@@ -1,0 +1,75 @@
+<!-- 작업 추가 및 선택 -->
+<div class="projt-selWarp">
+	<div class="pull-left">
+		<div class="projt-sel dropdown">
+			<button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<span class="txt">{{main.userTenant.korName}}</span><span class="ico arr"></span>
+			</button>
+			<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
+				<li ng-repeat="tenant in main.userTenants"><a href="" ng-click="main.userTenantSelect(tenant);">{{tenant.korName}}</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!-- //작업 추가 및 선택 -->
+
+	<div class="guideTxt type1" ng-bind-html="'iaasMenu.desc.' + main.selectSiteMap.name + '.short' | translate"></div>
+
+<!-- table -->
+<div class="tbl type1">
+	<table class="table">
+		<colgroup>
+			<col style="width:10%;">
+			<col style="width:20%;">
+			<col style="width:10%;">
+			<col style="width:auto;">
+			<col style="width:20%;">
+			<col style="width:20%;">
+		</colgroup>
+		<thead>
+			<tr>
+				<th scope="col">상태</th>
+				<th scope="col">인스턴스 이름</th>
+				<th scope="col">IP</th>
+				<th scope="col">이미지</th>
+				<th scope="col">키페어</th>
+				<th scope="col">스펙</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="instance in contents.keypairInstanceList">
+				<td>
+					<span tooltip-placement="bottom" uib-tooltip="{{instance.vmState}}">
+						<span ng-if="instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+						<span ng-if="instance.vmState == 'error'" class="stateMark type2">오류</span>
+						<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building' || instance.vmState == 'starting' || instance.vmState == 'stopping' || instance.vmState == 'pausing' || instance.vmState == 'unpausing' || instance.vmState == 'rebooting'" class="stateMark type4">대기</span>
+						<span ng-if="instance.vmState == 'stopped'" class="stateMark type3">중지</span>
+					</span>
+				</td>
+				<td style="text-decoration: underline;">
+					<a href="javascript:void(0)" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" tooltip-placement="bottom" uib-tooltip="{{instance.name}}">
+						{{instance.name}}
+					</a>
+				</td>
+				<td>
+					<div ng-repeat="fixedIp in instance.fixedIps">
+						{{fixedIp}}
+					</div>
+				</td>
+				<td>{{instance.image.serviceName}}</td>
+				<td>{{instance.keypair.name}}</td>
+				<td>
+					<span tooltip-placement="bottom" uib-tooltip="vCPU {{instance.spec.vcpus}}개 , MEM {{instance.spec.ram/1024|number:0}} GB, DISK {{instance.spec.disk}} GB">{{instance.spec.name}}</span>
+				</td>
+			</tr>
+			<tr ng-if="contents.keypairInstanceList.length == 0">
+				<td colspan="6" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!-- //table -->
+<div class="btn-btm">
+	<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage(main.moveParentUrl);">목록</button>
+</div>
+

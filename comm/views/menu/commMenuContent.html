@@ -1,0 +1,6 @@
+    <il ng-repeat="(key, menuItem) in main.commLeftMenuParams">
+        <p ng-click="main.commLeftMenuClick($event, menuItem);" ng-class="{'menu-parent': (menuItem.subMenus && menuItem.subMenus.length > 0)}" dynamic-template="menuItem.templateHtml"></p>
+        <ul ng-if="menuItem.subMenus && menuItem.subMenus.length > 0" class="lnb" ng-style="{ 'display': ((menuItem.open) ? 'block' : 'none') }">
+            <li ng-repeat="(subKey, menuSubItem) in menuItem.subMenus" dynamic-template="menuSubItem.templateHtml" class="lm"></li>
+        </ul>
+    </il>

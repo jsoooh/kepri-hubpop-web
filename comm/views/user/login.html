@@ -1,0 +1,32 @@
+    <!-- login -->
+    <form name="loginForm" method="POST">
+        <div class="mem-hd">
+            <h1>CloudXpert</h1>
+            <h2>CloudXpert {{ 'label.login' | translate }}</h2>
+        </div>
+        <div class="mem-body">
+            <ul class="ul-join">
+                <li>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="ico type1"></span>
+                        </div>
+                        <input type="text" id="email" name="email" maxlength="30" placeholder="{{ 'message.mi_type_id_email' | translate }}" ng-model="credentials.email" required ng-blur="blurEmail=true;" class="form-control"/>
+                    </div>
+                </li>
+                <li>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="ico type2"></span>
+                        </div>
+                        <input type="password" name="password" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="credentials.password" ng-keypress="checkCapsLock($event);" required class="form-control"/>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="mem-foot">
+            <button type="submit" name="button" class="btn btn-color1" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
+            <p class="text-right"><a href="#/signup">계정생성</a></p>
+        </div>
+    </form>
+    <!-- //login-->

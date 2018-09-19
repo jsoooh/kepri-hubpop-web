@@ -1,0 +1,32 @@
+<table class="table table-striped table-bordered">
+    <tbody>
+    <tr>
+        <td width="49%">
+            <canvas id="line" class="chart chart-line" chart-data="contents.line.data" chart-labels="contents.line.labels"
+                    chart-click="contents.line.onClick" chart-hover="contents.line.onHover" chart-series="contents.line.series" chart-options="contents.line.options"
+                    chart-dataset-override="line.datasetOverride"></canvas>
+        </td>
+        <td width="2%"></td>
+        <td width="49%">
+            <canvas id="bar" class="chart chart-bar" chart-data="contents.bar.data" chart-labels="contents.bar.labels"
+                    chart-series="contents.bar.series" chart-options="contents.bar.options"></canvas>
+        </td>
+    </tr>
+    <tr>
+        <td style="height:20px;"></td>
+        <td style="height:20px;"></td>
+        <td style="height:20px;"></td>
+    </tr>
+    <tr>
+        <td>
+            <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-data="contents.doughnut.data"
+                    chart-labels="contents.doughnut.labels" chart-options="contents.doughnut.options"></canvas>
+        </td>
+        <td></td>
+        <td>
+            <canvas id="pie" class="chart chart-pie chart-xs" chart-data="contents.pie.data"
+                    chart-labels="contents.pie.labels" chart-options="contents.pie.options"></canvas>
+        </td>
+    </tr>
+    </tbody>
+</table>

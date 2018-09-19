@@ -1,0 +1,272 @@
+<div class="mainWrap container-fluid">
+    <div class="main stepContainer two">	<!--	170830 스탭수에 따라 수정 - two, three 등	-->
+        <uib-tabset active="contents.activeTabIndex" class="tab-animation">
+            <uib-tab index="1">
+                <uib-tab-heading>{{ 'label.application_push_one_step' | translate }}</uib-tab-heading>
+				<form name="contents.appPushForm01" novalidate>
+					<div class="tableWrap">
+						<table class="table table-bordered">
+							<colgroup>
+								<col style="width:17%" />
+								<col style="width:33%" />
+								<col style="width:17%" />
+								<col  />
+							</colgroup>
+							<tbody>
+							<tr>
+								<th>
+									<span class="require"></span>
+									<label for="organization">{{ 'label.org' | translate }}</label><!-- 조직 -->
+								</th>
+								<td>
+									<select name="organization" id="organization" ng-change="contents.changeOrganization();" ng-model="contents.appPushData.organizationGuid" validation="required">
+										<option value="">{{ 'label.select' | translate }}</option>
+										<option ng-repeat="orgItem in contents.organizations" value="{{ orgItem.guid }}">{{ orgItem.name }}</option>
+									</select>
+								</td>
+								<th>
+									<span class="require"></span>
+									<label for="space">{{ 'label.space' | translate }}</label><!-- 영역 -->
+								</th>
+								<td>
+									<select name="space" id="space" ng-change="contents.changeSpace();" ng-model="contents.appPushData.spaceGuid" validation="required">
+										<option value="">{{ 'label.select' | translate }}</option>
+										<option ng-repeat="spaceItem in contents.spaces" value="{{ spaceItem.guid }}">{{ spaceItem.name }}</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th><span class="require"></span>{{ 'label.application_type' | translate }}</th><!-- 앱 유형 -->
+								<td colspan="3">
+									<p class="inputWrap inline">	<!-- 170829 input radio 변경, inline 클래스 추가 	-->
+										<input type="radio" id="pushType01_01" name="pushType" value="GENERAL" ng-model="contents.appPushData.pushType">
+										<label  for="pushType01_01">{{ 'label.general_application' | translate }}</label>
+									</p>
+									<p class="inputWrap inline">	<!-- 170829 input radio 변경 inline 클래스 추가	-->
+										<input type="radio" id="pushType01_02" name="pushType" value="DOCKER" ng-model="contents.appPushData.pushType">
+										<label  for="pushType01_02">{{ 'label.docker_img' | translate }}</label>
+									</p>
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'GENERAL'">
+								<th><span class="require"></span>{{ 'label.buildpack' | translate }}</th>
+								<td colspan="3">
+									<ul class="buildPackWrap">
+										<li ng-repeat="(key, buildpackItem) in contents.portalBuildpacks">
+											<input type="radio" id="buldpack_{{ buildpackItem.id }}" name="buldpack" value="{{ buildpackItem.id }}" ng-model="contents.sltBuildpackId" ng-change="contents.changePortalBuildpack();" />
+											<label for="buldpack_{{ buildpackItem.id }}">
+												<img class="img-circle" ng-if="buildpackItem.iconImage != null" ng-src="data:{{ buildpackItem.iconImage.contentType }}; base64, {{ buildpackItem.iconImage.image }}" width="40" height="40">
+												<img class="img-circle" ng-if="buildpackItem.iconImage == null" src="img/default_image.png" width="40" height="40">
+												<span>{{ buildpackItem.name }}</span>
+											</label>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'GENERAL'">
+								<th><span class="require"></span>{{ 'label.buildpack_version' | translate }}</th>
+								<td colspan="3">
+									<p class="inputWrap inline" ng-repeat="(key, versionItem) in contents.sltPortalBuildpack.versions">
+										<input type="radio" id="buldpackVersion_{{ key }}" name="buildpackVersion" value="{{ versionItem.id }}" ng-model="contents.sltBuildpackVersionId" ng-change="contents.changePortalBuildpackVersion();" />
+										<label for="buldpackVersion_{{ key }}">{{ versionItem.versionName }}</label>
+									</p>
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'GENERAL'">
+								<th>{{ 'label.buildpack_details' | translate }}</th><!-- 빌드팩 상세 -->
+								<td colspan="3" class="innerTableWrap appPushInnerTable">
+									 <table class="table">
+										<colgroup>
+											<col  />
+											<col style="width:120px;" />
+										</colgroup>
+										<tbody>
+										<tr>
+											<td>
+												<pre class="text-left" style="max-height: 150px; background-color: #FFFFFF; margin: 0 0 0 0;">{{ contents.sltBuildpackVersion.description }}</pre>
+											</td>
+											<td>
+												<button type="button" class="btn" tooltip-placement="bottom" uib-tooltip="{{ 'label.read_more' | translate }}">
+													<a target="_blank" ng-href="{{ contents.sltBuildpackVersion.url }}">{{ 'label.read_more' | translate }}</a>
+												</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'DOCKER'">
+								<th>
+									<span class="require"></span>
+									<label for="dockerImage">{{ 'label.docker_img' | translate }}</label>
+								</th>
+								<td colspan="3">
+									<input type="text" maxlength="100" name="dockerImage" id="dockerImage" ng-model="contents.appPushData.dockerImage" placeholder="{{ 'message.mi_type_docker_img_path' | translate }}" validation="required">
+									<span>{{ 'label.ex' | translate }} : cloudfoundry/lattice-app</span>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+            </uib-tab>
+            <uib-tab index="2" disable="contents.activeTabIndex < 2">
+                <uib-tab-heading>{{ 'label.application_push_two_step' | translate }}</uib-tab-heading>
+				<form name="contents.appPushForm02" novalidate>
+					<div class="tableWrap">
+						<table class="table table-bordered">
+							<colgroup>
+								<col style="width:17%" />
+								<col style="width:33%" />
+								<col style="width:17%" />
+								<col  />
+							</colgroup>
+							<tbody>
+							<tr>
+								<th>{{ 'label.org' | translate }}</th><!-- 조직 -->
+								<td>{{ contents.sltOrganization.name }}</td>
+								<th>{{ 'label.space' | translate }}</th><!-- 영역 -->
+								<td>{{ contents.sltSpace.name }}</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'GENERAL'">
+								<th>{{ 'label.buildpack_details' | translate }}</th><!-- 빌드팩 상세 -->
+								<td colspan="3" class="innerTableWrap appPushInnerTable">
+									<table class="table">
+										<colgroup>
+											<col style="width:150px;" />
+											<col  />
+											<col style="width:100px;" />
+										</colgroup>
+										<tbody>
+										<tr>
+											<td>
+												<img class="img-circle" ng-if="contents.sltPortalBuildpack.iconImage != null" ng-src="data:{{ contents.sltPortalBuildpack.iconImage.contentType }}; base64, {{ contents.sltPortalBuildpack.iconImage.image }}" width="80" height="80">
+												<img class="img-circle" ng-if="contents.sltPortalBuildpack.iconImage == null" src="img/default_image.png" width="80" height="80">
+												<p>{{ contents.sltPortalBuildpack.name }}<br/>{{ contents.sltBuildpackVersion.versionName }}</p>
+											</td>
+											<td>
+												<pre class="text-left" style="min-height: 150px; max-height: 200px; background-color: #FFFFFF; margin: 0 0 0 0;">{{ contents.sltBuildpackVersion.description }}</pre>
+											</td>
+											<td>
+												<button type="button" class="btn" tooltip-placement="bottom" uib-tooltip="{{ 'label.read_more' | translate }}">
+													<a target="_blank" ng-href="{{ contents.sltBuildpackVersion.url }}">{{ 'label.read_more' | translate }}</a>
+												</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'DOCKER'">
+								<th>GitHub URI</th>
+								<td colspan="3">
+									<input type="text" maxlength="10" name="dockerImageView" ng-model="contents.appPushData.dockerImage" value="{{ contents.appPushData.dockerImage }}" disabled="true">
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'GENERAL'">
+								<th><span class="require"></span>{{ 'label.deploy_option' | translate }}</th><!-- 배포 옵션 -->
+								<td colspan="3">
+									<p class="inputWrap inline">
+										<input type="radio"  id="deployOption_01" name="deployOption" value="B" ng-model="contents.sltDeployOption" ng-disabled="!contents.sltPortalBuildpack.appFilePath" />
+										<label for="deployOption_01">{{ 'label.base_app_deploy' | translate }}</label>
+									</p>
+									<p class="inputWrap inline">
+										<input type="radio" id="deployOption_02" name="deployOption" value="U" ng-model="contents.sltDeployOption" ng-disabled="!contents.sltPortalBuildpack.appFilePath" />
+										<label for="deployOption_02">{{ 'label.user_define_app_deploy' | translate }}</label>
+									</p>
+								</td>
+							</tr>
+							<tr>
+								<th>
+									<span class="require"></span>
+									<label for="appName">{{ 'label.application_name' | translate }}</label>
+								</th>
+								<td>
+									<input type="text" maxlength="30" id="appName" name="appName" placeholder="{{ 'label.application_name' | translate }}" ng-model="contents.appPushData.appName" validation="alpha_dash|min_len:3|max_len:30|required" />
+								</td>
+								<th>
+									<span class="require"></span>
+									<label for="domain">{{ 'label.domain' | translate}}</label>
+								</th>
+								<td>
+									<select name="domainName" id="domain" name="domain" ng-model="contents.sltDomainName">
+										<option ng-repeat="domainItem in contents.domains" value="{{ domainItem.name }}">{{ domainItem.name }}</option>
+									</select>
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'GENERAL' && contents.sltDeployOption != 'B'">
+								<th><span class="require"></span>{{ 'label.file_upload' | translate }}</th>
+								<td colspan="3" class="text-left">
+									<input type="file" name="file" nv-file-select="" uploader="contents.uploader" style="display: none;" />
+									<button type="button" class="btn btn-file" ng-click="main.fileSelectBtnClick($event);">
+										{{ 'label.file_search' | translate }}
+									</button>
+									<input type="hidden" name="contents.appFileName" ng-model="contents.appFileItem.file.name" style="display: none;" validation="required" />
+									<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
+									<span ng-if="!contents.appFileErrorMessage && contents.appFileItem.file.name">{{ contents.appFileItem.file.name }}</span>
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'DOCKER' || (contents.appPushData.pushType == 'GENERAL' && contents.sltDeployOption != 'B')">
+								<th><span class="require"></span>{{ 'label.start_option' | translate }}</th>
+								<td colspan="{{ (contents.appPushData.pushType == 'DOCKER') ? '3' : '1' }}">
+									<p class="inputWrap inline">
+										<input type="radio" id="withStart_01" name="withStart" value="false" ng-model="contents.appPushData.withStart" />
+										<label for="withStart_01">{{ 'label.application_deploy' | translate }}</label>
+									</p>
+									<p class="inputWrap inline">
+										<input type="radio" id="withStart_02" name="withStart" value="true" ng-model="contents.appPushData.withStart"  />
+										<label for="withStart_02">{{ 'label.deploy_and_start' | translate }}</label>
+									</p>
+								</td>
+								<th ng-if="contents.appPushData.pushType == 'GENERAL'">
+									<label for="serviceInstances">{{ 'label.service' | translate }}</label>
+								</th>
+								<td ng-if="contents.appPushData.pushType == 'GENERAL'">
+									<select id="serviceInstances" name="serviceInstances" ng-model="contents.appPushData.serviceInstanceGuid">
+										<option value="">{{ 'label.no_select' | translate }}</option>
+										<option ng-repeat="serviceInstanceItem in contents.serviceInstances" value="{{ serviceInstanceItem.guid }}">{{ serviceInstanceItem.name }}</option>
+									</select>
+								</td>
+							</tr>
+							<tr ng-if="contents.appPushData.pushType == 'DOCKER' || (contents.appPushData.pushType == 'GENERAL' && contents.sltDeployOption != 'B')">
+								<th><span class="require"></span>{{ 'label.resource_set' | translate }}</th>
+								<td colspan="3">
+									<ul class="sliderContainer labelNone">
+										<li>
+											<p class="sliderTitle">{{ 'label.instance' | translate }}</p>
+											<div class="sliderWrap instanceSlider">
+												<rzslider rz-slider-model="contents.instancesSlider.value" rz-slider-options="contents.instancesSlider.options"></rzslider>
+											</div>
+											<p class="sliderData"><b>{{ contents.instancesSlider.value|number:0 }}</b> / {{ contents.instancesSlider.options.ceil|number:0 }}</p>
+										</li>
+										<li>
+											<p class="sliderTitle">{{ 'label.memory' | translate }}</p>
+											<div class="sliderWrap memorySlider">
+												<rzslider rz-slider-model="contents.memorySlider.value" rz-slider-options="contents.memorySlider.options"></rzslider>
+											</div>
+											<p class="sliderData"><b>{{ contents.memorySlider.value|displayVolume:'MB' }}</b> / {{ contents.memorySlider.options.ceil|displayVolume:'MB' }}</p>
+										</li>
+										<li>
+											<p class="sliderTitle">{{ 'label.disk' | translate }}</p>
+											<div class="sliderWrap diskSlider">
+												<rzslider rz-slider-model="contents.diskQuotaSlider.value" rz-slider-options="contents.diskQuotaSlider.options"></rzslider>
+											</div>
+											<p class="sliderData"><b>{{ contents.diskQuotaSlider.value|displayVolume:'MB' }}</b> / {{ contents.diskQuotaSlider.options.ceil|displayVolume:'MB' }}</p>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+            </uib-tab>
+        </uib-tabset>
+        <div class="bottomBtnWrap">
+            <button ng-if="contents.activeTabIndex > 1" ng-disabled="actionBtnHied" type="button" class="btn btn-prev" ng-click="contents.previousTab();">{{ 'label.previous' | translate }}</button>
+            <button ng-if="contents.activeTabIndex < 2" ng-disabled="actionBtnHied" type="button" class="btn btn-add" ng-click="contents.nextTab();">{{ 'label.next' | translate }}</button>
+            <button ng-if="contents.activeTabIndex == 2" ng-disabled="actionBtnHied" type="button" class="btn btn-add" ng-click="contents.appPush();">{{ 'label.deploy' | translate }}</button>
+            <button type="button" class="btn" ng-click="main.goToPage('/paas/apps')">{{ 'label.cancel' | translate }}</button>
+        </div>
+    </div>
+</div>

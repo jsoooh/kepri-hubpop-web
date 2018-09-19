@@ -1,0 +1,32 @@
+<!-- wrap -->
+<md-dialog draggable drag-handle=".modal-header" class="bs-example-modal" aria-label="{{ dialog.ariaLabel }}">
+	<!-- 팝업 구현시 이 부분만 사용 -->
+	<div class="modal-content modal-sm"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+		<!-- modal header -->
+		<div class="modal-header">
+			<button type="button" class="close" aria-label="Close" ng-click="dialog.abort()" md-autofocus="dialog.$type != 'alert'"><span aria-hidden="true">×</span></button>
+			<h1 class="modal-title">{{ dialog.title }}</h1>
+		</div>
+		<!-- //modal header -->
+
+		<!-- modal body -->
+		<div class="modal-body">
+			<h2 class="md-title" ng-if="false">{{ dialog.title }}</h2>
+			<div ng-if="::dialog.mdHtmlContent" class="md-dialog-content-body only-text" ng-bind-html="::dialog.mdHtmlContent"></div>
+			<div ng-if="::!dialog.mdHtmlContent" class="md-dialog-content-body only-text"><p>{{::dialog.mdTextContent}}</p></div>
+			<md-input-container md-no-float ng-if="::dialog.$type == 'prompt'" class="md-prompt-input-container">
+				<input ng-keypress="dialog.keypress($event)" md-autofocus ng-model="dialog.result" placeholder="{{::dialog.placeholder}}">
+			</md-input-container>
+		</div>
+		<!-- //modal body -->
+
+		<!-- modal footer -->
+		<div class="modal-footer">
+			<button type="button" class="btn btn-color4" ng-click="dialog.hide()" md-autofocus="dialog.$type==='alert'" >{{ dialog.ok }}</button>
+			<button type="button" name="button" class="btn btn-color5" ng-if="dialog.$type === 'confirm' || dialog.$type === 'prompt'" ng-click="dialog.abort()" data-dismiss="modal">{{ dialog.cancel }}</button>
+		</div>
+		<!-- //modal footer -->
+	</div>
+	<!-- //팝업 구현시 이 부분만 사용 -->
+</md-dialog>
+<!-- //wrap -->

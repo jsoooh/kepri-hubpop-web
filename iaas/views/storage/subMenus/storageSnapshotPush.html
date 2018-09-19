@@ -1,0 +1,274 @@
+<script>
+$(document).ready(function(){
+    $('.dropdown-menu').click(function (e) { e.stopPropagation(); });
+});
+</script>
+<div class="mainWrap container-fluid">
+    <div class="main stepContainer two">	<!--	170830 스탭수에 따라 수정 - two, three 등 - PaaS/앱&서비스/앱/앱추가 기능 참고	-->
+        <uib-tabset active="contents.activeTabIndex" class="tab-animation">
+            <uib-tab index="1">
+                <uib-tab-heading>서버 설정</uib-tab-heading>
+				<form name="froms.appPushForm" novalidate>
+                    <div class="tableWrap">
+						<table class="table table-bordered">
+							<colgroup>
+								<col style="width:10%" />
+								<col style="width:37%" />
+								<col style="width:10%" />
+								<col  />
+							</colgroup>
+							<tbody>
+    							<tr>
+    								<th>조직명</th>
+    								<td>{{contents.data.tenantName}}</td>
+    								<th>{{ 'label.label_image' | translate }}</th>
+    								<td>{{contents.data.image.name}}</td>
+    							</tr>
+                                <tr>
+    								<th><span class="require"></span>{{ 'label.label_name' | translate }}</th>
+    								<td>
+                                        <input type="text" name="serverName" maxlength="50" ng-model="contents.data.name" validation="alpha_dash|required">
+                                    </td>
+    								<th><span class="require"></span>{{ 'label.label_usage' | translate }}</th>
+    								<td class="withCheckInline vmType selectTypeA">
+                                        <select ng-init="contents.vmType = ''" ng-model="contents.vmType" ng-change="contents.data.vmType = contents.vmType" >
+                                            <option value="">사용자정의</option>
+                                            <option value="DB">DB</option>
+                                            <option value="WEB">WEB</option>
+                                            <option value="WAS">WAS</option>
+                                        </select>
+                                        <input type="text" name="vmType" ng-model="contents.data.vmType" maxlength="50" ng-init="contents.data.vmType = ''" value="{{contents.data.vmType}}" ng-readonly="contents.vmType != ''" validation="required">
+                                    </td>
+    							</tr>
+                                <tr>
+    								<th>네트워크</th>
+    								<td class="withCheckInline selectTypeB">
+                                        <select ng-options="network as network.description for network in contents.networks"
+                                                            ng-model="contents.network" ng-change="contents.fn.networksChange();"></select>
+									<!--	170908	-->
+                                        <p class="inputWrap">
+                                            <input type="checkbox" id="networkBind" ng-init="contents.networkBindCheck = true"  ng-model="contents.networkBindCheck" ng-click="contents.fn.networkBindSet()">
+										     <label for="networkBind">자동할당</label>
+										</p>
+                                    </td>
+    								<th><span class="require"></span>{{ 'label.label_spec' | translate }}</th>
+    								<td >
+                                        <!-- <select name="spec" ng-model="contents.specValue" ng-change="contents.fn.changeSpec(contents.specValue)" validation="required">
+                                            <option value="">선택</option>
+                                            <option ng-repeat="spec in contents.specList" value="{{spec}}">
+                                            <div>
+                                                <span style="width:55%;">[{{spec.name}}]</span>
+                                                <span style="width:15%;">cpu {{spec.vcpus}}개,</span>
+                                                <span style="width:15%;">ram {{spec.ram}} MB,</span>
+                                                <span style="width:15%;">disk {{spec.disk}} GB</span>
+                                            </div>
+                                            </option>
+                                        </select> -->
+                                        <select name="spec" class="specSelectList" ng-model="contents.specGroup" ng-change="contents.fn.getSpecList(contents.specGroup)"  validation-error-to="#specError">
+                                            <option value="">전체</option>
+                                            <option ng-repeat="specGroup in contents.specGroupList" value="{{specGroup.name}}">
+                                                {{specGroup.name}}
+                                            </option>
+                                        </select>
+                                        <div class="dropdown selectStyle rolesSelect selectSpecDetail"  style="font-size:10px;">
+                                        	<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                                <span ng-if="!contents.data.spec.name">선택</span>
+                                                <div ng-if="contents.data.spec.name" style="width:100%;">
+                                                    <div style="width:35%;display:inline-block;overflow:hidden;text-overflow:ellipsis;">[{{contents.data.spec.name}}]</div>
+                                                    <div style="width:20%;display:inline-block;overflow:hidden;text-overflow:ellipsis;">vCPU {{contents.data.spec.vcpus}}개</div>
+                                                    <div style="width:20%;display:inline-block;overflow:hidden;text-overflow:ellipsis;">MEM {{contents.data.spec.ram/1024|number:0}} GB</div>
+                                                    <div style="width:20%;display:inline-block;overflow:hidden;text-overflow:ellipsis;">DISK(HDD) {{contents.data.spec.disk}} GB</div>
+                                                </div>
+                                            </button>
+                                        	<ul class="dropdown-menu specDetail">
+                                        		<li ng-repeat="spec in contents.specList" ng-click="contents.fn.changeSpec($event,spec)">
+                                                    <div style="width:30%;display:inline-block;overflow:hidden;text-overflow:ellipsis;">[{{spec.name}}]</div>
+                                                    <div style="width:18%;display:inline-block;overflow:hidden;text-overflow:ellipsis;">vCPU {{spec.vcpus}}개</div>
+                                                    <div style="width:20%;display:inline-block;overflow:hidden;text-overflow:ellipsis;">MEM {{spec.ram/1024|number:0}} GB</div>
+                                                    <div style="width:29%;display:inline-block;overflow:hidden;text-overflow:ellipsis;">DISK(HDD) {{spec.disk}} GB</div>
+                                                </li>
+                                        	</ul>
+                                        </div>
+                                        <span id="specError" class="validation text-danger"></span>
+                                    </td>
+    							</tr>
+                                <tr>
+    								<th>내부IP</th>
+    								<td class="withCheckInline networkBindCheck">
+                                        <div ng-if="!contents.networkBindCheck">
+                                            <input type="text" value="{{contents.subnet.cidr_A}}" readonly>.
+                                            <input type="text" value="{{contents.subnet.cidr_B}}" readonly>.
+                                            <input type="text" value="{{contents.subnet.cidr_C}}" readonly>.
+                                            <input type="text" only-digits max-field="3" ng-model="contents.subnet.cidr_D" value="{{contents.subnet.cidr_D}}" ng-change="contents.fn.subnetCidrDChange()">
+                                            <button type="button" ng-click="contents.fn.checkCidr()" class="btn btn-black" >중복 확인</button>	<!--	170908	-->
+                                        </div>
+                                    </td>
+    								<th><span class="require"></span>키페어</th>
+    								<td class="selectTypeA">
+                                        <select name="keypairValue" ng-model="contents.keypairValue" ng-change="contents.fn.changeKeypair()" validation="required">
+                                            <option value="">선택</option>
+                                            <option ng-repeat="keypair in contents.keypairList" value="{{keypair}}">
+                                                {{keypair.name}}
+                                            </option>
+                                        </select>
+                                    </td>
+    							</tr>
+                                <tr>
+    								<th>보안정책</th>
+    								<td class="selectTypeB">
+                                        <div class="dropdown selectStyle rolesSelect">
+                                        	<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                                <span ng-if="contents.roles.length > 0">{{ contents.roles | join:', ':'name' }}</span>
+                                                <span ng-if="contents.roles.length == 0">선택</span>
+                                            </button>
+                                        	<ul class="dropdown-menu">
+                                        		<li ng-repeat="policy in contents.securityPolicyList">
+													<p class="inputWrap">
+														<input type="checkbox" id="{{policy.id}}" ng-click="contents.fn.changeSecurityPolicy()" checklist-model="contents.roles" checklist-value="policy">
+														<label for="{{policy.id}}">{{policy.name}}</label>
+													</p>
+													{{policy.description}}
+                                                </li>
+                                        	</ul>
+                                        </div>
+                                    </td>
+    								<th>{{ 'label.label_init_script' | translate }}</th>
+    								<td class="withCheckInline selectTypeA">
+                                        <select ng-disabled="!contents.initCheck" ng-model="contents.initScriptValue" ng-change="contents.fn.changeInitScript()">
+                                            <option value="">선택</option>
+                                            <option ng-repeat="initScript in contents.initScriptList" value="{{initScript}}">
+                                                {{initScript.name}}
+                                            </option>
+                                        </select>
+										<p class="inputWrap">
+											<input type="checkbox" id="initCheck" ng-init="contents.initCheck = false"  ng-model="contents.initCheck" ng-click="contents.fn.initScriptSet()">
+											<label for="initCheck">사용</label>
+										 </p>
+                                    </td>
+    							</tr>
+                                <tr>
+    								<th>{{ 'label.label_init_script_content' | translate }}</th>
+    								<td colspan="3">
+                                        <textarea ng-model="contents.data.initScript.script" rows="10" disabled></textarea>
+                                    </td>
+    							</tr>
+                                <tr>
+                                    <th>리소스</th>
+                                    <td colspan="3">
+                                        <div class="resourceWrap">
+                                            <ul class="graphWrap">
+                                                <li>
+                                                    <p class="pull-left" style="width:8%;">vCPU</p>
+                                                    <p>
+                                                        <span class="pull-right" style="width:10%;text-align:right">
+                                                            <b><span count-to="{{contents.tenantResource.usedResource.cores}}" duration="1" count-from="0" filter="number"></span>개</b>
+                                                             / {{contents.tenantResource.maxResource.cores | number: 0}}개
+                                                        </span>
+                                                    </p>
+                                                    <scalable-progress-bar max="100" top="80" scalable="{{contents.data.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number : 0}}" bar="{{contents.tenantResource.usedResource.cores / contents.tenantResource.maxResource.cores * 100 | number : 0}}" from="0" duration="1" top="80" down="{{contents.defaultResource.usedResource.cores / contents.defaultResource.maxResource.cores * 100 | number : 0}}" base="{{contents.defaultResource.usedResource.cores / contents.defaultResource.maxResource.cores * 100 | number: 0}}">%</scalable-progress-bar>
+                                                </li>
+                                                <li>
+                                                    <p class="pull-left" style="width:8%;">메모리</p>
+                                                    <p>
+                                                        <span class="pull-right" style="width:10%;text-align:right">
+                                                             <b><span count-to="{{(contents.tenantResource.usedResource.ramSize > 1024) ? (((contents.tenantResource.usedResource.ramSize/1024)|number:1).replace('.0', '') + ' GB') : ((contents.tenantResource.usedResource.ramSize|number:0) + ' MB')}}" duration="1" count-from="0" ></span></b>
+                                 							 / {{ (contents.tenantResource.maxResource.ramSize > 1024) ? (((contents.tenantResource.maxResource.ramSize/1024)|number:1).replace('.0', '') + ' GB') : ((contents.tenantResource.maxResource.ramSize|number:0) + ' MB') }}
+                                                        </span>
+                                                    </p>
+                                                    <scalable-progress-bar max="100" top="80" scalable="{{contents.data.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number : 0}}" bar="{{contents.tenantResource.usedResource.ramSize / contents.tenantResource.maxResource.ramSize * 100 | number : 0}}" from="0"  duration="1" top="80" down="{{contents.defaultResource.usedResource.ramSize / contents.defaultResource.maxResource.ramSize * 100}}" base="{{contents.defaultResource.usedResource.ramSize / contents.defaultResource.maxResource.ramSize * 100 | number: 0}}">%</scalable-progress-bar>
+                                                </li>
+                                                <li>
+                                                    <p class="pull-left" style="width:8%;">내장 디스크</p>
+                                                    <p>
+                                                        <span class="pull-right" style="width:10%;text-align:right">
+                                                            <b><span count-to="{{contents.tenantResource.usedResource.instanceDiskGigabytes}}" duration="1" count-from="0" filter="number"></span>GB</b>
+                                                             / {{contents.tenantResource.maxResource.instanceDiskGigabytes | number: 0}}GB
+                                                        </span>
+                                                    </p>
+                                                    <scalable-progress-bar max="100" top="80" scalable="{{contents.data.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}" bar="{{contents.tenantResource.usedResource.instanceDiskGigabytes / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}" from="0" duration="1" top="80" down="{{contents.defaultResource.usedResource.instanceDiskGigabytes / contents.defaultResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}" base="{{contents.defaultResource.usedResource.instanceDiskGigabytes / contents.defaultResource.maxResource.instanceDiskGigabytes * 100 | number: 0}}">%</scalable-progress-bar>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+            </uib-tab>
+            <uib-tab index="2" disable="contents.activeTabIndex < 2">
+                <uib-tab-heading>서버 정보 확인</uib-tab-heading>
+				<form name="froms.appPushForm" novalidate>
+					<div class="tableWrap">
+						<table class="table table-bordered">
+							<colgroup>
+								<col style="width:13%" />
+								<col style="width:37%" />
+								<col style="width:13%" />
+								<col  />
+							</colgroup>
+							<tbody>
+                                <tr>
+    								<th>조직명</th>
+    								<td>{{contents.data.tenantName}}</td>
+                                    <th>{{ 'label.label_name' | translate }}</th>
+                                    <td>
+                                        {{contents.data.name}}
+                                    </td>
+    							</tr>
+                                <tr>
+    								<th>{{ 'label.label_usage' | translate }}</th>
+    								<td>{{contents.data.vmType}}</td>
+                                    <th>{{ 'label.label_image' | translate }}</th>
+                                    <td>{{contents.data.image.name}}</td>
+    							</tr>
+                                <tr>
+                                    <th rowspan="2"><span class="require"></span>{{ 'label.label_spec' | translate }}</th>
+                                    <td rowspan="2">
+                                        [{{contents.data.spec.name}}]&nbsp;&nbsp; vCPU {{contents.data.spec.vcpus}}개,&nbsp;&nbsp; MEM {{contents.data.spec.ram/1024|number:0}} GB,&nbsp;&nbsp; DISK(HDD) {{contents.data.spec.disk}} GB
+                                    </td>
+                                    <th>네트워크</th>
+                                    <td>
+                                        {{contents.network.description}}
+                                    </td>
+    							</tr>
+                                <tr>
+                                    <th>내부IP</th>
+                                    <td>
+                                        {{contents.subnet.cidr_D?"수동할당":"자동할당"}} {{contents.subnet.cidr_A}}.{{contents.subnet.cidr_B}}.{{contents.subnet.cidr_C}}.{{contents.subnet.cidr_D?contents.subnet.cidr_D:"0/24"}}
+                                    </td>
+    							</tr>
+                                <tr>
+                                    <th>보안정책</th>
+                                    <td>
+                                        <ul>
+                                            <li ng-repeat="policy in contents.data.securityPolicies">
+                                                {{policy.name}}
+                                            </li>
+                                        </ul>
+                                    </td>
+    								<th><span class="require"></span>키페어</th>
+    								<td>
+                                        {{contents.data.keypair.name}}
+                                    </td>
+    							</tr>
+                                <tr>
+    								<th>{{ 'label.label_init_script_content' | translate }}</th>
+    								<td colspan="3">
+                                        <textarea ng-model="contents.data.initScript.name" disabled></textarea>
+                                    </td>
+    							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+            </uib-tab>
+        </uib-tabset>
+        <div class="bottomBtnWrap">
+            <button ng-if="contents.activeTabIndex != 1" ng-disabled="actionBtnHied" type="button" class="btn btn-prev" ng-click="contents.previousTab();"  tooltip-placement="bottom" uib-tooltip="이전">{{ 'label.previous' | translate }}</button>
+            <button ng-if="contents.activeTabIndex < 2" ng-disabled="actionBtnHied" type="button" class="btn btn-add" ng-click="contents.nextTab();"  tooltip-placement="bottom" uib-tooltip="다음">{{ 'label.next' | translate }}</button>
+            <button ng-if="contents.activeTabIndex == 2" ng-disabled="actionBtnHied" type="button" class="btn btn-add" ng-click="contents.fn.createServer();"  tooltip-placement="bottom" uib-tooltip="생성">서버 생성</button>
+            <!-- <button type="button" class="btn" ng-click="main.moveToAppPage('/server/snapshot')">{{ 'label.cancel' | translate }}</button> -->
+        </div>
+    </div>
+</div>

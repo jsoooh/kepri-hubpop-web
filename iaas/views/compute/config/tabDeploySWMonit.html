@@ -1,0 +1,702 @@
+<!-- panel -->
+<div class="panelWrap" ng-controller="iaasDeploySWMontiTabCtrl as tab">
+	<div class="panel type2" style="cursor: unset;">
+		<div class="panel_head">
+			<div ng-if="tab.loadingSsMonitoring">
+				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+			</div>
+			<div class="tit pull-left">S/S 모니터링</div>
+			<div class="pull-right">
+				<div class="tit pull-right">
+					<button>시간 범위:</button>
+					<select id="timeRange" name="timeRange" ng-model="tab.selTimeRange" style="margin: 0px 7px 0px 7px;">
+						<option ng-repeat="timeRange in tab.timeRanges" value="{{ timeRange }}">{{ timeRange }}시간</option>
+					</select>
+					<button>주기:</button>
+					<select id="period" name="period" ng-model="tab.selPeriod" style="margin: 0px 7px 0px 7px;">
+						<option ng-repeat="period in tab.periods" value="{{ period }}">{{ period }}분</option>
+					</select>
+					<button type="button" name="button" class="btn-sm btn-color4" style="height: 38px; margin-right: 7px;" title="조회" ng-click="tab.changeTimestamp();">조회</button>
+					<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'deployMonit')"><span class="ico">확대/축소</span></button>
+				</div>
+			</div>
+		</div>
+		<div class="panel_body" style="height: 500px;">
+			<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="instance_monitoring_panel" class="in">
+				<!-- 탭 내용 : WEB -->
+				<ul class="visualizeList" ng-if="contents.deployServer.deployType == 'WEB'">
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="active client connections">
+							<ul class="legendWrap">
+								<li><span>active</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartActive.series"><em style="background:{{ tab.lineChartActive.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineActive" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartActive.options"
+									chart-series="tab.lineChartActive.series"
+									chart-colors="tab.lineChartActive.colors"
+									chart-labels="tab.lineChartActive.labels"
+									chart-data="tab.lineChartActive.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="response connections">
+							<ul class="legendWrap">
+								<li><span>writing</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartWriting.series"><em style="background:{{ tab.lineChartWriting.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineWriting" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartWriting.options"
+									chart-series="tab.lineChartWriting.series"
+									chart-colors="tab.lineChartWriting.colors"
+									chart-labels="tab.lineChartWriting.labels"
+									chart-data="tab.lineChartWriting.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="request connections">
+							<ul class="legendWrap">
+								<li><span>reading</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartReading.series"><em style="background:{{ tab.lineChartReading.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineReading" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartReading.options"
+									chart-series="tab.lineChartReading.series"
+									chart-colors="tab.lineChartReading.colors"
+									chart-labels="tab.lineChartReading.labels"
+									chart-data="tab.lineChartReading.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="accepted client connections">
+							<ul class="legendWrap">
+								<li><span>accepts</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartAccepts.series"><em style="background:{{ tab.lineChartAccepts.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineAccepts" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartAccepts.options"
+									chart-series="tab.lineChartAccepts.series"
+									chart-colors="tab.lineChartAccepts.colors"
+									chart-labels="tab.lineChartAccepts.labels"
+									chart-data="tab.lineChartAccepts.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="handled connections">
+							<ul class="legendWrap">
+								<li><span>handled</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartHandled.series"><em style="background:{{ tab.lineChartHandled.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineHandled" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartHandled.options"
+									chart-series="tab.lineChartHandled.series"
+									chart-colors="tab.lineChartHandled.colors"
+									chart-labels="tab.lineChartHandled.labels"
+									chart-data="tab.lineChartHandled.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="client requests">
+							<ul class="legendWrap">
+								<li><span>requests</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartRequests.series"><em style="background:{{ tab.lineChartRequests.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineRequests" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartRequests.options"
+									chart-series="tab.lineChartRequests.series"
+									chart-colors="tab.lineChartRequests.colors"
+									chart-labels="tab.lineChartRequests.labels"
+									chart-data="tab.lineChartRequests.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+
+				</ul>
+				<!-- //탭 내용 : WEB -->
+
+				<!-- 탭 내용 : LB -->
+				<ul class="visualizeList" ng-if="contents.deployServer.deployType == 'LB'">
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="session lb total">
+							<ul class="legendWrap">
+								<li><span>lbtot</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartLbtot.series"><em style="background:{{ tab.lineChartLbtot.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineLbtot" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartLbtot.options"
+									chart-series="tab.lineChartLbtot.series"
+									chart-colors="tab.lineChartLbtot.colors"
+									chart-labels="tab.lineChartLbtot.labels"
+									chart-data="tab.lineChartLbtot.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="error count - request">
+							<ul class="legendWrap">
+								<li><span>ereq</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartEreq.series"><em style="background:{{ tab.lineChartEreq.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineEreq" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartEreq.options"
+									chart-series="tab.lineChartEreq.series"
+									chart-colors="tab.lineChartEreq.colors"
+									chart-labels="tab.lineChartEreq.labels"
+									chart-data="tab.lineChartEreq.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="error count - response">
+							<ul class="legendWrap">
+								<li><span>eresp</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartEresp.series"><em style="background:{{ tab.lineChartEresp.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineEresp" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartEresp.options"
+									chart-series="tab.lineChartEresp.series"
+									chart-colors="tab.lineChartEresp.colors"
+									chart-labels="tab.lineChartEresp.labels"
+									chart-data="tab.lineChartEresp.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="input bytes">
+							<ul class="legendWrap">
+								<li><span>bin</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartBin.series"><em style="background:{{ tab.lineChartBin.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineBin" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartBin.options"
+									chart-series="tab.lineChartBin.series"
+									chart-colors="tab.lineChartBin.colors"
+									chart-labels="tab.lineChartBin.labels"
+									chart-data="tab.lineChartBin.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="output bytes">
+							<ul class="legendWrap">
+								<li><span>bout</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartBout.series"><em style="background:{{ tab.lineChartBout.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineBout" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartBout.options"
+									chart-series="tab.lineChartBout.series"
+									chart-colors="tab.lineChartBout.colors"
+									chart-labels="tab.lineChartBout.labels"
+									chart-data="tab.lineChartBout.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="error count - connection">
+							<ul class="legendWrap">
+								<li><span>econ</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartEcon.series"><em style="background:{{ tab.lineChartEcon.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineEcon" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartEcon.options"
+									chart-series="tab.lineChartEcon.series"
+									chart-colors="tab.lineChartEcon.colors"
+									chart-labels="tab.lineChartEcon.labels"
+									chart-data="tab.lineChartEcon.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage" title="session total">
+							<ul class="legendWrap">
+								<li><span>stot</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartStot.series"><em style="background:{{ tab.lineChartStot.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineStot" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartStot.options"
+									chart-series="tab.lineChartStot.series"
+									chart-colors="tab.lineChartStot.colors"
+									chart-labels="tab.lineChartStot.labels"
+									chart-data="tab.lineChartStot.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+
+				</ul>
+				<!-- //탭 내용 : LB -->
+
+				<!-- 탭 내용 : DB -->
+				<ul class="visualizeList" ng-if="contents.deployServer.deployType == 'DB'">
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>bytes_received</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartBytes_received.series"><em style="background:{{ tab.lineChartBytes_received.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineBytes_db_received" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartBytes_received.options"
+									chart-series="tab.lineChartBytes_received.series"
+									chart-colors="tab.lineChartBytes_received.colors"
+									chart-labels="tab.lineChartBytes_received.labels"
+									chart-data="tab.lineChartBytes_received.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>bytes_sent</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartBytes_sent.series"><em style="background:{{ tab.lineChartBytes_sent.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineBytes_db_sent" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartBytes_sent.options"
+									chart-series="tab.lineChartBytes_sent.series"
+									chart-colors="tab.lineChartBytes_sent.colors"
+									chart-labels="tab.lineChartBytes_sent.labels"
+									chart-data="tab.lineChartBytes_sent.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>commands_commit</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartCommands_commit.series"><em style="background:{{ tab.lineChartCommands_commit.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineCommands_commit" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartCommands_commit.options"
+									chart-series="tab.lineChartCommands_commit.series"
+									chart-colors="tab.lineChartCommands_commit.colors"
+									chart-labels="tab.lineChartCommands_commit.labels"
+									chart-data="tab.lineChartCommands_commit.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>commands_delete</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartCommands_delete.series"><em style="background:{{ tab.lineChartCommands_delete.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineCommands_delete" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartCommands_delete.options"
+									chart-series="tab.lineChartCommands_delete.series"
+									chart-colors="tab.lineChartCommands_delete.colors"
+									chart-labels="tab.lineChartCommands_delete.labels"
+									chart-data="tab.lineChartCommands_delete.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>commands_insert</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartCommands_insert.series"><em style="background:{{ tab.lineChartCommands_insert.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineCommands_insert" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartCommands_insert.options"
+									chart-series="tab.lineChartCommands_insert.series"
+									chart-colors="tab.lineChartCommands_insert.colors"
+									chart-labels="tab.lineChartCommands_insert.labels"
+									chart-data="tab.lineChartCommands_insert.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>commands_select</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartCommands_select.series"><em style="background:{{ tab.lineChartCommands_select.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineCommands_select" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartCommands_select.options"
+									chart-series="tab.lineChartCommands_select.series"
+									chart-colors="tab.lineChartCommands_select.colors"
+									chart-labels="tab.lineChartCommands_select.labels"
+									chart-data="tab.lineChartCommands_select.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>commands_update</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartCommands_update.series"><em style="background:{{ tab.lineChartCommands_update.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineCommands_update" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartCommands_update.options"
+									chart-series="tab.lineChartCommands_update.series"
+									chart-colors="tab.lineChartCommands_update.colors"
+									chart-labels="tab.lineChartCommands_update.labels"
+									chart-data="tab.lineChartCommands_update.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>connections</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartConnections.series"><em style="background:{{ tab.lineChartConnections.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineConnections" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartConnections.options"
+									chart-series="tab.lineChartConnections.series"
+									chart-colors="tab.lineChartConnections.colors"
+									chart-labels="tab.lineChartConnections.labels"
+									chart-data="tab.lineChartConnections.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>innodb_data_read</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartInnodb_data_read.series"><em style="background:{{ tab.lineChartInnodb_data_read.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineInnodb_data_read" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartInnodb_data_read.options"
+									chart-series="tab.lineChartInnodb_data_read.series"
+									chart-colors="tab.lineChartInnodb_data_read.colors"
+									chart-labels="tab.lineChartInnodb_data_read.labels"
+									chart-data="tab.lineChartInnodb_data_read.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>innodb_data_reads</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartInnodb_data_reads.series"><em style="background:{{ tab.lineChartInnodb_data_reads.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineInnodb_data_reads" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartInnodb_data_reads.options"
+									chart-series="tab.lineChartInnodb_data_reads.series"
+									chart-colors="tab.lineChartInnodb_data_reads.colors"
+									chart-labels="tab.lineChartInnodb_data_reads.labels"
+									chart-data="tab.lineChartInnodb_data_reads.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>innodb_data_writes</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartInnodb_data_writes.series"><em style="background:{{ tab.lineChartInnodb_data_writes.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineInnodb_data_writes" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartInnodb_data_writes.options"
+									chart-series="tab.lineChartInnodb_data_writes.series"
+									chart-colors="tab.lineChartInnodb_data_writes.colors"
+									chart-labels="tab.lineChartInnodb_data_writes.labels"
+									chart-data="tab.lineChartInnodb_data_writes.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>innodb_data_written</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartInnodb_data_written.series"><em style="background:{{ tab.lineChartInnodb_data_written.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineInnodb_data_written" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartInnodb_data_written.options"
+									chart-series="tab.lineChartInnodb_data_written.series"
+									chart-colors="tab.lineChartInnodb_data_written.colors"
+									chart-labels="tab.lineChartInnodb_data_written.labels"
+									chart-data="tab.lineChartInnodb_data_written.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>queries</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartQueries.series"><em style="background:{{ tab.lineChartQueries.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineQueries" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartQueries.options"
+									chart-series="tab.lineChartQueries.series"
+									chart-colors="tab.lineChartQueries.colors"
+									chart-labels="tab.lineChartQueries.labels"
+									chart-data="tab.lineChartQueries.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>memory_used</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartMemory_used.series"><em style="background:{{ tab.lineChartMemory_used.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineMemory_used" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartMemory_used.options"
+									chart-series="tab.lineChartMemory_used.series"
+									chart-colors="tab.lineChartMemory_used.colors"
+									chart-labels="tab.lineChartMemory_used.labels"
+									chart-data="tab.lineChartMemory_used.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+
+				</ul>
+				<!-- //탭 내용 : DB -->
+
+				<!-- 탭 내용 : WAS -->
+				<ul class="visualizeList" ng-if="contents.deployServer.deployType == 'WAS'">
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>bytes_received</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartBytes_received.series"><em style="background:{{ tab.lineChartBytes_received.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineBytes_was_received" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartBytes_received.options"
+									chart-series="tab.lineChartBytes_received.series"
+									chart-colors="tab.lineChartBytes_received.colors"
+									chart-labels="tab.lineChartBytes_received.labels"
+									chart-data="tab.lineChartBytes_received.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>bytes_sent</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartBytes_sent.series"><em style="background:{{ tab.lineChartBytes_sent.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineBytes_was_sent" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartBytes_sent.options"
+									chart-series="tab.lineChartBytes_sent.series"
+									chart-colors="tab.lineChartBytes_sent.colors"
+									chart-labels="tab.lineChartBytes_sent.labels"
+									chart-data="tab.lineChartBytes_sent.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>current_thread_count</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartCurrent_thread_count.series"><em style="background:{{ tab.lineChartCurrent_thread_count.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineCurrent_thread_count" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartCurrent_thread_count.options"
+									chart-series="tab.lineChartCurrent_thread_count.series"
+									chart-colors="tab.lineChartCurrent_thread_count.colors"
+									chart-labels="tab.lineChartCurrent_thread_count.labels"
+									chart-data="tab.lineChartCurrent_thread_count.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>current_threads_busy</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartCurrent_threads_busy.series"><em style="background:{{ tab.lineChartCurrent_threads_busy.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineCurrent_threads_busy" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartCurrent_threads_busy.options"
+									chart-series="tab.lineChartCurrent_threads_busy.series"
+									chart-colors="tab.lineChartCurrent_threads_busy.colors"
+									chart-labels="tab.lineChartCurrent_threads_busy.labels"
+									chart-data="tab.lineChartCurrent_threads_busy.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>error_count</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartError_count.series"><em style="background:{{ tab.lineChartError_count.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineError_count" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartError_count.options"
+									chart-series="tab.lineChartError_count.series"
+									chart-colors="tab.lineChartError_count.colors"
+									chart-labels="tab.lineChartError_count.labels"
+									chart-data="tab.lineChartError_count.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>processing_time</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartProcessing_time.series"><em style="background:{{ tab.lineChartProcessing_time.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineProcessing_time" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartProcessing_time.options"
+									chart-series="tab.lineChartProcessing_time.series"
+									chart-colors="tab.lineChartProcessing_time.colors"
+									chart-labels="tab.lineChartProcessing_time.labels"
+									chart-data="tab.lineChartProcessing_time.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>request_count</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartRequest_count.series"><em style="background:{{ tab.lineChartRequest_count.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineRequest_count" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartRequest_count.options"
+									chart-series="tab.lineChartRequest_count.series"
+									chart-colors="tab.lineChartRequest_count.colors"
+									chart-labels="tab.lineChartRequest_count.labels"
+									chart-data="tab.lineChartRequest_count.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>jvm memory free(MB)</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartFree.series"><em style="background:{{ tab.lineChartFree.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineFree" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartFree.options"
+									chart-series="tab.lineChartFree.series"
+									chart-colors="tab.lineChartFree.colors"
+									chart-labels="tab.lineChartFree.labels"
+									chart-data="tab.lineChartFree.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li><span>jvm memory total(MB)</span></li>
+								<li ng-repeat="(key, label) in tab.lineChartTotal.series"><em style="background:{{ tab.lineChartTotal.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineTotal" class="chart chart-line chart-xl"
+									chart-options="tab.lineChartTotal.options"
+									chart-series="tab.lineChartTotal.series"
+									chart-colors="tab.lineChartTotal.colors"
+									chart-labels="tab.lineChartTotal.labels"
+									chart-data="tab.lineChartTotal.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+
+				</ul>
+				<!-- //탭 내용 : WAS -->
+			</div>
+		</div>
+	</div>
+</div>
+<!-- //panel -->

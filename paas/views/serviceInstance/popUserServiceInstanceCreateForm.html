@@ -1,0 +1,64 @@
+<table class="table table-bordered">
+	<colgroup>
+		<col style="width:17%;" />
+		<col style="width:33%;" />
+		<col style="width:17%;" />
+		<col style="width:33%;" />
+	</colgroup>
+	<tbody>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="organization">{{ 'label.org_select' | translate }}</label><!-- 조직선택 -->
+		</th>
+		<td>
+			<select name="organization" id="organization" ng-change="pop.changeOrganization();" ng-model="pop.sltOrganizationGuid" validation="required">
+				<option value="">{{ 'label.select' | translate }}</option>
+				<option ng-repeat="orgItem in pop.organizations" value="{{ orgItem.guid }}">{{ orgItem.name }}</option>
+			</select>
+		</td>
+		<th>
+			<span class="require"></span>
+			<label for="space">{{ 'label.space_select' | translate }}</label><!-- 영역선택 -->
+		</th>
+		<td>
+			<select name="space" id="space" ng-change="pop.changeSpace();" ng-model="pop.sltSpaceGuid" validation="required">
+				<option value="">{{ 'label.select' | translate }}</option>
+				<option ng-repeat="spaceItem in pop.spaces" value="{{ spaceItem.guid }}">{{ spaceItem.name }}</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="userServiceInstanceName">{{ 'label.service_instance_name' | translate }}</label><!-- 서비스 인스턴스 명 -->
+		</th>
+		<td colspan="3">
+			<input type="text" maxlength="30" name="pop.userServiceInstanceName" id="userServiceInstanceName" ng-model="pop.sltUserServiceInstanceName" placeholder="{{ 'label.service_instance_name' | translate }}" validation="alpha_dash|min_len:3|max_len:30|required" maxlength="30">
+		</td>
+	</tr>
+	<tr>
+		<th>{{ 'label.service_access_info' | translate }} <button type="button" class="btn btn-add ng-binding" style="float: right;" tooltip-placement="bottom" uib-tooltip="{{ 'label.add' | translate }}" ng-click="pop.addCredential();"><img src="img/ico_add.png" width="9" height="9"></button><!-- 추가 --></th><!-- 서비스 접속 정보 -->
+		<td colspan="3" class="credentialWrap">
+			<ul>
+				<li ng-repeat="(idx, credentialItem) in pop.credentials">
+					<input type="text" maxlength="30" name="credentialKey" placeholder="Name" ng-model="credentialItem.key">
+					<input type="text" maxlength="30" name="credentialValue" placeholder="Value" ng-model="credentialItem.value">
+					<button type="button" class="btn btn-del ng-binding" ng-click="pop.delCredential(idx);"><img src="img/ico_delete.png" width="13" height="16"> {{ 'label.del' | translate }}</button><!-- 삭제 -->
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<label for="addApp">{{ 'label.binding_app_select' | translate }}</label><!-- 앱 -->
+		</th>
+		<td colspan="3" class="bindindWrap">
+			<select ui-select2="{ allowClear : true }" name="app" id="addApp" ng-model="pop.sltAppGuids" data-placeholder="{{ 'label.select' | translate }}"  multiple="multiple">
+				<option></option>
+				<option ng-repeat="appItem in pop.apps" value="{{ appItem.guid }}">{{ appItem.name }}</option>
+			</select>
+		</td>
+	</tr>
+	</tbody>
+</table>

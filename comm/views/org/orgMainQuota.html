@@ -1,0 +1,136 @@
+	<!-- cBox -->
+		<div class="cBox-cnt">
+
+			<div class="in">
+                <!-- table top -->
+                <div class="tb-top">
+                    <div class="pull-left"><h4 class="c-tit">{{ 'label.current_capacity' | translate }} : {{contents.selOrg.quotaId.name}}</h4></div>
+                    <div class="pull-right">
+                    <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-click="contents.asideQuotaReqNgClick();">
+                            <span class="ico">{{ 'label.add' | translate }}</span>
+                        </button>
+                    </div>
+                </div>
+				<!-- //table top -->
+
+				<!-- table : 현재 용량 스펙 숨기기-->
+				<div class="tbl type1" ng-if="0">
+					<table class="table">
+						<colgroup>
+							<col />
+							<col />
+							<col />
+							<col />
+							<col />
+							<col />
+							<col />
+							<col />
+							<col />
+							<col />
+							<col />
+							<col ng-if="0" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col" colspan="6" style="border-right: 1px solid">서버 가상화 서비스</th>
+								<th scope="col" colspan="4" style="border-right: 1px solid">표준 APP.개발 서비스</th>
+								<th scope="col" rowspan="2">{{ 'label.default' | translate }}</th>
+								<th scope="col" rowspan="2" ng-if="0">{{ 'label.job_count' | translate }}</th>
+							</tr>
+							<tr>
+								<th scope="col">vCpus</th>
+								<th scope="col">Memory</th>
+								<th scope="col">Disk(loc)</th>
+								<th scope="col">Disk(ext)</th>
+								<th scope="col">Disk(obj)</th>
+								<th scope="col">Ip</th>
+								<th scope="col">Memory</th>
+								<th scope="col">Service</th>
+								<th scope="col">Router</th>
+								<th scope="col">App</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{contents.selOrg.quotaId.quotaIaas.computingVcpus}}</td>   <!-- quotaIaas.computingVcpus -->
+								<td>{{contents.selOrg.quotaId.quotaIaas.computingRam}}</td>  <!-- quotaIaas.computingRam -->
+								<td>{{contents.selOrg.quotaId.quotaIaas.computingHdd}}</td>  <!-- quotaIaas.computingHdd -->
+								<td>{{contents.selOrg.quotaId.quotaIaas.storageExternalHdd}}</td>  <!-- quotaIaas.storage_externalHdd -->
+								<td>{{contents.selOrg.quotaId.quotaIaas.storageObjectStorage}}</td>  <!-- quotaIaas.storage_objectStorage -->
+								<td>{{contents.selOrg.quotaId.quotaIaas.networkFloatingIp}}</td>  <!-- quotaIaas.networkFloatingIp -->
+								<td>{{contents.selOrg.quotaId.quotaPaas.totalMemory}}</td> <!-- quotaPaas.totalMemory -->
+								<td>{{contents.selOrg.quotaId.quotaPaas.serviceInstances}}</td>  <!-- quotaPaas.serviceInstances -->
+								<td>{{contents.selOrg.quotaId.quotaPaas.routes}}</td>  <!-- quotaPaas.routes -->
+								<td>{{contents.selOrg.quotaId.quotaPaas.appInstances}}</td>  <!-- quotaPaas.appInstances -->
+								<td>{{contents.selOrg.quotaId.defaultQuota | commQuotaHistoryDefaultQuotaName}}</td> <!-- defaultQuota -->
+								<td ng-if="0">{{contents.selOrg.quotaId.orgCount}}</td>   <!-- orgCount -->
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- //table -->
+			</div>
+
+			<div class="in">
+			    <!-- table top : 용량변경요청 타이틀 숨김 -->
+                <div class="tb-top">
+                    <div class="pull-left" ng-if="0"><h4 class="c-tit">{{ 'label.capacity_change_request' | translate }}</h4></div>
+                    <div class="pull-right"> 
+                    </div>
+				</div>
+				<!-- //table top -->
+
+				<!-- table : quota 이력 -->
+				<div class="tbl type1">
+					<table class="table">
+						<colgroup>
+							<col style="width: 10%;">
+							<col style="width: 10%;">
+							<col style="width: 10%;">
+							<col style="width: 15%;">
+							<col style="width: 15%;">
+							<col style="width: 15%;">
+							<col style="width: 10%;">
+							<col style="width: 10%;">
+						</colgroup>
+						<thead>
+						<tr>
+							<th scope="col">No.</th>
+							<th scope="col">{{ 'label.apply' | translate }}</th>
+							<th scope="col">{{ 'label.capacity' | translate }}</th>
+							<th scope="col">{{ 'label.requester' | translate }}</th>
+							<th scope="col">{{ 'label.request_dd' | translate }}</th>
+							<th scope="col">{{ 'label.treat_dd' | translate }}</th>
+							<th scope="col">{{ 'label.state' | translate }}</th>
+							<th scope="col">{{ 'label.treat' | translate }}</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="quotaHistory in contents.listQuotaHistory.items">
+							<td>{{$index + 1}}</td>
+							<td>{{(!quotaHistory.messageReq || quotaHistory.messageReq=='SYSTEM INSERT')?'최초생성':'용량변경'}}</td>
+							<td>{{quotaHistory.status=='REQUEST'?quotaHistory.quotaReq.name:quotaHistory.quotaTo.name}}</td>
+							<td>{{quotaHistory.createdId}}</td>
+							<td>{{quotaHistory.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td>{{quotaHistory.updatedDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td>{{quotaHistory.status | commQuotaHistoryStatusName}}</td>
+							<td>
+								<button type="button" name="button" class="btn btn-ico-modi-s only-ico" ng-click="contents.asideQuotaResNgClick({quotaHistory : quotaHistory});" ng-show="quotaHistory.status=='REQUEST'" ng-disabled="!(contents.selOrg.project.myRoleName == 'OWNER' || contents.selOrg.project.myRoleName == 'ADMIN')">
+									<span class="ico">{{ 'label.treat' | translate }}</span>
+								</button>
+								<button type="button" name="button" class="btn btn-color3 btn-xs" ng-click="contents.systemLinkRetry(quotaHistory);" ng-show="quotaHistory.status=='FAIL'" ng-disabled="!(contents.selOrg.project.myRoleName == 'OWNER' || contents.selOrg.project.myRoleName == 'ADMIN')">
+									{{ 'label.rerun' | translate }}
+								</button>
+							</td>
+						</tr>
+						<!-- 등록된 멤버가 없을 때 -->
+						<tr class="no-data" ng-if="contents.listQuotaHistory.itemCount == 0">
+							<td colspan="8">등록된 용량변경 요청이 없습니다.</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- //table -->
+			</div>
+		</div>
+	<!-- //cBox -->

@@ -1,0 +1,165 @@
+	<!-- aside cnt -->
+	<form name="pop.{{pop.formName}}" novalidate>
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li>
+					<p ng-if="!pop.domainRouter.deployId" class="app-tit">인스턴스명</p>
+					<p ng-if="pop.domainRouter.deployId" class="app-tit">서비스 인스턴 명</p>
+					<div class="input-group" style="width : 100%;">
+						<input type="text" class="form-control"  ng-model="pop.floatingIps.instanceName" disabled>
+					</div>
+				</li>
+				<li>
+					<p class="app-tit">도메인</p>
+					<div ng-if="pop.formMode == 'mod'" class="input-group" style="width : 100%;">
+						<input type="text" class="form-control" value="{{pop.domainRouter.domain}}" disabled>
+					</div>
+					<div ng-if="pop.formMode == 'add'" class="instBox type2" style="padding-bottom: 10px;">
+						<div class="slider-input-group slider-label-hide">
+							<div class="radio radio-inline">
+								<input type="radio" name="radio_domain" id="radio-domain1" ng-model="pop.domainRouter.domainType" value="public" ng-disabled="!pop.domainList || pop.domainList.length == 0">
+								<label for="radio-domain1" class="label">공용 도메인</label>
+							</div>
+							<div class="radio radio-inline">
+								<input type="radio" name="radio_domain" id="radio-domain2" ng-model="pop.domainRouter.domainType" value="private" ng-disabled="!pop.domainList || pop.domainList.length == 0">
+								<label for="radio-domain2" class="label">사용자 도메인</label>
+							</div>
+						</div>
+						<ul class="app-set">
+							<li ng-if="pop.domainRouter.domainType == 'public'">
+								<div class="app-form-two w_auto">
+									<div class="two_box" >
+										<input type="text" class="form-control" maxlength="30" name="subDomain" ng-model="pop.domainRouter.subDomain" validation="alpha_num|required|custom:pop.fn.subDomainCustomValidationCheck(pop.domainRouter.subDomain)" placeholder="서브도메인명을 입력하세요.">
+									</div>
+									<div class="two_box" >
+										<select name="selectBaseDomain" class="form-control" ng-model="pop.domainRouter.baseDomain" validation="required">
+											<option ng-if="!pop.domainList || pop.domainList.length == 0" value="">도메인 없음</option>
+											<option ng-repeat="item in pop.domainList" value="{{item.domain}}">{{item.domain}}</option>
+										</select>
+									</div>
+								</div>
+								<div class="validation validation-subDomain validation-selectBaseDomain text-danger"></div>
+							</li>
+							<li ng-if="pop.domainRouter.domainType == 'private'">
+								<div class="input-group" style="width : 100%; padding-top: 5px;">
+									<input type="text" class="form-control" maxlength="30" name="domainName" ng-model="pop.domainRouter.domainName" validation="required|custom:pop.fn.domainCustomValidationCheck(pop.domainRouter.domainName)" placeholder="도메인명을 입력하세요.">
+								</div>
+								<div class="validation validation-domainName text-danger"></div>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li ng-if="pop.floatingIps.deployId">
+					<p class="app-tit">서비스 선택 (하나 이상 선택)</p>
+					<div class="instBox type2" style="padding-bottom: 20px;" ng-style="{'border-color': (pop[pop.formName].selectServices.$touched && pop[pop.formName].selectServices.$invalid) ? '#ff0740' : '#6e7587'}">
+						<ul class="app-set">
+							<li>
+								<p class="app-tit">WEB / WAS 서비스 선택</p>
+								<select name="selectHttpService" class="form-control" ng-model="pop.domainRouter.selectHttpServiceKey" ng-change="pop.fn.changeHttpService(pop.domainRouter.selectHttpServiceKey)">
+									<option value="">선택 안함</option>
+									<option ng-repeat="(key, item) in pop.httpServices" value="{{key}}">{{item.displayName}}</option>
+								</select>
+							</li>
+							<li>
+								<p class="app-tit">DB 서비스 선택</p>
+								<select name="selectMysqlService" class="form-control" ng-model="pop.domainRouter.selectMariadbServiceKey" ng-change="pop.fn.changeMariadbService(pop.domainRouter.selectMariadbServiceKey)">
+									<option value="">선택 안함</option>
+									<option ng-repeat="(key, item) in pop.mariadbServices" value="{{key}}">{{item.displayName}}</option>
+								</select>
+							</li>
+						</ul>
+					</div>
+					<input type="hidden" name="selectServices" ng-model="pop.domainRouter.selectServiceKies" validation="required">
+					<div class="validation validation-selectServices text-danger" style="display: none;"></div>
+					<div ng-if="pop[pop.formName].selectServices.$touched && pop[pop.formName].selectServices.$invalid" class="validation text-danger">하나 이상의 서비스를 선택해야 합니다.</div>
+				</li>
+				<li ng-if="!pop.floatingIps.deployId">
+					<p class="app-tit">사용 프로토콜</p>
+					<div class="instBox type2" style="padding-bottom: 10px;">
+						<div class="slider-input-group slider-label-hide">
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" name="domain_http_protocol" id="domain_http_protocol" ng-model="pop.domainRouter.http_protocol" value="true" ng-disabled="pop.domainRouter.https_protocol">
+								<label for="domain_http_protocol" class="label-txt">HTTP</label>
+							</div>
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" name="domain_https_protocol" id="domain_https_protocol" ng-model="pop.domainRouter.https_protocol" ng-change="pop.domainRouter.https_protocol ? pop.domainRouter.http_protocol = true: '';" value="true">
+								<label for="domain_https_protocol" class="label-txt">HTTPS</label>
+							</div>
+							<div class="checkbox checkbox-inline">
+								<input type="checkbox" name="domain_mysql_protocol" id="domain_mysql_protocol" ng-model="pop.domainRouter.mysql_protocol" value="true">
+								<label for="domain_mysql_protocol" class="label-txt">MYSQL</label>
+							</div>
+						</div>
+						<div ng-if="pop.domainRouter.http_protocol != true && pop.domainRouter.https_protocol != true && pop.domainRouter.mysql_protocol != true" class="validation text-danger">하나 이상의 프로토콜을 선택 하십시오.</div>
+						<ul class="app-set">
+							<li>
+								<div ng-if="pop.domainRouter.http_protocol == true" class="app-form-two w_auto mgt0" style="margin-top: 0; width: 100%;">
+									<div class="two_box" style="width: 90px; padding-top: 8px; color: #8992a8;">
+										<span>HTTP(80)</span>
+									</div>
+									<div class="two_box" style="width: 5px; text-align: center; padding-top: 8px; color: #8992a8;"><span>:</span></div>
+									<div class="two_box" style="width: auto;">
+										<input type="number" class="form-control" name="domainHttpPort" ng-model="pop.domainRouter.http_port" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.domainRouter.http_port)">
+									</div>
+								</div>
+								<div ng-if="pop.domainRouter.http_protocol == true" class="validation validation-domainHttpPort text-danger"></div>
+								<div ng-if="pop.domainRouter.https_protocol == true" class="app-form-two w_auto mgt0" style="margin-top: 0; width: 100%;">
+									<div class="two_box" style="width: 90px; padding-top: 8px; color: #8992a8;">
+										HTTPS(443)
+									</div>
+									<div class="two_box" style="width: 5px; text-align: center; padding-top: 8px; color: #8992a8;"><span>:</span></div>
+									<div class="two_box" style="width: auto;">
+										<input type="number" class="form-control" name="domainHttpsPort" ng-model="pop.domainRouter.https_port" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.domainRouter.https_port)">
+									</div>
+								</div>
+								<div ng-if="pop.domainRouter.https_protocol == true" class="validation validation-domainHttpPort text-danger"></div>
+								<div ng-if="pop.domainRouter.mysql_protocol == true" class="app-form-two w_auto mgt0" style="margin-top: 0; width: 100%;">
+									<div class="two_box" style="width: 90px; padding-top: 8px; color: #8992a8;">
+										MYSQL(3306)
+									</div>
+									<div class="two_box" style="width: 5px; text-align: center; padding-top: 8px; color: #8992a8;"><span>:</span></div>
+									<div class="two_box" style="width: auto;">
+										<input type="number" class="form-control" name="domainHttpsPort" ng-model="pop.domainRouter.mysql_port" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.domainRouter.https_port)">
+									</div>
+								</div>
+								<div ng-if="pop.domainRouter.mysql_protocol == true" class="validation validation-domainMysqlPort text-danger"></div>
+							</li>
+<!--
+							<li>
+								<div class="app-form-two w_auto mgt0" style="margin-top: 0; width: 100%;">
+									<div class="two_box" style="width: 90px; padding-top: 8px; color: #8992a8;">
+										RDP(3389)
+									</div>
+									<div class="two_box" style="width: 5px; text-align: center; padding-top: 8px; color: #8992a8;"><span>:</span></div>
+									<div class="two_box" style="width: auto;">
+										<input type="number" class="form-control" name="domainRdpPort" ng-model="pop.domainRouter.rdp_port" min="1" max="49151" max-number-length="5" validation="numeric|custom:pop.fn.systemPortCustomValidationCheck(pop.domainRouter.rdp_port)">
+									</div>
+								</div>
+								<div class="validation validation-domainRdpPort text-danger"></div>
+							</li>
+-->
+						</ul>
+					</div>
+				</li>
+				<li ng-if="pop.floatingIps.deployId && (pop.domainRouter.https_protocol == true)">
+					<p class="app-tit">도메인 인증서</p>
+					<div class="instBox type2" style="padding-bottom: 10px;">
+						<div class="input-group" style="width : 100%;">
+							<input type="text" class="form-control" maxlength="255" name="domainPublicCert" ng-model="pop.domainRouter.publicKey" validation="required|custom:pop.fn.domainCustomValidationCheck()" placeholder="public 인증서를 입력하세요.">
+						</div>
+						<div class="validation validation-domainPublicCert text-danger"></div>
+						<div class="input-group" style="width : 100%; padding-top: 10px;">
+							<input type="text" class="form-control" maxlength="255" name="domainPrivateCert" ng-model="pop.domainRouter.privateKey" validation="required|custom:pop.fn.domainCustomValidationCheck()" placeholder="private 인증서를 입력하세요.">
+						</div>
+						<div class="validation validation-domainPrivateCert text-danger"></div>
+						<div class="input-group" style="width : 100%; padding-top: 10px;">
+							<input type="text" class="form-control" maxlength="255" name="domainCACert" ng-model="pop.domainRouter.caKey" validation="required|custom:pop.fn.domainCustomValidationCheck()" placeholder="CA 인증서를 입력하세요.">
+						</div>
+						<div class="validation validation-domainCACert text-danger"></div>
+					</div>
+				</li>
+			</ol>
+		</div>
+		<!-- //sideInWrap -->
+	</form>

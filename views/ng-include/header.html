@@ -1,0 +1,236 @@
+		<div class="inner" ng-if="!main.isAuthenticated">
+			<div class="pull-left">
+				<h1 class="logo"><a href="./"><img src="images/top_logo.png" alt="HUB POP"></a></h1>
+			</div>
+			<div class="pull-right" style="border-bottom: 0px solid #eee;">
+				<div class="align_l">
+					<div class="col col-all" ng-show="main.hubpop.gnb == 'gnbLayer'" style="border-right: 0px solid #eee;"><!-- gnb가 relative로 들어갈때 data-user="gnb-left", 레이어일때 data-user="gnb-layer" -->
+						<a href="#" title="전체메뉴" data-user="gnb-layer" ng-if="0"><span class="ico">전체메뉴</span></a>
+					</div>
+					<div class="col col-all" ng-show="main.hubpop.gnb == 'gnbLeft'" style="border-right: 0px solid #eee;"><!-- gnb가 relative로 들어갈때 data-user="gnb-left", 레이어일때 data-user="gnb-layer" -->
+						<a href="#" title="전체메뉴" data-user="gnb-left" ng-if="0"><span class="ico">전체메뉴</span></a>
+					</div>
+					<div class="col col-proj">
+						<div class="dropdown" ng-if="0">
+							<button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span class="txt">{{main.hubpop.projectSelected.name}}</span><span class="ico arr"></span>
+							</button>
+							<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
+	<!-- 							<li><a href="#">수요예측 프로젝트</a></li> -->
+	<!-- 							<li><a href="#">HUBPOP 1.0 프로젝트</a></li> -->
+	<!-- 								<li ng-repeat="project in main.hubpop.projects"><a href="./#/projects/projectDetail/{{project.id}}">{{project.name}}</a></li> -->
+									<li ng-repeat="project in main.hubpop.projects"><a ng-click="main.hubpop.projectNgClick($event, $scope, main, project);">{{project.name}}</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col col-sev">
+						<a href="#" ng-if="0">서비스 카탈로그</a>
+					</div>
+				</div>
+<!-- 				<div class="col col-ws"></div> -->
+<!-- 				<div class="col col-sch"> -->
+<!-- 					<div class="input-group" ng-if="0"> -->
+<!-- 						<input type="text" name="" value="" class="form-control" placeholder="검색어를 입력하세요"> -->
+<!-- 						<div class="input-group-btn"> -->
+<!-- 							<button type="button" name="button" class="btn" title="검색"><span class="ico">검색</span></button> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+				<div class="align_r">
+					<div class="col col-noti">
+						<div class="dropdown" ng-if="0">
+							<button type="button" name="button" class="btn btn-noti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="알림"><span class="ico"><em class="badge">7</em></span></button>
+							<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
+								<li class="noti-txt">총 <em>4</em>개의 알람이 있습니다.</li>
+								<li class="divider"></li>
+								<li class="noti-li">
+									<a href="#">
+										<span class="noti-name">L</span>
+										<p class="noti-tit">Hubpop_Dev 인스턴스 System error</p>
+										<p class="noti-date">2018-01-31</p>
+									</a>
+								</li>
+								<li class="noti-li">
+									<a href="#">
+										<span class="noti-name">D</span>
+										<p class="noti-tit">Hubpop_Dev 인스턴스 System error</p>
+										<p class="noti-date">2018-01-31</p>
+									</a>
+								</li>
+								<li class="noti-li">
+									<a href="#">
+										<span class="noti-name">T</span>
+										<p class="noti-tit">Hubpop_Dev 인스턴스 System error</p>
+										<p class="noti-date">2018-01-31</p>
+									</a>
+								</li>
+								<li class="divider"></li>
+								<li class="noti-more"><a href="#">알람 더보기 <span class="ico"></span></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col col-set">
+						<div class="dropdown" ng-if="0">
+							<button id="btn-set" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="설정">
+								<span class="ico"></span>
+							</button>
+							<ul class="dropdown-menu" role="btn-set" aria-labelledby="btn-set">
+	<!-- 							<li><a href="#">알림설정</a></li> -->
+								<li class="langSet">
+									<a href="#">언어설정</a>
+										<ul class="dropdown-menu">
+	<!-- 										<li><a href="#">한국어</a></li> -->
+	<!-- 										<li><a href="#">영어</a></li> -->
+	<!-- 										<li ng-repeat="langItem in main.languages | filter:{key: '!'+main.sltLanguage.key}"><a href="" ng-click="main.changeLanguage(langItem.key)">{{ langItem.name }}</a></li> -->
+											<li><a href="" ng-click="main.changeLanguage('ko')">{{ 'label.ko' | translate }}</a></li>
+											<li><a href="" ng-click="main.changeLanguage('en')">{{ 'label.en' | translate }}</a></li>
+										</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col col-tuto">
+						<button id="btn-set" type="button" class="btn" title="튜토리얼" ng-if="0">
+							<span class="ico"></span>
+						</button>
+					</div>
+					<div class="col col-tuto">
+						<!--<a ng-click="main.goConsole();">Console</a>-->
+						<button id="btn-set" type="button" class="btn" title="콘솔" ng-click="main.goConsole();">Console</button>
+					</div>
+					<div class="col col-my">
+						<div class="dropdown">
+							<button id="btn-my" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<p class="name">{{'label.login' | translate}}</p>
+								<span class="ico arr"></span>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-right" role="btn-my" aria-labelledby="btn-my" ng-if="!main.isAuthenticated">
+								<li><a href="./#/login"><span class="ico ico4"></span>{{'label.login' | translate}}</a></li>
+								<li><a href="./#/signup"><span class="ico ico4"></span>{{'label.signup' | translate}}</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="inner" ng-if="!!main.isAuthenticated">
+			<div class="pull-left">
+				<h1 class="logo"><a href="./"><img src="images/top_logo.png" alt="HUB POP"></a></h1>
+			</div>
+			<div class="pull-right">
+				<div class="align_l">
+					<div class="col col-all" ng-show="main.hubpop.gnb == 'gnbLayer'" style="visibility: hidden;"><!-- gnb가 relative로 들어갈때 data-user="gnb-left", 레이어일때 data-user="gnb-layer" -->
+						<a href="#" title="전체메뉴" data-user="gnb-layer"><span class="ico">전체메뉴</span></a>
+					</div>
+					<div class="col col-all" ng-show="main.hubpop.gnb == 'gnbLeft'" style="visibility: hidden;"><!-- gnb가 relative로 들어갈때 data-user="gnb-left", 레이어일때 data-user="gnb-layer" -->
+						<a href="#" title="전체메뉴" data-user="gnb-left"><span class="ico">전체메뉴</span></a>
+					</div>
+					<div class="col col-proj" style="visibility: hidden;">
+						<div class="dropdown">
+							<button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<div style="width: 120px; overflow: hidden; text-overflow: ellipsis;">
+									<span class="txt">{{main.hubpop.projectSelected.name}}</span>
+								</div>
+								<span class="ico arr"></span>
+							</button>
+							<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
+	<!-- 							<li><a href="#">수요예측 프로젝트</a></li> -->
+	<!-- 							<li><a href="#">HUBPOP 1.0 프로젝트</a></li> -->
+	<!-- 							<li ng-repeat="project in main.hubpop.projects"><a href="./#/projects/projectDetail/{{project.id}}">{{project.name}}</a></li> -->
+								<li ng-repeat="project in main.hubpop.projects"><a ng-click="main.hubpop.projectNgClick($event, $scope, main, project);">{{project.name}}</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col col-sev" style="visibility: hidden;">
+						<a href="#">서비스 카탈로그</a>
+					</div>
+				</div>
+<!-- 				<div class="col col-ws" style="visibility: hidden;"></div> -->
+<!-- 				<div class="col col-sch" style="visibility: hidden;"> -->
+<!-- 					<div class="input-group"> -->
+<!-- 						<input type="text" name="" value="" class="form-control" placeholder="검색어를 입력하세요"> -->
+<!-- 						<div class="input-group-btn"> -->
+<!-- 							<button type="button" name="button" class="btn" title="검색"><span class="ico">검색</span></button> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+				<div class="align_r">
+					<div class="col col-noti" style="visibility: hidden;">
+						<div class="dropdown">
+							<button type="button" name="button" class="btn btn-noti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="알림"><span class="ico"><em class="badge">7</em></span></button>
+							<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
+								<li class="noti-txt">총 <em>4</em>개의 알람이 있습니다.</li>
+								<li class="divider"></li>
+								<li class="noti-li">
+									<a href="#">
+										<span class="noti-name">L</span>
+										<p class="noti-tit">Hubpop_Dev 인스턴스 System error</p>
+										<p class="noti-date">2018-01-31</p>
+									</a>
+								</li>
+								<li class="noti-li">
+									<a href="#">
+										<span class="noti-name">D</span>
+										<p class="noti-tit">Hubpop_Dev 인스턴스 System error</p>
+										<p class="noti-date">2018-01-31</p>
+									</a>
+								</li>
+								<li class="noti-li">
+									<a href="#">
+										<span class="noti-name">T</span>
+										<p class="noti-tit">Hubpop_Dev 인스턴스 System error</p>
+										<p class="noti-date">2018-01-31</p>
+									</a>
+								</li>
+								<li class="divider"></li>
+								<li class="noti-more"><a href="#">알람 더보기 <span class="ico"></span></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col col-set" style="visibility: hidden;">
+						<div class="dropdown">
+							<button id="btn-set" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="설정">
+								<span class="ico"></span>
+							</button>
+							<ul class="dropdown-menu" role="btn-set" aria-labelledby="btn-set">
+								<li><a href="#">알림설정</a></li>
+								<li class="langSet">
+									<a href="#">언어설정</a>
+										<ul class="dropdown-menu">
+	<!-- 										<li><a href="#">한국어</a></li> -->
+	<!-- 										<li><a href="#">영어</a></li> -->
+	<!-- 										<li ng-repeat="langItem in main.languages | filter:{key: '!'+main.sltLanguage.key}"><a href="" ng-click="main.changeLanguage(langItem.key)">{{ langItem.name }}</a></li> -->
+											<li><a href="" ng-click="main.changeLanguage('ko')">{{ 'label.ko' | translate }}</a></li>
+											<li><a href="" ng-click="main.changeLanguage('en')">{{ 'label.en' | translate }}</a></li>
+										</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col col-tuto" style="visibility: hidden;">
+						<button id="btn-set" type="button" class="btn" title="튜토리얼">
+							<span class="ico"></span>
+						</button>
+					</div>
+					<div class="col col-tuto">
+						<!--<a ng-click="main.goConsole();">Console</a>-->
+						<button id="btn-set" type="button" class="btn" title="콘솔" ng-click="main.goConsole();">Console</button>
+					</div>
+					<div class="col col-my">
+						<div class="dropdown" ng-class="{userIcon03: main.hubpop.userAuth == 'M'}">
+							<button id="btn-my" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<p class="name">{{main.userInfo.user_name}}</p>
+								<span class="ico arr"></span>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-right" role="btn-my" aria-labelledby="btn-my" ng-if="!!main.isAuthenticated">
+								<li><a href="./#/member"><span class="ico ico1"></span>{{ 'label.personal_info_edit' | translate }}</a></li>
+								<li><a href="./#/support/notice"><span class="ico ico2"></span>나의 문의내역</a></li>
+								<li><a href="./#/support/notice"><span class="ico ico3"></span>문의하기</a></li>
+								<li><a href="#" ng-click="main.logout();"><span class="ico ico4"></span>{{'label.logout' | translate}}</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>

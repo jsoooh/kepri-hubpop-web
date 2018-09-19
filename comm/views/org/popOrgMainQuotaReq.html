@@ -1,0 +1,43 @@
+    <!-- sideInWrap -->
+    <div class="sideInWrap">
+        <form name="orgQuotaReqPop.orgMainAsideQuotaReqForm" novalidate>
+            <ol class="app-set">
+      <li>
+        <p class="app-tit">1. 변경 요청할 용량을 선택해주세요.<span class="ico-info2 ico" ng-mouseleave="contents.quotaInfo = 0" ng-mouseover="contents.quotaInfo = 1" ng-init="contents.quotaInfo = 0"></span></p>
+        <select class="form-control" name="quotaReq" ng-model="contents.quotaHistory.quotaReq.id" ng-options="orgQuota.id as orgQuota.name disable when orgQuota.available == false for orgQuota in contents.selOrg.orgQuotas.items" validation="required" ng-change="contents.quotaReqDescription_ngChange();">
+          <option value="">{{ 'label.select' | translate }}</option>
+        </select>
+        <p class="has-error" ng-show="orgMainAsideQuotaReqForm.quotaReq.$touched && orgMainAsideQuotaReqForm.quotaReq.$error.required">1. 변경 요청할 용량을 선택해주세요.</p>
+        <div class="layer_info" ng-if="contents.quotaInfo">
+            <dl ng-repeat="orgQuota in contents.selOrg.orgQuotas.items">
+                <dt>{{orgQuota.name}}</dt>
+                <dd>{{orgQuota.description}}</dd>
+            </dl>
+        </div>
+        <div class="select_info">
+            <span class="tit" ng-if="!contents.quotaSelected.name">{{ 'label.select' | translate }}</span>
+            <span class="tit" ng-if="!!contents.quotaSelected.name">{{contents.quotaSelected.name}}</span>
+            <dl>
+                <dt>서버 가상화 서비스</dt>
+                <dd>- vCpus : {{contents.quotaSelected.quotaIaas.computingVcpus | number}}개</dd>
+                <dd>- Memory : {{contents.quotaSelected.quotaIaas.computingRam | number}}GB</dd>
+                <dd>- Disk(loc): {{contents.quotaSelected.quotaIaas.computingHdd | number}}GB</dd>
+                <dd>- Disk(ext): {{contents.quotaSelected.quotaIaas.storageExternalHdd | number}}GB</dd>
+                <dd>- IP : {{contents.quotaSelected.quotaIaas.networkFloatingIp | number}}개</dd>
+                <dt>표준 APP.개발 서비스</dt>
+                <dd>- Memory : {{contents.quotaSelected.quotaPaas.totalMemory | number}}GB</dd>
+                <dd>- Service : {{contents.quotaSelected.quotaPaas.serviceInstances | number}}개</dd>
+                <dd>- Router : {{contents.quotaSelected.quotaPaas.routes | number}}개</dd>
+                <dd>- App : {{contents.quotaSelected.quotaPaas.appInstances | number}}개</dd>
+            </dl>
+        </div>
+      </li>
+      <li>
+        <p class="app-tit">2. 변경 요청 사유를 입력해 주세요.</p>
+        <textarea name="messageReq" class="form-control" style="height:100px;" placeholder="{{ 'label.change_request_reason' | translate }}" ng-model="contents.quotaHistory.messageReq" validation="max_len:300|required"></textarea>
+        <p class="has-error" ng-show="orgMainAsideQuotaReqForm.messageReq.$touched && orgMainAsideQuotaReqForm.messageReq.$error.required">2. 변경 요청 사유를 입력해 주세요.</p>
+      </li>
+    </ol>
+        </form>
+    </div>
+    <!-- //sideInWrap -->

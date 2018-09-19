@@ -1,0 +1,30 @@
+{
+	"menu": {
+		"paasta_portal" : "PAASTA 포털",
+		"basic_information" : "기본정보",
+		"space_quota_management" : "영역 용량계획 관리",
+		"space_management" : "영역 관리",
+		"space_details" : "영역 상세",
+		"domain_management" : "도메인 관리",
+		"application_management" : "앱 관리",
+		"service_management" : "서비스 관리",
+		"authority_management" : "권한 관리",
+		"uaaXpert_UI" : "UaaXpert",
+		"user_info": "회원정보",
+		"role_request": "권한요청",
+		"org_mgmt": "조직 관리",
+		"org_add": "조직 추가",
+		"org_request_mgmt" : "조직 신청 관리",
+		"org_user_mgmt" : "조직 사용자 관리",
+		"company_mgmt" : "기업 관리",
+		"region_mgmt": "Region 관리",
+		"service_mgmt": "Service 관리",
+		"product_mgmt" : "상품 관리",
+		"product_iaas_mgmt" : "IaaS 상품 관리",
+		"product_paas_mgmt" : "PaaS 상품 관리",
+		"product_devops_mgmt" : "DevOps 상품 관리",
+		"product_sample" : "상품검색 샘플"
+	},
+	"desc": {
+	}
+}

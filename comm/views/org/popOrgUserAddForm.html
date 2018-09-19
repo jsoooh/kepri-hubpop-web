@@ -1,0 +1,40 @@
+
+	<!-- table -->
+	<div class="tbl type1" style="margin-top:20px;">
+		<table class="table">
+			<colgroup>
+			<col style="width:5%;">
+			<col style="width:22%;">
+			<col>
+			<col style="width:22%;">
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col">
+						<div>
+							<input type="checkbox" ng-model="contents.checkboxAll" ng-click="contents.checkedAll($event);">
+							<label></label>
+						</div>
+					</th>
+					<th scope="col">{{ 'label.name' | translate }}</th>
+					<th scope="col">{{ 'label.id' | translate }}</th>
+					<th scope="col">{{ 'label.role2' | translate }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!--<tr ng-repeat="projectUser in pop.projectUsers | filter: { added: false }">-->
+				<tr ng-repeat="projectUser in contents.selOrg.project.users | filter: { added: false }">
+					<td>
+						<div>
+						   <input type="checkbox" name="chkBox-sel" id="chkBox-sel${{$index}}" ng-model="projectUser.checked">
+						   <label for="chkBox-sel${{$index}}"></label>
+					   </div>
+					</td>
+					<td>{{projectUser.user.name}}</td>
+					<td>{{projectUser.user.email}}</td>
+					<td>{{projectUser.roleName | roleName2}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- //table -->

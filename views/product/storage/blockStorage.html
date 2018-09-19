@@ -1,0 +1,94 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".carousel").hide();
+	});
+</script>
+<div class="topVisualContainer productTop">
+    <nav class="navbar navbar-default product-sub-nav">
+	  <div class="container-fluid">
+	   <a class="back-product-list" href="#/product"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a> 
+		<div class="navbar-header">            
+		  <a class="navbar-brand" href="">Storage</a>
+		</div>
+		<ul class="nav navbar-nav product-nav-list">
+		  <li class="active"><a href="#/product/iaas/storage/blockstorage">Block Storage</a></li>
+		  <li><a href="#/product/iaas/storage/objectstorage">Object Storage</a></li>
+		  <li><a href="#/product/iaas/storage/backup">Back Up</a></li>
+		</ul>
+	  </div>
+	</nav>
+	<div class="productTopLeft"></div>
+	<div class="productTopRight"></div>
+	<div class="topVisualWrap">
+		<!--<img src="../img/img_supporttop.png" width="1069" height="201" alt="" />-->
+		<h3>Block Storage</h3>
+		<p>인스턴스 사용에 필요한 영구적 블록 스토리지 리소스를 제공합니다.</p>
+	</div>
+</div>
+<div id="content" class="container-fluid productContainer">
+	<uib-tabset active="contents.activeTabIndex" class="tab-animation">
+		<uib-tab index="1">
+			<uib-tab-heading>소개</uib-tab-heading>
+			<div class="productIntroWrap productOdd">
+                <h4><span>Block Storage</span>사용자 니즈에 따라 필요 시 쉽게생성하고 반납하는 데이터 저장 공간</h4>
+				<p>
+					Block Storage는 실시간으로 생성 후 서버에 연결하여 사용할 수 있습니다.<br>
+					사용 후, 필요에 따라 선별적으로 반납할 수 있어 경제적입니다.<br>
+					사용자가 필요로 하는 I/O에 따라서비스가 제공됩니다.
+				</p>
+				<ul>
+					<li>
+						<img src="../img/ico_service_detail_0010.png" width="90" height="73" alt=""/>
+						<span>
+							<span class="title">손쉬운 사용</span>
+							웹 콘솔로 스토리지를 관리할 수 있습니다.<br>TB 까지 생성, VM 대당 최대 개의 스토리지를 지원하여 워크로드에 맞는 스토리지 요구사항을 충족합니다.
+				        </span>
+					</li>
+					<li>
+						<img src="../img/ico_service_detail_0011.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">견고한 이중화 설계</span>
+							각각의 파트 별로 이중화 설계를 통해 높은 가용성과<br> 손실방지를최우선으로 하여, 예상치 못한 상황에서도 적절히 대응할 수 있습니다.
+						</span>
+					</li>
+					<li>
+						<img src="../img/ico_service_detail_0012.png" width="90" height="73" alt=""/>
+						<span>
+							<span class="title">스토리지 탄력적 사용 가능</span>
+							사용환경에 따라 유동적인 관리가 가능합니다.<br> 저렴한 HDD 타입의 스토리지 서비스 제공을 통한 비용절감과 용량계획에 따른 스토리지 사이즈를 조정할 수 있습니다.
+						</span>
+					</li> 
+				</ul>
+			</div> 
+		</uib-tab>
+		<uib-tab index="2">
+			<uib-tab-heading>상세 기능</uib-tab-heading>
+			<div class="productIntroWrap">
+				<dl>
+					<dt>Cinder 서비스를 위한 향상된 스토리지 사용</dt>
+					<dd>
+						기 구성된 백엔드 스토리지를 수반한 블록스토리지는 기본적으로 Cinder 볼륨 위에 구성된 LVM을 이용하여 수행합니다. 이를 이용하여 다른 스토리지 디바이스들이 최적화 될 수 있으며 사용자의 요구사항에 맞게 블록 사이즈가 조정될 수 있습니다. 
+					</dd>
+					<dt>유연한 사용자 권한 정책</dt>
+					<dd>블록 스토리지의 CLI를 이용하여 사용자 기반에 한정되었었던 테넌트 기반의 볼륨과 쿼타 등을 유연하게 사용할 수 있습니다. </dd>
+					<dt>손쉬운 사용 </dt>
+					<dd>웹 기반 콘솔로 스토리지를 관리할 수 있습니다.<br/>
+                    TB까지 생성 가능하고 VM 서버 대당 최대 개의 스토리지를 지원하여 워크로드에 맞는 스토리지 요구 사항을 충족하며, 
+                    손쉽게 스토리지 스펙 변경이 가능하여 장애 또는 성능 저하를 최소화합니다.
+                    또한 특정 시점의 스냅샷을 연속으로 캡쳐하고 엔지니어링 하여 효율적인 사용환경을 제공합니다</dd> 
+				</dl>
+			</div> 
+		</uib-tab>
+<!--
+		<uib-tab index="3">
+			<uib-tab-heading>이용안내</uib-tab-heading>
+		</uib-tab>
+-->
+	</uib-tabset>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var winHeight = $(window).height();
+        $(".productContainer").css("min-height",winHeight-434)
+    });
+</script>

@@ -1,0 +1,81 @@
+<table class="table table-bordered">
+	<colgroup>
+		<col style="width:160px;" />
+		<col />
+	</colgroup>
+	<tbody>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="organization">{{ 'label.org_select' | translate }}</label><!-- 조직선택 -->
+		</th>
+		<td>
+			<select name="organization" id="organization" ng-model="pop.spaceQuotaData.organizationGuid" validation="required">
+				<option value="">{{ 'label.select' | translate }}</option>
+				<option ng-repeat="orgItem in pop.organizations" value="{{ orgItem.guid }}">{{ orgItem.name }}</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="name">{{ 'label.quota_name' | translate }}</label><!-- 용량계획명 -->
+		</th>
+		<td>
+			<input name="name" id="name" type="text" maxlength="30" ng-model="pop.spaceQuotaData.name" placeholder="{{ 'label.quota_name' | translate }}" validation="alpha_dash|min_len:3|max_len:30|required" maxlength="30">
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="spaceQuoaTotalServices">{{ 'label.service_limit' | translate }}</label><!-- 서비스 최대 수 -->
+		</th>
+		<td>
+			<input name="spaceQuoaTotalServices" id="spaceQuoaTotalServices" type="number" min="1" max="99999" max-number-length="5" ng-model="pop.spaceQuotaData.spaceQuoaTotalServices" placeholder="{{ 'label.service_limit' | translate }}" validation="digits_between:1,5|required">
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="spaceQuoaTotalRoutes">{{ 'label.route_limit' | translate }}</label><!-- 라우트 최대 수 -->
+		</th>
+		<td>
+			<input name="spaceQuoaTotalRoutes" id="spaceQuoaTotalRoutes" type="number" min="1" max="99999" max-number-length="5" ng-model="pop.spaceQuotaData.spaceQuoaTotalRoutes" placeholder="{{ 'label.route_limit' | translate }}" validation="digits_between:1,5|required">
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="spaceQuotaMemoryLimit">{{ 'label.memory_limit' | translate }}</label><!-- 메모리 최대 량 -->
+		</th>
+		<td class="textSelectWrap">
+			<input name="spaceQuotaMemoryLimit" id="spaceQuotaMemoryLimit" type="number" min="1" max="99999" max-number-length="5" ng-model="pop.spaceQuotaData.spaceQuotaMemoryLimit" placeholder="{{ 'label.memory_limit' | translate }}" validation="digits_between:1,5|required">
+			<select id="spaceQuotaMemoryLimitUnit" name="spaceQuotaMemoryLimitUnit" ng-model="pop.spaceQuotaData.spaceQuotaMemoryLimitUnit">
+				<option ng-repeat="unit in pop.unitTypes" value="{{ unit.key }}">{{ unit.val }}</option>
+			</select>
+			<span class="validation-spaceQuotaMemoryLimit validation text-danger"></span>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="spaceQuotaInstanceMemoryLimit">{{ 'label.instance_memory_limit' | translate }}</label><!-- 인스턴스 메모리 최대 량 -->
+		</th>
+		<td class="textSelectWrap">
+			<input name="spaceQuotaInstanceMemoryLimit" id="spaceQuotaInstanceMemoryLimit" type="number" min="1" max="99999" max-number-length="5" ng-model="pop.spaceQuotaData.spaceQuotaInstanceMemoryLimit" placeholder="{{ 'label.instance_memory_limit' | translate }}" validation="digits_between:1,5|required">
+			<select id="spaceQuotaInstanceMemoryLimitUnit" name="spaceQuotaInstanceMemoryLimitUnit" ng-model="pop.spaceQuotaData.spaceQuotaInstanceMemoryLimitUnit">
+				<option ng-repeat="unit in pop.unitTypes" value="{{ unit.key }}">{{ unit.val }}</option>
+			</select>
+			<span class="validation-spaceQuotaInstanceMemoryLimit validation text-danger"></span>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="spaceQuotaAppInstanceLimit">{{ 'label.app_instance_limit' | translate }}</label><!-- 앱 인스턴스 최대 수 -->
+		</th>
+		<td>
+			<input name="spaceQuotaAppInstanceLimit" id="spaceQuotaAppInstanceLimit" type="number" min="1" max="99999" max-number-length="5" ng-model="pop.spaceQuotaData.spaceQuotaAppInstanceLimit" placeholder="{{ 'label.app_instance_limit' | translate }}" validation="digits_between:1,5|required">
+		</td>
+	</tr>
+</table>

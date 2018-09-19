@@ -1,0 +1,54 @@
+<div ng-controller="iaasComputeVolumeFormCtrl as pop">
+<!-- aside aside1 title -->
+<div class="sideTitWrap">
+	<h2 class="c_tit">{{pop.title}}</h2>
+	<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="main.thisAsideClose($event);"><span class="ico">닫기</span></button>
+</div>
+<!-- //aside aside1 title -->
+
+<!-- aside aside1 cnt -->
+<form name="{{pop.formName}}" novalidate>
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<div class="tbl type1">
+				<table class="table">
+					<colgroup>
+						<col style="width:5%" />
+						<col style="width:auto" />
+						<col style="width:20%" />
+						<col style="width:25%" />
+					</colgroup>
+					<thead>
+						<th>&nbsp;</th>
+						<th>볼륨명</th>
+						<th>부팅볼륨</th>
+						<th>SIZE</th>
+					</thead>
+					<tbody>
+						<tr ng-repeat="volume in pop.volumeList">
+							<td>
+								<input type="radio" name="volumeRadio" id="{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)">
+							</td>
+							<td>{{volume.name}}</td>
+							<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>
+							<td>{{volume.size}}GB</td>
+						</tr>
+						<tr ng-if="pop.volumeList == 0">
+							<td colspan="4">{{ 'message.mi_dont_exist_list' | translate }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+</form>
+<!-- //aside aside1 cnt -->
+
+<!-- aside aside1 btm -->
+<div class="sideBtmWrap">
+	<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.fn.addInstanceVolume();"">저장</button>
+</div>
+<!-- //aside aside1 btm -->
+</div>

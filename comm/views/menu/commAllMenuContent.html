@@ -1,0 +1,41 @@
+<il ng-repeat="(key, menuItem) in main.commLeftMenuParams.common" ng-if="menuItem.key != 'platform_service'">
+    <a href="" ng-click="main.commPartTopLeftMenuClick($event, menuItem.key);" class="gm part-all" ng-class="{'active': menuItem.open, 'on': menuItem.open}"><span class="ico ico-bul-all" ng-class="{'ico1': menuItem.key == 'home', 'ico2': menuItem.key == 'project'}"></span>{{ 'commMenu.menu.' + menuItem.name | translate }}<span ng-if="menuItem.subMenus && menuItem.subMenus.length > 0" class="ico ico-arr"></span></a>
+    <ul ng-if="menuItem.subMenus && menuItem.subMenus.length > 0" class="lnb left-line" ng-style="{ 'display': ((menuItem.open) ? 'block' : 'none') }">
+        <li ng-repeat="(subKey, menuSubItem) in menuItem.subMenus">
+            <p ng-click="main.commPartLeftMenuClick($event, menuItem);" dynamic-template="menuSubItem.templateHtml"></p>
+        </li>
+    </ul>
+</il>
+<il>
+    <a href="" ng-click="main.commPartTopLeftMenuClick($event, 'iaas');" class="gm part-all" ng-class="{'active': main.pageStage == 'iaas', 'on': main.pageStage == 'iaas'}"><span class="ico ico-bul-all ico3"></span>가상화 서비스<span class="ico ico-arr"></span></a>
+    <ul class="lnb left-line" ng-style="{ 'display': ((main.pageStage == 'iaas') ? 'block' : 'none') }">
+        <li ng-repeat="(key, menuItem) in main.commLeftMenuParams.iaasPotal">
+            <p ng-click="main.commPartLeftMenuClick($event, menuItem);" ng-class="{'menu-parent': (menuItem.subMenus && menuItem.subMenus.length > 0)}" dynamic-template="menuItem.templateHtml"></p>
+            <ul ng-if="menuItem.subMenus && menuItem.subMenus.length > 0" class="subm" ng-style="{ 'display': ((menuItem.open) ? 'block' : 'none') }">
+                <li ng-repeat="(subKey, menuSubItem) in menuItem.subMenus" dynamic-template="menuSubItem.templateHtml" class="lm"></li>
+            </ul>
+        </li>
+    </ul>
+</il>
+<il>
+    <a href="" ng-click="main.commPartTopLeftMenuClick($event, 'paas');" class="gm part-all" ng-class="{'active': main.pageStage == 'paas', 'on': main.pageStage == 'paas'}"><span class="ico ico-bul-all ico4"></span>표준 앱 서비스<span class="ico ico-arr"></span></a>
+    <ul class="lnb left-line" ng-style="{ 'display': ((main.pageStage == 'paas') ? 'block' : 'none') }">
+        <li ng-repeat="(key, menuItem) in main.commLeftMenuParams.paasPotal">
+            <p ng-click="main.commPartLeftMenuClick($event, menuItem);" ng-class="{'menu-parent': (menuItem.subMenus && menuItem.subMenus.length > 0)}" dynamic-template="menuItem.templateHtml"></p>
+            <ul ng-if="menuItem.subMenus && menuItem.subMenus.length > 0" class="subm" ng-style="{ 'display': ((menuItem.open) ? 'block' : 'none') }">
+                <li ng-repeat="(subKey, menuSubItem) in menuItem.subMenus" dynamic-template="menuSubItem.templateHtml" class="lm"></li>
+            </ul>
+        </li>
+    </ul>
+</il>
+<il>
+    <a href="" ng-click="main.commPartTopLeftMenuClick($event, 'monit');" class="gm part-all" ng-class="{'active': main.pageStage == 'monit', 'on': main.pageStage == 'monit'}"><span class="ico ico-bul-all ico5"></span>통합 모니터링<span class="ico ico-arr"></span></a>
+    <ul class="lnb left-line" ng-style="{ 'display': ((main.pageStage == 'monit') ? 'block' : 'none') }">
+        <li ng-repeat="(key, menuItem) in main.commLeftMenuParams.monitPotal">
+            <p ng-click="main.commPartLeftMenuClick($event, menuItem);" ng-class="{'menu-parent': (menuItem.subMenus && menuItem.subMenus.length > 0)}" dynamic-template="menuItem.templateHtml"></p>
+            <ul ng-if="menuItem.subMenus && menuItem.subMenus.length > 0" class="subm" ng-style="{ 'display': ((menuItem.open) ? 'block' : 'none') }">
+                <li ng-repeat="(subKey, menuSubItem) in menuItem.subMenus" dynamic-template="menuSubItem.templateHtml" class="lm"></li>
+            </ul>
+        </li>
+    </ul>
+</il>

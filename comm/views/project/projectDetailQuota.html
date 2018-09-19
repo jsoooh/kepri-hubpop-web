@@ -1,0 +1,131 @@
+
+					<div class="cBox-cnt">
+					
+						<div class="in">
+						<!-- table top -->
+						<div class="tb-top">
+							<div class="pull-left"><h4 class="c-tit">{{ 'label.current_capacity' | translate }} : {{contents.project.quota.name}}</h4></div>
+							<div class="pull-right">
+								<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-click="contents.asideQuotaReqNgClick();" ng-disabled="!contents.isThisProjectManager || contents.isExistRequest">
+									<span class="ico">{{ 'label.add' | translate }}</span>
+								</button>
+							</div>
+							</div>
+							<!-- //table top -->
+
+							<!-- table : 현재용량 스팩은 보여주지 않음 -->
+							<div class="tbl type1" ng-if="0">
+								<table class="table">
+									<colgroup>
+										<col />
+										<col />
+										<col />
+										<col />
+										<col />
+										<col />
+										<col />
+										<col />
+										<col />
+										<col />
+										<col />
+										<col />
+									</colgroup>
+									<thead>
+										<tr>
+											<th scope="col" colspan="6" style="border-right: 1px solid">서버 가상화 서비스</th>
+											<th scope="col" colspan="4" style="border-right: 1px solid">표준 APP.개발 서비스</th>
+											<th scope="col" rowspan="2" style="border-right: 1px solid">{{ 'label.default' | translate }}</th>
+											<th scope="col" rowspan="2">{{ 'label.job_count' | translate }}</th>
+										</tr>
+										<tr>
+											<th scope="col">vCpus</th>
+											<th scope="col">Memory</th>
+											<th scope="col">Disk(loc)</th>
+											<th scope="col">Disk(ext)</th>
+											<th scope="col">Disk(obj)</th>
+											<th scope="col">Ip</th>
+											<th scope="col">Memory</th>
+											<th scope="col">Service</th>
+											<th scope="col">Router</th>
+											<th scope="col">App</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>{{contents.project.quota.quotaIaas.computingVcpus}}</td>   <!-- quotaIaas.computingVcpus -->
+											<td>{{contents.project.quota.quotaIaas.computingRam}}</td>  <!-- quotaIaas.computingRam -->
+											<td>{{contents.project.quota.quotaIaas.computingHdd}}</td>  <!-- quotaIaas.computingHdd -->
+											<td>{{contents.project.quota.quotaIaas.storageExternalHdd}}</td>  <!-- quotaIaas.storage_externalHdd -->
+											<td>{{contents.project.quota.quotaIaas.storageObjectStorage}}</td>  <!-- quotaIaas.storage_objectStorage -->
+											<td>{{contents.project.quota.quotaIaas.networkFloatingIp}}</td>  <!-- quotaIaas.networkFloatingIp -->
+											<td>{{contents.project.quota.quotaPaas.totalMemory}}</td> <!-- quotaPaas.totalMemory -->
+											<td>{{contents.project.quota.quotaPaas.serviceInstances}}</td>  <!-- quotaPaas.serviceInstances -->
+											<td>{{contents.project.quota.quotaPaas.routes}}</td>  <!-- quotaPaas.routes -->
+											<td>{{contents.project.quota.quotaPaas.appInstances}}</td>  <!-- quotaPaas.appInstances -->
+											<td>{{contents.project.quota.defaultQuota | commQuotaHistoryDefaultQuotaName}}</td> <!-- defaultQuota -->
+											<td>{{contents.project.orgCount}}</td>   <!-- orgCount -->
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- //table -->
+						</div>
+						
+						<div class="in">
+							<!-- table top : 용량변경요청 타이틀 숨김 -->
+							<div class="tb-top">
+								<div class="pull-left" ng-if="0"><h4 class="c-tit">{{ 'label.capacity_change_request' | translate }}</h4></div>
+							</div>
+							<!-- //table top -->
+
+							<!-- table -->
+							<div class="tbl type1">
+								<table class="table">
+									<colgroup>
+										<col style="width: 10%;">
+										<col style="width: 10%;">
+										<col style="width: 10%;">
+										<col style="width: 15%;">
+										<col style="width: 15%;">
+										<col style="width: 15%;">
+										<col style="width: 10%;">
+										<col style="width: 10%;">
+									</colgroup>
+									<thead>
+										<tr>
+											<th scope="col">No.</th>
+											<th scope="col">{{ 'label.apply' | translate }}</th>
+											<th scope="col">{{ 'label.capacity' | translate }}</th>
+											<th scope="col">{{ 'label.requester' | translate }}</th>
+											<th scope="col">{{ 'label.request_dd' | translate }}</th>
+											<th scope="col">{{ 'label.treat_dd' | translate }}</th>
+											<th scope="col">{{ 'label.state' | translate }}</th>
+											<th scope="col">{{ 'label.del' | translate }}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="quotaHistory in contents.listQuotaHistory.items">
+											<td>{{$index + 1}}</td>
+											<td>{{(!quotaHistory.status || quotaHistory.status=='SUCCESS' || quotaHistory.status=='FAIL')?'최초생성':'용량변경'}}</td>
+											<td>{{quotaHistory.status=='REQUEST'?quotaHistory.quotaReq.name:quotaHistory.quotaTo.name}}</td>
+											<td>{{quotaHistory.createdId}}</td>
+											<td>{{quotaHistory.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+											<td>{{quotaHistory.updatedDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+											<td>{{quotaHistory.status | commQuotaHistoryStatusName2}}</td>
+											<td>
+												<button type="button" name="button" class="btn btn-ico-del-s only-ico" ng-click="contents.deleteRequestQuota(quotaHistory);" ng-show="quotaHistory.status == 'REQUEST'" ng-disabled="!contents.isThisProjectManager">
+													<span class="ico">{{ 'label.treat' | translate }}</span>
+												</button>
+											</td>
+										</tr>
+										<!-- 등록된 멤버가 없을 때 -->
+										<tr class="no-data" ng-if="contents.listQuotaHistory.itemCount == 0">
+											<td colspan="8">등록된 용량변경 요청이 없습니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- //table -->
+						</div>
+					</div>
+				<!-- //cBox -->

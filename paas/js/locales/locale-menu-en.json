@@ -1,0 +1,30 @@
+{
+	"paasMenu": {
+		"menu": {
+			"dashboard": "Dashboard",
+			"paas_portal": "Standard APP.Development Service",
+			"app_and_service": "Apps & Services",
+			"applications": "Applications",
+			"application_push": "Add Application",
+			"application_details": "Application Detail",
+			"service_instances": "Services",
+			"paas_market": "Market Place",
+			"paas_market_app": "App Market",
+			"paas_market_app_view": "App Detail",
+			"paas_market_app_push": "App Push",
+			"paas_market_service": "Service Market",
+			"paas_market_service_view": "Service Detail",
+			"environments": "Environment",
+			"organizations": "Organizations",
+			"space_quotas": "Space Quotas",
+			"spaces": "Spaces",
+			"space_details": "Space Detail",
+			"user_roles": "User Roles",
+			"domains": "Domains",
+			"routes": "Routes",
+			"application_log": "APP 로깅"
+		},
+		"desc": {
+		}
+	}
+}

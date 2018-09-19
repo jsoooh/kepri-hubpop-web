@@ -1,0 +1,67 @@
+<md-dialog draggable drag-handle=".modal-header" aria-label="{{ dialogOptions.title }}" class="{{ dialogOptions.dialogClassName }}">
+	<form name="{{ dialogOptions.formName }}" novalidate>
+		<div class="modal-header">
+			<h4 class="modal-title">{{dialogOptions.title}}</h4>
+			<button type="button" ng-hide="actionLoading" class="close" data-dismiss="modal" aria-hidden="true" ng-click="popCancel()"><img src="img/btn_popupclose.png" width="16" height="16" alt="Close" /></button>
+		</div>
+		<div class="modal-body">
+			<div ng-show="dialogClose" class="alert alert-error">
+				<div class="well loading-well">
+					<h3 class="text-center">CLOSE</h3>
+					<h5 class="text-center">Dialog Close</h5>
+					<div spin="defaultSpinnerConfig" spin-if="dialogClose"></div>
+				</div>
+			</div>
+			<div ng-show="actionLoading">
+				<div ng-if="!main.uploadProgress" class="well loading-well">
+					<div>
+						<md-progress-circular class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
+					</div>
+					<div>
+						<h3>{{ 'message.mi_data_bing_processed' | translate }}</h3>
+						<h5>{{ 'message.mi_please_wait' | translate }}</h5>
+					</div>
+				</div>
+				<div ng-if="main.uploadProgress" class="well upload-well">
+					<div>
+						<div class="uploadProgressMsg">
+							<p class="pull-left">
+								{{ 'label.file_upload' | translate }} ( {{ (main.uploadProgress.loaded/1024)|number:0 }} KB / {{ (main.uploadProgress.total/1024)|number:0 }} KB )
+							</p>
+							<p class="pull-right">
+								{{ main.uploadProgress.percent }}%
+							</p>
+						</div>
+						<div class="uploadProgress progress">
+							<div class="progress-bar" role="progressbar" ng-style="{ 'width': main.uploadProgress.percent + '%' }">{{ main.uploadProgress.percent }}%</div>
+						</div>
+					</div>
+					<div class="uploadMessage">
+						<h3>{{ 'message.mi_uploading_file' | translate }}</h3>
+						<h5>{{ 'message.mi_please_wait' | translate }}</h5>
+					</div>
+				</div>
+			</div>
+			<div ng-show="success" class="alert alert-success">
+				<div class="well loading-well">
+					<h3 class="text-center">SUCCESS</h3>
+					<h5 class="text-center" ng-bind-html="success"</h5>
+					<div spin="defaultSpinnerConfig" spin-if="success"></div>
+				</div>
+			</div>
+			<div ng-show="error" class="alert alert-error">
+				<div class="well loading-well">
+					<h3 class="text-center">ERROR</h3>
+					<h5 class="text-center" ng-bind-html="error"></h5>
+					<div spin="defaultSpinnerConfig" spin-if="error"></div>
+				</div>
+			</div>
+			<div ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl">
+			</div>
+		</div>
+		<div class="modal-footer" layout="row" ng-show="!actionLoading && dialogOptions.btnTemplateUrl" ng-include="dialogOptions.btnTemplateUrl">
+		</div>
+		<div class="modal-footer" layout="row" ng-show="!actionLoading && dialogOptions.btnTemplate" dynamic-template="dialogOptions.btnTemplate">
+		</div>
+	</form>
+</md-dialog>

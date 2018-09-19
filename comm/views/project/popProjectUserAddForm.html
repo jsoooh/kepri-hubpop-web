@@ -1,0 +1,74 @@
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+
+		<!-- search -->
+		<div class="searchBox">
+			<div class="input-group">
+				<input type="text" placeholder="멤버 이름을 입력해 주세요" class="form-control" ng-model="contents.pop.email" ng-keyup="$event.keyCode == 13 ? contents.pop.memberAdd(1) : null;">
+				<div class="input-group-btn">
+					<button type="button" name="button" class="btn btn-sch" title="{{ 'label.search' | translate }}" ng-click="contents.pop.memberAdd(1);"><span class="ico">{{ 'label.search' | translate }}</span></button>
+				</div>
+			</div>
+		</div>
+		<!-- //search -->
+
+		<!-- table -->
+		<div class="tbl type1" style="margin-top:20px;">
+			<table class="table">
+				<colgroup>
+					<col style="width:5%;">
+					<col style="width:22%;">
+					<col>
+					<col style="width:30%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">
+							<div>
+								<input type="checkbox" ng-model="contents.pop.checkboxAll" ng-click="contents.pop.checkedAll($event);">
+								<label></label>
+							</div>
+						</th>
+						<th scope="col">{{ 'label.name' | translate }}</th>
+						<th scope="col">{{ 'label.id' | translate }}</th>
+						<th scope="col">{{ 'label.role2' | translate }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in contents.pop.listPageUser">
+						<td>
+							<div>
+							   <input type="checkbox" name="chkBox-sel" id="chkBox-sel${{$index}}" ng-model="item.checked">
+							   <label for="chkBox-sel${{$index}}"></label>
+						   </div>
+						</td>
+						<td>{{item.name}}</td>
+						<td>{{item.email}}</td>
+						<td>
+							<select ng-model="item.roleName" ng-disabled="item.ngDisabled" style="width:100px;">
+								<option value="{{ contents.CONSTANTS.roleName.user }}" title="사용자">{{ 'label.user' | translate }}</option>
+								<option value="{{ contents.CONSTANTS.roleName.admin }}" title="관리자">{{ 'label.mngr' | translate }}</option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- //table -->
+		<!-- page -->
+		<nav class="pagiWrap">
+			<paging
+			page="contents.pop.pageOptions.currentPage"
+			page-size="contents.pop.pageOptions.pageSize"
+			total="contents.pop.pageOptions.total"
+			pg-href=""
+			show-prev-next="true"
+			show-first-last="true"
+			paging-action="contents.pop.memberAdd(page)"
+			>
+			</paging>
+		</nav>
+		<!-- //page -->
+
+	</div>
+	<!-- //sideInWrap -->

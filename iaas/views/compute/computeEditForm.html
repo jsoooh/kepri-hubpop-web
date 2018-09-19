@@ -1,0 +1,58 @@
+<div ng-controller="iaasComputeEditFormCtrl as pop">
+<!-- aside aside1 title -->
+<div class="sideTitWrap">
+	<h2 class="c_tit">{{pop.title}}</h2>
+	<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="main.thisAsideClose($event);"><span class="ico">닫기</span></button>
+</div>
+<!-- //aside aside1 title -->
+
+<!-- aside aside1 cnt -->
+<form name="{{pop.formName}}" novalidate>
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap" style="min-height:500px;">
+			<ol class="app-set">
+				<li>
+					<p class="app-tit">이름 입력</p>
+					<input type="text" name="serverName" class="form-control" ng-model="pop.instance.name" value="" maxlength="50" placeholder="이름을 입력해 주세요." validation="alpha_number|required">
+				</li>
+				<li>
+					<p class="app-tit">보안그룹 선택</p>
+					<div class="dropdown instSelWrap2">
+						<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+							<span ng-if="pop.roles.length > 0">{{ pop.roles | join:', ':'name' }}</span>
+							<span class="fontW400" ng-if="pop.roles.length == 0">선택</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-hold instBox2">
+							<li ng-repeat="policy in pop.securityPolicyList">
+								<div>
+									<p>
+										<input type="checkbox" id="{{policy.id}}" ng-click="pop.fn.changeSecurityPolicy()" checklist-model="pop.roles" checklist-value="policy">
+										<label for="{{policy.id}}" class="fontW400">{{policy.name}}</label>
+									</p>
+										{{policy.description}}
+								</div>
+								
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ol>
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+</form>
+<!-- //aside aside1 cnt -->
+
+<!-- aside aside1 btm -->
+<div class="sideBtmWrap">
+	<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.fn.changeInstance();"">저장</button>
+</div>
+<!-- //aside aside1 btm -->
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.dropdown-menu-hold').click(function (e) { e.stopPropagation(); });
+	});
+</script>

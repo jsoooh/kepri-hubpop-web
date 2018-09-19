@@ -1,0 +1,90 @@
+<div class="mainWrap container-fluid organizationWrap"> 
+	<div ng-repeat="orgItem in contents.organizations">
+		<div class="lineChart">
+			<h3 class="title">{{ orgItem.name }} ({{ orgItem.quotaDefinition.name }})</h3>
+			<ul class="graphWrap">
+				<li>
+					<p>
+						{{ 'label.service' | translate }}
+						<span class="pull-right">
+							<b>{{ orgItem.servicesUsage|number:0 }}</b>
+							{{ orgItem.quotaDefinition.totalServices <= 0 ? "" : "/ " + (orgItem.quotaDefinition.totalServices | number:0) }}
+						</span>
+					</p>
+					<loading-progress-bar max="{{ (orgItem.quotaDefinition.totalServices <= 0) ? orgItem.servicesUsage*100 : 100 }}"
+										  bar="{{ (orgItem.quotaDefinition.totalServices <= 0) ? orgItem.servicesUsage : (orgItem.servicesUsage*100/orgItem.quotaDefinition.totalServices) | number:0 }}"
+										  from="0" duration="1"
+										  top="{{ (orgItem.quotaDefinition.totalServices <= 0) ? orgItem.servicesUsage : main.loadingProgressBar.top }}"
+										  down="{{ (orgItem.quotaDefinition.totalServices <= 0) ? orgItem.servicesUsage : main.loadingProgressBar.down }}">
+						{{ (orgItem.quotaDefinition.totalServices <= 0) ? "" : "%" }}
+					</loading-progress-bar>
+				</li>
+				<li>
+					<p>
+						{{ 'label.route' | translate }}
+						<span class="pull-right">
+							<b>{{ orgItem.routesUsage }}</b>
+							{{ orgItem.quotaDefinition.totalRoutes <= 0 ? "" : "/ " + (orgItem.quotaDefinition.totalRoutes|number:0) }}
+						</span>
+					</p>
+					<loading-progress-bar max="{{ (orgItem.quotaDefinition.totalRoutes <= 0) ? orgItem.routesUsage*100 : 100 }}"
+										  bar="{{ (orgItem.quotaDefinition.totalRoutes <= 0) ? orgItem.routesUsage : (orgItem.routesUsage*100/orgItem.quotaDefinition.totalRoutes) | number:0 }}"
+										  from="0" duration="1"
+										  top="{{ (orgItem.quotaDefinition.totalRoutes <= 0) ? orgItem.routesUsage : main.loadingProgressBar.top }}"
+										  down="{{ (orgItem.quotaDefinition.totalRoutes <= 0) ? orgItem.routesUsage : main.loadingProgressBar.down }}">
+						{{ (orgItem.quotaDefinition.totalRoutes <= 0) ? "" : "%" }}
+					</loading-progress-bar>
+				</li>
+				<li>
+					<p>
+						{{ 'label.memory' | translate }}
+						<span class="pull-right">
+							<b>{{ orgItem.memoryUsage|displayVolume:'MB' }}</b>
+							{{ (orgItem.quotaDefinition.memoryLimit <= 0) ? "" : "/ " + (orgItem.quotaDefinition.memoryLimit|displayVolume:'MB') }}
+						</span>
+					</p>
+					<loading-progress-bar max="{{ (orgItem.quotaDefinition.memoryLimit <= 0) ? orgItem.memoryUsage*100 : 100 }}"
+										  bar="{{ (orgItem.quotaDefinition.memoryLimit <= 0) ? ((orgItem.memoryUsage < 1024) ? orgItem.memoryUsage : (orgItem.memoryUsage/1024 | number)) : ((orgItem.memoryUsage*100/orgItem.quotaDefinition.memoryLimit)|number:0) }}"
+										  from="0" duration="1"
+										  top="{{ (orgItem.quotaDefinition.memoryLimit <= 0) ? orgItem.memoryUsage : main.loadingProgressBar.top }}"
+										  down="{{ (orgItem.quotaDefinition.memoryLimit <= 0) ? orgItem.memoryUsage : main.loadingProgressBar.down }}">
+						{{ (orgItem.quotaDefinition.memoryLimit <= 0) ? ((orgItem.memoryUsage < 1024) ? 'MB' : 'GB') : "%" }}
+					</loading-progress-bar>
+				</li>
+				<li>
+					<p>
+						{{ 'label.app_instance' | translate }}
+						<span class="pull-right">
+							<b>{{ orgItem.appInstancesUsage|number:0 }}</b>
+							{{ orgItem.quotaDefinition.appInstanceLimit <= 0 ? "" : "/ " + (orgItem.quotaDefinition.appInstanceLimit | number:0) }}
+						</span>
+					</p>
+					<loading-progress-bar max="{{ (orgItem.quotaDefinition.appInstanceLimit <= 0) ? orgItem.appInstancesUsage*100 : 100 }}"
+										  bar="{{ (orgItem.quotaDefinition.appInstanceLimit <= 0) ? orgItem.appInstancesUsage : (orgItem.appInstancesUsage*100/orgItem.quotaDefinition.appInstanceLimit) | number:0 }}"
+										  from="0" duration="1"
+										  top="{{ (orgItem.quotaDefinition.appInstanceLimit <= 0) ? orgItem.appInstancesUsage : main.loadingProgressBar.top }}"
+										  down="{{ (orgItem.quotaDefinition.appInstanceLimit <= 0) ? orgItem.appInstancesUsage : main.loadingProgressBar.down }}" >
+						{{ (orgItem.quotaDefinition.appInstanceLimit <= 0) ? "" : "%" }}
+					</loading-progress-bar>
+				</li>
+				<li>
+					<p>{{ 'label.instance_memory' | translate }}
+						<span class="pull-right">
+							<b ng-if="orgItem.quotaDefinition.instanceMemoryLimit > 0">{{ orgItem.quotaDefinition.instanceMemoryLimit|displayVolume:'MB' }}</b>
+							<b ng-if="orgItem.quotaDefinition.instanceMemoryLimit <= 0"><span>{{ 'label.none_limit' | translate }}</span></b>
+						</span>
+					</p>
+				</li>
+			</ul>
+			<div class="chartInfo">
+				<div class="tooltipButton">
+					<button type="button" tooltip-placement="bottom" uib-tooltip="{{ 'menu.spaces' | translate }}" ng-click="main.setOrganizationAndGoToPath(orgItem.guid, '/spaces')"><img src="img//nav_paas_space.png" width="26" height="24" alt="{{ 'menu.spaces' | translate }}" /></button>
+					<button type="button" tooltip-placement="bottom" uib-tooltip="{{ 'menu.domains' | translate }}" ng-click="main.setOrganizationAndGoToPath(orgItem.guid, '/domains')"><img src="img//nav_paas_domain.png" width="26" height="24" alt="{{ 'menu.domains' | translate }}" /></button>
+					<button type="button" tooltip-placement="bottom" uib-tooltip="{{ 'menu.applications' | translate }}" ng-click="main.setOrganizationAndGoToPath(orgItem.guid, '/apps')"><img src="img//nav_paas_app.png" width="26" height="24" alt="{{ 'menu.applications' | translate }}" /></button>
+					<button type="button" tooltip-placement="bottom" uib-tooltip="{{ 'menu.service_instances' | translate }}" ng-click="main.setOrganizationAndGoToPath(orgItem.guid, '/service_instances')"><img src="img//nav_paas_service.png" width="26" height="24" alt="{{ 'menu.services' | translate }}" /></button>
+					<button type="button" tooltip-placement="bottom" uib-tooltip="{{ 'menu.space_quotas' | translate }}" ng-click="main.setOrganizationAndGoToPath(orgItem.guid, '/space_quotas')"><img src="img/nav_paas_quota.png" width="26" height="24" alt="{{ 'menu.space_quotas' | translate }}" /></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

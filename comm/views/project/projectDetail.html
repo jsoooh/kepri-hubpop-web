@@ -1,0 +1,175 @@
+				<!-- cBox -->
+				<div class="cBox type1 appCnt-info">
+					<div class="cBox-hd">
+						<h4 class="c-tit noLogo"><!--<img src="images/im_app_logo1.png" class="logo" alt="">-->{{contents.project.name}}</h4>
+						<div class="pull-right">
+							<button type="button" name="button" class="btn only-ico ico-view" tooltip-placement="top" uib-tooltip="{{ 'label.show' | translate }}" ng-if="contents.isDashboardHide" ng-click="contents.projectItemSetShowHide(false);"><span class="ico">{{ 'label.view' | translate }}</span></button>
+							<button type="button" name="button" class="btn only-ico ico-view" tooltip-placement="top" uib-tooltip="{{ 'label.hide' | translate }}" ng-if="!contents.isDashboardHide" ng-click="contents.projectItemSetShowHide(true);"><span class="ico">{{ 'label.view' | translate }}</span></button>
+							<button type="button" name="button" class="btn only-ico ico-del" tooltip-placement="top" uib-tooltip="{{ 'label.del' | translate }}" ng-disabled="!contents.isThisProjectManager" ng-click="contents.btn.deleteProject();"><span class="ico">{{ 'label.del' | translate }}</span></button>
+							<button type="button" name="button" class="btn only-ico ico-modi" tooltip-placement="top" uib-tooltip="{{ 'label.edit' | translate }}" data-user="aside" data-username="#aside-modi" ng-click="contents.btn.updateProject();" ng-disabled="!contents.isThisProjectManager"><span class="ico">{{ 'label.edit' | translate }}</span></button>
+						</div>
+					</div>
+
+					<div class="cBox-cnt">
+						<div class="in"> 
+							<!-- app 정보 -->
+							<div class="col info-txt">
+								<ul>
+									<li>
+										<strong class="tit">{{ 'label.mngr' | translate }}</strong>
+										<div class="txt">{{contents.project.owner.name}}</div>
+									</li>
+									<li>
+										<strong class="tit">{{ 'label.project_id' | translate }}</strong>
+										<div class="txt">{{contents.project.id}}</div>
+									</li>
+									<li>
+									     <strong class="tit">{{ 'label.desc' | translate }}</strong>
+                                        <div class="txt">{{contents.project.description}}</div>
+									</li>
+								</ul>
+							</div>
+							<!-- //app 정보 -->
+
+							<!-- app 정보 -->
+							<div class="col info-txt">
+								<ul>
+									<li>
+										<strong class="tit">시작일</strong>
+										<div class="txt">{{contents.project.useStartDate}}</div>
+									</li>
+									<!--<li>
+										<strong class="tit">마감일</strong>
+										<div class="txt">{{contents.project.useEndDate}}</div>
+									</li>-->
+								</ul>
+								<!--<p class="count" ng-if="contents.project.useRemainTimeMs != -1"><span class="count-txt">D -{{contents.project.useRemainTimeMs2}}</span></p>-->
+							</div>
+							<!-- //app 정보 -->
+
+							<!-- 작업수 -->
+							<div class="col info-txt2">
+								<p class="txt"><span>{{contents.project.orgCount}}</span><strong>JOB</strong></p>
+							</div>
+							<!-- //작업수 -->
+
+							<!-- 멤버수 -->
+							<div class="col info-txt3">
+								<p class="txt"><span>{{contents.project.userCount}}</span><strong>Member</strong></p>
+							</div>
+							<!-- //멤버수 -->
+						</div> 
+					</div>
+				</div>
+				<!-- //cBox -->
+
+				<!-- cBox : 프로젝트 이력/용량변경 요청 -->
+				<div class="cBox type3 cToggle mt30">
+					<div class="cBox-hd">
+						<h4 class="c-tit">{{ 'label.project_history' | translate }}/{{ 'label.capacity_change_request' | translate }}</h4>
+						<div class="pull-right">
+							<button type="button" name="button" class="btn btn-toggle" title="열고/닫기" data-user="toggle" ng-click="contents.listQuotaHistoryNgClick();main.cBoxToggleChange($event);"><span class="ico">열고/닫기</span></button>
+						</div>
+					</div>
+					<div ng-include="'/comm/views/project/projectDetailQuota.html'"></div>
+				</div>
+				<!-- //cBox -->
+
+				<!-- Nav tabs -->
+				<div role="tabpanel" class="tabWrap type1 mt30">
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="" aria-controls="tab1" role="tab" data-toggle="tab" aria-expanded="true" class="workTab" ng-click="contents.tabNgClick({$event : $event, tabId : 'tab1'});">{{ 'label.job_info' | translate }}<em class="point1">({{contents.project.orgCount}})</em></a></li>
+						<li role="presentation" class=""><a href="" aria-controls="tab2" role="tab" data-toggle="tab" aria-expanded="false" class="workTab" ng-click="contents.tabNgClick({$event : $event, tabId : 'tab2'});">{{ 'label.project_member' | translate }}<em class="point1">({{contents.project.userCount}})</em></a></li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<!-- tab1 cnt -->
+						<div role="tabpanel" class="tab-pane active in bdtNon" id="tab1">
+							<ol ng-if="0">
+								<li>{{contents.project.orgs=contents.project.orgs}}</li>
+							</ol>
+							<ul class="ul-panel">
+								<li ng-repeat="org in contents.project.orgs">
+									<!-- panel -->
+									<!--<div class="panelWrap bdtColor1" id="panelWrapBdtColor{{$index}}">-->
+									<div class="panelWrap bdtColor{{org.statusCode.indexOf('error')>-1?2:3}}" id="panelWrapBdtColor{{$index}}">
+										<div class="panel type1">
+											<div class="in">
+												<div class="panel_head" ng-click="contents.orgFormRNgClick({$event : $event, org : org});">
+													<div class="tit">{{org.name}}</div>
+												</div>
+												<div class="panel_body" ng-click="contents.orgFormRNgClick({$event : $event, org : org});">
+													<ul class="ul-list type1">
+														<!--<li>{{ 'label.job_id' | translate }} : {{org.id}}</li>
+														<li>{{ 'label.job_name' | translate }} : {{org.name}}</li>-->
+														<li>{{ 'label.project' | translate }} : {{contents.project.name}}</li>
+														<li>{{ 'label.member_count' | translate }} : {{org.orgUserCount}}</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- panel -->
+								</li>
+								<li>
+									<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-add" ng-click="contents.btn.orgForm({$event : $event});main.cBoxToggleChange($event);" ng-disabled="!contents.isThisProjectManager"><span class="ico"></span><span class="txt">{{ 'label.job_register' | translate }}</span></button>
+								</li>
+							</ul>
+						</div>
+						<!-- //tab1 cnt -->
+
+						<!-- tab2 cnt -->
+						<div role="tabpanel" class="tab-pane bdtNon" id="tab2">
+							<!-- table top -->
+							<div class="tb-top">
+								<div class="pull-left"></div>
+								<div class="pull-right"><button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-mem" ng-click="contents.pop.memberAdd();" ng-disabled="!contents.isThisProjectManager"><span class="ico">{{ 'label.add' | translate }}</span></button></div>
+							</div>
+							<!-- //table top -->
+
+							<!-- table -->
+							<div class="tbl type1">
+								<table class="table">
+									<colgroup>
+									<col style="width:10%;">
+									<col style="width:15%;">
+									<col>
+									<col style="width:20%;">
+									<col style="width:20%;">
+									<col style="width:10%;">
+									</colgroup>
+									<thead>
+										<tr>
+											<th scope="col">No.</th>
+											<th scope="col">{{ 'label.name' | translate }}</th>
+											<th scope="col">{{ 'label.id' | translate }}</th>
+											<th scope="col">{{ 'label.role2' | translate }}</th>
+											<th scope="col">{{ 'label.member_register_dd' | translate }}</th>
+											<th scope="col">{{ 'label.del' | translate }}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="user in contents.project.users">
+											<td>{{$index + 1}}</td>
+											<td>{{user.user.name}}</td>
+											<td>{{user.user.email}}</td>
+											<td>{{user.roleName | roleName}}</td>
+											<td>{{user.createdDate.time | date : 'yyyy.MM.dd HH:mm:ss'}}</td>
+											<td><button type="button" name="button" class="btn btn-ico-del-s only-ico" ng-click="contents.btn.del(user);" ng-if="user.roleName != 'OWNER'" ng-disabled="!contents.isThisProjectManager"><span class="ico">{{ 'label.del' | translate }}</span></button></td>
+										</tr>
+										<!-- 등록된 멤버가 없을 때 -->
+										<tr class="no-data" ng-if="!contents.project.users">
+											<td colspan="6">등록된 프로젝트 멤버가 없습니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- //table -->
+
+						</div>
+						<!-- //tab2 cnt -->
+					</div>
+				</div>
+				<!-- //Nav tabs -->

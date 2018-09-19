@@ -1,0 +1,81 @@
+<uib-tabset active="pop.activeTabIndex" class="tab-animation">
+	<uib-tab index="1"><!-- 서비스 -->
+		<uib-tab-heading>{{ 'label.user_service' | translate }}</uib-tab-heading>
+		<table class="table table-bordered">
+			<colgroup>
+				<col style="width:17%;" />
+				<col style="width:33%;" />
+				<col style="width:17%;" />
+				<col style="width:33%;" />
+			</colgroup>
+			<tbody>
+			<tr>
+				<th>{{ 'label.org' | translate }}</th><!-- 조직 -->
+				<td class="text-left">{{ pop.userServiceInstance.organizationName }}</td>
+				<th>{{ 'label.space' | translate }}</th><!-- 영역 -->
+				<td class="text-left">{{ pop.userServiceInstance.space.name }}</td>
+			</tr>
+			<tr>
+				<th>
+					<span class="require"></span>
+					<label for="name">{{ 'label.service_instance_name' | translate }}</label><!-- 서비스 인스턴스 명 -->
+				</th>
+				<td colspan="3">
+					<input type="text" maxlength="30" name="name" id="name" ng-model="pop.sltUserServiceInstanceName" placeholder="{{ 'label.service_instance_name' | translate }}" validation="alpha_dash|min_len:3|max_len:30|required" maxlength="30">
+				</td>
+			</tr>
+			<tr>
+				<th>{{ 'label.service_access_info' | translate }} <button type="button" class="btn btn-add ng-binding" style="float: right;" tooltip-placement="bottom" uib-tooltip="{{ 'label.add' | translate }}" ng-click="pop.addCredential();"><img src="img/ico_add.png" width="9" height="9"></button><!-- 추가 --></th><!-- 서비스 접속 정보 -->
+				<td colspan="3" class="credentialWrap">
+					<ul>
+						<li ng-repeat="(idx, credentialItem) in pop.credentials">
+							<input type="text" maxlength="100" name="credentialKey" placeholder="Name" ng-model="credentialItem.key">
+							<input type="text" maxlength="100" name="credentialValue" placeholder="Value" ng-model="credentialItem.value">
+							<button type="button" class="btn btn-del ng-binding" ng-click="pop.delCredential(idx);"><img src="img/ico_delete.png" width="13" height="16"> {{ 'label.del' | translate }}</button><!-- 삭제 -->
+						</li>
+					</ul>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</uib-tab>
+	<uib-tab index="2"><!-- 바인딩 -->
+		<uib-tab-heading>{{ 'label.binding' | translate }} <span class="badge">{{ pop.serviceBindings.length }}</span></uib-tab-heading>
+		<table class="table table-bordered">
+			<colgroup>
+				<col style="width:160px;" />
+				<col />
+			</colgroup>
+			<tbody>
+			<tr>
+				<th>
+					<label for="editApp">{{ 'label.binding_app_select' | translate }}</label><!-- 앱 -->
+				</th>
+				<td class="bindindWrap">
+					<select ui-select2="{ allowClear : true }" name="app" id="editApp" ng-model="pop.sltAppGuids" data-placeholder="{{ 'label.select' | translate }}"  multiple="multiple">
+						<option></option>
+						<option ng-repeat="appItem in pop.apps" value="{{ appItem.guid }}">{{ appItem.name }}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>{{ 'label.binding_app' | translate }}</th><!-- 바인딩 앱 -->
+				<td class="bindindWrap">
+					<div class="panel-group bindingPanel" role="tablist" aria-multiselectable="false">
+						<div ng-repeat="serviceBindingItem in pop.serviceBindings" class="panel panel-default">
+							<div class="panel-heading" role="tab">
+								<h4 class="panel-title">
+									<p ng-if="serviceBindingItem.guid && !serviceBindingItem.delCheck" class="form-control-static">{{ serviceBindingItem.appName }}</p>
+									<p ng-if="serviceBindingItem.guid && serviceBindingItem.delCheck" class="form-control-static" style="text-decoration: line-through; color:#999999;">{{ serviceBindingItem.appName }} [{{ 'label.unset' | translate }}]</p>
+								</h4>
+								<button ng-if="serviceBindingItem.guid && !serviceBindingItem.delCheck" type="button" class="btn pull-right" ng-click="serviceBindingItem.delCheck = true;"><img src="img/ico_delete.png" width="13" height="16" alt="" /> {{ 'label.unbinding' | translate }}</button><!-- 바인딩 해제 -->
+								<button ng-if="serviceBindingItem.guid && serviceBindingItem.delCheck" type="button" class="btn pull-right" ng-click="serviceBindingItem.delCheck = false;"><img src="img/ico_cancel.png" width="16" height="16" alt="" /> {{ 'label.unset_cancel' | translate }}</button><!-- 해제 취소 -->
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</uib-tab>
+</uib-tabset>

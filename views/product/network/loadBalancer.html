@@ -1,0 +1,120 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".carousel").hide();
+	});
+</script>
+<div class="topVisualContainer productTop">
+    <nav class="navbar navbar-default product-sub-nav">
+	  <div class="container-fluid">
+	   <a class="back-product-list" href="#/product"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a> 
+		<div class="navbar-header">            
+		  <a class="navbar-brand" href="">Network</a>
+		</div>
+		<ul class="nav navbar-nav product-nav-list">
+		  <li class="active"><a href="#/product/iaas/network/loadbalancer">Load Balancer</a></li>
+		  <li><a href="#/product/iaas/network/ipsecvpn">IPSec VPN</a></li> 
+		</ul>
+	  </div>
+	</nav>
+	<div class="productTopLeft"></div>
+	<div class="productTopRight"></div>
+	<div class="topVisualWrap">
+		<!--<img src="../img/img_supporttop.png" width="1069" height="201" alt="" />-->
+		<h3>Load Balancer</h3>
+		<p>사용자의 정책에 따라 다수의서버에 트래픽 분산을 전달합니다.</p>
+	</div>
+</div>
+<div id="content" class="container-fluid productContainer">
+	<uib-tabset active="contents.activeTabIndex" class="tab-animation">
+		<uib-tab index="1">
+			<uib-tab-heading>소개</uib-tab-heading>
+			<div class="productIntroWrap productOdd">
+                <h4><span>Load Balancer</span>안전한 서버 유지 및 원활한 트래픽 관리를 위한</h4>
+				<p>
+					어플리케이션 네트워크 트래픽을 수용 가능한 자원에 따라 각각 인스턴스들에 자동으로 분산시킵니다.<br>환경과 필요에 따라 단일 또는 다중 가용 영역을 구분하여 워크로드 처리가 가능합니다. 
+				</p>
+				<ul>
+					<li>
+						<img src="../img/ico_service_detail_0007.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">빠른 트래픽 패턴에 대처 </span>
+							탄력적인 NFV 기능으로 사용자의 요청에 따라 유연하게<br> 트래픽 패턴의 변화에 대처가 가능합니다. 
+				        </span>
+					</li>
+					<li>
+						<img src="../img/ico_service_detail_0009.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">편리한 인터페이스 </span>
+							웹 기반 콘솔은 각종 기능들을 편리하게 생성 및 설정을 관리할 수<br> 있으며, 사용현황에 대해서도 확인할 수 있습니다. 
+						</span>
+					</li>
+					<li>
+						<img src="../img/ico_service_detail_0008.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">비즈니스 연속성 보장 </span>
+							일부 서버에 장애 발생 시에도 로드밸런스에 연결된 다른 서버로 자동으로 트래픽 및 부하를 분산해 비즈니스 연속성을 가능하게 합니다.<br> 또한, 특정 로드밸런서에 기 반영된 서버라도 탄력적으로 다른 로드밸런서에 추가 설정이 가능합니다. 
+						</span>
+					</li> 
+				</ul>
+			</div> 
+		</uib-tab>
+		<uib-tab index="2">
+			<uib-tab-heading>상세 기능</uib-tab-heading>
+			<div class="productIntroWrap">
+				<dl>
+					<dt>비즈니스 연속성 보장 </dt>
+					<dd>
+						일부 서버에 장애 발생 시에도 로드밸런스에 연결된 다른 서버로 자동으로 트래픽 및 부하를 분산해 비즈니스 연속성을 가능하게 합니다.<br> 또한, 특정 로드밸런서에 기 반영된 서버라도 탄력적으로 다른 로드밸런서에 추가 설정이 가능합니다. 
+					</dd>
+					<dt>편리한 인터페이스 환경 </dt>
+					<dd>웹 기반 콘솔은 각종 기능들을 편리하게 생성 및 설정을 관리할 수 있으며, 사용 현황에 대해서도 확인할 수 있으며,<br> 또한, 개발용 RESTful API를 제공해 편리하게 설정할 수 있습니다. 
+                    </dd>
+					<dt>빠른 트래픽 패턴에 대처 가능 </dt>
+					<dd>탄력적인 NFV 기능으로 사용자의 요청에 따라 유연하게 트래픽 패턴의 변화에 대처할 수 있습니다. </dd> 
+                    <dt>Active-Standby 방식의 High Availability 제공 </dt>
+					<dd>두개 이상의 IPSec VPN 서비스를 뛰우고 VIP( Virtual IP Address )를 제공하는 방식으로 Active 서비스가 <br>문제가 생겨도 Standby 서비스가 VIP를 양도 받아 끊김 없는 로드밸런서 서비스를 사용할 수 있습니다. </dd> 
+					<dt>L4/L7 로드밸런싱 다중 포트 제공 </dt>
+					<dd>포트별로 HTTP, HTTPS, TCP 를설정하여 어떠한 서비스를 로드밸런싱할지 다르게 설정가능합니다. <br>하나 이상의 포트를 사용하여 여러개의 로드밸런싱 서비스를 사용할 수 있어서 여러가지 서비스를 동시에 사용할 수 있습니다.</dd> 
+					<dt>로드밸런싱 모니터링 </dt>
+					<dd>TCP, HTTP 방식등의 모니터링 방식과 수집 주기를 설정하여 로드밸런싱 하고자 하는 서비스들의 특징에 맞게끔 서버들의 모니터링 설정을 할 수 있습니다.<br>로드밸런싱 대상이 되는 서버가 죽으면 어떠한 서버가 죽었는지 사용자에게 알려주며 자동으로 살아있는 다른 서버에게 트래픽을 분산합니다.</dd> 
+					<dt>다양한 로드밸런싱 알고리즘 제공 </dt>
+					<dd>
+					    <table class="table table-striped tabInTable tableInList">
+							<colgroup>
+								<col style="width:279px" />
+								<col />
+							</colgroup>
+							<thead> 
+							</thead>
+							<tbody>
+								<tr>
+									<th>Round Robin</th>
+									<td>로드밸런싱 대상이 될 서버들에 차례차례 요청을 전달합니다. <br>각 서버들별로 가중치를 줄 수 있어서 서버들의 성능이 차이가 날 때 가장 효율적인 방법입니다.</td> 
+								</tr> 
+								<tr>
+									<th>Least Connection </th>
+									<td>로드밸런싱의 대상이 되는 서버들별로 현재 처리하고 있는 총 세션을 모니터링하여 현재 가장 적은 세션을 처리하고 있는 서버들에 새로운 트래픽을 할당하는 방법입니다. 서버들의 성능이 비슷할 때 효율적인 방법입니다.</td> 
+								</tr> 
+								<tr>
+									<th>Source IP </th>
+									<td>클라이언트의 Source IP를 해시함수로 처리한 결과에 기반하여 서버들의 트래픽을 분배하는 방식입니다.</td> 
+								</tr>						
+							</tbody>
+						</table>
+					</dd> 
+				</dl>
+			</div> 
+		</uib-tab>
+<!--
+		<uib-tab index="3">
+			<uib-tab-heading>이용안내</uib-tab-heading>
+		</uib-tab>
+-->
+	</uib-tabset>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var winHeight = $(window).height();
+        $(".productContainer").css("min-height",winHeight-434)
+    });
+</script>

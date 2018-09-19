@@ -1,0 +1,175 @@
+<div id="appCreate" ng-controller="paasApplicationPushCtrl as tab">
+	<form name="{{tab.formName}}" method="POST" novalidate>
+		<!-- aside title -->
+			<div class="sideTitWrap">
+				<h2 class="c_tit">APP 개발 서비스 추가</h2>
+				<button type="button" name="button" class="btn btn-close" data-user="aside-close" ng-click="tab.closeForm($event);"><span class="ico">닫기</span></button>
+			</div>
+			<!-- //aside title -->
+
+			<!-- aside cnt -->
+			<div class="sideCntWrap" ng-show="tab.activeTabIndex == 1">
+				<!-- aside step -->
+				<div class="sideStepWrap">
+					<ul>
+						<li class="on pull-left"><em>step 01</em><span>APP환경설정</span></li>
+						<li class="pull-right"><em>step 02</em><span>인스턴스 설정</span></li>
+					</ul>
+				</div>
+				<!-- //aside step -->
+
+				<!-- sideInWrap -->
+				<div class="sideInWrap">
+					<ol class="app-set">
+						<li>
+							<p class="app-tit">1. 작업 이름</p>
+							<input type="text" name="" class="form-control" value="{{tab.sltOrganization.orgName}}" disabled>
+						</li>
+						<li>
+							<p class="app-tit">2. 유형을 선택해 주세요.</p>
+							<div>
+								<div class="radio radio-inline">
+									<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="tab.appPushData.pushType">
+									<label for="app-radio1-1" class="label">일반앱</label>
+								</div>
+								<div class="radio radio-inline">
+									<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="tab.appPushData.pushType">
+									<label for="app-radio1-2" class="label">Docker</label>
+									<em class="ico-info2 ico" title="툴팁이 나와요"></em>
+								</div>
+							</div>
+						</li>
+						<li ng-if="tab.appPushData.pushType == 'GENERAL'">
+							<p class="app-tit">3. 개발언어를 선택해 주세요.</p>
+							<div class="scroll-pane">
+								<ul class="ul-list1">
+									<li ng-repeat="(key, buildpackItem) in tab.portalBuildpacks track by $index">
+										<div class="radio1 radio-inline">
+											<input type="radio" id="buldpack_{{ buildpackItem.id }}" name="buldpack" value="{{ buildpackItem.id }}" ng-model="tab.sltBuildpackId" ng-change="tab.changePortalBuildpack();" />
+											<!-- 라벨, 이미지는 변수 -->
+											<label for="buldpack_{{ buildpackItem.id }}">
+												<img class="img-circle" ng-if="buildpackItem.iconImage != null" ng-src="data:{{ buildpackItem.iconImage.contentType }}; base64, {{ buildpackItem.iconImage.image }}" width="40" height="40">
+												<img class="img-circle" ng-if="buildpackItem.iconImage == null" src="img/default_image.png" width="40" height="40">
+											</label>
+										</div>
+										<p class="label-txt">{{ buildpackItem.name }}</p>
+										<input type="hidden" ng-if="$last" ng-init="tab.scrollPane()">
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<p class="app-tit">{{ (tab.appPushData.pushType == 'GENERAL') ?  '4' : '3'}}. 사용하실 APP 이름을 입력해 주세요.</p>
+							<input type="text" maxlength="20" id="appName" name="appName" ng-model="tab.appPushData.appName" ng-change="tab.appPushData.domainFirstName = tab.appPushData.appName" validation="min_len:3|max_len:20|required" class="form-control" />
+						</li>
+						<li>
+							<p class="app-tit">{{ (tab.appPushData.pushType == 'GENERAL') ?  '5' : '4'}}. 호스트(Host) URL을 입력해 주세요. (앱명은 영문만 입력 가능합니다.)</p>
+							<div class="app-form-two">
+								<div class="two_box">
+									<input type="text" maxlength="20" id="domainFirstName" name="domainFirstName" ng-model="tab.appPushData.domainFirstName" ng-change="tab.hostDup = false" validation="alpha_dash|min_len:3|max_len:20|required" />
+								</div>
+								<div class="two_box">
+									<select id="domainName" name="domainName" ng-model="tab.sltDomainName">
+										<option ng-repeat="domainItem in tab.domains" value="{{ domainItem.name }}">{{ domainItem.name }}</option>
+									</select>
+								</div>
+							</div>
+							<div ng-if="tab.appPushForm01.domainFirstName.$touched && tab.appPushForm01.domainFirstName.$invalid" class="validation validation-domainFirstName text-danger"></div>
+							<div ng-if="tab.hostDup" class="validation text-danger"><span class="validation-icon"></span>이미 사용 중인 호스트입니다.</div>
+						</li>
+						<li ng-if="tab.appPushData.pushType == 'DOCKER'">
+							<p class="app-tit">5. Docker 이미지 정보를 입력해 주세요. </p>
+							<input type="text" maxlength="100" name="dockerImage" id="dockerImage" ng-model="tab.appPushData.dockerImage" class="form-control" placeholder="예 : cloudfoundry/lattice-app" validation="required">
+						</li>
+
+						<li ng-if="tab.appPushData.pushType != 'DOCKER'">
+							<p class="app-tit">6. {{ 'label.file_upload' | translate }} 	<em class="ico-info2 ico" title="지원 파일 포맷 .war .jar .zip"></em></p>
+							<div colspan="3" class="text-left file_up">
+								<input type="file" maxlength="100" name="file" nv-file-select="" uploader="tab.uploader" class="form-control" style="display: none;" accept=".war, .jar, .zip"/>
+								<input type="text" value="{{ tab.appFileItem.file.name }}" readonly>
+								<button type="button" class="btn btn-md btn-color1" ng-click="main.fileSelectBtnClick($event);">{{ 'label.file_search' | translate }}</button>
+								<input type="hidden" name="tab.appFileName" ng-model="tab.appFileItem.file.name" style="display: none;" />
+								<span ng-if="tab.appFileErrorMessage" style="color: red;" dynamic-template="tab.appFileErrorMessage"></span>
+							</div>
+						</li>
+					</ol>
+				</div>
+				<!-- //sideInWrap -->
+			</div>
+			<!-- //aside cnt -->
+
+			<!-- aside cnt -->
+			<div class="sideCntWrap" ng-show="tab.activeTabIndex == 2">
+				<!-- aside step -->
+				<div class="sideStepWrap">
+					<ul>
+						<li class="pull-left"><em>step 01</em><span>APP환경설정</span></li>
+						<li class="pull-right on"><em>step 02</em><span>인스턴스 설정</span></li>
+					</ul>
+				</div>
+				<!-- //aside step -->
+
+				<!-- sideInWrap -->
+				<div class="sideInWrap">
+					<ul class="app-set2">
+						<li>
+							<p class="app-tit">생성할 리소스 정보</p>
+							<ul class="app-reso">
+								<li><span>{{tab.instancesSlider.value}}<em>개</em></span><strong>생성할<br>인스턴스 수</strong></li>
+								<li><span>{{ (tab.memorySlider.value < 1024) ?  (tab.memorySlider.value|number:0)  : (tab.memorySlider.value/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (tab.memorySlider.value < 1024) ?  'MB' : 'GB'}}</em></span><strong>Total<br>Memory</strong></li>
+								<li><span>{{ (tab.diskQuotaSlider.value < 1024) ?  (tab.diskQuotaSlider.value|number:0)  : (tab.diskQuotaSlider.value/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (tab.diskQuotaSlider.value < 1024) ?  'MB' : 'GB'}}</em></span><strong>Total<br>Disk</strong></li>
+							</ul>
+						</li>
+						<li>
+							<p class="app-tit">마우스를 움직여 생성하실 인스턴스를 설정해<br>주세요.</p>
+							<!-- inst dropdown -->
+							<div class="instSelWrap">
+								<button type="button" name="button" class="btn" ng-click="tab.showSlider($event);">세부설정하기<span class="ico"></span></button>
+								<div class="instBox">
+									<ul class="inst-set">
+										<li>
+											<div class="rangeWrap type1">
+												<div class="range-text">
+													<strong class="range-tit">인스턴스 개수</strong>
+													<span class="range-txt">최대 {{tab.instancesSlider.options.ceil}}개</span>
+												</div>
+												<input class="eff-report eff-report1" data-slider-id='ex1Slider1' type="text" data-slider-min="{{tab.instancesSlider.options.minLimit}}" data-slider-max="{{tab.instancesSlider.options.ceil}}" data-slider-step="{{tab.instancesSlider.options.step}}" data-slider-value="{{tab.instancesSlider.value}}" ng-model="tab.instancesSlider.value" data-slider-tool="개">
+											</div>
+										</li>
+										<li>
+											<div class="rangeWrap type2">
+												<div class="range-text">
+													<strong class="range-tit">Total Memory</strong>
+													<span class="range-txt">최대 {{ (tab.memorySlider.options.ceil < 1024) ?  (tab.memorySlider.options.ceil|number:0)  : (tab.memorySlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}G</span>
+												</div>
+												<input class="eff-report eff-report2" data-slider-id='ex1Slider2' type="text" data-slider-min="{{tab.memorySlider.options.minLimit}}" data-slider-max="{{tab.memorySlider.options.ceil}}" data-slider-step="{{tab.memorySlider.options.step}}" data-slider-value="{{tab.memorySlider.value}}" ng-model="tab.memorySlider.value" data-slider-tool="M">
+											</div>
+										</li>
+										<li>
+											<div class="rangeWrap type3">
+												<div class="range-text">
+													<strong class="range-tit">Total Disk</strong>
+													<span class="range-txt">최대 {{ (tab.diskQuotaSlider.options.ceil < 1024) ?  (tab.diskQuotaSlider.options.ceil|number:0)  : (tab.diskQuotaSlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}G</span>
+												</div>
+												<input class="eff-report eff-report3" data-slider-id='ex1Slider3' type="text" data-slider-min="{{tab.diskQuotaSlider.options.minLimit}}" data-slider-max="{{tab.diskQuotaSlider.options.ceil}}" data-slider-step="{{tab.diskQuotaSlider.options.step}}" data-slider-value="{{tab.diskQuotaSlider.value}}" ng-model="tab.diskQuotaSlider.value" data-slider-tool="M">
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<!-- inst dropdown -->
+						</li>
+					</ul>
+				</div>
+				<!-- //sideInWrap -->
+			</div>
+			<!-- //aside cnt -->
+
+		<div class="sideBtmWrap">
+			<button ng-if="tab.activeTabIndex < 2" type="button" class="btn" data-username="#aside-aside2" ng-click="tab.showForm2();">{{ 'label.next' | translate }}</button>
+			<button ng-if="tab.activeTabIndex == 2" type="button" class="btn" ng-click="tab.activeTabIndex = 1" style="width:49.5%">{{ 'label.previous' | translate }}</button>
+			<button ng-if="tab.activeTabIndex == 2" type="button" class="btn" ng-click="tab.appPush();" style="width:49.5%">{{ 'label.deploy' | translate }}</button>
+		</div>
+
+	</form>
+</div>

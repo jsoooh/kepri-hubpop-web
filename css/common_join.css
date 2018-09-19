@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+/* select.ng-touched.ng-invalid-required, input.ng-touched.ng-invalid-required{border-color:#ff0740 !important;} */
+/* .ng-touched.ng-invalid-required{color: #d40031 !important; line-height: 18px !important; padding-top:10px !important; } */
+/* .ng-touched.ng-invalid-required::before{display: inline-block !important; content: '' !important; width:18px !important; height: 18px !important; margin-right: 5px !important; vertical-align: text-bottom !important; background: url("../images/ico_com.png") no-repeat !important; background-position: -508px -46px !important;} */
+
+/* select.ng-touched.ng-valid-required, input.ng-touched.ng-valid-required{border-color:#2ecc71 !important;} */
+/* .ng-touched.ng-valid-required{color: #2ecc71 !important; line-height: 18px !important; padding-top:10px !important; } */
+/* .ng-touched.ng-valid-required::before{display: inline-block !important; content: '' !important; width:18px !important; height: 18px !important; margin-right: 5px !important; vertical-align: text-bottom !important; background: url("../images/ico_com.png") no-repeat !important; background-position: -508px -46px !important;} */
+
+/* .aside select.ng-touched.ng-valid-required, .aside input.ng-touched.ng-valid-required{border-color:#2ecc71 !important;} */
+/* .aside .ng-touched.ng-valid-required{color: #8992a8 !important; line-height: 18px !important; padding-top:10px !important; } */
+/* .aside .ng-touched.ng-valid-required::before{display: inline-block !important; content: '' !important; width:18px !important; height: 18px !important; margin-right: 5px !important; vertical-align: text-bottom !important; background: url("../images/ico_com.png") no-repeat !important; background-position: -508px -46px !important;} */
+
+select.ng-touched.ng-invalid-required, input.ng-touched.ng-invalid-required, textarea.ng-touched.ng-invalid-required{border-color:#ff0740;}
+select.ng-touched.ng-valid-required, input.ng-touched.ng-valid-required, textarea.ng-touched.ng-valid-required{border-color:#2ecc71;}
+
+#nsignupEmail.ng-touched.ng-invalid-pattern{border-color:#ff0740;}
+#nsignupEmail.ng-touched.ng-valid-pattern{border-color:#2ecc71;}
+
+.input-group-btn.btn-top {vertical-align:top}
+.input-group-btn.btn-bottom {vertical-align:bottom}
+
+.tabWrap.type1 .nav.padding40>li>a{padding:0 40px;;}
+
+/** terminal **/
+.scroll-pane .terminal .xterm-rows { padding: 6px; }
+.scroll-pane .terminal .xterm-viewport { overflow-y: hidden; }
+
+.cBox.appCnt-info .info-txt .config-txt a {display:inline-block; max-width:310px; font-size:13px; color:#888; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:20px; background:url("../images/ico_window.png") no-repeat right center;}/*180515 대시보드 패널 링크연결 텍스트에 아이콘 추가*/

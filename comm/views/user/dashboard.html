@@ -1,0 +1,407 @@
+<!-- projt list wrap -->
+<div class="projIistWrap">
+    <!-- 관리 왼쪽 영역 -->
+    <div class="pull-left">
+
+        <!--<div ng-if="main.userAuth != 'M' && contents.reductAsides.usage.checked" class="cont-titWrap">-->
+        <div ng-if="contents.reductAsides.usage.checked" class="cont-titWrap">
+            <h3 class="h-tit2">{{ 'label.use_resource' | translate }}</h3>
+        </div>
+        <!-- //cont tit -->
+
+        <!-- cBox -->
+        <div ng-if="contents.reductAsides.usage.checked" class="cBox type2">
+            <div class="cBox-cnt">
+                <div class="dashUserInfo"> 
+                    <div class="col"> 
+                        <!-- chartWrap -->
+                        <div class="chartWrap" style="width:180px; height:220px;">
+                            <p class="chrt-tit">CPU</p>
+                            <canvas class="chart chart-doughnut chart-xs" height="180" width="180"
+                                    chart-labels="contents.useRecurse.cpu.labels"
+                                    chart-colors="contents.useRecurse.cpu.colors"
+                                    chart-options="contents.useRecurse.cpu.options"
+                                    chart-data="contents.useRecurse.cpu.data"></canvas>
+                            <div class="doughnut-label-box">
+                                <ul>
+                                    <li><span>{{contents.useRecurseCpu}}</span><span>%</span></li>
+                                    <li><span>{{'label.usage' | translate}}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //chartWrap -->
+                    </div>
+                    <div class="col">
+                        <!-- chartWrap -->
+                        <div class="chartWrap" style="width:180px; height:220px;">
+                            <p class="chrt-tit">Disk</p>
+                            <canvas class="chart chart-doughnut chart-xs" height="180" width="180"
+                                    chart-labels="contents.useRecurse.disk.labels"
+                                    chart-colors="contents.useRecurse.disk.colors"
+                                    chart-options="contents.useRecurse.disk.options"
+                                    chart-data="contents.useRecurse.disk.data"></canvas>
+                            <div class="doughnut-label-box">
+                                <ul>
+                                    <li><span>{{contents.useRecurseDisk}}</span><span>%</span></li>
+                                    <li><span>{{'label.usage' | translate}}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //chartWrap -->
+                    </div>
+                    <div class="col">
+                        <!-- chartWrap -->
+                        <div class="chartWrap" style="width:180px; height:220px;">
+                            <p class="chrt-tit">Memory</p>
+                            <canvas class="chart chart-doughnut chart-xs" height="180" width="180"
+                                    chart-labels="contents.useRecurse.memory.labels"
+                                    chart-colors="contents.useRecurse.memory.colors"
+                                    chart-options="contents.useRecurse.memory.options"
+                                    chart-data="contents.useRecurse.memory.data"></canvas>
+                            <div class="doughnut-label-box">
+                                <ul>
+                                    <li><span>{{contents.useRecurseMemory}}</span><span>%</span></li>
+                                    <li><span>{{'label.usage' | translate}}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //chartWrap -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //cBox -->
+
+        <!-- cont tit -->
+        <div ng-if="contents.reductAsides.usage_trend.checked" class="cont-titWrap">
+            <h3 class="h-tit2">{{ 'comm.label.usage_trend' | translate }}</h3>
+        </div>
+        <!-- //cont tit -->
+
+        <!-- cBox -->
+        <div ng-if="contents.reductAsides.usage_trend.checked" class="cBox type2">
+            <div class="cBox-cnt">
+                <div class="dashUsage">
+                    <ul class="legendWrap">
+                        <li><em class="em1"></em><span>CPU</span></li>
+                        <li><em class="em2"></em><span>Disk</span></li>
+                        <li><em class="em3"></em><span>Memory</span></li>
+                    </ul>
+                </div>
+                <div class="in">
+                    <!-- chartWrap -->
+                    <div class="chartWrap">
+                        <canvas id="line" class="chart chart-line chart-xl"
+                                chart-data="contents.usageTrend.data" chart-labels="contents.usageTrend.labels"
+                                chart-series="contents.usageTrend.series" chart-options="contents.usageTrend.options"
+                                chart-colors="contents.usageTrend.colors"
+                                chart-dataset-override="contents.usageTrend.datasetOverride" height="40"></canvas>
+                   </div>
+                    <!-- //chartWrap -->
+                </div>
+            </div>
+        </div>
+        <!-- //cBox -->
+
+        <!-- cont tit -->
+        <div class="cont-titWrap">
+            <h3 class="h-tit2">{{ 'label.project_info' | translate }}</h3>
+            <div class="h-right">
+                <ul class="ul-count">
+                    <li>{{ 'label.all_project_count' | translate }} <span class="point1">({{contents.projects.length}})</span></li>
+                    <li>{{ 'label.all_job_count' | translate }} <span class="point1">({{contents.totalJobCount}})</span></li>
+                </ul>
+            </div>
+        </div>
+        <!-- //cont tit -->
+        <!-- 프로젝트 패널 -->
+        <div class="dropzone">
+            <ul dnd-list="contents.projects" dnd-allowed-types="['project']" class="ul-panel">
+                <li ng-repeat="(key, item) in contents.projects" ng-if="!item.hide" dnd-type="'project'" dnd-draggable="item" dnd-moved="contents.projects.splice($index, 1)" dnd-dragend="contents.projectDragend(dropEffect)">
+                    <!-- panel -->
+                    <div class="panelWrap" ng-class="item.bgColorType">
+                        <div class="panel type1" ng-style="{'background-image': 'url(' + item.bgImage + ')'}">
+                            <div class="in">
+                                <div class="panel_head" ng-click="contents.goProjectDetail(item);">
+                                    <div class="tit">
+                                        {{item.name}}
+                                    </div>
+                                </div>
+                                <div class="panel_body" ng-click="contents.goProjectDetail(item);">
+                                    <ul class="ul-list type1">
+                                        <li><strong>{{ 'label.mngr' | translate }} : {{item.owner.name}}</strong></li>
+                                        <!--<li>{{ 'label.project_id' | translate }} : {{item.id}}</li>-->
+                                        <!--<li>마감일 : {{item.useEndDate.time | date : 'yyyy.MM.dd'}} <span class="stateDay" ng-if="item.useRemainTimeMs != -1">D -{{item.useRemainTimeMs | commProjectUseRemainTimeMs}}</span></li>-->
+                                    </ul>
+                                </div>
+                                <div class="service_link">
+                                    <ul>
+                                        <li class="serviceIaas" ng-click="contents.goSystemLink('project', 'iaas', item);">
+                                            <img src="images/ico_iaas_btn_bk.png" alt="iaas">
+                                            <a href="" title="iaas">가상서버</a>
+                                        </li>
+                                        <li class="servicePaas" ng-click="contents.goSystemLink('project', 'paas', item);">
+                                            <img src="images/ico_paas_btn_bk.png" alt="paas">
+                                            <a href="" title="paas">표준 앱</a>
+                                        </li>
+                                        <li class="serviceMonit" ng-click="contents.goSystemLink('project', 'monit', item);">
+                                            <img src="images/ico_monit_btn_bk.png" alt="monit">
+                                            <a href="" title="monit">통합 모니터링</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="panel_foot two">
+                                    <p class="use-txt"><span class="txt">{{ 'label.job_count' | translate }}</span><span class="num">{{item.orgCount}}</span></p>
+                                    <p class="use-txt"><span class="txt">{{ 'label.member_count' | translate }}</span><span class="num">{{item.userCount}}</span></p>
+                                </div>
+                            </div>
+                            <!-- drop down -->
+                            <div class="dropdown drop-set">
+                                <button type="button" class="btn only-ico ico-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'label.set' | translate }}">
+                                    <span class="ico">{{ 'label.set' | translate }}</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="btn-set" aria-labelledby="btn-set">
+                                    <li ng-repeat="(key, dmitem) in contents.bgtypes"><a href="" ng-class="dmitem.iconClass" title="{{dmitem.label | translate}}" ng-click="contents.projectItemBgChange(item, dmitem);"></a></li>
+                                    <!--<li class="file-att" title="배경이미지"><a href="" class="pic"><span class="ico"></span></a></li>-->
+                                    <li title="{{ 'label.hide' | translate }}"><a class="pic pic2" href="" ng-click="contents.projectItemSetHide(item);"><span class="ico"></span></a></li>
+                                </ul>
+                            </div>
+                            <!-- //drop down -->
+                        </div>
+                    </div>
+                    <!-- panel -->
+                </li>
+            </ul>
+        </div>
+        <!-- //프로젝트 패널 -->
+
+        <!-- cont tit -->
+        <div class="cont-titWrap">
+            <h3 class="h-tit2">{{ 'label.job_info' | translate }}</h3>
+            <div class="h-right">
+                <ul class="ul-count">
+                    <li>{{ 'label.all_job_count' | translate }} <span class="point1">({{contents.jobs.length}})</span></li>
+                </ul>
+            </div>
+        </div>
+        <!-- //cont tit -->
+
+        <!-- 프로젝트 패널 -->
+        <div class="dropzone">
+            <ul dnd-list="contents.jobs" dnd-allowed-types="['job']" class="ul-panel">
+                <li ng-repeat="(key, item) in contents.jobs" ng-if="!item.hide" dnd-type="'job'" dnd-draggable="item" dnd-moved="contents.jobs.splice($index, 1)" dnd-dragend="contents.jobDragend(dropEffect)">
+                    <!-- panel -->
+                    <div class="panelWrap" ng-class="item.bgColorType">
+                        <div class="panel type1" ng-style="{'background-image': 'url(' + item.bgImage + ')'}">
+                            <div class="in">
+                                <div class="panel_head" ng-click="contents.goJobDetail(item);">
+                                    <div class="tit">
+                                        {{item.orgName}}
+                                    </div>
+                                </div>
+                                <div class="panel_body" ng-click="contents.goJobDetail(item);">
+                                    <ul class="ul-list type1">
+                                        <li>{{ 'label.project' | translate }} : {{item.projectName}}</li>
+                                        <li>{{ 'label.member_count' | translate }} : {{item.orgUserCount}}</li>
+                                    </ul>
+                                </div>
+                                <div class="service_link" ng-if="0">
+                                    <ul>
+                                        <li class="serviceIaas" ng-click="contents.goSystemLink('job', 'iaas', item);"><a href="" title="iaas">IaaS</a></li>
+                                        <li class="servicePaas" ng-click="contents.goSystemLink('job', 'paas', item);"><a href="" title="paas">PaaS</a></li>
+                                        <li class="serviceMonit" ng-click="contents.goSystemLink('job', 'monit', item);"><a href="" title="monit">Monit</a></li>
+                                    </ul>
+                                </div>
+                                <div class="service_link">
+                                    <ul>
+                                        <li class="serviceIaas" ng-click="contents.goSystemLink('job', 'iaas', item);">
+                                            <img src="images/ico_iaas_btn_bk.png" alt="iaas">
+                                            <a href="" title="iaas">가상서버</a>
+                                        </li>
+                                        <li class="servicePaas" ng-click="contents.goSystemLink('job', 'paas', item);">
+                                            <img src="images/ico_paas_btn_bk.png" alt="paas">
+                                            <a href="" title="paas">표준 앱</a>
+                                        </li>
+                                        <li class="serviceMonit" ng-click="contents.goSystemLink('job', 'monit', item);">
+                                            <img src="images/ico_monit_btn_bk.png" alt="monit">
+                                            <a href="" title="monit">통합 모니터링</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- drop down -->
+                            <div class="dropdown drop-set">
+                                <button type="button" class="btn only-ico ico-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'label.set' | translate }}">
+                                    <span class="ico">{{ 'label.set' | translate }}</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="btn-set" aria-labelledby="btn-set">
+                                    <li ng-repeat="(key, dmitem) in contents.bgtypes"><a href="" ng-class="dmitem.iconClass" title="{{dmitem.label | translate}}" ng-click="contents.jobItemBgChange(item, dmitem);"></a></li>
+                                    <!--<li class="file-att" title="배경이미지"><a href="#" class="pic"><span class="ico"></span></a></li>-->
+                                    <li title="{{ 'label.hide' | translate }}"><a class="pic pic2" href="" ng-click="contents.jobItemSetHide(item);"><span class="ico"></span></a></li>
+                                </ul>
+                            </div>
+                            <!-- //drop down -->
+                        </div>
+                    </div>
+                    <!-- panel -->
+                </li>
+            </ul>
+        </div>
+        <!-- //프로젝트 패널 -->
+
+        <!-- cont tit -->
+        <div class="cont-titWrap" ng-if="false">
+            <h3 class="h-tit2">{{ 'label.shortcut_info' | translate }}</h3>
+        </div>
+        <!-- //cont tit -->
+
+        <!-- 바로가기 패널 -->
+        <div class="dropzone" ng-if="false">
+            <ul dnd-list="contents.quickMenus" dnd-allowed-types="['quickMenu']" class="ul-quick">
+                <li ng-repeat="(key, item) in contents.quickMenus" ng-if="!item.hide" dnd-draggable="item" dnd-type="'quickMenu'" dnd-moved="contents.quickMenus.splice($index, 1)" dnd-dragend="contents.quickMenuDragend(dropEffect)">
+                    <div class="quickBox" ng-class="item.bgColorType" ng-style="{'background-image': 'url(' + item.bgImage + ')'}">
+                        <div class="titleTop">
+                            <div>
+                                <p class="tit">{{item.name}}<span class="new">N</span></p>
+                                <span class="quick-num">{{item.count}}</span>
+                            </div>
+                            <!-- btn top -->
+                            <div class="btnTop">
+                                <button type="button" name="button" class="btn btn-ico-del2-s only-ico" title="{{ 'label.del' | translate }}"><span class="ico">{{ 'label.del' | translate }}</span></button>
+                                <!-- drop down -->
+                                <div class="dropdown drop-set">
+                                    <button type="button" class="btn only-ico ico-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{ 'label.set' | translate }}">
+                                        <span class="ico">{{ 'label.set' | translate }}</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="btn-set" aria-labelledby="btn-set">
+                                        <li ng-repeat="(key, dmitem) in contents.bgtypes"><a href="" ng-class="dmitem.iconClass" title="{{dmitem.label | translate}}" ng-click="contents.quickMenuItemBgChange(item, dmitem);"></a></li>
+                                        <!--<li class="file-att" title="배경이미지"><a href="" class="pic"><span class="ico"></span></a></li>-->
+                                        <li title="{{ 'label.show' | translate }}/{{ 'label.hide' | translate }}"><a class="pic pic2" href="" ng-click="contents.quickMenuItemSetHide(item);"><span class="ico"></span></a></li>
+                                    </ul>
+                                </div>
+                                <!-- //drop down -->
+                            </div>
+                            <!-- //btn top -->
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- //바로가기 패널 -->
+    </div>
+    <!-- //관리 왼쪽 영역 -->
+
+    <!-- 관리 오른쪽 영역 -->
+    <div class="pull-right">
+        <ul class="ul-panel">
+            <li ng-if="contents.reductAsides.alarm.checked" class="pr1">
+                <!-- panel -->
+                <div class="panelWrap">
+                    <div class="panel type0">
+                        <div class="in">
+                            <div class="panel_head">
+                                <div class="tit"><span class="ico ico1"></span>알람 <em class="num">{{main.alarms?main.alarms.totalElements:0}}</em></div>
+                                <a href="#/monit/alarm"><button type="button" name="button" class="btn btn-more"><span class="ico">더보기</span></button></a>
+                            </div>
+                            <div class="panel_body">
+                                <div scroll-pane scroll-config="{ contentWidth: '0px' }" id="alarm_scroll_pane" class="in">
+                                    <ul class="ul-alarm">
+                                        <li ng-repeat="(key, item) in main.alarms.content">
+                                            <a href="">
+                                                <span class="name">{{item.stateCode?item.stateCode.state.substring(0,1):''}}</span>
+                                                <p class="tit">{{item.contents}}</p>
+                                                <p class="date">{{item.updateDttm | date : 'yyyy-MM-dd HH:mm:ss'}}</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- panel -->
+            </li>
+            <li ng-if="contents.reductAsides.document.checked" class="pr2">
+                <!-- panel -->
+                <div class="panelWrap">
+                    <div class="panel type0">
+                        <div class="in">
+                            <div class="panel_head">
+                                <div class="tit"><span class="ico ico2"></span>매뉴얼 <em class="num">{{contents.documents.length}}</em></div>
+                                <a href="#/tutorial/1"><button type="button" name="button" class="btn btn-more" class="더보기"><span class="ico">더보기</span></button></a>
+                            </div>
+                            <div class="panel_body">
+                                <div scroll-pane scroll-config="{ contentWidth: '0px' }" id="document_scroll_pane" class="in">
+                                    <ul class="ul-list1">
+                                        <li ng-repeat="(key, item) in contents.documents"><a href="#/tutorial/{{item.id}}">{{item.title}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- panel -->
+            </li>
+            <li ng-if="contents.reductAsides.notice.checked" class="pr3">
+                <!-- panel -->
+                <div class="panelWrap">
+                    <div class="panel type0">
+                        <div class="in">
+                            <div class="panel_head">
+                                <div class="tit"><span class="ico ico3"></span>공지사항 <em class="num">{{contents.notices.length}}</em></div>
+                                <a href="#/comm/boards/notice"><button type="button" name="button" class="btn btn-more" class="더보기"><a href="#/comm/boards/notice"><span class="ico">더보기</span></a></button></a>
+                            </div>
+                            <div class="panel_body">
+                                <div scroll-pane scroll-config="{ contentWidth: '0px' }" id="notice_scroll_pane" class="in">
+                                    <ul class="ul-list1">
+                                        <li ng-repeat="(key, item) in contents.notices"><a href="#/comm/boards/boardDetail/notice/{{item.id}}">{{item.title}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- panel -->
+            </li>
+        </ul>
+    </div>
+    <!-- 관리 오른쪽 영역 -->
+
+    <!-- aside aside1 -->
+    <div class="aside reductAside"><!-- 인스턴스 추가 버튼의 data-username에 연결할 아이디 이름을 넣어주세요. -->
+        <button type="button" name="button" class="btn btn-projt-set" title="컨텐츠 추가" ng-click="contents.asideReductAsideClick($event);"><span class="ico"></span></button>
+        <!-- aside aside1 title -->
+        <div class="sideTitWrap asideCnt">
+            <h2 class="c_tit">컨텐츠 추가</h2>
+            <button type="button" name="button" class="btn btn-close" ng-click="contents.asideReductAsideClose($event);"><span class="ico">{{ 'label.close' | translate }}</span></button>
+        </div>
+        <!-- //aside aside1 title -->
+        <!-- aside aside1 cnt -->
+        <div class="sideCntWrap reductHeight">
+            <!-- sideInWrap -->
+            <div class="sideInWrap">
+                <p class="sideGuideTxt">Dashboard에 보여질 항목을 추가하거나 삭제할 수 있습니다.</p>
+                <div class="sideCnt">
+                    <ul class="side-list">
+                        <li ng-repeat="(key, item) in contents.tempReductAsides">
+                            <div class="checkbox">
+                                <input type="checkbox" id="check-id-{{key}}" ng-model="item.checked">
+                                <label class="label-txt" for="check-id-{{key}}">{{item.label | translate}}</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- //sideInWrap -->
+        </div>
+        <!-- //aside aside1 cnt -->
+
+        <!-- aside aside1 btm -->
+        <div class="sideBtmWrap two">
+            <button type="button" name="button" class="btn" ng-click="contents.asideReductAsideSave($event);">{{ 'label.save' | translate }}</button>
+            <button type="button" name="button" class="btn btn-color5" ng-click="contents.asideReductAsideClose($event);">{{ "label.cancel" | translate }}</button>
+        </div>
+        <!-- //aside aside1 btm -->
+    </div>
+    <!-- //aside aside1 -->
+</div>

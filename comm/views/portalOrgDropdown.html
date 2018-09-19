@@ -1,0 +1,9 @@
+<div ng-if="!main.portalOrgs || main.portalOrgs.length == 0" style="position:relative; font-weight: 700; font-size: 26px;height: 39px;padding-top: 10px;">작업이 존재하지 않습니다.</div>
+<div ng-if="main.portalOrgs && main.portalOrgs.length > 0" class="projt-sel dropdown">
+    <button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="txt">{{ main.sltPortalOrgDisplayName }}</span><span class="ico arr"></span>
+    </button>
+    <ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
+        <li ng-repeat="orgItem in main.portalOrgs"><a href="" ng-click="main.changePortalOrg(orgItem);">{{ orgItem.orgName }}</a></li>
+    </ul>
+</div>

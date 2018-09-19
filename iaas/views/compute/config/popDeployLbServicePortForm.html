@@ -1,0 +1,78 @@
+<form name="portPop.{{portPop.formName}}" novalidate>
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+		<ol class="app-set">
+			<li>
+				<p class="app-tit">LB 포트명</p>
+				<input type="text" class="form-control" name="path" ng-model="portPop.servicePort.servicePortName" validation="required">
+			</li>
+			<li>
+				<p class="app-tit">LB 포트</p>
+				<ul class="app-set">
+					<li ng-if="!portPop.sltProtocolDiabled">
+						<div class="app-form-two w_auto mgt0" style="margin-top: 0;">
+							<div class="two_box" style="width: 40%; padding-top: 8px;"><span class="label-txt">프로토콜</span></div>
+							<div class="two_box" style="width: 5%; text-align: center; padding-top: 8px;"><span class="label-txt">:</span></div>
+							<div class="two_box" style="width: 55%;">
+								<select class="form-control" name="port-protocol-type" ng-model="portPop.sltProtocol" ng-change="portPop.changeProtocol(portPop.sltProtocol)" validation="required">
+									<option ng-if="portPop.serviceType != 'DB'" value="http">HTTP</option>
+									<option ng-if="portPop.serviceType != 'DB'" value="https">HTTP/HTTPS</option>
+									<option ng-if="portPop.serviceType == 'DB' || portPop.serviceType == 'LB'" value="mysql">MYSQL</option>
+								</select>
+							</div>
+						</div>
+					</li>
+					<li style="margin-top: 15px;">
+						<div class="app-form-two w_auto mgt0" style="margin-top: 0;">
+							<div ng-if="portPop.sltProtocol == 'http' || portPop.sltProtocol == 'https'" class="two_box" style="width: 40%; padding-top: 8px;"><span class="label-txt">HTTP 포트</span></div>
+							<div ng-if="portPop.sltProtocol == 'mysql'" class="two_box" style="width: 40%; padding-top: 8px;"><span class="label-txt">MYSQL 포트</span></div>
+							<div class="two_box" style="width: 5%; text-align: center; padding-top: 8px;"><span class="label-txt">:</span></div>
+							<div class="two_box" style="width: 55%;">
+								<input type="number" class="form-control" name="lbSourcePort" ng-model="portPop.servicePort.sourcePort" min="1" max="65535" max-number-length="5"  validation="numeric|required|custom:portPop.fn.systemLbPortCustomValidationCheck(portPop.servicePort.sourcePort)">
+							</div>
+						</div>
+						<div class="validation validation-lbSourcePort text-danger"></div>
+					</li>
+					<li ng-if="portPop.sltProtocol == 'https'" style="margin-top: 15px;">
+						<div class="app-form-two w_auto mgt0" style="margin-top: 0;">
+							<div class="two_box" style="width: 40%; padding-top: 8px;"><span class="label-txt">HTTPS 포트</span></div>
+							<div class="two_box" style="width: 5%; text-align: center; padding-top: 8px;"><span class="label-txt">:</span></div>
+							<div class="two_box" style="width: 55%;">
+								<input type="number" class="form-control" name="lbSslSourcePort" ng-model="portPop.servicePort.sslSourcePort" min="1" max="65535" max-number-length="5"  validation="numeric|required|custom:portPop.fn.systemLbSslPortCustomValidationCheck(portPop.servicePort.sslSourcePort)">
+							</div>
+						</div>
+						<div class="validation validation-lbSslSourcePort text-danger"></div>
+					</li>
+				</ul>
+			</li>
+			<li ng-if="portPop.formMode == 'mod' && portPop.sltProtocol == 'https'">
+				<p class="app-tit">프로토콜 제약</p>
+				<div class="checkbox checkbox-inline">
+					<input type="checkbox" name="checkbox_https_only" id="checkbox_https_only" ng-model="portPop.servicePort.httpsOnly" value="true">
+					<label for="checkbox_https_only" class="label-txt">HTTPS 만 허용</label>
+				</div>
+			</li>
+			<li ng-if="portPop.formMode == 'mod'">
+				<p class="app-tit">로드 밸런스 유형</p>
+				<div class="slider-input-group slider-label-hide" style="padding-bottom: 5px;">
+					<div class="radio radio-inline">
+						<input type="radio" name="balance" id="balance_1" value="source" ng-model="portPop.servicePort.balance">
+						<label for="balance_1" class="label">소스</label>
+					</div>
+					<div class="radio radio-inline">
+						<input type="radio" name="balance" id="balance_2" value="roundrobin" ng-model="portPop.servicePort.balance">
+						<label for="balance_2" class="label">라운드로빈</label>
+					</div>
+				</div>
+			</li>
+			<li ng-if="portPop.formMode == 'mod'">
+				<p class="app-tit">헬스체크 주기 (단위: 초)</p>
+				<input type="number" class="form-control" name="check_inter" ng-model="portPop.servicePort.checkInter" min="1" max="99999" max-number-length="5" validation="numeric|required">
+			</li>
+			<li ng-if="portPop.formMode == 'mod'">
+				<p class="app-tit">헬스체크 URL</p>
+				<input type="text" class="form-control" name="monitor_url" ng-model="portPop.servicePort.monitorUrl" validation="required">
+			</li>
+		</ol>
+	</div>
+</form>

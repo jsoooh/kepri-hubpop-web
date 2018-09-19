@@ -1,0 +1,20 @@
+<div class="sideTitWrap" ng-class="childDialogOptions.formMode == 'mod' ? 'asideCnt':''">
+    <h2 class="c_tit">{{ childDialogOptions.title | translate }}</h2>
+    <button type="button" name="button" class="btn btn-close" data-user="aside-close" ng-click="childDialogOptions.popCancel();"><span class="ico">{{ 'label.close' | translate }}</span></button>
+</div>
+<!-- //aside title -->
+
+<!-- aside cnt -->
+<div class="sideCntWrap" ng-include="childDialogOptions.templateUrl">
+</div>
+<!-- //aside cnt -->
+
+<!-- aside btm -->
+<div ng-if="!childDialogOptions.btnTemplateUrl && !childDialogOptions.btnTemplate" class="sideBtmWrap">
+    <button type="button" name="button" class="btn" ng-click="childDialogOptions.popDialogOk();">{{ childDialogOptions.okName | translate }}</button>
+</div>
+<div ng-if="childDialogOptions.btnTemplateUrl" class="sideBtmWrap" ng-include="childDialogOptions.btnTemplateUrl">
+</div>
+<div ng-if="childDialogOptions.btnTemplate" class="sideBtmWrap" dynamic-template="childDialogOptions.btnTemplate">
+</div>
+<!-- //aside btm -->

@@ -1,0 +1,399 @@
+<div class="mainWrap container-fluid">
+	<div class="row">
+		<div class="col-sm-8">
+			<div class="lineChartWrap">
+				<div class="lineChart" ng-if="!(contents.space.spaceQuota && contents.space.spaceQuota.guid)">
+					<h3 class="title">{{ (!contents.space.guid) ? "" : contents.space.name + "(" + contents.space.organizationQuota.name + ")" }}</h3>
+					<div class="row">
+						<div class="col-sm-6">
+							<p>
+                                {{ 'label.service' | translate }}
+                                <span ng-if="contents.space.guid" class="pull-right">
+                                    <b>{{ contents.space.servicesUsage|number:0 }}</b>
+                                    {{ (contents.space.organizationQuota.totalServices <= 0) ? '' : ('/ ' + (contents.space.organizationQuota.totalServices|number:0)) }}
+                                </span>
+                            </p>
+							<loading-progress-bar max="{{ (contents.space.organizationQuota.totalServices <= 0) ? contents.space.servicesUsage*100 : 100 }}"
+                                                  bar="{{ (contents.space.organizationQuota.totalServices <= 0) ? contents.space.servicesUsage : (((contents.space.servicesUsage*100)/contents.space.organizationQuota.totalServices) | number:0) }}"
+                                                  from="0" duration="1"
+                                                  top="{{ (contents.space.organizationQuota.totalServices <= 0) ? contents.space.servicesUsage : main.loadingProgressBar.top }}"
+                                                  down="{{ (contents.space.organizationQuota.totalServices <= 0) ? contents.space.servicesUsage : main.loadingProgressBar.down }}">
+                                {{ (contents.space.organizationQuota.totalServices <= 0) ? "" : "%" }}
+                            </loading-progress-bar>
+						</div>
+						<div class="col-sm-6">
+							<p>
+                                {{ 'label.route' | translate }}
+                                <span ng-if="contents.space.guid" class="pull-right">
+                                    <b>{{ contents.space.routesUsage|number:0 }}</b>
+                                    {{ (contents.space.organizationQuota.totalRoutes <= 0) ? '' : ('/ ' + (contents.space.organizationQuota.totalRoutes|number:0)) }}
+                                </span>
+                            </p>
+							<loading-progress-bar max="{{ (contents.space.organizationQuota.totalRoutes <= 0) ? contents.space.routesUsage*100 : 100 }}"
+                                                  bar="{{  (contents.space.organizationQuota.totalRoutes <= 0) ? contents.space.routesUsage : (((contents.space.routesUsage*100)/contents.space.organizationQuota.totalRoutes) | number:0) }}"
+                                                  from="0" duration="1"
+                                                  top="{{ (contents.space.organizationQuota.totalRoutes <= 0) ? contents.space.routesUsage : main.loadingProgressBar.top }}"
+                                                  down="{{ (contents.space.organizationQuota.totalRoutes <= 0) ? contents.space.routesUsage : main.loadingProgressBar.down }}">
+                                {{ (contents.space.organizationQuota.totalRoutes <= 0) ? "%" : "%" }}
+                            </loading-progress-bar>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<p>
+                                {{ 'label.memory' | translate }}
+                                <span ng-if="contents.space.guid" class="pull-right">
+                                    <b>{{ contents.space.memoryUsage|displayVolume:'MB' }}</b>
+                                    {{ (contents.space.organizationQuota.memoryLimit <= 0) ? '' : ('/ ' + (contents.space.organizationQuota.memoryLimit|displayVolume:'MB')) }}
+                                </span>
+                            </p>
+							<loading-progress-bar max="{{ (contents.space.organizationQuota.memoryLimit <= 0) ? contents.space.memoryUsage*100 : 100 }}"
+                                                  bar="{{ (contents.space.organizationQuota.memoryLimit <= 0) ? contents.space.memoryUsage : (((contents.space.memoryUsage*100)/contents.space.organizationQuota.memoryLimit) | number:0) }}"
+                                                  from="0" duration="1"
+                                                  top="{{ (contents.space.organizationQuota.memoryLimit <= 0) ? contents.space.memoryUsage : main.loadingProgressBar.top }}"
+                                                  down="{{ (contents.space.organizationQuota.memoryLimit <= 0) ? contents.space.memoryUsage : main.loadingProgressBar.down }}">
+                                {{ (contents.space.organizationQuota.memoryLimit <= 0) ? "" : "%" }}
+                            </loading-progress-bar>
+						</div>
+						<div class="col-sm-6">
+							<p>
+                                {{ 'label.app_instance' | translate }}
+                                <span ng-if="contents.space.guid" class="pull-right">
+                                    <b>{{ contents.space.appInstancesUsage|number:0 }}</b>
+                                    {{ (contents.space.organizationQuota.appInstanceLimit <= 0) ? '' : ('/ ' + (contents.space.organizationQuota.appInstanceLimit|number:0)) }}
+                                </span>
+                            </p>
+							<loading-progress-bar max="{{ (contents.space.organizationQuota.appInstanceLimit <= 0) ? contents.space.appInstancesUsage*100 : 100 }}"
+                                                  bar="{{  (contents.space.organizationQuota.appInstanceLimit <= 0) ? contents.space.appInstancesUsage : (((contents.space.appInstancesUsage*100)/contents.space.organizationQuota.appInstanceLimit)|number:0) }}"
+                                                  from="0" duration="1"
+                                                  top="{{ (contents.space.organizationQuota.appInstanceLimit <= 0) ? contents.space.appInstancesUsage : main.loadingProgressBar.top }}"
+                                                  down="{{  (contents.space.organizationQuota.appInstanceLimit <= 0) ? contents.space.appInstancesUsage : main.loadingProgressBar.down }}">
+                                {{ (contents.space.organizationQuota.appInstanceLimit <= 0) ? "" : "%" }}
+                            </loading-progress-bar>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+                            <p>{{ 'label.instance_memory' | translate }}
+                                <span class="pull-right">
+                                    <b ng-if="contents.space.organizationQuota.instanceMemoryLimit > 0">{{ contents.space.organizationQuota.instanceMemoryLimit|displayVolume:'MB' }}</b>
+                                    <b ng-if="contents.space.organizationQuota.instanceMemoryLimit <= 0"><span>{{ 'label.none_limit' | translate }}</span></b>
+                                </span>
+                            </p>
+						</div>
+					</div>
+				</div>
+				<div class="lineChart" ng-if="contents.space.spaceQuota && contents.space.spaceQuota.guid">
+					<h3 class="title">{{ contents.space.name }} ({{ contents.space.spaceQuota.name }})</h3>
+					<div class="row">
+						<div class="col-sm-6">
+							<p>{{ 'label.service' | translate }}
+                                <span class="pull-right">
+                                    <b>{{ contents.space.servicesUsage|number:0 }}</b>
+                                    {{ (contents.space.spaceQuota.totalServices <= 0) ? '' : ('/ ' + contents.space.spaceQuota.totalServices) }}
+                                </span>
+                            </p>
+							<loading-progress-bar max="{{ (contents.space.spaceQuota.totalServices <= 0) ? contents.space.serviceInstances.length*100 : 100 }}"
+                                                  bar="{{ (contents.space.spaceQuota.totalServices <= 0) ? contents.space.serviceInstances.length : (((contents.space.serviceInstances.length*100)/contents.space.spaceQuota.totalServices) | number:0) }}"
+                                                  from="0" duration="1"
+                                                  top="{{ (contents.space.spaceQuota.totalServices <= 0) ? contents.space.serviceInstances.length : main.loadingProgressBar.top }}"
+                                                  down="{{ (contents.space.spaceQuota.totalServices <= 0) ? contents.space.serviceInstances.length : main.loadingProgressBar.down }}">
+                                {{ (contents.space.spaceQuota.totalServices <= 0) ? "" : "%" }}
+                            </loading-progress-bar>
+						</div>
+						<div class="col-sm-6">
+							<p>{{ 'label.route' | translate }}
+                                <span class="pull-right">
+                                    <b>{{ contents.space.routesUsage|number:0 }}</b>
+                                    {{ (contents.space.spaceQuota.totalRoutes <= 0) ? '' : ('/ ' + (contents.space.spaceQuota.totalRoutes|number:0)) }}
+                                </span>
+                            </p>
+							<loading-progress-bar max="{{ (contents.space.spaceQuota.totalRoutes <= 0) ? contents.space.routes.length*100 : 100 }}"
+                                                  bar="{{ (contents.space.spaceQuota.totalRoutes <= 0) ? contents.space.routes.length : (((contents.space.routes.length*100)/contents.space.spaceQuota.totalRoutes) | number:0) }}"
+                                                  from="0" duration="1"
+                                                  top="{{ (contents.space.spaceQuota.totalRoutes <= 0) ? contents.space.routes.length : main.loadingProgressBar.top }}"
+                                                  down="{{ (contents.space.spaceQuota.totalRoutes <= 0) ? contents.space.routes.length : main.loadingProgressBar.down }}">
+                                {{ (contents.space.spaceQuota.totalRoutes <= 0) ? "" : "%" }}
+                            </loading-progress-bar>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<p>{{ 'label.memory' | translate }}
+                                <span class="pull-right">
+                                    <b>{{ contents.space.memoryUsage|displayVolume:'MB' }}</b>
+                                    {{ (contents.space.spaceQuota.memoryLimit <= 0) ? '' : ('/ ' + (contents.space.spaceQuota.memoryLimit|displayVolume:'MB')) }}
+                                </span>
+                            </p>
+							<loading-progress-bar max="{{ (contents.space.spaceQuota.memoryLimit <= 0) ? contents.space.memoryUsage*100 : 100 }}"
+                                                  bar="{{ (contents.space.spaceQuota.memoryLimit <= 0) ? contents.space.memoryUsage : (((contents.space.memoryUsage*100)/contents.space.spaceQuota.memoryLimit) | number:0) }}"
+                                                  from="0" duration="1"
+                                                  top="{{ (contents.space.spaceQuota.memoryLimit <= 0) ? contents.space.memoryUsage : main.loadingProgressBar.top }}"
+                                                  down="{{ (contents.space.spaceQuota.memoryLimit <= 0) ? contents.space.memoryUsage : main.loadingProgressBar.down }}">
+                                {{ (contents.space.spaceQuota.memoryLimit <= 0) ? "" : "%" }}
+                            </loading-progress-bar>
+						</div>
+						<div class="col-sm-6">
+							<p>{{ 'label.app_instance' | translate }}
+                                <span class="pull-right">
+                                    <b>{{ contents.space.appInstancesUsage|number:0 }}</b>
+                                    {{ (contents.space.spaceQuota.appInstanceLimit <= 0) ? '' : ('/ ' + (contents.space.spaceQuota.appInstanceLimit|number:0)) }}
+                                </span>
+                            </p>
+							<loading-progress-bar max="{{ (contents.space.spaceQuota.appInstanceLimit <= 0) ? contents.space.appInstancesUsage*100 : 100 }}"
+                                                  bar="{{ (contents.space.spaceQuota.appInstanceLimit <= 0) ? contents.space.appInstancesUsage : (((contents.space.appInstancesUsage*100)/contents.space.spaceQuota.appInstanceLimit) | number:0) }}"
+                                                  from="0" duration="1"
+                                                  top="{{ (contents.space.spaceQuota.appInstanceLimit <= 0) ? contents.space.appInstancesUsage : main.loadingProgressBar.top }}"
+                                                  down="{{ (contents.space.spaceQuota.appInstanceLimit <= 0) ? contents.space.appInstancesUsage : main.loadingProgressBar.down }}">
+                                {{ (contents.space.spaceQuota.appInstanceLimit <= 0) ? "" : "%" }}
+                            </loading-progress-bar>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<p>{{ 'label.instance_memory' | translate }}
+                                <span class="pull-right">
+                                    <b ng-if="contents.space.spaceQuota.instanceMemoryLimit > 0">{{ contents.space.spaceQuota.instanceMemoryLimit|displayVolume:'MB' }}</b>
+                                    <b ng-if="contents.space.spaceQuota.instanceMemoryLimit <= 0"><span>{{ 'label.none_limit' | translate }}</span></b>
+                                </span>
+                            </p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4 spaceTableWrap">
+			<div class="lineTable">
+				<p class="title">{{ 'label.deploy_state' | translate }}</p><!-- 배포 상태 -->
+				<table class="table table-striped">
+					<colgroup>
+						<col />
+                        <col style="width:30%" />
+                        <col style="width:30%" />
+					</colgroup>
+					<thead>
+					<tr>
+						<th>{{ 'label.type' | translate }}</th><!-- 구분 -->
+						<th>STARTED</th>
+						<th>STOPPED</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>STAGED</td>
+						<td>{{ contents.space.appStartStates.staged }}</td>
+						<td>{{ contents.space.appStopStates.staged }}</td>
+					</tr>
+					<tr>
+						<td>PENDING</td>
+						<td>{{ contents.space.appStartStates.panding }}</td>
+						<td>{{ contents.space.appStopStates.panding }}</td>
+					</tr>
+					<tr>
+						<td>FAILED</td>
+						<td>{{ contents.space.appStartStates.failed }}</td>
+						<td>{{ contents.space.appStopStates.failed }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+    <div class="main tabContainer withBadge">	<!--	170830 badge 있는 경우 withBadge 클래스 추가	-->
+        <button ng-if="contents.activeTabIndex != 4" type="button" class="btn button_img" ng-click="contents.getSpace(1);"><img src="img/btn_tabrefresh.png" width="20" height="15" alt="{{ 'label.refresh' | translate }}" /></button>	<!--	170829 변경	-->
+        <button ng-if="contents.activeTabIndex == 4" type="button" class="btn button_img" ng-click="contents.listSpaceUserRoles(1);"><img src="img/btn_tabrefresh.png" width="20" height="15" alt="{{ 'label.refresh' | translate }}" /></button>	<!--	170829 변경	-->
+        <uib-tabset active="contents.activeTabIndex" class="tab-animation">
+            <uib-tab index="1"><!-- 앱 -->
+                <uib-tab-heading>{{ 'label.apps' | translate }} <span class="badge">{{ app.apps.length }}</span></uib-tab-heading>
+                <div class="tableWrap">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col style="width:5%" />
+                            <col style="width:12%" />
+                            <col />
+                            <col span="2" style="width:10%" />
+                            <col span="4" style="width:7%" />
+                            <col style="width:5%" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>{{ 'label.no' | translate }}</th><!-- 번호 -->
+                            <th>{{ 'label.app' | translate }}</th><!-- 앱 -->
+                            <th>{{ 'label.route' | translate }}</th><!-- 라우트 -->
+                            <th>{{ 'label.app_state' | translate }}</th><!-- 앱상태 -->
+                            <th>{{ 'label.deploy_state' | translate }}</th><!-- 배포 상태 -->
+                            <th>{{ 'label.service' | translate }}</th><!-- 서비스 -->
+                            <th>{{ 'label.instance' | translate }}</th><!-- 인스턴스 -->
+                            <th>{{ 'label.memory' | translate }}</th><!-- 메모리 -->
+                            <th>{{ 'label.disk' | translate }}</th><!-- 디스크 -->
+                            <th>{{ 'label.set' | translate }}</th><!-- 설정 -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="(key, appItem) in app.apps" ng-if="key >= app.pageOptions.start && key < app.pageOptions.start + app.pageOptions.pageSize">
+                            <td>{{ key + 1 }}</td>
+                            <td class="text-left">
+                                <a href="#/apps/{{ appItem.guid }}" tooltip-placement="bottom" uib-tooltip="{{ 'label.app_detail' | translate }}">{{ appItem.name }}</a><!-- 앱 상세 -->
+                            </td>
+                            <td class="text-left">
+                                <ul>
+                                    <li ng-repeat="(key, uri) in appItem.uris"><a target="_blank" href="http://{{uri}}">http://{{ uri }}</a></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <span class="label label-{{ appItem.state.toLowerCase() }}">{{ appItem.state }}</span>
+                            </td>
+                            <td>
+                                <span class="label label-{{ appItem.packageState.toLowerCase() }}">{{ appItem.packageState }}</span>
+                            </td>
+                            <td>{{ appItem.serviceBindings.length }}</td>
+                            <td>{{ appItem.instances }}</td>
+                            <td>{{ appItem.memory|displayVolume:'MB' }}</td>
+                            <td>{{ appItem.diskQuota|displayVolume:'MB' }}</td>
+                            <td>
+                                <a ng-hide="appItem.state == 'STARTED'" href="" tooltip-placement="bottom" uib-tooltip="{{ 'label.start' | translate }}"><img src="img/btn_play.png" width="20" height="20" alt="{{ 'label.start' | translate }}" /></a><!-- 시작 -->
+                                <a ng-show="appItem.state == 'STARTED'" href="" tooltip-placement="bottom" uib-tooltip="{{ 'label.stop' | translate }}"><img src="img/btn_pause.png" width="20" height="20" alt="{{ 'label.stop' | translate }}" /></a><!-- 정지 -->
+                            </td>
+                        </tr>
+                        <tr ng-if="app.pageOptions.total == 0">
+                            <td colspan="10">{{ 'message.mi_dont_exist_list' | translate }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="paginationWrap">
+                    <div class="totalWrap">
+                        {{ 'label.total' | translate }} {{ app.pageOptions.total }} {{ 'label.count' | translate }}
+                    </div>
+                    <paging
+                            page="app.pageOptions.currentPage"
+                            page-size="app.pageOptions.pageSize"
+                            total="app.pageOptions.total"
+                            pg-href=""
+                            show-prev-next="true"
+                            show-first-last="true"
+                            paging-action="app.listApps(page)"
+                            text-first-class="firstPage"
+                            text-last-class="lastPage"
+                            text-next-class="nextPage"
+                            text-prev-class="prevPage">
+                    </paging>
+                </div>
+            </uib-tab>
+            <uib-tab index="2"><!-- PaaS 서비스 -->
+                <uib-tab-heading>{{ 'label.paas_service' | translate }} <span class="badge">{{ serviceInstance.serviceInstances.length }}</span></uib-tab-heading>
+                <div class="tableWrap">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col style="width: 6%;">
+                            <col>
+                            <col style="width: 18%;">
+                            <col style="width: 13%;">
+                            <col style="width: 15%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>{{ 'label.no' | translate }}</th><!-- 번호 -->
+                            <th>{{ 'label.service_name' | translate }}</th><!-- 서비스 명 -->
+                            <th>{{ 'label.service_plan' | translate }}</th><!-- 서비스 플랜 -->
+                            <th>{{ 'label.binding_apps' | translate }}</th><!-- 바인딩 앱 수 -->
+                            <th>{{ 'label.set' | translate }}</th><!-- 설정 -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="(key, serviceItem) in serviceInstance.serviceInstances" ng-if="key >= serviceInstance.pageOptions.start && key < serviceInstance.pageOptions.start + serviceInstance.pageOptions.pageSize">
+                            <td>{{ key + 1 }}</td>
+                            <td class="text-left">{{ serviceItem.name }}</td>
+                            <td class="text-left">{{ serviceItem.servicePlanName }}</td>
+                            <td>{{ serviceItem.serviceBindings.length }}</td>
+                            <td>
+                                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.paas_service_edit' | translate }}" ng-click="contents.updateServiceInstance($event, serviceItem);"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.paas_service_edit' | translate }}" /></button>
+                                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.paas_service_del' | translate }}" ng-click="contents.deleteServiceInstance(serviceItem.guid, serviceItem.name);"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.paas_service_del' | translate }}" /></button>
+                            </td>
+                        </tr>
+                        <tr ng-if="serviceInstance.pageOptions.total == 0">
+                            <td colspan="5">{{ 'message.mi_dont_exist_list' | translate }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="paginationWrap">
+                    <div class="totalWrap">
+                        {{ 'label.total' | translate }} {{ serviceInstance.pageOptions.total }} {{ 'label.count' | translate }}
+                    </div>
+                    <paging
+                        page="serviceInstance.pageOptions.currentPage"
+                        page-size="serviceInstance.pageOptions.pageSize"
+                        total="serviceInstance.pageOptions.total"
+                        pg-href=""
+                        show-prev-next="true"
+                        show-first-last="true"
+                        paging-action="serviceInstance.listServiceInstances(page)"
+                        text-first-class="firstPage"
+                        text-last-class="lastPage"
+                        text-next-class="nextPage"
+                        text-prev-class="prevPage">
+                    </paging>
+                </div>
+            </uib-tab>
+            <uib-tab index="3"><!-- 사용자 서비스 -->
+                <uib-tab-heading>{{ 'label.user_service' | translate }} <span class="badge">{{ userServiceInstance.userServiceInstances.length }}</span></uib-tab-heading>
+                <div class="tableWrap">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col style="width: 6%;">
+                            <col>
+                            <col style="width: 18%;">
+                            <col style="width: 13%;">
+                            <col style="width: 15%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>{{ 'label.no' | translate }}</th><!-- 번호 -->
+                            <th>{{ 'label.service_name' | translate }}</th><!-- 서비스 명 -->
+                            <th>{{ 'label.service_desc' | translate }}</th><!-- 서비스 설명 -->
+                            <th>{{ 'label.binding_apps' | translate }}</th><!-- 바인딩 앱 수 -->
+                            <th>{{ 'label.set' | translate }}</th><!-- 설정 -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="(key, serviceItem) in userServiceInstance.userServiceInstances" ng-if="key >= userServiceInstance.pageOptions.start && key < userServiceInstance.pageOptions.start + userServiceInstance.pageOptions.pageSize">
+                            <td>{{ key + 1 }}</td>
+                            <td class="text-left">{{ serviceItem.name }}</td>
+                            <td class="text-left">{{ 'label.user_service' | translate }}</td><!-- 사용자 서비스 -->
+                            <td>{{ serviceItem.serviceBindings.length }}</td>
+                            <td>
+                                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.user_service_edit' | translate }}" ng-click="contents.updateUserServiceInstance($event, serviceItem);"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.user_service_edit' | translate }}" /></button>
+                                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.user_service_del' | translate }}" ng-click="contents.deleteUserServiceInstance(serviceItem.guid, serviceItem.name);"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.user_service_del' | translate }}" /></button>
+                            </td>
+                        </tr>
+                        <tr ng-if="userServiceInstance.pageOptions.total == 0">
+                            <td colspan="5">{{ 'message.mi_dont_exist_list' | translate }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="paginationWrap">
+                    <div class="totalWrap">
+                        {{ 'label.total' | translate }} {{ userServiceInstance.pageOptions.total }} {{ 'label.count' | translate }}
+                    </div>
+                    <paging
+                            class="small"
+                            page="userServiceInstance.pageOptions.currentPage"
+                            page-size="userServiceInstance.pageOptions.pageSize"
+                            total="userServiceInstance.pageOptions.total"
+                            pg-href=""
+                            show-prev-next="true"
+                            show-first-last="true"
+                            paging-action="userServiceInstance.listUserServiceInstances(page)"
+                            text-first-class="firstPage"
+                            text-last-class="lastPage"
+                            text-next-class="nextPage"
+                            text-prev-class="prevPage">
+                    </paging>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+</div>
+

@@ -1,0 +1,152 @@
+<div class="mainWrap container-fluid">
+	<div class="row deviceWrap">
+		<div class="col-sm-6 groupInfo">
+			<div class="lineTable deviceInner">
+				<p class="title">{{ 'label.company_info' | translate }}</p><!-- 기업 정보 -->
+				<table class="table table-striped">
+					<colgroup>
+						<col style="width:50%" />
+						<col style="width:50%" />
+					</colgroup>
+					<thead>
+					<tr>
+						<th>{{ 'label.use_org' | translate }}</th><!-- 사용조직 -->
+						<th>{{ 'label.user' | translate }}</th><!-- 사용자 -->
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="text-center">{{ contents.portalInfo.orgCount | number:0 }}</td>
+						<td>{{ contents.portalInfo.userCount | number:0 }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-sm-6 spaceTableWrap">
+			<div class="lineTable deviceInner">
+				<p class="title">{{ 'label.service_info' | translate }}</p><!-- 서비스 정보 -->
+				<table class="table table-striped">
+					<colgroup>
+						<col style="width:33.3%" />
+						<col style="width:33.3%" />
+						<col style="width:33.3%" />
+					</colgroup>
+					<thead>
+					<tr>
+						<th>{{ 'label.service' | translate }}</th><!-- 서비스 -->
+						<th>{{ 'label.user_service' | translate }}</th><!-- 사용자 서비스 -->
+						<th>{{ 'label.route' | translate }}</th><!-- 라우트 -->
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="text-center">{{ contents.serviceInfo.passServicesCount | number:0 }}</td>
+						<td>{{ contents.serviceInfo.userServicesCount | number:0 }}</td>
+						<td>{{ contents.serviceInfo.routesCount | number:0 }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-sm-6 groupInfo">
+			<div class="lineTable deviceInner">
+				<p class="title">{{ 'label.org_quota_info' | translate }}</p><!-- 조직 용량계획 정보 -->
+				<table class="table table-striped">
+					<colgroup>
+						<col width="20%" />
+						<col width="20%" />
+						<col width="20%" />
+						<col width="20%" />
+						<col width="20%" />
+					</colgroup>
+					<thead>
+					<tr>
+						<th>{{ 'label.type' | translate }}</th>
+						<th>{{ 'label.service' | translate }}</th>
+						<th>{{ 'label.route' | translate }}</th>
+						<th>{{ 'label.memory' | translate }}</th>
+						<th>{{ 'label.app_instance' | translate }}</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>{{ 'label.quota' | translate }}</td>
+						<td>{{ contents.orgQuotaInfo.totalServices | number:0 }}</td>
+						<td>{{ contents.orgQuotaInfo.totalRoutes | number:0 }}</td>
+						<td>{{ (contents.orgQuotaInfo.memoryLimit == null) ? '' : (contents.orgQuotaInfo.memoryLimit|displayVolume:'MB') }}</td>
+						<td>{{ contents.orgQuotaInfo.appInstanceLimit | number:0 }}</td>
+					</tr>
+					<tr>
+						<td>{{ 'label.usage' | translate }}</td>
+						<td>{{ contents.serviceInfo.passServicesCount | number:0 }}</td>
+						<td>{{ contents.serviceInfo.routesCount | number:0 }}</td>
+						<td>{{ (contents.appStartInfo.memory == null) ? '' : (contents.appStartInfo.memory|displayVolume:'MB') }}</td>
+						<td>{{ contents.appStartInfo.instances | number:0 }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-sm-6 spaceTableWrap">
+			<div class="lineTable deviceInner">
+				<p class="title">{{ 'label.application_info' | translate }}</p><!-- 앱 정보 -->
+				<table class="table table-striped">
+					<colgroup>
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+					</colgroup>
+					<thead>
+					<tr>
+						<th colspan="4">STARTED</th>
+						<th colspan="4">STOPPED</th>
+					</tr>
+					<tr>
+						<th>{{ 'label.apps' | translate }}</th>
+						<th>{{ 'label.instance' | translate }}</th>
+						<th>{{ 'label.memory' | translate }}</th>
+						<th>{{ 'label.disk' | translate }}</th>
+						<th>{{ 'label.apps' | translate }}</th>
+						<th>{{ 'label.instance' | translate }}</th>
+						<th>{{ 'label.memory' | translate }}</th>
+						<th>{{ 'label.disk' | translate }}</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="text-center">{{ contents.appStartInfo.apps | number:0 }}</td>
+						<td>{{ contents.appStartInfo.instances | number:0 }}</td>
+						<td>{{ (contents.appStartInfo.memory == null) ? '' : (contents.appStartInfo.memory|displayVolume:'MB')}}</td>
+						<td>{{ (contents.appStartInfo.diskQuota == null) ? '' : (contents.appStartInfo.diskQuota|displayVolume:'MB')}}</td>
+						<td>{{ contents.appStopInfo.apps | number:0 }}</td>
+						<td>{{ contents.appStopInfo.instances | number:0 }}</td>
+						<td>{{ (contents.appStopInfo.memory == null) ? '' : (contents.appStartInfo.memory|displayVolume:'MB')}}</td>
+						<td>{{ (contents.appStopInfo.diskQuota == null) ? '' : (contents.appStartInfo.memory|displayVolume:'MB')}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="main buildAppInfo">
+		<div class="mainItem">
+			<p class="title">{{ 'label.application_info_by_buildpack' | translate }}</p> <!-- 빌드팩 별 앱 정보 -->
+			<div ng-repeat="(key, buildpackItem) in contents.portalBuildpacks" class="itemArea">
+				<div class="itemQuantity">
+					<a href="">
+						<img class="img-circle" ng-if="buildpackItem.iconImage != null" ng-src="data:{{ buildpackItem.iconImage.contentType }}; base64, {{ buildpackItem.iconImage.image }}" width="40" height="40">
+						<img class="img-circle" ng-if="buildpackItem.iconImage == null" src="img/default_image.png" width="40" height="40">
+						<p class="appTitle marketTitle">{{ buildpackItem.name }}</p>
+						<p class="quantity"><span>{{(buildpackItem.appStartCount + buildpackItem.appStopCount) | number:0 }}</span></p>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

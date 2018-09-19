@@ -1,0 +1,63 @@
+<div class="mainWrap container-fluid">
+    <div class="main">
+        <div class="topFunctionWrap">
+            <div class="btnWrap">
+                <ul class="systemBtnWrap">
+                    <li>
+                        <button type="button" class="btn btn-add" tooltip-placement="bottom" uib-tooltip="{{ 'label.route_add' | translate }}" ng-click="contents.createRoute($event);"><img src="img/ico_add.png" width="9" height="9" alt="" />{{ 'label.route_add' | translate }}</button><!-- 라우트 추가 -->
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tableWrap">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>{{ 'label.no' | translate }}</th><!-- 번호 -->
+                    <th>{{ 'label.space' | translate }}</th><!-- 영역 -->
+                    <th>{{ 'label.host_name' | translate }}</th><!-- 호스트명 -->
+                    <th>{{ 'label.domain_name' | translate }}</th><!-- 도메인명 -->
+                    <th>PATH</th><!-- PATH -->
+                    <th>{{ 'label.application' | translate }}</th><!-- 엡명 -->
+                    <th>{{ 'label.set' | translate }}</th><!-- 설정 -->
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="(key, routeItem) in contents.routes.content">
+                    <td>{{ ((contents.routes.number - 1) * contents.routes.size) + key + 1 }}</td>
+                    <td class="text-left">{{ routeItem.spaceName }}</td>
+                    <td class="text-left">{{ routeItem.host }}</td>
+                    <td class="text-left">{{ routeItem.domainName }}</td>
+                    <td class="text-left">{{ routeItem.path }}</td>
+                    <td>{{ routeItem.apps.length }}</td>
+                    <td>
+                        <button type="button" class="btn button_img" ng-click="contents.updateRoute($event, routeItem);" data-toggle="modal" data-target="#modalHostEdit" id="toolTipEdit01"><img src="img/ico_edit.png" width="16" height="16" alt="수정" /></button>
+                        <button type="button" class="btn button_img" ng-click="contents.deleteRoute(routeItem.guid, routeItem.host);" data-toggle="modal" data-target="#modalPaasDelete" id="toolTipDelete01"><img src="img/ico_delete.png" width="13" height="16" alt="삭제" /></button>
+                    </td>
+                </tr>
+                <tr ng-if="contents.pageOptions.total == 0">
+                    <td colspan="7">{{ 'message.mi_dont_exist_list' | translate }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginationWrap">
+            <div class="totalWrap">
+                {{ 'label.total' | translate }} {{ contents.pageOptions.total }} {{ 'label.count' | translate }}
+            </div>
+            <paging
+                    page="contents.pageOptions.currentPage"
+                    page-size="contents.pageOptions.pageSize"
+                    total="contents.pageOptions.total"
+                    pg-href=""
+                    show-prev-next="true"
+                    show-first-last="true"
+                    paging-action="contents.listRoutes(page)"
+                    text-first-class="firstPage"
+                    text-last-class="lastPage"
+                    text-next-class="nextPage"
+                    text-prev-class="prevPage">
+            </paging>
+        </div>
+    </div>
+</div>

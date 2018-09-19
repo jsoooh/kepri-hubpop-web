@@ -1,0 +1,146 @@
+<div class="mainWrap container-fluid">
+    <div class="main">
+        <form name="contents.{{ contents.formName }}" novalidate>
+            <div class="tableWrap">
+                <table class="table table-bordered">
+                    <colgroup>
+                        <col style="width:17%" />
+                        <col style="width:33%" />
+                        <col style="width:17%" />
+                        <col  />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th>
+                            <span class="require"></span>
+                            <label for="organization">{{ 'label.org' | translate }}</label><!-- 조직 -->
+                        </th>
+                        <td>
+                            <select name="organization" id="organization" ng-change="contents.changeOrganization();" ng-model="contents.appPushData.organizationGuid" validation="required">
+                                <option value="">{{ 'label.select' | translate }}</option>
+                                <option ng-repeat="orgItem in contents.organizations" value="{{ orgItem.guid }}">{{ orgItem.name }}</option>
+                            </select>
+                        </td>
+                        <th>
+                            <span class="require"></span>
+                            <label for="space">{{ 'label.space' | translate }}</label><!-- 영역 -->
+                        </th>
+                        <td>
+                            <select name="space" id="space" ng-change="contents.changeSpace();" ng-model="contents.appPushData.spaceGuid" validation="required">
+                                <option value="">{{ 'label.select' | translate }}</option>
+                                <option ng-repeat="spaceItem in contents.spaces" value="{{ spaceItem.guid }}">{{ spaceItem.name }}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'label.buildpack_details' | translate }}</th><!-- 빌드팩 상세 -->
+                        <td colspan="3" class="innerTableWrap appPushInnerTable">
+                            <table class="table">
+                                <colgroup>
+                                    <col style="width:150px;" />
+                                    <col  />
+                                    <col style="width:100px;" />
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <img class="img-circle" ng-if="contents.sltMarketApp.portalBuildpackVersion.portalBuildpack.iconImage != null" ng-src="data:{{ contents.sltMarketApp.portalBuildpackVersion.portalBuildpack.iconImage.contentType }}; base64, {{ contents.sltMarketApp.portalBuildpackVersion.portalBuildpack.iconImage.image }}" width="80" height="80">
+                                        <img class="img-circle" ng-if="contents.sltMarketApp.portalBuildpackVersion.portalBuildpack.iconImage == null" src="img/default_image.png" width="80" height="80">
+                                        <p>{{ contents.sltMarketApp.buildpackName }}<br/>{{ contents.sltMarketApp.buildpackVersionName }}</p>
+                                    </td>
+                                    <td>
+	                                    <pre class="text-left" style="min-height: 150px; max-height: 200px; background-color: #FFFFFF; margin: 0 0 0 0;">{{ contents.sltMarketApp.portalBuildpackVersion.description }}</pre>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn" tooltip-placement="bottom" uib-tooltip="{{ 'label.read_more' | translate }}">
+                                            <a target="_blank" ng-href="{{ contents.sltMarketApp.portalBuildpackVersion.url }}">{{ 'label.read_more' | translate }}</a>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span class="require"></span>
+                            <label for="appName">{{ 'label.application_name' | translate }}</label>
+                        </th>
+                        <td>
+                            <input type="text" maxlength="30" id="appName" name="appName" placeholder="{{ 'label.application_name' | translate }}" ng-model="contents.appPushData.appName" validation="alpha_dash|min_len:3|max_len:30|required" />
+                        </td>
+                        <th>
+                            <span class="require"></span>
+                            <label for="domain">{{ 'label.domain' | translate}}</label>
+                        </th>
+                        <td>
+                            <select name="domainName" id="domain" name="domain" ng-model="contents.sltDomainName" validation="required">
+                                <option value="">{{ 'label.select' | translate }}</option>
+                                <option ng-repeat="domainItem in contents.domains" value="{{ domainItem.name }}">{{ domainItem.name }}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'label.start_option' | translate }}</th>
+                        <td colspan="3">
+                            <p class="inputWrap inline">
+                                <input type="radio" id="withStart_01" name="withStart" value="false" ng-model="contents.appPushData.withStart" />
+                                <label for="withStart_01">{{ 'label.application_deploy' | translate }}</label>
+                            </p>
+                            <p class="inputWrap inline">
+                                <input type="radio" id="withStart_02" name="withStart" value="true" ng-model="contents.appPushData.withStart"  />
+                                <label for="withStart_02">{{ 'label.deploy_and_start' | translate }}</label>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="serviceItem in contents.services">
+                        <th><span class="require"></span>{{ 'label.service' | translate }} ( {{ serviceItem.label }} ) </th><!-- 서비스 -->
+                        <td>
+                            <input type="text" maxlength="30" name="serviceInstanceName_{{ serviceItem.label }}" ng-model="serviceItem.sltServiceInstanceName" placeholder="{{ 'label.service_instance_name' | translate }}" validation="alpha_dash|min_len:3|max_len:30|required" maxlength="30">
+                        </td>
+                        <th><span class="require"></span>{{ 'label.service_plan' | translate }} ( {{ serviceItem.label }} ) </th><!-- 서비스 플랜 -->
+                        <td>
+                            <select allow-clear=true name="servicePlan_{{ serviceItem.label }}" ng-model="serviceItem.sltServicePlanGuid" validation="required">
+                                <option value="">{{ 'label.select' | translate }}</option>
+                                <option ng-repeat="servicePlanItem in serviceItem.servicePlans" value="{{ servicePlanItem.guid }}">{{ servicePlanItem.name }}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'label.resource_set' | translate }}</th>
+                        <td colspan="3">
+                            <ul class="sliderContainer labelNone">
+                                <li>
+                                    <p class="sliderTitle">{{ 'label.instance' | translate }}</p>
+                                    <div class="sliderWrap instanceSlider">
+                                        <rzslider rz-slider-model="contents.instancesSlider.value" rz-slider-options="contents.instancesSlider.options"></rzslider>
+                                    </div>
+                                    <p class="sliderData"><b>{{ contents.instancesSlider.value|number:0 }}</b> / {{ contents.instancesSlider.options.ceil|number:0 }}</p>
+                                </li>
+                                <li>
+                                    <p class="sliderTitle">{{ 'label.memory' | translate }}</p>
+                                    <div class="sliderWrap memorySlider">
+                                        <rzslider rz-slider-model="contents.memorySlider.value" rz-slider-options="contents.memorySlider.options"></rzslider>
+                                    </div>
+	                                <p class="sliderData"><b>{{ contents.memorySlider.value|displayVolume:'MB' }}</b> / {{ contents.memorySlider.options.ceil|displayVolume:'MB' }}</p>
+                                </li>
+                                <li>
+                                    <p class="sliderTitle">{{ 'label.disk' | translate }}</p>
+                                    <div class="sliderWrap diskSlider">
+                                        <rzslider rz-slider-model="contents.diskQuotaSlider.value" rz-slider-options="contents.diskQuotaSlider.options"></rzslider>
+                                    </div>
+	                                <p class="sliderData"><b>{{ contents.diskQuotaSlider.value|displayVolume:'MB' }}</b> / {{ contents.diskQuotaSlider.options.ceil|displayVolume:'MB' }}</p>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        <div class="bottomBtnWrap">
+            <button ng-disabled="actionBtnHied" type="button" class="btn btn-add" ng-click="contents.marketAppPush();">{{ 'label.deploy' | translate }}</button>
+            <button type="button" class="btn" ng-click="main.goToPage(main.moveParentUrl);">{{ 'label.cancel' | translate }}</button>
+        </div>
+    </div>
+</div>

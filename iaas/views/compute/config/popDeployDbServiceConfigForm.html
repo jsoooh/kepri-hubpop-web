@@ -1,0 +1,23 @@
+<form name="pop.{{pop.formName}}" novalidate>
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+		<ol class="app-set">
+			<li>
+				<p class="app-tit">DB 서비스 포트</p>
+				<input type="number" class="form-control" name="servicePort" ng-model="pop.serviceInstance.servicePort" min="1" max="99999" max-number-length="5" min="1" max="49151" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.serviceInstance.servicePort)">
+			</li>
+			<li>
+				<p class="app-tit">최대 허용 접속 수</p>
+				<input type="number" class="form-control" name="maxConnections" ng-model="pop.serviceInstance.dbConfig.maxConnections" min="1" max="99999" max-number-length="5" min="1" max="49151" validation="numeric|required">
+			</li>
+			<li>
+				<p class="app-tit">최대 허용 패킷 용량 (MB)</p>
+				<input type="number" class="form-control" name="maxAllowedPacket" ng-model="pop.serviceInstance.dbConfig.maxAllowedPacket" min="1" max="99999" max-number-length="5" min="1" max="49151" validation="numeric|required">
+			</li>
+			<li>
+				<p class="app-tit">최대 허용 binlog 크기 (MB)</p>
+				<input type="number" class="form-control" name="maxBinlogSize" ng-model="pop.serviceInstance.dbConfig.maxBinlogSize" min="1" max="99999" max-number-length="5" min="1" max="49151" validation="numeric|required">
+			</li>
+		</ol>
+	</div>
+</form>

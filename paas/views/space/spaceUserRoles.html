@@ -1,0 +1,71 @@
+<div class="mainWrap container-fluid">
+    <div class="main">
+        <div class="tableWrap">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>{{ 'label.no' | translate }}</th>
+                    <th>{{ 'label.org' | translate }}</th>
+                    <th>{{ 'label.space' | translate }}</th>
+                    <th>{{ 'label.user' | translate }}</th>
+                    <th>{{ 'label.manager' | translate }}</th>
+                    <th>{{ 'label.developer' | translate }}</th>
+                    <th>{{ 'label.auditor' | translate }}</th>
+	                <th>{{ 'label.edit' | translate }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="(key, userRoleItem) in contents.spaceUsers">
+                    <td>{{ key + 1 }}</td>
+                    <td class="text-left">{{ contents.space.organizationName }}</td>
+                    <td class="text-left">{{ contents.space.name }}</td>
+                    <td class="text-left">{{ userRoleItem.displayUserName || ('label.uaa_user_deleted' | translate) }}</td>
+	                <td style="{{(contents.orgSpaceUsers[key].manager != userRoleItem.manager) ? ' background-color: #fcece5;' : ''}}">
+	                    <p class="inputWrap inline">
+                            <input type="checkbox" id="manager_checked_{{key}}" name="manager_checked_{{key}}" ng-checked="userRoleItem.manager" ng-model="userRoleItem.manager" ng-change="contents.changeSpaceUserRole(key)" ng-disabled="userRoleItem.disabled" />
+		                    <label for="manager_checked_{{key}}"></label>
+                        </p>
+                    </td>
+                    <td style="{{(contents.orgSpaceUsers[key].developer != userRoleItem.developer) ? ' background-color: #fcece5;' : ''}}">
+                        <p class="inputWrap inline">
+                            <input type="checkbox" id="developer_checked_{{key}}" name="developer_checked_{{key}}" ng-checked="userRoleItem.developer" ng-model="userRoleItem.developer" ng-change="contents.changeSpaceUserRole(key)" ng-disabled="userRoleItem.disabled" />
+	                        <label for="developer_checked_{{key}}"></label>
+                        </p>
+                    </td>
+                    <td style="{{(contents.orgSpaceUsers[key].auditor != userRoleItem.auditor) ? ' background-color: #fcece5;' : ''}}">
+                        <p class="inputWrap inline">
+                            <input type="checkbox" id="auditor_checked_{{key}}" name="auditor_checked_{{key}}" ng-checked="userRoleItem.auditor" ng-model="userRoleItem.auditor" ng-change="contents.changeSpaceUserRole(key)" ng-disabled="userRoleItem.disabled" />
+	                        <label for="auditor_checked_{{key}}"></label>
+                        </p>
+                    </td>
+	                <td>
+		                <button type="button" class="btn button_img" ng-click="contents.updateSpaceUserRole(key);" tooltip-placement="bottom" uib-tooltip="{{ 'label.edit' | translate }}" ng-disabled="(userRoleItem.roleType == '')"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.edit' | translate }}"/></button>
+		                <button type="button" class="btn button_img" ng-click="contents.cancelChangeSpaceUserRole(key);" tooltip-placement="bottom" uib-tooltip="{{ 'label.cancel' | translate }}" ng-disabled="(userRoleItem.roleType == '')"><img src="img/input_cancel.png" width="16" height="16" alt="{{ 'label.cancel' | translate }}"/></button>
+	                </td>
+                </tr>
+                <tr ng-if="contents.pageOptions.total == 0">
+                    <td colspan="8">{{ 'message.mi_dont_exist_list' | translate }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginationWrap">
+            <div class="totalWrap">
+                {{ 'label.total' | translate }} {{ contents.pageOptions.total }} {{ 'label.count' | translate }}
+            </div>
+            <paging
+                    page="contents.pageOptions.currentPage"
+                    page-size="contents.pageOptions.pageSize"
+                    total="contents.pageOptions.total"
+                    pg-href=""
+                    show-prev-next="true"
+                    show-first-last="true"
+                    paging-action="contents.listSpaceUserRoles(page)"
+                    text-first-class="firstPage"
+                    text-last-class="lastPage"
+                    text-next-class="nextPage"
+                    text-prev-class="prevPage">
+            </paging>
+        </div>
+    </div>
+</div>

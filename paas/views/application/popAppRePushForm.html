@@ -1,0 +1,34 @@
+<table class="table table-bordered">
+	<colgroup>
+		<col style="width:160px;" />
+		<col />
+	</colgroup>
+	<tbody>
+	<tr ng-if="pop.appPushData.pushType == 'GENERAL' || pop.appPushData.pushType == 'MARKET'">
+		<th>{{ 'label.buildpack' | translate }}</th>
+		<td>{{ pop.app.buildpackName }} ({{ pop.app.buildpackVersionName }})</td>
+	</tr>
+	<tr ng-if="pop.appPushData.pushType == 'DOCKER'">
+		<th>GitHub URI</th>
+		<td>
+			<input type="text" maxlength="10" name="dockerImageView" ng-model="pop.appPushData.dockerImage" value="{{ pop.appPushData.dockerImage }}" disabled="true">
+		</td>
+	</tr>
+	<tr ng-if="pop.appPushData.pushType == 'GENERAL'">
+		<th><span class="require"></span>{{ 'label.file_upload' | translate }}</th>
+		<td class="text-left">
+			<input type="file" name="file" nv-file-select="" uploader="pop.uploader" style="display: none;" />
+			<button type="button" class="btn btn-file" ng-click="main.fileSelectBtnClick($event);">
+				{{ 'label.file_search' | translate }}
+			</button>
+			<input type="hidden" name="pop.appFileName" ng-model="pop.appFileItem.file.name" style="display: none;" validation="required" />
+			<span ng-if="pop.appFileErrorMessage" style="color: red;" dynamic-template="pop.appFileErrorMessage"></span>
+			<span ng-if="!pop.appFileErrorMessage && pop.appFileItem.file.name">{{ pop.appFileItem.file.name }}</span>
+		</td>
+	</tr>
+	<tr ng-if="pop.appPushData.pushType == 'MARKET'">
+		<th>{{ 'label.market_app_name' | translate }}</th>
+		<td>{{ pop.app.marketAppPush.marketApp.name }}</td>
+	</tr>
+	</tbody>
+</table>

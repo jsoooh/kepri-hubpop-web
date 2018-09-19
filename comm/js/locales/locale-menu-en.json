@@ -1,0 +1,73 @@
+{
+	"commMenu": {
+		"menu": {
+			"devops": "DevOps",
+			"devops_git": "DevOps Git",
+			"devops_ci": "DevOps CI/CD",
+			"devops_wide": "DevOps Web IDE",
+			"home": "Dashboard",
+			"dashboard": "Dashboard",
+			"org_mgmt": "Jobs",
+			"org_user_mgmt": "Org Members",
+			"company_mngr_info": "Company Manager",
+			"company_info": "Company Info",
+			"company_manager": "Company Manager",
+			"community": "Community",
+			"boards": "Boards",
+			"board_notice": "Notice",
+			"board_details": "Board View",
+			"board_faq": "FAQ",
+			"board_qna": "QnA",
+			"board_data": "Resource",
+			"platform_service": "Platform Service",
+			"platform_service_paas": "표준 APP. 개발 서비스",
+			"platform_service_iaas": "서버 가상화 서비스",
+			"platform_service_monit": "통합 모니터링",
+			"data_linkage": "데이터 연계",
+			"data_linkage_01": "허브팝 데이터 연계 및 보유 현황",
+			"data_linkage_02": "데이터 연계 신청 처리 현황",
+			"data_linkage_03": "데이터 연계 신청",
+			"project": "Project",
+			"project_mgmt": "Projects",
+			"comm_portal": "Home",
+			"project_details": "Project Detail",
+			"service_catalog": "Service Catalog",
+			"cata_list": "Catalog List",
+			"cata_view": "Catalog View",
+			"board_notice": "Notice",
+			"board_create": "등록",
+			"board_update": "수정"
+		},
+		"desc": {
+		}
+	},
+	"communityMenu": {
+		"menu": {
+			"community": "Community",
+			"board_notice": "Notice",
+			"board_details": "Board View",
+			"board_faq": "FAQ",
+			"board_qna": "QnA",
+			"board_data": "Resource"
+		},
+		"desc": {
+		}
+	},
+	"cataListMenu": {
+		"menu": {
+			"cata_list_portal": "기타",
+			"cata_list": "서비스 카탈로그"
+		}
+	},
+	"tutorialMenu": {
+		"menu": {
+			"tutorial_portal": "기타",
+			"tutorial": "튜토리얼",
+			"tutorial1": "가상 서버 활용하기",
+			"tutorial2": "SW 개발하기",
+			"tutorial3": "회원가입 및 작업 관리하기",
+			"tutorial4": "API Gateway 활용하기",
+			"tutorial5": "데이터 연계 신청하기"
+		}
+	}
+}

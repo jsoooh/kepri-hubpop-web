@@ -1,0 +1,80 @@
+<div ng-controller="iaasStorageEditFormCtrl as pop">
+	<!-- aside aside1 title -->
+	<div class="sideTitWrap">
+		<h2 class="c_tit">{{pop.title}}</h2>
+		<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="pop.popCancel();"><span class="ico">닫기</span></button>
+	</div>
+	<!-- //aside aside1 title -->
+	
+	<!-- aside aside1 cnt -->
+	<form name="{{pop.formName}}" novalidate>
+		<div class="sideCntWrap">
+			<!-- sideInWrap -->
+			<div class="sideInWrap">
+				<ol class="app-set">
+					<li>
+						<p class="app-tit">이름 입력</p>
+						<input type="text" class="form-control" ng-model="pop.volume.name" maxlength="50" name="volumeName" validation="required" placeholder="이름을 입력해 주세요." />
+					</li>
+					<li>
+						<p class="app-tit">볼륨 크기 입력</p>
+						<!-- <input type="text" class="form-control" ng-model="pop.expandVolumeSize" name="expandVolumeSize" ng-change="pop.fn.changeVolumeSize()" maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span>
+						<button class="btn btn-plus"  ng-click="pop.fn.volumeSizeAction(true)" tooltip-placement="bottom" uib-tooltip="증가"><img src="images/ico_plus.png" width="10" height="10" alt="" /></button>
+						<button class="btn btn-minus"  ng-click="pop.fn.volumeSizeAction(false)" tooltip-placement="bottom" uib-tooltip="감소"><img src="images/ico_minus.png" width="10" height="10" alt="" /></button>
+						<ul class="inst-set">
+							<li>
+								<div class="rangeWrap type2">
+									<div class="range-text">
+										<strong class="range-tit">볼륨크기</strong>
+										<p class="text-letter">{{pop.resource.usedResource.volumeGigabytes | number : 0}}GB / {{pop.resource.maxResource.volumeGigabytes | number:0}}GB</p>
+									</div>
+									<scalable-progress-bar swidth="90" max="100" top="80" scalable="{{(pop.expandVolumeSize - pop.resourceDefault.usedResource.volumeGigabytes) / pop.resource.maxResource.volumeGigabytes * 100 | number: 0}}" bar="{{pop.resource.usedResource.volumeGigabytes / pop.resource.maxResource.volumeGigabytes * 100 | number: 0}}" from="0" duration="1" base="{{pop.resourceDefault.usedResource.volumeGigabytes / pop.resourceDefault.maxResource.volumeGigabytes * 100 | number: 0}}" >%</scalable-progress-bar>
+								</div>
+							</li>
+						</ul> -->
+						
+						<div class="instBox noneBox" style="padding: 10px 0;">
+							<ul class="inst-set">
+								<li>
+									<div class="rangeWrap type2">
+										<div class="range-text">
+											<!-- <strong class="range-tit">볼륨 크기</strong> -->
+											<input type="text" class="form-control" ng-model="pop.expandVolumeSize" name="expandVolumeSize" ng-change="pop.fn.changeVolumeSize()" maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span>
+											<span class="range-txt">최대 {{(pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) | number:0}}G</span>
+										</div>
+										<slider
+											slider-id="ex1Slider2"
+											ng-model="pop.expandVolumeSize"
+											value="pop.expandVolumeSize"
+											min="(pop.volume.size)"
+											max="(pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)"
+											step="1"
+											slider_tooltip_position="top"
+											formatter="pop.formatter(pop.expandVolumeSize)"
+										>
+										</slider>
+									</div>
+								</li>
+							</ul>
+							<p class="inst-txt">마우스를 움직여 생성하실 볼륨의 크기를 설정해 주세요.</p>
+						</div>
+					</li>
+					<li>
+						<p class="app-tit">설명 입력</p>
+						<textarea id="keypairDescription" name="volumeDescription" maxlength="255" style="height:150px;" ng-model="pop.volume.description" class="form-control" ng-keyup="pop.fn.checkByte(pop.volume.description,255)" placeholder="설명을 입력해 주세요." ></textarea>
+						<p class="text-letter">{{pop.volume.description | stringToBytes}}/255 Byte</p>
+						<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
+					</li>
+				</ol>
+			</div>
+			<!-- //sideInWrap -->
+		</div>
+	</form>
+	<!-- //aside aside1 cnt -->
+	
+	<!-- aside aside1 btm -->
+	<div class="sideBtmWrap">
+		<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.fn.updateVolume();">{{ 'label.change' | translate }}</button>
+	</div>
+	<!-- //aside aside1 btm -->
+</div>

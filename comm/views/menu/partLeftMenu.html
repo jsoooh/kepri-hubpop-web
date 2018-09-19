@@ -1,0 +1,34 @@
+<div class="lmmMenu">
+    <div ng-if="main.selectSiteMap.mainKey == 'paasPotal' || main.selectSiteMap.mainKey == 'iaasPotal' || main.selectSiteMap.mainKey == 'monitPotal'" class="lmm_title">
+        <span class="ico_iaas" ng-if="main.selectSiteMap.mainKey == 'iaasPotal'">서버 가상화 서비스</span>
+        <span class="ico_paas" ng-if="main.selectSiteMap.mainKey == 'paasPotal'">표준 APP.개발 서비스</span>
+        <span class="ico_monit" ng-if="main.selectSiteMap.mainKey == 'monitPotal'">통합 모니터링</span>
+    </div>
+    <div class="lmm lmm1" ng-class="main.commLeftFav.favSetlmmClass">
+        <div class="lmmBtn">
+            <button type="button" name="button" class="btn btn-fav" title="{{'comm.label.favorites' | translate}}" ng-class="main.commLeftFav.favClass" ng-click="main.leftIconFavToggle($event);"><span class="ico">{{'comm.label.favorites' | translate}}</span></button>
+            <button type="button" name="button" class="btn btn-set" title="{{'label.set' | translate}}/{{'label.save' | translate}}" ng-class="main.commLeftFav.favSetClass" ng-click="main.leftIconSetToggle($event);"><span class="ico">{{'label.set' | translate}}/{{'label.save' | translate}}</span></button>
+        </div>
+        <div scroll-pane id="comm_left_fav_icon_scroll_pane" class="lmmWrap">
+            <ul ui-sortable="main.commLeftFav.sortableOptions" ng-model="main.commLeftFav.linkIconMenus">
+                <li ng-repeat="(key, item) in main.commLeftFav.linkIconMenus" class="ui-state-default">
+                    <a href="" ng-click="main.leftLinkIconClick($event, item)" class="lms" title="{{ item.name | translate }}"><span class="ico-bul" ng-class="item.icon"></span></a>
+                    <span class="link-remove-icon" ng-click="main.leftLinkIconRemoveClick($event, key, item)"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="lmm lmm2">
+        <ul>
+            <li ng-repeat="(key, menuItem) in main.leftMenuParams">
+                <p ng-click="main.partLeftMenuClick($event, menuItem.mainKey, menuItem.id);" ng-class="{'menu-parent': (menuItem.subMenus && menuItem.subMenus.length > 0)}" dynamic-template="menuItem.templateHtml"></p>
+                <div ng-if="menuItem.subMenus && menuItem.subMenus.length > 0" class="subm" ng-style="{ 'display': ((menuItem.open) ? 'block' : 'none') }">
+                    <ul>
+                        <li ng-repeat="(subKey, menuSubItem) in menuItem.subMenus" dynamic-template="menuSubItem.templateHtml"></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <button type="button" name="button" class="btn btn-lmm" ng-class="main.commLeftFav.favIconMenuClass" ng-click="main.leftIconFavMenuToggle($event)"><span class="ico">{{'label.open' | translate}}/{{'label.close' | translate}}</span></button>
+    </div>
+</div>

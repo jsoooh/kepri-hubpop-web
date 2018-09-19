@@ -1,0 +1,232 @@
+    <!-- aside step -->
+    <div class="sideStepWrap">
+        <ul>
+            <li class="pull-left on"><em>step 01</em><span>APP환경설정</span></li>
+            <li class="pull-right"><em>step 02</em><span>인스턴스 설정</span></li>
+        </ul>
+    </div>
+    <!-- //aside step -->
+
+    <form name="projectsAsideAddForm" novalidate>
+    <!-- sideInWrap -->
+    <div class="sideInWrap">
+        <ol class="app-set">
+            <li>
+                <p class="app-tit">1. 유형을 선택해 주세요.</p>
+                <div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="app-radio1" id="app-radio1-1">
+                        <label for="app-radio1-1" class="label">Compute</label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="app-radio1" id="app-radio1-2">
+                        <label for="app-radio1-2" class="label">C APP</label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="app-radio1" id="app-radio1-3">
+                        <label for="app-radio1-3" class="label">Net APP</label>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <p class="app-tit">2. 인스턴스 이름을 입력해 주세요.</p>
+                <input type="text" name="instanceName" ng-model="pop.sample.instanceName" class="form-control" validation="alpha_dash|min_len:3|max_len:30|required">
+            </li>
+            <li>
+                <p class="app-tit">3. OS 이미지를 선택해 주세요.</p>
+                <div scroll-pane id="app_image_select">
+                    <ul class="ul-list1">
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio2" id="app-radio2-1">
+                                <label for="app-radio2-1" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">Ubuntu</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio2" id="app-radio2-2">
+                                <label for="app-radio2-2" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">Jboss</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio2" id="app-radio2-3">
+                                <label for="app-radio2-3" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">Jboss</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio2" id="app-radio2-4">
+                                <label for="app-radio2-4" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">Jboss</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio2" id="app-radio2-5">
+                                <label for="app-radio2-5" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">Jboss</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <!-- 						<p class="app-tit">3. 프로젝트 기간을 입력해 주세요.</p> -->
+                <p class="app-tit">3. 기간을 입력해 주세요.(adm-dtp)</p>
+                <div class="datepickerWrap">
+                    <div class="date-inpt">
+                        <!-- validation 사용 -->
+                        <adm-dtp name="'useStartDate1'" ng-model="pop.sample.useStartDate1" options="main.admDtpCalTypeOptions" maxdate="'{{pop.sample.useEndDate1}}'" ng-required=true></adm-dtp>
+                    </div>
+                    <span class="wave">~</span>
+                    <div class="date-inpt">
+                        <!-- ng-required 사용 -->
+                        <adm-dtp name="'useEndDate1'" ng-model="pop.sample.useEndDate1" options="main.admDtpCalTypeOptions" mindate="'{{pop.sample.useStartDate1}}'" ng-required=true></adm-dtp>
+                    </div>
+                </div>
+                <p class="has-error" ng-show="projectsAsideAddForm.useStartDate1.$touched && projectsAsideAddForm.useStartDate1.$error.required">3. 기간을 입력해 주세요. 시작일</p>
+                <p class="has-error" ng-show="projectsAsideAddForm.useEndDate1.$touched && projectsAsideAddForm.useEndDate1.$error.required">3. 기간을 입력해 주세요. 종료일</p>
+            </li>
+            <li>
+                <p class="app-tit">3. 기간을 입력해 주세요. (기존퍼블리싱)</p>
+                <div class="dateWrap">
+                    <div class="date-inpt"><input datepicker type="text" class="datepicker" ng-model="pop.sample.useStartDate2" name="useStartDate2" placeholder="YYYY-MM-DD" validation="required"></div>
+                    <span class="wave">~</span>
+                    <div class="date-inpt"><input datepicker type="text" class="datepicker" ng-model="pop.sample.useEndDate2" name="useEndDate2" placeholder="YYYY-MM-DD" validation="required"></div>
+                </div>
+                <p class="has-error" ng-show="projectsAsideAddForm.useStartDate2.$touched && projectsAsideAddForm.useStartDate2.$error.required">3. 기간을 입력해 주세요. 시작일</p>
+                <p class="has-error" ng-show="projectsAsideAddForm.useEndDate2.$touched && projectsAsideAddForm.useEndDate2.$error.required">3. 기간을 입력해 주세요. 종료일</p>
+            </li>
+            <li>
+                <p class="app-tit">4. C/S APP을 선택해 주세요.</p>
+                <select class="form-control" name="">
+                    <option value="">{{ 'label.select' | translate }}</option>
+                    <option value="">항목1</option>
+                    <option value="">항목2</option>
+                </select>
+            </li>
+            <li>
+                <p class="app-tit">5. 보안그룹</p>
+                <div class="input-group">
+                    <select class="form-control">
+                        <option value="">버전</option>
+                        <option value="">항목1</option>
+                        <option value="">항목2</option>
+                    </select>
+                    <div class="input-group-btn">
+                        <button type="button" name="button" class="btn btn-color1" style="width:90px;">보안그룹 추가</button>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <p class="app-tit">6. 키페어 (필수)</p>
+                <div class="input-group">
+                    <select class="form-control">
+                        <option value="">버전</option>
+                        <option value="">항목1</option>
+                        <option value="">항목2</option>
+                    </select>
+                    <div class="input-group-btn">
+                        <button type="button" name="button" class="btn btn-color1" style="width:90px;">키페어 추가</button>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <p class="app-tit">7. 소프트웨어 설정 (선택)</p>
+                <div scroll-pane id="app_type_select">
+                    <ul class="ul-list1">
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio3" id="app-radio3-1">
+                                <label for="app-radio3-1" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">DB</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio3" id="app-radio3-2">
+                                <label for="app-radio3-2" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">WAS</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio3" id="app-radio3-3">
+                                <label for="app-radio3-3" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">WEB</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio3" id="app-radio3-4">
+                                <label for="app-radio3-4" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">WEB</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                        <li>
+                            <div class="radio1 radio-inline">
+                                <input type="radio" name="app-radio3" id="app-radio3-5">
+                                <label for="app-radio3-5" class="label"><img src="images/thum_noimg1.png" alt="" class="im"></label>
+                            </div>
+                            <p class="label-txt">WEB</p>
+                            <select class="form-control">
+                                <option value="">버전</option>
+                                <option value="">항목1</option>
+                                <option value="">항목2</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ol>
+    </div>
+    </form>

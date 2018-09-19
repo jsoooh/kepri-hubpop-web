@@ -1,0 +1,41 @@
+<div ng-controller="iaasComputeSnapshotFormCtrl as pop">
+<!-- aside aside1 title -->
+<div class="sideTitWrap">
+	<h2 class="c_tit">{{pop.title}}</h2>
+	<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="main.thisAsideClose($event)"><span class="ico">닫기</span></button>
+</div>
+<!-- //aside aside1 title -->
+
+<!-- aside aside1 cnt -->
+<form name="{{pop.formName}}" novalidate>
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li>
+					<p class="app-tit">1. 인스턴스 이름</p>
+					<input type="text" name="serverName1" class="form-control" ng-model="pop.instance.name" value="{{pop.instance.name}}" disabled>
+				</li>
+				<li>
+					<p class="app-tit">2. 인스턴스 스냅샷 이름 입력</p>
+					<input type="text" name="snapshotName" class="form-control" maxlength="50" placeholder="인스턴스 스냅샷 이름을 입력해 주세요."  ng-model="pop.data.snapShotName" validation="alpha_dash|required">
+				</li>
+				<li>
+					<p class="app-tit">3. 설명 입력</p>
+					<textarea id="description" name="description" style="height:150px;" placeholder="설명을 입력해 주세요." ng-model="pop.data.description" class="form-control" ng-keyup="pop.fn.checkByte(pop.data.description,255)"></textarea>
+					<p class="text-letter">{{pop.data.description | stringToBytes}}/255 Byte</p>
+					<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
+				</li>
+			</ol>
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+</form>
+<!-- //aside aside1 cnt -->
+
+<!-- aside aside1 btm -->
+<div class="sideBtmWrap">
+	<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.popDialogOk();">저장</button>
+</div>
+<!-- //aside aside1 btm -->
+</div>

@@ -1,0 +1,126 @@
+			<!-- content -->
+			<div class="content" style="">
+<form name="boardUpdateForm" novalidate>
+				<!-- table -->
+				<div class="tbw type1">
+					<table class="table">
+						<colgroup>
+						<col style="width:15%;">
+						<col style="width:auto;">
+						</colgroup>
+						<tbody>
+							<tr ng-show="0">
+								<th scope="row">{{'label.board' | translate}}</th>
+								<td>
+									<select id="schType" name="schType" ng-options="( condition.name | translate ) for condition in pop.conditions" ng-model="pop.selCondition" style="width:280px;" validation="required">
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">제목</th>
+								<td><input type="text" name="title0" value="허브팝 공지 2" class="form-control" maxlength="30" ng-model="pop.boardData.title0" validation="required"></td>
+							</tr>
+<!-- 							<tr> -->
+<!-- 								<th scope="row">공지대상</th> -->
+<!-- 								<td> -->
+<!-- 									<div class="checkbox checkbox-inline"> -->
+<!-- 								        <input type="checkbox" id="check-id1" checked="checked"> -->
+<!-- 								        <label class="label-txt" for="check-id1">전체</label> -->
+<!-- 									</div> -->
+<!-- 									<div class="checkbox checkbox-inline spacing"> -->
+<!-- 								        <input type="checkbox" id="check-id2"> -->
+<!-- 								        <label class="label-txt" for="check-id2">프로젝트 책임자</label> -->
+<!-- 									</div> -->
+<!-- 									<div class="checkbox checkbox-inline spacing"> -->
+<!-- 								        <input type="checkbox" id="check-id3"> -->
+<!-- 								        <label class="label-txt" for="check-id3">프로젝트 운영자</label> -->
+<!-- 									</div> -->
+<!-- 									<div class="checkbox checkbox-inline spacing"> -->
+<!-- 								        <input type="checkbox" id="check-id4"> -->
+<!-- 								        <label class="label-txt" for="check-id4">프로젝트 사용자</label> -->
+<!-- 									</div> -->
+<!-- 								</td> -->
+<!-- 							</tr> -->
+							<tr ng-show="pop.selCondition.id=='notice' && false">
+								<th scope="row">공지여부</th>
+								<td>
+									<div class="checkbox checkbox-only">
+										<input type="checkbox" value="" checked="checked" ng-model="pop.boardData.popup" id="popup">>
+										<label for="popup">{{'label.bulletin_popup' | translate}}</label>
+									</div>
+								</td>
+							</tr>
+							<tr ng-show="pop.boardData.popup && 0">
+								<th scope="row">{{ 'label.bulletin_period' | translate }}</th>
+								<td>
+									<adm-dtp name="startDate" id="startDate" ng-model='pop.boardData.startDate' options='{ format: "YYYY.MM.DD", minDate: "dates.minDate", maxDate: "maxDate", gregorianDic : main.sltDataTimePickerOptions, autoClose:true }' full-data="date11_detail" maxdate="{{date12_detail.unix}}"></adm-dtp>
+									&nbsp; ~ &nbsp;
+									<adm-dtp name="endDate" id="endDate" ng-model='pop.boardData.endDate' options='{ format: "YYYY.MM.DD", minDate: "minDate", gregorianDic : main.sltDataTimePickerOptions, autoClose:true }' full-data="date12_detail" mindate="{{date11_detail.unix}}"></adm-dtp>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">내용</th>
+								<td>
+									<textarea name="name" style="height:400px;" maxlength="4000" ng-model="pop.boardData.content0" validation="required">
+공지사항
+공지사항
+공지사항
+공지사항
+									</textarea>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">첨부파일</th>
+								<td>
+									<!-- 첨부파일 -->
+<!-- 									<div class="fileUploadWrap" style="width:50%;"> -->
+<!-- 										<input id="fileInput" filestyle="" type="file" data-class-button="btn btn-default" data-class-input="form-control" data-button-text="" data-icon-name="fa fa-upload" class="form-control" tabindex="-1" style="position: absolute; clip: rect(0px 0px 0px 0px);" placeholder="file.jpg"> -->
+<!-- 										<div class="bootstrap-filestyle input-group"> -->
+<!-- 											<input type="text" id="userfile" class="form-control" name="userfile" disabled="" placeholder="file.jpg"> -->
+<!-- 											<span class="group-span-filestyle input-group-btn" tabindex="0"> -->
+<!-- 												<label for="fileInput" class="btn btn-default "> -->
+<!-- 													<span class="btn btn-md btn-color1">파일찾기</span> -->
+<!-- 												</label> -->
+
+<!-- 											</span> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+
+<!-- 									<div class="checkbox checkbox-inline"> -->
+<!-- 										<input type="checkbox" id="check-id5"> -->
+<!-- 										<label class="label-txt" for="check-id5">{{ 'label.del' | translate }}</label> -->
+<!-- 									</div> -->
+									<!-- //첨부파일 -->
+
+									<ul>
+										<li ng-repeat="f in contents.boardData.attachFile" ng-hide="f.isDel">
+											<a href="/comm-api/cmm/fms/FileDown.do?boardAttachedId={{f.id}}" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>
+											<button type="button" class="btn button_img" ng-click="contents.delFile(f);" ng-show="contents.mode=='U'" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.del' | translate }}"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}"></button>
+										</li>
+									</ul>
+
+									<input type="file" id="uploadedNoticeFile" file-input="pop.file.uploadedNoticeFile" multiple placeholder="Upload File" style="display: none;" nv-file-select="" uploader="pop.uploader"/>
+									<button type="button" class="btn btn-file" ng-click="main.fileSelectBtnClick($event);">
+										{{ 'label.file_search' | translate }}
+									</button>
+									<ul>
+										<li ng-repeat="aFile in pop.file.uploadedNoticeFile">{{ aFile.name }}</li>
+									</ul>
+
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- //table -->
+
+                <!-- btm buttom -->
+				<div class="btn-btm rightSide">
+<!-- 					<button type="button" name="button" class="btn btn-color1 btn-md" ng-show="contents.showBtnSave" ng-click="contents.updateBoard(contents.boardData);">{{ 'label.save' | translate }}</button> -->
+					<button type="button" name="button" class="btn btn-color1 btn-md" ng-show="contents.showBtnSave" ng-click="contents.updateBoard(pop.boardData);">{{ 'label.save' | translate }}</button>
+					<button type="button" name="button" class="btn btn-color2 btn-md"><a ng-href="#/comm/boards/{{pop.selCondition.id}}">{{ 'label.cancel' | translate }}</a></button>
+				</div>
+                <!-- //btm buttom -->
+</form>
+			</div>
+			<!-- //content -->

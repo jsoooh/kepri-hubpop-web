@@ -1,0 +1,95 @@
+<div class="panelWrap" style="min-height: 200px;" ng-controller="iaasDeployWebServiceConfigTabCtrl as tab">
+	<div class="panel type2" style="cursor: unset;">
+		<div class="panel_head">
+			<div class="tit pull-left" style="min-width: 230px;">WEB 서비스 관리</div>
+			<div class="pull-right btnArea">
+				<button type="button" class="btn ico-plus-25 only-ico" ng-click="tab.fn.addWebServiceInstanceFormOpen()" title="WEB 서비스 추가"><span class="ico">WEB 서비스 추가</span></button>
+				<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'configSetting')"><span class="ico">확대/축소</span></button>
+			</div>
+		</div>
+		<div class="panel_body panel_body_typeA" style="min-height: 500px; overflow: auto;">
+			<scrollable-table watch="contents.deployServer.serviceInstances" class="tableHeight420">
+				<table class="table">
+					<thead>
+					<tr>
+						<th sortable-header col="serviceInstanceName" style="width:15%;">서비스명</th>
+						<th sortable-header col="servicePort" style="width:10%;">서비스 포트</th>
+						<th sortable-header col="defaultLbServicePort.servicePortName" style="width:20%;">LB 포트명</th>
+						<th sortable-header col="defaultLbServicePort.sourcePort" style="width:10%;">LB 포트</th>
+						<th style="width:20%;">도메인</th>
+						<th style="width:10%;">관리</th> 
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat-start="serviceInstance in contents.deployServer.serviceInstances">
+						<td>
+							<a href="" ng-click="contents.fn.configDetailToggle(serviceInstance);">{{serviceInstance.serviceInstanceName}}</a>
+						</td>
+						<td>{{serviceInstance.servicePort}}</td>
+						<td class="config-txt">
+							<a href="" ng-click="main.goToPage('/iaas/deploy_server/detail/' + serviceInstance.defaultLbServicePort.deployId)">{{serviceInstance.defaultLbServicePort.servicePortName}}</a>
+						</td>
+						<td class="config-txt">{{serviceInstance.defaultLbServicePort.sourcePort}}{{serviceInstance.defaultLbServicePort.sslUsed ? (", " + serviceInstance.defaultLbServicePort.sslSourcePort) : ""}}</td>
+						<td>
+							<div ng-repeat="domainLink in serviceInstance.defaultLbServicePort.servicePortDomainLinks" class="config-txt" style="height: 26px; padding-top: 4px;">
+								<a href="http://{{domainLink.domainInfo.domain}}" target="_blank">{{domainLink.domainInfo.domain}}</a>
+							</div>
+						</td>
+						<td>
+							<div class="dropdown btn-option">
+								<button id="btn-option-list" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="서비스 설정">
+									<span class="ico">실행 설정</span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option" style="min-width: 100px;">
+                                    <!--<li><a href="" ng-click="contents.fn.configDetailToggle(serviceInstance);">상세 보기</a></li>-->
+									<li><a href="" ng-click="tab.fn.modWebServiceInstanceConfigFormOpen(serviceInstance);">서비스 수정</a></li>
+									<li ng-if="serviceInstance.defaultLbServicePort && serviceInstance.defaultLbServicePort.id"><a href="" ng-click="contents.fn.delLbServerPortLink(serviceInstance.defaultLbServicePort);">LB 포트 연결 해제</a></li>
+									<li ng-if="!serviceInstance.defaultLbServicePort || !serviceInstance.defaultLbServicePort.id"><a href="" ng-click="contents.fn.addLbServicePortLinkFormOpen(serviceInstance);">LB 포트 연결</a></li>
+									<li><a href="" ng-click="contents.fn.openResourceUploadForm(serviceInstance);">리소스 재배포</a></li>
+									<li><a href="" ng-click="tab.fn.delWebServiceInstance(serviceInstance);">서비스 삭제</a></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+					<tr ng-repeat-end ng-show="serviceInstance.configDetailView">
+						<td colspan="6" class="text-left borderNon">
+							<div class="cBox type1 appCnt-info" style="padding:0 15px 0 20px;">
+								<div class="cBox-cnt cBox-cnt-typeA" style="padding-bottom: 20px;">
+									<div style="width: 100%; padding-right: 20px;">
+										<div class="config-group-tit pull-left">추가 정보</div>
+									</div>
+									<div class="in service-box">
+										<div class="col info-txt" style="padding-top: 10px;">
+											<ul class="config">
+												<li>
+													<strong class="config-tit">최대 전송 크기</strong>
+													<div class="config-txt">{{serviceInstance.webServiceInstance.clientMaxBodySize}}</div>
+												</li>
+												<li>
+													<strong class="config-tit">404에러 페이지</strong>
+													<div class="config-txt">{{serviceInstance.webServiceInstance.notFoundErrorPage}}</div>
+												</li>
+												<li>
+													<strong class="config-tit">50x에러 페이지</strong>
+													<div class="config-txt">{{serviceInstance.webServiceInstance.serverErrorPage}}</div>
+												</li>
+												<li>
+													<strong class="config-tit">색인 파일</strong>
+													<div class="config-txt">{{serviceInstance.webServiceInstance.indexPage}}</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr ng-if="!contents.deployServer.serviceInstances || contents.deployServer.serviceInstances.length == 0">
+						<td colspan="6" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</scrollable-table>
+		</div>
+	</div>
+</div>

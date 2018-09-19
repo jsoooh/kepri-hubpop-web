@@ -1,0 +1,84 @@
+		<!-- login -->
+		<div class="memWrap" ng-show="joinStep=='step1'">
+            <form name="requestForm">
+				<div class="mem-hd">
+					<h1>CloudXpert</h1>
+					<h2>CloudXpert 계정생성</h2>
+				</div>
+
+				<div class="mem-body">
+					<ul class="ul-join">
+						<li>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="ico type1"></span>
+								</div>
+								<!-- <input type="text" name="" value="" class="form-control" placeholder="Usename"> -->
+								<input type="text" id="nsignupEmail" name="nsignupEmail" maxlength="30" ng-model="memberInfo.email" ng-blur="validationEmail();blurSignupEmail=true;" ng-focus="resetEmail()" placeholder="{{ 'message.mi_type_id_email' | translate }}" required class="form-control" />
+							</div>
+							<p class="has-error" ng-show="emailError">{{ 'message.mi_exist_duplicate_email' | translate }}</p>
+							<p class="has-error" ng-show="emailTempError">{{ 'message.mi_allow_temp_email' | translate }}</p>
+							<p class="has-error" ng-show="blurSignupEmail && requestForm.nsignupEmail.$error.pattern">{{ 'message.mi_invalid_email_address' | translate }}</p>
+							<p class="has-error" ng-show="blurSignupEmail && requestForm.nsignupEmail.$error.required && !requestForm.nsignupEmail.$pristine">{{ 'message.mi_required_item' | translate }}</p>
+						</li>
+						<li>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="ico type2"></span>
+								</div>
+								<!-- <input type="text" name="" value="" class="form-control" placeholder="Password"> -->
+								<input type="password" id="npassword1" name="npassword1" maxlength="20" ng-model="memberInfo.password" ng-pattern="/^.*(?=^.{10,20}$)(?=.*\d)(?=.*[a-zA-Z]).*$/" placeholder="{{ 'message.mi_type_pwd' | translate }}" required ng-blur="blurPassword=true" class="form-control"/>
+							</div>
+							<p class="has-error" ng-show="blurPassword && requestForm.npassword1.$error.pattern">{{ 'message.mi_type_eng_number_10to20_pwd' | translate }}</p>
+							<p class="has-error" ng-show="blurPassword && requestForm.npassword1.$error.required && !requestForm.npassword1.$pristine">{{ 'message.mi_required_item' | translate }}</p>
+						</li>
+						<li>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="ico type2"></span>
+								</div>
+								<!-- <input type="text" name="" value="" class="form-control" placeholder="Password Confirm"> -->
+								<input type="password" id="npassword2" name="npassword2" maxlength="20" ng-model="memberInfo.password2" ng-blur="checkPasswordConfirm()"  placeholder="{{ 'message.mi_type_pwd_again' | translate }}" required ng-blur="blurPassword=true" class="form-control"/>
+							</div>
+							<p class="has-error" ng-show="invalidPassword">{{ 'message.mi_wrong_pwd' | translate }}</p>
+							<p class="has-error" ng-show="blurPassword && requestForm.npassword2.$error.required && !requestForm.npassword2.$pristine">{{ 'message.mi_required_item' | translate }}</p>
+						</li>
+						<li>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="ico type1"></span>
+								</div>
+								<input type="text" id="user_name" name="user_name" maxlength="30" ng-model="memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" required class="form-control" />
+							</div>
+							<p class="has-error" ng-show="requestForm.user_name.$error.required && !requestForm.user_name.$pristine">{{ 'message.mi_required_item' | translate }}</p>
+						</li>
+					</ul>
+				</div>
+				<div class="mem-foot">
+					<button type="submit" name="button" class="btn btn-color1" ng-click="signup()" ng-disabled="requestForm.$invalid">생성하기</button>
+					<p class="text-right"><a href="/">이전화면으로 돌아가기</a></p>
+				</div>
+            </form>
+		</div>
+
+		<div class="memWrap" ng-show="joinStep=='step4'">
+			<div class="mem-hd">
+				<h1>CloudXpert</h1>
+				<h2>CloudXpert 회원가입</h2>
+			</div>
+
+			<div class="mem-body">
+				<div class="compMsgBox">
+					<span class="ico"></span>
+					<strong class="msg-tit">가입완료</strong>
+					<div class="msg-txt">
+						CloudXpert에 가입하신 것을 축하 드립니다.!<br>
+						가입하신 아이디는 {{memberInfo.email}} 입니다.
+					</div>
+				</div>
+			</div>
+			<div class="mem-foot">
+				<button type="button" name="button" class="btn btn-color1" ng-click="moveLoginPage();">Sign in</button>
+			</div>
+		</div>
+		<!-- //login-->

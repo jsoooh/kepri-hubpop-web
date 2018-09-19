@@ -1,0 +1,36 @@
+
+	<form name="projectPop.projectsAsideAddForm" novalidate>
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li>
+					<p class="app-tit">1. 프로젝트명을 입력해 주세요.</p>
+					<input type="text" name="pop.name" class="form-control" ng-model="pop.project.name" validation="max_len:50|required">
+				</li>
+				<li>
+					<p class="app-tit">2. 프로젝트 기간을 입력해 주세요.</p>
+					<div class="datepickerWrap">
+						<div class="date-inpt">
+							<!-- validation 사용 -->
+							<adm-dtp name="pop.useStartDate" ng-model="pop.project.useStartDate" options="main.admDtpCalTypeOptions" maxdate="'{{pop.project.useEndDate}}'" ng-required=true></adm-dtp>
+						</div>
+						<span class="wave">~</span>
+						<div class="date-inpt">
+							<!-- ng-required 사용 -->
+							<adm-dtp name="pop.useEndDate" ng-model="pop.project.useEndDate" options="main.admDtpCalTypeOptions" mindate="'{{pop.project.useStartDate}}'" ng-required=true></adm-dtp>
+						</div>
+					</div>
+				</li>
+				<li>
+					<p class="app-tit">3. 프로젝트 쿼터를 선택해 주세요.</p>
+					<select class="form-control" name="pop.quotaId" ng-model="pop.project.quota.id" ng-options="projectQuota.id as projectQuota.name disable when projectQuota.available == false for projectQuota in pop.projectQuotas.items" validation="required" disabled="disabled">
+						<option value="">{{ 'label.select' | translate }}</option>
+					</select>
+				</li>
+				<li>
+					<p class="app-tit">4. 설명을 입력해 주세요.</p>
+					<textarea name="pop.description" class="form-control" style="height:100px;" ng-model="pop.project.description" validation="max_len:300|required"></textarea>
+				</li>
+			</ol>
+		</div>
+	</form>
+	<!-- //sideInWrap -->

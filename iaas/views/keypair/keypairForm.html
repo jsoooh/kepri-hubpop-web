@@ -1,0 +1,41 @@
+<div ng-controller="iaasKeypairFormCtrl as pop">
+<!-- aside aside1 title -->
+<div class="sideTitWrap">
+	<h2 class="c_tit">{{pop.title}}</h2>
+	<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="main.thisAsideClose($event);"><span class="ico">닫기</span></button>
+</div>
+<!-- //aside aside1 title -->
+
+<!-- aside aside1 cnt -->
+<form name="{{pop.formName}}" novalidate>
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li ng-if="pop.formType == 'write'">
+					<p class="app-tit">이름 입력</p>
+					<input type="text" name="keypairName" maxlength="50" placeholder="이름을 입력해 주세요." ng-model="pop.keypair.name" class="form-control" validation="alpha_dash|required">
+				</li>
+				<li ng-if="pop.formType == 'edit'">
+					<p class="app-tit">이름 입력</p>
+					<input type="text" name="editKeypairName" maxlength="50" placeholder="이름을 입력해 주세요."  ng-model="pop.keypair.name" class="form-control" disabled validation="required">
+				</li>
+				<li>
+					<p class="app-tit">설명 입력</p>
+					<textarea id="keypairDescription" name="keypairDescription" maxlength="255" style="height:150px;" placeholder="설명을 입력해 주세요."  ng-model="pop.keypair.description" class="form-control" ng-keyup="pop.fn.checkByte(pop.keypair.description,255)"></textarea>
+					<p class="text-letter">{{pop.keypair.description | stringToBytes}}/255 Byte</p>
+					<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
+				</li>
+			</ol>
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+</form>
+<!-- //aside aside1 cnt -->
+
+<!-- aside aside1 btm -->
+<div class="sideBtmWrap">
+	<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.popDialogOk($event);">확인</button>
+</div>
+<!-- //aside aside1 btm -->
+</div>

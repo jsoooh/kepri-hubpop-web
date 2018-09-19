@@ -1,0 +1,32 @@
+{
+    "iaas": {
+        "label": {
+            "deploy_initializing" : "가상머신 설치 준비 중",
+            "deploy_creating" : "가상머신 생성 중",
+            "deploy_preparing" : "서비스 설치 준비 중",
+            "deploy_installing" : "서비스 설치 진행 중",
+            "deploy_configuring" : "서비스 설정 업데이트 중",
+            "deploy_error" : "서비스 실행 실패",
+            "deploy_active" : "서비스 정상 실행",
+            "deploy_running" : "서비스 기동 중",
+            "deploy_restarting" : "서비스 재시작 중",
+            "deploy_stopping" : "서비스 정지 중",
+            "deploy_starting" : "서비스 시작 중",
+            "deploy_deleting" : "서비스 삭제 중",
+            "deploy_init_error" : "가상머신 생성 실패",
+            "deploy_run_error" : "서비스 기동 실패",
+            "deploy_reconfiguring" : "서비스 재설정 중",
+            "deploy_stop" : "서비스 중지",
+            "instance_active" : "정상",
+            "instance_stopped" : "정지",
+            "instance_error" : "오류",
+            "instance_paused" : "일시정지",
+            "instance_resized" : "변경중",
+            "instance_building" : "생성중",
+            "public" : "공용",
+            "private" : "사용자"
+        },
+        "message" : {
+        }
+    }
+}

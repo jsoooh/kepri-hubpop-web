@@ -1,0 +1,199 @@
+<div class="mainWrap container-fluid">
+	<form class="main" name="companyInfoForm" novalidate>
+		<div class="tableWrap">
+			<p class="title">{{'label.company_info' | translate}}</p>
+			<table class="table table-bordered inputWidthWrap">
+				<colgroup>
+					<col style="width:160px;" />
+					<col />
+				</colgroup>
+				<tbody>
+				<tr>
+					<th>
+						<span class="require"></span>
+						<label for="companyId">{{ 'label.business_id' | translate }}</label>
+					</th>
+					<td>
+						<input type="text" class="form-control" id="companyId" name="companyId" ng-model="contents.companyInfo.companyId" disabled validation="required" />
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="require"></span>
+						<label for="companyName">{{ 'label.business_name' | translate }}</label>
+					</th>
+					<td>
+						<input type="text" class="form-control" id="companyName" name="companyName" maxlength="30" ng-model="contents.companyInfo.companyName" placeholder="{{ 'message.mi_type_business_name' | translate }}" validation="required" />
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="require"></span>
+						<label for="representativeName">{{ 'label.representative_name' | translate }}</label>
+					</th>
+					<td>
+						<input type="text" class="form-control" id="representativeName" name="representativeName" maxlength="30" ng-model="contents.companyInfo.representativeName" placeholder="{{ 'message.mi_representative_name' | translate }}"  validation="required" />
+					</td>
+				</tr>
+				<tr class="phoneNumWrap">
+					<th>
+						<span class="require"></span>
+						{{ 'label.registration_number' | translate }}</span>
+					</th>
+					<td class="numberWrap">
+						<input class="form-control" type="text" id="registrationNo1" name="registrationNo1" minlength="3" maxlength="3" ng-model="contents.companyInfo.registrationNumber1" ng-pattern="/^\d*\.?\d+$/" ng-minlength="3" ng-maxlength="3" ng-required="true" ng-blur="contents.blurRegistrationNo = true" only-number/>
+						<span>-</span>
+						<input class="form-control" type="text" id="registrationNo2" name="registrationNo2" minlength="2" maxlength="2" ng-model="contents.companyInfo.registrationNumber2" ng-pattern="/^\d*\.?\d+$/" ng-minlength="2" ng-maxlength="2" ng-required="true" ng-blur="contents.blurRegistrationNo = true" only-number/>
+						<span>-</span>
+						<input class="form-control" type="text" id="registrationNo3" name="registrationNo3" minlength="5" maxlength="5" ng-model="contents.companyInfo.registrationNumber3" ng-pattern="/^\d*\.?\d+$/" ng-minlength="5" ng-maxlength="5" ng-required="true" ng-blur="contents.blurRegistrationNo = true" only-number/>
+						<div class="error_msg_block" ng-show="companyInfoForm.registrationNo1.$error.pattern || companyInfoForm.registrationNo2.$error.pattern || companyInfoForm.registrationNo3.$error.pattern">{{ 'message.mi_type_only_number' | translate }}</div>
+						<div class="error_msg_block" ng-show="companyInfoForm.registrationNo1.$error.minlength || companyInfoForm.registrationNo2.$error.minlength || companyInfoForm.registrationNo3.$error.minlength || companyInfoForm.registrationNo1.$error.maxlength || companyInfoForm.registrationNo2.$error.maxlength || companyInfoForm.registrationNo3.$error.maxlength">{{ 'message.mi_error_len_busi_no' | translate }}</div>
+						<div class="error_msg_block" ng-show="contents.blurRegistrationNo && (companyInfoForm.registrationNo1.$error.required || companyInfoForm.registrationNo2.$error.required || companyInfoForm.registrationNo3.$error.required)">{{ 'INVALID_REQUIRED' | translate }}</div>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="require"></span>
+						<label for="address">{{ 'label.address' | translate }}</label>
+					</th>
+					<td>
+						<input type="text" class="form-control" id="address" maxlength="120" name="address" ng-model="contents.companyInfo.address" placeholder="{{ 'message.mi_type_address' | translate }}" validation="required" style="width:500px;" />
+					</td>
+				</tr>
+				<tr class="phoneNumWrap">
+					<th>
+						<span class="require"></span>
+						{{ 'label.representative_phone_number' | translate }}
+					</th>
+					<td class="numberWrap">
+						<select id="phoneNo1" name="phoneNo1" ng-model="contents.companyInfo.phoneNumber1" ng-required="true" ng-blur="contents.blurPhoneNo = true">
+							<option value="">{{ 'label.select' | translate }}</option>
+							<option ng-repeat="pNumber in contents.phoneNumbers" value="{{pNumber.no}}">{{pNumber.no}}</option>
+						</select>
+						<span>-</span>
+						<input class="form-control" type="text" id="phoneNo2" name="phoneNo2" ng-model="contents.companyInfo.phoneNumber2" minlength="3" maxlength="4" ng-pattern="/^\d*\.?\d+$/" ng-minlength="3" ng-maxlength="4" ng-required="true" ng-blur="contents.blurPhoneNo=true" only-number>
+						<span>-</span>
+						<input class="form-control" type="text" id="phoneNo3" name="phoneNo3" ng-model="contents.companyInfo.phoneNumber3" minlength="4" maxlength="4" ng-pattern="/^\d*\.?\d+$/" ng-minlength="3" ng-maxlength="4" ng-required="true" ng-blur="contents.blurPhoneNo=true" only-number>
+						<div class="error_msg_block" ng-show="companyInfoForm.phoneNo1.$error.pattern || companyInfoForm.phoneNo2.$error.pattern || companyInfoForm.phoneNo3.$error.pattern">{{ 'message.mi_type_only_number' | translate }}</div>
+						<div class="error_msg_block" ng-show="companyInfoForm.phoneNo1.$error.minlength || companyInfoForm.phoneNo2.$error.minlength || companyInfoForm.phoneNo3.$error.minlength || companyInfoForm.phoneNo1.$error.maxlength || companyInfoForm.phoneNo2.$error.maxlength || companyInfoForm.phoneNo3.$error.maxlength">{{ 'message.mi_error_len' | translate }}</div>
+						<div class="error_msg_block" ng-show="contents.blurPhoneNo && (companyInfoForm.registrationNo1.$error.required || companyInfoForm.registrationNo2.$error.required || companyInfoForm.registrationNo3.$error.required)">{{ 'INVALID_REQUIRED' | translate }}</div>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="require"></span>
+						{{ 'label.business_license' | translate }}
+					</th>
+					<td>
+						<!--<input type="text" id="fileName" name="fileName" ng-model="uploadedFile.name" placeholder="Upload File" disabled/>
+						<label class="btn btn-black" for="uploadedFile">{{ 'label.file_search' | translate }}</label>
+						<input type="file" id="uploadedFile" name="uploadedFile" file-input="uploadedFile" style="visibility: hidden; position: absolute; width: 0;" accept="image/*, .pdf">-->
+						<ul>
+							<li>
+								<a href="{{contents.companyInfo.registrationFilePath}}" target="_blank">{{contents.companyInfo.registrationFileName}}</a>
+							</li>
+						</ul>
+						<ul style="padding-top:10px;">
+							<li>
+								<input type="file" id="uploadedRegFile0" file-input="contents.file.registrationFile" placeholder="Upload File" accept="image/*, .pdf" style="display: none;"/>
+								<button type="button" class="btn btn-file" ng-click="main.fileSelectBtnClick($event);">
+									{{ 'label.file_search' | translate }}
+								</button>
+								<ul>
+									<li ng-repeat="aFile in contents.file.registrationFile">{{ aFile.name }}</li>
+								</ul>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="require none"></span>
+						{{ 'label.business_logo_use' | translate }}
+					</th>
+					<td>
+						<p class="inputWrap inline">
+							<input type="radio" id="ciUseYn_01" name="ciUseYn" value="Y" ng-model="contents.companyInfo.ciUseYn">
+							<label  for="ciUseYn_01">{{ 'label.use' | translate }}</label>
+						</p>
+						<p class="inputWrap inline">
+							<input type="radio" id="ciUseYn_02" name="ciUseYn" value="N" ng-model="contents.companyInfo.ciUseYn">
+							<label  for="ciUseYn_02">{{ 'label.not_use' | translate }}</label>
+						</p>
+						<p>
+							기업로고를 사용하면 [Console] 에서 기업로고로 사이트를 보실 수 있습니다.<br>
+							<a href="{{guideUrl}}/guides/logo_sample.jpg" target="_blank">샘플 다운로드</a> <span class="require none"></span> 사이즈 : 230 * 70
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="require none"></span>
+						{{ 'label.business_logo' | translate }}
+					</th>
+					<td>
+						<ul>
+							<li>
+								<a href="{{contents.companyInfo.ciFilePath}}" target="_blank">{{contents.companyInfo.ciFileName}}</a>
+							</li>
+						</ul>
+						<ul style="padding-top:10px;">
+							<li>
+								<input type="file" id="uploadedCiFile0" file-input="contents.file.ciFile" placeholder="Upload File" accept="image/*" style="display: none;"/>
+								<button type="button" class="btn btn-file" ng-disabled="contents.companyInfo.ciUseYn!='Y'" ng-click="main.fileSelectBtnClick($event);">
+									{{ 'label.file_search' | translate }}
+								</button>
+								<ul>
+									<li ng-repeat="aFile in contents.file.ciFile">{{ aFile.name }}</li>
+								</ul>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="require"></span>
+						<label>{{ 'label.third_party_yn' | translate }}</label>
+					</th>
+					<td>
+						<p class="inputWrap inline">
+							<input type="radio" id="thirdPartyYn_01" name="thirdPartyYn" value="Y" ng-model="contents.companyInfo.thirdPartyYn">
+							<label  for="thirdPartyYn_01">Y</label>
+						</p>
+						<p class="inputWrap inline">
+							<input type="radio" id="thirdPartyYn_02" name="thirdPartyYn" value="N" ng-model="contents.companyInfo.thirdPartyYn">
+							<label  for="thirdPartyYn_02">N</label>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="require none"></span>
+						<label for="username">{{ 'label.manager_name' | translate }}</label>
+					</th>
+					<td>
+						<input type="text" id="username" name="username" ng-model="contents.companyInfo.managerName" placeholder="{{ 'message.mi_type_name' | translate }}" disabled />
+					</td>
+				</tr>
+				<tr class="phoneNumWrap">
+					<th>
+						<span class="require none"></span>
+						{{'label.mobile_no' | translate }}
+					</th>
+					<td>
+						<input class="form-control" type="text" id="cellphoneNo1" name="cellphoneNo1" minlength="3" maxlength="3" ng-model="contents.companyInfo.managerPhoneNumber1" placeholder="000" only-number disabled/>
+						<span>-</span>
+						<input type="text" id="cellphoneNo2" name="cellphoneNo2" ng-model="contents.companyInfo.managerPhoneNumber2" only-number minlength="3" maxlength="4" ng-minlength="3" ng-maxlength="4" placeholder="0000" disabled/>
+						<sepan>-</sepan>
+						<input type="text" id="cellphoneNo3" name="cellphoneNo3" ng-model="contents.companyInfo.managerPhoneNumber3" only-number minlength="4" maxlength="4" ng-minlength="4" ng-maxlength="4" placeholder="0000" disabled/>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="bottomBtnWrap">
+			<button type="button" class="btn btn-add" ng-click="contents.updateCompany()">{{ 'label.save' | translate }}</button>
+		</div>
+	</form>
+	</div>
+</div>

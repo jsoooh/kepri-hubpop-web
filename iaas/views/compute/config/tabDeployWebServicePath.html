@@ -1,0 +1,87 @@
+<div class="panelWrap" style="min-height: 200px;" ng-controller="iaasDeployWebServicePathTabCtrl as tab">
+	<div class="panel type2" style="cursor: unset;" >
+		<div class="panel_head">
+			<div class="tit pull-left" style="min-width: 230px;">WEB 리소스 관리</div>
+			<div class="pull-right" style="margin-left: 40px;">
+				<select name="sltServerKey" class="form-control" ng-model="contents.sltServiceInstanceId" ng-change="tab.fn.selectServiceInstance(contents.sltServiceInstanceId);"  style="display:inline-block; width: 200px;">
+					<option ng-if="!contents.deployServer.serviceInstances || contents.deployServer.serviceInstances.length == 0" value="">WEB 서비스 없음</option>
+					<option ng-repeat="(key, serviceInstance) in contents.deployServer.serviceInstances" value="{{serviceInstance.id}}">{{serviceInstance.serviceInstanceName}}</option>
+				</select>
+				<button type="button" class="btn ico-plus-25 only-ico" style="margin-right: 20px;" ng-click="tab.fn.addWebServiceInstanceLocationForm(contents.sltServiceInstance)" title="WEB 경로 추가" style="display:inline-block;margin-top:0;"><span class="ico">WEB 경로 추가</span></button>
+				<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'pathSetting')"><span class="ico">확대/축소</span></button>
+			</div>
+			<!--
+			<div class="pull-right btnArea">
+				<button type="button" class="btn ico-plus-25 only-ico" ng-click="tab.fn.addWebServiceInstanceLocationForm(contents.sltServiceInstance)" title="WEB 경로 추가"><span class="ico">WEB 경로 추가</span></button>
+			</div>
+			-->
+		</div>
+		<div class="panel_body" style="min-height: 500px;">
+			<scrollable-table watch="contents.sltServiceInstance.serviceLocations" class="tableHeight420">
+				<table class="table">
+					<thead>
+					<tr>
+						<th sortable-header col="location" style="width:15%;">접근 경로</th>
+						<th sortable-header col="targetType" style="width:10%;">유형</th>
+						<th style="width:30%;">연결 경로</th>
+						<th style="width:35%;">리소스 OR 접속 경로</th>
+						<th style="width:10%;">삭제</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="serviceLocation in contents.sltServiceInstance.serviceLocations">
+						<td>{{serviceLocation.location}}</td>
+						<td ng-if="serviceLocation.locationType == 'res'">배포</td>
+						<td ng-if="serviceLocation.locationType != 'res'">{{ serviceLocation.locationType == 'res' || serviceLocation.targetType == 'ins' ? '경로' : '연결' }}</td>
+						<td ng-if="serviceLocation.locationType == 'res'" class="text-left">/home/ubuntu/nginx/{{serviceLocation.name == 'default' ? contents.sltServiceInstance.name : contents.sltServiceInstance.name + '/' + serviceLocation.name}}/default/</td>
+						<td ng-if="serviceLocation.locationType != 'res'" class="text-left">{{ serviceLocation.targetType == 'ins' ? serviceLocation.alias : serviceLocation.proxyPass }}</td>
+						<td ng-if="serviceLocation.targetType == 'url'" class="config-txt text-left">
+							<a href="{{ serviceLocation.url }}" style="max-width: 450px;" title="{{serviceLocation.url}}" target="_blank">{{serviceLocation.url}}</a>
+						</td>
+						<td ng-if="serviceLocation.targetType == 'file'" class="config-txt text-left">
+							<a href="{{ serviceLocation.url }}" style="max-width: 450px;" title="{{serviceLocation.resFile.originalFileName}}" target="_blank">{{serviceLocation.resFile.originalFileName}}</a>
+						</td>
+						<td ng-if="serviceLocation.targetType == 'out' && (!contents.sltServiceInstance.defaultLbServicePort || !contents.sltServiceInstance.defaultLbServicePort.id)">
+							<div ng-repeat="deployInstance in contents.deployServer.deployInstances" class="config-txt text-left" style="height: 26px; padding-top: 4px;">
+								<a href="http://{{ deployInstance.fixedIp + serviceLocation.location }}" style="max-width: 450px;" title="http://{{ deployInstance.fixedIp + serviceLocation.location }}" target="_blank">http://{{ deployInstance.fixedIp + serviceLocation.location }}</a>
+							</div>
+						</td>
+						<td ng-if="serviceLocation.targetType == 'out' && contents.sltServiceInstance.defaultLbServicePort && contents.sltServiceInstance.defaultLbServicePort.id && (!contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks || contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks.length == 0)">
+							<div class="config-txt text-left" style="height: 26px; padding-top: 4px;">
+								<a href="http://{{ contents.lbDeployServer.vip }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}" style="max-width: 450px;" title="http://{{ contents.lbDeployServer.vip }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}" target="_blank">http://{{ contents.lbDeployServer.vip }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}</a>
+							</div>
+						</td>
+						<td ng-if="serviceLocation.targetType == 'out' && contents.sltServiceInstance.defaultLbServicePort && contents.sltServiceInstance.defaultLbServicePort.id && contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks && contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks.length > 0">
+							<div ng-repeat="domainLink in contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks" class="config-txt text-left" style="height: 26px; padding-top: 4px;">
+								<a href="http://{{ domainLink.domainInfo.domain }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}" style="max-width: 450px;" title="http://{{ domainLink.domainInfo.domain }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}" target="_blank">http://{{ domainLink.domainInfo.domain }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}</a>
+							</div>
+						</td>
+						<td ng-if="serviceLocation.targetType == 'ins' && (!contents.sltServiceInstance.defaultLbServicePort || !contents.sltServiceInstance.defaultLbServicePort.id)" class="config-txt text-left">
+							<div ng-repeat="deployInstance in contents.deployServer.deployInstances" class="config-txt text-left" style="height: 26px; padding-top: 4px;">
+								<a href="http://{{ deployInstance.fixedIp + serviceLocation.location }}" style="max-width: 450px;" title="http://{{ deployInstance.fixedIp + serviceLocation.location }}" target="_blank">http://{{ deployInstance.fixedIp + serviceLocation.location }}</a>
+							</div>
+						</td>
+						<td ng-if="serviceLocation.targetType == 'ins' && contents.sltServiceInstance.defaultLbServicePort && contents.sltServiceInstance.defaultLbServicePort.id && (!contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks || contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks.length == 0)">
+							<div class="config-txt text-left" style="height: 26px; padding-top: 4px;">
+								<a href="http://{{ contents.lbDeployServer.vip }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}" style="max-width: 450px;" title="http://{{ contents.lbDeployServer.vip }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}" target="_blank">http://{{ contents.lbDeployServer.vip }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}</a>
+							</div>
+						</td>
+						<td ng-if="serviceLocation.targetType == 'ins' && contents.sltServiceInstance.defaultLbServicePort && contents.sltServiceInstance.defaultLbServicePort.id && contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks && contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks.length > 0">
+							<div ng-repeat="domainLink in contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks" class="config-txt text-left" style="height: 26px; padding-top: 4px;">
+								<a href="http://{{ domainLink.domainInfo.domain }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}" style="max-width: 450px;" title="http://{{ domainLink.domainInfo.domain }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}" target="_blank">http://{{ domainLink.domainInfo.domain }}{{(contents.sltServiceInstance.defaultLbServicePort.sourcePort == 80) ? '' : ':' + contents.sltServiceInstance.defaultLbServicePort.sourcePort }}{{ serviceLocation.location }}</a>
+							</div>
+						</td>
+						<td>
+							<button ng-if="serviceLocation.id == contents.sltServiceInstance.defaultServiceLocation.id" type="button" class="btn ico-upload-25 only-ico" ng-click="contents.fn.openResourceUploadForm(contents.sltServiceInstance)" title="WAS 리소스 배포"><span class="ico">WAS 리소스 배포</span></button>
+							<button ng-if="serviceLocation.id != contents.sltServiceInstance.defaultServiceLocation.id" type="button" class="btn ico-del-25 only-ico" ng-click="tab.fn.delWebServiceInstanceLocation(serviceLocation)" title="WEB 경로 삭제"><span class="ico">WEB 경로 삭제</span></button>
+						</td>
+					</tr>
+					<tr ng-if="!contents.sltServiceInstance.serviceLocations || contents.sltServiceInstance.serviceLocations.length == 0">
+						<td colspan="5" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</scrollable-table>
+		</div>
+	</div>
+</div>

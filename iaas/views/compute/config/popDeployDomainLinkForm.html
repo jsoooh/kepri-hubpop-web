@@ -1,0 +1,17 @@
+<form name="pop.{{pop.formName}}" novalidate>
+	<div class="sideInWrap">
+		<ol class="app-set">
+			<li>
+				<p class="app-tit">도메인 연결 <button type="button" class="btn ico-plus" ng-click="pop.fn.addDomainFormOpen()" tooltip-placement="bottom" uib-tooltip="IP 신규 추가 할당"></button></p>
+				<div class="input-group" style="width : 100%;">
+					<select class="form-control" name="sltDomain" ng-model="pop.sltDomainId" validation="required">
+						<option ng-if="!pop.unusingDomainLoad" value="">도메인 로딩 중 ...</option>
+						<option ng-if="pop.unusingDomainLoad && (!pop.protocolUnusingDomains || pop.protocolUnusingDomains.length == 0)" value="">선택 가능한 도메인이 없습니다.</option>
+						<option ng-repeat="item in pop.protocolUnusingDomains" value="{{item.id}}">{{item.domain}}</option>
+					</select>
+				</div>
+				<div class="validation validation-sltDomain text-danger"></div>
+			</li>
+		</ol>
+	</div>
+</form>

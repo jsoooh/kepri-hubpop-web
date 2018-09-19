@@ -1,0 +1,71 @@
+<!-- 작업 추가 및 선택 -->
+<div class="projt-selWarp">
+    <div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+    <div class="pull-right">
+        <button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+    </div>
+</div>
+
+<!-- search -->
+<!--<div class="searchWrap">
+    <div class="searchBox">
+        <div class="form-group">
+            <input type="text" placeholder="검색어를 입력해 주세요." style="width:400px;">
+        </div>
+        <button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+    </div>
+</div>-->
+<!-- search -->
+
+<!-- tb top -->
+<div class="tb-top">
+    <div class="pull-left">
+        <button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="contents.fn.accessInfoBtn()">접근정보 조회</button>
+        <div class="tb_inputBox">
+            <span class="tit">팀 할당량(GB)</span>
+            <input type="text" name="teamQuator" value="{{contents.objectStorageQuator.teamQuator}}" disabled>
+            <span class="tit">전체 사용량(GB)</span>
+            <input type="text" name="quatorUsed" value="{{contents.objectStorageQuator.quatorUsed | number:2}}" disabled>
+        </div>
+    </div>
+    <div class="pull-right">
+        <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-add" title="추가" ng-click="contents.fn.createStorageObjectBtn()"><span class="ico">추가</span></button>
+    </div>
+</div>
+<!-- tb top -->
+
+<!-- table -->
+<div class="tbl type1 strgObj">
+    <table class="table">
+        <colgroup>
+            <col style="width:25%;">
+            <col style="width:25%;">
+            <col style="width:35%;">
+            <col style="width:15%;">
+        </colgroup>
+        <thead>
+        <tr>
+            <th scope="col">컨테이너</th>
+            <th scope="col">사용량(GB)</th>
+            <th scope="col">사용률(%)</th>
+            <th scope="col">관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="contItem in contents.objectContainerList">
+            <td>{{contItem.containerName}}</td>
+            <td>{{contItem.usedGiGaByte | number:2}}GB</td>
+            <td>{{contItem.usedRate * 100 | number:2}}%</td>
+            <td>
+                <button type="button" name="button" class="btn btn-ico-key-s only-ico" title="권한" ng-click="contents.fn.popAclInfo($event,contItem)" ng-if="0"><span class="ico">권한</span></button>
+                <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteContainer(contItem)"><span class="ico">삭제</span></button>
+            </td>
+        </tr>
+        <tr ng-if="!contents.objectContainerList || contents.objectContainerList.length == 0">
+            <td colspan="4" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+

@@ -1,0 +1,38 @@
+<div class="contentWrap main">
+    <div class="mainItem">
+        <p class="mainItemTitle">{{ 'label.new_item' | translate }} : {{ 'label.total' | translate }} {{ contents.pageOptions.total }} {{ 'label.count' | translate }}</p>
+        <div class="itemArea">
+            <ul class="itemBox">
+                <li ng-repeat="(key, marketServiceItem) in contents.marketServices.content">
+                    <a href="" ng-click="contents.marketServiceView(marketServiceItem.id);">
+                        <div class="appImg">
+                            <div ng-if="marketServiceItem.iconImage == null" ng-thumb="{ fileUrl: 'img/app_service_img_blank.png', canvasBorder: 'no', canvasWidth: 140, maxWidth: 140, maxHeight: 80, minHeight: 80 }"></div>
+                            <div ng-if="marketServiceItem.iconImage != null" ng-thumb="{ fileUrl: 'data:' + marketServiceItem.iconImage.contentType + '; base64, ' + marketServiceItem.iconImage.image, canvasBorder: 'no', canvasWidth: 140, maxWidth: 140, maxHeight: 80, minHeight: 80 }"></div>
+                        </div>
+                    </a>
+                    <p class="appTitle"><a href="" ng-click="contents.marketServiceView(marketServiceItem.id);">{{ marketServiceItem.name }}</a></p>
+                    <p class="appCon">{{ marketServiceItem.shortDescription }}</p>
+                    <p><span>{{ 'label.freeware' | translate }}</span></p>
+                </li>
+                <li ng-if="contents.pageOptions.total == 0">{{ 'message.mi_dont_exist_list' | translate }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div ng-if="contents.pageOptions.total > contents.pageOptions.pageSize" class="paginationWrap">
+    <paging
+            page="contents.pageOptions.currentPage"
+            page-size="contents.pageOptions.pageSize"
+            total="contents.pageOptions.total"
+            pg-href=""
+            show-prev-next="true"
+            show-first-last="true"
+            paging-action="contents.listPrivateDomains(page)"
+            text-first-class="firstPage"
+            text-last-class="lastPage"
+            text-next-class="nextPage"
+            text-prev-class="prevPage">
+    </paging>
+</div>
+
+

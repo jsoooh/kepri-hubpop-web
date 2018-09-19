@@ -1,0 +1,90 @@
+<div class="panelWrap" style="min-height: 200px;" ng-controller="iaasDeployDbServiceConfigTabCtrl as tab">
+	<div class="panel type2" style="cursor: unset;">
+		<div class="panel_head">
+			<div class="tit pull-left" style="min-width: 230px;">DB 서비스 관리</div>
+			<div class="pull-right btnArea">
+				<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'dbConfigSetting')"><span class="ico">확대/축소</span></button>
+			</div>
+			<div class="pull-right btnArea" style="margin-right: 20px;">
+				<div class="dropdown btn-option">
+					<button id="btn-option-detail" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="서비스 설정">
+						<span class="ico">실행 설정</span>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option" style="min-width: 100px;">
+						<li><a href="" ng-click="tab.fn.modDbServiceInstanceConfigFormOpen(contents.sltServiceInstance);">서비스 수정</a></li>
+						<li ng-if="contents.sltServiceInstance.defaultLbServicePort && contents.sltServiceInstance.defaultLbServicePort.id"><a href="" ng-click="contents.fn.delLbServerPortLink(contents.sltServiceInstance.defaultLbServicePort);">LB 포트 연결 해제</a></li>
+						<li ng-if="!contents.sltServiceInstance.defaultLbServicePort || !contents.sltServiceInstance.defaultLbServicePort.id"><a href="" ng-click="contents.fn.addLbServicePortLinkFormOpen(contents.sltServiceInstance);">LB 포트 연결</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="panel_body panel_body_typeA" style="min-height: 500px;">
+			<div class="cBox type1 appCnt-info" style="max-height: 432px; padding:0 15px 0 20px; overflow-y: auto;">
+				<div class="cBox-cnt cBox-cnt-typeA">
+					<div style="width: 100%; padding-right: 20px;">
+						<div class="config-group-tit pull-left ">WEB 서비스 정보</div>
+					</div>
+					<div class="in service-box">
+						<div class="col info-txt">
+							<ul class="config">
+								<li>
+									<strong class="config-tit">서비스 포트</strong>
+									<div class="config-txt">{{contents.sltServiceInstance.servicePort}}</div>
+								</li>
+								<li>
+									<strong class="config-tit">최대 허용 접속 수</strong>
+									<div class="config-txt">{{contents.sltServiceInstance.dbServiceInstance.maxConnections}}</div>
+								</li>
+								<li>
+									<strong class="config-tit">마스터 데이터 베이스</strong>
+									<div class="config-txt">{{contents.sltServiceInstance.dbServiceInstance.masterDb}}</div>
+								</li>
+								<li>
+									<strong class="config-tit">최대 허용 패킷 용량</strong>
+									<div class="config-txt">{{contents.sltServiceInstance.dbServiceInstance.maxAllowedPacket}}MB</div>
+								</li>
+								<li>
+									<strong class="config-tit">마스터 사용자 명</strong>
+									<div class="config-txt">{{contents.sltServiceInstance.dbServiceInstance.masterUserId}}</div>
+								</li>
+								<li>
+									<strong class="config-tit">최대 허용 binlog 크기</strong>
+									<div class="config-txt">{{contents.sltServiceInstance.dbServiceInstance.maxBinlogSize}}MB</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div ng-if="contents.sltServiceInstance.defaultLbServicePort && contents.sltServiceInstance.defaultLbServicePort.id" class="cBox-cnt cBox-cnt-typeA">
+					<div style="width: 100%; padding-right: 20px;">
+						<div class="config-group-tit config-group-tit-typeA pull-left">연결 LB 포트 정보</div>
+					</div>
+					<div class="in service-box">
+						<div class="col info-txt" style="padding-top: 10px;">
+							<ul class="config">
+								<li>
+									<strong class="config-tit">LB 포트명</strong>
+									<div class="config-txt">
+										<a href="" ng-click="main.goToPage('/iaas/deploy_server/detail/' + contents.sltServiceInstance.defaultLbServicePort.deployId)">{{contents.sltServiceInstance.defaultLbServicePort.servicePortName}}</a>
+									</div>
+								</li>
+								<li>
+									<strong class="config-tit">LB 포트</strong>
+									<div class="config-txt">{{ contents.sltServiceInstance.defaultLbServicePort.sourcePort }}</div>
+								</li>
+								<li style="width: 100%;">
+									<strong class="config-tit">도메인</strong>
+									<div class="config">
+										<span ng-repeat="(k, item) in contents.sltServiceInstance.defaultLbServicePort.servicePortDomainLinks" style="padding-right: 15px;" class="config-txt">
+											<a href="http://{{item.domainInfo.domain}}" target="_blank">{{item.domainInfo.domain}}</a>
+										</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

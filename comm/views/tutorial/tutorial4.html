@@ -1,0 +1,467 @@
+<!-- content -->
+<div class="content">
+	<div class="in">
+		<h2 class="h-tit2">모니터링 하기</h2>
+
+		<h3 class="h-tit3" id="/tutorial/4?content=1">개요</h3>
+
+		<h5 class="h-tit5">모니터링(Monitoring)</h5>
+		<p class="tuto-txt">인스턴스를 생성하거나 어플리케이션을 배포했을 때 문제가 발생했는지에 대한 여부를 데이터 저장 및 화면에 출력하는 서비스 입니다.</p><br>
+		<p class="tuto-txt">사용자는 작업을 선택, 인스턴스를 생성하고 통합 모니터링에서는 인스턴스 사용량 데이터를 화면에 출력합니다.</p><br>
+		<p class="tuto-txt">어플리케이션의 배포 상태와 현시점 사용량 현황, 백엔드 서비스 상태를 확인할 수 있습니다.</p><br>
+		<p class="tuto-txt">작업에 포함된 인스턴스와 어플리케이션 상태에 대한 이벤트와 로그를 확인할 수 있습니다.</p><br>
+		<p class="tuto-txt">사용자 별로 해당 작업 인스턴스와 어플리케이션 상태에 대한 사용치 알람을 확인하여 조치할 수 있습니다.</p><br>
+
+		<h5 class="h-tit5" id="/tutorial/4?content=2">대시보드 확인하기</h5>
+		<p class="tuto-txt">프로젝트 하위 작업에 대한 VM 사용량 및 서버 가상화와 표준 APP 개발 서비스 WEB, WAS, DB의 서비스 상태와 알람 및 이벤트에 대한 내역을 확인할 수 있습니다.</p>
+		<img src="images/tutorial/monit/tenantDashboard.png" alt="">
+		<ul class="tuto-ul">
+			<li>현재 선택된 프로젝트 및 작업을 변경하여 다른 프로젝트 및 작업의 데이터를 확인할 수 있습니다.</li>
+			<li>IaaS 가상머신이나 PaaS 앱의 Start, Stop, Error 상태를 보여줍니다.</li>
+			<li>IaaS 가상머신의 CPU, MEMORY, DISK 사용량과 DISK IOPS와 NETWORK IO 추이를 보여줍니다.</li>
+			<li>가상머신 CPU 사용량 기준으로 가장 많이 사용한 VM TOP 5를 상단에서 확인할 수 있습니다.</li>
+			<li>앱 CPU 사용량 기준으로 가장 많이 사용한 앱 TOP 5를 상단에서 확인할 수 있습니다.</li>
+			<li>알람과 이벤트는 하루를 기준으로 대시보드에 보여지고 있습니다.</li>
+		</ul>
+
+		<!-- table -->
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width:8%;">
+					<col style="width:23%;">
+					<col style="width:23%;">
+					<col style="width:23%;">
+					<col style="width:23%;">
+					<col style="width:23%;">
+				</colgroup>
+				<thead>
+				<tr>
+					<th scope="col">구분</th>
+					<th scope="col">CPU</th>
+					<th scope="col">MEMORY</th>
+					<th scope="col">DISK</th>
+					<th scope="col">DISK IOPS</th>
+					<th scope="col">NETWORK IO</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td style="background-color: #B6C1CF;color:#000000;">정의</td>
+					<td style="text-align:left;vertical-align: top;">
+						<ul class="tuto-ul">
+							<li>전체 VM 및 APP의 평균 CPU 사용량 통계</li>
+						</ul>
+					</td>
+					<td style="text-align:left;vertical-align: top;">
+						<ul class="tuto-ul">
+							<li>전체 VM 및 APP의 평균 MEMORY 사용량 통계</li>
+						</ul>
+					</td>
+					<td style="text-align:left;vertical-align: top;">
+						<ul class="tuto-ul">
+							<li>전체 VM 및 APP의 평균 DISK 사용량 통계</li>
+						</ul>
+					</td>
+					<td style="text-align:left;vertical-align: top;">
+						<ul class="tuto-ul">
+							<li>디스크로부터 Input/Out을 수행한 수치를 의미(초당 입출력 횟수)</li>
+						</ul>
+					</td>
+					<td style="text-align:left;vertical-align: top;">
+						<ul class="tuto-ul">
+							<li>네트워크의 입출력 데이터(Megabyte기준)</li>
+						</ul>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- table -->
+
+		<h5 class="h-tit5" id="/tutorial/4?content=3">가상서버 Top 뷰</h5>
+		<p class="tuto-txt">현재 작업의 CPU 사용량을 기준으로 가상서버를 나열한 화면입니다. 각 가상머신 이름, IP, CPU, MEMORY, DISK 사용량과 DISK IOPS, NETWORK IO를 확인할 수 있습니다.</p>
+		<img src="images/tutorial/monit/iaasTopView.png" alt="">
+
+		<h5 class="h-tit5" id="/tutorial/4?content=4">가상머신 모니터링</h5>
+		<p class="tuto-txt">각 가상머신에 대한 CPU, MEMORY, DISK, NETWORK 사용량을 확인할 수 있습니다.</p>
+		<img src="images/tutorial/monit/iaasVmsMonit.png" alt="">
+		<ul class="tuto-ul">
+			<li>좌측 리스트는 인스턴스의 종류와 VM명을 포함하고 있습니다.(현재 선택된 상단화면은 인스턴스 유형이 Load Balance인 VM이름 abc_01이다.)</li>
+			<li>모니터링 내역으로는 CPU(Max, Avg, Min의 사용량), MEMORY(Max, Avg, Min의 사용량), Disk 사용량, NETWORK 송수신 바이트와 패킷으로 구성되어있습니다.</li>
+		</ul>
+
+		<h5 class="h-tit5" id="/tutorial/4?content=5">시스템 S/W 모니터링</h5>
+		<p class="tuto-txt">가상머신을 생성할 때 선택하는 인스턴스 유형(LB)일 경우 아래와 같은 메트릭과 그래프를 확인할 수 있다.</p>
+		<img src="images/tutorial/monit/iaasSystemSwLb.png" alt="">
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width:15%;">
+					<col style="width:25%;">
+					<col style="width:15%;">
+					<col style="width:40%;">
+				</colgroup>
+				<thead>
+				<tr>
+					<th scope="col">메저먼트</th>
+					<th scope="col">메트릭</th>
+					<th scope="col">타입</th>
+					<th scope="col">설명</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+				<tr>
+					<td rowspan="9" style="background-color: #B6C1CF;color:#000000;">haproxy</td>
+					<td>proxy</td>
+					<td>tag</td>
+					<td>프록시명</td>
+				</tr>
+				<tr>
+					<td>sv</td>
+					<td>tag</td>
+					<td>서버명</td>
+				</tr>
+				<tr>
+					<td>lbtot</td>
+					<td>integer</td>
+					<td>총 세션 로드밸런스 수</td>
+				</tr>
+				<tr>
+					<td>ereq</td>
+					<td>integer</td>
+					<td>요청 에러 횟수</td>
+				</tr>
+				<tr>
+					<td>eresp</td>
+					<td>integer</td>
+					<td>응답 에러 횟수</td>
+				</tr>
+				<tr>
+					<td>bin</td>
+					<td>integer</td>
+					<td>입력 바이트 수</td>
+				</tr>
+				<tr>
+					<td>bout</td>
+					<td>integer</td>
+					<td>출력 바이트 수</td>
+				</tr>
+				<tr>
+					<td>econ</td>
+					<td>integer</td>
+					<td>접속 에러 수</td>
+				</tr>
+				<tr>
+					<td>stot</td>
+					<td>integer</td>
+					<td>총 세션 수</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- table -->
+
+		<img src="images/tutorial/monit/iaasSystemSwWeb.png" alt="">
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width:15%;">
+					<col style="width:25%;">
+					<col style="width:15%;">
+					<col style="width:40%;">
+				</colgroup>
+				<thead>
+				<tr>
+					<th scope="col">메저먼트</th>
+					<th scope="col">메트릭</th>
+					<th scope="col">타입</th>
+					<th scope="col">설명</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+				<tr>
+					<td rowspan="9" style="background-color: #B6C1CF;color:#000000;">nginx</td>
+					<td>port</td>
+					<td>tag</td>
+					<td>확인하는 포트</td>
+				</tr>
+				<tr>
+					<td>writing</td>
+					<td>tag</td>
+					<td>기록 횟수</td>
+				</tr>
+				<tr>
+					<td>active</td>
+					<td>integer</td>
+					<td>사장 최근 사용되었던 메모리 수</td>
+				</tr>
+				<tr>
+					<td>accepts</td>
+					<td>integer</td>
+					<td>허용된 클라이언트 연결 수</td>
+				</tr>
+				<tr>
+					<td>handled</td>
+					<td>integer</td>
+					<td>총 연결 횟수</td>
+				</tr>
+				<tr>
+					<td>requests</td>
+					<td>integer</td>
+					<td>총 요청 횟수</td>
+				</tr>
+				<tr>
+					<td>reading</td>
+					<td>integer</td>
+					<td>읽기 횟수</td>
+				</tr>
+				<tr>
+					<td>econ</td>
+					<td>integer</td>
+					<td>접속 에러 수</td>
+				</tr>
+				<tr>
+					<td>stot</td>
+					<td>integer</td>
+					<td>총 세션 수</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- table -->
+		<p class="tuto-txt">가상머신을 생성할 때 선택하는 인스턴스 유형(WEB)일 경우 아래와 같은 메트릭과 그래프를 확인할 수 있다.</p>
+
+
+		<img src="images/tutorial/monit/iaasSystemSwWas.png" alt="">
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width:15%;">
+					<col style="width:25%;">
+					<col style="width:15%;">
+					<col style="width:40%;">
+				</colgroup>
+				<thead>
+				<tr>
+					<th scope="col">메저먼트</th>
+					<th scope="col">메트릭</th>
+					<th scope="col">타입</th>
+					<th scope="col">설명</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+				<tr>
+					<td rowspan="8" style="background-color: #B6C1CF;color:#000000;">tomcat_connector</td>
+					<td>name</td>
+					<td>tag</td>
+					<td>프로토콜 + 포트명</td>
+				</tr>
+				<tr>
+					<td>bytes_received</td>
+					<td>integer</td>
+					<td>수신한 바이트 수</td>
+				</tr>
+				<tr>
+					<td>bytes_sent</td>
+					<td>integer</td>
+					<td>송신한 바이트 수</td>
+				</tr>
+				<tr>
+					<td>current_thread_count</td>
+					<td>integer</td>
+					<td>현재 쓰레드 수</td>
+				</tr>
+				<tr>
+					<td>current_threads_busy</td>
+					<td>integer</td>
+					<td>현재 쓰레드 사용 수</td>
+				</tr>
+				<tr>
+					<td>error_count</td>
+					<td>integer</td>
+					<td>에러 수</td>
+				</tr>
+				<tr>
+					<td>processing_time</td>
+					<td>integer</td>
+					<td>최대 프로세스 시간</td>
+				</tr>
+				<tr>
+					<td>request_count</td>
+					<td>integer</td>
+					<td>응답 수</td>
+				</tr>
+				<tr>
+					<td rowspan="2" style="background-color: #B6C1CF;color:#000000;">tomcat_jvm_memory</td>
+					<td>free</td>
+					<td>integer</td>
+					<td>현재 시스템에서 사용중이지 않음 메모리(사용가능 메모리)</td>
+				</tr>
+				<tr>
+					<td>total</td>
+					<td>integer</td>
+					<td>물리적인 전체 메모리</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- table -->
+		<p class="tuto-txt">가상머신을 생성할 때 선택하는 인스턴스 유형(WAS)일 경우 아래와 같은 메트릭과 그래프를 확인할 수 있다.</p>
+
+		<img src="images/tutorial/monit/iaasSystemSwDb.png" alt="">
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width:15%;">
+					<col style="width:25%;">
+					<col style="width:15%;">
+					<col style="width:40%;">
+				</colgroup>
+				<thead>
+				<tr>
+					<th scope="col">메저먼트</th>
+					<th scope="col">메트릭</th>
+					<th scope="col">타입</th>
+					<th scope="col">설명</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+				<tr>
+					<td rowspan="14" style="background-color: #B6C1CF;color:#000000;">mysql</td>
+					<td>bytes_received</td>
+					<td>integer</td>
+					<td>수신한 바이트 수</td>
+				</tr>
+				<tr>
+					<td>bytes_sent</td>
+					<td>integer</td>
+					<td>송신한 바이트 수</td>
+				</tr>
+				<tr>
+					<td>commands_commit</td>
+					<td>integer</td>
+					<td>커밋한 커맨드 횟수</td>
+				</tr>
+				<tr>
+					<td>commands_delete</td>
+					<td>integer</td>
+					<td>삭제 커맨드 횟수</td>
+				</tr>
+				<tr>
+					<td>commands_insert</td>
+					<td>integer</td>
+					<td>추가 커맨드 횟수</td>
+				</tr>
+				<tr>
+					<td>commands_select</td>
+					<td>integer</td>
+					<td>선택 커맨드 횟수</td>
+				</tr>
+				<tr>
+					<td>commands_update</td>
+					<td>integer</td>
+					<td>업데이트 커맨드 횟수</td>
+				</tr>
+				<tr>
+					<td>connections</td>
+					<td>integer</td>
+					<td>유저 접속수</td>
+				</tr>
+				<tr>
+					<td>innodb_data_read</td>
+					<td>integer</td>
+					<td>읽은 페이지 수</td>
+				</tr>
+				<tr>
+					<td>innodb_data_reads</td>
+					<td>integer</td>
+					<td>바이트 단위로 읽은 데이터 양</td>
+				</tr>
+				<tr>
+					<td>innodb_data_writes</td>
+					<td>integer</td>
+					<td>초기화된 쓰기 수</td>
+				</tr>
+				<tr>
+					<td>innodb_data_written</td>
+					<td>integer</td>
+					<td>바이트 단위로 쓰여진 데이터 양</td>
+				</tr>
+				<tr>
+					<td>memory_used</td>
+					<td>integer</td>
+					<td>현재 사용된 메모리</td>
+				</tr>
+				<tr>
+					<td>queries</td>
+					<td>integer</td>
+					<td>쿼리 횟수</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- table -->
+		<p class="tuto-txt">가상머신을 생성할 때 선택하는 인스턴스 유형(DB)일 경우 아래와 같은 메트릭과 그래프를 확인할 수 있다.</p>
+
+
+		<h5 class="h-tit5" id="/tutorial/4?content=6">App Top 뷰</h5>
+		<p class="tuto-txt">현재 작업의 CPU 사용량을 기준으로 가상서버를 나열한 화면입니다. 각 앱의 이름, IP, CPU, MEMORY, Disk 사용량과 DISK IOPS, NETWORK IO를 확인할 수 있습니다.</p>
+		<img src="images/tutorial/monit/paasAppTopView.png" alt="">
+
+		<h5 class="h-tit5" id="/tutorial/4?content=7">App 모니터링</h5>
+		<p class="tuto-txt">각 앱에 대한 CPU, MEMORY, DISK 사용량을 확인할 수 있습니다.</p>
+		<img src="images/tutorial/monit/paasAppsMonit.png" alt="">
+		<ul class="tuto-ul">
+			<li>모니터링 내역으로는 CPU, MEMORY, Disk 사용량으로 구성되어있습니다.</li>
+		</ul>
+
+		<h5 class="h-tit5" id="/tutorial/4?content=8">알람 확인하기</h5>
+		<p class="tuto-txt">로그인한 사용자를 기준으로 알람을 생성하여 작업에 대한 내역을 화면에 표시합니다.(임계치 생성기준 WARNING : 80 ~ CRITICAL : 90)</p>
+		<img src="images/tutorial/monit/alarm.png" alt="">
+		<ul class="tuto-ul">
+			<li>이벤트내역에서 해당 작업에 내용만 사용자에게 보여집니다.</li>
+			<li>상태는 WARNING 상태와 CRITICAL 상태만을 표시합니다.</li>
+		</ul>
+
+		<h5 class="h-tit5" id="/tutorial/4?content=9">이벤트 확인하기</h5>
+		<p class="tuto-txt">프로젝트 하위 작업에 대한 VM에 대한 이벤트(시작, 중지, 임계치 초과 등)를 확인 할 수 있습니다.</p>
+		<img src="images/tutorial/monit/event.png" alt="">
+
+		<h5 class="h-tit5" id="/tutorial/4?content=10">시스템 로그</h5>
+		<p class="tuto-txt">프로젝트 하위 작업에 대한 시스템 로그 정보를 확인 할 수 있습니다.</p>
+		<img src="images/tutorial/monit/log.png" alt="">
+		<ul class="tuto-ul">
+			<li>로그는 현재 날짜를 기준으로 시스템 로그에 대한 데이터를 확인할 수 있습니다.</li>
+			<li>우측 상단의 달력아이콘을 클릭하여 사용자가 원하는 날짜의 시스템 로그를 확인 할 수 있습니다.</li>
+		</ul>
+
+	</div>
+
+	<!-- tutorial menu -->
+	<div class="sideMenu">
+		<dl>
+			<dt>목차</dt>
+			<dd>
+				<ul>
+					<li><a href="#/tutorial/4?content=1" class="on content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">개요</a></li><!-- selected class "on" -->
+					<li><a href="#/tutorial/4?content=2" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">대시보드 확인하기</a></li>
+					<li><a href="#/tutorial/4?content=3" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">가상서버 Top 뷰</a></li>
+					<li><a href="#/tutorial/4?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">가상머신 모니터링</a></li>
+					<li><a href="#/tutorial/4?content=5" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">시스템 S/W 모니터링</a></li>
+					<li><a href="#/tutorial/4?content=6" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">App Top 뷰</a></li>
+					<li><a href="#/tutorial/4?content=7" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">App 모니터링</a></li>
+					<li><a href="#/tutorial/4?content=8" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">알람 확인하기</a></li>
+					<li><a href="#/tutorial/4?content=9" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">이벤트 확인하기</a></li>
+					<li><a href="#/tutorial/4?content=10" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">시스템 로그</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
+	<!-- //tutorial menu -->
+</div>
+<!-- //content -->

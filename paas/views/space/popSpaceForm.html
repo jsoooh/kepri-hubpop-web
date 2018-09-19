@@ -1,0 +1,49 @@
+<table class="table table-bordered">
+	<colgroup>
+		<col style="width:160px;" />
+		<col />
+	</colgroup>
+	<tbody>
+	<tr ng-show="!pop.spaceData.guid">
+		<th>
+			<span class="require"></span>
+			<label for="organization">{{ 'label.org_select' | translate }}</label><!-- 조직선택 -->
+		</th>
+		<td>
+			<select name="organization" id="organization" ng-change="pop.changeOrganization();" ng-model="pop.spaceData.organizationGuid" validation="required">
+				<option value="">{{ 'label.select' | translate }}</option>
+				<option ng-repeat="orgItem in pop.organizations" value="{{ orgItem.guid }}">{{ orgItem.name }}</option>
+			</select>
+		</td>
+	</tr>
+	<tr ng-show="pop.spaceData.guid">
+		<th>{{ 'label.org' | translate }}</th><!-- 조직 -->
+		<td class="text-left">{{ pop.spaceData.organizationName }}</td>
+	</tr>
+	<tr>
+		<th>
+			<span class="require"></span>
+			<label for="name">{{ 'label.space_name' | translate }}</label><!-- 영역명 -->
+		</th>
+		<td>
+			<input type="text" maxlength="30" name="name" id="name" ng-model="pop.spaceData.name" placeholder="{{ 'label.space_name' | translate }}" validation="alpha_dash|min_len:3|max_len:30|required" maxlength="30">
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<label for="spaceQuota">{{ 'label.quota_select' | translate }}</label><!-- 용량계획 선택 -->
+		</th>
+		<td ng-show="pop.sltOrganization.guid">
+			<select name="spaceQuota" id="spaceQuota" ng-change="pop.changeSpaceQuota();" ng-model="pop.spaceData.spaceQuotaDefinitionGuid">
+				<option value="">{{ 'label.no_select' | translate }}</option>
+				<option ng-repeat="spaceQuotaItem in pop.spaceQuotas" value="{{ spaceQuotaItem.guid }}">{{ spaceQuotaItem.name }}</option>
+			</select>
+		</td>
+		<td ng-show="pop.spaceData.organizationGuid && !pop.sltOrganization.guid">
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</td>
+		<td ng-show="!pop.spaceData.organizationGuid" colspan="2" class="text-left">
+			&nbsp;
+		</td>
+	</tr>
+</table>

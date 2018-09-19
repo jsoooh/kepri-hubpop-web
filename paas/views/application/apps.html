@@ -1,0 +1,271 @@
+<!-- content -->
+    <div ng-if="contents.loadingApps">
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+    </div>
+    <!-- 작업 추가 및 선택 -->
+    <div class="projt-selWarp">
+        <div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+        <div class="pull-right">
+            <button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+        </div>
+   </div>
+    <!-- //작업 추가 및 선택 -->
+
+    <!-- panel area-->
+    <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel">
+        <li ng-repeat="(key, appItem) in contents.apps.content">
+            <!-- panel -->
+            <div class="panelWrap">
+                <div class="panel type3">
+                    <div class="panel_head">
+                      <div>
+                          <div class="stateWrap">
+                              <img ng-if="appItem.appImage != ''" ng-src="data:image/JPEG; base64, {{ appItem.appImage }}" class="logo" alt="" style="width:54px; height:54px;">
+                              <img ng-if="appItem.appImage == ''" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+                          </div>
+                      </div>
+                      <p class="tit" id="txt-renameApp-{{appItem.name}}" style="display:block;" ng-click="contents.moveToApplicationPage(appItem);">{{ appItem.name }}</p>
+                      <div id="renameAppButton-{{appItem.name}}" style="display:none; width:240px;">
+                        <input id="inputAppName-{{appItem.name}}" type="text" data-guid="{{appItem.guid}}" name="renameApp-{{appItem.name}}" class="form-control" ng-model="appItem.name" maxlength="20" validation="min_len:3|max_len:20|required">
+                        <div class="sdBtnWrap">
+                          <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="contents.updateAppName(appItem.name)" ><span class="ico">이름저장</span></button>
+                          <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameApp(appItem.name)"><span class="ico">변경취소</span></button>
+                        </div>
+                      </div>
+                      <a class="txt" ng-href="http://{{appItem.uris[0]}}" target="_blank" title="{{appItem.uris}}" >http://{{appItem.uris[0]}}</a>
+
+                      <div class="dropdown btn-option">
+    		                <button id="btn-option-{{appItem.name}}" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+    		                  <span class="ico">실행 설정</span>
+    		                </button>
+    		                <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+    		                  <li><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">시작</a></li>
+    		                  <li><a href="javascript:void(0);" ng-click="contents.stopAppState(appItem.guid, appItem.name)">중지</a></li>
+    		                  <li><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">재시작</a></li>
+    		                  <li><a href="javascript:void(0);" ng-click="contents.deleteApp(appItem.guid, appItem.name)">삭제</a></li>
+    		                  <li class="renameApp"><a href="javascript:void(0);" ng-click="contents.renameApp(appItem.name)">APP 이름변경</a></li>
+    		                </ul>
+    		              </div>
+                    </div>
+                    <div class="panel_body" ng-click="contents.moveToApplicationPage(appItem);">
+                        <ul class="ul-in">
+                            <li class="col1">
+                                <div class="up">
+                                    <p class="txt"><strong>인스턴스</strong><span>{{ appItem.instances | number:0 }}</span></p>
+                                </div>
+                                <div class="down">
+                                    <div class="stateWrap" ng-if="(appItem.state == 'STARTED') && (appItem.packageState == 'STAGED')">
+                                        <span class="stateMark type1">시작</span>
+                                        <span class="state-txt">시작</span>
+                                    </div>
+                                    <div class="stateWrap" ng-if="(appItem.state == 'STARTED') && (appItem.packageState == 'PENDING')">
+                                        <span>{{appItem}}</span>
+                                        <span class="stateMark type4">배포 진행 중</span>
+                                        <span class="state-txt">배포 진행 중</span>
+                                    </div>
+                                    <div class="stateWrap" ng-if="(appItem.state == 'STOPPED') && (appItem.packageState != 'FAILED')">
+                                        <span class="stateMark type2">정지</span>
+                                        <span class="state-txt">정지</span>
+                                    </div>
+                                    <div class="stateWrap" ng-if="appItem.packageState == 'FAILED'">
+                                        <span class="stateMark type3">실패</span>
+                                        <span class="state-txt">실패</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="col2">
+                                <ul class="ul-prog">
+                                    <li>
+                                        <div class="progressWrap type1">
+                                            <div class="progress">
+                                                <div percent-progress-bar-animate bar-type="height" percent="{{appItem.cpuRoundProgressPercentage}}" class="progress">
+                                                    <div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{appItem.cpuRoundProgressPercentage}}%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <strong class="tit">CPU</strong>
+                                    </li>
+                                    <li>
+                                        <div class="progressWrap type1">
+                                            <div class="progress">
+                                                <div percent-progress-bar-animate bar-type="height" percent="{{appItem.memoryRoundProgressPercentage}}" class="progress">
+                                                    <div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{appItem.memoryRoundProgressPercentage}}%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <strong class="tit">메모리</strong>
+                                    </li>
+                                    <li>
+                                        <div class="progressWrap type1">
+                                            <div class="progress">
+                                                <div percent-progress-bar-animate bar-type="height" percent="{{appItem.diskRoundProgressPercentage}}" class="progress">
+                                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{appItem.diskRoundProgressPercentage}}%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <strong class="tit">디스크</strong>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- //panel -->
+        </li>
+        <li style="padding-bottom:3.5%;">
+            <button type="submit" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" id="aside-aside" ng-click="contents.showForm();"><span class="ico"></span></button>
+        </li>
+    </ul>
+    <!-- page cnt -->
+    <div ng-if="main.contentsViewType == 'tbl'" class="ListView">
+        <!-- tb top -->
+        <div class="tb-top">
+            <div class="pull-left">
+                <div class="tbTop-state">
+                    <span class="stateWrap"><span class="state-tit">시작 :</span><span class="stateMark type1">시작</span></span>
+                    <span class="stateWrap"><span class="state-tit">정지 :</span><span class="stateMark type2">정지</span></span>
+                    <span class="stateWrap"><span class="state-tit">실패 :</span><span class="stateMark type3">실패</span></span>
+                </div>
+            </div>
+            <div class="pull-right">
+                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" ng-click="contents.showForm();" data-username="#aside-aside1"><span class="ico"></span></button>
+            </div>
+        </div>
+        <!-- //tb top -->
+
+        <!-- table -->
+        <div class="tbl type1">
+            <table class="table">
+                <colgroup>
+                    <col style="width:5%;">
+                    <col style="width:5%;">
+                    <col style="width:10%;">
+                    <col style="width:5%;">
+                    <col style="width:15%;">
+                    <col style="width:15%;">
+                    <col style="width:15%;">
+                    <col style="width:15%;">
+                    <col style="width:10%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">상태</th>
+                    <th scope="col">앱 유형</th>
+                    <th scope="col">앱명</th>
+                    <th scope="col">인스턴스</th>
+                    <th scope="col">CPU</th>
+                    <th scope="col">메모리</th>
+                    <th scope="col">디스크</th>
+                    <th scope="col">라우트 URL</th>
+                    <th scope="col">액션</th>
+                </tr>
+                </thead>
+                <tbody ng-if="1 > contents.apps.content.length">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>앱이 없습니다.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+                <tbody ng-if="1 <= contents.apps.content.length">
+                <tr ng-repeat="(key, appItem) in contents.apps.content">
+                    <td>
+                        <div class="stateWrap">
+                            <span class="stateMark type1" ng-if="(contents.appStateCnt != appItem.instances) && (appItem.state == 'STARTED')"></span>
+                            <span class="stateMark type2" ng-if="(contents.appStateCnt == 0) && (appItem.state == 'STOPPED')"></span>
+                            <span class="stateMark type3" ng-if="contents.appStateCnt == appItem.instances"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <bp ng-if="appItem.buildpackName == 'DOCKER'">{{ appItem.buildpackName }}</bp>
+                        <bp ng-if="appItem.buildpackName != 'DOCKER'">일반 앱</bp>
+                    </td>
+                    <td>
+                        <p class="tit" id="txt-renameAppList-{{appItem.name}}" ng-click="contents.moveToApplicationPage(appItem);">{{ appItem.name }}</p>
+                    </td>
+                    <td>{{ appItem.instances | number:0 }}</td>
+                    <td>
+                        <div class="progressWrap type2">
+                            <div class="progress">
+                                <div class="progress-bar color-type3" role="progressbar" aria-valuenow="{{appItem.cpuRoundProgressPercentage}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': appItem.cpuRoundProgressPercentage}" data-toggle="tooltip" data-placement="top" title="{{appItem.cpuRoundProgressPercentage}}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progressWrap type2">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="{{appItem.memoryRoundProgressPercentage}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': appItem.memoryRoundProgressPercentage}" data-toggle="tooltip" data-placement="top" title="{{appItem.memoryRoundProgressPercentage}}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progressWrap type2">
+                            <div class="progress">
+                                <div class="progress-bar color-type2" role="progressbar" aria-valuenow="{{appItem.diskRoundProgressPercentage}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': appItem.diskRoundProgressPercentage}" data-toggle="tooltip" data-placement="top" title="{{appItem.diskRoundProgressPercentage}}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a ng-href="http://{{appItem.uris[0]}}" target="_blank">http://{{appItem.uris[0]}} <br /></a>
+                        <button ng-if="1 < appItem.uris.length" ng-click="uris(appItem.name)" title="{{appItem.uris}}">[전체보기]</button>
+                    </td>
+                    <td>
+                        <select value="item.field" ng-options="item.field for item in fieldTable" ng-model="selected" ng-change="contents.controllAppState(selected, appItem.guid, appItem.name, $event)"></select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagiWrap"></div>
+        </div>
+        <!-- //table -->
+    </div>
+    <!-- //page cnt -->
+    <!-- //panel area-->
+
+    <!-- cBox -->
+    <div class="cBox type2 appCnt-sev" ng-if="contents.sltOrganizationGuid != ''" ng-controller="paasServiceInstancesCtrl as ins">
+        <div ng-if="ins.loadingServiceInstances">
+            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+        </div>
+        <div class="cBox-hd">
+            <h4 class="c-tit">연결 서비스 <em class="point1">({{serviceInstance.serviceInstances.content.length}})</em></h4>
+        </div>
+
+        <div class="cBox-cnt">
+            <div class="in scroll-pane">
+                <ul class="sev-list">
+                    <li class="sevBox on" ng-repeat="(key, serviceItem) in serviceInstance.serviceInstances.content">
+                        <img ng-src="images/thum/im_app_{{ serviceItem.serviceLabel }}_{{ (serviceItem.service.active == true) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}">
+                        <div class="dropdown btn-option">
+				                <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+				                  <span class="ico">실행 설정</span>
+				                </button>
+                            <ul class="dropdown-menu dropdown-menu-left" role="btn-optionn" aria-labelledby="btn-option">
+                                <li><a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a></li>
+                                <li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="ins.renameInst(serviceItem.name)">서비스 이름변경</a></li>
+                                <li><a href="javascript:void(0);" ng-click="ins.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
+                            </ul>
+                        </div>
+                        <p class="txt1" id="txt-{{serviceItem.name}}" style="display:block;">{{ serviceItem.name }}</p>
+                        <div id="renameService-{{serviceItem.name}}" style="display:none;">
+                            <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" class="form-control" style="height:38px;" ng-model="serviceItem.name" maxlength="20" validation="min_len:3|max_len:20|required" />
+                            <div class="sdBtnWrap">
+                                <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
+                                <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="ins.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sevBox addSev ui-sortable-handle">
+                        <button type="button" name="button" ng-click="ins.showForm(serviceInstance.serviceInstances)" class="btn only-ico ico-add" title="추가" data-user="aside" data-username="#aside-sevAdd"><span class="ico">추가</span></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- //cBox -->
+<!-- //content -->

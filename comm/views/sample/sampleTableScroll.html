@@ -1,0 +1,45 @@
+<!-- tb top -->
+<div class="tb-top">
+    <form name="searchForm" novalidate>
+        <div class="pull-left">
+            <h2>스크롤 테이블</h2>
+        </div>
+        <div class="pull-left" style="padding-left: 100px;">
+            <div class="dateWrap">
+                <div class="date-inpt"><input datepicker type="text" class="datepicker" ng-model="pop.sample.useStartDate2" name="startDate" placeholder="YYYY-MM-DD" validation="required"></div>
+                <span class="wave">~</span>
+                <div class="date-inpt"><input datepicker type="text" class="datepicker" ng-model="pop.sample.useEndDate2" name="startDate" placeholder="YYYY-MM-DD" validation="required"></div>
+            </div>
+        </div>
+        <div class="pull-left" style="padding-left: 20px;">
+            <p class="has-error" ng-show="searchForm.startDate.$touched && searchForm.startDate.$error.required">기간을 입력해 주세요. 시작일</p>
+            <p class="has-error" ng-show="searchForm.endDate.$touched && searchForm.endDate.$error.required">기간을 입력해 주세요. 종료일</p>
+        </div>
+    </form>
+</div>
+
+<!-- tb top -->
+<scrollable-table watch="contents.visibleProjects" class="tableHeight600"><!-- resizable 는 싸이즈 조절이 필요한 곳 만 적용 -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th sortable-header style="width:150px;" col="facility">Facility</th>
+            <th sortable-header style="width:100px;" col="code" title="The code for the unit">Unit code</th>
+            <th sortable-header col="cost">Cost</th>
+            <th sortable-header col="conditionRating">Condition score</th>
+            <th sortable-header style="width:150px;" col="extent">Not sortable</th>
+            <th sortable-header style="width:100px;" col="planYear" comparator-fn="comparator">Plan year</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in contents.visibleProjects" row-id="{{ item.facility }}" ng-class="{info: selected == item.facility}" >
+            <td>{{ item.facility }}</td>
+            <td>{{ item.code }}</td>
+            <td>{{ item.cost }}</td>
+            <td>{{ item.conditionRating }}</td>
+            <td>{{ item.extent }}</td>
+            <td>{{ item.planYear }}</td>
+        </tr>
+        </tbody>
+    </table>
+</scrollable-table>

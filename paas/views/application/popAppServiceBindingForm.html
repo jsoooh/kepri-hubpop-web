@@ -1,0 +1,29 @@
+	<table class="table table-bordered">
+		<colgroup>
+			<col style="width:150px;" />
+			<col />
+		</colgroup>
+		<tbody>
+		<tr>
+			<th>{{ 'label.app' | translate }}</th><!-- 앱 -->
+			<td class="text-left">{{ pop.appName }}</td>
+		</tr>
+		<tr>
+			<th>
+				<span class="require"></span>
+				<label for="serviceInstance">{{ 'label.service_instance' | translate }}</label><!-- 서비스 인스턴스 -->
+			</th>
+			<td class="bindindWrap">
+				<select name="serviceInstance" id="serviceInstance" ng-model="pop.sltServiceInstanceGuid" validation="required">
+					<option value="">{{ 'label.select' | translate }}</option>
+					<optgroup ng-if="pop.spaceServiceInstances.length > 0" label="{{ 'label.paas_service' | translate }}">
+						<option ng-repeat="serviceInstanceItem in pop.spaceServiceInstances" value="{{ serviceInstanceItem.guid }}">{{ serviceInstanceItem.name }}</option>
+					</optgroup>
+					<optgroup ng-if="pop.spaceUserServiceInstances.length > 0" label="{{ 'label.user_service' | translate }}">
+						<option ng-repeat="userServiceInstanceItem in pop.spaceUserServiceInstances" value="{{ userServiceInstanceItem.guid }}">{{ userServiceInstanceItem.name }}</option>
+					</optgroup>
+				</select>
+			</td>
+		</tr>
+		</tbody>
+	</table>

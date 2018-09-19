@@ -1,0 +1,60 @@
+
+<div class="tableWrap">
+    <div class="topFunctionWrap">
+        <p class="title">{{ title }}</p>
+        <div class="searchWrap">
+            <ul class="searchinputWrap">
+                <li>
+                    <input type="text" maxlength="30" placeholder="{{'label.bulletin_title_search' | translate}}" ng-model="sch.text" ng-keypress="schEnter($event);" />
+                </li>
+                <li>
+                    <button type="button" class="btn btn-search" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.search' | translate }}" ng-click="getListBoards();">
+                        <img src="img/ico_search.png" width="20" height="20" alt="{{ 'label.search' | translate }}">
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <table class="table">
+        <colgroup>
+            <col style="width:120px" />
+            <col />
+            <col style="width:160px" />
+            <col style="width:140px" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>{{ 'label.no' | translate }}</th>
+            <th>{{ 'label.title' | translate }}</th>
+            <th>{{ 'label.create_dt' | translate }}</th>
+            <th>{{ 'label.hits' | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="boardItem in boards" ng-click="viewDetail(boardItem);">
+            <td>{{pageOptions.pageSize*(pageOptions.currentPage-1)+ $index+1}}</td>
+            <td class="text-left"><a><span class="reply" ng-show="boardItem.level>1"></span><span ng-bind-html="boardItem.title"></span></a></td>
+            <td>{{ boardItem.createdDate.time | date : "yyyy.MM.dd" }}</td>
+            <td>{{boardItem.hits}}</td>
+        </tr>
+        <tr ng-show="!pageOptions.total">
+            <td colspan="4">{{ 'message.mi_dont_exist_list' | translate }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="paginationWrap" ng-show="pageOptions.total">
+    <paging
+            page="pageOptions.currentPage"
+            page-size="pageOptions.pageSize"
+            total="pageOptions.total"
+            pg-href=""
+            show-prev-next="true"
+            show-first-last="true"
+            paging-action="listBoards(page)"
+            text-first-class="firstPage"
+            text-last-class="lastPage"
+            text-next-class="nextPage"
+            text-prev-class="prevPage">
+    </paging>
+</div>

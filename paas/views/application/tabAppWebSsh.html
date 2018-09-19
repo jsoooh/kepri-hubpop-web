@@ -1,0 +1,24 @@
+<div class="panel_head">
+	<div class="tit pull-left">SSH</div>
+	<div class="pull-right">
+		<select name="instanceStats" ng-model="tab.sltInstanceStatsId" ng-change="tab.changeInstanceStats();" class="modal-sel2" style="margin-right: 7px;">
+			<option value="">선택없음</option>
+			<option ng-repeat="item in tab.app.instanceStats" value="{{ item.id }}">{{ 'label.instance' | translate }} {{ item.id }}</option>
+			<option ng-if="!tab.app.instanceStats.length" value="">{{ 'label.no_instance_selected' | translate }}</option>
+		</select>
+		<button id="ssh" type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel('ssh')"><span class="ico">확대/축소</span></button>
+	</div>
+</div>
+<div class="panel_body">
+	<div class="in scroll-pane">
+		<div>
+			<h3 ng-if="tab.sltInstanceStatsId == ''">선택된 앱 인스턴스가 없습니다.</h3>
+			<div ng-if="tab.sltInstanceStatsId != ''" style="width: 100%; border:1px solid #d7d7d7 !important; height:640px;" dynamic-template="tab.appWebSshIframe"></div>
+		</div>
+	</div>
+</div>
+<div>
+    <ul>
+        <li><a href="" class=""></a></li>
+    </ul>
+</div>

@@ -1,0 +1,358 @@
+				<!-- cBox -->
+				<div class="cBox type1 appCnt-info">
+					<div class="cBox-hd">
+						<img ng-if="contents.appImage != ''" ng-src="data:image/JPEG; base64, {{ contents.appImage }}" class="logo" alt="" style="width:54px; height:54px;">
+						<img ng-if="contents.appImage == ''" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+                        <h4 class="c-tit">{{ contents.app.name }}</h4>
+						<div class="pull-right">
+							<!--<button type="button" name="button" class="btn btn-sm btn-color1" tooltip-placement="bottom" uib-tooltip="재배포" ng-click="contents.showFormRePush();">재배포</button>-->
+							<button type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-show="contents.app.state == 'STOPPED'" ng-click="contents.startAppState(contents.appGuid, contents.app.name);"><span class="ico">시작</span></button>
+							<button type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="중지" ng-show="contents.app.state == 'STARTED'" ng-click="contents.stopAppState(contents.appGuid, contents.app.name);"><span class="ico">중지</span></button>
+							<button type="button" name="button" class="btn ico-refresh only-ico" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="contents.refreshApp();"><span class="ico">새로고침</span></button>
+							<div class="dropdown btn-option">
+								<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+									<span class="ico">실행 설정</span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+									<li><a href="" ng-click="contents.restageApp(contents.appGuid, contents.app.name);">재시작</a></li>
+									<li><a href="" ng-click="contents.deleteApp(contents.appGuid, contents.app.name);">삭제</a></li>
+									<li><a href="" class="renameInst" ng-click="contents.renameInst();">이름 변경</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="cBox-cnt">
+						<div class="in">
+							<!-- app 정보 -->
+							<div class="col info-txt useChart" style="padding-top: 30px;">
+								<ul>
+									<li>
+										<strong class="tit">APP 유형</strong>
+										<div class="txt" ng-if="contents.app.buildpackName == 'DOCKER'">{{ contents.app.buildpackName }}</div>
+										<div class="txt" ng-if="contents.app.buildpackName != 'DOCKER'">일반 앱</div>
+									</li>
+									<li>
+										<strong class="tit">개발언어</strong>
+										<div class="txt">{{contents.app.buildpackName}}</div>
+									</li>
+									<li>
+										<strong class="tit">빌드팩 버전</strong>
+										<div class="txt">{{contents.app.buildpackVersion}}</div>
+									</li>
+									<li>
+										<strong class="tit">URL</strong>
+                                        <div class="txt">
+											<a ng-href="http://{{contents.app.routes[0].url}}" target="_blank">http://{{contents.app.routes[0].url}}</a>
+										</div>
+									</li>
+									<li>
+										<strong class="tit">최종 배포일자</strong>
+										<div class="txt">{{contents.app.created}}</div>
+									</li>
+									<li>
+										<strong class="tit">상태</strong>
+										<div class="txt">
+											<span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED')">
+												<span class="stateMark type1">시작</span>
+												<span class="state-txt">시작</span>
+											</span>
+											<div class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'PENDING')">
+												<span class="stateMark type4">배포 진행 중</span>
+												<span class="state-txt">배포 진행 중</span>
+											</div>
+											<span class="stateWrap" ng-if="(contents.app.state == 'STOPPED') && (contents.app.packageState != 'FAILED')">
+												<span class="stateMark type2">정지</span>
+												<span class="state-txt">정지</span>
+											</span>
+											<span class="stateWrap" ng-if="contents.app.packageState == 'FAILED'">
+												<span class="stateMark type3">실패</span>
+												<span class="state-txt">실패</span>
+											</span>
+										</div>
+									</li>
+									<li>
+										<strong class="btnArea">
+											<button type="button" name="button" class="btn btn-sm btn-color1" data-user="aside" data-username="#aside-rework" ng-click="contents.showFormRePush();">재배포</button>
+										</strong>
+									</li>
+								</ul>
+							</div>
+							<!-- //app 정보 -->
+
+							<!-- app 챠트 정보 -->
+							<div class="col info-chart type3">
+								<div class="chartWrap" style="width:180px; height:220px;">
+									<p class="chrt-tit">CPU</p>
+									<canvas class="chart chart-doughnut chart-xs" height="180" width="180"
+											chart-labels="contents.useRecurse.cpu.labels"
+											chart-colors="contents.useRecurse.cpu.colors"
+											chart-options="contents.useRecurse.cpu.options"
+											chart-data="contents.useRecurse.cpu.data"></canvas>
+									<div class="doughnut-label-box">
+										<ul>
+											<li><span>{{contents.cpuRoundProgress.percentage}}</span><span>%</span></li>
+											<li><span>{{'label.usage' | translate}}</span></li>
+										</ul>
+									</div>
+								</div>
+								<!-- //chartWrap -->
+							</div>
+							<!-- //app 챠트 정보 -->
+
+							<!-- app 챠트 정보 -->
+							<div class="col info-chart type1">
+								<div class="chartWrap" style="width:180px; height:220px;">
+									<p class="chrt-tit">메모리</p>
+									<canvas class="chart chart-doughnut chart-xs" height="180" width="180"
+											chart-labels="contents.useRecurse.memory.labels"
+											chart-colors="contents.useRecurse.memory.colors"
+											chart-options="contents.useRecurse.memory.options"
+											chart-data="contents.useRecurse.memory.data"></canvas>
+									<div class="doughnut-label-box">
+										<ul>
+											<li><span>{{contents.memoryRoundProgress.percentage}}</span><span>%</span></li>
+											<li><span>{{'label.usage' | translate}}</span></li>
+										</ul>
+									</div>
+								</div>
+								<!-- //chartWrap -->
+							</div>
+							<!-- //app 챠트 정보 -->
+
+							<!-- app 챠트 정보 -->
+							<div class="col info-chart type2">
+								<div class="chartWrap" style="width:180px; height:220px;">
+									<p class="chrt-tit">디스크</p>
+									<canvas class="chart chart-doughnut chart-xs" height="180" width="180"
+											chart-labels="contents.useRecurse.disk.labels"
+											chart-colors="contents.useRecurse.disk.colors"
+											chart-options="contents.useRecurse.disk.options"
+											chart-data="contents.useRecurse.disk.data"></canvas>
+									<div class="doughnut-label-box">
+										<ul>
+											<li><span>{{contents.diskRoundProgress.percentage}}</span><span>%</span></li>
+											<li><span>{{'label.usage' | translate}}</span></li>
+										</ul>
+									</div>
+								</div>
+								<!-- //chartWrap -->
+							</div>
+							<!-- //app 챠트 정보 -->
+						</div>
+					</div>
+				</div>
+				<!-- //cBox -->
+
+				<!-- cBox -->
+				<div class="cBox type2 appCnt-inst">
+					<div class="cBox-hd">
+						<h4 class="c-tit">인스턴스 <em class="point1">({{contents.app.instances}})</em></h4>
+						<div class="pull-right">
+							<ul class="legendWrap">
+								<li>
+									<span class="stateWrap"><span class="state-tit">시작</span><span class="stateMark type1"></span></span>
+								</li>
+								<li>
+									<span class="stateWrap"><span class="state-tit">시작중</span><span class="stateMark type4"></span></span>
+								</li>
+								<li>
+									<span class="stateWrap"><span class="state-tit">실패</span><span class="stateMark type3"></span></span>
+								</li>
+							</ul>
+							<div class="listType">
+								<button type="button" name="button" class="btn btn-list type1 on" ng-click="DetailviewType('image');"><span class="ico"></span>이미지형</button>
+								<button type="button" name="button" class="btn btn-list type2" ng-click="DetailviewType('list');"><span class="ico"></span>리스트</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="cBox-cnt">
+						<div class="appCnt-inst">
+						<!-- 이미지형 -->
+						<div class="inst-list type1 scroll-pane" ng-if="image != false">
+							<ul class="instUl" style="height: 180px;">
+								<h3 ng-if="contents.instanceStats.length == 0">{{ 'label.app_instance_state' | translate }}</h3>
+								<li class="instBox color-type{{ (statItem.state == 'CRASHED') ?  '1' : (statItem.state == 'RUNNING') ?  '2' : (statItem.state == 'STARTING') ?  '4' : '1'}}" ng-repeat="(key, statItem) in contents.instanceStats">
+									<div class="in">
+										<p class="c_tit"><em>인스턴스</em><span>{{statItem.id}}</span></p>
+										<button type="button" name="button" class="btn btn-ico-refresh-s only-ico" title="재시작" ng-click="contents.instanceRestart(contents.app.guid, statItem.id);"><span class="ico">재시작</span></button>
+										<ul class="instProg">
+											<li>
+												<strong class="tit">CPU</strong>
+												<div class="progressWrap color-type1">
+													<div class="progress">
+														<div class="progress-bar" role="progressbar" aria-valuenow="{{statItem.usage.cpu*100}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': statItem.usage.cpu*100}">
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<strong class="tit">메모리</strong>
+												<div class="progressWrap color-type3">
+													<div class="progress">
+														<div class="progress-bar" role="progressbar" aria-valuenow="{{ (statItem.memQuota <= 0) ? statItem.usage.mem : (((statItem.usage.mem*100)/statItem.memQuota) | number:0) }}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width':  (((statItem.usage.mem*100)/statItem.memQuota) | number:0)}">
+														</div>
+													</div>
+												</div>
+											</li>
+											<li>
+												<strong class="tit">디스크</strong>
+												<div class="progressWrap color-type2">
+													<div class="progress">
+														<div class="progress-bar" role="progressbar" aria-valuenow="{{ (statItem.diskQuota <= 0) ? statItem.usage.disk : (((statItem.usage.disk*100)/statItem.diskQuota) | number:0) }}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width':  (((statItem.usage.disk*100)/statItem.diskQuota) | number:0)}">
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!-- //이미지형 -->
+
+						<!-- 리스트형 ng-hide="image"-->
+						<div class="inst-list type2 scroll-pane" ng-if="image == false">
+							<ul class="instUl" style="height: 100px;">
+								<h3 ng-if="contents.instanceStats.length == 0">{{ 'label.app_instance_state' | translate }}</h3>
+								<li class="instBox color-type{{ (statItem.state == 'CRASHED') ?  '1' : (statItem.state == 'RUNNING') ?  '2' : (statItem.state == 'STARTING') ?  '4' : '1'}}" ng-repeat="(key, statItem) in contents.instanceStats">
+									<div class="instName" title="인스턴스 풀네임 노출">{{statItem.id}}</div>
+								</li>
+							</ul>
+						</div>
+						<!-- //리스트형 -->
+						</div>
+					</div>
+				</div>
+				<!-- //cBox -->
+
+				<!-- cBox -->
+				<div class="cBox type2 appCnt-sev" ng-if="contents.sltOrganizationGuid != ''" ng-controller="paasServiceInstancesCtrl as ins">
+					<div class="cBox-hd">
+						<h4 class="c-tit">연결 서비스 관리<em class="point1">({{serviceInstance.serviceInstances.content.length}})</em></h4>
+					</div>
+
+					<div class="cBox-cnt">
+						<div class="in">
+							<ul class="sev-list">
+								<h3 ng-if="serviceInstance.serviceInstances.content.length == 0">생성한 서비스가 없습니다.</h3>
+								<li class="sevBox on" ng-repeat="(key, serviceItem) in serviceInstance.serviceInstances.content">
+									<img ng-src="{{ins.getImageUriBinding(serviceItem, contents.appGuid)}}" alt="{{ serviceItem.serviceLabel }}">
+									<!--<img ng-src="images/thum/im_app_{{ serviceItem.serviceLabel }}_{{ (serviceItem.serviceBindings.length > 0) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}">-->
+									<div class="dropdown btn-option" ng-controller="tabAppServiceBindingsCtrl as bind">
+										<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-click="ins.existAppName(contents.app.name);">
+											<span class="ico">실행 설정</span>
+										</button>
+										<!-- serviceNameEqIdx 값이 공백이 아닐 때 -->
+										<ul class="dropdown-menu dropdown-menu-left" role="btn-optionn" aria-labelledby="btn-option" ng-if="serviceItem.serviceNameEqIdx != ''">
+											<li>
+												<a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a>
+											</li>
+											<li><a href="javascript:void(0);" ng-click="bindingInfo($event, serviceItem, contents.appGuid);">연결 정보</a></li>
+											<li><a href="javascript:void(0);" ng-click="bind.deleteAppServiceBinding(serviceItem.serviceBindings, contents.app.name, serviceItem.name);">연결 해제</a></li>
+										</ul>
+										<!-- serviceNameEqIdx 값이 공백일때 -->
+										<ul class="dropdown-menu dropdown-menu-left" role="btn-optionn" aria-labelledby="btn-option" ng-if="serviceItem.serviceNameEqIdx == ''">
+											<li>
+												<a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a>
+											</li>
+											<li><a href="javascript:void(0);" ng-click="bind.createAppServiceBinding(contents.appGuid, serviceItem.guid, serviceItem.name)">연결하기</a></li>
+										</ul>
+									</div>
+									<p class="txt1" style="display:block;">{{ serviceItem.name }}</p>
+									<div class="bs-example-modal" data-example-id="static-modal">
+										<!-- 팝업 구현시 이 부분만 사용 -->
+										<div class="modal" id="{{serviceItem.name}}" style="display:none;">
+											<div class="modal-dialog">
+												<div class="modal-content"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+													<!-- modal header -->
+													<div class="modal-header">
+														<button type="button" class="close" aria-label="Close" ng-click="serviceInfo(serviceItem.name);"><span aria-hidden="true">×</span></button>
+														<h1 class="modal-title">서비스 정보</h1>
+													</div>
+													<!-- //modal header -->
+
+													<!-- modal body -->
+													<div class="modal-body servInfo">
+														<!-- table -->
+														<div class="tbw type1">
+															<table class="table">
+																<colgroup>
+																	<col style="width:25%;">
+																	<col style="width:auto;">
+																</colgroup>
+																<tbody>
+																<tr>
+																	<th scope="row">연결 앱 수</th>
+																	<td>{{ serviceItem.serviceBindings.length }}</td>
+																</tr>
+																<tr>
+																	<th scope="row">서비스 설명</th>
+																	<td>{{ serviceItem.servicePlan.service.description }}</td>
+																</tr>
+																<tr>
+																	<th scope="row">서비스 플랜 정보</th>
+																	<td>{{ serviceItem.servicePlan.name }}</td>
+																</tr>
+																</tbody>
+															</table>
+														</div>
+														<!-- //table -->
+													</div>
+													<!-- //modal body -->
+												</div>
+											</div>
+										</div>
+										<!-- //팝업 구현시 이 부분만 사용 -->
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- //cBox -->
+
+				<!-- panel -->
+				<div class="mt30">
+					<div class="panelWrap" ng-if="contents.app.guid != null">
+						<div class="panel type2" ng-controller="tabAppMonitCtrl as tab" ng-include="tab.tabBodytemplateUri"></div>
+					</div>
+					<ul class="ul-panel2">
+						<li>
+							<!-- 라우트 추가 panel -->
+							<div class="panelWrap" ng-if="contents.app.guid != null">
+								<div class="panel type2" ng-controller="tabAppRoutesCtrl as tab" ng-include="tab.tabBodytemplateUri"></div>
+							</div>
+							<!-- //panel -->
+						</li>
+						<li>
+							<!-- 이벤트 로그 panel -->
+							<div class="panelWrap" ng-if="contents.app.guid != null">
+								<div class="panel type2" ng-controller="tabAppEventsCtrl as tab" ng-include="tab.tabBodytemplateUri"></div>
+							</div>
+							<!-- //panel -->
+						</li>
+						<li>
+							<!-- 환경 변수 panel -->
+							<div class="panelWrap" ng-if="contents.app.guid != null">
+								<div class="panel type2" ng-controller="tabAppEnvVarCtrl as tab" ng-include="tab.tabBodytemplateUri"></div>
+							</div>
+							<!-- //panel -->
+						</li>
+						<li>
+							<!-- 로깅 -->
+							<div class="panelWrap" ng-if="contents.app.guid != null">
+								<div class="panel type2" ng-controller="tabAppWebLogCtrl as tab" ng-include="tab.tabBodytemplateUri"></div>
+							</div>
+							<!-- //panel -->
+						</li>
+						<li>
+							<!-- SSH panel -->
+							<div class="panelWrap" ng-if="contents.app.guid != null">
+								<div class="panel type2" ng-controller="tabAppWebSshCtrl as tab" ng-include="tab.tabBodytemplateUri"></div>
+							</div>
+							<!-- //panel -->
+						</li>
+					</ul>
+				</div>

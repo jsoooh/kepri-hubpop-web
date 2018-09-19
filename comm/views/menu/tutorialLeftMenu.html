@@ -1,0 +1,14 @@
+<div class="lmmMenu">
+    <div class="lmm lmm2">
+        <ul>
+            <li ng-repeat="(key, menuItem) in main.leftMenuParams">
+                <p ng-click="main.partLeftMenuClick($event, menuItem.mainKey, menuItem.id);" dynamic-template="menuItem.templateHtml"></p>
+                <div ng-if="menuItem.subMenus && menuItem.subMenus.length > 0" class="subm" ng-style="{ 'display': ((menuItem.open) ? 'block' : 'none') }">
+                    <ul>
+                        <li ng-repeat="(subKey, menuSubItem) in menuItem.subMenus" dynamic-template="menuSubItem.templateHtml"></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

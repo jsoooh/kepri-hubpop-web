@@ -1,0 +1,43 @@
+<form name="pop.{{pop.formName}}" novalidate>
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+		<ol class="app-set">
+			<li>
+				<p class="app-tit">WAS 서비스 명</p>
+				<input type="text" class="form-control" name="serviceInstanceName" ng-model="pop.serviceInstance.serviceInstanceName" validation="required">
+			</li>
+			<li>
+				<p class="app-tit">WAS 서비스 포트</p>
+				<input type="number" class="form-control" name="http_port" ng-model="pop.serviceInstance.servicePort" min="1" max="99999" max-number-length="5" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemServicePortCustomValidationCheck(pop.serviceInstance.servicePort)">
+			</li>
+			<li ng-if="pop.formMode == 'mod' && pop.isDefaultServiceInstance">
+				<p class="app-tit">자바 패키지</p>
+				<div class="input-group" style="width : 100%;">
+					<select class="form-control" name="javaPackage" ng-model="pop.serviceInstance.wasConfig.javaPackage" validation="required">
+						<option value="openjdk-7-jdk">Java 7</option>
+						<option value="openjdk-8-jdk">Java 8</option>
+					</select>
+				</div>
+				<div class="validation validation-javaPackage text-danger"></div>
+			</li>
+			<li ng-if="pop.formMode == 'mod' && pop.isDefaultServiceInstance">
+				<p class="app-tit">톰켓 버전</p>
+				<div class="input-group" style="width : 100%;">
+					<select class="form-control" name="tomcatVersion" ng-model="pop.serviceInstance.wasConfig.tomcatVersion" validation="required">
+						<option value="7">Tomcat 7</option>
+						<option value="8">Tomcat 8</option>
+					</select>
+				</div>
+				<div class="validation validation-tomcatVersion text-danger"></div>
+			</li>
+			<li ng-if="pop.formMode == 'mod'">
+				<p class="app-tit">최소 허용 메모리 (MB)</p>
+				<input type="number" class="form-control" name="tomcat_memory_ms" ng-model="pop.serviceInstance.wasConfig.tomcatMemoryMs" min="1" max="99999" max-number-length="5" validation="numeric|required">
+			</li>
+			<li ng-if="pop.formMode == 'mod'">
+				<p class="app-tit">최대 허용 메모리 (MB)</p>
+				<input type="number" class="form-control" name="tomcat_memory_ms" ng-model="pop.serviceInstance.wasConfig.tomcatMemoryMx" min="1" max="99999" max-number-length="5" validation="numeric|required">
+			</li>
+		</ol>
+	</div>
+</form>

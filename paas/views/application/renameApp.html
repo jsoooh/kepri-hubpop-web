@@ -1,0 +1,23 @@
+<!-- modal body -->
+<div class="modal-body servInfo">
+  <!-- table -->
+  <div class="tbw type1">
+    <table class="table">
+      <colgroup>
+      <col style="width:25%;">
+      <col style="width:auto;">
+      </colgroup>
+      <tbody>
+        <tr>
+          <th scope="row">앱명</th>
+          <td>
+            <input type="text" ng-model="pop.newName" name="newName" placeholder="{{pop.newName}}" validation="required|min_len:3|max_len:30">
+            <div ng-if="renameForm.newName.$touched && renameForm.newName.$invalid" class="validation validation-newName text-danger"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- //table -->
+</div>
+<!-- //modal body -->

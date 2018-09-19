@@ -1,0 +1,88 @@
+	<!-- 작업 추가 및 선택 -->
+	<div class="projt-selWarp">
+		<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+		<div class="pull-right">
+			<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+		</div>
+	</div>
+	<!-- //작업 추가 및 선택 -->
+	<!-- guide box 0830 삭제 -->
+	<!--
+	<div class="guideTxt type1" ng-bind-html="'iaasMenu.desc.' + main.selectSiteMap.name + '.short' | translate"></div>
+	-->
+	
+	<!-- search -->
+	<div class="searchWrap">
+		<div class="searchBox">
+			<div class="form-group">
+                   <input type="text" name="name" id="name" ng-model="contents.data.instanceName" placeholder="검색어를 입력해 주세요." style="width:400px;">
+               </div>
+			<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.fn.getInstanceSnapshotList()"><span class="ico">검색</span></button>
+		</div>
+	</div>
+	<!-- search -->
+	
+	<!-- table -->
+	<div class="tbl type1">
+		<table class="table">
+			<colgroup>
+				<col style="width:18%" />
+				<col style="width:21%" />
+				<col style="width:21%"/>
+				<col style="width:7%" />
+				<col style="width:7%" />
+				<col style="width:13%" />
+				<col style="width:13%"/>
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col">이름</th>
+					<th scope="col">설명</th>
+					<th scope="col">인스턴스</th>
+					<th scope="col">크기</th>
+					<th scope="col">상태</th>
+					<th scope="col">생성일자</th>
+					<th scope="col">관리</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="snapshot in contents.snapshotList">
+					<td><span>{{snapshot.snapShotName}}</span></td>
+					<td class="text-left">{{snapshot.description}}</td>
+					<td class="text-left" style="text-decoration: underline;">
+						<a href="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+snapshot.instanceId,snapshot.instanceName,true)" tooltip-placement="top" uib-tooltip="{{snapshot.instanceName}}">{{snapshot.instanceName}}</a>
+					</td>
+					<td>{{snapshot.size | displayVolume:'GB'}}</td>
+					<td snapshot-status-observe observe-action="snapshot.observeAction" ng-model="snapshot.observeAction" ng-init="snapshot.observeAction = 'ready'">
+						<span ng-if="snapshot.status == 'active'" class="stateBox type1 color1">{{snapshot.status}}</span>
+						<span ng-if="snapshot.status != 'active'" class="stateBox type1 color2">{{snapshot.status}}</span>
+					</td>
+					<td>{{snapshot.createDate}}</td>
+					<td>
+						<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-resto-s only-ico" data-user="aside" data-username="#aside-restore" title="복원" ng-click="contents.formOpen(snapshot);"><span class="ico">복원</span></button>
+						<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteSnapshot(snapshot);"><span class="ico">삭제<span></button>
+					</td>
+				</tr>
+				<tr ng-if="contents.snapshotList.length == 0">
+					<td colspan="7" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<!-- //page -->
+	<nav class="pagiWrap" ng-show="contents.pageOptions.total > contents.pageOptions.pageSize">
+		<paging class="pagiWrap"
+			page="contents.pageOptions.currentPage"
+			page-size="contents.pageOptions.pageSize"
+			total="contents.pageOptions.total"
+			pg-href=""
+			show-prev-next="true"
+			show-first-last="true"
+			paging-action="contents.fn.getInstanceSnapshotList(page)"
+			text-first-class="first"
+			text-last-class="last"
+			text-next-class="next"
+			text-prev-class="end">
+		</paging>
+	</nav>

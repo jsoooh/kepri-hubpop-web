@@ -1,0 +1,31 @@
+<div class="container-fluid">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="/"><img src="/img/logo_cloudxpert.png" width="149" height="32" alt="cl;oudxpert" /></a>
+	</div>
+	<ul class="nav navbar-nav gnb">
+		<li><a href="#/intro">{{'label.introduce' | translate}}</a></li>
+		<li><a href="#/product">{{'label.product' | translate}}</a></li>
+		<li><a href="#/support/notice">{{'label.service_center' | translate}}</a></li>
+		<li><a href="#/guide">{{'label.user_guide' | translate}}</a></li>
+	</ul>
+	<ul class="nav navbar-nav navbar-right">
+		<li ng-show="!main.isAuthenticated" ng-click="selected = 'login'"><a href="#/login">{{'label.login' | translate}}</a></li>
+		<li ng-show="!main.isAuthenticated" ng-click="selected = 'signup'"><a href="#/signup">{{'label.signup' | translate}}</a></li>
+		<li ng-show="main.isAuthenticated" class="userStatus">
+			<span><b>{{ main.userInfo.user_name }}</b>님</span>
+			<button class="btn" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.set' | translate }}" ng-click="main.memberInfo()"><img src="img/nav_gnb_user.png" width="15" height="15" /></button>
+			<button class="btn" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.logout' | translate }}" ng-click="main.logout()"><img src="img/nav_gnb_logout.png" width="16" height="15" /></button>
+		</li>
+		<li class="consoleWrap">
+			<a href="#" ng-click="main.goConsole()"><img src="/img/img_console.png" width="16" height="17" alt="" />Console</a>
+		</li>
+		<li class="dropdownWrap">
+			<div class="dropdown">
+				<button class="btn dropdown-toggle" type="button" data-toggle="dropdown"><img src="img/ico_{{ main.sltLanguage.key }}.png" width="22" height="22" /> {{ main.sltLanguage.name }} <img src="img/ico_dropdown.png" width="18" height="11" alt="" /></button>
+				<ul class="dropdown-menu">
+					<li ng-repeat="langItem in main.languages | filter:{key: '!'+main.sltLanguage.key}"><a href="" ng-click="main.changeLanguage(langItem.key)">{{ langItem.name }}</a></li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+</div>

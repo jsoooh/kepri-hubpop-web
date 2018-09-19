@@ -1,0 +1,64 @@
+<div ng-controller="iaasComputeDomainFormCtrl as pop">
+    <!-- aside aside1 title -->
+    <div class="sideTitWrap">
+        <h2 class="c_tit">{{pop.title}}</h2>
+        <button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="pop.formClose();"><span class="ico">닫기</span></button>
+    </div>
+    <!-- //aside aside1 title -->
+
+    <!-- aside aside1 cnt -->
+    <form name="{{pop.formName}}">
+        <div class="sideCntWrap">
+            <!-- sideInWrap -->
+            <div class="sideInWrap">
+                <ol class="app-set">
+                    <li>
+                        <p class="app-tit">프로토콜 타입</p>
+                        <div>
+                            <div class="radio radio-inline">
+                                <input type="radio" name="radio_protocol_type" id="radio-protocol-type1" ng-model="pop.data.protocolType" value="http" ng-click="pop.changeProtocolType()" >
+                                <label for="radio-protocol-type1" class="label">HTTP</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" name="radio_protocol_type" id="radio-protocol-type2" ng-model="pop.data.protocolType" value="mysql" ng-click="pop.changeProtocolType()" >
+                                <label for="radio-protocol-type2" class="label">MySQL</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" name="radio_protocol_type" id="radio-protocol-type3" ng-model="pop.data.protocolType" value="rdp" ng-click="pop.changeProtocolType()" >
+                                <label for="radio-protocol-type3" class="label">RDP</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <p class="app-tit">도메인</p>
+                        <select name="selectBaseDomain" class="form-control" ng-model="pop.data.domainId" validation="required">
+                            <option ng-if="pop.domainListByType && pop.domainListByType.length > 0" value="">선택</option>
+                            <option ng-if="!pop.domainListByType || pop.domainListByType.length == 0" value="">해당 도메인 없음</option>
+                            <option ng-repeat="item in pop.domainListByType" value="{{item.id}}">{{item.domain}}</option>
+                        </select>
+                    </li>
+                    <li>
+                        <p class="app-tit">포트</p>
+                        <input type="text" class="form-control" ng-model="pop.data.sourcePort" maxlength="4" name="sourcePort" validation="numeric|required" placeholder="포트를 입력해 주세요." />
+                    </li>
+                    <li ng-if="pop.data.protocolType == 'http'">
+                        <p class="app-tit">
+                            SSL
+                            <input type="checkbox" name="checkbox_ssl_cert" id="checkbox-ssl-cert" ng-model="pop.data.sslUsed" value="true" style="margin-left: 5px;">
+                            <label for="checkbox-ssl-cert" class="label">SSL 사용</label>
+                        </p>
+                        <input ng-if="pop.data.sslUsed == true" type="text" class="form-control" ng-model="pop.data.sslSourcePort" maxlength="4" name="sslSourcePort" validation="numeric|required" placeholder="SSL 포트를 입력해 주세요." />
+                    </li>
+                </ol>
+            </div>
+            <!-- //sideInWrap -->
+        </div>
+    </form>
+    <!-- //aside aside1 cnt -->
+
+    <!-- aside aside1 btm -->
+    <div class="sideBtmWrap">
+        <button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.popDialogOk();">연결</button>
+    </div>
+    <!-- //aside aside1 btm -->
+</div>

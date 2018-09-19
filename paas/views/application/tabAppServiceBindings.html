@@ -1,0 +1,64 @@
+<div ng-if="tab.loadingAppServiceBindings">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+</div>
+<div class="topFunctionWrap">
+    <div class="btnWrap">
+        <ul class="systemBtnWrap">
+            <li>
+                <button type="button" class="btn btn-add" tooltip-placement="bottom" uib-tooltip="{{ 'label.service_connect_add' | translate }}" ng-click="tab.createAppServiceBindings($event);"><img src="img/ico_add.png" width="9" height="9" alt="" />{{ 'label.service_connect_add' | translate }}</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="tableWrap">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>{{ 'label.no' | translate }}</th><!-- 번호 -->
+            <th>{{ 'label.service_name' | translate }}</th><!-- 서비스명 -->
+            <th>{{ 'label.service' | translate }}</th><!-- 서비스 -->
+            <th>{{ 'label.service_plan_name' | translate }}</th><!-- 서비스 플랜명 -->
+            <th>{{ 'label.management_tool' | translate }}</th><!-- 관리 툴 -->
+            <th>{{ 'label.access_info' | translate }}</th><!-- 접속정보 -->
+            <th>{{ 'label.del' | translate }}</th><!-- 삭제 -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat-start="(k, serviceBindingItem) in tab.appServiceBindings">
+            <td>{{ (k + 1) }}</td>
+            <td class="text-left">{{ serviceBindingItem.serviceInstanceName }}</td>
+            <td>{{ serviceBindingItem.serviceLabel }}</td>
+            <td>{{ serviceBindingItem.serviceInstance.servicePlanName }}</td>
+            <td>
+                <a ng-if="serviceBindingItem.dbWebxpertUrl" target="_blank" ng-href="{{ serviceBindingItem.dbWebxpertUrl }}" class="btn btn-link-info">@DBWebXpert</a>
+            </td>
+            <td>
+                <button type="button" class="btn btn-link-info" ng-click="tab.credentialsToggle('serviceBinding_credentials_' + serviceBindingItem.guid)">{{ 'label.access_info' | translate }}</button>
+            </td>
+            <td>
+                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppServiceBinding(serviceBindingItem.guid, serviceBindingItem.serviceInstanceName)"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button>
+            </td>
+        </tr>
+        <tr ng-repeat-end class="serviceBinding_credentials innerTableWrap" id="serviceBinding_credentials_{{ serviceBindingItem.guid }}" style="display:none">
+            <td colspan="7">
+				<p>{{ 'label.access_info' | translate }}</p>
+                <table class="table innerTable">
+					<colgroup>
+						<col style="width:25%" />
+						<col />
+					</colgroup>
+                    <tbody>
+                    <tr ng-repeat="(key, value) in serviceBindingItem.credentials">
+                        <td><input class="credential_key" ng-style="(key == 'username' || key == 'password') && {'font-weight':'bold'}" type="text" maxlength="50" value="{{ key }}" readonly/></td>
+                        <td><input class="credential_value" ng-style="(key == 'username' || key == 'password') && {'font-weight':'bold'}" type="text" maxlength="100" value="{{ value }}" readonly/></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr ng-if="tab.appServiceBindings.length == 0">
+            <td colspan="7">{{ 'message.mi_dont_exist_list' | translate }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

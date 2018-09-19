@@ -1,0 +1,77 @@
+<div class="mainWrap container-fluid">
+	<div class="main">
+		<div class="appDetail">
+			<div class="appLeft">
+				<ul>
+					<li>
+						<div ng-if="contents.sltMarketService.iconImage == null" style="width: 160px; height: 100px;" ng-thumb="{ fileUrl: 'img/app_service_img_blank.png', canvasBorder: 'no', canvasWidth: 140, maxWidth: 140, maxHeight: 80, minHeight: 80 }"></div>
+						<div ng-if="contents.sltMarketService.iconImage != null" style="width: 160px; height: 100px;" ng-thumb="{ fileUrl: 'data:' + contents.sltMarketService.iconImage.contentType + '; base64, ' + contents.sltMarketService.iconImage.image, canvasBorder: 'no', canvasWidth: 140, maxWidth: 140, maxHeight: 80, minHeight: 80 }"></div>
+					</li>
+					<li>{{ 'label.freeware' | translate }}</li>
+				</ul>
+			</div>
+			<div class="appRight">
+				<div class="appSub">
+					<p class="sub_title">{{ contents.sltMarketService.name }}</p>
+					<p class="sub_txt">{{ contents.sltMarketService.longDescription }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="appTable">
+			<div class="tableWrap">
+				<table class="table table-bordered">
+					<colgroup>
+						<col style="width:12%" />
+						<col style="width:38%" />
+						<col style="width:12%" />
+						<col style="width:38%" />
+					</colgroup>
+					<tbody>
+					<tr>
+						<th>{{ 'label.category' | translate }}</th><!-- 카테고리 -->
+						<td>{{ contents.sltMarketService.marketCategory.name }}</td>
+						<th>{{ 'label.service' | translate }}</th><!-- 서비스 -->
+						<td>{{ contents.sltMarketService.serviceLabel }}</td>
+					</tr>
+					<tr>
+						<th>{{ 'label.pdf_file' | translate }}</th>
+						<td colspan="3" ng-if="contents.sltMarketService.pdfFile.originalFileName" class="text-left">
+							<a href="{{ contents.sltMarketService.pdfFile.filePath }}" target="_blank">{{ contents.sltMarketService.pdfFile.originalFileName }}</a></span>
+						</td>
+						<td colspan="3" ng-if="!contents.sltMarketService.pdfFile.originalFileName" class="text-left">{{ 'label.none' | translate }}</td>
+					</tr>
+                    <tr>
+                        <th>{{ 'label.support_url' | translate }}</th><!-- 지원 URL -->
+                        <td>{{ contents.sltService.extra.supportUrl }}</td>
+                        <th>{{ 'label.view_document' | translate }}</th><!-- 문서보기-->
+                        <td>
+                            <a target="_blank" ng-href="{{ contents.sltService.extra.documentationUrl }}">{{ 'label.view_document' | translate }}</a>
+                        </td>
+                    </tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+        <br />
+        <div class="marketContainer"><!-- 서비스 플랜 상세 -->
+            <ul class="dataHead">
+                <li>{{ 'label.service_plan' | translate }}</li>
+                <li>{{ 'label.feature' | translate }}</li>
+                <li>{{ 'label.price' | translate }}</li>
+            </ul>
+            <ul class="detailDataWrap">
+                <li ng-repeat="servicePlan in contents.sltService.servicePlans">
+                    <ul>
+                        <li><p>{{ servicePlan.name }}</p></li>
+                        <li><p ng-repeat="bullet in servicePlan.extra.bullets">{{ bullet }}</p></li>
+                        <li ng-repeat="cost in servicePlan.extra.costs">${{ cost.amount.usd }} / {{ cost.unit }}</li>
+                        <li class="totalWrap">
+                            <p class="pull-left"><span class="total">{{ 'label.total' | translate }}: </span>{{ servicePlan.free ? ('label.free_service' | translate) : ('label.priced_service' | translate) }}</p>
+                            <p class="pull-right"><button class="btn btn-add" ng-click="contents.createServiceInstance($event, contents.sltService, servicePlan);"><img src="img/ico_add.png" width="9" height="9" alt="">{{ 'label.paas_service_add' | translate }}</button></p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

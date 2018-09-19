@@ -1,0 +1,76 @@
+<div class="mainWrap container-fluid">
+    <div class="main">
+        <div class="topFunctionWrap">
+            <div class="btnWrap">
+                <ul class="systemBtnWrap">
+                    <li>
+                        <button type="button" class="btn btn-add" tooltip-placement="bottom" uib-tooltip="{{ 'label.space_add' | translate }}" ng-click="contents.createSpace($event);"><img src="img/ico_add.png" width="9" height="9" alt="" />{{ 'label.space_add' | translate }}</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tableWrap">
+            <table class="table table-hover">
+                <thead class="doubleRow">
+                <tr>
+                    <th rowspan="2">{{ 'label.no' | translate }}</th><!-- 번호 -->
+                    <th rowspan="2">{{ 'label.org' | translate }}</th><!-- 조직 -->
+                    <th rowspan="2">{{ 'label.space' | translate }}</th><!-- 영역 -->
+                    <th colspan="5" class="bg">{{ 'label.space_quota' | translate }}</th><!--  영역 용량 계획 -->
+                    <th rowspan="2">{{ 'label.app' | translate }}</th><!-- 앱 -->
+                    <th rowspan="2">{{ 'label.set' | translate }}</th><!-- 설정 -->
+                </tr>
+                <tr>
+                    <th>{{ 'label.service' | translate }}</th><!-- 서비스 -->
+                    <th>{{ 'label.app_route' | translate }}</th><!-- 라우트 -->
+                    <th>{{ 'label.memory' | translate }}</th><!-- 메모리 -->
+                    <th>{{ 'label.instance_memory' | translate }}</th><!-- 인스턴스 메모리 -->
+                    <th>{{ 'label.app_instance' | translate }}</th><!-- 앱 인스턴스 -->
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="(key, spaceItem) in contents.spaces.content">
+                    <td>{{ ((contents.spaces.number - 1) * contents.spaces.size) + key + 1 }}</td>
+                    <td class="text-left">{{ spaceItem.organization.name }}</td>
+                    <td class="text-left">
+                        <a href="" ng-click="contents.moveToSpacePage(spaceItem);" tooltip-placement="bottom" uib-tooltip="{{ 'label.space_details' | translate }}">{{ spaceItem.name }}</a>
+                    </td>
+                    <td>{{ spaceItem.serviceInstances.length }} / <span style="{{ spaceItem.spaceQuota ? '' : 'color: #9d9d9d; font-weight: bold;' }}">{{ spaceItem.spaceQuota ? (spaceItem.spaceQuota.totalServices|number) : (spaceItem.organizationQuota.totalServices|number) }}</span></td>
+                    <td>{{ spaceItem.routes.length }} / <span style="{{ spaceItem.spaceQuota ? '' : 'color: #9d9d9d; font-weight: bold;' }}">{{ spaceItem.spaceQuota ? (spaceItem.spaceQuota.totalRoutes|number) : (spaceItem.organizationQuota.totalRoutes|number) }}</span></td>
+                    <td>{{ spaceItem.memoryUsage|displayVolume:'MB' }} / <span style="{{ spaceItem.spaceQuota ? '' : 'color: #9d9d9d; font-weight: bold;' }}">{{ spaceItem.spaceQuota ? (spaceItem.spaceQuota.memoryLimit|displayVolume:'MB') : (spaceItem.organizationQuota.memoryLimit|displayVolume:'MB') }}</span></td>
+                    <td><span style="{{ spaceItem.spaceQuota ? '' : 'color: #9d9d9d; font-weight: bold;' }}">{{ spaceItem.spaceQuota ? (spaceItem.spaceQuota.instanceMemoryLimit|displayVolume:'MB') : (spaceItem.organizationQuota.instanceMemoryLimit|displayVolume:'MB') }}</span></td>
+                    <td>{{ spaceItem.appInstancesUsage }} / <span style="{{ spaceItem.spaceQuota ? '' : 'color: #9d9d9d; font-weight: bold;' }}">{{ spaceItem.spaceQuota ? (spaceItem.spaceQuota.appInstanceLimit|number) : (spaceItem.organizationQuota.appInstanceLimit|number) }}</span></td>
+                    <td>{{ spaceItem.apps.length }}</td>
+                    <td>
+						<button type="button" class="btn button_img" ng-click="contents.moveToSpaceUserRole(spaceItem);" tooltip-placement="bottom" uib-tooltip="{{ 'label.space_user' | translate }}"><img src="img/ico_user.png" width="16" height="16" alt="{{ 'label.space_user' | translate }}"/></button>
+                        <button type="button" class="btn button_img" ng-click="contents.updateSpace($event, spaceItem);" tooltip-placement="bottom" uib-tooltip="{{ 'label.space_edit' | translate }}"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.space_edit' | translate }}"/></button>
+                        <button type="button" class="btn button_img" ng-click="contents.deleteSpace(spaceItem.guid, spaceItem.name);" tooltip-placement="bottom" uib-tooltip="{{ 'label.space_del' | translate }}"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.space_del' | translate }}" /></button>
+                    </td>
+                </tr>
+                <tr ng-if="contents.pageOptions.total == 0">
+                    <td colspan="10">{{ 'message.mi_dont_exist_list' | translate }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginationWrap">
+            <div class="totalWrap">
+                {{ 'label.total' | translate }} {{ contents.pageOptions.total }} {{ 'label.count' | translate }}
+            </div>
+            <paging
+                    page="contents.pageOptions.currentPage"
+                    page-size="contents.pageOptions.pageSize"
+                    total="contents.pageOptions.total"
+                    pg-href=""
+                    show-prev-next="true"
+                    show-first-last="true"
+                    paging-action="contents.listSpaces(page)"
+                    text-first-class="firstPage"
+                    text-last-class="lastPage"
+                    text-next-class="nextPage"
+                    text-prev-class="prevPage">
+            </paging>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,81 @@
+<form name="pop.{{pop.formName}}" novalidate>
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+		<ol class="app-set">
+			<li>
+				<p class="app-tit">웹 컨텟스트 패턴 방식</p>
+				<div class="slider-input-group slider-label-hide" style="padding-bottom: 20px;">
+					<div class="radio radio-inline">
+						<input type="radio" name="radio_location_type" id="radio-location-type1" ng-change="pop.fn.changeLocationType()" ng-model="pop.serviceLocation.locationType" value="path">
+						<label for="radio-location-type1" class="label">경로</label>
+					</div>
+					<div class="radio radio-inline">
+						<input type="radio" name="radio_location_type" id="radio-location-type2" ng-change="pop.fn.changeLocationType()" ng-model="pop.serviceLocation.locationType" value="ftype">
+						<label for="radio-location-type2" class="label">확장자 패턴</label>
+					</div>
+				</div>
+                <ul class="app-set">
+                    <li ng-if="pop.serviceLocation.locationType == 'path'">
+                        <input type="text" class="form-control" name="inputLocationName" ng-model="pop.inputLocationName" maxlength="50" placeholder="경로를 입력해 주세요. (예: comm)" validation="alpha_dash|required|custom:pop.fn.InputLocationNameCustomValidationCheck(pop.inputLocationName)">
+                    </li>
+                    <li ng-if="pop.serviceLocation.locationType == 'ftype'">
+                        <input type="text" class="form-control" name="inputLocationFilType" ng-model="pop.inputLocationFilType" maxlength="10" placeholder="확장자를 입력해 주세요. (예: php, do)" validation="alpha_dash|required|custom:pop.fn.inputLocationFilTypeCustomValidationCheck(pop.inputLocationFilType)">
+                    </li>
+                </ul>
+			</li>
+            <li>
+                <p class="app-tit">리소그 지정 방식</p>
+                <div class="slider-input-group slider-label-hide" style="padding-bottom: 20px;">
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_location_target" id="radio-location-target-ins" ng-model="pop.vtargetType" value="ins">
+                        <label for="radio-location-target-ins" class="label">내부 경로</label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_location_target" id="radio-location-target-app" ng-model="pop.vtargetType" value="app">
+                        <label for="radio-location-target-app" class="label">WAS 선택</label>
+                    </div>
+                    <div class="radio radio-inline">
+                        <input type="radio" name="radio_location_target" id="radio-location-target-out" ng-model="pop.vtargetType" value="out">
+                        <label for="radio-location-target-out" class="label">직접 입력 URL</label>
+                    </div>
+                </div>
+                <ul ng-if="pop.vtargetType == 'ins'" class="app-set">
+                    <li>
+                        <p class="app-tit">내부 서비스 선택</p>
+                        <div class="input-group" style="width : 100%;">
+                            <select class="form-control" name="sltServiceInstanceId" ng-model="pop.sltServiceInstanceId" ng-change="pop.fn.changeServiceInstance(pop.sltServiceInstanceId)" validation="required">
+                                <option ng-repeat="item in pop.deployServer.serviceInstances" value="{{item.id}}">{{item.serviceInstanceName}}</option>
+                            </select>
+                        </div>
+                        <div class="validation validation-sltServiceInstanceId text-danger"></div>
+                    </li>
+                    <li style="margin-top: 15px;">
+                        <p class="app-tit">추가 경로</p>
+                        <input type="text" class="form-control" name="inChildPath" ng-model="pop.inChildPath" maxlength="50" validation="required">
+                    </li>
+                </ul>
+                <ul ng-if="pop.vtargetType == 'app'" class="app-set">
+                    <li>
+                        <p class="app-tit">리소그 지정 방식</p>
+                        <div class="input-group" style="width : 100%;">
+                            <select class="form-control" name="sltLbServicePortId" ng-model="pop.sltLbServicePortId" ng-change="pop.fn.changeAppDeployServer(pop.sltLbServicePortId)" validation="required">
+                                <option ng-if="!pop.lbDeployServerLoad" value="">내부 LB 연결 서비스 로딩중 ...</option>
+                                <option ng-if="pop.lbDeployServerLoad && (!pop.lbServicePorts || pop.lbServicePorts.length == 0)" value="">내부 LB 연결 서비스가 존재 하지 않습니다.</option>
+                                <option ng-if="pop.lbDeployServerLoad && (pop.lbServicePorts && pop.lbServicePorts.length > 0)" value="">내부 LB 연결 서비스 선택</option>
+                                <option ng-repeat="item in pop.lbServicePorts" value="{{item.id}}">{{item.deployName}}({{item.servicePortName}}[{{item.sourcePort}}]):{{item.svcDeployName}}({{item.serviceInstanceName}}[{{item.svcServicePort}}])</option>
+                            </select>
+                        </div>
+                        <div class="validation validation-sltLbServicePortId text-danger"></div>
+                    </li>
+                    <li style="margin-top: 15px;">
+                        <p class="app-tit">추가 경로</p>
+                        <input type="text" class="form-control" name="outputLocationName" ng-model="pop.outChildPath" maxlength="50" validation="required">
+                    </li>
+                </ul>
+                <ul ng-if="pop.vtargetType == 'out'" class="app-set">
+                    <input type="text" class="form-control" name="outProxyPass" ng-model="pop.outProxyPass" placeholder="URL 경로를 입력해 주세요." validation="required">
+                </ul>
+            </li>
+		</ol>
+	</div>
+</form>

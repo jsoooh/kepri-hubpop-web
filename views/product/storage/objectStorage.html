@@ -1,0 +1,103 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".carousel").hide();
+	});
+</script>
+<div class="topVisualContainer productTop">
+    <nav class="navbar navbar-default product-sub-nav">
+	  <div class="container-fluid">
+	   <a class="back-product-list" href="#/product"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a> 
+		<div class="navbar-header">            
+		  <a class="navbar-brand" href="">Storage</a>
+		</div>
+		<ul class="nav navbar-nav product-nav-list">
+		  <li><a href="#/product/iaas/storage/blockstorage">Block Storage</a></li>
+		  <li class="active"><a href="#/product/iaas/storage/objectstorage">Object Storage</a></li>
+		  <li><a href="#/product/iaas/storage/backup">Back Up</a></li>
+		</ul>
+	  </div>
+	</nav>
+	<div class="productTopLeft"></div>
+	<div class="productTopRight"></div>
+	<div class="topVisualWrap">
+		<!--<img src="../img/img_supporttop.png" width="1069" height="201" alt="" />-->
+		<h3>Object Storage</h3>
+		<p>자유롭게 데이터를 저장 및 확인이 가능한 스토리지 입니다.</p>
+	</div>
+</div>
+<div id="content" class="container-fluid productContainer">
+	<uib-tabset active="contents.activeTabIndex" class="tab-animation">
+		<uib-tab index="1">
+			<uib-tab-heading>소개</uib-tab-heading>
+			<div class="productIntroWrap productOdd">
+                <h4><span>Object Storage</span>다량의 파일을 안전하고 효율적으로 보관, 사용이 가능한 파일 서비스 플랫폼 </h4>
+				<p>
+					Object Storage는 많은 수량의 파일을 처리하기 위한 분산 기술과<br> 불필요한 파일을
+                    보다 경제적으로 티어링/아카이빙하는 기술입니다.<br>
+                    수십 년간 축척 되어온 레거시 보안 기술로 고객님의 소중한 데이터를 안전 히 보관하세요.
+				</p>
+				<ul>
+					<li>
+						<img src="../img/ico_service_detail_0013.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">효율적인 데이터 보호 </span>
+							많은 수량의 파일들을 처리하는 데 한계가 있는 기존의 백업 방식 대신 여러 개의 사본을 분산배치,<br/> 버전을 기록하여 데이터를 보호하는 기술을 제공합니다. 
+				        </span>
+					</li>
+					<li>
+						<img src="../img/ico_service_detail_0014.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">꼼꼼한 무결성 검증 </span>
+							보관되어 있는 파일들의 손상 정도를 파악하며, 과거 데이터와 비교,<br/> 검증을 통한 높은 수준의 무결성 테스트 서비스를 제공합니다. 
+						</span>
+					</li>
+					<li>
+						<img src="../img/ico_service_detail_0015.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">사용하기 쉬운 사용자 UI </span>
+							보관된 파일들이 필요할 경우 즉시 쉽게 사용 가능하도록 하는 검색 기능과 표준 서비스 인터페이스/ 프로토콜 구현,
+                            서비스 네트워크 구성과<br> 모든 기능들이 원활하게 동작하도록 모니터링 하고 설정하고 관리해 주는 기능들이 추가되어 통합 구현이 가능합니다. 
+						</span>
+					</li> 
+				</ul>
+			</div> 
+		</uib-tab>
+		<uib-tab index="2">
+			<uib-tab-heading>상세 기능</uib-tab-heading>
+			<div class="productIntroWrap">
+				<dl>
+					<dt>효율적인 데이터 보호 용</dt>
+					<dd>
+						많은 수량의 파일들을 처리하는 데 한계가 있는 기존의 백업 방식 대신 여러 개의 파일 사본을
+                         분산 배치 또는 이전 버전을 기록하여 데이터를 보호하는 기술을 제공합니다. 
+					</dd>
+					<dt>꼼꼼한 무결성 검증 </dt>
+					<dd>보관되어 있는 파일들의 손상정도를 파악하며, 과거 데이터와비교 검증을 통해 높은 수준의 무결성 테스트 서비스를 제공합니다.
+                    </dd>
+					<dt>사용하기 쉬운 사용자 UI</dt>
+					<dd>보관된 파일들이 필요할 경우 즉시 쉽게 사용 가능하도록 하는 검색 기능과<br/>
+                    표준 서비스 인터페이스/프로토콜 구현, 서비스 네트워크 구성과 모든 기능들이 원활하게 동작하도록<br/>
+                     모니터링하고 설정하고 관리해 주는 기능들이 추가되어 통합 구현이 가능합니다. </dd> 
+                    <dt>Rados G/W를 이용한 유연한 사용</dt>
+					<dd>Rados G/W는 FastCGI 모듈로 구성되어 있으며 librados와 상호 작동합니다.<br/>
+					Openstack Swift와 Amazon S3와 호환이 가능합니다.</dd> 
+					<dt>Ceph 클라이언트 사용 가능 </dt>
+					<dd>Rados G/W는 Ceph 파일서비스 클라이언트를 이용하여 기존에 사용하던 Rados 클러스터에 저장을 할 수 있습니다.</dd> 
+					<dt>Amazon S3와 Swift APIs와의 호환</dt>
+					<dd>S3와 Swift APIs는 공통의 namespace를 공유하며, 이를 통해서 하나의 API로 데이터를 작성할 수 있으며 다른 데이터들도 유용하게 작업 가능합니다.</dd> 
+				</dl>
+			</div> 
+		</uib-tab>
+<!--
+		<uib-tab index="3">
+			<uib-tab-heading>이용안내</uib-tab-heading>
+		</uib-tab>
+-->
+	</uib-tabset>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var winHeight = $(window).height();
+        $(".productContainer").css("min-height",winHeight-434)
+    });
+</script>

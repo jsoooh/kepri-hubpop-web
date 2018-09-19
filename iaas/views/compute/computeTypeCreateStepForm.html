@@ -1,0 +1,539 @@
+<div id="computeCreate" ng-controller="iaasComputeTypeCreateCtrl as pop">
+	<!-- aside aside1 title -->
+	<div class="sideTitWrap">
+		<h2 class="c_tit">인스턴스 만들기</h2>
+		<button type="button" name="closeBtn1" class="btn btn-close" data-user="aside-close" ng-click="main.thisAsideClose($event);"><span class="ico">닫기</span></button>
+	</div>
+	<!-- //aside aside1 title -->
+
+	<div class="sideCntWrap">
+		<!-- aside step -->
+		<div class="sideStepWrap">
+			<ul ng-if="pop.activeTab == 'SLT'">
+				<li class="pull-left on"><em>step 01</em><span>유형 설정</span></li>
+				<li class="pull-right"><em>step 02</em><span>환경 설정</span></li>
+			</ul>
+            <ul ng-if="pop.activeTab == 'CP' || pop.activeTab == 'LB' || pop.activeTab == 'WEB' || pop.activeTab == 'WAS' || pop.activeTab == 'DB'">
+                <li class="pull-left on"><em>step 02</em><span>환경 설정</span></li>
+                <li class="pull-right"><em>step 03</em><span>리소스 설정</span></li>
+            </ul>
+            <ul ng-if="pop.activeTab == 'RES'">
+                <li class="pull-left"><em>step 02</em><span>환경 설정</span></li>
+                <li class="pull-right on"><em>step 03</em><span>리소스 설정</span></li>
+            </ul>
+		</div>
+		<!-- //aside step -->
+        <!-- aside aside1 cnt -->
+        <div ng-show="pop.activeTab == 'SLT'" class="sideInWrap">
+            <!-- sideInWrap -->
+<form name="pop.POP_SLT_FORM" novalidate>
+            <ol class="app-set">
+                <li>
+                    <p class="app-tit">서비스 유형</p>
+                    <div ng-if="pop.deployTypes.length > 0" scroll-pane scroll-config="{ contentHeight: '0px' }" id="deploy_type_scroll_panel">
+                        <ul class="ul-list1"><!-- class='ul-list-type' 스크롤 사용 안 할 경우-->
+                            <li ng-repeat="deployType in pop.deployTypes">
+                                <div class="radio1 radio-inline">
+                                    <input type="radio" id="{{deployType.$$hashKey}}" name="deployType" value="{{deployType.type}}" ng-model="pop.deployData.type" ng-change="pop.fn.changeDeployType(pop.deployData.type)">
+                                    <label for="{{deployType.$$hashKey}}" class="label"><img ng-src="images/thum/{{deployType.iconFileName}}.png" class="im"/></label>
+                                </div>
+                                <p class="label-txt">{{deployType.name}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" ng-model="pop.deployData.type" name="deploy_type" validation="required">
+                </li>
+                <li ng-if="pop.deployData.type == 'CP'" style="padding-bottom: 10px;">
+                    <p class="app-tit">OS 이미지</p>
+                    <div ng-if="pop.imageList.length > 0" scroll-pane scroll-config="{ contentHeight: '0px' }" id="os_image_scroll_panel">
+                        <ul class="ul-list1">
+                            <li ng-repeat="image in pop.imageList" ng-if="pop.deployData.type == 'CP' || image.serviceName == pop.systemSwImageServiceName">
+                                <div class="radio1 radio-inline">
+                                    <input type="radio" id="os_cp_service_image_{{image.id}}" name="cpOsServiceImage" value="{{image.id}}" ng-model="pop.deployData['CP'].osImageId">
+                                    <label for="os_cp_service_image_{{image.id}}" class="label"><img ng-src="data:{{ image.contentType }}; base64, {{ image.icon }}" class="im"/></label>
+                                </div>
+                                <p class="label-txt">{{image.serviceName}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" ng-model="pop.deployData['CP'].osImageId" name="selectCpOsServiceImage" validation="required">
+                </li>
+                <li ng-if="pop.deployData.type == 'LB'">
+                    <p class="app-tit">LB 서버 유형</p>
+                    <div ng-if="pop.softwares['LB'] && pop.softwares['LB'].length > 0" scroll-pane scroll-config="{ contentHeight: '0px' }" id="lb_system_sw_scroll_panel">
+                        <ul class="ul-list1">
+                            <li ng-repeat="software in pop.softwares['LB']">
+                                <div class="radio1 radio-inline">
+                                    <input type="radio" id="lb_system_sw_{{software.id}}" name="lbSystemSw" value="{{software.software}}" ng-model="pop.deployData['LB'].software">
+                                    <label for="lb_system_sw_{{software.id}}" class="label"><img ng-src="images/thum/{{software.iconFileName}}.png" class="im"/></label>
+                                </div>
+                                <p class="label-txt">{{software.software}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" ng-model="pop.deployData['LB'].software" name="selectLbSoftware" validation="required">
+                </li>
+                <li ng-if="pop.deployData.type == 'WEB'">
+                    <p class="app-tit">WEB 서버 유형</p>
+                    <div ng-if="pop.softwares['WEB'] && pop.softwares['WEB'].length > 0" scroll-pane scroll-config="{ contentHeight: '0px' }" id="web_system_web_scroll_panel">
+                        <ul class="ul-list1">
+                            <li ng-repeat="softwareInfo in pop.softwares['WEB']">
+                                <div class="radio1 radio-inline">
+                                    <input type="radio" id="web_system_sw_{{softwareInfo.id}}" name="lbSystemSw" value="{{softwareInfo.software}}" ng-model="pop.deployData['WEB'].software">
+                                    <label for="web_system_sw_{{softwareInfo.id}}" class="label"><img ng-src="images/thum/{{softwareInfo.iconFileName}}.png" class="im"/></label>
+                                </div>
+                                <p class="label-txt">{{softwareInfo.software}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" ng-model="pop.deployData['WEB'].software" name="selectWebSoftware" validation="required">
+                </li>
+                <li ng-if="pop.deployData.type == 'WAS'">
+                    <p class="app-tit">WAS 서버 유형</p>
+                    <div ng-if="pop.softwares['WAS'] && pop.softwares['WAS'].length > 0" scroll-pane scroll-config="{ contentHeight: '0px' }" id="was_system_was_scroll_panel">
+                        <ul class="ul-list1">
+                            <li ng-repeat="softwareInfo in pop.softwares['WAS']">
+                                <div class="radio1 radio-inline">
+                                    <input type="radio" id="was_system_sw_{{softwareInfo.id}}" name="lbSystemSw" value="{{softwareInfo.software}}" ng-model="pop.deployData['WAS'].software">
+                                    <label for="was_system_sw_{{softwareInfo.id}}" class="label"><img ng-src="images/thum/{{softwareInfo.iconFileName}}.png" class="im"/></label>
+                                </div>
+                                <p class="label-txt">{{softwareInfo.software}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" ng-model="pop.deployData['WAS'].software" name="selectWasSoftware" validation="required">
+                </li>
+                <li ng-if="pop.deployData.type == 'DB'">
+                    <p class="app-tit">DB 서버 유형</p>
+                    <div ng-if="pop.softwares['DB'] && pop.softwares['DB'].length > 0" scroll-pane scroll-config="{ contentHeight: '0px' }" id="db_system_db_scroll_panel">
+                        <ul class="ul-list1">
+                            <li ng-repeat="softwareInfo in pop.softwares['DB']">
+                                <div class="radio1 radio-inline">
+                                    <input type="radio" id="db_system_sw_{{softwareInfo.id}}" name="lbSystemSw" value="{{softwareInfo.software}}" ng-model="pop.deployData['DB'].software">
+                                    <label for="db_system_sw_{{softwareInfo.id}}" class="label"><img ng-src="images/thum/{{softwareInfo.iconFileName}}.png" class="im"/></label>
+                                </div>
+                                <p class="label-txt">{{softwareInfo.software}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" ng-model="pop.deployData['DB'].software" name="selectDbSoftware" validation="required">
+                </li>
+                <li ng-if="pop.deployData.type == 'CP'">
+                    <p class="app-tit">접속 IP 할당 (선택 사항) <button type="button" class="btn ico-plus" ng-click="pop.fn.publicIpAllotment(pop.deployData.type)" tooltip-placement="bottom" uib-tooltip="IP 신규 추가 할당"></button></p>
+                    <select class="form-control" name="cpPublicIpId" ng-model="pop.deployData['CP'].floatingIp">
+                        <option ng-if="pop.publicIpList.length > 0" value="">선택</option>
+                        <option ng-if="pop.loadPublicIp != true" value="">접속 IP Loading...</option>
+                        <option ng-if="pop.loadPublicIp == true && pop.publicIpList.length == 0" value="">할당된 IP가 존재하지 않습니다.</option>
+                        <option ng-repeat="publicIp in pop.publicIpList" value="{{publicIp.floatingIp}}">{{publicIp.floatingIp}}</option>
+                    </select>
+                </li>
+                <li ng-if="pop.deployData.type == 'WEB' || pop.deployData.type == 'WAS' || pop.deployData.type == 'DB'">
+                    <p class="app-tit">LB 선택</p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="selectSwLbDeploy" ng-model="pop.deployData.lbDeployId" ng-change="pop.fn.selectedLbDeploy(pop.deployData.type, pop.deployData.lbDeployId)" validation="required">
+                            <option ng-if="pop.deployLbList.length == 0" value="">생성된 LB가 존재하지 않습니다.</option>
+                            <option ng-repeat="deploy in pop.deployLbList" value="{{deploy.deployId}}">{{deploy.deployName}}</option>
+                        </select>
+                    </div>
+                    <div class="validation validation-selectSwLbDeploy text-danger"></div>
+                </li>
+                <li ng-if="pop.deployData.type == 'LB'">
+                    <p class="app-tit">LB 구성</p>
+                    <div class="instBox type2">
+                        <div class="slider-input-group slider-label-hide">
+                            <div class="sliderIcon"><img src="images/thum/im_thum_lb_s.png" class="ticon"></div>
+                            <div class="radio radio-inline">
+                                <input type="radio" name="lb_create_cnt" id="lb_create_cnt_1" value="1" ng-model="pop.deployData['LB'].instanceCount">
+                                <label for="lb_create_cnt_1" class="label">단일 구성</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" name="lb_create_cnt" id="lb_create_cnt_2" value="2" ng-model="pop.deployData['LB'].instanceCount">
+                                <label for="lb_create_cnt_2" class="label">클러스터 구성(2)</label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li ng-if="pop.deployData.type == 'WEB'">
+                    <p class="app-tit">WEB 인스턴스 수</p>
+                    <div class="instBox type2">
+                        <div class="slider-input-group slider-label-hide">
+                            <div class="sliderIcon"><img src="images/thum/im_thum_web_s.png" class="ticon" tooltip-placement="top" uib-tooltip="WEB"></div>
+                            <div style="width: 160px;">
+                                <rzslider rz-slider-model="pop.deployData['WEB'].instanceCount" rz-slider-options="pop.webSliderOptions"></rzslider>
+                            </div>
+                            <div class="sliderData"><b>{{ pop.deployData['WEB'].instanceCount | number }}</b>/5개</div>
+                        </div>
+                    </div>
+                </li>
+                <li ng-if="pop.deployData.type == 'WAS'">
+                    <p class="app-tit">WAS 인스턴스 수</p>
+                    <div class="instBox type2">
+                        <div class="slider-input-group slider-label-hide">
+                            <div class="sliderIcon"><img src="images/thum/im_thum_was_s.png" class="ticon" tooltip-placement="top" uib-tooltip="WAS"></div>
+                            <div style="width: 160px;">
+                                <rzslider rz-slider-model="pop.deployData['WAS'].instanceCount" rz-slider-options="pop.wasSliderOptions"></rzslider>
+                            </div>
+                            <div class="sliderData"><b>{{ pop.deployData['WAS'].instanceCount | number }}</b>/5개</div>
+                        </div>
+                    </div>
+                </li>
+                <li ng-if="pop.deployData.type == 'DB'">
+                    <p class="app-tit">DB 인스턴스 구성</p>
+                    <div class="instBox type2">
+                        <div class="slider-input-group slider-label-hide">
+                            <div class="sliderIcon"><img src="images/thum/im_thum_lb_s.png" class="ticon"></div>
+                            <div class="radio radio-inline">
+                                <input type="radio" name="db_create_cnt" id="db_create_cnt_1" value="1" ng-model="pop.deployData['DB'].instanceCount">
+                                <label for="db_create_cnt_1" class="label">단일 구성</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" name="db_create_cnt" id="db_create_cnt_3" value="3" ng-model="pop.deployData['DB'].instanceCount">
+                                <label for="db_create_cnt_3" class="label">클러스터 구성(3)</label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+</form>
+            <!-- //sideInWrap -->
+        </div>
+        <!-- //aside aside1 cnt -->
+
+        <!-- aside aside1 cnt -->
+		<div ng-show="pop.activeTab == 'CP'" class="sideInWrap">
+			<!-- sideInWrap -->
+<form name="pop.POP_CP_FORM" novalidate>
+            <ol class="app-set">
+                <li>
+                    <p class="app-tit">인스턴스 명</p>
+                    <input type="text" class="form-control" name="cpInstanceServerName" ng-model="pop.deployData['CP'].name" maxlength="50" placeholder="인스턴스 명을 입력해 주세요." validation="alpha_dash|required|custom:pop.fn.deployNameCustomValidationCheck(pop.deployData['CP'].name)">
+                </li>
+                <li>
+                    <p class="app-tit">키페어 선택 <button type="button" class="btn ico-plus" ng-click="pop.fn.createKeypair()" tooltip-placement="bottom" uib-tooltip="키페어 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="cpKeypairName" ng-model="pop.deployData['CP'].keypairName" validation="required">
+                            <option ng-if="pop.keypairList && pop.keypairList.length > 0" value="">선택</option>
+                            <option ng-if="!pop.keypairList || pop.keypairList.length == 0" value="">키페어을 추가해 주세요.</option>
+                            <option ng-repeat="item in pop.keypairList" value="{{item.keypairName}}">
+                                {{item.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="validation validation-cpKeypairName text-danger"></div>
+                </li>
+                <li>
+                    <p class="app-tit">보안그룹 선택</p>
+                    <div class="dropdown instSelWrap2">
+                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                            <span ng-if="pop.deployData['CP'].securityPolicies.length > 0">default, {{ pop.deployData['CP'].securityPolicies | join:', ':'name' }}</span>
+                            <span ng-if="pop.deployData['CP'].securityPolicies.length == 0" class="fontW400">default</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-hold instBox2">
+                            <ul ng-if="pop.securityPolicyList && pop.securityPolicyList.length > 0">
+                                <li ng-repeat="policy in pop.securityPolicyList">
+                                    <div>
+                                        <p>
+                                            <input type="checkbox" id="cp_security_policy_{{policy.id}}" checklist-model="pop.deployData['CP'].securityPolicies" checklist-value="policy">
+                                            <label for="cp_security_policy_{{policy.id}}" class="fontW400">{{policy.name}}</label>
+                                        </p>
+                                        {{policy.description | splitStr : '\n' : 0}}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+</form>
+			<!-- //sideInWrap -->
+		</div>
+		<!-- //aside aside1 cnt -->
+
+        <!-- aside aside1 cnt -->
+        <div ng-show="pop.activeTab == 'LB'" class="sideInWrap">
+            <!-- sideInWrap -->
+<form name="pop.POP_LB_FORM" novalidate>
+            <ol class="app-set">
+                <li>
+                    <p class="app-tit">LB 서비스 명 입력</p>
+                    <input type="text" class="form-control" name="lbInstanceServerName" ng-model="pop.deployData['LB'].name" maxlength="50" placeholder="서비스 명을 입력해 주세요." validation="alpha_dash|required|custom:pop.fn.deployNameCustomValidationCheck(pop.deployData['LB'].name)">
+                </li>
+                <li>
+                    <p class="app-tit">키페어 선택 <button type="button" class="btn ico-plus" ng-click="pop.fn.createKeypair()" tooltip-placement="bottom" uib-tooltip="키페어 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="lbKeypairName" ng-model="pop.deployData['LB'].keypairName" validation="required">
+                            <option ng-if="pop.keypairList && pop.keypairList.length > 0" value="">선택</option>
+                            <option ng-if="!pop.keypairList || pop.keypairList.length == 0" value="">키페어을 추가해 주세요.</option>
+                            <option ng-repeat="item in pop.keypairList" value="{{item.keypairName}}">
+                                {{item.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="validation validation-lbKeypairName text-danger"></div>
+                </li>
+                <li>
+                    <p class="app-tit inputWrap">LB 기본 포트 구성</p>
+                    <ol class="app-set">
+                        <li>
+                            <div class="checkbox checkbox-inline">
+                                <input type="checkbox" name="webPortSeting" id="webPortSeting" ng-model="pop.deployData['LB'].webPortSeting" value="true">
+                                <label for="webPortSeting" class="label-txt">WEB 포트 구성 : </label>
+                            </div>
+                            <div ng-if="pop.deployData['LB'].webPortSeting" class="radio radio-inline" style="margin-left: 10px;">
+                                <input type="radio" name="lbdefaultServicePortProtocol" id="lb_default_service_port_http" value="http" ng-model="pop.deployData['LB'].defaultServicePortProtocol">
+                                <label for="lb_default_service_port_http" class="label">80</label>
+                            </div>
+                            <div ng-if="pop.deployData['LB'].webPortSeting" class="radio radio-inline">
+                                <input type="radio" name="lbdefaultServicePortProtocol" id="lb_default_service_port_https" value="https" ng-model="pop.deployData['LB'].defaultServicePortProtocol">
+                                <label for="lb_default_service_port_https" class="label">80, ssl 443</label>
+                            </div>
+                        </li>
+                        </li>
+                        <li style="margin-top: 15px;">
+                            <div class="checkbox checkbox-inline">
+                                <input type="checkbox" name="wasPortSeting" id="wasPortSeting" ng-model="pop.deployData['LB'].wasPortSeting" value="true">
+                                <label for="wasPortSeting" class="label-txt">WAS 포트 구성 : 8080</label>
+                            </div>
+                        </li>
+                        <li style="margin-top: 15px;">
+                            <div class="checkbox checkbox-inline">
+                                <input type="checkbox" name="dbPortSeting" id="dbPortSeting" ng-model="pop.deployData['LB'].dbPortSeting" value="true">
+                                <label for="dbPortSeting" class="label-txt">DB 포트 구성 : 3306</label>
+                            </div>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+</form>
+            <!-- //sideInWrap -->
+        </div>
+        <!-- //aside aside1 cnt -->
+
+        <!-- aside aside1 cnt -->
+        <div ng-show="pop.activeTab == 'WEB'" class="sideInWrap">
+            <!-- sideInWrap -->
+<form name="pop.POP_WEB_FORM" novalidate>
+            <ol class="app-set">
+                <li>
+                    <p class="app-tit">WEB 서비스 명</p>
+                    <input type="text" class="form-control" name="webInstanceServerName" ng-model="pop.deployData['WEB'].name" maxlength="50" placeholder="서비스 명을 입력해 주세요." validation="alpha_dash|required|custom:pop.fn.deployNameCustomValidationCheck(pop.deployData['WEB'].name)">
+                </li>
+                <li>
+                    <p class="app-tit">키페어 선택 <button type="button" class="btn ico-plus" ng-click="pop.fn.createKeypair()" tooltip-placement="bottom" uib-tooltip="키페어 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="webKeypairName" ng-model="pop.deployData['WEB'].keypairName" validation="required">
+                            <option ng-if="pop.keypairList && pop.keypairList.length > 0" value="">선택</option>
+                            <option ng-if="!pop.keypairList || pop.keypairList.length == 0" value="">키페어을 추가해 주세요.</option>
+                            <option ng-repeat="item in pop.keypairList" value="{{item.keypairName}}">
+                                {{item.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="validation validation-webKeypairName text-danger"></div>
+                </li>
+                <li>
+                    <p class="app-tit">LB 포트 연결 (선택 사항) <button type="button" class="btn ico-plus" ng-click="pop.fn.addLbServicePortFormOpen()" tooltip-placement="bottom" uib-tooltip="LB 포트 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="webDefaultLbServicePort" ng-model="pop.deployData['WEB'].config.lbServicePortId" ng-change="pop.fn.changeServicePort(pop.deployData.type, pop.deployData['WEB'].config.lbServicePortId)">
+                            <option ng-if="pop.unusingServicePorts && pop.unusingServicePorts.length > 0" value="">연결 안함</option>
+                            <option ng-if="!pop.unusingServicePorts || pop.unusingServicePorts.length == 0" value="">서비스 포트를 추가해 주세요.</option>
+                            <option ng-repeat="item in pop.unusingServicePorts" value="{{item.id}}">{{item.servicePortName}}[{{item.sourcePort}}{{item.sslUsed ? ', ssl ' + item.sslSourcePort : ''}}]</option>
+                        </select>
+                    </div>
+                    <div class="validation validation-webDefaultLbServicePort text-danger"></div>
+                </li>
+                <li ng-if="pop.deployData['WEB'].config.lbServicePortId">
+                    <p class="app-tit">도메인 추가 연결 (선택 사항) <button type="button" class="btn ico-plus" ng-click="pop.fn.addDomainFormOpen()" tooltip-placement="bottom" uib-tooltip="도메인 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="webDefaultDomain" ng-model="pop.deployData['WEB'].config.domainId">
+                            <option ng-if="pop.deployData['WEB'].config.lbServicePortId && pop.protocolUnusingDomains && pop.protocolUnusingDomains.length > 0" value="">추가 안함</option>
+                            <option ng-if="!pop.deployData['WEB'].config.lbServicePortId" value="">먼저 LB 포트를 선택 하십시오.</option>
+                            <option ng-if="pop.deployData['WEB'].config.lbServicePortId && (!pop.protocolUnusingDomains || pop.protocolUnusingDomains.length == 0)" value="">선택 가능한 도메인이 없습니다.</option>
+                            <option ng-repeat="item in pop.protocolUnusingDomains" value="{{item.id}}">{{item.domain}}</option>
+                        </select>
+                    </div>
+                </li>
+                <li ng-if="pop.deployData['WEB'].config.sltLbServicePort.servicePortDomainLinks.length > 0">
+                    <p class="app-tit">선택 LB 포트에 연결된 도메인</p>
+                    <div ng-repeat="domainLink in pop.deployData['WEB'].config.sltLbServicePort.servicePortDomainLinks" class="input-group app-txt">{{domainLink.domainInfo.domain}}</div>
+                </li>
+            </ol>
+</form>
+            <!-- //sideInWrap -->
+        </div>
+        <!-- //aside aside1 cnt -->
+
+        <!-- aside aside1 cnt -->
+        <div ng-show="pop.activeTab == 'WAS'" class="sideInWrap">
+            <!-- sideInWrap -->
+<form name="pop.POP_WAS_FORM" novalidate>
+            <ol class="app-set">
+                <li>
+                    <p class="app-tit">WAS 서비스 명</p>
+                    <input type="text" class="form-control" name="wasInstanceServerName" ng-model="pop.deployData['WAS'].name" maxlength="50" placeholder="서비스 명을 입력해 주세요." validation="alpha_dash|required|custom:pop.fn.deployNameCustomValidationCheck(pop.deployData['WAS'].name)">
+                </li>
+                <li>
+                    <p class="app-tit">키페어 선택 <button type="button" class="btn ico-plus" ng-click="pop.fn.createKeypair()" tooltip-placement="bottom" uib-tooltip="키페어 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="wasKeypairName" ng-model="pop.deployData['WAS'].keypairName" validation="required">
+                            <option ng-if="pop.keypairList && pop.keypairList.length > 0" value="">선택</option>
+                            <option ng-if="!pop.keypairList || pop.keypairList.length == 0" value="">키페어을 추가해 주세요.</option>
+                            <option ng-repeat="item in pop.keypairList" value="{{item.keypairName}}">
+                                {{item.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="validation validation-wasKeypairName text-danger"></div>
+                </li>
+                <li>
+                    <p class="app-tit">LB 포트 연결 (선택 사항) <button type="button" class="btn ico-plus" ng-click="pop.fn.addLbServicePortFormOpen()" tooltip-placement="bottom" uib-tooltip="LB 포트 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="wasDefaultLbServicePort" ng-model="pop.deployData['WAS'].config.lbServicePortId" ng-change="pop.fn.changeServicePort(pop.deployData.type, pop.deployData['WAS'].config.lbServicePortId)">
+                            <option ng-if="pop.unusingServicePorts && pop.unusingServicePorts.length > 0" value="">연결 안함</option>
+                            <option ng-if="!pop.unusingServicePorts || pop.unusingServicePorts.length == 0" value="">LB 포트를 추가해 주세요.</option>
+                            <option ng-repeat="item in pop.unusingServicePorts" value="{{item.id}}">{{item.servicePortName}}[{{item.sourcePort}}{{item.sslUsed ? ', ssl ' + item.sslSourcePort : ''}}]</option>
+                        </select>
+                    </div>
+                    <div class="validation validation-wasDefaultLbServicePort text-danger"></div>
+                </li>
+                <li ng-if="pop.deployData['WAS'].config.lbServicePortId">
+                    <p class="app-tit">도메인 추가 연결(선택 사항) <button type="button" class="btn ico-plus" ng-click="pop.fn.addDomainFormOpen()" tooltip-placement="bottom" uib-tooltip="도메인 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="wasDefaultDomain" ng-model="pop.deployData['WAS'].config.domainId">
+                            <option ng-if="pop.deployData['WAS'].config.lbServicePortId && pop.protocolUnusingDomains && pop.protocolUnusingDomains.length > 0" value="">추가 안함</option>
+                            <option ng-if="!pop.deployData['WAS'].config.lbServicePortId" value="">먼저 LB 포트를 선택 하십시오.</option>
+                            <option ng-if="pop.deployData['WAS'].config.lbServicePortId && (!pop.protocolUnusingDomains || pop.protocolUnusingDomains.length == 0)" value="">선택 가능한 도메인이 없습니다.</option>
+                            <option ng-repeat="item in pop.protocolUnusingDomains" value="{{item.id}}">{{item.domain}}</option>
+                        </select>
+                    </div>
+                </li>
+                <li ng-if="pop.deployData['WAS'].config.sltLbServicePort.servicePortDomainLinks.length > 0">
+                    <p class="app-tit">선택 LB 포트에 연결 도메인</p>
+                    <div ng-repeat="domainLink in pop.deployData['WAS'].config.sltLbServicePort.servicePortDomainLinks" class="input-group app-txt">{{domainLink.domainInfo.domain}}</div>
+                </li>
+            </ol>
+</form>
+            <!-- //sideInWrap -->
+        </div>
+        <!-- //aside aside1 cnt -->
+
+        <!-- aside aside1 cnt -->
+        <div ng-show="pop.activeTab == 'DB'" class="sideInWrap">
+            <!-- sideInWrap -->
+<form name="pop.POP_DB_FORM" novalidate>
+            <ol class="app-set">
+                <li>
+                    <p class="app-tit">DB 서비스 명</p>
+                    <input type="text" class="form-control" name="dbInstanceServerName" ng-model="pop.deployData['DB'].name" maxlength="50" placeholder="서비스 명을 입력해 주세요." validation="required|alpha_dash|custom:pop.fn.deployNameCustomValidationCheck(pop.deployData['DB'].name)">
+                </li>
+                <li>
+                    <p class="app-tit">키페어 선택 <button type="button" class="btn ico-plus" ng-click="pop.fn.createKeypair()" tooltip-placement="bottom" uib-tooltip="키페어 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="dbKeypairName" ng-model="pop.deployData['DB'].keypairName" validation="required">
+                            <option ng-if="pop.keypairList && pop.keypairList.length > 0" value="">선택</option>
+                            <option ng-if="!pop.keypairList || pop.keypairList.length == 0" value="">키페어을 추가해 주세요.</option>
+                            <option ng-repeat="item in pop.keypairList" value="{{item.keypairName}}">
+                                {{item.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="validation validation-dbKeypairName text-danger"></div>
+                </li>
+                <li>
+                    <p class="app-tit">마스터 DB명 / 마스터 사용자명</p>
+                    <div class="app-form-two w_auto mgt0" style="margin-top: 0;">
+                        <div class="two_box" style="width: 48%;">
+                            <input type="text" class="form-control" name="dbMasterDb" ng-model="pop.deployData['DB'].config.masterDb" validation="required|alpha_dash">
+                        </div>
+                        <div class="two_box" style="width: 4%; text-align: center; padding-top: 8px;"><span>/</span></div>
+                        <div class="two_box" style="width: 48%;">
+                            <input type="text" class="form-control" name="dbMasterUserId" ng-model="pop.deployData['DB'].config.masterUserId" validation="required|alpha_dash">
+                        </div>
+                    </div>
+                    <div class="validation validation-dbMasterDb validation-dbMasterUserId text-danger"></div>
+                </li>
+                <li>
+                    <p class="app-tit">사용자 비밀 번호 / 비밀번호 확인</p>
+                    <div class="app-form-two w_auto mgt0" style="margin-top: 0;">
+                        <div class="two_box" style="width: 48%;">
+                            <input type="password" class="form-control" name="dbUserMasterPass" ng-model="pop.deployData['DB'].config.masterUserPass" ng-blur="pop.fn.onUserMasterPassBlur()" validation="required|min:5">
+                        </div>
+                        <div class="two_box" style="width: 4%; text-align: center; padding-top: 8px;"><span>/</span></div>
+                        <div class="two_box" style="width: 48%;">
+                            <input type="password" class="form-control" name="dbUserMasterPassConfirm" id="db_user_password_confirm" ng-model="pop.deployData['DB'].config.masterUserPassConfirm" validation="required|custom:pop.fn.customUserMasterPassConfirmCheck(pop.deployData['DB'].config.masterUserPass, pop.deployData['DB'].config.masterUserPassConfirm)">
+                        </div>
+                    </div>
+                    <div class="validation validation-dbUserMasterPass validation-dbUserMasterPassConfirm text-danger"></div>
+                </li>
+                <li>
+                    <p class="app-tit">LB 포트 연결 (선택 사항) <button type="button" class="btn ico-plus" ng-click="pop.fn.addLbServicePortFormOpen()" tooltip-placement="bottom" uib-tooltip="LB 포트 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="dbDefaultLbServicePort" ng-model="pop.deployData['DB'].config.lbServicePortId" ng-change="pop.fn.changeServicePort(pop.deployData.type, pop.deployData['DB'].config.lbServicePortId)">
+                            <option ng-if="pop.unusingServicePorts && pop.unusingServicePorts.length > 0" value="">연결 안함</option>
+                            <option ng-if="!pop.unusingServicePorts || pop.unusingServicePorts.length == 0" value="">LB 포트를 추가해 주세요.</option>
+                            <option ng-repeat="item in pop.unusingServicePorts" value="{{item.id}}">{{item.servicePortName}}[{{item.sourcePort}}{{item.sslUsed ? ', ssl ' + item.sslSourcePort : ''}}]</option>
+                        </select>
+                    </div>
+                    <div class="validation validation-dbDefaultLbServicePort text-danger"></div>
+                </li>
+                <li ng-if="pop.deployData['DB'].config.lbServicePortId">
+                    <p class="app-tit">도메인 추가 연결 (선택 사항) <button type="button" class="btn ico-plus" ng-click="pop.fn.addDomainFormOpen()" tooltip-placement="bottom" uib-tooltip="도메인 추가"></button></p>
+                    <div class="input-group" style="width : 100%;">
+                        <select class="form-control" name="dbDefaultDomain" ng-model="pop.deployData['DB'].config.domainId">
+                            <option ng-if="pop.deployData['DB'].config.lbServicePortId && pop.protocolUnusingDomains && pop.protocolUnusingDomains.length > 0" value="">추가 안함</option>
+                            <option ng-if="!pop.deployData['DB'].config.lbServicePortId" value="">먼저 LB 포트를 선택 하십시오.</option>
+                            <option ng-if="pop.deployData['DB'].config.lbServicePortId && (!pop.protocolUnusingDomains || pop.protocolUnusingDomains.length == 0)" value="">선택 가능한 도메인이 없습니다.</option>
+                            <option ng-repeat="item in pop.protocolUnusingDomains" value="{{item.id}}">{{item.domain}}</option>
+                        </select>
+                    </div>
+                </li>
+                <li ng-if="pop.deployData['DB'].config.sltLbServicePort.servicePortDomainLinks.length > 0">
+                    <p class="app-tit">선택 LB 포트에 연결 도메인</p>
+                    <div ng-repeat="domainLink in pop.deployData['DB'].config.sltLbServicePort.servicePortDomainLinks" class="input-group app-txt">{{domainLink.domainInfo.domain}}</div>
+                </li>
+            </ol>
+</form>
+            <!-- //sideInWrap -->
+        </div>
+        <!-- //aside aside1 cnt -->
+
+        <!-- aside aside1 cnt -->
+		<div ng-if="pop.activeTab == 'RES'" class="sideInWrap">
+			<!-- sideInWrap -->
+<form name="pop.POP_RES_FORM" novalidate>
+            <ol class="app-set">
+                <li>
+                    <p class="app-tit">인스턴스 사양 선택</p>
+                    <select class="form-control" name="resSpecId" ng-model="pop.deployData[pop.deployData.type].specName" ng-change="pop.fn.selectSpec(pop.deployData.type);" validation="required">
+                        <option value="">선택 (vCPU / MEM / DISK)</option>
+                        <option ng-repeat="spec in pop.specList | filter:{name:'m'}" value="{{spec.name}}">[{{spec.name}}] vCPU {{spec.vcpus}}개 / MEM {{spec.ram/1024|number}} GB / DISK {{spec.disk}} GB</option>
+                    </select>
+                    <ul class="app-reso" style="margin-top: 10px;">
+                        <li><span>{{pop.deployData[pop.deployData.type].spec.vcpus}}<em>Core</em></span><strong>vCPU</strong></li>
+                        <li><span>{{pop.deployData[pop.deployData.type].spec.ram/1024|number}}<em>G</em></span><strong>vMemory</strong></li>
+                        <li><span>{{pop.deployData[pop.deployData.type].spec.disk}}<em>G</em></span><strong>Disk</strong></li>
+                    </ul>
+                </li>
+            </ol>
+</form>
+			<!-- //sideInWrap -->
+		</div>
+		<!-- //aside cnt -->
+	</div>
+    <!-- aside btm -->
+    <div ng-if="pop.activeTab == 'SLT'" class="sideBtmWrap">
+        <button type="button" name="nextStpeBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.fn.nextStep()">다음단계</button>
+    </div>
+    <!-- aside btm -->
+    <div ng-if="pop.activeTab != 'SLT' && pop.activeTab != 'RES'" class="sideBtmWrap">
+        <button type="button" name="preBtn" class="btn" data-user="aside" data-username="#aside-aside1" ng-click="pop.fn.preStep();" style="width:49.5%">이전단계</button>
+        <button type="button" name="saveBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.fn.nextStep();" style="width:49.5%">다음단계</button>
+    </div>
+    <!-- //aside btm -->
+    <!-- aside btm -->
+    <div ng-if="pop.activeTab == 'RES'" class="sideBtmWrap">
+        <button type="button" name="preBtn" class="btn" data-user="aside" data-username="#aside-aside1" ng-click="pop.fn.preStep();" style="width:49.5%">이전단계</button>
+        <button type="button" name="saveBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.fn.createTypeServer($event);" style="width:49.5%">인스턴스 생성</button>
+    </div>
+    <!-- //aside btm -->
+</div>

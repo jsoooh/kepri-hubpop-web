@@ -1,0 +1,15 @@
+<div class="mainWrap container-fluid">
+    <div class="main">
+        <ul class="marketWrap"><!-- 서비스 목록 -->
+            <li ng-repeat="serviceItem in contents.services | orderBy:'label'" ng-click="contents.goToServiceDetail(serviceItem.label)">
+                <div class="titleWrap">
+                    <img class="img-circle" ng-if="serviceItem.iconImage != null" ng-src="data:{{ serviceItem.iconImage.contentType }}; base64, {{ serviceItem.iconImage.image }}">
+                    <img class="img-circle" ng-if="serviceItem.iconImage == null" src="img/default_image.png">
+                    {{ serviceItem.label }}
+                </div>
+                <p class="infoWrap">{{ serviceItem.description }}</p>
+                <ul><li class="colorBlue">{{ serviceItem.extra.providerDisplayName }}</li></ul>
+            </li>
+        </ul>
+    </div>
+</div>

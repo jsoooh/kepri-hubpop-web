@@ -1,0 +1,52 @@
+				<!-- 프로젝트 정보 -->
+				<div class="cBox type0 projt-mana">
+					<div class="pull-left">
+						<h4 class="c-tit">{{ 'label.all_project_count' | translate }} <em class="point1">({{contents.projects.length}})</em></h4>
+					</div>
+					<div class="pull-right">
+						<!-- 검색 -->
+						<div class="searchBox type2">
+							<div class="form-group">
+								<input type="text" placeholder="프로젝트명" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listProjects() : null;">
+							</div>
+							<button type="button" name="button" class="btn btn-sch" title="{{ 'label.search' | translate }}" ng-click="contents.listProjects();"><span class="ico search">{{ 'label.search' | translate }}</span></button>
+						</div>
+						<!-- //검색 -->
+					</div>
+				</div>
+				<!-- //프로젝트 정보 -->
+
+				<!-- 패널 리스트 -->
+				<ul class="ul-panel">
+					<li ng-repeat="project in contents.projects">
+						<!-- panel -->
+						<div class="panelWrap color-type1" id="panelWrapColorType{{$index}}">
+							<div class="panel type1">
+								<div class="in" ng-click="contents.listProjects_click(project);">
+									<div class="panel_head">
+										<div class="tit">
+											{{project.name}}
+										</div>
+									</div>
+									<div class="panel_body">
+										<ul class="ul-list type1">
+											<li class="sum director">{{ 'label.mngr' | translate }} : {{project.owner.name}}</li>
+											<li class="sum project">{{ 'label.project_id' | translate }} : {{project.id}}</li>
+											<!--<li class="sum date">마감일 : {{project.useEndDate.time | date : 'yyyy.MM.dd'}}<span class="stateDay" ng-if="project.useRemainTimeMs != -1">D -{{project.useRemainTimeMs | commProjectUseRemainTimeMs}}</span></li>-->
+											<li class="sum job">{{ 'label.job_count' | translate }} : {{project.orgCount}}</li>
+											<li class="sum member">{{ 'label.member_count' | translate }} : {{project.userCount}}</li>
+										</ul>
+									</div>
+									<!--<div class="panel_foot two">
+										<p class="use-txt"><span class="txt">작업 수</span><span class="num">2</span></p>
+										<p class="use-txt"><span class="txt">멤버 수</span><span class="num">4</span></p>
+									</div>-->
+								</div>
+							</div>
+						</div>
+						<!-- panel -->
+					</li>
+					<li>
+						<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-add" ng-click="contents.callAddProject($event);" ng-disabled="main.userAuth != 'M'"><span class="ico"></span><span class="txt">프로젝트 등록</span></button>
+					</li>
+				</ul>				<!-- //패널 리스트 -->

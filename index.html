@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<script type="text/javascript">
+	var _DOMAIN_ = document.domain;
+    var _VERSION_ = "0.2";
+    var _DEMO_ = false;
+    var _MODE_ = "DEBUG"; // PRD, DEV, DEBUG
+    var _DEBUG_LEVEL_ = 3; // 1, 2, 3
+    var _TOME_ = new Date().getTime();
+    var _VERSION_TAIL_HEAD_ = "?version=" + _VERSION_;
+    var _VERSION_TAIL_ = _VERSION_TAIL_HEAD_ + ((_MODE_ == "DEBUG" && _DEBUG_LEVEL_ > 1) ? "." + _TOME_ : "");
+
+    // upload 진행 바 표현 최소 파일 사이즈 - 작은 사이즈의 경우 표현이 의미 없음
+    var _UPLOADING_VIEW_MIN_SIZE_ = 1024; // 1MB
+
+    function _VersionTail() {
+        if (_MODE_ == "DEBUG" && _DEBUG_LEVEL_ >= 3) {
+            return 	_VersionTimeTail();
+        } else {
+            return _VERSION_TAIL_;
+        }
+    }
+
+    function _VersionTimeTail() {
+		return 	_VERSION_TAIL_HEAD_ + "." + new Date().getTime();
+    }
+
+    var _VIEWS_ = "views";
+    var _ADMIN_VIEWS_ = "views/admin";
+
+    var _CONNECT_SITE_ = "USER";
+    var _LAYOUT_VIEWS_ = _VIEWS_;
+
+    var _CSRF_TOKEN_HEADER_NAME_ = "X-CSRF-TOKEN";
+    var _TOKEN_HEADER_NAME_ = "U-X-TOKEN";
+    var _REGION_HEADER_NAME_ = "X-HEADER-REGION";
+
+    var _COOKIES_PATH_	= "/";
+    var _CSRF_TOKEN_COOKIE_NAME_ = "XSRF-TOKEN";
+    var _ACCESS_TOKEN_COOKIE_NAME_ = "U-TOKEN";
+    var _LANGUAGE_KEY_COOKIE_NAME_ = "LANGUAGE-KEY";
+    var _REGION_KEY_COOKIE_NAME_ = "REGION-KEY";
+    var _USER_INFO_COOKIE_NAME_ = "USER-INFO";
+    var _LEFT_MENU_SHOW_COOKIE_NAME_ = "LEFT-MENU-SHOW";
+
+    var _ACCESS_TOKEN_CASHE_NAME_ = "cmm.accessToken";
+    var _LANGUAGE_KEY_CASHE_NAME_ = "cmm.languageKey";
+    var _REGION_KEY_CASHE_NAME_ = "cmm.regionKey";
+    var _USER_INFO_CASHE_NAME_ = "cmm.user";
+    var _LEFT_MENU_SHOW_CASHE_NAME_ = "cmm.leftMenuShow";
+    var _COMPANY_LOGO_CASHE_NAME_  = "cmm.companyLogo";
+
+
+</script>
+<html ng-app="app" lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<!-- 	<title>HUB-POP</title> -->
+	<title>HUB POP</title>
+
+<!-- 	<link rel="icon" type="image/png" href="/comm/favicon.ico" /> -->
+
+	<script type="text/javascript">
+
+		var _MIN_ = (_MODE_ == "PRD") ? ".min" : "";
+
+        document.writeln('<link rel="stylesheet" href="css/components/jquery-ui' + _MIN_ + '.css"/>');
+        document.writeln('<link rel="stylesheet" href="css/components/bootstrap' + _MIN_ + '.css"/>');
+//         document.writeln('<link rel="stylesheet" href="css/components/bootstrap-select' + _MIN_ + '.css"/>');
+//         document.writeln('<link rel="stylesheet" href="css/components/bootstrap-datetimepicker' + _MIN_ + '.css"/>');
+//         document.writeln('<link rel="stylesheet" href="css/components/ADM-dateTimePicker' + _MIN_ + '.css"/>');
+//         document.writeln('<link rel="stylesheet" href="css/components/angular-material' + _MIN_ + '.css">');
+//         document.writeln('<link rel="stylesheet" href="css/components/select2' + _MIN_ + '.css"/>');
+//         document.writeln('<link rel="stylesheet" href="css/components/rzslider' + _MIN_ + '.css"/>');
+
+        document.writeln('<script src="js/components/modernizr-custom.js"></\script>');
+		document.writeln('<script src="js/components/es5-shim.min.js"></\script>');
+		document.writeln('<script src="js/components/es5-sham.min.js"></\script>');
+		document.writeln('<script src="js/components/jquery' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/jquery-ui' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/ResizeSensor.js"></\script>');
+		document.writeln('<script src="js/components/ElementQueries.js"></\script>');
+		document.writeln('<script src="js/components/console-sham' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/bootstrap' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-sanitize' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/ui-bootstrap-tpls' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/moment' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/moment-range' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/bootstrap-datetimepicker' + _MIN_ + '.js"></\script>');
+        document.writeln('<script src="js/components/d3.js"><\/script>');
+        document.writeln('<script src="js/components/nv.d3.js"><\/script>');
+        document.writeln('<script src="js/components/angular-nvd3.js"><\/script>');
+		document.writeln('<script src="js/components/angular-route' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-ui-router' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-local-storage' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-translate' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-translate-loader-static-files' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-validation.js"></\script>');
+		document.writeln('<script src="js/components/angular-cookies' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-animate' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-aria' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-material' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-moment' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-count-to' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/bootstrap-select' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/select2' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-select2.js"></\script>');
+		document.writeln('<script src="js/components/paging' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/angular-file-upload' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/ADM-dateTimePicker' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/rzslider' + _MIN_ + '.js"></\script>');
+		document.writeln('<script src="js/components/validator' + _MIN_ + '.js"></\script>');
+
+//         document.writeln('<link rel="stylesheet" href="css/portal.css'+_VERSION_TAIL_+'"\/>');
+
+        document.writeln('<script src="js/cmmFunction.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/app.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/properties/constants.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/properties/sitemap.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/directives/commonDirectives.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/filters/commonFilters.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+
+        document.writeln('<script src="js/controllers/commonControllers.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/controllers/portalControllers.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/controllers/loginControllers.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/controllers/signupControllers.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/controllers/memberControllers.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/controllers/boardControllers.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+
+        document.writeln('<script src="js/services/commonServices.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/services/portalServices.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/services/loginServices.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/services/userServices.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/services/signupServices.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/services/memberServices.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+        document.writeln('<script src="js/services/boardServices.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+
+document.writeln('<script src="comm/js/services/orgServices.js'+_VERSION_TAIL_HEAD_+'"><\/script>');
+
+	</script>
+
+<!-- common -->
+<!-- <link rel="stylesheet" type="text/css" href="../common/css/bootstrap.min.css"> -->
+<link rel="stylesheet" type="text/css" href="css/components/bootstrap-slider.css">
+<link rel="stylesheet" type="text/css" href="css/components/jquery.jscrollpane.css">
+<!-- <link rel="stylesheet" type="text/css" href="../common/css/jquery-ui.css"> -->
+<link rel="stylesheet" type="text/css" href="css/css.css">
+<link rel="stylesheet" type="text/css" href="css2/css.css">
+
+<!--[if lt IE 9]>
+	<script type="text/javascript" src="js/components/html5shiv.min.js"></script>
+<![endif]-->
+<!-- 	<script type="text/javascript" src="../common/js/respond.min.js"></script> -->
+
+<!-- <script type="text/javascript" src="../common/js/jquery-1.11.3.min.js"></script> -->
+<!-- <script type="text/javascript" src="../common/js/jquery-ui.js"></script> -->
+<!-- <script type="text/javascript" src="../common/js/bootstrap.min.js"></script> -->
+<script type="text/javascript" src="js/components/bootstrap-slider.js"></script>
+<script type="text/javascript" src="js/components/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="js/components/jquery.jscrollpane.js"></script>
+
+<!-- custom -->
+<script type="text/javascript" src="js2/user.js"></script>
+
+<script type="text/javascript" src="js2/index.js"></script>
+
+</head>
+<body id="mainCtrl" ng-controller="mainCtrl as main" class="mainBody paasBody">
+
+<!-- wrap -->
+<div id="wrap" class="one_page" ng-if="main.hubpop.layout == 'layout1'">
+	<div class="one_in">
+		<div id="mainContentsLayout" ui-view="mainBody"></div>
+	</div>
+</div>
+
+<div id="wrap" class="" ng-if="main.hubpop.layout == 'layout2'">
+	<!-- header -->
+	<header id="header" ng-include="'views/ng-include/header.html'">
+	</header>
+	<!-- //header -->
+	<div id="mainContentsLayout" ui-view="mainBody" style="height: 100%;"></div>
+</div>
+<!-- //wrap -->
+
+<script type="text/javascript">
+
+    document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>');
+//     document.writeln('<div class="pageWrap mainWrap">');
+//     document.writeln('	<nav id="navigation" class="navbar navbar-fixed-top" ng-include="\''+_LAYOUT_VIEWS_+ '/navigation.html'+_VERSION_TAIL_+'\'"></nav>');
+//     document.writeln('	<div id="mainContentsLayout" ui-view="mainBody"></div>');
+//     document.writeln('	<div id="footerLayout" ng-include="\''+_VIEWS_+ '/footer.html'+_VERSION_TAIL_+'\'"></div>');
+//     document.writeln('</div>');
+
+</script>
+
+</body>
+</html>

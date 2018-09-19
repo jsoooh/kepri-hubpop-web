@@ -1,0 +1,20 @@
+{
+    "comm": {
+        "label": {
+            "alarm" : "Alarm",
+            "background_image": "Background Image",
+            "blue": "Blue",
+            "document" : "Document",
+            "favorites" : "Favorites",
+            "login": "Sign In",
+            "mint": "Mint",
+            "notice" : "Notice",
+            "orange": "Orange",
+            "usage_trend" : "Usage Trend",
+            "usage" : "Usage",
+            "white": "White"
+        },
+        "message" : {
+        }
+    }
+}

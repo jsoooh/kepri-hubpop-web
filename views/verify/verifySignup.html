@@ -1,0 +1,46 @@
+<div class="container-fluid loginWrap">
+    <div class="bgWrap">
+        <dl>
+            <dt>K PaaS-TA를 활용하여<br />비즈니스 영역을 확장 하세요.</dt>
+            <dd>사용자가 한번 클릭으로 통합 앱에 액서스 할 수 있습니다.</dd>
+            <dd>비즈니스 인텔리전스 및 자동화를 추가하여 사용자에게<br />앱의 가치를 높이 세요.</dd>
+        </dl>
+    </div>
+    <div id="content" class="loginContainer">
+        <div class="login-body">
+            <h1>이메일 인증</h1>
+            <form class="form-horizontal">
+                <ul class="user_info">
+                    <li>{{ verifyMessage }} </li>
+                </ul>
+                <ul class="bottomBtnWrap">
+                    <li>
+                        <button class="btn" ng-click="ok()">확인</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>	<!--	//contentContainer	-->
+<div class="footerContainer">
+    <div class="footer containerWrap">
+        <div class="footer-brand"><img src="../img/logo_koscom_footer.png" width="134" height="27" alt="Koscom" /></div>
+        <div class="footerWrap">
+            <ul ng-hide="true">
+                <li><a href="#">개인정보처리방침</a></li>
+                <li><a href="#">본인인증</a></li>
+                <li><a href="#">고객만족센터</a></li>
+                <li><a href="#">SITE LINK</a></li>
+            </ul>
+            <address>서울시 영등포구 여의나루로 76 (주)크로센트 대표전화 : 02-2078-2088</address>
+            <p class="copyright">COPYRIGHT 2015 CROSSENT CORP ALLRIGHTS RESERVED.</p>
+            <p class="info">본 페이지에 게시된 이메일 주소가 자동 수집되는 것을 거부하며, 이를 위반시 정보통신법에 의해 처벌함을 유의하시기 바랍니다.</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var winHeight = $(window).height();
+        $(".loginWrap").css("height",winHeight-113)
+    });
+</script>

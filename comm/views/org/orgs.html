@@ -1,0 +1,73 @@
+			<!-- content -->
+				<!-- 작업 정보 -->
+				<div class="cBox type0 projt-mana">
+					<div class="pull-left">
+ 						<!--<h4 class="c-tit">{{ 'label.all_project_count' | translate }} <em class="point1">(5)</em></h4> -->
+						<h4 class="c-tit">{{ 'label.all_job_count' | translate }}<em class="point1">({{contents.orgs.length}})</em></h4>
+                        <!--<h4 class="c-tit">전체 멤버 수 <em class="point1">(2)</em></h4> -->
+					</div>
+					<div class="pull-right">
+						<!-- 검색 -->
+						<div class="searchBox type2">
+							<div class="form-group">
+								<input type="text" placeholder="{{ 'label.job_name' | translate }}" style="width:300px;" ng-model="schText" ng-keyup="$event.keyCode == 13 ? contents.listOrgs() : null;">
+							</div>
+							<button type="button" name="button" class="btn btn-sch" title="{{ 'label.search' | translate }}" ng-click="contents.listOrgs();" id="listOrgs"><span class="ico search">{{ 'label.search' | translate }}</span></button>
+						</div>
+						<!-- //검색 -->
+					</div>
+				</div> 
+				<!-- //작업 정보 -->
+
+				<!-- panel area -->
+				<ul class="ul-panel"> 
+					<li ng-repeat="orgItem in contents.orgs">
+						<!-- panel -->
+						<!--<div class="panelWrap bdtColor{{($index % 4) + 1}}" id="panelWrapColorType{{$index}}">-->
+						<div class="panelWrap bdtColor{{orgItem.statusCode.indexOf('error')>-1?2:3}}" id="panelWrapColorType{{$index}}">
+							<div class="panel type1">
+								<div class="in" ng-click="contents.detailNgClick({$event : $event, orgItem : orgItem});">
+									<div class="panel_head">
+										<div class="tit">
+											{{$index + 1}}. {{orgItem.orgName}}
+										</div>
+									</div>
+									<div class="panel_body">
+										<ul class="ul-list type1">
+											<!--<li>{{ 'label.job_id' | translate }} : {{orgItem.id}}</li>-->
+											<li>{{ 'label.project' | translate }} : {{orgItem.projectName}}</li>
+											<li>{{ 'label.member_count' | translate }} : {{orgItem.orgUserCount}}</li>
+										</ul>
+									</div>
+									<!--<div class="panel_foot">
+										<p class="use-txt"><span class="txt">사용서비스</span><span class="num">4</span></p>
+									</div>-->
+								</div>
+								<div class="btnTop">
+									<!--<button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제"><span class="ico">{{ 'label.del' | translate }}</span></button>
+									<button type="button" name="button" class="btn btn-ico-modi-s only-ico" title="수정"><span class="ico">{{ 'label.edit' | translate }}</span></button>-->
+									<!-- drop down -->
+									<div class="dropdown drop-set" ng-if="0">
+										<button type="button" class="btn only-ico ico-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="설정">
+											<span class="ico">{{ 'label.set' | translate }}</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-set" aria-labelledby="btn-set">
+											<li><a href="" class="color1" title="하얀색" ng-click="contents.set($index, 'color-type1');"></a></li>
+											<li><a href="" class="color2" title="파란색" ng-click="contents.set($index, 'color-type2');"></a></li>
+											<li><a href="" class="color3" title="주황색" ng-click="contents.set($index, 'color-type3');"></a></li>
+											<li><a href="" class="color4" title="민트색" ng-click="contents.set($index, 'color-type4');"></a></li>
+											<li class="file-att" title="배경이미지"><a href="" class="pic"><span class="ico"></span></a></li>
+										</ul>
+									</div>
+									<!-- //drop down -->
+								</div>
+							</div>
+						</div>
+						<!-- panel -->
+					</li>
+					<li>
+						<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-add" ng-click="main.cBoxToggleChange($event); contents.asideAdd($event, main);" ng-disabled="!contents.isBtnOperationRegistration"><span class="ico"></span><span class="txt">{{ 'label.job_register' | translate }}</span></button>
+					</li>
+				</ul>
+				<!-- //panel area -->
+			<!-- //content -->

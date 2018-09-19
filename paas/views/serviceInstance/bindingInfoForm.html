@@ -1,0 +1,20 @@
+<!-- modal body -->
+<div class="modal-body">
+    <!-- table -->
+    <div class="tbw type1">
+        <table class="table">
+            <colgroup>
+                <col style="width:25%;">
+                <col style="width:auto;">
+            </colgroup>
+            <tbody>
+                <tr ng-repeat="(key, value) in bindingInfos.credential">
+                    <th rowspan="{{bindingInfos.credential.length}}">{{key}}</th>
+                    <td rowspan="{{bindingInfos.credential.length}}">{{value}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- //table -->
+</div>
+<!-- //modal body -->

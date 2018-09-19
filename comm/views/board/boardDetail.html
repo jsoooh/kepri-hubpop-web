@@ -1,0 +1,91 @@
+				<!-- table -->
+				<div class="tbw type1 thCtr">
+					<table class="table">
+						<colgroup>
+						<col style="width:15%;">
+						<col style="width:35%;">
+						<col style="width:15%;">
+						<col style="width:;">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">{{ 'label.title' | translate }}</th>
+								<td colspan="3">{{contents.boardData.title}}</td>
+							</tr>
+							<tr>
+								<th scope="row">{{ 'label.registrant' | translate }}</th>
+								<td colspan="3">{{contents.boardData.ownerName}}</td>
+							</tr>
+							<tr>
+								<th scope="row">{{ 'label.register_dd' | translate }}</th>
+								<td>{{ contents.boardData.createdDate.time | date : "yyyy-MM-dd" }}</td>
+								<th scope="row">{{ 'label.hits' | translate }}</th>
+								<td>{{contents.boardData.hits}}</td>
+							</tr>
+							<tr>
+								<td colspan="4" class="td-cont" style="height:500px;">
+									<span ng-bind-html="contents.boardData.content | newlines"></span>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">{{ 'label.bulletin_attach' | translate }}</th>
+								<td colspan="3">
+									<!-- <a href="#" class="td-attach">file.jpg</a> -->
+									<ul>
+										<li ng-repeat="f in contents.boardData.attachFile" ng-hide="f.isDel">
+											 <a href="{{f.storagePath}}" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>
+											<!--<a href="/comm-api/api/portal/v1/files/{{f.id}}/download" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>-->
+											<button type="button" class="btn button_img" ng-click="contents.delFile(f);" ng-show="contents.mode=='U'" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.del' | translate }}"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}"></button>
+										</li>
+									</ul>
+									<ul style="padding-top:10px;" ng-show="contents.mode=='U'">
+										<li>
+											<input type="file" id="uploadedNoticeFile0" file-input="contents.file.uploadedNoticeFile" multiple placeholder="Upload File" style="display: none;"/>
+											<button type="button" class="btn btn-file" ng-click="main.fileSelectBtnClick($event);">
+												{{ 'label.file_search' | translate }}
+											</button>
+											<ul>
+												<li ng-repeat="aFile in contents.file.uploadedNoticeFile">{{ aFile.name }}</li>
+											</ul>
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- //table -->
+
+				<!-- table -->
+				<div class="tbw type2">
+					<table class="table">
+						<colgroup>
+						<col style="width:15%;">
+						<col style="width:auto;">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">{{ 'label.pre_board' | translate }}</th>
+								<td colspan="3" ng-if="!contents.nextPreData[0].title">{{ 'message.mi_dont_exist_pre_board' | translate }}</td>
+								<!--<td colspan="3" ng-if="contents.nextPreData[0].title"><a href="#/comm/boards/boardDetail/notice/{{contents.nextPreData[0].id}}">{{contents.nextPreData[0].title}}</a></td>-->
+								<td colspan="3" ng-if="contents.nextPreData[0].title" ng-click="contents.goDetail(contents.nextPreData[0].id);">{{contents.nextPreData[0].title}}</td>
+							</tr>
+							<tr>
+								<th scope="row">{{ 'label.next_board' | translate }}</th>
+								<td colspan="3" ng-if="!contents.nextPreData[1].title">{{ 'message.mi_dont_exist_next_board' | translate }}</td>
+								<!--<td colspan="3" ng-if="contents.nextPreData[1].title"><a href="#/comm/boards/boardDetail/notice/{{contents.nextPreData[1].id}}">{{contents.nextPreData[1].title}}</a></td>-->
+								<td colspan="3" ng-if="contents.nextPreData[1].title" ng-click="contents.goDetail(contents.nextPreData[1].id);">{{contents.nextPreData[1].title}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- //table -->
+
+                <!-- btm buttom -->
+				<div class="btn-btm rightSide">
+					<!--<button type="button" name="button" class="btn btn-color1 btn-md" ng-show="contents.showBtnEdit"><a ng-href="#/comm/boards/boardUpdate/notice/{{contents.boardData.id}}">{{ 'label.edit' | translate }}</a></button>
+					<button type="button" name="button" class="btn btn-color2 btn-md" ng-show="contents.showBtnDelete" ng-click="contents.deleteBoard(contents.boardData.id);">{{ 'label.del' | translate }}</button>-->
+					<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="contents.clickCancel();">{{ 'label.list' | translate }}</button>
+				</div>
+                <!-- //btm buttom -->
+

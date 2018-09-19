@@ -1,0 +1,18 @@
+<form name="pop.{{pop.formName}}" novalidate>
+	<div class="sideInWrap">
+		<ol ng-if="pop.deployServer && pop.deployServer.deployId" class="app-set">
+			<li>
+				<p class="app-tit">{{pop.deployServer.deployType}} 인스턴스 수</p>
+				<div class="instBox type2">
+					<div class="slider-input-group slider-label-hide">
+						<div class="sliderIcon"><img src="images/thum/im_thum_{{pop.deployServer.deployType.toLowerCase()}}_s.png" class="ticon" tooltip-placement="top" uib-tooltip="{{pop.deployServer.deployType}}"></div>
+						<div style="width: 160px;">
+							<rzslider rz-slider-model="pop.instanceCount" rz-slider-options="pop.instanceCountSliderOptions"></rzslider>
+						</div>
+						<div class="sliderData"><b>{{ pop.instanceCount | number }}</b>/5개</div>
+					</div>
+				</div>
+			</li>
+		</ol>
+	</div>
+</form>

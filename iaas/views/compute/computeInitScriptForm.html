@@ -1,0 +1,77 @@
+<div ng-controller="iaasComputeScriptDetailCtrl as pop">
+<!-- aside aside1 title -->
+<div class="sideTitWrap">
+	<h2 class="c_tit">{{pop.title}}</h2>
+	<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="pop.fn.formClose();"><span class="ico">닫기</span></button>
+</div>
+<!-- //aside aside1 title -->
+
+<!-- aside aside1 cnt -->
+<form name="{{pop.formName}}" novalidate>
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set" ng-if="pop.initScript.scripType != 'sys'">
+				<li>
+					<p class="app-tit">1. 이름 입력</p>
+					<input type="text" name="initScript.name" maxlength="50" ng-model="pop.initScript.name" placeholder="이름을 입력해 주세요." class="form-control" validation="required">
+				</li>
+				<li>
+					<p class="app-tit">2. 사용OS</p>
+					<select class="form-control" name="initScriptForm.type" ng-model="pop.initScript.type" ng-init="pop.initScript?pop.initScript.type:pop.initScript.type = ''" validation="required">
+						<option value="">선택</option>
+						<option value="LINUX">LINUX</option>
+						<option value="WINDOWS">WINDOWS</option>
+					</select>
+				</li>
+				<li>
+					<p class="app-tit">3. 설명 입력</p>
+					<textarea id="initScriptForm.description" name="initScriptForm.description" style="height:150px;" placeholder="설명을 입력해 주세요." ng-model="pop.initScript.description" class="form-control" ng-keyup="pop.fn.checkByte(pop.initScript.description,255)"></textarea>
+					<p class="text-letter">{{pop.initScript.description | stringToBytes}}/255 Byte</p>
+					<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
+				</li>
+				<li>
+					<p class="app-tit">4. 스크립트 입력</p>
+					<textarea id="initScriptForm.script" name="initScriptForm.script" style="height:150px;" placeholder="스크립트를 입력해 주세요." ng-model="pop.initScript.script" class="form-control"></textarea>
+				</li>
+			</ol>
+			
+			<ol class="app-set" ng-if="pop.initScript.scripType == 'sys'">
+				<li>
+					<p class="app-tit">1. 이름 입력</p>
+					<input type="text" name="initScript.name" ng-model="pop.initScript.name" class="form-control" readonly>
+				</li>
+				<li>
+					<p class="app-tit">2. 사용OS</p>
+					<select class="form-control" name="initScriptForm.type" ng-model="pop.initScript.type" ng-disabled="true">
+						<option value="">선택</option>
+						<option value="LINUX">LINUX</option>
+						<option value="WINDOWS">WINDOWS</option>
+					</select>
+				</li>
+				<li>
+					<p class="app-tit">3. 설명 입력</p>
+					<textarea id="initScriptForm.description" name="initScriptForm.description" style="height:150px;" ng-model="pop.initScript.description" class="form-control"readonly></textarea>
+					<p class="text-letter">{{pop.initScript.description | stringToBytes}}/255 Byte</p>
+					<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
+				</li>
+				<li>
+					<p class="app-tit">4. 스크립트 입력</p>
+					<textarea id="initScriptForm.script" name="initScriptForm.script" style="height:150px;" ng-model="pop.initScript.script" class="form-control" readonly></textarea>
+				</li>
+			</ol>
+			
+			
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+</form>
+<!-- //aside aside1 cnt -->
+
+<!-- aside aside1 btm -->
+<div class="sideBtmWrap">
+	<button type="button" name="saveBtn" ng-if="pop.initScript.scripType != 'sys'" class="btn" data-user="aside-close" ng-click="pop.fn.createOrChangeInitScript();">저장</button>
+	<button type="button" name="saveBtn" ng-if="pop.initScript.scripType == 'sys'" class="btn" data-user="aside-close" ng-click="pop.fn.formClose();">닫기</button>
+</div>
+<!-- //aside aside1 btm -->
+</div>

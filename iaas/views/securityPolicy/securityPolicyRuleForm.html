@@ -1,0 +1,87 @@
+<div ng-controller="iaasAddPolicyRuleFormCtrl as pop">
+<!-- aside aside1 title -->
+<div class="sideTitWrap">
+	<h2 class="c_tit">{{pop.title}}</h2>
+	<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="main.thisAsideClose($event);"><span class="ico">닫기</span></button>
+</div>
+<!-- //aside aside1 title -->
+
+<!-- aside aside1 cnt -->
+<form name="{{pop.formName}}" novalidate>
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li>
+					<p class="app-tit">규칙 선택</p>
+					<select class="form-control" id="addPolicyProtocol" name="pop.protocol" ng-model="pop.protocol" ng-change="pop.fn.protocolChange($event)" validation="required">
+						<option value="tcp">사용자 정의 TCP 규칙</option>
+						<option value="udp">사용자 정의 UDP 규칙</option>
+						<option ng-repeat="metaRule in pop.policyRuleMetaList" value="{{metaRule}}">{{metaRule.name}}</option>
+					</select>
+					<input type="hidden" ng-model="pop.policy.etherType" ng-init="pop.policy.etherType = 'IPv4'" >
+				</li>
+				<li>
+					<p class="app-tit">방향 선택</p>
+					<select class="form-control" name="direction" ng-model="pop.policy.direction" ng-init="pop.policy.direction = 'ingress'" ng-disabled="!(pop.protocol == 'tcp' || pop.protocol == 'udp')">
+						<option value="ingress">Inbound</option>
+						<option value="egress">Outbound</option>
+					</select>
+				</li>
+				
+				<li>
+					<p class="app-tit">사용할 포트 또는 범위 지정</p>
+					<ul class="app-set">
+						<li>
+							<div>
+								<div class="radio radio-inline">
+									<input type="radio" name="radio_port" id="radio-port1" ng-model="pop.portType" value="All" ng-change="pop.fn.portTypeChange();" ng-disabled="!(pop.protocol == 'tcp' || pop.protocol == 'udp')">
+									<label for="radio-port1" class="label">All</label>
+								</div>
+								<div class="radio radio-inline">
+									<input type="radio" name="radio_port" id="radio-port2" ng-model="pop.portType" value="port" ng-change="pop.fn.portTypeChange();" ng-disabled="!(pop.protocol == 'tcp' || pop.protocol == 'udp')">
+									<label for="radio-port2" class="label">포트</label>
+								</div>
+								<div class="radio radio-inline">
+									<input type="radio" name="radio_port" id="radio-port3" ng-model="pop.portType" value="range" ng-change="pop.fn.portTypeChange();" ng-disabled="!(pop.protocol == 'tcp' || pop.protocol == 'udp')">
+									<label for="radio-port3" class="label">범위</label>
+								</div>
+							</div>
+						</li>
+						<li ng-if="pop.portType == 'port'" style="margin-top: 15px;">
+							<div class="input-group">
+								<input type="number" name="pop.policy.port" ng-model="pop.policy.minPort" value="" max-number-length="5" class="form-control" ng-change="pop.fn.portTypeChange();" min="1" max="65535" validation="between_num:1,65535|numeric|required">
+							</div>
+							<div class="validation validation-pop-policy-port text-danger"></div>
+						</li>
+						<li ng-if="pop.portType == 'range'" style="margin-top: 15px;">
+							<div class="app-form-two w_auto mgt0" style="margin-top: 0;">
+								<div class="two_box" style="width: 46%;">
+									<input type="number" style="" name="pop.policy.minPort" ng-model="pop.policy.minPort" value="" max-number-length="5" class="form-control" min="1" max="65535" validation="between_num:1,65535|numeric|required">
+								</div>
+								<div class="two_box" style="width: 8%;text-align: center">~</div>
+								<div class="two_box" style="width: 46%;">
+									<input type="number" style="" name="pop.policy.maxPort" ng-model="pop.policy.maxPort" value="" max-number-length="5" class="form-control" min="1" max="65535" validation="between_num:1,65535|numeric|required">
+								</div>
+							</div>
+							<div class="validation validation-pop-policy-minPort validation-pop-policy-maxPort text-danger"></div>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<p class="app-tit">CIDR 정보 입력</p>
+					<input type="text" class="form-control" ng-model="pop.policy.cidr" maxlength="20" placeholder="CIDR 정보를 입력해 주세요." name="pop.policy.cidr" ng-init="pop.policy.cidr = '0.0.0.0/0'">
+				</li>
+			</ol>
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+</form>
+<!-- //aside aside1 cnt -->
+
+<!-- aside aside1 btm -->
+<div class="sideBtmWrap">
+	<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.popDialogOk();">저장</button>
+</div>
+<!-- //aside aside1 btm -->
+</div>

@@ -1,0 +1,56 @@
+<div class="mainWrap container-fluid">
+    <div class="main">
+        <div class="marketContainer"><!-- 서비스 플랜 상세 -->
+            <div class="summary">
+                <p class="topTitle">{{ contents.sltService.label }}</p>
+                <div class="pull-left imgWrap">
+                    <img class="img-circle" ng-if="contents.sltService.iconImage != null" ng-src="data:{{ contents.sltService.iconImage.contentType }}; base64, {{ contents.sltService.iconImage.image }}" width="150" height="150">
+                    <img class="img-circle" ng-if="contents.sltService.iconImage == null" src="img/default_image.png" width="150" height="150">
+                </div>
+                <div class="pull-left infoWrap">
+                    <dl ng-show="contents.sltService.extra.displayName != null">
+                        <dt>{{ 'label.name' | translate }}: </dt>
+                        <dd>{{ contents.sltService.extra.displayName }}</dd>
+                    </dl>
+                    <dl ng-show="contents.sltService.description != null">
+                        <dt>{{ 'label.desc' | translate }}: </dt>
+                        <dd>{{ contents.sltService.description }}</dd>
+                    </dl>
+                    <dl ng-show="contents.sltService.extra.longDescription != null">
+                        <dt>{{ 'label.details' | translate }}: </dt>
+                        <dd>{{ contents.sltService.extra.longDescription }}</dd>
+                    </dl>
+                    <dl ng-show="contents.sltService.extra.providerDisplayName != null">
+                        <dt>{{ 'label.provider_name' | translate }}: </dt>
+                        <dd>{{ contents.sltService.extra.providerDisplayName }}</dd>
+                    </dl>
+                    <dl ng-show="contents.sltService.extra.supportUrl != null">
+                        <dt>{{ 'label.support_url' | translate }}: </dt>
+                        <dd>{{ contents.sltService.extra.supportUrl }}</dd>
+                    </dl>
+                    <ul ng-show="contents.sltService.extra.documentationUrl != null">
+                        <li><a target="_blank" ng-href="{{ contents.sltService.extra.documentationUrl }}">{{ 'label.view_document' | translate }}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <ul class="dataHead">
+                <li>{{ 'label.service_plan' | translate }}</li>
+                <li>{{ 'label.feature' | translate }}</li>
+                <li>{{ 'label.price' | translate }}</li>
+            </ul>
+            <ul class="detailDataWrap">
+                <li ng-repeat="servicePlan in contents.sltService.servicePlans">
+                    <ul>
+                        <li><p>{{ servicePlan.name }}</p></li>
+                        <li><p ng-repeat="bullet in servicePlan.extra.bullets">{{ bullet }}</p></li>
+                        <li ng-repeat="cost in servicePlan.extra.costs">${{ cost.amount.usd }} / {{ cost.unit }}</li>
+                        <li class="totalWrap">
+                            <p class="pull-left"><span class="total">{{ 'label.total' | translate }}: </span>{{ servicePlan.free ? ('label.free_service' | translate) : ('label.priced_service' | translate) }}</p>
+                            <p class="pull-right"><button class="btn btn-add" ng-click="contents.createServiceInstance($event, contents.sltService, servicePlan);"><img src="img/ico_add.png" width="9" height="9" alt="">{{ 'label.paas_service_add' | translate }}</button></p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+{
+    "comm": {
+        "label": {
+            "alarm" : "알림",
+            "background_image": "배경이미지",
+            "blue": "파란색",
+            "document" : "문서 보기",
+            "favorites" : "즐겨찾기",
+            "login": "로그인",
+            "mint": "민트색",
+            "notice" : "공지 사항",
+            "orange": "주황색",
+            "usage_trend" : "사용 추이",
+            "usage" : "Usage",
+            "white": "하얀색"
+        },
+        "message" : {
+        }
+    }
+}

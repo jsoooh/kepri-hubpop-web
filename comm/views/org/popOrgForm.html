@@ -1,0 +1,47 @@
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+		<form name="orgPop.orgAsideForm" novalidate>
+		<ol class="app-set">
+			<li>
+				<p class="app-tit">1. 프로젝트를 선택해 주세요.</p>
+				<!--<select class="form-control" name="projectId" ng-model="pop.selOrg.projectId" ng-options="project.id as project.name for project in main.projects | filter : {myRoleName : ('OWNER' || 'ADMIN')}" validation="required" ng-change="pop.projectNgChange(pop.selOrg.projectId);" ng-disabled="pop.parentForm=='org'?false:true">-->
+				<select class="form-control" name="projectId" ng-model="pop.selOrg.projectId" ng-options="project.id as project.name for project in main.projects" validation="required" ng-change="pop.projectNgChange(pop.selOrg.projectId);" ng-disabled="pop.parentForm=='org'?false:true">
+					<option value="">{{ 'label.select' | translate }}</option>
+				</select>
+				<p class="has-error" ng-show="orgAsideForm.projectId.$touched && orgAsideForm.projectId.$error.required">1. 프로젝트를 선택해 주세요.</p>
+			</li>
+			<li>
+				<p class="app-tit">2. 작업명을 입력해 주세요.</p>
+				<input type="text" name="orgName" class="form-control" ng-model="pop.selOrg.orgName" validation="max_len:50|required">
+				<p class="has-error" ng-show="orgAsideForm.orgName.$touched && orgAsideForm.orgName.$error.required">2. 작업명을 입력해 주세요.</p>
+			</li>
+			<li>
+				<p class="app-tit">3. 작업 쿼터를 선택해 주세요.</p>
+				<select class="form-control" name="orgQuotaId" ng-model="pop.selOrg.orgQuotaId" ng-options="orgQuota.id as orgQuota.name disable when orgQuota.available == false for orgQuota in pop.selOrg.orgQuotas" validation="required">
+					<option value="">{{ 'label.select' | translate }}</option>
+				</select>
+				<p class="has-error" ng-show="orgAsideForm.orgQuotaId.$touched && orgAsideForm.orgQuotaId.$error.required">3. 작업 쿼터를 선택해 주세요.</p>
+			</li>
+			<li ng-show="pop.parentForm ? true:false">
+				<p class="app-tit">4. 내부공인IP사용여부를 체크해 주세요.</p>
+				<div class="checkbox checkbox-inline" style="margin:6px 0px 0px 10px;">
+					<input type="checkbox" id="isUsePublicIp" ng-model="pop.selOrg.isUsePublicIp">
+					<label for="isUsePublicIp" class="label"><span style="margin-left:5px;">{{'label.use_public_ip_yn' | translate}}</span></label>
+				</div>
+			</li>
+			<li>
+				<p class="app-tit" ng-show="pop.parentForm ? true:false">5. 작업 설명 내용을 입력해 주세요.</p>
+				<p class="app-tit" ng-hide="pop.parentForm ? true:false">4. 작업 설명 내용을 입력해 주세요.</p>
+				<textarea name="description" class="form-control" style="height:200px;" ng-model="pop.selOrg.description" validation="max_len:300|required"></textarea>
+				<p class="has-error" ng-show="orgAsideForm.description.$touched && orgAsideForm.description.$error.required">4. 작업 설명 내용을 입력해 주세요.</p>
+			</li>
+			<li ng-show="0">
+				<p class="app-tit"></p>
+				<adm-dtp name="startDate" ng-model='pop.selOrg.useStartDate' options='{ format: "YYYY.MM.DD", minDate: "dates.minDate", maxDate: "maxDate", gregorianDic : main.sltDataTimePickerOptions, autoClose:true }' full-data="date11_detail" maxdate="{{date12_detail.unix}}" ng-change="pop.chgEndDate();"></adm-dtp>
+				&nbsp; ~ &nbsp;
+				<adm-dtp name="endDate" ng-model='pop.selOrg.useEndDate' options='{ format: "YYYY.MM.DD", minDate: "minDate", gregorianDic : main.sltDataTimePickerOptions, autoClose:true }' full-data="date12_detail" mindate="{{date11_detail.unix}}"></adm-dtp>
+			</li>
+		</ol>
+		</form>
+	</div>
+	<!-- //sideInWrap -->

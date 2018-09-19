@@ -1,0 +1,70 @@
+
+	<!-- title area -->
+	<div class="titWrap">
+		<h2 class="h2">{{ 'label.personal_info_edit' | translate }}</h2>
+
+		<!-- breadcrumb -->
+		<div class="breadWrap">
+			<ol class="breadcrumb">
+				<li class="active">{{ 'label.personal_info_edit' | translate }}</li><!-- 마지막 li -->
+			</ol>
+		</div>
+		<!-- //breadcrumb -->
+	</div>
+	<!-- //title area -->
+
+	<!-- content -->
+		<form name="requestForm" >
+			<!-- table top -->
+			<div class="tb-top">
+				<div class="pull-left">
+
+				</div>
+				<div class="pull-right">
+					<span class="point2"><i class="i_star">필수입력</i> 는 필수입력 사항입니다.</span>
+				</div>
+			</div>
+			<!-- //table top -->
+
+			<!-- table -->
+			<div class="tbw type1">
+				<table class="table">
+					<colgroup>
+					<col style="width:15%;">
+					<col style="width:auto;">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row"><label for="signupEmail">{{'label.id' | translate}}</label></th>
+							<td><input type="text" id="signupEmail" name="signupEmail" ng-model="memberInfo.email" disabled /></td>
+						</tr>
+						<tr>
+							<th scope="row">{{ 'label.name' | translate }}<i class="i_star">필수입력</i></th>
+							<td>
+								<input type="text" id="user_name" name="user_name" ng-model="memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" validation="max_len:40|required" />
+								<p class="has-error" ng-show="requestForm.user_name.$error.required && !requestForm.user_name.$pristine">{{ 'message.mi_type_name' | translate }}</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">{{ 'label.user_type' | translate }}</th>
+							<td>{{contents.userAuthNm}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- //table -->
+
+			<!-- btn btm -->
+			<div class="btn-btm type2">
+				<div class="pull-left">
+					<button type="button" name="button" class="btn btn-md btn-color2" ng-click="signout()">{{'label.signout' | translate}}</button>
+				</div>
+
+				<div class="pull-right">
+					<button type="button" name="button" class="btn btn-md btn-color4" data-toggle="modal" ng-click="changePassword($event);">{{ 'label.pwd_edit' | translate }}</button>
+					<button type="button" name="button" class="btn btn-md btn-color1" ng-click="updateUser()" ng-disabled="requestForm.$invalid">{{'label.save' | translate}}</button>
+				</div>
+			</div>
+			<!-- //btn btm -->
+		</form>
+	<!-- //content -->

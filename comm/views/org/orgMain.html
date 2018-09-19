@@ -1,0 +1,249 @@
+				<!-- cBox -->
+				<div class="cBox type1 workCnt-info">
+					<div class="cBox-hd">
+						<h4 class="c-tit">{{contents.selOrg.orgName}}</h4>
+						<div class="pull-right">
+							<button type="button" name="button" class="btn only-ico ico-view" tooltip-placement="top" uib-tooltip="{{ 'label.show' | translate }}" ng-if="contents.isDashboardHide" ng-click="contents.jobItemSetShowHide(false);"><span class="ico">{{ 'label.view' | translate }}</span></button>
+							<button type="button" name="button" class="btn only-ico ico-view" tooltip-placement="top" uib-tooltip="{{ 'label.hide' | translate }}" ng-if="!contents.isDashboardHide" ng-click="contents.jobItemSetShowHide(true);"><span class="ico">{{ 'label.view' | translate }}</span></button>
+							<button type="button" name="button" class="btn only-ico ico-del" tooltip-placement="top" uib-tooltip="{{ 'label.del' | translate }}" ng-click="contents.orgBtn('deleteCall');" ng-disabled="!(contents.selOrg.project.myRoleName == 'OWNER' || contents.selOrg.project.myRoleName == 'ADMIN')"><span class="ico">{{ 'label.del' | translate }}</span></button>
+							<button type="button" name="button" class="btn only-ico ico-modi" tooltip-placement="top" uib-tooltip="{{ 'label.edit' | translate }}" ng-click="contents.orgBtn('update');" ng-disabled="!(contents.selOrg.project.myRoleName == 'OWNER' || contents.selOrg.project.myRoleName == 'ADMIN')"><span class="ico">{{ 'label.edit' | translate }}</span></button>
+						</div>
+					</div>
+ 
+					<div class="cBox-cnt">
+						<div class="in">
+							<div class="col info-txt type1">
+								<ul>
+									<li>
+										<strong class="tit">{{ 'label.project_name' | translate }}</strong>
+										<div class="txt"><a href="#/comm/projects/projectDetail/{{contents.selOrg.project.id}}">{{contents.selOrg.project.name}}</a></div>
+									</li>
+									<li>
+										<strong class="tit">{{ 'label.job_id' | translate }}</strong>
+										<div class="txt">{{contents.selOrg.id}}</div>
+									</li>
+									<li>
+									    <strong class="tit">{{ 'label.desc' | translate }}</strong>
+								        <div class="txt">{{contents.selOrg.description}}</div>
+									</li>
+								</ul>
+							</div>
+							<div class="col info-txt type1">
+								<ul>
+									<li>
+										<strong class="tit">{{ 'label.job_create_dd' | translate }}</strong>
+										<div class="txt">{{contents.selOrg.createdDate.time | date : 'yyyy-MM-dd HH:mm'}}</div>
+									</li>
+									<li>
+										<strong class="tit">{{ 'label.internal_public_ip' | translate }}</strong>
+										<div class="txt">{{contents.selOrg.isUsePublicIp?'Y':'N'}}</div>
+									</li>
+								</ul>
+							</div>
+							<div class="col info-txt2">
+								<p class="txt"><span>{{contents.serverMainData.totalElements?contents.serverMainData.totalElements:0}}</span><strong>IaaS</strong></p>
+							</div>
+							<div class="col info-txt3">
+								<p class="txt"><span>{{contents.apps.content?contents.apps.content.length:0}}</span><strong>PaaS</strong></p>
+							</div>
+						</div>  
+					</div>
+				</div>
+				<!-- //cBox -->
+
+				<!-- cBox : 쿼터 -->
+				<div class="cBox type3 cToggle">
+					<div class="cBox-hd">
+						<h4 class="c-tit">{{ 'label.quota' | translate }}</h4>
+						<div class="pull-right">
+							<button type="button" name="button" class="btn btn-toggle" title="열고/닫기" data-user="toggle" ng-click="main.cBoxToggleChange($event);contents.searchSystemLinkQuota();"><span class="ico">열고/닫기</span></button>
+						</div>
+					</div>
+					<div class="cBox-cnt">
+						<div class="in">
+							<div class="tb-top heightType">
+								<div class="pull-left">
+									<h4 class="c-tit ng-binding">{{ 'label.quota' | translate }} Plan : {{(contents.selOrg && contents.selOrg.quotaId)?contents.selOrg.quotaId.name:''}}</h4>
+								</div>
+							</div>
+							<div class="progress_layout_two">
+								<div class="progress_box wd_tit">
+									<span class="tit">IaaS {{ 'label.quota' | translate }}</span>
+									<ul>
+										<li>
+											<span class="tit_txt">cpu</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaIaaS.cpuRatio}}" aria-valuemin="0" aria-valuemax="100" style="width: {{contents.usedQuotaIaaS.cpuRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaIaaS.cpuRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaIaaS.cpu}}/{{contents.planQuotaIaaS.cpu}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">{{ 'label.memory' | translate }}</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaIaaS.memoryRatio}}" aria-valuemin="0" aria-valuemax="100" style="width: {{contents.usedQuotaIaaS.memoryRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaIaaS.memoryRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaIaaS.memory}}/{{contents.planQuotaIaaS.memory}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">{{ 'label.disk' | translate }}(내.외장)</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaIaaS.diskRatio}}" aria-valuemin="0" aria-valuemax="100" style="width: {{contents.usedQuotaIaaS.diskRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaIaaS.diskRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaIaaS.disk}}/{{contents.planQuotaIaaS.disk}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">Object Storage</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaIaaS.objectStorageRatio}}" aria-valuemin="0" aria-valuemax="100" style="width: {{contents.usedQuotaIaaS.objectStorageRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaIaaS.objectStorageRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaIaaS.objectStorage}}/{{contents.planQuotaIaaS.objectStorage}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">공인IP</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaIaaS.ipRatio}}" aria-valuemin="0" aria-valuemax="100" style="width: {{contents.usedQuotaIaaS.ipRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaIaaS.ipRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaIaaS.ip}}/{{contents.planQuotaIaaS.ip}})</span>
+										</li>
+									</ul>
+								</div>
+								<div class="progress_box">
+									<span class="tit">PaaS {{ 'label.quota' | translate }}</span>
+									<ul>
+										<li>
+											<span class="tit_txt">{{ 'label.memory' | translate }}</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaPaaS.memoryRatio}}" aria-valuemin="0" aria-valuemax="100" style="width:{{contents.usedQuotaPaaS.memoryRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaPaaS.memoryRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaPaaS.memory}}/{{contents.planQuotaPaaS.memory}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">{{ 'label.service' | translate }}</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaPaaS.serviceRatio}}" aria-valuemin="0" aria-valuemax="100" style="width: {{contents.usedQuotaPaaS.serviceRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaPaaS.serviceRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaPaaS.service}}/{{contents.planQuotaPaaS.service}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">라우터</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaPaaS.routerRatio}}" aria-valuemin="0" aria-valuemax="100" style="width: {{contents.usedQuotaPaaS.routerRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaPaaS.routerRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaPaaS.router}}/{{contents.planQuotaPaaS.router}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">App</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="{{contents.usedQuotaPaaS.appRatio}}" aria-valuemin="0" aria-valuemax="100" style="width: {{contents.usedQuotaPaaS.appRatio}}%;" data-toggle="tooltip" data-placement="top" data-original-title="{{contents.usedQuotaPaaS.appRatio}}%">
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{contents.usedQuotaPaaS.app}}/{{contents.planQuotaPaaS.app}})</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //cBox -->
+
+				<!-- cBox : 작업멤버 -->
+				<div class="cBox type3 cToggle">
+					<div class="cBox-hd">
+						<h4 class="c-tit">{{ 'label.job_members' | translate }}<span class="point1">({{contents.orgUsers.length}})</span></h4>
+						<div class="pull-right">
+							<button type="button" name="button" class="btn btn-toggle" title="열고/닫기" data-user="toggle" ng-click="main.cBoxToggleChange($event);"><span class="ico">열고/닫기</span></button>
+						</div>
+					</div>
+					<div class="cBox-cnt">
+						<div class="in">
+							<!-- table top -->
+							<div class="tb-top">
+								<div class="pull-left"></div>
+								<div class="pull-right"><button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-mem" ng-click="contents.clickBtn($event, 'add');" ng-disabled="!(contents.selOrg.project.myRoleName == 'OWNER' || contents.selOrg.project.myRoleName == 'ADMIN')"><span class="ico">{{ 'label.add' | translate }}</span></button></div>
+							</div>
+							<!-- //table top -->
+
+							<!-- table -->
+							<div class="tbl type1">
+								<table class="table">
+									<colgroup>
+										<col style="width:10%;">
+										<col style="width:15%;">
+										<col>
+										<col style="width:20%;">
+										<col style="width:20%;">
+										<col style="width:10%;">
+									</colgroup>
+									<thead>
+									<tr>
+										<th scope="col">No.</th>
+										<th scope="col">{{ 'label.name' | translate }}</th>
+										<th scope="col">{{ 'label.id' | translate }}</th>
+										<th scope="col">{{ 'label.role2' | translate }}</th>
+										<th scope="col">{{ 'label.member_register_dd' | translate }}</th>
+										<th scope="col">{{ 'label.del' | translate }}</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="orgUser in contents.orgUsers">
+										<td>{{$index + 1}}</td>
+										<td>{{orgUser.name}}</td>
+										<td>{{orgUser.email}}</td>
+										<td>
+											<span ng-if="orgUser.email == contents.selOrg.project.owner.email">프로젝트 책임자</span>
+											<span ng-if="orgUser.email != contents.selOrg.project.owner.email">{{orgUser.auth | roleName}}</span>
+										</td>
+										<td>{{orgUser.createDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+										<td><button type="button" name="button" class="btn btn-ico-del-s only-ico" ng-click="contents.deleteUser(orgUser);" ng-if="orgUser.email != contents.selOrg.project.owner.email && orgUser.email != main.userInfo.email" ng-disabled="!(contents.selOrg.project.myRoleName == 'OWNER' || contents.selOrg.project.myRoleName == 'ADMIN')"><span class="ico">{{ 'label.del' | translate }}</span></button></td>
+									</tr>
+									<!-- 등록된 멤버가 없을 때 -->
+									<tr class="no-data" ng-if="!contents.orgUsers">
+										<td colspan="6">{{ 'message.mi_dont_exist_list' | translate }}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- //table -->
+						</div>
+					</div>
+				</div>
+				<!-- //cBox -->
+
+				<!-- cBox : 작업 이력/용량변경 요청 -->
+				<div class="cBox type3 cToggle mt30">
+					<div class="cBox-hd">
+						<h4 class="c-tit">{{ 'label.job_history' | translate }}/{{ 'label.capacity_change_request' | translate }}</h4>
+						<div class="pull-right">
+							<button type="button" name="button" class="btn btn-toggle" title="열고/닫기" data-user="toggle" ng-click="contents.listQuotaHistoryNgClick();main.cBoxToggleChange($event);"><span class="ico">열고/닫기</span></button>
+						</div>
+					</div>
+					<div ng-include="'/comm/views/org/orgMainQuota.html'"></div>
+				</div>
+				<!-- //cBox -->

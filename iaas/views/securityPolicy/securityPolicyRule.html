@@ -1,0 +1,112 @@
+	<!-- 작업 추가 및 선택 -->
+	<div class="projt-selWarp">
+		<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+		<div class="pull-right">
+			<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+		</div>
+	</div>
+	<!-- //작업 추가 및 선택 -->
+
+	<div class="guideTxt type1" ng-bind-html="'iaasMenu.desc.' + main.selectSiteMap.name + '.short' | translate"></div>
+
+	<!-- table -->
+	<div class="tbw type1">
+		<table class="table">
+			<colgroup>
+			<col style="width:25%;">
+			<col style="width:auto;">
+			</colgroup>
+			<tbody>
+				<tr>
+					<th scope="row">{{'label.security_group' | translate}}명</th>
+					<td>{{contents.policyName}}</td>
+				</tr>
+				<tr>
+					<th scope="row">설명</th>
+					<td style="white-space:pre-line;">{{contents.policyDescription}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- //table -->
+
+	<!-- cont tit -->
+	<div class="cont-titWrap mt50" style="margin-bottom:0;">
+		<h3 class="h-tit3">규칙관리</h3>
+	</div>
+	<!-- //cont tit -->
+		
+	<!-- tb top -->
+	<div class="tb-top">
+		<div class="pull-left"></div>
+		<div class="pull-right">
+			<!-- <button type="button" name="button" class="btn btn-ico-refresh only-ico" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button> -->
+			<button type="button" name="button" class="btn btn-ico-add only-ico" tooltip-placement="bottom" uib-tooltip="등록" ng-click="contents.fn.formOpen($event, 'write');"><span class="ico">등록</span></button>
+		</div>
+	</div>
+	<!-- tb top -->
+
+	<!-- table -->
+	<div class="tbl type1">
+		<table class="table">
+			<colgroup>
+				<col style="width:10%;">
+				<col style="width:16%;">
+				<col style="width:;">
+				<col style="width:;">
+				<col style="width:;">
+				<col style="width:16%;">
+				<col style="width:16%;">
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col">No.</th>
+					<th scope="col">방향</th>
+					<th scope="col">IP 프로토콜</th>
+					<th scope="col">포트 범위</th>
+					<th scope="col">CIDR</th>
+					<th scope="col">원격보안그룹</th>
+					<th scope="col">관리</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="(key, rule) in contents.policyRuleList">
+					<td>
+						{{key+1}}
+					</td>
+					<td>
+						{{rule.direction == 'ingress'?"Inbound":"Outbound"}}
+					</td>
+					<td>
+						{{rule.protocol == null ? "ALL":rule.protocol | uppercase}}
+					</td>
+					<td>
+						<span ng-if="rule.minPort == null && rule.minPort == null">ALL</span>
+                           <span ng-if="rule.minPort != null && rule.maxPort != null && rule.minPort == rule.maxPort">{{rule.minPort}}</span>
+                           <span ng-if="rule.minPort != null && rule.maxPort != null && rule.minPort != rule.maxPort">{{rule.minPort}}~{{rule.maxPort}}</span>
+					</td>
+					<td>
+                           <span ng-if="rule.etherType == 'IPv4'">{{rule.cidr == null?'0.0.0.0/0':rule.cidr}}</span>
+                           <span ng-if="rule.etherType == 'IPv6'">{{rule.cidr == null?'::/0':rule.cidr}}</span>
+					</td>
+					<td>
+						{{rule.remotePolicyName}}
+					</td>
+					<td>
+						<button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deletePolicyRolesJob(rule.id)"><span class="ico">삭제</span></button>
+						<!-- <button type="button" name="button" class="btn btn-ico-modi-s only-ico" title="수정" ng-click="contents.fn.formOpen($event, 'edit', rule);"><span class="ico">수정</span></button> -->
+					</td>
+				</tr>
+				<tr ng-if="contents.policyRuleList.length == 0">
+					<td colspan="7" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- //table -->
+	
+	<!-- tb btm -->
+	<div class="btn-btm">
+		<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage(main.moveParentUrl);">목록</button>
+	</div>
+	<!-- //tb btm -->

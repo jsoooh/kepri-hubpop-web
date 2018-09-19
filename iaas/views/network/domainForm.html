@@ -1,0 +1,65 @@
+	<!-- aside cnt -->
+	<form name="domainPop.{{domainPop.formName}}" novalidate>
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li ng-if="domainPop.formMode == 'add'">
+					<p class="app-tit">도메인</p>
+					<div ng-if="domainPop.formMode == 'add'" class="slider-input-group slider-label-hide" style="padding-bottom: 10px;">
+						<div class="radio radio-inline">
+							<input type="radio" name="radio_domain" id="radio-domain1" ng-model="domainPop.domain.domainType" value="public">
+							<label for="radio-domain1" class="label">공용 도메인</label>
+						</div>
+						<div class="radio radio-inline">
+							<input type="radio" name="radio_domain" id="radio-domain2" ng-model="domainPop.domain.domainType" value="private">
+							<label for="radio-domain2" class="label">사용자 도메인</label>
+						</div>
+					</div>
+					<ul class="app-set">
+						<li ng-if="domainPop.domain.domainType == 'public'">
+							<div class="app-form-two w_auto">
+								<div class="two_box block-box" >
+									<input type="text" class="form-control" maxlength="30" name="subDomain" ng-model="domainPop.domain.subDomain" validation="alpha_num|required|custom:domainPop.fn.subDomainCustomValidationCheck(domainPop.domain.subDomain)" placeholder="서브 도메인명을 입력하세요.">
+								</div>
+								<div class="two_box show-box block-box" >
+									<select name="selectBaseDomain" class="form-control" ng-model="domainPop.domain.baseDomain" validation="required">
+										<option ng-if="!domainPop.baseDomains || domainPop.baseDomains.length == 0" value="">도메인 없음</option>
+										<option ng-repeat="item in domainPop.baseDomains" value="{{item.domain}}">{{item.domain}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="validation validation-subDomain validation-selectBaseDomain text-danger"></div>
+						</li>
+						<li ng-if="domainPop.domain.domainType == 'private'">
+							<div class="input-group" style="width : 100%; padding-top: 5px;">
+								<input type="text" class="form-control" maxlength="30" name="domainName" ng-model="domainPop.domain.domainName" validation="required|custom:domainPop.fn.domainCustomValidationCheck(domainPop.domain.domainName)" placeholder="도메인명을 입력하세요.">
+							</div>
+							<div class="validation validation-domainName text-danger"></div>
+							<div style="color: #bbb;">사용자 도메인을 사용하시려면, 사용하시는 도메인의 호스트 IP를  프록시 서버 IP[<span style="color: whitesmoke;">{{domainPop.domainRouter.floatingIp}}</span>]로 등록하세요</div>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<p ng-if="domainPop.formMode == 'add'" class="app-tit inputWrap">도메인 인증서 &nbsp; &nbsp; <input type="checkbox" name="checkbox_ssl_cert" id="checkbox-ssl-cert" ng-model="domainPop.isSslCert" value="true"> <label for="checkbox-ssl-cert" class="label">인증서 등록</label></p>
+					<p ng-if="domainPop.formMode == 'mod'" class="app-tit inputWrap">도메인 인증서</p>
+					<ul ng-if="domainPop.isSslCert == true" class="app-set">
+						<div class="app-form-two w_auto">
+							<div class="two_box block-box" >
+								<textarea  class="form-control" maxlength="6000" name="domainPublicCert" ng-model="domainPop.domain.publicKey" validation="required" placeholder="public 인증서를 입력하세요."></textarea>
+							</div>
+							<div class="validation validation-domainPublicCert text-danger"></div>
+							<div class="two_box show-box block-box" >
+								<textarea class="form-control" maxlength="6000" name="domainPrivateCert" ng-model="domainPop.domain.privateKey" validation="required" placeholder="private 인증서를 입력하세요."></textarea>
+							</div>
+							<div class="validation validation-domainPrivateCert text-danger"></div>
+							<div class="two_box show-box block-box" >
+								<textarea class="form-control" maxlength="6000" name="domainCACert" ng-model="domainPop.domain.caKey" validation="required" placeholder="CA 인증서를 입력하세요."></textarea>
+							</div>
+							<div class="validation validation-domainCACert text-danger"></div>
+						</div>
+					</ul>
+				</li>
+			</ol>
+		</div> 
+		<!-- //sideInWrap -->
+	</form>

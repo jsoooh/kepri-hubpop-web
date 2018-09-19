@@ -1,0 +1,119 @@
+<div class="mainWrap container-fluid">
+	<div class="main">
+		<div class="appDetail">
+			<div class="appLeft">
+				<ul>
+					<li>
+						<div ng-if="contents.sltMarketApp.iconImage == null" style="width: 160px; height: 100px;" ng-thumb="{ fileUrl: 'img/app_img_blank.png', canvasBorder: 'no', canvasWidth: 140, maxWidth: 140, maxHeight: 80, minHeight: 80 }"></div>
+						<div ng-if="contents.sltMarketApp.iconImage != null" style="width: 160px; height: 100px;" ng-thumb="{ fileUrl: 'data:' + contents.sltMarketApp.iconImage.contentType + '; base64, ' + contents.sltMarketApp.iconImage.image, canvasBorder: 'no', canvasWidth: 140, maxWidth: 140, maxHeight: 80, minHeight: 80 }"></div>
+					</li>
+					<li><button type="button" class="btnSet" ng-click="contents.goMarketAppPush();">{{ 'label.deploying' | translate }}</button></li>
+					<li>{{ contents.sltMarketApp.appFree ? ('label.freeware' | translate) : ('label.payware' | translate) }}</li>
+				</ul>
+			</div>
+			<div class="appRight">
+				<div class="appSub">
+					<p class="sub_title">{{ contents.sltMarketApp.name }}</p>
+					<p class="sub_txt">{{ contents.sltMarketApp.longDescription }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="appTable">
+			<div class="tableWrap">
+				<table class="table table-bordered">
+					<colgroup>
+						<col style="width:12%" />
+						<col style="width:38%" />
+						<col style="width:12%" />
+						<col style="width:38%" />
+					</colgroup>
+					<tbody>
+					<tr>
+						<th>{{ 'label.category' | translate }}</th><!-- 카테고리 -->
+						<td>{{ contents.sltMarketApp.marketCategory.name }}</td>
+						<th>{{ 'label.version' | translate }}</th><!-- 버전 -->
+						<td>{{ contents.sltMarketApp.version }}</td>
+					</tr>
+					<tr>
+						<th>{{ 'label.buildpack_details' | translate }}</th><!-- 빌드팩 상세 -->
+						<td colspan="3" class="innerTableWrap appPushInnerTable">
+							<table class="table">
+								<colgroup>
+									<col style="width:150px;" />
+									<col  />
+									<col style="width:100px;" />
+								</colgroup>
+								<tbody>
+								<tr>
+									<td>
+										<img class="img-circle" ng-if="contents.sltMarketApp.portalBuildpackVersion.portalBuildpack.iconImage != null" ng-src="data:{{ contents.sltMarketApp.portalBuildpackVersion.portalBuildpack.iconImage.contentType }}; base64, {{ contents.sltMarketApp.portalBuildpackVersion.portalBuildpack.iconImage.image }}" width="80" height="80">
+										<img class="img-circle" ng-if="contents.sltMarketApp.portalBuildpackVersion.portalBuildpack.iconImage == null" src="img/default_image.png" width="80" height="80">
+										<p>{{ contents.sltMarketApp.buildpackName }}<br/>{{ contents.sltMarketApp.buildpackVersionName }}</p>
+									</td>
+									<td>
+										<pre class="text-left" style="min-height: 150px; max-height: 200px; background-color: #FFFFFF; margin: 0 0 0 0;">{{ contents.sltMarketApp.portalBuildpackVersion.description }}</pre>
+									</td>
+									<td>
+										<button type="button" class="btn" tooltip-placement="bottom" uib-tooltip="{{ 'label.read_more' | translate }}">
+											<a target="_blank" ng-href="{{ contents.sltMarketApp.portalBuildpackVersion.url }}">{{ 'label.read_more' | translate }}</a>
+										</button>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<th>{{ 'label.resource_set' | translate }}</th>
+						<td colspan="3">
+							<ul class="sliderContainer labelNone">
+								<li>
+									<p class="sliderTitle">{{ 'label.memory_minimum_threshold' | translate }}</p>
+									<div class="sliderWrap memorySlider">
+										<rzslider rz-slider-model="contents.memorySlider.value" rz-slider-options="contents.memorySlider.options"></rzslider>
+									</div>
+									<p class="sliderData"><b>{{ contents.memorySlider.value|displayVolume:'MB' }}</b> / {{ contents.memorySlider.options.ceil|displayVolume:'MB' }}</p>
+								</li>
+								<li>
+									<p class="sliderTitle">{{ 'label.disk_minimum_threshold' | translate }}</p>
+									<div class="sliderWrap diskSlider">
+										<rzslider rz-slider-model="contents.diskQuotaSlider.value" rz-slider-options="contents.diskQuotaSlider.options"></rzslider>
+									</div>
+									<p class="sliderData"><b>{{ contents.diskQuotaSlider.value|displayVolume:'MB' }}</b> / {{ contents.diskQuotaSlider.options.ceil|displayVolume:'MB' }}</p>
+								</li>
+							</ul>
+						</td>
+					</tr>
+					<tr ng-if="contents.marketServices && contents.marketServices.length > 0">
+						<th>{{ 'label.service' | translate }}</th>
+						<td colspan="3">
+							<ul class="buildPackWrap">
+								<li ng-repeat="(key, marketServiceItem) in contents.marketServices">
+									<input type="checkbox" name="market_servcies" value="{{ key }}" ng-model="marketServiceItem.checked" disabled readonly />
+									<label>
+										<img class="img-circle" ng-if="marketServiceItem.iconImage != null" ng-src="data:{{ marketServiceItem.iconImage.contentType }}; base64, {{ marketServiceItem.iconImage.image }}" width="40" height="40">
+										<img class="img-circle" ng-if="marketServiceItem.iconImage == null" src="img/default_image.png" width="40" height="40">
+										<span>{{ marketServiceItem.name }}</span>
+									</label>
+								</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<th>{{ 'label.pdf_file' | translate }}</th>
+						<td ng-if="contents.sltMarketApp.pdfFile.originalFileName" class="text-left">
+							<a href="{{ contents.sltMarketApp.pdfFile.filePath }}" target="_blank">{{ contents.sltMarketApp.pdfFile.originalFileName }}</a></span>
+						</td>
+						<td ng-if="!contents.sltMarketApp.pdfFile.originalFileName" class="text-left">{{ 'label.none' | translate }}</td>
+						<th>{{ 'label.video_url' | translate }}</th><!-- 동영상 URL -->
+						<td ng-if="contents.sltMarketApp.videoUrl">
+							<a href="{{ contents.sltMarketApp.videoUrl }}" target="_blank">{{ contents.sltMarketApp.videoUrl }}</a>
+						</td>
+						<td ng-if="!contents.sltMarketApp.videoUrl" class="text-left">{{ 'label.none' | translate }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+    </div>
+</div>

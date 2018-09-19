@@ -1,0 +1,86 @@
+<!-- tb top -->
+<div class="tb-top">
+    <form name="searchForm" novalidate>
+        <div class="pull-left">
+            <h2>일반 테이블</h2>
+        </div>
+        <div class="pull-left" style="padding-left: 100px;">
+            <div class="datepickerWrap">
+                <div class="date-inpt">
+                    <!-- 추가적인 options 필요시 options="{ disabled:['i', 'i+6'], gregorianDic: main.sltDataTimePickerOptions }" // 주말 선택 제외 -->
+                    <adm-dtp name="'startDate'" ng-model="contents.boardData.startDate" options="{ disabled:['i', 'i+6'], gregorianDic: main.sltDataTimePickerOptions }" maxdate="'{{contents.boardData.endDate}}'" ng-required=true></adm-dtp>
+                </div>
+                <span class="wave">~</span>
+                <div class="date-inpt">
+                    <!-- default options 사용시 options="main.admDtpCalTypeOptions", removeIcon 필요시 class="removeIconShow" -->
+                    <adm-dtp name="'endDate'" ng-model="contents.boardData.endDate" options="main.admDtpCalTypeOptions" mindate="'{{contents.boardData.startDate}}'" ng-required=true></adm-dtp>
+                </div>
+            </div>
+        </div>
+        <div class="pull-left" style="padding-left: 20px;">
+            <p class="has-error" ng-show="searchForm.startDate.$touched && searchForm.startDate.$error.required">기간을 입력해 주세요. 시작일</p>
+            <p class="has-error" ng-show="searchForm.endDate.$touched && searchForm.endDate.$error.required">기간을 입력해 주세요. 종료일</p>
+        </div>
+    </form>
+</div>
+<!-- tb top -->
+<div class="tbl type1">
+    <table class="table">
+        <colgroup>
+            <col style="width:100px;" />
+            <col style="width:100px;" />
+            <col />
+            <col />
+            <col style="width:120px;" />
+            <col style="width:180px;" />
+            <col style="width:180px;" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>Num</th>
+            <th>Facility</th>
+            <th title="The code for the unit">Unit code</th>
+            <th>Cost</th>
+            <th>Condition score</th>
+            <th>Not sortable</th>
+            <th>Plan year</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="(key, item) in contents.visibleProjects" ng-if="key >= contents.pageOptions.start && key < contents.pageOptions.start + contents.pageOptions.pageSize">
+            <td>{{ key + 1 }}</td>
+            <td>{{ item.facility }}</td>
+            <td>{{ item.code }}</td>
+            <td>{{ item.cost }}</td>
+            <td>{{ item.conditionRating }}</td>
+            <td>{{ item.extent }}</td>
+            <td>{{ item.planYear }}</td>
+        </tr>
+        <tr ng-if="contents.pageOptions.total < (contents.pageOptions.pageSize * contents.pageOptions.currentPage)"
+            ng-repeat="n in [] | range:((contents.pageOptions.pageSize * contents.pageOptions.currentPage) - contents.pageOptions.total)">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<nav class="pagiWrap">
+    <paging
+            page="contents.pageOptions.currentPage"
+            page-size="contents.pageOptions.pageSize"
+            total="contents.pageOptions.total"
+            pg-href=""
+            show-prev-next="true"
+            show-first-last="true"
+            paging-action="contents.goCurrentPage(page)"
+            text-first-class="first"
+            text-last-class="end"
+            text-next-class="next"
+            text-prev-class="prev">
+    </paging>
+</nav>

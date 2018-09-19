@@ -1,0 +1,31 @@
+<form name="pop.{{pop.formName}}" novalidate>
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+		<ol class="app-set">
+			<li>
+				<p class="app-tit">WEB 서비스 명 </p>
+				<input type="text" class="form-control" name="serviceInstanceName" ng-model="pop.serviceInstance.serviceInstanceName" validation="required">
+			</li>
+			<li>
+				<p class="app-tit">WAS 서비스 포트</p>
+				<input type="number" class="form-control" name="http_port" ng-model="pop.serviceInstance.servicePort" min="1" max="99999" max-number-length="5" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemServicePortCustomValidationCheck(pop.serviceInstance.servicePort)">
+			</li>
+			<li ng-if="pop.formMode == 'mod'">
+				<p class="app-tit">최대 전송 크기 (MB)</p>
+				<input type="number" class="form-control" name="clientMaxBodySize" ng-model="pop.serviceInstance.webConfig.clientMaxBodySize" min="1" max="99999" max-number-length="5" validation="numeric|required">
+			</li>
+			<li ng-if="pop.formMode == 'mod'">
+				<p class="app-tit">인덱스 페이지</p>
+				<input type="text" class="form-control" name="indexPage" ng-model="pop.serviceInstance.webConfig.indexPage" validation="required">
+			</li>
+			<li ng-if="pop.formMode == 'mod'">
+				<p class="app-tit">기본 404 에러 페이지</p>
+				<input type="text" class="form-control" name="notFoundErrorPage" ng-model="pop.serviceInstance.webConfig.notFoundErrorPage" validation="required">
+			</li>
+			<li ng-if="pop.formMode == 'mod'">
+				<p class="app-tit">기본 50x 에러 페이지</p>
+				<input type="text" class="form-control" name="serverErrorPage" ng-model="pop.serviceInstance.webConfig.serverErrorPage" validation="required">
+			</li>
+		</ol>
+	</div>
+</form>

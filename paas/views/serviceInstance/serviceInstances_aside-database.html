@@ -1,0 +1,62 @@
+<!-- aside aside1 title -->
+<div ng-controller="paasServiceInstancesPushCtrl as ins">
+	<div class="sideTitWrap asideCnt">
+		<h2 class="c_tit">서비스 만들기</h2>
+		<button type="button" name="button" class="btn btn-close" data-user="aside-close" ng-click="main.asideHide({selectors : '#aside-aside1'});"><span class="ico">닫기</span></button>
+	</div>
+	<!-- //aside aside1 title -->
+
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li>
+					<p class="app-tit">1. 서비스 선택</p>
+					<div class="scroll-pane" id="serviceInstancesThumList">
+						<ul class="ul-list1">
+							<li ng-repeat="(key, serviceItem) in services">
+								<div class="radio1 radio-inline">
+									<input type="radio" name="sevSel-radio" ng-model="radio.name" ng-value="serviceItem.label" ng-change="showDescript(serviceItem.label)" id="{{serviceItem.label}}">
+									<!-- 라벨, 이미지는 변수 -->
+									<label for="{{serviceItem.label}}" class="label reductHeight">
+										<img ng-src="images/thum/im_app_{{ serviceItem.label }}_on.png" alt="{{ serviceItem.label }}">
+									</label>
+								</div>
+								<p class="label-txt">{{ serviceItem.label }}</p>
+								<input type="hidden" ng-if="$last" ng-init="ins.scrollPane()">
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<textarea name="name" class="form-control" style="height:80px;" disabled>{{ radio.description }}</textarea>
+				</li>
+				<li>
+					<p class="app-tit">2. 서비스 이름</p>
+					<input type="text" value="" name="inputName" ng-model="radio.inputName" class="form-control" placeholder="서비스 이름을 입력하세요." maxlength="20" validation="min_len:3|max_len:20|required">
+				</li>
+				<li>
+					<p class="app-tit">3. 서비스 플랜(용량)을 선택해 주세요.</p>
+					<ul class="sevPlanSel">
+						<li ng-repeat="(key, plan) in plans" style="width:140px;">
+							<div class="radio radio-inline">
+								<input type="radio" name="radioSev" ng-model="radio.planName" ng-value="plan.name" id="sev-radio1-{{key + 1}}" ng-change="planChange(plan.guid, plan.serviceGuid)">
+								<label for="sev-radio1-{{key + 1}}" class="label">{{ plan.name }}</label>
+								<em class="ico-info2 ico" title="{{plan.description}}"></em>
+								<img ng-src="images/thum/aside_database_0{{key + 1}}.png" alt="{{ plan.name }}">
+							</div>
+						</li>
+					</ul>
+				</li>
+			</ol>
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+
+	<!-- aside aside1 btm -->
+	<div class="sideBtmWrap">
+		<button type="button" name="button" class="btn" data-user="aside" data-username="aside-database" ng-click="ins.servicePush()">생성</button>
+	</div>
+	<!-- //aside aside1 btm -->
+	<!-- //aside aside1 -->
+</div>

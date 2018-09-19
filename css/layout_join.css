@@ -1,0 +1,90 @@
+@charset "utf-8";
+
+#container{ padding-top:81px; }
+#container .leftMenu .lmmMenu{height: 100%}
+
+#wrap #header {display: none;}
+#wrap #container #mainTop {display: none;}
+#wrap.one_page #container .one_in {display: inherit;}
+#wrap #container {padding-top:0px;}
+#wrap #container .rightCnt{vertical-align: middle;}
+
+#wrap.main #header{display:block;}
+#wrap.main #container #mainTop {display: block;}
+#wrap.main #container{padding-top:81px;}
+#wrap.main #container .rightCnt{vertical-align: top;}
+
+.aside .sideCntWrap {padding-bottom: 10px;}
+
+
+/*0912*/
+.depth-3 .leftMenu{
+    display: block;
+}
+.leftMenu .gnb-menu.lmm2{
+    padding-top: 0;
+}
+.leftMenu .lmm1 .lms.depth-2.on:before{
+    display: none;
+}
+.leftMenu .lmm2 .lms.depth-2:hover:before{
+    display: none;
+}
+
+.gnb-menu .gm.part-all {padding:25px 55px 25px 55px;}
+
+.gnb-menu .gm .ico-bul-all {
+    position: absolute;
+    left: 20px;
+    top: 27px;
+    z-index: 1;
+    width: 26px;
+    height: 22px;
+    background: url(../images/ico_gnbmenu.png) no-repeat;
+    background-position: -25px -25px;
+}
+.gnb-menu .gm .ico-bul-all.ico1{
+    top: 27px;
+    background-position: -25px -502px;
+}
+.gnb-menu .gm:hover .ico-bul-all.ico1, .gnb-menu .gm.on .ico-bul-all.ico1, .gnb-menu .gm.active .ico-bul-all.ico1 {
+    top: 27px;
+    background-position: -89px -502px;
+}
+.gnb-menu .gm .ico-bul-all.ico2{
+    top: 26px;
+    background-position: -25px -31px;
+}
+.gnb-menu .gm:hover .ico-bul-all.ico2, .gnb-menu .gm.on .ico-bul-all.ico2, .gnb-menu .gm.active .ico-bul-all.ico2 {
+    top: 26px;
+    background-position: -89px -31px;
+}
+.gnb-menu .gm .ico-bul-all.ico3{
+    top: 28px;
+    background-position: -25px -100px;
+}
+.gnb-menu .gm:hover .ico-bul-all.ico3, .gnb-menu .gm.on .ico-bul-all.ico3, .gnb-menu .gm.active .ico-bul-all.ico3 {
+    top: 28px;
+    background-position: -89px -100px;
+}
+.gnb-menu .gm .ico-bul-all.ico4{
+    top: 26px;
+    background-position: -25px -231px;
+}
+.gnb-menu .gm:hover .ico-bul-all.ico4, .gnb-menu .gm.on .ico-bul-all.ico4, .gnb-menu .gm.active .ico-bul-all.ico4 {
+    top: 26px;
+    background-position: -89px -231px;
+}
+.gnb-menu .gm .ico-bul-all.ico5{
+    top: 27px;
+    background-position: -25px -165px;
+}
+.gnb-menu .gm:hover .ico-bul-all.ico5, .gnb-menu .gm.on .ico-bul-all.ico5, .gnb-menu .gm.active .ico-bul-all.ico5 {
+    top: 27px;
+    background-position: -89px -165px;
+}
+
+.gnb-menu .gm.active{color:#fff; background-color: #3b4152;}
+/*
+.gnb-menu .gm.active::before{display: inline-block; position: absolute; left:0; top:0; z-index: 1; content: ''; width:4px; height:100%; background-color: #00bfff; }
+*/

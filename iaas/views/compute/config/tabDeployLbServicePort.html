@@ -1,0 +1,95 @@
+<div class="panelWrap" style="min-height: 200px;" ng-controller="iaasDeployLbServicePortTabCtrl as tab">
+	<div class="panel type2" style="cursor: unset;" >
+		<div class="panel_head">
+			<div class="tit pull-left" style="min-width: 230px;">LB 포트 관리</div>
+			<div class="pull-right btnArea">
+				<button type="button" class="btn ico-plus-25 only-ico" ng-click="tab.fn.addLbServicePortFormOpen()" title="LB 포트 추가"><span class="ico">LB 포트 추가</span></button>
+				<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'configSetting')"><span class="ico">확대/축소</span></button>
+			</div>
+		</div>
+		<div class="panel_body panel_body_typeA" style="min-height: 500px;">
+			<scrollable-table watch="contents.deployServer.servicePorts" class="tableHeight420">
+				<table class="table">
+					<thead>
+					<tr>
+						<th sortable-header col="servicePortName" style="width:20%;">LB 포트명</th>
+						<th sortable-header col="protocolType" style="width:10%;">LB 프로토콜</th>
+						<th sortable-header col="sourcePort" style="width:10%;">LB 포트</th> 
+						<th style="width:20%;">연결 도메인</th>
+						<th sortable-header col="serviceInstance.serviceInstanceName" style="width:15%;">연결 서비스</th>
+						<th sortable-header col="serviceInstance.servicePort" style="width:10%;">연결 서비스 포트</th>
+						<th style="width:10%;">관리</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat-start="lbServicePort in contents.deployServer.servicePorts">
+						<td>
+							<a href="" ng-click="contents.fn.configDetailToggle(lbServicePort);">{{lbServicePort.servicePortName}}</a>
+						</td>
+						<td class="config-txt">{{ (lbServicePort.protocolType == 'http' && lbServicePort.sslUsed == true) ? 'HTTP/HTTPS' : lbServicePort.protocolType.toUpperCase() }}</td>
+						<td>{{lbServicePort.sourcePort}}{{lbServicePort.sslUsed ? (", ssl " + lbServicePort.sslSourcePort) : ""}}</td>
+						<td>
+							<div ng-repeat="domainLink in lbServicePort.servicePortDomainLinks" class="config-txt" style="height: 26px; padding-top: 4px;">
+								<a href="http://{{domainLink.domainInfo.domain}}" target="_blank">{{domainLink.domainInfo.domain}}</a>
+								<button type="button" class="btn btn-ico-key-s only-ico" style="margin-top: -8px; margin-left: 20px;" ng-click="contents.fn.delDomainLink(domainLink)" title="도메인 연결 해제"><img src="img/ico_unlink.png" width="16" height="16" /></button>
+							</div>
+						</td>
+						<td ng-if="lbServicePort.serviceInstance.deployId" class="config-txt">
+							<a href="" ng-click="main.goToPage('/iaas/deploy_server/detail/' + lbServicePort.serviceInstance.deployId)">[{{lbServicePort.serviceInstance.serviceType}}] {{lbServicePort.serviceInstance.serviceInstanceName}}</a>
+						</td>
+						<td ng-if="!lbServicePort.serviceInstance.deployId"></td>
+						<td>{{lbServicePort.serviceInstance.servicePort}}</td>
+						<td>
+							<div class="dropdown btn-option">
+								<button id="btn-option-list" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="서비스 설정">
+									<span class="ico">실행 설정</span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option" style="min-width: 100px;">
+									<!--<li><a href="" ng-click="contents.fn.configDetailToggle(lbServicePort);">상세 보기</a></li>-->
+									<li><a href="" ng-click="contents.fn.modLbServicePortFormOpen(contents.deployServer, lbServicePort);">포트 수정</a></li>
+									<li><a href="" ng-click="contents.fn.addDomainLinkFormOpen(lbServicePort);">도메인 연결 추가</a></li>
+									<li ng-if="lbServicePort.serviceInstance && lbServicePort.serviceInstance.id"><a href="" ng-click="contents.fn.delLbServerPortLink(lbServicePort);">서비스 연결 해제</a></li>
+									<li ng-if="!lbServicePort.serviceInstance || !lbServicePort.serviceInstance.id"><a href="" ng-click="contents.fn.addLbServicePortLinkFormOpen(lbServicePort);">서비스 연결 추가</a></li>
+									<li><a href="" ng-click="tab.fn.deleteLbServicePort(lbServicePort);">포트 삭제</a></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+					<tr ng-repeat-end ng-show="lbServicePort.configDetailView">
+						<td colspan="7" class="text-left borderNon">
+							<div class="cBox type1 appCnt-info" style="width: 100%; padding: 0 15px 0 20px; overflow-y: auto">
+								<div class="cBox-cnt cBox-cnt-typeA" style="padding-bottom: 20px;">
+									<div style="width: 100%; padding-right: 20px;">
+										<div class="config-group-tit pull-left">추가 정보</div>
+									</div>
+									<div class="in service-box">
+										<div class="col info-txt" style="padding-top: 10px;">
+											<ul class="config">
+												<li>
+													<strong class="config-tit">로드 밸런스 유형</strong>
+													<div class="config-txt">{{lbServicePort.balance == 'roundrobin' ? '라운드로빈' : '소스'}}</div>
+												</li>
+												<li>
+													<strong class="config-tit">헬스 체크 주기(초)</strong>
+													<div class="config-txt">{{lbServicePort.checkInter}}s</div>
+												</li>
+												<li>
+													<strong class="config-tit">헬스 체크 경로</strong>
+													<div class="config-txt">{{lbServicePort.monitorUrl}}</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr ng-if="!contents.deployServer.servicePorts || contents.deployServer.servicePorts.length == 0">
+						<td colspan="7" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+					</tr>
+					</tbody>
+				</table>
+			</scrollable-table>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,52 @@
+<div ng-controller="iaasNetworkActionFormCtrl as pop">
+<!-- aside aside1 title -->
+<div class="sideTitWrap">
+	<h2 class="c_tit">{{pop.title}}</h2>
+	<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="pop.popCancel();"><span class="ico">닫기</span></button>
+</div>
+<!-- //aside aside1 title -->
+
+<!-- aside aside1 cnt -->
+<form name="{{pop.formName}}" novalidate>
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li>
+					<p class="app-tit">이름 입력</p>
+					<input type="text" class="form-control" ng-model="pop.data.description" maxlength="50" name="volumeName" validation="required" placeholder="이름을 입력해 주세요." />
+				</li>
+				<li ng-if="pop.method == 'POST'">
+					<p class="app-tit">네트워크 대역을 입력해 주세요.</p>
+					<input type="text" style="width:15%;" ng-model="pop.cidr_A" disabled />.
+					<input type="text" style="width:15%;" ng-model="pop.cidr_B" disabled />.
+					<input type="text" style="width:15%;" ng-model="pop.cidr_C_t" name="cidrct" ng-change="pop.cidr_C = pop.cidr_C_t" maxlength="3" only-digits />.
+					<input type="text" style="width:15%;" ng-model="pop.cidr_D" ng-init="pop.cidr_D=0" disabled />/24
+					<input type="hidden" ng-model="pop.cidr_C" name="cidrc" only-digits validation="pattern=/^\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\b/i:alt={{ 'INVALID_IP_CHAR' | translate }}|required">
+				</li>
+				<li ng-if="pop.method == 'POST'">
+					<p class="app-tit">라우팅 여부를 선택해 주세요.</p>
+					<div class="checkbox checkbox-only" >
+						<input type="checkbox" id="roter" ng-model="pop.data.router" ng-init="pop.data.router = true" />
+						<label for="roter"></label>
+					</div>
+					사용
+				</li>
+				<li>
+					<p class="app-tit">설명 입력</p>
+					<textarea name="volumeDescription" maxlength="255" style="height:150px;" ng-model="pop.data.realDescription" class="form-control" placeholder="설명을 입력해 주세요." ></textarea>
+					<p class="text-letter">{{pop.data.realDescription | stringToBytes}}/255 Byte</p>
+				</li>
+			</ol>
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+</form>
+<!-- //aside aside1 cnt -->
+
+<!-- aside aside1 btm -->
+<div class="sideBtmWrap">
+	<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.popDialogOk();">저장</button>
+</div>
+<!-- //aside aside1 btm -->
+</div>

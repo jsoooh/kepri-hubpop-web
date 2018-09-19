@@ -1,0 +1,526 @@
+			<!-- content -->
+			<div class="content">
+				<div class="in">
+					<h2 class="h-tit2">가상 서버 활용하기</h2>
+
+					<h3 class="h-tit3" id="/tutorial/1?content=1">가상 서버 만들기 및 구성</h3>
+					<p class="tuto-txt">가상 서버를 사용하면 서버를 하나만 설치한 경우에도 여러 회사나 개인에게 도메인 이름, IP 주소 및 일련의 서버 관리 기능을 제공할 수 있습니다. 가상 서버에 대한 소개와 가상 서버를 설정하는 방법은 가상 서버 사용을 참조하십시오.</p>
+					
+					<!-- 키페어 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=2">키페어</h3>
+					<img src="images/tutorial/iaas/keypair.png" alt="">
+					<br>
+					<br>
+					<p class="tuto-txt">키페어는 인스턴스에 접속하기 위해 필요한 Public Key와 Private Key의 조합 입니다.</p>
+					<br>
+					<p class="tuto-txt">일반적으로 Public Key는 서버에서 관리되고, Private Key는 사용자가 관리합니다.</p>
+
+					<img src="images/tutorial/iaas/keypair_list.png" alt="">
+					<ul class="tuto-ul">
+						<li>[가상서버]메뉴를 클릭합니다.</li>
+						<li>[키페어]메뉴를 클릭합니다.</li>
+						<li>키페어 페이지로 이동합니다.</li>
+						<li>[+]버튼을 클릭하여 [키페어 생성 레이어 팝업]을 호출합니다.</li>
+					</ul>
+					
+					<img src="images/tutorial/iaas/keypair_list_create.png" alt="">
+					<ul class="tuto-ul">
+						<li>[키페어 생성 레이어 팝업]에서 [키페어 이름, 설명]에 알맞은 정보를 입력합니다.</li>
+						<li>[저장]버튼을 클릭하여 생성을 완료합니다.</li>
+					</ul>
+					<!-- 키페어 E -->
+					
+					<!-- 보안그룹 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=3">보안그룹</h3>
+					<img src="images/tutorial/iaas/security_policy.png" alt="">
+					<br>
+					<br>
+					<p class="tuto-txt">보안그룹은 외부 접속 및 다양한 사용자 정책을 통해 생성하는 가상의 방화벽 입니다.</p>
+					<br>
+					<p class="tuto-txt">가상의 방화벽을 통해 사용자들의 보안 유지와 외부 접속에 제한을 줄 수 있습니다.</p>
+
+					<img src="images/tutorial/iaas/security_group_list.png" alt="">
+					<ul class="tuto-ul">
+						<li>[가상서버]메뉴를 클릭합니다.</li>
+						<li>[보안그룹]메뉴를 클릭합니다.</li>
+						<li>키페어 페이지로 이동합니다.</li>
+						<li>[+]버튼을 클릭하여 [보안그룹 생성 레이어 팝업]을 호출합니다.</li>
+					</ul>
+					<img src="images/tutorial/iaas/security_group_list_create.png" alt="">
+					<ul class="tuto-ul">
+						<li>[보안그룹 생성 레이어 팝업]에서 [보안그룹 이름, 설명]에 알맞은 정보를 입력합니다.</li>
+						<li>[저장]버튼을 클릭하여 생성을 완료합니다.</li>
+						<li>보안그룹 목록의 관리 항목의 [톱니모양 아이콘]을 클릭합니다.</li>
+						<li>[보안그룹 > 규칙관리 페이지]로 이동합니다.</li>
+					</ul>
+					
+					<img src="images/tutorial/iaas/security_rule_list.png" alt="">
+					<ul class="tuto-ul">
+						<li>[+]버튼을 클릭하여 [규칙추가 레이어 팝업]을 호출합니다.</li>
+					</ul>
+					<img src="images/tutorial/iaas/security_rule_list_create.png" alt="">
+					<ul class="tuto-ul">
+						<li>[규칙추가 레이어 팝업]에 알맞은 정보를 입력합니다. ([규칙선택], [범위지정 또는 포트입력])</li>
+						<li>[저장]버튼을 클릭하여 생성을 완료합니다.</li>
+					</ul>
+					<!-- 보안그룹 E -->
+					
+					<!-- 서비스 인스턴스 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=4">서비스 인스턴스</h3>
+					<img src="images/tutorial/iaas/service_instance.png" alt="">
+					<br>
+					<br>
+					<p class="tuto-txt">인스턴스 생성은 사용자가 원하는 사양과 이미지를 선택 후 가상 머신을 자동적으로 생성해 줍니다.</p>
+					<br>
+					<p class="tuto-txt">즉, 사용자가 원하는 가상의 환경을 제작해 서비스 운영을 쉽고 편하게 이용할 수 있도록 제공하는 서비스 입니다.</p>
+					<br>
+					<p class="tuto-txt">인스턴스를 생성하기 전에 보안 정책과 키페어가 준비되어 있어야 하며, 인스턴스 생성 계획을 가지고 있으면 좀 더 유용하게 생성 할 수 있습니다.</p>
+
+<!--
+                    <h5 class="h-tit5">대시보드(이미지형)에서</h5>
+					<img src="images/tutorial/instance01.png" alt="">
+					<img src="images/tutorial/instance02.png" alt="">
+					<ul class="tuto-ul">
+						<li>[대시보드]메뉴를 클릭합니다.</li>
+						<li>[서비스추가]버튼을 클릭하여 [인스턴스 만들기 레이어 팝업]을 호출합니다.</li>
+					</ul>
+					<h5 class="h-tit5">대시보드(리스트형)에서</h5>
+					<img src="images/tutorial/instance03.png" alt="">
+					<img src="images/tutorial/instance04.png" alt="">
+					<ul class="tuto-ul">
+						<li>[대시보드]메뉴를 클릭합니다.</li>
+						<li>[+]버튼을 클릭하여 [인스턴스 만들기 레이어 팝업]을 호출합니다.</li>
+					</ul>
+
+					<h5 class="h-tit5">인스턴스메뉴(리스트형)에서</h5>
+					<img src="images/tutorial/instance05.png" alt="">
+					<img src="images/tutorial/instance06.png" alt="">
+					<ul class="tuto-ul">
+						<li>[가상서버]메뉴를 클릭합니다.</li>
+						<li>[인스턴스]메뉴를 클릭합니다.</li>
+						<li>[+]버튼을 클릭하여 [인스턴스 만들기 레이어 팝업]을 호출합니다.</li>
+					</ul>
+					<h5 class="h-tit5">서비스 인스턴스메뉴에서</h5>
+-->
+					<img src="images/tutorial/iaas/service_instance_image_type.png" alt="">
+					<ul class="tuto-ul">
+						<li>[가상서버]메뉴를 클릭합니다.</li>
+						<li>[서비스 인스턴스]메뉴를 클릭합니다.</li>
+						<li>[서비스추가]버튼을 클릭하여 [인스턴스 만들기 레이어 팝업]을 호출합니다.</li>
+					</ul>
+					<img src="images/tutorial/iaas/service_instance_list_create.png" alt="">
+					<!-- COMPUTE 인스턴스 만들기 -->
+					<br>
+ 					<h5 class="h-tit5">COMPUTE 인스턴스 만들기</h5>
+					<ul style="display: flex;">
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_cp_01.png" style="width: 90%;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_cp_02.png" style="width: 90%;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_cp_03.png" style="width: 90%;margin-top: 20px;" alt=""></li>
+					</ul>
+					<ul class="tuto-ul">
+						<li>
+							<h6>[Stop 01] 유형 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 만들기 레이어 팝업]에서 인스턴스 유형을 'Compute'로 선택 한다.</li>
+								<li>[OS 이미지]선택, [접속 IP 할당]선택(선택하지 않아도 됩니다. 신규 할당을 할 수 있습니다.)</li>
+								<li>[대표 도메인]입력('접속 IP 할당'을 선택 하였을 경우 선택적으로 입력 할 수 있습니다.)</li>
+								<li>[다음단계]버튼을 클릭하여 STEP2 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<h6>[Stop 02] 환경 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 명]입력</li>
+								<li>[Stop 01]에서 [대표 도메인]이 입력 된 경우 [프로토콜]선택(선택에 따라 HTTP or HTTPS의 포트를 입력 받습니다.)</li>
+								<li>[보안그룹]선택, [키페어]선택(키페어 바로 추가 가능)</li>
+								<li>[다음단계]버튼을 클릭하여 STEP3 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<p>[Stop 03] 리소스 설정</p>
+							<ul class="tuto-ul">
+								<li>[인스턴스 사양(vCPU, Memory, Disk )]을 선택합니다.</li>
+								<li>[인스턴스 생성]버튼을 클릭하여 인스턴스를 생성합니다.</li>
+							</ul>
+						</li>
+					</ul>
+					<!-- / COMPUTE 인스턴스 만들기 -->
+					<!-- LB 인스턴스 만들기 -->
+					<h5 class="h-tit5">Load Balance 인스턴스 만들기</h5>
+					<ul style="display: flex;">
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_lb_01.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_lb_02.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_lb_03.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+					</ul>
+					<ul class="tuto-ul">
+						<li>
+							<h6>[Stop 01] 유형 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 만들기 레이어 팝업]에서 인스턴스 유형을 'Load Balance'로 선택 한다.</li>
+								<li>[Load Balance]선택, [대표 도메인]입력(선택적으로 입력 할 수 있습니다.)</li>
+								<li>[다음단계]버튼을 클릭하여 STEP2 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<h6>[Stop 02] 환경 설정</h6>
+							<ul class="tuto-ul">
+								<li>[LB 인스턴스 명]입력, [Load Balance 구성]선택</li>
+								<li>[보안그룹]선택, [키페어]선택(키페어 바로 추가 가능)</li>
+								<li>[다음단계]버튼을 클릭하여 STEP3 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<h6>[Stop 03] 리소스 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 사양(vCPU, Memory, Disk )]을 선택합니다.</li>
+								<li>[인스턴스 생성]버튼을 클릭하여 인스턴스를 생성합니다.</li>
+							</ul>
+						</li>
+					</ul>
+					<!-- / LB 인스턴스 만들기 -->
+					<!-- WEB 인스턴스 만들기 -->
+					<h5 class="h-tit5">WEB 인스턴스 만들기</h5>
+					<ul style="display: flex;">
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_web_01.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_web_02.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_web_03.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+					</ul>
+					<ul class="tuto-ul">
+						<li>
+							<h6>[Stop 01] 유형 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 만들기 레이어 팝업]에서 인스턴스 유형을 'WEB'로 선택 한다.</li>
+								<li>[WEB 서버]선택, [LB 선택]선택, [WEB 서비스 프로토콜]선택</li>
+								<li>[WEB 서비스 프로토콜]선택이 직접입력 일 경우 [WEB 포트]입력([LB v포트],  [LB v포트])</li>
+								<li>[다음단계]버튼을 클릭하여 STEP2 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<h6>[Stop 02] 환경 설정</h6>
+							<ul class="tuto-ul">
+								<li>[WEB 인스턴스 명]입력, [WEB 인스턴스 수]입력</li>
+								<li>[보안그룹]선택, [키페어]선택(키페어 바로 추가 가능)</li>
+								<li>[다음단계]버튼을 클릭하여 STEP3 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<h6>[Stop 03] 리소스 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 사양(vCPU, Memory, Disk )]을 선택합니다.</li>
+								<li>[인스턴스 생성]버튼을 클릭하여 인스턴스를 생성합니다.</li>
+							</ul>
+						</li>
+					</ul>
+					<!-- / WEB 인스턴스 만들기 -->
+					<!-- WAS 인스턴스 만들기 -->
+					<h5 class="h-tit5">WAS 인스턴스 만들기</h5>
+					<ul style="display: flex;">
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_was_01.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_was_02.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_was_03.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+					</ul>
+					<ul class="tuto-ul">
+						<li>
+							<h6>[Stop 01] 유형 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 만들기 레이어 팝업]에서 인스턴스 유형을 'WAS'로 선택 한다.</li>
+								<li>[WAS 서버]선택, [LB 선택]선택, [LB 포트]입력, [서비스 포트]입력</li>
+								<li>[다음단계]버튼을 클릭하여 STEP2 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<h6>[Stop 02] 환경 설정</h6>
+							<ul class="tuto-ul">
+								<li>[WAS 인스턴스 명]입력, [WAS 인스턴스 수]입력</li>
+								<li>[보안그룹]선택, [키페어]선택(키페어 바로 추가 가능)</li>
+								<li>[다음단계]버튼을 클릭하여 STEP3 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<p>[Stop 03] 리소스 설정</p>
+							<ul class="tuto-ul">
+								<li>[인스턴스 사양(vCPU, Memory, Disk )]을 선택합니다.</li>
+								<li>[인스턴스 생성]버튼을 클릭하여 인스턴스를 생성합니다.</li>
+							</ul>
+						</li>
+					</ul>
+					<!-- / WAS 인스턴스 만들기 -->
+					<!-- DB 인스턴스 만들기 -->
+					<h5 class="h-tit5">DB 인스턴스 만들기</h5>
+					<ul style="display: flex;">
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_db_01.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_db_02.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+						<li style="width: 33%;"><img src="images/tutorial/iaas/service_instance_create_db_03.png" style="width: 90%;;margin-top: 20px;" alt=""></li>
+					</ul>
+					<ul class="tuto-ul">
+						<li>
+							<h6>[Stop 01] 유형 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 만들기 레이어 팝업]에서 인스턴스 유형을 'DB'로 선택 한다.</li>
+								<li>[DB 서버]선택, [LB 선택]선택</li>
+								<li>[다음단계]버튼을 클릭하여 STEP2 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<h6>[Stop 02] 환경 설정</h6>
+							<ul class="tuto-ul">
+								<li>[DB 인스턴스 명]입력, [DB 인스턴스 구성]선택</li>
+								<li>[보안그룹]선택, [키페어]선택(키페어 바로 추가 가능)</li>
+								<li>[다음단계]버튼을 클릭하여 STEP3 페이지로 이동합니다.</li>
+							</ul>
+                            <br>
+						</li>
+						<li>
+							<h6>[Stop 03] 리소스 설정</h6>
+							<ul class="tuto-ul">
+								<li>[인스턴스 사양(vCPU, Memory, Disk )]을 선택합니다.</li>
+								<li>[인스턴스 생성]버튼을 클릭하여 인스턴스를 생성합니다.</li>
+							</ul>
+						</li>
+					</ul>
+					<!-- / WAS 인스턴스 만들기 -->
+					<!-- 인스턴스 E -->
+					
+					<!-- 인스턴스 스냅샷 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=5">인스턴스 스냅샷</h3>
+					<p class="tuto-txt">인스턴스에서 작업을 하던 도중 스냅샷을 생성하면 그 작업 상태로 스냅샷이 생성 됩니다.</p>
+					<br>
+					<p class="tuto-txt">그 작업 상태를 백업하고 싶거나 동일한 상태의 인스턴스를 추가 생성 하고 싶을 경우 사용 하시면 됩니다.</p>
+					<br>
+					<p class="tuto-txt">인스턴스 스냅샷은 인스턴스가 생성된 상태에서 사용이 가능합니다.</p>
+					<!-- <h5 class="h-tit5">대시보드(이미지형)에서</h5> -->
+					<img src="images/tutorial/iaas/instance_snapshot_01.png" alt="">
+					<img src="images/tutorial/iaas/instance_snapshot_02.png" alt="">
+					<ul class="tuto-ul">
+						<li>[가상서버][서비스 인스턴스] 메뉴를 클릭합니다.</li>
+						<li>[stopped]상태의 인스턴스의 우측 상단 [···]아이콘을 클릭합니다.</li>
+						<li>드롭 다운 메뉴의 [이미지 스냅샷]메뉴를 클릭하여 [인스턴스 스냅샷 생성 레이어 팝업]을 호출합니다.</li>
+					</ul>
+
+					<h5 class="h-tit5">인스턴스 스냅샷 생성</h5>
+					<img src="images/tutorial/iaas/instance_snapshot_02.png" alt="">
+					<ul class="tuto-ul">
+						<li>[인스턴스 스냅샷 생성 레이어 팝업]에서 [인스턴스 스냅샷 이름, 설명]에 알맞은 정보를 입력합니다.</li>
+						<li>[저장]버튼을 클릭하여 생성을 완료합니다.</li>
+					</ul>
+					
+					<h5 class="h-tit5">인스턴스 스냅샷 복원</h5>
+					<img src="images/tutorial/iaas/instance_snapshot_03.png" alt="">
+					<ul class="tuto-ul">
+						<li>[가상서버]메뉴를 클릭합니다.</li>
+						<li>[인스턴스 스냅샷]메뉴를 클릭합니다.</li>
+						<li>인스턴스 스냅샷 목록의 관리 항목의 [복원 아이콘]을 클릭하여 [인스턴스 만들기 레이어 팝업]을 호출합니다.</li>
+					</ul>
+					<img src="images/tutorial/iaas/instance_snapshot_04.png" alt="">
+					
+					<ul class="tuto-ul">
+						<li>[인스턴스 만들기 레이어 팝업]에서 정보들을 순서에 맞게 정확하게 입력합니다.</li>
+						<li> - [인스턴스 이름]입력</li>
+						<li> - [보안그룹], [키페어]는 변경이 필요할 경우 선택합니다.(원본 인스턴스 설정이 기본입니다.)</li>
+						<li>[다음단계]버튼을 클릭하여 STEP2 페이지로 이동합니다.</li>
+					</ul>
+					<img src="images/tutorial/iaas/instance_snapshot_05.png" alt="">
+					
+					<ul class="tuto-ul">
+						<li>[인스턴스 사양]은 변경 필요 시 선택합니다. (원본 인스턴스 설정이 기본입니다.)</li>
+						<li>[인스턴스 생성]버튼을 클릭하여 인스턴스를 생성합니다.</li>
+					</ul>
+					<!-- 인스턴스 스냅샷 E -->
+					
+					<!-- 볼륨 스토리지 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=6">볼륨 스토리지</h3>
+					<p class="tuto-txt">인스턴스를 사용하다보면 디스크 용량이 부족 할 때가 있습니다.</p>
+					<br>
+					<p class="tuto-txt">그럴 때 새로운 인스턴스를 생성하지 않고 추가적으로 디스크를 생성하여 연결해 수 있도록 제작된 서비스가 볼륨 입니다.</p>
+					
+					<!-- <h5 class="h-tit5">대시보드(이미지형)에서</h5> -->
+					<img src="images/tutorial/iaas/volume_01.png" alt="">
+					<ul class="tuto-ul">
+						<li>[스토리지][볼륨]메뉴를 클릭합니다.</li>
+						<li>[서비스추가]버튼을 클릭하여 [볼륨 추가 레이어 팝업]을 호출합니다.</li>
+					</ul>
+
+					<h5 class="h-tit5">볼륨 만들기</h5>
+					<img src="images/tutorial/iaas/volume_02.png" alt="">
+					<ul class="tuto-ul">
+						<li>[볼륨 추가 레이어 팝업]에서 정보들을 순서에 맞게 정확하게 입력합니다.</li>
+						<li> - [이름]입력, [볼륨크기]설정, [설명]입력</li>
+						<li>[저장]버튼을 클릭하여 볼륨을 생성합니다.</li>
+					</ul>
+					<!-- 볼륨 스토리지 E -->
+					
+					<!-- 볼륨 스냅샷 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=7">볼륨 스냅샷</h3>
+					<p class="tuto-txt">볼륨 스냅샷은 사용자가 원하는 시점의 볼륨 상태를 스냅샷으로 저장할 수 있습니다.</p>
+
+					<img src="images/tutorial/iaas/volume_snapshot_01.png" alt="">
+					<img src="images/tutorial/iaas/volume_snapshot_02.png" alt="">
+					<ul class="tuto-ul">
+						<li>[스토리지][볼륨 스냅샷] 메뉴를 클릭합니다.</li>
+						<li>스냅샷을 사용하려는 볼륨의 우측 상단 [···]아이콘을 클릭합니다.</li>
+						<li>드롭 다운 메뉴의 [볼륨 스냅샷]메뉴를 클릭하여 [볼륨 스냅샷 생성 레이어 팝업]을 호출합니다.</li>
+						<li>[볼륨 스냅샷 생성 레이어 팝업]에서 [스냅샷 명, 설명]에 알맞은 정보를 입력합니다.</li>
+						<li>[저장]버튼을 클릭하여 생성을 완료합니다.</li>
+					</ul>
+					
+					<h5 class="h-tit5">볼륨 스냅샷 복원</h5>
+					<img src="images/tutorial/iaas/volume_snapshot_03.png" alt="">
+					<ul class="tuto-ul">
+						<li>[스토리지][볼륨 스냅샷] 메뉴를 클릭합니다.</li>
+						<li>볼륨 스냅샷 목록의 관리 항목의 [복원 아이콘]을 클릭하여 [볼륨 추가 레이어 팝업]을 호출합니다.</li>
+					</ul>
+					<img src="images/tutorial/iaas/volume_snapshot_04.png" alt="">
+					<ul class="tuto-ul">
+						<li>[인스턴스 추가 레이어 팝업]에서 정보들을 순서에 맞게 정확하게 입력합니다.</li>
+						<li> - [이름]입력, [볼륨크기]설정, [설명]입력</li>
+						<li>[복원]버튼을 클릭하여 볼륨을 복원합니다.</li>
+					</ul>
+					<!-- 볼륨 스냅샷 E -->
+
+					<!-- 오브젝트 스토리지 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=8">오브젝트 스토리지</h3>
+					<p class="tuto-txt">오브젝트 스토리지를 통해 데이터의 저장 및 공유 할 수 있습니다.</p> <br>
+					<p class="tuto-txt">포털에서는 오브젝트 스토리지 접근 정보 확인 및 컨테이터 관리를 할 수 있습니다.</p>
+					<p class="tuto-txt">접근 정보로 Api 또는 S3 브라우저로 오브젝트 스토리지를 사용 할 수 있습니다.</p>
+					<img src="images/tutorial/iaas/object_storage_01.png" alt="">
+
+					<h5 class="h-tit5">접근 정보 확인</h5>
+					<img src="images/tutorial/iaas/object_storage_02.png" alt="">
+					<ul class="tuto-ul">
+						<li>[스토리지][오브젝트 스토리지]메뉴를 클릭합니다.</li>
+						<li>목록 왼쪽 상단의 [접근정보조회]를 클릭합니다.</li>
+						<li>오브젝트 스토리지 접근 정보는 swift와 S3의 두가지 인터페이스에 대한 접속 정보를 보여 줍니다.</li>
+					</ul>
+
+					<h5 class="h-tit5">컨테이너 생성</h5>
+					<img src="images/tutorial/iaas/object_storage_03.png" alt="">
+					<ul class="tuto-ul">
+						<li>우측 상단의 [+]아이콘을 클릭합니다.</li>
+						<li>컨테이너명을 입력하고 확인을 클릭하면 신규 컨테이너가 생성됩니다.</li>
+					</ul>
+
+					<h5 class="h-tit5">S3 브라우저 사용</h5>
+					<img src="images/tutorial/iaas/object_storage_s3_01.png" alt="">
+					<ul class="tuto-ul">
+						<li>아마존 사이트에서 S3 브라우저를 다운로드 받고 설치 합니다.</li>
+					</ul>
+
+					<img src="images/tutorial/iaas/object_storage_s3_02.png" alt="">
+					<ul class="tuto-ul">
+						<li>S3 브라우저를 실행합니다.</li>
+						<li>실행 화면의 [Accounts][Add new account] 메뉴를 클릭 합니다.</li>
+					</ul>
+
+					<img src="images/tutorial/iaas/object_storage_s3_03.png" alt="">
+					<ul class="tuto-ul">
+						<li>[Account Type]은 S3 Compatible Storage를 선택합니다.</li>
+						<li>[REST Endpoint]는 포털의 접근 정보중 S3의 Rest Endpoint값을 입력 합니다.</li>
+						<li>[Access Key ID]는 포털의 접근 정보중 S3의 Access Key ID값을 입력 합니다.</li>
+						<li>[Secret Access Key]는 포털의 접근 정보중 S3의 Secret Access Key값을 입력 합니다.</li>
+						<li>[Add new account] 아이콘을 클릭합니다.</li>
+					</ul>
+
+					<img src="images/tutorial/iaas/object_storage_s3_04.png" alt="">
+					<ul class="tuto-ul">
+						<li>위에서 입력한 S3 접근 정보가 맞으면 포털과 같이 컨테이너 목록을 상단 좌측 화면에 조회됩니다.</li>
+					</ul>
+
+					<img src="images/tutorial/iaas/object_storage_s3_05.png" alt="">
+					<ul class="tuto-ul">
+						<li>상단 우측 화면에서 마우스 우클릭하여 파일을 upload/download 할 수 있습니다.</li>
+					</ul>
+
+					<!-- 오브젝트 스토리지 E -->
+					
+					<!-- 도메인 네트워크 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=9">도메인 네트워크</h3>
+					<p class="tuto-txt">클라우드 환경에서 생성된 인스턴스는 기본적으로 외부 인터넷 환경에서 접속 할 수 없습니다.</p> <br>
+					<p class="tuto-txt">도메인 네트워크에서는 이러한 내부 인스턴스 접속을 위한 접속IP 및 도메인을 관리를 합니다.</p>
+
+					<img src="images/tutorial/iaas/domain_network_01.png" alt="">
+					<ul class="tuto-ul">
+						<li>도메인 네트워크 조회 화면에서는 좌측에는 도메인 라우터 정보, 우측에는 해당 작업의 접속 IP 할당 정보를 보여 줍니다.</li>
+						<li>도메인 라우터는 인스턴스에 접속하기 위한 게이트웨이 라고 생각 하면 됩니다.</li>
+						<li>접속 IP에는 도메인 및 인스턴스를 연결 할 수 있습니다.</li>
+					</ul>
+
+					<img src="images/tutorial/iaas/domain_network_02.png" alt="">
+					<ul class="tuto-ul">
+						<li>인스턴스에 접속 IP가 할당 된 경우 화면과 같이 인스턴스 명이 같이 보여집니다.</li>
+						<li>도메인 네트워크 목록에서 우측 상단 [···]아이콘을 클릭합니다.</li>
+						<li>드롭 다운 메뉴에서 도메인 수정, 접속 IP 해제를 할 수 있습니다.</li>
+						<li>접속 IP 해제를 하면 인스턴스에서 접속 IP 연결을 제거 합니다.</li>
+					</ul>
+
+					<img src="images/tutorial/iaas/domain_network_03.png" alt="">
+					<ul class="tuto-ul">
+						<li>접속 IP가 인스턴스에 할당 되지 않은 경우 상태는 available이 되고 다른 인스턴스에 할당 할 수 있습니다.</li>
+						<li>도메인 네트워크 목록에서 우측 상단 [···]아이콘을 클릭합니다.</li>
+						<li>드롭 다운 메뉴에서 도메인 수정, 접속 IP 삭제를 할 수 있습니다.</li>
+						<li>접속 IP 삭제를 하면 도메인 네트워크에서 접속 IP를 반납합니다.</li>
+					</ul>
+
+					<h5 class="h-tit5">접속 IP 추가</h5>
+					<img src="images/tutorial/iaas/domain_network_04.png" alt="">
+					<ul class="tuto-ul">
+						<li>[접속IP 추가]로 신규 접속 IP를 할당 받을 수 있습니다.</li>
+						<li>[접속IP 추가]버튼을 클릭 합니다.</li>
+						<li>우측 팝업창이 뜨고 [IP 신규 할당] 버튼을 클릭하면 신규 접속 IP를 부여 받습니다.</li>
+					</ul>
+					
+					<img src="images/tutorial/iaas/domain_network_05.png" alt="">
+					<ul class="tuto-ul">
+						<li>접속IP에는 추가로 도메인을 부여 할 수 있습니다.</li>
+						<li>[확인] 버튼을 클릭하여 접속IP에 도메인을 부여합니다.</li>
+					</ul>
+					
+					<h5 class="h-tit5">도메인 네트워크 수정</h5>
+					<img src="images/tutorial/iaas/domain_network_06.png" alt="">
+					<ul class="tuto-ul">
+						<li>도메인 네트워크 목록에서 우측 상단 [···]아이콘을 클릭합니다.</li>
+						<li>드롭 다운 메뉴에서 도메인 수정을 클릭을 하여 [도메인수정 레이어 팝업]을 호출 합니다.</li>
+						<li>수정 화면에서는 도메인명을 변경 할 수 있습니다.</li>
+					</ul>
+
+					<img src="images/tutorial/iaas/domain_network_07.png" alt="">
+					<ul class="tuto-ul">
+						<li>접속 IP에 인스턴스가 연결 되지 않은 경우 도메인 수정을 클릭하면 팝업창에 인스턴스 입력 항목이 생깁니다.</li>
+						<li>인스턴스는 접속 IP가 부여되지 않은 인스턴스만 조회 됩니다.</li>
+						<li>인스턴스를 선택 한 후 [저장]버튼을 클릭하여 인스턴스에 접속 IP를 부여합니다.</li>
+					</ul>
+					<!-- 도메인 네트워크 E -->
+					
+				</div>
+
+				<!-- tutorial menu -->
+				<div class="sideMenu">
+					<dl>
+						<dt>목차</dt>
+						<dd>
+							<ul>
+								<li><a href="#/tutorial/1?content=1" class="on content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">가상 서버 만들기 및 구성</a></li><!-- selected class "on" -->
+								<li><a href="#/tutorial/1?content=2" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">키페어</a></li>
+								<li><a href="#/tutorial/1?content=3" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">보안그룹</a></li>
+								<li><a href="#/tutorial/1?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">서비스 인스턴스</a></li>
+								<li><a href="#/tutorial/1?content=5" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">인스턴스 스냅샷</a></li>
+								<li><a href="#/tutorial/1?content=6" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">볼륨 스토리지</a></li>
+								<li><a href="#/tutorial/1?content=7" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">볼륨 스냅샷</a></li>
+								<li><a href="#/tutorial/1?content=8" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">오브젝트 스토리지</a></li>
+								<li><a href="#/tutorial/1?content=9" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">도메인 네트워크</a></li>
+<!-- 								<li><a href="">가상 서버 만들기</a></li> -->
+							</ul>
+						</dd>
+					</dl>
+				</div>
+				<!-- //tutorial menu -->
+			</div>
+			<!-- //content -->

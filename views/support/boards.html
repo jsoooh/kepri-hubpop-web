@@ -1,0 +1,302 @@
+	<!-- container -->
+	<div id="container" class="fixed"><!-- 왼쪽메뉴가 고정일 경우 -->
+		<!-- left menu -->
+		<div class="leftMenu" ng-include="'views/ng-include/leftMenu.html'">
+		</div>
+		<!-- //left menu -->
+
+		<!-- rignt Cnt -->
+		<div class="rightCnt">
+			<!-- title area -->
+			<div class="titWrap">
+				<h2 class="h2">나의 문의내역</h2>
+
+				<!-- breadcrumb -->
+				<div class="breadWrap">
+					<ol class="breadcrumb">
+						<li><a href="#">Home</a></li>
+						<li><a href="#">마이페이지</a></li>
+						<li class="active">나의 문의내역</li><!-- 마지막 li -->
+					</ol>
+				</div>
+				<!-- //breadcrumb -->
+			</div>
+			<!-- //title area -->
+
+			<!-- content -->
+			<div class="content">
+				<!-- search -->
+				<div class="searchWrap">
+					<div class="searchBox">
+						<div class="form-group">
+							<!-- <label class="control-label">검색</label> -->
+		                    <input type="text" placeholder="검색어를 입력해 주세요." style="width:400px;">
+		                </div>
+						<button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+					</div>
+				</div>
+				<!-- //search -->
+
+				<!-- table -->
+				<div class="tbl type1">
+					<table class="table">
+						<colgroup>
+						<col style="width:15%;">
+						<col style="width:15%;">
+						<col style="width:auto;">
+						<col style="width:15%;">
+						<col style="width:15%;">
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">번호</th>
+								<th scope="col">문의유형</th>
+								<th scope="col">제목</th>
+								<th scope="col">등록일</th>
+								<th scope="col">상태</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>10</td>
+								<td>문의유형</td>
+								<td class="text-left"><a href="#">문의드립니다.</a></td>
+								<td>2018-02-27</td>
+								<td>답변완료</td>
+							</tr>
+							<tr>
+								<td>9</td>
+								<td>문의유형</td>
+								<td class="text-left"><a href="#">문의드립니다.</a></td>
+								<td>2018-02-27</td>
+								<td>대기</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td class="text-left"><a href="#"></a></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td class="text-left"><a href="#"></a></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td class="text-left"><a href="#"></a></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td class="text-left"><a href="#"></a></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td class="text-left"><a href="#"></a></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td class="text-left"><a href="#"></a></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td class="text-left"><a href="#"></a></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td class="text-left"><a href="#"></a></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- table -->
+
+				<!-- page -->
+				<nav class="pagiWrap">
+					<ul class="pagination">
+						<li class="first disabled"><a href="#" title="맨 처음">맨 처음</a></li>
+						<li class="prev"><a href="#" title="이전">이전</a></li>
+						<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+						<li class=" disabled"><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href="#">4</a></li>
+						<li><a href="#">5</a></li>
+						<li><a href="#">6</a></li>
+						<li><a href="#">7</a></li>
+						<li><a href="#">8</a></li>
+						<li><a href="#">9</a></li>
+						<li><a href="#">10</a></li>
+						<li class="next"><a href="#" title="다음">다음</a></li>
+						<li class="end"><a href="#" title="맨 끝">맨 끝</a></li>
+					</ul>
+				</nav>
+				<!-- //page -->
+			</div>
+			<!-- //content -->
+		</div>
+		<!-- rignt Cnt -->
+	</div>
+	<!-- //container -->
+
+    <!-- gnb menu -->
+    <div class="gnbMenu" ng-include="'views/ng-include/gnbMenu.html'">
+    </div>
+    <!-- //gnb menu -->
+
+	<!-- aside aside1 -->
+	<div class="aside" id="aside-aside1"><!-- 인스턴스 추가 버튼의 data-username에 연결할 아이디 이름을 넣어주세요. -->
+		<!-- aside aside1 title -->
+		<div class="sideTitWrap asideCnt">
+			<h2 class="c_tit">Java APP 서비스 추가</h2>
+			<button type="button" name="button" class="btn btn-close" data-user="aside-close"><span class="ico">닫기</span></button>
+		</div>
+		<!-- //aside aside1 title -->
+		<!-- aside aside1 cnt -->
+		<div class="sideCntWrap">
+			<!-- aside aside1 step -->
+			<div class="sideStepWrap">
+				<ul>
+					<li class="pull-left"><em>step 01</em><span>APP환경설정</span></li>
+					<li class="pull-right on"><em>step 02</em><span>인스턴스 설정</span></li>
+				</ul>
+			</div>
+			<!-- //aside aside1 step -->
+
+			<!-- sideInWrap -->
+			<div class="sideInWrap">
+				레이어 내용
+			</div>
+			<!-- //sideInWrap -->
+		</div>
+		<!-- //aside aside1 cnt -->
+
+		<!-- aside aside1 btm -->
+		<div class="sideBtmWrap two">
+			<button type="button" name="button" class="btn">저장</button>
+			<button type="button" name="button" class="btn btn-color5">취소</button>
+		</div>
+		<!-- //aside aside1 btm -->
+	</div>
+	<!-- //aside aside1 -->
+
+<div ng-if="main.hubpop.userJs == 'notMainBody'" ng-include="'views/ng-include/user.js.html'"></div>
+
+<div ng-if="0">
+
+<div class="topVisualContainer supportTop">
+	<div class="supportTopLeft"></div>
+	<div class="supportTopRight"></div>
+	<div class="topVisualWrap">
+		<img src="../img/img_supporttop.png" width="1069" height="201" alt="" />
+		<h3>{{'label.service_center' | translate}}</h3>
+		<div class="input-group searchWrap" ng-hide="true">
+			<input type="text" />
+			<div class="input-group-btn">
+				<button class="btn" type="submit">
+					<img src="../img/ico_search.png" width="20" height="20" alt="" />
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="content" class="container-fluid boardContainer">
+	<uib-tabset active="activeTabIndex" class="tab-animation">
+		<uib-tab index="1" ng-click="selTab(1);">
+			<uib-tab-heading>{{'label.board_notice' | translate}}</uib-tab-heading>
+			<div ng-if="!showDetail && activeTabIndex==1" ng-include="'views/support/boardList.html'"></div>
+			<div ng-if="showDetail && activeTabIndex==1" ng-include="'views/support/boardDetail.html'"></div>
+		</uib-tab>
+		<uib-tab index="2" ng-click="selTab(2);">
+			<uib-tab-heading>{{'label.board_faq' | translate}}</uib-tab-heading>
+			<div ng-if="!showDetail && activeTabIndex==2" ng-include="'views/support/boardList.html'"></div>
+			<div ng-if="showDetail && activeTabIndex==2" ng-include="'views/support/boardDetail.html'"></div>
+		</uib-tab>
+		<uib-tab index="3" ng-click="selTab(3);">
+			<uib-tab-heading>{{'label.board_data' | translate}}</uib-tab-heading>
+			<div ng-if="!showDetail && activeTabIndex==3" ng-include="'views/support/boardList.html'"></div>
+			<div ng-if="showDetail && activeTabIndex==3" ng-include="'views/support/boardDetail.html'"></div>
+		</uib-tab>
+		<uib-tab index="4" ng-click="selTab(4);" ng-show="isAuthenticated">
+			<uib-tab-heading>{{'label.board_qna' | translate}}</uib-tab-heading>
+			<div class="tableWrap">
+				<div class="topFunctionWrap">
+					<p class="title">{{title}}</p>
+				</div>
+				<table class="table writeTable">
+					<colgroup>
+						<col style="width:210px" />
+						<col />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th><span class="require"></span>{{ 'label.title' | translate }}</th>
+							<td>
+								<input type="text" name="title" maxlength="50" placeholder="{{ 'message.mi_type_title' | translate }}" ng-model="writeData.title" required/>
+								<span class="error_msg_block" ng-show="valid.isErrorTitle">{{ 'message.mi_dont_input_title' | translate }}</span>
+							</td>
+						</tr>
+						<tr>
+							<th><span class="require"></span>{{ 'label.contents' | translate }}</th>
+							<td>
+								<textarea maxlength="4000" name="content" placeholder="{{ 'message.mi_type_content' | translate }}" ng-model="writeData.content" required ></textarea><p class="info">* 개인정보보호를 위해 문의 내용에 휴대폰 번호 등 개인정보 입력을 삼가하여 주시기 바랍니다.</p>
+								<span class="error_msg_block" ng-show="valid.isErrorContent">{{ 'message.mi_dont_input_content' | translate }}</span>
+							</td>
+						</tr>
+						<tr>
+							<th><span class="require none"></span>{{ 'label.file_attach' | translate }}</th>
+							<td>
+								<ul>
+									<li>
+										<input type="file" id="uploadedNoticeFile" file-input="file.uploadedNoticeFile" placeholder="Upload File" style="display: none;"/>
+										<button type="button" class="btn btn-file" ng-click="main.fileSelectBtnClick($event);">
+											{{ 'label.file_search' | translate }}
+										</button>
+										<span ng-if="file.uploadedNoticeFile.name">{{ file.uploadedNoticeFile.name }}</span>
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="bottomBtnWrap">
+				<button class="btn btn-add" ng-click="boardAdd(writeData);">{{ 'label.qna' | translate }}</button>
+				<button class="btn" ng-click="writeData={};">{{ 'label.cancel' | translate }}</button>
+			</div>
+		</uib-tab>
+		<uib-tab index="5" ng-click="selTab(5);" ng-show="isAuthenticated">
+			<uib-tab-heading>{{'label.board_myQna' | translate}}</uib-tab-heading>
+			<div ng-if="!showDetail && activeTabIndex==5" ng-include="'views/support/boardList.html'"></div>
+			<div ng-if="showDetail && activeTabIndex==5" ng-include="'views/support/boardDetail.html'"></div>
+		</uib-tab>
+	</uib-tabset>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var winHeight = $(window).height();
+        $(".boardContainer").css("min-height",winHeight-416)
+    });
+</script>
+
+</div>

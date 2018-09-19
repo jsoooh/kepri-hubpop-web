@@ -1,0 +1,108 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".carousel").hide();
+	});
+</script>
+<div class="topVisualContainer productTop"> 
+    <nav class="navbar navbar-default product-sub-nav">
+	  <div class="container-fluid">
+	   <a class="back-product-list" href="#/product"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a> 
+		<div class="navbar-header">            
+		  <a class="navbar-brand" href="">Storage</a>
+		</div>
+		<ul class="nav navbar-nav product-nav-list">
+		  <li><a href="#/product/iaas/storage/blockstorage">Block Storage</a></li>
+		  <li><a href="#/product/iaas/storage/objectstorage">Object Storage</a></li>
+		  <li class="active"><a href="#/product/storage/backup">Back Up</a></li>
+		</ul>
+	  </div>
+	</nav>
+	<div class="productTopLeft"></div>
+	<div class="productTopRight"></div>
+	<div class="topVisualWrap"> 
+		<!--<img src="../img/img_supporttop.png" width="1069" height="201" alt="" />-->
+		<h3>Back Up</h3>
+		<p>사용환경을 스냅샷으로 간편하게 관리하세요.</p>
+	</div>
+</div>
+<div id="content" class="container-fluid productContainer">
+	<uib-tabset active="contents.activeTabIndex" class="tab-animation">
+		<uib-tab index="1">
+			<uib-tab-heading>소개</uib-tab-heading>
+			<div class="productIntroWrap productEven">
+                <h4><span>Back Up</span>사용자 개발의 연속성을 위해 이미지로 관리하는 기능</h4>
+				<p>
+					특정 시점의 스냅샷을 생성하여 다양한 워크로드로 인해 발생할 수 있는 업무 손실을 최소화 할 수
+                    있으며, <br> 고객의 물리적 위치에 영향을 받지 않고 보호하며,
+                    다양한 고객의 시나리오를 만족합니다. 
+				</p>
+				<ul>
+					<li>
+						<img src="../img/ico_service_detail_0013.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">효율적인 데이터 보호 </span>
+							많은 수량의 파일들을 처리하는 데 한계가 있는 기존의 백업 방식 대신 여러 개의 사본을 분산배치,<br/> 버전을 기록하여 데이터를 보호하는 기술을 제공합니다. 
+				        </span>
+					</li>
+					<li>
+						<img src="../img/ico_service_detail_0006.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">간편한 이용 </span>
+							웹 기반 콘솔을 이용하여 간편하게 관리 합니다. <br> 복잡한 명령어를 써야 하는 커멘드 라인을 이용할 필요 없이 간편하게 백업할 수 있습니다.  
+						</span>
+					</li> 
+					<li>
+						<img src="../img/ico_service_detail_0016.png" width="90" height="73" alt="" />
+						<span>
+							<span class="title">효율적인 리소스 관리 </span>
+							사용자가 사용한 부분에 대해 풀 백업이 아닌 부분 백업으로<br> 사용 기록에 대해 누적 데이터를 백업할 수 있습니다.
+						</span>
+					</li>
+					
+					<li>
+						<img src="../img/ico_service_detail_0003.png" width="90" height="72" alt="" />
+						<span>
+							<span class="title">안정적인 백업 기능 </span>
+							Cinder 내에 위치한 API 및 볼륨 백업 기능으로<br> 안정적인 백업 서비스를 제공합니다.   
+						</span>
+					</li> 
+				</ul>
+			</div> 
+		</uib-tab>
+		<uib-tab index="2">
+			<uib-tab-heading>상세 기능</uib-tab-heading>
+			<div class="productIntroWrap">
+				<dl>
+					<dt>비즈니스 연속성 보장 </dt>
+					<dd>
+						즉각적인 재해 복구를 위해 운영 중단 없이 특정 시점 스냅샷을 캡쳐합니다.<br> 모든 요소를 이중화 구성하여 데이터 손실 방지를 최우선으로 설계하여 높은 수준의 가용성을 제공하며, 이를 통해 고객의 비즈니스 연속성 보장에 기여합니다.
+
+					</dd>
+					<dt>간편한 이용</dt>
+					<dd>웹 기반 콘솔을 이용하여 간편하게 관리할 수 있습니다. 복잡한 명령어를 써야 하는 커맨드라인을 이용할 필요가 없으며 사용자는 몇 번의 클릭만으로 백업서비스를 이용할 수 있습니다. 
+                    </dd>
+					<dt>효율적인 리소스 관리</dt>
+					<dd>사용자가 사용한 부분에 대해 풀 백업이 아닌 부분 백업으로 사용 기록에 대해 누적 데이터를 백업할 수 있습니다. </dd> 
+                    <dt>안정적인 백업 기능 </dt>
+					<dd>Cinder 내에 위치한 API및 볼륨 백업 기능으로 안정적인 백업 서비스를 제공합니다. </dd> 
+					<dt>강력한 볼륨 스냅샷 기능 </dt>
+					<dd>오픈스택 내 구성되어 있는 Cinder 시스템을 이용하여 볼륨 전체를 스냅샷으로 백업합니다. </dd> 
+					<dt>유연한 VM 스냅샷 기능 </dt>
+					<dd>사용자가 원하는 운영체제에 맞게(페도라 및 데비안계열 리눅스, 윈도우)  오픈스택 내 구성되어 있는 Nova 시스템을 이용하여
+                    VM(Virtual Machine)을 백업합니다.</dd> 
+				</dl>
+			</div> 
+		</uib-tab>
+<!--
+		<uib-tab index="3">
+			<uib-tab-heading>이용안내</uib-tab-heading>
+		</uib-tab>
+-->
+	</uib-tabset>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var winHeight = $(window).height();
+        $(".productContainer").css("min-height",winHeight-434)
+    });
+</script>

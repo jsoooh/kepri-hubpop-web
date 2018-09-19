@@ -1,0 +1,78 @@
+<div class="tableWrap">
+	<div class="tableWrap">
+		<table class="table table-bordered inputWidthWrap">
+			<colgroup>
+				<col style="width:140px;" />
+				<col />
+			</colgroup>
+			<tbody>
+			<tr>
+				<th>
+					<span class="require"></span>
+					<label>{{'label.board' | translate}}</label>
+				</th>
+				<td>
+					<select id="schType" name="schType" ng-options="( condition.name | translate ) for condition in pop.conditions" ng-model="pop.selCondition" style="width:280px;" validation="required">
+					</select>
+				</td>
+			</tr>
+            <tr>
+                <th>
+                    <span class="require"></span>
+                    <label for="title">{{ 'label.bulletin_title' | translate }}</label>
+                </th>
+                <td>
+                    <input type="text" id="title" name="title" maxlength="30" ng-model="pop.boardData.title0" placeholder="{{'label.bulletin_title' | translate}}" style="width:95%;ime-mode:active;" validation="required"/>
+                </td>
+            </tr>
+			<tr ng-show="pop.selCondition.id=='notice'">
+				<th>
+					<span class="require none"></span>
+					<label for="popup0">{{ 'label.bulletin_option' | translate }}</label>
+				</th>
+				<td>
+					<p class="inputWrap inline">
+						<input type="checkbox" id="popup0" class="mdl-checkbox__input" ng-model="pop.boardData.popup"/><label for="popup0">{{'label.bulletin_popup' | translate}}</label>
+					</p>
+				</td>
+			</tr>
+			<tr ng-show="pop.boardData.popup">
+				<th>
+					<span class="require none"></span>
+					<label>{{ 'label.bulletin_period' | translate }}</label>
+				</th>
+				<td class="datepickerWrap">
+					<!-- angular-datepicker -->
+					<adm-dtp name="startDate" id="startDate" ng-model='pop.boardData.startDate' options='{ format: "YYYY.MM.DD", minDate: "dates.minDate", maxDate: "maxDate", gregorianDic : main.sltDataTimePickerOptions, autoClose:true }' full-data="date11_detail" maxdate="{{date12_detail.unix}}"></adm-dtp>
+					&nbsp; ~ &nbsp;
+					<adm-dtp name="endDate" id="endDate" ng-model='pop.boardData.endDate' options='{ format: "YYYY.MM.DD", minDate: "minDate", gregorianDic : main.sltDataTimePickerOptions, autoClose:true }' full-data="date12_detail" mindate="{{date11_detail.unix}}"></adm-dtp>
+				</td>
+			</tr>
+			<tr>
+				<th>
+                    <span class="require"></span>
+					<label for="content">{{ 'label.bulletin_content' | translate }}</label>
+				</th>
+				<td>
+					<textarea maxlength="4000" type="text" class="success" id="content" name="content" ng-model="pop.boardData.content0" placeholder="{{ 'label.bulletin_content' | translate }}" style="width:95%;ime-mode:active;" rows="10" validation="required"/>
+				</td>
+			</tr>
+            <tr>
+                <th>
+					<span class="require none"></span>
+                    <label for="content">{{ 'label.bulletin_attach' | translate }}</label>
+                </th>
+                <td>
+					<input type="file" id="uploadedNoticeFile" file-input="pop.file.uploadedNoticeFile" multiple placeholder="Upload File" style="display: none;"/>
+					<button type="button" class="btn btn-file" ng-click="main.fileSelectBtnClick($event);">
+						{{ 'label.file_search' | translate }}
+					</button>
+					<ul>
+						<li ng-repeat="aFile in pop.file.uploadedNoticeFile">{{ aFile.name }}</li>
+					</ul>
+                </td>
+            </tr>
+			</tbody>
+		</table>
+	</div>
+</div>

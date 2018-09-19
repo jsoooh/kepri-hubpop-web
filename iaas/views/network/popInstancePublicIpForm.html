@@ -1,0 +1,85 @@
+<!-- sideInWrap -->
+<div class="sideInWrap">
+
+	<!-- search -->
+	<div class="searchBox">
+		<div class="input-group">
+			<select style="width:55%" ng-options="network as network.description for network in pop.networks"
+					ng-model="pop.network" ng-change="pop.fn.networksChange();"></select>
+			<select style="width:45%" ng-model="pop.conditionKey" ng-init="pop.conditionKey = ''">
+				<option value="">--조건선택--</option>
+				<option value="name">서버명</option>
+				<option value="ip">IP</option>
+				<!--<option value="vmType">서버용도</option>-->
+			</select>
+			<!--<input type="text"  ng-model="pop.conditionValue" placeholder="검색" ng-keyup="$event.keyCode == 13 ? pop.fn.getInstanceList() : null;">
+			<button type="button" class="btn" ng-click="pop.conditionValue = ''"><img src="img/input_delete.png" width="9" height="9" alt="Clear" /></button>
+
+			<button type="button" class="btn btn-search" ng-click="pop.fn.getInstanceList();" tooltip-placement="bottom" uib-tooltip="{{ 'label.search' | translate }}">
+				<img src="img/btn_search.png" width="16" height="16" alt="{{ 'label.search' | translate }}">
+			</button>-->
+
+			<input type="text" placeholder="검색" class="form-control" style="width:98%;" ng-model="pop.conditionValue" ng-keyup="$event.keyCode == 13 ? pop.fn.getInstanceList() : null;">
+			<!--<button type="button" class="btn" ng-click="pop.conditionValue = ''"><img src="img/input_delete.png" width="9" height="9" alt="Clear" /></button>-->
+			<div class="input-group-btn btn-bottom">
+				<button type="button" name="button" class="btn btn-sch" ng-click="pop.fn.getInstanceList();" tooltip-placement="bottom" uib-tooltip="{{ 'label.search' | translate }}"><span class="ico">{{ 'label.search' | translate }}</span></button>
+			</div>
+		</div>
+	</div>
+	<!-- //search -->
+
+	<div class="tbl type1" style="margin-top:10px;">
+		<table class="table table-hover" style="table-layout:fixed">
+			<colgroup>
+				<col style="width:15%" />
+				<col />
+				<col style="width:30%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>선택</th>
+					<th>인스턴스</th>
+					<th>내부IP</th>
+				</tr>
+			</thead>
+			<tbody id="mainList">
+				<tr ng-repeat="instance in pop.instanceList">
+					<td>
+						<p class="inputWrap" ng-show="instance.vmState != 'deleted' && instance.taskState != 'deleting'">
+							<input type="radio" id="{{instance.$$hashKey}}" name="instanceId" ng-model="pop.instance" value="{{instance}}">
+							<label for="{{instance.$$hashKey}}"></label>
+						</p>
+					</td>
+					<td class="text-left labelWrap">
+						{{instance.name}}
+					</td>
+					<td>
+						<div ng-repeat="fixedIp in instance.fixedIps">
+							{{fixedIp}}
+						</div>
+					</td>
+				</tr>
+				<tr ng-if="!pop.instanceList || pop.instanceList.length == 0">
+					 <td colspan="3" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- page -->
+	<nav class="pagiWrap">
+		<paging class="pagiWrap"
+				page="pop.pageOptions.currentPage"
+				page-size="pop.pageOptions.pageSize"
+				total="pop.pageOptions.total"
+				pg-href=""
+				show-prev-next="true"
+				show-first-last="true"
+				paging-action="pop.fn.getInstanceList(page)"
+				text-first-class="first"
+				text-last-class="end"
+				text-next-class="next"
+				text-prev-class="prev">
+		</paging>
+	</nav>
+	<!-- //page -->
+</div>

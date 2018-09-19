@@ -1,0 +1,41 @@
+<div ng-controller="iaasPolicyGroupActionFormCtrl as pop">
+<!-- aside aside1 title -->
+<div class="sideTitWrap">
+	<h2 class="c_tit">{{pop.title}}</h2>
+	<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="main.thisAsideClose($event);"><span class="ico">닫기</span></button>
+</div>
+<!-- //aside aside1 title -->
+
+<!-- aside aside1 cnt -->
+<form name="{{pop.formName}}" novalidate>
+	<div class="sideCntWrap">
+		<!-- sideInWrap -->
+		<div class="sideInWrap">
+			<ol class="app-set">
+				<li ng-if="pop.formType == 'write'">
+					<p class="app-tit">이름 입력</p>
+					<input type="text" name="policyGroupName" value="" ng-model="pop.securityPolicy.name" maxlength="30" class="form-control" placeholder="이름을 입력해 주세요." validation="alpha_dash|required">
+				</li>
+				<li ng-if="pop.formType == 'edit'">
+					<p class="app-tit">이름 입력</p>
+					<input type="text" name="editPolicyGroupName" value="" ng-model="pop.securityPolicy.name" class="form-control" placeholder="이름을 입력해 주세요." disabled validation="required">
+				</li>
+				<li>
+					<p class="app-tit">설명 입력</p>
+					<textarea name="policyGroupDescription" style="height:200px;" placeholder="설명을 입력해 주세요." ng-model="pop.securityPolicy.description" class="form-control" ng-keyup="pop.fn.checkByte(pop.securityPolicy.description,255)"></textarea>
+					<p class="text-letter">{{pop.securityPolicy.description | stringToBytes}}/255 Byte</p>
+					<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
+				</li>
+			</ol>
+		</div>
+		<!-- //sideInWrap -->
+	</div>
+</form>
+<!-- //aside aside1 cnt -->
+
+<!-- aside aside1 btm -->
+<div class="sideBtmWrap">
+	<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.popDialogOk();">저장</button>
+</div>
+<!-- //aside aside1 btm -->
+</div>

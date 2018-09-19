@@ -1,0 +1,51 @@
+<!-- 작업 추가 및 선택 -->
+<div class="projt-selWarp">
+	<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+	<div class="pull-right">
+		<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+	</div>
+</div>
+<!-- //작업 추가 및 선택 -->
+
+<!-- table -->
+<div class="tbl type1">
+	<table class="table">
+		<colgroup>
+			<col style="width:18%"/>
+			<col style="width:18%"/>
+			<col style="width:18%"/>
+			<col style="width:18%"/>
+			<col style="width:18%"/>
+			<col style="width:10%"/>
+		</colgroup>
+		<thead>
+			<tr>
+				<th>고정IP</th>
+				<th>공인IP</th>
+				<th>인스턴스</th>
+				<th>인스턴스 타입</th>
+				<th>상태</th>
+				<th>관리</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="port in contents.portList">
+				<td>{{port.fixedIp}}</td>
+				<td>{{port.floatingIp}}</td>
+				<td>{{port.instanceName}}</td>
+				<td>{{port.vmType}}</td>
+				<td>{{port.status}}</td>
+				<td>
+					<button type="button" ng-if="port.status == 'DOWN'" class="btn button_img" ng-click="contents.fn.deletePort(port.id)" tooltip-placement="bottom" uib-tooltip="삭제"><img src="img/ico_delete.png" width="13" height="16" alt="" /></button>
+				</td>
+			</tr>
+			<tr ng-if="!contents.portList || contents.portList.length == 0">
+				<td colspan="6" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!-- //table -->
+<div class="btn-btm">
+	<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage(main.moveParentUrl);">목록</button>
+</div>

@@ -1,0 +1,28 @@
+<form name="pop.{{pop.formName}}" novalidate>
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+		<ol class="app-set">
+			<li ng-if="pop.deployServer.deployType == 'LB'">
+				<p class="app-tit">서비스 연결</p>
+				<div class="input-group" style="width : 100%;">
+					<select class="form-control" name="sltServiceInstance" ng-model="pop.sltServiceInstanceId" ng-change="pop.fn.changeServiceInstance(pop.sltServiceInstanceId)" validation="required">
+						<option ng-if="!pop.unusingServiceInstances || pop.unusingServiceInstances.length == 0" value="">연결 가능한 서비스가 존재하지 않습니다.</option>
+						<option ng-repeat="item in pop.unusingServiceInstances" value="{{item.id}}">{{item.serviceInstanceName}}[{{item.servicePort}}]</option>
+					</select>
+				</div>
+				<div class="validation validation-sltServiceInstance text-danger"></div>
+			</li>
+			<li ng-if="pop.deployServer.deployType != 'LB'">
+				<p class="app-tit">LB 서비스 포트<button type="button" class="btn ico-plus" ng-click="pop.fn.addLbServicePortFormOpen()" tooltip-placement="bottom" uib-tooltip="LB 포트 추가"></button></p>
+				<div class="input-group" style="width : 100%;">
+					<select class="form-control" name="sltLbServicePort" ng-model="pop.sltLbServicePortId" ng-change="pop.fn.changeServicePort(pop.sltLbServicePortId)" validation="required">
+						<option ng-if="!pop.lbDeployServer || !pop.lbDeployServer.deployId" value="">서비스 포트 로딩 중 ...</option>
+						<option ng-if="pop.lbDeployServer && pop.lbDeployServer.deployId && (!pop.unusingServicePorts || pop.unusingServicePorts.length == 0)" value="">서비스 포트를 추가해 주세요.</option>
+						<option ng-repeat="item in pop.unusingServicePorts" value="{{item.id}}">{{item.servicePortName}}[{{item.sourcePort}}{{item.sslUsed ? ', ssl ' + item.sslSourcePort : ''}}]</option>
+					</select>
+				</div>
+				<div class="validation validation-sltLbServicePort text-danger"></div>
+			</li>
+		</ol>
+	</div>
+</form>

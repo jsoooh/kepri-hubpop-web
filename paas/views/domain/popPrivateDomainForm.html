@@ -1,0 +1,31 @@
+<table class="table table-bordered">
+    <colgroup>
+        <col style="width:120px;" />
+        <col />
+    </colgroup>
+    <tbody>
+    <tr>
+        <th>
+            <span class="require"></span>
+            <label for="organization">{{ 'label.org_select' | translate }}</label><!-- 조직선택 -->
+        </th>
+        <td ng-show="organizationEnabled">
+            <select name="organization" id="organization" ng-model="pop.privateDomainData.organizationGuid" validation="required">
+                <option value="">{{ 'label.select' | translate }}</option>
+                <option ng-repeat="orgItem in pop.organizations" value="{{ orgItem.guid }}">{{ orgItem.name }}</option>
+            </select>
+        </td>
+        <td ng-hide="organizationEnabled">
+            <input type="text" maxlength="30" value="{{ pop.privateDomainData.organizationName }}" disabled>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            <span class="require"></span>
+            <label for="name">{{ 'label.domain_name' | translate }}</label><!-- 도메인명 -->
+        </th>
+        <td>
+            <input type="text" maxlength="30" name="name" id="name" ng-model="pop.privateDomainData.name" placeholder="{{ 'label.domain_example' | translate }}" validation="pattern=/^([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,6}$/:alt={{ 'INVALID_PATTERN_DATA' | translate: { data: ( 'label.domain_example' | translate) } }}|min_len:3|max_len:30|required" maxlength="30">
+        </td>
+    </tr>
+</table>

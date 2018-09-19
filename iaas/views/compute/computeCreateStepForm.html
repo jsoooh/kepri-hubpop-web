@@ -1,0 +1,191 @@
+<div id="computeCreate" ng-controller="iaasComputeCreateCtrl as pop">
+	<div ng-show="pop.activeTabIndex == 1">
+		<!-- aside aside1 title -->
+		<div class="sideTitWrap">
+			<h2 class="c_tit">인스턴스 만들기</h2>
+			<button type="button" name="closeBtn1" class="btn btn-close" data-user="aside-close" ng-click="pop.fn.formClose();"><span class="ico">닫기</span></button>
+		</div>
+		<!-- //aside aside1 title -->
+		
+		<!-- aside aside1 cnt -->
+		<form name="{{pop.formName}}" novalidate>
+			<div class="sideCntWrap">
+				<!-- aside step -->
+				<div class="sideStepWrap">
+					<ul>
+						<li class="pull-left on"><em>step 01</em><span>APP환경설정</span></li>
+						<li class="pull-right"><em>step 02</em><span>인스턴스 설정</span></li>
+					</ul>
+				</div>
+				<!-- //aside step -->
+			
+				<!-- sideInWrap -->
+				<div class="sideInWrap">
+					<ol class="app-set">
+						<!-- <li>
+							<p class="app-tit">1. 유형 선택</p>
+							<div>
+								<div class="radio radio-inline">
+									<input type="radio" name="app-radio1" id="app-radio1-1" checked="checked">
+									<label for="app-radio1-1" class="label">Compute</label>
+								</div>
+								<div class="radio radio-inline">
+									<input type="radio" name="app-radio1-2" id="app-radio1-2">
+									<label for="app-radio1-2" class="label">C APP</label>
+								</div>
+								<div class="radio radio-inline">
+									<input type="radio" name="app-radio1-3" id="app-radio1-3">
+									<label for="app-radio1-3" class="label">Net APP</label>
+								</div>
+							</div>
+						</li> -->
+						<li>
+							<p class="app-tit">1. 인스턴스 명</p>
+							<input type="text" class="form-control" name="serverName" ng-model="pop.data.name" maxlength="50" placeholder="인스턴스 명을 입력해 주세요." validation="alpha_dash|required">
+						</li>
+						<li>
+							<p class="app-tit">2. OS 이미지 선택</p>
+							<div class="scroll-pane">
+								<ul class="ul-list1">
+									<li ng-repeat="image in pop.imageList">
+										<div class="radio1 radio-inline">
+											<input type="radio" id="{{image.$$hashKey}}" name="froms.selectImageForm.imageId" ng-click="pop.data.image = image;">
+											<label for="{{image.$$hashKey}}" class="label"><img ng-src="images/thum/{{image.iconFileName}}.png" class="im"/></label>
+										</div>
+										<p class="label-txt">{{image.name}}</p>
+										<input type="hidden" ng-if="$last" ng-init="pop.scrollPane()">
+									</li>
+								</ul>
+							</div>
+							<input type="hidden" ng-model="pop.data.image" name="selectImage" validation="required">
+						</li>
+						<li>
+							<p class="app-tit">3. 보안그룹 선택</p>
+							<div class="dropdown instSelWrap2">
+								<button name="securityPolicyBtn" class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" >
+									<span ng-if="pop.roles.length > 0">{{ pop.roles | join:', ':'name' }}</span>
+									<span class="fontW400" ng-if="pop.roles.length == 0">선택</span>
+								</button>
+								<div class="dropdown-menu dropdown-menu-hold instBox2">
+									<ul>
+										<li ng-repeat="policy in pop.securityPolicyList">
+											<div>
+												<p>
+													<input type="checkbox" id="{{policy.id}}" ng-click="pop.fn.changeSecurityPolicy()" checklist-model="pop.roles" checklist-value="policy">
+													<label for="{{policy.id}}" class="fontW400">{{policy.name}}</label>
+												</p>
+												{{policy.description | splitStr : '\n' : 0}}
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</li>
+						<li>
+							<p class="app-tit">4. 키페어 선택 (필수)</p>
+							<div class="input-group">
+								<select class="form-control" name="keypairValue" ng-model="pop.keypairValue" ng-change="pop.fn.changeKeypair()" validation="required">
+									<option value="">선택</option>
+									<option ng-repeat="keypair in pop.keypairList" value="{{keypair}}">
+										{{keypair.name}}
+									</option>
+								</select>
+								<div class="input-group-btn btn-top">
+									<button type="button" name="createKeypairBtn" class="btn btn-color1" style="width:90px;" ng-click="pop.fn.createKeypair()">키페어 추가</button>
+								</div>
+							</div>
+						</li>
+					</ol>
+				</div>
+				<!-- //sideInWrap -->
+			</div>
+		</form>
+		<!-- //aside aside1 cnt -->
+		
+		<!-- aside btm -->
+		<div class="sideBtmWrap">
+			<button type="button" name="nextStpeBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.nextStep()">다음단계</button>
+		</div>
+		<!-- //aside btm -->
+	</div>
+	
+	
+	<div ng-show="pop.activeTabIndex == 2">
+			<!-- aside title -->
+			<div class="sideTitWrap">
+				<h2 class="c_tit">인스턴스 만들기</h2>
+				<button type="button" name="closeBtn2" class="btn btn-close" data-user="aside-close" ng-click="pop.fn.formClose();"><span class="ico">닫기</span></button>
+			</div>
+			<!-- //aside title -->
+	
+			<!-- aside cnt -->
+			<form name="{{pop.formName2}}" novalidate>
+				<div class="sideCntWrap">
+					<!-- aside step -->
+					<div class="sideStepWrap">
+						<ul>
+							<li class="pull-left"><em>step 01</em><span>APP환경설정</span></li>
+							<li class="pull-right on"><em>step 02</em><span>인스턴스 설정</span></li>
+						</ul>
+					</div>
+					<!-- //aside step -->
+		
+					<!-- sideInWrap -->
+					<div class="sideInWrap">
+						<ol class="app-set">
+							<li>
+								<p class="app-tit">초기화스크립트 선택</p>
+								<select name="pop.initScriptValue" class="form-control" ng-disabled="!pop.initCheck" ng-model="pop.initScriptValue" ng-change="pop.fn.changeInitScript()" style="float:left; width:235px;">
+									<option value="" ng-if="pop.initScriptList.length > 0">선택</option>
+									<option value="" ng-if="pop.initScriptList.length == 0">초기화 스크립트가 존재하지 않습니다.</option>
+									<option ng-repeat="initScript in pop.initScriptList" value="{{initScript}}">
+										{{initScript.name}}
+									</option>
+								</select>
+								<div class="checkbox checkbox-inline" style="margin:6px 0px 0px 10px;">
+									<input type="checkbox" name="initCheck" id="initCheck" ng-init="pop.initCheck = false"  ng-model="pop.initCheck" ng-click="pop.fn.initScriptSet()">
+									<label for="initCheck" class="label"><span style="margin-left:5px;">사용</span></label>
+								</div>
+							</li>
+							<li ng-show="pop.initCheck">
+								<textarea name="pop.data.initScript.script" ng-model="pop.data.initScript.script" style="height:80px;" disabled></textarea>
+							</li>
+							<li>
+								<p class="app-tit">생성할 리소스 정보</p>
+								<ul class="app-reso">
+									<li><span>{{pop.data.spec.vcpus}}<em>Core</em></span><strong>Total<br>vCPU</strong></li>
+									<li><span>{{pop.data.spec.ram/1024|number}}<em>G</em></span><strong>Total<br>vMemory</strong></li>
+									<li><span>{{pop.data.spec.disk}}<em>G</em></span><strong>Total<br>Disk</strong></li>
+								</ul>
+							</li>
+							<li>
+								<p class="app-tit">인스턴스 사양 선택</p>
+								<select class="form-control" name="pop.specValue" ng-model="pop.specValue" ng-change="pop.fn.selectSpec();" validation="required">
+									<option value="">선택</option>
+									<option ng-repeat="spec in pop.specList | filter:{name:'m'}" value="{{spec}}">[{{spec.name}}] vCPU {{spec.vcpus}}개 / MEM {{spec.ram/1024|number}} GB / DISK(HDD) {{spec.disk}} GB</option>
+								</select>
+							</li>
+						</ol>
+					</div>
+					<!-- //sideInWrap -->
+				</div>
+			</form>
+			<!-- //aside cnt -->
+	
+			<!-- aside btm -->
+			<div class="sideBtmWrap">
+				<button type="button" name="preBtn" class="btn" data-user="aside" data-username="#aside-aside1" ng-click="pop.preStep();" style="width:49.5%">이전단계</button>
+				<button type="button" name="saveBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.fn.createServer();" style="width:49.5%">인스턴스 생성</button>
+			</div>
+			<!-- //aside btm -->
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".aside .instSelWrap .btn").on("click", function(){
+			$(this).next(".instBox").slideToggle();
+		});
+		
+		$('.dropdown-menu-hold').click(function (e) { e.stopPropagation(); });
+	});
+</script>

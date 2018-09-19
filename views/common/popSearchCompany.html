@@ -1,0 +1,81 @@
+<div class="topFunctionWrap">
+    <div class="searchWrap">
+        <ul class="searchinputWrap">
+            <li>
+                <select ng-options="( condition.name | translate ) for condition in pop.conditions" ng-model="pop.selCondition" ng-change="changeType()"></select>
+            </li>
+            <li>
+                <input type="text" placeholder="{{ 'label.search' | translate }}" ng-model="pop.schText" id="searchText" maxlength="30" style="width:250px;">
+            </li>
+            <li>
+                <button type="button" class="btn btn-black" ng-click="pop.searchCompanyAction()" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.search' | translate }}">
+                   {{ 'label.search' | translate }}
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="tableWrap">
+    <table class="table table-hover">
+        <thead>
+        <colgroup>
+            <col style="width:6%;">
+            <col style="width:10%;">
+            <col style="width:20%;">
+            <!--<col style="width:20%;">-->
+            <col style="width:12%;">
+            <col style="width:28%">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>{{ 'label.no' | translate }}</th>
+            <th class="text-left">{{ 'label.business_id' | translate }}</th>
+            <th class="text-left">{{ 'label.business_name' | translate }}</th>
+            <!--<th>{{ 'label.registration_number' | translate }}</th>-->
+            <th class="text-left">{{ 'label.representative_name' | translate }}</th>
+            <th class="text-left">{{ 'label.address' | translate }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="company in pop.companies" ng-click="pop.setCompany(company)" ng-hide="loadingCompany">
+            <td>{{ pop.pageOption.pageSize*(pop.pageOption.currentPage-1)+ $index+1 }}</td>
+            <td class="text-left">{{ company.companyId }}</td>
+            <td class="text-left">{{ company.companyName }}</td>
+            <!--<td>{{ company.registrationNumber1 }}-{{ company.registrationNumber2 }}-{{ company.registrationNumber3 }}</td>-->
+            <td class="text-left">{{ company.representativeName }}</td>
+            <td class="text-left">{{ company.address }}</td>
+        </tr>
+        <tr ng-show="!pop.pageOption.total">
+            <td colspan="5">{{ 'message.mi_dont_exist_list' | translate }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="paginationWrap" ng-show="pop.pageOption.total > 0">
+    <div class="totalWrap">
+        {{ 'label.total' | translate }} {{ pop.pageOption.total }}{{ 'label.count' | translate }}
+    </div>
+    <paging
+            class="small"
+            page="pop.pageOption.currentPage"
+            page-size="pop.pageOption.pageSize"
+            total="pop.pageOption.total"
+            pg-href=""
+            show-prev-next="true"
+            show-first-last="true"
+            paging-action="pop.searchCompanyAction(page)"
+            text-first='<<'
+            text-last='>>'
+            text-next='>'
+            text-prev='<'
+            text-first-class="firstPage"
+            text-last-class="lastPage"
+            text-next-class="nextPage"
+            text-prev-class="prevPage"
+            text-title-page="{page}"
+            text-title-first="First"
+            text-title-last="Last"
+            text-title-next="Next"
+            text-title-previous="Previous">
+    </paging>
+</div>

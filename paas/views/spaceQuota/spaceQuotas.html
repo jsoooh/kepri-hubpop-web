@@ -1,0 +1,69 @@
+<div class="mainWrap container-fluid">
+    <div class="main">
+		<div class="topFunctionWrap">
+			<div class="btnWrap">
+				<ul class="systemBtnWrap">
+					<li>
+						<button type="button" class="btn btn-add" tooltip-placement="bottom" uib-tooltip="{{ 'label.space_quota_add' | translate }}" ng-click="contents.createSpaceQuota($event);"><img src="img/ico_add.png" width="9" height="9" alt="" />{{ 'label.space_quota_add' | translate }}</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="tableWrap">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>{{ 'label.no' | translate }}</th><!-- 번호 -->
+					<th>{{ 'label.org' | translate }}</th><!-- 조직 -->
+					<th>{{ 'label.orgquota' | translate }}</th><!-- 조직 용량 계획 -->
+					<th>{{ 'label.service' | translate }}</th><!-- 서비스 -->
+					<th>{{ 'label.app_route' | translate }}</th><!-- 라우트 -->
+					<th>{{ 'label.memory' | translate }}</th><!-- 메모리 -->
+					<th>{{ 'label.instance_memory' | translate }}</th><!-- 인스턴스 메모리 -->
+					<th>{{ 'label.app_instance' | translate }}</th><!-- 앱 인스턴스 -->
+					<th>{{ 'label.space' | translate }}</th><!-- 영역 -->
+					<th>{{ 'label.del' | translate }}</th><!-- 삭제 -->
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="(key, quotaItem) in contents.spaceQuotas.content">
+					<td>{{ ((contents.spaceQuotas.number - 1) * contents.spaceQuotas.size) + key + 1 }}</td>
+					<td class="text-left">{{ quotaItem.organizationName }}</td>
+					<td class="text-left">{{ quotaItem.name }}</td>
+					<td>{{ quotaItem.totalServices }}</td>
+					<td>{{ quotaItem.totalRoutes }}</td>
+					<td>{{ quotaItem.memoryLimit|displayVolume:'MB' }}</td>
+					<td>{{ quotaItem.instanceMemoryLimit|displayVolume:'MB' }}</td>
+					<td>{{ quotaItem.appInstanceLimit }}</td>
+					<td>{{ quotaItem.spaces.length }}</td>
+					<td>
+						<button type="button" class="btn button_img" ng-click="contents.deleteSpaceQuota(quotaItem.guid, quotaItem.name);" tooltip-placement="bottom" uib-tooltip="{{ 'label.space_quota_del' | translate }}"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.space_quota_del' | translate }}" /></button>
+					</td>
+				</tr>
+				<tr ng-if="contents.pageOptions.total == 0">
+					<td colspan="10">{{ 'message.mi_dont_exist_list' | translate }}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+        <div class="paginationWrap">
+			<div class="totalWrap">
+				{{ 'label.total' | translate }} {{ contents.pageOptions.total }} {{ 'label.count' | translate }}
+			</div>
+			<paging
+                    page="contents.pageOptions.currentPage"
+                    page-size="contents.pageOptions.pageSize"
+                    total="contents.pageOptions.total"
+                    pg-href=""
+                    show-prev-next="true"
+                    show-first-last="true"
+                    paging-action="contents.listSpaces(page)"
+					text-first-class="firstPage"
+					text-last-class="lastPage"
+					text-next-class="nextPage"
+					text-prev-class="prevPage">
+            </paging>
+        </div>
+    </div>
+</div>
+

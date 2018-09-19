@@ -1,0 +1,31 @@
+{
+    "iaas": {
+        "label": {
+            "deploy_initializing" : "Initializing",
+            "deploy_creating" : "Creating",
+            "deploy_init_error" : "Init Error",
+            "deploy_preparing" : "Preparing",
+            "deploy_installing" : "Installing",
+            "deploy_configuring" : "Configuring",
+            "deploy_active" : "Active",
+            "deploy_run_error" : "Run Error",
+            "deploy_starting" : "Starting",
+            "deploy_running" : "Running",
+            "deploy_restarting" : "Restarting",
+            "deploy_reconfiguring" : "Reconfiguring",
+            "deploy_stopping" : "Stopping",
+            "deploy_stop" : "Stop",
+            "deploy_deleting" : "Deleting",
+            "instance_active" : "Active",
+            "instance_stopped" : "Stopped",
+            "instance_error" : "Error",
+            "instance_paused" : "Paused",
+            "instance_resized" : "Resized",
+            "instance_building" : "Building",
+            "public" : "Public",
+            "private" : "Private"
+        },
+        "message" : {
+        }
+    }
+}

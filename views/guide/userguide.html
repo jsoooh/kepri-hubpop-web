@@ -1,0 +1,75 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".carousel").hide();
+	});
+</script>
+<div class="topVisualContainer guideTop">
+	<div class="guideTopLeft"></div>
+	<div class="guideTopRight"></div>
+	<div class="topVisualWrap">
+		<h3>{{'label.user_guide' | translate}}</h3>
+		<p>도움이 필요하십니까? 사용자 매뉴얼을 참조하십시오.</p>
+	</div>
+</div>
+<div id="content" class="container-fluid guideContainer">
+	<div class="pull-left">
+		<dl>
+			<dt>클라우드 플랫폼 가이드</dt>
+			<dd> 
+				<span>
+				    <span class="date">2017.10.25</span>
+					회원가입_조직관리_매뉴얼 Ver 1.0 (KOREAN) - 1.1MB
+				</span>
+				<ul class="guide-icon">
+				    <li><a href="{{guideUrl}}/guides/사용자 가이드 회원가입.pdf" tooltip-placement="bottom" uib-tooltip="다운로드"><img src="img/img_guidedown.png" alt="" width="20" height="23"></a></li>
+					<!--<li><a href="https://www.youtube.com/channel/UC7MBIYLRxHhfuMqWd0nvrlw" target="_blank" tooltip-placement="bottom" uib-tooltip="동영상 메뉴얼"><img src="img/ico_player.png" alt="" width="29" height="23"></a></li>
+					<li><a href="https://helpcomm.k2stg.paasxpert.com" target="_blank" tooltip-placement="bottom" uib-tooltip="메뉴얼 사이트로 이동"><img src="img/ico_move_site.png" alt="" width="23" height="23"></a></li>-->
+				</ul> 
+			</dd>
+			<dd> 
+				<span>
+					<span class="date">2017.10.25</span>
+					FAQ Ver 1.0 (KOREAN) - 0.2MB
+				</span>
+				<ul class="guide-icon">
+				    <li><a href="{{guideUrl}}/guides/사용자 가이드 FAQ.pdf" tooltip-placement="bottom" uib-tooltip="다운로드"><img src="img/img_guidedown.png" alt="" width="20" height="23"></a></li>
+					<!--<li><a href="https://www.youtube.com/channel/UC7MBIYLRxHhfuMqWd0nvrlw" target="_blank" tooltip-placement="bottom" uib-tooltip="동영상 메뉴얼"><img src="img/ico_player.png" alt="" width="29" height="23"></a></li>
+					<li><a href="https://helpqna.k2stg.paasxpert.com" target="_blank" tooltip-placement="bottom" uib-tooltip="메뉴얼 사이트로 이동"><img src="img/ico_move_site.png" alt="" width="23" height="23"></a></li>-->
+				</ul> 
+			</dd>
+		</dl>
+	</div>
+	<div class="pull-right">
+		<dl>
+			<dt>클라우드 플랫폼 사용자 매뉴얼</dt>
+			<dd>
+				<span>
+					<span class="date">2017.10.25</span>
+					IaaS 사용자 매뉴얼 Ver 1.0 (KOREAN) - 1.9MB
+				</span>
+				<ul class="guide-icon">
+				    <li><a href="{{guideUrl}}/guides/사용자 가이드 IaaS 사용 가이드.pdf" tooltip-placement="bottom" uib-tooltip="다운로드"><img src="img/img_guidedown.png" alt="" width="20" height="23"></a></li>
+					<!--<li><a href="https://www.youtube.com/channel/UC7MBIYLRxHhfuMqWd0nvrlw" target="_blank" tooltip-placement="bottom" uib-tooltip="동영상 메뉴얼"><img src="img/ico_player.png" alt="" width="29" height="23"></a></li>
+					<li><a href="https://helpiaas.k2stg.paasxpert.com" target="_blank" tooltip-placement="bottom" uib-tooltip="메뉴얼 사이트로 이동"><img src="img/ico_move_site.png" alt="" width="23" height="23"></a></li>-->
+				</ul> 
+			</dd>
+			<dd> 
+				<span>
+					<span class="date">2017.10.25</span>
+					PaaS 사용자 매뉴얼 Ver 1.0 (KOREAN) - 2.0MB
+				</span>
+				<ul class="guide-icon">
+				    <li><a href="{{guideUrl}}/guides/사용자 가이드 PaaS 사용 가이드.pdf" tooltip-placement="bottom" uib-tooltip="다운로드"><img src="img/img_guidedown.png" alt="" width="20" height="23"></a></li>
+					<!--<li><a href="https://www.youtube.com/watch?v=KWTz8tx-Hjs&list=PLCKcvTouMO3Rpqk1L7vYiZO_OPkvSflw0" target="_blank" tooltip-placement="bottom" uib-tooltip="동영상 메뉴얼"><img src="img/ico_player.png" alt="" width="29" height="23"></a></li>
+					<li><a href="https://helppaas.k2stg.paasxpert.com" target="_blank" tooltip-placement="bottom" uib-tooltip="메뉴얼 사이트로 이동"><img src="img/ico_move_site.png" alt="" width="23" height="23"></a></li>-->
+				</ul> 
+			</dd>
+		</dl>
+	</div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var winHeight = $(window).height();
+        $(".guideContainer").css("min-height",winHeight-416)
+    });
+</script>

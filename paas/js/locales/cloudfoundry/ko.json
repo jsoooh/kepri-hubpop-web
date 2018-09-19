@@ -1,0 +1,1640 @@
+{
+	"CF_ERROR": {
+		"1000": {
+			"message_type": "preserve",
+			"message_key": "Invalid Auth Token",
+			"name": "InvalidAuthToken",
+			"http_code": 401,
+			"message": "잘못된 인증 토큰"
+		},
+		"1001": {
+			"message_type": "tail",
+			"message_key": "Request invalid due to parse error: %s",
+			"name": "MessageParseError",
+			"http_code": 400,
+			"message": "파싱 오류, 매우 착오적 인 요청: %s"
+		},
+		"1002": {
+			"message_type": "no",
+			"message_key": "%s",
+			"name": "InvalidRelation",
+			"http_code": 400,
+			"message": "%s"
+		},
+		"1003": {
+			"message_type": "tail",
+			"message_key": "Invalid content type, expected: %s",
+			"name": "InvalidContentType",
+			"http_code": 400,
+			"message": "잘못된 콘텐츠 유형, 값: %s"
+		},
+		"10000": {
+			"message_type": "preserve",
+			"message_key": "Unknown request",
+			"name": "NotFound",
+			"http_code": 404,
+			"message": "알 수없는 요청"
+		},
+		"10001": {
+			"message_type": "preserve",
+			"message_key": "Server error",
+			"name": "ServerError",
+			"http_code": 500,
+			"message": "서버 오류"
+		},
+		"10002": {
+			"message_type": "preserve",
+			"message_key": "Authentication error",
+			"name": "NotAuthenticated",
+			"http_code": 401,
+			"message": "인증 오류"
+		},
+		"10003": {
+			"message_type": "preserve",
+			"message_key": "You are not authorized to perform the requested action",
+			"name": "NotAuthorized",
+			"http_code": 403,
+			"message": "요청하는 작업을 할 수있는 권한이 없습니다."
+		},
+		"10004": {
+			"message_type": "preserve",
+			"message_key": "The request is invalid",
+			"name": "InvalidRequest",
+			"http_code": 400,
+			"message": "요청이 잘못되었습니다."
+		},
+		"10005": {
+			"message_type": "tail",
+			"message_key": "The query parameter is invalid: %s",
+			"name": "BadQueryParameter",
+			"http_code": 400,
+			"message": "쿼리 매개 변수: %s"
+		},
+		"10006": {
+			"message_type": "reverse",
+			"message_key": "Please delete the %s associations for your %s.",
+			"name": "AssociationNotEmpty",
+			"http_code": 400,
+			"message": "%s에 대한 %s 연관을 삭제하십시오."
+		},
+		"10007": {
+			"message_type": "preserve",
+			"message_key": "Your token lacks the necessary scopes to access this resource.",
+			"name": "InsufficientScope",
+			"http_code": 403,
+			"message": "토큰에 대한 리소스가 없습니다. 범위가 없습니다."
+		},
+		"10008": {
+			"message_type": "no",
+			"message_key": "%s",
+			"name": "UnprocessableEntity",
+			"http_code": 422,
+			"message": "%s"
+		},
+		"10009": {
+			"message_type": "head_tail",
+			"message_key": "%s could not be completed: %s",
+			"name": "UnableToPerform",
+			"http_code": 400,
+			"message": "%s을 (를) 완료 할 수 없습니다.: %s"
+		},
+		"10010": {
+			"message_type": "no",
+			"message_key": "%s",
+			"name": "ResourceNotFound",
+			"http_code": 404,
+			"message": "%s"
+		},
+		"10011": {
+			"message_type": "preserve",
+			"message_key": "Database error",
+			"name": "DatabaseError",
+			"http_code": 500,
+			"message": "데이터베이스 오류"
+		},
+		"10012": {
+			"message_type": "tail",
+			"message_key": "Cannot order by: %s",
+			"name": "OrderByParameterInvalid",
+			"http_code": 500,
+			"message": "다음의 순서: %s"
+		},
+		"10013": {
+			"message_type": "preserve",
+			"message_key": "Rate Limit Exceeded",
+			"name": "RateLimitExceeded",
+			"http_code": 429,
+			"message": "속도 제한 초과"
+		},
+		"20001": {
+			"message_type": "tail",
+			"message_key": "The user info is invalid: %s",
+			"name": "UserInvalid",
+			"http_code": 400,
+			"message": "사용자 정보가 없습니다: %s"
+		},
+		"20002": {
+			"message_type": "tail",
+			"message_key": "The UAA ID is taken: %s",
+			"name": "UaaIdTaken",
+			"http_code": 400,
+			"message": "이전의 사용자 ID입니다: %s"
+		},
+		"20003": {
+			"message_type": "tail",
+			"message_key": "The user could not be found: %s",
+			"name": "UserNotFound",
+			"http_code": 404,
+			"message": "사용자 존재하지 않는다: %s"
+		},
+		"20004": {
+			"message_type": "preserve",
+			"message_key": "The UAA service is currently unavailable",
+			"name": "UaaUnavailable",
+			"http_code": 503,
+			"message": "현재 UAA 서비스를 이용할 수 없습니다"
+		},
+		"20005": {
+			"message_type": "preserve",
+			"message_key": "The UAA endpoint needed is disabled",
+			"name": "UaaEndpointDisabled",
+			"http_code": 501,
+			"message": "필요한 UAA 끝점이 비활성화되었습니다."
+		},
+		"20006": {
+			"message_type": "tail",
+			"message_key": "The user exists in multiple origins. Specify an origin for the requested user from: %s",
+			"name": "UserIsInMultipleOrigins",
+			"http_code": 400,
+			"message": "사용자가 여러 출처에 존재합니다. 요청한 사용자의 출처를 지정하십시오: %s"
+		},
+		"20007": {
+			"message_type": "tail",
+			"message_key": "The user could not be found, %s",
+			"name": "UserWithOriginNotFound",
+			"http_code": 404,
+			"message": "사용자를 찾을 수 없습니다, %s"
+		},
+		"30001": {
+			"message_type": "tail",
+			"message_key": "The organization info is invalid: %s",
+			"name": "OrganizationInvalid",
+			"http_code": 400,
+			"message": "조직 정보가 유효하지 않습니다: %s"
+		},
+		"30002": {
+			"message_type": "tail",
+			"message_key": "The organization name is taken: %s",
+			"name": "OrganizationNameTaken",
+			"http_code": 400,
+			"message": "조직 이름을 사용했습니다: %s"
+		},
+		"30003": {
+			"message_type": "tail",
+			"message_key": "The organization could not be found: %s",
+			"name": "OrganizationNotFound",
+			"http_code": 404,
+			"message": "조직을 찾을 수 없습니다: %s"
+		},
+		"30004": {
+			"message_type": "preserve",
+			"message_key": "Cannot remove last Org Manager in org",
+			"name": "LastManagerInOrg",
+			"http_code": 403,
+			"message": "org 조직의 마지막 조직 관리자를 제거 할 수 없습니다"
+		},
+		"30005": {
+			"message_type": "preserve",
+			"message_key": "Cannot remove last Billing Manager in org",
+			"name": "LastBillingManagerInOrg",
+			"http_code": 403,
+			"message": "조직의 청구 관리자가 삭제할 수 없습니다"
+		},
+		"30006": {
+			"message_type": "preserve",
+			"message_key": "Cannot remove last User in org",
+			"name": "LastUserInOrg",
+			"http_code": 403,
+			"message": "조직의 마지막 사용자를 삭제할 수 없습니다"
+		},
+		"30007": {
+			"message_type": "preserve",
+			"message_key": "Cannot change organization",
+			"name": "OrganizationAlreadySet",
+			"http_code": 400,
+			"message": "조직을 바꿀 수 없다"
+		},
+		"40001": {
+			"message_type": "tail",
+			"message_key": "The app space info is invalid: %s",
+			"name": "SpaceInvalid",
+			"http_code": 400,
+			"message": "공간 정보가 잘못되었습니다: %s"
+		},
+		"40002": {
+			"message_type": "tail",
+			"message_key": "The app space name is taken: %s",
+			"name": "SpaceNameTaken",
+			"http_code": 400,
+			"message": "앱 공간 이름은 사용중입니다: %s"
+		},
+		"40003": {
+			"message_type": "tail",
+			"message_key": "The app space and the user are not in the same org: %s",
+			"name": "SpaceUserNotInOrg",
+			"http_code": 400,
+			"message": "앱 공간과 사용자가 같은 조직에 없습니다: %s"
+		},
+		"40004": {
+			"message_type": "tail",
+			"message_key": "The app space could not be found: %s",
+			"name": "SpaceNotFound",
+			"http_code": 404,
+			"message": "응용 프로그램 공간을 찾을 수 없습니다: %s"
+		},
+		"60001": {
+			"message_type": "preserve",
+			"message_key": "Service instance name is required.",
+			"name": "ServiceInstanceNameEmpty",
+			"http_code": 400,
+			"message": "서비스 인스턴스 이름이 필요합니다."
+		},
+		"60002": {
+			"message_type": "tail",
+			"message_key": "The service instance name is taken: %s",
+			"name": "ServiceInstanceNameTaken",
+			"http_code": 400,
+			"message": "서비스 인스턴스 이름을 사용했습니다: %s"
+		},
+		"60003": {
+			"message_type": "tail",
+			"message_key": "The service instance is invalid: %s",
+			"name": "ServiceInstanceInvalid",
+			"http_code": 400,
+			"message": "서비스 인스턴스가 유효하지 않습니다: %s"
+		},
+		"60004": {
+			"message_type": "tail",
+			"message_key": "The service instance could not be found: %s",
+			"name": "ServiceInstanceNotFound",
+			"http_code": 404,
+			"message": "서비스 인스턴스를 생성했습니다: %s"
+		},
+		"60005": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded your organization's services limit.",
+			"name": "ServiceInstanceQuotaExceeded",
+			"http_code": 400,
+			"message": "조직의 서비스 한도를 초과했습니다."
+		},
+		"60006": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded your organization's services limit.",
+			"이름": "PreviouslyUsedAs_ServiceInstancePaidQuotaExceeded",
+			"http_code": 400,
+			"message": "조직의 서비스 한도를 초과했습니다."
+		},
+		"60007": {
+			"message_type": "preserve",
+			"message_key": "The service instance cannot be created because paid service plans are not allowed.",
+			"name": "ServiceInstanceServicePlanNotAllowed",
+			"http_code": 400,
+			"message": "유료 서비스 요금제가 허용되지 않아 서비스 인스턴스를 만들 수 없습니다."
+		},
+		"60008": {
+			"message_type": "preserve",
+			"message_key": "An instance of this service is already present in this space. Some services only support one instance per space.",
+			"name": "ServiceInstanceDuplicateNotAllowed",
+			"http_code": 400,
+			"message": "이 서비스의 인스턴스가 이미이 공간에 있습니다.<br>일부 서비스는 공간 당 하나의 인스턴스 만 지원합니다."
+		},
+		"60009": {
+			"message_type": "preserve",
+			"message_key": "You have requested an invalid service instance name. Names are limited to 50 characters.",
+			"name": "ServiceInstanceNameTooLong",
+			"http_code": 400,
+			"message": "잘못된 서비스 인스턴스 이름을 요청했습니다. 이름은 50 자로 제한됩니다."
+		},
+		"60010": {
+			"message_type": "preserve",
+			"message_key": "A service instance for the selected plan cannot be created in this organization. The plan is visible because another organization you belong to has access to it.",
+			"name": "ServiceInstanceOrganizationNotAuthorized",
+			"http_code": 403,
+			"message": "선택한 계획에 대한 서비스 인스턴스를이 조직에서 만들 수 없습니다.<br>사용자가 속한 다른 조직에서 액세스 할 수 있으므로 계획이 표시됩니다."
+		},
+		"60011": {
+			"message_type": "tail",
+			"message_key": "The service broker reported an error during deprovisioning: %s",
+			"name": "ServiceInstanceDeprovisionFailed",
+			"http_code": 409,
+			"message": "서비스 브로커가 프로비저닝을 해제하는 동안 오류를보고했습니다: %s"
+		},
+		"60012": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded your space's services limit.",
+			"name": "ServiceInstanceSpaceQuotaExceeded",
+			"http_code": 400,
+			"message": "공간 제한을 초과했습니다."
+		},
+		"60013": {
+			"message_type": "preserve",
+			"message_key": "The service instance cannot be created because paid service plans are not allowed for your space.",
+			"name": "ServiceInstanceServicePlanNotAllowedBySpaceQuota",
+			"http_code": 400,
+			"message": "귀하의 공간에서 유료 서비스 요금제가 허용되지 않기 때문에 서비스 인스턴스를 생성 할 수 없습니다."
+		},
+		"60014": {
+			"message_type": "preserve",
+			"message_key": "Cannot update space for service instance.",
+			"name": "ServiceInstanceSpaceChangeNotAllowed",
+			"http_code": 400,
+			"message": "서비스 인스턴스의 공간을 업데이트 할 수 없습니다."
+		},
+		"60015": {
+			"message_type": "one",
+			"message_key": "Combined length of tags for service %s must be 2048 characters or less.",
+			"name": "ServiceInstanceTagsTooLong",
+			"http_code": 400,
+			"message": "서비스 %s의 총 태그 길이는 2048 자 이하 여야합니다."
+		},
+		"60016": {
+			"message_type": "one",
+			"message_key": "An operation for service instance %s is in progress.",
+			"name": "AsyncServiceInstanceOperationInProgress",
+			"http_code": 409,
+			"message": "서비스 인스턴스 %s에 대한 작업이 진행 중입니다."
+		},
+		"60017": {
+			"message_type": "preserve",
+			"message_key": "The service instance and the route are in different spaces.",
+			"name": "ServiceInstanceRouteBindingSpaceMismatch",
+			"http_code": 400,
+			"message": "서비스 인스턴스와 라우트가 다른 공간에 있습니다."
+		},
+		"60018": {
+			"message_type": "preserve",
+			"message_key": "A service instance for the selected plan cannot be created in this space.",
+			"name": "ServiceInstanceSpaceNotAuthorized",
+			"http_code": 403,
+			"message": "선택한 계획에 대한 서비스 인스턴스를이 공간에 만들 수 없습니다."
+		},
+		"60019": {
+			"message_type": "tail",
+			"message_key": "The route service URL is invalid: %s",
+			"name": "ServiceInstanceRouteServiceURLInvalid",
+			"http_code": 400,
+			"message": "라우트 서비스 URL이 잘못되었습니다: %s"
+		},
+		"60020": {
+			"message_type": "preserve",
+			"message_key": "Route services are only supported for apps on Diego. Unbind the service instance from the route or enable Diego for the app.",
+			"name": "ServiceInstanceRouteServiceRequiresDiego",
+			"http_code": 400,
+			"message": "라우트 서비스는 디에고의 앱에서만 지원됩니다.<br>라우트에서 서비스 인스턴스의 바인딩을 해제하거나 앱의 디에고를 사용하도록 설정하십시오."
+		},
+		"60021": {
+			"message_type": "preserve",
+			"message_key": "Support for route services is disabled",
+			"name": "ServiceInstanceRouteServiceDisabled",
+			"http_code": 403,
+			"message": "라우트 서비스 지원이 비활성화되었습니다."
+		},
+		"60022": {
+			"message_type": "preserve",
+			"message_key": "App ports are supported for Diego apps only.",
+			"name": "AppPortMappingRequiresDiego",
+			"http_code": 400,
+			"message": "앱 포트는 Diego 앱에서만 지원됩니다."
+		},
+		"60023": {
+			"message_type": "preserve",
+			"message_key": "Routes can only be mapped to ports already enabled for the application.",
+			"name": "RoutePortNotEnabledOnApp",
+			"http_code": 400,
+			"message": "라우트는 응용 프로그램에 이미 설정된 포트에만 매핑 할 수 있습니다."
+		},
+		"60024": {
+			"message_type": "preserve",
+			"message_key": "The app has routes mapped to multiple ports. Multiple ports are supported for Diego only. Please unmap routes from all but one app port. Multiple routes can be mapped to the same port if desired.",
+			"name": "MultipleAppPortsMappedDiegoToDea",
+			"http_code": 400,
+			"message": "응용 프로그램은 여러 포트에 매핑 된 라우트를 가지고 있습니다.<br>디에고는 여러 포트를 지원합니다.<br>하나의 응용 프로그램 포트를 제외한 모든 포트의 매핑을 해제하십시오.<br>원하는 경우 여러 라우트를 동일한 포트에 매핑 할 수 있습니다."
+		},
+		"60025": {
+			"message_type": "preserve",
+			"message_key": "Support for volume mount services is disabled",
+			"name": "VolumeMountServiceDisabled",
+			"http_code": 403,
+			"message": "볼륨 탑재 서비스 지원이 비활성화되었습니다."
+		},
+		"60026": {
+			"message_type": "preserve",
+			"message_key": "Docker apps cannot run on DEAs",
+			"name": "DockerAppToDea",
+			"http_code": 400,
+			"message": "Dock에서 Docker 앱을 실행할 수 없습니다."
+		},
+		"70001": {
+			"message_type": "tail",
+			"message_key": "The runtime is invalid: %s",
+			"name": "RuntimeInvalid",
+			"http_code": 400,
+			"message": "런타임이 유효하지 않습니다: %s"
+		},
+		"70002": {
+			"message_type": "tail",
+			"message_key": "The runtime name is taken: %s",
+			"name": "RuntimeNameTaken",
+			"http_code": 400,
+			"message": "런타임 이름을 사용했습니다: %s"
+		},
+		"70003": {
+			"message_type": "tail",
+			"message_key": "The runtime could not be found: %s",
+			"name": "RuntimeNotFound",
+			"http_code": 404,
+			"message": "런타임을 찾을 수 없습니다: %s"
+		},
+		"80001": {
+			"message_type": "tail",
+			"message_key": "The framework is invalid: %s",
+			"name": "FrameworkInvalid",
+			"http_code": 400,
+			"message": "프레임 워크가 유효하지 않습니다: %s"
+		},
+		"80002": {
+			"message_type": "tail",
+			"message_key": "The framework name is taken: %s",
+			"name": "FrameworkNameTaken",
+			"http_code": 400,
+			"message": "프레임 워크 이름이 사용되었습니다: %s"
+		},
+		"80003": {
+			"message_type": "tail",
+			"message_key": "The framework could not be found: %s",
+			"name": "FrameworkNotFound",
+			"http_code": 404,
+			"message": "프레임 워크를 찾을 수 없습니다: %s"
+		},
+		"90001": {
+			"message_type": "tail",
+			"message_key": "The service binding is invalid: %s",
+			"name": "ServiceBindingInvalid",
+			"http_code": 400,
+			"message": "서비스 바인딩이 유효하지 않습니다: %s"
+		},
+		"90002": {
+			"message_type": "tail",
+			"message_key": "The app and the service are not in the same app space: %s",
+			"name": "ServiceBindingDifferentSpaces",
+			"http_code": 400,
+			"message": "앱과 서비스가 동일한 앱 공간에 없습니다: %s"
+		},
+		"90003": {
+			"message_type": "no",
+			"message_key": "%s",
+			"name": "ServiceBindingAppServiceTaken",
+			"http_code": 400,
+			"message": "%s"
+		},
+		"90004": {
+			"message_type": "tail",
+			"message_key": "The service binding could not be found: %s",
+			"name": "ServiceBindingNotFound",
+			"http_code": 404,
+			"message": "서비스 바인딩을 찾을 수 없습니다: %s"
+		},
+		"90005": {
+			"message_type": "preserve",
+			"message_key": "The service instance doesn't support binding.",
+			"name": "UnbindableService",
+			"http_code": 400,
+			"message": "서비스 인스턴스가 바인딩을 지원하지 않습니다."
+		},
+		"90006": {
+			"message_type": "preserve",
+			"message_key": "The service is attempting to stream logs from your application, but is not registered as a logging service. Please contact the service provider.",
+			"name": "InvalidLoggingServiceBinding",
+			"http_code": 502,
+			"message": "서비스가 응용 프로그램의 로그를 스트리밍하려고 시도했지만 로깅 서비스로 등록되지 않았습니다.<br>서비스 공급자에게 문의하십시오."
+		},
+		"100001": {
+			"message_type": "tail",
+			"message_key": "The app is invalid: %s",
+			"name": "AppInvalid",
+			"http_code": 400,
+			"message": "앱이 유효하지 않습니다: %s"
+		},
+		"100002": {
+			"message_type": "tail",
+			"message_key": "The app name is taken: %s",
+			"name": "AppNameTaken",
+			"http_code": 400,
+			"message": "앱 이름을 사용했습니다: %s"
+		},
+		"100004": {
+			"message_type": "tail",
+			"message_key": "The app could not be found: %s",
+			"name": "AppNotFound",
+			"http_code": 404,
+			"message": "앱을 찾을 수 없습니다: %s"
+		},
+		"100005": {
+			"message_type": "tail",
+			"message_key": "You have exceeded your organization's memory limit: %s",
+			"name": "AppMemoryQuotaExceeded",
+			"http_code": 400,
+			"message": "조직의 메모리 한도를 초과했습니다: %s"
+		},
+		"100006": {
+			"message_type": "preserve",
+			"message_key": "You have specified an invalid amount of memory for your application.",
+			"name": "AppMemoryInvalid",
+			"http_code": 400,
+			"message": "응용 프로그램에 대해 유효하지 않은 양의 메모리를 지정했습니다."
+		},
+		"100007": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded the instance memory limit for your organization's quota.",
+			"name": "QuotaInstanceMemoryLimitExceeded",
+			"http_code": 400,
+			"message": "조직의 할당량에 대한 인스턴스 메모리 제한을 초과했습니다."
+		},
+		"100008": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded the instance limit for your organization's quota.",
+			"name": "QuotaInstanceLimitExceeded",
+			"http_code": 400,
+			"message": "조직의 할당량에 대한 인스턴스 제한을 초과했습니다."
+		},
+		"110001": {
+			"message_type": "tail",
+			"message_key": "The service plan is invalid: %s",
+			"name": "ServicePlanInvalid",
+			"http_code": 400,
+			"message": "서비스 계획이 잘못되었습니다: %s"
+		},
+		"110002": {
+			"message_type": "tail",
+			"message_key": "The service plan name is taken: %s",
+			"name": "ServicePlanNameTaken",
+			"http_code": 400,
+			"message": "서비스 계획 이름을 가져 왔습니다: %s"
+		},
+		"110003": {
+			"message_type": "tail",
+			"message_key": "The service plan could not be found: %s",
+			"name": "ServicePlanNotFound",
+			"http_code": 404,
+			"message": "서비스 계획을 찾을 수 없습니다: %s"
+		},
+		"110004": {
+			"message_type": "preserve",
+			"message_key": "The service does not support changing plans.",
+			"name": "ServicePlanNotUpdateable",
+			"http_code": 400,
+			"message": "서비스 변경 계획을 지원하지 않습니다."
+		},
+		"120001": {
+			"message_type": "tail",
+			"message_key": "The service is invalid: %s",
+			"name": "ServiceInvalid",
+			"http_code": 400,
+			"message": "서비스가 유효하지 않습니다: %s"
+		},
+		"120002": {
+			"message_type": "tail",
+			"message_key": "The service label is taken: %s",
+			"name": "ServiceLabelTaken",
+			"http_code": 400,
+			"message": "서비스 레이블을 사용했습니다: %s"
+		},
+		"120003": {
+			"message_type": "tail",
+			"message_key": "The service could not be found: %s",
+			"name": "ServiceNotFound",
+			"http_code": 404,
+			"message": "서비스를 찾을 수 없습니다: %s"
+		},
+		"130001": {
+			"message_type": "tail",
+			"message_key": "The domain is invalid: %s",
+			"name": "DomainInvalid",
+			"http_code": 400,
+			"message": "도메인이 유효하지 않습니다: %s"
+		},
+		"130002": {
+			"message_type": "tail",
+			"message_key": "The domain could not be found: %s",
+			"name": "DomainNotFound",
+			"http_code": 404,
+			"message": "도메인을 찾을 수 없습니다: %s"
+		},
+		"130003": {
+			"message_type": "tail",
+			"message_key": "The domain name is taken: %s",
+			"name": "DomainNameTaken",
+			"http_code": 400,
+			"message": "도메인 이름을 사용했습니다: %s"
+		},
+		"130004": {
+			"message_type": "tail",
+			"message_key": "The path is invalid: %s",
+			"name": "PathInvalid",
+			"http_code": 400,
+			"message": "경로가 잘못되었습니다: %s"
+		},
+		"130005": {
+			"message_type": "tail",
+			"message_key": "The number of private domains exceeds the quota for organization: %s",
+			"name": "TotalPrivateDomainsExceeded",
+			"http_code": 400,
+			"message": "개인 도메인의 수가 조직의 할당량을 초과했습니다: %s"
+		},
+		"130006": {
+			"message_type": "preserve",
+			"message_key": "This service does not support route binding.",
+			"name": "ServiceDoesNotSupportRoutes",
+			"http_code": 400,
+			"message": "이 서비스는 라우트 바인딩을 지원하지 않습니다."
+		},
+		"130007": {
+			"message_type": "preserve",
+			"message_key": "A route may only be bound to a single service instance",
+			"name": "RouteAlreadyBoundToServiceInstance",
+			"http_code": 400,
+			"message": "라우트는 단일 서비스 인스턴스에만 바인딩 될 수 있습니다"
+		},
+		"130008": {
+			"message_type": "preserve",
+			"message_key": "The route and service instance are already bound.",
+			"name": "ServiceInstanceAlreadyBoundToSameRoute",
+			"http_code": 400,
+			"message": "라우트 및 서비스 인스턴스가 이미 바인딩되었습니다."
+		},
+		"140001": {
+			"message_type": "preserve",
+			"message_key": "A legacy api call requiring a default app space was called, but no default app space is set for the user.",
+			"name": "LegacyApiWithoutDefaultSpace",
+			"http_code": 400,
+			"message": "기본 앱 공간이 필요한 레거시 API 호출이 호출되었지만 기본 앱 공간이 설정되지 않았습니다."
+		},
+		"150001": {
+			"message_type": "tail",
+			"message_key": "The app package is invalid: %s",
+			"name": "AppPackageInvalid",
+			"http_code": 400,
+			"message": "앱 패키지가 유효하지 않습니다: %s"
+		},
+		"150002": {
+			"message_type": "tail",
+			"message_key": "The app package could not be found: %s",
+			"name": "AppPackageNotFound",
+			"http_code": 404,
+			"message": "앱 패키지를 찾을 수 없습니다: %s"
+		},
+		"150003": {
+			"message_type": "preserve",
+			"message_key": "One or more instances could not be started because of insufficient running resources.",
+			"name": "InsufficientRunningResourcesAvailable",
+			"http_code": 503,
+			"message": "실행 리소스가 부족하여 하나 이상의 인스턴스를 시작할 수 없습니다."
+		},
+		"150004": {
+			"message_type": "preserve",
+			"message_key": "Bits may be uploaded only once. Create a new package to upload different bits.",
+			"name": "PackageBitsAlreadyUploaded",
+			"http_code": 400,
+			"message": "비트는 한 번만 업로드 할 수 있습니다. 새 패키지를 만들어 다른 비트를 업로드하십시오."
+		},
+		"150005": {
+			"message_type": "preserve",
+			"message_key": "Downloading blobs can only be done directly to the blobstore.",
+			"name": "BlobstoreNotLocal",
+			"http_code": 400,
+			"message": "BLOB를 다운로드하는 것은 blobstore에서만 직접 할 수 있습니다."
+		},
+		"150006": {
+			"message_type": "preserve",
+			"message_key": "Failed to perform operation due to blobstore unavailability.",
+			"name": "BlobstoreUnavailable",
+			"http_code": 502,
+			"message": "BLOB 저장소를 사용할 수 없기 때문에 작업을 수행하지 못했습니다."
+		},
+		"150007": {
+			"message_type": "preserve",
+			"message_key": "Failed to perform blobstore operation after three retries.",
+			"name": "BlobstoreError",
+			"http_code": 500,
+			"message": "세 번 재시도 후에 blobstore 작업을 수행하지 못했습니다."
+		},
+		"150008": {
+			"message_type": "preserve",
+			"message_key": "Docker credentials can only be supplied for apps with a 'docker_image'",
+			"name": "DockerImageMissing",
+			"http_code": 400,
+			"message": "도커 자격 증명은 'docker_image'가 있는 앱에만 제공 될 수 있습니다."
+		},
+		"160001": {
+			"message_type": "tail",
+			"message_key": "The app upload is invalid: %s",
+			"name": "AppBitsUploadInvalid",
+			"http_code": 400,
+			"message": "앱 업로드가 잘못되었습니다: %s"
+		},
+		"160002": {
+			"message_type": "tail",
+			"message_key": "The app copy is invalid: %s",
+			"name": "AppBitsCopyInvalid",
+			"http_code": 400,
+			"message": "응용 프로그램 복사본이 유효하지 않습니다: %s"
+		},
+		"160003": {
+			"message_type": "tail",
+			"message_key": "The resource file mode is invalid: %s",
+			"name": "AppResourcesFileModeInvalid",
+			"http_code": 400,
+			"message": "리소스 파일 모드가 잘못되었습니다: %s"
+		},
+		"160004": {
+			"message_type": "tail",
+			"message_key": "The resource file path is invalid: %s",
+			"name": "AppResourcesFilePathInvalid",
+			"http_code": 400,
+			"message": "리소스 파일 경로가 잘못되었습니다: %s"
+		},
+		"170001": {
+			"message_type": "tail",
+			"message_key": "Staging error: %s",
+			"name": "StagingError",
+			"http_code": 400,
+			"message": "스테이징 오류: %s"
+		},
+		"170002": {
+			"message_type": "preserve",
+			"message_key": "App has not finished staging",
+			"name": "NotStaged",
+			"http_code": 400,
+			"message": "앱이 준비를 마쳤습니다."
+		},
+		"170003": {
+			"message_type": "preserve",
+			"message_key": "An app was not successfully detected by any available buildpack",
+			"name": "NoAppDetectedError",
+			"http_code": 400,
+			"message": "사용 가능한 모든 buildpack에서 앱을 성공적으로 감지하지 못했습니다"
+		},
+		"170004": {
+			"message_type": "preserve",
+			"message_key": "App staging failed in the buildpack compile phase",
+			"name": "BuildpackCompileFailed",
+			"http_code": 400,
+			"message": "빌드 팩 컴파일 단계에서 응용 프로그램 준비가 실패했습니다"
+		},
+		"170005": {
+			"message_type": "preserve",
+			"message_key": "App staging failed in the buildpack release phase",
+			"name": "BuildpackReleaseFailed",
+			"http_code": 400,
+			"message": "빌드 팩 릴리스 단계에서 응용 프로그램 준비가 실패했습니다"
+		},
+		"170006": {
+			"message_type": "preserve",
+			"message_key": "There are no buildpacks available",
+			"name": "NoBuildpacksFound",
+			"http_code": 400,
+			"message": "사용할 수있는 빌드 팩이 없습니다."
+		},
+		"170007": {
+			"message_type": "tail",
+			"message_key": "Staging time expired: %s",
+			"name": "StagingTimeExpired",
+			"http_code": 504,
+			"message": "준비 시간 만료: %s"
+		},
+		"170008": {
+			"message_type": "preserve",
+			"message_key": "Insufficient resources",
+			"name": "InsufficientResources",
+			"http_code": 400,
+			"message": "부족한 자원"
+		},
+		"170009": {
+			"message_type": "preserve",
+			"message_key": "Found no compatible cell",
+			"name": "NoCompatibleCell",
+			"http_code": 400,
+			"message": "호환되는 셀을 찾을 수 없습니다"
+		},
+		"170010": {
+			"message_type": "tail",
+			"message_key": "Stager is unavailable: %s",
+			"name": "StagerUnavailable",
+			"http_code": 503,
+			"message": "스테이징 사용할 수 없습니다: %s"
+		},
+		"170011": {
+			"message_type": "tail",
+			"message_key": "Stager error: %s",
+			"name": "StagerError",
+			"http_code": 500,
+			"message": "스테이징 오류: %s"
+		},
+		"170014": {
+			"message_type": "tail",
+			"message_key": "Runner invalid request: %s",
+			"name": "RunnerInvalidRequest",
+			"http_code": 500,
+			"message": "러너 무효 요청: %s"
+		},
+		"170015": {
+			"message_type": "tail",
+			"message_key": "Runner is unavailable: %s",
+			"name": "RunnerUnavailable",
+			"http_code": 503,
+			"message": "러너를 사용할 수 없습니다: %s"
+		},
+		"170016": {
+			"message_type": "tail",
+			"message_key": "Runner error: %s",
+			"name": "RunnerError",
+			"http_code": 500,
+			"message": "러너 오류: %s"
+		},
+		"170017": {
+			"message_type": "preserve",
+			"message_key": "Only one build can be STAGING at a time per application.",
+			"name": "StagingInProgress",
+			"http_code": 422,
+			"message": "응용 프로그램 당 한 번에 하나의 빌드 만 STAGING 할 수 있습니다."
+		},
+		"170018": {
+			"message_type": "tail",
+			"message_key": "Invalid config: %s",
+			"name": "InvalidTaskAddress",
+			"http_code": 500,
+			"message": "유효하지 않은 설정: %s"
+		},
+		"170019": {
+			"message_type": "tail",
+			"message_key": "Task failed: %s",
+			"name": "TaskError",
+			"http_code": 500,
+			"message": "작업 실패: %s"
+		},
+		"170020": {
+			"message_type": "tail",
+			"message_key": "Task workers are unavailable: %s",
+			"name": "TaskWorkersUnavailable",
+			"http_code": 503,
+			"message": "작업 작업자를 사용할 수 없습니다: %s"
+		},
+		"170021": {
+			"message_type": "tail",
+			"message_key": "The task request is invalid: %s",
+			"name": "InvalidTaskRequest",
+			"http_code": 422,
+			"message": "작업 요청이 잘못되었습니다: %s"
+		},
+		"180002": {
+			"message_type": "tail",
+			"message_key": "Service gateway internal error: %s",
+			"name": "ServiceGatewayError",
+			"http_code": 503,
+			"message": "서비스 게이트웨이 내부 오류: %s"
+		},
+		"180003": {
+			"message_type": "preserve",
+			"message_key": "Operation not supported for service",
+			"name": "ServiceNotImplemented",
+			"http_code": 501,
+			"message": "서비스가 지원되지 않음"
+		},
+		"180004": {
+			"message_type": "preserve",
+			"message_key": "No serialization service backends available",
+			"name": "SDSNotAvailable",
+			"http_code": 501,
+			"message": "사용할 수있는 백엔드 서비스가 없습니다"
+		},
+		"190001": {
+			"message_type": "tail",
+			"message_key": "File error: %s",
+			"name": "FileError",
+			"http_code": 400,
+			"message": "파일 오류: %s"
+		},
+		"200001": {
+			"message_type": "tail",
+			"message_key": "Stats error: %s",
+			"name": "StatsError",
+			"http_code": 400,
+			"message": "통계 오류: %s"
+		},
+		"200002": {
+			"message_type": "tail",
+			"message_key": "Stats unavailable: %s",
+			"name": "StatsUnavailable",
+			"http_code": 503,
+			"message": "통계를 사용할 수 없습니다: %s"
+		},
+		"200003": {
+			"message_type": "tail",
+			"message_key": "Could not fetch stats for stopped app: %s",
+			"name": "AppStoppedStatsError",
+			"http_code": 400,
+			"message": "중지 된 앱에 대한 통계를 가져올 수 없습니다: %s"
+		},
+		"210001": {
+			"message_type": "tail",
+			"message_key": "The route is invalid: %s",
+			"name": "RouteInvalid",
+			"http_code": 400,
+			"message": "라우트가 잘못되었습니다: %s"
+		},
+		"210002": {
+			"message_type": "tail",
+			"message_key": "The route could not be found: %s",
+			"name": "RouteNotFound",
+			"http_code": 404,
+			"message": "라우트를 찾을 수 없습니다: %s"
+		},
+		"210003": {
+			"message_type": "tail",
+			"message_key": "The host is taken: %s",
+			"이름": "RouteHostTaken",
+			"http_code": 400,
+			"message": "호스트가 사용되었습니다: %s"
+		},
+		"210004": {
+			"message_type": "tail",
+			"message_key": "The path is taken: %s",
+			"이름": "RoutePathTaken",
+			"http_code": 400,
+			"message": "경로가 사용되었습니다: %s"
+		},
+		"210005": {
+			"message_type": "tail",
+			"message_key": "The port is taken: %s",
+			"이름": "RoutePortTaken",
+			"http_code": 400,
+			"message": "포트가 사용되었습니다: %s"
+		},
+		"210006": {
+			"message_type": "tail",
+			"message_key": "The route mapping is taken: %s",
+			"이름": "RouteMappingTaken",
+			"http_code": 400,
+			"message": "라우트 매핑을 사용했습니다: %s"
+		},
+		"210007": {
+			"message_type": "tail",
+			"message_key": "The route mapping could not be found: %s",
+			"name": "RouteMappingNotFound",
+			"http_code": 404,
+			"message": "라우트 매핑을 찾을 수 없습니다: %s"
+		},
+		"21008": {
+			"message_type": "one",
+			"message_key": "There are no more ports available for router group: %s. Please contact your administrator for more information.",
+			"name": "OutOfRouterGroupPorts",
+			"http_code": 403,
+			"message": "라우터 그룹에 사용할 수있는 포트가 더 이상 없습니다: %s. 자세한 정보는 관리자에게 문의하십시오."
+		},
+		"210009": {
+			"message_type": "tail",
+			"message_key": "The router group could not be found: %s",
+			"name": "RouterGroupNotFound",
+			"http_code": 404,
+			"message": "라우터 그룹을 찾을 수 없습니다: %s"
+		},
+		"220001": {
+			"message_type": "tail",
+			"message_key": "Instances error: %s",
+			"name": "InstancesError",
+			"http_code": 400,
+			"message": "인스턴스 오류: %s"
+		},
+		"220002": {
+			"message_type": "tail",
+			"message_key": "Instances information unavailable: %s",
+			"name": "InstancesUnavailable",
+			"http_code": 503,
+			"message": "인스턴스 정보를 사용할 수 없습니다: %s"
+		},
+		"230002": {
+			"message_type": "tail",
+			"message_key": "Event could not be found: %s",
+			"name": "EventNotFound",
+			"http_code": 404,
+			"message": "이벤트를 찾을 수 없습니다: %s"
+		},
+		"240001": {
+			"message_type": "tail",
+			"message_key": "Quota Definition could not be found: %s",
+			"name": "QuotaDefinitionNotFound",
+			"http_code": 404,
+			"message": "할당량 정의를 찾을 수 없습니다: %s"
+		},
+		"240002": {
+			"message_type": "tail",
+			"message_key": "Quota Definition is taken: %s",
+			"name": "QuotaDefinitionNameTaken",
+			"http_code": 400,
+			"message": "할당량 정의가 사용되었습니다: %s"
+		},
+		"240003": {
+			"message_type": "tail",
+			"message_key": "Quota Definition is invalid: %s",
+			"name": "QuotaDefinitionInvalid",
+			"http_code": 400,
+			"message": "할당량 정의가 잘못되었습니다: %s"
+		},
+		"240004": {
+			"message_type": "preserve",
+			"message_key": "Quota Definition memory limit cannot be negative",
+			"name": "QuotaDefinitionMemoryLimitNegative",
+			"http_code": 400,
+			"message": "할당량 정의 메모리 제한은 음수가 될 수 없습니다"
+		},
+		"250001": {
+			"message_type": "tail",
+			"message_key": "The stack is invalid: %s",
+			"name": "StackInvalid",
+			"http_code": 400,
+			"message": "스택이 유효하지 않습니다: %s"
+		},
+		"250002": {
+			"message_type": "tail",
+			"message_key": "The stack name is taken: %s",
+			"name": "StackNameTaken",
+			"http_code": 400,
+			"message": "스택 이름을 사용했습니다: %s"
+		},
+		"250003": {
+			"message_type": "tail",
+			"message_key": "The stack could not be found: %s",
+			"name": "StackNotFound",
+			"http_code": 404,
+			"message": "스택을 찾을 수 없습니다: %s"
+		},
+		"260001": {
+			"message_type": "tail",
+			"message_key": "Service Plan Visibility is invalid: %s",
+			"name": "ServicePlanVisibilityInvalid",
+			"http_code": 400,
+			"message": "서비스 계획 가시성이 유효하지 않습니다: %s"
+		},
+		"260002": {
+			"message_type": "tail",
+			"message_key": "This combination of ServicePlan and Organization is already taken: %s",
+			"name": "ServicePlanVisibilityAlreadyExists",
+			"http_code": 400,
+			"message": "ServicePlan과 Organization의 조합은 이미 사용되었습니다: %s"
+		},
+		"260003": {
+			"message_type": "tail",
+			"message_key": "The service plan visibility could not be found: %s",
+			"name": "ServicePlanVisibilityNotFound",
+			"http_code": 404,
+			"message": "서비스 계획 가시성을 찾을 수 없습니다: %s"
+		},
+		"270001": {
+			"message_type": "tail",
+			"message_key": "Service broker is invalid: %s",
+			"name": "ServiceBrokerInvalid",
+			"http_code": 400,
+			"message": "서비스 브로커가 잘못되었습니다: %s"
+		},
+		"270002": {
+			"message_type": "preserve",
+			"message_key": "The service broker name is taken",
+			"name": "ServiceBrokerNameTaken",
+			"http_code": 400,
+			"message": "서비스 브로커 이름이 사용되었습니다"
+		},
+		"270003": {
+			"message_type": "tail",
+			"message_key": "The service broker url is taken: %s",
+			"name": "ServiceBrokerUrlTaken",
+			"http_code": 400,
+			"message": "서비스 브로커 URL을 가져 왔습니다: %s"
+		},
+		"270004": {
+			"message_type": "tail",
+			"message_key": "The service broker was not found: %s",
+			"name": "ServiceBrokerNotFound",
+			"http_code": 404,
+			"message": "서비스 브로커를 찾을 수 없습니다: %s"
+		},
+		"270010": {
+			"message_type": "tail",
+			"message_key": "Can not remove brokers that have associated service instances: %s",
+			"name": "ServiceBrokerNotRemovable",
+			"http_code": 400,
+			"message": "관련 서비스 인스턴스가있는 브로커를 제거 할 수 없습니다: %s"
+		},
+		"270011": {
+			"message_type": "head",
+			"message_key": "%s is not a valid URL",
+			"name": "ServiceBrokerUrlInvalid",
+			"http_code": 400,
+			"message": "%s은(는) 유효한 URL이 아닙니다."
+		},
+		"270012": {
+			"message_type": "tail",
+			"message_key": "Service broker catalog is invalid: %s",
+			"name": "ServiceBrokerCatalogInvalid",
+			"http_code": 502,
+			"message": "서비스 브로커 카탈로그가 잘못되었습니다: %s"
+		},
+		"270013": {
+			"message_type": "tail",
+			"message_key": "Service broker dashboard clients could not be modified: %s",
+			"name": "ServiceBrokerDashboardClientFailure",
+			"http_code": 502,
+			"message": "Service Broker 대시 보드 클라이언트를 수정할 수 없습니다: %s"
+		},
+		"270014": {
+			"message_type": "preserve",
+			"message_key": "This service plan requires client support for asynchronous service operations.",
+			"name": "ServiceBrokerAsyncRequired",
+			"http_code": 400,
+			"message": "이 서비스 계획에는 비동기 서비스 작업에 대한 클라이언트 지원이 필요합니다."
+		},
+		"270015": {
+			"message_type": "preserve",
+			"message_key": "Service broker returned dashboard client configuration without a dashboard URL",
+			"name": "ServiceDashboardClientMissingUrl",
+			"http_code": 502,
+			"message": "서비스 브로커는 대시 보드 URL없이 대시 보드 클라이언트 구성을 반환했습니다"
+		},
+		"290001": {
+			"message_type": "tail",
+			"message_key": "The buildpack name is already in use: %s",
+			"name": "BuildpackNameTaken",
+			"http_code": 400,
+			"message": "빌드 팩 이름은 이미 사용 중입니다: %s"
+		},
+		"290002": {
+			"message_type": "tail",
+			"message_key": "The buildpack upload is invalid: %s",
+			"name": "BuildpackBitsUploadInvalid",
+			"http_code": 400,
+			"message": "buildpack 업로드가 잘못되었습니다: %s"
+		},
+		"290003": {
+			"message_type": "tail",
+			"message_key": "Buildpack is invalid: %s",
+			"name": "BuildpackInvalid",
+			"http_code": 400,
+			"message": "Buildpack이 유효하지 않습니다: %s"
+		},
+		"290004": {
+			"message_type": "preserve",
+			"message_key": "Custom buildpacks are disabled",
+			"name": "CustomBuildpacksDisabled",
+			"http_code": 400,
+			"message": "사용자 정의 buildpacks 사용할 수 없습니다."
+		},
+		"290005": {
+			"message_type": "preserve",
+			"message_key": "The buildpack is locked",
+			"name": "BuildpackLocked",
+			"http_code": 409,
+			"message": "빌드 팩이 잠겼습니다."
+		},
+		"290006": {
+			"message_type": "preserve",
+			"message_key": "The job execution has timed out.",
+			"name": "JobTimeout",
+			"http_code": 524,
+			"message": "작업 실행 시간이 초과되었습니다."
+		},
+		"290007": {
+			"message_type": "one",
+			"message_key": "Deletion of space %s timed out before all resources within could be deleted",
+			"name": "SpaceDeleteTimeout",
+			"http_code": 524,
+			"message": "모든 리소스가 삭제되기 전에 공간 %s의 시간 초과가 삭제되었습니다"
+		},
+		"290008": {
+			"message_type": "middle_tail",
+			"message_key": "Deletion of space %s failed because one or more resources within could not be deleted.\n\n%s",
+			"name": "SpaceDeletionFailed",
+			"http_code": 502,
+			"message": "하나 이상의 자원을 삭제할 수 없기 때문에 공간 %s을 삭제하지 못했습니다.<br><br>%s"
+		},
+		"290009": {
+			"message_type": "one",
+			"message_key": "Delete of organization %s timed out before all resources within could be deleted",
+			"name": "OrganizationDeleteTimeout",
+			"http_code": 524,
+			"message": "모든 리소스가 삭제되기 전에 %s 타임 아웃 된 조직 삭제"
+		},
+		"290010": {
+			"message_type": "middle_tail",
+			"message_key": "Deletion of organization %s failed because one or more resources within could not be deleted.\n\n%s",
+			"name": "OrganizationDeletionFailed",
+			"http_code": 502,
+			"message": "하나 이상의 자원을 삭제할 수 없기 때문에 조직 %s을 삭제하지 못했습니다.<br><br>%s"
+		},
+		"290011": {
+			"message_type": "one",
+			"message_key": "Resource inside space %s must first be deleted, or specify recursive delete.",
+			"name": "NonrecursiveSpaceDeletionFailed",
+			"http_code": 400,
+			"message": "공간 %s 내의 리소스를 먼저 삭제하거나 재귀 적 삭제를 지정해야합니다."
+		},
+		"290012": {
+			"message_type": "tail",
+			"message_key": "The bits service returned an error: %s",
+			"name": "BitsServiceError",
+			"http_code": 500,
+			"message": "비트 서비스가 오류를 반환했습니다: %s"
+		},
+		"290013": {
+			"message_type": "one",
+			"message_key": "Deletion of roles for space %s timed out before all roles could be deleted",
+			"name": "SpaceRolesDeletionTimeout",
+			"http_code": 524,
+			"message": "공간 %s의 역할 삭제가 모든 역할을 삭제하기 전에 시간 초과되었습니다"
+		},
+		"290014": {
+			"message_type": "tail",
+			"message_key": "Failed to delete one or more roles for organization %s",
+			"name": "OrganizationRolesDeletionFailed",
+			"http_code": 502,
+			"message": "조직 %s의 하나 이상의 역할을 삭제하지 못했습니다"
+		},
+		"290016": {
+			"message_type": "tail",
+			"message_key": "Failed to delete one or more roles for space %s",
+			"name": "SpaceRolesDeletionFailed",
+			"http_code": 502,
+			"message": "공간 %s에 대한 하나 이상의 역할을 삭제하지 못했습니다"
+		},
+		"300001": {
+			"message_type": "tail",
+			"message_key": "The security group is invalid: %s",
+			"name": "SecurityGroupInvalid",
+			"http_code": 400,
+			"message": "보안 그룹이 유효하지 않습니다: %s"
+		},
+		"300002": {
+			"message_type": "tail",
+			"message_key": "The security group could not be found: %s",
+			"name": "SecurityGroupNotFound",
+			"http_code": 404,
+			"message": "보안 그룹을 찾을 수 없습니다: %s"
+		},
+		"300003": {
+			"message_type": "tail",
+			"message_key": "The security group could not be found: %s",
+			"name": "SecurityGroupStagingDefaultInvalid",
+			"http_code": 400,
+			"message": "보안 그룹을 찾을 수 없습니다: %s"
+		},
+		"300004": {
+			"message_type": "tail",
+			"message_key": "The security group could not be found: %s",
+			"name": "SecurityGroupRunningDefaultInvalid",
+			"http_code": 400,
+			"message": "보안 그룹을 찾을 수 없습니다: %s"
+		},
+		"300005": {
+			"message_type": "tail",
+			"message_key": "The security group name is taken: %s",
+			"name": "SecurityGroupNameTaken",
+			"http_code": 400,
+			"message": "보안 그룹 이름을 사용했습니다: %s"
+		},
+		"310001": {
+			"message_type": "tail",
+			"message_key": "Space Quota Definition is invalid: %s",
+			"name": "SpaceQuotaDefinitionInvalid",
+			"http_code": 400,
+			"message": "공간 할당량 정의가 잘못되었습니다: %s"
+		},
+		"310002": {
+			"message_type": "tail",
+			"message_key": "The space quota definition name is taken: %s",
+			"name": "SpaceQuotaDefinitionNameTaken",
+			"http_code": 400,
+			"message": "공간 할당량 정의 이름이 사용되었습니다: %s"
+		},
+		"310003": {
+			"message_type": "tail",
+			"message_key": "You have exceeded your space's memory limit: %s",
+			"name": "SpaceQuotaMemoryLimitExceeded",
+			"http_code": 400,
+			"message": "공간의 메모리 한도를 초과했습니다: %s"
+		},
+		"310004": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded the instance memory limit for your space's quota.",
+			"name": "SpaceQuotaInstanceMemoryLimitExceeded",
+			"http_code": 400,
+			"message": "공간 할당량에 대한 인스턴스 메모리 제한을 초과했습니다."
+		},
+		"310005": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded the total routes for your space's quota.",
+			"name": "SpaceQuotaTotalRoutesExceeded",
+			"http_code": 400,
+			"message": "공간 할당량의 총 라우트를 초과했습니다."
+		},
+		"310006": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded the total routes for your organization's quota.",
+			"name": "OrgQuotaTotalRoutesExceeded",
+			"http_code": 400,
+			"message": "조직의 할당량에 대한 총 라우트를 초과했습니다."
+		},
+		"310007": {
+			"message_type": "tail",
+			"message_key": "Space Quota Definition could not be found: %s",
+			"name": "SpaceQuotaDefinitionNotFound",
+			"http_code": 404,
+			"message": "공간 할당량 정의를 찾을 수 없습니다: %s"
+		},
+		"310008": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded the instance limit for your space's quota.",
+			"name": "SpaceQuotaInstanceLimitExceeded",
+			"http_code": 400,
+			"message": "공간 할당량에 대한 인스턴스 제한을 초과했습니다."
+		},
+		"310009": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded the total reserved route ports for your organization's quota.",
+			"name": "OrgQuotaTotalReservedRoutePortsExceeded",
+			"http_code": 400,
+			"message": "조직의 할당량에 대해 예약 된 전체 라우트 포트를 초과했습니다."
+		},
+		"310010": {
+			"message_type": "preserve",
+			"message_key": "You have exceeded the total reserved route ports for your space's quota.",
+			"name": "SpaceQuotaTotalReservedRoutePortsExceeded",
+			"http_code": 400,
+			"message": "우주 할당량에 대해 예약 된 총 루트 포트를 초과했습니다."
+		},
+		"320001": {
+			"message_type": "preserve",
+			"message_key": "Diego has not been enabled.",
+			"name": "DiegoDisabled",
+			"http_code": 400,
+			"message": "디에고는 사용하지 않았습니다."
+		},
+		"320002": {
+			"message_type": "preserve",
+			"message_key": "You cannot specify a custom buildpack and a docker image at the same time.",
+			"name": "DiegoDockerBuildpackConflict",
+			"http_code": 400,
+			"message": "사용자 정의 빌드 팩과 도커 이미지를 동시에 지정할 수 없습니다."
+		},
+		"320003": {
+			"message_type": "preserve",
+			"message_key": "Docker support has not been enabled.",
+			"name": "DockerDisabled",
+			"http_code": 400,
+			"message": "도커를 지원하지 않습니다."
+		},
+		"320004": {
+			"message_type": "preserve",
+			"message_key": "The request staging completion endpoint only handles apps desired to stage on the Diego backend.",
+			"name": "StagingBackendInvalid",
+			"http_code": 403,
+			"message": "완료 준비 요청 엔드 포인트는 디에고 백엔드에 서기를 원하는 응용 프로그램 만 처리합니다."
+		},
+		"320005": {
+			"message_type": "preserve",
+			"message_key": "You cannot select the backend on which to run this application",
+			"name": "BackendSelectionNotAuthorized",
+			"http_code": 403,
+			"message": "이 응용 프로그램을 실행할 백엔드를 선택할 수 없습니다"
+		},
+		"330000": {
+			"message_type": "tail",
+			"message_key": "The feature flag could not be found: %s",
+			"name": "FeatureFlagNotFound",
+			"http_code": 404,
+			"message": "기능 플래그를 찾을 수 없습니다: %s"
+		},
+		"330001": {
+			"message_type": "tail",
+			"message_key": "The feature flag is invalid: %s",
+			"name": "FeatureFlagInvalid",
+			"http_code": 400,
+			"message": "기능 플래그가 유효하지 않습니다: %s"
+		},
+		"330002": {
+			"message_type": "tail",
+			"message_key": "Feature Disabled: %s",
+			"name": "FeatureDisabled",
+			"http_code": 403,
+			"message": "기능 alloc: %s"
+		},
+		"340001": {
+			"message_type": "tail",
+			"message_key": "The service instance could not be found: %s",
+			"name": "UserProvidedServiceInstanceNotFound",
+			"http_code": 404,
+			"message": "서비스 인스턴스를 생성했습니다: %s"
+		},
+		"340002": {
+			"message_type": "preserve",
+			"message_key": "Please use the User Provided Services API to manage this resource.",
+			"name": "UserProvidedServiceInstanceHandlerNeeded",
+			"http_code": 400,
+			"message": "사용자 제공 서비스 API를 사용하여이 리소스를 관리하십시오."
+		},
+		"350001": {
+			"message_type": "tail",
+			"message_key": "The process is invalid: %s",
+			"name": "ProcessInvalid",
+			"http_code": 400,
+			"message": "프로세스가 없습니다: %s"
+		},
+		"350002": {
+			"message_type": "tail",
+			"message_key": "Unable to perform delete action: %s",
+			"name": "UnableToDelete",
+			"http_code": 400,
+			"message": "삭제 작업을 수행 할 수 없습니다: %s"
+		},
+		"350003": {
+			"message_type": "tail",
+			"message_key": "The process could not be found: %s",
+			"name": "ProcessNotFound",
+			"http_code": 404,
+			"message": "해당 프로세스는 존재하지 않습니다: %s"
+		},
+		"360001": {
+			"message_type": "tail",
+			"message_key": "The service key name is taken: %s",
+			"name": "ServiceKeyNameTaken",
+			"http_code": 400,
+			"message": "서비스 키 이름은 이미 사용했습니다: %s"
+		},
+		"360002": {
+			"message_type": "tail",
+			"message_key": "The service key is invalid: %s",
+			"name": "ServiceKeyInvalid",
+			"http_code": 400,
+			"message": "서비스 키: %s"
+		},
+		"360003": {
+			"message_type": "tail",
+			"message_key": "The service key could not be found: %s",
+			"name": "ServiceKeyNotFound",
+			"http_code": 404,
+			"message": "서비스 키는 존재하지 않습니다: %s"
+		},
+		"360004": {
+			"message_type": "no",
+			"message_key": "%s",
+			"name": "ServiceKeyNotSupported",
+			"http_code": 400,
+			"message": "%s"
+		},
+		"360005": {
+			"message_type": "preserve",
+			"message_key": "Credential store is unavailable",
+			"name": "ServiceKeyCredentialStoreUnavailable",
+			"http_code": 503,
+			"message": "자격 증명 저장소를 사용할 수 없습니다"
+		},
+		"370001": {
+			"message_type": "preserve",
+			"message_key": "The Routing API is currently unavailable",
+			"name": "RoutingApiUnavailable",
+			"http_code": 503,
+			"message": "라우팅 API가 없습니다"
+		},
+		"370003": {
+			"message_type": "preserve",
+			"message_key": "Routing API is disabled",
+			"name": "RoutingApiDisabled",
+			"http_code": 403,
+			"message": "라우팅 API가 삽입되었습니다"
+		},
+		"380001": {
+			"message_type": "tail",
+			"message_key": "The Environment Variable Group is invalid: %s",
+			"name": "EnvironmentVariableGroupInvalid",
+			"http_code": 400,
+			"message": "환경 변수 그룹: %s"
+		},
+		"380002": {
+			"message_type": "tail",
+			"message_key": "The droplet upload is invalid: %s",
+			"name": "DropletUploadInvalid",
+			"http_code": 400,
+			"message": "droplet 업로드가 잘못되었습니다.: %s"
+		},
+		"390001": {
+			"message_type": "tail",
+			"message_key": "Unshare of service instance failed because one or more bindings could not be deleted.\n\n%s",
+			"name": "ServiceInstanceUnshareFailed",
+			"http_code": 502,
+			"message": "하나 이상의 바인딩을 삭제할 수 없어 서비스 인스턴스를 공유하지 못했습니다.<br><br>%s"
+		},
+		"390002": {
+			"message_type": "one",
+			"message_key": "Service instances must be unshared before they can be deleted. Unsharing %s will automatically delete any bindings that have been made to applications in other spaces.",
+			"name": "ServiceInstanceDeletionSharesExists",
+			"http_code": 400,
+			"message": "서비스 인스턴스는 삭제되기 전에 공유되지 않아야합니다.<br>%s의 공유를 해제하면 다른 공간의 응용 프로그램에 만들어진 모든 바인딩이 자동으로 삭제됩니다."
+		},
+		"390003": {
+			"message_type": "one",
+			"message_key": "The %s service does not support service instance sharing.",
+			"name": "ServiceShareIsDisabled",
+			"http_code": 400,
+			"message": "%s 서비스는 서비스 인스턴스 공유를 지원하지 않습니다."
+		},
+		"390004": {
+			"message_type": "preserve",
+			"message_key": "User-provided services cannot be shared",
+			"name": "UserProvidedServiceInstanceSharingNotSupported",
+			"http_code": 400,
+			"message": "사용자 제공 서비스를 공유 할 수 없습니다"
+		},
+		"390005": {
+			"message_type": "preserve",
+			"message_key": "Route services cannot be shared",
+			"name": "RouteServiceInstanceSharingNotSupported",
+			"http_code": 400,
+			"message": "라우트 서비스를 공유 할 수 없습니다"
+		},
+		"390006": {
+			"message_type": "middle_tail",
+			"message_key": "A service instance called %s already exists in %s",
+			"name": "SharedServiceInstanceNameTaken",
+			"http_code": 400,
+			"message": "%s라는 서비스 인스턴스가 이미 %s에 있습니다"
+		},
+		"390007": {
+			"message_type": "preserve",
+			"message_key": "Service instances cannot be shared into the space where they were created",
+			"name": "InvalidServiceInstanceSharingTargetSpace",
+			"http_code": 422,
+			"message": "서비스 인스턴스를 작성한 공간으로 공유 할 수 없습니다."
+		},
+		"CF-AppRequired": {
+			"message_type": "preserve",
+			"message_key": "This service supports generation of credentials through binding an application only.",
+			"http_code": 400,
+			"message": "이 서비스는 응용 프로그램 만 바인딩하여 자격 증명 생성을 지원합니다."
+		},
+		"CF-ServiceBrokerApiAuthenticationFailed": {
+			"message_type": "replace",
+			"message_key": "Authentication with the service broker failed. Double-check that the username and password are correct:",
+			"http_code": 502,
+			"message": "서비스 브로커를 사용한 인증에 실패했습니다. 사용자 이름과 비밀번호가 맞는지 다시 확인하십시오.:"
+		},
+		"CF-ServiceBrokerBadResponse": {
+			"message_type": "replace_middle_tail",
+			"message_key1": "Service broker error:",
+			"message_key2": "The service broker returned an invalid response for the request to %s. %s",
+			"http_code": 400,
+			"message1": "서비스 브로커 오류:",
+			"message2": "서비스 브로커가 %s에 대한 요청에 대해 유효하지 않은 응답을 반환했습니다. %s"
+		},
+		"CF-ServiceBrokerConflict": {
+			"message_type": "replace2",
+			"message_key1": "Service broker error:",
+			"message_key2": "Resource conflict:",
+			"http_code": 409,
+			"message1": "서비스 브로커 오류:",
+			"message2": "리소스 충돌:"
+		},
+		"CF-ServiceBrokerInvalidSyslogDrainUrl": {
+			"message_type": "preserve",
+			"message_key": "The service is attempting to stream logs from your application, but is not registered as a logging service. Please contact the service provider.",
+			"http_code": 502,
+			"message": "서비스에서 응용 프로그램의 로그를 스트리밍하려고 시도하지만 로깅 서비스로 등록되지 않았습니다. 서비스 제공 업체에 문의하십시오."
+		},
+		"CF-ServiceBrokerInvalidVolumeMounts": {
+			"message_type": "middle_tail",
+			"message_key": "The service broker returned an invalid response for the request to %s: %s",
+			"http_code": 502,
+			"message": "서비스 브로커가 %s에 대한 요청에 대해 유효하지 않은 응답을 반환했습니다.: %s"
+		},
+		"CF-ServiceBrokerRequestRejected": {
+			"message_type": "replace_middle_tail",
+			"message_key1": "Service broker error:",
+			"message_key2": "The service broker rejected the request to %s. %s",
+			"http_code": 409,
+			"message1": "서비스 브로커 오류:",
+			"message2": "서비스 중개인이 %s에 대한 요청을 거부했습니다. %s"
+		},
+		"CF-ServiceBrokerResponseMalformed": {
+			"message_type": "middle_tail",
+			"message_key": "The service broker returned an invalid response for the request to %s: %s",
+			"http_code": 502,
+			"message": "서비스 브로커가 %s에 대한 요청에 대해 유효하지 않은 응답을 반환했습니다.: %s"
+		}
+	}
+}

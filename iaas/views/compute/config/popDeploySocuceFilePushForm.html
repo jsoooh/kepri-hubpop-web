@@ -1,0 +1,41 @@
+<form name="pop.{{pop.formName}}" novalidate>
+	<!-- sideInWrap -->
+	<div class="sideInWrap">
+		<ol class="app-set">
+			<li>
+				<p class="app-tit">리소스</p>
+				<div class="instBox type2" style="padding-bottom: 15px;">
+					<div class="slider-input-group slider-label-hide">
+						<div class="radio radio-inline">
+							<input type="radio" name="radio_push_type" id="radio-push-file-type2" ng-model="pop.pushType" value="upload">
+							<label for="radio-push-file-type2" class="label">파일 업로드</label>
+						</div>
+						<div class="radio radio-inline">
+							<input type="radio" name="radio_push_type" id="radio-push-file-type1" ng-model="pop.pushType" value="path">
+							<label for="radio-push-file-type1" class="label">파일 URL</label>
+						</div>
+					</div>
+					<ul class="app-set">
+						<li ng-if="pop.pushType == 'path'">
+							<div class="input-group" style="width : 100%;">
+								<input type="text" class="form-control" name="deployFilePath" ng-model="pop.deployFilePath" placeholder="리소스 URL을 입력해 주세요." validation="required">
+							</div>
+							<div class="validation validation-deployFilePath text-danger"></div>
+						</li>
+						<li ng-if="pop.pushType == 'upload'">
+							<div class="input-group" style="width : 100%;">
+								<input type="file" name="file" nv-file-select="" uploader="pop.uploader" style="display: none;" />
+								<button type="button" class="btn btn-sm btn-color1" ng-click="main.fileSelectBtnClick($event);">{{ 'label.file_search' | translate }}</button>
+							</div>
+							<div class="input-group" style="width : 100%; padding-top: 10px;">
+								<span ng-if="pop.appFileErrorMessage" style="color: red;" dynamic-template="pop.appFileErrorMessage"></span>
+								<span ng-if="!pop.appFileErrorMessage && pop.appFileItem.file.name" style="color: #fff;">{{ pop.appFileItem.file.name }}</span>
+							</div>
+							<input type="hidden" name="appFileName" ng-model="pop.appFileItem.file.name" style="display: none;" validation="required" />
+						</li>
+					</ul>
+				</div>
+			</li>
+		</ol>
+	</div>
+</form>

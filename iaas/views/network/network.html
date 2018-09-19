@@ -1,0 +1,77 @@
+<!-- 작업 추가 및 선택 -->
+<div class="projt-selWarp">
+	<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+	<div class="pull-right">
+		<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+	</div>
+</div>
+<!-- //작업 추가 및 선택 --> 
+<!-- guide box 0830 삭제 -->
+	<!--
+<div class="guideTxt type1" ng-bind-html="'iaasMenu.desc.' + main.selectSiteMap.name + '.short' | translate"></div>
+-->
+
+<!-- table -->
+<div class="tbl type1">
+	<table class="table">
+		<colgroup>
+			<col style="width:26%" />
+			<col style="width:auto;"/>
+			<col span="2" style="width:10%" />
+			<col style="width:10%" />
+			<col style="width:10%" />
+			<col style="width:10%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th>이름</th>
+                   <th>설명</th>
+                   <th>네트워크 대역</th>
+                   <th>게이트웨이</th>
+                   <th>라우팅 여부</th>
+                   <th>상태</th>
+                   <th>관리</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="network in contents.networkMainList">
+				<td style="text-decoration: underline;"><a href="#/iaas/network/detail/{{network.id}}" ng-click="main.moveToAppPage('/iaas/network/detail/'+network.id, network.description)"  tooltip-placement="bottom" uib-tooltip="{{network.description}}">{{network.description}}</a></td>
+				<td>{{network.realDescription}}</td>
+				<td>{{network.subnets[0].cidr}}</td>
+				<td>{{network.subnets[0].gateway}}</td>
+				<td>{{network.router?'사용':'미사용'}}</td>
+				<td>
+					<span ng-if="network.status == 'ACTIVE' || network.status == 'in-use'" class="stateMark type1"></span>
+					<span ng-if="network.status == 'creating' || network.status == 'deleting'" class="stateMark type4"></span>
+					<span ng-if="network.status == 'deleted'" class="stateMark type3"></span>
+					<span class="state-txt">{{network.status | lowercase}}</span>
+				</td>
+				<td>
+					<button type="button" ng-if="$index != 0" class="btn btn-ico-del-s only-ico" ng-click="contents.fn.deleteNetwork(network)" tooltip-placement="bottom" title="네트워크 삭제" ><span class="ico">삭제</span></button>
+					<button type="button" class="btn btn-ico-modi-s only-ico" ng-click="contents.fn.formOpen($event, 'edit', network);" tooltip-placement="bottom" title="네트워크 수정" ><span class="ico">수정</span></button>
+				</td>
+			</tr>
+			<tr ng-if="!contents.networkMainList || contents.networkMainList.length == 0">
+				<td colspan="7" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- page -->
+	<nav class="pagiWrap">
+		<paging class="pagiWrap"
+			page="contents.pageOptions.currentPage"
+			page-size="contents.pageOptions.pageSize"
+			total="contents.pageOptions.total"
+			pg-href=""
+			show-prev-next="true"
+			show-first-last="true"
+			paging-action="contents.listApps(page)"
+			text-first-class="first"
+			text-last-class="end"
+			text-next-class="next"
+			text-prev-class="prev">
+		</paging>
+	</nav>
+	<!-- //page -->
+</div>
+<!-- //table -->

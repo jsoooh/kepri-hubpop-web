@@ -1,0 +1,77 @@
+<table class="table table-striped table-bordered">
+    <tbody>
+    <tr>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showAlertSuccess('알림팝업(성공) 입니다.');" tooltip-placement="bottom" uib-tooltip="알림팝업">
+                알림팝업(성공)
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showAlertError('알림팝업(실패) 입니다.');" tooltip-placement="bottom" uib-tooltip="알림팝업">
+                알림팝업(실패)
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showAlertWarning('알림팝업(경고) 입니다.');" tooltip-placement="bottom" uib-tooltip="알림팝업">
+                알림팝업(경고)
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showAlertInfo('알림팝업(정보) 입니다.');" tooltip-placement="bottom" uib-tooltip="오른쪽팝업">
+                알림팝업(정보)
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showDialogAlert('중앙알림팝업', '중앙알림팝업 입니다.');" tooltip-placement="bottom" uib-tooltip="중앙알림팝업">
+                중앙알림팝업
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showConfirm('확인팝업', '확인 하시겠습니까?');" tooltip-placement="bottom" uib-tooltip="확인팝업">
+                확인팝업
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showDialog($event);" tooltip-placement="bottom" uib-tooltip="일반입력팝업">
+                일반입력팝업
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showSimpleDialog($event);" tooltip-placement="bottom" uib-tooltip="일반심플입력팝업">
+                일반심플입력팝업
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" class="btn btn-color1 btn-md" ng-click="contents.showRightDialog();" tooltip-placement="bottom" uib-tooltip="오른쪽입력팝업">
+                오른쪽입력팝업
+            </button>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- cBox -->
+<div class="cBox type3 cToggle">
+    <div class="cBox-hd">
+        <h4 class="c-tit">{{ 'label.desc' | translate }}</h4>
+        <div class="pull-right">
+            <button type="button" name="button" class="btn btn-toggle" title="열고/닫기" ng-click="main.cBoxToggleChange($event);"><span class="ico">열고/닫기</span></button>
+        </div>
+    </div>
+
+    <div class="cBox-cnt">
+        <div class="in" style="white-space: pre-wrap;">내용 내용 내용 내용 내용 내용 내용 내용 </div>
+    </div>
+</div>
+<!-- //cBox -->
+

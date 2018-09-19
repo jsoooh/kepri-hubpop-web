@@ -1,0 +1,73 @@
+<div class="dropzone">
+    <ul class="ul-panel"l dnd-list="contents.container.items"
+        dnd-allowed-types="['item']"
+        dnd-horizontal-list="false"
+        dnd-external-sources="false"
+        dnd-effect-allowed="all"
+        dnd-dragover="contents.dragoverCallback(index, external, type)"
+        dnd-drop="contents.dropCallback(index, item, external, type)"
+        dnd-inserted="contents.logListEvent('inserted at', index, external, type)">
+        <li ng-repeat="(key, item) in contents.container.items"
+            dnd-moved="contents.container.items.splice($index, 1)"
+            dnd-draggable="item"
+            dnd-type="'item'"
+            dnd-effect-allowed="all"
+            dnd-draggable="item"
+            dnd-dragstart="contents.logEvent('Started to drag an item')"
+            dnd-dragend="contents.logEvent('Drag operation ended. Drop effect: ' + dropEffect)">
+            <!-- panel -->
+            <div class="panelWrap color-type{{ item.itemStyle }}">
+                <!-- 옵션 중 색상 선택시 클래스 .panelWrap에 다음 클래스 및 배경 이미지 적용
+                     색상 타입 클래스 :  color-type1 ~ color-type4,
+                     옵션 중 배경 선택시
+                     배경이미지 클래스 : color-no 삽입과  클래스 panel에 style로 배경 이미지 연결
+                 -->
+                <div class="panel type1" style="background-image:url('');">
+                    <div class="in">
+                        <div class="panel_head">
+                            <div class="tit">
+                                Project name {{item.label}}
+                            </div>
+                        </div>
+                        <div class="panel_body">
+                            <ul class="ul-list type1">
+                                <li><strong>Director : Abcd</strong></li>
+                                <li>{{ 'label.project_id' | translate }} : {{item.label}}</li>
+                                <li>End date <span class="stateDay">D -10</span></li>
+                                <li>Job : 2</li>
+                                <li>Member : 10</li>
+                            </ul>
+                        </div>
+<!--
+                        <div class="panel_foot two">
+                            <p class="use-txt"><span class="txt">작업 수</span><span class="num">2</span></p>
+                            <p class="use-txt"><span class="txt">멤버 수</span><span class="num">4</span></p>
+                        </div>
+-->
+                    </div>
+                    <!-- drop down -->
+                    <div class="dropdown drop-set">
+                        <button type="button" class="btn only-ico ico-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="설정">
+                            <span class="ico">{{ 'label.set' | translate }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="btn-set" aria-labelledby="btn-set">
+                            <li><a href="#" class="color1" title="하얀색"></a></li>
+                            <li><a href="#" class="color2" title="파란색"></a></li>
+                            <li><a href="#" class="color3" title="주황색"></a></li>
+                            <li><a href="#" class="color4" title="민트색"></a></li>
+                            <li class="file-att" title="배경이미지"><a href="#" class="pic"><span class="ico"></span></a></li>
+                            <li title="보기/끄기"><a class="pic pic2" href="#"><span class="ico"></span></a></li>
+                        </ul>
+                    </div>
+                    <!-- //drop down -->
+                </div>
+            </div>
+            <!-- panel -->
+        </li>
+        <li>
+            <div class="advanced-btn-pannel">
+                <button type="button" name="button" class="btn btn-panel-add" data-user="aside"><span class="ico"></span><span class="txt">프로젝트 등록</span></button>
+            </div>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,169 @@
+@charset "utf-8";
+
+/***************************** Dropzone Styling *****************************/
+.dropzone ul[dnd-list] > li.dndDragging {opacity: 0.7;}
+.dropzone ul[dnd-list] > li.dndDraggingSource {opacity: 0.4;}
+.dropzone ul[dnd-list].dndDragover > li.dndDraggingSource {display: none;}
+.dropzone ul[dnd-list] > li.dndPlaceholder {background-color: #ffffff; border-color: #333333; border-style: dashed; border-width: 4px; display: block;}
+.dropzone ul[dnd-list] > li {transition: none; -o-transition: none; -ms-transition: none; -moz-transition: none; -webkit-transition: none;}
+.dropzone ul[dnd-list] > li .advanced-btn-pannel { width: 100%; }
+.dropzone ul[dnd-list] > li .advanced-btn-pannel .btn-panel-add {background-color: #ffffff; border: 1px solid #ccc; width: 100%; height: 100%;}
+.dropzone ul[dnd-list] > li .advanced-btn-pannel .btn-panel-add .ico {display: block; margin: auto; background-position: 0 -520px;}
+
+/***************************** Element type specific styles *****************************/
+.dropzone ul.ul-panel[dnd-list] > li { margin-bottom: 40px;}
+.dropzone ul.ul-panel[dnd-list] > li .panel.type1 {padding-bottom: 40px; margin-bottom: 0px;}
+.dropzone ul.ul-panel[dnd-list] > li .advanced-btn-pannel { height: 360px; }
+.dropzone ul.ul-panel[dnd-list] .dndPlaceholder{ height: 360px;}
+
+.dropzone ul.ul-quick[dnd-list] > li { margin-bottom: 30px;}
+.dropzone ul.ul-quick[dnd-list] .dndPlaceholder{ height: 220px; }
+.dropzone ul.ul-quick[dnd-list] .quickBox {cursor: pointer;}
+.dropzone ul.ul-quick[dnd-list] .quickBox > .titleTop{ display: block; height:100%; padding:40px; background-repeat: no-repeat; background-position: center;}
+
+/***************************** progress styles *****************************/
+
+.progress[bar-type="width"] .progress-bar{width: 0%; width: 0; transition: width 0.6s ease 0s;}
+.progress[bar-type="height"] .progress-bar{height: 0%; height: 0; transition: height 0.6s ease 0s;}
+.progress[bar-type="width"] .tooltip .tooltip-inner{border-radius: 3px;}
+.progress[bar-type="height"] .tooltip .tooltip-inner{border-radius: 3px;}
+
+/** alert **/
+.growl {top: 100px; right:40px; width:500px; z-index:200;}
+.growl-item {z-index:200;}
+.growl-item.alert-success{border-left-color:#84b547;}
+.growl-item.alert-info{border-left-color:#579ef7;}
+.growl-item.alert-warning{border-left-color:#fa5e49;}
+.growl-item.alert-danger{border-left-color:#fa5e49;}
+.growl-item.alert-error{border-left-color:#cb3d4a;}
+.growl-item > div > div {line-height:14px;}
+.growl-item > button {margin-top: -4px; line-height:14px;}
+
+
+/* scrollable table */
+.scrollableContainer { padding-top: 48px; }
+.tableHeight350 .scrollableContainer{height: 332px}
+.tableHeight420 .scrollableContainer{height: 426px}
+.tableHeight600 .scrollableContainer{height: 567px}
+.tableHeight650 .scrollableContainer{height: 614px}
+.scrollableContainer .scrollArea .table{table-layout: fixed; border-bottom:1px solid #d6d6d6;}
+.scrollableContainer .headerSpacer {border: 0; position: absolute; height: 47px; top: 0; right: 0; left: 0; background: #3e424d;}
+.scrollableContainer .scrollArea .table th .th-inner { height:47px; background: #3e424d;}
+.scrollableContainer .scrollArea .table th .th-inner .box {padding:16px 5px 11px 5px; height:47px; border-bottom:0;  font-size:15px; font-weight: 500; color:#fff; line-height: 1; vertical-align: middle; text-align: center;}/** border-color: #3e424d; **/
+.scrollableContainer .scrollArea .table th .th-inner .box > div{ padding-right: 20px; height:47px; }
+.scrollableContainer .scrollArea .table th .th-inner .ico-info2{vertical-align: top;}
+.scrollableContainer .scrollArea .table th .th-inner .orderWrapper{top: 10px; right: 8px;}
+.scrollableContainer .scrollArea .table th .th-inner .orderWrapper .order{ font-size: 10pt; color: #fff;}
+.scrollableContainer .scrollArea .table th .th-inner .orderWrapper .active{color: #fff;}
+
+.scrollableContainer .scrollArea .table td{font-size:15px; word-break: break-all; color:#888; padding:10px 5px; height:47px; text-align: center; vertical-align: middle; border-color:#d6d6d6; background: #fff;}
+.scrollableContainer .scrollArea .table td .progress{margin-bottom: 0;}
+.scrollableContainer .scrollArea .table td .btnWrap{font-size: 0; }
+.scrollableContainer .scrollArea .table td .btnWrap .btn + .btn{margin-left:5px;}
+.scrollableContainer .scrollArea .table td select{height:30px;}
+.scrollableContainer .scrollArea .table td .stateMark{vertical-align: middle;}
+.scrollableContainer .scrollArea .table td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 스타일 갱신 margin-left:6px*/
+.scrollableContainer .scrollArea .table td .noti td{font-weight: 700;font-size:16px; color:#2957cc;}/*180409 스타일 갱신 font-size:16px; color:#2957cc;*/
+.scrollableContainer .scrollArea .table td .no-data{font-size:18px; line-height: 30px !important; height:200px !important; }
+.scrollableContainer .scrollArea .table td a:hover{color:#2f3b48;}
+
+/* paging */
+paging > ul{margin:0; vertical-align: middle;}
+paging > ul > li > a{font-size:15px; color:#888; line-height: 24px; width:23px; height:23px; padding:0; margin: 0 3px 0 2px; background:none; border:0;}
+paging > ul.pagination>.disabled>a, paging > ul.pagination>.disabled>a:focus, paging > ul.pagination>.disabled>a:hover, paging > ul.pagination>.disabled>span, paging > ul.pagination>.disabled>span:focus, paging > ul.pagination>.disabled>span:hover{color:#24537e; border:0 !important; background: none !important;}
+paging > ul.pagination>.disabled>a, paging > ul.pagination>.disabled>a:focus, paging > ul.pagination>.disabled>a:hover, paging > ul.pagination>.disabled>span, paging > ul.pagination>.disabled>span:focus, paging > ul.pagination>.disabled>span:hover{background: inherit; box-shadow: none; border: 0 ;}
+paging > ul.pagination > li a.first, paging > ul.pagination > li a.end{color:#d0d0d0; border-radius: 0; border:0; background: #a2a2a2 !important;}
+paging > ul.pagination > li a.first:hover, paging > ul.pagination > li a.end:hover{background: #a2a2a2 !important;}
+paging > ul.pagination > li a.prev, paging > ul.pagination > li a.next{color:#d0d0d0; border-radius: 0; border:0; background: #b4b4b4 !important;}
+paging > ul.pagination > .active > a, paging > ul.pagination > .active > span, paging > ul.pagination > .active > a:hover, paging > ul.pagination > .active > span:hover, paging > ul.pagination > .active > a:focus, paging > ul.pagination > .active > span:focus{position: relative; z-index: 1; color:#24537e; text-decoration:none; background: inherit !important;}
+paging > ul.pagination>li>a:focus, paging > ul.pagination>li>a:hover, paging > ul.pagination>li>span:focus, paging > ul.pagination>li>span:hover{border:0; background: none;}
+paging > ul.pagination > li .ico{line-height: 1.1; height:17px; background: none;}
+paging > ul.pagination > li a.first, paging > ul.pagination > li a.first, paging > ul.pagination > li a.prev, paging > ul.pagination > li a.next, paging > ul.pagination > li a.end{font-size: 0;}
+paging > ul.pagination > li a.first:hover, paging > ul.pagination > li a.first:hover, paging > ul.pagination > li a.prev:hover, paging > ul.pagination > li a.next:hover, paging > ul.pagination > li a.end:hover{background:#555 !important}
+paging > ul.pagination > li a.first::before, paging > ul.pagination > li a.first::before, paging > ul.pagination > li a.prev::before, paging > ul.pagination > li a.next::before, paging > ul.pagination > li a.end::before{display: inline-block; width:100%; height:100%; font-size: 15px; color:#fff; line-height: 23px; font-family: 'FontAwesome';}
+paging > ul.pagination > li a.first::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position:-152px -145px;}
+paging > ul.pagination > li a.prev::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -175px -145px;}
+paging > ul.pagination > li a.next::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -197px -145px;}
+paging > ul.pagination > li a.end::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -217px -145px;}
+paging > ul.pagination > li.disabled:hover a, paging > ul.pagination > li.disabled:focus a, paging > ul.pagination > li.disabled:active a{border:1px solid #8c97a4; background: #8c97a4;}
+
+/** right popup **/
+.aside md-dialog{height: 100%; width: 100%; max-width: 100%; max-height: 100%;}
+.aside md-dialog.md-transition-in{opacity: 1; -webkit-transition: none; transition: none; -webkit-transform: none; transform: none;}
+.aside md-dialog.md-transition-out{opacity: 0; -webkit-transition: none 0.18s; transition: none 0.18s; -webkit-transform: none; transform: none;}
+.aside md-dialog .sideBtmWrap{z-index: 9;}
+.aside md-dialog .sideCntWrap{margin: 70px 0px 60px; overflow-x: hidden; overflow-y: auto;}
+
+/** chart **/
+.doughnut-label-box{text-anchor: middle; text-align:center;}
+.doughnut-label-box > ul > li{text-anchor: middle; text-align:center; padding:0 !important; height:auto !important;}/*180515 padding 기본값 0으로 수정(상위 div의 li css상속되는문제)*/
+.doughnut-label-box > ul > li:first-child > span:first-child{color: rgb(68, 68, 68); font-size:40px;font-weight: 900;}
+.doughnut-label-box > ul > li:first-child > span:last-child{color: rgb(68, 68, 68); font-size: 18px;font-weight: 200;}
+.doughnut-label-box > ul > li:last-child > span{font-size: 12px; color: rgb(162, 162, 162);font-weight: 200;}
+
+.chartWrap .doughnut-label-box{margin-top: -107px;}/*180515 margin-top:-110px -> -107px로 수정*/
+
+/** left fav icon menu **/
+#container .leftMenu.pageLoad.on{transition: none;}
+#container .leftMenu .lmm1.modicon .lms{background-color: #2b2b2b; background-image: url("../images/bg_lmm.png"); background-repeat: no-repeat;}
+#container .leftMenu .lmm1.modicon .lms:hover, #container .leftMenu .lmm1 .lmm-modi .lms.on{background-color:#0d3cb6;}
+#container .leftMenu .lmm1.modicon li{position:relative;}
+#container .leftMenu .lmm1.modicon li span.link-remove-icon{display: none; position: absolute; right:10px; top:10px; z-index: 1; content: ''; width:9px; height:9px; background:url("../images/ico_com.png") no-repeat; background-position: -478px -51px; cursor:pointer;}
+#container .leftMenu .lmm1.modicon li span.link-remove-icon{display: block;}
+
+/** pull-right jscrollpane **/
+/*
+.projIistWrap .pull-right .ul-panel > li .panel .in.scroll-pane.jspScrollable .jspHorizontalBar .jspTrack, .projIistWrap .pull-right .ul-panel > li .panel .in.scroll-pane.jspScrollable .jspHorizontalBar .jspDrag{display: block}
+.projIistWrap .pull-right .ul-panel > li .panel .in.scroll-pane.jspScrollable > .jspContainer{width: 100% !important;}
+.projIistWrap .pull-right .ul-panel > li .panel .in.scroll-pane.jspScrollable > .jspContainer > .jspPane{width: 100% !important; padding-right: 10px !important;}
+*/
+
+.panel [scroll-pane].in.scroll-pane.jspScrollable .jspHorizontalBar .jspTrack, .panel [scroll-pane].scroll-pane.jspScrollable .jspHorizontalBar .jspDrag{display: block}
+.panel [scroll-pane].in.scroll-pane.jspScrollable > .jspContainer{width: 100% !important;}
+.panel [scroll-pane].in.scroll-pane.jspScrollable > .jspContainer > .jspPane{width: 100% !important; padding-right: 10px !important;}
+
+/**	ADMdtp **/
+.ADMdtp-box { z-index:100; }
+.ADMdtp { font-family:'roboto','Noto Sans KR'; line-height:24px; color:#464646; display:inline-block; vertical-align:middle; }
+.ADMdtp .ADMdtpInput>input { font-size:13px; font-family: 'Noto Sans KR', 'Montserrat','Apple SD Gothic Neo', sans-serif; padding-left: 12px; padding-right: 10px; width:100px; height: 38px; }
+.ADMdtp .ADMdtpInput>.dtp-ig .calendarIcon,.datepickerWrap .ADMdtpInput>.dtp-ig .datepickerWrap .ADMdtpInput>.removeIcon,.datepickerWrap .ADMdtpInput>.dtp-ig .closeIcon { top:0; left:0; width:100%; height: 38px; padding:0 3px; }
+.ADMdtp .ADMdtpInput>.removeIcon { display: none; right:27px; top:2px; fill: #464646; padding:5px; cursor:pointer; height:25px; }
+.ADMdtp .ADMdtpInput>.dtp-ig { width:28px; padding:0; color:#464646; text-align:center; background:none; border-left: 0px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
+.ADMdtp .ADMdtpInput>.dtp-ig .calendarIcon,.datepickerWrap .ADMdtpInput>.dtp-ig .closeIcon { border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
+.ADMdtp .ADMdtpInput>.dtp-ig .calendarIcon {background: #4c515f; fill: #fff; }
+.ADMdtp .ADMdtpInput select.ng-touched.ng-invalid-required + div.dtp-ig, input.ng-touched.ng-invalid-required + div.dtp-ig {border-color:#ff0740 !important;}
+.ADMdtp .ADMdtpInput select.ng-touched.ng-valid-required + div.dtp-ig, input.ng-touched.ng-valid-required + div.dtp-ig {border-color:#2ecc71 !important;}
+.ADMdtp.removeIconShow .ADMdtpInput>input { width:110px; padding-right: 27px;}
+.ADMdtp.removeIconShow .ADMdtpInput>.removeIcon { display: block; }
+
+
+/**	datepickerWrap **/
+.datepickerWrap .date-inpt {display: inline-block; position: relative;}
+.datepickerWrap .wave {display: inline-block; font-size:13px; width:20px; text-align: center; vertical-align: middle;}
+.datepickerWrap .wave {color: #fff;}
+
+/**	aside datepickerWrap **/
+.aside .datepickerWrap .ADMdtpInput>.dtp-ig { border-color: #6e7587; }
+
+/**	aside dateWrap **/
+.aside .dateWrap .date-inpt{z-index: 200;}
+
+/** validation **/
+/*180515 validation padding-top값 0px로 수정*/
+select.ng-touched.ng-invalid-validation, input.ng-touched.ng-invalid-validation{border-color:#ff0740 !important; }
+.ng-touched.ng-invalid-validation{color: #d40031 !important; line-height: 18px !important; }
+
+select.ng-touched.ng-valid-validation, input.ng-touched.ng-valid-validation{border-color:#2ecc71 !important; }
+.ng-touched.ng-valid-validation{color: #2ecc71 !important; line-height: 18px !important; }
+
+.validation.text-danger{ color: #d40031; line-height: 18px; margin-top:10px; }
+.validation.text-danger span.validation-icon{display: inline-block; content: ''; width:18px; height: 18px; margin-right: 5px; vertical-align: top; background: url("../images/ico_com.png") no-repeat; background-position: -508px -46px;}
+
+/** tooltip **/
+.tooltip.top .tooltip-arrow{border-top:5px solid #fccd50 !important; border-left:6px solid transparent !important; border-right:6px solid transparent !important; border-bottom:0px !important;}
+.tooltip.left .tooltip-arrow{border-left:5px solid #fccd50 !important; border-top:6px solid transparent !important; border-bottom:6px solid transparent !important; border-right:0px !important;}
+.tooltip.right .tooltip-arrow{border-right:5px solid #fccd50 !important; border-top:6px solid transparent !important; border-bottom:6px solid transparent !important; border-left:0px !important;}
+.tooltip.bottom .tooltip-arrow{border-bottom:5px solid #fccd50 !important; border-left:6px solid transparent !important; border-right:6px solid transparent !important; border-top:0px !important;}
+
+/** modal **/
+.modal-lg { width:940px !important; min-width:940px;}

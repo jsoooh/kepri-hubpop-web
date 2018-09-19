@@ -1,0 +1,52 @@
+<div class="mainWrap container-fluid">
+	<div class="main">
+		<div class="tableWrap">
+			<p class="title">{{'label.mngr_change' | translate}}</p>
+			<table class="table table-bordered inputWidthWrap">
+				<colgroup>
+					<col style="width:110px;" />
+					<col />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th>
+							<span class="require"></span>
+							<label for="email">{{ 'label.email' | translate }}</label>
+						</th>
+						<td>
+							<input type="text" id="email" maxlength="30" ng-model="contents.chgManagerEmail" placeholder="변경할 관리자 이메일을 입력하세요." ng-change="contents.isSearchManager=false;"/>
+							<button type="button" class="btn btn-black" data-toggle="modal" ng-click="contents.schMember();">{{ 'label.search' | translate }}</button>
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<label>{{ 'label.name' | translate }}</label>
+						</th>
+						<td>
+							{{ contents.chgManager.name }}
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<label>{{ 'label.company' | translate }}</label>
+						</th>
+						<td>
+							{{ contents.chgManager.company.companyName }}
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<label>{{ 'label.mobile_no' | translate }}</label>
+						</th>
+						<td class="numberWrap">
+							{{ contents.chgManager.cellphoneNumber }}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="bottomBtnWrap">
+			<button type="button" class="btn btn-add" ng-click="contents.updateManager()">{{ 'label.change' | translate }}</button>
+		</div>
+	</div>
+</div>
