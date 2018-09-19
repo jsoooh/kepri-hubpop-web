@@ -33,14 +33,6 @@
    - 각각의 IP에 대한 Hosts 설정 필요
 
     ```
-    $ sudo vi /etc/hosts
-    127.0.0.1 uaa-api-vip
-    127.0.0.1 comm-api-vip
-    127.0.0.1 iaas-api-vip
-    127.0.0.1 paas-api-vip
-    127.0.0.1 monit-api-vip
-    
-    
     $ sudo rm -f /etc/nginx/sites-enabled/default
     $ sudo vi /etc/nginx/sites-enabled/Web
     
@@ -49,11 +41,11 @@
         listen 80 default_server;
         listen [::]:80 default_server;
     
-        root /home/ubuntu/public_html/x1-portal-web;
+        root /home/ubuntu/public_html/kepri-hubpop-web;
     
         index console.html;
     
-        server_name www.{domain_name};
+        server_name www.kepri-domo.crossent.com;
     
         client_max_body_size    500m;
         client_body_buffer_size 256k;
@@ -66,30 +58,24 @@
             proxy_temp_file_write_size  64k;
         }
         
-        ## uaa 로컬 개발 시 필요   
-        location ^~ /uaa/ {
-           proxy_pass http://uaa-api-vip:8080;
-        }
-
         location ^~ /comm-api/ {
            rewrite ^/comm-api/(.*)$ /$1 break;
-           proxy_pass http://comm-api-vip:8081;
+           proxy_pass http://localhost:8081;
+           #proxy_pass http://www.kepri-domo.crossent.com; # 로컬 개발시
         }
     
         location ^~ /iaas-api/ {
             rewrite ^/iaas-api/(.*)$ /$1 break;
-            proxy_pass http://iaas-api-vip:8082;
+            proxy_pass http://localhost:8082;
+            #proxy_pass http://www.kepri-domo.crossent.com; # 로컬 개발시
         }
 
         location ^~ /paas-api/ {
             rewrite ^/paas-api/(.*)$ /$1 break;
-            proxy_pass http://paas-api-vip:8083;
+            proxy_pass http://localhost:8083;
+            #proxy_pass http://www.kepri-domo.crossent.com; # 로컬 개발시
         }
 
-        location ^~ /monit-api/ {
-            rewrite ^/monit-api/(.*)$ /$1 break;
-            proxy_pass http://monit-api-vip:8084;
-        }
     }
 
     ```
@@ -105,11 +91,11 @@
         listen 80;
         listen [::]:80;
         
-        root /home/ubuntu/public_html/x1-portal-web;
+        root /home/ubuntu/public_html/kepri-admin-web;
     
-        index admin.html;
+        index index.html;
     
-        server_name admin.{domain_name};
+        server_name admin.kepri-domo.crossent.com;
     
         client_max_body_size    500m;
         client_body_buffer_size 256k;
@@ -124,31 +110,29 @@
     
         location ^~ /comm-api/ {
            rewrite ^/comm-api/(.*)$ /$1 break;
-           proxy_pass http://{comm-api-vip}:8081;
+           proxy_pass http://localhost:8081;
+            #proxy_pass http://admin.kepri-domo.crossent.com; # 로컬 개발시
         }
     
         location ^~ /iaas-api/ {
             rewrite ^/iaas-api/(.*)$ /$1 break;
-            proxy_pass http://{iaas-api-vip}:8082;
+            proxy_pass http://localhost:8082;
+            #proxy_pass http://admin.kepri-domo.crossent.com; # 로컬 개발시
         }
 
         location ^~ /paas-api/ {
             rewrite ^/paas-api/(.*)$ /$1 break;
-            proxy_pass http://{paas-api-vip}:8083;
-        }
-
-        location ^~ /monit-api/ {
-            rewrite ^/monit-api/(.*)$ /$1 break;
-            proxy_pass http://{monit-api-vip}:8084;
+            proxy_pass http://localhost:8083;
+            #proxy_pass http://admin.kepri-domo.crossent.com; # 로컬 개발시
         }
 
         location /comm/img/ {
-            alias /home/ubuntu/workspace/x1-portal-web/img/;
+            alias /home/ubuntu/public_html/kepri-admin-web/img/;
             autoindex on;
         }
         
         location /comm/fonts/ {
-            alias /home/ubuntu}/workspace/x1-portal-web/fonts/;
+            alias /home/ubuntu/public_html/kepri-admin-web/fonts/;
             autoindex on;
         }
     }
