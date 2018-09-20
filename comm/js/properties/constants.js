@@ -34,7 +34,7 @@ angular.module('app')
 		popCommFormUrl: _COMM_VIEWS_ + '/common/popCommForm.html',
         rightPopCommFormUrl: _COMM_VIEWS_ + '/common/rightPopCommForm.html',
         popAlertFormUrl: _COMM_VIEWS_ + '/common/popAlertForm.html',
-        popAlertFormUrl2: _VIEWS_ + '/common/popAlertForm.html',
+        popAlertFormUrl2: _COMM_VIEWS_ + '/common/popAlertForm2.html',
         xpertHosts : {
             mysqlDB : "dbwebxpert",
             webLog : "weblog",

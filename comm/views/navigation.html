@@ -34,9 +34,9 @@
 		<div class="align_r">
 			<div class="col col-noti">
 				<div class="dropdown">
-					<button type="button" name="button" class="btn btn-noti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="알림"><span class="ico"><em class="badge">{{main.alarms?main.alarms.totalElements:0}}</em></span></button>
+					<button type="button" name="button" class="btn btn-noti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="알림"><span class="ico"><em class="badge">{{main.alarms.totalElements ? main.alarms.totalElements : 0}}</em></span></button>
 					<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
-						<li class="noti-txt">총 <em>{{main.alarms?main.alarms.totalElements:0}}</em>개의 알람이 있습니다.</li>
+						<li class="noti-txt">총 <em>{{main.alarms.totalElements ? main.alarms.totalElements : 0}}</em>개의 알람이 있습니다.</li>
 						<li class="divider"></li>
 						<li ng-repeat="(key, item) in main.alarms.content" ng-if="key < 4" class="noti-li">
 							<a href="">
