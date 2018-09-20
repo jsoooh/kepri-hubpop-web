@@ -1,9 +1,688 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasDashboardCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, user, paging, common, tenantDashboardService, ValidationService, CONSTANTS) {
+    .controller('iaasComputeDashboardCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, user, paging, common, ValidationService, CONSTANTS) {
+        _DebugConsoleLog("dashboardControllers.js : iaasComputeDashboardCtrl", 1);
+
+        $scope.actionBtnEnabled = false;
+
+        var ct = this;
+        ct.fn = {};
+        ct.data = {};
+        ct.roles = [];
+        ct.network = {};
+        ct.selectedValues = {};
+        ct.consoleLogLimit = '50';
+        ct.actionLogLimit = '10';
+
+        ct.formOpen = function ($event, state, type, data){
+            if(state == 'volume'){
+                if(type == 'storage'){
+                    ct.fn.createStorage($event);
+                }else if (type == 'snapshot'){
+                    ct.fn.createSnapshotPopBefore($event, data);
+                }
+            }else if(state == 'compute'){
+                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateStepForm.html" + _VersionTail();
+                $(".aside").stop().animate({"right":"-360px"}, 400);
+                $("#aside-aside1").stop().animate({"right":"0"}, 500);
+            }
+        };
+
+        // 공통 레프트 메뉴의 userTenantId
+        ct.data.tenantId = common.getMainCtrlScope().main.userTenant.id;
+        ct.data.tenantName = common.getMainCtrlScope().main.userTenant.korName;
+
+        // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
+        $scope.$on('userTenantChanged',function(event,status) {
+            ct.data.tenantId = status.id;
+            ct.data.tenantName = status.korName;
+            ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
+            ct.network = ct.networks[0];
+            ct.fnGetServerMainList();
+            //ct.fn.getStorageList();
+        });
+        // 인스턴스 S
+
+        // 서버메인 tenant list 함수
+        ct.fnGetServerMainList = function(currentPage) {
+            $scope.main.loadingMainBody = true;
+
+            var param = {
+                tenantId : ct.data.tenantId,
+                conditionKey : ct.conditionKey,
+                conditionValue : ct.conditionValue,
+                queryType : 'list'
+            };
+
+            if(ct.network.id != '') {
+                param.networkName = ct.network.name;
+            }
+
+            if (currentPage != undefined) {
+                param.number = currentPage;
+            }
+
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data) {
+                    ct.pageOptions = paging.makePagingOptions(data);
+                    ct.serverMainList = data.content.instances;
+                    //icon image match   08.21 추가
+                    //진행중일 때 count 필요 08.22 추가
+                    angular.forEach(ct.serverMainList, function(sData, key) {
+                        if (sData.vmState.indexOf("ing") > -1){
+                            ct.serverMainList[key].vmStateSec = 0;
+                            ct.serverMainList[key].vmStateInterval = $interval(function () {
+                                fnInterval(key);
+                            }, 1000);
+                        }
+                        angular.forEach(ct.imageList, function(iData) {
+                            if (sData.image && sData.image.id == iData.id) {
+                                sData.image.iconFileName = iData.iconFileName;
+                            }
+                        });
+                        if (!sData.image.iconFileName){
+                            sData.image.iconFileName = "im_logo_compute";
+                        }
+                    });
+                    ct.fnGetUsedResource();
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                //$scope.main.loadingMainBody = false;
+            });
+        };
+
+        //추가 S
+        ct.fnGetUsedResource = function() {
+            $scope.main.loadingMainBody = true;
+            var params = {
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.tenantResource = data.content[0];
+                //$scope.main.loadingMainBody = false;
+                ct.fn.getStorageList();
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+        };
+        //추가 E
+
+        // 네트워크 리스트 조회
+        ct.fn.networkListSearch = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                isExternal : false
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.networks = data.content.networks;
+                if(ct.networks.length > 0) {
+                    ct.network = data.content.networks[0];
+                    ct.data.networks.push(ct.networks[0]);
+                    ct.subnet.cidr_A = ct.network.subnets[0].cidr_A;
+                    ct.subnet.cidr_B = ct.network.subnets[0].cidr_B;
+                    ct.subnet.cidr_C = ct.network.subnets[0].cidr_C;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 이미지 리스트 조회
+        ct.fn.imageListSearch = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId
+            };
+            if(ct.conditionKey == 'imageServiceName') {
+                param.imageServiceName = ct.conditionValue;
+            }
+            if(ct.conditionKey == 'imageUseCase') {
+                param.imageUseCase = ct.conditionValue;
+            }
+            param.imageType = ct.imageType;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.imageList = data.content.images;
+                ct.fnGetServerMainList();   //서버메인 tenant list 함수
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //키페어 조회
+        ct.fn.getKeyPairList = function(keyPairName) {
+            var param = {tenantId:ct.data.tenantId};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keyPair', 'GET', param , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.keyPairList = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+        //보안정책 조회
+        ct.fn.getSecurityPolicy = function() {
+            var param = {tenantId:ct.data.tenantId};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.securityPolicyList = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+        // 스펙그룹의 스펙 리스트 조회
+        ct.fn.getSpecList = function(specGroup) {
+            $scope.main.loadingMainBody = true;
+            ct.specList = [];
+            ct.data.spec = {};
+            var param = {specGroupName:specGroup};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.specList = data.content.specs;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //초기화스크립트 리스트 조회
+        ct.fn.getInitScriptList = function(scriptId) {
+            var param = {
+                tenantId : ct.data.tenantId
+            };
+            if(scriptId) {
+                param.scriptId = scriptId;
+            }
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/initScript', 'GET', param , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                if(scriptId) {
+                    ct.data.initScript = data.content[0];
+                    $scope.main.loadingMainBody = false;
+                } else {
+                    ct.initScriptList = data.content;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //서버 생성
+        ct.fn.createServer = function() {
+            if (!ct.data.spec || angular.equals({},ct.data.spec)) {
+                common.validationAlert($scope,"인스턴스 사양", "필수 선택 항목입니다.");
+                return;
+            }
+
+            $scope.main.loadingMainBody = true;
+            ct.data.spec.type = ct.data.spec.name;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : ct.data});
+            returnPromise.success(function (data, status, headers) {
+                $state.reload();
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function() {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //키페어 setting
+        ct.fn.changeKeyPair = function() {
+            if(ct.keyPairValue){
+                ct.data.keyPair = angular.fromJson(ct.keyPairValue);
+            }
+        };
+        //보안정책 setting
+        ct.fn.changeSecurityPolicy = function() {
+            ct.data.securityPolicys = ct.roles;
+        };
+        //인스턴스 설정
+        ct.fn.selectSpec = function() {
+            if(ct.specValue){
+                ct.data.spec = angular.fromJson(ct.specValue);
+            }else{
+                ct.data.spec.vcpus = 0;
+                ct.data.spec.ram = 0;
+                ct.data.spec.disk = 0;
+            }
+        };
+        //초기화 스크립트 체크
+        ct.fn.initScriptSet = function() {
+            if(!ct.initCheck) {
+                ct.data.initScript = {};
+                ct.initScriptValue = "";
+            }
+        };
+        //초기화 스크립트 변경
+        ct.fn.changeInitScript = function() {
+            if(ct.initScriptValue == "") {
+                ct.data.initScript = {};
+            } else {
+                ct.fn.getInitScriptList(angular.fromJson(ct.initScriptValue).scriptId);
+            }
+        };
+        // 서버삭제
+        ct.deleteInstanceJob = function(id) {
+            common.showConfirm('서버 삭제','선택한 서버를 삭제하시겠습니까?').then(function(){
+
+                $scope.main.loadingMainBody = true;
+                var deferred = $q.defer();
+                if(typeof id !== 'string') {
+                    return;
+                }
+                var param = {
+                    tenantId : ct.data.tenantId,
+                    instanceId : id
+                };
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'DELETE', param)
+                returnPromise.success(function (data, status, headers) {
+                    if (status == 200 && data) {
+                        var action = "";
+                        var instance = {};
+                        var tenantId = ct.data.tenantId;
+                        var value = "";
+
+                        var recursive = function() {
+                            var param = {
+                                instanceId : id,
+                                action : action,
+                                tenantId : tenantId
+                            };
+                            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
+                            returnPromise.success(function (data, status, headers) {
+                                if (status == 200 && data) {
+                                    var requestAction = $filter('lowercase')(action);
+                                    var responseAction = $filter('lowercase')(data.content.instances[0].vmState);
+                                    if(requestAction == responseAction || responseAction == "error") {
+                                        if(responseAction == 'deleted') {
+                                            $scope.main.loadingMainBody = false;
+                                            common.showAlertSuccess(10000,'삭제되었습니다.');
+                                            ct.fnGetServerMainList(1);
+                                        }
+                                    }else if(responseAction == 'deleted') {
+                                        $scope.main.loadingMainBody = false;
+                                        common.showAlertSuccess(10000,'삭제되었습니다.');
+                                        ct.fnGetServerMainList(1);
+                                    }else {
+                                        instance.taskState = data.content.instances[0].taskState;
+                                        directiveWatch();
+                                    }
+                                } else {
+                                    instance.vmState = "error";
+                                }
+                            });
+                            returnPromise.error(function (data, status, headers) {
+                                $scope.main.loadingMainBody = false;
+                                instance.vmState = "error";
+                            });
+                        };
+
+                        var directiveWatch = function() {
+                            if(instance.taskState == "deleting") {
+                                value="DELETE";
+                            }
+
+                            if(value != "ready") {
+                                if(value == "DELETE") {
+                                    action = "deleted";
+                                }
+                                $timeout(recursive,5000);
+                            }
+                        };
+                        directiveWatch();
+                    } else {
+                        $scope.main.loadingMainBody = false;
+                        common.showAlertError('오류가 발생하였습니다.');
+                    }
+                });
+                returnPromise.error(function (data, status, headers) {
+                    common.showAlertError(data.message);
+                });
+            });
+        };
+        ct.fnServerConfirm = function(action,instance,index) {
+            if(action == "START") {
+                // 메시지 헤더와 메시지 내용부를 통일. 201808.24 sg0730
+                common.showConfirm('서버 시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance,index);
+                });
+            } else if(action == "STOP") {
+                common.showConfirm('서버 정지',instance.name +' 서버를 정지하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance,index);
+                });
+            } else if(action == "PAUSE") {
+                common.showConfirm('서버 일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance,index);
+                });
+            } else if(action == "UNPAUSE") {
+                common.showConfirm('서버 정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance,index);
+                });
+            } else if(action == "REBOOT") {
+                common.showConfirm('서버 재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance,index);
+                });
+            } else if(action == "DELETE") {
+                ct.deleteInstanceJob(instance.id);
+            } else if(action == "SNAPSHOT") {
+                ct.fn.createSnapshot(instance);
+            } else if(action == "VOLUME"){
+                ct.fn.createInstanceVolumePop(instance);
+            } else if(action == "IPCONNECT"){
+                ct.fn.IpConnectPop(instance,index);
+            } else if(action == "IPDISCONNECT"){
+                ct.fn.ipConnectionSet(instance, "detach",index);
+            }
+            ct.selectedValues[index] = "";
+        };
+
+        ct.fnSingleInstanceAction = function(action,instance,index) {
+            var param = {
+                instanceId : instance.id,
+                action : action,
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+
+                var vmStateChange = "";
+                if(action == "START"){
+                    vmStateChange = "starting";
+                }else if(action == "STOP"){
+                    vmStateChange = "stopping";
+                }else if(action == "PAUSE"){
+                    vmStateChange = "pausing";
+                }else if(action == "UNPAUSE"){
+                    vmStateChange = "unpausing";
+                }else if(action == "REBOOT"){
+                    vmStateChange = "rebooting";
+                }
+
+                ct.serverMainList[index].vmState = vmStateChange;
+                ct.serverMainList[index].observeAction = action;
+                ct.serverMainList[index].vmStateSec = 0;
+                ct.serverMainList[index].vmStateInterval = $interval(function () {
+                    fnInterval(index);
+                }, 1000);
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+        };
+
+        var fnInterval = function(index) {
+            ct.serverMainList[index].vmStateSec += 1;
+            if (ct.serverMainList[index].vmState.lastIndexOf("ing") == -1) {
+                $interval.cancel(ct.serverMainList[index].vmStateInterval);
+            }
+        };
+
+        // SnapShot 생성
+        ct.fn.createSnapshot = function(instance) {
+            if(instance.vmState != 'stopped') {
+                common.showAlertWarning('서버를 종료 후 생성가능합니다.');
+                return;
+            } else {
+                ct.selectInstance = instance;
+                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeSnapshotForm.html" + _VersionTail();
+                $(".aside").stop().animate({"right":"-360px"}, 400);
+                $("#aside-aside1").stop().animate({"right":"0"}, 500);
+            }
+        };
+
+        //인스턴스 볼륨 생성 팝업
+        ct.fn.createInstanceVolumePop = function(instance) {
+            common.showConfirm('볼륨연결',instance.name +' 서버에 볼륨을 연결하시겠습니까?').then(function(){
+                ct.selectInstance = instance;
+                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
+                $(".aside").stop().animate({"right":"-360px"}, 400);
+                $("#aside-aside1").stop().animate({"right":"0"}, 500);
+            });
+        };
+
+        // 접속 IP 설정 팝업
+        ct.fn.IpConnectPop = function(instance,index) {
+            common.showConfirm('접속 IP설정',instance.name +' 서버에 접속 IP를 설정하시겠습니까?').then(function(){
+                ct.selectInstance = instance;
+                ct.selectInstanceIndex = index;
+
+                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computePublicIpForm.html" + _VersionTail();
+                $(".aside").stop().animate({"right":"-360px"}, 400);
+                $("#aside-aside1").stop().animate({"right":"0"}, 500);
+            });
+        };
+
+        // 공인 IP 연결 해제 펑션
+        ct.fn.ipConnectionSet = function(instance,type,index) {
+            common.showConfirm('접속 IP해제',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
+                var param = {
+                    tenantId : ct.data.tenantId,
+                    instanceId : instance.id
+                };
+                if(instance.floatingIp) {
+                    param.floatingIp = instance.floatingIp;
+                    param.action = type;
+                } else {
+                    return false;
+                }
+                $scope.main.loadingMainBody = true;
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/network/floatingIp', 'POST', param,'application/x-www-form-urlencoded');
+                returnPromise.success(function (data, status, headers) {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertSuccess('접속 IP가 해제되었습니다.');
+                    ct.serverMainList[index].floatingIp = "";
+                });
+                returnPromise.error(function (data, status, headers) {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlert("message",data.message);
+                });
+            });
+        };
+
+        // 인스턴스 E
+        // 볼륨 스토리지 S
+        var conditionValue = $stateParams.volumeName;
+        if($stateParams.volumeName) {
+            ct.conditionKey = 'name';
+            ct.conditionValue = $stateParams.volumeName;
+        } else {
+            ct.conditionKey = '';
+        }
+
+        //볼륨 리스트
+        ct.fn.getStorageList = function(currentPage) {
+            //$scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                conditionKey : ct.conditionKey,
+                conditionValue : ct.conditionValue
+            };
+            if (currentPage != undefined) {
+                param.number = currentPage;
+            }
+
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.pageOptions = paging.makePagingOptions(data);
+                ct.storageMainList = data.content.volumes;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.deleteVolumes = function(type, id) {
+            if(type == 'thum'){
+                common.showConfirm('볼륨 삭제','볼륨을 삭제 하시겠습니까?').then(function(){
+                    ct.deleteVolumesAction(type, id);
+                });
+            }else if(type == 'tbl'){
+                if(ct.roles.length == 0) {
+                    common.showAlert('메세지','선택된 볼륨이 없습니다.');
+                } else {
+                    common.showConfirm('볼륨 삭제','선택된 '+ct.roles.length+'개의 볼륨을 삭제 하시겠습니까?').then(function(){
+                        ct.deleteVolumesAction(type, id);
+                    });
+                }
+            }
+
+        };
+
+        // 스토리지 삭제
+        ct.deleteVolumesAction = function(type, id) {
+            var prom = [];
+            if(type == 'thum'){
+                prom.push(ct.deleteVolumesJob(id));
+            }else if(type == 'tbl'){
+                for(var i=0; i< ct.roles.length; i++) {
+                    prom.push(ct.deleteVolumesJob(ct.roles[i]));
+                }
+            }
+            $q.all(prom).then(function(results){
+                for(var i=0; i < results.length; i++ ) {
+                    if(!results[i]) {
+                        common.showAlert('메세지','오류가 발생하였습니다.');
+                    }
+                }
+                ct.fn.getStorageList();
+                ct.roles = [];
+            }).catch(function(e){
+                common.showAlert('메세지',e);
+            });
+        };
+
+        // 스토리지 삭제
+        ct.deleteVolumesJob = function(id) {
+            $scope.main.loadingMainBody = true;
+            var deferred = $q.defer();
+            if(typeof id !== 'string') {
+                return;
+            }
+            var param = {
+                tenantId : ct.data.tenantId,
+                volumeId : id
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
+            returnPromise.success(function (data, status, headers) {
+                deferred.resolve(true);
+            });
+            returnPromise.error(function (data, status, headers) {
+                deferred.reject(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+
+            return deferred.promise;
+        };
+
+        ct.fn.createStorage = function ($event) {
+            $scope.dialogOptions = {
+                controller : "iaasStorageFormCtrl",
+                callBackFunction : ct.fn.getStorageList
+            };
+            $scope.actionBtnEnabled = false;
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/storageForm.html" + _VersionTail();
+            var name = $($event.currentTarget).attr("data-username"),
+                top = $(window).scrollTop();
+
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
+
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.fn.createSnapshotPopBefore = function ($event,volume) {
+            if(volume.status == 'in-use' || volume.status == 'available') {
+                if(volume.status == 'in-use') {
+                    var param = {
+                        tenantId : volume.tenantId,
+                        volumeId : volume.volumeId
+                    };
+                    var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
+                    returnPromise.success(function (data, status, headers) {
+                        if(data.content.instanceStatus == 'active') {
+                            common.showAlert('메세지',data.content.instanceName + '이 실행 중입니다. 인스턴스를 종료하고 시도해주세요.');
+                        } else {
+                            ct.fn.createSnapshotPop($event,volume);
+                        }
+                    });
+                    returnPromise.error(function (data, status, headers) {
+                        common.showAlert('메세지',data.message);
+                    });
+                    returnPromise.finally(function (data, status, headers) {
+                        $scope.main.loadingMainBody = false;
+                    });
+                } else {
+                    ct.fn.createSnapshotPop($event,volume);
+                }
+            } else {
+                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
+            }
+        };
+
+        ct.fn.createSnapshotPop = function ($event, volume) {
+            $scope.dialogOptions = {
+                controller : "iaasCreateStorageSnapshotFormCtrl",
+                callBackFunction : null,
+                volume : volume
+            };
+            $scope.actionBtnEnabled = false;
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
+            var name = $($event.currentTarget).attr("data-username"),
+                top = $(window).scrollTop();
+
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
+
+            $scope.actionLoading = true; // action loading
+        };
+        //볼륨 스토리지 E
+
+        if(ct.data.tenantId) {
+            ct.fn.imageListSearch();    //이미지 리스트 조회
+            //ct.fnGetServerMainList();
+            //ct.fn.getStorageList(1);
+        }else if(!$scope.main.hubpop.projectIdSelected && !$scope.main.currentProjectId){ // 프로젝트 선택
+            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
+            showAlert.then(function () {
+                $scope.main.moveToAppPage("/");
+            });
+            return false;
+        }
+    })
+    .controller('iaasDashboardCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, user, paging, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("dashboardControllers.js : iaasDashboardCtrl", 1);
-        
+
         $scope.actionBtnHied = false;
 
         var ct = this;
@@ -76,7 +755,7 @@ angular.module('iaas.controllers')
         		$("#aside-aside1").stop().animate({"right":"0"}, 500);
             }
         };
-        
+
         // 공통 레프트 메뉴의 userTenantId
         if (angular.isObject($scope.main.userTenant) && $scope.main.userTenantId) {
             ct.data.tenantId = $scope.main.userTenantId;
@@ -763,7 +1442,7 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-            	
+
             	var vmStateChange = "";
             	if(action == "START"){
             		vmStateChange = "starting";
@@ -776,8 +1455,8 @@ angular.module('iaas.controllers')
             	}else if(action == "REBOOT"){
             		vmStateChange = "rebooting";
             	}
-            	
-            	ct.serverMainList[index].vmState = vmStateChange; 
+
+            	ct.serverMainList[index].vmState = vmStateChange;
                 ct.serverMainList[index].observeAction = action;
             });
             returnPromise.error(function (data, status, headers) {
@@ -798,17 +1477,17 @@ angular.module('iaas.controllers')
     			$("#aside-aside1").stop().animate({"right":"0"}, 500);
             }
         }
-        
+
         // 접속 IP 설정 팝업
         ct.fn.IpConnectPop = function(instance,index) {
         	ct.selectInstance = instance;
         	ct.selectInstanceIndex = index;
-        	
+
         	$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computePublicIpForm.html" + _VersionTail();
 			$(".aside").stop().animate({"right":"-360px"}, 400);
 			$("#aside-aside1").stop().animate({"right":"0"}, 500);
         }
-        
+
         // 공인 IP 연결 해제 펑션
         ct.fn.ipConnectionSet = function(instance,type,index) {
             var param = {
@@ -842,8 +1521,8 @@ angular.module('iaas.controllers')
         } else {
             ct.conditionKey = '';
         }
-        
-        //볼륨 리스트 
+
+        //볼륨 리스트
         ct.fn.getStorageList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -879,7 +1558,7 @@ angular.module('iaas.controllers')
                     });
                 }
         	}
-            
+
         }
      // 스토리지 삭제
         ct.deleteVolumesAction = function(type, id) {
@@ -930,7 +1609,7 @@ angular.module('iaas.controllers')
 
             return deferred.promise;
         };
-        
+
         ct.fn.createStorage = function ($event) {
             $scope.dialogOptions = {
                 controller : "iaasStorageFormCtrl",
@@ -943,10 +1622,10 @@ angular.module('iaas.controllers')
 
 			$(".aside").stop().animate({"right":"-360px"}, 400);
 			$("#aside-aside1").stop().animate({"right":"0"}, 500);
-            
+
             $scope.actionLoading = true; // action loading
         }
-        
+
         ct.fn.createSnapshotPopBefore = function ($event,volume) {
             if(volume.status == 'in-use' || volume.status == 'available') {
                 if(volume.status == 'in-use') {
@@ -975,7 +1654,7 @@ angular.module('iaas.controllers')
                 common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
             }
         }
-        
+
         ct.fn.createSnapshotPop = function ($event, volume) {
             $scope.dialogOptions = {
                 controller : "iaasCreateStorageSnapshotFormCtrl",
@@ -984,17 +1663,15 @@ angular.module('iaas.controllers')
             };
             $scope.actionBtnHied = false;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
-            var name = $($event.currentTarget).attr("data-username"),
-    		top = $(window).scrollTop();
 
 			$(".aside").stop().animate({"right":"-360px"}, 400);
 			$("#aside-aside1").stop().animate({"right":"0"}, 500);
 
             $scope.actionLoading = true; // action loading
         }
-        
+
 //볼륨 스토리지 E
-        
+
         if(ct.data.tenantId) {
             ct.fn.getUsedResource();
             ct.fn.getDeployServerList();

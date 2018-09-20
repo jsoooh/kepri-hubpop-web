@@ -15,17 +15,17 @@ angular.module('app')
                 	dashboard: {
 						name: "dashboard",
 						icon: "fa-th-large",
-						stateKey: 'iaasDashboard',
+						stateKey: 'iaasComputeDashboard',
 						url: '/iaas',
-						controller: 'iaasDashboardCtrl',
-						templateUrl: _IAAS_VIEWS_+'/dashboard/dashboard.html',
+						controller: 'iaasComputeDashboardCtrl',
+						templateUrl: _IAAS_VIEWS_+'/dashboard/computeDashboard.html',
 					},
                     server: {
                         name: "server",
                         icon: "iaasServer",
                         stateKey: 'iaasServer',
                         subMenus: {
-                            /*serverMain: {
+                            serverMain: {
                                 name: "server_main",
                                 icon: "serverMain",
                                 stateKey: 'iaasCompute',
@@ -41,7 +41,8 @@ angular.module('app')
                                         templateUrl: _IAAS_VIEWS_+'/compute/computeDetail.html',
                                     }
                                 },
-                            },*/
+                            },
+/*
                             deployServer: {
                                 name: "deploy_server",
                                 icon: "deployServer",
@@ -73,6 +74,7 @@ angular.module('app')
                                     }
                                 }
                             },
+*/
                             server_snapshot: {
                                 name: "server_snapshot",
                                 icon: "server_snapshot",
