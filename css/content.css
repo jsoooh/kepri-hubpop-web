@@ -416,7 +416,8 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .panel.type2 .panel_head .pull-right .btn + .btn{margin-left: 10px;}
 .panel.type2 .panel_body{height: 300px; padding:30px; }
 .panel.type2 .panel_body .in{height: 100%; overflow:hidden;}
-.panel.type2 .panel_body .tbl.type1 td{/*overflow: hidden;*/   white-space: nowrap;   text-overflow: ellipsis;}
+.panel.type2 .panel_body .tbl.type1 td{overflow: hidden; white-space: nowrap;   text-overflow: ellipsis;}
+.panel.type2 .panel_body .tbl.type1 td.over-visible{overflow: visible;}
 .panel.type2 .panel_body .ul-list1 li{line-height: 1.4;}
 .panel.type2 .panel_body .ul-list1 li + li{margin-top: 10px;}
 .panel.type2 .panel_body .btn-btm.enVar{margin-top:20px; text-align:left;}
