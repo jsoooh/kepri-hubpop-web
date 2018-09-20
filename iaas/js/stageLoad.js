@@ -24,7 +24,3 @@ loadJavascript(_IAAS_STAGE_+'/js/controllers/network/networkControllers.js'+_VER
 loadJavascript(_IAAS_STAGE_+'/js/controllers/network/domainControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/network/domainRouterControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/network/networkExpansionControllers.js'+_VERSION_TAIL_HEAD_);
-
-loadJavascript(_IAAS_STAGE_+'/js/controllers/admin/aServerControllers.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_IAAS_STAGE_+'/js/controllers/admin/aNetworkControllers.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_IAAS_STAGE_+'/js/controllers/admin/aSystemControllers.js'+_VERSION_TAIL_HEAD_);
