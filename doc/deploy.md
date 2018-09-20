@@ -43,7 +43,7 @@
     
         root /home/ubuntu/public_html/kepri-hubpop-web;
     
-        index console.html;
+        index index.html;
     
         server_name www.kepri-domo.crossent.com;
     
