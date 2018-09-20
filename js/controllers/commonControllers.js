@@ -348,15 +348,6 @@ angular.module('common.controllers', [])
                 }
 			}
 		}
-commonControllers_mainCtrl({
-	$scope : $scope,
-	$location : $location,
-	common : common,
-	CONSTANTS : CONSTANTS,
-	projectService : projectService,
-	orgService : orgService,
-	mc : mc
-});
         _DebugConsoleLog('commonControllers.js : mainCtrl End', 1);
 	})
 	.controller('mainBodyCtrl', function ($scope, $location, $templateCache, $state, $stateParams, $timeout, $window, $translate, common, CONSTANTS) {
