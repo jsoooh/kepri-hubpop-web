@@ -43,7 +43,7 @@ angular.module('app', [
         , 'ngJScrollPane'
         , 'checklist-model'
     ])
-    .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$translateProvider', 'CONSTANTS', 'SITEMAP', 'IAASSITEMAP', 'PAASSITEMAP'/*, 'MARKETSITEMAP'*/, 'MONITSITEMAP',
+    .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$translateProvider', 'CONSTANTS', 'SITEMAP', 'IAASSITEMAP', 'PAASSITEMAP'/*, 'MARKETSITEMAP', 'MONITSITEMAP'*/,
         function ($httpProvider, $stateProvider, $urlRouterProvider, $translateProvider, CONSTANTS, SITEMAP, IAASSITEMAP, PAASSITEMAP/*, MARKETSITEMAP, MONITSITEMAP*/) {
 
         _DebugConsoleLog('app.js : commonApp', 1);
