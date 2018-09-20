@@ -13,8 +13,8 @@ angular.module('app', [
         , 'paas.services'
         // , 'market.controllers'
         // , 'market.services'
-        , 'monit.controllers'
-        , 'monit.services'
+        //, 'monit.controllers'
+        //, 'monit.services'
         , 'ngRoute'
         , 'ui.router'
         , 'ui.bootstrap'
@@ -44,7 +44,7 @@ angular.module('app', [
         , 'checklist-model'
     ])
     .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$translateProvider', 'CONSTANTS', 'SITEMAP', 'IAASSITEMAP', 'PAASSITEMAP'/*, 'MARKETSITEMAP'*/, 'MONITSITEMAP',
-        function ($httpProvider, $stateProvider, $urlRouterProvider, $translateProvider, CONSTANTS, SITEMAP, IAASSITEMAP, PAASSITEMAP/*, MARKETSITEMAP*/, MONITSITEMAP) {
+        function ($httpProvider, $stateProvider, $urlRouterProvider, $translateProvider, CONSTANTS, SITEMAP, IAASSITEMAP, PAASSITEMAP/*, MARKETSITEMAP, MONITSITEMAP*/) {
 
         _DebugConsoleLog('app.js : commonApp', 1);
 
@@ -110,11 +110,13 @@ angular.module('app', [
             });
         }
 */
+/*
         if (MONITSITEMAP.pages) {
             angular.forEach(MONITSITEMAP.pages, function (option, key) {
                 if (!SITEMAP.pages[key]) SITEMAP.pages[key] = option;
             });
         }
+*/
 
         if (IAASSITEMAP.leftMenus) {
             angular.forEach(IAASSITEMAP.leftMenus, function (option, key) {
@@ -133,11 +135,13 @@ angular.module('app', [
             });
         }
 */
+/*
         if (MONITSITEMAP.leftMenus) {
             angular.forEach(MONITSITEMAP.leftMenus, function (option, key) {
                 if (!SITEMAP.leftMenus[key]) SITEMAP.leftMenus[key] = option;
             });
         }
+*/
 
         angular.forEach(SITEMAP.pages, function(option, key) {
             option.pageStage = (option.pageStage) ? option.pageStage : "comm";
