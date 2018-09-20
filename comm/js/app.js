@@ -179,7 +179,7 @@ angular.module('app', [
             });
         });
 
-        var pageStages = ['comm', 'iaas', 'paas', /*'market',*/ 'monit'];
+        var pageStages = ['comm', 'iaas', 'paas', /*'market', 'monit'*/];
         var translateFiles = [];
 
         translateFiles.push({
