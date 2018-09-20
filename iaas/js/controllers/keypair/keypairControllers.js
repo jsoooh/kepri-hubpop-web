@@ -224,7 +224,7 @@ angular.module('iaas.controllers')
                 common.showAlert("message",returnData.data.responseJSON.message);
                 $scope.main.loadingMainBody = false;
             }
-        }
+        };
 
         pop.fn.editKeypair = function() {
             $scope.main.loadingMainBody = true;
