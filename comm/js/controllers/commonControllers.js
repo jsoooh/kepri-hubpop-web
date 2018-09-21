@@ -6,6 +6,9 @@ angular.module('common.controllers', [])
         _DebugConsoleLog('commonControllers.js : mainCtrl Start, path : ' + $location.path(), 1);
 
         var mc = this;
+
+        mc.topLogoIcon = "images/top_logo.png";
+
 		mc.pageLoadCount = 0;
         // 기본 셋팅
         if (common.getLanguageKey() != "en") {
@@ -1210,7 +1213,7 @@ angular.module('common.controllers', [])
                 $scope.main.loginSetingInit();
                 $scope.main.syncListAllProjects();
                 //$scope.main.syncListAllPortalOrgs();
-                $scope.main.listAlarms();
+                //$scope.main.listAlarms();
             }
 
             // paas menu 처리
