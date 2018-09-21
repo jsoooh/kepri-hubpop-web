@@ -214,8 +214,8 @@ angular.module('app', [
                 'en-*': 'en',
                 'ko-*': 'ko'
             })
-            .determinePreferredLanguage()
-            .fallbackLanguage('en');
+            // .determinePreferredLanguage()
+            .fallbackLanguage('ko');
         $translateProvider.useSanitizeValueStrategy(null);
         $translateProvider.test = "test";
 
@@ -262,6 +262,7 @@ angular.module('app', [
         _DebugConsoleLog("app run", 1);
         /********** default start **********/
         var languageKey = common.getLanguageKey();
+        languageKey = 'ko';
         if(languageKey == null || languageKey == '') {
             languageKey = $translate.proposedLanguage() || $translate.use();
             common.setLanguageKey(languageKey);
