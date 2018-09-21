@@ -26,13 +26,13 @@
 				</li>
 				<li>
 					<p class="app-tit">3. 설명 입력</p>
-					<textarea id="initScriptForm.description" name="initScriptForm.description" style="height:150px;" placeholder="설명을 입력해 주세요." ng-model="pop.initScript.description" class="form-control" ng-keyup="pop.fn.checkByte(pop.initScript.description,255)"></textarea>
+					<textarea id="initScriptForm_description" name="initScriptForm.description" style="height:150px;" placeholder="설명을 입력해 주세요." ng-model="pop.initScript.description" class="form-control" ng-keyup="pop.fn.checkByte(pop.initScript.description,255)"></textarea>
 					<p class="text-letter">{{pop.initScript.description | stringToBytes}}/255 Byte</p>
 					<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
 				</li>
 				<li>
 					<p class="app-tit">4. 스크립트 입력</p>
-					<textarea id="initScriptForm.script" name="initScriptForm.script" style="height:150px;" placeholder="스크립트를 입력해 주세요." ng-model="pop.initScript.script" class="form-control"></textarea>
+					<textarea id="initScriptForm_script" name="initScriptForm.script" style="height:150px;" placeholder="스크립트를 입력해 주세요." ng-model="pop.initScript.script" class="form-control"></textarea>
 				</li>
 			</ol>
 			
@@ -51,13 +51,13 @@
 				</li>
 				<li>
 					<p class="app-tit">3. 설명 입력</p>
-					<textarea id="initScriptForm.description" name="initScriptForm.description" style="height:150px;" ng-model="pop.initScript.description" class="form-control"readonly></textarea>
+					<textarea id="initScriptForm_description" name="initScriptForm.description" style="height:150px;" ng-model="pop.initScript.description" class="form-control"readonly></textarea>
 					<p class="text-letter">{{pop.initScript.description | stringToBytes}}/255 Byte</p>
 					<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
 				</li>
 				<li>
 					<p class="app-tit">4. 스크립트 입력</p>
-					<textarea id="initScriptForm.script" name="initScriptForm.script" style="height:150px;" ng-model="pop.initScript.script" class="form-control" readonly></textarea>
+					<textarea id="initScriptForm_script" name="initScriptForm.script" style="height:150px;" ng-model="pop.initScript.script" class="form-control" readonly></textarea>
 				</li>
 			</ol>
 			

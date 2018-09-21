@@ -83,14 +83,14 @@ angular.module('app')
                                 controller: 'iaasComputeSnapshotCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/compute/computeSnapshot.html'
                             },
-                            /*initScript: {
+                            initScript: {
                                 name: "server_init_script",
                                 icon: "server_init_script",
                                 stateKey: 'iaasInitScript',
                                 url: '/iaas/compute/initScript',
                                 controller: 'iaasComputeIntitScriptCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/compute/computeInitScript.html'
-                            },*/
+                            },
                             securityPolicy: {
                                 name: "server_security_policy",
                                 icon: "server_security_policy",
