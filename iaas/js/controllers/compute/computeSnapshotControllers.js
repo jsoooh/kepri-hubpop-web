@@ -375,7 +375,7 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 pop.networks = data.content;
                 if(pop.networks.length > 0) {
-                    pop.network = data.content.networks[0];
+                    pop.network = pop..networks[0];
                     pop.data.networks.push(pop.networks[0]);
                     pop.subnet.cidr_A = pop.network.subnets[0].cidr_A;
                     pop.subnet.cidr_B = pop.network.subnets[0].cidr_B;

@@ -1,24 +1,24 @@
-<div id="computeCreate" ng-controller="iaasComputeCreateCtrl as pop">
-	<div ng-show="pop.activeTabIndex == 1">
+<div id="computeCreate" ng-controller="iaasComputeCreateCtrl as contents">
+	<div ng-show="contents.activeTabIndex == 1">
 		<!-- aside aside1 title -->
 		<div class="sideTitWrap">
-			<h2 class="c_tit">인스턴스 만들기</h2>
-			<button type="button" name="closeBtn1" class="btn btn-close" data-user="aside-close" ng-click="pop.fn.formClose();"><span class="ico">닫기</span></button>
+			<h2 class="c_tit">가상서버 만들기</h2>
+			<button type="button" name="closeBtn1" class="btn btn-close" data-user="aside-close" ng-click="contents.fn.formClose();"><span class="ico">닫기</span></button>
 		</div>
 		<!-- //aside aside1 title -->
-		
+
 		<!-- aside aside1 cnt -->
-		<form name="{{pop.formName}}" novalidate>
+		<form name="{{contents.formName2}}" novalidate>
 			<div class="sideCntWrap">
 				<!-- aside step -->
-				<div class="sideStepWrap">
+				<div class="sideStepWrap" ng-if="0">
 					<ul>
-						<li class="pull-left on"><em>step 01</em><span>APP환경설정</span></li>
-						<li class="pull-right"><em>step 02</em><span>인스턴스 설정</span></li>
+						<li class="pull-left on" style="width:120px"><em>step 01</em><span>기본정보 입력</span></li>
+						<li class="pull-right on" style="width:120px"><em>step 02</em><span>기본정보 설정</span></li>
 					</ul>
 				</div>
 				<!-- //aside step -->
-			
+
 				<!-- sideInWrap -->
 				<div class="sideInWrap">
 					<ol class="app-set">
@@ -40,38 +40,42 @@
 							</div>
 						</li> -->
 						<li>
-							<p class="app-tit">1. 인스턴스 명</p>
-							<input type="text" class="form-control" name="serverName" ng-model="pop.data.name" maxlength="50" placeholder="인스턴스 명을 입력해 주세요." validation="alpha_dash|required">
+							<p class="app-tit">1. 이름 입력 <i class="i_star"></i></p>
+							<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="이름을 입력해 주세요." validation="alpha_dash_spaces|required">
 						</li>
 						<li>
-							<p class="app-tit">2. OS 이미지 선택</p>
+							<p class="app-tit">2. OS 선택 <i class="i_star"></i></p>
 							<div class="scroll-pane">
 								<ul class="ul-list1">
-									<li ng-repeat="image in pop.imageList">
+									<li ng-repeat="image in contents.imageList">
 										<div class="radio1 radio-inline">
-											<input type="radio" id="{{image.$$hashKey}}" name="froms.selectImageForm.imageId" ng-click="pop.data.image = image;">
+											<input type="radio" id="{{image.$$hashKey}}" name="froms.selectImageForm.imageId" ng-click="contents.data.image = image;">
 											<label for="{{image.$$hashKey}}" class="label"><img ng-src="images/thum/{{image.iconFileName}}.png" class="im"/></label>
 										</div>
 										<p class="label-txt">{{image.name}}</p>
-										<input type="hidden" ng-if="$last" ng-init="pop.scrollPane()">
+										<input type="hidden" ng-if="$last" ng-init="contents.scrollPane()">
 									</li>
 								</ul>
 							</div>
-							<input type="hidden" ng-model="pop.data.image" name="selectImage" validation="required">
+							<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
 						</li>
-						<li>
+						<!-- 보안그룹, 키페어선택 기존소스 임시제거 -->
+						<li ng-if="0">
 							<p class="app-tit">3. 보안그룹 선택</p>
 							<div class="dropdown instSelWrap2">
 								<button name="securityPolicyBtn" class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" >
-									<span ng-if="pop.roles.length > 0">{{ pop.roles | join:', ':'name' }}</span>
-									<span class="fontW400" ng-if="pop.roles.length == 0">선택</span>
+									<span ng-if="contents.roles.length > 0">
+										<span class="fontW400" ng-repeat="policy in contents.roles" ng-if="$index == 0">{{policy.name}}</span>
+										<span class="fontW400" ng-repeat="policy in contents.roles" ng-if="$index != 0">,{{policy.name}}</span>
+									</span>
+									<span class="fontW400" ng-if="contents.roles.length == 0">선택</span>
 								</button>
 								<div class="dropdown-menu dropdown-menu-hold instBox2">
 									<ul>
-										<li ng-repeat="policy in pop.securityPolicyList">
+										<li ng-repeat="policy in contents.securityPolicyList">
 											<div>
 												<p>
-													<input type="checkbox" id="{{policy.id}}" ng-click="pop.fn.changeSecurityPolicy()" checklist-model="pop.roles" checklist-value="policy">
+													<input type="checkbox" id="{{policy.id}}" ng-click="contents.fn.changeSecurityPolicy()" checklist-model="contents.roles" checklist-value="policy">
 													<label for="{{policy.id}}" class="fontW400">{{policy.name}}</label>
 												</p>
 												{{policy.description | splitStr : '\n' : 0}}
@@ -81,19 +85,49 @@
 								</div>
 							</div>
 						</li>
+						<li ng-if="0">
+							<p class="app-tit">4. 키페어 선택 <i class="i_star"></i></p>
+							<select name="keyPairValue"
+									class="form-control"
+									ng-model="contents.keyPairValue"
+									ng-change="contents.fn.changeKeyPair()"
+									ng-options="keyPair as keyPair.name for keyPair in contents.keyPairList track by keyPair.name"
+									validation="required">
+							</select>
+						</li>
+						<!-- //보안그룹, 키페어선택 기존소스 임시제거 -->
+
 						<li>
-							<p class="app-tit">4. 키페어 선택 (필수)</p>
-							<div class="input-group">
-								<select class="form-control" name="keypairValue" ng-model="pop.keypairValue" ng-change="pop.fn.changeKeypair()" validation="required">
-									<option value="">선택</option>
-									<option ng-repeat="keypair in pop.keypairList" value="{{keypair}}">
-										{{keypair.name}}
-									</option>
-								</select>
-								<div class="input-group-btn btn-top">
-									<button type="button" name="createKeypairBtn" class="btn btn-color1" style="width:90px;" ng-click="pop.fn.createKeypair()">키페어 추가</button>
-								</div>
+							<p class="app-tit">3. 사양 선택 <i class="i_star"></i></p>
+							<select class="form-control" name="contents.specValue" ng-model="contents.specValue" ng-change="contents.fn.selectSpec();" validation="required">
+								<option value="">선택</option>
+								<option ng-repeat="spec in contents.specList | filter:{name:'m'}" value="{{spec}}">[{{spec.name}}] vCPU {{spec.vcpus}}개 / MEM {{spec.ram/1024|number}} GB / DISK(HDD) {{spec.disk}} GB</option>
+							</select>
+						</li>
+						<li>
+							<p class="app-tit">생성할 리소스 정보</p>
+							<ul class="app-reso">
+								<li><span>{{contents.data.spec.vcpus}}<em>Core</em></span><strong>Total<br>vCPU</strong></li>
+								<li><span>{{contents.data.spec.ram/1024|number}}<em>G</em></span><strong>Total<br>vMemory</strong></li>
+								<li><span>{{contents.data.spec.disk}}<em>G</em></span><strong>Total<br>Disk</strong></li>
+							</ul>
+						</li>
+						<li>
+							<p class="app-tit">4. 초기화스크립트 선택</p>
+							<select name="contents.initScriptValue" class="form-control" ng-disabled="!contents.initCheck" ng-model="contents.initScriptValue" ng-change="contents.fn.changeInitScript()" style="float:left; width:235px;">
+								<option value="" ng-if="contents.initScriptList.length > 0">선택</option>
+								<option value="" ng-if="contents.initScriptList.length == 0">초기화 스크립트가 존재하지 않습니다.</option>
+								<option ng-repeat="initScript in contents.initScriptList" value="{{initScript}}">
+									{{initScript.name}}
+								</option>
+							</select>
+							<div class="checkbox checkbox-inline" style="margin:6px 0px 0px 10px;">
+								<input type="checkbox" name="initCheck" id="initCheck" ng-init="contents.initCheck = false"  ng-model="contents.initCheck" ng-click="contents.fn.initScriptSet()">
+								<label for="initCheck" class="label"><span style="margin-left:5px;">사용</span></label>
 							</div>
+						</li>
+						<li ng-show="contents.initCheck">
+							<textarea name="contents.data.initScript.script" ng-model="contents.data.initScript.script" style="height:80px;" disabled></textarea>
 						</li>
 					</ol>
 				</div>
@@ -101,91 +135,92 @@
 			</div>
 		</form>
 		<!-- //aside aside1 cnt -->
-		
+
 		<!-- aside btm -->
 		<div class="sideBtmWrap">
-			<button type="button" name="nextStpeBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.nextStep()">다음단계</button>
+			<!-- <button type="button" name="nextStpeBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="contents.nextStep();">다음단계</button> -->
+			<button type="button" name="saveBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="contents.fn.createServer();">생성</button>
 		</div>
 		<!-- //aside btm -->
 	</div>
-	
-	
-	<div ng-show="pop.activeTabIndex == 2">
-			<!-- aside title -->
-			<div class="sideTitWrap">
-				<h2 class="c_tit">인스턴스 만들기</h2>
-				<button type="button" name="closeBtn2" class="btn btn-close" data-user="aside-close" ng-click="pop.fn.formClose();"><span class="ico">닫기</span></button>
-			</div>
-			<!-- //aside title -->
-	
-			<!-- aside cnt -->
-			<form name="{{pop.formName2}}" novalidate>
-				<div class="sideCntWrap">
-					<!-- aside step -->
-					<div class="sideStepWrap">
-						<ul>
-							<li class="pull-left"><em>step 01</em><span>APP환경설정</span></li>
-							<li class="pull-right on"><em>step 02</em><span>인스턴스 설정</span></li>
-						</ul>
-					</div>
-					<!-- //aside step -->
-		
-					<!-- sideInWrap -->
-					<div class="sideInWrap">
-						<ol class="app-set">
-							<li>
-								<p class="app-tit">초기화스크립트 선택</p>
-								<select name="pop.initScriptValue" class="form-control" ng-disabled="!pop.initCheck" ng-model="pop.initScriptValue" ng-change="pop.fn.changeInitScript()" style="float:left; width:235px;">
-									<option value="" ng-if="pop.initScriptList.length > 0">선택</option>
-									<option value="" ng-if="pop.initScriptList.length == 0">초기화 스크립트가 존재하지 않습니다.</option>
-									<option ng-repeat="initScript in pop.initScriptList" value="{{initScript}}">
-										{{initScript.name}}
-									</option>
-								</select>
-								<div class="checkbox checkbox-inline" style="margin:6px 0px 0px 10px;">
-									<input type="checkbox" name="initCheck" id="initCheck" ng-init="pop.initCheck = false"  ng-model="pop.initCheck" ng-click="pop.fn.initScriptSet()">
-									<label for="initCheck" class="label"><span style="margin-left:5px;">사용</span></label>
-								</div>
-							</li>
-							<li ng-show="pop.initCheck">
-								<textarea name="pop.data.initScript.script" ng-model="pop.data.initScript.script" style="height:80px;" disabled></textarea>
-							</li>
-							<li>
-								<p class="app-tit">생성할 리소스 정보</p>
-								<ul class="app-reso">
-									<li><span>{{pop.data.spec.vcpus}}<em>Core</em></span><strong>Total<br>vCPU</strong></li>
-									<li><span>{{pop.data.spec.ram/1024|number}}<em>G</em></span><strong>Total<br>vMemory</strong></li>
-									<li><span>{{pop.data.spec.disk}}<em>G</em></span><strong>Total<br>Disk</strong></li>
-								</ul>
-							</li>
-							<li>
-								<p class="app-tit">인스턴스 사양 선택</p>
-								<select class="form-control" name="pop.specValue" ng-model="pop.specValue" ng-change="pop.fn.selectSpec();" validation="required">
-									<option value="">선택</option>
-									<option ng-repeat="spec in pop.specList | filter:{name:'m'}" value="{{spec}}">[{{spec.name}}] vCPU {{spec.vcpus}}개 / MEM {{spec.ram/1024|number}} GB / DISK(HDD) {{spec.disk}} GB</option>
-								</select>
-							</li>
-						</ol>
-					</div>
-					<!-- //sideInWrap -->
+
+
+	<div ng-show="contents.activeTabIndex == 2" ng-if="0">
+		<!-- aside title -->
+		<div class="sideTitWrap">
+			<h2 class="c_tit">인스턴스 만들기</h2>
+			<button type="button" name="closeBtn2" class="btn btn-close" data-user="aside-close" ng-click="contents.fn.formClose();"><span class="ico">닫기</span></button>
+		</div>
+		<!-- //aside title -->
+
+		<!-- aside cnt -->
+		<form name="{{contents.formName2}}" novalidate>
+			<div class="sideCntWrap">
+				<!-- aside step -->
+				<div class="sideStepWrap">
+					<ul>
+						<li class="pull-left" style="width:120px"><em>step 01</em><span>인스턴스 기본정보</span></li>
+						<li class="pull-right on" style="width:120px"><em>step 02</em><span>인스턴스 설정</span></li>
+					</ul>
 				</div>
-			</form>
-			<!-- //aside cnt -->
-	
-			<!-- aside btm -->
-			<div class="sideBtmWrap">
-				<button type="button" name="preBtn" class="btn" data-user="aside" data-username="#aside-aside1" ng-click="pop.preStep();" style="width:49.5%">이전단계</button>
-				<button type="button" name="saveBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.fn.createServer();" style="width:49.5%">인스턴스 생성</button>
+				<!-- //aside step -->
+
+				<!-- sideInWrap -->
+				<div class="sideInWrap">
+					<ol class="app-set">
+						<li>
+							<p class="app-tit">초기화스크립트 선택</p>
+							<select name="contents.initScriptValue" class="form-control" ng-disabled="!contents.initCheck" ng-model="contents.initScriptValue" ng-change="contents.fn.changeInitScript()" style="float:left; width:235px;">
+								<option value="" ng-if="contents.initScriptList.length > 0">선택</option>
+								<option value="" ng-if="contents.initScriptList.length == 0">초기화 스크립트가 존재하지 않습니다.</option>
+								<option ng-repeat="initScript in contents.initScriptList" value="{{initScript}}">
+									{{initScript.name}}
+								</option>
+							</select>
+							<div class="checkbox checkbox-inline" style="margin:6px 0px 0px 10px;">
+								<input type="checkbox" name="initCheck" id="initCheck" ng-init="contents.initCheck = false"  ng-model="contents.initCheck" ng-click="contents.fn.initScriptSet()">
+								<label for="initCheck" class="label"><span style="margin-left:5px;">사용</span></label>
+							</div>
+						</li>
+						<li ng-show="contents.initCheck">
+							<textarea name="contents.data.initScript.script" ng-model="contents.data.initScript.script" style="height:80px;" disabled></textarea>
+						</li>
+						<li>
+							<p class="app-tit">생성할 리소스 정보</p>
+							<ul class="app-reso">
+								<li><span>{{contents.data.spec.vcpus}}<em>Core</em></span><strong>Total<br>vCPU</strong></li>
+								<li><span>{{contents.data.spec.ram/1024|number}}<em>G</em></span><strong>Total<br>vMemory</strong></li>
+								<li><span>{{contents.data.spec.disk}}<em>G</em></span><strong>Total<br>Disk</strong></li>
+							</ul>
+						</li>
+						<li>
+							<p class="app-tit">인스턴스 사양 선택 <i class="i_star"></i></p>
+							<select class="form-control" name="contents.specValue" ng-model="contents.specValue" ng-change="contents.fn.selectSpec();" validation="required">
+								<option value="">선택</option>
+								<option ng-repeat="spec in contents.specList | filter:{name:'m'}" value="{{spec}}">[{{spec.name}}] vCPU {{spec.vcpus}}개 / MEM {{spec.ram/1024|number}} GB / DISK(HDD) {{spec.disk}} GB</option>
+							</select>
+						</li>
+					</ol>
+				</div>
+				<!-- //sideInWrap -->
 			</div>
-			<!-- //aside btm -->
+		</form>
+		<!-- //aside cnt -->
+
+		<!-- aside btm -->
+		<div class="sideBtmWrap">
+			<button type="button" name="preBtn" class="btn" data-user="aside" data-username="#aside-aside1" ng-click="contents.preStep();" style="width:49.5%">이전단계</button>
+			<button type="button" name="saveBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="contents.fn.createServer();" style="width:49.5%">인스턴스 생성</button>
+		</div>
+		<!-- //aside btm -->
 	</div>
 </div>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$(".aside .instSelWrap .btn").on("click", function(){
-			$(this).next(".instBox").slideToggle();
-		});
-		
-		$('.dropdown-menu-hold').click(function (e) { e.stopPropagation(); });
-	});
+    $(document).ready(function() {
+        $(".aside .instSelWrap .btn").on("click", function(){
+            $(this).next(".instBox").slideToggle();
+        });
+
+        $('.dropdown-menu-hold').click(function (e) { e.stopPropagation(); });
+    });
 </script>

@@ -125,9 +125,9 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                ct.networks = data.content.networks;
+                ct.networks = data.content;
                 if(ct.networks.length > 0) {
-                    ct.network = data.content.networks[0];
+                    ct.network = ct.networks[0];
                     ct.data.networks.push(ct.networks[0]);
                     ct.subnet.cidr_A = ct.network.subnets[0].cidr_A;
                     ct.subnet.cidr_B = ct.network.subnets[0].cidr_B;
@@ -168,7 +168,7 @@ angular.module('iaas.controllers')
         //키페어 조회
         ct.fn.getKeyPairList = function(keyPairName) {
             var param = {tenantId:ct.data.tenantId};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keyPair', 'GET', param , 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param , 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 ct.keyPairList = data.content;
             });
