@@ -8,7 +8,7 @@
         <div class="pull-right">
             <button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
         </div>
-   </div>
+    </div>
     <!-- //작업 추가 및 선택 -->
 
     <!-- panel area-->
@@ -228,44 +228,69 @@
     <!-- //panel area-->
 
     <!-- cBox -->
-    <div class="cBox type2 appCnt-sev" ng-if="contents.sltOrganizationGuid != ''" ng-controller="paasServiceInstancesCtrl as ins">
+    <div ng-if="contents.sltOrganizationGuid != ''" ng-controller="paasServiceInstancesCtrl as ins">
         <div ng-if="ins.loadingServiceInstances">
             <md-progress-linear md-mode="indeterminate"></md-progress-linear>
         </div>
-        <div class="cBox-hd">
-            <h4 class="c-tit">연결 서비스 <em class="point1">({{serviceInstance.serviceInstances.content.length}})</em></h4>
+        <div class="cont-titWrap mt50">
+            <h3 class="h-tit3">연결 서비스 <span class="point1">({{serviceInstance.serviceInstances.content.length}})</span></h3>
         </div>
-
-        <div class="cBox-cnt">
-            <div class="in scroll-pane">
-                <ul class="sev-list">
-                    <li class="sevBox on" ng-repeat="(key, serviceItem) in serviceInstance.serviceInstances.content">
-                        <img ng-src="images/thum/im_app_{{ serviceItem.serviceLabel }}_{{ (serviceItem.service.active == true) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}">
-                        <div class="dropdown btn-option">
-				                <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-				                  <span class="ico">실행 설정</span>
-				                </button>
-                            <ul class="dropdown-menu dropdown-menu-left" role="btn-optionn" aria-labelledby="btn-option">
-                                <li><a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a></li>
-                                <li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="ins.renameInst(serviceItem.name)">서비스 이름변경</a></li>
-                                <li><a href="javascript:void(0);" ng-click="ins.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
-                            </ul>
-                        </div>
-                        <p class="txt1" id="txt-{{serviceItem.name}}" style="display:block;">{{ serviceItem.name }}</p>
-                        <div id="renameService-{{serviceItem.name}}" style="display:none;">
-                            <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" class="form-control" style="height:38px;" ng-model="serviceItem.name" maxlength="20" validation="min_len:3|max_len:20|required" />
-                            <div class="sdBtnWrap">
-                                <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
-                                <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="ins.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
+        <!-- panel area-->
+        <ul class="ul-panel">
+            <li ng-repeat="(key, serviceItem) in serviceInstance.serviceInstances.content">
+                <!-- panel -->
+                <div class="panelWrap">
+                    <div class="panel type3">
+                        <div class="panel_head">
+                            <div class="logo">
+                                <img ng-src="images/thum/im_logo_{{ serviceItem.serviceLabel }}_cir.png" alt="{{ serviceItem.serviceLabel }}" />
+                            </div>
+                            <p id="txt-{{serviceItem.name}}" class="tit"><a href="">{{ serviceItem.name }}</a></p>
+                            <div id="renameService-{{serviceItem.name}}" style="display:none; width:240px;">
+                                <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
+                                <div class="sdBtnWrap">
+                                    <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
+                                    <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="ins.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
+                                </div>
+                            </div>
+                            <p class="txt nolink">S/W : {{serviceItem.serviceLabel}}</p>
+                            <div class="dropdown btn-option">
+                                <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                                    <span class="ico">실행 설정</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                                    <li><a href="javascript:void(0);" ng-click="contents.serviceInfo($event, serviceItem);">서비스 정보보기</a></li>
+                                    <li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="ins.renameInst(serviceItem.name)">서비스 이름변경</a></li>
+                                    <li><a href="javascript:void(0);" ng-click="ins.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
+                                </ul>
                             </div>
                         </div>
-                    </li>
-                    <li class="sevBox addSev ui-sortable-handle">
-                        <button type="button" name="button" ng-click="ins.showForm(serviceInstance.serviceInstances)" class="btn only-ico ico-add" title="추가" data-user="aside" data-username="#aside-sevAdd"><span class="ico">추가</span></button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+                        <div class="panel_body">
+                            <ul class="ul-in">
+                                <li class="col1 type2">
+                                    <div class="up">
+                                        <p class="txt"><strong>연결앱 수</strong><span>{{ serviceItem.serviceBindings.length }}</span></p>
+                                    </div>
+                                    <div class="down">
+                                        <span class="stateWrap"><span class="stateMark type1">정상배포</span><span class="state-txt">실행</span></span>
+                                    </div>
+                                </li>
+                                <li class="col2 type2">
+                                    <div class="service_plan">
+                                        <span class="tit">서비스플랜</span>
+                                        <span class="txt_bg">{{ serviceItem.servicePlan.name }}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- //panel -->
+            </li>
+            <li style="padding-bottom:3.5%;">
+                <button type="submit" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" id="aside-aside" ng-click="ins.showForm(serviceInstance.serviceInstances)"><span class="ico"></span><span class="txt">연결 서비스 추가</span></button>
+            </li>
+        </ul>
     </div>
     <!-- //cBox -->
 <!-- //content -->
