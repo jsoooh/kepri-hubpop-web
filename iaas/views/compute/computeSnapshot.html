@@ -1,5 +1,5 @@
 	<!-- 작업 추가 및 선택 -->
-	<div class="projt-selWarp">
+	<div ng-if="main.projectType == 'pjt'" ng-if="main.projectType == 'pjt'" class="projt-selWarp">
 		<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
 		<div class="pull-right">
 			<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>

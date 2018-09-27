@@ -80,4 +80,22 @@ angular.module('app')
           return input.replace(regex, to);
            
         };
-    }]);
+    }])
+    .filter('iaasVmState', [function() {
+        return function (input) {
+
+            var json = {};
+            json['active']    = '활성';
+            json['paused']    = '일시정지';
+            json['stopped']   = '정지';
+            json['starting']  = '시작중';
+            json['rebooting'] = '재시작중';
+            json['pausing']   = '일시정지중';
+            json['unpausing'] = '정지해제중';
+            json['stopping']  = '정지중';
+            json['error']     = '오류';
+
+            return json[input];
+        };
+    }])
+;

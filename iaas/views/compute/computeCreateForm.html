@@ -3,7 +3,7 @@
 		<!-- aside aside1 title -->
 		<div class="sideTitWrap">
 			<h2 class="c_tit">가상서버 만들기</h2>
-			<button type="button" name="closeBtn1" class="btn btn-close" data-user="aside-close" ng-click="contents.fn.formClose();"><span class="ico">닫기</span></button>
+			<button type="button" name="closeBtn1" class="btn btn-close" data-user="aside-close" ng-click="main.thisAsideClose($event);"><span class="ico">닫기</span></button>
 		</div>
 		<!-- //aside aside1 title -->
 
@@ -87,11 +87,11 @@
 						</li>
 						<li ng-if="0">
 							<p class="app-tit">4. 키페어 선택 <i class="i_star"></i></p>
-							<select name="keyPairValue"
+							<select name="keypairValue"
 									class="form-control"
-									ng-model="contents.keyPairValue"
-									ng-change="contents.fn.changeKeyPair()"
-									ng-options="keyPair as keyPair.name for keyPair in contents.keyPairList track by keyPair.name"
+									ng-model="contents.keypairValue"
+									ng-change="contents.fn.changeKeypair()"
+									ng-options="keypair as keypair.name for keypair in contents.keypairList track by keypair.name"
 									validation="required">
 							</select>
 						</li>

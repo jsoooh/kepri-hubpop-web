@@ -522,18 +522,18 @@
 	</div>
     <!-- aside btm -->
     <div ng-if="pop.activeTab == 'SLT'" class="sideBtmWrap">
-        <button type="button" name="nextStpeBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.fn.nextStep()">다음단계</button>
+        <button type="button" name="nextStpeBtn" class="btn" data-user="aside" ng-click="pop.fn.nextStep()">다음단계</button>
     </div>
     <!-- aside btm -->
     <div ng-if="pop.activeTab != 'SLT' && pop.activeTab != 'RES'" class="sideBtmWrap">
-        <button type="button" name="preBtn" class="btn" data-user="aside" data-username="#aside-aside1" ng-click="pop.fn.preStep();" style="width:49.5%">이전단계</button>
-        <button type="button" name="saveBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.fn.nextStep();" style="width:49.5%">다음단계</button>
+        <button type="button" name="preBtn" class="btn" data-user="aside" ng-click="pop.fn.preStep();" style="width:49.5%">이전단계</button>
+        <button type="button" name="saveBtn" class="btn" data-user="aside" ng-click="pop.fn.nextStep();" style="width:49.5%">다음단계</button>
     </div>
     <!-- //aside btm -->
     <!-- aside btm -->
     <div ng-if="pop.activeTab == 'RES'" class="sideBtmWrap">
-        <button type="button" name="preBtn" class="btn" data-user="aside" data-username="#aside-aside1" ng-click="pop.fn.preStep();" style="width:49.5%">이전단계</button>
-        <button type="button" name="saveBtn" class="btn" data-user="aside" data-username="#aside-aside2" ng-click="pop.fn.createTypeServer($event);" style="width:49.5%">인스턴스 생성</button>
+        <button type="button" name="preBtn" class="btn" data-user="aside" ng-click="pop.fn.preStep();" style="width:49.5%">이전단계</button>
+        <button type="button" name="saveBtn" class="btn" data-user="aside" ng-click="pop.fn.createTypeServer($event);" style="width:49.5%">인스턴스 생성</button>
     </div>
     <!-- //aside btm -->
 </div>

@@ -9,6 +9,8 @@ angular.module('common.controllers', [])
 
         mc.topLogoIcon = "images/top_logo.png";
 
+        mc.projectType = _PROJECT_TYPE_;
+
 		mc.pageLoadCount = 0;
         // 기본 셋팅
         if (common.getLanguageKey() != "en") {

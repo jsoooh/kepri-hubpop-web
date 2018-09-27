@@ -214,61 +214,12 @@
 
 						<!-- 리스트형 ng-hide="image"-->
 						<div class="inst-list type2 scroll-pane" ng-if="image == false">
-							<div class="tb-top">
-								<div class="pull-left">
-									<div class="tb_top_info" ng-if="contents.instanceStats.length > 0">
-										<span class="tit">{{ contents.app.name }}</span>
-										<span class="txt"><strong>Memory 할당량 : </strong>{{contents.instanceStatsMemQuotaValue}}</span>
-										<span class="txt"><strong>Disk 할당량 : </strong>{{ contents.instanceStatsDiskQuotaValue}}</span>
-									</div>
-								</div>
-							</div>
-							<!-- tb top -->
-
-							<div class="tbl type1">
-								<table class="table">
-									<colgroup>
-										<col style="width:10%;">
-										<col style="width:15%;">
-										<col style="width:15%;">
-										<col style="width:15%;">
-										<col style="width:15%;">
-										<col style="width:20%;">
-										<col style="width:10%;">
-									</colgroup>
-									<thead>
-									<tr>
-										<th scope="col">상태</th>
-										<th scope="col">인스턴스 번호</th>
-										<th scope="col">CPU({{ 'label.usage' | translate }})</th>
-										<th scope="col">Memory({{ 'label.usage' | translate }})</th>
-										<th scope="col">Disk({{ 'label.usage' | translate }})</th>
-										<th scope="col">최종 시작일<!-- {{ 'label.use_start_dd' | translate }} --></th>
-										<th scope="col">{{ 'label.restart' | translate }}</th>
-									</tr>
-									</thead>
-									<tbody>
-									<tr ng-repeat="(key, statItem) in contents.instanceStats">
-										<td>
-											<span class="stateWrap">
-												<span class="stateMark type{{ (statItem.state == 'CRASHED') ?  '3' : (statItem.state == 'RUNNING') ?  '1' : (statItem.state == 'STARTING') ?  '4' : '3'}}"></span>
-											</span>
-										</td>
-										<td>{{statItem.id}}</td>
-										<td>{{statItem.usage.cpu*100 | number:1}}%</td>
-										<td>{{statItem.memUse}} ({{(statItem.memQuota <= 0) ? statItem.usage.mem : (((statItem.usage.mem*100)/statItem.memQuota) | number:1)}}%)</td>
-										<td>{{statItem.diskUse}} ({{(statItem.diskQuota <= 0) ? statItem.usage.disk : (((statItem.usage.disk*100)/statItem.diskQuota) | number:1)}}%)</td>
-										<td>{{nowDate - (statItem.uptime*1000) | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-										<td>
-											<button type="button" name="button" class="btn btn-ico-refresh-s only-ico" title="재시작" ng-click="contents.instanceRestart(contents.app.guid, statItem.id);"><span class="ico">재시작</span></button>
-										</td>
-									</tr>
-									<tr ng-if="contents.instanceStats.length == 0">
-										<td colspan="7">{{ 'label.app_instance_state' | translate }}</td>
-									</tr>
-									</tbody>
-								</table>
-							</div>
+							<ul class="instUl" style="height: 100px;">
+								<h3 ng-if="contents.instanceStats.length == 0">{{ 'label.app_instance_state' | translate }}</h3>
+								<li class="instBox color-type{{ (statItem.state == 'CRASHED') ?  '1' : (statItem.state == 'RUNNING') ?  '2' : (statItem.state == 'STARTING') ?  '4' : '1'}}" ng-repeat="(key, statItem) in contents.instanceStats">
+									<div class="instName" title="인스턴스 풀네임 노출">{{statItem.id}}</div>
+								</li>
+							</ul>
 						</div>
 						<!-- //리스트형 -->
 						</div>

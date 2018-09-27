@@ -2,7 +2,7 @@
 	<form name="{{tab.formName}}" method="POST" novalidate>
 		<!-- aside title -->
 			<div class="sideTitWrap">
-				<h2 class="c_tit">APP 만들기</h2>
+				<h2 class="c_tit">APP 개발 서비스 추가</h2>
 				<button type="button" name="button" class="btn btn-close" data-user="aside-close" ng-click="tab.closeForm($event);"><span class="ico">닫기</span></button>
 			</div>
 			<!-- //aside title -->
@@ -21,12 +21,12 @@
 				<!-- sideInWrap -->
 				<div class="sideInWrap">
 					<ol class="app-set">
-						<!-- <li>
+						<li>
 							<p class="app-tit">1. 작업 이름</p>
 							<input type="text" name="" class="form-control" value="{{tab.sltOrganization.orgName}}" disabled>
-						</li> -->
+						</li>
 						<li>
-							<p class="app-tit">1. APP 유형 선택 <em class="ico-info2 ico" title="일반앱(CF빌드팩 기반), docker앱(docker Image기반)"></em><i class="i_star"></i></p>
+							<p class="app-tit">2. 유형을 선택해 주세요.</p>
 							<div>
 								<div class="radio radio-inline">
 									<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="tab.appPushData.pushType">
@@ -35,11 +35,12 @@
 								<div class="radio radio-inline">
 									<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="tab.appPushData.pushType">
 									<label for="app-radio1-2" class="label">Docker</label>
+									<em class="ico-info2 ico" title="툴팁이 나와요"></em>
 								</div>
 							</div>
 						</li>
 						<li ng-if="tab.appPushData.pushType == 'GENERAL'">
-							<p class="app-tit">2. 빌드팩(buildpack) 선택 <i class="i_star"></i></p>
+							<p class="app-tit">3. 개발언어를 선택해 주세요.</p>
 							<div class="scroll-pane">
 								<ul class="ul-list1">
 									<li ng-repeat="(key, buildpackItem) in tab.portalBuildpacks track by $index">
@@ -58,14 +59,14 @@
 							</div>
 						</li>
 						<li>
-							<p class="app-tit">{{ (tab.appPushData.pushType == 'GENERAL') ?  '3' : '2'}}. APP 이름 입력 <i class="i_star"></i></p>
-							<input type="text" maxlength="20" id="appName" name="appName" ng-model="tab.appPushData.appName" ng-change="tab.appPushData.domainFirstName = tab.appPushData.appName" validation="min_len:3|max_len:20|required" class="form-control" placeholder="APP 이름을 입력하세요." />
+							<p class="app-tit">{{ (tab.appPushData.pushType == 'GENERAL') ?  '4' : '3'}}. 사용하실 APP 이름을 입력해 주세요.</p>
+							<input type="text" maxlength="20" id="appName" name="appName" ng-model="tab.appPushData.appName" ng-change="tab.appPushData.domainFirstName = tab.appPushData.appName" validation="min_len:3|max_len:20|required" class="form-control" />
 						</li>
 						<li>
-							<p class="app-tit">{{ (tab.appPushData.pushType == 'GENERAL') ?  '4' : '3'}}. APP 호스트(Host) 이름 입력 <i class="i_star"></i></p>
+							<p class="app-tit">{{ (tab.appPushData.pushType == 'GENERAL') ?  '5' : '4'}}. 호스트(Host) URL을 입력해 주세요. (앱명은 영문만 입력 가능합니다.)</p>
 							<div class="app-form-two">
 								<div class="two_box">
-									<input type="text" maxlength="20" id="domainFirstName" name="domainFirstName" ng-model="tab.appPushData.domainFirstName" ng-change="tab.hostDup = false" validation="alpha_dash|min_len:3|max_len:20|required" placeholder="호스트 이름(영문)을 입력하세요." />
+									<input type="text" maxlength="20" id="domainFirstName" name="domainFirstName" ng-model="tab.appPushData.domainFirstName" ng-change="tab.hostDup = false" validation="alpha_dash|min_len:3|max_len:20|required" />
 								</div>
 								<div class="two_box">
 									<select id="domainName" name="domainName" ng-model="tab.sltDomainName">
@@ -77,12 +78,12 @@
 							<div ng-if="tab.hostDup" class="validation text-danger"><span class="validation-icon"></span>이미 사용 중인 호스트입니다.</div>
 						</li>
 						<li ng-if="tab.appPushData.pushType == 'DOCKER'">
-							<p class="app-tit">4. Docker 이미지 정보를 입력해 주세요. <i class="i_star"></i></p>
+							<p class="app-tit">5. Docker 이미지 정보를 입력해 주세요. </p>
 							<input type="text" maxlength="100" name="dockerImage" id="dockerImage" ng-model="tab.appPushData.dockerImage" class="form-control" placeholder="예 : cloudfoundry/lattice-app" validation="required">
 						</li>
 
 						<li ng-if="tab.appPushData.pushType != 'DOCKER'">
-							<p class="app-tit">5. {{ 'label.file_upload' | translate }} <em class="ico-info2 ico" title="지원 파일 포맷 .war .jar .zip"></em><i class="i_star"></i></p>
+							<p class="app-tit">6. {{ 'label.file_upload' | translate }} 	<em class="ico-info2 ico" title="지원 파일 포맷 .war .jar .zip"></em></p>
 							<div colspan="3" class="text-left file_up">
 								<input type="file" maxlength="100" name="file" nv-file-select="" uploader="tab.uploader" class="form-control" style="display: none;" accept=".war, .jar, .zip"/>
 								<input type="text" value="{{ tab.appFileItem.file.name }}" readonly>

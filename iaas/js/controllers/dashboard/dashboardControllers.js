@@ -23,7 +23,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPopBefore($event, data);
                 }
             }else if(state == 'compute'){
-                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateStepForm.html" + _VersionTail();
+                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateForm.html" + _VersionTail();
                 $(".aside").stop().animate({"right":"-360px"}, 400);
                 $("#aside-aside1").stop().animate({"right":"0"}, 500);
             }
@@ -93,24 +93,20 @@ angular.module('iaas.controllers')
                 common.showAlert("message",data.message);
             });
             returnPromise.finally(function (data, status, headers) {
-                //$scope.main.loadingMainBody = false;
+                $scope.main.loadingMainBody = false;
             });
         };
 
         //추가 S
         ct.fnGetUsedResource = function() {
-            $scope.main.loadingMainBody = true;
             var params = {
                 tenantId : ct.data.tenantId
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 ct.tenantResource = data.content[0];
-                //$scope.main.loadingMainBody = false;
-                ct.fn.getStorageList();
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
         };
@@ -153,7 +149,7 @@ angular.module('iaas.controllers')
                 param.imageUseCase = ct.conditionValue;
             }
             param.imageType = ct.imageType;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param , 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.imageList = data.content.images;
                 ct.fnGetServerMainList();   //서버메인 tenant list 함수
@@ -166,11 +162,11 @@ angular.module('iaas.controllers')
         };
 
         //키페어 조회
-        ct.fn.getKeyPairList = function(keyPairName) {
+        ct.fn.getKeypairList = function(keypairName) {
             var param = {tenantId:ct.data.tenantId};
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param , 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                ct.keyPairList = data.content;
+                ct.keypairList = data.content;
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
@@ -253,9 +249,9 @@ angular.module('iaas.controllers')
         };
 
         //키페어 setting
-        ct.fn.changeKeyPair = function() {
-            if(ct.keyPairValue){
-                ct.data.keyPair = angular.fromJson(ct.keyPairValue);
+        ct.fn.changeKeypair = function() {
+            if(ct.keypairValue){
+                ct.data.keypair = angular.fromJson(ct.keypairValue);
             }
         };
         //보안정책 setting
@@ -468,14 +464,12 @@ angular.module('iaas.controllers')
 
         // 접속 IP 설정 팝업
         ct.fn.IpConnectPop = function(instance,index) {
-            common.showConfirm('접속 IP설정',instance.name +' 서버에 접속 IP를 설정하시겠습니까?').then(function(){
-                ct.selectInstance = instance;
-                ct.selectInstanceIndex = index;
+            ct.selectInstance = instance;
+            ct.selectInstanceIndex = index;
 
-                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computePublicIpForm.html" + _VersionTail();
-                $(".aside").stop().animate({"right":"-360px"}, 400);
-                $("#aside-aside1").stop().animate({"right":"0"}, 500);
-            });
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computePublicIpForm.html" + _VersionTail();
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
 
         // 공인 IP 연결 해제 펑션
@@ -517,7 +511,7 @@ angular.module('iaas.controllers')
 
         //볼륨 리스트
         ct.fn.getStorageList = function(currentPage) {
-            //$scope.main.loadingMainBody = true;
+            $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
                 conditionKey : ct.conditionKey,
@@ -671,7 +665,7 @@ angular.module('iaas.controllers')
         if(ct.data.tenantId) {
             ct.fn.imageListSearch();    //이미지 리스트 조회
             //ct.fnGetServerMainList();
-            //ct.fn.getStorageList(1);
+            ct.fn.getStorageList(1);
         }else if(!$scope.main.hubpop.projectIdSelected && !$scope.main.currentProjectId){ // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
             showAlert.then(function () {
@@ -749,8 +743,8 @@ angular.module('iaas.controllers')
         			ct.fn.createSnapshotPopBefore($event, data);
         		}
         	}else if(state == 'compute'){
-        		//$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateStepForm.html" + _VersionTail();
-                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeTypeCreateStepForm.html" + _VersionTail();
+        		//$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateForm.html" + _VersionTail();
+                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeTypeCreateForm.html" + _VersionTail();
         		$(".aside").stop().animate({"right":"-360px"}, 400);
         		$("#aside-aside1").stop().animate({"right":"0"}, 500);
             }

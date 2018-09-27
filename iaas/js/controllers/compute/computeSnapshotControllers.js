@@ -13,7 +13,7 @@ angular.module('iaas.controllers')
         ct.data.tenantName = $scope.main.userTenant.korName;
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
-        $scope.$on('userTenantChanged',function(event,status) {
+        $scope.$on('userTenantChanged',function(event, status) {
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
             ct.fn.getInstanceSnapshotList(1);
@@ -35,7 +35,7 @@ angular.module('iaas.controllers')
                 instanceName : ct.data.instanceName,
                 number : page
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             	ct.snapshotList = data.content.instanceSnapShots;
@@ -48,7 +48,7 @@ angular.module('iaas.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         ct.fn.deleteSnapshot = function(snapshot) {
             common.showConfirm('스냅샷 삭제',snapshot.snapShotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
@@ -76,7 +76,7 @@ angular.module('iaas.controllers')
                     $scope.main.loadingMainBody = false;
                 });
             });
-        }
+        };
         if(ct.data.tenantId) {
             ct.fn.getInstanceSnapshotList(1);
         }
@@ -113,19 +113,19 @@ angular.module('iaas.controllers')
             }
         	
             pop.activeTabIndex++;
-        }
+        };
 
         //이전
         pop.preStep = function () {
         	pop.activeTabIndex--;
-        }
+        };
         
         pop.fn.getSnapshotInfo = function(snapshotId) {
             $scope.main.loadingMainBody = true;
             var params = {
                 tenantId : pop.data.tenantId,
                 snapShotId : snapshotId
-            }
+            };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'GET', params, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 //$scope.main.loadingMainBody = false;
@@ -136,7 +136,7 @@ angular.module('iaas.controllers')
                 //common.showAlert("message",data.message);
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
         
       //인스턴스 상세 정보 조회
         pop.fn.getInstanceInfo = function(instanceId) {
@@ -144,7 +144,7 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : pop.data.tenantId,
                 instanceId : instanceId
-            }
+            };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
             	pop.instance = data.content.instances[0];
@@ -167,7 +167,7 @@ angular.module('iaas.controllers')
             	common.showAlertError(data.message);
                 //common.showAlert("message",data.message);
             });
-        }
+        };
         
         pop.fn.getSecurityPolicy = function() {
             $scope.main.loadingMainBody = true;
@@ -193,11 +193,11 @@ angular.module('iaas.controllers')
             	common.showAlertError(data.message);
                 //common.showAlert("message",data.message);
             });
-        }
+        };
         
         pop.fn.changeSecurityPolicy = function() {
         	 pop.securityPolicies = pop.roles;
-        }
+        };
 
         pop.fn.getKeypairList = function() {
             $scope.main.loadingMainBody = true;
@@ -225,12 +225,11 @@ angular.module('iaas.controllers')
             	common.showAlertError(data.message);
                 //common.showAlert("message",data.message);
             });
-        }
+        };
 
         pop.fn.changeKeypair = function() {
             pop.data.keypair = angular.fromJson(pop.keypairValue);
-            
-        }
+        };
 
         pop.fn.createKeypair = function () {
             pop.nowMenu = "compute";
@@ -248,7 +247,7 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : pop.data.tenantId,
                 name : keypair.name
-            }
+            };
             location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+pop.data.tenantId+"&name="+keypair.name;
         };
         
@@ -311,7 +310,7 @@ angular.module('iaas.controllers')
             	common.showAlertError(data.message);
                 //common.showAlert("message",data.message);
             });
-        }
+        };
         
         pop.fn.selectSpec = function() {
         	if(pop.specValue){
@@ -321,12 +320,12 @@ angular.module('iaas.controllers')
         		pop.data.spec.ram = 0;
         		pop.data.spec.disk = 0;
         	}
-        }
+        };
         
         pop.fn.getInitScriptList = function(scriptId) {
             var param = {
                 tenantId : pop.data.tenantId
-            }
+            };
             if(scriptId) {
                 param.scriptId = scriptId;
             }
@@ -346,7 +345,7 @@ angular.module('iaas.controllers')
             	common.showAlertError(data.message);
                 //common.showAlert("message",data.message);
             });
-        }
+        };
 
         pop.fn.changeInitScript = function() {
             if(pop.initScriptValue == "") {
@@ -354,14 +353,14 @@ angular.module('iaas.controllers')
             } else {
                 pop.fn.getInitScriptList(angular.fromJson(pop.initScriptValue).scriptId);
             }
-        }
+        };
         
         pop.fn.initScriptSet = function() {
             if(!pop.initCheck) {
                 pop.data.initScript = {};
                 pop.initScriptValue = "";
             }
-        }
+        };
         
         // 네트워크 리스트 조회
         pop.fn.networkListSearch = function() {
@@ -369,13 +368,13 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : pop.data.tenantId,
                 isExternal : false
-            }
+            };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 pop.networks = data.content;
                 if(pop.networks.length > 0) {
-                    pop.network = pop..networks[0];
+                    pop.network = pop.networks[0];
                     pop.data.networks.push(pop.networks[0]);
                     pop.subnet.cidr_A = pop.network.subnets[0].cidr_A;
                     pop.subnet.cidr_B = pop.network.subnets[0].cidr_B;
@@ -387,7 +386,7 @@ angular.module('iaas.controllers')
             	common.showAlertError(data.message);
                 //common.showAlert("message",data.message);
             });
-        }
+        };
 
         //네트워크 setting
         pop.fn.networksChange = function() {
@@ -399,7 +398,7 @@ angular.module('iaas.controllers')
                     id : pop.network.id
                 }];
             }
-        }
+        };
         
         if(pop.data.tenantId) {
             pop.fn.getInstanceInfo(pop.instanceId);

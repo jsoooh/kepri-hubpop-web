@@ -15,6 +15,7 @@
 .tbl td .btnWrap{font-size: 0; }
 .tbl td .btnWrap .btn + .btn{margin-left:5px;}
 .tbl td select{height:30px;}
+.tbl td input{height:30px;}/*180702 스타일 추가*/
 .tbl.type1 td:last-child select{width:80%;}/*180411 스타일 추가*/
 .tbl td .stateMark{vertical-align: middle;}
 
@@ -22,6 +23,7 @@
 .tbl.type1 th{font-size:15px; font-weight: 500; color:#fff; line-height: 1; padding:11px 5px; height:47px; vertical-align: middle; text-align: center; border-bottom:0; background: #3e424d;}
 .tbl.type1 th.bd_r{border-right:1px solid #d6d6d6; }
 .tbl.type1 td{font-size:15px; color:#888; padding:10px; height:47px; text-align: center; vertical-align: middle; border-color:#d6d6d6; background: #fff;}
+.tbl.type1 td.tdpd {padding:10px 40px;}/*180702 스타일 추가*/
 .tbl.type1 .noti td{font-weight: 700;font-size:16px; color:#2957cc;}/*180409 스타일 갱신 font-size:16px; color:#2957cc;*/
 .tbl.type1 td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 스타일 갱신 margin-left:6px*/
 .tbl.type1 td div[uib-tooltip-popup].tooltip + .btn.only-ico{margin-left:20px;}/*180411 스타일 갱신 margin-left:6px*/
@@ -72,6 +74,14 @@
 .tbw.type2 td textarea{font-size: 16px; padding-left:10px;}
 .tbw.type1 + .tbw.type2{margin-top:20px;}
 .btn-btm + .tbw{margin-top: 60px;}
+
+/*180620 테이블 인풋 스타일추가 type3*/
+.tbw.type3.pdb20 {padding-bottom:20px;}
+.tbw.type3 input.tb_txt_input {width:280px; height:30px; border:0; outline:0; background-color:transparent; cursor:default;}
+.tbw.type3 .btn_copy {display: inline-block; position:relative; top:3px; right:-16px; border:0;}
+.tbw.type3 .btn_copy span.ico_copy {display:block; width:22px; height:22px; background:url("../images/btn_copy.png") no-repeat 0px 0px;}
+.tbw.type3 .btn_copy span.ico_copy:hover {background:url("../images/btn_copy.png") no-repeat 0px -27px;}
+.tbw.type3 td {padding:10px;}
 
 td .td-attach{display: inline-block; position: relative; padding-left:30px;}
 td .td-attach::before{display: inline-block; position: absolute; top:0; left:0; z-index: 1; content: ''; clear: both; width:20px; height:18px; background: url("../images/ico_com.png") no-repeat; background-position: -254px -303px;}

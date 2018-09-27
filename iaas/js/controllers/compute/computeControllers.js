@@ -16,7 +16,7 @@ angular.module('iaas.controllers')
         ct.actionLogLimit = '10';
 
         ct.formOpen = function (){
-            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateStepForm.html" + _VersionTail();
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateForm.html" + _VersionTail();
 
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
@@ -70,7 +70,7 @@ angular.module('iaas.controllers')
                 param.imageUseCase = ct.conditionValue;
             }
             param.imageType = ct.imageType;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param , 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.imageList = data.content.images;
                 ct.fnGetServerMainList();
@@ -138,17 +138,14 @@ angular.module('iaas.controllers')
 
         //추가 S
         ct.fnGetUsedResource = function() {
-            $scope.main.loadingMainBody = true;
             var params = {
                 tenantId : ct.data.tenantId
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 ct.tenantResource = data.content[0];
-                $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
         };
@@ -331,14 +328,12 @@ angular.module('iaas.controllers')
 
         // 접속 IP 설정 팝업
         ct.fn.IpConnectPop = function(instance,index) {
-            common.showConfirm('메세지',instance.name +' 서버에 접속 IP를 설정하시겠습니까?').then(function(){
-                ct.selectInstance = instance;
-                ct.selectInstanceIndex = index;
+            ct.selectInstance = instance;
+            ct.selectInstanceIndex = index;
 
-                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computePublicIpForm.html" + _VersionTail();
-                $(".aside").stop().animate({"right":"-360px"}, 400);
-                $("#aside-aside1").stop().animate({"right":"0"}, 500);
-            });
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computePublicIpForm.html" + _VersionTail();
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
 
         // 공인 IP 연결 해제 펑션
@@ -391,13 +386,13 @@ angular.module('iaas.controllers')
         ct.data.name = '';
         ct.data.spec = {};
         ct.data.networks = [];
-        ct.data.keyPair = {};
+        ct.data.keypair = {};
         ct.data.initScript = {};
         ct.data.securityPolicys = [];
         ct.subnet = {};
         ct.networks = [];
         ct.specValue = '';
-        ct.keyPairValue = '';
+        ct.keypairValue = '';
         ct.initScriptValue = '';
         ct.ipFlag = true;
         ct.activeTabIndex = 1;
@@ -406,11 +401,6 @@ angular.module('iaas.controllers')
         ct.formName = "computeCreateForm";
         ct.formName2 = "computeCreateForm2";
         ct.fnGetServerMainList = common.getMainContentsCtrlScope().contents.fnGetServerMainList;
-
-        ct.fn.formClose = function(){
-            $(".aside").stop().animate({"right":"-360px"}, 400);
-            $(".aside div").remove();
-        };
 
         ct.scrollPane = function (){
             setTimeout(function() {
@@ -461,7 +451,7 @@ angular.module('iaas.controllers')
                         ct.data.securityPolicys = ct.roles;
                     }
                 }
-                ct.fn.getKeyPairList();
+                ct.fn.getKeypairList();
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
@@ -475,12 +465,12 @@ angular.module('iaas.controllers')
         };
 
         //키페어 조회
-        ct.fn.getKeyPairList = function(keyPairName) {
+        ct.fn.getKeypairList = function(keypairName) {
             var param = {tenantId:ct.data.tenantId};
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param , 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                ct.keyPairList = data.content;
-                if(ct.keyPairList.length == 0){
+                ct.keypairList = data.content;
+                if(ct.keypairList.length == 0){
                     ct.createKeypair = {};
                     ct.createKeypair.tenantId = ct.data.tenantId;
                     ct.createKeypair.name = "default";
@@ -492,19 +482,19 @@ angular.module('iaas.controllers')
                     var returnData = common.noMsgSyncHttpResponseJson(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'POST', param);
                     if(returnData.status == 200) {
                         //ct.fn.getKeyFile(returnData.responseJSON.content.keypair,'privateKey');
-                        ct.fn.getKeyPairList();
+                        ct.fn.getKeypairList();
                     } else {
                         common.showAlertError(returnData.data.responseJSON.message);
                         $scope.main.loadingMainBody = false;
                     }
                 }else{
-                    for(var i = 0; i < ct.keyPairList.length; i++){
-                        if(ct.keyPairList[i].name == "default"){
-                            ct.keyPairValue = ct.keyPairList[i];
-                            ct.data.keyPair = angular.fromJson(ct.keyPairValue);
+                    for(var i = 0; i < ct.keypairList.length; i++){
+                        if(ct.keypairList[i].name == "default"){
+                            ct.keypairValue = ct.keypairList[i];
+                            ct.data.keypair = angular.fromJson(ct.keypairValue);
                         }else{
-                            ct.keyPairValue = ct.keyPairList[0];
-                            ct.data.keyPair = angular.fromJson(ct.keyPairValue);
+                            ct.keypairValue = ct.keypairList[0];
+                            ct.data.keypair = angular.fromJson(ct.keypairValue);
                         }
                     }
                     $scope.main.loadingMainBody = false;
@@ -518,9 +508,9 @@ angular.module('iaas.controllers')
         };
 
         //키페어 setting
-        ct.fn.changeKeyPair = function() {
-            if(ct.keyPairValue){
-                ct.data.keyPair = angular.fromJson(ct.keyPairValue);
+        ct.fn.changeKeypair = function() {
+            if(ct.keypairValue){
+                ct.data.keypair = angular.fromJson(ct.keypairValue);
             }
         };
 
@@ -607,7 +597,7 @@ angular.module('iaas.controllers')
                 param.imageUseCase = ct.conditionValue;
             }
             param.imageType = ct.imageType;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param , 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.imageList = data.content.images;
                 ct.fn.getSecurityPolicy();
@@ -625,17 +615,29 @@ angular.module('iaas.controllers')
                 clickCheck = true;
 
                 if (!new ValidationService().checkFormValidity($scope[ct.formName2])) {
+                    clickCheck = false;
                     return;
                 }
 
+                var instance = {};
+                instance.name = ct.data.name;
+                instance.tenantId = ct.data.tenantId;
+                instance.networks = [{ id: ct.data.networks[0].id }];
+                instance.image = {id: ct.data.image.id};
+                instance.keypair = { keypairName: ct.data.keypair.keypairName };
+                instance.securityPolicies = angular.copy(ct.data.securityPolicys);
+                if (ct.data.initScript) {
+                    instance.initScript = angular.copy(ct.data.initScript);
+                }
+                instance.spec = ct.data.spec;
+
                 $scope.main.loadingMainBody = true;
-                ct.fn.formClose();
-                ct.data.spec.type = ct.data.spec.name;
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : ct.data});
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : instance});
                 returnPromise.success(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
+                    $scope.main.asideClose();
+                    common.showAlertSuccess("생성 되었습니다.");
                     ct.fnGetServerMainList(1);
-                    //common.showAlertSuccess("생성 되었습니다.");
                 });
                 returnPromise.error(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
