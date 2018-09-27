@@ -1308,6 +1308,9 @@ angular.module('paas.controllers')
                 var instanceStatsUsageDiskValue = 0;
                 var instanceStatsUsageCpuValue = 0;
 
+                var instanceStatsMemQuotaValue = 0;
+                var instanceStatsDiskQuotaValue = 0;
+
                 for (var i=0; i<ct.instanceStats.length; i++) {
                     if (ct.instanceStats[i].usage != null) {
                         instanceStatsUsageCpu += ct.instanceStats[i].usage.cpu * 100;
@@ -1316,10 +1319,14 @@ angular.module('paas.controllers')
                     if (parseInt(ct.instanceStats[i].memQuota, 10) > 0) {
                         instanceStatsUsageMemory += (parseInt(ct.instanceStats[i].usage.mem, 10) * 100) / parseInt(ct.instanceStats[i].memQuota, 10);
                         instanceStatsUsageMemoryValue += ct.instanceStats[i].usage.mem;
+
+                        instanceStatsMemQuotaValue += parseInt(ct.instanceStats[i].memQuota, 10);
                     }
                     if (parseInt(ct.instanceStats[i].diskQuota, 10) > 0) {
                         instanceStatsUsageDisk += (parseInt(ct.instanceStats[i].usage.disk, 10) * 100) / parseInt(ct.instanceStats[i].diskQuota, 10);
                         instanceStatsUsageDiskValue += ct.instanceStats[i].usage.disk;
+
+                        instanceStatsDiskQuotaValue += parseInt(ct.instanceStats[i].diskQuota, 10);
                     }
                 }
                 var memoryByte = (instanceStatsUsageMemoryValue / ct.instanceStats.length);
@@ -1334,6 +1341,42 @@ angular.module('paas.controllers')
                 var d = Math.floor(Math.log(diskByte)/Math.log(1024));
                 var c = Math.floor(Math.log(cpuByte)/Math.log(1024));
 
+                var mq = Math.floor(Math.log(instanceStatsMemQuotaValue)/Math.log(1024));
+                var dq = Math.floor(Math.log(instanceStatsDiskQuotaValue)/Math.log(1024));
+
+                if(mq == "-Infinity") {
+                    ct.instanceStatsMemQuotaValue = "0 "+s[0];
+                }else{
+                    ct.instanceStatsMemQuotaValue = (instanceStatsMemQuotaValue/Math.pow(1024, Math.floor(mq))).toFixed(1)+" "+s[mq];
+                }
+
+                if(dq == "-Infinity") {
+                    ct.instanceStatsDiskQuotaValue = "0 "+s[0];
+                }else{
+                    ct.instanceStatsDiskQuotaValue = (instanceStatsDiskQuotaValue/Math.pow(1024, Math.floor(dq))).toFixed(1)+" "+s[dq];
+                }
+
+                for(var i = 0; i < ct.instanceStats.length; i++){
+                    if (ct.instanceStats[i].usage != null) {
+                        var mem = Math.floor(Math.log(ct.instanceStats[i].usage.mem)/Math.log(1024));
+                        var disk = Math.floor(Math.log(ct.instanceStats[i].usage.disk)/Math.log(1024));
+
+                        if(mem == "-Infinity") {
+                            ct.instanceStats[i].memUse = "0 "+s[0];
+                        }else{
+                            ct.instanceStats[i].memUse = (ct.instanceStats[i].usage.mem/Math.pow(1024, Math.floor(mem))).toFixed(1)+" "+s[mem];
+                        }
+
+                        if(disk == "-Infinity") {
+                            ct.instanceStats[i].diskUse = "0 "+s[0];
+                        }else{
+                            ct.instanceStats[i].diskUse = (ct.instanceStats[i].usage.disk/Math.pow(1024, Math.floor(disk))).toFixed(1)+" "+s[mem];
+                        }
+                    }
+                }
+
+                $scope.nowDate = new Date();	// 인스턴스 최종 시작일 계산을 위한 현재 시간
+                
                 if(e == "-Infinity") {
                     memoryValue = "0 "+s[0];
                 } else {

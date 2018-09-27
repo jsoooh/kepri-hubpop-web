@@ -457,6 +457,11 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .panel.type3 .panel_body .ul-in2 .info-txt.two > .txt{width:50%; }
 .panel.type3 .panel_body .ul-in2 .info-txt .ico-timer{width:14px; height: 14px; margin-right: 6px; background-position: 0 -334px;}
 
+/*180627 테이블상단 정보영역*/
+.tb_top_info span {display:inline-block; padding:0 15px; background:url("../images/txt_line.png") no-repeat left center; color:#515151;}
+.tb_top_info span:first-child {background:none;}
+.tb_top_info span.tit {background:url("../images/txt_dot.png") no-repeat 8px center; font-weight:800; color:#1657da;}
+
 /*180626 연결서비스 UI개선 스타일 추가*/
 .panel.type3 .panel_body .ul-in .col2.type2 {padding:0;}
 /* .panel.type3 .panel_body .ul-in .col1.type2 .up{padding-top:38px;} */
