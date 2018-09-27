@@ -37,16 +37,22 @@
 				</li>
 				<li>
 					<p class="app-tit">3. 서비스 플랜(용량)을 선택해 주세요.</p>
-					<ul class="sevPlanSel">
-						<li ng-repeat="(key, plan) in plans" style="width:140px;">
-							<div class="radio radio-inline">
-								<input type="radio" name="radioSev" ng-model="radio.planName" ng-value="plan.name" id="sev-radio1-{{key + 1}}" ng-change="planChange(plan.guid, plan.serviceGuid)">
-								<label for="sev-radio1-{{key + 1}}" class="label">{{ plan.name }}</label>
-								<em class="ico-info2 ico" title="{{plan.description}}"></em>
-								<img ng-src="images/thum/aside_database_0{{key + 1}}.png" alt="{{ plan.name }}">
-							</div>
-						</li>
-					</ul>
+					<div class="plan_capacity">
+						<ul>
+							<li class="on" ng-repeat="(key, plan) in plans">
+								<div class="plan_box">
+									<div class="radio radio-inline">
+										<input type="radio" class="radio radio-inline" name="radioSev" ng-model="radio.planName" ng-value="plan.name" id="sev-radio1-{{key + 1}}" ng-change="planChange(plan.guid, plan.serviceGuid, plan.name)">
+										<label for="sev-radio1-{{key + 1}}" class="label plan_label">{{ plan.name }}</label>
+									</div>
+									<a href="" title="플랜정보 더보기" ng-click="planChange(plan.guid, plan.serviceGuid, plan.name)"><span class="ico-bt-arrow ico"></span></a>
+								</div>
+								<div class="plan_disc" ng-show="radio.planId == plan.guid">
+									{{plan.description}}
+								</div>
+							</li>
+						</ul>
+					</div>
 				</li>
 			</ol>
 		</div>
