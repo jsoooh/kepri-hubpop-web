@@ -457,6 +457,19 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .panel.type3 .panel_body .ul-in2 .info-txt.two > .txt{width:50%; }
 .panel.type3 .panel_body .ul-in2 .info-txt .ico-timer{width:14px; height: 14px; margin-right: 6px; background-position: 0 -334px;}
 
+/*180626 연결서비스 UI개선 스타일 추가*/
+.panel.type3 .panel_body .ul-in .col2.type2 {padding:0;}
+/* .panel.type3 .panel_body .ul-in .col1.type2 .up{padding-top:38px;} */
+.panel.type3 .panel_body .ul-in .col1.type2 .down{padding-top:0;}
+.panel.type3 .panel_body .ul-in .col2 .service_plan {/*padding:38px 15px 0 15px;*/padding:25px 15px 15px 15px;}
+.panel.type3 .panel_body .ul-in .col2 .service_plan span.tit {display:block; font-size:13px; color:#888; line-height:1.1; }
+/* .panel.type3 .panel_body .ul-in .col2 .service_plan span.txt_bg {display:inline-block; height:47px; font-family: 'Montserrat'; font-size:25px; font-weight:700; color:#444; background:url("../images/thum/im_thum_db_bg.png") no-repeat left top; padding:24px 0 0 63px; margin:35px 38px 12px 38px; } */
+.panel.type3 .panel_body .ul-in .col2 .service_plan span.txt_bg {display:block; height:40px; font-family: 'Montserrat'; font-size:25px; font-weight:700; text-align:center; color:#444; background:url("../images/thum/im_thum_db_bg.png") no-repeat center top; padding:63px 0 0 0; /*margin:20px 0 24px 0;*/ margin:60px 0 24px 0; }
+.panel.type3 .panel_body .ul-in .col2 .service_plan span.txt_bg em {font-size:18px;}
+.panel.type3 .panel_body .ul-in .col2 .service_plan div.txt {padding:9px 0 6px 0;}
+.panel.type3 .panel_body .ul-in .col2 .service_plan div.txt span {display:block; height:63px; overflow:hidden; word-break:break-all; line-height:20px;}
+.panel.type3 .panel_head .txt.nolink {background:none;}
+
 .panel.type4 {position: relative; height: 360px; /*padding-bottom: 80px;*/}
 /*.panel.type4:hover {border-color: #333; -webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); -webkit-transform: translate(0, -4px); transform: translate(0, -4px);}*/
 .panel.type4 .in{padding:40px 25px 25px; text-align: center;}
