@@ -25,6 +25,7 @@
 .ico-info1{width:17px; height:17px; background-position: -110px -304px;}
 .ico-info2{width:17px; height:17px; vertical-align: middle; margin-left: 5px; background-position: -137px -304px;}
 .ico-info3{position:absolute; z-index:999; top:14px; right:18px; width:17px; height:17px; vertical-align: middle; margin-left: 5px; background-position: -109px -304px;}
+.ico-info4{width:17px; height:17px; vertical-align: middle; margin-left: 5px; background-position: -109px -304px;}
 
 /* font */
 .underline{display: inline-block; border-bottom:1px solid;}
@@ -32,6 +33,8 @@
 
 /* align */
 .text-left{text-align: left !important}
+.fl_l {float:left;}
+.fl_r {float:right;}
 
 /* point */
 .point1{color: #184eda !important;}
@@ -48,6 +51,20 @@
 .mt40{margin-top:40px !important}
 .mt50{margin-top:50px !important}
 .mt80{margin-top:80px !important}
+
+.mb10{margin-bottom:10px !important}
+.mb20{margin-bottom:20px !important;}
+.mb30{margin-bottom:30px !important;}
+.mb40{margin-bottom:40px !important}
+.mb50{margin-bottom:50px !important}
+.mb80{margin-bottom:80px !important}
+
+.mgt0{margin-top:0 !important;}
+.mgb0{margin-bottom:0 !important;}
+
+/* padding */
+.pd0 {padding:0 !important;}
+
 
 /* form */
 .select{font-size:13px; font-weight:400; height:25px; padding-left:5px;  border:1px solid #eaeaea;  background: url("../images/ico_sel.png") no-repeat; background-size: auto 25px; background-position: center right; -webkit-appearance: listbox; -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; -o-appearance: none; appearance: none;}
@@ -141,6 +158,10 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .btn-color4:hover, .btn-color4:focus, .btn.btn-color4:hover, .btn.btn-color4:focus{color:#fff; background: #0bc5b6; border:1px solid #0bc5b6;}
 .btn-color4:active{color:#fff; background: #15578e;}
 .btn-color5{color:#fff; border:1px solid #777; background: #777;}
+/*180704 버튼스타일추가*/
+.btn-color6{color:#333; border:1px solid #ddd; background: #f5f5f5;}
+.btn-color6:hover, .btn-color3:focus{color:#fff; background: #333;}
+.btn-color6:active{color:#fff; border-color:#ddd; background: #4d4d4d;}
 
 .btn-sch{font-size: 16px; min-width:110px; height: 40px; padding:0 15px; margin-left: 10px;}
 .btn-sch.btn-md{font-size: 16px; line-height:1;}
@@ -221,6 +242,21 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .btn-ico-key-s .ico{width:18px; height:17px; background-position: -228px -350px;}
 .btn-ico-key-s:hover .ico{background-position: -228px -330px;}
 
+/*180621 아이콘추가*/
+.btn-ico-view-s .ico{width:19px; height:19px; background-position: -255px -330px;}
+.btn-ico-view-s:hover .ico{width:19px; height:19px; background-position: -255px -351px;}
+
+/*180629 아이콘추가*/
+.btn-ico-pw_reset-s .ico{width:12px; height:15px; background-position: -202px -350px;}
+.btn-ico-pw_reset-s:hover .ico{background-position: -202px -331px;}
+.btn-ico-add_mem-s .ico{width:18px; height:16px; background-position: -256px -396px;}
+.btn-ico-add_mem-s:hover .ico{background-position: -256px -378px;}
+
+/*180702 아이콘추가*/
+.btn-ico-row_plus .ico{width:17px; height:17px; background:url("../images/ico_plus_b.png") no-repeat;}
+.btn-ico-row_minus .ico{width:17px; height:17px; background:url("../images/ico_minus_b.png") no-repeat;}
+
+
 .btn-btm{margin-top: 50px; text-align: center;}
 .btn-btm .btn{min-width:100px;}
 .btn-btm .btn + .btn{margin-left: 2px;}
@@ -299,6 +335,9 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 .tabWrap.type2 .nav>li>a .point1{color:#888 !important; }
 .tabWrap.type2 .nav>li.active{border-bottom:4px solid #2957cc;}
 .tabWrap.type2 .nav>li.active >a, .tabWrap.type2 .nav>li.active>a:focus, .tabWrap.type2 .nav>li.active>a:hover, .tabWrap.type2 .nav>li>a:focus, .tabWrap.type2 .nav>li>a:hover{color:#2957cc; font-weight: 500; border:0; background: none;}
+
+/*180704 탭안에 내용div 스타일 제거*/
+.tabWrap.type2 .tab-content > div.st_none {color:#333; line-height:unset; padding-top:50px;}
 
 .nav-tabs.type1{margin: 0 20px 50px; border-color:#d6d6d6;}
 .nav.type1>li>a{font-size: 18px; color:#5f6c86; line-height: 1.2; min-width: 170px; padding:0 0 20px; text-align: center; border:0; }

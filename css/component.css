@@ -62,8 +62,8 @@
 .scrollableContainer .scrollArea .table td .btnWrap .btn + .btn{margin-left:5px;}
 .scrollableContainer .scrollArea .table td select{height:30px;}
 .scrollableContainer .scrollArea .table td .stateMark{vertical-align: middle;}
-.scrollableContainer .scrollArea .table td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 스타일 갱신 margin-left:6px*/
-.scrollableContainer .scrollArea .table td .noti td{font-weight: 700;font-size:16px; color:#2957cc;}/*180409 스타일 갱신 font-size:16px; color:#2957cc;*/
+.scrollableContainer .scrollArea .table td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 ?��???갱신 margin-left:6px*/
+.scrollableContainer .scrollArea .table td .noti td{font-weight: 700;font-size:16px; color:#2957cc;}/*180409 ?��???갱신 font-size:16px; color:#2957cc;*/
 .scrollableContainer .scrollArea .table td .no-data{font-size:18px; line-height: 30px !important; height:200px !important; }
 .scrollableContainer .scrollArea .table td a:hover{color:#2f3b48;}
 
@@ -86,22 +86,28 @@ paging > ul.pagination > li a.prev::before{display: inline-block; content: ''; c
 paging > ul.pagination > li a.next::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -197px -145px;}
 paging > ul.pagination > li a.end::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -217px -145px;}
 paging > ul.pagination > li.disabled:hover a, paging > ul.pagination > li.disabled:focus a, paging > ul.pagination > li.disabled:active a{border:1px solid #8c97a4; background: #8c97a4;}
+paging > ul.pagination > li.disabled a.first, paging > ul.pagination > li.disabled a.first:hover, paging > ul.pagination > li.disabled a.first:focus,  paging > ul.pagination > li.disabled a.first:active {background: #d3d3d3 !important;}
+paging > ul.pagination > li.disabled a.prev, paging > ul.pagination > li.disabled a.prev:hover, paging > ul.pagination > li.disabled a.prev:focus,  paging > ul.pagination > li.disabled a.prev:active {background: #d3d3d3 !important;}
+paging > ul.pagination > li.disabled a.next, paging > ul.pagination > li.disabled a.next:hover, paging > ul.pagination > li.disabled a.next:focus,  paging > ul.pagination > li.disabled a.next:active {background: #d3d3d3 !important;}
+paging > ul.pagination > li.disabled a.end, paging > ul.pagination > li.disabled a.end:hover, paging > ul.pagination > li.disabled a.end:focus,  paging > ul.pagination > li.disabled a.end:active {background: #d3d3d3 !important;}
 
 /** right popup **/
 .aside md-dialog{height: 100%; width: 100%; max-width: 100%; max-height: 100%;}
 .aside md-dialog.md-transition-in{opacity: 1; -webkit-transition: none; transition: none; -webkit-transform: none; transform: none;}
 .aside md-dialog.md-transition-out{opacity: 0; -webkit-transition: none 0.18s; transition: none 0.18s; -webkit-transform: none; transform: none;}
 .aside md-dialog .sideBtmWrap{z-index: 9;}
-.aside md-dialog .sideCntWrap{margin: 70px 0px 60px; overflow-x: hidden; overflow-y: auto;}
+.aside md-dialog .sideCntWrap{margin: 70px 0px 60px;}
 
 /** chart **/
 .doughnut-label-box{text-anchor: middle; text-align:center;}
-.doughnut-label-box > ul > li{text-anchor: middle; text-align:center; padding:0 !important; height:auto !important;}/*180515 padding 기본값 0으로 수정(상위 div의 li css상속되는문제)*/
+.doughnut-label-box > ul > li{text-anchor: middle; text-align:center; padding:0 !important; height:auto !important;}/*180515 padding 기본�?0?�로 ?�정(?�위 div??li css?�속?�는문제)*/
 .doughnut-label-box > ul > li:first-child > span:first-child{color: rgb(68, 68, 68); font-size:40px;font-weight: 900;}
 .doughnut-label-box > ul > li:first-child > span:last-child{color: rgb(68, 68, 68); font-size: 18px;font-weight: 200;}
 .doughnut-label-box > ul > li:last-child > span{font-size: 12px; color: rgb(162, 162, 162);font-weight: 200;}
 
-.chartWrap .doughnut-label-box{margin-top: -107px;}/*180515 margin-top:-110px -> -107px로 수정*/
+.doughnut-label-box > ul > li:first-child > span:first-child{font-size:26px}/*180723 ?�트값수??(?�넛 차트 ?�수 3?�리 ?�상?�때 깨�??�문??*/
+
+.chartWrap .doughnut-label-box{margin-top: -107px;}/*180515 margin-top:-110px -> -107px�??�정*/
 
 /** left fav icon menu **/
 #container .leftMenu.pageLoad.on{transition: none;}
@@ -149,7 +155,7 @@ paging > ul.pagination > li.disabled:hover a, paging > ul.pagination > li.disabl
 .aside .dateWrap .date-inpt{z-index: 200;}
 
 /** validation **/
-/*180515 validation padding-top값 0px로 수정*/
+/*180515 validation padding-top�?0px�??�정*/
 select.ng-touched.ng-invalid-validation, input.ng-touched.ng-invalid-validation{border-color:#ff0740 !important; }
 .ng-touched.ng-invalid-validation{color: #d40031 !important; line-height: 18px !important; }
 
