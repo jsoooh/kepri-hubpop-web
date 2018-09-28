@@ -20,8 +20,8 @@
                     <div class="panel_head">
                       <div>
                           <div class="stateWrap">
-                              <img ng-if="appItem.appImage != ''" ng-src="data:image/JPEG; base64, {{ appItem.appImage }}" class="logo" alt="" style="width:54px; height:54px;">
-                              <img ng-if="appItem.appImage == ''" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+                              <img ng-if="appItem.buildpackName == null" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+                              <img ng-if="appItem.buildpackName != null" ng-src="images/thum/im_logo_{{ appItem.buildpackName | lowercase }}.png" class="logo" alt="" style="width:54px; height:54px;">
                           </div>
                       </div>
                       <p class="tit" id="txt-renameApp-{{appItem.name}}" style="display:block;" ng-click="contents.moveToApplicationPage(appItem);">{{ appItem.name }}</p>
@@ -32,7 +32,7 @@
                           <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameApp(appItem.name)"><span class="ico">변경취소</span></button>
                         </div>
                       </div>
-                      <a class="txt" ng-href="http://{{appItem.uris[0]}}" target="_blank" title="{{appItem.uris}}" >http://{{appItem.uris[0]}}</a>
+                      <a class="txt" ng-if="0 < appItem.uris.length" ng-href="http://{{ appItem.uris[0] }}" target="_blank" title="{{ appItem.uris[0] }}">http://{{ appItem.uris[0] }}</a>
 
                       <div class="dropdown btn-option">
     		                <button id="btn-option-{{appItem.name}}" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -211,8 +211,7 @@
                         </div>
                     </td>
                     <td>
-                        <a ng-href="http://{{appItem.uris[0]}}" target="_blank">http://{{appItem.uris[0]}} <br /></a>
-                        <button ng-if="1 < appItem.uris.length" ng-click="uris(appItem.name)" title="{{appItem.uris}}">[전체보기]</button>
+                        <a ng-repeat="uri in appItem.uris" ng-href="http://{{ uri }}" target="_blank">http://{{ uri }}<br/></a>
                     </td>
                     <td>
                         <select value="item.field" ng-options="item.field for item in fieldTable" ng-model="selected" ng-change="contents.controllAppState(selected, appItem.guid, appItem.name, $event)"></select>

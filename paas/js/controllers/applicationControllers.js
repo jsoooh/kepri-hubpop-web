@@ -40,28 +40,7 @@ angular.module('paas.controllers')
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
-
-        $scope.viewType = function (type) {
-            document.getElementsByClassName('btn btn-list')[2].classList.remove('on');
-            document.getElementsByClassName('btn btn-list')[3].classList.remove('on');
-            if (type == 'image') {
-                $scope.image = true;
-                document.getElementsByClassName('btn btn-list type1')[1].classList.add('on');
-            } else {
-                $scope.image = false;
-                document.getElementsByClassName('btn btn-list type2')[1].classList.add('on');
-            }
-        }
-
-        $scope.uris = function(appName) {
-        var dialog = document.getElementById(appName);
-        if(dialog.style.display=='none') {
-          dialog.style.display = 'block';
-        } else {
-          dialog.style.display = 'none';
-        }
-      }
-
+        
         ct.listSpaces = function () {
             var spacePromise = applicationService.listAllSpaces(ct.sltOrganizationGuid);
             spacePromise.success(function (data) {
@@ -163,6 +142,9 @@ angular.module('paas.controllers')
                     if (option.buildpack) {
                         var buildpackSplit = option.buildpack.split('_buildpack-');
                         option["buildpackName"] = buildpackSplit[0].toUpperCase();
+                        if (option["buildpackName"] == 'STATICFILE') {
+                            option["buildpackName"] = 'NGINX';
+                        }
                         option["buildpackVersion"] = buildpackSplit[1].replace('-', '.');
                     } else {
                         option["buildpackName"] = "DOCKER";
@@ -197,9 +179,6 @@ angular.module('paas.controllers')
                         option["cpuRoundProgressPercentage"] = (instanceStatsUsageCpu / option["instances"]).toFixed(1);
                         option["memoryRoundProgressPercentage"] = (instanceStatsUsageMemory / option["instances"]).toFixed(1);
                         option["diskRoundProgressPercentage"] = (instanceStatsUsageDisk / option["instances"]).toFixed(1);
-                        
-                        // 해당 앱 언어 아이콘 이미지 가져오기
-                        option["appImage"] = ct.getAppImage(option["buildpackName"]);
                     });
                     appPromise.error(function (data) {
                         option["instanceStats"] = [];
@@ -218,25 +197,6 @@ angular.module('paas.controllers')
                 $scope.main.loadingMainBody = false;
                 $scope.main.loadingMain = false;
             });
-        };
-
-        ct.listAllPortalBuildpacks = function () {
-            var appPromise = applicationService.listAllPortalBuildpacks();
-            appPromise.success(function (data) {
-                $scope.main.portalBuildpacks = data;
-            });
-            appPromise.error(function (data) {
-                $scope.main.portalBuildpacks = [];
-            })
-        };
-
-        ct.getAppImage = function (buildpackName) {
-            for (var i = 0; i < $scope.main.portalBuildpacks.length; i++) {
-                if ($scope.main.portalBuildpacks[i].name.toUpperCase() == buildpackName) {
-                    return $scope.main.portalBuildpacks[i].iconImage.image;
-                }
-            }
-            return '';
         };
 
         ct.getAppState = function (guid) {
@@ -511,7 +471,6 @@ angular.module('paas.controllers')
         };
 
         ct.pageLoadData();
-        ct.listAllPortalBuildpacks();
     })
     .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, routeService, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationPushCtrl", 1);
@@ -1090,15 +1049,15 @@ angular.module('paas.controllers')
 
         $scope.main.loadingMainBody = false;
 
-        $scope.DetailviewType = function (type) {
+        ct.changeViewType = function (type) {
+            document.getElementsByClassName('btn btn-list')[1].classList.remove('on');
             document.getElementsByClassName('btn btn-list')[2].classList.remove('on');
-            document.getElementsByClassName('btn btn-list')[3].classList.remove('on');
             if (type == 'image') {
                 $scope.image = true;
-                document.getElementsByClassName('btn btn-list type1')[1].classList.add('on');
+                document.getElementsByClassName('btn btn-list type1')[0].classList.add('on');
             } else {
                 $scope.image = false;
-                document.getElementsByClassName('btn btn-list type2')[1].classList.add('on');
+                document.getElementsByClassName('btn btn-list type2')[0].classList.add('on');
             }
         };
         
@@ -1552,19 +1511,13 @@ angular.module('paas.controllers')
                     ct.reloadAppInstanceStats();
                 }
 
-                // 앱 아이콘 이미지
-                ct.appImage = '';
                 if (ct.app.buildpack) {
                     var buildpackSplit = ct.app.buildpack.split('_buildpack-');
                     ct.app.buildpackName = buildpackSplit[0].toUpperCase();
-                    ct.app.buildpackVersion = buildpackSplit[1].replace('-', '.');
-
-                    for (var i = 0; i < $scope.main.portalBuildpacks.length; i++) {
-                        if ($scope.main.portalBuildpacks[i].name.toUpperCase() == ct.app.buildpackName) {
-                            ct.appImage = $scope.main.portalBuildpacks[i].iconImage.image;
-                            break;
-                        }
+                    if (ct.app.buildpackName == 'STATICFILE') {
+                        ct.app.buildpackName = 'NGINX';
                     }
+                    ct.app.buildpackVersion = buildpackSplit[1].replace('-', '.');
                 } else {
                     ct.app.buildpackName = "DOCKER";
                     ct.app.buildpackVersion = "-";

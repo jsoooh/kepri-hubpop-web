@@ -1,8 +1,8 @@
 				<!-- cBox -->
 				<div class="cBox type1 appCnt-info">
 					<div class="cBox-hd">
-						<img ng-if="contents.appImage != ''" ng-src="data:image/JPEG; base64, {{ contents.appImage }}" class="logo" alt="" style="width:54px; height:54px;">
-						<img ng-if="contents.appImage == ''" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+						<img ng-if="contents.app.buildpackName == null" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+						<img ng-if="contents.app.buildpackName != null" ng-src="images/thum/im_logo_{{ contents.app.buildpackName | lowercase }}.png" class="logo" alt="" style="width:54px; height:54px;">
                         <h4 class="c-tit">{{ contents.app.name }}</h4>
 						<div class="pull-right">
 							<!--<button type="button" name="button" class="btn btn-sm btn-color1" tooltip-placement="bottom" uib-tooltip="재배포" ng-click="contents.showFormRePush();">재배포</button>-->
@@ -43,7 +43,7 @@
 									<li>
 										<strong class="tit">URL</strong>
                                         <div class="txt">
-											<a ng-href="http://{{contents.app.routes[0].url}}" target="_blank">http://{{contents.app.routes[0].url}}</a>
+                                            <a ng-if="0 < contents.app.routes.length" ng-href="http://{{contents.app.routes[0].url}}" target="_blank">http://{{contents.app.routes[0].url}}</a>
 										</div>
 									</li>
 									<li>
@@ -161,8 +161,8 @@
 								</li>
 							</ul>
 							<div class="listType">
-								<button type="button" name="button" class="btn btn-list type1 on" ng-click="DetailviewType('image');"><span class="ico"></span>이미지형</button>
-								<button type="button" name="button" class="btn btn-list type2" ng-click="DetailviewType('list');"><span class="ico"></span>리스트</button>
+								<button type="button" name="button" class="btn btn-list type1 on" ng-click="contents.changeViewType('image');"><span class="ico"></span>이미지형</button>
+								<button type="button" name="button" class="btn btn-list type2" ng-click="contents.changeViewType('list');"><span class="ico"></span>리스트</button>
 							</div>
 						</div>
 					</div>
