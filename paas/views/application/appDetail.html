@@ -1,8 +1,8 @@
 				<!-- cBox -->
 				<div class="cBox type1 appCnt-info">
 					<div class="cBox-hd">
-						<img ng-if="contents.appImage != ''" ng-src="data:image/JPEG; base64, {{ contents.appImage }}" class="logo" alt="" style="width:54px; height:54px;">
-						<img ng-if="contents.appImage == ''" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+						<img ng-if="contents.app.buildpackName == null" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+						<img ng-if="contents.app.buildpackName != null" ng-src="images/thum/im_logo_{{ contents.app.buildpackName | lowercase }}.png" class="logo" alt="" style="width:54px; height:54px;">
                         <h4 class="c-tit">{{ contents.app.name }}</h4>
 						<div class="pull-right">
 							<!--<button type="button" name="button" class="btn btn-sm btn-color1" tooltip-placement="bottom" uib-tooltip="재배포" ng-click="contents.showFormRePush();">재배포</button>-->

@@ -163,6 +163,9 @@ angular.module('paas.controllers')
                     if (option.buildpack) {
                         var buildpackSplit = option.buildpack.split('_buildpack-');
                         option["buildpackName"] = buildpackSplit[0].toUpperCase();
+                        if (option["buildpackName"] == 'STATICFILE') {
+                            option["buildpackName"] = 'NGINX';
+                        }
                         option["buildpackVersion"] = buildpackSplit[1].replace('-', '.');
                     } else {
                         option["buildpackName"] = "DOCKER";
@@ -197,9 +200,6 @@ angular.module('paas.controllers')
                         option["cpuRoundProgressPercentage"] = (instanceStatsUsageCpu / option["instances"]).toFixed(1);
                         option["memoryRoundProgressPercentage"] = (instanceStatsUsageMemory / option["instances"]).toFixed(1);
                         option["diskRoundProgressPercentage"] = (instanceStatsUsageDisk / option["instances"]).toFixed(1);
-                        
-                        // 해당 앱 언어 아이콘 이미지 가져오기
-                        option["appImage"] = ct.getAppImage(option["buildpackName"]);
                     });
                     appPromise.error(function (data) {
                         option["instanceStats"] = [];
@@ -218,25 +218,6 @@ angular.module('paas.controllers')
                 $scope.main.loadingMainBody = false;
                 $scope.main.loadingMain = false;
             });
-        };
-
-        ct.listAllPortalBuildpacks = function () {
-            var appPromise = applicationService.listAllPortalBuildpacks();
-            appPromise.success(function (data) {
-                $scope.main.portalBuildpacks = data;
-            });
-            appPromise.error(function (data) {
-                $scope.main.portalBuildpacks = [];
-            })
-        };
-
-        ct.getAppImage = function (buildpackName) {
-            for (var i = 0; i < $scope.main.portalBuildpacks.length; i++) {
-                if ($scope.main.portalBuildpacks[i].name.toUpperCase() == buildpackName) {
-                    return $scope.main.portalBuildpacks[i].iconImage.image;
-                }
-            }
-            return '';
         };
 
         ct.getAppState = function (guid) {
@@ -511,7 +492,6 @@ angular.module('paas.controllers')
         };
 
         ct.pageLoadData();
-        ct.listAllPortalBuildpacks();
     })
     .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, routeService, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationPushCtrl", 1);
@@ -1552,19 +1532,13 @@ angular.module('paas.controllers')
                     ct.reloadAppInstanceStats();
                 }
 
-                // 앱 아이콘 이미지
-                ct.appImage = '';
                 if (ct.app.buildpack) {
                     var buildpackSplit = ct.app.buildpack.split('_buildpack-');
                     ct.app.buildpackName = buildpackSplit[0].toUpperCase();
-                    ct.app.buildpackVersion = buildpackSplit[1].replace('-', '.');
-
-                    for (var i = 0; i < $scope.main.portalBuildpacks.length; i++) {
-                        if ($scope.main.portalBuildpacks[i].name.toUpperCase() == ct.app.buildpackName) {
-                            ct.appImage = $scope.main.portalBuildpacks[i].iconImage.image;
-                            break;
-                        }
+                    if (ct.app.buildpackName == 'STATICFILE') {
+                        ct.app.buildpackName = 'NGINX';
                     }
+                    ct.app.buildpackVersion = buildpackSplit[1].replace('-', '.');
                 } else {
                     ct.app.buildpackName = "DOCKER";
                     ct.app.buildpackVersion = "-";

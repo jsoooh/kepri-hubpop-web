@@ -20,8 +20,8 @@
                     <div class="panel_head">
                       <div>
                           <div class="stateWrap">
-                              <img ng-if="appItem.appImage != ''" ng-src="data:image/JPEG; base64, {{ appItem.appImage }}" class="logo" alt="" style="width:54px; height:54px;">
-                              <img ng-if="appItem.appImage == ''" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+                              <img ng-if="appItem.buildpackName == null" src="images/thum/im_app_logo5.png" class="logo" alt="" style="width:54px; height:54px;">
+                              <img ng-if="appItem.buildpackName != null" ng-src="images/thum/im_logo_{{ appItem.buildpackName | lowercase }}.png" class="logo" alt="" style="width:54px; height:54px;">
                           </div>
                       </div>
                       <p class="tit" id="txt-renameApp-{{appItem.name}}" style="display:block;" ng-click="contents.moveToApplicationPage(appItem);">{{ appItem.name }}</p>
