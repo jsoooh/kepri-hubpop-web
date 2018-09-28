@@ -32,7 +32,7 @@
                           <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameApp(appItem.name)"><span class="ico">변경취소</span></button>
                         </div>
                       </div>
-                      <a class="txt" ng-href="http://{{appItem.uris[0]}}" target="_blank" title="{{appItem.uris}}" >http://{{appItem.uris[0]}}</a>
+                      <a class="txt" ng-if="0 < appItem.uris.length" ng-href="http://{{ appItem.uris[0] }}" target="_blank" title="{{ appItem.uris[0] }}">http://{{ appItem.uris[0] }}</a>
 
                       <div class="dropdown btn-option">
     		                <button id="btn-option-{{appItem.name}}" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">

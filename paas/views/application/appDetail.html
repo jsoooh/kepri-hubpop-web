@@ -43,7 +43,7 @@
 									<li>
 										<strong class="tit">URL</strong>
                                         <div class="txt">
-											<a ng-href="http://{{contents.app.routes[0].url}}" target="_blank">http://{{contents.app.routes[0].url}}</a>
+                                            <a ng-if="0 < contents.app.routes.length" ng-href="http://{{contents.app.routes[0].url}}" target="_blank">http://{{contents.app.routes[0].url}}</a>
 										</div>
 									</li>
 									<li>
