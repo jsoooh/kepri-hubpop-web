@@ -1090,15 +1090,15 @@ angular.module('paas.controllers')
 
         $scope.main.loadingMainBody = false;
 
-        $scope.DetailviewType = function (type) {
+        ct.changeViewType = function (type) {
+            document.getElementsByClassName('btn btn-list')[1].classList.remove('on');
             document.getElementsByClassName('btn btn-list')[2].classList.remove('on');
-            document.getElementsByClassName('btn btn-list')[3].classList.remove('on');
             if (type == 'image') {
                 $scope.image = true;
-                document.getElementsByClassName('btn btn-list type1')[1].classList.add('on');
+                document.getElementsByClassName('btn btn-list type1')[0].classList.add('on');
             } else {
                 $scope.image = false;
-                document.getElementsByClassName('btn btn-list type2')[1].classList.add('on');
+                document.getElementsByClassName('btn btn-list type2')[0].classList.add('on');
             }
         };
         
