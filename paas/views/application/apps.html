@@ -211,8 +211,7 @@
                         </div>
                     </td>
                     <td>
-                        <a ng-href="http://{{appItem.uris[0]}}" target="_blank">http://{{appItem.uris[0]}} <br /></a>
-                        <button ng-if="1 < appItem.uris.length" ng-click="uris(appItem.name)" title="{{appItem.uris}}">[전체보기]</button>
+                        <a ng-repeat="uri in appItem.uris" ng-href="http://{{ uri }}" target="_blank">http://{{ uri }}<br/></a>
                     </td>
                     <td>
                         <select value="item.field" ng-options="item.field for item in fieldTable" ng-model="selected" ng-change="contents.controllAppState(selected, appItem.guid, appItem.name, $event)"></select>

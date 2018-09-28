@@ -40,28 +40,7 @@ angular.module('paas.controllers')
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
-
-        $scope.viewType = function (type) {
-            document.getElementsByClassName('btn btn-list')[2].classList.remove('on');
-            document.getElementsByClassName('btn btn-list')[3].classList.remove('on');
-            if (type == 'image') {
-                $scope.image = true;
-                document.getElementsByClassName('btn btn-list type1')[1].classList.add('on');
-            } else {
-                $scope.image = false;
-                document.getElementsByClassName('btn btn-list type2')[1].classList.add('on');
-            }
-        }
-
-        $scope.uris = function(appName) {
-        var dialog = document.getElementById(appName);
-        if(dialog.style.display=='none') {
-          dialog.style.display = 'block';
-        } else {
-          dialog.style.display = 'none';
-        }
-      }
-
+        
         ct.listSpaces = function () {
             var spacePromise = applicationService.listAllSpaces(ct.sltOrganizationGuid);
             spacePromise.success(function (data) {
