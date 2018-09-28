@@ -2,7 +2,504 @@
 
 angular.module('iaas.controllers')
     .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
-        _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
+        _DebugConsoleLog("computeDetailControllers.js : iaasComputeSystemDetailCtrl", 1);
+
+        $scope.actionBtnHied = true;
+        var ct = this;
+        ct.fn = {};
+        ct.ui = {};
+        ct.data = {};
+        ct.instance = {};
+        ct.subnet = {};
+        ct.ipFlag = true;
+        ct.addNetwork = {};
+        ct.roles = [];
+        ct.volumeRoles = [];
+        ct.consoleLogLimit = 50 ;
+        ct.actionLogLimit = 5;
+        // 공통 레프트 메뉴의 userTenantId
+        ct.data.tenantId = $scope.main.userTenantId;
+        ct.data.tenantName = $scope.main.userTenant.korName;
+        ct.instance.id = $stateParams.instanceId;
+        ct.viewType = 'instance';
+        if ($scope.main.stateKey == "iaasDeployServerComputeDetail") {
+            ct.viewType = 'deploy';
+        }
+        ct.sltInfoTab = 'actEvent';
+        ct.deployTypes = angular.copy(CONSTANTS.deployTypes);
+
+        ct.computeEditFormOpen = function (){
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
+        }
+
+        ct.cpuRoundProgress = {
+            label : "{percentage}%",
+            percentage : 0
+        };
+
+
+        ct.ramRoundProgress = {
+            label : "{percentage}%",
+            percentage : 0
+        };
+
+        ct.doughnut = {};
+        ct.doughnut.labels = ['남은 쿼터', '다른 인스턴스 사용', '현재 인스턴스 사용'];
+
+        ct.doughnut.colors = {};
+        ct.doughnut.colors.cpu = ["rgba(199,143,220,.5)","rgba(183,93,218,.7)", "rgba(183,93,218,1)"];
+        ct.doughnut.colors.ram = ["rgba(145,191,206,.5)","rgba(1,160,206,.7)", "rgba(1,160,206,1)"];
+        ct.doughnut.colors.disk = ["rgba(143,171,234,.5)","rgba(22,87,218,.7)", "rgba(22,87,218,1)"];
+
+        ct.doughnut.data = {};
+        ct.doughnut.data.cpu = [1, 0, 0];
+        ct.doughnut.data.ram = [1, 0, 0];
+        ct.doughnut.data.disk = [1, 0, 0];
+
+        ct.zoomPanel = function(evt, type){
+            var panel = $(evt.currentTarget).closest(".panel");
+            var isZoom = false;
+            if(panel.hasClass("zoom")) {
+                panel.removeClass("zoom").resize();
+                panel.find('.panel_body').css("height", "400px");
+                $timeout(function () {
+                    $(window).scrollTop(document.scrollingElement.scrollHeight);
+                }, 100);
+            } else {
+                isZoom = true;
+                panel.addClass("zoom").resize();
+                panel.find('.panel_body').css("height", "90%");
+                $timeout(function () {
+                    $(window).scrollTop(0);
+                }, 100);
+            }
+            if(type == 'insMonit') {
+                if (isZoom) {
+                    panel.find('.visualizeItem').css("width", "750px");
+                } else {
+                    panel.find('.visualizeItem').css("width", "465px");
+                }
+                $timeout(function () {
+                    panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
+                }, 100);
+            } else {
+                panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
+                if(type == 'bootLog') {
+                    if (isZoom) {
+                        ct.fn.systemTerminalResize(180, 40);
+                    } else {
+                        ct.fn.systemTerminalResize(170, 20);
+                    }
+                }
+            }
+        };
+
+
+        $scope.$on('userTenantChanged',function(event,status) {
+            $scope.main.moveToAppPage("/iaas");
+        });
+
+        ct.fn.getUsedResource = function() {
+            var params = {
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.tenantResource = data.content[0];
+
+                ct.defaultResource = angular.copy(ct.tenantResource);
+                ct.tenantResource.usedResource.cores -= ct.instance.spec.vcpus;
+                ct.tenantResource.usedResource.ramSize -= ct.instance.spec.ram;
+                ct.tenantResource.usedResource.instanceDiskGigabytes -= ct.instance.spec.disk;
+
+                ct.doughnut.data.cpu = [ct.defaultResource.maxResource.cores - ct.defaultResource.usedResource.cores, ct.tenantResource.usedResource.cores, ct.instance.spec.vcpus];
+                ct.doughnut.data.ram = [(ct.defaultResource.maxResource.ramSize - ct.defaultResource.usedResource.ramSize)/1024, ct.tenantResource.usedResource.ramSize/1024, ct.instance.spec.ram/1024];
+                ct.doughnut.data.disk = [ct.defaultResource.maxResource.instanceDiskGigabytes - ct.defaultResource.usedResource.instanceDiskGigabytes, ct.tenantResource.usedResource.instanceDiskGigabytes, ct.instance.spec.disk];
+
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+        };
+
+        //인스턴스 상세 정보 조회
+        ct.fn.getInstanceInfo = function(action) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                instanceId : ct.instance.id,
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                if(data.content.instances.length == 1) {
+                    if(data.content.instances[0].powerState == "deleted"){
+                        common.showAlertWarning('삭제된 인스턴스입니다.');
+                        $window.history.back();
+                    }
+
+                    ct.instance = data.content.instances[0];
+                    ct.instance.tenantId = ct.data.tenantId;
+
+                    ct.instance.changeName = ct.instance.name;
+                    $scope.main.sltOrganizationName = ct.instance.name;
+
+                    var vmDeployType = common.objectsFindCopyByField(ct.deployTypes, "type", ct.instance.vmType);
+                    if (angular.isObject(vmDeployType) && vmDeployType.id) {
+                        ct.instance.vmDeployType = vmDeployType;
+                    } else {
+                        ct.instance.vmDeployType = angular.copy(ct.deployTypes[0]);
+                    }
+
+                    ct.specValue = '';
+                    if(ct.instance.spec !== undefined && ct.instance.spec != null) {
+                        if(ct.instance.spec.name) ct.specValue +='['+ct.instance.spec.name+']';
+                        if(ct.instance.spec.vcpus) ct.specValue += ' cpu'+ct.instance.spec.vcpus+'개';
+                        if(ct.instance.spec.ram) ct.specValue += ', ram'+ct.instance.spec.ram + 'MB';
+                        if(ct.instance.spec.disk) ct.specValue += ', disk'+ct.instance.spec.disk + 'GB';
+                    }
+
+                    ct.fn.getUsedResource();
+                    ct.fn.searchInstanceVolumeList();
+
+                    if (ct.instance.vmState != 'active' && ct.instance.vmState != 'stopped' && ct.instance.vmState != 'paused' ) {
+                        $scope.main.reloadTimmer['deployServerDetail'] = $timeout(function () {
+                            ct.fn.getInstanceInfo();
+                        }, 10000)
+                    }
+
+                    ct.instance.consoleArr = ct.instance.console.split("\n");
+                    for (var i=0; i<ct.instance.consoleArr.length; i++) {
+                        ct.instance.consoleArr[i] = common.replaceAll(ct.instance.consoleArr[i], "(\\[[0-9;]{1,}m(.){1,})\\[0m", "\x1B$1\x1B[0m");
+                    }
+                    $timeout(function () {
+                        $('#action_event_panel.scroll-pane').jScrollPane({});
+                    }, 100);
+                }
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.systemTerminalResize = function(cols, rows) {
+            //Terminal.applyAddon(fit);
+            if (!cols) {
+                cols = 170;
+            }
+            if (!rows) {
+                rows = 20;
+            }
+            var term = new Terminal({
+                cursorBlink: true,  // Do not blink the terminal's cursor
+                cols: cols,  // Set the terminal's width to 120 columns
+                rows: rows  // Set the terminal's height to 80 rows
+            });
+            $('#boot_log_terminal').html('');
+            term.open(document.getElementById('boot_log_terminal'));
+            //term.fit();
+            if (ct.instance && angular.isArray(ct.instance.consoleArr)) {
+                for (var i=0; i<ct.instance.consoleArr.length; i++) {
+                    term.writeln(ct.instance.consoleArr[i]);
+                }
+            }
+        };
+
+        ct.fn.getTimeColumnSeries = function(data) {
+            var series = [];
+            if (angular.isArray(data) && data.length > 0 && angular.isArray(data[0].series)  && data[0].series.length > 0) {
+                angular.forEach(data[0].series, function (seryData, seryKey) {
+                    seryData.columnData = [];
+                    if (angular.isArray(seryData.values) &&  seryData.values.length > 0) {
+                        var valuesLen = seryData.values.length;
+                        angular.forEach(seryData.values, function (value, key) {
+                            var itemObj = {};
+                            angular.forEach(seryData.columns, function (column, k) {
+                                itemObj[column] = value[k];
+                            });
+                            if (key == valuesLen - 1 && itemObj["total"]) {
+                                seryData.total = itemObj["total"];
+                            }
+                            seryData.columnData.push(itemObj);
+                        });
+                    }
+                    series.push(seryData)
+                });
+            }
+            return series;
+        };
+
+        // 도메인 연결 버튼
+        ct.fn.connectDomainFormOpen = function() {
+            if (ct.instance.floatingIp == '') {
+                common.showAlertError('접속 IP 주소가 없으면 도메인 연결을 할 수 없습니다.');
+                return;
+            }
+
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeDomainForm.html" + _VersionTail();
+
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
+        };
+
+        // 도메인 반환 버튼
+        ct.fn.publicIpReturn = function(domain) {
+            common.showConfirm('도메인 반환','※'+domain.domainInfo.domain+' 도메인을 반환 합니다. 반환된 도메인에 대한 관리는 도메인 관리에서 가능합니다').then(function(){
+                ct.fn.restorationDomain(domain);
+            });
+        };
+
+        // 도메인 반환 job
+        ct.fn.restorationDomain = function(domain) {
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain', 'DELETE', {instanceDomainLinkId:domain.id});
+            returnPromise.success(function (data, status, headers) {
+                ct.fn.getInstanceInfo();
+                common.showAlertSuccess("도메인이 반환 되었습니다.");
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.serverActionConfirm = function(action,instance) {
+            if(action == "START") {
+                common.showConfirm('메세지',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance);
+                });
+            } else if(action == "STOP") {
+                common.showConfirm('메세지',instance.name +' 서버를 종료하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance);
+                });
+            } else if(action == "PAUSE") {
+                common.showConfirm('메세지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance);
+                });
+            } else if(action == "UNPAUSE") {
+                common.showConfirm('메세지', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance);
+                });
+            } else if(action == "REBOOT") {
+                common.showConfirm('메세지',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance);
+                });
+            } else if(action == "IPCONNECT"){
+                ct.fn.IpConnectPop();
+            } else if(action == "IPDISCONNECT"){
+                common.showConfirm('메세지',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
+                    ct.fn.ipConnectionSet("detach");
+                });
+            }
+        };
+
+        ct.fnSingleInstanceAction = function(action,instance) {
+            $scope.main.loadingMainBody = true;
+            if(typeof id !== 'string' && typeof action !== 'string'){
+                console.log('type missmatch error');
+                return;
+            }
+            var param = {
+                instanceId : instance.id,
+                action : action,
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                ct.fn.getInstanceInfo(action);
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // SnapShot 생성
+        ct.fn.createSnapshot = function($event,instance) {
+            if(instance.vmState != 'stopped') {
+                common.showAlertWarning('서버를 종료 후 생성가능합니다.');
+                //common.showAlert('메세지','서버를 종료 후 생성가능합니다.');
+                return;
+            } else {
+                ct.selectInstance = instance;
+                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeSnapshotForm.html" + _VersionTail();
+                $(".aside").stop().animate({"right":"-360px"}, 400);
+                $("#aside-aside1").stop().animate({"right":"0"}, 500);
+            }
+        };
+
+        //인스턴스 볼륨 조회
+        ct.fn.searchInstanceVolumeList = function() {
+            var param = {
+                tenantId : ct.data.tenantId,
+                instanceId : ct.instance.id
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instance', 'GET', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.instanceVolList = data.content.volumeAttaches;
+                ct.instanceVolListLength = ct.instanceVolList.length;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+        }
+
+        // 볼륨 반환 버튼
+        ct.fn.restorationConfirm = function(volume) {
+            common.showConfirm('볼륨 반환','※'+volume.volumeName+' 볼륨을 반환 합니다. 반환된 볼륨에 대한 관리는 스토리지 관리에서 가능합니다').then(function(){
+                ct.fn.restorationVolume(volume);
+            });
+        };
+
+        //볼륨 반환 job
+        ct.fn.restorationVolume = function(volume) {
+            volume.tenantId = ct.data.tenantId;
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach:volume});
+            returnPromise.success(function (data, status, headers) {
+                ct.fn.searchInstanceVolumeList();
+                common.showAlertSuccess("볼륨이 반환 되었습니다.");
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //인스턴스 볼륨 생성 팝업
+        ct.fn.createInstanceVolumePop = function(instance) {
+            ct.selectInstance = instance;
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
+        };
+
+        // 접속 IP 설정 팝업
+        ct.fn.IpConnectPop = function() {
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computePublicIpForm.html" + _VersionTail();
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
+        };
+
+        // 공인 IP 연결 해제 펑션
+        ct.fn.ipConnectionSet = function(type) {
+            var param = {
+                tenantId : ct.data.tenantId,
+                instanceId : ct.instance.id
+            };
+            if(ct.instance.floatingIp) {
+                param.floatingIp = ct.instance.floatingIp;
+                param.action = type;
+            } else {
+                return false;
+            }
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/network/floatingIp', 'POST', param,'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                common.showAlertSuccess('접속 IP가 해제되었습니다.');
+                ct.instance.floatingIp = '';
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlert("message",data.message);
+            });
+        };
+
+        // paging
+        ct.eventHistoryPageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 1
+        };
+
+        // 이벤트 이력 Page
+        ct.fn.listEventHistory = function(page, size) {
+            if (angular.isUndefined(page)) {
+                page = ct.eventHistoryPageOptions.currentPage;
+            } else {
+                ct.eventHistoryPageOptions.currentPage = page;
+            }
+            if (angular.isUndefined(size)) {
+                size = ct.eventHistoryPageOptions.pageSize;
+            } else {
+                ct.eventHistoryPageOptions.pageSize = size;
+            }
+            var params = {
+                urlPaths: {
+                    resource_uuid: ct.instance.id
+                },
+                page: (page - 1),
+                size: size
+            };
+            $scope.main.loadingMainBody = true;
+            ct.data.eventHistories == [];
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitApiContextUrl + '/iaas/event_histories/{resource_uuid}/page', 'GET', params);
+            serverStatsPromise.success(function (data, status, headers) {
+                ct.data.eventHistories = data.content;
+                ct.eventHistoryPageOptions.total = data.totalElements;
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $timeout(function () {
+                    $('#system_event_history_panel.scroll-pane').jScrollPane({});
+                }, 100);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // paging
+        ct.systemLogPageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 1
+        };
+
+        ct.fn.changeSltInfoTab = function (sltInfoTab) {
+            if (!sltInfoTab) {
+                sltInfoTab = 'actEvent';
+                ct.sltInfoTab = sltInfoTab;
+            } else {
+                if (ct.sltInfoTab != sltInfoTab) {
+                    ct.sltInfoTab = sltInfoTab;
+                    if (sltInfoTab == 'bootLog') {
+                        $timeout(function() {
+                            ct.fn.systemTerminalResize(170, 20);
+                        }, 100);
+                    } else if (sltInfoTab == 'sysEvent') {
+                        ct.fn.listEventHistory(1, 1000);
+                    }
+                }
+            }
+        };
+
+        if(ct.data.tenantId) {
+            ct.fn.getInstanceInfo();
+            ct.fn.changeSltInfoTab();
+        }
+
+    })
+    .controller('iaasComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
+        _DebugConsoleLog("computeDetailControllers.js : iaasComputeSystemDetailCtrl", 1);
         
         $scope.actionBtnHied = true;
         var ct = this;
@@ -63,12 +560,6 @@ angular.module('iaas.controllers')
         ct.doughnut.cpuDataLoad = false;
         ct.doughnut.ramDataLoad = false;
         ct.doughnut.diskDataLoad = false;
-
-        ct.timeRanges = ["1", "2", "6", "24", "48"];
-        ct.periods = ["1", "5", "15", "30", "60"];
-
-        ct.selTimeRange = ct.timeRanges[0];
-        ct.selPeriod = ct.periods[0];
 
         ct.zoomPanel = function(evt, type){
             var panel = $(evt.currentTarget).closest(".panel");
@@ -150,10 +641,6 @@ angular.module('iaas.controllers')
                     }
 
                     ct.fn.searchInstanceVolumeList();
-                    if(ct.instance.floatingIp){
-                        //임시 막음. 추후 타 api로 변경예정. 08.28
-                        //ct.fn.getDnsRouterList();
-                    }
 
                     if (ct.instance.vmState != 'active' && ct.instance.vmState != 'stopped' && ct.instance.vmState != 'paused' ) {
                         $scope.main.reloadTimmer['deployServerDetail'] = $timeout(function () {
@@ -370,22 +857,6 @@ angular.module('iaas.controllers')
             });
         };
 
-        //도메인라우터 목록
-	    ct.fn.getDnsRouterList = function() {
-			var param = {
-                floatingIp : ct.instance.floatingIp
-            };
-			var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/dnsRouter', 'GET', param , 'application/x-www-form-urlencoded');
-			returnPromise.success(function (data, status, headers) {
-				ct.dnsRouterList = data.content.domainRouters;
-			});
-			returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-	        	common.showAlertError(data.message);
-			});
-		};
-        
-
         ct.fn.serverActionConfirm = function(action,instance) {
             if(action == "START") {
                 common.showConfirm('메세지',instance.name +' 서버를 시작하시겠습니까?').then(function(){
@@ -499,8 +970,9 @@ angular.module('iaas.controllers')
         };
 
         //인스턴스 볼륨 생성 팝업
-        ct.fn.createInstanceVolumePop = function($event) {
-        	$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
+        ct.fn.createInstanceVolumePop = function(instance) {
+            ct.selectInstance = instance;
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
 			$(".aside").stop().animate({"right":"-360px"}, 400);
 			$("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
@@ -1304,9 +1776,12 @@ angular.module('iaas.controllers')
         pop.domainListByType = [];
 
         // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.actionBtnHied = false;
         pop.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
             if (!vs.checkFormValidity($scope[pop.formName])) {
+                $scope.actionBtnHied = false;
                 return;
             }
             pop.connectDomain();
@@ -1364,9 +1839,11 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 common.showAlertSuccess("도메인이 연결되었습니다.");
                 ct.fn.getInstanceInfo();
+                $scope.actionBtnHied = false;
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
+                $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -1390,14 +1867,18 @@ angular.module('iaas.controllers')
         pop.title = "인스턴스 스냅샷 생성";
         
         // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.actionBtnHied = false;
         pop.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
             if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
+                $scope.actionBtnHied = false;
                 return;
             }
 
             pop.checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
         	if(pop.checkByte > 255){
+                $scope.actionBtnHied = false;
         		return;
         	}
         	
@@ -1420,6 +1901,7 @@ angular.module('iaas.controllers')
             	common.showAlertError(data.message);
             });
             returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });
         }
@@ -1474,8 +1956,8 @@ angular.module('iaas.controllers')
         //인스턴스 볼륨 추가
         pop.fn.addInstanceVolume = function() {
             var param = {
-                instanceId : ct.instance.id,
-                tenantId : ct.data.tenantId,
+                instanceId : $scope.contents.selectInstance.id,
+                tenantId : $scope.contents.data.tenantId,
                 volumeId : pop.volume.volumeId
             };
             $scope.main.loadingMainBody = true;
@@ -1523,9 +2005,12 @@ angular.module('iaas.controllers')
         pop.title = "접속 IP 설정";
 
         // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.actionBtnHied = false;
         pop.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
-            if (vs.checkFormValidity($scope[pop.formName])) {
+            $scope.actionBtnHied = true;
+            if (!vs.checkFormValidity($scope[pop.formName])) {
+                $scope.actionBtnHied = false;
                 return;
             }
             pop.fn.ipConnectionSet();
@@ -1538,10 +2023,12 @@ angular.module('iaas.controllers')
 
         //공인아이피 리스트 조회
         pop.fn.getPublicIpList = function() {
+            pop.floatingIpsList = [];
             $scope.main.loadingMainBody = true;
             var param = {tenantId:pop.userTenant.id,queryType:'list'};
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/floatingIps', 'GET', param);
             returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 pop.tenantName = pop.userTenant.tenantName;
                 if (data && angular.isArray(data.content) && data.content.length > 0) {
                     pop.floatingIpsList = data.content;
@@ -1586,24 +2073,36 @@ angular.module('iaas.controllers')
             }
 
             var param = {
-                tenantId : ct.data.tenantId,
-                instanceId : instanceId,
-                floatingIp : pop.floatingIp.floatingIp,
-                action : "attach"
+                urlParams : {
+                    tenantId : ct.data.tenantId,
+                    instanceId : instanceId,
+                    floatingIp : pop.selectFloatingIp,
+                    action : "attach"
+                }
             };
 
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/network/floatingIp', 'POST', param,'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/network/floatingIp', 'POST', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                if(ct.fn.getInstanceInfo){
-                    ct.instance.floatingIp = pop.floatingIp.floatingIp;
+                $scope.actionBtnHied = false;
+                if(ct && ct.fn && ct.fn.getInstanceInfo){
+                    ct.instance.floatingIp = pop.selectFloatingIp;
                     ct.fn.getInstanceInfo();
-                }else{
-                    ct.deployServerList[pop.instanceIndex].floatingIp = pop.floatingIp.floatingIp;
+                } else {
+                    if (pop.instanceIndex) {
+                        if (ct.deployServerList && ct.deployServerList[pop.instanceIndex]) {
+                            ct.deployServerList[pop.instanceIndex].floatingIp = pop.floatingIp.floatingIp;
+                        }
+                    } else {
+                        if (ct.fnGetServerMainList) {
+                            ct.fnGetServerMainList();
+                        }
+                    }
                 }
                 common.showAlertSuccess("접속 IP가 설정 되었습니다.");
             });
             returnPromise.error(function (data, status, headers) {
+                $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
                 common.showAlert("message",data.message);
             });

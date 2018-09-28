@@ -25,7 +25,6 @@ angular.module('iaas.controllers')
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = common.getMainCtrlScope().main.userTenant.id;
         ct.data.tenantName = common.getMainCtrlScope().main.userTenant.korName;
-        //ct.data.tenantId = 'acb13dd1207740e8aeebdb46a2eb2e71';
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
@@ -54,30 +53,6 @@ angular.module('iaas.controllers')
                 common.showAlertError(data.message);
                 //common.showAlert("message",data.message);
                 $scope.main.loadingMainBody = false;
-            });
-        };
-
-        //이미지 리스트 조회
-        ct.fn.imageListSearch = function() {
-            $scope.main.loadingMainBody = true;
-            var param = {
-                tenantId : ct.data.tenantId
-            };
-            if(ct.conditionKey == 'imageServiceName') {
-                param.imageServiceName = ct.conditionValue;
-            }
-            if(ct.conditionKey == 'imageUseCase') {
-                param.imageUseCase = ct.conditionValue;
-            }
-            param.imageType = ct.imageType;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
-            returnPromise.success(function (data, status, headers) {
-                ct.imageList = data.content.images;
-                ct.fnGetServerMainList();
-            });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                common.showAlertError(data.message);
             });
         };
 
@@ -114,14 +89,6 @@ angular.module('iaas.controllers')
                             ct.serverMainList[key].vmStateInterval = $interval(function () {
                                 fnInterval(key);
                             }, 1000);
-                        }
-                        angular.forEach(ct.imageList, function(iData) {
-                            if (sData.image && sData.image.id == iData.id) {
-                                sData.image.iconFileName = iData.iconFileName;
-                            }
-                        });
-                        if (!sData.image.iconFileName){
-                            sData.image.iconFileName = "im_logo_compute";
                         }
                     });
                     ct.fnGetUsedResource();
@@ -318,12 +285,10 @@ angular.module('iaas.controllers')
 
         //인스턴스 볼륨 생성 팝업
         ct.fn.createInstanceVolumePop = function(instance) {
-            common.showConfirm('메세지',instance.name +' 서버에 볼륨을 연결하시겠습니까?').then(function(){
-                ct.selectInstance = instance;
-                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
-                $(".aside").stop().animate({"right":"-360px"}, 400);
-                $("#aside-aside1").stop().animate({"right":"0"}, 500);
-            });
+            ct.selectInstance = instance;
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
 
         // 접속 IP 설정 팝업
@@ -364,9 +329,8 @@ angular.module('iaas.controllers')
         };
 
         if(ct.data.tenantId) {
-            //ct.fnGetServerMainList();
-            ct.fn.imageListSearch();
-        }else if(!$scope.main.hubpop.projectIdSelected && !$scope.main.currentProjectId){ // 프로젝트 선택
+            ct.fnGetServerMainList();
+        } else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
             showAlert.then(function () {
                 $scope.main.moveToAppPage("/");

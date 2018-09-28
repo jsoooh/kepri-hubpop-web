@@ -18,7 +18,7 @@
 						<select class="form-control" name="selectFloatingIp" ng-model="pop.selectFloatingIp" validation="required">
 							<option value="" ng-if="pop.floatingIpsList.length > 0">선택</option>
 							<option value="" ng-if="pop.floatingIpsList.length == 0">할당된 IP가 존재하지 않습니다.</option>
-							<option ng-repeat="floatingIp in pop.floatingIpsList" value="{{floatingIp}}">
+							<option ng-repeat="floatingIp in pop.floatingIpsList" value="{{floatingIp.floatingIp}}">
 								{{floatingIp.floatingIp}}
 							</option>
 						</select>

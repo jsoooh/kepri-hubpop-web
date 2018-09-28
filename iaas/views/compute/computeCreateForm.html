@@ -52,7 +52,7 @@
 											<input type="radio" id="{{image.$$hashKey}}" name="froms.selectImageForm.imageId" ng-click="contents.data.image = image;">
 											<label for="{{image.$$hashKey}}" class="label"><img ng-src="images/thum/{{image.iconFileName}}.png" class="im"/></label>
 										</div>
-										<p class="label-txt">{{image.name}}</p>
+										<p class="label-txt">{{image.serviceName}}</p>
 										<input type="hidden" ng-if="$last" ng-init="contents.scrollPane()">
 									</li>
 								</ul>

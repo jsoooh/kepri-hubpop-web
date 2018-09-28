@@ -153,7 +153,6 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.imageList = data.content.images;
                 ct.fnGetServerMainList();   //서버메인 tenant list 함수
-                $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
@@ -454,12 +453,10 @@ angular.module('iaas.controllers')
 
         //인스턴스 볼륨 생성 팝업
         ct.fn.createInstanceVolumePop = function(instance) {
-            common.showConfirm('볼륨연결',instance.name +' 서버에 볼륨을 연결하시겠습니까?').then(function(){
-                ct.selectInstance = instance;
-                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
-                $(".aside").stop().animate({"right":"-360px"}, 400);
-                $("#aside-aside1").stop().animate({"right":"0"}, 500);
-            });
+            ct.selectInstance = instance;
+            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
+            $(".aside").stop().animate({"right":"-360px"}, 400);
+            $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
 
         // 접속 IP 설정 팝업
@@ -674,8 +671,8 @@ angular.module('iaas.controllers')
             return false;
         }
     })
-    .controller('iaasDashboardCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, user, paging, common, ValidationService, CONSTANTS) {
-        _DebugConsoleLog("dashboardControllers.js : iaasDashboardCtrl", 1);
+    .controller('iaasDeployDashboardCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, user, paging, common, ValidationService, CONSTANTS) {
+        _DebugConsoleLog("dashboardControllers.js : iaasDeployDashboardCtrl", 1);
 
         $scope.actionBtnHied = false;
 
