@@ -4,6 +4,168 @@ angular.module('portal.services', [])
     .factory('portal', function (common, CONSTANTS) {
     	var portal = {};
 
+        portal.sso = {};
+
+        portal.sso.decode = function(params) {
+            var pathUrl = '/sso/decode';
+            var method = 'GET';
+
+            var promise = common.resourcePromise(pathUrl, method, params);
+            var finallyFn = function() {
+                //_DebugConsoleLog('finallyFn', 3);
+            };
+
+            return common.retrieveResource(promise, finallyFn);
+        };
+
+        portal.sso.createProjectResponsiblePersonSso = function(params) {
+            var pathUrl = CONSTANTS.uaaContextUrl + '/users2/projectResponsiblePersonSso';
+            var method = 'POST';
+
+            var promise = common.resourcePromise(pathUrl, method, params);
+            var finallyFn = function() {
+                //_DebugConsoleLog('finallyFn', 3);
+            };
+
+            return common.retrieveResource(promise, finallyFn);
+        };
+
+        portal.menu = {};
+
+        /* 메뉴 모록 */
+        portal.menu.getMenuList = function() {
+            return common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/menus', 'GET');
+        };
+
+        //Left Menu 구조 생성
+        portal.menu.setListMenu = function(menuList, myRoleName) {
+            var repeatData = [];
+            if (!angular.isArray(menuList)) return;
+            for(var i = 0; i < menuList.length; i++){
+                if(myRoleName == 'Manager'){
+                    if(menuList[i].isManager){
+                        repeatData.push(menuList[i]);
+                    }
+                } else if(myRoleName == 'UserPM'){
+                    if(menuList[i].isUserPm){
+                        repeatData.push(menuList[i]);
+                    }
+                } else if(myRoleName == 'User'){
+                    if(menuList[i].isUser){
+                        repeatData.push(menuList[i]);
+                    }
+                } else{
+                    repeatData.push(menuList[i]);
+                }
+            }
+
+            var leftMenu = "\n	<!-- depth1 START -->\n";
+            leftMenu += "	<ul class='gnb-menu dept1 depth1'>\n";
+            var parentId1 = '';
+            var parentId2 = '';
+
+            for(var i = 0; i < repeatData.length; i++){
+                // Depth 1
+                if(repeatData[i].level == '1'){
+                    var icoId = repeatData[i].id.toString().substr(2,1);
+                    if(repeatData[i].urlPath){
+                        leftMenu += "		<li class='dept1'>\n";
+                        leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                        leftMenu += "		</li>\n";
+                    }else{
+                        parentId1 = repeatData[i].id;
+                        leftMenu += "		<li class='dept1'>\n";
+                        leftMenu += "			<a class='dept1' href='javascript:void(0);' onclick='depth1Click(event);'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "<span class='ico ico-arr'></span></a>\n";
+                        leftMenu += "			<ul class='dept2' style='display:none' onmouseleave='depth3Leave();'>\n";
+                    }
+                }
+                // Depth 2
+                if(repeatData[i].level == '2' && repeatData[i].parentId == parentId1){
+                    if(repeatData[i].urlPath){
+                        leftMenu += "				<li class='dept2' onmouseover='depth2LiHover(event,\"no\");'>\n";
+                        leftMenu += "					<a class='dept2' href='" + repeatData[i].urlPath + "' onmouseover='depth2Hover(event,\"no\");'>" + repeatData[i].depth2 + "</a>\n";
+                        leftMenu += "				</li>\n";
+                    }else{
+                        parentId2 = repeatData[i].id;
+                        leftMenu += "				<li class='dept2' onmouseover='depth2LiHover(event);'>\n";
+                        leftMenu += "					<a class='dept2' href='javascript:void(0);' onmouseover='depth2Hover(event);'>" + repeatData[i].depth2 + "<span class='ico ico-arr'></span></a>\n";
+                        leftMenu += "					<ul class='dept3' style='display:none' >\n";
+                    }
+                }
+                // Depth 3
+                if(repeatData[i].level == '3' && repeatData[i].parentId == parentId2){
+                    leftMenu += "						<li class='dept3'>\n";
+                    leftMenu += "							<a class='dept3' href='" + repeatData[i].urlPath + "' onclick='depth3Click(event);'>" + repeatData[i].depth3 + "</a>\n";
+                    leftMenu += "						</li>\n";
+                }
+                if(i == repeatData.length-1){
+                    if(repeatData[i].level == '3'){
+                        leftMenu += "					</ul>\n";
+                        leftMenu += "					<!-- dept3 END -->\n";
+                        leftMenu += "				</li>\n";
+                    }
+
+                    if(repeatData[i].level == '2' || repeatData[i].level == '3'){
+                        leftMenu += "			</ul>\n";
+                        leftMenu += "			<!-- dept2 END -->\n";
+                        leftMenu += "		</li>\n";
+                    }
+                }else if(i+1 < repeatData.length){
+                    if((repeatData[i+1].level == '1' || repeatData[i+1].level == '2') && repeatData[i].level == '3' && repeatData[i+1].parentId != parentId2 && repeatData[i].parentId){
+                        leftMenu += "					</ul>\n";
+                        leftMenu += "					<!-- dept3 END -->\n";
+                        leftMenu += "				</li>\n";
+                    }
+
+                    if(repeatData[i+1].level == '1' && repeatData[i+1].parentId != parentId1 && repeatData[i].parentId){
+                        leftMenu += "			</ul>\n";
+                        leftMenu += "			<!-- dept2 END -->\n";
+                        leftMenu += "		</li>\n";
+                    }
+                }
+            }
+
+            leftMenu += "	</ul>\n";
+            leftMenu += "	<!-- depth1 END -->\n";
+
+            $("#leftMenu").html(leftMenu);
+        };
+
+        //url정보 체크하여 메뉴 위치 확인
+        portal.menu.urlCheck = function(){
+            var nowHost = $(location).attr('host');
+            var nowPage = $(location).attr('href');
+            var nowHref = nowPage.split(nowHost);
+
+            $("#leftMenu").find('a').each(function(){
+                var thisHref = $(this).attr("href");
+
+                if(nowHref[1].match(thisHref)){
+                    if($(this).hasClass("on")){
+
+                    }else{
+                        $("#leftMenu").find('a').removeClass("on");
+                        $("#leftMenu").find('ul.dept2').hide(0);
+                        $("#leftMenu").find('ul.dept3').hide(0);
+                        $(this).toggleClass("on");
+
+                        if($(this).hasClass("dept3")){
+                            $(this).closest("li.dept2").find("a.dept2").toggleClass("on");
+                            $(this).closest("li.dept1").find("ul.dept2").toggle(0);
+                            $(this).closest("li.dept1").find("a.dept1").toggleClass("on");
+                        };
+                        if($(this).hasClass("dept2")){
+                            $(this).closest("li.dept1").find("ul.dept2").toggle(0);
+                            $(this).closest("li.dept1").find("a.dept1").toggleClass("on");
+                        };
+                        if($(this).hasClass("dept1")){
+                            $(this).closest("li.dept1").find("ul.dept2").toggle(0);
+                        };
+                    }
+                }
+            })
+        };
+
         portal.portalOrgs = {};
 
         portal.portalOrgs.listAllProjects = function () {

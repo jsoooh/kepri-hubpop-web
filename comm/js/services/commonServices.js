@@ -2519,6 +2519,10 @@ angular.module('common.services', ['LocalStorageModule'])
             return (cookies.getAccessToken() != null && cookies.getAccessToken() != "");
         };
 
+        common.getPgsecuid = function () {
+            return cookies.getPgsecuid();
+        };
+
         common.logoutAction = function () {
             var scope = common.getMainCtrlScope();
             scope.main.loadingMainBody = true;
@@ -2800,6 +2804,10 @@ angular.module('common.services', ['LocalStorageModule'])
 
         cookies.clearUser = function () {
             $cookies.remove(_USER_INFO_COOKIE_NAME_, cookiesOption);
+        };
+
+        cookies.getPgsecuid = function () {
+            return $cookies.get('pgsecuid');
         };
 
         cookies.getAccessToken = function () {

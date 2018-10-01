@@ -162,3 +162,126 @@ cmm.tooltip = function () {
         });
     }, 200);
 };
+
+
+// Left Menu Script
+// 현재 페이지의 메뉴에 class on
+function nowHrefFunction (depth){
+    var nowHost = $(location).attr('host');
+    var nowPage = $(location).attr('href');
+    var nowHref = nowPage.split(nowHost);
+
+    var menuHrefArray = [];
+    $("#leftMenu").find('a').each(function(){
+        var thisHref = $(this).attr("href");
+        if(nowHref[1].match(thisHref)){
+            menuHrefArray.push($(this));
+        }
+    });
+
+    if(menuHrefArray.length > 1){
+        // PaaS 2dept class on을 위한 분기 처리
+        var appsCheck = nowHref[1].match("/apps");
+        var appLogCheck = nowHref[1].match("/appLog");
+        if(nowHref[1].match("/paas")){
+            for(var i = 0; i < menuHrefArray.length; i++){
+                if(menuHrefArray[i].attr("href").match("/apps") && menuHrefArray[i].attr("href").match("/appLog") && appsCheck && appLogCheck){
+                    $(menuHrefArray[i]).closest('li.'+depth).find('a.'+depth).addClass("on");
+                }else if(menuHrefArray[i].attr("href").match("/apps") && !menuHrefArray[i].attr("href").match("/appLog") && appsCheck && !appLogCheck){
+                    $(menuHrefArray[i]).closest('li.'+depth).find('a.'+depth).addClass("on");
+                }
+            }
+        }else{
+            $(menuHrefArray[1]).closest('li.'+depth).find('a.'+depth).addClass("on");
+        }
+    }else{
+        $(menuHrefArray[0]).closest('li.'+depth).find('a.'+depth).addClass("on");
+    }
+
+}
+//1depth click event
+function depth1Click (evt) {
+
+    var mainCtrlScope = angular.element(document.getElementById('mainCtrl')).scope();
+
+    //프로젝트 선택 여부 확인
+    if(!mainCtrlScope.main.sltPortalOrgId){
+        mainCtrlScope.main.showDialogAlert('알림','프로젝트를 선택해주세요.');
+        return false;
+    }
+
+    var target = $(evt.currentTarget);
+
+    if (target.hasClass("open")) {
+        $("#leftMenu").find('ul.dept2').hide(200);
+        $("#leftMenu").find('a.dept1').removeClass("open on");
+
+        nowHrefFunction("dept1");
+
+    } else {
+        $("#leftMenu").find('ul.dept2').hide(200);
+        $("#leftMenu").find('a.dept1').removeClass("open on");
+
+        nowHrefFunction("dept1");
+
+        target.addClass("open on");
+        $(target).closest("li.dept1").find("ul.dept2").toggle(200);
+    }
+};
+
+//2depth hover event
+function depth2Hover (evt,depth) {
+    var target = $(evt.currentTarget);
+
+    if(target.hasClass("open")){
+        $("#leftMenu").find('ul.dept3').hide();
+        $(target).parent().find("ul.dept3").show();
+    }else{
+        $("#leftMenu").find('a.dept2').removeClass("open on");
+        $("#leftMenu").find('ul.dept3').hide();
+        $(target).parent().find("ul.dept3").show();
+
+        nowHrefFunction("dept2");
+
+        if(depth != 'no'){
+            target.addClass("open on");
+        }
+    }
+};
+
+function depth2LiHover(evt,depth){
+    var target = $(evt.currentTarget).find("a.dept2");
+
+    if(target.hasClass("open")){
+        $("#leftMenu").find('ul.dept3').hide();
+        $(target).parent().find("ul.dept3").show();
+    }else{
+        $("#leftMenu").find('a.dept2').removeClass("open on");
+        $("#leftMenu").find('ul.dept3').hide();
+        $(target).parent().find("ul.dept3").show();
+
+        nowHrefFunction("dept2");
+
+        if(depth != 'no'){
+            target.addClass("open on");
+        }
+    }
+}
+//3depth click event
+function depth3Click (evt) {
+    var target = $(evt.currentTarget);
+    $("#leftMenu").find('a').removeClass("on");
+    $("#leftMenu").find('ul.dept3').hide();
+
+    $(target).closest("li.dept2").find("a.dept2").addClass("on");
+    $(target).closest("li.dept1").find("a.dept1").addClass("on");
+
+    target.toggleClass("on");
+};
+
+function depth3Leave (){
+    $("#leftMenu").find('a.dept2').removeClass("open on");
+    $("#leftMenu").find('ul.dept3').hide();
+
+    nowHrefFunction("dept2");
+}

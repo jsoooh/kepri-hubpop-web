@@ -25,14 +25,25 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 #header .pull-right .align_l {float:left;}
 #header .pull-right .align_l .col-proj {display:inline-block; float:left; font-weight: 500;}
 #header .pull-right .align_l .col-proj > div{padding:0 25px 0 22px;}/*180516 padding-left:40->22으로 수정*/
-#header .pull-right .align_l .col-proj span.txt {font-weight:500; padding-right:30px;}
-#header .pull-right .align_l .col-proj .btn{position: relative; font-size: 20px; line-height: 80px; width:100%; min-width:200px; padding:0; text-align: left; border:0;}/*180516 min-width값 추가*/
+#header .pull-right .align_l .col-proj span.txt {display:inline-block; font-weight:500; padding-right:30px; width:200px; overflow:hidden; text-overflow:ellipsis;}/*180719 display:inline-block; width:190px overflow속성 추가*/
+#header .pull-right .align_l .col-proj .btn{position: relative; font-size: 20px; line-height: 80px; height: 80px; padding:0; text-align: left; border:0;}/*180516 min-width값 추가*/
 #header .pull-right .align_l .col-proj .btn .ico.arr{position:absolute; top:28px; right:-10px; display:inline-block; z-index: 1; width:17px; height:30px; background:url("../images/ico_com.png") no-repeat -83px 10px; margin-left:20px;}
 #header .dropdown{position: relative;}
-#header .dropdown-menu, .projt-selWarp .dropdown-menu{top:80px; width: 100%; padding:0; margin: 0; border-radius: 0; border-color:#476cca; background-color: #fff; background-clip:border-box; -webkit-background-clip:border-box; box-shadow: none; font-size:16px;}
+#header .dropdown-menu, .projt-selWarp .dropdown-menu{top:80px; min-width:250px; padding:0; margin: 0; border-radius: 0; border-color:#476cca; background-color: #fff; background-clip:border-box; -webkit-background-clip:border-box; box-shadow: none; font-size:16px;}/*180719 width:100% 삭제하고 min-width:300px 추가*/
+#header .col-proj .dropdown-menu {left:5px;}/*180906 left:5px 추가 */
 #header .dropdown-menu>li>a{line-height: 45px; padding:0 20px;}
 #header .dropdown-menu>li>a:hover, 
 #header .dropdown-menu>li>a:focus, .projt-selWarp .dropdown-menu>li>a:hover, .projt-selWarp .dropdown-menu>li>a:focus{color:#fff; background:#335cc4;}
+
+/*프로젝트 메뉴명  > 드롭다운메뉴 > 버튼 추가 20180816*/
+#header .dropdown-menu > span.bg_arrw {position:absolute; top:-6px; left:48%; display:inline-block; width:9px; height:11px; background:url('../images/dropdown_arrw_bg.png') no-repeat left top;}
+#header .dropdown-menu a {cursor:pointer}
+#header .dropdown-menu > a.btn_create_proj {display:block; font-style:italic; color:#fff; padding:20px; background:#335cc4;}
+#header .dropdown-menu > a.btn_create_proj::before {display:inline-block; content:''; width:11px; height:11px; background:url('../images/btn_bg_plus.png') no-repeat left top; padding-right:20px;}
+#header .dropdown-menu > a.btn_create_proj:hover {text-decoration:underline;}
+#header .dropdown-menu > a.btn_all_proj {display:block; color:#333; padding:20px 0 20px 64px; border-top:1px solid #d6d6d6;}
+#header .dropdown-menu > a.btn_all_proj::before {display:inline-block; content:''; width:11px; height:11px; background:url('../images/btn_bg_menu.png') no-repeat left top; padding-right:20px;}
+#header .dropdown-menu > a.btn_all_proj:hover {text-decoration:underline;}
 
 /* 서비스 카탈로그 */
 #header .col-sev {display:inline-block; font-weight: 500; padding-left:40px;}
@@ -81,11 +92,13 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 #header .col-set .btn {display:block; width:80px; height:80px;}
 #header .col-set .btn .ico{width:28px; height:29px; background-position: -278px -1px;}/*180516 아이콘 위치 조정*/
 #header .col-set .dropdown{display: inline-block;}
-#header .col-set .dropdown-menu{left:50%; width:160px; min-width:0; margin-left:-80px;}
+/*180706 영어로 전환되었을때 너비짤리는문제로 width수정(160->180)*/
+#header .col-set .dropdown-menu{left:50%; width:180px; min-width:0; margin-left:-80px;}
 #header .col-set .langSet{position:relative;}
 #header .col-set .langSet > a:before{display:block;position:absolute;right:15px;top:17px;z-index:1;content:'';width:6px;height:11px;background:url(../images/ico_com.png) no-repeat;background-position:-244px -114px;}
 #header .col-set .langSet:hover > a:before{display:block;position:absolute;right:15px;top:17px;z-index:1;content:'';width:6px;height:11px; background:url(../images/ico_com.png) no-repeat; background-position:-244px -101px;}
-#header .col-set .langSet > .dropdown-menu{min-width:104px;width:104px;top:0;left:150%;border:none;-webkit-box-shadow:2px 2px 10px rgba(41, 53, 65, 0.15);box-shadow:2px 2px 10px rgba(41, 53, 65, 0.15);}
+/*180706 영어로 전환되었을때 너비짤리는문제로  left수정(150->145)*/
+#header .col-set .langSet > .dropdown-menu{min-width:104px;width:104px;top:0;left:145px;border:none;-webkit-box-shadow:2px 2px 10px rgba(41, 53, 65, 0.15);box-shadow:2px 2px 10px rgba(41, 53, 65, 0.15);}
 #header .col-set .langSet > a.subOn{background:#335cc4;color:#fff;}
 #header .col-set .langSet:hover > .dropdown-menu{display:block;}
 #header .col-set .langSet > .dropdown-menu li{width:104px;height:34px;}
@@ -110,7 +123,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 #header .col-my .dropdown.userIcon02::before{display: inline-block; position: absolute; left:13px; top:26px; z-index: 1; content: ''; clear: both; width:28px; height:28px; background: url("../images/ico_com.png") no-repeat; background-position: -36px -420px; }
 #header .col-my .dropdown.userIcon03::before{display: inline-block; position: absolute; left:13px; top:26px; z-index: 1; content: ''; clear: both; width:28px; height:28px; background: url("../images/ico_com.png") no-repeat; background-position: -75px -420px; }
 #header .col-my .btn{position: relative; height:80px; padding:10px 30px 10px 0;}
-#header .col-my .btn .name{display:inline-block; font-size: 16px; color:#333; line-height: 3.3; font-weight: 500; vertical-align: middle;}
+#header .col-my .btn .name{display:inline-block; font-size: 18px; color:#333; line-height: 3.3; font-weight: 500; vertical-align: middle;}
 #header .col-my .dropdown-menu a{position: relative; padding-left:55px;}
 #header .col-my .dropdown-menu a .ico{position: absolute; left:25px; top:13px; z-index: 1; width:20px; height:20px; margin-right:15px; }
 #header .col-my .dropdown-menu a .ico1{background-position: -580px -44px;}
@@ -123,7 +136,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 #header .col-my .dropdown-menu a:hover .ico4{background-position: -542px -210px;}
 
 
-#container{position: relative; z-index: 0; display: table; table-layout: fixed; width:100%; height: 100%; padding:0; padding-top:81px; background: #f3f3f3; }/*180405 스타일 갱신 pading-top:120px;*/
+#container{position: relative; z-index: auto; display: table; table-layout: fixed; width:100%; height: 100%; padding:0; padding-top:81px; background: #f3f3f3; }/*180405 스타일 갱신 pading-top:120px;*/
 #container.fixed {table-layout: fixed;}
 #container.fixed:before{content: none;}
 #container.fixed .leftMenu{overflow: hidden;}
@@ -243,7 +256,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 
 .effect #navbar, .effect #content-container, .effect #mainnav-container, .effect #aside-container, .effect #footer, .effect .navbar-brand, .effect .navbar-content, .effect .navbar-header:before, .effect .page-fixedbar-container {transition-property: width, padding, left, right; transition-duration: .35s;}
 
-.gnbMenu {position: absolute; top:0px; left:-240px; bottom:0; z-index:1000; color:#8d97ad; width:240px; background:#4c515f; height:100%; overflow: hidden; overflow-y:auto;}
+.gnbMenu {position: absolute; top:0px; left:-240px; bottom:0; z-index:1000; color:#8d97ad; width:240px; background:#4c515f; height:100%; /*overflow: hidden; overflow-y:auto;*/}
 .gnbMenu .jspDrag{background: rgba(0,0,0,.3);}
 .gnbMenu .gnb-in{padding-bottom:20px;}
 .gnbMenu .gnb-logo{margin:0;}
@@ -280,6 +293,57 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu .slm:hover a, .slm.on a{color:#fff;}
 .gnbMenu .gnb-close{position: absolute; right:0px; top:0; width:40px; height:40px;}
 .gnbMenu .gnb-close .ico{width:16px; height:18px; background-position: -460px 0;}
+
+/*메뉴 1depth*/
+.gnb-menu > li > a{display: block; position: relative; font-size:15px; color:#8d96ad; padding:20px 0 20px 47px;}/*180712 gnb font-size 수정*/
+.gnb-menu > li > a .ico-bul{position: absolute; left:19px; top:20px; z-index: 1; width:26px; height: 20px; background: url("../images/ico_gnbmenu.png") no-repeat; background-position: -25px -25px;}
+.gnb-menu > li > a .ico-arr{position: absolute; right:30px; top:21px; z-index: 1; width:19px; height: 19px; background-position: 0 -100px;}
+.gnb-menu > li > a:hover, .gnb-menu > li > a.on{color:#fff; background-color: #3b4152;}
+.gnb-menu > li > a:hover .ico-bul{background-position: -95px -25px;}
+.gnb-menu > li > a:hover .ico-arr{background-position: -28px -100px;}
+.gnb-menu > li > a:hover::before, .gnb-menu > li > a.on::before{display: inline-block; position: absolute; left:0; top:0; z-index: 1; content: ''; width:4px; height:100%; background-color: #00bfff; }
+.gnb-menu > li > a.on .ico-bul{background-position: -95px -25px;}
+.gnb-menu > li > a.on .ico-arr{background-position: -83px -100px;}
+.gnb-menu > li > a .ico-bul.ico1{ background-position: -25px -31px;}
+.gnb-menu > li > a:hover .ico-bul.ico1, .gnb-menu > li > a.on .ico-bul.ico1{ background-position: -89px -31px;}
+.gnb-menu > li > a .ico-bul.ico2{position: absolute; left:19px; top:22px; background-position: -25px -100px;}
+.gnb-menu > li > a:hover .ico-bul.ico2, .gnb-menu > li > a.on .ico-bul.ico2{ background-position: -89px -100px;}
+.gnb-menu > li > a .ico-bul.ico3{ background-position: -25px -165px;}
+.gnb-menu > li > a:hover .ico-bul.ico3, .gnb-menu > li > a.on .ico-bul.ico3{ background-position: -89px -165px;}
+.gnb-menu > li > a .ico-bul.ico4{ background-position: -25px -231px;}
+.gnb-menu > li > a:hover .ico-bul.ico4, .gnb-menu > li > a.on .ico-bul.ico4{ background-position: -89px -231px;}
+.gnb-menu > li > a .ico-bul.ico5{ background-position: -25px -301px;}
+.gnb-menu > li > a:hover .ico-bul.ico5, .gnb-menu > li > a.on .ico-bul.ico5{ background-position: -89px -301px;}
+.gnb-menu > li > a .ico-bul.ico6{position: absolute; left:13px; top:22px; background-position: -25px -369px;}
+.gnb-menu > li > a:hover .ico-bul.ico6, .gnb-menu > li > a.on .ico-bul.ico6{ background-position: -89px -369px;}
+.gnb-menu > li > a .ico-bul.ico7{ background-position: -25px -432px;}
+.gnb-menu > li > a:hover .ico-bul.ico7, .gnb-menu > li > a.on .ico-bul.ico7{ background-position: -89px -432px;}
+.gnb-menu > li > a .ico-bul.ico8{ background-position: -25px -502px;}
+.gnb-menu > li > a:hover .ico-bul.ico8, .gnb-menu > li > a.on .ico-bul.ico8{ background-position: -89px -502px;}
+.gnb-menu > li > a .ico-bul.ico9{ background-position: -25px -569px;}
+.gnb-menu > li > a:hover .ico-bul.ico9, .gnb-menu > li > a.on .ico-bul.ico9{ background-position: -89px -569px;}
+
+/*메뉴 2depth*/
+.gnb-menu > li > ul {padding:15px 10px 15px 30px;}
+.gnb-menu > li > ul > li {position:relative; background: url("../images/ico_gnb_dot1.png") repeat-y; padding:7px 0;}
+.gnb-menu > li > ul > li > a{display:block; font-size:14px; color:#8d96ad; line-height:24px; word-break:break-all; padding:0 23px; background:url("../images/ico_gnb_dot2.png") no-repeat; background-position: 0 14px;}
+.gnb-menu > li > ul > li > a.on{color:#fff;}
+
+/*180806 메뉴 2depth에 하위메뉴 있을때 우측에 화살표 추가*/
+.gnb-menu > li > ul > li > a .ico-arr{position: absolute; right:10px; top:14px; z-index: 1; width:6px; height:11px; background-position: -244px -127px;}
+.gnb-menu > li > ul > li > a.on .ico-arr{background-position: -244px -101px;}
+/* .gnb-menu > li > ul > li > a.on::after{display: block; position: absolute; right:10px; top:15px; z-index: 1; content: ''; width:6px; height:11px; background:url("../images/ico_com.png") no-repeat; background-position: -244px -101px; } */
+
+.gnb-menu > li > ul > li:last-child {padding-bottom:0;}
+.gnb-menu > li > ul > li:last-child > a{background:#4c515f  url("../images/ico_gnb_dot3.png") no-repeat; background-position: 0 0px;}
+.gnb-menu > li > ul > li:hover > a, .gnb-menu > li > ul > li > a.on{color:#fff;}
+
+/*메뉴 3depth*/
+.gnb-menu > li > ul > li > ul {position:absolute; top:0; left:210px; background:#6d7384; /*padding:5px 0;*/}
+.gnb-menu > li > ul > li > ul > li > a {display: block; position: relative; width:200px; font-size:14px; color:#fff; word-break: keep-all; padding:10px 30px 11px 30px;}
+.gnb-menu > li > ul > li > ul > li > a::before {display:inline-block; position:absolute; left:23px; top:19px; content:''; width:2px; height:2px; background:#fff;}
+.gnb-menu > li > ul > li > ul > li > a:hover {background:#4c515f;}
+.gnb-menu > li > ul > li > ul > li > a.on {background:#4c515f;}
 
 
 .aside {position: fixed; top:0px; right:-360px; bottom:0; z-index:100; color:#8d97ad; width:360px; padding:70px 0 60px; background:#4c515f; overflow: hidden;}

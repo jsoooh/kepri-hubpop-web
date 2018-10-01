@@ -29,7 +29,7 @@
         }
     }
 
-    var _MENU_TYPE_			 	= "all"; // part, all, db
+    var _MENU_TYPE_			 	= "db"; // part, all, db
     var _PROJECT_TYPE_			= "org"; // pjt, org
 
     var _COMM_STAGE_			 = "comm";
@@ -219,7 +219,8 @@
     document.writeln('<div id="wrap" ng-class="main.mainLayoutClass">');
     document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="main.navigationTemplateUrl"></header>');
     document.writeln('	<div id="container" ng-class="main.containerLayoutClass">');
-    document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
+//    document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
+    document.writeln('		<div class="leftCnt"><div class="gnbMenu"><div class="gnb-in" id="leftMenu"></div></div></div>');	// Left Menu 구조 변경 TEST용
     document.writeln('		<div class="rightCnt" id="{{main.rightCntId}}">');
     document.writeln('			<div ng-if="main.isLoginPage" class="titWrap" id="mainTop" ng-include="main.topTemplateUrl"></div>');
     document.writeln('			<div ui-view="mainBody"></div>');

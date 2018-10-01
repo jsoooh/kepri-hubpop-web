@@ -1,474 +1,633 @@
 			<!-- content -->
 			<div class="content">
+				
+				<!-- tab wrap -->
+				<div class="tabWrap type1 mb40">
+					<!-- Nav tabs -->
+					<div class="navWrap">
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation"><a href="#/tutorial/1" role="tab" data-toggle="tab">가상 서버 활용하기</a></li>
+							<li role="presentation" class="active"><a href="#/tutorial/2" role="tab" data-toggle="tab">SW 개발하기</a></li>
+						</ul>
+					</div>
+					<!-- //Nav tabs -->
+				</div>
+				<!-- tab wrap -->
+			
 				<div class="in">
 					<h2 class="h-tit2">PaaS 사용자 가이드</h2>
-
 					<h3 class="h-tit3" id="/tutorial/2?content=1">개요</h3>
+					<p class="tuto-txt">
+						<b>PaaS(Platform as a Service)</b>는 어플리케이션 런타임 환경과 백엔드 서비스 환경을 제공하는 서비스 입니다. <br /><br />
+						Java, Go, PHP 등 다양한 언어의 실행환경을 탑재하여 제공하며, MySQL, Redis 등 다양한 백엔드 서비스를 제공합니다.
+						사용자는 운영체제, 미들웨어에 대한 설치 및 운영에 대한 고민 없이 어플리케이션 배포만으로 안정적인 서비스 운영이 가능합니다.<br /><br />
 
-					<h5 class="h-tit5">PaaS(Platform as a Service)</h5>
-					<p class="tuto-txt">어플리케이션 런타임 환경과 백엔드 서비스 환경을 제공하는 서비스 입니다.</p><br>
-					<p class="tuto-txt">Java, Go, PHP 등 다양한 언어의 실행환경을 탑재하여 제공하며, MySQL, Redis 등 다양한 백엔드 서비스를 제공합니다.</p><br>
-					<p class="tuto-txt">사용자는 운영체제, 미들웨어에 대한 설치 및 운영에 대한 고민 없이 어플리케이션 배포만으로 안정적인 서비스 운영이 가능합니다.</p><br>
-					<p class="tuto-txt">본 사용자 가이드는 먼저 어플리케이션 데이터 저장을 위한 백엔드 서비스를 생성하고,</p><br>
-					<p class="tuto-txt">빌드팩 기반 어플리케이션과 Docker 기반의 어플리케이션 배포와 서비스 바인딩, 서비스 접근 절차를 소개합니다.</p><br>
+						본 사용자 가이드는 먼저 어플리케이션 데이터 저장을 위한 백엔드 서비스를 생성하고, 빌드팩 기반 어플리케이션과 Docker 기반의 어플리케이션 배포와 서비스 바인딩, 서비스 접근 절차를 소개합니다.<br /><br />
 
-					<h5 class="h-tit5">PaaS 서비스 사용 절차</h5>
-					<img src="images/paas/tutorial/app_process.png" alt=""><br><br><br>
-					<div class="titleTop"></div>
-					<p class="tuto-txt">PaaS 서비스를 사용하기 위해서 필요한 절차들이 있습니다.</p><br>
-					<p class="tuto-txt">앱 배포 전 서비스 생성과 일반 앱, Docker 이미지 앱 배포 방법과 앱 배포 후 생성한 서비스 바인딩까지의 절차에 대해서 안내하고 있습니다.</p><br>
+						<b>서비스 생성</b> <br />
+						어플리케이션 데이터를 저장 시키기 위한 백엔드 서비스 생성 방법에 대하여 2 가지 방법으로 나누어 소개하고 있습니다.  <br />
+						앱 배포(일반 앱), 앱 배포(docker 앱), 앱관리, 앱 런타임 관리, 서비스 Bind & Unbind <br />
+						빌드 팩 기반의 어플리케이션과 Docker 이미지 배포 와 서비스 바인딩에 대하여 소개하고 있습니다. <br />
 
-					<h5 class="h-tit5">표준 APP.개발 서비스</h5>
-					<p class="tuto-txt">어플리케이션 데이터를 저장 시키기 위한 백엔드 서비스 생성 방법에 대하여 소개하고 있습니다.</p><br>
-					<p class="tuto-txt">앱 배포(일반 앱), 앱 배포(Docker 앱), 앱관리, 앱 런타임 관리, 서비스 Bind & Unbind에 대하여 소개하고 있습니다.</p><br>
-					<p class="tuto-txt">빌드 팩 기반의 어플리케이션과 Docker 이미지 배포 와 서비스 바인딩에 대하여 소개하고 있습니다.</p><br>
+					</p>
+
+						<img src="images/paas/tutorial/image_101.JPG" alt=""> <br /><br />
+
+						<p class="tuto-txt">
+							PaaS 서비스를 사용하기 위해서 필요한 절차들이 있습니다. <br />
+							앱 배포 전 서비스 생성과 일반 앱, docker 이미지 앱, CLI를 통한 앱 배포 방법과 <br />
+							앱 배포 후 생성한 서비스 바인딩까지의 절차에 대해서 안내하고 있습니다. <br /><br />
+
+
+							<h5 class="h-tit5">서비스란?</h5>
+							사용자가 개발한 어플리케이션에는 <span style="color:orange">데이터베이스 및 세션을 사용</span>하는 환경의 어플리케이션이 있습니다. <br />
+							PaaS 에서는 그런 <span style="color:orange">데이터베이스 및 세션을 지원해 주기위해서 서비스를 제공</span>하고 있습니다. <br />
+							사용자는 어플리케이션에 알맞은 설정을 통해 PaaS 에서 지원해 주는 서비스와 연결 후 <br />
+							어플리케이션에서 필요한 <span style="color:orange">데이터베이스로 사용</span>할 수 있습니다. <br />
+							이번 순서에서는 서비스 생성 절차에 대해서 안내하고 있습니다. <br /><br />
+
+							(어플리케이션에서 서비스 연결 설정에 관한 가이드는 개발 가이드를 참고 하시기 바랍니다.) <br />
+						</p>
 
 					<h3 class="h-tit3" id="/tutorial/2?content=2">서비스 생성(서비스 메뉴)</h3>
 
-					<br>
-					<p class="tuto-txt">사용자가 개발한 어플리케이션에는 데이터베이스 및 세션을 사용하는 환경의 어플리케이션이 있습니다.</p><br>
-					<p class="tuto-txt">PaaS 에서는 그런 데이터베이스 및 세션을 지원해 주기위해서 서비스를 제공하고 있습니다.</p><br>
-					<p class="tuto-txt">사용자는 어플리케이션에 알맞은 설정을 통해 PaaS 에서 지원해 주는 서비스와 연결 후 어플리케이션에서 필요한 데이터베이스로 사용할 수 있습니다.</p><br>
-					<p class="tuto-txt">이번 순서에서는 서비스 생성 절차에 대해서 안내하고 있습니다.</p><br>
-					<p class="tuto-txt">(어플리케이션에서 서비스 연결 설정에 관한 가이드는 개발 가이드를 참고 하시기 바랍니다.)</p><br>
+					<h5 class="h-tit5">프로젝트 선택</h5>
+					<img src="images/paas/tutorial/pass1_prj_select.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 프로젝트 선택 <br />
+						① Hub-PoP 포탈에 로그인을 합니다. <br />
+						② Hub-PoP 프로젝트를 클릭합니다.
+					</p>
 
+					<h5 class="h-tit5">표준 APP 개발 이동</h5>
+					<img src="images/paas/tutorial/pass2_dashDB_select.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						2) 표준 APP 개발 -> 대쉬보드 페이지 이동 <br />
+						① Hub-PoP 로그인 후 프로젝트를 선택한 후 좌측메뉴에서 [표준 APP 개발]메뉴의 [대쉬보드]를 클릭합니다. <br />
+					</p>
+					
+					<h5 class="h-tit3" id="/tutorial/2?content=3">앱 배포(일반 앱 배포)</h5>
+					
+					<!-- 2018.09.03 sg0730 위치 이동  -->	
+					<h5 class="h-tit5">APP 생성 페이지 호출 - 이미지형</h5>
+					<img src="images/paas/tutorial/pass3_app_create_btn.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) APP 생성 페이지 호출 <br />
+						① 표준 APP 개발 대시보드 중앙에 위치한 [+] 버튼을 클릭하면 우측에 [APP 개발 서비스 추가]페이지가 나타납니다.
+					</p>
+					
+					
+					<h5 class="h-tit5">APP 생성 정보 입력</h5>
+					<img src="images/paas/tutorial/pass3_app_create_info_1.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						2) APP 생성 정보 입력 <br />
+						① APP 개발 서비스 추가 팝업에 정보들을 순서에 맞게 알맞게 입력합니다. <br />
+						&nbsp &nbsp <span style="color:red"> 앱 유형 선택(일반앱), 개발언어 선택, 앱 명 입력, 호스트 URL입력, APP Package 파일 업로드, WAS 선택</span><br />
+						&nbsp &nbsp <span style="color:red"> * APP Package 파일 업로드 시 파일 첨부는 필수가 아님.</span><br />
+						② 서비스 정보 입력이 완료 되면 <span style="color:red">[다음]</span> 버튼을 클릭하여 세부 설정 페이지로 이동합니다.
+					</p>
+
+					<h5 class="h-tit5">APP 생성 세부설정</h5>
+					<img src="images/paas/tutorial/pass3_app_create_info_2.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						3) APP 생성 세부설정(리소스 정보 설정) <br />
+						① <span style="color:red">[세부설정하기]</span> 버튼을 클릭하면 세부설정 가능한 슬라이드가 나타납니다.<br />
+						② 서비스 세부설정이 완료 되면 <span style="color:red">[배포]</span> 버튼을 클릭하여 APP을 배포합니다.
+					</p>
+					
+					
+					<h5 class="h-tit5">APP 생성 완료</h5>
+					<img src="images/paas/tutorial/pass4_app_complete2.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						4) APP 생성완료 <br />
+						① APP배포가 성공적으로 완료되면 앱 상세 페이지로 이동하게 됩니다. <br />
+						② APP 런타임 페이지에서 <span style="color:red">시작 상태</span>로  변하게 되면 APP이 실행된 것입니다.<br />
+					</p>
+					
+					<!-- 
+					
+					<h5 class="h-tit5">APP 생성 정보 입력 1</h5>
+					<img src="images/paas/tutorial/pass3_app_create_info_1.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						2) APP 생성 1 <br />
+						① APP 생성 추가 팝업에 정보들을 순서에 맞게 알맞게 입력합니다. <br />
+						&nbsp &nbsp <span style="color:red">① 빌드팩 선택 ② APP 이름 입력 ③ APP호스트 이름 입력</span><br />
+						② APP 패키지 업로드 등 서비스 정보입력이 완료 되면 <span style="color:red">④</span>[다음] 버튼을 클릭하여 앱 생성 다음 페이지로 이동합니다.
+					</p>
+					
+					<br />
+					<h5 class="h-tit5">APP 생성 정보 입력 2</h5>
+					<img src="images/paas/tutorial/pass3_app_create_info_1.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						3)APP 생성 2 <br />
+						① APP 생성시 필요한 리소스 정보를 세부 사항에 맞게 선택합니다. <br />
+						<span style="color:red">④</span>[배포] 버튼을 클릭하여 APP을 생성합니다.
+					</p>
+					
+					
+					
+					
+					<h5 class="h-tit5">APP 생성 완료</h5>
+					<img src="images/paas/tutorial/pass4_app_complete.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						4) APP 생성 완료 <br />
+						① 앱배포가 성공적으로 완료되면 앱 상세 페이지로 이동하게 됩니다. <br />
+						② APP 런타임 페이지에서 <span style="color:red">①</span>번과 같이 상태가 STARTED 상태로 변하게 되면 앱이 실행된 것입니다.<br />
+						③ APP 런타임 페이지 중앙에 위치한 <span style="color:red">②</span>번을 클릭하면 서비스 생성된 것을 확인할 수 있습니다.
+					</p>
+					
+					 -->
+					
+					
+					
+					
 					<h5 class="h-tit5">서비스 만들기 페이지</h5>
-					<img src="images/paas/tutorial/create_service_instance.png" alt="">
-					<ul class="tuto-ul">
-						<li>서비스 대시보드 하단에 위치한 [+]버튼을 클릭합니다.</li>
-						<li>우측에 [서비스 만들기]페이지가 나타납니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass5_service_create1.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 연결 서비스 만들기 페이지 호출 <br />
+						① 연결 서비스 대시보드 하단에 위치한 <span style="color:red">[+]</span> 버튼을 클릭하면 우측에 <span style="color:red">[서비스 만들기]</span>페이지가 나타납니다. <br />
+					</p>
 
 					<h5 class="h-tit5">서비스 정보 입력</h5>
-					<img src="images/paas/tutorial/create_service_instance_detail.png" alt="">
-					<ul class="tuto-ul">
-						<li>서비스 추가 팝업에 정보들을 순서에 맞게 알맞게 입력합니다.</li>
-						<li>서비스 선택, 서비스 이름 입력, 서비스 플랜 선택 순서로 진행합니다.</li>
-						<li>서비스 정보 입력이 완료 되면 [생성]버튼을 클릭하여 서비스를 생성합니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass5_service_create2.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						2) 서비스 생성 <br />
+						① 서비스 추가 팝업에 정보들을 순서에 맞게 알맞게 입력합니다. <br />
+						&nbsp &nbsp <span style="color:red">서비스 선택, 서비스 이름 입력, 서비스 플랜 선택 순서로 입력</span><br />
+						② 서비스 정보입력이 완료 되면 <span style="color:red">[생성]</span> 버튼을 클릭하여 서비스를 생성 합니다.
+					</p>
 
 					<h5 class="h-tit5">서비스 생성 완료</h5>
-					<img src="images/paas/tutorial/create_service_instance_success.png" alt="">
-					<ul class="tuto-ul">
-						<li>서비스가 성공적으로 생성된 것을 확인 할 수 있습니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass6_service_complet.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						3) 서비스 생성 완료 <br />
+						① 서비스가 생성되고 나면 <span style="color:red">연결 서비스 </span>항목과 같이 서비스가 성공적으로 생성된 것을 확인 할 수 있습니다. <br />
+					</p>
+					
+					
+					
+					
+					<h5 class="h-tit5"> APP과 DB 인스턴스 연결 </h5>
+					<img src="images/paas/tutorial/pass8_APP_DB_conn_1.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 연결 서비스 메뉴 호출 <br />
+						① 대시보드 하단에 위치한  DB정보의 <span style="color:red">...</span> 버튼을 클릭하면 확장메뉴에 <span style="color:red">[연결하기]</span>메뉴가 나타납니다. <br />
+					</p>
 
-					<h5 class="h-tit3" id="/tutorial/2?content=3">앱 배포(일반 앱 배포)</h5>
+					<!-- <h5 class="h-tit5">서비스 정보 입력</h5> -->
+					<img src="images/paas/tutorial/pass8_APP_DB_conn_2.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						2) 서비스 연결 확인 <br />
+						① 서비스를 연결하시겠습니까? 확인창이 호출되며, 확인 클릭시 APP을 <span style="color:red">재시작</span>하게 됩니다. <br />
+					</p>
 
-					<h5 class="h-tit5">앱 생성 페이지 호출 - 이미지형</h5>
-					<img src="images/paas/tutorial/create_app.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>서비스 대시보드 중앙에 위치한 [+]버튼을 클릭하면 우측에 [APP 개발 서비스 추가]페이지가 나타납니다.</li>
-					</ul>
 
+
+					<h5 class="h-tit5">APP과 DB 인스턴스 연결 완료</h5>
+					<img src="images/paas/tutorial/pass8_APP_DB_conn_3.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						3) 서비스 생성 완료 <br />
+						① 서비스가 생성되고 나면 서비스가 성공적으로 생성된 것을 확인 할 수 있습니다. <br />
+					</p>
+					
+					
+					
+<!-- 
 					<h5 class="h-tit5">앱 생성 페이지 호출 - 리스트형</h5>
-					<img src="images/paas/tutorial/create_app_list.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>[리스트] 버튼을 클릭합니다.</li>
-						<li>서비스 대시보드 우측에 위치한 [+]버튼을 클릭하면 우측에 [APP 개발 서비스 추가]페이지가 나타납니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/image_302.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 생성 페이지 호출 <br />
+						① <span style="color:red">①</span>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다. <br />
+						② <span style="color:red">②</span>[리스트] 버튼을 클릭합니다. <br />
+						③ 서비스 대시보드 우측에 위치한 <span style="color:red">③[+]</span>버튼을 클릭하면 [APP 개발 서비스 추가]페이지가 나타납니다. <br />
+					</p>
 
 					<h5 class="h-tit5">앱 생성 정보 입력</h5>
-					<img src="images/paas/tutorial/create_app_detail.png" alt="">
-					<ul class="tuto-ul">
-						<li>APP 개발 서비스 추가 팝업에 정보들을 순서에 맞게 알맞게 입력합니다.</li>
-						<li>앱 유형 선택(일반앱), 개발언어 선택, 앱 명 입력, 호스트 URL입력, APP Package 파일 업로드합니다.</li>
-						<li>앱 정보 입력이 완료 되면 [다음]버튼을 클릭하여 세부 설정 페이지로 이동합니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/image_303.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						2) 앱 생성 정보 입력 <br />
+						① APP 개발 서비스 추가 팝업에 정보들을 순서에 맞게 알맞게 입력합니다. <br />
+						&nbsp &nbsp <span style="color:red">① 앱 유형 선택(일반앱) ② 개발언어 선택 ③ 앱 명 입력 ④ 호스트 URL입력 ⑤ APP Package 파일 업로드 ⑥ WAS 선택</span><br />
+						② 서비스 정보 입력이 완료 되면 <span style="color:red">⑦</span>[다음] 버튼을 클릭하여 세부 설정 페이지로 이동합니다.
+					</p>
 
 					<h5 class="h-tit5">앱 생성 세부설정</h5>
-					<img src="images/paas/tutorial/create_app_detail_resources.png" alt="">
-					<ul class="tuto-ul">
-						<li>[세부설정하기]버튼을 클릭하면 세부설정 가능한 슬라이드가 나타납니다.</li>
-						<li>서비스 세부설정이 완료되면 [배포]버튼을 클릭하여 앱을 배포합니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/image_304.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						3) 앱 생성 세부설정(리소스 정보 설정) <br />
+						① <span style="color:red">①</span>[세부설정하기] 버튼을 클릭하면 <span style="color:red">②</span>번 항목과 같이 세부설정 가능한 슬라이드가 나타납니다.<br />
+						② 서비스 세부설정이 완료 되면 <span style="color:red">③</span>[배포] 버튼을 클릭하여 앱을 배포합니다.
+					</p>
 
 					<h5 class="h-tit5">앱 생성 완료</h5>
-					<img src="images/paas/tutorial/create_app_success.png" alt="">
-					<ul class="tuto-ul">
-						<li>앱 배포가 성공적으로 완료되면 앱 상세 페이지로 이동하게 됩니다.</li>
-						<li>APP 런타임 페이지에서 태가 STARTED 상태로 변하게 되면 앱이 실행된 것입니다.</li>
-						<li>APP 런타임 페이지 중앙에 위치한 URL을 클릭하면 앱이 생성된 것을 확인할 수 있습니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/image_305.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						4) 앱 생성완료 <br />
+						① 앱배포가 성공적으로 완료되면 앱 상세 페이지로 이동하게 됩니다. <br />
+						② APP 런타임 페이지에서 <span style="color:red">①</span>번과 같이 상태가 STARTED 상태로 변하게 되면 앱이 실행된 것입니다.<br />
+						③ APP 런타임 페이지 중앙에 위치한 <span style="color:red">②</span>번을 클릭하면 서비스 생성된 것을 확인할 수 있습니다.
+					</p>
+
+ 
+
 
 					<h3 class="h-tit3" id="/tutorial/2?content=4">앱 배포(Docker 이미지 배포)</h3>
 
-					<h5 class="h-tit5">Docker 앱 생성 페이지 호출 - 이미지형</h5>
-					<img src="images/paas/tutorial/create_docker_app.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>서비스 대시보드 중앙에 위치한 [+]버튼을 클릭하면 우측에 [APP 개발 서비스 추가]페이지가 나타납니다.</li>
-					</ul>
+					<h5 class="h-tit5">docker 앱 생성 페이지 호출 - 이미지형</h5>
+					<img src="images/paas/tutorial/image_401.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 생성 페이지 호출 <br />
+						① <span style="color:red">①</span>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다. <br />
+						② 서비스 대시보드 중앙에 위치한 <span style="color:red">②</span>번 버튼을 클릭하면 우측에 <span style="color:red">③</span>[APP 개발 서비스 추가]페이지가 나타납니다.
+					</p>
 
-					<h5 class="h-tit5">Docker 앱 생성 페이지 호출 - 리스트형</h5>
-					<img src="images/paas/tutorial/create_app_list.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>[리스트] 버튼을 클릭합니다.</li>
-						<li>서비스 대시보드 우측에 위치한 [+]버튼을 클릭하면 우측에 [APP 개발 서비스 추가]페이지가 나타납니다.</li>
-					</ul>
+					<h5 class="h-tit5">docker 앱 생성 페이지 호출 - 리스트형</h5>
+					<img src="images/paas/tutorial/image_402.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 생성 페이지 호출 <br />
+						① <span style="color:red">①</span>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다. <br />
+						② <span style="color:red">②</span>[리스트] 버튼을 클릭합니다. <br />
+						③ 서비스 대시보드 우측에 위치한 <span style="color:red">③[+]</span>버튼을 클릭하면 [APP 개발 서비스 추가]페이지가 나타납니다. <br />
+					</p>
 
-					<h5 class="h-tit5">Docker 앱 생성 정보 입력</h5>
-					<img src="images/paas/tutorial/create_docker_app_detail.png" alt="">
-					<ul class="tuto-ul">
-						<li>APP 개발 서비스 추가 팝업에 정보들을 순서에 맞게 알맞게 입력합니다.</li>
-						<li>앱 유형 선택(Docker), 앱 명 입력, 호스트 URL입력, Docker 이미지 정보를 입력합니다.</li>
-						<li>앱 정보 입력이 완료 되면 [다음]버튼을 클릭하여 세부 설정 페이지로 이동합니다.</li>
-					</ul>
+					<h5 class="h-tit5">docker 앱 생성 정보 입력</h5>
+					<img src="images/paas/tutorial/image_403.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						2) 앱 생성 정보 입력 <br />
+						① APP 개발 서비스 추가 팝업에 정보들을 순서에 맞게 알맞게 입력합니다. <br />
+						&nbsp &nbsp <span style="color:red">① 앱 유형 선택(docker) ② 앱 명 입력 ③ 호스트 URL입력 ④ docker 이미지 정보 입력</span><br />
+						② 서비스 정보 입력이 완료 되면 <span style="color:red">⑤</span>[다음] 버튼을 클릭하여 세부 설정 페이지로 이동합니다.
+					</p>
 
-					<h5 class="h-tit5">Docker 앱 생성 세부설정</h5>
-					<img src="images/paas/tutorial/create_app_detail_resources.png" alt="">
-					<ul class="tuto-ul">
-						<li>[세부설정하기]버튼을 클릭하면 세부설정 가능한 슬라이드가 나타납니다.</li>
-						<li>서비스 세부설정이 완료되면 [배포]버튼을 클릭하여 앱을 배포합니다.</li>
-					</ul>
+					<h5 class="h-tit5">docker 앱 생성 세부설정</h5>
+					<img src="images/paas/tutorial/image_404.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						3) 앱 생성 세부설정(리소스 정보 설정) <br />
+						① <span style="color:red">①</span>[세부설정하기] 버튼을 클릭하면 <span style="color:red">②</span>번 항목과 같이 세부설정 가능한 슬라이드가 나타납니다.<br />
+						② 서비스 세부설정이 완료 되면 <span style="color:red">③</span>[배포] 버튼을 클릭하여 앱을 배포합니다.
+					</p>
 
-					<h5 class="h-tit5">Docker 앱 생성 완료</h5>
-					<img src="images/paas/tutorial/create_docker_app_success.png" alt="">
-					<ul class="tuto-ul">
-						<li>앱 배포가 성공적으로 완료되면 앱 상세 페이지로 이동하게 됩니다.</li>
-						<li>APP 런타임 페이지에서 태가 STARTED 상태로 변하게 되면 앱이 실행된 것입니다.</li>
-						<li>APP 런타임 페이지 중앙에 위치한 URL을 클릭하면 앱이 생성된 것을 확인할 수 있습니다.</li>
-					</ul>
+					<h5 class="h-tit5">docker 앱 생성 완료</h5>
+					<img src="images/paas/tutorial/image_305.JPG" alt=""> <br /><br />
+					<p class="tuto-txt">
+						4) 앱 생성완료 <br />
+						① 앱배포가 성공적으로 완료되면 앱 상세 페이지로 이동하게 됩니다. <br />
+						② APP 런타임 페이지에서 <span style="color:red">①</span>번과 같이 상태가 STARTED 상태로 변하게 되면 앱이 실행된 것입니다.<br />
+						③ APP 런타임 페이지 중앙에 위치한 <span style="color:red">②</span>번을 클릭하면 서비스 생성된 것을 확인할 수 있습니다.
+					</p>
+-->
+
+
 
 					<h3 class="h-tit3" id="/tutorial/2?content=5">앱 관리</h3>
 
 					<h5 class="h-tit5">시작(이미지형)</h5>
-					<img src="images/paas/tutorial/app_management_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>[· · ·]버튼을 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_management_start.png" alt="">
-					<ul class="tuto-ul">
-						<li>[시작]버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.</li>
-						<li>[예]를 클릭하면 앱이 시작됩니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_start1.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 시작 <br />
+						① [대시보드]를 클릭해서 대시보드로 이동합니다. <br />
+						② <span style="color:red">...</span>을 클릭하면 <span style="color:red">확장메뉴</span> 영역이 나타납니다.<br />
+						③ <span style="color:red">시작</span>버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.<br />
+						④ <span style="color:red">[예]</span>를 클릭하면 앱이 시작됩니다.<br />
+					</p>
 
 					<h5 class="h-tit5">중지(이미지형)</h5>
-					<img src="images/paas/tutorial/app_management_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>[· · ·]버튼을 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_management_stop.png" alt="">
-					<ul class="tuto-ul">
-						<li>[중지]버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.</li>
-						<li>[예]를 클릭하면 앱이 중지됩니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_start2.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 중지 <br />
+						① [대시보드]를 클릭해서 대시보드로 이동합니다. <br />
+						② <span style="color:red">...</span>을 클릭하면 <span style="color:red">확장메뉴</span> 영역이 나타납니다.<br />
+						③ <span style="color:red">중지</span>버튼을 누르면 앱을 중지할 것인지 묻는 알림창이 나타납니다.<br />
+						④ <span style="color:red">[예]</span>를 클릭하면 앱이 시작됩니다.<br />
+					</p>
 
 					<h5 class="h-tit5">재시작(이미지형)</h5>
-					<img src="images/paas/tutorial/app_management_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>[· · ·]버튼을 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_management_restart.png" alt="">
-					<ul class="tuto-ul">
-						<li>[재시작]버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.</li>
-						<li>[예]를 클릭하면 앱이 재시작됩니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_start3.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 재시작 <br />
+						① [대시보드]를 클릭해서 대시보드로 이동합니다. <br />
+						② <span style="color:red">...</span>을 클릭하면 <span style="color:red">확장메뉴</span> 영역이 나타납니다.<br />
+						③ <span style="color:red">재시작</span>버튼을 누르면 앱을 재시작할 것인지 묻는 알림창이 나타납니다.<br />
+						④ <span style="color:red">[예]</span>를 클릭하면 앱이 시작됩니다.<br />
+					</p>
 
 					<h5 class="h-tit5">삭제(이미지형)</h5>
-					<img src="images/paas/tutorial/app_management_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>[· · ·]버튼을 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_management_delete.png" alt="">
-					<ul class="tuto-ul">
-						<li>[삭제]버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.</li>
-						<li>[예]를 클릭하면 앱이 삭제됩니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_start4.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 삭제 <br />
+						① [대시보드]를 클릭해서 대시보드로 이동합니다. <br />
+						② <span style="color:red">...</span>을 클릭하면 <span style="color:red">확장메뉴</span> 영역이 나타납니다.<br />
+						③ <span style="color:red">삭제</span>버튼을 누르면 앱을 삭제할 것인지 묻는 알림창이 나타납니다.<br />
+						④ <span style="color:red">[예]</span>를 클릭하면 앱이 시작됩니다.<br />
+					</p>
 
 					<h5 class="h-tit5">APP 이름변경 (이미지형)</h5>
-					<img src="images/paas/tutorial/app_management_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 대시보드]를 클릭해서 대시보드로 이동합니다.</li>
-						<li>[· · ·]버튼을 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_re_app_name2.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 이름변경 클릭 <br />
+						① [대시보드]를 클릭해서 대시보드로 이동합니다. <br />
+						② <span style="color:red">...</span>을 클릭하면 <span style="color:red">확장메뉴</span> 영역이 나타납니다.<br />
+						③ <span style="color:red">APP 이름변경</span>을 클릭하면 앱 이름 영역이 바뀝니다.<br />
+					</p>
 
-					<img src="images/paas/tutorial/app_management_rename.png" alt="">
-					<ul class="tuto-ul">
-						<li>[이름변경]버튼을 누르면 이름을 변경 할 수 있는 영역이 나타납니다.</li>
-						<li>[저장]버튼을 클릭하면 앱 이름 영역이 바뀝니다.</li>
-					</ul>
+					<h5 class="h-tit5">APP 이름변경 (이미지형)</h5>
+					<img src="images/paas/tutorial/pass_re_app_name1.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						2) 앱 이름변경 완료 <br />
+						① 새로운 앱 명을 입력합니다. <br />
+						② <span style="color:red">저장</span>버튼을 누르면 앱 명이 변경됩니다..<br />
+					</p>
 
 					<h5 class="h-tit5">시작(리스트형)</h5>
-					<img src="images/paas/tutorial/app_management_list_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[리스트] 버튼을 클릭합니다.</li>
-						<li>[선택]박스를 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_management_list_start.png" alt="">
-					<ul class="tuto-ul">
-						<li>[시작]버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.</li>
-						<li>[예]를 클릭하면 앱이 시작됩니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_list_start1.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 시작 <br />
+						① [리스트] 버튼을 클릭합니다. <br />
+						② 액션 칼럼의 [셀렉트 박스]를 클릭하면 확장 메뉴 영역이 나타납니다.<br />
+						③ <span style="color:red">[시작]</span>을 클릭하면 시작할 것인지 확인하는 창이 나타납니다.<br />
+						④ <span style="color:red">[예]</span>를 클릭하면 앱이 시작됩니다.<br />
+					</p>
 
 					<h5 class="h-tit5">중지(리스트형)</h5>
-					<img src="images/paas/tutorial/app_management_list_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[리스트] 버튼을 클릭합니다.</li>
-						<li>[선택]박스를 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_management_list_stop.png" alt="">
-					<ul class="tuto-ul">
-						<li>[중지]버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.</li>
-						<li>[예]를 클릭하면 앱이 중지됩니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_list_start2.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 중지 <br />
+						① [리스트] 버튼을 클릭합니다. <br />
+						② 액션 칼럼의 [셀렉트 박스]를 클릭하면 확장 메뉴 영역이 나타납니다.<br />
+						③ <span style="color:red">[중지]</span>을 클릭하면 중지할 것인지 확인하는 창이 나타납니다.<br />
+						④ <span style="color:red">[예]</span>를 클릭하면 앱이 중지됩니다.<br />
+					</p>
 
 					<h5 class="h-tit5">재시작(리스트형)</h5>
-					<img src="images/paas/tutorial/app_management_list_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[리스트] 버튼을 클릭합니다.</li>
-						<li>[선택]박스를 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_management_list_restart.png" alt="">
-					<ul class="tuto-ul">
-						<li>[재시작]버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.</li>
-						<li>[예]를 클릭하면 앱이 재시작됩니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_list_start3.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 재시작 <br />
+						① [리스트] 버튼을 클릭합니다. <br />
+						② 액션 칼럼의 [셀렉트 박스]를 클릭하면 확장 메뉴 영역이 나타납니다.<br />
+						③ <span style="color:red">[재시작]</span>을 클릭하면 재시작할 것인지 확인하는 창이 나타납니다.<br />
+						④ <span style="color:red">[예]</span>를 클릭하면 앱이 재시작됩니다.<br />
+					</p>
 
 					<h5 class="h-tit5">삭제(리스트형)</h5>
-					<img src="images/paas/tutorial/app_management_list_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[리스트] 버튼을 클릭합니다.</li>
-						<li>[선택]박스를 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_management_list_delete.png" alt="">
-					<ul class="tuto-ul">
-						<li>[삭제]버튼을 누르면 앱을 시작할 것인지 묻는 알림창이 나타납니다.</li>
-						<li>[예]를 클릭하면 앱이 삭제됩니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_list_start4.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 삭제 <br />
+						① [리스트] 버튼을 클릭합니다. <br />
+						② 액션 칼럼의 [셀렉트 박스]를 클릭하면 확장 메뉴 영역이 나타납니다.<br />
+						③ <span style="color:red">[삭제]</span>을 클릭하면 삭제할 것인지 확인하는 창이 나타납니다.<br />
+						④ <span style="color:red">[예]</span>를 클릭하면 앱이 삭제됩니다.<br />
+					</p>
 
 					<h5 class="h-tit5">APP 이름변경 (리스트형)</h5>
-					<img src="images/paas/tutorial/app_management_list_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>[리스트]버튼을 클릭합니다.</li>
-						<li>[선택]박스를 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_list_start5.png" alt=""> <br /><br />
+					<p class="tuto-txt">
+						1) 앱 이름변경 <br />
+						① [리스트] 버튼을 클릭합니다. <br />
+						② 액션 칼럼의 [셀렉트 박스]를 클릭하면 확장 메뉴 영역이 나타납니다.<br />
+						③ <span style="color:red">[이름변경]</span>을 클릭하면 이름변경 창이 나옵니다.<br />
+						④ <span style="color:red">앱명</span> 영역에 새로운 앱 명을 입력합니다.<br />
+						⑤ <span style="color:red">[수정] </span>버튼을 클릭하면 앱 이름이 변경됩니다.<br />
+					</p>
 
-					<img src="images/paas/tutorial/app_management_list_rename.png" alt="">
-					<ul class="tuto-ul">
-						<li>[이름변경]버튼을 누르면 이름을 변경 할 수 있는 영역이 나타납니다.</li>
-						<li>[수정]을 클릭하면 앱 이름 영역이 바뀝니다.</li>
-					</ul>
+
+
+
+
+
 
 					<h3 class="h-tit3" id="/tutorial/2?content=6">앱 런타임 관리</h3>
-
 					<h5 class="h-tit5">앱 런타임 페이지 이동</h5>
-					<img src="images/paas/tutorial/app_runtime_list.png" alt="">
-					<ul class="tuto-ul">
-						<li>서비스 대시보드에서 확인하고자 하는 앱 판넬을 클릭하여 APP 런타임 페이지로 이동합니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_runtime_1.png" alt=""><br /><br />
+					<p class="tuto-txt">1) APP 런타임 페이지 이동</p><br />
+					<p class="tuto-txt">① 서비스 대시보드에서 확인하고자 하는 앱 판넬을 클릭하여 APP 런타임 페이지로 이동합니다.</p>
 
-					<h5 class="h-tit5">앱 주요 정보</h5>
-					<img src="images/paas/tutorial/app_runtime_detail.png" alt=""><br />
-					<ul class="tuto-ul">
-						<li>생성된 APP 의 주요 정보 확인합니다.</li>
-						<li>해당 APP 의 CPU, Disk, Memory 사용량 표시합니다.</li>
-						<li>해당 APP 제어합니다.</li>
-						<li>[시작/중지]버튼을 클릭하면 앱을 시작하고 중지한다.</li>
-						<li>[새로고침]버튼을 클릭하면 페이지를 새로고침합니다.</li>
+					<h5 class="h-tit5">구조</h5>
+					<img src="images/paas/tutorial/pass_batch_1.png" alt="">
+					<ul class="tuto-ul">①
+						<li>생성된 APP 의 주요 정보와 해당 APP의 CPU, Disk, Memory 사용량 표시</li>
+						<li>해당 APP 의 인스턴스 재배포 기능</li>
 					</ul>
+					<ul class="tuto-ul">②
+						<li>이미지형, 리스트형으로 해당 APP 의 인스턴스 개수 및 상태(시작, 시작중, 실패) 를 표시</li>
+					</ul>
+					<ul class="tuto-ul">③
+						<li>해당 APP 의 라우트 확인 및 추가, 변경, 삭제 기능</li>
+						<li>해당 APP 의 이벤트 로그 확인</li>
+						<li>해당 APP 의 환경변수 확인 및 추가, 변경, 삭제 기능</li>
+						<li>해당 APP 의 인스턴스 별로 SSH 확인</li>
+					</ul><br />
+					<ul class="tuto-ul">④
+						<!-- <li><span style="color:red">서비스 Bind & Unbind 에서 다룹니다.</span></li> -->
+						<li>생성된 서비스를 해당 APP 과 바인딩 및 언바인드 하는 기능</li>
+						<li>서비스 정보 및 바인딩 정보 확인 기능</li>
+					</ul>
+					
+					
+					<h5 class="h-tit5">앱 주요 정보 및 인스턴스 재배포</h5>
+					<img src="images/paas/tutorial/pass_app1.png" alt=""><br />
+					<p class="tuto-txt">1) APP 주요 정보</p><br />
+					<p class="tuto-txt">
+						① 생성된 APP 의 주요 정보 확인<br />
+						② 해당 APP 의 CPU, Disk, Memory 사용량 표시<br />
+						③ 해당 APP 제어
+					</p>
+					<ul class="tuto-ul">
+						<li>시작/중지 버튼 : 앱을 시작하고 중지한다.</li>
+						<li>새로고침 버튼 : 앱을 새로고침 한다.</li>
+						<img src="images/paas/tutorial/pass_app2.png" alt=""><br /><br /><br />
 
-					<img src="images/paas/tutorial/app_runtime_detail_control.png" alt="">
-					<ul class="tuto-ul">
-						<li>[재시작]버튼을 클릭하면 앱이 재시작됩니다.</li>
-						<li>[삭제]버튼을 클릭하면 앱이 삭제됩니다.</li>
-						<li>[이름변경]버튼을 클릭하면 앱의 이름을 변경 할 수 있습니다.</li>
-					</ul>
+						<li>실행 설정 버튼</li>
+						<img src="images/paas/tutorial/pass_app3.png" alt="">
+						<img src="images/paas/tutorial/pass_app4.png" alt="" align="right" style="width:500px; height:230px; margin-top: 70px; margin-bottom: 20px;">
+						<br /><br />
+						<p class="tuto-txt">
+							- 재시작 : 앱을 restart 한다.<br />
+							- 삭제 : 앱을 삭제한다.<br />
+							- 이름변경 : 앱의 이름을 변경한다.
+						</p>
+					</ul><br /><br />
+					<p class="tuto-txt">2) 인스턴스 재배포 Layer 창 호출</p><br />
 
-					<h5 class="h-tit5">인스턴스 재배포</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_redeploy.png" alt="">
-					<ul class="tuto-ul">
-						<li>앱 상세 정보 하단에 위치한 [재배포]버튼을 클릭합니다.</li>
-						<li>우측에 [인스턴스 재배포]페이지가 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_redeploy_resources.png" alt="">
-					<ul class="tuto-ul">
-						<li>[리소스 변경하기]버튼을 클릭하면 리소스를 변경할 수 있는 창이 나타납니다.</li>
-						<li>슬라이드 바를 움직여 리소스를 변경합니다.</li>
-						<li>슬라이드 바를 움직이는 대로 배포할 리소스 정보가 변경됩니다.</li>
-						<li>리소스를 조절한 후 [재배포]버튼을 클릭합니다.</li>
-						<li>앱 런타임에서 변경된 리소스를 확인합니다.</li>
-					</ul>
+					<p class="tuto-txt">
+						<img src="images/paas/tutorial/pass_app5.png" alt=""><br /><br />
+						① App 상세 정보 하단에 위치한 <span style="color:red">[ 재배포 ] </span>버튼을 클릭하면 우측에 <span style="color:red">[인스턴스 재배포] </span>Layer 창이 나타납니다.<br />
+						<img src="images/paas/tutorial/pass_app25.png" alt=""><br /><br />
+						② App 상세 정보 하단에 위치한 <span style="color:red">[리소스 변경하기] </span>버튼을 클릭하면 <span style="color:red">리소스를 변경</span>할 수 있는 창이 나타납니다. 슬라이드 바를 움직여 리소스를 변경합니다.<br />
+						③ 슬라이드 바를 움직이는 대로 재배포할 <span style="color:red">리소스 정보</span>가 변경됩니다.<br />
+						④ 리소스를 조절한 후 <span style="color:red">[재배포] </span>버튼을 클릭합니다.<br />
+						⑤ APP 런타임에서 변경된 리소스를 확인합니다.<br />
+					</p><br />
 
 					<h5 class="h-tit5">인스턴스 상태 확인(이미지형)</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_instances.png" alt="">
-					<ul class="tuto-ul">
-						<li>APP 런타임으로 이동하면 인스턴스 상태는 기본적으로 이미지형으로 보여줍니다.</li>
-						<li>"STARTED"는 인스턴스가 정상 작동중인 상태입니다.</li>
-						<li>"STARTING"는 인스턴스가 시작되고 있는 상태입니다.</li>
-						<li>"FAILED"는 인스턴스가 오류 난 상태입니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_app8.png" alt=""><br /><br />
+					<p class="tuto-txt">1) 인스턴스 상태 확인(이미지형)</p><br />
+					<p class="tuto-txt">
+						① APP 런타임으로 이동하면 기본적으로 인스턴스 상태는 <span style="color:red">이미지형</span>을 보여줍니다.<br />
+						② 정의된 인스턴스 상태입니다.<br />
+						<img src="images/paas/tutorial/pass_app9.png" alt=""><br />
+						- 시작 : 인스턴스가 정상작동 중인 상태<br />
+						- 시작중 : 인스턴스가 시작되고 있는 상태<br />
+						- 실패 : 인스턴스가 오류 난 상태<br /><br />
 
-					<img src="images/paas/tutorial/app_runtime_detail_instance_info.png" alt="">
-					<ul class="tuto-ul">
-						<li>인스턴스 상태를 확인할 수 있습니다.</li>
-						<li>해당 APP 의 인스턴스 총 수를 확인할 수 있습니다.</li>
-						<li>인스턴스의 고유 번호를 확인할 수 있습니다.</li>
-						<li>인스턴스의 CPU, 디스크, 메모리 사용량을 확인할 수 있습니다.</li>
-						<li>인스턴스 재시작 할 수 있습니다.</li>
-					</ul>
+						③ 인스턴스 상태를 확인할 수 있습니다.<br />
+						<img src="images/paas/tutorial/pass_app10.png" alt=""><br /><br />
+						- <span style="color:red">①</span>해당 APP 의 인스턴스 총 개수<br />
+						- <span style="color:red">②</span>인스턴스의 고유 번호<br />
+						- <span style="color:red">③</span>인스턴스의 CPU, 디스크, 메모리 사용량<br />
+						- <span style="color:red">④</span>인스턴스 재시작<br />
+					</p><br />
 
 					<h5 class="h-tit5">인스턴스 상태 확인(리스트형)</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_instance_info_list.png" alt="">
-					<ul class="tuto-ul">
-						<li>[리스트형]버튼을 클릭하면 리스트형 인스턴스 상태를 보여줍니다.</li>
-					</ul>
-
-					<h5 class="h-tit5">모니터링</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_monitoring.png" alt="">
-					<ul class="tuto-ul">
-						<li>해당 앱의 CPU, Memory, Disk 모니터링 상태를 보여줍니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_monitoring_full_screen.png" alt="">
-					<ul class="tuto-ul">
-						<li>[확대]버튼을 클릭하면 모니터링 탭이 확대됨을 확인할 수 있습니다.</li>
-						<li>[축소]버튼을 클릭하면 모니터링 탭이 축소됨을 확인할 수 있습니다.</li>
-					</ul>
-
-					<h5 class="h-tit5">라우트</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_add_route.png" alt="">
-					<ul class="tuto-ul">
-						<li>라우트 탭에서 [+]버튼을 클릭합니다.</li>
-						<li>라우트 추가 팝업이 뜨고 호스트 명에 값을 입력합니다.</li>
-						<li>[확인]버튼을 클릭하면 추가가 되며 로딩바가 표시됩니다.</li>
-						<li>새로고침이 끝난 후 추가된 라우트를 확인합니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_route.png" alt="">
-					<ul class="tuto-ul">
-						<li>[확대]버튼을 클릭하면 라우트 탭이 확대됨을 확인할 수 있습니다.</li>
-						<li>[축소]버튼을 클릭하면 라우트 탭이 축소됨을 확인할 수 있습니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_delete_route.png" alt="">
-					<ul class="tuto-ul">
-						<li>[휴지통]버튼을 클릭하면 삭제할 것인지 확인하는 창이 나타납니다.</li>
-						<li>[예]버튼을 클릭하면 라우트가 삭제됩니다.</li>
-					</ul>
-
-					<h5 class="h-tit5">이벤트 로그</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_events.png" alt="">
-					<ul class="tuto-ul">
-						<li>해당 앱에서 어떤 이벤트가 일어났는지 확인할 수 있습니다.</li>
-						<li>[확대]버튼을 클릭하면 이벤트 로그가 확대됨을 확인할 수 있습니다.</li>
-						<li>[축소]버튼을 클릭하면 이벤트 로그가 축소됨을 확인할 수 있습니다.</li>
-					</ul>
-
-					<h5 class="h-tit5">환경변수</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_add_env.png" alt="">
-					<ul class="tuto-ul">
-						<li>환경변수 탭에서 [+]버튼을 클릭합니다.</li>
-						<li>환경변수 추가 팝업이 뜨고 변수 이름과 변수 값에 적절한 값을 입력합니다.</li>
-						<li>[확인]버튼을 클릭하면 추가가 되며 로딩바가 표시됩니다.</li>
-						<li>새로고침이 끝난 후 추가된 환경변수를 확인합니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_envs.png" alt="">
-					<ul class="tuto-ul">
-						<li>[확대]버튼을 클릭하면 환경변수 탭이 확대됨을 확인할 수 있습니다.</li>
-						<li>[축소]버튼을 클릭하면 환경변수 탭이 축소됨을 확인할 수 있습니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_update_env.png" alt="">
-					<ul class="tuto-ul">
-						<li>[연필]버튼을 클릭하면 수정할 수 있는 팝업 창이 나타납니다.</li>
-						<li>변수 값에 수정한 값을 입력 후 [확인] 버튼을 클릭하면 환경변수가 수정됩니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_delete_env.png" alt="">
-					<ul class="tuto-ul">
-						<li>[휴지통]버튼을 클릭하면 삭제할 것인지 확인하는 창이 나타납니다.</li>
-						<li>[예]버튼을 클릭하면 환경변수가 삭제됩니다.</li>
-					</ul>
-
-					<h5 class="h-tit5">SSH</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_ssh_instance.png" alt="">
-					<ul class="tuto-ul">
-						<li>해당 앱의 인스턴스 별 SSH 접속하여 관련 내용을 확인할 수 있습니다.</li>
-						<li>기본 값은 "선택 없음"으로 되어 있습니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_ssh.png" alt="">
-					<ul class="tuto-ul">
-						<li>[확대]버튼을 클릭하면 SSH 탭이 확대됨을 확인할 수 있습니다.</li>
-						<li>[축소]버튼을 클릭하면 SSH 탭이 축소됨을 확인할 수 있습니다.</li>
-					</ul>
-
+					<img src="images/paas/tutorial/pass_app11.png" alt=""><br /><br />
+					<p class="tuto-txt">1) 인스턴스 상태 확인(리스트형)</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">리스트형 탭</span>을 클릭하면 리스트형 인스턴스 상태를 보여줍니다.<br />
+					</p><br />
+					
+					
+					
+					
+					
 					<h3 class="h-tit3" id="/tutorial/2?content=7">서비스 Bind & Unbind</h3>
-
 					<h5 class="h-tit5">연결 서비스 관리 리스트</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_service_instances.png" alt="">
-					<ul class="tuto-ul">
-						<li>서비스 대시보드에서 생성한 서비스의 총 개수 출력합니다.</li>
-						<li>서비스 대시보드에서 생성한 서비스들의 이름과 이미지 출력합니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_app19.png" alt=""><br /><br />
+					<p class="tuto-txt">
+						① 서비스 대시보드에서 생성한 서비스의 총 개수 출력 및 서비스 대시보드에서 생성한 서비스들의 이름과 이미지 출력.
+					</p><br /><br />
 
 					<h5 class="h-tit5">서비스 연결</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_service_instance_options.png" alt="">
-					<ul class="tuto-ul">
-						<li>서비스 대시보드에서 생성한 서비스가 해당 앱과 연결이 안 되어있을 경우 이미지가 희미하게 보입니다.</li>
-						<li>[· · ·]버튼을 클릭하면 선택 옵션이 나타납니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_service_instance_info.png" alt="">
-					<ul class="tuto-ul">
-						<li>서비스 대시보드에서 생성된 해당 서비스의 정보를 보여줍니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_bind_service_instance.png" alt="">
-					<ul class="tuto-ul">
-						<li>서비스 대시보드에서 생성한 서비스가 해당 APP 과 연결이 안 되어있을 경우 이미지가 희미하게 보입니다.</li>
-						<li>[연결하기]버튼을 클릭하면 팝업 창이 나타나며 서비스를 바인딩할 것인지 묻습니다.</li>
-						<li>[예]버튼을 클릭하면 서비스가 해당 앱과 바인딩 됩니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_service_instance_bound.png" alt="">
-					<ul class="tuto-ul">
-						<li>앞서 바인딩한 서비스를 보면 해당 서비스의 이미지가 선명하게 보이는 것을 확인할 수 있습니다.</li>
-					</ul>
-
-					<img src="images/paas/tutorial/app_runtime_detail_service_instance_bound_info.png" alt="">
-					<ul class="tuto-ul">
-						<li>[서비스 정보보기]버튼을 클릭하면 팝업 창이 나타납니다.</li>
-						<li>서비스와 앱 간 연결된 정보가 보입니다.</li>
-					</ul>
+					
+					<!-- 
+					<img src="images/paas/tutorial/image_602.jpg" alt=""><br /><br />
+					<p class="tuto-txt">
+						① 서비스 대시보드에서 생성한 서비스가 해당 APP 과 연결이 안 되어있을 경우 이미지가 희미하게 보입니다.<br />
+						② <span style="color:red">①</span>버튼을 클릭하면 <span style="color:red">②</span>번 영역이 나타납니다.
+					</p><br /><br />
+					 -->
+					
+					
+					<img src="images/paas/tutorial/pass_app21.png" alt=""><br /><br />
+					<p class="tuto-txt">
+						① 실행 설정 영역에서 <span style="color:red">연결하기</span>버튼을 클릭하면 <span style="color:red">연결 팝업 창</span> 이 나타나며 서비스를 바인딩할 것인지 묻습니다.<br />
+						③ <span style="color:red">확인</span>버튼을 클릭하면 서비스가 해당 APP 과 바인딩 됩니다.
+					</p><br /><br />
+					<img src="images/paas/tutorial/pass_app22.png" alt=""><br /><br />
+					<p class="tuto-txt">
+						① 앞서 바인딩한 서비스를 보면 해당 서비스의 이미지가 선명하게 보이는 것을 확인할 수 있습니다.<br />
+						② <span style="color:red">서비스 정보보기</span>버튼을 클릭해서 서비스 팝업 정보 창을 보면 <span style="color:red">연결 앱 수가 1로 증가</span>한 것을 확인할 수 있습니다.<br />
+						③ <span style="color:red">연결정보</span>버튼을 클릭하면 <span style="color:red">연결 정보 팝업 창</span>이 나타납니다. 서비스와 APP 간 연결된 정보가 보입니다.<br />
+					</p><br /><br />
+					
+					
 
 					<h5 class="h-tit5">서비스 연결 해제</h5>
-					<img src="images/paas/tutorial/app_runtime_detail_unbind_service_instance.png" alt="">
-					<ul class="tuto-ul">
-						<li>[연결하기]버튼을 클릭하면 바인딩을 해제할 지 확인하는 창이 나타납니다.</li>
-						<li>[예]버튼을 클릭하면 바인딩이 해제되며 이미지가 다시 희미해진 것을 확인할 수 있습니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/pass_app23.png" alt=""><br /><br />
+					<p class="tuto-txt">
+						① <span style="color:red">연결 해제</span>버튼을 클릭하면 바인딩을 해제할 지 확인하는 창이 나타납니다.<br />
+						② <span style="color:red">서비스 해제 팝업 창</span>이 나타나며  <span style="color:red">[ 예 ] </span>버튼을 클릭하면 바인딩을 해제 할 수 있습니다..<br />
+					</p><br /><br />
+					
+					
+					
+					
+					
+					<h5 class="h-tit5">환경변수</h5>
+					<img src="images/paas/tutorial/image_516.jpg" alt=""><br /><br />
+					<p class="tuto-txt">1) 환경변수 추가</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">①</span>[ + ] 버튼을 클릭합니다.<br />
+						② 환경변수 추가 팝업이 뜨고 <span style="color:red">②</span>변수 이름과 <span style="color:red">③</span>변수 값에 적절한 값을 입력합니다.<br />
+						③ <span style="color:red">④</span>[ 확인 ] 버튼을 클릭하면 추가가 되며 로딩바가 표시됩니다.<br />
+						④ 새로고침이 끝난 후 추가된 환경변수를 확인합니다.
+					</p><br /><br />
+					<img src="images/paas/tutorial/image_517.jpg" alt=""><br /><br />
+					<p class="tuto-txt">2) 환경변수 확대 및 축소</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">①</span>[ 확대 ] 버튼을 클릭하면 라우트가 확대됨을 확인할 수 있습니다.<br />
+						② <span style="color:red">②</span>[ 축소 ] 버튼을 클릭하면 라우트가 축소됨을 확인할 수 있습니다.
+					</p><br /><br />
+					<img src="images/paas/tutorial/image_518.jpg" alt=""><br /><br />
+					<p class="tuto-txt">3) 환경변수 수정</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">①</span>[ 연필 ] 버튼을 클릭하면 수정할 수 있는 팝업 창이 나타납니다.<br />
+						② <span style="color:red">②</span>변수 값에 수정한 값을 입력 후 <span style="color:red">③</span>[ 확인 ] 버튼을 클릭하면 환경변수가 수정됩니다.
+					</p><br />
+					<img src="images/paas/tutorial/image_519.jpg" alt=""><br /><br />
+					<p class="tuto-txt">4) 환경변수 삭제</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">①</span>[ 휴지통 ] 버튼을 클릭하면 삭제할 것인지 확인하는 창이 나타납니다.<br />
+						② <span style="color:red">②</span>[ 예 ] 버튼을 클릭하면 환경변수가 삭제됩니다.
+					</p><br />
+					
+					
+					
+					
+					<h5 class="h-tit5">SSH</h5>
+					<img src="images/paas/tutorial/image_520.jpg" alt=""><br /><br />
+					<p class="tuto-txt">1) SSH</p><br />
+					<p class="tuto-txt">
+						① 해당 앱의 인스턴스 별 SSH 접속하여 관련 내용을 확인할 수 있습니다. 기본 값은‘선택 없음' 으로 되어 있습니다.<br />
+					</p><br /><br />
+					<img src="images/paas/tutorial/image_521.jpg" alt=""><br /><br />
+					<p class="tuto-txt">2) SSH 확대 및 축소</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">①</span>[ 확대 ] 버튼을 클릭하면 SSH 가 확대됨을 확인할 수 있습니다.<br />
+						② <span style="color:red">②</span>[ 축소 ] 버튼을 클릭하면 SSH 가 축소됨을 확인할 수 있습니다.
+					</p><br /><br />
+					
+					
+					
+					
+					
+					
+					
+					
+					<h5 class="h-tit5">라우트 추가</h5>
+					<img src="images/paas/tutorial/pass_app24.png" alt=""><br /><br />
+					<p class="tuto-txt">1) 라우트 추가</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">[ + ]</span> 버튼을 클릭합니다.<br />
+						② 라우트 추가 팝업이 뜨고 <span style="color:red">호스트 명</span> 값을 입력합니다.<br />
+						③ <span style="color:red">[ 확인 ] </span>버튼을 클릭하면 추가가 되며 로딩바가 표시됩니다.<br />
+						④ 새로고침이 끝난 후 추가된 라우트를 확인합니다.<br />
+					</p><br /><br />
+					<img src="images/paas/tutorial/pass_app16.png" alt=""><br /><br />
+					<p class="tuto-txt">2) 라우트 확대 및 축소</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">[ 확대 ] </span>버튼을 클릭하면 라우트가 확대됨을 확인할 수 있습니다.<br />
+						② <span style="color:red">[ 축소 ]</span> 버튼을 클릭하면 라우트가 축소됨을 확인할 수 있습니다.
+					</p><br /><br />
+					<img src="images/paas/tutorial/pass_app17.png" alt=""><br /><br />
+					<p class="tuto-txt">3) 라우트 삭제</p><br />
+					<p class="tuto-txt">
+						① <span style="color:red">[ 휴지통 ] </span>버튼을 클릭하면 삭제할 것인지 확인하는 창이 나타납니다.<br />
+						② <span style="color:red">[ 예 ] </span>버튼을 클릭하면 라우트가 삭제됩니다.
+					</p><br />
+					
+					
+					
+					
 
+					<h5 class="h-tit5">이벤트 로그</h5>
+					<img src="images/paas/tutorial/image_515.jpg" alt=""><br /><br />
+					<p class="tuto-txt">1) 이벤트 로그</p><br />
+					<p class="tuto-txt">
+						① 해당 앱에서 어떤 이벤트가 일어났는지 로그로 확인할 수 있습니다.
+						② <span style="color:red">①</span>[ 확대 ] 버튼을 클릭하면 이벤트 로그가 확대됨을 확인할 수 있습니다.<br />
+						③ <span style="color:red">②</span>[ 축소 ] 버튼을 클릭하면 이벤트 로그가 축소됨을 확인할 수 있습니다.
+					</p><br />
+
+					
 					<h3 class="h-tit3" id="/tutorial/2?content=8">앱 로깅</h3>
-					<img src="images/paas/tutorial/app_before_logging.png" alt="">
-					<ul class="tuto-ul">
-						<li>APP 런타임 화면에서 APP 로깅을 클릭합니다.</li>
-					</ul>
+					<img src="images/paas/tutorial/image_701.jpg" alt=""><br /><br />
+					<p class="tuto-txt">
+						① APP 런타임 화면에서 <span style="color:red">①</span>APP 로깅을 클릭하면 앱 별 로그를 확인할 수 있습니다.<br />
+					</p><br /><br />
 
-					<img src="images/paas/tutorial/app_after_logging.png" alt="">
-					<ul class="tuto-ul">
-						<li>앱 별 로그를 확인할 수 있습니다.</li>
-					</ul>
+
+
+
 				</div>
-
 				<!-- tutorial menu -->
 				<div class="sideMenu">
 					<dl>
@@ -478,14 +637,18 @@
 								<li><a href="#/tutorial/2?content=1" class="on content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">개요</a></li>
 								<li><a href="#/tutorial/2?content=2" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">서비스 생성(서비스 메뉴)</a></li><!-- selected class "on" -->
 								<li><a href="#/tutorial/2?content=3" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">앱 배포(일반 앱 배포)</a></li>
-								<li><a href="#/tutorial/2?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">앱 배포(Docker 이미지 배포)</a></li>
+								<!-- <li><a href="#/tutorial/2?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">앱 배포(Docker 이미지 배포)</a></li> -->
 								<li><a href="#/tutorial/2?content=5" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">앱 관리</a></li>
 								<li><a href="#/tutorial/2?content=6" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">앱 런타임 관리</a></li>
 								<li><a href="#/tutorial/2?content=7" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">서비스 Bind & Unbind</a></li>
 								<li><a href="#/tutorial/2?content=8" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">앱 로깅</a></li>
+<!-- 								<li><a href="">가상 서버 만들기</a></li> -->
 							</ul>
 						</dd>
 					</dl>
+					<div class="btn_top_area">
+						<a href="#" class="btn_top"><span class="txt">Top</span></a>
+					</div>
 				</div>
 				<!-- //tutorial menu -->
 			</div>

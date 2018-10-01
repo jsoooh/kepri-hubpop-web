@@ -346,6 +346,7 @@ angular.module('common.controllers', [])
         // PortalOrg 변경 처리
         mc.changePortalOrg = function(portalOrg) {
             mc.setPortalOrg(portalOrg);
+            mc.listMenu();
             if (angular.isObject(portalOrg) && portalOrg.id) {
                 mc.asideClose();
                 $scope.$broadcast('portalOrgChanged', mc.sltPortalOrg);
@@ -364,6 +365,7 @@ angular.module('common.controllers', [])
         // Organization 값 셋팅
         mc.setPortalOrg = function(portalOrg) {
             if (angular.isObject(portalOrg) && portalOrg.id) {
+                mc.desplayDbMenuList(portalOrg.myRoleName);
                 common.setPortalOrgKey(portalOrg.id);
                 mc.sltPortalOrg = portalOrg;
                 mc.sltPortalOrgId = portalOrg.id;
@@ -371,6 +373,7 @@ angular.module('common.controllers', [])
                 mc.setUserTenant(common.objectsFindCopyByField(mc.userTenants, "teamCode", mc.sltPortalOrg.orgId));
                 mc.loadSltOrganization();
             } else {
+                mc.desplayDbMenuList("none");
                 if (mc.sltPortalOrgId) {
                     common.clearPortalOrgKey();
                     mc.sltPortalOrg = {};
@@ -1130,10 +1133,31 @@ angular.module('common.controllers', [])
             $(selectors).stop().animate({'right' : '-360px'}, 400);
         };
 
+        //Left Menu 구조 생성
+        mc.setDbMenuList = function() {
+            mc.dbMenuList = [];
+            var response = portal.menu.getMenuList();
+            if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
+                mc.dbMenuList = response.data.items;
+            }
+        };
+
+        //url정보 체크하여 메뉴 위치 확인
+        mc.desplayDbMenuList = function(myRoleName) {
+            portal.menu.setListMenu(mc.dbMenuList, myRoleName);
+        };
+
+        //url정보 체크하여 메뉴 위치 확인
+        mc.urlCheck = function(){
+            portal.menu.urlCheck();
+        };
+
         mc.resetInit();
         mc.setMainLanguage(common.getLanguageKey());
         mc.sltProjectId = common.getProjectKey();
         mc.sltPortalOrgId = common.getPortalOrgKey();
+
+        mc.setDbMenuList();
 
         // PassRegion
         mc.syncSetPassRegionSet();
@@ -1170,6 +1194,31 @@ angular.module('common.controllers', [])
 
         // 로그인 여부 체크
         if (!common.isAuthenticated()) {
+
+            // TODO : SSO 연계 추가 작성
+            if (common.getPgsecuid()) {
+
+/*
+                var decodeData = portal.sso.decode();
+                var credentials = {
+                    email : decodeData.id,
+                    password : decodeData.id,
+                    redirect : 'console',
+                    isSso : true
+                };
+
+                user.authenticate(credentials);
+
+                var params = {};
+                params.email = decodeData.id;
+                params.name = decodeData.name;
+                params.password = decodeData.id;
+
+                portal.sso.createProjectResponsiblePersonSso(params);
+*/
+
+            }
+
             $scope.main.isLoginPage = false;
             $scope.main.mainLayoutClass = "one_page";
 
@@ -1270,7 +1319,8 @@ angular.module('common.controllers', [])
                 $scope.main.navigationTemplateUrl = CONSTANTS.layoutTemplateUrl.navigation + _VERSION_TAIL_;
             }
 
-            if (_MENU_TYPE_ == 'part') {
+            if (_MENU_TYPE_ == 'db') {
+            } else if (_MENU_TYPE_ == 'part') {
                 $scope.main.setLeftMunuParams();
             } else {
                 $scope.main.setLeftAllMunuParams();
@@ -1288,48 +1338,50 @@ angular.module('common.controllers', [])
             }
 
             $scope.main.rightCntId = 'not-tutorial';
-            if ($scope.main.pageStage == 'tutorial') {
-                $scope.main.containerLayoutClass ="fixed";
-                $scope.main.leftMenuLayoutClass = "leftMenu type2";
-                $scope.main.rightCntId = 'tutorial';
-                $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_+"/menu/tutorialLeftMenu.html"+_VERSION_TAIL_; // leftCnt, leftMenu
-            } else if ($scope.main.pageStage == 'tutorial') {
-                $scope.main.containerLayoutClass = "fixed";
-                $scope.main.leftMenuLayoutClass = "leftMenu";
-                if ($scope.main.commLeftFav.favIconMenuClass == "on") {
-                    $scope.main.leftMenuLayoutClass = "leftMenu pageLoad on";
-                }
-                $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_ + "/menu/partLeftMenu.html" + _VERSION_TAIL_; // leftCnt, leftMenu
+            if (_MENU_TYPE_ == 'db') {
+                $scope.main.urlCheck();
             } else {
-                if (_MENU_TYPE_ == 'part') {
-                    if ($scope.main.pageStage == 'comm') {
+                if ($scope.main.pageStage == 'tutorial') {
+                    $scope.main.containerLayoutClass ="fixed";
+                    $scope.main.rightCntId = 'tutorial';
+                    $scope.main.leftMenuLayoutClass = "leftMenu type2";
+                    if ($scope.main.commLeftFav.favIconMenuClass == "on") {
+                        $scope.main.leftMenuLayoutClass = "leftMenu type2 pageLoad on";
+                    }
+                    $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_+"/menu/tutorialLeftMenu.html"+_VERSION_TAIL_; // leftCnt, leftMenu
+                } else {
+                    if (_MENU_TYPE_ == 'part') {
+                        if ($scope.main.pageStage == 'comm') {
+                            $scope.main.containerLayoutClass = "";
+                            $scope.main.leftMenuLayoutClass = "leftCnt"; // leftCnt, leftMenu
+                            if (common.isLeftMenuShow()) {
+                                $scope.main.leftMenuLayoutClass += " on";
+                            }
+                            $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_ + "/menu/commLeftMenu.html" + _VERSION_TAIL_; // leftCnt, leftMenu
+                        } else {
+                            $scope.main.containerLayoutClass = "fixed";
+                            $scope.main.leftMenuLayoutClass = "leftMenu";
+                            if ($scope.main.commLeftFav.favIconMenuClass == "on") {
+                                $scope.main.leftMenuLayoutClass = "leftMenu pageLoad on";
+                            }
+                            $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_ + "/menu/partLeftMenu.html" + _VERSION_TAIL_; // leftCnt, leftMenu
+                        }
+                    } else {
                         $scope.main.containerLayoutClass = "";
-                        $scope.main.leftMenuLayoutClass = "leftCnt"; // leftCnt, leftMenu
+                        $scope.main.leftMenuLayoutClass = "leftCnt depth-3"; // leftCnt, leftMenu
                         if (common.isLeftMenuShow()) {
                             $scope.main.leftMenuLayoutClass += " on";
                         }
-                        $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_ + "/menu/commLeftMenu.html" + _VERSION_TAIL_; // leftCnt, leftMenu
-                    } else {
-                        $scope.main.containerLayoutClass = "fixed";
-                        $scope.main.leftMenuLayoutClass = "leftMenu";
-                        if ($scope.main.commLeftFav.favIconMenuClass == "on") {
-                            $scope.main.leftMenuLayoutClass = "leftMenu pageLoad on";
-                        }
-                        $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_ + "/menu/partLeftMenu.html" + _VERSION_TAIL_; // leftCnt, leftMenu
+                        $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_ + "/menu/commAllLeftMenu.html" + _VERSION_TAIL_; // leftCnt, leftMenu
                     }
-                } else {
-                    $scope.main.containerLayoutClass = "";
-                    $scope.main.leftMenuLayoutClass = "leftCnt depth-3"; // leftCnt, leftMenu
-                    if (common.isLeftMenuShow()) {
-                        $scope.main.leftMenuLayoutClass += " on";
-                    }
-                    $scope.main.leftMenuTemplateUrl = _COMM_VIEWS_ + "/menu/commAllLeftMenu.html" + _VERSION_TAIL_; // leftCnt, leftMenu
                 }
             }
             $scope.main.setLayout();
             $scope.main.commMenuHide();
 
             if (_MENU_TYPE_ == 'part') {
+                common.leftMenuShow();
+            } else if (_MENU_TYPE_ == 'part') {
                 if ($scope.main.pageStage == 'comm') {
                     $scope.main.leftMenuDefaultSet();
                 }
