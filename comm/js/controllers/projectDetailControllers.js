@@ -388,11 +388,13 @@ angular.module('portal.controllers')
         };
 
         // 탭클릭 : 작업정보/프로젝트 멤버
-        ct.tabNgClick = function (param) {
-            var tabId = param.tabId;
-
-            $('#tab1, #tab2').removeClass('active');
+        ct.tabNgClick = function (tabId) {
+            $('#tab1-1, #tab1-2, #tab1-3').removeClass('active');
             $('#' + tabId).addClass('active');
+
+            if (tabId == 'tab1-3') {
+                ct.listQuotaHistoryNgClick();
+            }
         };
 
         //project 상세조회

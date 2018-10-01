@@ -22,7 +22,7 @@
 				</div>
 				<div ng-if="main.projectType == 'org' && (!main.portalOrgs || main.portalOrgs.length == 0)" style="position:relative; font-weight: 700; font-size: 26px;height: 39px;padding-top: 10px;">프로젝트가 존재하지 않습니다.</div>
 				<div ng-if="main.projectType == 'org' && main.portalOrgs && main.portalOrgs.length > 0" class="dropdown">
-					<button id="btn-btn_create_proj" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<span class="txt">{{ main.sltPortalOrgDisplayName }}</span><span class="ico arr"></span>
 					</button>
 					<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
@@ -82,7 +82,7 @@
 				</div>
 			</div>-->
 			<div class="col col-tuto">
-				<button id="btn-set2" type="button" class="btn" title="{{ 'label.tutorial' | translate }}" onclick="location.href = '#/tutorial/1';">
+				<button id="btn-set2" type="button" class="btn" title="매뉴얼" onclick="location.href = '#/tutorial/1';">
 					<span class="ico"></span>
 				</button>
 			</div>

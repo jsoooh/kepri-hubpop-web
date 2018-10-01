@@ -939,6 +939,8 @@ angular.module('paas.controllers')
         $scope.main.appGuid = ct.appGuid;
         ct.app = {};
         ct.appStateCnt = 0;
+        ct.sltInfoTab = 'service';
+
         ct.cpuRoundProgress = {
             label : "{percentage}%",
             percentage : 0,
@@ -1706,12 +1708,17 @@ angular.module('paas.controllers')
             });
         };
 
+        ct.changeSltInfoTab = function (sltInfoTab) {
+            ct.sltInfoTab = sltInfoTab;
+        };
+
         $scope.main.refreshInterval['appStats'] = $interval(function () {
             ct.getAppStats(false);
         }, 60000);
 
         ct.getAppStats(true);
         ct.getAppSummary();
+        ct.changeSltInfoTab('service');
     })
     .controller('applicationRePushFormCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, ValidationService, FileUploader, common, CONSTANTS) {
         _DebugConsoleLog("applicationControllers.js : applicationRePushFormCtrl", 1);

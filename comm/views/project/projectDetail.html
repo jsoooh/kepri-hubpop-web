@@ -1,32 +1,47 @@
-				<!-- cBox -->
-				<div class="cBox type1 appCnt-info">
-					<div class="cBox-hd">
-						<h4 class="c-tit noLogo"><!--<img src="images/im_app_logo1.png" class="logo" alt="">-->{{contents.project.name}}</h4>
-						<div class="pull-right">
-							<button type="button" name="button" class="btn only-ico ico-view" tooltip-placement="top" uib-tooltip="{{ 'label.show' | translate }}" ng-if="contents.isDashboardHide" ng-click="contents.projectItemSetShowHide(false);"><span class="ico">{{ 'label.view' | translate }}</span></button>
-							<button type="button" name="button" class="btn only-ico ico-view" tooltip-placement="top" uib-tooltip="{{ 'label.hide' | translate }}" ng-if="!contents.isDashboardHide" ng-click="contents.projectItemSetShowHide(true);"><span class="ico">{{ 'label.view' | translate }}</span></button>
-							<button type="button" name="button" class="btn only-ico ico-del" tooltip-placement="top" uib-tooltip="{{ 'label.del' | translate }}" ng-disabled="!contents.isThisProjectManager" ng-click="contents.btn.deleteProject();"><span class="ico">{{ 'label.del' | translate }}</span></button>
-							<button type="button" name="button" class="btn only-ico ico-modi" tooltip-placement="top" uib-tooltip="{{ 'label.edit' | translate }}" data-user="aside" data-username="#aside-modi" ng-click="contents.btn.updateProject();" ng-disabled="!contents.isThisProjectManager"><span class="ico">{{ 'label.edit' | translate }}</span></button>
-						</div>
-					</div>
+<!-- tab wrap -->
+<div role="tabpanel" class="tabWrap type1">
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist" style="border-bottom:0;" id="navTabs1">
+		<li role="presentation" class="active"><a href="" aria-controls="tab1-1" role="tab" data-toggle="tab" class="workTab" ng-click="contents.tabNgClick('tab1-1');">프로젝트 개요</a></li>
+		<li role="presentation"><a href="" aria-controls="tab1-2" role="tab" data-toggle="tab" class="workTab" ng-click="contents.tabNgClick('tab1-2');">프로젝트 멤버</a></li>
+		<li role="presentation"><a href="" aria-controls="tab1-3" role="tab" data-toggle="tab" class="workTab" ng-click="contents.tabNgClick('tab1-3');">프로젝트 자원</a></li>
+	</ul>
 
-					<div class="cBox-cnt">
-						<div class="in"> 
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<!-- tab1 cnt -->
+		<div role="tabpanel" class="tab-pane st_none in active" id="tab1-1">
+
+			<!-- cBox -->
+			<div class="cBox type1 appCnt-info">
+				<div class="cBox-hd">
+					<h4 class="c-tit">
+						<!-- 										<button type="button" name="button" class="btn only-ico thum_modify" title="수정" data-toggle="modal" data-target="#myModal"><span class="ico">썸네일 수정</span></button> -->
+						<button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-click="contents.thumModify_ngClick($event)" ng-disabled="!contents.isThisProjectManager2"><span class="ico">썸네일 수정</span></button>
+										<span class="thum_box img_line" ng-show="!!contents.project.logo">
+											<img ng-src="{{contents.projectLogo}}" alt="">
+										</span>
+										<span class="thum_box" ng-show="!contents.project.logo">
+											<span class="txt">{{contents.project.name.substr(0, 1)}}</span>
+										</span>
+						{{contents.project.name}}
+					</h4>
+					<div class="pull-right">
+						<!-- <button type="button" name="button" class="btn only-ico ico-del" title="삭제"><span class="ico">삭제</span></button> -->
+						<button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isThisProjectManager2" ng-click="contents.btn.deleteProject();"><span class="ico">삭제</span></button>
+						<!-- 										<button type="button" name="button" class="btn only-ico ico-modi" title="수정" data-user="aside" data-username="#aside-modi"><span class="ico">수정</span></button> -->
+					</div>
+				</div>
+				<div class="cBox-cnt">
+					<div class="l_box">
+						<div class="in">
 							<!-- app 정보 -->
-							<div class="col info-txt">
+							<div class="col info-txt pdb0">
 								<ul>
 									<li>
-										<strong class="tit">{{ 'label.mngr' | translate }}</strong>
+										<strong class="tit">생성자</strong>
 										<div class="txt">{{contents.project.owner.name}}</div>
 									</li>
-									<li>
-										<strong class="tit">{{ 'label.project_id' | translate }}</strong>
-										<div class="txt">{{contents.project.id}}</div>
-									</li>
-									<li>
-									     <strong class="tit">{{ 'label.desc' | translate }}</strong>
-                                        <div class="txt">{{contents.project.description}}</div>
-									</li>
 								</ul>
 							</div>
 							<!-- //app 정보 -->
@@ -35,141 +50,342 @@
 							<div class="col info-txt">
 								<ul>
 									<li>
-										<strong class="tit">시작일</strong>
-										<div class="txt">{{contents.project.useStartDate}}</div>
+										<strong class="tit">Project ID</strong>
+										<div class="txt">{{contents.project.id}}</div>
 									</li>
-									<!--<li>
-										<strong class="tit">마감일</strong>
-										<div class="txt">{{contents.project.useEndDate}}</div>
-									</li>-->
 								</ul>
-								<!--<p class="count" ng-if="contents.project.useRemainTimeMs != -1"><span class="count-txt">D -{{contents.project.useRemainTimeMs2}}</span></p>-->
 							</div>
 							<!-- //app 정보 -->
-
-							<!-- 작업수 -->
-							<div class="col info-txt2">
-								<p class="txt"><span>{{contents.project.orgCount}}</span><strong>JOB</strong></p>
+						</div>
+						<div class="in">
+							<!-- app 정보 -->
+							<div class="col-non info-txt4 rbox-2-width"><!-- r_box에 갯수 추가될 때 사용 -->
+								<strong class="tit">설명<button type="button" name="button" class="btn only-ico ico-txt_modi" title="수정" data-user="aside" data-username="#" ng-click="contents.popProjectDescription();" ng-disabled="!contents.isThisProjectManager2"><span class="ico">수정</span></button></strong>
+								<div class="txt">
+									<span class="txt_normal" ng-show="contents.txt_normal_ngShow">{{contents.project.description}}</span>
+									<!--
+                                    <div class="txt_modi" ng-show="contents.txt_modi_ngShow">
+                                        <textarea name="name" style="height:50px;" ng-model="contents.project.description" ng-blur="contents.updateProjectDescription_ngBlur()"></textarea>
+                                    </div>
+                                    -->
+								</div>
 							</div>
-							<!-- //작업수 -->
-
-							<!-- 멤버수 -->
-							<div class="col info-txt3">
-								<p class="txt"><span>{{contents.project.userCount}}</span><strong>Member</strong></p>
-							</div>
-							<!-- //멤버수 -->
-						</div> 
-					</div>
-				</div>
-				<!-- //cBox -->
-
-				<!-- cBox : 프로젝트 이력/용량변경 요청 -->
-				<div class="cBox type3 cToggle mt30">
-					<div class="cBox-hd">
-						<h4 class="c-tit">{{ 'label.project_history' | translate }}/{{ 'label.capacity_change_request' | translate }}</h4>
-						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-toggle" title="열고/닫기" data-user="toggle" ng-click="contents.listQuotaHistoryNgClick();main.cBoxToggleChange($event);"><span class="ico">열고/닫기</span></button>
+							<!-- //app 정보 -->
 						</div>
 					</div>
-					<div ng-include="'/comm/views/project/projectDetailQuota.html'"></div>
+					<div class="r_box">
+						<!-- 서비스수 -->
+						<!-- 										<div class="col info-txt2"> -->
+						<!-- 											<p class="txt"><span>2</span><strong>Service</strong></p> -->
+						<!-- 										</div> -->
+						<!-- //서비스수 -->
+						<!-- 멤버수 -->
+						<div class="col info-txt3">
+							<p class="txt"><span>{{contents.project.userCount}}</span><strong>Member</strong></p>
+						</div>
+						<!-- //멤버수 -->
+					</div>
 				</div>
-				<!-- //cBox -->
+			</div>
+			<!-- //cBox -->
 
-				<!-- Nav tabs -->
-				<div role="tabpanel" class="tabWrap type1 mt30">
-					<!-- Nav tabs -->
-					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active"><a href="" aria-controls="tab1" role="tab" data-toggle="tab" aria-expanded="true" class="workTab" ng-click="contents.tabNgClick({$event : $event, tabId : 'tab1'});">{{ 'label.job_info' | translate }}<em class="point1">({{contents.project.orgCount}})</em></a></li>
-						<li role="presentation" class=""><a href="" aria-controls="tab2" role="tab" data-toggle="tab" aria-expanded="false" class="workTab" ng-click="contents.tabNgClick({$event : $event, tabId : 'tab2'});">{{ 'label.project_member' | translate }}<em class="point1">({{contents.project.userCount}})</em></a></li>
-					</ul>
+			<div class="cont-titWrap mt50">
+				<h3 class="h-tit3 pd0">프로젝트 참여자</h3>
+			</div>
 
-					<!-- Tab panes -->
-					<div class="tab-content">
-						<!-- tab1 cnt -->
-						<div role="tabpanel" class="tab-pane active in bdtNon" id="tab1">
-							<ol ng-if="0">
-								<li>{{contents.project.orgs=contents.project.orgs}}</li>
-							</ol>
-							<ul class="ul-panel">
-								<li ng-repeat="org in contents.project.orgs">
-									<!-- panel -->
-									<!--<div class="panelWrap bdtColor1" id="panelWrapBdtColor{{$index}}">-->
-									<div class="panelWrap bdtColor{{org.statusCode.indexOf('error')>-1?2:3}}" id="panelWrapBdtColor{{$index}}">
-										<div class="panel type1">
-											<div class="in">
-												<div class="panel_head" ng-click="contents.orgFormRNgClick({$event : $event, org : org});">
-													<div class="tit">{{org.name}}</div>
-												</div>
-												<div class="panel_body" ng-click="contents.orgFormRNgClick({$event : $event, org : org});">
-													<ul class="ul-list type1">
-														<!--<li>{{ 'label.job_id' | translate }} : {{org.id}}</li>
-														<li>{{ 'label.job_name' | translate }} : {{org.name}}</li>-->
-														<li>{{ 'label.project' | translate }} : {{contents.project.name}}</li>
-														<li>{{ 'label.member_count' | translate }} : {{org.orgUserCount}}</li>
-													</ul>
+			<!-- table -->
+			<div class="tbl type1">
+				<table class="table">
+					<colgroup>
+						<col style="width:10%;">
+						<col style="width:30%;">
+						<col style="width:30%;">
+						<col style="width:30%;">
+					</colgroup>
+					<thead>
+					<tr>
+						<th scope="col">No.</th>
+						<th scope="col">이름</th>
+						<th scope="col">역할</th>
+						<th scope="col">멤버 등록일</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="user in contents.project.users">
+						<td>{{$index + 1}}</td>
+						<td>{{user.user.name}}</td>
+						<td>{{user.roleName | roleName}}</td>
+						<td>{{user.createdDate.time | date : 'yyyy.MM.dd HH:mm:ss'}}</td>
+					</tr>
+					<!-- 등록된 멤버가 없을 때 -->
+					<tr class="no-data" ng-if="!contents.project.users">
+						<td colspan="5">등록된 프로젝트 멤버가 없습니다.</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- //table -->
+		</div>
+		<!-- //tab1 cnt -->
+
+		<!-- tab2 cnt -->
+		<div role="tabpanel" class="tab-pane st_none" id="tab1-2">
+			<!-- table -->
+			<div class="tb-top">
+				<div class="pull-right">
+					<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-disabled="!contents.isThisProjectManager2" ng-click="contents.projectUsers_ngClick()"><span class="ico">추가</span></button>
+					<!-- 									<a ng-href="#/comm/projects/projectUsers/{{contents.project.id}}" class="btn btn-ico-add only-ico" title="멤버추가" ng-disabled="!contents.isThisProjectManager2"><span class="ico">멤버추가</span></a> -->
+				</div>
+			</div>
+			<div class="tbl type1">
+				<table class="table">
+					<colgroup>
+						<col style="width:15%;">
+						<col style="width:auto;">
+						<col style="width:20%;">
+						<col style="width:20%;">
+						<col style="width:15%;">
+					</colgroup>
+					<thead>
+					<tr>
+						<th scope="col">No.</th>
+						<th scope="col">이름</th>
+						<th scope="col">역할</th>
+						<th scope="col">멤버 등록일</th>
+						<th scope="col">관리</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="user in contents.project.users">
+						<td>{{$index + 1}}</td>
+						<td>{{user.user.name}}</td>
+						<td>{{user.roleName | roleName}}</td>
+						<td>{{user.createdDate.time | date : 'yyyy.MM.dd HH:mm:ss'}}</td>
+						<td>
+							<button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-click="contents.resetPassword2(user);" ng-if="user.roleName != 'OWNER' && user.user.isSso == false" ng-disabled="!contents.isThisProjectManager"><span class="ico">패스워드 초기화</span></button>
+							<!-- <button type="button" name="button" class="btn btn-ico-modi-s only-ico" title="수정"><span class="ico">수정</span></button> -->
+							<!-- <a ng-href="#/comm/projects/projectUsers/{{contents.project.id}}" class="btn btn-ico-add_mem-s only-ico" title="멤버추가"><span class="ico">멤버추가</span></a> -->
+							<button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.btn.del(user);" ng-if="user.roleName != 'OWNER'" ng-disabled="!contents.isThisProjectManager"><span class="ico">삭제</span></button>
+						</td>
+					</tr>
+					<!-- 등록된 멤버가 없을 때 -->
+					<tr class="no-data" ng-if="!contents.project.users">
+						<td colspan="5">등록된 프로젝트 멤버가 없습니다.</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- //table -->
+		</div>
+		<!-- //tab2 cnt -->
+
+		<!-- tab3 cnt -->
+		<div role="tabpanel" class="tab-pane st_none" id="tab1-3">
+			<!-- cBox -->
+			<div class="cBox type4">
+				<h3 class="h-tit3 pd0">자원쿼터</h3>
+
+				<div class="cBox-cnt pd0">
+					<div class="in">
+						<div class="tb-top">
+							<div class="pull-left c-tit_st">
+								<h4 class="c-tit ng-binding">- 쿼터 Plan : {{contents.project.quota.name}}</h4>
+							</div>
+						</div>
+						<div class="progress_layout_two" ng-if="0">
+							<div class="progress_box wd_tit">
+								<span class="tit">서버 가상화 서비스 (IaaS)</span>
+								<ul>
+									<li>
+										<span class="tit_txt">vcpu</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 13%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="13%">
+                                                </div> -->
+												<div percent-progress-bar-animate bar-type="width" percent="13" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="13%"></div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<!-- panel -->
-								</li>
-								<li>
-									<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-add" ng-click="contents.btn.orgForm({$event : $event});main.cBoxToggleChange($event);" ng-disabled="!contents.isThisProjectManager"><span class="ico"></span><span class="txt">{{ 'label.job_register' | translate }}</span></button>
-								</li>
-							</ul>
-						</div>
-						<!-- //tab1 cnt -->
-
-						<!-- tab2 cnt -->
-						<div role="tabpanel" class="tab-pane bdtNon" id="tab2">
-							<!-- table top -->
-							<div class="tb-top">
-								<div class="pull-left"></div>
-								<div class="pull-right"><button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-mem" ng-click="contents.pop.memberAdd();" ng-disabled="!contents.isThisProjectManager"><span class="ico">{{ 'label.add' | translate }}</span></button></div>
+										<span class="txt_count">(20/{{contents.project.quota.quotaIaas.computingVcpus | number}}개)</span>
+									</li>
+									<li>
+										<span class="tit_txt">메모리</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 50%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="50%">
+                                                </div> -->
+												<div percent-progress-bar-animate bar-type="width" percent="50" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="50%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">(200/{{contents.project.quota.quotaIaas.computingRam | number}}GB)</span>
+									</li>
+									<!-- 													<li> -->
+									<!-- 														<span class="tit_txt">로컬디스크</span> -->
+									<!-- 														<div class="progressWrap type2"> -->
+									<!-- 															<div class="progress"> -->
+									<!-- 															  <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 4%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="4%"> -->
+									<!-- 															  </div> -->
+									<!-- 															</div> -->
+									<!-- 														</div> -->
+									<!-- 														<span class="txt_count">(300/{{contents.project.quota.quotaIaas.computingHdd | number}}GB)</span> -->
+									<!-- 													</li> -->
+									<li>
+										<span class="tit_txt">볼륨스토리지</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 5%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="5%">
+                                                </div> -->
+												<div percent-progress-bar-animate bar-type="width" percent="5" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="5%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">(400/{{contents.project.quota.quotaIaas.storageExternalHdd | number}}GB)</span>
+									</li>
+									<!-- 													<li> -->
+									<!-- 														<span class="tit_txt">오브젝트스토리지</span> -->
+									<!-- 														<div class="progressWrap type2"> -->
+									<!-- 															<div class="progress"> -->
+									<!-- 															  <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 6%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="6%"> -->
+									<!-- 															  </div> -->
+									<!-- 															</div> -->
+									<!-- 														</div> -->
+									<!-- 														<span class="txt_count">(500/{{contents.project.quota.quotaIaas.storageObjectStorage | number}}GB)</span> -->
+									<!-- 													</li> -->
+									<li>
+										<span class="tit_txt">IP</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 75%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="75%">
+                                                </div> -->
+												<div percent-progress-bar-animate bar-type="width" percent="75" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="75%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">(60/{{contents.project.quota.quotaIaas.networkFloatingIp | number}}개)</span>
+									</li>
+								</ul>
 							</div>
-							<!-- //table top -->
+							<div class="progress_box">
+								<span class="tit">표준 App. 개발 서비스 (PaaS)</span>
+								<ul>
+									<li>
+										<span class="tit_txt">메모리</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:8%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="8%">
+                                                </div> -->
+												<div percent-progress-bar-animate bar-type="width" percent="8" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="8%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">(40/{{contents.project.quota.quotaPaas.totalMemory | number}}GB)</span>
+									</li>
+									<li>
+										<span class="tit_txt">서비스</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 19%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="19%">
+                                                </div> -->
+												<div percent-progress-bar-animate bar-type="width" percent="19" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="19%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">(30/{{contents.project.quota.quotaPaas.serviceInstances | number}}개)</span>
+									</li>
+									<li>
+										<span class="tit_txt">라우터</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 13%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="13%">
+                                                </div> -->
+												<div percent-progress-bar-animate bar-type="width" percent="13" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="13%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">(20/{{contents.project.quota.quotaPaas.routes | number}}개)</span>
+									</li>
+									<li>
+										<span class="tit_txt">App</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 6%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="6%">
+                                                </div> -->
+												<div percent-progress-bar-animate bar-type="width" percent="6" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="6%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">(10/{{contents.project.quota.quotaPaas.appInstances | number}}개)</span>
+									</li>
+								</ul>
+							</div>
+						</div>
 
-							<!-- table -->
-							<div class="tbl type1">
-								<table class="table">
-									<colgroup>
+						<div class="tb-top">
+							<div class="pull-left">
+								<h4 class="c-tit ng-binding">쿼터변경요청</h4>
+							</div>
+							<div class="pull-right">
+								<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-click="contents.asideQuotaReqNgClick2($event);" ng-disabled="!contents.isThisProjectManager2 || !contents.isThisProjectManager2A">
+									<span class="ico">추가</span>
+								</button>
+							</div>
+						</div>
+						<!-- table -->
+						<div class="tbl type1">
+							<table class="table">
+								<colgroup>
 									<col style="width:10%;">
+									<col style="width:10%;">
+									<col style="width:10%;">
+									<col style="width:auto;">
 									<col style="width:15%;">
-									<col>
-									<col style="width:20%;">
-									<col style="width:20%;">
+									<col style="width:15%;">
 									<col style="width:10%;">
-									</colgroup>
-									<thead>
-										<tr>
-											<th scope="col">No.</th>
-											<th scope="col">{{ 'label.name' | translate }}</th>
-											<th scope="col">{{ 'label.id' | translate }}</th>
-											<th scope="col">{{ 'label.role2' | translate }}</th>
-											<th scope="col">{{ 'label.member_register_dd' | translate }}</th>
-											<th scope="col">{{ 'label.del' | translate }}</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="user in contents.project.users">
-											<td>{{$index + 1}}</td>
-											<td>{{user.user.name}}</td>
-											<td>{{user.user.email}}</td>
-											<td>{{user.roleName | roleName}}</td>
-											<td>{{user.createdDate.time | date : 'yyyy.MM.dd HH:mm:ss'}}</td>
-											<td><button type="button" name="button" class="btn btn-ico-del-s only-ico" ng-click="contents.btn.del(user);" ng-if="user.roleName != 'OWNER'" ng-disabled="!contents.isThisProjectManager"><span class="ico">{{ 'label.del' | translate }}</span></button></td>
-										</tr>
-										<!-- 등록된 멤버가 없을 때 -->
-										<tr class="no-data" ng-if="!contents.project.users">
-											<td colspan="6">등록된 프로젝트 멤버가 없습니다.</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<!-- //table -->
-
+									<col style="width:10%;">
+								</colgroup>
+								<thead>
+								<tr>
+									<th scope="col">No.</th>
+									<th scope="col">신청</th>
+									<th scope="col">용량</th>
+									<th scope="col">요청자</th>
+									<th scope="col">요청일</th>
+									<th scope="col">처리일</th>
+									<th scope="col">상태</th>
+									<th scope="col">처리</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr ng-repeat="quotaHistory in contents.listQuotaHistory.items">
+									<td>{{$index + 1}}</td>
+									<td>{{quotaHistory.messageReq}}</td>
+									<td>{{quotaHistory.quotaReq.name}}</td>
+									<td>{{quotaHistory.createdId}}</td>
+									<td>{{quotaHistory.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+									<td>{{quotaHistory.updatedDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+									<td>{{quotaHistory.status | commQuotaHistoryStatusName}}</td>
+									<td></td>
+								</tr>
+								</tbody>
+							</table>
 						</div>
-						<!-- //tab2 cnt -->
+						<!-- //table -->
+
 					</div>
 				</div>
-				<!-- //Nav tabs -->
+			</div>
+			<!-- //cBox -->
+		</div>
+		<!-- //tab3 cnt -->
+	</div>
+</div>
+<!-- //tab wrap -->
