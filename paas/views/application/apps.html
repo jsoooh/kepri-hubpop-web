@@ -228,9 +228,6 @@
 
     <!-- cBox -->
     <div ng-if="contents.sltOrganizationGuid != ''" ng-controller="paasServiceInstancesCtrl as ins">
-        <div ng-if="ins.loadingServiceInstances">
-            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-        </div>
         <div class="cont-titWrap mt50">
             <h3 class="h-tit3">연결 서비스 <span class="point1">({{serviceInstance.serviceInstances.content.length}})</span></h3>
         </div>
