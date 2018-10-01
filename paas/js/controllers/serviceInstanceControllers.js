@@ -234,21 +234,19 @@ angular.module('paas.controllers')
             }
         };
 
-
-       $scope.serviceInfo = function ($event, serviceItem) {
-
-         $scope.serviceInfo.connection = serviceItem.serviceBindings.length;
-         $scope.serviceInfo.description = serviceItem.servicePlan.service.description;
-         $scope.serviceInfo.planName = serviceItem.servicePlan.name;
-         $scope.serviceInfo.planDes = serviceItem.servicePlan.description;
-         $scope.dialogOptions = {
-             title : "서비스 정보",
-             formName : "serviceInfoForm",
-             dialogClassName : "modal-dialog",
-             templateUrl: _PAAS_VIEWS_ + "/serviceInstance/serviceInfoForm.html" + _VersionTail(),
-             okBtnHide : true
-         };
-         common.showDialog($scope, $event, $scope.dialogOptions);
+        ct.serviceInfo = function ($event, serviceItem) {
+            $scope.serviceInfo.connection = serviceItem.serviceBindings.length;
+            $scope.serviceInfo.description = serviceItem.servicePlan.service.description;
+            $scope.serviceInfo.planName = serviceItem.servicePlan.name;
+            $scope.serviceInfo.planDes = serviceItem.servicePlan.description;
+            $scope.dialogOptions = {
+                title : "서비스 정보",
+                formName : "serviceInfoForm",
+                dialogClassName : "modal-dialog",
+                templateUrl: _PAAS_VIEWS_ + "/serviceInstance/serviceInfoForm.html" + _VersionTail(),
+                okBtnHide : true
+            };
+            common.showDialog($scope, $event, $scope.dialogOptions);
        };
 
        $scope.bindingInfo = function ($event, serviceItem, appGuid) {
