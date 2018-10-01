@@ -1,8 +1,8 @@
     <!-- login -->
     <form name="loginForm" method="POST">
         <div class="mem-hd">
-            <h1>CloudXpert</h1>
-            <h2>CloudXpert {{ 'label.login' | translate }}</h2>
+            <h1>hubpop</h1>
+            <h2>HUB-PoP {{ 'label.login' | translate }}</h2>
         </div>
         <div class="mem-body">
             <ul class="ul-join">
@@ -26,7 +26,7 @@
         </div>
         <div class="mem-foot">
             <button type="submit" name="button" class="btn btn-color1" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
-            <p class="text-right"><a href="#/signup">계정생성</a></p>
+            <p class="text-right"><a href="/#/signup">계정생성</a></p><!-- | <a href="/">홈</a>  -->
         </div>
     </form>
     <!-- //login-->
