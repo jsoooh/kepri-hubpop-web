@@ -66,25 +66,18 @@ angular.module('app')
                     project: {
                         name: 'project',
                         icon: "ico2",
-                        stateKey: 'commProject',
-                        subMenus: {
-                            project_mgmt: {
-                                name: 'project_mgmt',
-                                icon: "uaaUserHome",
-                                stateKey: 'commProjectMgmt',
-                                url: '/comm/projects',
-                                controller: 'commOrgsCtrl',
-                                templateUrl: _COMM_VIEWS_+'/org/orgs.html',
-                                subPages: {
-                                    projectDetail: {
-                                        name: 'project_details',
-                                        stateKey: 'commProjectDetail',
-                                        url: '/comm/projects/projectDetail/:orgId',
-                                        controller: 'commOrgDetailCtrl',
-                                        templateUrl: _COMM_VIEWS_+'/org/orgMain.html'
-                                    }
-                                }
-                            },
+                        stateKey: 'commProjectMgmt',
+                        url: '/comm/projects',
+                        controller: 'commOrgsCtrl',
+                        templateUrl: _COMM_VIEWS_+'/org/orgs.html',
+                        subPages: {
+                            projectDetail: {
+                                name: 'project_details',
+                                stateKey: 'commProjectDetail',
+                                url: '/comm/projects/projectDetail/:orgId',
+                                controller: 'commOrgDetailCtrl',
+                                templateUrl: _COMM_VIEWS_+'/org/orgMain.html'
+                            }
                         }
                     },
                     platform_service: {
