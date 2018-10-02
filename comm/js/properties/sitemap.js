@@ -69,14 +69,14 @@ angular.module('app')
                         stateKey: 'commProjectMgmt',
                         url: '/comm/projects',
                         controller: 'commOrgsCtrl',
-                        templateUrl: _COMM_VIEWS_+'/org/orgs.html',
+                        templateUrl: _COMM_VIEWS_+'/org/orgProjects.html',
                         subPages: {
                             projectDetail: {
                                 name: 'project_details',
                                 stateKey: 'commProjectDetail',
                                 url: '/comm/projects/projectDetail/:orgId',
                                 controller: 'commOrgDetailCtrl',
-                                templateUrl: _COMM_VIEWS_+'/org/orgMain.html'
+                                templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html'
                             }
                         }
                     },
