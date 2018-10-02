@@ -263,7 +263,7 @@ angular.module('portal.controllers')
                 var $location = param.$location;
                 var orgItem = param2.orgItem;
 
-                $location.path('/comm/orgs/orgForm/R/' + orgItem.id);
+                $location.path('/comm/projects/projectDetail/' + orgItem.id);
             };
         }
 

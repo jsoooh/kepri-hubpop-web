@@ -47,7 +47,7 @@
                     <p class="app-tit">OS 이미지</p>
                     <div ng-if="pop.imageList.length > 0" scroll-pane scroll-config="{ contentHeight: '0px' }" id="os_image_scroll_panel">
                         <ul class="ul-list1">
-                            <li ng-repeat="image in pop.imageList" ng-if="pop.deployData.type == 'CP' || image.serviceName == pop.systemSwImageServiceName">
+                            <li ng-repeat="image in pop.imageList" ng-if="image.serviceName != pop.systemSwImageServiceName">
                                 <div class="radio1 radio-inline">
                                     <input type="radio" id="os_cp_service_image_{{image.id}}" name="cpOsServiceImage" value="{{image.id}}" ng-model="pop.deployData['CP'].osImageId">
                                     <label for="os_cp_service_image_{{image.id}}" class="label"><img ng-src="data:{{ image.contentType }}; base64, {{ image.icon }}" class="im"/></label>

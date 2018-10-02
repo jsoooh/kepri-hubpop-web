@@ -346,7 +346,6 @@ angular.module('common.controllers', [])
         // PortalOrg 변경 처리
         mc.changePortalOrg = function(portalOrg) {
             mc.setPortalOrg(portalOrg);
-            mc.listMenu();
             if (angular.isObject(portalOrg) && portalOrg.id) {
                 mc.asideClose();
                 $scope.$broadcast('portalOrgChanged', mc.sltPortalOrg);

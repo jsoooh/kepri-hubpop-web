@@ -73,38 +73,18 @@ angular.module('app')
                                 icon: "uaaUserHome",
                                 stateKey: 'commProjectMgmt',
                                 url: '/comm/projects',
-                                controller: 'commProjectsCtrl',
-                                templateUrl: _COMM_VIEWS_+'/project/projects.html',
-                                subPages: {
-                                    projectDetail: {
-                                        //menuKey: 'projects',
-                                        name: 'project_details',
-                                        stateKey: 'commProjectDetail',
-                                        url: '/comm/projects/projectDetail/:projectId',
-                                        controller: 'commProjectDetailCtrl',
-                                        templateUrl: _COMM_VIEWS_+'/project/projectDetail.html'
-                                    }
-                                }
-                            },
-                            org_mgmt: {
-                                name: 'org_mgmt',
-                                icon: "paasMarket",
-                                stateKey: 'commOrg',
-                                url: '/comm/orgs',
                                 controller: 'commOrgsCtrl',
                                 templateUrl: _COMM_VIEWS_+'/org/orgs.html',
-                                subPages: {	// 메뉴에서는 상세 페이지로 표현
-                                    orgDetail: {
-                                        //menuKey: 'orgs',
-                                        title : "<li>{{ main.detailOrgName }}</li>",
-                                        name: 'org_details',
-                                        stateKey: 'commOrgForm',
-                                        url: '/comm/orgs/orgForm/:mode/:orgId',
+                                subPages: {
+                                    projectDetail: {
+                                        name: 'project_details',
+                                        stateKey: 'commProjectDetail',
+                                        url: '/comm/projects/projectDetail/:orgId',
                                         controller: 'commOrgDetailCtrl',
                                         templateUrl: _COMM_VIEWS_+'/org/orgMain.html'
                                     }
                                 }
-                            }
+                            },
                         }
                     },
                     platform_service: {
