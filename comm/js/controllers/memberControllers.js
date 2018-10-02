@@ -42,6 +42,7 @@ angular.module('portal.controllers')
             $scope.memberInfo.user_id           = $scope.main.userInfo.user_id;
             $scope.memberInfo.user_name         = $scope.main.userInfo.user_name;
             $scope.memberInfo.email             = $scope.main.userInfo.email;
+            $scope.memberInfo.position          = $scope.main.userInfo.position;
             $scope.memberInfo.user_type         = $scope.main.userInfo.user_type;
             $scope.is_uaaUpdate                 = false;
         };

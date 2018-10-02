@@ -364,7 +364,10 @@ angular.module('common.controllers', [])
         // Organization 값 셋팅
         mc.setPortalOrg = function(portalOrg) {
             if (angular.isObject(portalOrg) && portalOrg.id) {
-                mc.desplayDbMenuList(portalOrg.myRoleName);
+                $timeout(function () {
+                    mc.desplayDbMenuList(portalOrg.myRoleName);
+                    $scope.main.urlCheck();
+                }, 100);
                 common.setPortalOrgKey(portalOrg.id);
                 mc.sltPortalOrg = portalOrg;
                 mc.sltPortalOrgId = portalOrg.id;
@@ -1055,6 +1058,31 @@ angular.module('common.controllers', [])
                 $scope.dialogClose	= true;
                 common.mdDialogHide();
             };
+        };
+
+        mc.addOrgProjectCallBackFun = function() {
+            mc.syncListAllProjects();
+            common.moveCommHomePage();
+        };
+
+        mc.addOrgProjectFormOpen = function($event) {
+            var orgProject = {};
+            orgProject.managerId    = mc.userInfo.user_id;
+            orgProject.managerName  = mc.userInfo.user_name;
+            orgProject.managerEmail = mc.userInfo.email;
+
+            orgProject.projectId = mc.sltProjectId;
+
+            var dialogOptions = {
+                controller : "commAddOrgProjecFormCtrl",
+                controllerAs: "pop",
+                formName : "popOrgProjectForm",
+                orgProject : orgProject,
+                callBackFunction : mc.addOrgProjectCallBackFun
+            };
+            $scope.actionBtnHied = false;
+            $scope.actionLoading = false;
+            common.showDialog($scope, $event, dialogOptions);
         };
 
         // get 으로 token이 넘어온 경우

@@ -43,7 +43,7 @@ angular.module('app')
         },
         homeUrl: '/#/',
         homePath: '/',
-        commHomeState: 'commHome',
+        commHomeState: 'commProjectMgmt',
         commHomeUrl: '#/',
         commHomePath: '/',
         notLoginAcceptPages: [

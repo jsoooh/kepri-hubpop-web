@@ -9,6 +9,7 @@
 				<a href="" title="전체메뉴" data-user="gnb-layer" ng-click="main.leftMenuToggle();"><span class="ico">전체메뉴</span></a>
 			</div>
 -->
+<!--
 			<div class="col col-proj">
 				<div ng-if="main.projectType == 'pjt' && (!main.projects || main.projects.length == 0)" style="position:relative; font-weight: 700; font-size: 26px;height: 39px;padding-top: 10px;">프로젝트가 존재하지 않습니다.</div>
 				<div ng-if="main.projectType == 'pjt'" ng-if="main.pageStage == 'iaas' || main.pageStage == 'paas' || (main.pageStage == 'monit' && main.stateKey != 'monitAlarm')" class="dropdown">
@@ -27,6 +28,21 @@
 					</button>
 					<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
 						<li ng-repeat="orgItem in main.portalOrgs"><a href="" ng-click="main.changePortalOrg(orgItem);">{{ orgItem.orgName }}</a></li>
+					</ul>
+				</div>
+			</div>
+-->
+			<div class="col col-proj">
+				<div class="dropdown">
+					<button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="txt">{{main.sltProject.name}}</span>
+						<span class="ico arr"></span>
+					</button>
+					<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
+						<span class="bg_arrw"></span>
+						<a class="btn_create_proj" ng-click="main.addOrgProjectFormOpen($event)">프로젝트 생성</a>
+						<li ng-repeat="orgItem in main.portalOrgs" ng-if="$index < 5"><a ng-click="main.changeProject(orgItem);">{{orgItem.orgName}}</a></li>
+						<a class="btn_all_proj" href="/console#/comm/projects">전체프로젝트</a>
 					</ul>
 				</div>
 			</div>

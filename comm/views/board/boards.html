@@ -80,8 +80,9 @@
 				<div class="compMsgBox type1" ng-show="!contents.pageOptions.total">
 				  <div class="inMsgTxt">
 					<span class="ico"></span>
-					<strong class="msg-tit">'<span class="point1">{{contents.schText}}</span>'에 대한 검색 결과가 없습니다.</strong>
-					<div class="msg-txt">
+					  <strong ng-if="!contents.schText" class="msg-tit">게시물이 존재하지 않습니다.</strong>
+					  <strong ng-if="contents.schText" class="msg-tit">'<span class="point1">{{contents.schText}}</span>'에 대한 검색 결과가 없습니다.</strong>
+					<div ng-if="contents.schText" class="msg-txt">
 					  다른 검색어를 넣어 다시 검색해주세요.
 					</div>
 				  </div>

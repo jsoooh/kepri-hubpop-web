@@ -1,19 +1,7 @@
 
-	<!-- title area -->
-	<div class="titWrap">
-		<h2 class="h2">{{ 'label.personal_info_edit' | translate }}</h2>
-
-		<!-- breadcrumb -->
-		<div class="breadWrap">
-			<ol class="breadcrumb">
-				<li class="active">{{ 'label.personal_info_edit' | translate }}</li><!-- 마지막 li -->
-			</ol>
-		</div>
-		<!-- //breadcrumb -->
-	</div>
-	<!-- //title area -->
-
 	<!-- content -->
+	<div class="content">
+
 		<form name="requestForm" >
 			<!-- table top -->
 			<div class="tb-top">
@@ -34,21 +22,40 @@
 					<col style="width:auto;">
 					</colgroup>
 					<tbody>
-						<tr>
-							<th scope="row"><label for="signupEmail">{{'label.id' | translate}}</label></th>
-							<td><input type="text" id="signupEmail" name="signupEmail" ng-model="memberInfo.email" disabled /></td>
-						</tr>
-						<tr>
-							<th scope="row">{{ 'label.name' | translate }}<i class="i_star">필수입력</i></th>
-							<td>
-								<input type="text" id="user_name" name="user_name" ng-model="memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" validation="max_len:40|required" />
-								<p class="has-error" ng-show="requestForm.user_name.$error.required && !requestForm.user_name.$pristine">{{ 'message.mi_type_name' | translate }}</p>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">{{ 'label.user_type' | translate }}</th>
-							<td>{{contents.userAuthNm}}</td>
-						</tr>
+					<tr>
+						<th scope="row">이름</th>
+						<td>
+							<input type="text" id="user_name" name="user_name" ng-model="memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" required />
+							<p class="has-error" ng-show="requestForm.user_name.$error.required && !requestForm.user_name.$pristine">{{ 'message.mi_type_name' | translate }}</p>
+
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">소속</th>
+						<td>
+							<input type="text"  name="position" ng-model="memberInfo.position" placeholder="{{ 'message.mi_type_position' | translate }}" required />
+							<p class="has-error" ng-show="requestForm.position.$error.required && !requestForm.position.$pristine">{{ 'message.mi_type_position' | translate }}</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="signupEmail">{{'label.id' | translate}}</label></th>
+						<td><input type="text" id="signupEmail" name="signupEmail" ng-model="memberInfo.email" disabled /></td>
+					</tr>
+					<tr ng-if="0">
+						<th scope="row">비밀번호 변경<i class="i_star">필수입력</i></th>
+						<td>
+							<ul>
+								<li><input type="text" name="" value="" style="width:620px;" placeholder="현재 비밀번호를 입력하세요"></li>
+								<li class="mt10"><input type="text" name="" value="" style="width:620px;" placeholder="변경할 비밀번호를 입력하세요"></li>
+								<li class="mt10"><input type="text" name="" value="" style="width:620px;" placeholder="변경할 비밀번호를 한번 더 입력하세요"></li>
+							</ul>
+							<p class="help-block type2">영문 대/소문자, 숫자 2종류 이상 혼합 10~20자 이하, 3종류 이상 혼합 8~20자 이하로 설정해 주세요.</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">회원구분</th>
+						<td>{{main.hubpop.userAuthNm}}{{}}</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>
@@ -67,4 +74,5 @@
 			</div>
 			<!-- //btn btm -->
 		</form>
+	</div>
 	<!-- //content -->

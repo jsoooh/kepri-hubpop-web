@@ -595,26 +595,20 @@ angular.module('common.services', ['LocalStorageModule'])
             }
             if (angular.isObject(sltSiteMap.parentSiteMap) && sltSiteMap.parentSiteMap.name != sltSiteMap.rootName) {
                 navigationTree += common.getNavigationRootTree(sltSiteMap.parentSiteMap, navigationTree);
-                if(sltSiteMap.menuDisplayNo){
-                	navigationTree += "";
-                }else {
-                	navigationTree += '<li class="active">';
-                }
+                navigationTree += '<li class="active">';
             } else {
                 navigationTree += '<li><a href="">';
             }
             if (sltSiteMap.topName == "sample") {
                 navigationTree += sltSiteMap.name + "";
-            }else if(sltSiteMap.menuDisplayNo){
-            	navigationTree += "";
-            }else if(sltSiteMap.subPage){
+            } else if(sltSiteMap.subPage){
             	navigationTree += "{{ '" + sltSiteMap.pageStage + "Menu.menu." + sltSiteMap.name + "' | translate }}<span ng-if='main.sltOrganizationName'> : {{ main.sltOrganizationName }}</span>";
-            }else {
+            } else {
                 navigationTree += "{{ '" + sltSiteMap.pageStage + "Menu.menu." + sltSiteMap.name + "' | translate }}";
             }
             
             if (angular.isObject(sltSiteMap.parentSiteMap) && sltSiteMap.parentSiteMap.name != sltSiteMap.rootName) {
-                if(sltSiteMap.menuDisplayNo){
+                if(sltSiteMap.mainTop){
                 	navigationTree += "";
                 }else {
                 	navigationTree += '</li>';
@@ -630,7 +624,7 @@ angular.module('common.services', ['LocalStorageModule'])
         // Contents Top NavigationTree
         common.getNavigationTree = function (sltSiteMap, displayName) {
             var navigationTree = '<ol class="breadcrumb">';
-            navigationTree += "<li><a href=''>{{ '" + sltSiteMap.pageStage + "Menu.menu." + sltSiteMap.pageStage + "_portal' | translate }}</a></li>";
+            //navigationTree += "<li><a href=''>{{ '" + sltSiteMap.pageStage + "Menu.menu." + sltSiteMap.pageStage + "_portal' | translate }}</a></li>";
             navigationTree += common.getNavigationRootTree(sltSiteMap);
             if (((sltSiteMap.orgNameView || sltSiteMap.categoryView) && displayName) || sltSiteMap.title) {
                 if (sltSiteMap.title) {

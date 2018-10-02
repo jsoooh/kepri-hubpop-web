@@ -222,7 +222,7 @@
     document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="main.navigationTemplateUrl"></header>');
     document.writeln('	<div id="container" ng-class="main.containerLayoutClass">');
     if (_MENU_TYPE_ == 'db') {
-        document.writeln('		<div class="leftCnt on"><div class="gnbMenu"><div class="gnb-in" id="leftMenu"></div></div></div>');	// Left Menu 구조 변경 TEST용
+        document.writeln('		<div ng-if="main.isLoginPage" class="leftCnt on"><div class="gnbMenu"><div class="gnb-in" id="leftMenu"></div></div></div>');	// Left Menu 구조 변경 TEST용
 	} else {
         document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
 	}

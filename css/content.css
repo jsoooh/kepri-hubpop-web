@@ -1069,6 +1069,7 @@ button.btn.btn-lg.btn-color4.btn-only-more:hover{background:#335cc4;border-color
 .memWrap .ul-join .input-group-addon{width:40px; border: 1px solid #ccc; border-right: 0; background: #e8e9ed;}
 .memWrap .ul-join .input-group-addon .ico.type1{width:13px; height: 15px; background-position:-180px -331px;}
 .memWrap .ul-join .input-group-addon .ico.type2{width:13px; height: 15px; background-position:-202px -331px;}
+.memWrap .ul-join .input-group-addon .ico.type3{width:14px; height: 13px; background-position:-202px -370px;}/*180724 회원가입이미지추가*/
 
 .memWrap .compMsgBox{padding: 40px; border:1px solid #ccc; border-radius: 4px; background: #fff;}
 .memWrap .compMsgBox .ico{margin-bottom: 15px; background-position: -418px -545px;}
@@ -1796,13 +1797,10 @@ select.ng-touched.ng-valid-validation, input.ng-touched.ng-valid-validation, tex
 .panel .ul-list.type1 li{
     color: #808d94;
 }
-.cBox.type0, .projt-selWarp{
+.projt-selWarp{
     height: 64px;
     margin-bottom: 30px;
 } 
-.cBox.type0 h4.c-tit{
-    line-height: 64px; 
-}
 .cBox.type0 .searchBox{
     margin-top: 13px;
 }

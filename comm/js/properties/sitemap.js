@@ -19,15 +19,6 @@ angular.module('app')
                 templateUrl: _COMM_VIEWS_ + '/user/signup.html',
                 mainBodyTemplateUrl : _COMM_VIEWS_+'/loginLayout.html'+_VERSION_TAIL_
             },
-            member_edit: {
-                pageStage : "comm",
-                name: 'member_edit',
-                stateKey: 'commMemberEdit',
-                menuDisplayNo : true,
-                url: '/comm/memberEdit',
-                controller: 'commUserEditCtrl',
-                templateUrl: _COMM_VIEWS_ + '/user/userForm.html'
-            }
         },
         leftMenus: {
             common: {
@@ -37,17 +28,17 @@ angular.module('app')
                 notEdPAuth: "AA",
                 mainTop: true,
                 menus: {
-/*
-                    home: {
-                        name: 'home',
-                        icon: "ico1",
-                        stateKey: 'commHome',
-                        url: '/',
-                        controller: 'commDashboardsCtrl',
-                        templateUrl: _COMM_VIEWS_+'/user/dashboard.html'
+                    member_edit: {
+                        pageStage : "comm",
+                        name: 'member_edit',
+                        stateKey: 'commMemberEdit',
+                        menuDisplayNo : true,
+                        url: '/comm/memberEdit',
+                        controller: 'commUserEditCtrl',
+                        templateUrl: _COMM_VIEWS_ + '/user/userForm.html'
                     },
-*/
                     project: {
+                        mainTop: false,
                         name: 'project',
                         icon: "ico2",
                         stateKey: 'commProjectMgmt',
@@ -56,6 +47,7 @@ angular.module('app')
                         templateUrl: _COMM_VIEWS_+'/org/orgProjects.html',
                         subPages: {
                             projectDetail: {
+                                mainTop: true,
                                 name: 'project_details',
                                 stateKey: 'commProjectDetail',
                                 url: '/comm/projects/projectDetail/:orgId',

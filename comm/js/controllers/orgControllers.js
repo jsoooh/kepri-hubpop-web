@@ -56,17 +56,12 @@ angular.module('portal.controllers')
         };
 
         ct.addOrgProjectFormOpen = function($event) {
-            if (!ct.defaultOrgQuotaId){
-                common.showAlert('', '작업 쿼터가 없어 작업을 등록할 수 없습니다.');
-                return;
-            }
             var orgProject = {};
             orgProject.managerId    = $scope.main.userInfo.user_id;
             orgProject.managerName  = $scope.main.userInfo.user_name;
             orgProject.managerEmail = $scope.main.userInfo.email;
 
             orgProject.projectId = $scope.main.sltProjectId;
-            orgProject.orgQuotaId = ct.defaultOrgQuotaId;
 
             var dialogOptions = {
                 controller : "commAddOrgProjecFormCtrl",
@@ -79,35 +74,6 @@ angular.module('portal.controllers')
             $scope.actionLoading = false;
             common.showDialog($scope, $event, dialogOptions);
         };
-
-        ct.orgProjectDefaultQuota = function(projectId) {
-            if(!projectId) {
-                return;
-            }
-            var param = {};
-            param['projectId'] = projectId;
-            var promise = quotaService.listOrgQuotas(param);
-            promise.success(function(data, status, headers) {
-                ct.orgQuotas = data.items;
-                ct.defaultOrgQuotaId = '';
-                for (var i = 0, l = ct.orgQuotas.length; i < l; i++) {
-                    if (ct.orgQuotas[i].available == true) {
-                        if (ct.orgQuotas[i].defaultQuota == true) {
-                            ct.defaultOrgQuotaId = ct.orgQuotas[i].id;
-                            break;
-                        } else {
-                            ct.defaultOrgQuotaId = ct.orgQuotas[i].id;
-                        }
-                    }
-                }
-            });
-            promise.error(function(data, status, headers) {
-                ct.defaultOrgQuotaId = '';
-            });
-        };
-
-        // 조직 쿼터 목록 조회
-        ct.orgProjectDefaultQuota($scope.main.sltProjectId);
 
         // 조직 목록 조회
         ct.listOrgProjects();
@@ -138,6 +104,36 @@ angular.module('portal.controllers')
         };
 
         pop.btnClickCheck = false;
+
+        pop.orgProjectDefaultQuota = function(projectId) {
+            if(!projectId) {
+                return;
+            }
+            var param = {};
+            param['projectId'] = projectId;
+            var promise = quotaService.listOrgQuotas(param);
+            promise.success(function(data, status, headers) {
+                pop.orgQuotas = data.items;
+                pop.orgProject.orgQuotaId = '';
+                for (var i = 0; i < pop.orgQuotas.length; i++) {
+                    if (pop.orgQuotas[i].available == true) {
+                        if (pop.orgQuotas[i].defaultQuota == true) {
+                            pop.orgProject.orgQuotaId = pop.orgQuotas[i].id;
+                            break;
+                        } else {
+                            pop.orgProject.orgQuotaId = pop.orgQuotas[i].id;
+                        }
+                    }
+                }
+                if (!pop.orgProject.orgQuotaId){
+                    common.showAlert('작업 쿼터가 없어 작업을 등록할 수 없습니다.');
+                    common.mdDialogHide();
+                }
+            });
+            promise.error(function(data, status, headers) {
+                pop.defaultOrgQuotaId = '';
+            });
+        };
 
         pop.addOrgProject = function() {
 
@@ -175,6 +171,8 @@ angular.module('portal.controllers')
                 common.showAlertError($translate.instant('label.org_add') + "(" + pop.selOrg.orgId + ")", data);
             });
         };
+
+        pop.orgProjectDefaultQuota(pop.orgProject.projectId);
 
     })
 ;
