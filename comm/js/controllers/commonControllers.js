@@ -483,12 +483,11 @@ angular.module('common.controllers', [])
             }
         };
 
-        mc.syncListAllPortalOrgs = function () {
-            var response = portal.portalOrgs.syncListAllPortalOrgs(mc.sltProjectId);
+        mc.setListAllPortalOrgs = function (portalOrgs) {
             var sltPortOrg;
             var sltPortOrgId = "";
-            if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
-                mc.portalOrgs = response.data.items;
+            if (angular.isArray(portalOrgs)) {
+                mc.portalOrgs = portalOrgs;
                 if (mc.portalOrgs.length > 0) {
                     sltPortOrg = common.objectsFindCopyByField(mc.portalOrgs, "id", mc.sltPortalOrgId);
                     if (!angular.isObject(sltPortOrg) || !sltPortOrg.id) {
@@ -505,6 +504,15 @@ angular.module('common.controllers', [])
                 mc.setPortalOrg(sltPortOrg);
             } else {
                 mc.changePortalOrg(sltPortOrg);
+            }
+        };
+
+        mc.syncListAllPortalOrgs = function () {
+            var response = portal.portalOrgs.syncListAllPortalOrgs(mc.sltProjectId);
+            if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
+                mc.setListAllPortalOrgs(response.data.items);
+            } else {
+                mc.setListAllPortalOrgs();
             }
         };
 

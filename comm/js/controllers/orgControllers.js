@@ -29,30 +29,20 @@ angular.module('portal.controllers')
         ct.listOrgProjects = function () {
             ct.orgProjects = [];
             var schText = !ct.schText ? "" : ct.schText;
-
             $scope.main.loadingMainBody = true;
-            var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, ct.schType, schText);
+            var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
             promise.success(function (data) {
-
-                //목록 중 생성중/수정중/삭제중 있는지 확인
-                var isIng = false;
-                angular.forEach(data.items, function(orgItem) {
-                    //상태코드가 중지중/삭제중이 있는 경우
-                    if (orgItem.statusCode.indexOf("ing")>-1) {
-                        isIng = true;
-                        return;
-                    }
-                });
-                if (!isIng) { //에러 시 refresh 멈추도록
-                    ct.orgProjects = data.items;
-                    $timeout.cancel($scope.main.reloadCommTimmer['orgProjects']);
-                    $scope.main.loadingMainBody = false;
+                $scope.main.loadingMainBody = false;
+                if (angular.isArray(data.items)) {
+                    angular.forEach(data.items, function (orgProject, key) {
+                        if (!schText || (orgProject.orgName && (orgProject.orgName.toLowerCase().indexOf(schText.toLowerCase()) >= 0))) {
+                            ct.orgProjects.push(orgProject);
+                        }
+                    });
+                    $scope.main.setListAllPortalOrgs(data.items);
                 } else {
-                    $scope.main.reloadCommTimmer['orgProjects'] = $timeout(function () {
-                        ct.listOrgs();
-                    }, 3000)
+                    $scope.main.setListAllPortalOrgs();
                 }
-                $scope.main.syncListAllPortalOrgs();  //작업 전체 조회
             });
             promise.error(function (data, status, headers) {
                 ct.orgs = [];
@@ -76,17 +66,18 @@ angular.module('portal.controllers')
             orgProject.managerEmail = $scope.main.userInfo.email;
 
             orgProject.projectId = $scope.main.sltProjectId;
+            orgProject.orgQuotaId = ct.defaultOrgQuotaId;
 
             var dialogOptions = {
                 controller : "commAddOrgProjecFormCtrl",
                 controllerAs: "pop",
-                fromName : "popOrgProjectForm",
+                formName : "popOrgProjectForm",
                 orgProject : orgProject,
                 callBackFunction : ct.listOrgProjects
             };
             $scope.actionBtnHied = false;
+            $scope.actionLoading = false;
             common.showDialog($scope, $event, dialogOptions);
-            $scope.actionLoading = true;
         };
 
         ct.orgProjectDefaultQuota = function(projectId) {
@@ -115,10 +106,11 @@ angular.module('portal.controllers')
             });
         };
 
+        // 조직 쿼터 목록 조회
+        ct.orgProjectDefaultQuota($scope.main.sltProjectId);
+
         // 조직 목록 조회
         ct.listOrgProjects();
-
-        ct.orgProjectDefaultQuota($scope.main.sltProjectId);
 
     })
     .controller('commAddOrgProjecFormCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, orgService, quotaService, common) {
@@ -126,64 +118,60 @@ angular.module('portal.controllers')
 
         var pop = this;
 
-        pop.validationService = new ValidationService({controllerAs : pop});
+        pop.validationService = new ValidationService();
 
-        pop.formName = $scope.dialogOptions.fromName;
-
+        pop.formName = $scope.dialogOptions.formName;
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
         $scope.dialogOptions.title = $translate.instant("label.project_register");
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail();
         $scope.dialogOptions.okName = "생성";
         $scope.dialogOptions.closeName = "취소";
 
-        $scope.actionLoading = true;
+        pop.orgProject = $scope.dialogOptions.orgProject;
 
-        pop.apply = function() {
-            // 기본정보 validate
-            if (!pop.validateOrg()) return;
-            if (! pop.validationService.checkFormValidity(pop[pop.formName])) {
+        $scope.actionBtnHied = false;
+        $scope.actionLoading = false;
+
+
+        $scope.popDialogOk = function () {
+            pop.addOrgProject();
+        };
+
+        pop.btnClickCheck = false;
+
+        pop.addOrgProject = function() {
+
+            if (pop.btnClickCheck) return;
+            pop.btnClickCheck = true;
+
+            if (!pop.validationService.checkFormValidity($scope[pop.formName])) {
+                pop.btnClickCheck = false;
                 return;
             }
 
+            var param              = {};
+            param.orgManager    = {'email':pop.orgProject.managerEmail, 'userId':pop.orgProject.managerId};
+            param.project       = {'id':pop.orgProject.projectId};
+            param.quota         = {'id':pop.orgProject.orgQuotaId};
+            param.description   = String(pop.orgProject.orgName);
+            param.usePublicIp   = true;
+            param.orgName       = String(pop.orgProject.orgName);
+
             $scope.main.loadingMainBody= true;
 
-            var param              = {};
-            var orgManager         = {'email':pop.selOrg.managerEmail, 'userId':pop.selOrg.managerId};
-            var project            = {'id':pop.selOrg.projectId};
-            var quota              = {'id':pop.selOrg.orgQuotaId};
-            param['orgManager']    = orgManager;
-            param['orgId']         = String(pop.selOrg.orgId);
-            param['project']       = project;
-            param['quota']         = quota;
-            param['description']   = pop.selOrg.description;
-            param['usePublicIp']   = pop.selOrg.isUsePublicIp;
-
-            if(!pop.selOrg.orgName)
-                param['orgName']   = "";
-            else
-                param['orgName']   = String(pop.selOrg.orgName);
-
-            var useStartDate       = new Date(pop.selOrg.useStartDate.replace(/\./g,"-")).getTime();
-            var useEndDate         = new Date(pop.selOrg.useEndDate.replace(/\./g,"-")).getTime();
-            param['useStartDate']  = String(useStartDate);
-            param['useEndDate']    = String(useEndDate);
-
-            var applyPromise;
-            var resultMessage;
-
-            //신규추가
-            applyPromise = orgService.requestOrgCreate(param);
+            var applyPromise = orgService.requestOrgCreate(param);
             applyPromise.success(function (data) {
                 $scope.main.loadingMainBody=false;
-                if(ct.userAuth=="A" || ct.userAuth=="M") {
-                    common.showAlert($translate.instant('label.org_add'), "작업 신청이 완료되었습니다.");
-                }else {
-                    common.showAlert($translate.instant('label.org_add'), $translate.instant('message.mi_apply_org_after_apprv'));
+                pop.btnClickCheck = false;
+                common.showAlert($translate.instant('label.org_add'), $translate.instant('message.mi_apply_org_after_apprv'));
+                if (angular.isFunction(pop.callBackFunction)) {
+                    pop.callBackFunction();
                 }
-                window.setTimeout(function() {$('#listOrgs').trigger('click');}, 1000);
-                common.mdDialogCancel();
+                common.mdDialogHide();
             });
             applyPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody=false;
+                pop.btnClickCheck = false;
                 common.showAlertError($translate.instant('label.org_add') + "(" + pop.selOrg.orgId + ")", data);
             });
         };

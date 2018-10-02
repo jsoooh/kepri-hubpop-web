@@ -7,9 +7,9 @@
 						<!-- 검색 -->
 						<div class="searchBox type2">
 							<div class="form-group">
-								<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listOrgs() : null;">
+								<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listOrgProjects() : null;">
 							</div>
-							<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.listOrgs();"><span class="ico">검색</span></button>
+							<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.listOrgProjects();"><span class="ico">검색</span></button>
 						</div>
 						<!-- //검색 -->
 					</div>
@@ -19,7 +19,7 @@
 				<!-- table top -->
 				<div class="tb-top">
 					<div class="pull-right">
-						<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 생성" ng-click="contents.asideAdd($event);" ng-disabled="main.userAuth != 'M'">프로젝트 생성</button>
+						<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 생성" ng-click="contents.addOrgProjectFormOpen($event);" ng-disabled="main.userAuth != 'M'">프로젝트 생성</button>
 					</div>
 				</div>
 				<!-- //table top -->
@@ -28,7 +28,7 @@
 				<div class="proj_list_area" ng-if="contents.orgProjects.length > 0">
 					<ul class="ul-panel dash_list">
 						<li ng-repeat="org in contents.orgProjects">
-							<a ng-click="contents.detailNgClick(orgItem);">
+							<a ng-click="contents.detailNgClick(org);">
 								<div class="thum">
 									<span class="thum_in img_line" ng-if="org.iconImage && org.iconImage.icon">
 										<img ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.icon }}" class="logo" alt="">
@@ -52,8 +52,8 @@
 									</ul>
 									<div class="date">
 										<span>생성일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
-										<span ng-if="org.lastLoginDate">최근활동일 : {{org.lastLoginDate.time | date : 'yyyy.MM.dd'}}</span>
-										<span ng-if="!org.lastLoginDate">최근활동일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
+										<span ng-if="org.updatedDate">최근활동일 : {{org.updatedDate.time | date : 'yyyy.MM.dd'}}</span>
+										<span ng-if="!org.updatedDate">최근활동일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
 									</div>
 								</div>
 							</a>
@@ -82,7 +82,7 @@
 								</ul>
 								<p>프로젝트 생성 버튼을 눌러서 프로젝트를 만들어 보세요.</p>
 								<div class="txt_box_btn">
-									<button type="button" name="button" class="btn btn-proj-add" ng-click="contents.asideAdd($event);" ng-disabled="main.userAuth != 'M'"><span class="ico"></span><span class="txt">프로젝트 생성</span></button>
+									<button type="button" name="button" class="btn btn-proj-add" ng-click="contents.addOrgProjectFormOpen($event);" ng-disabled="main.userAuth != 'M'"><span class="ico"></span><span class="txt">프로젝트 생성</span></button>
 								</div>
 							</div>
 						</li>
