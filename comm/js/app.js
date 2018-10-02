@@ -67,7 +67,7 @@ angular.module('app', [
 
 		delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/comm/projects');
 
         function setState(option) {
             var mainContents	= {};

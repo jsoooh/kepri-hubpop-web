@@ -19,24 +19,6 @@ angular.module('app')
                 templateUrl: _COMM_VIEWS_ + '/user/signup.html',
                 mainBodyTemplateUrl : _COMM_VIEWS_+'/loginLayout.html'+_VERSION_TAIL_
             },
-            service_catalog: {
-                pageStage : "comm",
-                name: 'service_catalog',
-                stateKey: 'commServiceCatalog',
-                menuDisplayNo : true,
-                url: '/serviceCatalogs',
-                controller: 'commServiceCatalogCataListCtrl',
-                templateUrl: _COMM_VIEWS_ + '/serviceCatalog/cata_list.html'
-            },
-            service_catalog_view: {
-                pageStage : "comm",
-                name: 'service_catalog_view',
-                stateKey: 'commServiceCatalogView',
-                menuDisplayNo : true,
-                url: '/serviceCatalogs/:serviceCatalogId',
-                controller: 'commServiceCatalogCataViewCtrl',
-                templateUrl: _COMM_VIEWS_ + '/serviceCatalog/cata_view.html'
-            },
             member_edit: {
                 pageStage : "comm",
                 name: 'member_edit',
@@ -55,6 +37,7 @@ angular.module('app')
                 notEdPAuth: "AA",
                 mainTop: true,
                 menus: {
+/*
                     home: {
                         name: 'home',
                         icon: "ico1",
@@ -63,6 +46,7 @@ angular.module('app')
                         controller: 'commDashboardsCtrl',
                         templateUrl: _COMM_VIEWS_+'/user/dashboard.html'
                     },
+*/
                     project: {
                         name: 'project',
                         icon: "ico2",
