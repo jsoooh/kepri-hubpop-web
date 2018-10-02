@@ -94,6 +94,7 @@
         var _MIN_ = (_MODE_ == "RUN") ? ".min" : "";
 
         loadCssLink('css/components/jquery.jscrollpane.css');
+        loadCssLink('css/components/jquery.scrolling-tabs' + _MIN_ + '.css');
         loadCssLink('css/components/jquery-ui' + _MIN_ + '.css');
         loadCssLink('css/components/bootstrap' + _MIN_ + '.css');
         loadCssLink('css/components/bootstrap-slider.css');
@@ -124,6 +125,7 @@
         loadJavascript('js/components/jquery-ui' + _MIN_ + '.js');
         loadJavascript('js/components/jquery.mousewheel.js');
         loadJavascript('js/components/jquery.jscrollpane' + _MIN_ + '.js');
+        loadJavascript('js/components/jquery.scrolling-tabs' + _MIN_ + '.js');
         loadJavascript('js/components/ResizeSensor.js');
         loadJavascript('js/components/ElementQueries.js');
         loadJavascript('js/components/console-sham' + _MIN_ + '.js');
@@ -219,17 +221,22 @@
     document.writeln('<div id="wrap" ng-class="main.mainLayoutClass">');
     document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="main.navigationTemplateUrl"></header>');
     document.writeln('	<div id="container" ng-class="main.containerLayoutClass">');
-//    document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
-    document.writeln('		<div class="leftCnt"><div class="gnbMenu"><div class="gnb-in" id="leftMenu"></div></div></div>');	// Left Menu 구조 변경 TEST용
+    if (_MENU_TYPE_ == 'db') {
+        document.writeln('		<div class="leftCnt on"><div class="gnbMenu"><div class="gnb-in" id="leftMenu"></div></div></div>');	// Left Menu 구조 변경 TEST용
+	} else {
+        document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
+	}
     document.writeln('		<div class="rightCnt" id="{{main.rightCntId}}">');
     document.writeln('			<div ng-if="main.isLoginPage" class="titWrap" id="mainTop" ng-include="main.topTemplateUrl"></div>');
     document.writeln('			<div ui-view="mainBody"></div>');
     document.writeln('		</div>');
     document.writeln('	</div>');
-    if (_MENU_TYPE_ == 'part') {
-        document.writeln('	<div id="comm_layer_menu" class="gnbMenu" ng-include="main.commLayerMenuTempeUrl"></div >');
-    } else {
-        document.writeln('	<div id="comm_layer_menu" class="gnbMenu leftMenu" ng-include="main.commLayerMenuTempeUrl"></div >');
+    if (_MENU_TYPE_ != 'db') {
+        if (_MENU_TYPE_ == 'part') {
+            document.writeln('	<div id="comm_layer_menu" class="gnbMenu" ng-include="main.commLayerMenuTempeUrl"></div >');
+        } else {
+            document.writeln('	<div id="comm_layer_menu" class="gnbMenu leftMenu" ng-include="main.commLayerMenuTempeUrl"></div >');
+        }
     }
     document.writeln('	<div class="aside" id="aside-md"></div>');
     document.writeln('	<div class="aside" id="aside-aside1"><div ng-include="main.layerTemplateUrl"></div></div>');

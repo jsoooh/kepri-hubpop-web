@@ -68,7 +68,7 @@ angular.module('app')
                         icon: "ico2",
                         stateKey: 'commProjectMgmt',
                         url: '/comm/projects',
-                        controller: 'commOrgsCtrl',
+                        controller: 'commOrgProjecsCtrl',
                         templateUrl: _COMM_VIEWS_+'/org/orgProjects.html',
                         subPages: {
                             projectDetail: {

@@ -1262,7 +1262,6 @@ angular.module('common.controllers', [])
                 $scope.main.mainBodyLoaded = true;
                 $scope.main.loginSetingInit();
                 $scope.main.syncListAllProjects();
-                //$scope.main.syncListAllPortalOrgs();
                 //$scope.main.listAlarms();
             }
 
@@ -1339,6 +1338,9 @@ angular.module('common.controllers', [])
             $scope.main.rightCntId = 'not-tutorial';
             if (_MENU_TYPE_ == 'db') {
                 $scope.main.urlCheck();
+                if ($scope.main.pageStage == 'tutorial') {
+                    $scope.main.rightCntId = 'tutorial';
+                }
             } else {
                 if ($scope.main.pageStage == 'tutorial') {
                     $scope.main.containerLayoutClass ="fixed";

@@ -1081,8 +1081,8 @@ button.btn.btn-lg.btn-color4.btn-only-more:hover{background:#335cc4;border-color
 
 
 /*튜토리얼 */
-#tutorial .content{position: relative; width:1280px; padding-right:340px;}
-#tutorial .content img{max-width: 100%; margin-top: 30px;}
+#tutorial .content{position: relative; padding-right:340px;}
+#tutorial .content img{max-width: 100%; margin-top: 30px; margin-bottom:10px;  padding:10px; background:#fff;}
 
 #tutorial .h-tit2{margin-bottom: 55px;}
 #tutorial .h-tit3{color:#4c4c4c; margin-top: 55px; margin-bottom: 15px;}
@@ -1095,8 +1095,8 @@ button.btn.btn-lg.btn-color4.btn-only-more:hover{background:#335cc4;border-color
 #tutorial .tuto-ul li{position: relative; color:#888; line-height: 1.5; padding-left:10px;}
 #tutorial .tuto-ul li::before{display: inline-block; position: absolute; left:0; top:10px; z-index: 0; width:3px; height:3px; content: ''; background: #888;}
 
-#tutorial .sideMenu{position: absolute; right:0px; top:30px; z-index: 1; font-size: 16px; width: 240px; padding:20px 0; border-radius: 5px; background: #fff;}
-#tutorial .sideMenu{position:fixed; right:0; top:140px; margin-right:300px;}/*180604 튜토리얼 sideMenu 위치값 수정*/
+#tutorial .sideMenu{position: absolute; right:0px; top:30px; z-index: 1;}
+#tutorial .sideMenu dl {font-size: 16px; width: 240px; padding:20px 0; border-radius: 5px; background: #fff;}
 #tutorial .sideMenu dt{line-height: 1.1; font-weight: 400; padding:0 22px; margin-bottom: 10px;}
 #tutorial .sideMenu li{line-height:1.1; min-height: 38px;}
 #tutorial .sideMenu li a{display: block; position: relative; color:#888; font-weight: 500; padding:12px 22px;}
@@ -1106,6 +1106,7 @@ button.btn.btn-lg.btn-color4.btn-only-more:hover{background:#335cc4;border-color
 #tutorial .sideMenu .btn_top_area {position:relative; margin-top:20px;}
 #tutorial .sideMenu .btn_top_area a.btn_top {display:block; width:60px; height:60px; background:url("../images/btn_top.png") no-repeat left top; margin:auto;}
 #tutorial .sideMenu .btn_top_area a.btn_top span.txt {position:absolute; top:56px; left:45%; display:block; font-size:13px; font-weight:700; color:#666; text-align:center; margin-top:15px;}
+
 
 
 /* 카탈로그 상세 */
@@ -1766,7 +1767,7 @@ select.ng-touched.ng-valid-validation, input.ng-touched.ng-valid-validation, tex
 #container .rightCnt .titWrap .h2{
     font-size: 30px;
 }
-.h-tit2, .panel.type1 .panel_head .tit{
+.panel.type1 .panel_head .tit{
     font-size: 24px;
 }
 .panel .ul-list.type1 li{
@@ -1856,9 +1857,6 @@ select.ng-touched.ng-valid-validation, input.ng-touched.ng-valid-validation, tex
 .searchWrap{
     margin-bottom: 30px;
 }
-.tb-top{
-    margin-bottom: 10px;
-}
 p.no-txt{
     font-weight: 400;
 }
@@ -1887,13 +1885,6 @@ p.no-txt{
     background: none;
     border: 0; 
 } 
-
-
-/*tutorial*/
-#tutorial .tuto-ul li, #tutorial .tuto-txt{
-    line-height: 26px;
-    font-size: 16px; 
-}
 
 
 

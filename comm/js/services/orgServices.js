@@ -36,6 +36,17 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams));
         };
 
+        /*조직 목록 조회 - 소속 조직 : 로그인 사용자 관련*/
+        orgService.getMyProjectOrgList = function (projectId, schType, schText) {
+            var getParams = {
+                'projectId' : projectId,
+                'schType' : schType,
+                'schText' : schText
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams));
+        };
+
+
         /*조직 사용자 조회*/
         orgService.listOrgUsers = function (id) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/users', 'GET'));

@@ -188,8 +188,7 @@ angular.module('portal.services', [])
             var getParams = null;
             if (projectId) {
                 getParams = {
-                    "schType": "projectId",
-                    "schText": projectId
+                    "projectId": projectId
                 };
             }
             return common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams);

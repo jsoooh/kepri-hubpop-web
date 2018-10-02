@@ -1,19 +1,15 @@
 				<!-- 프로젝트 정보 -->
 				<div class="cBox type0 projt-mana">
 					<div class="pull-left">
-						<h4 class="c-tit">전체 프로젝트 <em class="point1">({{contents.projects.length}})</em></h4>
-<!-- 						<h4 class="c-tit">활동 중인 프로젝트 수 <em class="point1">({{contents.projects.length}})</em></h4> -->
-<!-- 						<h4 class="c-tit">활동 정지 프로젝트 수 <em class="point1">({{contents.projects.length}})</em></h4> -->
+						<h4 class="c-tit">전체 프로젝트 <em class="point1">({{contents.orgProjects.length}})</em></h4>
 					</div>
 					<div class="pull-right">
 						<!-- 검색 -->
 						<div class="searchBox type2">
 							<div class="form-group">
-<!-- 								<input type="text" placeholder="프로젝트 명 or 프로젝트 책임자" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listProjects() : null;"> -->
-<!-- 								<input type="text" placeholder="프로젝트 명" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listProjects() : null;"> -->
-								<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listProjects_ngKeyup() : null;">
+								<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listOrgs() : null;">
 							</div>
-							<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.listProjects(); contents.isSearch = true;"><span class="ico">검색</span></button>
+							<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.listOrgs();"><span class="ico">검색</span></button>
 						</div>
 						<!-- //검색 -->
 					</div>
@@ -23,54 +19,50 @@
 				<!-- table top -->
 				<div class="tb-top">
 					<div class="pull-right">
-						<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 생성" ng-click="contents.projectRegistration_ngClick($event)" ng-disabled="main.hubpop.userAuth != 'M'">프로젝트 생성</button>
+						<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 생성" ng-click="contents.asideAdd($event);" ng-disabled="main.userAuth != 'M'">프로젝트 생성</button>
 					</div>
 				</div>
 				<!-- //table top -->
 
 				<!-- 프로젝트 리스트 -->
-				<div class="proj_list_area" ng-if="contents.projects.length > 0">
+				<div class="proj_list_area" ng-if="contents.orgProjects.length > 0">
 					<ul class="ul-panel dash_list">
-						<li ng-repeat="project in contents.projects">
-							<a ng-click="contents.listProjects_click(project);">
+						<li ng-repeat="org in contents.orgProjects">
+							<a ng-click="contents.detailNgClick(orgItem);">
 								<div class="thum">
-									<span class="thum_in img_line" ng-show="!!project.logo">
-										<img ng-src="{{project.logo2}}" class="logo" alt="">
+									<span class="thum_in img_line" ng-if="org.iconImage && org.iconImage.icon">
+										<img ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.icon }}" class="logo" alt="">
 									</span>
-									<span class="thum_in" ng-show="!project.logo">
-										<span class="txt">{{project.name.substr(0, 1)}}</span>
+									<span class="thum_in" ng-if="!org.logo">
+										<span class="txt">{{org.orgName.substr(0, 1)}}</span>
 									</span>
 									
 								</div>
 								<div class="list_in">
 									<dl>
-										<dt><strong>{{project.name}}</strong></dt>
-										<dd ng-if="!!project.description">{{project.description}}</dd>
+										<dt><strong>{{org.orgName}}</strong></dt>
+										<dd ng-if="org.description">{{org.description}}</dd>
 									</dl>
 								</div>
 								<div class="pj_info_box">
 									<ul class="user_info">
-										<li>관리자 : {{project.owner.name}}</li>
-										<li>참여자 수 : {{project.userCount}}</li>
-										<li>Project ID : {{project.id}}</li>
+										<li>관리자 : {{org.managerName}}</li>
+										<li>참여자 수 : {{org.orgUserCount}}</li>
+										<li>Project ID : {{org.id}}</li>
 									</ul>
 									<div class="date">
-										<span>생성일 : {{project.createdDate.time | date : 'yyyy.MM.dd'}}</span>
-										<span ng-if="project.lastLoginDate">최근활동일 : {{project.lastLoginDate.time | date : 'yyyy.MM.dd'}}</span>
-										<span ng-if="!project.lastLoginDate">최근활동일 : {{project.createdDate.time | date : 'yyyy.MM.dd'}}</span>
+										<span>생성일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
+										<span ng-if="org.lastLoginDate">최근활동일 : {{org.lastLoginDate.time | date : 'yyyy.MM.dd'}}</span>
+										<span ng-if="!org.lastLoginDate">최근활동일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
 									</div>
 								</div>
 							</a>
 						</li>
 					</ul>
-					<!-- <div class="btn-btm">
-						<button type="button" name="button" class="btn btn-lg btn-color4 btn-only-more" ng-click="contents.tab1BtnOnlyMore_ngClick();" ng-disabled="contents.tab1BtnOnlyMore_ngDisabled">더보기<span class="ico"></span></button>
-					</div> -->
 				</div>
 				<!-- //프로젝트 리스트 -->
-<!-- contents.isSearch={{contents.isSearch}} -->
 				<!-- 프로젝트 리스트(검색결과가 없을때) -->
-				<div class="proj_list_area" ng-if="contents.projects.length == 0 && contents.isSearch == true">
+				<div class="proj_list_area" ng-if="contents.org.length == 0 && contents.schText">
 					<ul class="ul-panel dash_list no_data">
 						<li><p class="no_data_txt pd0">검색결과가 없습니다.</p></li>
 					</ul>
@@ -78,7 +70,7 @@
 				<!-- //프로젝트 리스트(검색결과가 없을때) -->
 				
 				<!-- 프로젝트 리스트(데이터가 없을때) -->
-				<div class="proj_list_area" ng-if="contents.projects.length == 0 && contents.isSearch == false">
+				<div class="proj_list_area" ng-if="contents.projects.length == 0 && !contents.schText">
 					<ul class="ul-panel dash_list no_data">
 						<li>
 							<p class="no_data_txt">현재 참여중인 프로젝트가 없습니다. HUB-PoP을 사용하시려면 먼저 프로젝트를 생성해 주세요.</p>
@@ -90,7 +82,7 @@
 								</ul>
 								<p>프로젝트 생성 버튼을 눌러서 프로젝트를 만들어 보세요.</p>
 								<div class="txt_box_btn">
-									<button type="button" name="button" class="btn btn-proj-add" ng-click="contents.projectRegistration_ngClick($event)" ng-disabled="main.hubpop.userAuth != 'M'"><span class="ico"></span><span class="txt">프로젝트 생성</span></button>
+									<button type="button" name="button" class="btn btn-proj-add" ng-click="contents.asideAdd($event);" ng-disabled="main.userAuth != 'M'"><span class="ico"></span><span class="txt">프로젝트 생성</span></button>
 								</div>
 							</div>
 						</li>
