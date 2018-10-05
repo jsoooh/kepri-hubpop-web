@@ -49,9 +49,9 @@ angular.module('app')
                             projectDetail: {
                                 mainTop: true,
                                 name: 'project_details',
-                                stateKey: 'commProjectDetail',
+                                stateKey: 'orgProjectDetailCtrl',
                                 url: '/comm/projects/projectDetail/:orgId',
-                                controller: 'commOrgDetailCtrl',
+                                controller: 'orgProjectDetailCtrl',
                                 templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html'
                             }
                         }

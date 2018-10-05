@@ -1,0 +1,230 @@
+<!-- tab wrap -->
+<div class="tabWrap type1">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li ng-class="{'active':contents.sltInfoTab == 'info'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('info');">프로젝트 개요</a></li>
+        <li ng-class="{'active':contents.sltInfoTab == 'member'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('member');">프로젝트 멤버</a></li>
+        <li ng-class="{'active':contents.sltInfoTab == 'resource'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('resource');">프로젝트 자원</a></li>
+    </ul>
+    <!-- //Nav tabs -->
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- 프로젝트 개요 panel -->
+        <div ng-if="contents.sltInfoTab == 'info'" class="tab-pane st_none in" ng-class="{'active':contents.sltInfoTab == 'info'}">
+            <!-- cBox -->
+            <div class="cBox type1 appCnt-info">
+                <div class="cBox-hd">
+                    <h4 class="c-tit">
+                        <button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.changeIcon($event)" ><span class="ico">썸네일 수정</span></button>
+                        <span ng-if="contents.project.logo != null" class="thum_box img_line">
+                            <img ng-src="{{ contents.projectLogo }}" alt="">
+                        </span>
+                        <span ng-if="contents.project.logo == null" class="thum_box">
+                            <span class="txt">{{ contents.selOrg.orgName.substr(0, 1) }}</span>
+                        </span>
+                        {{ contents.selOrg.orgName }}
+                    </h4>
+                    <div class="pull-right">
+                        <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.btn.deleteProject();"><span class="ico">삭제</span></button>
+                    </div>
+                </div>
+                <div class="cBox-cnt">
+                    <div class="l_box">
+                        <div class="in">
+                            <div class="col info-txt pdb0">
+                                <ul>
+                                    <li>
+                                        <strong class="tit">생성자</strong>
+                                        <div class="txt">{{ contents.selOrg.managerName }}</div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col info-txt">
+                                <ul>
+                                    <li>
+                                        <strong class="tit">Project ID</strong>
+                                        <div class="txt">{{ contents.selOrg.id }}</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="in">
+                            <div class="col-non info-txt4 rbox-2-width"><!-- r_box에 갯수 추가될 때 사용 -->
+                                <strong class="tit">설명<button type="button" name="button" class="btn only-ico ico-txt_modi" title="수정" data-user="aside" data-username="#" ng-click="contents.popProjectDescription();"><span class="ico">수정</span></button></strong>
+                                <div class="txt">
+                                    <span class="txt_normal" ng-show="contents.txt_normal_ngShow">{{ contents.selOrg.description }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="r_box">
+                        <!-- 멤버 수 -->
+                        <div class="col info-txt3">
+                            <p class="txt"><span>{{ contents.orgUsers.counts }}</span><strong>Member</strong></p>
+                        </div>
+                        <!-- //멤버 수 -->
+                    </div>
+                </div>
+            </div>
+            <!-- //cBox -->
+
+            <div class="cont-titWrap mt50">
+                <h3 class="h-tit3 pd0">프로젝트 참여자</h3>
+            </div>
+
+            <!-- table -->
+            <div class="tbl type1">
+                <table class="table">
+                    <colgroup>
+                        <col style="width:10%;">
+                        <col style="width:30%;">
+                        <col style="width:30%;">
+                        <col style="width:30%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">역할</th>
+                        <th scope="col">멤버 등록일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in contents.orgUsers.items">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.auth | roleName }}</td>
+                        <td>{{ user.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
+                    </tr>
+                    <!-- 등록된 멤버가 없을 때 -->
+                    <tr ng-if="contents.orgUsers.counts == 0" class="no-data">
+                        <td colspan="5">등록된 프로젝트 멤버가 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- //table -->
+        </div>
+        <!-- //프로젝트 개요 panel -->
+
+        <!-- 프로젝트 멤버 panel -->
+        <div ng-if="contents.sltInfoTab == 'member'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'member'}">
+            <!-- table -->
+            <div class="tb-top">
+                <div class="pull-right">
+                    <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-disabled="!contents.isOrgManager" ng-click="contents.projectUsers_ngClick()"><span class="ico">추가</span></button>
+                </div>
+            </div>
+            <div class="tbl type1">
+                <table class="table">
+                    <colgroup>
+                        <col style="width:15%;">
+                        <col style="width:auto;">
+                        <col style="width:20%;">
+                        <col style="width:20%;">
+                        <col style="width:15%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">역할</th>
+                        <th scope="col">멤버 등록일</th>
+                        <th scope="col">관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in contents.orgUsers.items">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.auth | roleName }}</td>
+                        <td>{{ user.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
+                        <td>
+                            <button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-click="contents.resetPassword2(user);"><span class="ico">패스워드 초기화</span></button>
+                            <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.btn.del(user);" ng-if="user.roleName != 'OWNER'" ng-disabled="!contents.isThisProjectManager"><span class="ico">삭제</span></button>
+                        </td>
+                    </tr>
+                    <!-- 등록된 멤버가 없을 때 -->
+                    <tr ng-if="contents.orgUsers.counts == 0" class="no-data">
+                        <td colspan="5">등록된 프로젝트 멤버가 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- //table -->
+        </div>
+        <!-- //프로젝트 멤버 panel -->
+
+        <!-- 프로젝트 자원 panel -->
+        <div ng-if="contents.sltInfoTab == 'resource'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'resource'}">
+            <!-- cBox -->
+            <div class="cBox type4">
+                <h3 class="h-tit3 pd0">자원쿼터</h3>
+
+                <div class="cBox-cnt pd0">
+                    <div class="in">
+                        <div class="tb-top">
+                            <div class="pull-left c-tit_st">
+                                <h4 class="c-tit ng-binding">- 쿼터 Plan : {{ contents.project.quota.name }}</h4>
+                            </div>
+                        </div>
+
+                        <div class="tb-top">
+                            <div class="pull-left">
+                                <h4 class="c-tit ng-binding">쿼터변경요청</h4>
+                            </div>
+                            <div class="pull-right">
+                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-click="contents.asideQuotaReqNgClick2($event);" ng-disabled="!contents.isThisProjectManager2 || !contents.isThisProjectManager2A">
+                                    <span class="ico">추가</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- table -->
+                        <div class="tbl type1">
+                            <table class="table">
+                                <colgroup>
+                                    <col style="width:10%;">
+                                    <col style="width:10%;">
+                                    <col style="width:10%;">
+                                    <col style="width:auto;">
+                                    <col style="width:15%;">
+                                    <col style="width:15%;">
+                                    <col style="width:10%;">
+                                    <col style="width:10%;">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">신청</th>
+                                    <th scope="col">용량</th>
+                                    <th scope="col">요청자</th>
+                                    <th scope="col">요청일</th>
+                                    <th scope="col">처리일</th>
+                                    <th scope="col">상태</th>
+                                    <th scope="col">처리</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="item in contents.quotaHistory.items">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ item.messageReq }}</td>
+                                    <td>{{ item.quotaReq.name }}</td>
+                                    <td>{{ item.createdId }}</td>
+                                    <td>{{ item.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+                                    <td>{{ item.updatedDate.time | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+                                    <td>{{ item.status | commQuotaHistoryStatusName }}</td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- //table -->
+                    </div>
+                </div>
+            </div>
+            <!-- //cBox -->
+        </div>
+        <!-- //프로젝트 자원 panel -->
+    </div>
+</div>
