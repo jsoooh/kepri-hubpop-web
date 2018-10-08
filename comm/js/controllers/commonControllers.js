@@ -1102,26 +1102,6 @@ angular.module('common.controllers', [])
                     common.clearAccessToken();
                     common.logout();
                 }
-
-                /*
-                                var decodeData = portal.sso.decode();
-                                var credentials = {
-                                    email : decodeData.id,
-                                    password : decodeData.id,
-                                    redirect : 'console',
-                                    isSso : true
-                                };
-
-                                user.authenticate(credentials);
-
-                                var params = {};
-                                params.email = decodeData.id;
-                                params.name = decodeData.name;
-                                params.password = decodeData.id;
-
-                                portal.sso.createProjectResponsiblePersonSso(params);
-                */
-
             } else {
                 common.moveLoginPage();
             }

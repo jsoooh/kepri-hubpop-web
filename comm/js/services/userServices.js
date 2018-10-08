@@ -42,12 +42,9 @@ angular.module('common.services')
                 } else if (response.data && response.data.resultCode == "0") {
                     var userInfo = common.getUser();
                     var tokenUserInfo = response.data.tokenInfo;
-                    if (userInfo && userInfo.email && tokenUserInfo != userInfo.email) {
+                    if (userInfo && userInfo.email && tokenUserInfo.user_name != userInfo.email) {
                         if (tokenUserInfo.email == tokenUserInfo.user_name) {
                             tokenUserInfo.user_name = userInfo.user_name;
-                        }
-                        if (!tokenUserInfo.company &&  userInfo.company) {
-                            tokenUserInfo.company = userInfo.company;
                         }
                     }
                     common.setUser(tokenUserInfo);
@@ -68,19 +65,19 @@ angular.module('common.services')
             if (response) {
                 if (response.status == 307) {
                     return false;
-                } else if (response.data && response.data.resultCode == "0") {
-                    var userInfo = common.getUser();
-                    var tokenUserInfo = response.data.tokenInfo;
-                    if (userInfo && userInfo.email && tokenUserInfo != userInfo.email) {
-                        if (tokenUserInfo.email == tokenUserInfo.user_name) {
-                            tokenUserInfo.user_name = userInfo.user_name;
-                        }
-                        if (!tokenUserInfo.company &&  userInfo.company) {
-                            tokenUserInfo.company = userInfo.company;
-                        }
+                } else if (response.status == 200 && response.data) {
+                    var userInfo = response.data;
+                    var accessToken = userInfo.token;
+                    if (response.headers && response.headers("U-X-TOKEN")) {
+                        accessToken = response.headers("U-X-TOKEN");
                     }
-                    common.setUser(tokenUserInfo);
-                    return true;
+                    if (accessToken) {
+                        common.setAccessToken(accessToken);
+                        common.setUser(userInfo);
+                        return true;
+                    } else {
+                        return true;
+                    }
                 }
             } else {
                 return false;
