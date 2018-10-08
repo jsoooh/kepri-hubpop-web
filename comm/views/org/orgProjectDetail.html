@@ -21,9 +21,9 @@
                             <img ng-src="{{ contents.projectLogo }}" alt="">
                         </span>
                         <span ng-if="contents.project.logo == null" class="thum_box">
-                            <span class="txt">{{ contents.selOrg.orgName.substr(0, 1) }}</span>
+                            <span class="txt">{{ contents.selOrgProject.orgName.substr(0, 1) }}</span>
                         </span>
-                        {{ contents.selOrg.orgName }}
+                        {{ contents.selOrgProject.orgName }}
                     </h4>
                     <div class="pull-right">
                         <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.btn.deleteProject();"><span class="ico">삭제</span></button>
@@ -36,7 +36,7 @@
                                 <ul>
                                     <li>
                                         <strong class="tit">생성자</strong>
-                                        <div class="txt">{{ contents.selOrg.managerName }}</div>
+                                        <div class="txt">{{ contents.selOrgProject.managerName }}</div>
                                     </li>
                                 </ul>
                             </div>
@@ -44,7 +44,7 @@
                                 <ul>
                                     <li>
                                         <strong class="tit">Project ID</strong>
-                                        <div class="txt">{{ contents.selOrg.id }}</div>
+                                        <div class="txt">{{ contents.selOrgProject.id }}</div>
                                     </li>
                                 </ul>
                             </div>
@@ -53,7 +53,7 @@
                             <div class="col-non info-txt4 rbox-2-width"><!-- r_box에 갯수 추가될 때 사용 -->
                                 <strong class="tit">설명<button type="button" name="button" class="btn only-ico ico-txt_modi" title="수정" data-user="aside" data-username="#" ng-click="contents.popProjectDescription();"><span class="ico">수정</span></button></strong>
                                 <div class="txt">
-                                    <span class="txt_normal" ng-show="contents.txt_normal_ngShow">{{ contents.selOrg.description }}</span>
+                                    <span class="txt_normal" ng-show="contents.txt_normal_ngShow">{{ contents.selOrgProject.description }}</span>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                     <div class="in">
                         <div class="tb-top">
                             <div class="pull-left c-tit_st">
-                                <h4 class="c-tit ng-binding">- 쿼터 Plan : {{ contents.project.quota.name }}</h4>
+                                <h4 class="c-tit ng-binding">- 쿼터 Plan : {{ contents.selOrgProject.quotaId.name }}</h4>
                             </div>
                         </div>
 
