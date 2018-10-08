@@ -62,6 +62,31 @@ angular.module('common.services')
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/token/decode', 'POST', {"access_token": accessToken}));
         };
 
+        // 동기 방식
+        user.checkPgsecuid = function (pgsecuid) {
+            var response = common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/pgsecuid/check', 'POST', { "pgsecuid": pgsecuid });
+            if (response) {
+                if (response.status == 307) {
+                    return false;
+                } else if (response.data && response.data.resultCode == "0") {
+                    var userInfo = common.getUser();
+                    var tokenUserInfo = response.data.tokenInfo;
+                    if (userInfo && userInfo.email && tokenUserInfo != userInfo.email) {
+                        if (tokenUserInfo.email == tokenUserInfo.user_name) {
+                            tokenUserInfo.user_name = userInfo.user_name;
+                        }
+                        if (!tokenUserInfo.company &&  userInfo.company) {
+                            tokenUserInfo.company = userInfo.company;
+                        }
+                    }
+                    common.setUser(tokenUserInfo);
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        };
+
         user.logoutAction = function () {
             var scope = common.getMainCtrlScope();
             scope.main.loadingMainBody = true;

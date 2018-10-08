@@ -1098,6 +1098,10 @@ angular.module('common.controllers', [])
         } else {
             // TODO : SSO 연계 추가 작성
             if (common.getPgsecuid()) {
+                if (!user.checkPgsecuid(common.getPgsecuid())) {
+                    common.clearAccessToken();
+                    common.logout();
+                }
 
                 /*
                                 var decodeData = portal.sso.decode();
@@ -1250,7 +1254,7 @@ angular.module('common.controllers', [])
         $scope.main.replaceSeting();
 
         // 로그인 여부 체크
-        if (!common.isAuthenticated() || !$scope.main.userInfo || !$scope.main.userInfo.email) {
+        if (!common.isAuthenticated()) {
 
             $scope.main.isLoginPage = false;
             $scope.main.mainLayoutClass = "one_page";
