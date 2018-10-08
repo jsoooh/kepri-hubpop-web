@@ -1477,11 +1477,7 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         common.moveLoginPage = function () {
-            if (CONSTANTS.loginUrl.substring(0, 4) == "http" || CONSTANTS.loginUrl.indexOf(".html") > -1 || CONSTANTS.loginUrl.indexOf("#") > -1) {
-                common.locationHref(CONSTANTS.loginUrl);
-            } else {
-                common.locationPath(CONSTANTS.loginUrl);
-            }
+            common.locationHref(CONSTANTS.loginUrl);
         };
 
         common.locationUrl = function (pathUrl) {

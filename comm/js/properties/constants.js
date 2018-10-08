@@ -12,7 +12,7 @@ angular.module('app')
                 , { key : "en", name : "English" }
             ]
 		},
-        loginUrl: '#/login',
+        loginUrl: '/#/login',
         uaaContextUrl : '/comm-api/api/portal/v1',
 		paasApiCfContextUrl : '/paas-api/api/portal/v1',
 		paasApiCoreContextUrl : '/paas-api/api/core',

@@ -1091,13 +1091,35 @@ angular.module('common.controllers', [])
         }
 
         if (common.isAuthenticated()) {
-            if (!common.isNotLoginAcceptPage($location.path())) {
-                // 로그인 토큰 체크 (처음 로드 할 때만)
-                // 동기식 체크
-                if (!user.checkAccessToken(common.getAccessToken())) {
-                    common.clearAccessToken();
-                    common.logout();
-                }
+            if (!user.checkAccessToken(common.getAccessToken())) {
+                common.clearAccessToken();
+                common.logout();
+            }
+        } else {
+            // TODO : SSO 연계 추가 작성
+            if (common.getPgsecuid()) {
+
+                /*
+                                var decodeData = portal.sso.decode();
+                                var credentials = {
+                                    email : decodeData.id,
+                                    password : decodeData.id,
+                                    redirect : 'console',
+                                    isSso : true
+                                };
+
+                                user.authenticate(credentials);
+
+                                var params = {};
+                                params.email = decodeData.id;
+                                params.name = decodeData.name;
+                                params.password = decodeData.id;
+
+                                portal.sso.createProjectResponsiblePersonSso(params);
+                */
+
+            } else {
+                common.moveLoginPage();
             }
         }
 
@@ -1228,31 +1250,7 @@ angular.module('common.controllers', [])
         $scope.main.replaceSeting();
 
         // 로그인 여부 체크
-        if (!common.isAuthenticated()) {
-
-            // TODO : SSO 연계 추가 작성
-            if (common.getPgsecuid()) {
-
-/*
-                var decodeData = portal.sso.decode();
-                var credentials = {
-                    email : decodeData.id,
-                    password : decodeData.id,
-                    redirect : 'console',
-                    isSso : true
-                };
-
-                user.authenticate(credentials);
-
-                var params = {};
-                params.email = decodeData.id;
-                params.name = decodeData.name;
-                params.password = decodeData.id;
-
-                portal.sso.createProjectResponsiblePersonSso(params);
-*/
-
-            }
+        if (!common.isAuthenticated() || !$scope.main.userInfo || !$scope.main.userInfo.email) {
 
             $scope.main.isLoginPage = false;
             $scope.main.mainLayoutClass = "one_page";
