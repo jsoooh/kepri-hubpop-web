@@ -16,7 +16,7 @@
             <div class="cBox type1 appCnt-info">
                 <div class="cBox-hd">
                     <h4 class="c-tit">
-                        <button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-click="contents.changeIcon($event)"><span class="ico">썸네일 수정</span></button>
+                        <button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.changeIcon($event)"><span class="ico">썸네일 수정</span></button>
                         <span ng-if="contents.project.logo != null" class="thum_box img_line">
                             <img ng-src="{{ contents.projectLogo }}" alt="">
                         </span>
