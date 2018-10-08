@@ -305,7 +305,7 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 .tabWrap.type1 .scrtabs-tabs-movable-container{position:absolute; z-index: 0;}
 .tabWrap.type1 .nav-tabs{display: table; table-layout: fixed; width:100%; border-bottom:1px solid #0d2a73; background-color: #fff;}/*180406 스타일 갱신 border-color:#333 */
 .tabWrap.type1 .nav>li{display: table-cell;}
-.tabWrap.type1 .tab-content > div{padding-top:30px;border-top:1px solid #0d2a73;}/*180406 스타일 갱신 border-top:1px solid #0d2a73*/
+.tabWrap.type1 .tab-content > div{padding-top:50px;border-top:1px solid #0d2a73;}/*180406 스타일 갱신 border-top:1px solid #0d2a73*/
 .tab-content > div.bdtNon{border-top:0 !important;}/*180406 스타일 추가*/
 .tabWrap.type1 .nav>li{min-width:200px; border:0;}/*180409 스타일 갱신 min-width:160px*/
 .tabWrap.type1 .nav>li>a{display: block; font-size: 17px; color:#888; line-height:58px; padding:0 70px; margin:0; border-radius: 0; border-bottom:0; text-align: center; background:#fff;font-weight:700;}/*180406 스타일 갱신 font-weight:700*//*180409 스타일 갱신 padding:0 70px;*/
