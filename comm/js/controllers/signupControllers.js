@@ -201,6 +201,7 @@ angular.module('common.controllers')
             memInfo['email']                = memberInfo.email;
             memInfo['password']             = memberInfo.password;
             memInfo['password2']            = memberInfo.password2;
+            memInfo['position']             = memberInfo.position;
 
             return memInfo;
         }
