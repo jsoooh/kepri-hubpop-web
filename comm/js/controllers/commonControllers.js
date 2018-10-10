@@ -935,6 +935,10 @@ angular.module('common.controllers', [])
             $state.reload();
         };
 
+        mc.showDialogAlert = function(title, subject){
+            common.showDialogAlert(title, subject);
+        };
+
         // select2 사용자 정의 옵션(html 사용)
         mc.usSelectTwoOptions = {
             templateResult: function (state) {
@@ -1094,6 +1098,7 @@ angular.module('common.controllers', [])
             if (!user.checkAccessToken(common.getAccessToken())) {
                 common.clearAccessToken();
                 common.logout();
+                return;
             }
         } else {
             // TODO : SSO 연계 추가 작성
@@ -1101,9 +1106,13 @@ angular.module('common.controllers', [])
                 if (!user.checkPgsecuid(common.getPgsecuid())) {
                     common.clearAccessToken();
                     common.logout();
+                } else {
+                    common.moveHomePage();
                 }
+                return;
             } else {
                 common.moveLoginPage();
+                return;
             }
         }
 
