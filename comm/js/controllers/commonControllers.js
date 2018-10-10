@@ -386,7 +386,7 @@ angular.module('common.controllers', [])
                 mc.sltPortalOrg = portalOrg;
                 mc.sltPortalOrgId = portalOrg.id;
                 mc.sltPortalOrgDisplayName = portalOrg.orgName;
-                mc.setUserTenant(common.objectsFindCopyByField(mc.userTenants, "teamCode", mc.sltPortalOrg.orgId));
+                mc.loadUserTenant();
                 mc.loadSltOrganization();
             } else {
                 $timeout(function () {
@@ -669,7 +669,7 @@ angular.module('common.controllers', [])
                 mc.sltProjectId = "";
                 mc.sltProjectDisplayName = $translate.instant("label.all");
             }
-            mc.syncListTenants(mc.sltProjectId);
+            //mc.syncListTenants(mc.sltProjectId);
             mc.syncListAllPortalOrgs();
         };
 
