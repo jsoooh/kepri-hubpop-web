@@ -1453,8 +1453,9 @@ angular.module('common.controllers', [])
 			$scope.main.contentsLayoutResizeEvent	= true;
 		}
 
-        $scope.main.asideClose();
-        // IaaS 추가 2018.04.11 E
+		if (angular.isFunction($scope.main.asideClose())) {
+            $scope.main.asideClose();
+        }
 
         _DebugConsoleLog("commonControllers.js : mainBodyCtrl End, path : " + $location.path(), 1);
 
