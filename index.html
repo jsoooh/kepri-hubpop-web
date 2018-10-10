@@ -218,7 +218,7 @@
 <body id="mainCtrl" class="{{ main.bodyLayout }}" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">
 <script type="text/javascript">
 
-    document.writeln('<div id="wrap" ng-class="main.mainLayoutClass">');
+    document.writeln('<div style="display: none;" ng-style="{ \'display\' : (main.isLoginPage) ? \'block\' : \'none\' }" id="wrap" ng-class="main.mainLayoutClass">');
     document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="main.navigationTemplateUrl"></header>');
     document.writeln('	<div id="container" ng-class="main.containerLayoutClass">');
     if (_MENU_TYPE_ == 'db') {
@@ -250,8 +250,8 @@
 	document.writeln('	<div class="aside" id="aside-quota-res"><div ng-include="main.layerTemplateUrlQuotaRes"></div></div>'); // 작업 상세 > 용량
     document.writeln('</div>');
     document.writeln('<div growl></div>');
-    //document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
-    document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.loadingMain || main.loadingMainBody) ? \'block\' : \'none\' }">'); //로딩바 영역
+    document.writeln('<div class="loader-container" ng-hide="!main.loadingMain && !main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
+    document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.isLoginPage) ? \'none\' : \'block\' }">'); //로딩바 영역
     document.writeln('	<div class="loadWrap_spn">');
     document.writeln('		<div class="loadBox_spn">');
     document.writeln('			<div class="lds-css ng-scope">');
