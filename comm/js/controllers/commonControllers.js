@@ -787,9 +787,11 @@ angular.module('common.controllers', [])
                 } else {
                     mc.leftMenuParams = common.getLeftMenuList(mc.selectSiteMap, "A", "A");
                     mc.commLeftMenuParams = common.getLeftMenuList({mainKey: 'common', pageStage: 'comm'}, "A", "A");
+/*
                     if(!mc.commLeftFav.dataLoad) {
                         mc.setCommLeftIconMenuParams();
                     }
+*/
                 }
             }
         };
