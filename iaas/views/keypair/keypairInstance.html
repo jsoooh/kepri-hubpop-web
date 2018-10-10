@@ -1,19 +1,13 @@
 <!-- 작업 추가 및 선택 -->
-<div class="projt-selWarp">
-	<div class="pull-left">
-		<div class="projt-sel dropdown">
-			<button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<span class="txt">{{main.userTenant.korName}}</span><span class="ico arr"></span>
-			</button>
-			<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
-				<li ng-repeat="tenant in main.userTenants"><a href="" ng-click="main.userTenantSelect(tenant);">{{tenant.korName}}</a></li>
-			</ul>
-		</div>
+<div ng-if="main.projectType == 'pjt'" class="projt-selWarp">
+	<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+	<div class="pull-right">
+		<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
 	</div>
 </div>
 <!-- //작업 추가 및 선택 -->
 
-	<div class="guideTxt type1" ng-bind-html="'iaasMenu.desc.' + main.selectSiteMap.name + '.short' | translate"></div>
+<!--<div class="guideTxt type1" ng-bind-html="'iaasMenu.desc.' + main.selectSiteMap.name + '.short' | translate"></div>-->
 
 <!-- table -->
 <div class="tbl type1">

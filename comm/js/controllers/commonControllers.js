@@ -404,22 +404,6 @@ angular.module('common.controllers', [])
             }
         };
 
-        mc.syncListTenants = function (projectId) {
-            mc.userTenants = [];
-            if (projectId) {
-                var response = portal.portalOrgs.syncListTenantByName(projectId);
-                if (response && response.status == 200 && angular.isArray(response.data.content)) {
-                    mc.userTenants = response.data.content;
-                    for (var i=0; i<mc.userTenants.length; i++) {
-                        if (mc.userTenants[i]) {
-                            mc.userTenants[i].orgCode = mc.userTenants[i].pk.orgCode;
-                            mc.userTenants[i].teamCode = mc.userTenants[i].pk.teamCode;
-                        }
-                    }
-                }
-            }
-        };
-
         mc.syncGetTenantByName = function (orgCode, teamCode) {
             var response = portal.portalOrgs.syncGetTenantByName(orgCode, teamCode);
             if (response && response.status == 200 && angular.isObject(response.data.content)) {
@@ -669,7 +653,6 @@ angular.module('common.controllers', [])
                 mc.sltProjectId = "";
                 mc.sltProjectDisplayName = $translate.instant("label.all");
             }
-            //mc.syncListTenants(mc.sltProjectId);
             mc.syncListAllPortalOrgs();
         };
 
@@ -739,7 +722,6 @@ angular.module('common.controllers', [])
 
             mc.projects = [];
             mc.portalOrgs = [];
-            mc.userTenants = [];
             mc.organizations = [];
             mc.alarms = {};     //alarm.list : mc.alarms.content
 
