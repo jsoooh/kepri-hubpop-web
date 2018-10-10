@@ -370,7 +370,10 @@ angular.module('common.controllers', [])
                 mc.setUserTenant(common.objectsFindCopyByField(mc.userTenants, "teamCode", mc.sltPortalOrg.orgId));
                 mc.loadSltOrganization();
             } else {
-                mc.desplayDbMenuList("none");
+                $timeout(function () {
+                    mc.desplayDbMenuList("none");
+                    $scope.main.urlCheck();
+                }, 100);
                 if (mc.sltPortalOrgId) {
                     common.clearPortalOrgKey();
                     mc.sltPortalOrg = {};
