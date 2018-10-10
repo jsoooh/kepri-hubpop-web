@@ -2829,7 +2829,7 @@ angular.module('common.services', ['LocalStorageModule'])
 
         cookies.clearAll = function () {
             cookies.clearAccessToken();
-            cookies.clearPgsecuid();
+            //cookies.clearPgsecuid();
             cookies.clearUser();
         };
 
