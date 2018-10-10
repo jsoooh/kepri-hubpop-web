@@ -343,6 +343,25 @@ angular.module('common.controllers', [])
             }
         };
 
+        //Left Menu 구조 생성
+        mc.setDbMenuList = function() {
+            mc.dbMenuList = [];
+            var response = portal.menu.getMenuList();
+            if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
+                mc.dbMenuList = response.data.items;
+            }
+        };
+
+        //url정보 체크하여 메뉴 위치 확인
+        mc.desplayDbMenuList = function(myRoleName) {
+            portal.menu.setListMenu(mc.dbMenuList, myRoleName);
+        };
+
+        //url정보 체크하여 메뉴 위치 확인
+        mc.urlCheck = function(){
+            portal.menu.urlCheck();
+        };
+
         // PortalOrg 변경 처리
         mc.changePortalOrg = function(portalOrg) {
             mc.setPortalOrg(portalOrg);
@@ -1179,25 +1198,6 @@ angular.module('common.controllers', [])
             var selectors = param.selectors;
             $(selectors).find('> dev').remove();
             $(selectors).stop().animate({'right' : '-360px'}, 400);
-        };
-
-        //Left Menu 구조 생성
-        mc.setDbMenuList = function() {
-            mc.dbMenuList = [];
-            var response = portal.menu.getMenuList();
-            if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
-                mc.dbMenuList = response.data.items;
-            }
-        };
-
-        //url정보 체크하여 메뉴 위치 확인
-        mc.desplayDbMenuList = function(myRoleName) {
-            portal.menu.setListMenu(mc.dbMenuList, myRoleName);
-        };
-
-        //url정보 체크하여 메뉴 위치 확인
-        mc.urlCheck = function(){
-            portal.menu.urlCheck();
         };
 
         mc.resetInit();
