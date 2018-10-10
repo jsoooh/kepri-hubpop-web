@@ -1450,9 +1450,7 @@ angular.module('common.controllers', [])
 			$scope.main.contentsLayoutResizeEvent	= true;
 		}
 
-		if (angular.isFunction($scope.main.asideClose)) {
-            $scope.main.asideClose();
-        }
+        $scope.main.asideClose();
 
         _DebugConsoleLog("commonControllers.js : mainBodyCtrl End, path : " + $location.path(), 1);
 
