@@ -1115,7 +1115,6 @@ angular.module('common.controllers', [])
             if (!user.checkAccessToken(common.getAccessToken())) {
                 common.clearAccessToken();
                 common.logout();
-                return;
             }
         } else {
             // TODO : SSO 연계 추가 작성
@@ -1126,10 +1125,8 @@ angular.module('common.controllers', [])
                 } else {
                     common.moveHomePage();
                 }
-                return;
             } else {
                 common.moveLoginPage();
-                return;
             }
         }
 
