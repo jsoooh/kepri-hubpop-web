@@ -1451,6 +1451,7 @@ angular.module('common.controllers', [])
 		}
 
         $scope.main.asideClose();
+        $scope.main.isLoadPageBody = true;
 
         _DebugConsoleLog("commonControllers.js : mainBodyCtrl End, path : " + $location.path(), 1);
 
