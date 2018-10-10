@@ -1468,12 +1468,7 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         common.moveHomePage = function () {
-            common.goToState(CONSTANTS.homeState);
-            if (CONSTANTS.homeUrl.substring(0, 4) == "http" || CONSTANTS.homeUrl.indexOf(".html") > -1 || CONSTANTS.homeUrl.indexOf("#") > -1) {
-                common.locationHref(CONSTANTS.homeUrl);
-            } else {
-                common.locationPath(CONSTANTS.homeUrl);
-            }
+            common.locationHref(CONSTANTS.homeUrl);
         };
 
         common.moveLoginPage = function () {
