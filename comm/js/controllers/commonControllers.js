@@ -1453,7 +1453,7 @@ angular.module('common.controllers', [])
 			$scope.main.contentsLayoutResizeEvent	= true;
 		}
 
-		if (angular.isFunction($scope.main.asideClose())) {
+		if (angular.isFunction($scope.main.asideClose)) {
             $scope.main.asideClose();
         }
 
