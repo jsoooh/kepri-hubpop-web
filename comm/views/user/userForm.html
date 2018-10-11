@@ -25,7 +25,7 @@
 					<tr>
 						<th scope="row">이름</th>
 						<td>
-							<input type="text" id="user_name" name="user_name" ng-model="memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" required />
+							<input type="text" id="user_name" name="user_name" ng-model="contents.memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" required />
 							<p class="has-error" ng-show="requestForm.user_name.$error.required && !requestForm.user_name.$pristine">{{ 'message.mi_type_name' | translate }}</p>
 
 						</td>
@@ -33,13 +33,13 @@
 					<tr>
 						<th scope="row">소속</th>
 						<td>
-							<input type="text"  name="position" ng-model="memberInfo.position" placeholder="{{ 'message.mi_type_position' | translate }}" required />
+							<input type="text"  name="position" ng-model="contents.memberInfo.position" placeholder="{{ 'message.mi_type_position' | translate }}" required />
 							<p class="has-error" ng-show="requestForm.position.$error.required && !requestForm.position.$pristine">{{ 'message.mi_type_position' | translate }}</p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="signupEmail">{{'label.id' | translate}}</label></th>
-						<td><input type="text" id="signupEmail" name="signupEmail" ng-model="memberInfo.email" disabled /></td>
+						<td><input type="text" id="signupEmail" name="signupEmail" ng-model="contents.memberInfo.email" disabled /></td>
 					</tr>
 					<tr ng-if="0">
 						<th scope="row">비밀번호 변경<i class="i_star">필수입력</i></th>
@@ -54,7 +54,7 @@
 					</tr>
 					<tr>
 						<th scope="row">회원구분</th>
-						<td>{{main.hubpop.userAuthNm}}{{}}</td>
+						<td>{{ contents.userAuthNm }}</td>
 					</tr>
 					</tbody>
 				</table>
