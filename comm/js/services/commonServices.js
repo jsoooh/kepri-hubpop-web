@@ -1607,17 +1607,19 @@ angular.module('common.services', ['LocalStorageModule'])
                     textContent = args[start + 1];
                     alertType = args[start + 2];
                 }
-                $timeout(function () {
-                    if (alertType == "success") {
-                        growl.addSuccessMessage(textContent, {ttl: time, enableHtml: false});
-                    } else if (alertType == "warn") {
-                        growl.addWarnMessage(textContent, {ttl: time, enableHtml: false});
-                    } else if (alertType == "error") {
-                        growl.addErrorMessage(textContent, {ttl: time, enableHtml: false});
-                    } else {
-                        growl.addInfoMessage(textContent, {ttl: time, enableHtml: false});
-                    }
-                }, 10);
+                if (textContent != "Unauthorized") {
+                    $timeout(function () {
+                        if (alertType == "success") {
+                            growl.addSuccessMessage(textContent, {ttl: time, enableHtml: false});
+                        } else if (alertType == "warn") {
+                            growl.addWarnMessage(textContent, {ttl: time, enableHtml: false});
+                        } else if (alertType == "error") {
+                            growl.addErrorMessage(textContent, {ttl: time, enableHtml: false});
+                        } else {
+                            growl.addInfoMessage(textContent, {ttl: time, enableHtml: false});
+                        }
+                    }, 10);
+                }
             }
         };
 
