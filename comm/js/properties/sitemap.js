@@ -49,10 +49,17 @@ angular.module('app')
                             projectDetail: {
                                 mainTop: true,
                                 name: 'project_details',
-                                stateKey: 'orgProjectDetailCtrl',
+                                stateKey: 'commProjectDetail',
                                 url: '/comm/projects/projectDetail/:orgId',
-                                controller: 'orgProjectDetailCtrl',
+                                controller: 'commOrgProjectDetailCtrl',
                                 templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html'
+                            },
+                            projectUsers: {
+                                name: 'project_users',
+                                stateKey: 'commProjectUsers',
+                                url: '/comm/projects/projectUsers/:projectId',
+                                controller: 'commOrgProjectUsersCtrl',
+                                templateUrl: _COMM_VIEWS_+'/org/orgProjectUsers.html'
                             }
                         }
                     },
