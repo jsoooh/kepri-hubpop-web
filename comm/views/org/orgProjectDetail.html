@@ -113,7 +113,9 @@
             <!-- table -->
             <div class="tb-top">
                 <div class="pull-right">
-                    <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-disabled="!contents.isOrgManager" ng-click="contents.projectUsers_ngClick()"><span class="ico">추가</span></button>
+                    <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-disabled="!contents.isOrgManager" ng-click="contents.goToProjectUsers()">
+                        <span class="ico">추가</span>
+                    </button>
                 </div>
             </div>
             <div class="tbl type1">
@@ -141,8 +143,8 @@
                         <td>{{ user.auth | roleName }}</td>
                         <td>{{ user.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                         <td>
-                            <button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-click="contents.resetPassword2(user);"><span class="ico">패스워드 초기화</span></button>
-                            <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.btn.del(user);" ng-if="user.roleName != 'OWNER'" ng-disabled="!contents.isThisProjectManager"><span class="ico">삭제</span></button>
+                            <button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-click="contents.resetPassword(user);"><span class="ico">패스워드 초기화</span></button>
+                            <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteUser(user);"><span class="ico">삭제</span></button>
                         </td>
                     </tr>
                     <!-- 등록된 멤버가 없을 때 -->

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portal.controllers')
-    .controller('commOrgProjectDetailCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, orgService, common, cache, quotaService) {
+    .controller('commOrgProjectDetailCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, orgService, common, cache, quotaService, memberService) {
         _DebugConsoleLog('orgDetailControllers.js : commOrgProjectDetailCtrl', 1);
 
         var ct = this;
@@ -114,7 +114,7 @@ angular.module('portal.controllers')
         // 조직 설명 추가 액션
         ct.createOrgProjectDescAction = function () {
             var body = {};
-            body["updates"] = "";
+            body['updates'] = '';
 
             $scope.main.loadingMainBody = true;
             var promise = orgService.updateOrg(ct.paramId, body);
@@ -123,17 +123,17 @@ angular.module('portal.controllers')
                 common.showAlert($translate.instant('label.org_edit'), $translate.instant('message.mi_change_apply'));
                 common.mdDialogCancel();
             });
-            promise.error(function (data, status, headers) {
+            promise.error(function (data) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertError($translate.instant('label.org_edit') + "(" + ct.selOrg.orgId + ")", data);
-            })
+                common.showAlertError($translate.instant('label.org_edit') + '(' + ct.selOrg.orgId + ')', data);
+            });
 
             $scope.main.loadingMain = true;
             var params = {};
             params.id = ct.project.id;
             params.description = $('#description_toUpdate').val();
-            var promise = orgService.updateProjectDescription(params);
-            promise.success(function (data, status, headers) {
+            var promise = orgService.updateOrg(ct.paramId, params);
+            promise.success(function (data) {
                 ct.txt_normal_ngShow = true;
                 ct.txt_modi_ngShow = false;
                 $scope.main.loadingMain = false;
@@ -141,7 +141,7 @@ angular.module('portal.controllers')
                 common.mdDialogHide();
                 ct.project.description = params.description;
             });
-            promise.error(function (data, status, headers) {
+            promise.error(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertError($translate.instant('message.mi_egov_fail_common_update'));
             });
@@ -186,9 +186,42 @@ angular.module('portal.controllers')
             });
         };
 
+        // 비밀번호 초기화
+        ct.resetPassword = function (user) {
+            var showConfirm = common.showConfirm('비밀번호 초기화', user.name + '(' + user.email + ') 비밀번호(kepco12345) 초기화하시겠습니까?');
+            showConfirm.then(function() {
+                ct.resetPasswordAction(user);
+            });
+        };
+
+        // 비밀번호 초기화 액션
+        ct.resetPasswordAction = function () {
+            var param = {};
+            param.email = user.user.email;
+            param.new_password = 'kepco12345';
+
+            $scope.main.loadingMain = true;
+            var promise = memberService.resetPassword(param);
+            promise.success(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertSuccess('비밀번호가 정상적으로 초기화되었습니다');
+            });
+            promise.error(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertError('비밀번호 초기화가 실패하였습니다.');
+            });
+        };
+
         // 사용자 추가 버튼 클릭
-        ct.projectUsers_ngClick = function () {
+        ct.goToProjectUsers = function () {
             common.locationPath('/comm/projects/projectUsers/' + ct.selOrgProject.project.id);
+        };
+
+        ct.deleteUser = function (user) {
+            var showConfirm = common.showConfirm($translate.instant('label.del'), user.name + ' ' + $translate.instant('message.mq_delete'));
+            showConfirm.then(function() {
+                
+            });
         };
 
         // 자원 조회
