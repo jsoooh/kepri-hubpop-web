@@ -24,9 +24,4 @@ loadJavascript(_COMM_STAGE_+'/js/services/boardServices.js'+_VERSION_TAIL_HEAD_)
 loadJavascript(_COMM_STAGE_+'/js/services/quotaServices.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/services/userSettingServices.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/services/signupServices.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_PAAS_STAGE_+'/js/services/applicationServices.js'+_VERSION_TAIL_HEAD_);
-
-//console.js
-loadJavascript('js/filters/commQuotaFilters.js' + _VERSION_TAIL_HEAD_);
-loadJavascript(_COMM_STAGE_ + '/js/filters/commProjectFilters.js' + _VERSION_TAIL_HEAD_);
 

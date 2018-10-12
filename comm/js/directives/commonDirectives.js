@@ -431,12 +431,12 @@ angular.module('app')
             template: '',
             scope: {
                 barType : "=",
-                percent : "="
+                percent : "@"
             },
             replace: false,
             transclude: false,
             link: function (scope, element, attrs){
-                var percent = parseInt(attrs.percent, 10);
+            	var percent = parseInt(scope.percent, 10);
                 var barType = attrs.barType;
                 if (!barType) {
                     barType = "width";
@@ -470,7 +470,6 @@ angular.module('app')
                 var width = node.getAttribute('data-round-progress-width') || '300';
                 var height = node.getAttribute('data-round-progress-height') || '300';
 
-                var outerCircleWidth = node.getAttribute('data-round-progress-outer-circle-width') || '40';
                 var outerCircleWidth = node.getAttribute('data-round-progress-outer-circle-width') || '40';
                 var outerCircleBackgroundColor = node.getAttribute('data-round-progress-outer-circle-background-color') || '#505769';
                 var outerCircleForegroundColor = node.getAttribute('data-round-progress-outer-circle-foreground-color') || '#12eeb9';
@@ -690,137 +689,137 @@ angular.module('app')
             }
         };
     }])
-    .directive('listCheckBox', ['$parse', '$compile', function($parse, $compile) {
-        // contains
-        function contains(arr, item, comparator) {
-            if (angular.isArray(arr)) {
-                for (var i = arr.length; i--;) {
-                    if (comparator(arr[i], item)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+	.directive('listCheckBox', ['$parse', '$compile', function($parse, $compile) {
+		// contains
+		function contains(arr, item, comparator) {
+			if (angular.isArray(arr)) {
+				for (var i = arr.length; i--;) {
+					if (comparator(arr[i], item)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 
-        // add
-        function add(arr, item, comparator) {
-            arr = angular.isArray(arr) ? arr : [];
-            if(!contains(arr, item, comparator)) {
-                arr.push(item);
-            }
-            return arr;
-        }
+		// add
+		function add(arr, item, comparator) {
+			arr = angular.isArray(arr) ? arr : [];
+			if(!contains(arr, item, comparator)) {
+				arr.push(item);
+			}
+			return arr;
+		}
 
-        // remove
-        function remove(arr, item, comparator) {
-            if (angular.isArray(arr)) {
-                for (var i = arr.length; i--;) {
-                    if (comparator(arr[i], item)) {
-                        arr.splice(i, 1);
-                        break;
-                    }
-                }
-            }
-            return arr;
-        }
+		// remove
+		function remove(arr, item, comparator) {
+			if (angular.isArray(arr)) {
+				for (var i = arr.length; i--;) {
+					if (comparator(arr[i], item)) {
+						arr.splice(i, 1);
+						break;
+					}
+				}
+			}
+			return arr;
+		}
 
-        // http://stackoverflow.com/a/19228302/1458162
-        function postLinkFn(scope, elem, attrs) {
-            // exclude recursion, but still keep the model
-            var listCheckBox = attrs.listCheckBox;
-            attrs.$set("listCheckBox", null);
-            // compile with `ng-model` pointing to `checked`
-            $compile(elem)(scope);
-            attrs.$set("listCheckBox", listCheckBox);
+		// http://stackoverflow.com/a/19228302/1458162
+		function postLinkFn(scope, elem, attrs) {
+			// exclude recursion, but still keep the model
+			var listCheckBox = attrs.listCheckBox;
+			attrs.$set("listCheckBox", null);
+			// compile with `ng-model` pointing to `checked`
+			$compile(elem)(scope);
+			attrs.$set("listCheckBox", listCheckBox);
 
-            // getter / setter for original model
-            var getter = $parse(listCheckBox);
-            var setter = getter.assign;
-            var checklistChange = $parse(attrs.checklistChange);
-            var checklistBeforeChange = $parse(attrs.checklistBeforeChange);
+			// getter / setter for original model
+			var getter = $parse(listCheckBox);
+			var setter = getter.assign;
+			var checklistChange = $parse(attrs.checklistChange);
+			var checklistBeforeChange = $parse(attrs.checklistBeforeChange);
 
-            // value added to list
-            var value = attrs.listCheckValue ? $parse(attrs.listCheckValue)(scope.$parent) : attrs.value;
+			// value added to list
+			var value = attrs.listCheckValue ? $parse(attrs.listCheckValue)(scope.$parent) : attrs.value;
 
-            var comparator = angular.equals;
-            if (attrs.hasOwnProperty('checklistComparator')){
-                if (attrs.checklistComparator[0] == '.') {
-                    var comparatorExpression = attrs.checklistComparator.substring(1);
-                    comparator = function (a, b) {
-                        return a[comparatorExpression] === b[comparatorExpression];
-                    };
-                } else {
-                    comparator = $parse(attrs.checklistComparator)(scope.$parent);
-                }
-            }
+			var comparator = angular.equals;
+			if (attrs.hasOwnProperty('checklistComparator')){
+				if (attrs.checklistComparator[0] == '.') {
+					var comparatorExpression = attrs.checklistComparator.substring(1);
+					comparator = function (a, b) {
+						return a[comparatorExpression] === b[comparatorExpression];
+					};
+				} else {
+					comparator = $parse(attrs.checklistComparator)(scope.$parent);
+				}
+			}
 
-            // watch UI checked change
-            scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-                if (newValue === oldValue) {
-                    return;
-                }
-                if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
-                    scope[attrs.ngModel] = contains(getter(scope.$parent), value, comparator);
-                    return;
-                }
-                setValueInChecklistModel(value, newValue);
-                if (checklistChange) {
-                    checklistChange(scope);
-                }
-            });
+			// watch UI checked change
+			scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+				if (newValue === oldValue) {
+					return;
+				}
+				if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
+					scope[attrs.ngModel] = contains(getter(scope.$parent), value, comparator);
+					return;
+				}
+				setValueInChecklistModel(value, newValue);
+				if (checklistChange) {
+					checklistChange(scope);
+				}
+			});
 
-            function setValueInChecklistModel(value, checked) {
-                var current = getter(scope.$parent);
-                if (angular.isFunction(setter)) {
-                    if (checked === true) {
-                        setter(scope.$parent, add(current, value, comparator));
-                    } else {
-                        setter(scope.$parent, remove(current, value, comparator));
-                    }
-                }
+			function setValueInChecklistModel(value, checked) {
+				var current = getter(scope.$parent);
+				if (angular.isFunction(setter)) {
+					if (checked === true) {
+						setter(scope.$parent, add(current, value, comparator));
+					} else {
+						setter(scope.$parent, remove(current, value, comparator));
+					}
+				}
 
-            }
+			}
 
-            // declare one function to be used for both $watch functions
-            function setChecked(newArr, oldArr) {
-                if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
-                    setValueInChecklistModel(value, scope[attrs.ngModel]);
-                    return;
-                }
-                scope[attrs.ngModel] = contains(newArr, value, comparator);
-            }
+			// declare one function to be used for both $watch functions
+			function setChecked(newArr, oldArr) {
+				if (checklistBeforeChange && (checklistBeforeChange(scope) === false)) {
+					setValueInChecklistModel(value, scope[attrs.ngModel]);
+					return;
+				}
+				scope[attrs.ngModel] = contains(newArr, value, comparator);
+			}
 
-            // watch original model change
-            // use the faster $watchCollection method if it's available
-            if (angular.isFunction(scope.$parent.$watchCollection)) {
-                scope.$parent.$watchCollection(listCheckBox, setChecked);
-            } else {
-                scope.$parent.$watch(listCheckBox, setChecked, true);
-            }
-        }
+			// watch original model change
+			// use the faster $watchCollection method if it's available
+			if (angular.isFunction(scope.$parent.$watchCollection)) {
+				scope.$parent.$watchCollection(listCheckBox, setChecked);
+			} else {
+				scope.$parent.$watch(listCheckBox, setChecked, true);
+			}
+		}
 
-        return {
-            restrict: 'A',
-            priority: 1000,
-            terminal: true,
-            scope: true,
-            compile: function(tElement, tAttrs) {
-                if ((tElement[0].tagName !== 'INPUT' || tAttrs.type !== 'checkbox') && (tElement[0].tagName !== 'MD-CHECKBOX') && (!tAttrs.btnCheckbox)) {
-                    throw 'checklist-model should be applied to `input[type="checkbox"]` or `md-checkbox`.';
-                }
-                if (!tAttrs.listCheckValue && !tAttrs.value) {
-                    throw 'You should provide `value` or `checklist-value`.';
-                }
-                // by default ngModel is 'checked', so we set it if not specified
-                if (!tAttrs.ngModel) {
-                    // local scope var storing individual checkbox model
-                    tAttrs.$set("ngModel", "checked");
-                }
-                return postLinkFn;
-            }
-        };
-    }])
+		return {
+			restrict: 'A',
+			priority: 1000,
+			terminal: true,
+			scope: true,
+			compile: function(tElement, tAttrs) {
+				if ((tElement[0].tagName !== 'INPUT' || tAttrs.type !== 'checkbox') && (tElement[0].tagName !== 'MD-CHECKBOX') && (!tAttrs.btnCheckbox)) {
+					throw 'checklist-model should be applied to `input[type="checkbox"]` or `md-checkbox`.';
+				}
+				if (!tAttrs.listCheckValue && !tAttrs.value) {
+					throw 'You should provide `value` or `checklist-value`.';
+				}
+				// by default ngModel is 'checked', so we set it if not specified
+				if (!tAttrs.ngModel) {
+					// local scope var storing individual checkbox model
+					tAttrs.$set("ngModel", "checked");
+				}
+				return postLinkFn;
+			}
+		};
+	}])
     .directive('listCheckAll', ['$parse', '$compile', function($parse, $compile) {
         return {
             restrict: 'A',
@@ -878,107 +877,107 @@ angular.module('app')
     }])
     .directive('scalableProgressBar', [
         '$timeout',
-        function ($timeout) {
+		function ($timeout) {
 
-            var templateHtml = '<div class="progress-striped progress"  style="width:{{swidth}}%">\n'
-                + '<div class="progress-bar default" role="progressbar">\n'
-                + '</div>\n'
-                + '<div class="progress-bar add" role="progressbar">\n'
-                + '</div>\n'
-                + '<div class="progress-bar persent" style="background:bottom;width:100%;top:-100%;" role="progressbar">\n'
-                + '<span style="z-index:1" max="{{ max }}" count-to="{{ bar }}" count-from="{{ bar+base }}" duration="{{ duration }}" filter="number"></span><span style="z-index:1" ng-transclude></span>'
-                + '</div>\n'
-                + '</div>\n'
+			var templateHtml = '<div class="progress-striped progress"  style="width:{{swidth}}%">\n'
+				+ '<div class="progress-bar default" role="progressbar">\n'
+				+ '</div>\n'
+				+ '<div class="progress-bar add" role="progressbar">\n'
+				+ '</div>\n'
+				+ '<div class="progress-bar persent" style="background:bottom;width:100%;top:-100%;" role="progressbar">\n'
+				+ '<span style="z-index:1" max="{{ max }}" count-to="{{ bar }}" count-from="{{ bar+base }}" duration="{{ duration }}" filter="number"></span><span style="z-index:1" ng-transclude></span>'
+				+ '</div>\n'
+				+ '</div>\n'
 
-            return {
-                restrict: 'EA',
+			return {
+				restrict: 'EA',
                 template: templateHtml,
                 scope: {
                     max : "@",
                     bar : "@",
-                    top : "@",
-                    base : "@",
-                    scalable : "@",
-                    swidth : "@",
+					top : "@",
+					base : "@",
+					scalable : "@",
+					swidth : "@",
                     from : "@",
                     duration : "@",
-                    level : "@",
+					level : "@",
                 },
                 replace: false,
                 transclude: true,
-                link: function (scope, element, attrs){
-                    var max = parseInt(attrs.max, 10);
+				link: function (scope, element, attrs){
+					var max = parseInt(attrs.max, 10);
                     var bar = parseInt(attrs.bar, 10);
-                    var top = parseInt(attrs.top, 10);
-                    var base = parseInt(attrs.base, 10);
-                    var scalable = parseInt(attrs.scalable,10);
-                    var progressbarLoading = function (progressbar, level)	{
-                        if($(progressbar).hasClass('add')) {
-                            if(level == 3) {
-                                progressClass(progressbar,"progress-bar-high");
-                            } else if(level == 2) {
-                                progressClass(progressbar,"progress-bar-middle");
-                            }
-                        } else {
-                            progressClass(progressbar,"progress-bar-low");
-                        }
+					var top = parseInt(attrs.top, 10);
+					var base = parseInt(attrs.base, 10);
+					var scalable = parseInt(attrs.scalable,10);
+					var progressbarLoading = function (progressbar, level)	{
+						if($(progressbar).hasClass('add')) {
+							if(level == 3) {
+								progressClass(progressbar,"progress-bar-high");
+							} else if(level == 2) {
+								progressClass(progressbar,"progress-bar-middle");
+							}
+						} else {
+							progressClass(progressbar,"progress-bar-low");
+						}
                     };
 
-                    var progressClass = function(prbar,className) {
-                        prbar.addClass(className);
-                        if(className == 'progress-bar-high') {
-                            prbar.removeClass('progress-bar-middle');
-                            prbar.removeClass('progress-bar-low');
-                        } else if( className == 'progress-bar-middle') {
-                            prbar.removeClass('progress-bar-high');
-                            prbar.removeClass('progress-bar-low');
-                        } else {
-                            prbar.removeClass('progress-bar-high');
-                            prbar.removeClass('progress-bar-middle');
-                        }
-                    };
+					var progressClass = function(prbar,className) {
+						prbar.addClass(className);
+						if(className == 'progress-bar-high') {
+							prbar.removeClass('progress-bar-middle');
+							prbar.removeClass('progress-bar-low');
+						} else if( className == 'progress-bar-middle') {
+							prbar.removeClass('progress-bar-high');
+							prbar.removeClass('progress-bar-low');
+						} else {
+							prbar.removeClass('progress-bar-high');
+							prbar.removeClass('progress-bar-middle');
+						}
+					}
                     var start = function () {
-                        var checkPersent = 0;
+						var checkPersent = 0;
                         var defaultPersent = 0;
                         if (base > 0) {
                             defaultPersent = parseInt(base * 100 / max, 10);
-                            checkPersent += defaultPersent;
+							checkPersent += defaultPersent;
                         }
-                        var addPersent = 0;
+						var addPersent = 0;
                         if (scalable > 0) {
                             addPersent = parseInt(scalable * 100 / max, 10);
-                            checkPersent += addPersent;
-                            if((addPersent+defaultPersent) > 100) addPersent = 100-defaultPersent;
+							checkPersent += addPersent;
+							if((addPersent+defaultPersent) > 100) addPersent = 100-defaultPersent;
                         }
                         scope.persent = defaultPersent + addPersent;
-                        // if(scope.persent > 100 ) scope.persent = 100;
+						// if(scope.persent > 100 ) scope.persent = 100;
                         var level = 1;
 
                         // if (bar > top) {
                         //     level = 3;
                         // } else if(scalable > 0) {
-                        // 	level = 2;
-                        // }
-                        if (checkPersent > 100) {
+						// 	level = 2;
+						// }
+						if (checkPersent > 100) {
                             level = 3;
                         } else {
-                            if(scalable > 0) {
-                                level = 2;
-                            }
-                        }
+							if(scalable > 0) {
+								level = 2;
+							}
+						}
                         $(document).ready(function () {
                             var defaultbar = element.find(".progress-bar.default");
-                            defaultbar.css("width", defaultPersent + "%");
-                            $timeout(function () {
+							defaultbar.css("width", defaultPersent + "%");
+							$timeout(function () {
                                 progressbarLoading(defaultbar, level);
                             }, 400);
-                            var progressbar = element.find(".progress-bar.add");
+							var progressbar = element.find(".progress-bar.add");
                             progressbar.css("width", addPersent + "%");
                             $timeout(function () {
                                 progressbarLoading(progressbar, level);
                             }, 400);
                         });
-                    }
+					}
 
                     var timoutId;
                     var timeoutStart = function (time) {
@@ -996,21 +995,21 @@ angular.module('app')
                         max = parseInt(val, 10);
                         timeoutStart(200);
                     });
-                    attrs.$observe('top', function (val) {
+					attrs.$observe('top', function (val) {
                         top = parseInt(val, 10);
                         timeoutStart(200);
                     });
-                    attrs.$observe('base', function (val) {
+					attrs.$observe('base', function (val) {
                         base = parseInt(val, 10);
                         timeoutStart(200);
                     });
-                    attrs.$observe('scalable', function (val) {
+					attrs.$observe('scalable', function (val) {
                         scalable = parseInt(val, 10);
                         timeoutStart(200);
                     });
                 }
-            }
-        }
+			}
+    	}
     ])
     .directive('datepicker', function () {
         return {
@@ -1032,21 +1031,4 @@ angular.module('app')
             }
         };
     })
-    // File Upload 적용
-    .directive('fileInput', ['$parse', function ($parse) {
-        return {
-            restrict: 'EA',
-            //replace: true,
-            //transclude: true,
-            link: function (scope, element, attrs) {
-                var model = $parse(attrs.fileInput);
-                var modelSetter = model.assign;
-                element.bind('change', function () {
-                    scope.$apply(function () {
-                        modelSetter(scope, element[0].files);
-                    });
-                });
-            }
-        };
-    }])
 ;
