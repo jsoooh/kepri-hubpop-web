@@ -177,7 +177,7 @@
                                 <h4 class="c-tit ng-binding">쿼터변경요청</h4>
                             </div>
                             <div class="pull-right">
-                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-click="contents.asideQuotaReqNgClick2($event);" ng-disabled="!contents.isThisProjectManager2 || !contents.isThisProjectManager2A">
+                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager" ng-click="contents.updateQuota($event);">
                                     <span class="ico">추가</span>
                                 </button>
                             </div>

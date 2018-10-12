@@ -7,7 +7,7 @@ angular.module('portal.controllers')
         var ct = this;
 
         ct.paramId = $stateParams.orgId;
-        ct.isOrgManager = false;
+        ct.isOrgManager = true;
         ct.sltInfoTab = 'info';
         
         // 탭 변경
@@ -38,8 +38,8 @@ angular.module('portal.controllers')
 
         // 이미지 변경
         $scope.pop = {};
+        var pop = $scope.pop;
         ct.createOrgProjectIcon = function($event) {
-            var pop = $scope.pop;
             pop.uploadedNoticeFile = [];
             pop.uploader = common.setDefaultFileUploader($scope);
             pop.uploader.onAfterAddingFile = function(fileItem) {
@@ -134,8 +134,6 @@ angular.module('portal.controllers')
             params.description = $('#description_toUpdate').val();
             var promise = orgService.updateOrg(ct.paramId, params);
             promise.success(function (data) {
-                ct.txt_normal_ngShow = true;
-                ct.txt_modi_ngShow = false;
                 $scope.main.loadingMain = false;
                 common.showAlertSuccess($translate.instant('message.mi_egov_success_common_update'));
                 common.mdDialogHide();
@@ -196,12 +194,12 @@ angular.module('portal.controllers')
 
         // 비밀번호 초기화 액션
         ct.resetPasswordAction = function () {
-            var param = {};
-            param.email = user.user.email;
-            param.new_password = 'kepco12345';
+            var body = {};
+            body.email = user.user.email;
+            body.new_password = 'kepco12345';
 
             $scope.main.loadingMain = true;
-            var promise = memberService.resetPassword(param);
+            var promise = memberService.resetDefaultPassword(body);
             promise.success(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertSuccess('비밀번호가 정상적으로 초기화되었습니다');
@@ -239,6 +237,23 @@ angular.module('portal.controllers')
             promise.error(function (data) {
                 $scope.main.loadingMainBody = false;
             });
+        };
+
+        ct.updateQuota = function($event) {
+            var dialogOptions = {
+                title : '용량 변경 요청',
+                formName : 'projectDetailAsideQuotaReqForm',
+                dialogClassName : 'modal-dialog-projectDetailAsideQuotaReq',
+                templateUrl : _COMM_VIEWS_ + '/org/popOrgQuota.html' + _VersionTail(),
+            };
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.popDialogOk = function() {
+                ct.asideQuotaReqRequestQuotaNgClick();
+            };
+            $scope.popCancel = function() {
+                $scope.dialogClose = true;
+                common.mdDialogCancel();
+            };
         };
 
         ct.pageLoadData = function () {
