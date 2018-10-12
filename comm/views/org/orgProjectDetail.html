@@ -16,7 +16,7 @@
             <div class="cBox type1 appCnt-info">
                 <div class="cBox-hd">
                     <h4 class="c-tit">
-                        <button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.changeIcon($event)"><span class="ico">썸네일 수정</span></button>
+                        <button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.createOrgProjectIcon($event)"><span class="ico">썸네일 수정</span></button>
                         <span ng-if="contents.project.logo != null" class="thum_box img_line">
                             <img ng-src="{{ contents.projectLogo }}" alt="">
                         </span>
@@ -26,7 +26,7 @@
                         {{ contents.selOrgProject.orgName }}
                     </h4>
                     <div class="pull-right">
-                        <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.btn.deleteProject();"><span class="ico">삭제</span></button>
+                        <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProject();"><span class="ico">삭제</span></button>
                     </div>
                 </div>
                 <div class="cBox-cnt">
@@ -51,9 +51,9 @@
                         </div>
                         <div class="in">
                             <div class="col-non info-txt4 rbox-2-width"><!-- r_box에 갯수 추가될 때 사용 -->
-                                <strong class="tit">설명<button type="button" name="button" class="btn only-ico ico-txt_modi" title="수정" data-user="aside" data-username="#" ng-click="contents.popProjectDescription();"><span class="ico">수정</span></button></strong>
+                                <strong class="tit">설명<button type="button" name="button" class="btn only-ico ico-txt_modi" title="수정" data-user="aside" data-username="#" ng-click="contents.createOrgProjectDesc();"><span class="ico">수정</span></button></strong>
                                 <div class="txt">
-                                    <span class="txt_normal" ng-show="contents.txt_normal_ngShow">{{ contents.selOrgProject.description }}</span>
+                                    <span class="txt_normal">{{ contents.selOrgProject.description }}</span>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,9 @@
             <!-- table -->
             <div class="tb-top">
                 <div class="pull-right">
-                    <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-disabled="!contents.isOrgManager" ng-click="contents.projectUsers_ngClick()"><span class="ico">추가</span></button>
+                    <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-disabled="!contents.isOrgManager" ng-click="contents.goToProjectUsers()">
+                        <span class="ico">추가</span>
+                    </button>
                 </div>
             </div>
             <div class="tbl type1">
@@ -141,8 +143,8 @@
                         <td>{{ user.auth | roleName }}</td>
                         <td>{{ user.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                         <td>
-                            <button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-click="contents.resetPassword2(user);"><span class="ico">패스워드 초기화</span></button>
-                            <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.btn.del(user);" ng-if="user.roleName != 'OWNER'" ng-disabled="!contents.isThisProjectManager"><span class="ico">삭제</span></button>
+                            <button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-click="contents.resetPassword(user);"><span class="ico">패스워드 초기화</span></button>
+                            <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteUser(user);"><span class="ico">삭제</span></button>
                         </td>
                     </tr>
                     <!-- 등록된 멤버가 없을 때 -->

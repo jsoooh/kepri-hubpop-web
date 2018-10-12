@@ -167,6 +167,10 @@ angular.module('portal.services')
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', getParams));
         };
+        
+        orgService.createOrgIcon = function (ordId, body) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + ordId + '/icon', 'POST', body, "multipart/form-data"));
+        };
 
 		return orgService;
 	})
