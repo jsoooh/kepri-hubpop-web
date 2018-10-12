@@ -30,13 +30,12 @@
 						<li ng-repeat="org in contents.orgProjects">
 							<a ng-click="contents.detailNgClick(org);">
 								<div class="thum">
-									<span class="thum_in img_line" ng-if="org.iconImage && org.iconImage.icon">
-										<img ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.icon }}" class="logo" alt="">
+									<span ng-if="org.iconImage && org.iconImage.image" class="thum_in img_line">
+										<img ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.image }}" class="logo" alt="">
 									</span>
-									<span class="thum_in" ng-if="!org.logo">
+									<span class="thum_in" ng-if="!org.iconImage || !org.iconImage.image">
 										<span class="txt">{{org.orgName.substr(0, 1)}}</span>
 									</span>
-									
 								</div>
 								<div class="list_in">
 									<dl>

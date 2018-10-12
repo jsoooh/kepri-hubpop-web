@@ -1377,6 +1377,8 @@ td.tdTit{text-align:center;}
 /*180702 프로젝트상세 > 썸네일이미지*/
 .cBox.appCnt-info .cBox-hd .c-tit .thum_box {position:absolute; top:13px; left:0; display:block; width:54px; height:54px; color:#fff; border-radius:50%; background:#99b7c1; overflow:hidden; line-height:53px;}
 .cBox.appCnt-info .cBox-hd .c-tit .thum_box.img_line {background:none; border:1px solid #e3e3e3;}
+.cBox.appCnt-info .cBox-hd .c-tit .thum_box img {width:54px; height:54px;}
+.cBox.appCnt-info .cBox-hd .c-tit .thum_box img.logo {position:absolute; top:0; left:0;}
 .cBox.appCnt-info .cBox-hd .c-tit .thum_box span.txt {display: inline-block; width: 100%; text-align: center; font-size:20px;}
 .cBox.appCnt-info .cBox-hd .c-tit img {width:54px; height:54px; vertical-align:top;}
 /*.cBox.appCnt-info .cBox-hd .c-tit img.logo {position:absolute; top:0; left:0;}*/
