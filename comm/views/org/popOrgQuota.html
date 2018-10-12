@@ -10,18 +10,18 @@
                 <th scope="row">변경 요청 용량<span class="ico-info4 ico" ng-mouseleave="contents.quotaInfo = 0" ng-mouseover="contents.quotaInfo = 1" ng-init="contents.quotaInfo = 0"></span></th>
                 <td>
                     <div class="layer_info" ng-if="contents.quotaInfo">
-                        <dl ng-repeat="projectQuota in contents.listProjectQuotas.items">
-                            <dt>{{projectQuota.name}}</dt>
-                            <dd>{{projectQuota.description}}</dd>
+                        <dl ng-repeat="projectQuota in contents.orgQuotas">
+                            <dt>{{ projectQuota.name }}</dt>
+                            <dd>{{ projectQuota.description }}</dd>
                         </dl>
                     </div>
-                    <select class="form-control" name="quotaReq" ng-model="contents.quotaHistory.quotaReq" ng-options="projectQuota as projectQuota.name disable when projectQuota.available == false for projectQuota in contents.listProjectQuotas.items" required="required">
+                    <select class="form-control" name="quotaReq" ng-model="contents.quotaHistory.quotaReq" ng-options="projectQuota as projectQuota.name disable when projectQuota.available == false for projectQuota in contents.orgQuotas" required="required">
                         <option value="">선택</option>
                     </select>
                     <p class="has-error" ng-show="projectDetailAsideQuotaReqForm.quotaReq.$touched && projectDetailAsideQuotaReqForm.quotaReq.$error.required">변경 요청할 용량을 선택해주세요.</p>
                     <div class="select_info">
                         <span class="tit" ng-if="!contents.quotaHistory.quotaReq.name">선택</span>
-                        <span class="tit" ng-if="!!contents.quotaHistory.quotaReq.name">{{contents.quotaHistory.quotaReq.name}}</span>
+                        <span class="tit" ng-if="!!contents.quotaHistory.quotaReq.name">{{ contents.quotaHistory.quotaReq.name }}</span>
                         <dl>
                             <dt>서버 가상화 서비스</dt>
                             <dd>- vCpus : {{contents.quotaHistory.quotaReq.quotaIaas.computingVcpus | number}}개</dd>

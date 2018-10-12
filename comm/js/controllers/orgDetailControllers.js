@@ -73,9 +73,10 @@ angular.module('portal.controllers')
                 return;
             }
 
-            $scope.main.loadingMain = true;
             var body = {};
             body.iconFile = pop.uploadedNoticeFile[pop.uploadedNoticeFile.length - 1];
+
+            $scope.main.loadingMain = true;
             var promise = orgService.createOrgIcon(ct.paramId, body);
             promise.success(function (data, status, headers) {
                 $scope.main.loadingMain = false;
@@ -114,25 +115,11 @@ angular.module('portal.controllers')
 
         // 조직 설명 추가 액션
         ct.createOrgProjectDescAction = function () {
-            var body = {};
-            body['updates'] = '';
-
-            $scope.main.loadingMainBody = true;
-            var promise = orgService.updateOrg(ct.paramId, body);
-            promise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                common.showAlert($translate.instant('label.org_edit'), $translate.instant('message.mi_change_apply'));
-                common.mdDialogCancel();
-            });
-            promise.error(function (data) {
-                $scope.main.loadingMainBody = false;
-                common.showAlertError($translate.instant('label.org_edit') + '(' + ct.selOrg.orgId + ')', data);
-            });
+            var params = {};
+            params.id = ct.paramId;
+            params.description = $('#description_toUpdate').val();
 
             $scope.main.loadingMain = true;
-            var params = {};
-            params.id = ct.project.id;
-            params.description = $('#description_toUpdate').val();
             var promise = orgService.updateOrg(ct.paramId, params);
             promise.success(function (data) {
                 $scope.main.loadingMain = false;
@@ -200,10 +187,9 @@ angular.module('portal.controllers')
 
         // 비밀번호 초기화 액션
         ct.resetPasswordAction = function (user) {
-            var params = {
-                email : user.email,
-                new_password : 'kepco12345'
-            };
+            var params = {};
+            params.email = user.email;
+            params.new_password = 'kepco12345';
 
             $scope.main.loadingMain = true;
             var promise = memberService.resetPassword(params);
@@ -264,8 +250,7 @@ angular.module('portal.controllers')
 
             var promise = quotaService.listOrgQuotas(params);
             promise.success(function (data) {
-                ct.orgQuotas = data;
-                console.log(data)
+                ct.orgQuotas = data.items;
             });
             promise.error(function (data) {
                 ct.orgQuotas = {};
@@ -290,11 +275,41 @@ angular.module('portal.controllers')
                 $scope.dialogClose = true;
                 common.mdDialogCancel();
             };
+
+            ct.listOrgQuotas();
         };
 
         // 용량 변경 액션
         ct.updateQuotaAction = function () {
+            if (ct.quotaHistory.quotaReq == undefined) {
+                common.showAlert('용량 변경 요청', '1. 변경 요청할 용량을 선택해주세요.');
+                return;
+            }
+            if (ct.quotaHistory.messageReq == null) {
+                common.showAlert('용량 변경 요청', '2. 변경 요청 사유를 입력해 주세요.');
+                return;
+            }
 
+            var params = {};
+            params.type = 'ORG';
+            params.org = {};
+            params.org.id = ct.selOrgProject.id;
+            params.quotaReq = {};
+            params.quotaReq.id = ct.quotaHistory.quotaReq.id;
+            params.messageReq = ct.quotaHistory.messageReq;
+
+            $scope.main.loadingMain = true;
+            var promise = quotaService.requestQuota(params);
+            promise.success(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
+                common.mdDialogHide();
+                ct.listQuotaHistory();
+            });
+            promise.error(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
+            });
         };
 
         ct.pageLoadData = function () {
