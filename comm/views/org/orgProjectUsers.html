@@ -43,7 +43,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="item in contents.projectUsers">
+                    <tr ng-repeat="projectUser in contents.projectUsers">
                         <td>
                             <div>
                                 <input type="checkbox" name="chkBox-sel" id="chkBox-sel$0" ng-model="item.checked">
@@ -51,12 +51,13 @@
                             </div>
                         </td>
                         <td>{{contents.pop.pageOptions.pageSize * (contents.pop.pageOptions.currentPage - 1) + $index + 1}}</td>
-                        <td>{{item.email}}</td>
-                        <td>{{item.name}}</td>
-                        <td>
-                            <select ng-model="item.roleName" ng-disabled="item.ngDisabled">
-                                <option value="{{ contents.CONSTANTS.roleName.user }}" title="프로젝트 사용자">사용자</option>
-                                <option value="{{ contents.CONSTANTS.roleName.admin }}" title="프로젝트 관리자">관리자</option>
+                        <td>{{projectUser.user.email}}</td>
+                        <td>{{projectUser.user.name}}</td>
+                        <td ng-if="contents.orgRoleNames.owner == projectUser.roleName">{{contents.orgRoleNames.owner}}</td>
+                        <td ng-if="contents.orgRoleNames.owner != projectUser.roleName">
+                            <select ng-model="projectUser.roleName" ng-disabled="item.ngDisabled">
+                                <option value="{{ contents.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
+                                <option value="{{ contents.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
                             </select>
                         </td>
                     </tr>

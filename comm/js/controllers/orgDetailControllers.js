@@ -269,6 +269,7 @@ angular.module('portal.controllers')
 
         var ct = this;
 
+        ct.orgRoleNames = CONSTANTS.roleName;
         ct.paramId = $stateParams.projectId;
 
         ct.tab_ngClick = function (tabId) {
