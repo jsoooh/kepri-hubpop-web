@@ -185,6 +185,11 @@ angular.module('portal.controllers')
             });
         };
 
+        // 사용자 추가 버튼 클릭
+        ct.goToProjectUsers = function () {
+            common.locationPath('/comm/projects/projectUsers/' + ct.selOrgProject.project.id);
+        };
+
         // 비밀번호 초기화
         ct.resetPassword = function (user) {
             var showConfirm = common.showConfirm('비밀번호 초기화', user.name + '(' + user.email + ') 비밀번호(kepco12345) 초기화하시겠습니까?');
@@ -199,7 +204,7 @@ angular.module('portal.controllers')
                 'email': user.email,
                 'new_password': 'kepco12345'
             };
-            
+
             $scope.main.loadingMain = true;
             var promise = memberService.resetPassword(param);
             promise.success(function (data) {
@@ -212,15 +217,25 @@ angular.module('portal.controllers')
             });
         };
 
-        // 사용자 추가 버튼 클릭
-        ct.goToProjectUsers = function () {
-            common.locationPath('/comm/projects/projectUsers/' + ct.selOrgProject.project.id);
-        };
-
-        ct.deleteUser = function (user) {
+        // 사용자 삭제
+        ct.deleteOrgProjectUser = function (user) {
             var showConfirm = common.showConfirm($translate.instant('label.del'), user.name + ' ' + $translate.instant('message.mq_delete'));
             showConfirm.then(function() {
-                
+                ct.deleteOrgProjectUserAction(user);
+            });
+        };
+
+        // 사용자 삭제 액션
+        ct.deleteOrgProjectUserAction = function (user) {
+            $scope.main.loadingMain = true;
+            var promise = orgService.deleteOrgUser(ct.paramId, user.email);
+            promise.success(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertSuccess(user.name + ' ' + $translate.instant('message.mi_egov_success_common_delete'));
+            });
+            promise.error(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertError($translate.instant('message.mi_egov_fail_common_delete'));
             });
         };
 
