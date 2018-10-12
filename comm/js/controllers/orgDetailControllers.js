@@ -200,13 +200,13 @@ angular.module('portal.controllers')
 
         // 비밀번호 초기화 액션
         ct.resetPasswordAction = function (user) {
-            var param = {
-                'email': user.email,
-                'new_password': 'kepco12345'
+            var params = {
+                email : user.email,
+                new_password : 'kepco12345'
             };
 
             $scope.main.loadingMain = true;
-            var promise = memberService.resetPassword(param);
+            var promise = memberService.resetPassword(params);
             promise.success(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertSuccess('비밀번호가 정상적으로 초기화되었습니다');
@@ -256,6 +256,23 @@ angular.module('portal.controllers')
             });
         };
 
+        // 용량 조회
+        ct.listOrgQuotas = function () {
+            var params = {
+                projectId : ct.selOrgProject.project.id
+            };
+
+            var promise = quotaService.listOrgQuotas(params);
+            promise.success(function (data) {
+                ct.orgQuotas = data;
+                console.log(data)
+            });
+            promise.error(function (data) {
+                ct.orgQuotas = {};
+            });
+        };
+
+        // 용량 변경
         ct.updateQuota = function($event) {
             var dialogOptions = {
                 title : '용량 변경 요청',
@@ -264,13 +281,20 @@ angular.module('portal.controllers')
                 templateUrl : _COMM_VIEWS_ + '/org/popOrgQuota.html' + _VersionTail(),
             };
             common.showDialog($scope, $event, dialogOptions);
+
             $scope.popDialogOk = function() {
-                ct.asideQuotaReqRequestQuotaNgClick();
+                ct.updateQuotaAction();
             };
+
             $scope.popCancel = function() {
                 $scope.dialogClose = true;
                 common.mdDialogCancel();
             };
+        };
+
+        // 용량 변경 액션
+        ct.updateQuotaAction = function () {
+
         };
 
         ct.pageLoadData = function () {
