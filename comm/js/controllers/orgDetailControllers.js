@@ -79,6 +79,7 @@ angular.module('portal.controllers')
             var promise = orgService.createOrgIcon(ct.paramId, body);
             promise.success(function (data, status, headers) {
                 $scope.main.loadingMain = false;
+                ct.selOrgProject.iconImage = data;
                 common.mdDialogHide();
                 common.showAlertSuccess('업로드 되었습니다');
             });
