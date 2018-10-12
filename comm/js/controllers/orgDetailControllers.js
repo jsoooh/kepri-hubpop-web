@@ -392,8 +392,10 @@ angular.module('portal.controllers')
             if (ct.allUsers && ct.allUsers.length > 0) {
                 angular.forEach(ct.allUsers, function (user, key) {
                     if (ct.orgUserEmails.indexOf(user.email) == -1) {
-                        user.roleName = ct.orgRoleNames.user;
-                        ct.orgNotUsers.push(user);
+                        if (!ct.schName || user.name.toLowerCase().indexOf(ct.schName.toLowerCase()) > -1) {
+                            user.roleName = ct.orgRoleNames.user;
+                            ct.orgNotUsers.push(user);
+                        }
                     }
                 });
             }
@@ -404,15 +406,16 @@ angular.module('portal.controllers')
             ct.pageOptions.currentPage = page;
         };
 
-        ct.pageLoadData = function () {
+        ct.pagelistOrgUsersLoadData = function (page) {
+            ct.pageOptions.currentPage = page;
             ct.loadListOrgUsers = false;
             ct.loadListAllUsers = false;
-            ct.listOrgUsers();
+            ct.listOrgUsers(1);
             ct.listAllUsers();
         };
 
         ct.addNewOrgUsers();
 
-        ct.pageLoadData();
+        ct.pagelistOrgUsersLoadData(1);
     })
 ;

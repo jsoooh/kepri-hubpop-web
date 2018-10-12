@@ -13,9 +13,9 @@
             <div class="searchWrap mb20" style="text-align: center;">
                 <div class="searchBox">
                     <div class="form-group">
-                        <input type="text" placeholder="멤버이름을 입력해 주세요." style="width:400px;" ng-model="contents.pop.email" ng-keyup="$event.keyCode == 13 ? contents.pop.memberAdd3(null, 1) : null;">
+                        <input type="text" placeholder="멤버이름을 입력해 주세요." style="width:400px;" ng-model="contents.schName" ng-keyup="$event.keyCode == 13 ? contents.pagelistOrgUsersLoadData(1) : null;">
                     </div>
-                    <button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.memberAdd3(null, 1);"><span class="ico">검색</span></button>
+                    <button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.pagelistOrgUsersLoadData(1);"><span class="ico">검색</span></button>
                 </div>
             </div>
             <!-- table -->
