@@ -16,13 +16,13 @@
             <div class="cBox type1 appCnt-info">
                 <div class="cBox-hd">
                     <h4 class="c-tit">
-                        <button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.createOrgProjectIcon($event)"><span class="ico">썸네일 수정</span></button>
                         <span ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image" class="thum_box img_line">
                             <img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" class="logo" alt="">
                         </span>
                         <span class="thum_box" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image">
                             <span class="txt">{{contents.selOrgProject.orgName.substr(0, 1)}}</span>
                         </span>
+                        <button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.createOrgProjectIcon($event)"><span class="ico">썸네일 수정</span></button>
                         {{ contents.selOrgProject.orgName }}
                     </h4>
                     <div class="pull-right">
