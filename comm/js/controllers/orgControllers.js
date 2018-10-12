@@ -115,14 +115,15 @@ angular.module('portal.controllers')
             promise.success(function(data, status, headers) {
                 pop.orgQuotas = data.items;
                 pop.orgProject.orgQuotaId = '';
-                for (var i = 0; i < pop.orgQuotas.length; i++) {
-                    if (pop.orgQuotas[i].available == true) {
+                if (pop.orgQuotas && pop.orgQuotas.length > 0) {
+                    for (var i = 0; i < pop.orgQuotas.length; i++) {
                         if (pop.orgQuotas[i].defaultQuota == true) {
                             pop.orgProject.orgQuotaId = pop.orgQuotas[i].id;
                             break;
-                        } else {
-                            pop.orgProject.orgQuotaId = pop.orgQuotas[i].id;
                         }
+                    }
+                    if (!pop.orgProject.orgQuotaId){
+                        pop.orgProject.orgQuotaId = pop.orgQuotas[0].orgQuotaId;
                     }
                 }
                 if (!pop.orgProject.orgQuotaId){
