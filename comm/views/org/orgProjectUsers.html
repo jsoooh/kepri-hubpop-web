@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <input type="text" placeholder="멤버이름을 입력해 주세요." style="width:400px;" ng-model="contents.pop.email" ng-keyup="$event.keyCode == 13 ? contents.pop.memberAdd3(null, 1) : null;">
                     </div>
-                    <button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.pop.memberAdd3(null, 1);"><span class="ico">검색</span></button>
+                    <button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.memberAdd3(null, 1);"><span class="ico">검색</span></button>
                 </div>
             </div>
             <!-- table -->
@@ -43,19 +43,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="projectUser in contents.projectUsers">
+                    <tr ng-repeat="(key, user) in contents.orgNotUsers" ng-if="(key >= (contents.pageOptions.pageSize * (contents.pageOptions.currentPage-1))) && (key < (contents.pageOptions.pageSize * (contents.pageOptions.currentPage)))">
                         <td>
                             <div>
                                 <input type="checkbox" name="chkBox-sel" id="chkBox-sel$0" ng-model="item.checked">
                                 <label for="chkBox-sel$0"></label>
                             </div>
                         </td>
-                        <td>{{contents.pop.pageOptions.pageSize * (contents.pop.pageOptions.currentPage - 1) + $index + 1}}</td>
-                        <td>{{projectUser.user.email}}</td>
-                        <td>{{projectUser.user.name}}</td>
-                        <td ng-if="contents.orgRoleNames.owner == projectUser.roleName">{{contents.orgRoleNames.owner}}</td>
-                        <td ng-if="contents.orgRoleNames.owner != projectUser.roleName">
-                            <select ng-model="projectUser.roleName" ng-disabled="item.ngDisabled">
+                        <td>{{(key + 1)}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.name}}</td>
+                        <td>
+                            <select ng-model="user.roleName" ng-disabled="item.ngDisabled">
                                 <option value="{{ contents.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
                                 <option value="{{ contents.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
                             </select>
@@ -69,13 +68,12 @@
             <!-- page -->
             <nav class="pagiWrap">
                 <paging
-                        page="contents.pop.pageOptions.currentPage"
-                        page-size="contents.pop.pageOptions.pageSize"
-                        total="contents.pop.pageOptions.total"
-                        pg-href=""
+                        page="contents.pageOptions.currentPage"
+                        page-size="contents.pageOptions.pageSize"
+                        total="contents.pageOptions.total"
                         show-prev-next="true"
                         show-first-last="true"
-                        paging-action="contents.pop.memberAdd3(null, page)"
+                        paging-action="contents.goToPage(page)"
                         text-first-class="first"
                         text-last-class="end"
                         text-next-class="next"
@@ -113,18 +111,13 @@
                             <th scope="col">이름</th>
                             <th scope="col">소속</th>
                             <th scope="col">아이디</th>
-                            <th scope="col">
-                                패스워드<span class="ico-info4 ico" ng-mouseover="contents.layer_info_tooltip = 1" ng-init="contents.layer_info_tooltip = 0" ng-mouseleave="contents.layer_info_tooltip = 0"></span>
-                                <div class="layer_info_tooltip_tbl ng-hide" ng-show="contents.layer_info_tooltip" aria-hidden="true" style="">
-                                    <p class="ng-binding"> 영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오. </p>
-                                </div>
-                            </th>
+                            <th scope="col">패스워드<span class="ico-info4 ico" tooltip-placement="top" uib-tooltip="영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오."></span></th>
                             <th scope="col">역할</th>
                             <th scope="col"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="item in contents.newUsers">
+                        <tr ng-repeat="item in contents.newOrgUsers">
                             <td>{{$index + 1}}</td>
                             <td class="tdpd"><input type="text" name="" value="" class="form-control" placeholder="이름을 입력하세요" ng-model="item.name" required="required"></td>
                             <td class="tdpd"><input type="text" name="" value="" class="form-control" placeholder="소속을 입력하세요" ng-model="item.position" required="required"></td>
@@ -135,8 +128,8 @@
                             <td class="tdpd"><input type="text" name="" value="" class="form-control" placeholder="비밀번호를 입력하세요" ng-model="item.password" required="required"></td>
                             <td>
                                 <select ng-model="item.roleName" ng-disabled="item.ngDisabled">
-                                    <option value="{{ contents.CONSTANTS.roleName.user }}" title="프로젝트 사용자">사용자</option>
-                                    <option value="{{ contents.CONSTANTS.roleName.admin }}" title="프로젝트 관리자">관리자</option>
+                                    <option value="{{ contents.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
+                                    <option value="{{ contents.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
                                 </select>
                             </td>
                             <td>

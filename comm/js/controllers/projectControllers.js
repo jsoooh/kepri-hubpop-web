@@ -172,13 +172,13 @@ angular.module('portal.controllers')
         ct.listProjects();
 
 	})
-	.filter('roleName', function(CONSTANTS) {
+	.filter('orgRoleName', function(CONSTANTS) {
 		return function(input) {
 
 			var json = {};
 			json[CONSTANTS.roleName.owner] = '프로젝트 책임자';
-			json[CONSTANTS.roleName.admin] = '작업 관리자';
-			json[CONSTANTS.roleName.user] = '작업 사용자';
+			json[CONSTANTS.roleName.admin] = '프로젝트 관리자';
+			json[CONSTANTS.roleName.user] = '프로젝트 사용자';
 
 			return json[input];
 		}

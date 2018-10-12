@@ -176,10 +176,10 @@ angular.module('portal.controllers')
         };
 
         // 사용자 목록 조회
-        ct.listUsers = function () {
+        ct.listOrgUsers = function () {
             var promise = orgService.listOrgUsers(ct.paramId);
             promise.success(function (data) {
-                ct.orgUsers = data;
+                ct.orgUsers = data.items;
             });
             promise.error(function (data) {
             });
@@ -213,8 +213,8 @@ angular.module('portal.controllers')
         };
 
         // 사용자 추가 버튼 클릭
-        ct.goToProjectUsers = function () {
-            common.locationPath('/comm/projects/projectUsers/' + ct.selOrgProject.project.id);
+        ct.goToOrgProjectUsers = function () {
+            common.locationPath('/comm/projects/projectUsers/' + ct.selOrgProject.id);
         };
 
         ct.deleteUser = function (user) {
@@ -260,30 +260,72 @@ angular.module('portal.controllers')
 
         ct.pageLoadData = function () {
             ct.getOrgProject();
-            ct.listUsers();
+            ct.listOrgUsers();
         };
 
         ct.pageLoadData();
     })
-    .controller('commOrgProjectUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, projectService, CONSTANTS, SITEMAP, memberService, orgService) {
+    .controller('commOrgProjectUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, orgService, memberService, CONSTANTS, SITEMAP) {
         _DebugConsoleLog('orgDetailControllers.js : commOrgProjectUsersCtrl', 1);
 
         var ct = this;
 
         ct.orgRoleNames = CONSTANTS.roleName;
-        ct.paramId = $stateParams.projectId;
+        ct.paramId = $stateParams.orgId;
+
+        ct.newOrgUsers = [];
+
+        // paging
+        ct.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 1
+        };
+
+        ct.addNewOrgUsers = function () {
+            ct.newOrgUsers.push({
+                roleName : ct.orgRoleNames.user,
+                add : true,
+                del : false,
+                ngDisabled : ct.ngDisabled,
+            });
+        };
 
         ct.tab_ngClick = function (tabId) {
             $('#tab1-1, #tab1-2').removeClass('active');
             $('#' + tabId).addClass('active');
         };
 
-        ct.getProject = function () {
+        // 사용자 목록 조회
+        ct.listOrgUsers = function () {
+            ct.orgUserEmails = [];
+            var promise = orgService.listOrgUsers(ct.paramId);
+            promise.success(function (data) {
+                var orgUsers = data.items;
+                if (orgUsers && orgUsers.length > 0) {
+                    angular.forEach(orgUsers, function (orgUser, key) {
+                        ct.orgUserEmails.push(orgUser.usersInfo.email);
+                    });
+                }
+                ct.loadListOrgUsers = true;
+                if (ct.loadListAllUsers) {
+                    ct.setOrgNotUsers();
+                }
+            });
+            promise.error(function (data) {
+            });
+        };
+
+        ct.listAllUsers = function () {
             $scope.main.loadingMainBody = true;
-            var promise = projectService.getProject(ct.paramId);
+            var promise = memberService.listAllUsers();
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.projectUsers = data.users;
+                ct.allUsers = data.items;
+                ct.loadListAllUsers = true;
+                if (ct.loadListOrgUsers) {
+                    ct.setOrgNotUsers();
+                }
             });
 
             promise.error(function (data) {
@@ -291,6 +333,32 @@ angular.module('portal.controllers')
             });
         };
 
-        ct.getProject();
+        ct.setOrgNotUsers = function () {
+            ct.orgNotUsers = [];
+            if (ct.allUsers && ct.allUsers.length > 0) {
+                angular.forEach(ct.allUsers, function (user, key) {
+                    if (ct.orgUserEmails.indexOf(user.email) == -1) {
+                        user.roleName = ct.orgRoleNames.user;
+                        ct.orgNotUsers.push(user);
+                    }
+                });
+            }
+            ct.pageOptions.total = ct.orgNotUsers.length;
+        };
+
+        ct.goToPage = function (page) {
+            ct.pageOptions.currentPage = page;
+        };
+
+        ct.pageLoadData = function () {
+            ct.loadListOrgUsers = false;
+            ct.loadListAllUsers = false;
+            ct.listOrgUsers();
+            ct.listAllUsers();
+        };
+
+        ct.addNewOrgUsers();
+
+        ct.pageLoadData();
     })
 ;

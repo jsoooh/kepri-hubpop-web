@@ -91,14 +91,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in contents.orgUsers.items">
+                    <tr ng-repeat="orgUser in contents.orgUsers">
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.auth | roleName }}</td>
-                        <td>{{ user.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
+                        <td>{{ orgUser.usersInfo.name }}</td>
+                        <td>{{ orgUser.roleName | orgRoleName }}</td>
+                        <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                     </tr>
                     <!-- 등록된 멤버가 없을 때 -->
-                    <tr ng-if="contents.orgUsers.counts == 0" class="no-data">
+                    <tr ng-if="contents.orgUsers.length == 0" class="no-data">
                         <td colspan="5">등록된 프로젝트 멤버가 없습니다.</td>
                     </tr>
                     </tbody>
@@ -113,7 +113,7 @@
             <!-- table -->
             <div class="tb-top">
                 <div class="pull-right">
-                    <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-disabled="!contents.isOrgManager" ng-click="contents.goToProjectUsers()">
+                    <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-disabled="!contents.isOrgManager" ng-click="contents.goToOrgProjectUsers()">
                         <span class="ico">추가</span>
                     </button>
                 </div>
@@ -137,18 +137,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in contents.orgUsers.items">
+                    <tr ng-repeat="orgUser in contents.orgUsers">
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.auth | roleName }}</td>
-                        <td>{{ user.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
+                        <td>{{ orgUser.usersInfo.name }}</td>
+                        <td>{{ orgUser.roleName | orgRoleName }}</td>
+                        <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                         <td>
                             <button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-click="contents.resetPassword(user);"><span class="ico">패스워드 초기화</span></button>
                             <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteUser(user);"><span class="ico">삭제</span></button>
                         </td>
                     </tr>
                     <!-- 등록된 멤버가 없을 때 -->
-                    <tr ng-if="contents.orgUsers.counts == 0" class="no-data">
+                    <tr ng-if="contents.orgUsers.length == 0" class="no-data">
                         <td colspan="5">등록된 프로젝트 멤버가 없습니다.</td>
                     </tr>
                     </tbody>

@@ -7,7 +7,7 @@ angular.module('portal.services')
 
         /*사용자관리 조회*/
         memberService.listAllUsers = function (param) {
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/users/all', 'POST', param));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/users/all', 'GET', param));
         };
 
         memberService.listUsers = function (size, page, condition) {
