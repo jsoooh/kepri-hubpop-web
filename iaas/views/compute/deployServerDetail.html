@@ -58,6 +58,7 @@
 						<li ng-if="contents.deployServer.deployStatus == 'done'"><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('STOP');">정지</a></li>
 						<li ng-if="contents.deployServer.deployStatus == 'done'"><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('RESTART');">재시작</a></li>
 						<li ng-if="contents.deployServer.deployStatus == 'done' && (contents.deployServer.deployType == 'WEB' || contents.deployServer.deployType == 'WAS')"><a href="javascript:void(0);" ng-click="contents.fn.deployServerDetailActionConfirm('SCALE');">인스턴스 증감</a></li>
+						<li ng-if="contents.deployServer.deployStatus == 'fail'"><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('INSTALL');">재배포</a></li>
 						<li><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('DELETE', contents.deployServer);">삭제</a></li>
 					</ul>
 				</div>
