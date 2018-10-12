@@ -362,6 +362,11 @@ angular.module('common.controllers', [])
             portal.menu.urlCheck();
         };
 
+        mc.changePortalOrgToMove = function(portalOrg) {
+            mc.changePortalOrg(portalOrg);
+            mc.goToPage("/comm/projects/projectDetail/" + portalOrg.id)
+        };
+
         // PortalOrg 변경 처리
         mc.changePortalOrg = function(portalOrg) {
             mc.setPortalOrg(portalOrg);
