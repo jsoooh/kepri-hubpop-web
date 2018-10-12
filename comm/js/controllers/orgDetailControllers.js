@@ -115,17 +115,17 @@ angular.module('portal.controllers')
 
         // 조직 설명 추가 액션
         ct.createOrgProjectDescAction = function () {
-            var params = {};
-            params.id = ct.paramId;
-            params.description = $('#description_toUpdate').val();
+            var params = {
+                description : $('#description_toUpdate').val()
+            }
 
             $scope.main.loadingMain = true;
-            var promise = orgService.updateOrg(ct.paramId, params);
+            var promise = orgService.updateOrgDescription(ct.paramId, params);
             promise.success(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertSuccess($translate.instant('message.mi_egov_success_common_update'));
                 common.mdDialogHide();
-                ct.project.description = params.description;
+                ct.selOrgProject.description = params.description;
             });
             promise.error(function (data) {
                 $scope.main.loadingMain = false;
