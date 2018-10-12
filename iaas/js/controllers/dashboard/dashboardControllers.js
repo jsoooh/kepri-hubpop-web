@@ -1362,7 +1362,11 @@ angular.module('iaas.controllers')
                 common.showConfirm('메세지', deployServer.deployName + ' 서버를 재시작 하시겠습니까?').then(function () {
                     ct.fn.deployServerAction(action, deployServer, index);
                 });
-            } else if(action == "DELETE") {
+            } else if(action == "INSTALL") {
+                common.showConfirm('메세지', deployServer.deployName + ' 서버를 재배포 하시겠습니까?').then(function () {
+                    ct.fn.deployServerAction(action, deployServer, index);
+                });
+            }  else if(action == "DELETE") {
                 ct.fn.deleteDeployServer(deployServer, index);
             } else if(action == "SCALE") {
                 ct.fn.deployServerInstanceCountFormOpen(deployServer, index);
@@ -1383,6 +1387,8 @@ angular.module('iaas.controllers')
                     common.showAlertError("서비스가 정지 되었습니다.");
                 } else if(action == "RESTART") {
                     common.showAlertError("서비스가 재시작 되었습니다.");
+                }  else if(action == "INSTALL") {
+                    common.showAlertError("서비스가 재배포 중 입니다.");
                 }
             });
             returnPromise.error(function (data, status, headers) {

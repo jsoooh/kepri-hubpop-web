@@ -192,6 +192,7 @@
 							<li ng-if="deployServer.deployStatus == 'done'"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('STOP', deployServer, diployIndex);">중지</a></li>
 							<li ng-if="deployServer.deployStatus == 'done'"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('RESTART', deployServer, diployIndex);">재시작</a></li>
 							<!--<li ng-if="deployServer.deployStatus == 'done' && (deployServer.deployType == 'WEB' || deployServer.deployType == 'WAS')"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('SCALE', deployServer, diployIndex);">인스턴스 증감</a></li>-->
+							<li ng-if="deployServer.deployStatus == 'fail'"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('INSTALL', deployServer, diployIndex);">재배포</a></li>
 							<li><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('DELETE', deployServer, diployIndex);">삭제</a></li>
 						</ul>
 					</div>
@@ -389,6 +390,7 @@
 						<option ng-if="deployServer.deployStatus == 'done'" value="STOP">중지</option>
 						<option ng-if="deployServer.deployStatus == 'done'" value="RESTART">재시작</option>
 						<!--<option ng-if="deployServer.deployStatus == 'done' && (deployServer.deployType == 'WEB' || deployServer.deployType == 'WAS')" value="SCALE">인스턴스 증감</option>-->
+						<option ng-if="deployServer.deployStatus == 'fail'" value="INSTALL">재배포</option>
 						<option value="DELETE">삭제</option>
 					</select>
 				</td>
