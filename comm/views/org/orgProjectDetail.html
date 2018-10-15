@@ -144,7 +144,7 @@
                         <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                         <td>
                             <button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-click="contents.resetPassword(orgUser.usersInfo);"><span class="ico">패스워드 초기화</span></button>
-                            <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProjectUser(orgUser);"><span class="ico">삭제</span></button>
+                            <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProjectUser(orgUser.usersInfo);"><span class="ico">삭제</span></button>
                         </td>
                     </tr>
                     <!-- 등록된 멤버가 없을 때 -->
