@@ -767,9 +767,11 @@ angular.module('portal.controllers')
             applyPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 if (ct.userAuth == "A" || ct.userAuth == "M") {
-                    common.showAlert($translate.instant('label.org_add'), "작업 신청이 완료되었습니다.");
+                    //common.showAlert($translate.instant('label.org_add'), "작업 신청이 완료되었습니다.");
+                    common.showAlert($translate.instant('label.org_add'), mi_egov_success_common_insert);
                 } else {
-                    common.showAlert($translate.instant('label.org_add'), $translate.instant('message.mi_apply_org_after_apprv'));
+                    //common.showAlert($translate.instant('label.org_add'), $translate.instant('message.mi_apply_org_after_apprv'));
+                    common.showAlert($translate.instant('label.org_add'), $translate.instant('message.mi_egov_success_common_insert'));
                 }
                 /*window.setTimeout(function () {
                     $('#listOrgs').trigger('click');
