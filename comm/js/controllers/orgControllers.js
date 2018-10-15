@@ -157,6 +157,7 @@ angular.module('portal.controllers')
             $scope.main.loadingMainBody= true;
 
             var applyPromise = orgService.requestOrgCreate(param);
+            common.mdDialogHide();
             applyPromise.success(function (data) {
                 $scope.main.loadingMainBody=false;
                 pop.btnClickCheck = false;
@@ -164,12 +165,11 @@ angular.module('portal.controllers')
                 if (angular.isFunction(pop.callBackFunction)) {
                     pop.callBackFunction();
                 }
-                common.mdDialogHide();
             });
             applyPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody=false;
                 pop.btnClickCheck = false;
-                common.showAlertError($translate.instant('label.org_add') + "(" + pop.selOrg.orgId + ")", data);
+                common.showAlertError($translate.instant('label.org_add') + "(" + param.orgName + ")", data);
             });
         };
 
