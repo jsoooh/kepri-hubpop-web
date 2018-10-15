@@ -15,6 +15,8 @@ angular.module('portal.controllers')
             ct.sltInfoTab = sltInfoTab;
 
             if (sltInfoTab == 'resource') {
+                // 조직 변경 중복 신청 체크
+                ct.orgRequest = true;
                 ct.listQuotaHistory();
             }
         };
@@ -26,7 +28,7 @@ angular.module('portal.controllers')
             orgPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.selOrgProject = data;
-                
+
                 if (ct.selOrgProject.project.myRoleName == 'OWNER') {
                     ct.isOrgManager = true;
                 }
@@ -234,6 +236,14 @@ angular.module('portal.controllers')
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.quotaHistory = data;
+
+                for (var i = 0; i < data.items.length; i++) {
+                    var item = data.items[i];
+                    if (item.status == 'REQUEST') {
+                        ct.orgRequest = false;
+                        break;
+                    }
+                }
             });
             promise.error(function (data) {
                 $scope.main.loadingMainBody = false;
