@@ -28,7 +28,7 @@
 				<div class="proj_list_area" ng-if="contents.orgProjects.length > 0">
 					<ul class="ul-panel dash_list">
 						<li ng-repeat="org in contents.orgProjects" ng-if="org.statusCode != 'deleting'">
-							<a ng-click="main.changePortalOrgToMove(org);">
+							<a ng-click="main.goToPortalOrgPage(org);">
 								<div class="thum">
 									<span ng-if="org.iconImage && org.iconImage.image" class="thum_in img_line">
 										<img ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.image }}" class="logo" alt="">

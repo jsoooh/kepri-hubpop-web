@@ -367,6 +367,10 @@ angular.module('common.controllers', [])
             mc.goToPage("/comm/projects/projectDetail/" + portalOrg.id)
         };
 
+        mc.goToPortalOrgPage = function(portalOrg) {
+            mc.goToPage("/comm/projects/projectDetail/" + portalOrg.id)
+        };
+
         // PortalOrg 변경 처리
         mc.changePortalOrg = function(portalOrg) {
             mc.setPortalOrg(portalOrg);

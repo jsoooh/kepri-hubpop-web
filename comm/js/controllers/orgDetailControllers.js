@@ -26,10 +26,12 @@ angular.module('portal.controllers')
             orgPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.selOrgProject = data;
-                
                 if (ct.selOrgProject.project.myRoleName == 'OWNER') {
                     ct.isOrgManager = true;
                 }
+                $timeout(function () {
+                    $scope.main.changePortalOrg(data);
+                }, 0);
             });
             orgPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
