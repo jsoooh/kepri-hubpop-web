@@ -27,7 +27,7 @@
 				<!-- 프로젝트 리스트 -->
 				<div class="proj_list_area" ng-if="contents.orgProjects.length > 0">
 					<ul class="ul-panel dash_list">
-						<li ng-repeat="org in contents.orgProjects">
+						<li ng-repeat="org in contents.orgProjects" ng-if="org.statusCode != 'deleting'">
 							<a ng-click="contents.detailNgClick(org);">
 								<div class="thum">
 									<span ng-if="org.iconImage && org.iconImage.image" class="thum_in img_line">
