@@ -41,7 +41,7 @@
 					<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
 						<span class="bg_arrw"></span>
 						<a ng-if="main.userAuth == 'M'" class="btn_create_proj" ng-click="main.addOrgProjectFormOpen($event)">프로젝트 생성</a>
-						<li ng-repeat="orgItem in main.portalOrgs" ng-if="$index < 5"><a ng-click="main.changePortalOrgToMove(orgItem);">{{orgItem.orgName}}</a></li>
+						<li ng-repeat="orgItem in main.portalOrgs" ng-if="$index < 5"><a ng-click="main.goToPortalOrgPage(orgItem);">{{orgItem.orgName}}</a></li>
 						<a class="btn_all_proj" href="/#/comm/projects">전체프로젝트</a>
 					</ul>
 				</div>
