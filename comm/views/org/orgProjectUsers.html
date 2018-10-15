@@ -32,7 +32,7 @@
                     <tr>
                         <th scope="col">
                             <div>
-                                <input type="checkbox" ng-model="contents.pop.checkboxAll" ng-click="contents.pop.checkedAll($event);">
+                                <input type="checkbox" ng-model="contents.checkboxAll" ng-click="contents.checkAll($event);">
                                 <label></label>
                             </div>
                         </th>
@@ -46,7 +46,7 @@
                     <tr ng-repeat="(key, user) in contents.orgNotUsers" ng-if="(key >= (contents.pageOptions.pageSize * (contents.pageOptions.currentPage-1))) && (key < (contents.pageOptions.pageSize * (contents.pageOptions.currentPage)))">
                         <td>
                             <div>
-                                <input type="checkbox" name="chkBox-sel" id="chkBox-sel$0" ng-model="item.checked">
+                                <input type="checkbox" name="chkBox-sel" id="chkBox-sel$0" ng-model="user.checked">
                                 <label for="chkBox-sel$0"></label>
                             </div>
                         </td>
