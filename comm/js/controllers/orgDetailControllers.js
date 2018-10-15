@@ -446,15 +446,41 @@ angular.module('portal.controllers')
             };
             $scope.main.loadingMain = true;
             var promise = orgService.orgUserAdds(ct.paramId, params);
-            promise.success(function(data, status, headers) {
+            promise.success(function (data) {
                 $scope.main.loadingMain = false;
+                ct.checkboxAll = false;
                 ct.pageListOrgUsersLoadData(1);
                 common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
             });
-            promise.error(function(data, status, headers) {
+            promise.error(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
             });
+        };
+
+        // 사용자 아이디 중복 체크
+        ct.checkOrgUserDup = function (email) {
+            if (!email) {
+                return;
+            }
+
+            // 등록 사용자 목록에서 조회
+            for (var i = 0; i < ct.orgUserEmails.length; i++) {
+                if (ct.orgUserEmails[i].indexOf(email) > -1) {
+                    common.showAlertError('이미 회원가입/프로젝트 멤버 추가한 아이디(' + email + ')입니다.');
+                    return;
+                }
+            }
+
+            // 미등록 사용자 목록에서 조회
+            for (var i = 0; i < ct.orgNotUsers.length; i++) {
+                if (ct.orgNotUsers[i].email.indexOf(email) > -1) {
+                    common.showAlertError('이미 회원가입한 아이디(' + email + ')입니다.');
+                    return;
+                }
+            }
+
+            common.showAlertSuccess('회원가입 가능한 아이디(' + email + ')입니다.');
         };
 
         // 사용자 직접 등록
@@ -489,7 +515,7 @@ angular.module('portal.controllers')
 
         // 사용자 직접 등록 액션
         ct.addCustomOrgUserAction = function () {
-  
+            
         };
 
         // 취소 버튼
