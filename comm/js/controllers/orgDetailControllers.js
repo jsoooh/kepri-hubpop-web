@@ -7,7 +7,7 @@ angular.module('portal.controllers')
         var ct = this;
 
         ct.paramId = $stateParams.orgId;
-        ct.isOrgManager = true;
+        ct.isOrgManager = false;
         ct.sltInfoTab = 'info';
         
         // 탭 변경
@@ -115,17 +115,17 @@ angular.module('portal.controllers')
 
         // 조직 설명 추가 액션
         ct.createOrgProjectDescAction = function () {
-            var params = {};
-            params.id = ct.paramId;
-            params.description = $('#description_toUpdate').val();
+            var params = {
+                description : $('#description_toUpdate').val()
+            };
 
             $scope.main.loadingMain = true;
-            var promise = orgService.updateOrg(ct.paramId, params);
+            var promise = orgService.updateOrgDescription(ct.paramId, params);
             promise.success(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertSuccess($translate.instant('message.mi_egov_success_common_update'));
                 common.mdDialogHide();
-                ct.project.description = params.description;
+                ct.selOrgProject.description = params.description;
             });
             promise.error(function (data) {
                 $scope.main.loadingMain = false;
@@ -150,7 +150,7 @@ angular.module('portal.controllers')
                 common.showAlert($translate.instant('label.org_del') + '(' + ct.selOrgProject.orgName + ')', '해당 프로젝트를 삭제 처리 중 입니다.');
                 $scope.main.goToPage('/comm/projects');
             });
-            promise.error(function (data) {
+            promise.error(function (data, status) {
                 $scope.main.loadingMainBody = false;
                 if (status == 406) {
                     common.showAlertError($translate.instant('label.org_del') + '(' + ct.selOrgProject.orgName + ')', '삭제 권한이 없습니다.');
@@ -217,6 +217,7 @@ angular.module('portal.controllers')
             var promise = orgService.deleteOrgUser(ct.paramId, user.email);
             promise.success(function (data) {
                 $scope.main.loadingMain = false;
+                ct.listOrgUsers();
                 common.showAlertSuccess(user.name + ' ' + $translate.instant('message.mi_egov_success_common_delete'));
             });
             promise.error(function (data) {
@@ -332,7 +333,7 @@ angular.module('portal.controllers')
         // paging
         ct.pageOptions = {
             currentPage : 1,
-            pageSize : 10,
+            pageSize : 5,
             total : 1
         };
 
@@ -402,11 +403,76 @@ angular.module('portal.controllers')
             ct.pageOptions.total = ct.orgNotUsers.length;
         };
 
+        // 전체 선택
+        ct.checkAll = function ($event) {
+            for (var i = 0; i < ct.orgNotUsers.length; i++) {
+                if ((i >= (ct.pageOptions.pageSize * (ct.pageOptions.currentPage-1))) && (i < (ct.pageOptions.pageSize * (ct.pageOptions.currentPage)))) {
+                    ct.orgNotUsers[i].checked = $event.currentTarget.checked;
+                }
+            }
+        };
+
+        // 사용자 조회 등록
+        ct.addOrgUsers = function () {
+            var adminCnt = 0;
+            ct.orgUserRequests = [];
+
+            for (var i = 0; i < ct.orgNotUsers.length; i++) {
+                if (ct.orgNotUsers[i].checked) {
+                    ct.orgUserRequests.push({
+                        email : ct.orgNotUsers[i].email,
+                        name : ct.orgNotUsers[i].name,
+                        userRole : ct.orgNotUsers[i].roleName
+                    });
+
+                    if (ct.orgNotUsers[i].roleName == 'ADMIN') {
+                        adminCnt++;
+                    }
+                }
+            }
+
+            if (adminCnt > 1) {
+                common.showAlert('', '프로젝트 관리자는 한 명만 가능합니다.');
+                return;
+            }
+
+            if (ct.orgUserRequests.length == 0) {
+                common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
+                return;
+            }
+
+            var params = {
+                type : 'add',
+                orgUserRequests : ct.orgUserRequests
+            };
+            $scope.main.loadingMain = true;
+            var promise = orgService.orgUserAdds(ct.paramId, params);
+            promise.success(function(data, status, headers) {
+                $scope.main.loadingMain = false;
+                ct.pageListOrgUsersLoadData(1);
+                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
+            });
+            promise.error(function(data, status, headers) {
+                $scope.main.loadingMain = false;
+                common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
+            });
+        };
+
+        // 사용자 직접 등록
+        ct.addCustomOrgUsers = function () {
+
+        };
+
+        // 취소 버튼
+        ct.cancel = function () {
+            common.locationPath('/comm/projects/projectDetail/' + ct.paramId);
+        };
+
         ct.goToPage = function (page) {
             ct.pageOptions.currentPage = page;
         };
 
-        ct.pagelistOrgUsersLoadData = function (page) {
+        ct.pageListOrgUsersLoadData = function (page) {
             ct.pageOptions.currentPage = page;
             ct.loadListOrgUsers = false;
             ct.loadListAllUsers = false;
@@ -416,6 +482,6 @@ angular.module('portal.controllers')
 
         ct.addNewOrgUsers();
 
-        ct.pagelistOrgUsersLoadData(1);
+        ct.pageListOrgUsersLoadData(1);
     })
 ;

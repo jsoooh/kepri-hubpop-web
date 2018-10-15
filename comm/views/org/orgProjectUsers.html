@@ -13,9 +13,9 @@
             <div class="searchWrap mb20" style="text-align: center;">
                 <div class="searchBox">
                     <div class="form-group">
-                        <input type="text" placeholder="멤버이름을 입력해 주세요." style="width:400px;" ng-model="contents.schName" ng-keyup="$event.keyCode == 13 ? contents.pagelistOrgUsersLoadData(1) : null;">
+                        <input type="text" placeholder="멤버이름을 입력해 주세요." style="width:400px;" ng-model="contents.schName" ng-keyup="$event.keyCode == 13 ? contents.setOrgNotUsers() : null;">
                     </div>
-                    <button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.pagelistOrgUsersLoadData(1);"><span class="ico">검색</span></button>
+                    <button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.setOrgNotUsers();"><span class="ico">검색</span></button>
                 </div>
             </div>
             <!-- table -->
@@ -32,7 +32,7 @@
                     <tr>
                         <th scope="col">
                             <div>
-                                <input type="checkbox" ng-model="contents.pop.checkboxAll" ng-click="contents.pop.checkedAll($event);">
+                                <input type="checkbox" ng-model="contents.checkboxAll" ng-click="contents.checkAll($event);">
                                 <label></label>
                             </div>
                         </th>
@@ -46,7 +46,7 @@
                     <tr ng-repeat="(key, user) in contents.orgNotUsers" ng-if="(key >= (contents.pageOptions.pageSize * (contents.pageOptions.currentPage-1))) && (key < (contents.pageOptions.pageSize * (contents.pageOptions.currentPage)))">
                         <td>
                             <div>
-                                <input type="checkbox" name="chkBox-sel" id="chkBox-sel$0" ng-model="item.checked">
+                                <input type="checkbox" name="chkBox-sel" id="chkBox-sel$0" ng-model="user.checked">
                                 <label for="chkBox-sel$0"></label>
                             </div>
                         </td>
@@ -83,8 +83,8 @@
             <!-- //page -->
 
             <div class="mt30 fl_r">
-                <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.register_ngClick($event)">등록</button>
-                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="contents.cancel_ngClick()">취소</button>
+                <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.addOrgUsers($event)">등록</button>
+                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="contents.cancel()">취소</button>
             </div>
 
         </div>
