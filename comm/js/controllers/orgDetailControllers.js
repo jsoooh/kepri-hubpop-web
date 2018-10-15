@@ -348,7 +348,7 @@ angular.module('portal.controllers')
             $('#' + tabId).addClass('active');
         };
 
-        // 사용자 목록 조회
+        // 등록 사용자 목록 조회
         ct.listOrgUsers = function () {
             ct.orgUserEmails = [];
             var promise = orgService.listOrgUsers(ct.paramId);
@@ -368,6 +368,7 @@ angular.module('portal.controllers')
             });
         };
 
+        // 전체 사용자 조회
         ct.listAllUsers = function () {
             $scope.main.loadingMainBody = true;
             var promise = memberService.listAllUsers();
@@ -385,6 +386,7 @@ angular.module('portal.controllers')
             });
         };
 
+        // 조직 신규 사용자 등록을 위한 미동록 사용 목록 조회
         ct.setOrgNotUsers = function () {
             ct.orgNotUsers = [];
             if (ct.allUsers && ct.allUsers.length > 0) {
@@ -471,12 +473,23 @@ angular.module('portal.controllers')
                 return;
             }
 
+            for (var i = 0; i < ct.newOrgUsers.length; i++) {
+                var orgUser = ct.newOrgUsers[i];
+                orgUser.add = false;
+                orgUser.del = true;
+            }
+
             ct.newOrgUsers.push({
                 roleName : CONSTANTS.roleName.user,
                 add : true,
                 del : false,
-                ngDisabled : ct.ngDisabled,
+                ngDisabled : ct.ngDisabled
             });
+        };
+
+        // 사용자 직접 등록 액션
+        ct.addCustomOrgUserAction = function () {
+  
         };
 
         // 취소 버튼
