@@ -7,7 +7,7 @@ angular.module('portal.controllers')
         var ct = this;
 
         ct.paramId = $stateParams.orgId;
-        ct.isOrgManager = true;
+        ct.isOrgManager = false;
         ct.sltInfoTab = 'info';
         
         // 탭 변경
@@ -117,7 +117,7 @@ angular.module('portal.controllers')
         ct.createOrgProjectDescAction = function () {
             var params = {
                 description : $('#description_toUpdate').val()
-            }
+            };
 
             $scope.main.loadingMain = true;
             var promise = orgService.updateOrgDescription(ct.paramId, params);
