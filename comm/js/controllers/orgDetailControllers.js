@@ -187,12 +187,9 @@ angular.module('portal.controllers')
 
         // 비밀번호 초기화 액션
         ct.resetPasswordAction = function (user) {
-            var params = {};
-            params.email = user.email;
-            params.new_password = 'kepco12345';
-
+            var password = 'kepco12345';
             $scope.main.loadingMain = true;
-            var promise = memberService.resetPassword(params);
+            var promise = memberService.resetPassword(user.email, password);
             promise.success(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertSuccess('비밀번호가 정상적으로 초기화되었습니다');
@@ -351,7 +348,7 @@ angular.module('portal.controllers')
             $('#' + tabId).addClass('active');
         };
 
-        // 사용자 목록 조회
+        // 등록 사용자 목록 조회
         ct.listOrgUsers = function () {
             ct.orgUserEmails = [];
             var promise = orgService.listOrgUsers(ct.paramId);
@@ -371,6 +368,7 @@ angular.module('portal.controllers')
             });
         };
 
+        // 전체 사용자 조회
         ct.listAllUsers = function () {
             $scope.main.loadingMainBody = true;
             var promise = memberService.listAllUsers();
@@ -388,6 +386,7 @@ angular.module('portal.controllers')
             });
         };
 
+        // 조직 신규 사용자 등록을 위한 미동록 사용 목록 조회
         ct.setOrgNotUsers = function () {
             ct.orgNotUsers = [];
             if (ct.allUsers && ct.allUsers.length > 0) {
@@ -459,8 +458,38 @@ angular.module('portal.controllers')
         };
 
         // 사용자 직접 등록
-        ct.addCustomOrgUsers = function () {
+        ct.addCustomOrgUser = function (item) {
+            if (!item.name) {
+                common.showAlertWarning('이름을 입력하세요');
+                return;
+            } else if (!item.position) {
+                common.showAlertWarning('소속을 입력하세요');
+                return;
+            } else if (!item.email) {
+                common.showAlertWarning('아이디를 입력하세요');
+                return;
+            } else if (!item.password) {
+                common.showAlertWarning('비밀번호를 입력하세요');
+                return;
+            }
 
+            for (var i = 0; i < ct.newOrgUsers.length; i++) {
+                var orgUser = ct.newOrgUsers[i];
+                orgUser.add = false;
+                orgUser.del = true;
+            }
+
+            ct.newOrgUsers.push({
+                roleName : CONSTANTS.roleName.user,
+                add : true,
+                del : false,
+                ngDisabled : ct.ngDisabled
+            });
+        };
+
+        // 사용자 직접 등록 액션
+        ct.addCustomOrgUserAction = function () {
+  
         };
 
         // 취소 버튼
