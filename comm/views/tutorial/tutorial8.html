@@ -8,8 +8,8 @@
 						<ul class="nav nav-tabs" role="tablist">
 							<li role="presentation"><a href="#/tutorial/1" role="tab" data-toggle="tab">가상 서버 활용하기</a></li>
 							<li role="presentation"><a href="#/tutorial/2" role="tab" data-toggle="tab">표준APP.개발 활용하기</a></li>
-							<li role="presentation" class="active"><a href="#/tutorial/6" role="tab" data-toggle="tab">개발 파이프라인 활용하기</a></li>
-							<li role="presentation" class="active"><a href="#/tutorial/4" role="tab" data-toggle="tab">API Gateway 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/6" role="tab" data-toggle="tab">개발 파이프라인 활용하기</a></li>
+							<li role="presentation" class="active"><a href="#/tutorial/8" role="tab" data-toggle="tab">API Gateway 활용하기</a></li>
 						</ul>
 					</div>
 					<!-- //Nav tabs -->
@@ -19,10 +19,10 @@
 				<div class="in">
 					<h2 class="h-tit2">API Gateway 활용하기</h2>
 					
-					<h3 class="h-tit3" id="/tutorial/4?content=1">API Life Cycle</h3>
+					<h3 class="h-tit3" id="/tutorial/8?content=1">API Life Cycle</h3>
 						<p class="tuto-txt">API Gateway는 손쉽게 API를 생성, 등록, 배포하고 유지 관리, 모니터링 및 보호할 수 있는 서비스입니다.</p>
 						<p class="tuto-txt">모든 클라이언트 요청에 대한 end point를 통합하여 API 호출을 수락 및 처리하는 데 관련된 모든 작업을 처리합니다.</p>
-						<img src="images/api_gateway/tutorial/api_life_cycle.png" alt="">
+						<img src="images/tutorial/api_gateway/api_life_cycle.png" alt="">
 						<ul class="tuto-ul">
 							<li>API 매니저가 서비스 API를 디자인/설계</li>
 							<li>개발자가 설계를 반영하여 API를 개발하고 테스트</li>
@@ -32,8 +32,8 @@
 							<li>API를 분석하고 모니터링</li>
 						</ul>
 					
-					<h3 class="h-tit3" id="/tutorial/4?content=2">API 서비스 ID 등록</h3>
-						<img src="images/api_gateway/tutorial/api_service_id.png" alt="">
+					<h3 class="h-tit3" id="/tutorial/8?content=2">API 서비스 ID 등록</h3>
+						<img src="images/tutorial/api_gateway/api_service_id.png" alt="">
 						<ul class="tuto-ul">
 							<li>[API 기준 정보 관리]메뉴를 클릭합니다.</li>
 							<li>[서비스 ID 관리]버튼을 클릭하여 [+]를 호출합니다.</li>
@@ -42,98 +42,98 @@
 							<li>[저장]버튼을 클릭하여 서비스 ID를 생성합니다.</li>
 						</ul>
 					
-					<h3 class="h-tit3" id="/tutorial/4?content=3">API 명세 등록</h3>
-						<img src="images/api_gateway/tutorial/api_spec_list.png" alt="">
+					<h3 class="h-tit3" id="/tutorial/8?content=3">API 명세 등록</h3>
+						<img src="images/tutorial/api_gateway/api_spec_list.png" alt="">
 						<ul class="tuto-ul">
 							<li>[API 명세 관리]메뉴를 클릭하여 [+]를 호출합니다.</li>
 							<li>[API 명세 등록]에서 정보들을 순서에 맞게 정확하게 입력합니다.</li>
 							<li>- [서비스 ID]선택, [API 명세 버전]입력</li>
 							<li>[저장]버튼을 클릭하여 API 명세를 생성합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_spec_write_btn.png" alt="">
+						<img src="images/tutorial/api_gateway/api_spec_write_btn.png" alt="">
 						<ul class="tuto-ul">
 							<li>생성한 API 명세의 [작성]버튼을 클릭합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_spec_write.png" alt="">
+						<img src="images/tutorial/api_gateway/api_spec_write.png" alt="">
 						<ul class="tuto-ul">
 							<li>[File] 버튼을 클릭하여 API 명세 파일을 읽어옵니다.</li>
 							<li>[Edit] 버튼을 클릭하여 API 명세를 YAML 형식으로 변환 가능합니다.</li>
 							<li>[저장]버튼을 클릭하여 API 명세를 저장합니다.</li>
 						</ul>
 						
-					<h3 class="h-tit3" id="/tutorial/4?content=4">API 명세 배포</h3>
-						<img src="images/api_gateway/tutorial/api_spec_deploy_btn.png" alt="">
+					<h3 class="h-tit3" id="/tutorial/8?content=4">API 명세 배포</h3>
+						<img src="images/tutorial/api_gateway/api_spec_deploy_btn.png" alt="">
 						<ul class="tuto-ul">
 							<li>[API 명세 관리]메뉴를 클릭합니다.</li>
 							<li>생성한 API 명세의 [배포]버튼을 클릭합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_depoly_step1.png" alt="">
+						<img src="images/tutorial/api_gateway/api_depoly_step1.png" alt="">
 						<ul class="tuto-ul">
 							<li>[step01-상세정보]에서 정보들을 순서에 맞게 정확하게 입력합니다.</li>
 							<li>- (필수사항)[카테고리]선택, [API 배포 이름]입력, [API ID/버전]자동입력, [API 배포 설명]입력, [라우팅 방식]선택</li>
 							<li>- (선택사항)[API 브랜드 포탈 주소]입력, [API 로고 이미지]입력 </li>
 							<li>[다음]버튼을 클릭하여 API 상세정보를 저장합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_depoly_step2.png" alt="">
+						<img src="images/tutorial/api_gateway/api_depoly_step2.png" alt="">
 						<ul class="tuto-ul">
 							<li>[step02-자원정보]에서 API 자원 정보를 선택합니다.</li>
 							<li>- 등록된 자원중 배포할 자원을 선택</li>
 							<li>[다음]버튼을 클릭하여 API 자원 정보를 저장합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_depoly_step3.png" alt="">
+						<img src="images/tutorial/api_gateway/api_depoly_step3.png" alt="">
 						<ul class="tuto-ul">
 							<li>[step03-핕터]에서 API 필터 정보를 선택합니다.</li>
 							<li>- 배포하면서 적용할 필터기능을 선택</li>
 							<li>[다음]버튼을 클릭하여 API 필터 정보를 저장합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_depoly_step4.png" alt="">
+						<img src="images/tutorial/api_gateway/api_depoly_step4.png" alt="">
 						<ul class="tuto-ul">
 							<li>[step04-보안]에서 API 보안 정보를 선택합니다.</li>
 							<li>- OAuth 2.0을 선택</li>
 							<li>[다음]버튼을 클릭하여 API 보안 정보를 저장합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_depoly_step5.png" alt="">
+						<img src="images/tutorial/api_gateway/api_depoly_step5.png" alt="">
 						<ul class="tuto-ul">
 							<li>[step05-배포위치]에서 API 배포위치 정보를 선택합니다.</li>
 							<li>- [개발 및 테스트]선택, [운영]선택</li>
 							<li>[다음]버튼을 클릭하여 API 배포위치 정보를 저장합니다.</li>
 							<li>- 해당 배포위치로 배포진행</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_depoly_step6.png" alt="">
+						<img src="images/tutorial/api_gateway/api_depoly_step6.png" alt="">
 						<ul class="tuto-ul">
 							<li>[step06-배포결과]에서 API 배포결과 정보를 확인합니다.</li>
 							<li>- [개발 및 테스트]선택, [운영]선택</li>
 							<li>[배포한 서비스 보기]버튼을 클릭하여 API 배포 상세정보를 확인합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/api_deploy_detail.png" alt="">
+						<img src="images/tutorial/api_gateway/api_deploy_detail.png" alt="">
 						
-					<h3 class="h-tit3" id="/tutorial/4?content=5">APP 등록</h3>
-						<img src="images/api_gateway/tutorial/app_list.png" alt="">
+					<h3 class="h-tit3" id="/tutorial/8?content=5">APP 등록</h3>
+						<img src="images/tutorial/api_gateway/app_list.png" alt="">
 						<ul class="tuto-ul">
 							<li>[APP 등록]메뉴를 클릭하여 [+]를 호출합니다.</li>
 							<li>[API 록]에서 정보들을 순서에 맞게 정확하게 입력합니다.</li>
 							<li>- [프로젝트]선택, [APP 이름]입력, [APP 설명]입력</li>
 							<li>[저장]버튼을 클릭하여 APP 정보를 생성합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/app_app_btn.png" alt="">
+						<img src="images/tutorial/api_gateway/app_app_btn.png" alt="">
 						<ul class="tuto-ul">
 							<li>생성한 APP의 [리스트]를 클릭합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/app_scope_btn.png" alt="">
+						<img src="images/tutorial/api_gateway/app_scope_btn.png" alt="">
 						<ul class="tuto-ul">
 							<li>APP 등록 상세조회의 [API 서비스(범위)선택-서비스추가]를 클릭합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/app_api_pop.png" alt="">
+						<img src="images/tutorial/api_gateway/app_api_pop.png" alt="">
 						<ul class="tuto-ul">
 							<li>APP에 서비스할 [API 서비스]를 선택합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/app_method_token.png" alt="">
+						<img src="images/tutorial/api_gateway/app_method_token.png" alt="">
 						<ul class="tuto-ul">
 							<li>선택한 API 서비스의 스코프(범위)를 선택합니다.</li>
 							<li>- [Get]선택, [Post]선택, [Put]선택, [Delete]선택</li>
 							<li>[토큰발급]버튼을 클릭하여 해당 APP 토큰정보를 발급합니다.</li>
 						</ul>
-						<img src="images/api_gateway/tutorial/app_simulator.png" alt="">
+						<img src="images/tutorial/api_gateway/app_simulator.png" alt="">
 						<ul class="tuto-ul">
 							<li>발급받은 토큰정보로 API를 호출합니다.</li>
 							<li>ex) API 시뮬레이터를 활용한 호출</li>
@@ -149,11 +149,11 @@
 						<dt>목차</dt>
 						<dd>
 							<ul>
-								<li><a href="#/tutorial/4?content=1" class="on content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">API Life Cycle</a></li>
-								<li><a href="#/tutorial/4?content=2" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">API 서비스 ID 등록</a></li>
-								<li><a href="#/tutorial/4?content=3" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">API 명세 등록</a></li>
-								<li><a href="#/tutorial/4?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">API 명세 배포</a></li>
-								<li><a href="#/tutorial/4?content=5" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">APP 등록</a></li>
+								<li><a href="#/tutorial/8?content=1" class="on content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">API Life Cycle</a></li>
+								<li><a href="#/tutorial/8?content=2" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">API 서비스 ID 등록</a></li>
+								<li><a href="#/tutorial/8?content=3" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">API 명세 등록</a></li>
+								<li><a href="#/tutorial/8?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">API 명세 배포</a></li>
+								<li><a href="#/tutorial/8?content=5" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">APP 등록</a></li>
 							</ul>
 						</dd>
 					</dl>
