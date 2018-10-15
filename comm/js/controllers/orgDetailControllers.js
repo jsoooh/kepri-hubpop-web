@@ -459,8 +459,27 @@ angular.module('portal.controllers')
         };
 
         // 사용자 직접 등록
-        ct.addCustomOrgUsers = function () {
+        ct.addCustomOrgUser = function (item) {
+            if (!item.name) {
+                common.showAlertWarning('이름을 입력하세요');
+                return;
+            } else if (!item.position) {
+                common.showAlertWarning('소속을 입력하세요');
+                return;
+            } else if (!item.email) {
+                common.showAlertWarning('아이디를 입력하세요');
+                return;
+            } else if (!item.password) {
+                common.showAlertWarning('비밀번호를 입력하세요');
+                return;
+            }
 
+            ct.newOrgUsers.push({
+                roleName : CONSTANTS.roleName.user,
+                add : true,
+                del : false,
+                ngDisabled : ct.ngDisabled,
+            });
         };
 
         // 취소 버튼

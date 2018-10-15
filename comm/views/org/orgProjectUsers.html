@@ -133,8 +133,8 @@
                                 </select>
                             </td>
                             <td>
-                                <button type="button" name="button" class="btn btn-ico-row_plus only-ico" title="추가" ng-click="contents.add_ngClick(item)" ng-if="item.add"><span class="ico">추가</span></button>
-                                <button type="button" name="button" class="btn btn-ico-row_minus only-ico" title="삭제" ng-click="contents.del_ngClick($index)" ng-if="item.del"><span class="ico">삭제</span></button>
+                                <button type="button" name="button" class="btn btn-ico-row_plus only-ico" title="추가" ng-click="contents.addCustomOrgUser(item)" ng-if="item.add"><span class="ico">추가</span></button>
+                                <button type="button" name="button" class="btn btn-ico-row_minus only-ico" title="삭제" ng-click="contents.deleteCustomOrgUser($index)" ng-if="item.del"><span class="ico">삭제</span></button>
                             </td>
                         </tr>
                         </tbody>
@@ -142,8 +142,8 @@
                 </div>
                 <!-- //table -->
                 <div class="mt30 fl_r">
-                    <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.register2_ngClick()" ng-disabled="projectUsersRegister2Form.$invalid">등록</button>
-                    <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="contents.cancel_ngClick()">취소</button>
+                    <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.addCustomOrgUserAction()">등록</button>
+                    <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="contents.cancel()">취소</button>
                 </div>
             </form>
         </div>
