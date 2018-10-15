@@ -332,7 +332,7 @@ angular.module('portal.controllers')
         // paging
         ct.pageOptions = {
             currentPage : 1,
-            pageSize : 10,
+            pageSize : 5,
             total : 1
         };
 
@@ -402,11 +402,15 @@ angular.module('portal.controllers')
             ct.pageOptions.total = ct.orgNotUsers.length;
         };
 
+        ct.cancel = function () {
+            common.locationPath('/comm/projects/projectDetail/' + ct.paramId);
+        };
+
         ct.goToPage = function (page) {
             ct.pageOptions.currentPage = page;
         };
 
-        ct.pagelistOrgUsersLoadData = function (page) {
+        ct.pageListOrgUsersLoadData = function (page) {
             ct.pageOptions.currentPage = page;
             ct.loadListOrgUsers = false;
             ct.loadListAllUsers = false;
@@ -416,6 +420,6 @@ angular.module('portal.controllers')
 
         ct.addNewOrgUsers();
 
-        ct.pagelistOrgUsersLoadData(1);
+        ct.pageListOrgUsersLoadData(1);
     })
 ;
