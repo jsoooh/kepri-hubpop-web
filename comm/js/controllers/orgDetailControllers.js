@@ -187,12 +187,9 @@ angular.module('portal.controllers')
 
         // 비밀번호 초기화 액션
         ct.resetPasswordAction = function (user) {
-            var params = {};
-            params.email = user.email;
-            params.new_password = 'kepco12345';
-
+            var password = 'kepco12345';
             $scope.main.loadingMain = true;
-            var promise = memberService.resetPassword(params);
+            var promise = memberService.resetPassword(user.email, password);
             promise.success(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertSuccess('비밀번호가 정상적으로 초기화되었습니다');

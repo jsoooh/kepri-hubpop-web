@@ -47,8 +47,8 @@ angular.module('portal.services')
         };
 
         /*비밀번호 초기화*/
-        memberService.resetPassword = function(param) {
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/users/passwordreset/manager', 'POST', param));
+        memberService.resetPassword = function(email, password) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/users/passwordreset/manager?email='+email+'&new_password='+password, 'POST'));
         };
 
         /*회원정보 수정*/
