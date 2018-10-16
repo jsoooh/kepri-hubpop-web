@@ -261,6 +261,14 @@ angular.module('portal.controllers')
             var promise = quotaService.listOrgQuotas(params);
             promise.success(function (data) {
                 ct.orgQuotas = data.items;
+
+                // 현재 사용하고 있는 용량 표시
+                for (var i = 0; i < ct.orgQuotas.length; i++) {
+                    if (ct.orgQuotas[i].name == ct.selOrgProject.quotaId.name) {
+                        ct.quotaHistory.quotaReq = ct.orgQuotas[i];
+                        break;
+                    }
+                }
             });
             promise.error(function (data) {
                 ct.orgQuotas = {};
@@ -293,6 +301,10 @@ angular.module('portal.controllers')
         ct.updateQuotaAction = function () {
             if (ct.quotaHistory.quotaReq == undefined) {
                 common.showAlert('용량 변경 요청', '1. 변경 요청할 용량을 선택해주세요.');
+                return;
+            }
+            if (ct.quotaHistory.quotaReq.name == ct.selOrgProject.quotaId.name) {
+                common.showAlert('용량 변경 요청', ct.quotaHistory.quotaReq.name + ' 현재 사용하고 있는 용량과 동일합니다.');
                 return;
             }
             if (ct.quotaHistory.messageReq == null) {
