@@ -1099,6 +1099,27 @@ angular.module('common.controllers', [])
             common.showDialog($scope, $event, dialogOptions);
         };
 
+        mc.ssoUserLogin = false;
+        mc.ssoUserLoginChecking = false;
+        mc.checkSsoPgsecuid = function (pgsecuid) {
+            mc.ssoUserLoginChecking = true;
+            var promise = user.getCheckSsoPgsecuid(pgsecuid);
+            promise.success(function (data, status, headers) {
+                var userInfo = data;
+                var accessToken = userInfo.token;
+                if (accessToken) {
+                    common.setAccessToken(accessToken);
+                    common.setUser(userInfo);
+                    common.moveHomePage();
+                }
+                mc.ssoUserLoging = true;
+                mc.ssoUserLoginChecking = false;
+            });
+            promise.error(function (data, status, headers) {
+                mc.ssoUserLoging = true;
+            });
+        };
+
         // get 으로 token이 넘어온 경우
         if ($stateParams.token) {
             common.setAccessToken($stateParams.token);
@@ -1112,12 +1133,15 @@ angular.module('common.controllers', [])
         } else {
             // TODO : SSO 연계 추가 작성
             if (common.getPgsecuid()) {
+                mc.checkSsoPgsecuid(common.getPgsecuid());
+/* 동기 방식
                 if (!user.checkPgsecuid(common.getPgsecuid())) {
                     common.clearAccessToken();
                     common.logout();
                 } else {
                     common.moveHomePage();
                 }
+*/
             } else {
                 common.moveLoginPage();
             }

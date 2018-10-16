@@ -1,10 +1,11 @@
+
     <!-- login -->
     <form name="loginForm" method="POST">
         <div class="mem-hd">
             <h1>hubpop</h1>
             <h2>HUB-PoP {{ 'label.login' | translate }}</h2>
         </div>
-        <div class="mem-body">
+        <div ng-show="!main.ssoUserLogin && !main.ssoUserLoginChecking" class="mem-body">
             <ul class="ul-join">
                 <li>
                     <div class="input-group">
@@ -24,7 +25,14 @@
                 </li>
             </ul>
         </div>
-        <div class="mem-foot">
+        <div ng-show="main.ssoUserLogin || main.ssoUserLoginChecking" class="mem-body">
+            SSO 로그인 중 입니다.
+            <BR>
+            최초 접속 시에는 수분이 걸릴 수 있습니다.
+            <BR>
+            기다려 주시기 바랍니다.
+        </div>
+        <div ng-show="!main.ssoUserLogin && !main.ssoUserLoginChecking" class="mem-foot">
             <button type="submit" name="button" class="btn btn-color1" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
             <p class="text-right"><a href="/#/signup">계정생성</a></p><!-- | <a href="/">홈</a>  -->
         </div>

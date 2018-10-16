@@ -59,6 +59,11 @@ angular.module('common.services')
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/token/decode', 'POST', {"access_token": accessToken}));
         };
 
+        // 비동기 방식
+        user.getCheckSsoPgsecuid = function (pgsecuid) {
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/pgsecuid/check', 'POST', { "pgsecuid": pgsecuid }));
+        };
+
         // 동기 방식
         user.checkPgsecuid = function (pgsecuid) {
             var response = common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/pgsecuid/check', 'POST', { "pgsecuid": pgsecuid });
