@@ -15,6 +15,8 @@ angular.module('portal.controllers')
             ct.sltInfoTab = sltInfoTab;
 
             if (sltInfoTab == 'resource') {
+                // 조직 변경 중복 신청 체크
+                ct.orgRequest = true;
                 ct.listQuotaHistory();
             }
         };
@@ -236,6 +238,14 @@ angular.module('portal.controllers')
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.quotaHistory = data;
+
+                for (var i = 0; i < data.items.length; i++) {
+                    var item = data.items[i];
+                    if (item.status == 'REQUEST') {
+                        ct.orgRequest = false;
+                        break;
+                    }
+                }
             });
             promise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -251,6 +261,14 @@ angular.module('portal.controllers')
             var promise = quotaService.listOrgQuotas(params);
             promise.success(function (data) {
                 ct.orgQuotas = data.items;
+
+                // 현재 사용하고 있는 용량 표시
+                for (var i = 0; i < ct.orgQuotas.length; i++) {
+                    if (ct.orgQuotas[i].name == ct.selOrgProject.quotaId.name) {
+                        ct.quotaHistory.quotaReq = ct.orgQuotas[i];
+                        break;
+                    }
+                }
             });
             promise.error(function (data) {
                 ct.orgQuotas = {};
@@ -283,6 +301,10 @@ angular.module('portal.controllers')
         ct.updateQuotaAction = function () {
             if (ct.quotaHistory.quotaReq == undefined) {
                 common.showAlert('용량 변경 요청', '1. 변경 요청할 용량을 선택해주세요.');
+                return;
+            }
+            if (ct.quotaHistory.quotaReq.name == ct.selOrgProject.quotaId.name) {
+                common.showAlert('용량 변경 요청', ct.quotaHistory.quotaReq.name + ' 현재 사용하고 있는 용량과 동일합니다.');
                 return;
             }
             if (ct.quotaHistory.messageReq == null) {
@@ -319,7 +341,7 @@ angular.module('portal.controllers')
 
         ct.pageLoadData();
     })
-    .controller('commOrgProjectUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, orgService, memberService, CONSTANTS, SITEMAP) {
+    .controller('commOrgProjectUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
         _DebugConsoleLog('orgDetailControllers.js : commOrgProjectUsersCtrl', 1);
 
         var ct = this;
@@ -328,6 +350,8 @@ angular.module('portal.controllers')
         ct.paramId = $stateParams.orgId;
 
         ct.newOrgUsers = [];
+        // 관리자 존재 여부 조회
+        ct.isAdmin = false;
 
         // paging
         ct.pageOptions = {
@@ -359,6 +383,10 @@ angular.module('portal.controllers')
                 if (orgUsers && orgUsers.length > 0) {
                     angular.forEach(orgUsers, function (orgUser, key) {
                         ct.orgUserEmails.push(orgUser.usersInfo.email);
+
+                        if (orgUser.isAdmin)  {
+                            ct.isAdmin = true;
+                        }
                     });
                 }
                 ct.loadListOrgUsers = true;
@@ -420,13 +448,14 @@ angular.module('portal.controllers')
 
             for (var i = 0; i < ct.orgNotUsers.length; i++) {
                 if (ct.orgNotUsers[i].checked) {
+                    var roleName = ct.isAdmin ? 'USER' : ct.orgNotUsers[i].roleName;
                     ct.orgUserRequests.push({
                         email : ct.orgNotUsers[i].email,
                         name : ct.orgNotUsers[i].name,
-                        userRole : ct.orgNotUsers[i].roleName
+                        userRole : roleName
                     });
 
-                    if (ct.orgNotUsers[i].roleName == 'ADMIN') {
+                    if (roleName == 'ADMIN') {
                         adminCnt++;
                     }
                 }
@@ -441,17 +470,21 @@ angular.module('portal.controllers')
                 common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
                 return;
             }
+            
+            ct.addOrgUsersAction(ct.orgUserRequests)
+        };
 
+        // 사용자 등록 액션
+        ct.addOrgUsersAction = function (orgUserRequests) {
             var params = {
                 type : 'add',
-                orgUserRequests : ct.orgUserRequests
+                orgUserRequests : orgUserRequests
             };
             $scope.main.loadingMain = true;
             var promise = orgService.orgUserAdds(ct.paramId, params);
             promise.success(function (data) {
-                $scope.main.loadingMain = false;
                 ct.checkboxAll = false;
-                ct.pageListOrgUsersLoadData(1);
+                common.locationPath('/comm/projects/projectDetail/' + ct.paramId);
                 common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
             });
             promise.error(function (data) {
@@ -459,16 +492,16 @@ angular.module('portal.controllers')
                 common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
             });
         };
-
+        
         // 사용자 아이디 중복 체크
-        ct.checkOrgUserDup = function (email) {
+        ct.checkOrgUserDup = function (email, index) {
             if (!email) {
                 return;
             }
 
             // 등록 사용자 목록에서 조회
             for (var i = 0; i < ct.orgUserEmails.length; i++) {
-                if (ct.orgUserEmails[i].indexOf(email) > -1) {
+                if (ct.orgUserEmails[i] == email) {
                     common.showAlertError('이미 회원가입/프로젝트 멤버 추가한 아이디(' + email + ')입니다.');
                     return;
                 }
@@ -476,13 +509,30 @@ angular.module('portal.controllers')
 
             // 미등록 사용자 목록에서 조회
             for (var i = 0; i < ct.orgNotUsers.length; i++) {
-                if (ct.orgNotUsers[i].email.indexOf(email) > -1) {
+                if (ct.orgNotUsers[i].email == email) {
                     common.showAlertError('이미 회원가입한 아이디(' + email + ')입니다.');
                     return;
                 }
             }
 
+            // 등록하려는 사용자 목록에서 조회
+            for (var i = 0; i < ct.newOrgUsers.length; i++) {
+                if (i != index && ct.newOrgUsers[i].email.indexOf(email) > -1) {
+                    common.showAlertError('직접 등록 사용자 목록에 존재하는 아이디(' + email + ')입니다.');
+                    return;
+                }
+            }
+
             common.showAlertSuccess('회원가입 가능한 아이디(' + email + ')입니다.');
+        };
+
+        ct.checkPasswordPattern = function (password) {
+            var regex = /^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{10,20}$/;
+            if(!regex.test(password)) {
+                common.showAlertWarning('영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오.');
+                return false;
+            }
+            return true;
         };
 
         // 사용자 직접 등록
@@ -499,7 +549,10 @@ angular.module('portal.controllers')
             } else if (!item.password) {
                 common.showAlertWarning('비밀번호를 입력하세요');
                 return;
+            } else if (!ct.checkPasswordPattern(item.password)) {
+                return;
             }
+
 
             for (var i = 0; i < ct.newOrgUsers.length; i++) {
                 var orgUser = ct.newOrgUsers[i];
@@ -510,14 +563,82 @@ angular.module('portal.controllers')
             ct.newOrgUsers.push({
                 roleName : CONSTANTS.roleName.user,
                 add : true,
-                del : false,
-                ngDisabled : ct.ngDisabled
+                del : false
             });
+        };
+
+        ct.deleteCustomOrgUser = function (start) {
+            ct.newOrgUsers.splice(start, 1);
         };
 
         // 사용자 직접 등록 액션
         ct.addCustomOrgUserAction = function () {
-            
+            var adminCnt = 0;
+            ct.orgUserRequests = [];
+
+            for (var i = 0; i < ct.newOrgUsers.length; i++) {
+                if (!ct.newOrgUsers[i].name) {
+                    common.showAlertWarning('이름을 입력하세요');
+                    return;
+                } else if (!ct.newOrgUsers[i].position) {
+                    common.showAlertWarning('소속을 입력하세요');
+                    return;
+                } else if (!ct.newOrgUsers[i].email) {
+                    common.showAlertWarning('아이디를 입력하세요');
+                    return;
+                } else if (!ct.newOrgUsers[i].password) {
+                    common.showAlertWarning('비밀번호를 입력하세요');
+                    return;
+                } else if (!ct.checkPasswordPattern(ct.newOrgUsers[i].password)) {
+                    return;
+                }
+
+                var roleName = ct.isAdmin ? 'USER' : ct.newOrgUsers[i].roleName;
+                ct.orgUserRequests.push({
+                    email : ct.newOrgUsers[i].email,
+                    name : ct.newOrgUsers[i].name,
+                    userRole : roleName
+                });
+
+                if (roleName == 'ADMIN') {
+                    adminCnt++;
+                }
+            }
+
+            if (adminCnt > 1) {
+                common.showAlert('', '프로젝트 관리자는 한 명만 가능합니다.');
+                return;
+            }
+
+            if (ct.orgUserRequests.length == 0) {
+                common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
+                return;
+            }
+
+            $scope.main.loadingMain = true;
+            for (var i = 0; i < ct.newOrgUsers.length; i++) {
+                var item = ct.newOrgUsers[i];
+                // 모든 사용자 생성 이후 조직 등록
+                var totalUsers = 0;
+
+                var param = {};
+                param.name = item.name;
+                param.position = item.position;
+                param.email = item.email;
+                param.password = item.password;
+                param.userType = 'normal';
+                var promise = memberService.createUser(param);
+                promise.success(function (data) {
+                    totalUsers++;
+                    if (totalUsers == ct.newOrgUsers.length) {
+                        ct.addOrgUsersAction(ct.orgUserRequests);
+                    }
+                });
+                promise.error(function (data) {
+                    $scope.main.loadingMain = false;
+                    common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
+                });
+            }
         };
 
         // 취소 버튼

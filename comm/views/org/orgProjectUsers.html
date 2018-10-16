@@ -54,7 +54,8 @@
                         <td>{{user.email}}</td>
                         <td>{{user.name}}</td>
                         <td>
-                            <select ng-model="user.roleName" ng-disabled="item.ngDisabled">
+                            <span ng-if="contents.isAdmin">사용자</span>
+                            <select ng-if="!contents.isAdmin" ng-model="user.roleName">
                                 <option value="{{ contents.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
                                 <option value="{{ contents.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
                             </select>
@@ -122,12 +123,13 @@
                             <td class="tdpd"><input type="text" name="" value="" class="form-control" placeholder="이름을 입력하세요" ng-model="item.name" required="required"></td>
                             <td class="tdpd"><input type="text" name="" value="" class="form-control" placeholder="소속을 입력하세요" ng-model="item.position" required="required"></td>
                             <td class="tdpd">
-                                <input type="text" name="" value="" class="form-control" placeholder="아이디를 입력하세요" ng-model="item.email" required="required" ng-blur="contents.checkOrgUserDup(item.email)">
+                                <input type="text" name="" value="" class="form-control" placeholder="아이디를 입력하세요" ng-model="item.email" required="required" ng-blur="contents.checkOrgUserDup(item.email, $index)">
                                 <input type="checkbox" ng-model="item.fetchByEmail" required="required" ng-hide="1">
                             </td>
-                            <td class="tdpd"><input type="password" name="" value="" class="form-control" placeholder="비밀번호를 입력하세요" ng-model="item.password" required="required"></td>
+                            <td class="tdpd"><input type="password" name="" value="" class="form-control" placeholder="비밀번호를 입력하세요" ng-model="item.password" required="required" ng-blur="contents.checkPasswordPattern(item.password)"></td>
                             <td>
-                                <select ng-model="item.roleName" ng-disabled="item.ngDisabled">
+                                <span ng-if="contents.isAdmin">사용자</span>
+                                <select ng-if="!contents.isAdmin" ng-model="item.roleName">
                                     <option value="{{ contents.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
                                     <option value="{{ contents.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
                                 </select>

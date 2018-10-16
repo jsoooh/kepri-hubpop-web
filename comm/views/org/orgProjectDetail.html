@@ -36,7 +36,7 @@
                                 <ul>
                                     <li>
                                         <strong class="tit">생성자</strong>
-                                        <div class="txt">{{ contents.selOrgProject.managerName }}</div>
+                                        <div class="txt">{{ contents.selOrgProject.createdId }}</div>
                                     </li>
                                 </ul>
                             </div>
@@ -61,7 +61,7 @@
                     <div class="r_box">
                         <!-- 멤버 수 -->
                         <div class="col info-txt3">
-                            <p class="txt"><span>{{ contents.orgUsers.counts }}</span><strong>Member</strong></p>
+                            <p class="txt"><span>{{ contents.orgUsers.length }}</span><strong>Member</strong></p>
                         </div>
                         <!-- //멤버 수 -->
                     </div>
@@ -78,14 +78,16 @@
                 <table class="table">
                     <colgroup>
                         <col style="width:10%;">
+                        <col style="width:15%;">
                         <col style="width:30%;">
-                        <col style="width:30%;">
+                        <col style="width:15%;">
                         <col style="width:30%;">
                     </colgroup>
                     <thead>
                     <tr>
                         <th scope="col">No.</th>
                         <th scope="col">이름</th>
+                        <th scope="col">아이디</th>
                         <th scope="col">역할</th>
                         <th scope="col">멤버 등록일</th>
                     </tr>
@@ -94,6 +96,7 @@
                     <tr ng-repeat="orgUser in contents.orgUsers">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ orgUser.usersInfo.name }}</td>
+                        <td>{{ orgUser.usersInfo.email }}</td>
                         <td>{{ orgUser.roleName | orgRoleName }}</td>
                         <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                     </tr>
@@ -122,15 +125,17 @@
                 <table class="table">
                     <colgroup>
                         <col style="width:15%;">
-                        <col style="width:auto;">
+                        <col style="width:15%;">
                         <col style="width:20%;">
                         <col style="width:20%;">
+                        <col style="width:15%;">
                         <col style="width:15%;">
                     </colgroup>
                     <thead>
                     <tr>
                         <th scope="col">No.</th>
                         <th scope="col">이름</th>
+                        <th scope="col">아이디</th>
                         <th scope="col">역할</th>
                         <th scope="col">멤버 등록일</th>
                         <th scope="col">관리</th>
@@ -140,6 +145,7 @@
                     <tr ng-repeat="orgUser in contents.orgUsers">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ orgUser.usersInfo.name }}</td>
+                        <td>{{ orgUser.usersInfo.email }}</td>
                         <td>{{ orgUser.roleName | orgRoleName }}</td>
                         <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                         <td>
@@ -174,10 +180,10 @@
 
                         <div class="tb-top">
                             <div class="pull-left">
-                                <h4 class="c-tit ng-binding">쿼터변경요청</h4>
+                                <h4 class="c-tit ng-binding" style="line-height: 80px; font-weight: 700; font-size: 24px;">쿼터변경요청</h4>
                             </div>
                             <div class="pull-right">
-                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager" ng-click="contents.updateQuota($event);">
+                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
                                     <span class="ico">추가</span>
                                 </button>
                             </div>
