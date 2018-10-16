@@ -78,14 +78,16 @@
                 <table class="table">
                     <colgroup>
                         <col style="width:10%;">
+                        <col style="width:15%;">
                         <col style="width:30%;">
-                        <col style="width:30%;">
+                        <col style="width:15%;">
                         <col style="width:30%;">
                     </colgroup>
                     <thead>
                     <tr>
                         <th scope="col">No.</th>
                         <th scope="col">이름</th>
+                        <th scope="col">아이디</th>
                         <th scope="col">역할</th>
                         <th scope="col">멤버 등록일</th>
                     </tr>
@@ -94,6 +96,7 @@
                     <tr ng-repeat="orgUser in contents.orgUsers">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ orgUser.usersInfo.name }}</td>
+                        <td>{{ orgUser.usersInfo.email }}</td>
                         <td>{{ orgUser.roleName | orgRoleName }}</td>
                         <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                     </tr>
@@ -122,15 +125,17 @@
                 <table class="table">
                     <colgroup>
                         <col style="width:15%;">
-                        <col style="width:auto;">
+                        <col style="width:15%;">
                         <col style="width:20%;">
                         <col style="width:20%;">
+                        <col style="width:15%;">
                         <col style="width:15%;">
                     </colgroup>
                     <thead>
                     <tr>
                         <th scope="col">No.</th>
                         <th scope="col">이름</th>
+                        <th scope="col">아이디</th>
                         <th scope="col">역할</th>
                         <th scope="col">멤버 등록일</th>
                         <th scope="col">관리</th>
@@ -140,6 +145,7 @@
                     <tr ng-repeat="orgUser in contents.orgUsers">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ orgUser.usersInfo.name }}</td>
+                        <td>{{ orgUser.usersInfo.email }}</td>
                         <td>{{ orgUser.roleName | orgRoleName }}</td>
                         <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
                         <td>
