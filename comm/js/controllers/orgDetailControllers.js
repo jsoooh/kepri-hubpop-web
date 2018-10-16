@@ -350,6 +350,8 @@ angular.module('portal.controllers')
         ct.paramId = $stateParams.orgId;
 
         ct.newOrgUsers = [];
+        // 관리자 존재 여부 조회
+        ct.isAdmin = false;
 
         // paging
         ct.pageOptions = {
@@ -381,6 +383,10 @@ angular.module('portal.controllers')
                 if (orgUsers && orgUsers.length > 0) {
                     angular.forEach(orgUsers, function (orgUser, key) {
                         ct.orgUserEmails.push(orgUser.usersInfo.email);
+
+                        if (orgUser.isAdmin)  {
+                            ct.isAdmin = true;
+                        }
                     });
                 }
                 ct.loadListOrgUsers = true;
@@ -442,10 +448,11 @@ angular.module('portal.controllers')
 
             for (var i = 0; i < ct.orgNotUsers.length; i++) {
                 if (ct.orgNotUsers[i].checked) {
+                    var roleName = ct.isAdmin ? 'USER' : ct.orgNotUsers[i].roleName;
                     ct.orgUserRequests.push({
                         email : ct.orgNotUsers[i].email,
                         name : ct.orgNotUsers[i].name,
-                        userRole : ct.orgNotUsers[i].roleName
+                        userRole : roleName
                     });
 
                     if (ct.orgNotUsers[i].roleName == 'ADMIN') {

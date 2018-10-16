@@ -54,7 +54,8 @@
                         <td>{{user.email}}</td>
                         <td>{{user.name}}</td>
                         <td>
-                            <select ng-model="user.roleName" ng-disabled="item.ngDisabled">
+                            <span ng-if="contents.isAdmin">사용자</span>
+                            <select ng-if="!contents.isAdmin" ng-model="user.roleName">
                                 <option value="{{ contents.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
                                 <option value="{{ contents.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
                             </select>
