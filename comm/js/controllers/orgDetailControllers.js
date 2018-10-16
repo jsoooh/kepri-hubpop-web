@@ -555,6 +555,10 @@ angular.module('portal.controllers')
             });
         };
 
+        ct.deleteCustomOrgUser = function (start) {
+            ct.newOrgUsers.splice(start, 1);
+        };
+
         // 사용자 직접 등록 액션
         ct.addCustomOrgUserAction = function () {
             var adminCnt = 0;
