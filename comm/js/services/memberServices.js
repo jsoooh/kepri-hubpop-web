@@ -125,6 +125,11 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/users/createAdmin', 'POST', param));
         };
 
+        /*사용자 등록*/
+        memberService.createUser = function (param) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/users', 'POST', param));
+        };
+
         return memberService;
 
 	})
