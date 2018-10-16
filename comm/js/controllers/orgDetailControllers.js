@@ -618,7 +618,9 @@ angular.module('portal.controllers')
             $scope.main.loadingMain = true;
             for (var i = 0; i < ct.newOrgUsers.length; i++) {
                 var item = ct.newOrgUsers[i];
-                
+                // 모든 사용자 생성 이후 조직 등록
+                var totalUsers = 0;
+
                 var param = {};
                 param.name = item.name;
                 param.position = item.position;
@@ -627,7 +629,8 @@ angular.module('portal.controllers')
                 param.userType = 'normal';
                 var promise = memberService.createUser(param);
                 promise.success(function (data) {
-                    if (i == ct.newOrgUsers.length) {
+                    totalUsers++;
+                    if (totalUsers == ct.newOrgUsers.length) {
                         ct.addOrgUsersAction(ct.orgUserRequests);
                     }
                 });
