@@ -455,7 +455,7 @@ angular.module('portal.controllers')
                         userRole : roleName
                     });
 
-                    if (ct.orgUserRequests[i].userRole == 'ADMIN') {
+                    if (roleName == 'ADMIN') {
                         adminCnt++;
                     }
                 }
@@ -569,7 +569,7 @@ angular.module('portal.controllers')
                     userRole : roleName
                 });
 
-                if (ct.orgUserRequests[i].userRole == 'ADMIN') {
+                if (roleName == 'ADMIN') {
                     adminCnt++;
                 }
             }
