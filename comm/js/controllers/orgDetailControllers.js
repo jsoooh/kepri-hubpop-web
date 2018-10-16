@@ -565,6 +565,20 @@ angular.module('portal.controllers')
             ct.orgUserRequests = [];
 
             for (var i = 0; i < ct.newOrgUsers.length; i++) {
+                if (!ct.newOrgUsers[i].name) {
+                    common.showAlertWarning('이름을 입력하세요');
+                    return;
+                } else if (!ct.newOrgUsers[i].position) {
+                    common.showAlertWarning('소속을 입력하세요');
+                    return;
+                } else if (!ct.newOrgUsers[i].email) {
+                    common.showAlertWarning('아이디를 입력하세요');
+                    return;
+                } else if (!ct.newOrgUsers[i].password) {
+                    common.showAlertWarning('비밀번호를 입력하세요');
+                    return;
+                }
+
                 var roleName = ct.isAdmin ? 'USER' : ct.newOrgUsers[i].roleName;
                 ct.orgUserRequests.push({
                     email : ct.newOrgUsers[i].email,
