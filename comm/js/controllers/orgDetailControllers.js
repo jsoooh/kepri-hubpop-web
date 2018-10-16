@@ -483,9 +483,8 @@ angular.module('portal.controllers')
             $scope.main.loadingMain = true;
             var promise = orgService.orgUserAdds(ct.paramId, params);
             promise.success(function (data) {
-                $scope.main.loadingMain = false;
                 ct.checkboxAll = false;
-                ct.pageListOrgUsersLoadData(1);
+                common.locationPath('/comm/projects/projectDetail/' + ct.paramId);
                 common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
             });
             promise.error(function (data) {
@@ -584,6 +583,7 @@ angular.module('portal.controllers')
                 return;
             }
 
+            $scope.main.loadingMain = true;
             for (var i = 0; i < ct.newOrgUsers.length; i++) {
                 var item = ct.newOrgUsers[i];
                 
