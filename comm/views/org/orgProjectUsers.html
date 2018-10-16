@@ -126,7 +126,7 @@
                                 <input type="text" name="" value="" class="form-control" placeholder="아이디를 입력하세요" ng-model="item.email" required="required" ng-blur="contents.checkOrgUserDup(item.email, $index)">
                                 <input type="checkbox" ng-model="item.fetchByEmail" required="required" ng-hide="1">
                             </td>
-                            <td class="tdpd"><input type="password" name="" value="" class="form-control" placeholder="비밀번호를 입력하세요" ng-model="item.password" required="required"></td>
+                            <td class="tdpd"><input type="password" name="" value="" class="form-control" placeholder="비밀번호를 입력하세요" ng-model="item.password" required="required" ng-blur="contents.checkPasswordPattern(item.password)"></td>
                             <td>
                                 <span ng-if="contents.isAdmin">사용자</span>
                                 <select ng-if="!contents.isAdmin" ng-model="item.roleName">

@@ -501,7 +501,7 @@ angular.module('portal.controllers')
 
             // 등록 사용자 목록에서 조회
             for (var i = 0; i < ct.orgUserEmails.length; i++) {
-                if (ct.orgUserEmails[i].indexOf(email) > -1) {
+                if (ct.orgUserEmails[i] == email) {
                     common.showAlertError('이미 회원가입/프로젝트 멤버 추가한 아이디(' + email + ')입니다.');
                     return;
                 }
@@ -509,7 +509,7 @@ angular.module('portal.controllers')
 
             // 미등록 사용자 목록에서 조회
             for (var i = 0; i < ct.orgNotUsers.length; i++) {
-                if (ct.orgNotUsers[i].email.indexOf(email) > -1) {
+                if (ct.orgNotUsers[i].email == email) {
                     common.showAlertError('이미 회원가입한 아이디(' + email + ')입니다.');
                     return;
                 }
@@ -526,6 +526,15 @@ angular.module('portal.controllers')
             common.showAlertSuccess('회원가입 가능한 아이디(' + email + ')입니다.');
         };
 
+        ct.checkPasswordPattern = function (password) {
+            var regex = /^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{10,20}$/;
+            if(!regex.test(password)) {
+                common.showAlertWarning('영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오.');
+                return false;
+            }
+            return true;
+        };
+
         // 사용자 직접 등록
         ct.addCustomOrgUser = function (item) {
             if (!item.name) {
@@ -540,7 +549,10 @@ angular.module('portal.controllers')
             } else if (!item.password) {
                 common.showAlertWarning('비밀번호를 입력하세요');
                 return;
+            } else if (!ct.checkPasswordPattern(item.password)) {
+                return;
             }
+
 
             for (var i = 0; i < ct.newOrgUsers.length; i++) {
                 var orgUser = ct.newOrgUsers[i];
@@ -576,6 +588,8 @@ angular.module('portal.controllers')
                     return;
                 } else if (!ct.newOrgUsers[i].password) {
                     common.showAlertWarning('비밀번호를 입력하세요');
+                    return;
+                } else if (!ct.checkPasswordPattern(ct.newOrgUsers[i].password)) {
                     return;
                 }
 
