@@ -45,8 +45,6 @@ angular.module('portal.controllers')
                 }
             });
             promise.error(function (data, status, headers) {
-                ct.orgs = [];
-                $timeout.cancel($scope.main.reloadCommTimmer['orgs']);
                 $scope.main.loadingMainBody = false;
             });
         };

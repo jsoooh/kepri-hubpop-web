@@ -53,14 +53,14 @@ angular.module('portal.controllers')
                     }
                 }
                 if (isIng) {
-                    $scope.main.reloadCommTimmer['projectDetail'] = $timeout(function () {
+                    $scope.main.reloadTimmer['projectDetail'] = $timeout(function () {
                         ct.getProject();
                     }, 3000)
                 } else {
                     ct.project    = data;
                     ct.projectBak = angular.copy(ct.project);
 
-                    $timeout.cancel($scope.main.reloadCommTimmer['projectDetail']);
+                    $timeout.cancel($scope.main.reloadTimmer['projectDetail']);
                     $scope.main.syncListAllPortalOrgs();  //작업 전체 조회
 
                     //프로젝트 상세에 따라 공통 현프로젝트 변경
@@ -101,7 +101,7 @@ angular.module('portal.controllers')
                 }
             });
             promise.error(function (data, status, headers) {
-                $timeout.cancel($scope.main.reloadCommTimmer['projectDetail']);
+                $timeout.cancel($scope.main.reloadTimmer['projectDetail']);
                 $scope.main.loadingMainBody = false;
             });
         };

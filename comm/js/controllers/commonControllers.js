@@ -35,7 +35,6 @@ angular.module('common.controllers', [])
         mc.commLeftFav = { setMode: false, dataLoad: false  };
 
         mc.reloadTimmer = {};
-        mc.reloadCommTimmer = {};
         mc.refreshInterval = {};
         mc.mainBodyLoaded = false;
         mc.isLoginPage = false;
@@ -910,22 +909,6 @@ angular.module('common.controllers', [])
             }
         };
 
-        /*화면 refresh stop*/
-        mc.reloadCommTimmerStop = function () {
-            if (angular.isObject(mc.reloadCommTimmer)) {
-                angular.forEach(mc.reloadCommTimmer, function (timmer, key) {
-                    try {
-                        if (timmer) {
-                            $timeout.cancel(timmer);
-                        }
-                    } catch (e) {
-                    } finally {
-                        mc.reloadCommTimmer[key] = null;
-                    }
-                });
-            }
-        };
-
         mc.refreshIntervalStop = function () {
             if (angular.isObject(mc.refreshInterval)) {
                 angular.forEach(mc.refreshInterval, function (interval, key) {
@@ -1108,15 +1091,16 @@ angular.module('common.controllers', [])
                 var userInfo = data;
                 var accessToken = userInfo.token;
                 if (accessToken) {
+                    mc.ssoUserLogin = true;
                     common.setAccessToken(accessToken);
                     common.setUser(userInfo);
                     common.moveHomePage();
                 }
-                mc.ssoUserLoging = true;
                 mc.ssoUserLoginChecking = false;
             });
             promise.error(function (data, status, headers) {
-                mc.ssoUserLoging = true;
+                mc.ssoUserLogin = false;
+                mc.ssoUserLoginChecking = false;
             });
         };
 
@@ -1234,9 +1218,6 @@ angular.module('common.controllers', [])
 
         // timmer 중지
         $scope.main.reloadTimmerStop();
-
-        // comm timmer 중지
-        $scope.main.reloadCommTimmerStop();
 
         // interval 중지
         $scope.main.refreshIntervalStop();

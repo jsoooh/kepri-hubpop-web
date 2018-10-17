@@ -4,6 +4,11 @@ angular.module('common.controllers')
     .controller('commLoginCtrl', function ($scope, $location, $timeout, $translate, user, common) {
         _DebugConsoleLog("userControllers.js : commLoginCtrl", 1);
 
+        var ct = this;
+
+        $scope.main.loadingMainBody = false;
+        ct.ssoUserCreating = false;
+
         $scope.authenticating = false;
         $scope.login = function (evt) {
             var param = {};
@@ -38,6 +43,11 @@ angular.module('common.controllers')
                 $scope.main.loadingMainBody = false;
             });
         };
-        $scope.main.loadingMainBody = false;
+
+        if ($scope.main.ssoUserLoginChecking) {
+            $scope.main.reloadTimmer['ssoUserCheck'] = $timeout(function () {
+                ct.ssoUserCreating = true;
+            }, 8000);
+        }
     })
 ;
