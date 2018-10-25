@@ -2098,7 +2098,7 @@ angular.module('iaas.controllers')
             instance.name = pop.deployData[type].name;
             instance.tenantId = pop.userTenantId;
             instance.networks = [{id: pop.deployData[type].networkId}];
-            instance.image = {id: pop.deployData[type].osImageId};
+            instance.image = pop.deployData[type].image;
             instance.keypair = {keypairName: pop.deployData[type].keypairName};
             if (type == "CP") {
                 if (pop.deployData[type].floatingIp) {
@@ -2415,6 +2415,7 @@ angular.module('iaas.controllers')
                     pop.sendClickCheck = false;
                     return;
                 }
+                pop.deployData[pop.deployData.type].image = common.objectsFindCopyByField(pop.imageList, "id", pop.deployData[pop.deployData.type].pop.osImageId);
                 if (pop.deployData.type == "CP") {
                     var instance = pop.getInstanceObj("CP");
                     pop.fn.createCPServer(evt, instance);
