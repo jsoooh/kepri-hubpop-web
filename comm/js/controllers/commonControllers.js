@@ -1420,6 +1420,9 @@ angular.module('common.controllers', [])
                 if ($scope.main.selectSiteMap.contentsView.controller) {
                     controllerHtml = ' ng-controller="' + $scope.main.selectSiteMap.contentsView.controller + ' as ' + $scope.main.selectSiteMap.contentsView.controllerAs + '"';
                 }
+                if ($scope.main.selectSiteMap.key == "demo" && $stateParams.demoPage) {
+                    $scope.main.selectSiteMap.contentsView.templateUrl = "/demo/" + $stateParams.demoPage + ".html";
+                }
                 var contentsTemplateHtml = '';
                 if ($scope.main.selectSiteMap.contentsView.templateUrl) {
                     common.getTemplateHtml($scope.main.selectSiteMap.contentsView.templateUrl + _VersionTail(), function (templateHtml) {

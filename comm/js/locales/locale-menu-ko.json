@@ -137,5 +137,10 @@
 			"tutorial4": "모니터링 하기",
 			"tutorial5": "데이터 연계 신청하기"
 		}
+	},
+	"sampleMenu": {
+		"menu": {
+			"demoPage": "데모 페이지"
+		}
 	}
 }
