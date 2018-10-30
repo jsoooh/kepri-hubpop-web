@@ -171,7 +171,11 @@ angular.module('iaas.controllers')
                         }, 10000)
                     }
 
-                    ct.instance.consoleArr = ct.instance.console.split("\n");
+                    if (ct.instance.console) {
+                        ct.instance.consoleArr = ct.instance.console.split("\n");
+                    } else {
+                        ct.instance.consoleArr = [];
+                    }
                     for (var i=0; i<ct.instance.consoleArr.length; i++) {
                         ct.instance.consoleArr[i] = common.replaceAll(ct.instance.consoleArr[i], "(\\[[0-9;]{1,}m(.){1,})\\[0m", "\x1B$1\x1B[0m");
                     }
@@ -648,7 +652,11 @@ angular.module('iaas.controllers')
                         }, 10000)
                     }
 
-                    ct.instance.consoleArr = ct.instance.console.split("\n");
+                    if (ct.instance.console) {
+                        ct.instance.consoleArr = ct.instance.console.split("\n");
+                    } else {
+                        ct.instance.consoleArr = [];
+                    }
                     for (var i=0; i<ct.instance.consoleArr.length; i++) {
                         ct.instance.consoleArr[i] = common.replaceAll(ct.instance.consoleArr[i], "(\\[[0-9;]{1,}m(.){1,})\\[0m", "\x1B$1\x1B[0m");
                     }
