@@ -10,7 +10,6 @@ angular.module('iaas.controllers')
         ct.serverMainList = [];
         ct.deployList = [];
         ct.deployServerList = [];
-        ct.selectedValues = {};
         ct.tenantMonitUsed = { cpu : {}, mem: {}, disk: {} };
         ct.cxAgengName = "cx_agent";
 
@@ -627,7 +626,6 @@ angular.module('iaas.controllers')
             } else if(action == "SCALE") {
                 ct.fn.deployServerInstanceCountFormOpen(deployServer, index);
             }
-            ct.selectedValues[index] = "";
         };
 
         ct.fn.deployServerAction = function(action, deployServer, index) {
@@ -684,7 +682,6 @@ angular.module('iaas.controllers')
                     ct.fn.ipConnectionSet(instance, "detach",index);
                 });
             }
-            ct.selectedValues[index] = "";
         };
 
 
@@ -711,6 +708,9 @@ angular.module('iaas.controllers')
                 }
                 ct.serverMainList[index].vmState = vmStateChange;
                 ct.serverMainList[index].observeAction = action;
+                $timeout(function () {
+                    ct.fn.getDeployServerList();
+                }, 1000);
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);

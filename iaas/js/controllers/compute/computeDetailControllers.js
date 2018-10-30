@@ -318,8 +318,9 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                ct.fn.getInstanceInfo(action);
+                $timeout(function () {
+                    ct.fn.getInstanceInfo(action);
+                }, 1000);
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -908,8 +909,9 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                ct.fn.getInstanceInfo(action);
+                $timeout(function () {
+                    ct.fn.getInstanceInfo(action);
+                }, 1000);
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

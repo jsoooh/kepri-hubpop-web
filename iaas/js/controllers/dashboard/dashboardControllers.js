@@ -1455,6 +1455,9 @@ angular.module('iaas.controllers')
 
             	ct.serverMainList[index].vmState = vmStateChange;
                 ct.serverMainList[index].observeAction = action;
+                $timeout(function () {
+                    ct.fn.getDeployServerList();
+                }, 1000);
             });
             returnPromise.error(function (data, status, headers) {
             	common.showAlertError(data.message);
