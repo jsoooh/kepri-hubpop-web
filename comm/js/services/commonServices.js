@@ -1039,8 +1039,9 @@ angular.module('common.services', ['LocalStorageModule'])
                                     if (!common.isPopCreateUserKey) {
                                         common.isPopCreateUserKey = true;
                                         $timeout(function () {
-                                            common.getMainCtrlScope().main.createUserKey();
-                                        }, 1000);
+                                            common.showAlertError("권한", "시스템에 대한 권한이 없습니다.");
+                                            //common.getMainCtrlScope().main.createUserKey();
+                                        }, 100);
                                     }
                                 } else {
                                     var errTitle = "";
@@ -1064,11 +1065,19 @@ angular.module('common.services', ['LocalStorageModule'])
                                         } catch (e) {
                                         }
                                     }
-                                    common.showAlertWarningHtml(errTitle, errMessage);
+                                    if (errMessage) {
+                                        $timeout(function () {
+                                            common.showAlertWarningHtml(errTitle, errMessage);
+                                        }, 100);
+                                    }
                                 }
                             } else {
                                 response.statusText = response.statusText ? response.statusText : (response.status ? response.status : $translate.instant("message.mi_error"));
-                                common.showAlertWarningHtml($translate.instant("label.error"), response.statusText);
+                                if (response.statusText) {
+                                    $timeout(function () {
+                                        common.showAlertWarningHtml($translate.instant("label.error"), response.statusText);
+                                    }, 100);
+                                }
                             }
                         } catch (e) {
                         }
@@ -1313,14 +1322,16 @@ angular.module('common.services', ['LocalStorageModule'])
                             if (!response.data.message) {
                                 response.data.message = "mi_no_login";
                             }
-                            var message = response.data.message;
-                            $timeout(function () {
-                                if (response.data.message == "mi_no_login") {
-                                    common.showAlertError($translate.instant("label.login"), "로그인 되어 있지 않습니다.");
-                                } else {
-                                    common.showAlertError($translate.instant("label.login"), $translate.instant("message." + message));
-                                }
-                            }, 100);
+                            var message = $translate.instant("message." + response.data.message);
+                            if (errMessage) {
+                                $timeout(function () {
+                                    if (response.data.message == "mi_no_login") {
+                                        common.showAlertError($translate.instant("label.login"), "로그인 되어 있지 않습니다.");
+                                    } else {
+                                        common.showAlertError($translate.instant("label.login"), message);
+                                    }
+                                }, 100);
+                            }
                             if (message == "mi_no_login") {
                                 common.clearUserAll();
                                 common.moveLoginPage();
@@ -1328,14 +1339,14 @@ angular.module('common.services', ['LocalStorageModule'])
                                 common.moveCommHomePage();
                             }
                         } else {
-/*
                             if (response.data && response.data.message) {
                                 if (response.data.status == 403 && response.data.message == "OAuth2 access denied.") {
                                     if (!common.isPopCreateUserKey) {
                                         common.isPopCreateUserKey = true;
                                         $timeout(function () {
-                                            common.getMainCtrlScope().main.createUserKey();
-                                        }, 1000);
+                                            common.showAlertError("권한", "시스템에 대한 권한이 없습니다.");
+                                            //common.getMainCtrlScope().main.createUserKey();
+                                        }, 100);
                                     }
                                 } else {
                                     var errTitle = "";
@@ -1358,18 +1369,21 @@ angular.module('common.services', ['LocalStorageModule'])
                                             }
                                         } catch (e) {}
                                     }
-                                    $timeout(function () {
-                                        common.showAlertWarningHtml(errTitle, errMessage);
-                                    }, 1000);
+                                    if (errMessage) {
+                                        $timeout(function () {
+                                            common.showAlertWarningHtml(errTitle, errMessage);
+                                        }, 100);
+                                    }
                                 }
                             } else {
                                 response.statusText = response.statusText ? response.statusText : (response.status ? response.status : $translate.instant("message.mi_error"));
                                 var message = response.statusText;
-                                $timeout(function () {
-                                    common.showAlertWarningHtml($translate.instant("label.error"), message);
-                                }, 1000);
+                                if (message) {
+                                    $timeout(function () {
+                                        common.showAlertWarningHtml($translate.instant("label.error"), message);
+                                    }, 100);
+                                }
                             }
-*/
                         }
                     } catch (e) {
                     } finally {
