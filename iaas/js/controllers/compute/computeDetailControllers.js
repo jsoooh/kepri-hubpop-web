@@ -306,7 +306,6 @@ angular.module('iaas.controllers')
         };
 
         ct.fnSingleInstanceAction = function(action,instance) {
-            $scope.main.loadingMainBody = true;
             if(typeof id !== 'string' && typeof action !== 'string'){
                 console.log('type missmatch error');
                 return;
@@ -316,18 +315,18 @@ angular.module('iaas.controllers')
                 action : action,
                 tenantId : ct.data.tenantId
             };
+            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 $timeout(function () {
                     ct.fn.getInstanceInfo(action);
-                }, 1000);
+                }, 1500);
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -897,7 +896,6 @@ angular.module('iaas.controllers')
         };
 
         ct.fnSingleInstanceAction = function(action,instance) {
-            $scope.main.loadingMainBody = true;
             if(typeof id !== 'string' && typeof action !== 'string'){
                 console.log('type missmatch error');
                 return;
@@ -907,6 +905,7 @@ angular.module('iaas.controllers')
                 action : action,
                 tenantId : ct.data.tenantId
             };
+            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 $timeout(function () {
@@ -918,7 +917,6 @@ angular.module('iaas.controllers')
             	common.showAlertError(data.message);
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
             });
         };
 

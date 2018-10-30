@@ -691,6 +691,7 @@ angular.module('iaas.controllers')
                 action : action,
                 tenantId : ct.data.tenantId
             };
+            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
 
@@ -713,8 +714,8 @@ angular.module('iaas.controllers')
                 }, 1000);
             });
             returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
-                //common.showAlert('메세지',data.message);
             });
         };
 

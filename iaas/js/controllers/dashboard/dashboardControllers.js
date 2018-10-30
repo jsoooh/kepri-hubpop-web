@@ -403,6 +403,7 @@ angular.module('iaas.controllers')
                 action : action,
                 tenantId : ct.data.tenantId
             };
+            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
 
@@ -424,9 +425,11 @@ angular.module('iaas.controllers')
                 ct.serverMainList[index].vmStateSec = 0;
                 ct.serverMainList[index].vmStateInterval = $interval(function () {
                     fnInterval(index);
+                    $scope.main.loadingMainBody = false;
                 }, 1000);
             });
             returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
         };
@@ -1437,6 +1440,7 @@ angular.module('iaas.controllers')
                 action : action,
                 tenantId : ct.data.tenantId
             };
+            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
 
@@ -1460,8 +1464,8 @@ angular.module('iaas.controllers')
                 }, 1000);
             });
             returnPromise.error(function (data, status, headers) {
-            	common.showAlertError(data.message);
-                //common.showAlert('메세지',data.message);
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
             });
         }
         // SnapShot 생성
