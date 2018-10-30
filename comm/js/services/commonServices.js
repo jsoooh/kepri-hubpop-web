@@ -1621,7 +1621,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     textContent = args[start + 1];
                     alertType = args[start + 2];
                 }
-                if (_MODE_ == "DEBUG" || textContent != "Unauthorized") {
+                if (_MODE_ == "DEBUG" || (textContent && textContent != "Unauthorized")) {
                     $timeout(function () {
                         if (alertType == "success") {
                             growl.addSuccessMessage(textContent, {ttl: time, enableHtml: false});
