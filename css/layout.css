@@ -393,8 +393,6 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .rightCnt .titWrap{position: relative; width:100%; height:74px; padding:0 50px 25px; background: #fff;}
 .rightCnt .titWrap{position: relative; width:100%; height:95px; padding:30px 40px; background: #fff;}
 
-
-
 /*180704 좌측메뉴 간격 스타일 재정의(1depth)*/
 .gnb-menu .gm {padding:23px 0 23px 46px;}
 .gnb-menu .gm .ico-bul {top:22px; left:17px;}
