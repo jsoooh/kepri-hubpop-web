@@ -255,7 +255,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 
 .effect #navbar, .effect #content-container, .effect #mainnav-container, .effect #aside-container, .effect #footer, .effect .navbar-brand, .effect .navbar-content, .effect .navbar-header:before, .effect .page-fixedbar-container {transition-property: width, padding, left, right; transition-duration: .35s;}
 
-.gnbMenu {position: absolute; top:0px; left:-240px; bottom:0; z-index:1000; color:#8d97ad; width:240px; background:#4c515f; height:100%; /*overflow: hidden; overflow-y:auto;*/}
+.gnbMenu {position: absolute; top:80px; left:0px; z-index:1000; color:#8d97ad; width:240px; background:#4c515f; /*overflow: hidden; overflow-y:auto;*/}
 .gnbMenu .jspDrag{background: rgba(0,0,0,.3);}
 .gnbMenu .gnb-in{padding-bottom:20px;}
 .gnbMenu .gnb-logo{margin:0;}
@@ -371,3 +371,28 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 
 .button_bottom{height:70px; background:#000; left:-70px; bottom:0px; left:0px; display:none; opacity:0; }
 .button_bottom.on{width:70px; display:block; left:0px; position:fixed; opacity: 1;}
+
+
+
+/*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
+
+/*-- gnb메뉴 스타일 변경(20180716) --*/
+#container .inner{display: table; width: 100%; height:100%; min-height: 1000px;}
+.leftCnt{position:absolute; top:0; left:0; z-index:3; display: table-cell; font-size: 0px; width:0px; height:100%; background: #4c515f; transition:all 0.2s; }
+.leftCnt.on{ font-size: 16px; width:240px;}
+.leftCnt .gnbMenu {width:240px; top:80px; left:0; transition:  0.2s width; background: #4c515f;}/*스타일재정의*/
+.leftCnt .gnbMenu .gnb-in{width:240px;}
+.leftCnt.on .gnbMenu{ width:240px;}
+
+.gnbMenu {position:absolute; top:80px; left:0; z-index:1100; color:#8d97ad; background:#4c515f; /* height:100%; overflow: hidden; overflow-y:auto; */}
+.gnbMenu .jspDrag{background: rgba(0,0,0,.3);}
+.gnbMenu .gnb-in{padding-bottom:20px;}
+.gnbMenu .gnb-logo{margin:0;}
+
+.rightCnt{position:relative; z-index:2; display: table-cell; vertical-align: top; width:100%; height:100%; padding-left:240px;}
+.rightCnt .titWrap{position: relative; width:100%; height:74px; padding:0 50px 25px; background: #fff;}
+.rightCnt .titWrap{position: relative; width:100%; height:95px; padding:30px 40px; background: #fff;}
+
+/*180704 좌측메뉴 간격 스타일 재정의(1depth)*/
+.gnb-menu .gm {padding:23px 0 23px 46px;}
+.gnb-menu .gm .ico-bul {top:22px; left:17px;}
