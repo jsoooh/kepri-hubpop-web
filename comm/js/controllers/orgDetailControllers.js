@@ -28,7 +28,7 @@ angular.module('portal.controllers')
             orgPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.selOrgProject = data;
-                if (ct.selOrgProject.orgUser && ct.selOrgProject.orgUser.roleName == 'OWNER') {
+                if (ct.selOrgProject.myRoleName == 'OWNER') {
                     ct.isOrgManager = true;
                 }
                 $timeout(function () {
