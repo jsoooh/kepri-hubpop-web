@@ -140,7 +140,8 @@
 	},
 	"sampleMenu": {
 		"menu": {
-			"demoPage": "데모 페이지"
+			"demoPage": "데모 페이지",
+			"demoNoPage": "데모 페이지(NoPadding)"
 		}
 	}
 }
