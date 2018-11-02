@@ -2103,7 +2103,18 @@ p.no-txt{
 .proj_main_cont .p_main_cont .p_cont_list ul > li > a:hover {border:0; box-shadow:none; background:#3360c5;}
 .proj_main_cont .p_main_cont .p_cont_list ul > li > a:hover .btn_txt{color:#fff;}
 
-.proj_main_cont .p_main_cont .p_cont_list .guide_box {position:relative; display:none; height:115px; background:url("../images/proj_guide_bg.png") no-repeat  #fff 45px center; border-radius:10px; border:1px solid #adc3f4; padding:25px 35px; margin-top:20px; }
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_ico.ico1 {background-position:-120px -20px;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_ico.ico2 {background-position:-120px -120px;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_ico.ico3 {background-position:-120px -220px;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_ico.ico4 {background-position:-120px -320px;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_ico.ico5 {background-position:-120px -420px;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_ico.ico6 {background-position:-120px -520px;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_ico.ico7 {background-position:-120px -620px;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_ico.ico8 {background-position:-120px -720px;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on {border:0; box-shadow:none; background:#3360c5;}
+.proj_main_cont .p_main_cont .p_cont_list ul > li > a.on .btn_txt{color:#fff;}
+
+.proj_main_cont .p_main_cont .p_cont_list .guide_box {position:relative; display:none; background:url("../images/proj_guide_bg.png") no-repeat  #fff 45px center; border-radius:10px; border:1px solid #adc3f4; padding:25px 35px; margin-top:20px; }
 .proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_ico {display:inline-block; width:16px; height:9px; background:url("../images/proj_guide_box_arrow.png") no-repeat;}
 .proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_ico.no_01 {position:absolute; top:-9px; left:80px; background-position:left top;}
 .proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_ico.no_02 {position:absolute; top:-9px; left:310px; background-position:left top;}
@@ -2113,7 +2124,7 @@ p.no-txt{
 .proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_ico.no_06 {position:absolute; bottom:-9px; left:310px; background-position:left bottom;}
 .proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_ico.no_07 {position:absolute; bottom:-9px; left:530px; background-position:left bottom;}
 .proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_ico.no_08 {position:absolute; bottom:-9px; left:750px; background-position:left bottom;}
-.proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_txt {display:inline-block; width:750px; font-size:16px; color:#333; line-height:20px; padding:10px 0 0 105px}
+.proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_txt {display:inline-block; width:750px; font-size:16px; color:#333; line-height:20px; padding:0 0 0 105px}
 
 .c_blue {display:inline; color:#3360c5;}
 
