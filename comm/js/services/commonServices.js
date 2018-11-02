@@ -105,6 +105,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 mainTop : option.mainTop,
                 title : option.title,
                 pageStage : option.pageStage ? option.pageStage : "comm",
+                mainContentsClass : option.mainContentsClass,
                 contentsView : option.contentsView
             };
         });
@@ -159,6 +160,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     title : option.title,
                     pageStage : option.pageStage,
                     contentsView : option.contentsView,
+                    mainContentsClass : option.mainContentsClass,
                     ngClick : option.ngClick
                 };
 
@@ -212,6 +214,7 @@ angular.module('common.services', ['LocalStorageModule'])
                         title : subMenuOption.title,
                         pageStage : subMenuOption.pageStage,
                         contentsView : subMenuOption.contentsView,
+                        mainContentsClass : subMenuOption.mainContentsClass,
                         ngClick : subMenuOption.ngClick,
                     };
 
@@ -262,6 +265,7 @@ angular.module('common.services', ['LocalStorageModule'])
                             title : subPageOption.title,
                             pageStage : subPageOption.pageStage,
                             contentsView : subPageOption.contentsView,
+                            mainContentsClass : subPageOption.mainContentsClass,
                             ngClick : subPageOption.ngClick,
                         };
                     });
@@ -309,6 +313,7 @@ angular.module('common.services', ['LocalStorageModule'])
                         title : subPageOption.title,
                         pageStage : subPageOption.pageStage,
                         contentsView : subPageOption.contentsView,
+                        mainContentsClass : subPageOption.mainContentsClass,
                         ngClick : subPageOption.ngClick,
                     };
                 });

@@ -1254,8 +1254,11 @@ angular.module('common.controllers', [])
                 // 페이지 로드
                 var contentsTemplateUrl = "mainContentsTemplate";
                 var controllerHtml = "";
+                if ($scope.main.selectSiteMap.mainContentsClass) {
+                    controllerHtml = ' ng-class="{' + $scope.main.selectSiteMap.mainContentsClass + ': true}"';
+                }
                 if ($scope.main.selectSiteMap.contentsView.controller) {
-                    controllerHtml = ' ng-controller="' + $scope.main.selectSiteMap.contentsView.controller + ' as ' + $scope.main.selectSiteMap.contentsView.controllerAs + '"';
+                    controllerHtml += ' ng-controller="' + $scope.main.selectSiteMap.contentsView.controller + ' as ' + $scope.main.selectSiteMap.contentsView.controllerAs + '"';
                 }
                 if ($scope.main.selectSiteMap.contentsView.templateUrl) {
                     common.getTemplateHtml($scope.main.selectSiteMap.contentsView.templateUrl + _VersionTail(), function (templateHtml) {
@@ -1417,10 +1420,13 @@ angular.module('common.controllers', [])
                 // 페이지 로드
                 var contentsTemplateUrl = "mainContentsTemplate";
                 var controllerHtml = "";
-                if ($scope.main.selectSiteMap.contentsView.controller) {
-                    controllerHtml = ' ng-controller="' + $scope.main.selectSiteMap.contentsView.controller + ' as ' + $scope.main.selectSiteMap.contentsView.controllerAs + '"';
+                if ($scope.main.selectSiteMap.mainContentsClass) {
+                    controllerHtml = ' ng-class="{' + $scope.main.selectSiteMap.mainContentsClass + ': true}"';
                 }
-                if ($scope.main.selectSiteMap.key == "demo" && $stateParams.demoPage) {
+                if ($scope.main.selectSiteMap.contentsView.controller) {
+                    controllerHtml += ' ng-controller="' + $scope.main.selectSiteMap.contentsView.controller + ' as ' + $scope.main.selectSiteMap.contentsView.controllerAs + '"';
+                }
+                if (($scope.main.selectSiteMap.key == "demo" || $scope.main.selectSiteMap.key == "demoNo") && $stateParams.demoPage) {
                     $scope.main.selectSiteMap.contentsView.templateUrl = "/demo/" + $stateParams.demoPage + ".html";
                 }
                 var contentsTemplateHtml = '';
