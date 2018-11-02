@@ -24,7 +24,7 @@ angular.module('common.controllers', [])
         mc.loadingMain = true;
         mc.loadingMainBody = false;
         //	mainContentsLayout Resize 이벤트 셋팅 여부
-        mc.contentsLayoutResizeEvent	= true;
+        mc.contentsLayoutResizeEvent	= false;
         mc.loadingProgressBar = CONSTANTS.loadingProgressBar;
 
         mc.languages = [];
@@ -85,11 +85,6 @@ angular.module('common.controllers', [])
                 mc.sltOrganizationName = "";
             }
             common.locationPath(path);
-        };
-
-        // 페이지 resize
-        mc.windowTriggerResize  = function(e) {
-            $(window).trigger('resize');
         };
 
         // left 메뉴 토글
@@ -1450,12 +1445,11 @@ angular.module('common.controllers', [])
             }
         }
 
+/*
 		if (!$scope.main.contentsLayoutResizeEvent) {
-			document.getElementById("container").addEventListener("transitionend", function(e) {
-				$scope.main.windowTriggerResize(e);
-			});
 			$scope.main.contentsLayoutResizeEvent	= true;
 		}
+*/
 
         $scope.main.asideClose();
         $scope.main.isLoadPageBody = true;
