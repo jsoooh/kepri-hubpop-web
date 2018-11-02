@@ -286,7 +286,7 @@ angular.module('app')
                     demoNo: {
                         name: 'demoNoPage',
                         stateKey: 'demoNo',
-                        mainContentsClass: 'noPadding',
+                        mainContentsClass: 'pd0',
                         url: '/sample/demoNo/:demoPage'
                     },
                 }
