@@ -228,7 +228,7 @@
 	} else {
         document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
 	}
-    document.writeln('		<div class="rightCnt" id="{{main.rightCntId}}">');
+    document.writeln('		<div class="rightCnt" ng-class="{ \'pd0\' : (main.stateKey == \'login\') }" id="{{main.rightCntId}}">');
     document.writeln('			<div ng-if="main.isLoginPage" class="titWrap" id="mainTop" ng-include="main.topTemplateUrl"></div>');
     document.writeln('			<div ui-view="mainBody"></div>');
     document.writeln('		</div>');
