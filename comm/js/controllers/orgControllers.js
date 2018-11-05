@@ -87,7 +87,16 @@ angular.module('portal.controllers')
 
         ct.userAuth  = $scope.main.userAuth;
 
-        ct.fn.changeItem = function(itemKey) {
+        ct.fn.extendItem = function(evt) {
+            console.log('extendItem', evt);
+            if($(evt.target).closest('.NotCloseFirstOrgProjecItem').length == 0) {
+                ct.selectItemKey = 0;
+            }
+        };
+
+
+        ct.fn.changeItem = function(evt, itemKey) {
+            console.log('changeItem', evt);
             ct.selectItemKey = itemKey;
         };
 
