@@ -94,7 +94,6 @@ angular.module('portal.controllers')
             }
         };
 
-
         ct.fn.changeItem = function(evt, itemKey) {
             console.log('changeItem', evt);
             ct.selectItemKey = itemKey;

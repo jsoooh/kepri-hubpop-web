@@ -485,6 +485,13 @@ angular.module('common.controllers', [])
                         mc.setProject(mc.projects[0]);
                     }
                 }
+            } else if (response && response.status == 307) {
+                if (response.responseJSON && response.responseJSON.resultMsg == "mi_no_login") {
+                    $timeout(function () {
+                        common.clearUserAll();
+                        common.moveLoginPage();
+                    }, 100);
+                }
             } else {
                 mc.projects = [];
             }

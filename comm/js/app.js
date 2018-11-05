@@ -37,7 +37,6 @@ angular.module('app', [
         , 'dndLists'
         , 'angular-growl'
         , 'Tek.progressBar'
-        , 'chart.js'
     	, 'bytes-validator'
         , 'ui.sortable'
         , 'ngJScrollPane'

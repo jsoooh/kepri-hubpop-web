@@ -166,6 +166,86 @@ angular.module('portal.services', [])
             })
         };
 
+        //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   Start  ///////////////////////////////////
+        portal.dashboard = {};
+
+        portal.dashboard.getTenantInfoByName = function (orgCode, teamCode) {
+            var getParams = {
+                orgCode : orgCode,
+                teamCode : teamCode
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams));
+        };
+
+        portal.dashboard.getIaasInseanceInfos = function (tenantId) {
+            var getParams = {
+                tenantId : tenantId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', getParams));
+        };
+
+        portal.dashboard.getIaasResourceUsed = function (tenantId) {
+            var getParams = {
+                tenantId : tenantId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', getParams));
+        };
+
+        portal.dashboard.getOrganizationByName = function (name) {
+            var getParams = {
+                urlPaths : {
+                    "name" : name
+                }
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', getParams));
+        };
+
+        portal.dashboard.getPaasAppInfos = function (organization_guid) {
+            var getParams = {
+                condition : "organization_guid:" + organization_guid,
+                depth: 2
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/apps/all', 'GET', getParams));
+        };
+
+        portal.dashboard.getPaasAppInstanceStatsInfos = function (app_guid) {
+            var getParams = {
+                urlPaths : {
+                    "guid" : app_guid
+                }
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/apps/{guid}/instance_stats/all', 'GET', getParams));
+        };
+
+        portal.dashboard.getDcpDashboardInfo = function (prjcCd) {
+            var getParams = {
+                prjcCd : prjcCd
+            };
+            /*return common.retrieveResource(common.resourcePromise('http://168.78.82.189:8086/dcp/api/userConsoleDashboard.do', 'GET', getParams));*/
+            return common.retrieveResource(common.resourcePromise('http://hubpop.kepri.re.kr/dcp/api/userConsoleDashboard/'+prjcCd, 'GET'));
+        };
+
+        portal.dashboard.getPipelineDashBoardInfo = function (p_proj_id) {
+            var getParams = {
+                p_proj_id : p_proj_id
+            };
+            return common.retrieveResource(common.resourcePromise('http://hubpop.kepri.re.kr/dpl/pipeline/pipelineDashBoardApi.json', 'GET', getParams));
+        };
+
+        portal.dashboard.getApipDashBoardInfo = function () {
+            return common.retrieveResource(common.resourcePromise('http://hubpop.kepri.re.kr/apip/com/dashboard.json', 'GET'));
+        };
+
+        portal.dashboard.getGisDashBoardInfo = function (prjcCd) {
+            var getParams = {
+                prjcCd : prjcCd
+            };
+            /*return common.retrieveResource(common.resourcePromise('http://168.78.82.183:58080/gis/api/projectInfo.do', 'GET', getParams));*/
+            return common.retrieveResource(common.resourcePromise('http://hubpop.kepri.re.kr/gis/api/projectInfo.do', 'GET', getParams));
+        };
+
+        //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   End  ///////////////////////////////////
+
         portal.portalOrgs = {};
 
         portal.portalOrgs.listAllProjects = function () {

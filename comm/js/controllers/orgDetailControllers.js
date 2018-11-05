@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('portal.controllers')
-    .controller('commOrgProjectDetailCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, orgService, common, cache, quotaService, memberService) {
+    .controller('commOrgProjectDetailCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, common, cache, orgService, portal, quotaService, memberService) {
         _DebugConsoleLog('orgDetailControllers.js : commOrgProjectDetailCtrl', 1);
 
         var ct = this;
 
         ct.paramId = $stateParams.orgId;
         ct.isOrgManager = false;
-        ct.sltInfoTab = 'info';
-        
+        ct.sltInfoTab = 'dashboard';
+
         // 탭 변경
         ct.changeSltInfoTab = function (sltInfoTab) {
             ct.sltInfoTab = sltInfoTab;
@@ -33,12 +33,956 @@ angular.module('portal.controllers')
                 }
                 $timeout(function () {
                     $scope.main.changePortalOrg(data);
+                    ct.loadDashBoard();
                 }, 0);
             });
             orgPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
             });
         };
+
+        /**************************************************************************/
+        /************************ 대시보드 차트 데이터 ****************************/
+        /**************************************************************************/
+
+        //Semi DOught Chart Func
+        ct.semiChart = function (chartArea, jsonList ) {
+            var container = document.getElementById(chartArea);
+            var data = jsonList;
+            var options = {
+                chart: {
+                    width: 247,
+                    height: 130
+                },
+                series: {
+                    startAngle: -90,
+                    endAngle: 90,
+                    radiusRange: ['75%', '100%'],
+                    showLabel: true
+                    //  showLegend: true
+                },
+                tooltip: {
+                    suffix: '%'
+                },
+                legend: {
+                    visible: false
+                },
+                chartExportMenu : {
+                    visible: false
+                } ,
+                usageStatistics : false
+            };
+
+            var theme = {
+                series: {
+                    colors: ['#fe3392', '#8fcbe4'],
+                    label: {
+                        color: '#fff',
+                        fontWeight: 'bold'
+                    }
+                }
+            };
+
+            tui.chart.registerTheme('myTheme', theme);
+            options.theme = 'myTheme';
+            tui.chart.pieChart(container, data, options);
+        };
+
+        ct.pieChart = function (chartArea, jsonList, tmpSuf, tmpColor1, tmpColor2) {
+            var container = document.getElementById(chartArea);
+            var data = jsonList;
+            var options = {
+                chart: {
+                    width: 152,
+                    height: 152
+                },
+                series: {
+                    radiusRange: ['75%', '100%']
+                },
+                tooltip: {
+                    suffix: tmpSuf
+                },
+                legend: {
+                    visible: false
+                },
+                chartExportMenu : {
+                    visible: false
+                } ,
+                usageStatistics : false
+            };
+            var theme = {
+                series: {
+                    colors: [tmpColor1, tmpColor2],
+                    label: {
+                        color: '#fff',
+                        fontWeight: 'bold'
+                    }
+                }
+            };
+
+            tui.chart.registerTheme('myTheme', theme);
+            options.theme = 'myTheme';
+            tui.chart.pieChart(container, data, options);
+
+        };
+
+        ct.barChart = function (chartArea, jsonList, tmpSuf, tmpColor1, tmpColor2) {
+            var container = document.getElementById(chartArea);
+            var data = jsonList;
+            var options = {
+                chart: {
+                    width: 580,
+                    height: 100,
+
+                },
+                yAxis: {
+
+                },
+                xAxis: {
+
+                },
+                series: {
+                    stackType: 'normal',
+                    showLabel : true
+                },
+                tooltip: {
+                    suffix: tmpSuf
+                },
+                legend: {
+                    visible: false
+                },
+                chartExportMenu : {
+                    visible: false
+                },
+                plot :{
+                    showLine : false
+                } ,
+                usageStatistics : false
+
+            };
+            var theme = {
+                series: {
+                    colors: [tmpColor1, tmpColor2],
+                    label: {
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        fontSize:14
+                    }
+                }
+            };
+
+            tui.chart.registerTheme('myTheme', theme);
+            options.theme = 'myTheme';
+
+            tui.chart.barChart(container, data, options);
+        };
+
+
+        //////////////////////////////// dcp Chart  ///////////////////////////////////
+        ct.dcpChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '200') {
+                ser1.name = "반려";
+                ser1.data = chartData.dataReqRejNoca;  //반려
+                reqJsonArray.push(ser1);
+
+                ser2.name = "승인";
+                ser2.data = chartData.dataReqAprvNoca;  //승인
+                reqJsonArray.push(ser2);
+
+                serJsonList.series = reqJsonArray;
+            }
+
+            var totTmpCnt = parseInt(chartData.dataReqRejNoca) + parseInt(chartData.dataReqAprvNoca);
+
+            ct.dcpDashboardInfo.totTmpCnt = totTmpCnt;
+
+            //ct.dataReq1 = { totalCnt: chartData.dataSubsNoca, totCnt: chartData.dataReqAllNoca, confirmCnt: chartData.dataReqAprvNoca, reJecCnt: chartData.dataReqRejNoca, totTmpCnt : totTmpCnt};
+            var chartArea = 'chart-area';
+            ct.semiChart (chartArea, serJsonList) ;
+        };
+
+        //////////////////////////////// API서비스 사용현황 Chart  ///////////////////////////////////
+        ct.apiChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000')
+            {
+                ser1.name = "비활성";
+                ser1.data = chartData.apiVtlzNCnt;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "활성";
+                ser2.data = chartData.apiVtlzYCnt;
+                reqJsonArray.push(ser2);
+
+                serJsonList.series = reqJsonArray;
+            }
+            var totTmpCnt = parseInt(chartData.apiVtlzNCnt) + parseInt(chartData.apiVtlzYCnt);
+
+            ct.apipeDashboardInfo.totTmpCnt = totTmpCnt;
+
+            //ct.dataReq2 = { totalCnt: chartData.apiTotalCnt, totCnt: chartData.appTotalCnt, confirmCnt: chartData.apiVtlzYCnt, reJecCnt: chartData.apiVtlzNCnt, totTmpCnt : totTmpCnt};
+            var chartArea = 'chart-area1';
+            ct.semiChart (chartArea, serJsonList) ;
+        };
+
+        //////////////////////////////// 가상서버 CPU    ///////////////////////////////////
+        ct.iaasCpuChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                //ct.dataReq4 = { };
+                ser1.name = "사용율";
+                ser1.data = chartData.cpuTotUsed;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.dataReq4 = serJsonList  ;
+            var chartArea = 'chart-area3';
+            var tmpValue = '%';
+
+            //CPU Chart Color
+            var tmpColor1 = "#0a88bd";
+            var tmpColor2 = "#ebebeb";
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// 가상서버 MEMORY     ///////////////////////////////////
+        ct.iaasMemChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                ser1.name = "사용율";
+                ser1.data = chartData.ramSizeTot;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.dataReq5 = ser1.data ;
+            var chartArea = 'chart-area4';
+            var tmpValue = '%';
+            //Memory Chart Color
+            var tmpColor1 = '#fe3392';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// 가상서버 STORAGE      ///////////////////////////////////
+
+        ct.iaasStorgeChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                //ct.dataReq4 = { };
+                ser1.name = "사용율";
+                // STRAGE 기준을 instance disk 로 할 것인지 volume으로 할 것인지 확인 필요
+                //ser1.data = chartData.instanceDiskGigabytesTot; // instance disk
+                ser1.data = chartData.objectStorageGigaByteTot; // volume
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.dataReq6 = ser1.data ;
+            var chartArea = 'chart-area5';
+            var tmpValue = '%';
+            var tmpColor1 = '#fe3392';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// 표준 앱 CPU 사용율    ///////////////////////////////////
+        ct.paasCpuChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                //ct.dataReq4 = { };
+                ser1.name = "사용율";
+                ser1.data = chartData.cpu.percentUsed.toFixed(1);
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.dataReq7 = ser1.data ;
+            var chartArea = 'chart-area7';
+            var tmpValue = '%';
+
+            //PaaS CPU Color
+            var tmpColor1 = '#0a88bd';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// 표준 앱 MEMORY    ///////////////////////////////////
+        ct.paasMemChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000')
+            {
+                ser1.name = "사용율";
+                ser1.data = chartData.mem.percentUsed.toFixed(1);
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.dataReq8 = ser1.data ;
+            var chartArea = 'chart-area8';
+            var tmpValue = '%';
+
+            var tmpColor1 = '#fe3392';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// 표준 앱 STOREGE  ajax sg0730 2018.10.15     ///////////////////////////////////
+        ct.paasStorgeChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                //ct.dataReq4 = { };
+                ser1.name = "사용율";
+                ser1.data = chartData.disk.percentUsed.toFixed(1);
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                //ser2.data = chartData.data2;
+                ser2.data = parseInt(100 - parseInt(ser1.data));;
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.dataReq9 = ser1.data ;
+            var chartArea = 'chart-area9';
+            var tmpValue = '%';
+            var tmpColor1 = '#fe3392';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// API서비스 사용현황 Chart  ///////////////////////////////////
+        ct.pipChartFunc = function (chartData)
+        {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                ser1.name = "SVN";
+                ser1.data = chartData.svnCnt;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "GIT";
+                ser2.data = chartData.gitCnt;
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            var tmpTot = chartData.svnCnt + chartData.gitCnt ;
+
+            ct.dataReq10 = { svnCnt: chartData.svnCnt, gitCnt: chartData.gitCnt, totCnt : ct.pipelineDashboardInfo.repoTotalCnt };
+            var chartArea = 'chart-area10';
+            var tmpValue = '건';
+
+            var tmpColor1 = '#8fcbe4'; //SVN
+            var tmpColor2 = '#0f6bba'; //GIT
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// pipeline Chart  ///////////////////////////////////
+        ct.barChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                ser1.name = "성공";
+                ser1.data = chartData.sucCnt;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "실패";
+                ser2.data = chartData.failCnt;
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+                serJsonList.categories = [''];
+            }
+
+            ct.pipelineDashboardInfo.totCnt = ser1.data + ser2.data;
+            var chartArea = 'chart-area11';
+            var tmpValue = '건';
+            var tmpColor1 = '#8fcbe4'; //성공
+            var tmpColor2 = '#fe3291'; //실패
+            ct.barChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// Dcp 데이터수집  ///////////////////////////////////
+
+        ct.dcpDashboardInfo = {
+            dataSubsNoca: 0,
+            dataReqAllNoca: 0,
+            dataReqAprvNoca: 0,
+            dataReqRejNoca: 0,
+            totTmpCnt : 0
+        };
+
+        ct.getDcpDashboardInfo = function (projectId) {
+            var promise = portal.dashboard.getDcpDashboardInfo(projectId);
+            promise.success(function (data, status, headers) {
+                if (data.code == '200' && data.dataReqAllNoca > 0 ) {
+                    ct.dcpDashboardInfo = data;
+                    // Semi Chart
+                    ct.dcpChartFunc(ct.dcpDashboardInfo) ;
+                }
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        //////////////////////////////// API서비스 사용현황  ///////////////////////////////////
+        ct.apipeDashboardInfo = {
+            apiTotalCnt : 0,
+            appTotalCnt : 0,
+            apiVtlzYCnt : 0,
+            apiVtlzNCnt : 0,
+            totTmpCnt : 0
+        };
+
+        ct.getApipDashBoardInfo = function () {
+            var promise = portal.dashboard.getApipDashBoardInfo();
+            promise.success(function (data, status, headers) {
+                if (data.code == '0000' && data.apiTotalCnt > 0 ) {
+                    ct.apipeDashboardInfo = data;
+                    ct.apiChartFunc(ct.apipeDashboardInfo);
+                }
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        //////////////////////////////// CPU 상태  ///////////////////////////////////
+        // 가상서버 CPU 상태
+        ct.iaasCpuStatusChart = function () {
+            var container = document.getElementById('chart-area2');
+            var data = {
+                categories: ['2018.01', '2018.06', '2018.12'],
+                series: {
+                    area: [
+                        {
+                            name: ' ',                                 //차후 항목라벨 정리필요 sg0730 2018.10.17
+                            data: [80, 60, 90]
+                        }
+                    ],
+                    line: [
+                        {
+                            name: ' ',
+                            data: [80, 60, 90]
+                        }
+                    ]
+                }
+            };
+            var options = {
+                chart: {
+                    width: 230,
+                    height: 80
+                },
+                yAxis: {
+                    min: 0,
+                    pointOnColumn: true
+                },
+                xAxis: {
+                    tickInterval: 'auto'
+                },
+                series: {
+                    zoomable: true
+                },
+                tooltip: {
+                    suffix: '%'
+                },
+                legend: {
+                    visible: false
+                },
+                chartExportMenu : {
+                    visible: false
+                }
+            };
+
+            var theme = {
+                series: {
+                    area: {
+                        colors: ['#ffc4c4']
+                    },
+                    line: {
+                        colors: ['#fe5f9e']
+                    }
+                }
+            };
+
+            tui.chart.registerTheme('newTheme', theme);
+            options.theme = 'newTheme';
+
+            tui.chart.comboChart(container, data, options);
+        };
+
+        ct.iaasInstanceStateCountInit = function () {
+            // 카운트
+            ct.iaasInstanceStateCount = {
+                TOTAL: 0,
+                STARTED: 0,
+                STOPPED: 0,
+                ERROR: 0
+            };
+        };
+
+        ct.iaasInstanceUsageInit = function () {
+            ct.iaasInstanceUsage = {
+                cpu : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당 코어수
+                    maxQuota : 0 // 프로젝트 할당량 코어수
+                },
+                mem : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Byte
+                    maxQuota : 0, // 프로젝트 할당량 Byte
+                },
+                disk : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Giga Byte
+                    maxQuota : 0, // 프로젝트 할당량 Giga Byte
+                },
+                volume : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Giga Byte
+                    maxQuota : 0, // 프로젝트 할당량 Giga Byte
+                }
+            };
+        };
+
+        ct.iaasInstanceStateCountInit();
+        ct.iaasInstanceUsageInit();
+
+        // IAAS 가상 서버 정보
+        ct.iaasInstances = [];
+        ct.getIaasInseanceInfos = function (tenantId) {
+            ct.iaasInstanceStateCountInit();
+            ct.iaasInstances = [];
+            var promise = portal.dashboard.getIaasInseanceInfos(tenantId);
+            promise.success(function (data, status, headers) {
+                if (data && data.content && data.content.instances && data.content.instances.length > 0) {
+                    ct.iaasInstances = data.content.instances;
+                    angular.forEach(ct.paasApps, function (instance, instanceKey) {
+                        ct.iaasInstanceStateCount.TOTAL++;
+                        if (instance.vmState == "active") {
+                            ct.iaasInstanceStateCount.STARTED++;
+                        } else if (instance.vmState == "error") {
+                            ct.iaasInstanceStateCount.ERROR++;
+                        } else {
+                            ct.iaasInstanceStateCount.STOPPED++;
+                        }
+                    });
+                }
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        // IAAS 가상 서버 할당 정보  리소스 사용 현황
+
+        ct.iaasResourceUsed = {};
+        ct.getIaasResourceUsed = function (tenantId) {
+            ct.iaasInstanceUsageInit();
+            ct.iaasResourceUsed = {};
+            var promise = portal.dashboard.getIaasResourceUsed(tenantId);
+            promise.success(function (data, status, headers) {
+                if (data && data.content && data.content.length > 0) {
+                    ct.iaasResourceUsed = data.content[0];
+                    if (ct.iaasResourceUsed.maxResource && ct.iaasResourceUsed.usedResource) {
+                        // 할당 코어수
+                        ct.iaasInstanceUsage.cpu.maxQuota = ct.iaasResourceUsed.maxResource.cores;
+                        ct.iaasInstanceUsage.cpu.usedQuota = ct.iaasResourceUsed.usedResource.cores;
+                        ct.iaasInstanceUsage.cpu.percentUsedQuota = (ct.iaasInstanceUsage.cpu.usedQuota/ct.iaasInstanceUsage.cpu.maxQuota) * 100;
+
+                        // 할당 메모리 Byte
+                        ct.iaasInstanceUsage.mem.maxQuota = ct.iaasResourceUsed.maxResource.ramSize;
+                        ct.iaasInstanceUsage.mem.usedQuota = ct.iaasResourceUsed.usedResource.ramSize;
+                        ct.iaasInstanceUsage.mem.percentUsedQuota = (ct.iaasInstanceUsage.mem.usedQuota/ct.iaasInstanceUsage.mem.maxQuota) * 100;
+
+                        // 할당 인스트턴스 용량 Giga Byte
+                        ct.iaasInstanceUsage.disk.maxQuota = ct.iaasResourceUsed.maxResource.instanceDiskGigabytes;
+                        ct.iaasInstanceUsage.disk.usedQuota = ct.iaasResourceUsed.usedResource.instanceDiskGigabytes;
+                        ct.iaasInstanceUsage.disk.percentUsedQuota = (ct.iaasInstanceUsage.disk.usedQuota/ct.iaasInstanceUsage.disk.maxQuota) * 100;
+
+                        // 할당 볼륨 용량 Giga Byte
+                        ct.iaasInstanceUsage.volume.maxQuota = ct.iaasResourceUsed.maxResource.volumeGigabytes;
+                        ct.iaasInstanceUsage.volume.usedQuota = ct.iaasResourceUsed.usedResource.volumeGigabytes;
+                        ct.iaasInstanceUsage.volume.percentUsedQuota = (ct.iaasInstanceUsage.volume.usedQuota/ct.iaasInstanceUsage.volume.maxQuota) * 100;
+
+                        var chartData = {
+                            code: "0000",
+                            cpuTotUsed : ct.iaasInstanceUsage.cpu.percentUsedQuota,
+                            ramSizeTot : ct.iaasInstanceUsage.mem.percentUsedQuota,
+                            instanceDiskGigabytesTot : ct.iaasInstanceUsage.disk.percentUsedQuota,
+                            objectStorageGigaByteTot : ct.iaasInstanceUsage.volume.percentUsedQuota
+                        };
+
+                        ct.iaasCpuChartFunc(chartData);
+                        ct.iaasMemChartFunc(chartData);
+                        ct.iaasStorgeChartFunc(chartData);
+                    }
+                }
+
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+
+        //////////////////////////////// 표준 앱 CPU 상태     ///////////////////////////////////
+        // 가상서버 CPU 상태
+        ct.paasCpuStatusChart = function () {
+            var container = document.getElementById('chart-area6');
+            var data = {
+                categories: ['20184.01', '2018.06', '2018.12'],
+                series: {
+                    area: [
+                        {
+                            name: ' ',
+                            data: [80, 60, 90]
+                        }
+                    ],
+                    line: [
+                        {
+                            name: ' ',
+                            data: [80, 60, 90]
+                        }
+                    ]
+                }
+            };
+            var options = {
+                chart: {
+                    width: 230,
+                    height: 80
+                    // title: 'Energy Usage'
+                },
+                yAxis: {
+                    // title: 'Energy (kWh)',
+                    min: 0,
+                    pointOnColumn: true
+                },
+                xAxis: {
+                    // title: 'Month',
+                    tickInterval: 'auto'
+                },
+                series: {
+                    zoomable: true
+                },
+                tooltip: {
+                    suffix: '%'
+                },
+                legend: {
+                    visible: false
+                },
+                chartExportMenu: {
+                    visible: false
+                },
+            };
+
+            var theme = {
+                series: {
+                    area: {
+                        colors: ['#ffc4c4']
+                    },
+                    line: {
+                        colors: ['#fe5f9e']
+                    }
+                }
+            };
+
+            tui.chart.registerTheme('newTheme', theme);
+            options.theme = 'newTheme';
+            tui.chart.comboChart(container, data, options);
+        };
+
+        // PAAS 가상 서버 할당 정보
+        ct.paasAppsStateCountInit = function () {
+            // 카운트
+            ct.paasAppsStateCount = {
+                TOTAL : 0,
+                STARTED : 0,
+                STOPPED : 0,
+                ERROR : 0
+            };
+        };
+
+        ct.paasAppsUsageInit = function () {
+            // 사용량
+            ct.paasAppsUsage = {
+                sumCount : 0, // 합산 app 카운트 => 순차적 계산을 위한용도
+                cpu : {
+                    percentUsed : 0, // 사용률 %
+                    sumPercentUsed : 0, // 사용률 합산 => 순차적 계산을 위한용도
+                },
+                disk : {
+                    percentUsed : 0, // 사용률 %
+                    sumUsed : 0, // 사용량 byte
+                    sumQuota : 0, // 할당량 byte
+                },
+                mem : {
+                    percentUsed : 0, // 사용률 %
+                    sumUsed : 0, // 사용량 byte
+                    sumQuota : 0, // 할당량 byte
+                }
+            };
+        };
+
+        ct.paasAppsStateCountInit();
+        ct.paasAppsUsageInit();
+
+        ct.paasApps = [];
+        ct.getPaasAppInfosAndInstanceInfosByName = function (orgId) {
+            var promise = portal.dashboard.getOrganizationByName(orgId);
+            promise.success(function (data) {
+                if (data.guid != null) {
+                    ct.getPaasAppInfosAndInstanceInfos(data.guid);
+                }
+            });
+            promise.error(function (data) {
+            });
+        };
+
+        ct.getPaasAppInfosAndInstanceInfos = function (org_guid) {
+            ct.paasAppsStateCountInit();
+            ct.paasAppsUsageInit();
+            ct.paasApps = [];
+            var promise = portal.dashboard.getPaasAppInfos(org_guid);
+            promise.success(function (data, status, headers) {
+                if (data && data.length > 0) {
+                    ct.paasApps = data;
+                    angular.forEach(ct.paasApps, function (app, appKey) {
+                        if (app.state == "STARTED") {
+                            ct.paasAppsStateCount.STARTED++;
+                            ct.getPaasAppInstanceStatsInfos(app.guid, appKey);
+                        } else if (app.state == "STARTING" || app.state == "STOPPED") {
+                            ct.paasAppsStateCount.STOPPED++;
+                            app.loadInstanceStats = true;
+                        } else if (app.state == "FAILED") {
+                            ct.paasAppsStateCount.ERROR++;
+                            app.loadInstanceStats = true;
+                        } else {
+                            ct.paasAppsStateCount.STOPPED++;
+                            app.loadInstanceStats = true;
+                        }
+                    });
+                    ct.paasAppsStateCount.TOTAL = data.length;
+                }
+
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+
+
+        ct.getPaasAppInstanceStatsInfos = function (org_guid, appKey) {
+            var promise = portal.dashboard.getPaasAppInstanceStatsInfos(org_guid);
+            promise.success(function (data, status, headers) {
+                if (data && data.length > 0) {
+                    var memQuota = 0;
+                    var diskQuota = 0;
+                    var sumPercentUsed = 0;
+                    var memUsed = 0;
+                    var diskUsed = 0;
+                    angular.forEach(data, function (instance, key) {
+                        memQuota += instance.memQuota;
+                        diskQuota += instance.diskQuota;
+                        sumPercentUsed += instance.usage.cpu;
+                        memUsed += instance.usage.mem;
+                        diskUsed += instance.usage.disk;
+                    });
+                    ct.paasApps[appKey].usage = {};
+                    ct.paasApps[appKey].usage.sumPercentUsed = sumPercentUsed;
+                    ct.paasApps[appKey].usage.memQuota = memQuota;
+                    ct.paasApps[appKey].usage.memUsed = memUsed;
+                    ct.paasApps[appKey].usage.diskQuota = diskQuota;
+                    ct.paasApps[appKey].usage.diskUsed = diskUsed;
+                    ct.paasApps[appKey].loadInstanceStats = true;
+                    ct.setPaasAppsUsaged(ct.paasApps[appKey].usage);
+                } else {
+                    ct.paasApps[appKey].loadInstanceStats = true;
+                    ct.setPaasAppsUsaged();
+                }
+            });
+            promise.error(function (data, status, headers) {
+                ct.paasApps[appKey].loadInstanceStats = true;
+                ct.setPaasAppsUsaged();
+            });
+        };
+
+
+        ct.setPaasAppsUsaged = function (usage) {
+            if (usage && usage.memQuota && usage.diskQuota) {
+                ct.paasAppsUsage.sumCount++;
+                ct.paasAppsUsage.cpu.sumPercentUsed += usage.sumPercentUsed;
+                ct.paasAppsUsage.mem.sumUsed += usage.memUsed;
+                ct.paasAppsUsage.mem.sumQuota += usage.diskQuota;
+                ct.paasAppsUsage.disk.sumUsed += usage.diskUsed;
+                ct.paasAppsUsage.disk.sumQuota += usage.diskQuota;
+            }
+
+            // 모두 로드 되었는지 체크 하는 부분
+            var loadInstanceStatsAll = true;
+            for (var i=0; i<ct.paasApps.length; i++) {
+                if (!ct.paasApps[i].loadInstanceStats) {
+                    loadInstanceStatsAll = false;
+                    break;
+                }
+            }
+            if (loadInstanceStatsAll) {
+                ct.paasAppsUsage.cpu.percentUsed = (ct.paasAppsUsage.cpu.sumPercentUsed/ct.paasAppsUsage.sumCount)*100;
+                ct.paasAppsUsage.mem.percentUsed = (ct.paasAppsUsage.mem.sumUsed/ct.paasAppsUsage.mem.sumQuota)*100;
+                ct.paasAppsUsage.disk.percentUsed = (ct.paasAppsUsage.disk.sumUsed/ct.paasAppsUsage.disk.sumQuota)*100;
+
+                // 이부분이 모두 로드된 상황임
+                if (ct.paasAppsUsage.sumCount > 0) {
+                    ct.paasAppsUsage.code = '0000';
+                } else {
+                    ct.paasAppsUsage.code = '1111';
+                }
+                ct.paasCpuChartFunc (ct.paasAppsUsage) ;
+                ct.paasMemChartFunc (ct.paasAppsUsage) ;
+                ct.paasStorgeChartFunc(ct.paasAppsUsage) ;
+            }
+        };
+
+        ct.dataReq10 = {
+            totCnt: 0,
+            svnCnt: 0,
+            gitCnt: 0
+        };
+
+        ct.pipelineDashboardInfo = {
+            sucCnt: 0,
+            failCnt: 0,
+            totCnt : 0
+        };
+
+        ct.getPipelineDashBoardInfo = function (projectId) {
+            var promise = portal.dashboard.getPipelineDashBoardInfo(projectId);
+            promise.success(function (data, status, headers) {
+                if (data.code == '0000' && data.apiTotalCnt > 0 ) {
+                    ct.pipelineDashboardInfo = data;
+                    ct.pipChartFunc (ct.pipelineDashboardInfo) ;
+                    ct.barChartFunc (ct.pipelineDashboardInfo) ;
+                }
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        ct.gisDashBoardInfo = {
+            layAllCnt: 0,
+            prjcLayCnt: 0,
+            styAllCnt: 0
+        };
+
+        ct.getGisDashBoardInfo = function (projectId) {
+            var promise = portal.dashboard.getGisDashBoardInfo(projectId);
+            promise.success(function (data, status, headers) {
+                ct.gisDashBoardInfo = data;
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        ct.loadDashBoard = function () {
+            // Dcp 정보
+            ct.getDcpDashboardInfo(ct.paramId);
+            // Apip 정보
+            ct.getApipDashBoardInfo();
+
+            // IaaS 정보
+            if ($scope.main.userTenantId) {
+                ct.iaasCpuStatusChart();
+                ct.getIaasInseanceInfos($scope.main.userTenantId);
+                ct.getIaasResourceUsed($scope.main.userTenantId);
+            }
+
+            // PaaS 정보
+            if ($scope.main.sltPortalOrg && $scope.main.sltOrganizationGuid) {
+                ct.paasCpuStatusChart();
+                ct.getPaasAppInfosAndInstanceInfos($scope.main.sltOrganizationGuid);
+            }
+            // Pipeline 정보
+            ct.getPipelineDashBoardInfo(ct.paramId);
+            // Gis 정보
+            ct.getGisDashBoardInfo(ct.paramId);
+        };
+
+        /**************************************************************************/
 
         // 이미지 변경
         $scope.pop = {};

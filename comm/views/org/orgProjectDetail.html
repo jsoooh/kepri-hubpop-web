@@ -2,6 +2,7 @@
 <div class="tabWrap type1">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
+        <li ng-class="{'active':contents.sltInfoTab == 'dashboard'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('dashboard');">대시보드</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'info'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('info');">프로젝트 개요</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'member'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('member');">프로젝트 멤버</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'resource'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('resource');">프로젝트 자원</a></li>
@@ -11,7 +12,428 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <!-- 프로젝트 개요 panel -->
-        <div ng-if="contents.sltInfoTab == 'info'" class="tab-pane st_none in" ng-class="{'active':contents.sltInfoTab == 'info'}">
+        <div ng-show="contents.sltInfoTab == 'dashboard'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'dashboard'}">
+            <!-- 대시보드 컨텐츠 -->
+            <div class="proj_dashboard">
+                <ul class="ul-panel">
+
+                    <!-- 프로젝트 정보 -->
+                    <li class="mgl0">
+                        <div class="panelWrap">
+                            <div class="panel type_info">
+                                <div class="panel_head">
+                                    <h4 class="tit">프로젝트 정보</h4>
+                                </div>
+                                <div class="panel_body">
+                                    <div class="thum_area">
+                                        <div class="thum">
+                                            <span class="thum_in img_line ng-hide"><img class="logo" alt=""></span>
+                                            <span class="thum_in"><span class="txt">P</span></span>
+                                        </div>
+                                        <div class="list_in">
+                                            <dl>
+                                                <dt><strong>{{contents.selOrgProject.orgName}}</strong></dt>
+                                                <dd>Project_HubPoP 상세설명</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                    <ul>
+                                        <li>프로젝트 ID : <span>{{contents.selOrgProject.id}}</span></li>
+                                        <li>프로젝트 생성자 : <span>{{contents.selOrgProject.managerName}}</span></li>
+                                        <li>프로젝트 구성원 수 : <span>{{contents.selOrgProject.orgUserCount}} 명</span></li>
+                                        <li>프로젝트 생성일자 : <span>{{contents.selOrgProject.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- //프로젝트 정보 -->
+
+                    <!-- 데이터 구독 현황 -->
+                    <li>
+                        <div class="panelWrap">
+                            <div class="panel type_api">
+                                <div class="panel_head">
+                                    <h4 class="tit">데이터 구독 현황</h4>
+                                    <!-- 차후 링크 페이지 확인후 href 수정요망. 2018.10.18 sg0730  -->
+                                    <a class="btn_more" href="/dcp/comn/doMegaProcessView.do">데이터 구독현황 바로가기<span class="ico_more"></span></a>
+                                </div>
+                                <div class="panel_body">
+                                    <div class="fl_l">
+                                        <div class="tit_area">
+                                            <h5 class="tit">데이터 요청</h5>
+                                        </div>
+                                        <div class="cont_area">
+                                            <div class="txt_data">
+                                                <ul>
+                                                    <li>
+                                                        <span class="state_mark type1"></span>
+                                                        <span class="state_txt">요청</span>
+                                                        <span class="state_result">{{content.dcpDashboardInfo.dataReqAllNoca}} 건</span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="state_mark type2"></span>
+                                                        <span class="state_txt">승인</span>
+                                                        <span class="state_result"> {{content.dcpDashboardInfo.dataReqAprvNoca}} 건</span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="state_mark type3"></span>
+                                                        <span class="state_txt">반려</span>
+                                                        <span class="state_result"><span class="type1"> {{content.dcpDashboardInfo.dataReqRejNoca}} </span>건</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="chart_data">
+                                                <div id="chart-area"></div>
+                                                <div class="cht_val">
+                                                    <span>0</span>
+                                                    <span>{{content.dcpDashboardInfo.totTmpCnt}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fl_r">
+                                        <div class="tit_area">
+                                            <h5 class="tit">데이터 구독</h5>
+                                        </div>
+                                        <span class="lg_txt">{{content.dcpDashboardInfo.dataSubsNoca}} </span>
+                                        <span class="sm_txt">Total</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- //데이터 구독 현황 -->
+
+                    <!-- API 서비스 사용현황 -->
+                    <li>
+                        <div class="panelWrap">
+                            <div class="panel type_api">
+                                <div class="panel_head">
+                                    <h4 class="tit">API 서비스 사용 현황</h4>
+                                    <a class="btn_more" href="/apip/com/process.do">API 서비스 사용 현황 바로가기<span class="ico_more"></span></a>
+                                </div>
+                                <div class="panel_body">
+                                    <div class="fl_l">
+                                        <div class="tit_area">
+                                            <h5 class="tit">API 등록</h5>
+                                        </div>
+                                        <div class="cont_area">
+                                            <div class="txt_data">
+                                                <ul>
+                                                    <li>
+                                                        <span class="state_mark type1"></span>
+                                                        <span class="state_txt">등록</span>
+                                                        <span class="state_result">{{contents.apipeDashboardInfo.appTotalCnt}} 개</span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="state_mark type2"></span>
+                                                        <span class="state_txt">활성</span>
+                                                        <span class="state_result">{{contents.apipeDashboardInfo.apiVtlzYCnt}}개</span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="state_mark type3"></span>
+                                                        <span class="state_txt">비활성</span>
+                                                        <span class="state_result"><span class="type1">{{contents.apipeDashboardInfo.apiVtlzNCnt}}</span>개</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="chart_data">
+                                                <div id="chart-area1"></div>
+                                                <div class="cht_val">
+                                                    <span>0</span>
+                                                    <span>{{contents.apipeDashboardInfo.totTmpCnt}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fl_r">
+                                        <div class="tit_area">
+                                            <h5 class="tit">API 구독</h5>
+                                        </div>
+                                        <span class="lg_txt">{{contents.apipeDashboardInfo.apiTotalCnt}}</span>
+                                        <span class="sm_txt">Total</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- //API 서비스 사용현황 -->
+
+                    <!-- 클라우드 자원사용 현황  2018.10.19 sg0730 IaaS는 차후 데이터 값 정리되면 다시 설정 필요. 현재는 하드코딩. -->
+                    <li class="mgl0 clear_bt">
+                        <div class="panelWrap">
+                            <div class="panel type_cloud">
+                                <div class="panel_head">
+                                    <h4 class="tit">클라우드 자원사용 현황</h4>
+                                </div>
+                                <div class="panel_body">
+                                    <div class="fl_l">
+                                        <div class="tit_area">
+                                            <h5 class="tit">가상서버</h5>
+                                            <a class="btn_more" href="#/iaas">가상서버 바로가기<span class="ico_more"></span></a>
+                                        </div>
+                                        <div class="cont_area">
+                                            <div class="cloud_stateWrap">
+                                                <ul>
+                                                    <li class="type1">
+                                                        <span class="sm_txt">TOTAL</span>
+                                                        <span class="lg_txt">{{contents.paasAppsStateCount.TOTAL}}</span>
+                                                    </li>
+                                                    <li class="type2">
+                                                        <span class="sm_txt">STARTED</span>
+                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STARTED}}</span>
+                                                    </li>
+                                                    <li class="type3">
+                                                        <span class="sm_txt">STOPPED</span>
+                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STOPPED}}</span>
+                                                    </li>
+                                                    <li class="type4">
+                                                        <span class="sm_txt">ERROR</span>
+                                                        <span class="lg_txt">{{contents.paasAppsStateCount.ERROR}}</span>
+                                                    </li>
+                                                </ul>
+                                                <div class="line_chart_data">
+                                                    <span class="sm_tit">CPU 상태</span>
+                                                    <div id="chart-area2"></div>
+                                                </div>
+                                            </div>
+                                            <div class="cloud_chartWrap" >
+                                                <ul>
+                                                    <li>
+                                                        <div class="chart_info">
+                                                            <span class="tit">CPU</span>
+                                                            <span class="txt">{{contents.dataReq4.series[0].data}}<span class="sm_txt">%</span></span>
+                                                        </div>
+                                                        <div class="donut_chart_data">
+                                                            <div class="data_txt">
+                                                                <span>{{contents.dataReq4.series[0].data}}</span>
+                                                                <span>100</span>
+                                                            </div>
+                                                            <div id="chart-area3"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="chart_info">
+                                                            <span class="tit">MEMORY</span>
+                                                            <span class="txt">{{contents.dataReq5}}<span class="sm_txt">%</span></span>
+                                                        </div>
+                                                        <div class="donut_chart_data">
+                                                            <div class="data_txt">
+                                                                <span>{{contents.dataReq5}}</span>
+                                                                <span>100</span>
+                                                            </div>
+                                                            <div id="chart-area4"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="chart_info">
+                                                            <span class="tit">STORAGE</span>
+                                                            <span class="txt">{{contents.dataReq6}}<span class="sm_txt">%</span></span>
+                                                        </div>
+                                                        <div class="donut_chart_data">
+                                                            <div class="data_txt">
+                                                                <span>{{contents.dataReq6}}</span>
+                                                                <span>100</span>
+                                                            </div>
+                                                            <div id="chart-area5"></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fl_r">
+                                        <div class="tit_area">
+                                            <h5 class="tit">표준 App.</h5>
+                                            <a class="btn_more" href="#/paas">표준 App 바로가기<span class="ico_more"></span></a>
+                                        </div>
+                                        <div class="cont_area">
+                                            <div class="cloud_stateWrap">
+                                                <ul>
+                                                    <li class="type1">
+                                                        <span class="sm_txt">TOTAL</span>
+                                                        <span class="lg_txt">{{contents.paasAppsStateCount.TOTAL}}</span>
+                                                    </li>
+                                                    <li class="type2">
+                                                        <span class="sm_txt">STARTED</span>
+                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STARTED}}</span>
+                                                    </li>
+                                                    <li class="type3">
+                                                        <span class="sm_txt">STOPPED</span>
+                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STOPPED}}</span>
+                                                    </li>
+                                                    <li class="type4">
+                                                        <span class="sm_txt">ERROR</span>
+                                                        <span class="lg_txt">{{contents.paasAppsStateCount.ERROR}}</span>
+                                                    </li>
+                                                </ul>
+                                                <div class="line_chart_data">
+                                                    <span class="sm_tit">CPU 상태</span>
+                                                    <div id="chart-area6"></div>
+                                                </div>
+                                            </div>
+                                            <div class="cloud_chartWrap" >
+                                                <ul>
+                                                    <li>
+                                                        <div class="chart_info" ng-init="contents.dataReq7 ='0.0'">
+                                                            <span class="tit">CPU</span>
+                                                            <span class="txt">{{contents.dataReq7}}<span class="sm_txt">%</span></span>
+                                                        </div>
+                                                        <div class="donut_chart_data">
+                                                            <div class="data_txt">
+                                                                <span>{{contents.dataReq7}}</span>
+                                                                <span>100</span>
+                                                            </div>
+                                                            <div id="chart-area7"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="chart_info" ng-init="contents.dataReq8 ='0.0'">
+                                                            <span class="tit">MEMORY</span>
+                                                            <span class="txt">{{contents.dataReq8}}<span class="sm_txt">%</span></span>
+                                                        </div>
+                                                        <div class="donut_chart_data">
+                                                            <div class="data_txt">
+                                                                <span>{{contents.dataReq8}}</span>
+                                                                <span>100</span>
+                                                            </div>
+                                                            <div id="chart-area8"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="chart_info" ng-init="contents.dataReq9 ='0.0'">
+                                                            <span class="tit">STORAGE</span>
+                                                            <span class="txt">{{contents.dataReq9}}<span class="sm_txt">%</span></span>
+                                                        </div>
+                                                        <div class="donut_chart_data">
+                                                            <div class="data_txt">
+                                                                <span>{{contents.dataReq9}}</span>
+                                                                <span>100</span>
+                                                            </div>
+                                                            <div id="chart-area9"></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- //클라우드 자원사용 현황 -->
+
+                    <!-- GIS 서비스 요약 -->
+                    <li class="mgl0 clear_bt">
+                        <div class="panelWrap">
+                            <div class="panel type_gis">
+                                <div class="panel_head">
+                                    <h4 class="tit">GIS 서비스 요약</h4>
+                                </div>
+                                <div class="panel_body">
+                                    <div class="txt_box">
+                                        <div class="tit_area">
+                                            <h5 class="tit">레이어 그룹</h5>
+                                        </div>
+                                        <span class="lg_txt">{{contents.gisDashBoardInfo.layAllCnt}}</span>
+                                    </div>
+                                    <div class="txt_box">
+                                        <div class="tit_area">
+                                            <h5 class="tit">레이어</h5>
+                                        </div>
+                                        <span class="lg_txt">{{contents.gisDashBoardInfo.prjcLayCnt}}</span>
+                                    </div>
+                                    <div class="txt_box">
+                                        <div class="tit_area">
+                                            <h5 class="tit">스타일</h5>
+                                        </div>
+                                        <span class="lg_txt">{{contents.gisDashBoardInfo.styAllCnt}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- //GIS 서비스 요약 -->
+
+                    <!-- 개발 파이프라인 사용 현황 -->
+                    <li>
+                        <div class="panelWrap">
+                            <div class="panel type_pipeLine">
+                                <div class="panel_head">
+                                    <h4 class="tit">개발 파이프라인 사용 현황</h4>
+                                </div>
+                                <div class="panel_body">
+                                    <div class="fl_l">
+                                        <div class="tit_area">
+                                            <h5 class="tit">코드 저장소</h5>
+                                        </div>
+                                        <div class="cont_area">
+                                            <div class="donut_chart_data">
+                                                <div class="data_txt_type2">
+                                                    <span class="txt_result">{{contents.dataReq10.totCnt}}</span>
+                                                    <span class="txt_total">TOTAL</span>
+                                                </div>
+                                                <div id="chart-area10"></div>
+                                            </div>
+                                            <div class="txt_data">
+                                                <ul>
+                                                    <li>
+                                                        <span class="state_mark type4"></span>
+                                                        <span class="state_txt">SVN</span>
+                                                        <span class="state_result">{{contents.dataReq10.svnCnt}}개</span>
+
+                                                    </li>
+                                                    <li>
+                                                        <span class="state_mark type5"></span>
+                                                        <span class="state_txt">GIT</span>
+                                                        <span class="state_result">{{contents.dataReq10.gitCnt}}개</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fl_r">
+                                        <div class="tit_area">
+                                            <h5 class="tit">빌드/배포</h5>
+                                        </div>
+                                        <div class="cont_area">
+                                            <div class="txt_data txt_inline">
+                                                <ul>
+                                                    <li>
+                                                        <span class="state_mark type2"></span>
+                                                        <span class="state_txt">성공</span>
+                                                        <span class="state_result">{{contents.pipelineDashboardInfo.sucCnt}}건</span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="state_mark type3"></span>
+                                                        <span class="state_txt">실패</span>
+                                                        <span class="state_result"><span class="type1">{{contents.pipelineDashboardInfo.failCnt}}</span>건</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="bar_chart_data">
+                                                <div id="chart-area11"></div>
+                                                <div class="cht_val">
+                                                    <span>0</span>
+                                                    <span>{{contents.pipelineDashboardInfo.totCnt}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- //개발 파이프라인 사용 현황 -->
+                </ul>
+            </div>
+            <!-- //대시보드 컨텐츠 -->
+        </div>
+        <!-- //프로젝트 개요 panel -->
+
+        <!-- 프로젝트 개요 panel -->
+        <div ng-if="contents.sltInfoTab == 'info'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'info'}">
             <!-- cBox -->
             <div class="cBox type1 appCnt-info">
                 <div class="cBox-hd">
@@ -36,7 +458,7 @@
                                 <ul>
                                     <li>
                                         <strong class="tit">생성자</strong>
-                                        <div class="txt">{{ contents.selOrgProject.createdId }}</div>
+                                        <div class="txt">{{ contents.selOrgProject.managerName }}</div>
                                     </li>
                                 </ul>
                             </div>

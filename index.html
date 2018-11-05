@@ -111,6 +111,8 @@
         loadCssLink('css/components/angular-growl' + _MIN_ + '.css');
         loadCssLink('css/components/xterm.css');
         loadCssLink('css/components/progress-wizard.min.css');
+        //Toast UI Chart css
+        loadCssLink('css/components/tui-chart.min.css');
 
         loadCssLink('css/css.css'+_VERSION_TAIL_);
         loadCssLink('css/layout_join.css'+_VERSION_TAIL_);
@@ -173,6 +175,11 @@
         loadJavascript('js/components/angularjs-bytes-validator.js');
         loadJavascript('js/components/sortable.js');
         loadJavascript('js/components/angular-jscrollpane' + _MIN_ + '.js');
+
+        //Toast UI Chart js
+        loadJavascript('js/components/tui-chart/tui-chart-all.js');
+        loadJavascript('js/components/tui-chart/tui-code-snippet.min.js');
+        loadJavascript('js/components/tui-chart/raphael.min.js');
 
         loadJavascript(_COMM_STAGE_+'/js/cmmFunction.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/app.js'+_VERSION_TAIL_HEAD_);
@@ -275,11 +282,6 @@
     document.writeln('		</div>');
     document.writeln('	</div>');
     document.writeln('</div>');
-
-    $(window).scroll(function(event){
-        var scroll=$(this).scrollTop();
-        console.log("scrollTop : " + scroll)
-    })
 
 </script>
 
