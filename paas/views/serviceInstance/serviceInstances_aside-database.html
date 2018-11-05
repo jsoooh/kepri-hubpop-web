@@ -11,7 +11,7 @@
 		<div class="sideInWrap">
 			<ol class="app-set">
 				<li>
-					<p class="app-tit">1. 서비스 선택</p>
+					<p class="app-tit">1. 서비스 선택 <i class="i_star"></i></p>
 					<div class="scroll-pane" id="serviceInstancesThumList">
 						<ul class="ul-list1">
 							<li ng-repeat="(key, serviceItem) in services">
@@ -32,11 +32,11 @@
 					<textarea name="name" class="form-control" style="height:80px;" disabled>{{ radio.description }}</textarea>
 				</li>
 				<li>
-					<p class="app-tit">2. 서비스 이름</p>
+					<p class="app-tit">2. 서비스 이름 <i class="i_star"></i></p>
 					<input type="text" value="" name="inputName" ng-model="radio.inputName" class="form-control" placeholder="서비스 이름을 입력하세요." maxlength="20" validation="min_len:3|max_len:20|required">
 				</li>
 				<li>
-					<p class="app-tit">3. 서비스 플랜(용량)을 선택해 주세요.</p>
+					<p class="app-tit">3. 서비스 플랜(용량)을 선택해 주세요. <i class="i_star"></i></p>
 					<div class="plan_capacity">
 						<ul>
 							<li class="on" ng-repeat="(key, plan) in plans">

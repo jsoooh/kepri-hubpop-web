@@ -2107,6 +2107,7 @@ angular.module('paas.controllers')
             appRoutePromise.success(function (appRoutData) {
                 var routePromise = applicationService.deleteRoute(routeGuid);
                 routePromise.success(function (data) {
+                    $scope.main.loadingMainBody = false;
                     tab.listAllAppRoutes();
                 });
                 routePromise.error(function (data) {
@@ -2245,6 +2246,7 @@ angular.module('paas.controllers')
             }
             var appRoutePromise = applicationService.updateAppUserEnvironment(tab.appGuid, appUserEnvVar);
             appRoutePromise.success(function (data) {
+                $scope.main.loadingMainBody = false;
                 tab.getAppEnvironment();
             });
             appRoutePromise.error(function (data) {
