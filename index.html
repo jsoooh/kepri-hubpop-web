@@ -276,6 +276,11 @@
     document.writeln('	</div>');
     document.writeln('</div>');
 
+    $(window).scroll(function(event){
+        var scroll=$(this).scrollTop();
+        console.log("scrollTop : " + scroll)
+    })
+
 </script>
 
 </body>

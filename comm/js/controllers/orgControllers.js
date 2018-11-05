@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portal.controllers')
-    .controller('commOrgProjecsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common) {
+    .controller('commOrgProjectsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common) {
         _DebugConsoleLog("orgControllers.js : commOrgsCtrl", 1);
 
         var ct = this;
@@ -75,6 +75,23 @@ angular.module('portal.controllers')
 
         // 조직 목록 조회
         ct.listOrgProjects();
+
+    })
+    .controller('commFirstOrgProjectMainCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common) {
+        _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);
+
+        var ct = this;
+        ct.fn = {};
+
+        ct.selectItemKey = 0;
+
+        ct.userAuth  = $scope.main.userAuth;
+
+        ct.fn.changeItem = function(itemKey) {
+            ct.selectItemKey = itemKey;
+        };
+
+        $scope.main.loadingMainBody = false;
 
     })
     .controller('commAddOrgProjecFormCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, orgService, quotaService, common) {

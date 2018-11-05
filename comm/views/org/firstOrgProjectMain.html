@@ -1,0 +1,86 @@
+<div class="proj_main_cont">
+	<div class="p_main_top">
+		<div class="top_txt">
+			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
+			<span class="l_txt"><span class="c_blue">프로젝트 생성</span>으로 HUB-PoP을 시작하세요!</span>
+		</div>
+		<div class="top_btn">
+			<a href="" ng-click="main.addOrgProjectFormOpen($event);">
+				<span>프로젝트 생성</span>
+			</a>
+		</div>
+	</div>
+	<div class="p_main_cont">
+		<div class="p_cont_txt">
+			<span class="p_tit">Service</span>
+			<div class="p_txt">프로젝트는 SW개발과 데이터 분석을 위한 <span class="c_blue">작업공간</span>입니다. 프로젝트가 생성되면 HUB-PoP의 다양한 서비스를 이용할 수 있습니다.</div>
+		</div>
+		<div class="p_cont_list">
+			<ul>
+				<li class="pdl0">
+					<a href="" ng-class="{'on' : contents.selectItemKey == 1}" ng-click="contents.fn.changeItem(1);">
+						<span class="btn_ico ico1"></span>
+						<span class="btn_txt">서버가상화</span>
+					</a>
+				</li>
+				<li>
+					<a href="" ng-class="{'on' : contents.selectItemKey == 2}" ng-click="contents.fn.changeItem(2);">
+						<span class="btn_ico ico2"></span>
+						<span class="btn_txt">표준 APP개발</span>
+					</a>
+				</li>
+				<li>
+					<a href="" ng-class="{'on' : contents.selectItemKey == 3}" ng-click="contents.fn.changeItem(3);">
+						<span class="btn_ico ico3"></span>
+						<span class="btn_txt">분석 허브</span>
+					</a>
+				</li>
+				<li>
+					<a href="" ng-class="{'on' : contents.selectItemKey == 4}" ng-click="contents.fn.changeItem(4);">
+						<span class="btn_ico ico4"></span>
+						<span class="btn_txt">GIS 플랫폼</span>
+					</a>
+				</li>
+			</ul>
+			<!-- 가이드박스 -->
+			<div class="guide_box" ng-style="{ 'display': ((contents.selectItemKey == 0) ? 'none' : 'block') }">
+				<span class="gbox_ico" ng-class="{'no_01': (contents.selectItemKey == 1), 'no_02': (contents.selectItemKey == 2), 'no_03': (contents.selectItemKey == 3), 'no_04': (contents.selectItemKey == 4), 'no_05': (contents.selectItemKey == 5), 'no_06': (contents.selectItemKey == 6), 'no_07': (contents.selectItemKey == 7), 'no_08': (contents.selectItemKey == 8) }"></span>
+				<span ng-if="contents.selectItemKey == 1" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">가상서버를 생성</span>합니다. <br/>가상서버 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
+				<span ng-if="contents.selectItemKey == 2" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">표준 APP를 생성</span>합니다. <br/>표준 APP 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
+				<span ng-if="contents.selectItemKey == 3" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">분석허브를 생성</span>합니다. <br/>분석허브 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
+				<span ng-if="contents.selectItemKey == 4" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">GIS 플랫폼을 생성</span>합니다. <br/>GIS 플랫폼 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
+				<span ng-if="contents.selectItemKey == 5" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">개발 파이프라인을 생성</span>합니다. <br/>개발 파이프라인 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
+				<span ng-if="contents.selectItemKey == 6" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">개발 프레임워크를 생성</span>합니다. <br/>개발 프레임워크 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
+				<span ng-if="contents.selectItemKey == 7" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">API Gateway를 생성</span>합니다. <br/>API Gateway 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
+				<span ng-if="contents.selectItemKey == 8" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">데이터연계를 생성</span>합니다. <br/>데이터연계 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
+			</div>
+			<!-- //가이드박스 -->
+			<ul>
+				<li class="pdl0">
+					<a href="" ng-class="{'on' : contents.selectItemKey == 5}" ng-click="contents.fn.changeItem(5);">
+						<span class="btn_ico ico5"></span>
+						<span class="btn_txt">개발 파이프라인</span>
+					</a>
+				</li>
+				<li>
+					<a href="" ng-class="{'on' : contents.selectItemKey == 6}" ng-click="contents.fn.changeItem(6);">
+						<span class="btn_ico ico6"></span>
+						<span class="btn_txt">개발 프레임워크</span>
+					</a>
+				</li>
+				<li>
+					<a href="" ng-class="{'on' : contents.selectItemKey == 7}" ng-click="contents.fn.changeItem(7);">
+						<span class="btn_ico ico7"></span>
+						<span class="btn_txt">API Gateway</span>
+					</a>
+				</li>
+				<li>
+					<a href="" ng-class="{'on' : contents.selectItemKey == 8}" ng-click="contents.fn.changeItem(8);">
+						<span class="btn_ico ico8"></span>
+						<span class="btn_txt">데이터연계</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

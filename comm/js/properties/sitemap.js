@@ -43,9 +43,18 @@ angular.module('app')
                         icon: "ico2",
                         stateKey: 'commProjectMgmt',
                         url: '/comm/projects',
-                        controller: 'commOrgProjecsCtrl',
+                        controller: 'commOrgProjectsCtrl',
                         templateUrl: _COMM_VIEWS_+'/org/orgProjects.html',
                         subPages: {
+                            firstProjectMain: {
+                                mainTop: true,
+                                name: 'first_project_main',
+                                stateKey: 'commFirstProjectMain',
+                                url: '/comm/projects/first',
+                                controller: 'commFirstOrgProjectMainCtrl',
+                                templateUrl: _COMM_VIEWS_+'/org/firstOrgProjectMain.html',
+                                mainContentsClass: 'pd0',
+                            },
                             projectDetail: {
                                 mainTop: true,
                                 name: 'project_details',
