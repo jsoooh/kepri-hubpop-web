@@ -234,7 +234,7 @@ angular.module('paas.controllers')
             }
         };
 
-        ct.serviceInfo = function ($event, serviceItem) {
+        $scope.serviceInfo = function ($event, serviceItem) {
             $scope.serviceInfo.connection = serviceItem.serviceBindings.length;
             $scope.serviceInfo.description = serviceItem.servicePlan.service.description;
             $scope.serviceInfo.planName = serviceItem.servicePlan.name;
