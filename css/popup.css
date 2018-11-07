@@ -114,3 +114,24 @@ md-dialog .modal-body{max-height: 500px; overflow-y: auto;}
 .modal-body .alertWrap .alertIcon {position:absolute; top:0; left:0; display:inline-block;}
 .modal-body .alertWrap .alertContent h2.md-title {font-size:20px; font-weight:500; letter-spacing:0.005em; padding:12px 0 0 60px;}
 .modal-body .alertWrap .alertContent .md-dialog-content-body {padding:25px 0 10px 0;}
+
+
+/*================== 신규팝업 CSS(2018-10 ~) 작성자:김보람 =================*/
+
+.modal-content.modal-xlg {width:1200px; margin:0 auto;}
+
+.modal-type-proj .modal-header {position:relative; height:auto; padding:20px; background:#fff; cursor:move;}
+.modal-type-proj .modal-header.brdb0 {border-bottom:0;}
+.modal-type-proj .modal-title {font-size:18px; color:#333; letter-spacing:-0.03em; font-weight:500; text-align:left;}
+.modal-type-proj .modal-content .close {position:absolute; right:20px; top:13px; z-index: 0; font-size:0px; margin-top:0; opacity:1; color:#a7a7a7; text-shadow:none; width:31px; height:31px; background:url("../images/btn_pop_close.png") no-repeat 0 0;}
+.modal-type-proj .modal-content .close:hover {background:url("../images/btn_pop_close.png") no-repeat 0 -39px;}
+.modal-type-proj .modal-body .cnt_box {padding:0 40px 40px 40px; }
+.modal-type-proj .pop_logo {display:block; width:100%; height:58px; background:url("../images/join_logo.png") no-repeat center center; margin-bottom:30px;}
+.modal-type-proj .modal-body .txt {font-size:22px; color:#333; text-align:center; padding:25px 0; }
+.modal-type-proj .modal-body .txt em {font-weight:500; color:#0f67d3; }
+.modal-type-proj .modal-body .cnt_box .btn_area {padding-top:30px; text-align:center;}
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create {width:340px; background:#3360c5; text-align:center; border-radius:50px;}
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create:hover {background:#00bfff;}
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create span {display:inline-block; font-size:18px; font-weight:500; color:#fff; padding:13px 0 14px 0; }
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create span::before {display:inline-block; content:''; width:22px; height:19px; background:url("../images/ico_folder.png") no-repeat left top; margin-right:6px; vertical-align:bottom;}
+
