@@ -1614,61 +1614,69 @@ angular.module('common.services', ['LocalStorageModule'])
 			return dialog;
 		};
 
-		common.showCustomDialog = function ($scope, $event, popController, templateUrl, popControllerAs) {
-			$scope.error	= null;
-			$scope.success	= null;
+        common.showCustomDialog = function ($scope, $event, dialogOptions) {
+            $scope.error	= null;
+            $scope.success	= null;
 
-			if (!popControllerAs) {
-				popControllerAs = "popCtrl";
-			}
+            if (!dialogOptions.controllerAs) {
+                dialogOptions.controllerAs = "pop";
+            }
 
-			var optionsOrPreset = {
-				controller: popController,
-				controllerAS: popControllerAs,
-				templateUrl: templateUrl,
-				parent: angular.element(document.body),
-				autoWrap: true,
-				targetEvent: $event,
-				scope: $scope,
-				preserveScope: true,
-				clickOutsideToClose: false,
-				escapeToClose: true,
-				fullscreen: true,
-			};
+            var optionsOrPreset = {
+                controller: dialogOptions.controller,
+                controllerAS: dialogOptions.controllerAs,
+                templateUrl: dialogOptions.templateUrl + _VersionTimeTail(),
+                parent: angular.element(document.body),
+                autoWrap: true,
+                targetEvent: $event,
+                scope: $scope,
+                preserveScope: false,
+                clickOutsideToClose: false,
+                escapeToClose: true,
+                fullscreen: false,
+                multiple: true,
+            };
 
-			$mdDialog.show(optionsOrPreset)
+            var dialog	= $mdDialog.show(optionsOrPreset);
 
-			$scope.popCancel = function () {
-				$mdDialog.cancel();
-			};
+            $scope.popCancel = function () {
+                $scope.actionBtnHied = false;
+                $mdDialog.cancel();
+            };
 
-			$scope.popHide = function () {
-				$mdDialog.hide();
-			};
+            $scope.popHide = function () {
+                $scope.actionBtnHied = false;
+                $mdDialog.hide();
+            };
 
-			$scope.popAnswer = function (answer) {
-				$mdDialog.hide(answer);
-			};
-		};
+            $scope.popAnswer = function (answer) {
+                $scope.actionBtnHied = false;
+                $mdDialog.hide(answer);
+            };
 
-		common.showLocalsDialog = function ($event, controller, templateUrl, locals) {
-			var optionsOrPreset = {
-				controller: controller,
-				templateUrl: templateUrl,
-				parent: angular.element(document.body),
-				autoWrap: true,
-				targetEvent: $event,
-				clickOutsideToClose: false,
-				escapeToClose: true,
-				fullscreen: true,
-			};
+            $scope.actionBtnHied = false;
+            return dialog;
+        };
 
-			if (locals) {
-				optionsOrPreset.locals = locals;
-			}
+        common.showLocalsDialog = function ($event, dialogOptions) {
+            var optionsOrPreset = {
+                controller: dialogOptions.controller,
+                templateUrl: dialogOptions.templateUrl,
+                parent: angular.element(document.body),
+                autoWrap: true,
+                targetEvent: $event,
+                clickOutsideToClose: false,
+                escapeToClose: true,
+                fullscreen: false,
+                multiple: true,
+            };
 
-			$mdDialog.show(optionsOrPreset)
-		};
+            if (dialogOptions.locals) {
+                optionsOrPreset.locals = dialogOptions.locals;
+            }
+
+            return $mdDialog.show(optionsOrPreset);
+        };
 
 		/*공지사항 팝업 : 임시*/
         common.notice = function (obj, index){

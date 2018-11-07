@@ -142,7 +142,7 @@
 	"sampleMenu": {
 		"menu": {
 			"demoPage": "데모 페이지",
-			"demoNoPage": "데모 페이지(NoPadding)"
+			"demoNoPage": "데모 페이지(pd0)"
 		}
 	}
 }

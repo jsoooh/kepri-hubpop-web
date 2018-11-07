@@ -1075,13 +1075,14 @@ angular.module('common.controllers', [])
             var dialogOptions = {
                 controller : "commAddOrgProjecFormCtrl",
                 controllerAs: "pop",
+                templateUrl: _COMM_VIEWS_ + "/org/popOrgProjectForm.html",
                 formName : "popOrgProjectForm",
                 orgProject : orgProject,
                 callBackFunction : mc.addOrgProjectCallBackFun
             };
             $scope.actionBtnHied = false;
             $scope.actionLoading = false;
-            common.showDialog($scope, $event, dialogOptions);
+            common.showCustomDialog($scope, $event, dialogOptions);
         };
 
         mc.ssoUserLogin = false;

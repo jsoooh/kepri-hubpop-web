@@ -1886,10 +1886,9 @@ angular.module('common.services', ['LocalStorageModule'])
                     vm.validationService = new ValidationService({controllerAs: vm});
                     _DebugConsoleLog("popCommFormCtrl", 3);
                 };
-            } else {
-                if (!dialogOptions.controllerAs) {
-                    dialogOptions.controllerAs = "pop";
-                }
+            }
+            if (!dialogOptions.controllerAs) {
+                dialogOptions.controllerAs = "pop";
             }
 
             if (!dialogOptions.formName) {
@@ -2168,54 +2167,85 @@ angular.module('common.services', ['LocalStorageModule'])
             return dialog;
         };
 
-        common.showCustomDialog = function ($scope, $event, popController, templateUrl, popControllerAs) {
+        common.showCustomDialog = function ($scope, $event, dialogOptions) {
             $scope.error	= null;
             $scope.success	= null;
 
-            if (!popControllerAs) {
-                popControllerAs = "popCtrl";
+            if (!dialogOptions.dialogClassName) {
+                dialogOptions.dialogClassName = "modal-dialog";
             }
 
+            if (!dialogOptions.controller) {
+                dialogOptions.controller = function ($scope, ValidationService) {
+                    var vm = this;
+                    vm.validationService = new ValidationService({controllerAs: vm});
+                    _DebugConsoleLog("popCommFormCtrl", 3);
+                };
+            }
+
+            if (!dialogOptions.controllerAs) {
+                dialogOptions.controllerAs = "pop";
+            }
+
+            if (!dialogOptions.formName) {
+                dialogOptions.formName = "dialogForm";
+            }
+
+            $scope.dialogOptions = dialogOptions;
+
             var optionsOrPreset = {
-                controller: popController,
-                controllerAS: popControllerAs,
-                templateUrl: templateUrl,
+                controller: dialogOptions.controller,
+                controllerAs: dialogOptions.controllerAs,
+                templateUrl: dialogOptions.templateUrl + _VersionTimeTail(),
                 parent: angular.element(document.body),
                 autoWrap: true,
                 targetEvent: $event,
                 scope: $scope,
-                preserveScope: false,
+                preserveScope: true,
                 clickOutsideToClose: false,
                 escapeToClose: true,
                 fullscreen: false,
-                multiple: true,
+                multiple: false,
+                skipHide: true
             };
 
             var dialog	= $mdDialog.show(optionsOrPreset);
 
-            $scope.popCancel = function () {
-                $scope.actionBtnHied = false;
-                $mdDialog.cancel();
-            };
+            if (!$scope.popDialogOk) {
+                $scope.popDialogOk = function () {
+                    $mdDialog.hide();
+                };
+            }
 
-            $scope.popHide = function () {
-                $scope.actionBtnHied = false;
-                $mdDialog.hide();
-            };
+            if (!$scope.popCancel) {
+                $scope.popCancel = function () {
+                    $scope.actionBtnHied = false;
+                    $mdDialog.cancel();
+                };
+            }
 
-            $scope.popAnswer = function (answer) {
-                $scope.actionBtnHied = false;
-                $mdDialog.hide(answer);
-            };
+            if (!$scope.popHide) {
+                $scope.popHide = function () {
+                    $scope.actionBtnHied = false;
+                    $mdDialog.hide();
+                };
+            }
+
+            if (!$scope.popAnswer) {
+                $scope.popAnswer = function (answer) {
+                    $scope.actionBtnHied = false;
+                    $mdDialog.hide(answer);
+                };
+            }
 
             $scope.actionBtnHied = false;
             return dialog;
         };
 
-        common.showLocalsDialog = function ($event, controller, templateUrl, locals) {
+        common.showLocalsDialog = function ($event, dialogOptions) {
             var optionsOrPreset = {
-                controller: controller,
-                templateUrl: templateUrl,
+                controller: dialogOptions.controller,
+                templateUrl: dialogOptions.templateUrl,
                 parent: angular.element(document.body),
                 autoWrap: true,
                 targetEvent: $event,
@@ -2225,8 +2255,8 @@ angular.module('common.services', ['LocalStorageModule'])
                 multiple: true,
             };
 
-            if (locals) {
-                optionsOrPreset.locals = locals;
+            if (dialogOptions.locals) {
+                optionsOrPreset.locals = dialogOptions.locals;
             }
 
             return $mdDialog.show(optionsOrPreset);

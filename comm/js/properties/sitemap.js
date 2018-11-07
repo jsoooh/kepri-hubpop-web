@@ -288,7 +288,7 @@ angular.module('app')
                     }
 */
                     demo: {
-                        name: 'demoNoPage',
+                        name: 'demoPage',
                         stateKey: 'demo',
                         url: '/sample/demo/:demoPage'
                     },
