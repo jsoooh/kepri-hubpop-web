@@ -501,7 +501,14 @@ angular.module('common.controllers', [])
             var sltPortOrg;
             var sltPortOrgId = "";
             if (angular.isArray(portalOrgs)) {
-                mc.portalOrgs = portalOrgs;
+                mc.portalOrgs = [];
+                if (portalOrgs.length > 0) {
+                    angular.forEach(portalOrgs, function (portalOrg, key) {
+                        if (portalOrg.statusCode != 'deleting') {
+                            mc.portalOrgs.push(portalOrg);
+                        }
+                    });
+                }
                 if (mc.portalOrgs.length > 0) {
                     sltPortOrg = common.objectsFindCopyByField(mc.portalOrgs, "id", mc.sltPortalOrgId);
                     if (!angular.isObject(sltPortOrg) || !sltPortOrg.id) {
@@ -1060,8 +1067,18 @@ angular.module('common.controllers', [])
         };
 
         mc.addOrgProjectCallBackFun = function() {
-            mc.syncListAllProjects();
-            common.moveCommHomePage();
+            if (mc.stateKey == "commProjectMgmt") {
+                var mainCentents = common.getMainContentsCtrlScope().contents;
+                if (mainCentents && angular.isFunction(mainCentents.listOrgProjects)) {
+                    mainCentents.listOrgProjects();
+                } else {
+                    mc.syncListAllProjects();
+                    common.moveCommHomePage();
+                }
+            } else {
+                mc.syncListAllProjects();
+                common.moveCommHomePage();
+            }
         };
 
         mc.addOrgProjectFormOpen = function($event) {
