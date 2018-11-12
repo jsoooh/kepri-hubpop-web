@@ -1537,7 +1537,7 @@ angular.module('iaas.controllers')
 
     })
     .controller('iaasComputeTypeCreateCtrl', function ($scope, $location, $state, $sce, $http, $translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
-        _DebugConsoleLog("deployServerControllers.js : iaasComputeCreateCtrl start", 1);
+        _DebugConsoleLog("deployServerControllers.js : iaasComputeTypeCreateCtrl start", 1);
 
         var pop = this;
         pop.validationService = new ValidationService({controllerAs : pop});

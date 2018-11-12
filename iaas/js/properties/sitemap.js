@@ -39,6 +39,13 @@ angular.module('app')
                                         url: '/iaas/compute/detail/:instanceId',
                                         controller: 'iaasComputeDetailCtrl',
                                         templateUrl: _IAAS_VIEWS_+'/compute/computeDetail.html',
+                                    },
+                                    serverCreate: {
+                                        name: 'server_create',
+                                        stateKey: 'iaasComputeCreate',
+                                        url: '/iaas/compute/detail',
+                                        controller: 'iaasComputeCreateCtrl',
+                                        templateUrl: _IAAS_VIEWS_+'/compute/computeCreateForm.html',
                                     }
                                 },
                             },

@@ -11,6 +11,7 @@
 			"deploy_server_details" : "Service Instance Detail",
 			"server_snapshot": "Instance Snapshot",
 			"server_details": "Instance Detail",
+			"server_create" : "Instance Create",
 			"server_init_script": "Init Script",
 			"server_security_policy": "Security Policy",
 			"security_policy_rule" : "Security Policy Rule",

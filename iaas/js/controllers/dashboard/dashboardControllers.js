@@ -82,7 +82,10 @@ angular.module('iaas.controllers')
                                 sData.image.iconFileName = iData.iconFileName;
                             }
                         });
-                        if (!sData.image.iconFileName){
+                        if (!sData.image) {
+                            sData.image = {};
+                        }
+                        if (sData.image.iconFileName){
                             sData.image.iconFileName = "im_logo_compute";
                         }
                     });

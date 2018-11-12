@@ -1092,7 +1092,6 @@ angular.module('common.controllers', [])
             var dialogOptions = {
                 controller : "commAddOrgProjecFormCtrl",
                 controllerAs: "pop",
-                templateUrl: _COMM_VIEWS_ + "/org/popOrgProjectForm.html",
                 formName : "popOrgProjectForm",
                 orgProject : orgProject,
                 callBackFunction : mc.addOrgProjectCallBackFun

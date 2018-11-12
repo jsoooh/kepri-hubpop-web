@@ -11,6 +11,7 @@
 			"deploy_server_details" : "서비스 인스턴스 상세",
 			"server_snapshot" : "인스턴스 스냅샷",
 			"server_details" : "인스턴스 상세",
+			"server_create" : "인스턴스 등록",
 			"server_init_script" : "초기화 스크립트",
 			"server_security_policy" : "보안그룹",
 			"security_policy_rule" : "규칙관리",
