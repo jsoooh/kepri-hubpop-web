@@ -884,8 +884,9 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.selectSpec = function() {
-            if(ct.specValue){
-                ct.data.spec = angular.fromJson(ct.specValue);
+            var sltSpec = common.objectsFindCopyByField(ct.specList, "uuid", ct.specUuid);
+            if(sltSpec && sltSpec.uuid){
+                ct.data.spec = sltSpec;
             }else{
                 ct.data.spec.vcpus = 0;
                 ct.data.spec.ram = 0;
