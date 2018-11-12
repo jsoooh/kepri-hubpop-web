@@ -1,0 +1,212 @@
+<div class="message_area">
+	<div class="msg_bg"></div>
+	<div class="msg_txt"><span>원본 백업 이미지로부터 새로운 서버를 생성합니다.</span></div>
+</div>
+
+<div class="panel_area">
+	<div class="panel_box pn_l">
+		<div class="pn_head">
+			<h4 class="pnh_tit">백업이미지 서버 만들기</h4>
+		</div>
+		<div class="pn_body">
+			<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+			<ul class="form_list">
+				<li>
+					<div class="pnb_tit">
+						백업 이미지 이름<span class="ico_info"></span>
+					</div>
+					<input type="text" class="form-control" maxlength="50" placeholder="backupImage_name" disabled>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i>서버 이름<span class="ico_info"></span>
+					</div>
+					<input type="text" class="form-control" maxlength="50" placeholder="서버 이름을 입력하세요.">
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 사양 선택<span class="ico_info"></span>
+					</div>
+					<div class="tbl type1">
+						<table class="table">
+							<colgroup>
+								<col style="width:10%;">
+								<col style="width:15%;">
+								<col style="width:20%;">
+								<col style="width:20%;">
+								<col style="width:20%;">
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col"></th>
+									<th scope="col">종류</th>
+									<th scope="col">vCPU</th>
+									<th scope="col">메모리</th>
+									<th scope="col">디스크(OS설치/여유)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<div class="radio radio-only">
+											<input type="radio" name="radio0" id="radio0-1" checked>
+											<label for="radio0-1"></label>
+										</div>
+									</td>
+									<td>소형</td>
+									<td>1 Core</td>
+									<td>2GB</td>
+									<td>20GB<span>(10GB/10GB)</span></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="radio radio-only">
+											<input type="radio" name="radio0" id="radio0-2">
+											<label for="radio0-2"></label>
+										</div>
+									</td>
+									<td>중형</td>
+									<td>2 Core</td>
+									<td>4GB</td>
+									<td>40GB<span>(10GB/30GB)</span></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="radio radio-only">
+											<input type="radio" name="radio0" id="radio0-3">
+											<label for="radio0-3"></label>
+										</div>
+									</td>
+									<td>대형</td>
+									<td>4 Core</td>
+									<td>8GB</td>
+									<td>80GB<span>(10GB/70GB)</span></td>
+								</tr>
+								<tr class="tbl_disabled">
+									<td>
+										<div class="radio radio-only">
+											<input type="radio" name="radio0" id="radio0-4" disabled>
+											<label for="radio0-4"></label>
+										</div>
+									</td>
+									<td>초대형</td>
+									<td>8 Core</td>
+									<td>16GB</td>
+									<td>160GB<span>(10GB/150GB)</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						설명<span class="ico_info"></span>
+					</div>
+					<div class="text_wrap">
+						<textarea rows="5" cols=""></textarea>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="pn_footer">
+			<div class="btn-btm mgt0">
+				<button type="button" name="button" class="btn btn-color1 btn-md">서버 생성</button>
+				<button type="button" name="button" class="btn btn-color2 btn-md">취소</button>
+			</div>
+		</div>
+	</div>
+	<div class="panel_box pn_r">
+	
+		<div class="pn_head">
+			<h4 class="pnh_tit ico01">서버 기본정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">서버 이름</span>
+						<span class="s_txt">dev-svr-001</span>
+					</li>
+					<li>
+						<span class="s_tit">서버 OS</span>
+						<span class="s_txt">Ubuntu 16.4</span>
+					</li>
+					<li>
+						<span class="s_tit">서버 사양</span>
+						<span class="s_txt">소형</span>
+						<div class="s_inner_cont">
+							<div class="innr_tbl">
+								<table>
+									<colgroup>
+										<col width="30" />
+										<col width="30" />
+										<col width="30" />
+									</colgroup>
+									<thead>
+										<tr>
+											<th>vCPU</th>
+											<th>메모리</th>
+											<th>디스크</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>2Core</td>
+											<td>4GB</td>
+											<td>10GB</td>
+										</tr>
+									</tbody>
+								</table>
+								<span class="info_txt">*  ‘디스크’ 크기는 OS 설치에 필요한 디스크 공간을 포함한 수치입니다.</span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="pn_head brdt">
+			<h4 class="pnh_tit ico02">추가 디스크</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">디스크 크기</span>
+						<span class="s_txt">20GB</span>
+					</li>
+					<li>
+						<span class="s_tit">디스크 유형<span class="ico_info"></span></span>
+						<span class="s_txt">Volume Storage</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="pn_head brdt">
+			<h4 class="pnh_tit ico03">프로젝트 사용가능 디스크 정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">전체 쿼터</span>
+						<span class="s_txt">10TB</span>
+					</li>
+					<li>
+						<span class="s_tit">현재 사용량</span>
+						<span class="s_txt">1.5TB</span>
+					</li>
+					<li>
+						<span class="s_tit">잔여 용량</span>
+						<span class="s_txt">8.5TB</span>
+					</li>
+				</ul>
+			</div>
+			<div class="btn-btm">
+				<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
+			</div>
+		</div>
+		
+	</div>
+</div>

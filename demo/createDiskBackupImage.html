@@ -1,0 +1,192 @@
+<div class="message_area">
+	<div class="msg_bg"></div>
+	<div class="msg_txt"><span>원본 백업 이미지로부터 새로운 디스크를 생성합니다.</span></div>
+</div>
+
+<div class="panel_area">
+	<div class="panel_box pn_l">
+		<div class="pn_head">
+			<h4 class="pnh_tit">백업이미지 디스크 만들기</h4>
+		</div>
+		<div class="pn_body">
+			<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+			<ul class="form_list">
+				<li>
+					<div class="pnb_tit">
+						백업 이미지 이름<span class="ico_info"></span>
+					</div>
+					<input type="text" class="form-control" maxlength="50" placeholder="backupImage_name" disabled>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 디스크 이름<span class="ico_info"></span>
+					</div>
+					<input type="text" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요.">
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 디스크 크기<span class="ico_info"></span>
+						<div class="disk_info">최대 100GB</div>
+					</div>
+					<div class="disk_area">
+						<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
+						<div class="disk_box">
+							<div class="rangeWrap type2">
+								<slider
+									slider-id="ex1Slider2"
+									ng-model="pop.data.size"
+									value="pop.data.size"
+									min="1"
+									max="(pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)"
+									step="1"
+									slider_tooltip_position="top"
+									formatter="pop.formatter(pop.data.size)"
+								>
+								</slider>
+								<div class="range-text">
+									<input type="text" class="form-control" ng-model="pop.data.size" name="volumeSize" ng-change="pop.fn.changeVolumeSize()" maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span>
+									<span class="range-txt">최대 {{(pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) | number:0}}G</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						설명<span class="ico_info"></span>
+					</div>
+					<div class="text_wrap">
+						<textarea rows="5" cols=""></textarea>
+					</div>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 가상서버와 연결<span class="ico_info"></span>
+					</div>
+					<div>
+						<select name="" class="form-control">
+							<option value="">KEPCOPROJECT-A-VM-001</option>
+							<option value="">KEPCOPROJECT-A-VM-002</option>
+							<option value="">KEPCOPROJECT-A-VM-003</option>
+						</select>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="pn_footer">
+			<div class="btn-btm mgt0">
+				<button type="button" name="button" class="btn btn-color1 btn-md">디스크 추가</button>
+				<button type="button" name="button" class="btn btn-color2 btn-md">취소</button>
+			</div>
+		</div>
+	</div>
+	<div class="panel_box pn_r">
+		<div class="pn_head">
+			<h4 class="pnh_tit ico02">디스크 기본정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">디스크 이름</span>
+						<span class="s_txt">dev-disk-001</span>
+					</li>
+					<li>
+						<span class="s_tit">디스크 크기</span>
+						<span class="s_txt">20GB</span>
+					</li>
+					<li>
+						<span class="s_tit">디스크 유형<span class="ico_info"></span></span>
+						<span class="s_txt">Volume Storage</span>
+					</li>
+					<li>
+						<span class="s_tit">디스크 설명</span>
+						<!-- <span class="s_txt">text-area</span> -->
+						<div class="s_inner_cont">
+							<span>
+								디스크 설명 영역입니다.
+							</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="pn_head brdt">
+			<h4 class="pnh_tit ico01">연결대상 가상서버 정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">서버 이름</span>
+						<span class="s_txt">10GB</span>
+					</li>
+					<li>
+						<span class="s_tit">서버 OS</span>
+						<span class="s_txt">Ubuntu 16.4</span>
+					</li>
+					<li>
+						<span class="s_tit">서버 접속IP</span>
+						<span class="s_txt">192.168.200.35</span>
+					</li>
+					<li>
+						<span class="s_tit">서버 사양</span>
+						<span class="s_txt">소형</span>
+						<div class="s_inner_cont">
+							<div class="innr_tbl">
+								<table>
+									<colgroup>
+										<col width="30" />
+										<col width="30" />
+										<col width="30" />
+									</colgroup>
+									<thead>
+										<tr>
+											<th>vCPU</th>
+											<th>메모리</th>
+											<th>디스크</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>2Core</td>
+											<td>4GB</td>
+											<td>10GB</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="pn_head brdt">
+			<h4 class="pnh_tit ico03">프로젝트 사용가능 디스크 정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">전체 쿼터</span>
+						<span class="s_txt">10TB</span>
+					</li>
+					<li>
+						<span class="s_tit">현재 사용량</span>
+						<span class="s_txt">1.5TB</span>
+					</li>
+					<li>
+						<span class="s_tit">잔여 용량</span>
+						<span class="s_txt">8.5TB</span>
+					</li>
+				</ul>
+			</div>
+			<div class="btn-btm">
+				<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
+			</div>
+		</div>
+		
+	</div>
+</div>
