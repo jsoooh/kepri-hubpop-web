@@ -26,7 +26,12 @@
 						<ul class="ul-list1">
 							<li ng-repeat="image in contents.imageList">
 								<div class="radio1 radio-inline">
-								   <input type="radio"  id="{{image.$$hashKey}}" name="froms.selectImageForm.imageId" ng-click="contents.data.image = image; contents.imageTmpNm = image.serviceName; ">
+								   <input type="radio"  
+								   	      id="{{image.$$hashKey}}" 
+								   	      name="froms.selectImageForm.imageId" 
+								   	      ng-model="contents.serviceNm"
+								   	      value="{{image.serviceName}}"
+								   	      ng-click="contents.fn.imageClick(image);">
 								   <label for="{{image.$$hashKey}}" class="label">
 										<img ng-src="images/thum/{{image.iconFileName}}.png"  class="im">
 								   </label>
@@ -40,8 +45,9 @@
 					</li>
 					<li>
 						<div class="pnb_tit">
-							<i class="i_star"></i> 사양 선택<span class="ico_info"></span>
+							<i class="i_star"></i> 사양 선택<span class="ico_info"></span>   <img ng-if="!contents.specUuid" src="images/loading_sm.gif">
 						</div>
+						
 						<div class="tbl type1">
 							<table class="table">
 								<colgroup>
@@ -65,7 +71,12 @@
 									<tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m'}"  >
 										<td>
 											<div class="radio radio-only" >
-												<input type="radio" name="spec_radio" ng-model="contents.specUuid" id="spec_radio_{{key}}" value="{{spec.uuid}}" ng-change="contents.fn.selectSpec();">
+												<input type="radio" 
+													   name="spec_radio" 
+													   ng-model="contents.specUuid" 
+													   id="spec_radio_{{key}}" 
+													   value="{{spec.uuid}}" 
+													   ng-change="contents.fn.selectSpec();">
 										
 												<label for="spec_radio_{{key}}"></label>
 											</div>
@@ -73,7 +84,7 @@
 										<td>{{spec.name}}</td>
 										<td>{{spec.vcpus}} Core</td>
 										<td>{{spec.ram/1024|number}}GB</td>
-										<td>{{spec.disk}}GB<span>(10GB/10GB)</span></td>
+										<td>{{spec.disk}}GB<span>(10GB/{{spec.disk}}GB)</span></td>
 									</tr>
 							
 								</tbody>
@@ -89,12 +100,15 @@
 							<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
 							<div class="disk_box">
 								<div class="rangeWrap type2">
-								<!-- <input type="hidden" ng-model="contents.volume.type" ng-init="contents.volume.type = 'Volume Storage'" name="volumeType" /> -->
-								<!-- <input type="hidden" ng-model="contents.volume.name" ng-init="contents.volume.name = '{{contents.data.name}}_volume01'" name="volumeName" /> -->
 									<rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
 									<div class="range-text">
-										<!-- <input type="text" class="form-control" ng-model="contents.volumeSize"  name="volumeSize" ng-change="contents.fn.changeVolumeSize()" maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span> -->
-										<input type="text" class="form-control" ng-model="contents.volumeSize"  name="volumeSize"  maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span>
+										<input type="text" 
+											   class="form-control" 
+											   ng-model="contents.volumeSize"  
+											   name="volumeSize"  
+											   maxlength="4" 
+											   only-digits style="width:25%; display: inline-block;"> 
+										<span class="app-tit">GB</span>
 									</div>
 								</div>
 							</div>
@@ -108,7 +122,6 @@
 			</div>
 			<div class="pn_footer">
 				<div class="btn-btm mgt0">
-					<!-- <button type="button" name="button" class="btn btn-color1 btn-md">서버 생성</button> -->
 					<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createServer();">서버 생성</button>
 					<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToPage('/iaas')">취소</button>
 				</div>

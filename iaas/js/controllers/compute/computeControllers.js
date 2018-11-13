@@ -876,7 +876,6 @@ angular.module('iaas.controllers')
         
         
         //사양선택 이벤트 2018.11.13 sg0730 add
-        
         ct.fn.selectSpec = function() 
         {
             var sltSpec = common.objectsFindCopyByField(ct.specList, "uuid", ct.specUuid);
@@ -932,7 +931,9 @@ angular.module('iaas.controllers')
                 ct.fn.getInitScript(angular.fromJson(ct.initScriptValue).scriptId);
             }
         };
-
+        
+        
+        
         //이미지 리스트 조회
         ct.fn.imageListSearch = function() {
             $scope.main.loadingMainBody = true;
@@ -948,7 +949,9 @@ angular.module('iaas.controllers')
             param.imageType = ct.imageType;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                ct.imageList = data.content.images;
+                ct.imageList  = data.content.images;
+                ct.data.image = ct.imageList[0];
+                ct.fn.imageClick (ct.data.image) ;
                 ct.fn.getSecurityPolicy();
             });
             returnPromise.error(function (data, status, headers) {
@@ -956,7 +959,15 @@ angular.module('iaas.controllers')
                 common.showAlertError(data.message);
             });
         };
-
+        
+        ct.fn.imageClick = function (image)
+        {
+        	var sltSpec = common.objectsFindCopyByField(ct.specList, "uuid", ct.specUuid);
+        	ct.data.image = image ;
+        	ct.serviceNm = image.serviceName
+        	ct.imageTmpNm = image.serviceName; 
+        }
+        
         // 네트워크 리스트 조회
         ct.fn.networkListSearch = function() {
             var param = {
@@ -999,9 +1010,6 @@ angular.module('iaas.controllers')
             {
                 tenantId : ct.data.tenantId
             }
-            
-            //$scope.main.loadingMainBody = true;
-            
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
             
             returnPromise.success(function (data, status, headers) 
@@ -1089,6 +1097,7 @@ angular.module('iaas.controllers')
         };
 
         if(ct.data.tenantId) {
+        	ct.fn.getSpecList();
             ct.fn.imageListSearch();
             ct.fn.networkListSearch();
             ct.fn.getTenantResource();
@@ -1129,10 +1138,6 @@ angular.module('iaas.controllers')
                 ct.volume.name = instance.name+'_volume01';
                 ct.volume.type = 'Volume Storage';
                 ct.volume.size = ct.volumeSize;
-                
-                console.log("volume ====>"+ct.volume.name);
-                console.log("type ====>"+ct.volume.type);
-                console.log("size ====>"+ct.volume.size);
           
                 instance.spec = ct.data.spec;
                 $scope.main.loadingMainBody = true;
@@ -1177,38 +1182,6 @@ angular.module('iaas.controllers')
         };
       
         
-     /*   
-        //볼륨생성 추가 2018.11.13 sg0730 Add
-        ct.createStorageVolumeAction = function() 
-        {
-            //$scope.main.loadingMainBody = true;
-            //pop.data.tenantId = pop.userTenant.tenantId;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'POST', {volume:ct.data});
-            
-            returnPromise.success(function (data, status, headers) 
-            {
-            	// 서버생성후 -> 볼륨 생성 후 sucess 처리.
-                $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("생성 되었습니다.");
-                // 페이지 이동으로 바꿔야 하고
-                //$scope.main.goToPage("/iaas/compute/detail/85fd2266-4c54-439b-be0b-28735dc8dcfb"); 생성후 대쉬보드 화면으로 이동.
-            	
-                //$scope.contents.fn.getStorageList();
-            });
-            
-            returnPromise.error(function (data, status, headers) 
-            {
-            	pop.popCancel();
-                common.showAlert("message",data.message);
-            });
-            
-            returnPromise.finally(function (data, status, headers) 
-            {
-                $scope.main.loadingMainBody = false;
-            });
-        };
-        
-        */
         
         
         
