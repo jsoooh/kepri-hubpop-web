@@ -8,6 +8,11 @@
     var _VERSION_TAIL_HEAD_ = "?version=" + _VERSION_;
     var _VERSION_TAIL_ = _VERSION_TAIL_HEAD_ + ((_MODE_ == "DEBUG" && _DEBUG_LEVEL_ > 1) ? "." + _TOME_ : "");
 
+    var _COOKIES_DOMAIN_ = _DOMAIN_;
+    if (_DOMAIN_ && _DOMAIN_.substring(0, 4) == 0) {
+        _COOKIES_DOMAIN_ = _DOMAIN_.substring(3);
+	}
+
     // upload 진행 바 표현 최소 파일 사이즈 - 작은 사이즈의 경우 표현이 의미 없음
     var _UPLOADING_VIEW_MIN_SIZE_ = 10240; // 10MB
 
@@ -235,7 +240,7 @@
 	} else {
         document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
 	}
-    document.writeln('		<div class="rightCnt" ng-class="{ \'pd0\' : (main.stateKey == \'login\') }" id="{{main.rightCntId}}">');
+    document.writeln('		<div class="rightCnt" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }" id="{{main.rightCntId}}">');
     document.writeln('			<div ng-if="main.isLoginPage" class="titWrap" id="mainTop" ng-include="main.topTemplateUrl"></div>');
     document.writeln('			<div ui-view="mainBody"></div>');
     document.writeln('		</div>');
@@ -261,7 +266,7 @@
     document.writeln('<div growl></div>');
     document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
     document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'none\' : \'block\' }">'); //로딩바 영역
-    document.writeln('	<div class="loadWrap_spn">');
+    document.writeln('	<div class="loadWrap_spn"  ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
     document.writeln('		<div class="loadBox_spn">');
     document.writeln('			<div class="lds-css ng-scope">');
     document.writeln('				<div class="lds-spinner" style="height:100%">');
