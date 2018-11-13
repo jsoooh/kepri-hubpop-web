@@ -38,10 +38,12 @@
 				<div spin="defaultSpinnerConfig" spin-if="error"></div>
 			</div>
 		</div>
-		<form name="{{ dialogOptions.formName}}" novalidate>
-		<div ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl" class="tbw type1">
-		</div>
+		<form ng-if="!dialogOptions.notForm" name="{{ dialogOptions.formName }}" novalidate>
+			<div ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl" class="tbw type1">
+			</div>
 		</form>
+		<div ng-if="dialogOptions.notForm" ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl" class="tbw type1">
+		</div>
 	</div>
 	<div class="modal-footer" ng-show="!actionLoading && dialogOptions.btnTemplateUrl" ng-include="dialogOptions.btnTemplateUrl">
 	</div>

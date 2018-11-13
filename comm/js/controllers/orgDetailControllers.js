@@ -1120,24 +1120,32 @@ angular.module('portal.controllers')
             });
         };
 
-        // 사용자 신규 추가 버튼 클릭
-        ct.popOrgProjectNewAddUsersOpen = function () {
+        ct.replaceCallBackFunction = function () {
+            ct.listOrgUsers();
+        };
+
+        // 사용자 검색 추가 버튼 클릭
+        ct.popOrgProjectSchAddUsersOpen = function ($event) {
             $scope.dialogOptions = {
-                controller : "applicationRePushFormCtrl",
-                sltApp : angular.copy(ct.app),
-                callBackFunction : ct.redeployCallBackFunction
+                controller : "commPopOrgProjectSchAddUsersCtrl",
+                formName : 'popOrgProjectSchAddUsersForm',
+                dialogClassName : "modal-xlg",
+                orgProject : angular.copy(ct.selOrgProject),
+                callBackFunction : ct.replaceCallBackFunction
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
             $scope.actionLoading = true; // action loading
         };
 
-        // 사용자 검색 추가 버튼 클릭
-        ct.popOrgProjectSchAddUsersOpen = function () {
+        // 사용자 신규 추가 버튼 클릭
+        ct.popOrgProjectNewAddUsersOpen = function ($event) {
             $scope.dialogOptions = {
-                controller : "applicationRePushFormCtrl",
-                sltApp : angular.copy(ct.app),
-                callBackFunction : ct.redeployCallBackFunction
+                controller : "commPopOrgProjectNewAddUsersCtrl",
+                dialogClassName : "modal-xlg",
+                formName : 'popOrgProjectNewAddUsersForm',
+                orgProject : angular.copy(ct.selOrgProject),
+                callBackFunction : ct.replaceCallBackFunction
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -1304,57 +1312,62 @@ angular.module('portal.controllers')
 
         ct.pageLoadData();
     })
-    .controller('commOrgProjectUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
-        _DebugConsoleLog('orgDetailControllers.js : commOrgProjectUsersCtrl', 1);
+    .controller('commPopOrgProjectSchAddUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, ValidationService, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
+        _DebugConsoleLog('orgDetailControllers.js : commPopOrgProjectSchAddUsersCtrl', 1);
 
-        var ct = this;
+        var pop = this;
 
-        ct.orgRoleNames = CONSTANTS.roleName;
-        ct.paramId = $stateParams.orgId;
+        pop.validationService = new ValidationService();
+        pop.formName = $scope.dialogOptions.formName;
 
-        ct.newOrgUsers = [];
-        // 관리자 존재 여부 조회
-        ct.isAdmin = false;
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
+        $scope.dialogOptions.title = "직접 등록";
+        $scope.dialogOptions.okName = "생성";
+        $scope.dialogOptions.closeName = "취소";
+        $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectSchAddUsersForm.html" + _VersionTail();
+
+
+        pop.orgProject = $scope.dialogOptions.orgProject;
+
+        $scope.actionBtnHied = false;
+        $scope.actionLoading = false;
+
+        $scope.popDialogOk = function () {
+            pop.addSchOrgUsersAction();
+        };
+
+        pop.btnClickCheck = false;
+
+        pop.orgRoleNames = CONSTANTS.roleName;
+        pop.paramId = $stateParams.orgId;
+
+        pop.schKey = "";
+        pop.schText = "";
+
+        pop.schAddOrgUsers = [];
+        pop.schAddOrgUserEmails = [];
 
         // paging
-        ct.pageOptions = {
+        pop.pageOptions = {
             currentPage : 1,
             pageSize : 5,
             total : 1
         };
 
-        ct.addNewOrgUsers = function () {
-            ct.newOrgUsers.push({
-                roleName : ct.orgRoleNames.user,
-                add : true,
-                del : false,
-                ngDisabled : ct.ngDisabled,
-            });
-        };
-
-        ct.tab_ngClick = function (tabId) {
-            $('#tab1-1, #tab1-2').removeClass('active');
-            $('#' + tabId).addClass('active');
-        };
-
         // 등록 사용자 목록 조회
-        ct.listOrgUsers = function () {
-            ct.orgUserEmails = [];
-            var promise = orgService.listOrgUsers(ct.paramId);
+        pop.listOrgUsers = function () {
+            pop.orgUserEmails = [];
+            var promise = orgService.listOrgUsers(pop.paramId);
             promise.success(function (data) {
                 var orgUsers = data.items;
                 if (orgUsers && orgUsers.length > 0) {
                     angular.forEach(orgUsers, function (orgUser, key) {
-                        ct.orgUserEmails.push(orgUser.usersInfo.email);
-
-                        if (orgUser.isAdmin)  {
-                            ct.isAdmin = true;
-                        }
+                        pop.orgUserEmails.push(orgUser.usersInfo.email);
                     });
                 }
-                ct.loadListOrgUsers = true;
-                if (ct.loadListAllUsers) {
-                    ct.setOrgNotUsers();
+                pop.loadListOrgUsers = true;
+                if (pop.loadListAllUsers) {
+                    pop.setOrgNotUsers();
                 }
             });
             promise.error(function (data) {
@@ -1362,15 +1375,15 @@ angular.module('portal.controllers')
         };
 
         // 전체 사용자 조회
-        ct.listAllUsers = function () {
+        pop.listAllUsers = function () {
             $scope.main.loadingMainBody = true;
             var promise = memberService.listAllUsers();
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.allUsers = data.items;
-                ct.loadListAllUsers = true;
-                if (ct.loadListOrgUsers) {
-                    ct.setOrgNotUsers();
+                pop.allUsers = data.items;
+                pop.loadListAllUsers = true;
+                if (pop.loadListOrgUsers) {
+                    pop.setOrgNotUsers();
                 }
             });
 
@@ -1380,304 +1393,166 @@ angular.module('portal.controllers')
         };
 
         // 조직 신규 사용자 등록을 위한 미동록 사용 목록 조회
-        ct.setOrgNotUsers = function () {
-            ct.orgNotUsers = [];
-            if (ct.allUsers && ct.allUsers.length > 0) {
-                angular.forEach(ct.allUsers, function (user, key) {
-                    if (ct.orgUserEmails.indexOf(user.email) == -1) {
-                        if (!ct.schName || user.name.toLowerCase().indexOf(ct.schName.toLowerCase()) > -1) {
-                            user.roleName = ct.orgRoleNames.user;
-                            ct.orgNotUsers.push(user);
+        pop.setOrgNotUsers = function () {
+            pop.orgNotUsers = [];
+            if (pop.allUsers && pop.allUsers.length > 0) {
+                angular.forEach(pop.allUsers, function (user, key) {
+                    if (pop.orgUserEmails.indexOf(user.email) == -1 && pop.schAddOrgUserEmails.indexOf(user.email) == -1) {
+                        if (pop.schText) {
+                            if (pop.schKey == "email" || pop.schKey == "name") {
+                                if (user[pop.schKey].toLowerCase().indexOf(pop.schText.toLowerCase()) > -1) {
+                                    pop.orgNotUsers.push(angular.copy(user));
+                                }
+                            } else {
+                                if (user.email.toLowerCase().indexOf(pop.schText.toLowerCase()) > -1 || user.name.toLowerCase().indexOf(pop.schText.toLowerCase()) > -1) {
+                                    pop.orgNotUsers.push(angular.copy(user));
+                                }
+                            }
+                        } else {
+                            pop.orgNotUsers.push(angular.copy(user));
                         }
                     }
                 });
             }
-            ct.pageOptions.total = ct.orgNotUsers.length;
+            pop.pageOptions.total = pop.orgNotUsers.length;
+            var maxCurrentPage = parseInt(pop.pageOptions.total/pop.pageOptions.pageSize) + 1;
+            if (pop.pageOptions.currentPage > maxCurrentPage) {
+                pop.pageOptions.currentPage = maxCurrentPage;
+            }
         };
 
         // 전체 선택
-        ct.checkAll = function ($event) {
-            for (var i = 0; i < ct.orgNotUsers.length; i++) {
-                if ((i >= (ct.pageOptions.pageSize * (ct.pageOptions.currentPage-1))) && (i < (ct.pageOptions.pageSize * (ct.pageOptions.currentPage)))) {
-                    ct.orgNotUsers[i].checked = $event.currentTarget.checked;
+        pop.checkAll = function ($event) {
+            for (var i = 0; i < pop.orgNotUsers.length; i++) {
+                if ((i >= (pop.pageOptions.pageSize * (pop.pageOptions.currentPage-1))) && (i < (pop.pageOptions.pageSize * (pop.pageOptions.currentPage)))) {
+                    pop.orgNotUsers[i].checked = $event.currentTarget.checked;
                 }
+            }
+        };
+
+        pop.sltUserMove = function () {
+            if (pop.orgNotUsers && pop.orgNotUsers.length > 0) {
+                angular.forEach(pop.orgNotUsers, function (user, key) {
+                    if (user.checked) {
+                        var addOrgUser = angular.copy(user);
+                        addOrgUser.roleName = pop.orgRoleNames.user;
+                        addOrgUser.checked = false;
+                        pop.schAddOrgUserEmails.push(addOrgUser.email);
+                        pop.schAddOrgUsers.push(addOrgUser);
+                    }
+                });
+                pop.setOrgNotUsers();
+            }
+        };
+
+        pop.sltOrgUserClear = function () {
+            if (pop.schAddOrgUsers && pop.schAddOrgUsers.length > 0) {
+                pop.schAddOrgUserEmails = [];
+                for (var i=(pop.schAddOrgUsers.length-1); i>=0; i--) {
+                    pop.schAddOrgUserEmails.splice(i, 1);
+                    if (pop.schAddOrgUsers[i].checked) {
+                        pop.schAddOrgUsers.splice(i, 1);
+                    } else {
+                        pop.schAddOrgUserEmails.push(pop.schAddOrgUsers[i].email);
+                    }
+                }
+                angular.forEach(pop.schAddOrgUsers, function (orgUser, key) {
+                });
+                pop.setOrgNotUsers();
             }
         };
 
         // 사용자 조회 등록
-        ct.addOrgUsers = function () {
-            var adminCnt = 0;
-            ct.orgUserRequests = [];
-
-            for (var i = 0; i < ct.orgNotUsers.length; i++) {
-                if (ct.orgNotUsers[i].checked) {
-                    var roleName = ct.isAdmin ? 'USER' : ct.orgNotUsers[i].roleName;
-                    ct.orgUserRequests.push({
-                        email : ct.orgNotUsers[i].email,
-                        name : ct.orgNotUsers[i].name,
-                        userRole : roleName
-                    });
-
-                    if (roleName == 'ADMIN') {
-                        adminCnt++;
-                    }
-                }
+        pop.addSchOrgUsersAction = function () {
+            if (pop.btnClickCheck) {
+                return;
             }
+            pop.btnClickCheck = true;
 
-            if (adminCnt > 1) {
-                common.showAlert('', '프로젝트 관리자는 한 명만 가능합니다.');
+            if (!pop.schAddOrgUsers || pop.schAddOrgUsers.length == 0) {
+                common.showAlert($translate.instant('message.mi_dont_exist_checked'));
+                pop.btnClickCheck = false;
                 return;
             }
 
-            if (ct.orgUserRequests.length == 0) {
-                common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
-                return;
-            }
-            
-            ct.addOrgUsersAction(ct.orgUserRequests)
-        };
+            var orgUserRequests = [];
+            angular.forEach(pop.schAddOrgUsers, function (orgUser) {
+                orgUserRequests.push({
+                    email : orgUser.email,
+                    name : orgUser.name,
+                    userRole : orgUser.roleName
+                });
+            });
 
-        // 사용자 등록 액션
-        ct.addOrgUsersAction = function (orgUserRequests) {
-            var params = {
-                type : 'add',
-                orgUserRequests : orgUserRequests
-            };
             $scope.main.loadingMain = true;
-            var promise = orgService.orgUserAdds(ct.paramId, params);
+            common.mdDialogHide();
+            var promise = orgService.orgUserAdds(pop.paramId, orgUserRequests);
             promise.success(function (data) {
-                ct.checkboxAll = false;
-                common.locationPath('/comm/projects/projectDetail/' + ct.paramId);
+                pop.btnClickCheck = false;
+                $scope.main.loadingMain = false;
                 common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
             });
             promise.error(function (data) {
+                pop.btnClickCheck = false;
                 $scope.main.loadingMain = false;
                 common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
             });
         };
-        
-        // 사용자 아이디 중복 체크
-        ct.checkOrgUserDup = function (email, index) {
-            if (!email) {
-                return;
-            }
 
-            // 등록 사용자 목록에서 조회
-            for (var i = 0; i < ct.orgUserEmails.length; i++) {
-                if (ct.orgUserEmails[i] == email) {
-                    common.showAlertError('이미 회원가입/프로젝트 멤버 추가한 아이디(' + email + ')입니다.');
-                    return;
-                }
-            }
-
-            // 미등록 사용자 목록에서 조회
-            for (var i = 0; i < ct.orgNotUsers.length; i++) {
-                if (ct.orgNotUsers[i].email == email) {
-                    common.showAlertError('이미 회원가입한 아이디(' + email + ')입니다.');
-                    return;
-                }
-            }
-
-            // 등록하려는 사용자 목록에서 조회
-            for (var i = 0; i < ct.newOrgUsers.length; i++) {
-                if (i != index && ct.newOrgUsers[i].email.indexOf(email) > -1) {
-                    common.showAlertError('직접 등록 사용자 목록에 존재하는 아이디(' + email + ')입니다.');
-                    return;
-                }
-            }
-
-            common.showAlertSuccess('회원가입 가능한 아이디(' + email + ')입니다.');
+        pop.pageListOrgUsersLoadData = function (page) {
+            pop.pageOptions.currentPage = page;
+            pop.loadListOrgUsers = false;
+            pop.loadListAllUsers = false;
+            pop.listOrgUsers();
+            pop.listAllUsers();
         };
 
-        ct.checkPasswordPattern = function (password) {
-            var regex = /^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{10,20}$/;
-            if(!regex.test(password)) {
-                common.showAlertWarning('영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오.');
-                return false;
-            }
-            return true;
-        };
-
-        // 사용자 직접 등록
-        ct.addCustomOrgUser = function (item) {
-            if (!item.name) {
-                common.showAlertWarning('이름을 입력하세요');
-                return;
-            } else if (!item.position) {
-                common.showAlertWarning('소속을 입력하세요');
-                return;
-            } else if (!item.email) {
-                common.showAlertWarning('아이디를 입력하세요');
-                return;
-            } else if (!item.password) {
-                common.showAlertWarning('비밀번호를 입력하세요');
-                return;
-            } else if (!ct.checkPasswordPattern(item.password)) {
-                return;
-            }
-
-
-            for (var i = 0; i < ct.newOrgUsers.length; i++) {
-                var orgUser = ct.newOrgUsers[i];
-                orgUser.add = false;
-                orgUser.del = true;
-            }
-
-            ct.newOrgUsers.push({
-                roleName : CONSTANTS.roleName.user,
-                add : true,
-                del : false
-            });
-        };
-
-        ct.deleteCustomOrgUser = function (start) {
-            ct.newOrgUsers.splice(start, 1);
-        };
-
-        // 사용자 직접 등록 액션
-        ct.addCustomOrgUserAction = function () {
-            var adminCnt = 0;
-            ct.orgUserRequests = [];
-
-            for (var i = 0; i < ct.newOrgUsers.length; i++) {
-                if (!ct.newOrgUsers[i].name) {
-                    common.showAlertWarning('이름을 입력하세요');
-                    return;
-                } else if (!ct.newOrgUsers[i].position) {
-                    common.showAlertWarning('소속을 입력하세요');
-                    return;
-                } else if (!ct.newOrgUsers[i].email) {
-                    common.showAlertWarning('아이디를 입력하세요');
-                    return;
-                } else if (!ct.newOrgUsers[i].password) {
-                    common.showAlertWarning('비밀번호를 입력하세요');
-                    return;
-                } else if (!ct.checkPasswordPattern(ct.newOrgUsers[i].password)) {
-                    return;
-                }
-
-                var roleName = ct.isAdmin ? 'USER' : ct.newOrgUsers[i].roleName;
-                ct.orgUserRequests.push({
-                    email : ct.newOrgUsers[i].email,
-                    name : ct.newOrgUsers[i].name,
-                    userRole : roleName
-                });
-
-                if (roleName == 'ADMIN') {
-                    adminCnt++;
-                }
-            }
-
-            if (adminCnt > 1) {
-                common.showAlert('', '프로젝트 관리자는 한 명만 가능합니다.');
-                return;
-            }
-
-            if (ct.orgUserRequests.length == 0) {
-                common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
-                return;
-            }
-
-            $scope.main.loadingMain = true;
-            for (var i = 0; i < ct.newOrgUsers.length; i++) {
-                var item = ct.newOrgUsers[i];
-                // 모든 사용자 생성 이후 조직 등록
-                var totalUsers = 0;
-
-                var param = {};
-                param.name = item.name;
-                param.position = item.position;
-                param.email = item.email;
-                param.password = item.password;
-                param.userType = 'normal';
-                var promise = memberService.createUser(param);
-                promise.success(function (data) {
-                    totalUsers++;
-                    if (totalUsers == ct.newOrgUsers.length) {
-                        ct.addOrgUsersAction(ct.orgUserRequests);
-                    }
-                });
-                promise.error(function (data) {
-                    $scope.main.loadingMain = false;
-                    common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
-                });
-            }
-        };
-
-        // 취소 버튼
-        ct.cancel = function () {
-            common.locationPath('/comm/projects/projectDetail/' + ct.paramId);
-        };
-
-        ct.goToPage = function (page) {
-            ct.pageOptions.currentPage = page;
-        };
-
-        ct.pageListOrgUsersLoadData = function (page) {
-            ct.pageOptions.currentPage = page;
-            ct.loadListOrgUsers = false;
-            ct.loadListAllUsers = false;
-            ct.listOrgUsers(1);
-            ct.listAllUsers();
-        };
-
-        ct.addNewOrgUsers();
-
-        ct.pageListOrgUsersLoadData(1);
+        pop.pageListOrgUsersLoadData(1);
     })
-    .controller('commOrgProjectNewAddUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
-        _DebugConsoleLog('orgDetailControllers.js : commOrgProjectUsersCtrl', 1);
+    .controller('commPopOrgProjectNewAddUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, ValidationService, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
+        _DebugConsoleLog('orgDetailControllers.js : commPopOrgProjectNewAddUsersCtrl', 1);
 
         var pop = this;
 
         pop.validationService = new ValidationService();
-
         pop.formName = $scope.dialogOptions.formName;
+
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
+        $scope.dialogOptions.title = "조회 등록";
+        $scope.dialogOptions.okName = "생성";
+        $scope.dialogOptions.closeName = "취소";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectNewAddUsersForm.html" + _VersionTail();
-        $scope.dialogOptions.title = "직접 등록";
-        $scope.dialogOptions.okName = "생성";
-        $scope.dialogOptions.closeName = "취소";
 
         pop.orgProject = $scope.dialogOptions.orgProject;
 
         $scope.actionBtnHied = false;
         $scope.actionLoading = false;
 
-
         $scope.popDialogOk = function () {
-            pop.addOrgProject();
+            pop.addCustomOrgUserAction();
         };
 
         pop.btnClickCheck = false;
-
 
         pop.orgRoleNames = CONSTANTS.roleName;
         pop.paramId = $stateParams.orgId;
 
         pop.newOrgUsers = [];
-        // 관리자 존재 여부 조회
-        pop.isAdmin = false;
-
-        // paging
-        pop.pageOptions = {
-            currentPage : 1,
-            pageSize : 5,
-            total : 1
-        };
+        pop.orgUserEmails = [];
+        pop.notOrgUserEmails = [];
 
         pop.addNewOrgUsers = function () {
             pop.newOrgUsers.push({
                 roleName : pop.orgRoleNames.user,
+                email : "",
+                name : "",
+                position : "",
                 add : true,
-                del : false,
-                ngDisabled : pop.ngDisabled,
+                del : false
             });
-        };
-
-        pop.tab_ngClick = function (tabId) {
-            $('#tab1-1, #tab1-2').removeClass('active');
-            $('#' + tabId).addClass('active');
         };
 
         // 등록 사용자 목록 조회
@@ -1689,10 +1564,6 @@ angular.module('portal.controllers')
                 if (orgUsers && orgUsers.length > 0) {
                     angular.forEach(orgUsers, function (orgUser, key) {
                         pop.orgUserEmails.push(orgUser.usersInfo.email);
-
-                        if (orgUser.isAdmin)  {
-                            pop.isAdmin = true;
-                        }
                     });
                 }
                 pop.loadListOrgUsers = true;
@@ -1724,106 +1595,32 @@ angular.module('portal.controllers')
 
         // 조직 신규 사용자 등록을 위한 미동록 사용 목록 조회
         pop.setOrgNotUsers = function () {
-            pop.orgNotUsers = [];
+            pop.notOrgUserEmails = [];
             if (pop.allUsers && pop.allUsers.length > 0) {
                 angular.forEach(pop.allUsers, function (user, key) {
                     if (pop.orgUserEmails.indexOf(user.email) == -1) {
-                        if (!pop.schName || user.name.toLowerCase().indexOf(pop.schName.toLowerCase()) > -1) {
-                            user.roleName = pop.orgRoleNames.user;
-                            pop.orgNotUsers.push(user);
-                        }
+                        pop.notOrgUserEmails.push(user.email);
                     }
                 });
             }
-            pop.pageOptions.total = pop.orgNotUsers.length;
-        };
-
-        // 전체 선택
-        pop.checkAll = function ($event) {
-            for (var i = 0; i < pop.orgNotUsers.length; i++) {
-                if ((i >= (pop.pageOptions.pageSize * (pop.pageOptions.currentPage-1))) && (i < (pop.pageOptions.pageSize * (pop.pageOptions.currentPage)))) {
-                    pop.orgNotUsers[i].checked = $event.currentTarget.checked;
-                }
-            }
-        };
-
-        // 사용자 조회 등록
-        pop.addOrgUsers = function () {
-            var adminCnt = 0;
-            pop.orgUserRequests = [];
-
-            for (var i = 0; i < pop.orgNotUsers.length; i++) {
-                if (pop.orgNotUsers[i].checked) {
-                    var roleName = pop.isAdmin ? 'USER' : pop.orgNotUsers[i].roleName;
-                    pop.orgUserRequests.push({
-                        email : pop.orgNotUsers[i].email,
-                        name : pop.orgNotUsers[i].name,
-                        userRole : roleName
-                    });
-
-                    if (roleName == 'ADMIN') {
-                        adminCnt++;
-                    }
-                }
-            }
-
-            if (adminCnt > 1) {
-                common.showAlert('', '프로젝트 관리자는 한 명만 가능합니다.');
-                return;
-            }
-
-            if (pop.orgUserRequests.length == 0) {
-                common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
-                return;
-            }
-
-            pop.addOrgUsersAction(pop.orgUserRequests)
-        };
-
-        // 사용자 등록 액션
-        pop.addOrgUsersAction = function (orgUserRequests) {
-            var params = {
-                type : 'add',
-                orgUserRequests : orgUserRequests
-            };
-            $scope.main.loadingMain = true;
-            var promise = orgService.orgUserAdds(pop.paramId, params);
-            promise.success(function (data) {
-                pop.checkboxAll = false;
-                common.locationPath('/comm/projects/projectDetail/' + pop.paramId);
-                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
-            });
-            promise.error(function (data) {
-                $scope.main.loadingMain = false;
-                common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
-            });
         };
 
         // 사용자 아이디 중복 체크
-        pop.checkOrgUserDup = function (email, index) {
+        pop.checkOrgUserDup = function (email, key) {
             if (!email) {
                 return;
             }
-
-            // 등록 사용자 목록에서 조회
-            for (var i = 0; i < pop.orgUserEmails.length; i++) {
-                if (pop.orgUserEmails[i] == email) {
-                    common.showAlertError('이미 회원가입/프로젝트 멤버 추가한 아이디(' + email + ')입니다.');
-                    return;
-                }
+            if (pop.orgUserEmails.indexOf(email) > -1 ) {
+                common.showAlertError('이미 회원가입/프로젝트 멤버 추가한 아이디(' + email + ')입니다.');
+                return;
             }
-
-            // 미등록 사용자 목록에서 조회
-            for (var i = 0; i < pop.orgNotUsers.length; i++) {
-                if (pop.orgNotUsers[i].email == email) {
-                    common.showAlertError('이미 회원가입한 아이디(' + email + ')입니다.');
-                    return;
-                }
+            if (pop.notOrgUserEmails.indexOf(email) > -1 ) {
+                common.showAlertError('이미 회원가입한 아이디(' + email + ')입니다.');
+                return;
             }
-
             // 등록하려는 사용자 목록에서 조회
             for (var i = 0; i < pop.newOrgUsers.length; i++) {
-                if (i != index && pop.newOrgUsers[i].email.indexOf(email) > -1) {
+                if (i != key && email.indexOf(pop.newOrgUsers[i].email) > -1) {
                     common.showAlertError('직접 등록 사용자 목록에 존재하는 아이디(' + email + ')입니다.');
                     return;
                 }
@@ -1842,85 +1639,94 @@ angular.module('portal.controllers')
         };
 
         // 사용자 직접 등록
-        pop.addCustomOrgUser = function (item) {
-            if (!item.name) {
+        pop.addCustomOrgUser = function (orgUser) {
+            if (!orgUser.name) {
                 common.showAlertWarning('이름을 입력하세요');
                 return;
-            } else if (!item.position) {
+            }
+            if (!orgUser.position) {
                 common.showAlertWarning('소속을 입력하세요');
                 return;
-            } else if (!item.email) {
+            }
+            if (!orgUser.email) {
                 common.showAlertWarning('아이디를 입력하세요');
                 return;
-            } else if (!item.password) {
+            }
+            if (!orgUser.password) {
                 common.showAlertWarning('비밀번호를 입력하세요');
                 return;
-            } else if (!pop.checkPasswordPattern(item.password)) {
+            }
+            if (!pop.checkPasswordPattern(orgUser.password)) {
                 return;
             }
-
-
-            for (var i = 0; i < pop.newOrgUsers.length; i++) {
-                var orgUser = pop.newOrgUsers[i];
-                orgUser.add = false;
-                orgUser.del = true;
-            }
-
-            pop.newOrgUsers.push({
-                roleName : CONSTANTS.roleName.user,
-                add : true,
-                del : false
-            });
+            pop.addNewOrgUsers();
         };
 
-        pop.deleteCustomOrgUser = function (start) {
-            pop.newOrgUsers.splice(start, 1);
+        pop.deleteCustomOrgUser = function (key) {
+            pop.newOrgUsers.splice(key, 1);
+        };
+
+        // 사용자 등록 액션
+        pop.addOrgUsersAction = function (orgUserRequests) {
+            $scope.main.loadingMain = true;
+            var promise = orgService.orgUserAdds(pop.paramId, orgUserRequests);
+            promise.success(function (data) {
+                pop.btnClickCheck = false;
+                $scope.main.loadingMain = false;
+                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
+                if (angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
+            });
+            promise.error(function (data) {
+                pop.btnClickCheck = false;
+                $scope.main.loadingMain = false;
+                common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
+            });
         };
 
         // 사용자 직접 등록 액션
         pop.addCustomOrgUserAction = function () {
-            var adminCnt = 0;
+            if (pop.btnClickCheck) {
+                return;
+            }
+            pop.btnClickCheck = true;
             pop.orgUserRequests = [];
-
             for (var i = 0; i < pop.newOrgUsers.length; i++) {
                 if (!pop.newOrgUsers[i].name) {
                     common.showAlertWarning('이름을 입력하세요');
+                    pop.btnClickCheck = false;
                     return;
                 } else if (!pop.newOrgUsers[i].position) {
                     common.showAlertWarning('소속을 입력하세요');
+                    pop.btnClickCheck = false;
                     return;
                 } else if (!pop.newOrgUsers[i].email) {
                     common.showAlertWarning('아이디를 입력하세요');
+                    pop.btnClickCheck = false;
                     return;
                 } else if (!pop.newOrgUsers[i].password) {
                     common.showAlertWarning('비밀번호를 입력하세요');
+                    pop.btnClickCheck = false;
                     return;
                 } else if (!pop.checkPasswordPattern(pop.newOrgUsers[i].password)) {
+                    pop.btnClickCheck = false;
                     return;
                 }
-
-                var roleName = pop.isAdmin ? 'USER' : pop.newOrgUsers[i].roleName;
                 pop.orgUserRequests.push({
                     email : pop.newOrgUsers[i].email,
                     name : pop.newOrgUsers[i].name,
-                    userRole : roleName
+                    userRole : pop.newOrgUsers[i].roleName
                 });
-
-                if (roleName == 'ADMIN') {
-                    adminCnt++;
-                }
             }
 
-            if (adminCnt > 1) {
-                common.showAlert('', '프로젝트 관리자는 한 명만 가능합니다.');
+            if (pop.newOrgUsers.length == 0) {
+                common.showAlertWarning($translate.instant('message.mi_dont_exist_checked'));
+                pop.btnClickCheck = false;
                 return;
             }
 
-            if (pop.orgUserRequests.length == 0) {
-                common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
-                return;
-            }
-
+            common.mdDialogHide();
             $scope.main.loadingMain = true;
             for (var i = 0; i < pop.newOrgUsers.length; i++) {
                 var item = pop.newOrgUsers[i];
@@ -1941,364 +1747,17 @@ angular.module('portal.controllers')
                     }
                 });
                 promise.error(function (data) {
-                    $scope.main.loadingMain = false;
-                    common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
-                });
-            }
-        };
-
-        // 취소 버튼
-        pop.cancel = function () {
-            common.locationPath('/comm/projects/projectDetail/' + pop.paramId);
-        };
-
-        pop.goToPage = function (page) {
-            pop.pageOptions.currentPage = page;
-        };
-
-        pop.pageListOrgUsersLoadData = function (page) {
-            pop.pageOptions.currentPage = page;
-            pop.loadListOrgUsers = false;
-            pop.loadListAllUsers = false;
-            pop.listOrgUsers(1);
-            pop.listAllUsers();
-        };
-
-        pop.addNewOrgUsers();
-
-        pop.pageListOrgUsersLoadData(1);
-    })
-    .controller('commOrgProjectSchAddUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
-        _DebugConsoleLog('orgDetailControllers.js : commOrgProjectUsersCtrl', 1);
-
-        var pop = this;
-
-        pop.validationService = new ValidationService();
-
-        pop.formName = $scope.dialogOptions.formName;
-        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
-        $scope.dialogOptions.title = "직접 등록";
-        $scope.dialogOptions.okName = "생성";
-        $scope.dialogOptions.closeName = "취소";
-
-        pop.orgProject = $scope.dialogOptions.orgProject;
-
-        $scope.actionBtnHied = false;
-        $scope.actionLoading = false;
-
-
-        $scope.popDialogOk = function () {
-            pop.addOrgProject();
-        };
-
-        pop.btnClickCheck = false;
-
-        pop.orgRoleNames = CONSTANTS.roleName;
-        pop.paramId = $stateParams.orgId;
-
-        pop.newOrgUsers = [];
-        // 관리자 존재 여부 조회
-        pop.isAdmin = false;
-
-        // paging
-        pop.pageOptions = {
-            currentPage : 1,
-            pageSize : 5,
-            total : 1
-        };
-
-        pop.addNewOrgUsers = function () {
-            pop.newOrgUsers.push({
-                roleName : pop.orgRoleNames.user,
-                add : true,
-                del : false,
-                ngDisabled : pop.ngDisabled,
-            });
-        };
-
-        pop.tab_ngClick = function (tabId) {
-            $('#tab1-1, #tab1-2').removeClass('active');
-            $('#' + tabId).addClass('active');
-        };
-
-        // 등록 사용자 목록 조회
-        pop.listOrgUsers = function () {
-            pop.orgUserEmails = [];
-            var promise = orgService.listOrgUsers(pop.paramId);
-            promise.success(function (data) {
-                var orgUsers = data.items;
-                if (orgUsers && orgUsers.length > 0) {
-                    angular.forEach(orgUsers, function (orgUser, key) {
-                        pop.orgUserEmails.push(orgUser.usersInfo.email);
-
-                        if (orgUser.isAdmin)  {
-                            pop.isAdmin = true;
-                        }
-                    });
-                }
-                pop.loadListOrgUsers = true;
-                if (pop.loadListAllUsers) {
-                    pop.setOrgNotUsers();
-                }
-            });
-            promise.error(function (data) {
-            });
-        };
-
-        // 전체 사용자 조회
-        pop.listAllUsers = function () {
-            $scope.main.loadingMainBody = true;
-            var promise = memberService.listAllUsers();
-            promise.success(function (data) {
-                $scope.main.loadingMainBody = false;
-                pop.allUsers = data.items;
-                pop.loadListAllUsers = true;
-                if (pop.loadListOrgUsers) {
-                    pop.setOrgNotUsers();
-                }
-            });
-
-            promise.error(function (data) {
-                $scope.main.loadingMainBody = false;
-            });
-        };
-
-        // 조직 신규 사용자 등록을 위한 미동록 사용 목록 조회
-        pop.setOrgNotUsers = function () {
-            pop.orgNotUsers = [];
-            if (pop.allUsers && pop.allUsers.length > 0) {
-                angular.forEach(pop.allUsers, function (user, key) {
-                    if (pop.orgUserEmails.indexOf(user.email) == -1) {
-                        if (!pop.schName || user.name.toLowerCase().indexOf(pop.schName.toLowerCase()) > -1) {
-                            user.roleName = pop.orgRoleNames.user;
-                            pop.orgNotUsers.push(user);
-                        }
-                    }
-                });
-            }
-            pop.pageOptions.total = pop.orgNotUsers.length;
-        };
-
-        // 전체 선택
-        pop.checkAll = function ($event) {
-            for (var i = 0; i < pop.orgNotUsers.length; i++) {
-                if ((i >= (pop.pageOptions.pageSize * (pop.pageOptions.currentPage-1))) && (i < (pop.pageOptions.pageSize * (pop.pageOptions.currentPage)))) {
-                    pop.orgNotUsers[i].checked = $event.currentTarget.checked;
-                }
-            }
-        };
-
-        // 사용자 조회 등록
-        pop.addOrgUsers = function () {
-            var adminCnt = 0;
-            pop.orgUserRequests = [];
-
-            for (var i = 0; i < pop.orgNotUsers.length; i++) {
-                if (pop.orgNotUsers[i].checked) {
-                    var roleName = pop.isAdmin ? 'USER' : pop.orgNotUsers[i].roleName;
-                    pop.orgUserRequests.push({
-                        email : pop.orgNotUsers[i].email,
-                        name : pop.orgNotUsers[i].name,
-                        userRole : roleName
-                    });
-
-                    if (roleName == 'ADMIN') {
-                        adminCnt++;
-                    }
-                }
-            }
-
-            if (adminCnt > 1) {
-                common.showAlert('', '프로젝트 관리자는 한 명만 가능합니다.');
-                return;
-            }
-
-            if (pop.orgUserRequests.length == 0) {
-                common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
-                return;
-            }
-
-            pop.addOrgUsersAction(pop.orgUserRequests)
-        };
-
-        // 사용자 등록 액션
-        pop.addOrgUsersAction = function (orgUserRequests) {
-            var params = {
-                type : 'add',
-                orgUserRequests : orgUserRequests
-            };
-            $scope.main.loadingMain = true;
-            var promise = orgService.orgUserAdds(pop.paramId, params);
-            promise.success(function (data) {
-                pop.checkboxAll = false;
-                common.locationPath('/comm/projects/projectDetail/' + pop.paramId);
-                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
-            });
-            promise.error(function (data) {
-                $scope.main.loadingMain = false;
-                common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
-            });
-        };
-
-        // 사용자 아이디 중복 체크
-        pop.checkOrgUserDup = function (email, index) {
-            if (!email) {
-                return;
-            }
-
-            // 등록 사용자 목록에서 조회
-            for (var i = 0; i < pop.orgUserEmails.length; i++) {
-                if (pop.orgUserEmails[i] == email) {
-                    common.showAlertError('이미 회원가입/프로젝트 멤버 추가한 아이디(' + email + ')입니다.');
-                    return;
-                }
-            }
-
-            // 미등록 사용자 목록에서 조회
-            for (var i = 0; i < pop.orgNotUsers.length; i++) {
-                if (pop.orgNotUsers[i].email == email) {
-                    common.showAlertError('이미 회원가입한 아이디(' + email + ')입니다.');
-                    return;
-                }
-            }
-
-            // 등록하려는 사용자 목록에서 조회
-            for (var i = 0; i < pop.newOrgUsers.length; i++) {
-                if (i != index && pop.newOrgUsers[i].email.indexOf(email) > -1) {
-                    common.showAlertError('직접 등록 사용자 목록에 존재하는 아이디(' + email + ')입니다.');
-                    return;
-                }
-            }
-
-            common.showAlertSuccess('회원가입 가능한 아이디(' + email + ')입니다.');
-        };
-
-        pop.checkPasswordPattern = function (password) {
-            var regex = /^(?=.*\d)(?=.*[a-z])[0-9a-zA-Z]{10,20}$/;
-            if(!regex.test(password)) {
-                common.showAlertWarning('영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오.');
-                return false;
-            }
-            return true;
-        };
-
-        // 사용자 직접 등록
-        pop.addCustomOrgUser = function (item) {
-            if (!item.name) {
-                common.showAlertWarning('이름을 입력하세요');
-                return;
-            } else if (!item.position) {
-                common.showAlertWarning('소속을 입력하세요');
-                return;
-            } else if (!item.email) {
-                common.showAlertWarning('아이디를 입력하세요');
-                return;
-            } else if (!item.password) {
-                common.showAlertWarning('비밀번호를 입력하세요');
-                return;
-            } else if (!pop.checkPasswordPattern(item.password)) {
-                return;
-            }
-
-
-            for (var i = 0; i < pop.newOrgUsers.length; i++) {
-                var orgUser = pop.newOrgUsers[i];
-                orgUser.add = false;
-                orgUser.del = true;
-            }
-
-            pop.newOrgUsers.push({
-                roleName : CONSTANTS.roleName.user,
-                add : true,
-                del : false
-            });
-        };
-
-        pop.deleteCustomOrgUser = function (start) {
-            pop.newOrgUsers.splice(start, 1);
-        };
-
-        // 사용자 직접 등록 액션
-        pop.addCustomOrgUserAction = function () {
-            var adminCnt = 0;
-            pop.orgUserRequests = [];
-
-            for (var i = 0; i < pop.newOrgUsers.length; i++) {
-                if (!pop.newOrgUsers[i].name) {
-                    common.showAlertWarning('이름을 입력하세요');
-                    return;
-                } else if (!pop.newOrgUsers[i].position) {
-                    common.showAlertWarning('소속을 입력하세요');
-                    return;
-                } else if (!pop.newOrgUsers[i].email) {
-                    common.showAlertWarning('아이디를 입력하세요');
-                    return;
-                } else if (!pop.newOrgUsers[i].password) {
-                    common.showAlertWarning('비밀번호를 입력하세요');
-                    return;
-                } else if (!pop.checkPasswordPattern(pop.newOrgUsers[i].password)) {
-                    return;
-                }
-
-                var roleName = pop.isAdmin ? 'USER' : pop.newOrgUsers[i].roleName;
-                pop.orgUserRequests.push({
-                    email : pop.newOrgUsers[i].email,
-                    name : pop.newOrgUsers[i].name,
-                    userRole : roleName
-                });
-
-                if (roleName == 'ADMIN') {
-                    adminCnt++;
-                }
-            }
-
-            if (adminCnt > 1) {
-                common.showAlert('', '프로젝트 관리자는 한 명만 가능합니다.');
-                return;
-            }
-
-            if (pop.orgUserRequests.length == 0) {
-                common.showAlert('', $translate.instant('message.mi_dont_exist_checked'));
-                return;
-            }
-
-            $scope.main.loadingMain = true;
-            for (var i = 0; i < pop.newOrgUsers.length; i++) {
-                var item = pop.newOrgUsers[i];
-                // 모든 사용자 생성 이후 조직 등록
-                var totalUsers = 0;
-
-                var param = {};
-                param.name = item.name;
-                param.position = item.position;
-                param.email = item.email;
-                param.password = item.password;
-                param.userType = 'normal';
-                var promise = memberService.createUser(param);
-                promise.success(function (data) {
                     totalUsers++;
+                    $scope.main.loadingMain = false;
                     if (totalUsers == pop.newOrgUsers.length) {
                         pop.addOrgUsersAction(pop.orgUserRequests);
                     }
-                });
-                promise.error(function (data) {
-                    $scope.main.loadingMain = false;
                     common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
                 });
             }
         };
 
-        // 취소 버튼
-        pop.cancel = function () {
-            common.locationPath('/comm/projects/projectDetail/' + pop.paramId);
-        };
-
-        pop.goToPage = function (page) {
-            pop.pageOptions.currentPage = page;
-        };
-
-        pop.pageListOrgUsersLoadData = function (page) {
-            pop.pageOptions.currentPage = page;
+        pop.pageListOrgUsersLoadData = function () {
             pop.loadListOrgUsers = false;
             pop.loadListAllUsers = false;
             pop.listOrgUsers(1);
@@ -2307,6 +1766,6 @@ angular.module('portal.controllers')
 
         pop.addNewOrgUsers();
 
-        pop.pageListOrgUsersLoadData(1);
+        pop.pageListOrgUsersLoadData();
     })
 ;
