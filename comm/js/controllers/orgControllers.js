@@ -64,6 +64,7 @@ angular.module('portal.controllers')
             var dialogOptions = {
                 controller : "commAddOrgProjecFormCtrl",
                 controllerAs: "pop",
+                templateUrl : _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail(),
                 formName : "popOrgProjectForm",
                 orgProject : orgProject,
                 callBackFunction : ct.listOrgProjects
@@ -112,7 +113,6 @@ angular.module('portal.controllers')
         pop.formName = $scope.dialogOptions.formName;
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
         $scope.dialogOptions.title = $translate.instant("label.project_register");
-        $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail();
         $scope.dialogOptions.okName = "생성";
         $scope.dialogOptions.closeName = "취소";
 
