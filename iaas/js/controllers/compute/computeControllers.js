@@ -729,47 +729,38 @@ angular.module('iaas.controllers')
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);
 
-        var ct = this;
-        ct.data = {};
-        ct.fn = {};
-        ct.ui = {};
-        ct.roles = [];
-        ct.data.name = '';
-        ct.data.spec = {};
-        ct.data.networks = [];
-        ct.data.keypair = {};
-        ct.data.initScript = {};
+        var ct               = this;
+        ct.data              = {};
+        ct.fn                = {};
+        ct.ui                = {};
+        ct.roles             = [];
+        ct.data.name         = '';
+        ct.data.spec         = {};
+        ct.data.networks     = [];
+        ct.data.keypair      = {};
+        ct.data.initScript   = {};
         ct.data.securityPolicys = [];
-        ct.subnet = {};
-        ct.networks = [];
-        ct.specValue = '';
-        ct.keypairValue = '';
-        ct.initScriptValue = '';
-        ct.ipFlag = true;
-        ct.activeTabIndex = 1;
-        ct.data.tenantId = $scope.main.userTenant.id;
-        ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.formName = "computeCreateForm";
-        ct.formName2 = "computeCreateForm2";
+        ct.subnet            = {};
+        ct.networks          = [];
+        ct.specValue         = '';
+        ct.volume            = {};
+        ct.keypairValue      = '';
+        ct.initScriptValue   = '';
+        ct.ipFlag            = true;
+        ct.activeTabIndex    = 1;
+        ct.data.tenantId     = $scope.main.userTenant.id;
+        ct.data.tenantName   = $scope.main.userTenant.korName;
+        ct.formName          = "computeCreateForm";
+        
+        //볼륨생성 변수
+        ct.data.size = 1;
 
         ct.scrollPane = function (){
             setTimeout(function() {
                 var scrollPane = $('.scroll-pane').jScrollPane({});
             }, 250);
         };
-
-        //다음
-        ct.nextStep = function(){
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                return;
-            }
-            ct.activeTabIndex++;
-        };
-
-        //이전
-        ct.preStep = function () {
-            ct.activeTabIndex--;
-        };
+        
 
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
@@ -831,7 +822,6 @@ angular.module('iaas.controllers')
                     };
                     var returnData = common.noMsgSyncHttpResponseJson(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'POST', param);
                     if(returnData.status == 200) {
-                        //ct.fn.getKeyFile(returnData.responseJSON.content.keypair,'privateKey');
                         ct.fn.getKeypairList();
                     } else {
                         common.showAlertError(returnData.data.responseJSON.message);
@@ -876,22 +866,29 @@ angular.module('iaas.controllers')
                 ct.initCheck = false;
                 ct.fn.initScriptSet();
                 ct.fn.getInitScriptList();
+                ct.fn.selectSpec();
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
         };
-
-        ct.fn.selectSpec = function() {
+        
+        
+        //사양선택 이벤트 2018.11.13 sg0730 add
+        ct.fn.selectSpec = function() 
+        {
             var sltSpec = common.objectsFindCopyByField(ct.specList, "uuid", ct.specUuid);
-            if(sltSpec && sltSpec.uuid){
-                ct.data.spec = sltSpec;
-            }else{
-                ct.data.spec.vcpus = 0;
-                ct.data.spec.ram = 0;
-                ct.data.spec.disk = 0;
+        
+            if(!sltSpec || !sltSpec.uuid)
+            {
+            	sltSpec = ct.specList[0] ;
+            	
             }
+            
+            ct.data.spec = sltSpec;
+            ct.specUuid = sltSpec.uuid;
+            
         };
 
         //초기화스크립트 리스트 조회
@@ -934,7 +931,9 @@ angular.module('iaas.controllers')
                 ct.fn.getInitScript(angular.fromJson(ct.initScriptValue).scriptId);
             }
         };
-
+        
+        
+        
         //이미지 리스트 조회
         ct.fn.imageListSearch = function() {
             $scope.main.loadingMainBody = true;
@@ -950,7 +949,9 @@ angular.module('iaas.controllers')
             param.imageType = ct.imageType;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                ct.imageList = data.content.images;
+                ct.imageList  = data.content.images;
+                ct.data.image = ct.imageList[0];
+                ct.fn.imageClick (ct.data.image) ;
                 ct.fn.getSecurityPolicy();
             });
             returnPromise.error(function (data, status, headers) {
@@ -958,49 +959,15 @@ angular.module('iaas.controllers')
                 common.showAlertError(data.message);
             });
         };
-
-        //서버 생성
-        var clickCheck = false;
-        ct.fn.createServer = function() {
-            if(!clickCheck){
-                clickCheck = true;
-
-                if (!new ValidationService().checkFormValidity($scope[ct.formName2])) {
-                    clickCheck = false;
-                    return;
-                }
-
-                var instance = {};
-                instance.name = ct.data.name;
-                instance.tenantId = ct.data.tenantId;
-                instance.networks = [{ id: ct.data.networks[0].id }];
-                instance.image = {id: ct.data.image.id};
-                instance.keypair = { keypairName: ct.data.keypair.keypairName };
-                instance.securityPolicies = angular.copy(ct.data.securityPolicys);
-                if (ct.data.initScript) {
-                    instance.initScript = angular.copy(ct.data.initScript);
-                }
-                instance.spec = ct.data.spec;
-
-                $scope.main.loadingMainBody = true;
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : instance});
-                returnPromise.success(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                    common.showAlertSuccess("생성 되었습니다.");
-                    // 페이지 이동으로 바꿔야 하고
-                    $scope.main.goToPage("/iaas/compute/detail/85fd2266-4c54-439b-be0b-28735dc8dcfb");
-                });
-                returnPromise.error(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                    common.showAlertError(data.message);
-                });
-                returnPromise.finally(function() {
-                    clickCheck = false;
-                });
-            }
-
-        };
-
+        
+        ct.fn.imageClick = function (image)
+        {
+        	var sltSpec = common.objectsFindCopyByField(ct.specList, "uuid", ct.specUuid);
+        	ct.data.image = image ;
+        	ct.serviceNm = image.serviceName
+        	ct.imageTmpNm = image.serviceName; 
+        }
+        
         // 네트워크 리스트 조회
         ct.fn.networkListSearch = function() {
             var param = {
@@ -1035,6 +1002,37 @@ angular.module('iaas.controllers')
                 }];
             }
         };
+        
+        // 볼륨 생성 부분 추가 2018.11.13 sg0730
+        ct.fn.getTenantResource = function() 
+        {
+            var params = 
+            {
+                tenantId : ct.data.tenantId
+            }
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            
+            returnPromise.success(function (data, status, headers) 
+            {
+                ct.volume.resource = data.content[0];
+                ct.volume.resourceDefault = angular.copy(ct.volume.resource);
+                ct.volumeSliderOptions.ceil = ct.volume.resource.maxResource.volumeGigabytes - ct.volume.resource.usedResource.volumeGigabytes ;
+            });
+            
+            returnPromise.error(function (data, status, headers) 
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlert("message",data.message);
+            });
+           
+            returnPromise.finally(function (data, status, headers) 
+            {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+        
+        
+        
 
         //ip체크
         ct.fn.checkCidr = function() {
@@ -1081,14 +1079,15 @@ angular.module('iaas.controllers')
             }
         };
 
-        ct.networkBindCheck = false;
         //자동&수동할당 체크
+        ct.networkBindCheck = false;
         ct.fn.networkBindSet = function() {
             if(ct.networkBindCheck) {
                 ct.subnet.cidr_D = "";
                 ct.ipFlag = false;
             }
         };
+        
         ct.fn.subnetCidrDChange = function() {
             if(ct.subnet.cidr_D) {
                 ct.ipFlag = false;
@@ -1098,8 +1097,10 @@ angular.module('iaas.controllers')
         };
 
         if(ct.data.tenantId) {
+        	ct.fn.getSpecList();
             ct.fn.imageListSearch();
             ct.fn.networkListSearch();
+            ct.fn.getTenantResource();
         }
 
         ct.fn.getKeyFile = function(keypair,type) {
@@ -1109,5 +1110,80 @@ angular.module('iaas.controllers')
             };
             location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
         }
+        
+        
+       
+        //서버 생성
+        var clickCheck = false;
+        ct.fn.createServer = function() 
+        {
+            if(!clickCheck)
+            {
+                clickCheck = true;
+
+                if (!new ValidationService().checkFormValidity($scope[ct.formName])) 
+                {
+                    clickCheck = false;
+                    return;
+                }
+
+                var instance              = {};
+                instance.name             = ct.data.name;
+                instance.tenantId         = ct.data.tenantId;
+                instance.networks         = [{ id: ct.data.networks[0].id }];
+                instance.image            = {id: ct.data.image.id};
+                instance.keypair          = { keypairName: ct.data.keypair.keypairName };
+                instance.securityPolicies = angular.copy(ct.data.securityPolicys);
+                
+                ct.volume.name = instance.name+'_volume01';
+                ct.volume.type = 'Volume Storage';
+                ct.volume.size = ct.volumeSize;
+          
+                instance.spec = ct.data.spec;
+                $scope.main.loadingMainBody = true;
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : instance, volume : ct.volume});
+                
+                returnPromise.success(function (data, status, headers) 
+                {
+                	// 서버생성후 -> 볼륨 생성 후 sucess 처리.
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertSuccess("생성 되었습니다.");
+                    // 페이지 이동으로 바꿔야 하고
+                    $scope.main.goToPage("/iaas");
+                	
+                	
+                });
+                
+                returnPromise.error(function (data, status, headers) 
+                {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertError(data.message);
+                });
+                
+                returnPromise.finally(function() 
+                {
+                    clickCheck = false;
+                });
+            }
+
+        };
+
+        ct.volumeSize = 10;
+        ct.volumeSliderOptions = 
+        {
+        	showSelectionBar : true,
+        	minValue : 1,
+        	
+        	options: {
+                floor: 0,
+                ceil: 100,
+                step: 30
+            }
+        };
+      
+        
+        
+        
+        
     })
 ;

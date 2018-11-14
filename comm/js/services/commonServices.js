@@ -1891,7 +1891,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 dialogOptions.controllerAs = "pop";
             }
 
-            if (!dialogOptions.formName) {
+            if (!dialogOptions.notForm && !dialogOptions.formName) {
                 dialogOptions.formName = "dialogForm";
             }
 

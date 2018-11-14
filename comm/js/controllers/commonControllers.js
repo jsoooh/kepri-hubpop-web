@@ -1264,7 +1264,6 @@ angular.module('common.controllers', [])
             $scope.main.resetInit();
             if (common.isLoginAcceptPage($location.path())) {
                 common.moveLoginPage();
-                return false;
             }
 
             $scope.main.setSelectSiteMap($scope.main.stateKey);
@@ -1311,7 +1310,6 @@ angular.module('common.controllers', [])
             if ($scope.main.pageStage == "paas") {
                 if (!$scope.main.sltOrganizationGuid) {
                     common.goHomePath();
-                    return false;
                 }
                 if (!mb.paasApplicationDetailSiteMap) {
                     mb.paasApplicationDetailSiteMap = common.getStateKeyBySelectSietMap('paasApplicationDetail');
@@ -1344,7 +1342,6 @@ angular.module('common.controllers', [])
                 if (!$scope.main.userTenantId) {
                     common.showAlertWarning("정보가 존재 하지 않습니다. 작업을 선택 하십시오.");
                     common.goHomePath();
-                    return false;
                 }
             }
 

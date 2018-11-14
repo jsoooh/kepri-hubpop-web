@@ -62,13 +62,6 @@ angular.module('app')
                                 url: '/comm/projects/projectDetail/:orgId',
                                 controller: 'commOrgProjectDetailCtrl',
                                 templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html'
-                            },
-                            projectUsers: {
-                                name: 'project_users',
-                                stateKey: 'commProjectUsers',
-                                url: '/comm/projects/projectUsers/:orgId',
-                                controller: 'commOrgProjectUsersCtrl',
-                                templateUrl: _COMM_VIEWS_+'/org/orgProjectUsers.html'
                             }
                         }
                     },

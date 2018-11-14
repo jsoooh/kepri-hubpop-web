@@ -92,7 +92,7 @@ angular.module('portal.services')
 
         /*조직 사용자 추가/초대-일괄*/
         orgService.orgUserAdds = function (id, param) {
-        	return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/orgUserAdd/multi?type=' + param.type, 'POST', param.orgUserRequests));
+        	return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/orgUserAdd/multi', 'POST', param));
         };
 
         /*[조직삭제] 실행*/
