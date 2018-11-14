@@ -43,7 +43,7 @@ angular.module('app')
                                     serverCreate: {
                                         name: 'server_create',
                                         stateKey: 'iaasComputeCreate',
-                                        url: '/iaas/compute/detail',
+                                        url: '/iaas/compute/create',
                                         controller: 'iaasComputeCreateCtrl',
                                         templateUrl: _IAAS_VIEWS_+'/compute/computeCreateForm.html',
                                     }
@@ -160,7 +160,7 @@ angular.module('app')
                                     storageCreate: {
 				                        name: 'storage_create',
 				                        stateKey: 'iaasStorgeCreate',
-				                        url: '/iaas/storage/detail',
+				                        url: '/iaas/storage/create',
 				                        controller: 'iaasStorageFormCtrl',
 				                        templateUrl: _IAAS_VIEWS_+'/storage/storageForm.html',
 				                    }
