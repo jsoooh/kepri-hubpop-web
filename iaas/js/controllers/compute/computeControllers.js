@@ -1136,7 +1136,7 @@ angular.module('iaas.controllers')
                 instance.securityPolicies = angular.copy(ct.data.securityPolicys);
                 
                 ct.volume.name = instance.name+'_volume01';
-                ct.volume.type = 'Volume Storage';
+                ct.volume.type = 'HDD';
                 ct.volume.size = ct.volumeSize;
                 ct.volume.tenantId = ct.data.tenantId;
           
