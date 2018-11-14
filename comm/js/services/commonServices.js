@@ -2892,18 +2892,28 @@ angular.module('common.services', ['LocalStorageModule'])
                 return config;
             },
             response: function(response) {
+                console.log(response);
                 return response;
             },
             progress: function(evt) {
                 return evt;
             },
             responseError: function(rejection) {
-                var main = angular.element(document.getElementById("mainCtrl")).scope().main;
                 if (rejection) {
+                    var main = angular.element(document.getElementById("mainCtrl")).scope().main;
+                    console.log(rejection);
                     if(rejection.status == 307 && rejection.url && rejection.url.indexOf('/iaas-api/') == 0) {
-                        if (angular.isDefined(main) && angular.isFunction(main.logout)) main.logout();
+                        if (angular.isDefined(main) && angular.isFunction(main.logout)) {
+                            $(function () {
+                                main.logout();
+                            });
+                        }
                     } else if (rejection.status == 500) {
-                        if (angular.isDefined(main) && angular.isDefined(main.loadingMainBody)) main.loadingMainBody = false;
+                        if (angular.isDefined(main) && angular.isDefined(main.loadingMainBody)) {
+                            $(function () {
+                                main.loadingMainBody = false;
+                            });
+                        }
                     }
                 }
                 return $q.reject(rejection);
