@@ -4,34 +4,6 @@
 	</div>
 	<div class="pull-right">
 		<div class="align_l">
-<!--
-			<div class="col col-all">&lt;!&ndash; gnb가 relative로 들어갈때 data-user="gnb-left", 레이어일때 data-user="gnb-layer" &ndash;&gt;
-				<a href="" title="전체메뉴" data-user="gnb-layer" ng-click="main.leftMenuToggle();"><span class="ico">전체메뉴</span></a>
-			</div>
--->
-<!--
-			<div class="col col-proj">
-				<div ng-if="main.projectType == 'pjt' && (!main.projects || main.projects.length == 0)" style="position:relative; font-weight: 700; font-size: 26px;height: 39px;padding-top: 10px;">프로젝트가 존재하지 않습니다.</div>
-				<div ng-if="main.projectType == 'pjt'" ng-if="main.pageStage == 'iaas' || main.pageStage == 'paas' || (main.pageStage == 'monit' && main.stateKey != 'monitAlarm')" class="dropdown">
-					<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span class="txt">{{main.sltProject.name}}</span>
-						<span class="ico arr"></span>
-					</button>
-					<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
-						<li ng-repeat="project in main.projects"><a href="" ng-click="main.changeProject(project);">{{project.name}}</a></li>
-					</ul>
-				</div>
-				<div ng-if="main.projectType == 'org' && (!main.portalOrgs || main.portalOrgs.length == 0)" style="position:relative; font-weight: 700; font-size: 26px;height: 39px;padding-top: 10px;">프로젝트가 존재하지 않습니다.</div>
-				<div ng-if="main.projectType == 'org' && main.portalOrgs && main.portalOrgs.length > 0" class="dropdown">
-					<button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span class="txt">{{ main.sltPortalOrgDisplayName }}</span><span class="ico arr"></span>
-					</button>
-					<ul class="dropdown-menu" role="btn-projt" aria-labelledby="btn-projt">
-						<li ng-repeat="orgItem in main.portalOrgs"><a href="" ng-click="main.changePortalOrg(orgItem);">{{ orgItem.orgName }}</a></li>
-					</ul>
-				</div>
-			</div>
--->
 			<div class="col col-proj">
 				<div class="dropdown">
 					<button id="btn-projt" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -46,57 +18,8 @@
 					</ul>
 				</div>
 			</div>
-			<!--<div class="col col-sev">
-				<a href="#/serviceCatalogs">{{ 'label.service_catalog' | translate }}</a>
-			</div>-->
 		</div>
- 		<!--<div class="col col-ws"></div>
- 		<div class="col col-sch" style="visibility: hidden;">
- 			<div class="input-group">
- 				<input type="text" name="" value="" class="form-control" placeholder="검색어를 입력하세요">
- 				<div class="input-group-btn">
- 					<button type="button" name="button" class="btn" title="검색"><span class="ico">{{ 'label.search' | translate }}</span></button>
- 				</div>
- 			</div>
- 		</div>-->
 		<div class="align_r">
-<!--
-			<div class="col col-noti">
-				<div class="dropdown">
-					<button type="button" name="button" class="btn btn-noti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="알림"><span class="ico"><em class="badge">{{main.alarms.totalElements ? main.alarms.totalElements : 0}}</em></span></button>
-					<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
-						<li class="noti-txt">총 <em>{{main.alarms.totalElements ? main.alarms.totalElements : 0}}</em>개의 알람이 있습니다.</li>
-						<li class="divider"></li>
-						<li ng-repeat="(key, item) in main.alarms.content" ng-if="key < 4" class="noti-li">
-							<a href="">
-								<span class="noti-name">{{item.stateCode?item.stateCode.state.substring(0,1):''}}</span>
-								<p class="noti-tit">{{item.contents}}</p>
-								<p class="noti-date">{{item.updateDttm | date : 'yyyy-MM-dd HH:mm:ss'}}</p>
-							</a>
-						</li>
-						<li class="divider"></li>
-						<li class="noti-more"><a href="#/monit/alarm">알람 더보기 <span class="ico"></span></a></li>
-					</ul>
-				</div>
-			</div>
--->
-			<!--<div class="col col-set">
-				<div class="dropdown">
-					<button id="btn-set" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="설정">
-						<span class="ico"></span>
-					</button>
-					<ul class="dropdown-menu" role="btn-set" aria-labelledby="btn-set">
-						&lt;!&ndash;<li><a href="#">{{ 'label.alarm_set' | translate }}</a></li>&ndash;&gt;
-						<li class="langSet">
-							<a href="#">{{ 'label.language_set' | translate }}</a>
-							<ul class="dropdown-menu">
-								<li><a href="" ng-click="main.changeLanguage('ko')"><span class="ico ico_kor"></span>{{ 'label.ko' | translate }}</a></li>
-							&lt;!&ndash;<li><a href="" ng-click="main.changeLanguage('en')"><span class="ico ico_eng"></span>{{ 'label.en' | translate }}</a></li>&ndash;&gt;
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</div>-->
 			<div class="col col-tuto">
 				<button id="btn-set2" type="button" class="btn" title="매뉴얼" onclick="location.href = '#/tutorial/1';">
 					<span class="ico"></span>

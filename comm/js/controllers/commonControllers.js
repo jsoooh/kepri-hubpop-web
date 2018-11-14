@@ -509,14 +509,11 @@ angular.module('common.controllers', [])
                         }
                     });
                 }
-                if (mc.portalOrgs.length > 0) {
+                if (mc.portalOrgs.length > 0 && mc.sltPortalOrgId) {
                     sltPortOrg = common.objectsFindCopyByField(mc.portalOrgs, "id", mc.sltPortalOrgId);
-                    if (!angular.isObject(sltPortOrg) || !sltPortOrg.id) {
-                        sltPortOrg = mc.portalOrgs[0];
+                    if (angular.isObject(sltPortOrg) && sltPortOrg.id) {
+                        sltPortOrgId = sltPortOrg.id;
                     }
-                    sltPortOrgId = sltPortOrg.id;
-                } else {
-                    mc.portalOrgs = [];
                 }
             } else {
                 mc.portalOrgs = [];

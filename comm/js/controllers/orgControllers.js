@@ -6,6 +6,9 @@ angular.module('portal.controllers')
 
         var ct = this;
 
+        // portalOrg 선택 제거
+        $scope.main.setPortalOrg(null);
+
         $scope.main.loadingMainBody = true;
 
         ct.userAuth  = $scope.main.userAuth;
