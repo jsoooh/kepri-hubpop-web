@@ -5,11 +5,15 @@
 		<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
 	</div>
 </div>
-<!-- //작업 추가 및 선택 -->
-<!-- guide box 0830 삭제 -->
-	<!--
-<div class="guideTxt type1" ng-bind-html="'iaasMenu.desc.' + main.selectSiteMap.name + '.short' | translate"></div>
--->
+
+<!-- 2018.11.14 sg0730 디스크 만들기 버튼 추가.-->
+<!-- button area Start-->
+<div class="btnWrap">
+	<button type="button" class="btn_lg">
+		<span class="ico ico_vlm_str"></span>디스크 만들기
+	</button>
+</div>
+<!-- button area end-->
 
 <!-- panel area-->
 <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel">
@@ -77,92 +81,3 @@
 	</li>
 </ul>
 <!-- //panel area-->
-
-<!-- table -->
-<div ng-if="main.contentsViewType == 'tbl'" class="tbl type1">
-	<!-- tb top -->
-	<div class="tb-top">
-		<!-- <div class="pull-left">
-			<div class="tbTop-state">
-				<span class="stateWrap"><span class="state-tit">정상배포 :</span><span class="stateMark type1">정상배포</span></span>
-				<span class="stateWrap"><span class="state-tit">오류 :</span><span class="stateMark type2">오류</span></span>
-				<span class="stateWrap"><span class="state-tit">대기 :</span><span class="stateMark type3">대기</span></span>
-				<span class="stateWrap"><span class="state-tit">중지 :</span><span class="stateMark type4">중지</span></span>
-			</div>
-		</div> -->
-		<div class="pull-right">
-			<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-add" title="추가" ng-click="contents.fn.formOpen($event, 'storage');"><span class="ico">추가</span></button>
-		</div>
-	</div>
-	<!-- tb top -->
-	<table class="table">
-		<colgroup>
-			<col style="width:28%" />
-			<col span="2" style="width:6%" />
-			<col style="width:14%" />
-			<col style="width:38%" />
-			<col style="width:12%" />
-		</colgroup>
-		<thead>
-			<tr>
-				<th>이름</th>
-				<th>볼륨 타입</th>
-				<th>크기</th>
-				<th>상태</th>
-				<th>연결정보</th>
-				<th>관리</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="volume in contents.storageMainList">
-				<td style="text-decoration: underline;">
-					<a href="javascript:void(0)" tooltip-placement="bottom" uib-tooltip="{{volume.name}}" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">{{volume.name}}</a>
-				</td>
-				<td>
-					{{volume.type}}
-				</td>
-				<td class="text-right" style="padding-right:10px">{{volume.size}} GB</td>
-				<td class="text-left" style="padding-left:50px" volume-status-observe observe-action="volume.observeAction" ng-model="volume.observeAction" ng-init="volume.observeAction = 'ready'" >
-				<!--	170908 수정	-->
-					<span class="stateMark type1" ng-if="volume.status == 'in-use'">정상배포</span>
-					<span class="stateMark type2" ng-if="volume.status == 'error'">오류</span>
-					<span class="stateMark type4" ng-if="volume.status == 'creating' || volume.status == 'deleting'">대기</span>
-					<span class="stateMark type3" ng-if="volume.status == 'available' || volume.status == 'deleted'">중지</span>
-					<span class="state-txt" >&nbsp;&nbsp;{{volume.status}}</span>
-				<!--
-					라벨 클래스 네이밍 규칙
-					storage_상태값
-					storage_inuse
-					storage_available
-				-->
-				</td>
-				<td class="text-left">{{volume.volumeAttachment.device}}&nbsp;&nbsp;<span ng-if="volume.volumeAttachment.instanceName">({{volume.volumeAttachment.instanceName}})</span></td>
-				<td>
-					<button type="button" class="btn btn-ico-resto-s only-ico" tooltip-placement="bottom" title="스냅샷" ng-click="contents.fn.formOpen($event, 'snapshot', volume);"><span class="ico">스냅샷</span></button>
-					<button type="button" class="btn btn-ico-del-s only-ico" tooltip-placement="bottom" title="삭제" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><span class="ico">삭제</span></button>
-				</td>
-			</tr>
-			<tr ng-if="!contents.storageMainList || contents.storageMainList.length == 0">
-				<td colspan="6" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
-			</tr>
-		</tbody>
-	</table>
-	<!-- page -->
-	<nav class="pagiWrap">
-		<paging class="pagiWrap"
-			page="contents.pageOptions.currentPage"
-			page-size="contents.pageOptions.pageSize"
-			total="contents.pageOptions.total"
-			pg-href=""
-			show-prev-next="true"
-			show-first-last="true"
-			paging-action="contents.fn.getStorageList(page)"
-			text-first-class="first"
-			text-last-class="end"
-			text-next-class="next"
-			text-prev-class="prev">
-		</paging>
-	</nav>
-	<!-- //page -->
-</div>
-<!-- //table -->

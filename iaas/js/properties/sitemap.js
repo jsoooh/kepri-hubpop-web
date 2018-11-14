@@ -156,7 +156,14 @@ angular.module('app')
                                         url: '/iaas/storage/detail/:volumeid',
                                         controller: 'iaasStorageDetailCtrl',
                                         templateUrl: _IAAS_VIEWS_+'/storage/subMenus/storageDetail.html',
-                                    }
+                                    },
+                                    storageCreate: {
+				                        name: 'storage_create',
+				                        stateKey: 'iaasStorgeCreate',
+				                        url: '/iaas/storage/detail',
+				                        controller: 'iaasStorageFormCtrl',
+				                        templateUrl: _IAAS_VIEWS_+'/storage/storageForm.html',
+				                    }
                                 }
                             },
                             storage_snapshot: {

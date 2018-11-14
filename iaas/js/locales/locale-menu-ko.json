@@ -20,6 +20,7 @@
 			"storage_main" : "볼륨",
 			"storage_snapshot" : "볼륨 스냅샷",
 			"storage_details" : "볼륨 상세",
+			"storage_create" : "볼륨 등록",
 			"object_storage" : "오브젝트 스토리지",
 			"network_main" : "내부 네트워크",
 			"network_detail" : "네트워크 상세",

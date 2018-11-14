@@ -18,6 +18,7 @@
 			"server_keypair": "Keypair",
 			"server_keypair_instance" : "Keypair Instance",
 			"storage_main": "Volume",
+			"storage_create": "Volume Create",
 			"storage_snapshot": "Volume Snapshot",
 			"storage_details": "Volume Snapshot Detail",
 			"object_storage": "Object Storage",
