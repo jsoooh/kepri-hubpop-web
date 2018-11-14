@@ -107,7 +107,7 @@
 .md-dialog-container{min-height: 600px; overflow: auto;}
 md-dialog.md-default-theme, md-dialog{background-color: inherit;}
 md-dialog{overflow: hidden;}
-md-dialog .modal-body{max-height: 500px; overflow-y: auto;}
+md-dialog .modal-body{max-height: 600px; overflow-y: auto;}
 
 /*180726 공통팝업(알림, 경고) 스타일 추가*/
 .modal-body .alertWrap {position:relative;}
