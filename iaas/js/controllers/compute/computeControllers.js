@@ -1138,6 +1138,7 @@ angular.module('iaas.controllers')
                 ct.volume.name = instance.name+'_volume01';
                 ct.volume.type = 'Volume Storage';
                 ct.volume.size = ct.volumeSize;
+                ct.volume.tenantId = ct.data.tenantId;
           
                 instance.spec = ct.data.spec;
                 $scope.main.loadingMainBody = true;
