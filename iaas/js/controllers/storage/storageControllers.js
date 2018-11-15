@@ -226,130 +226,134 @@ angular.module('iaas.controllers')
     .controller('iaasStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageFormCtrl", 1);
 
-        $scope.contents = common.getMainContentsCtrlScope().contents;
-        $scope.dialogOptions = common.getMainContentsCtrlScope().dialogOptions;
-        
-        var pop = this;
+        var ct               = this;
+        ct.data              = {};
+        ct.fn                = {};
+        ct.ui                = {};
+        ct.roles             = [];
+        ct.data.name         = '';
+        ct.volume            = {};
+        ct.data.tenantId     = $scope.main.userTenant.id;
+        ct.data.tenantName   = $scope.main.userTenant.korName;
+        ct.formName          = "storageForm";
+        ct.validDisabled = true;
         $scope.actionLoading = false;
-
-        pop.userTenant = angular.copy($scope.main.userTenant);
         
-        pop.fn = {};
-        pop.data = {};
-        pop.data.size = 1;
-        pop.roles = [];
-
-        pop.formName = "storageForm";
-        pop.validDisabled = true;
-        pop.dialogClassName = "modal-lg";
-        pop.title = "볼륨 추가";
-        
-        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageForm.html" + _VersionTail();
-
-
-        // Dialog ok 버튼 클릭 시 액션 정의
-        pop.popDialogOk = function () {
-            if ($scope.actionBtnHied) return;
-            $scope.actionBtnHied = true;
-            
-        	if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
-                $scope.actionBtnHied = false;
-                return;
+        //볼륨생성 변수
+        ct.volumeSize = 10;
+        ct.volumeSliderOptions = 
+        {
+        	showSelectionBar : true,
+        	minValue : 1,
+        	
+        	options: {
+                floor: 0,
+                ceil: 100,
+                step: 30
             }
+        };
+      
+        // Dialog ok 버튼 클릭 시 액션 정의
+        var clickCheck = false;
+        ct.checkVal = function () 
+        {
+        	if(!clickCheck)
+            {
+	        	 clickCheck = true;
+	            
+	            if (!new ValidationService().checkFormValidity($scope[ct.formName])) 
+	            {
+	                clickCheck = false;
+	                return;
+	            }
             
-            var checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
+           /* var checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
         	if(checkByte > 255){
                 common.showAlertWarning("볼륨 설명이 255Byte를 초과하였습니다.");
         		$scope.actionBtnHied = false;
         		return;
-        	}
+        	}*/
 
-            if(Number(pop.data.size) < 1){
+            /*if(Number(ct.data.size) < 1){
                 common.showAlertWarning("볼륨 크기는 1G 부터 추가 가능 합니다. 볼륨 크기 최소값 : 1" + ", 입력값 : " + pop.data.size );
                 pop.data.size = 10;
                 $scope.actionBtnHied = false;
                 return;
-            }
+            }*/
 
-            if(Number(pop.data.size) > (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)){
+           /* if(Number(pop.data.size) > (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)){
                 common.showAlertWarning("볼륨 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.data.size );
                 pop.data.size = 10;
                 $scope.actionBtnHied = false;
                 return;
-            }
+            }*/
 
-            pop.createStorageVolumeAction();
-            
+	            ct.createStorageVolumeAction();
+            }
         };
 
-        pop.popCancel = function () {
-        	$(".aside").stop().animate({"right":"-360px"}, 400);
-        };
-
-        pop.fn.getTenantResource = function() {
-            var params = {
-                tenantId : pop.userTenant.tenantId
+        // 볼륨 생성 부분 추가 2018.11.13 sg0730
+        ct.fn.getTenantResource = function() 
+        {
+            var params = 
+            {
+                tenantId : ct.data.tenantId
             }
-            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
-            returnPromise.success(function (data, status, headers) {
-                pop.resource = data.content[0];
-                pop.resourceDefault = angular.copy(pop.resource);
-                pop.resource.usedResource.volumeGigabytes += pop.data.size;
+            
+            returnPromise.success(function (data, status, headers) 
+            {
+                ct.volume.resource = data.content[0];
+                ct.volume.resourceDefault = angular.copy(ct.volume.resource);
+                ct.volumeSliderOptions.ceil = ct.volume.resource.maxResource.volumeGigabytes - ct.volume.resource.usedResource.volumeGigabytes ;
             });
-            returnPromise.error(function (data, status, headers) {
+            
+            returnPromise.error(function (data, status, headers) 
+            {
                 $scope.main.loadingMainBody = false;
                 common.showAlert("message",data.message);
             });
-            returnPromise.finally(function (data, status, headers) {
+           
+            returnPromise.finally(function (data, status, headers) 
+            {
                 $scope.main.loadingMainBody = false;
             });
-        }
-
-        pop.fn.volumeSizeAction = function(flag) {
-            if(flag) {
-                pop.data.size = Number(pop.data.size) + 1;
-                if(Number(pop.resourceDefault.maxResource.volumeGigabytes) < (Number(pop.data.size) + Number(pop.resourceDefault.usedResource.volumeGigabytes))){
-                    pop.data.size = Number(pop.data.size) - 1;
-                }
-            } else {
-                if(Number(pop.data.size) - 1 >= 1) {
-                    pop.data.size = Number(pop.data.size) - 1;
-                }
-            }
-            pop.resource.usedResource.volumeGigabytes = Number(pop.data.size) + Number(pop.resourceDefault.usedResource.volumeGigabytes);
-        }
-
-        pop.fn.changeVolumeSize = function() {
-            // pop.resource.usedResource.volumeGigabytes = Number(pop.data.size) + Number(pop.resourceDefault.usedResource.volumeGigabytes);
-        }
-
-        pop.createStorageVolumeAction = function() {
+        };
+        
+        // val 통과 실제 볼륨 생성 호출
+        ct.createStorageVolumeAction = function() 
+        {
             $scope.main.loadingMainBody = true;
-            pop.data.tenantId = pop.userTenant.tenantId;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'POST', {volume:pop.data});
-            returnPromise.success(function (data, status, headers) {
-                $scope.contents.fn.getStorageList();
-                pop.popCancel();
+        
+            //ct.volume.name = instance.name+'_volume01';
+            ct.volume.type = 'HDD';
+            ct.volume.size = ct.volumeSize;
+            ct.volume.tenantId = ct.data.tenantId;
+            
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'POST', {volume:ct.volume});
+            
+            returnPromise.success(function (data, status, headers) 
+            {
+            	// 서버생성후 -> 볼륨 생성 후 sucess 처리.
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess(ct.volume.name+" 디스크 생성이 시작 되었습니다.");
+                // 페이지 이동으로 바꿔야 하고
+                $scope.main.goToPage("/iaas/storage/");
             });
-            returnPromise.error(function (data, status, headers) {
-            	pop.popCancel();
+            
+            returnPromise.error(function (data, status, headers) 
+            {
+            	$scope.main.loadingMainBody = false;
                 common.showAlert("message",data.message);
             });
-            returnPromise.finally(function (data, status, headers) {
+            
+            returnPromise.finally(function (data, status, headers) 
+            {
                 $scope.main.loadingMainBody = false;
             });
         };
 
-        pop.fn.checkByte = function (text, maxValue){
-            pop.checkByte = $bytes.lengthInUtf8Bytes(text);
-        }
-        
-        pop.formatter = function(data){
-			return data + 'G';
-		}
-
-        pop.fn.getTenantResource();
+        ct.fn.getTenantResource();
     })
     .controller('iaasStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageDetailCtrl", 1);

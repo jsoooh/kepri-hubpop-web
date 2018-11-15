@@ -1,87 +1,188 @@
-<div ng-controller="iaasStorageFormCtrl as pop">
-	<!-- aside aside1 title -->
-	<div class="sideTitWrap">
-		<h2 class="c_tit">{{pop.title}}</h2>
-		<button type="button" name="closeBtn" class="btn btn-close" data-user="aside-close" ng-click="pop.popCancel();"><span class="ico">닫기</span></button>
-	</div>
-	<!-- //aside aside1 title -->
-	
-	<!-- aside aside1 cnt -->
-	<form name="{{pop.formName}}" novalidate>
-		<div class="sideCntWrap">
-			<!-- sideInWrap -->
-			<div class="sideInWrap">
-				<ol class="app-set">
-					<!-- <li>
-						<p class="app-tit">종류 선택</p>
-						<select class="form-control" ng-model="pop.data.type" ng-init="pop.data.type = 'HDD'" name="volumeType"  disabled>
-							<option value="HDD">HDD</option> 
+
+<div class="message_area">
+	<div class="msg_bg"></div>
+	<div class="msg_txt"><span>‘디스크 만들기’를 통해 가상서버에 추가적인 저장공간을 할당할 수 있습니다.</span></div>
+</div>
+
+<form name="{{contents.formName}}" novalidate>
+<div class="panel_area">
+	<div class="panel_box pn_l">
+		<div class="pn_head">
+			<h4 class="pnh_tit">디스크 만들기</h4>
+		</div>
+		<div class="pn_body">
+			<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+			<ul class="form_list">
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 디스크 이름<span class="ico_info"></span>
+					</div>
+					<input type="text" ng-model="contents.volume.name" name="volumeName" validation="required" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요.">
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 저장공간 크기<span class="ico_info"></span>
+						<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil | number:0}}GB</div>
+					</div>
+					<div class="disk_area">
+						<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
+						<div class="disk_box">
+							<div class="rangeWrap type2">
+								<rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
+								<div class="range-text">
+									<input type="text" 
+										   class="form-control" 
+										   ng-model="contents.volumeSize"  
+										   name="volumeSize"  
+										   maxlength="4" 
+										   only-digits style="width:25%; display: inline-block;"> 
+									<span class="app-tit">GB</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						설명<span class="ico_info"></span>
+					</div>
+					<div class="text_wrap">
+						<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." ></textarea>
+					</div>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 가상서버와 연결<span class="ico_info"></span>
+					</div>
+					<div> <!--2018.11.14 sg0730 차후 가상서버 API받아와야함. -->
+						<select name="" class="form-control">
+							<option value="">KEPCOPROJECT-A-VM-001</option>
+							<option value="">KEPCOPROJECT-A-VM-002</option>
+							<option value="">KEPCOPROJECT-A-VM-003</option>
 						</select>
-					</li> -->
-					<input type="hidden" ng-model="pop.data.type" ng-init="pop.data.type = 'HDD'" name="volumeType" />
+					</div>
+				</li>
+			</ul>
+			<div class="btn_add_area">
+				<span>추가기능 설정하기</span>
+				<button type="button" class="btn_add"></button>
+			</div>
+		</div>
+		<div class="pn_footer">
+			<div class="btn-btm mgt0">
+				<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.checkVal();">디스크 추가</button>
+				<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToPage('/iaas/storage/')">취소</button>
+			</div>
+		</div>
+	</div>
+	<div class="panel_box pn_r">
+		<div class="pn_head">
+			<h4 class="pnh_tit ico02">디스크 기본정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
 					<li>
-						<p class="app-tit">이름 입력</p>
-						<input type="text" class="form-control" ng-model="pop.data.name" maxlength="50" name="volumeName" validation="required" placeholder="이름을 입력해 주세요." />
+						<span class="s_tit">디스크 이름</span>
+						<span class="s_txt">{{contents.volume.name}}</span>
 					</li>
 					<li>
-						<p class="app-tit">볼륨 크기 입력</p>
-						<!-- <input type="text" class="form-control" ng-model="pop.data.size" name="volumeSize" ng-change="pop.fn.changeVolumeSize()" maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span>
-						<button class="btn btn-plus"  ng-click="pop.fn.volumeSizeAction(true)" tooltip-placement="bottom" uib-tooltip="증가"><img src="images/ico_plus.png" width="10" height="10" alt="" /></button>
-						<button class="btn btn-minus"  ng-click="pop.fn.volumeSizeAction(false)" tooltip-placement="bottom" uib-tooltip="감소"><img src="images/ico_minus.png" width="10" height="10" alt="" /></button>
-						<ul class="inst-set">
-							<li>
-								<div class="rangeWrap type2">
-									<div class="range-text">
-										<strong class="range-tit">볼륨크기</strong>
-										<p class="text-letter">{{pop.resource.usedResource.volumeGigabytes | number : 0}}GB / {{pop.resource.maxResource.volumeGigabytes | number:0}}GB</p>
-										
-									</div>
-									<scalable-progress-bar swidth="90" max="100" top="80" scalable="{{pop.data.size / pop.resource.maxResource.volumeGigabytes * 100 | number: 0}}" bar="{{pop.resource.usedResource.volumeGigabytes / pop.resource.maxResource.volumeGigabytes * 100 | number: 0}}" from="0" duration="1" base="{{pop.resourceDefault.usedResource.volumeGigabytes / pop.resourceDefault.maxResource.volumeGigabytes * 100 | number: 0}}" >%</scalable-progress-bar>
-								</div>
-							</li>
-						</ul> -->
-						<div class="instBox noneBox"  style="padding: 10px 0;">
-							<ul class="inst-set">
-								<li>
-									<div class="rangeWrap type2">
-										<div class="range-text">
-											<!-- <strong class="range-tit">볼륨 크기</strong> -->
-											<input type="text" class="form-control" ng-model="pop.data.size" name="volumeSize" ng-change="pop.fn.changeVolumeSize()" maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span>
-											<span class="range-txt">최대 {{(pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) | number:0}}G</span>
-										</div>
-										<slider
-											slider-id="ex1Slider2"
-											ng-model="pop.data.size"
-											value="pop.data.size"
-											min="1"
-											max="(pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)"
-											step="1"
-											slider_tooltip_position="top"
-											formatter="pop.formatter(pop.data.size)"
-										>
-										</slider>
-									</div>
-								</li>
-							</ul>
-							<p class="inst-txt">마우스를 움직여 생성하실 볼륨의 크기를 설정해 주세요.</p>
+						<span class="s_tit">디스크 크기</span>
+						<span class="s_txt">{{contents.volumeSize}}GB</span>
+					</li>
+					<li>
+						<span class="s_tit">디스크 유형<span class="ico_info"></span></span>
+						<span class="s_txt">Volume Storage</span>
+					</li>
+					<li>
+						<span class="s_tit">디스크 설명</span>
+						<!-- <span class="s_txt">text-area</span> -->
+						<div class="s_inner_cont">
+							<span>
+								{{contents.volume.description}}
+							</span>
 						</div>
 					</li>
-					<li>
-						<p class="app-tit">설명 입력</p>
-						<textarea id="volumeDescription" name="volumeDescription" maxlength="255" style="height:150px;" ng-model="pop.data.description" class="form-control" ng-keyup="pop.fn.checkByte(pop.data.description,255)" placeholder="설명을 입력해 주세요." ></textarea>
-						<p class="text-letter">{{pop.data.description | stringToBytes}}/255 Byte</p>
-						<div class="validation validation-description text-danger" ng-show="pop.checkByte > 255">255Byte까지 작성 가능합니다.</div>
-					</li>
-				</ol>
+				</ul>
 			</div>
-			<!-- //sideInWrap -->
 		</div>
-	</form>
-	<!-- //aside aside1 cnt -->
-	
-	<!-- aside aside1 btm -->
-	<div class="sideBtmWrap">
-		<button type="button" name="saveBtn" class="btn" data-user="aside-close" ng-click="pop.popDialogOk();">저장</button>
+		</form>
+		
+		<div class="pn_head brdt">
+			<h4 class="pnh_tit ico01">연결대상 가상서버 정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">서버 이름</span>
+						<span class="s_txt">10GB</span>
+					</li>
+					<li>
+						<span class="s_tit">서버 OS</span>
+						<span class="s_txt">Ubuntu 16.4</span>
+					</li>
+					<li>
+						<span class="s_tit">서버 접속IP</span>
+						<span class="s_txt">192.168.200.35</span>
+					</li>
+					<li>
+						<span class="s_tit">서버 사양</span>
+						<span class="s_txt">소형</span>
+						<div class="s_inner_cont">
+							<div class="innr_tbl">
+								<table>
+									<colgroup>
+										<col width="30" />
+										<col width="30" />
+										<col width="30" />
+									</colgroup>
+									<thead>
+										<tr>
+											<th>vCPU</th>
+											<th>메모리</th>
+											<th>디스크</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>2Core</td>
+											<td>4GB</td>
+											<td>10GB</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="pn_head brdt">
+			<h4 class="pnh_tit ico03">프로젝트 사용가능 디스크 정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">전체 쿼터</span>
+						<span class="s_txt">10TB</span>
+					</li>
+					<li>
+						<span class="s_tit">현재 사용량</span>
+						<span class="s_txt">1.5TB</span>
+					</li>
+					<li>
+						<span class="s_tit">잔여 용량</span>
+						<span class="s_txt">8.5TB</span>
+					</li>
+				</ul>
+			</div>
+			<div class="btn-btm">
+				<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
+			</div>
+		</div>
+		
 	</div>
-	<!-- //aside aside1 btm -->
 </div>

@@ -1148,9 +1148,9 @@ angular.module('iaas.controllers')
                 {
                 	// 서버생성후 -> 볼륨 생성 후 sucess 처리.
                     $scope.main.loadingMainBody = false;
-                    common.showAlertSuccess("생성 되었습니다.");
+                    common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
                     // 페이지 이동으로 바꿔야 하고
-                    $scope.main.goToPage("/iaas");
+                    $scope.main.goToPage("/iaas/compute");
                 	
                 	
                 });
