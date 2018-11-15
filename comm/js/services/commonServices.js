@@ -2892,7 +2892,6 @@ angular.module('common.services', ['LocalStorageModule'])
                 return config;
             },
             response: function(response) {
-                console.log(response);
                 return response;
             },
             progress: function(evt) {
