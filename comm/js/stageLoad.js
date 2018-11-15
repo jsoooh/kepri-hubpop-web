@@ -9,9 +9,9 @@ loadJavascript(_COMM_STAGE_+'/js/controllers/memberControllers.js'+_VERSION_TAIL
 loadJavascript(_COMM_STAGE_+'/js/controllers/orgControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/controllers/orgDetailControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/controllers/boardControllers.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_COMM_STAGE_+'/js/controllers/dashboardControllers.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_COMM_STAGE_+'/js/controllers/serviceCatalogListControllers.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_COMM_STAGE_+'/js/controllers/serviceCatalogViewControllers.js'+_VERSION_TAIL_HEAD_);
+//loadJavascript(_COMM_STAGE_+'/js/controllers/dashboardControllers.js'+_VERSION_TAIL_HEAD_);
+//loadJavascript(_COMM_STAGE_+'/js/controllers/serviceCatalogListControllers.js'+_VERSION_TAIL_HEAD_);
+//loadJavascript(_COMM_STAGE_+'/js/controllers/serviceCatalogViewControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/controllers/tutorialControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/controllers/signupControllers.js'+_VERSION_TAIL_HEAD_);
 

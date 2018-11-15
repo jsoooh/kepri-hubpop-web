@@ -1,10 +1,10 @@
 	<h2 class="h2">{{ main.selectSiteMap.pageStage + 'Menu.menu.' + main.selectSiteMap.name | translate }}</h2>
 	<!-- breadcrumb -->
-	<div class="breadWrap" dynamic-template="main.navigationTreeTitle"></div>
+	<!--<div class="breadWrap" dynamic-template="main.navigationTreeTitle"></div>-->
 	<!-- //breadcrumb -->
 
 	<div class="btnArea">
-		<button ng-if="main.selectSiteMap.name == 'server_main' || main.selectSiteMap.name == 'deploy_server' || main.selectSiteMap.name == 'storage_main' || main.selectSiteMap.name == 'dashboard' || main.selectSiteMap.name == 'applications' || main.selectSiteMap.name == 'network_domain_router'" type="button" name="button" class="btn btn-list type1" title="이미지형" ng-class="{'on' : main.contentsViewType =='thum'}" ng-click="main.changeType('thum');"><span class="ico"></span>이미지형</button>
-		<button ng-if="main.selectSiteMap.name == 'server_main' || main.selectSiteMap.name == 'deploy_server' || main.selectSiteMap.name == 'storage_main' || main.selectSiteMap.name == 'dashboard' || main.selectSiteMap.name == 'applications' || main.selectSiteMap.name == 'network_domain_router'" type="button" name="button" class="btn btn-list type2" title="리스트형" ng-class="{'on' : main.contentsViewType =='tbl'}" ng-click="main.changeType('tbl');"><span class="ico"></span>리스트</button>
+		<!--<button ng-if="main.selectSiteMap.name == 'server_main' || main.selectSiteMap.name == 'deploy_server' || main.selectSiteMap.name == 'storage_main' || main.selectSiteMap.name == 'dashboard' || main.selectSiteMap.name == 'applications' || main.selectSiteMap.name == 'network_domain_router'" type="button" name="button" class="btn btn-list type1" title="이미지형" ng-class="{'on' : main.contentsViewType =='thum'}" ng-click="main.changeType('thum');"><span class="ico"></span>이미지형</button>-->
+		<!--<button ng-if="main.selectSiteMap.name == 'server_main' || main.selectSiteMap.name == 'deploy_server' || main.selectSiteMap.name == 'storage_main' || main.selectSiteMap.name == 'dashboard' || main.selectSiteMap.name == 'applications' || main.selectSiteMap.name == 'network_domain_router'" type="button" name="button" class="btn btn-list type2" title="리스트형" ng-class="{'on' : main.contentsViewType =='tbl'}" ng-click="main.changeType('tbl');"><span class="ico"></span>리스트</button>-->
 		<button ng-if="main.projectType == 'org'" type="button" name="button" class="btn btn-list only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
 	</div>

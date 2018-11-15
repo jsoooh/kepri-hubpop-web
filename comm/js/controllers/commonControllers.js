@@ -1363,7 +1363,7 @@ angular.module('common.controllers', [])
 
             $scope.main.setLeftIconFavToggle($location.path());
 
-            $scope.main.setNavigationTreeTitle();
+            //$scope.main.setNavigationTreeTitle();
             if ($scope.main.selectSiteMap && $scope.main.selectSiteMap.parentSiteMap && $scope.main.selectSiteMap.parentSiteMap.defaultUrl) {
                 $scope.main.parentMenuName = $scope.main.selectSiteMap.parentSiteMap.name;
                 $scope.main.moveParentUrl = $scope.main.selectSiteMap.parentSiteMap.defaultUrl;
