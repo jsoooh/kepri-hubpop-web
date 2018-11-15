@@ -1,0 +1,171 @@
+<div class="message_area">
+	<div class="msg_bg"></div>
+	<div class="msg_txt"><span>배포 된 APP과 연결되어 사용되는 백엔드 서비스를 만들 수 있습니다.</span></div>
+</div>
+
+<div class="panel_area">
+	<div class="panel_box pn_l">
+		<div class="pn_head">
+			<h4 class="pnh_tit">APP 만들기</h4>
+		</div>
+		<div class="pn_body">
+			<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+			<ul class="form_list">
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 서비스 이름<span class="ico_info"></span>
+					</div>
+					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요.">
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 서비스 S/W<span class="ico_info"></span>
+					</div>
+					<ul class="ul-list1">
+						<li>
+							<div class="radio1 radio-inline">
+							   <input type="radio" name="app-radio3" id="app-radio3-1">
+							   <label for="app-radio3-1" class="label"><img src="images/thum/im_thum_ubuntu.png" alt="" class="im"></label>
+							</div>
+							<p class="label-txt">ubuntu 16.4</p>
+						</li>
+						<li>
+						   <div class="radio1 radio-inline">
+							  <input type="radio" name="app-radio3" id="app-radio3-2">
+							  <label for="app-radio3-2" class="label"><img src="images/thum/im_thum_centOS.png" alt="" class="im"></label>
+						   </div>
+							<p class="label-txt">CentOS 7.5</p>
+						</li>
+						<li>
+						   <div class="radio1 radio-inline">
+							  <input type="radio" name="app-radio3" id="app-radio3-3">
+							  <label for="app-radio3-3" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
+						   </div>
+							<p class="label-txt">Windows 10</p>
+						</li>
+						<li>
+						   <div class="radio1 radio-inline">
+							  <input type="radio" name="app-radio3" id="app-radio3-4">
+							  <label for="app-radio3-4" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
+						   </div>
+							<p class="label-txt">Windows 10</p>
+						</li>
+						<li>
+						   <div class="radio1 radio-inline">
+							  <input type="radio" name="app-radio3" id="app-radio3-5">
+							  <label for="app-radio3-5" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
+						   </div>
+							<p class="label-txt">Windows 10</p>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 서비스 플랜<span class="ico_info"></span>
+					</div>
+					<div class="app-form-two">
+						<div class="two_box pdr10">
+							<div class="radio radio-inline">
+							   <input type="radio" name="radio0" id="radio0-1">
+							   <label for="radio0-1">10MB</label>
+						   </div>
+						   <div class="txt_box">Shard My SQL Server</div>
+						</div>
+						<div class="two_box pdl10">
+							<div class="radio radio-inline">
+							   <input type="radio" name="radio0" id="radio0-2">
+							   <label for="radio0-2">20MB</label>
+						   </div>
+						   <div class="txt_box">Shard My SQL Server</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						연결대상 APP<span class="ico_info"></span>
+					</div>
+					<div class="select_dropdown">
+						<div class="sel_box on">연결 대상 APP을 선택합니다.(선택사항)</div>
+						<div class="down_box">
+							<input type="text" class="form-control" maxlength="100" placeholder="검색어를 입력하세요.">
+							<button class="ico_del_x">내용 지우기</button>
+							<ul>
+								<li class="on"><a href="">수요예측 APP</a></li>
+								<li><a href="">Microservice app 01</a></li>
+								<li><a href="">Microservice app 02</a></li>
+							</ul>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="pn_footer">
+			<div class="btn-btm mgt0">
+				<button type="button" name="button" class="btn btn-color1 btn-md">APP 생성</button>
+				<button type="button" name="button" class="btn btn-color2 btn-md">취소</button>
+			</div>
+		</div>
+	</div>
+	<div class="panel_box pn_r">
+		<div class="pn_head">
+			<h4 class="pnh_tit ico07">서비스 기본정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">서비스 이름</span>
+						<span class="s_txt">dev-mariadb-001</span>
+					</li>
+					<li>
+						<span class="s_tit">서비스 유형<span class="ico_info"></span></span>
+						<span class="s_txt">관계형 데이터 베이스</span>
+					</li>
+					<li>
+						<span class="s_tit">서비스 S/W 정보</span>
+						<div class="s_inner_cont">
+							<dl>
+								<dt>S/W :</dt>
+								<dd>Maria DB</dd>
+								<dt>버전 :</dt>
+								<dd>1.8.2</dd>
+								<dt>설명 :</dt>
+								<dd>오픈소스 관계형 데이터 베이스</dd>
+								<!-- <dt>주요구성 SW</dt>
+								<dd class="dd_row">Spring Framework 4.2</dd>
+								<dd class="dd_row">Tomcat 1.8.1</dd>
+								<dd class="dd_row">JRE 1.8.1</dd> -->
+							</dl>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="pn_head">
+			<h4 class="pnh_tit ico08">서비스 플랜(Plan)정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">서비스 용량</span>
+						<span class="s_txt">10 Megabyte</span>
+					</li>
+					<li>
+						<span class="s_tit">서비스 사용 모델<span class="ico_info"></span></span>
+						<span class="s_txt">공유형</span>
+					</li>
+					<li>
+						<span class="s_tit">서비스 플랜 설명</span>
+						<div class="s_inner_cont">
+							Shared MySQL Server
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="btn-btm">
+				<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
+			</div>
+		</div>
+	</div>
+</div>
