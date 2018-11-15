@@ -2343,7 +2343,7 @@ p.no-txt{
 .panel.type6 .panel_head.pdlr30 {padding:24px 30px 0 30px;}
 .panel.type6 .panel_head .btn_txt {display:inline-block; font-size:12px; color:#fff; background:#707070; border-radius:2px; padding:1px 10px 2px 10px; margin-top:6px;}
 .panel.type6 .panel_head .btn_txt:hover {background:#4d4d4d;}
-.panel.type6 .panel_head .ico_link {position:absolute; top:30px; right:55px; display:inline-block; width:42px; height:42px; font-size:0; background:url("../images/ico_link_lg.png") no-repeat;}
+.panel.type6 .panel_head .link_info {position:absolute; top:30px; right:55px; display:inline-block; width:42px; height:42px; font-size:0; background:url("../images/ico_link_lg.png") no-repeat;}
 
 
 /*180515 한 라인에 폼이 두개일경우의 스타일 추가*/
