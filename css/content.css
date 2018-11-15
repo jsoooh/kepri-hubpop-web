@@ -2200,6 +2200,7 @@ p.no-txt{
 .panel_area .pn_body .s_cont_box ul > li .s_tit {position:relative; font-size:15px; font-weight:500; color:#777;}
 .panel_area .pn_body .s_cont_box ul > li .s_txt {font-size:18px; font-weight:500; color:#333; float:right;}
 .panel_area .pn_body .s_cont_box ul > li .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:20px; margin:10px 0 0 0;}
+.panel_area .pn_body .s_cont_box ul > li .s_inner_cont pre {display:block; width:100%; font-family:'Noto Sans KR', 'Montserrat','Apple SD Gothic Neo', sans-serif; font-size:14px; color:#333; line-height:1.42857143; word-break:break-all; word-wrap:break-word; white-space:pre-line; overflow:hidden; background:none; border:0; border-radius:0px; padding:0px; margin:0;}
 .panel_area .pn_body .s_cont_box ul > li .innr_tbl table {width:100%;}
 .panel_area .pn_body .s_cont_box ul > li .innr_tbl table thead th {font-size:14px; color:#fff; border-right:1px solid #fff; background:#878889; text-align:center;}
 .panel_area .pn_body .s_cont_box ul > li .innr_tbl table thead th:last-child {border-right:0px;}
