@@ -62,7 +62,9 @@
 												</div>
 											</div>
 										</div>
-										<strong class="tit">CPU</strong>
+										<span class="percent_txt">{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}<span>%</span></span>
+										<strong class="tit mt10">CPU</strong>
+										<span class="flavor_info">{{instance.spec.vcpus}} 개</span>
 									</li>
 									<li>
 										<div class="progressWrap type1">
@@ -72,7 +74,9 @@
 												</div>
 											</div>
 										</div>
-										<strong class="tit">Memory</strong>
+										<span class="percent_txt">{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}<span>%</span></span>
+										<strong class="tit mt10">Memory</strong>
+										<span class="flavor_info">{{(instance.spec.ram/1024|number:1).replace('.0', '')}} GB</span>
 									</li>
 									<li>
 										<div class="progressWrap type1">
@@ -82,7 +86,9 @@
 												</div>
 											</div>
 										</div>
-										<strong class="tit">Disk</strong>
+										<span class="percent_txt">{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}<span>%</span></span>
+										<strong class="tit mt10">Disk</strong>
+										<span class="flavor_info">{{instance.spec.disk}} GB</span>
 									</li>
 								</ul>
 							</div>

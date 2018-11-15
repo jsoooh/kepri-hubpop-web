@@ -6,83 +6,121 @@
 		</div>
 	</div>
 	<!-- //작업 추가 및 선택 -->
-	<!-- guide box 0830 삭제 -->
-	<!--
-	<div class="guideTxt type1" ng-bind-html="'iaasMenu.desc.' + main.selectSiteMap.name + '.short' | translate"></div>
-	-->
 	
-	<!-- search -->
-	<div class="searchWrap">
-		<div class="searchBox">
-			<div class="form-group">
-                   <input type="text" name="name" id="name" ng-model="contents.data.instanceName" placeholder="검색어를 입력해 주세요." style="width:400px;">
-               </div>
-			<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.fn.getInstanceSnapshotList()"><span class="ico">검색</span></button>
+	<!-- 탭영역 -->
+	<div role="tabpanel" class="tabWrap type1">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist" style="border-bottom:none;">
+			<li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">서버 백업 이미지<span>(13)</span></a></li>
+			<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">디스크 백업 이미지<span>(13)</span></a></li>
+		</ul>
+	
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<!-- tab1 cnt -->
+			<div role="tabpanel" class="tab-pane in active" id="tab1">
+				<!-- panel -->
+				<ul class="ul-panel">
+					<li>
+						<div class="panelWrap">
+							<div class="panel type6">
+								<div class="panel_head">
+									<img class="logo" alt="" src="images/thum/ico_thum_svr.png"/>
+									<p class="tit">볼륨 이름</p>
+									<!-- <p class="txt">볼륨스토리지</p> -->
+									<button class="btn_txt">원본정보</button>
+									<div class="dropdown btn-option">
+										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<li><a href="#">볼륨 스냅샷</a></li>
+											<li><a href="#">볼륨 삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel_body">
+									<div class="ul-in">
+										<div class="cnt_wrap">
+											<div class="cnt_imgBox">
+												<span class="cnt_img ico02"></span>
+												<div class="cnt_txt"><span class="txt_name">HDD</span><span class="color1">10GB</span> / <span class="color2">100GB</span></div>
+											</div>
+											<div class="cnt_infoBox">
+												<dl>
+													<dt>연결서버</dt>
+													<dd>server001</dd>
+													<dt>장치정보</dt>
+													<dd>/dev/sdb</dd>
+												</dl>
+												<span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span>
+											</div>
+										</div>
+										<div class="down">
+											<span class="stateWrap"><span class="stateMark type01">IN-USE</span><span class="state-txt">IN-USE</span></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<!-- //panel -->
+			</div>
+			<!-- //tab1 cnt -->
+	
+			<!-- tab2 cnt -->
+			<div role="tabpanel" class="tab-pane" id="tab2">
+				<!-- panel -->
+				<ul class="ul-panel">
+					<li>
+						<div class="panelWrap">
+							<div class="panel type6">
+								<div class="panel_head">
+									<img class="logo" alt="" src="images/thum/ico_thum_disk.png"/>
+									<p class="tit">볼륨 이름</p>
+									<!-- <p class="txt">볼륨스토리지</p> -->
+									<button class="btn_txt">원본정보</button>
+									<div class="dropdown btn-option">
+										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<li><a href="#">볼륨 스냅샷</a></li>
+											<li><a href="#">볼륨 삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel_body">
+									<div class="ul-in">
+										<div class="cnt_wrap">
+											<div class="cnt_imgBox">
+												<span class="cnt_img ico02"></span>
+												<div class="cnt_txt"><span class="txt_name">disk-001-snapshot</span></div>
+											</div>
+											<div class="cnt_infoBox">
+												<dl>
+													<dt>이미지 크기</dt>
+													<dd>10GB</dd>
+													<dt>이미지 생성일시</dt>
+													<dd>2018-11-05 05:39:53</dd>
+												</dl>
+												<span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span>
+											</div>
+										</div>
+										<div class="down">
+											<span class="stateWrap"><span class="stateMark type01">IN-USE</span><span class="state-txt">IN-USE</span></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<!-- //panel -->
+			</div>
+			<!-- //tab2 cnt -->
 		</div>
 	</div>
-	<!-- search -->
+	<!-- 탭영역 -->
 	
-	<!-- table -->
-	<div class="tbl type1">
-		<table class="table">
-			<colgroup>
-				<col style="width:18%" />
-				<col style="width:21%" />
-				<col style="width:21%"/>
-				<col style="width:7%" />
-				<col style="width:7%" />
-				<col style="width:13%" />
-				<col style="width:13%"/>
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col">이름</th>
-					<th scope="col">설명</th>
-					<th scope="col">인스턴스</th>
-					<th scope="col">크기</th>
-					<th scope="col">상태</th>
-					<th scope="col">생성일자</th>
-					<th scope="col">관리</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="snapshot in contents.snapshotList">
-					<td><span>{{snapshot.snapShotName}}</span></td>
-					<td class="text-left">{{snapshot.description}}</td>
-					<td class="text-left" style="text-decoration: underline;">
-						<a href="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+snapshot.instanceId,snapshot.instanceName,true)" tooltip-placement="top" uib-tooltip="{{snapshot.instanceName}}">{{snapshot.instanceName}}</a>
-					</td>
-					<td>{{snapshot.size | displayVolume:'GB'}}</td>
-					<td snapshot-status-observe observe-action="snapshot.observeAction" ng-model="snapshot.observeAction" ng-init="snapshot.observeAction = 'ready'">
-						<span ng-if="snapshot.status == 'active'" class="stateBox type1 color1">{{snapshot.status}}</span>
-						<span ng-if="snapshot.status != 'active'" class="stateBox type1 color2">{{snapshot.status}}</span>
-					</td>
-					<td>{{snapshot.createDate}}</td>
-					<td>
-						<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-resto-s only-ico" data-user="aside" data-username="#aside-restore" title="복원" ng-click="contents.formOpen(snapshot);"><span class="ico">복원</span></button>
-						<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteSnapshot(snapshot);"><span class="ico">삭제<span></button>
-					</td>
-				</tr>
-				<tr ng-if="contents.snapshotList.length == 0">
-					<td colspan="7" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	
-	<!-- //page -->
-	<nav class="pagiWrap" ng-show="contents.pageOptions.total > contents.pageOptions.pageSize">
-		<paging class="pagiWrap"
-			page="contents.pageOptions.currentPage"
-			page-size="contents.pageOptions.pageSize"
-			total="contents.pageOptions.total"
-			pg-href=""
-			show-prev-next="true"
-			show-first-last="true"
-			paging-action="contents.fn.getInstanceSnapshotList(page)"
-			text-first-class="first"
-			text-last-class="last"
-			text-next-class="next"
-			text-prev-class="end">
-		</paging>
-	</nav>
