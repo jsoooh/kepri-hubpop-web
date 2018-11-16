@@ -278,7 +278,7 @@ angular.module('app')
                         url: '/sample/pop',
                         controller: 'samplePopCtrl',
                         templateUrl: _COMM_VIEWS_ + '/sample/samplePop.html',
-                    }
+                    },
 */
                     demo: {
                         name: 'demoPage',

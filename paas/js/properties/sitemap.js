@@ -19,17 +19,31 @@ angular.module('app')
                         url: '/paas',
                         controller: 'paasApplicationsCtrl',
                         templateUrl: _PAAS_VIEWS_ + '/application/apps.html',
+                        subPages: {
+                            applicationDetail: {
+                                name: 'application_details',
+                                stateKey: 'paasApplicationDetail',
+                                url: '/paas/apps/:guid',
+                                controller: 'paasApplicationDetailCtrl',
+                                templateUrl: _PAAS_VIEWS_ + '/application/appDetail.html',
+                                ngClick: "main.moveToAppPage('/paas/apps/' + main.stateParams.guid);",
+                            },
+                            applicationPush: {
+                                name: 'applications_create',
+                                stateKey: 'paasApplicationPush',
+                                url: '/paas/appsPush',
+                                controller: 'paasApplicationPushCtrl',
+                                templateUrl: _PAAS_VIEWS_+'/application/applicationPush.html',
+                            },
+                            serviceInstanceCreate: {
+                                name: 'service_instance_create',
+                                stateKey: 'paasServiceInstanceCreate',
+                                url: '/paas/serviceInstanceCreate',
+                                controller: 'paasServiceInstanceCreateCtrl',
+                                templateUrl: _PAAS_VIEWS_+'/application/serviceInstanceCreate.html',
+                            }
+                        }
                     }, // application
-                    applicationDetail: {
-                        title: "<li>{{ main.detailOrgName }}</li><li>{{ main.spaceName }}</li><li>{{ main.applicationName }}</li>",
-                        name: 'application_details',
-                        stateKey: 'paasApplicationDetail',
-                        menuDisplayNo : true,
-                        url: '/paas/apps/:guid',
-                        controller: 'paasApplicationDetailCtrl',
-                        templateUrl: _PAAS_VIEWS_ + '/application/appDetail.html',
-                        ngClick: "main.moveToAppPage('/paas/apps/' + main.stateParams.guid);",
-                    },
                 }, // menus
             }, // paasPotal
         } // leftMenus
