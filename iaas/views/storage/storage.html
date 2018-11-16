@@ -37,18 +37,7 @@
 				</div>
 				<div class="panel_body" ng-if="volume.status != 'creating'" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">
 					<div class="ul-in">
-						<!--
-						기존소스 주석처리(화면참조완료 후 삭제요망)181115김보람
-						 <div class="up">
-							<div class="hardProg">
-								<div class="progressWrap">
-									<strong class="progress-txt">{{volume.type}}</strong>
-									<p class="progress-txt">
-										<b><span count-to="{{volume.size | number : 0}}" duration="1" count-from="0" filter="number"></span>GB</b>
-									</p>
-								</div>
-							</div>
-						</div> -->
+					
 						<div class="cnt_wrap">
 							<div class="cnt_imgBox">
 								<span class="cnt_img ico01"></span>
