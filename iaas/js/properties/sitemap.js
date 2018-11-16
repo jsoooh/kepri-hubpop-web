@@ -46,24 +46,6 @@ angular.module('app')
                             }
                         },
                     },
-                    server_snapshot: {
-                        name: "server_snapshot",
-                        icon: "server_snapshot",
-                        stateKey: 'iaasComputeSnapshot',
-                        url: '/iaas/compute/snapshot',
-                        controller: 'iaasComputeSnapshotCtrl',
-                        templateUrl: _IAAS_VIEWS_+'/compute/computeSnapshot.html'
-                    },
-/*
-                    storage_snapshot: {
-                        name: "storage_snapshot",
-                        icon: "storage_snapshot",
-                        stateKey: 'iaasStorageSnapshot',
-                        url: '/iaas/compute/storageSnapshot',
-                        controller: 'iaasStorageSnapshotCtrl',
-                        templateUrl: _IAAS_VIEWS_+'/storage/storageSnapshot.html',
-                    },
-*/
                     storageMain: {
                         name: "storage_main",
                         icon: "storageMain",
@@ -81,6 +63,40 @@ angular.module('app')
                             }
                         }
                     },
+                    server_snapshot: {
+                        name: "server_snapshot",
+                        icon: "server_snapshot",
+                        stateKey: 'iaasServiceSnapshot',
+                        url: '/iaas/snapshot',
+                        controller: 'iaasServiceSnapshotCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/compute/serviceSnapshot.html',
+                        subPages: {
+                            instanceSnashotCreate: {
+                                name: 'instance_snapshot_create',
+                                stateKey: 'iaasInstanceSnapshotCreate',
+                                url: '/iaas/snapshot/instanceCreate',
+                                controller: 'iaasInstanceSnapshotCreateCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/compute/instanceSnapshotCreate.html',
+                            },
+                            storageSnashotCreate: {
+                                name: 'storage_snapshot_create',
+                                stateKey: 'iaasStorageSnapshotCreate',
+                                url: '/iaas/snapshot/storageCreate',
+                                controller: 'iaasStorageSnapshotCreateCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/storage/storageSnapshotCreate.html',
+                            }
+                        }
+                    },
+/*
+                    storage_snapshot: {
+                        name: "storage_snapshot",
+                        icon: "storage_snapshot",
+                        stateKey: 'iaasStorageSnapshot',
+                        url: '/iaas/compute/storageSnapshot',
+                        controller: 'iaasStorageSnapshotCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/storage/storageSnapshot.html',
+                    },
+*/
 /*
                             deployServer: {
                                 name: "deploy_server",

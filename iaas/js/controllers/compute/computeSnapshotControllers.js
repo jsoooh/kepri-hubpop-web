@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasComputeSnapshotCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
-        _DebugConsoleLog("computeSnapshotControllers.js : iaasComputeSnapshotCtrl", 1);
+    .controller('iaasServiceSnapshotCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
+        _DebugConsoleLog("computeSnapshotControllers.js : iaasServiceSnapshotCtrl", 1);
 
         var ct = this;
         ct.data = {};
@@ -45,7 +45,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        ct.fn.deleteSnapshot = function(instanceSnapshot) {
+        ct.fn.deleteInstanceSnapshot = function(instanceSnapshot) {
             common.showConfirm('스냅샷 삭제', instanceSnapshot.snapShotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
@@ -91,7 +91,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        ct.fn.deleteSnapshot = function(storageSnapshot) {
+        ct.fn.deleteStorageSnapshot = function(storageSnapshot) {
             common.showConfirm('스냅샷 삭제', storageSnapshot.snapshotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {

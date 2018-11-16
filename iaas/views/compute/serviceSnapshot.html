@@ -17,16 +17,15 @@
 							<div class="panel type6">
 								<div class="panel_head">
 									<img class="logo" alt="" src="images/thum/ico_thum_svr.png"/>
-									<p class="tit">볼륨 이름</p>
-									<!-- <p class="txt">볼륨스토리지</p> -->
-									<button class="btn_txt">원본정보</button>
+									<p class="tit">{{instanceSnapshot.snapShotName}}</p>
+									<button class="btn_txt" ng-click="main.moveToAppPage('/iaas/compute/detail/'+snapshot.instanceId,snapshot.instanceName,true)">{{instanceSnapshot.instanceName}}</button>
 									<div class="dropdown btn-option">
-										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+										<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="#">볼륨 스냅샷</a></li>
-											<li><a href="#">볼륨 삭제</a></li>
+											<li><a href="" ng-class="{'disabled' : instanceSnapshot.status != 'active'}" ng-click="main.goToPage('/iaas/snapshot/instanceCreate');">서버 백업 이미지 복원</a></li>
+											<li><a href="" ng-class="{'disabled' : instanceSnapshot.status != 'active'}" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">서버 백업 이미지 삭제</a></li>
 										</ul>
 									</div>
 								</div>
@@ -81,21 +80,21 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr ng-repeat="snapshot in contents.instanceSnapshotList">
-							<td><span>{{snapshot.snapShotName}}</span></td>
-							<td class="text-left">{{snapshot.description}}</td>
+						<tr ng-repeat="instanceSnapshot in contents.instanceSnapshotList">
+							<td><span>{{instanceSnapshot.snapShotName}}</span></td>
+							<td class="text-left">{{instanceSnapshot.description}}</td>
 							<td class="text-left" style="text-decoration: underline;">
-								<a href="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+snapshot.instanceId,snapshot.instanceName,true)" tooltip-placement="top" uib-tooltip="{{snapshot.instanceName}}">{{snapshot.instanceName}}</a>
+								<a href="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+snapshot.instanceId,snapshot.instanceName,true)" tooltip-placement="top" uib-tooltip="{{instanceSnapshot.instanceName}}">{{instanceSnapshot.instanceName}}</a>
 							</td>
-							<td>{{snapshot.size | displayVolume:'GB'}}</td>
+							<td>{{instanceSnapshot.size | displayVolume:'GB'}}</td>
 							<td snapshot-status-observe observe-action="snapshot.observeAction" ng-model="snapshot.observeAction" ng-init="snapshot.observeAction = 'ready'">
-								<span ng-if="snapshot.status == 'active'" class="stateBox type1 color1">{{snapshot.status}}</span>
-								<span ng-if="snapshot.status != 'active'" class="stateBox type1 color2">{{snapshot.status}}</span>
+								<span ng-if="instanceSnapshot.status == 'active'" class="stateBox type1 color1">{{instanceSnapshot.status}}</span>
+								<span ng-if="instanceSnapshot.status != 'active'" class="stateBox type1 color2">{{instanceSnapshot.status}}</span>
 							</td>
-							<td>{{snapshot.createDate}}</td>
+							<td>{{instanceSnapshot.createDate}}</td>
 							<td>
-								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-resto-s only-ico" data-user="aside" data-username="#aside-restore" title="복원" ng-click="contents.formOpen(snapshot);"><span class="ico">복원</span></button>
-								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteSnapshot(snapshot);"><span class="ico">삭제<span></button>
+								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-resto-s only-ico" data-user="aside" data-username="#aside-restore" title="복원" ng-click="contents.formOpen(instanceSnapshot);"><span class="ico">복원</span></button>
+								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteSnapshot(instanceSnapshot);"><span class="ico">삭제<span></button>
 							</td>
 						</tr>
 						<tr ng-if="contents.snapshotList.length == 0">
@@ -120,12 +119,12 @@
 									<!-- <p class="txt">볼륨스토리지</p> -->
 									<button class="btn_txt">원본정보</button>
 									<div class="dropdown btn-option">
-										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+										<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="#">볼륨 스냅샷</a></li>
-											<li><a href="#">볼륨 삭제</a></li>
+											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'active'}" ng-click="main.goToPage('/iaas/snapshot/storageCreate');">디스크 백업 이미지 복원</a></li>
+											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'active'}" ng-click="contents.fn.deleteVolumeSnapshot(storageSnapshot);">디스크 백업 이미지 삭제</a></li>
 										</ul>
 									</div>
 								</div>
