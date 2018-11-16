@@ -338,7 +338,7 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess(ct.volume.name+" 디스크 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고
-                $scope.main.goToPage("/iaas/storage/");
+                $scope.main.goToPage("/iaas/storage");
             });
             
             returnPromise.error(function (data, status, headers) 
@@ -443,7 +443,7 @@ angular.module('iaas.controllers')
             }
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             returnPromise.success(function (data, status, headers) {
-                $scope.main.moveToAppPage('/iaas/storage/');
+                $scope.main.moveToAppPage('/iaas/storage');
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);

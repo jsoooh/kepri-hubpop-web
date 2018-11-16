@@ -65,7 +65,7 @@ angular.module('iaas.controllers')
                     $scope.main.loadingMainBody = false;
                 });
             });
-        }
+        };
 
         $scope.actionLoading = false; // action loading
         $scope.authenticating = false; // action loading massage contents
@@ -223,7 +223,7 @@ angular.module('iaas.controllers')
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', param);
             returnPromise.success(function (data, status, headers) {
-            	$scope.main.moveToAppPage('/iaas/storage/');
+            	$scope.main.goToPage('/iaas/storage');
             });
             returnPromise.error(function (data, status, headers) {
             	pop.popCancel();

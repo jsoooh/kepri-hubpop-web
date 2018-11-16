@@ -7,7 +7,11 @@ angular.module('iaas.controllers')
         var ct = this;
         ct.data = {};
         ct.fn = {};
-        
+
+        ct.tabIndex = 0;
+        ct.instanceSnapshotList = [];
+        ct.storageSnapshotList = [];
+
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantName = $scope.main.userTenant.korName;
@@ -16,53 +20,44 @@ angular.module('iaas.controllers')
         $scope.$on('userTenantChanged',function(event, status) {
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
-            ct.fn.getInstanceSnapshotList(1);
+            ct.fn.getInstanceSnapshotList();
+            ct.fn.getStorageSnapshotList();
         });
         
-        ct.formOpen = function (snapshot){
-        	ct.selectSnapshot = snapshot;
-    		$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeRestoreStepForm.html" + _VersionTail();
-
-			$(".aside").stop().animate({"right":"-360px"}, 400);
-			$("#aside-aside1").stop().animate({"right":"0"}, 500);
-        }
-
         // Snapshot List
-        ct.fn.getInstanceSnapshotList = function(page) {
+        ct.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
-                tenantId : ct.data.tenantId,
-                instanceName : ct.data.instanceName,
-                number : page
+                tenantId : ct.data.tenantId
             };
+            ct.instanceSnapshotList = [];
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-            	ct.snapshotList = data.content.instanceSnapShots;
+            	ct.instanceSnapshotList = data.content.instanceSnapShots;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             	common.showAlertError(data.message);
-                //common.showAlert("message",data.message);
             });
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
 
-        ct.fn.deleteSnapshot = function(snapshot) {
-            common.showConfirm('스냅샷 삭제',snapshot.snapShotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
+        ct.fn.deleteSnapshot = function(instanceSnapshot) {
+            common.showConfirm('스냅샷 삭제', instanceSnapshot.snapShotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
-                    tenantId : snapshot.tenantId,
-                    snapShotId : snapshot.snapShotId
-                }
+                    tenantId : instanceSnapshot.tenantId,
+                    snapShotId : instanceSnapshot.snapShotId
+                };
                 var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'DELETE', param);
                 returnPromise.success(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
                     
                     $timeout(function() {
-                    	ct.fn.getInstanceSnapshotList(1);
+                    	ct.fn.getInstanceSnapshotList();
                         common.showAlertSuccess("삭제 되었습니다.");
                 	}, 1000);
                     
@@ -70,15 +65,55 @@ angular.module('iaas.controllers')
                 returnPromise.error(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
                 	common.showAlertError(data.message);
-                    //common.showAlert("message",data.message);
                 });
                 returnPromise.finally(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
                 });
             });
         };
+
+        // Script list
+        ct.fn.getStorageSnapshotList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId
+            };
+            ct.storageSnapshotList = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotList', 'GET', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.storageSnapshotList = data.content.volumeSnapShots;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.deleteSnapshot = function(storageSnapshot) {
+            common.showConfirm('스냅샷 삭제', storageSnapshot.snapshotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
+                $scope.main.loadingMainBody = true;
+                var param = {
+                    tenantId : storageSnapshot.tenantId,
+                    snapshotId : storageSnapshot.snapshotId
+                };
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'DELETE', param);
+                returnPromise.success(function (data, status, headers) {
+                    ct.fn.getStorageSnapshotList();
+                });
+                returnPromise.error(function (data, status, headers) {
+                    common.showAlert("message",data.message);
+                });
+                returnPromise.finally(function (data, status, headers) {
+                    $scope.main.loadingMainBody = false;
+                });
+            });
+        };
+
         if(ct.data.tenantId) {
-            ct.fn.getInstanceSnapshotList(1);
+            ct.fn.getInstanceSnapshotList();
+            ct.fn.getStorageSnapshotList(1);
         }
     })
     .controller('iaasComputeRestoreCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {

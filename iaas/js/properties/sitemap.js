@@ -12,6 +12,7 @@ angular.module('app')
                 notEdPAuth: "UV",
                 mainTop: true,
                 menus: {
+/*
                 	dashboard: {
 						name: "dashboard",
 						icon: "fa-th-large",
@@ -20,35 +21,66 @@ angular.module('app')
 						controller: 'iaasComputeDashboardCtrl',
 						templateUrl: _IAAS_VIEWS_+'/dashboard/computeDashboard.html',
 					},
-                    server: {
-                        name: "server",
-                        icon: "iaasServer",
-                        stateKey: 'iaasServer',
-                        subMenus: {
-                            serverMain: {
-                                name: "server_main",
-                                icon: "serverMain",
-                                stateKey: 'iaasCompute',
-                                url: '/iaas/compute',
-                                controller: 'iaasComputeCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/compute/compute.html',
-                                subPages: {	// 메뉴에서는 상세 페이지로 표현
-                                    serverDetail: {
-                                        name: 'server_details',
-                                        stateKey: 'iaasComputeDetail',
-                                        url: '/iaas/compute/detail/:instanceId',
-                                        controller: 'iaasComputeDetailCtrl',
-                                        templateUrl: _IAAS_VIEWS_+'/compute/computeDetail.html',
-                                    },
-                                    serverCreate: {
-                                        name: 'server_create',
-                                        stateKey: 'iaasComputeCreate',
-                                        url: '/iaas/compute/create',
-                                        controller: 'iaasComputeCreateCtrl',
-                                        templateUrl: _IAAS_VIEWS_+'/compute/computeCreateForm.html',
-                                    }
-                                },
+*/
+                    serverMain: {
+                        name: "server_main",
+                        icon: "serverMain",
+                        stateKey: 'iaasCompute',
+                        url: '/iaas/compute',
+                        controller: 'iaasComputeCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/compute/compute.html',
+                        subPages: {	// 메뉴에서는 상세 페이지로 표현
+                            serverDetail: {
+                                name: 'server_details',
+                                stateKey: 'iaasComputeDetail',
+                                url: '/iaas/compute/detail/:instanceId',
+                                controller: 'iaasComputeDetailCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/compute/computeDetail.html',
                             },
+                            serverCreate: {
+                                name: 'server_create',
+                                stateKey: 'iaasComputeCreate',
+                                url: '/iaas/compute/create',
+                                controller: 'iaasComputeCreateCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/compute/computeCreateForm.html',
+                            }
+                        },
+                    },
+                    server_snapshot: {
+                        name: "server_snapshot",
+                        icon: "server_snapshot",
+                        stateKey: 'iaasComputeSnapshot',
+                        url: '/iaas/compute/snapshot',
+                        controller: 'iaasComputeSnapshotCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/compute/computeSnapshot.html'
+                    },
+/*
+                    storage_snapshot: {
+                        name: "storage_snapshot",
+                        icon: "storage_snapshot",
+                        stateKey: 'iaasStorageSnapshot',
+                        url: '/iaas/compute/storageSnapshot',
+                        controller: 'iaasStorageSnapshotCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/storage/storageSnapshot.html',
+                    },
+*/
+                    storageMain: {
+                        name: "storage_main",
+                        icon: "storageMain",
+                        stateKey: 'iaasStorageMain',
+                        url: '/iaas/storage',
+                        controller: 'iaasStorageCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/storage/storage.html',
+                        subPages: {
+                            storageCreate: {
+                                name: 'storage_create',
+                                stateKey: 'iaasStorgeCreate',
+                                url: '/iaas/storage/create',
+                                controller: 'iaasStorageFormCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/storage/storageForm.html',
+                            }
+                        }
+                    },
 /*
                             deployServer: {
                                 name: "deploy_server",
@@ -82,60 +114,53 @@ angular.module('app')
                                 }
                             },
 */
-                            server_snapshot: {
-                                name: "server_snapshot",
-                                icon: "server_snapshot",
-                                stateKey: 'iaasComputeSnapshot',
-                                url: '/iaas/compute/snapshot',
-                                controller: 'iaasComputeSnapshotCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/compute/computeSnapshot.html'
-                            },
-                            initScript: {
-                                name: "server_init_script",
-                                icon: "server_init_script",
-                                stateKey: 'iaasInitScript',
-                                url: '/iaas/compute/initScript',
-                                controller: 'iaasComputeIntitScriptCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/compute/computeInitScript.html'
-                            },
-                            securityPolicy: {
-                                name: "server_security_policy",
-                                icon: "server_security_policy",
-                                stateKey: 'iaasSecurityPolicy',
-                                url: '/iaas/securityPolicy/securityPolicy',
-                                controller: 'iaasSecurityPolicyCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/securityPolicy/securityPolicy.html',
-                                subPages: {	// 메뉴에서는 상세 페이지로 표현
-                                    security_policy_rule: {
-                                        name: 'security_policy_rule',
-                                        icon: "iaasSecurityPolicyRule",
-                                        stateKey: 'iaasSecurityPolicyRule',
-                                        url: '/iaas/securityPolicy/securityPolicyRule/:policyid',
-                                        controller: 'iaasSecurityPolicyRuleCtrl',
-                                        templateUrl: _IAAS_VIEWS_+'/securityPolicy/securityPolicyRule.html',
-                                    }
-                                }
-                            },
-                            keypair: {
-                                name: "server_keypair",
-                                icon: "server_keypair",
-                                stateKey: 'iaasKeypair',
-                                url: '/iaas/keypair/keypair',
-                                controller: 'iaasKeypairCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/keypair/keypair.html',
-                                subPages: {	// 메뉴에서는 상세 페이지로 표현
-                                    keypair_instance: {
-                                        name: 'server_keypair_instance',
-                                        icon: "iaasKeypairInstance",
-                                        stateKey: 'iaasKeypairInstance',
-                                        url: '/iaas/keypair/keypair/:keypairName',
-                                        controller: 'iaasKeypairInstanceCtrl',
-                                        templateUrl: _IAAS_VIEWS_+'/keypair/keypairInstance.html',
-                                    }
-                                }
+/*
+                    initScript: {
+                        name: "server_init_script",
+                        icon: "server_init_script",
+                        stateKey: 'iaasInitScript',
+                        url: '/iaas/compute/initScript',
+                        controller: 'iaasComputeIntitScriptCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/compute/computeInitScript.html'
+                    },
+                    securityPolicy: {
+                        name: "server_security_policy",
+                        icon: "server_security_policy",
+                        stateKey: 'iaasSecurityPolicy',
+                        url: '/iaas/securityPolicy/securityPolicy',
+                        controller: 'iaasSecurityPolicyCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/securityPolicy/securityPolicy.html',
+                        subPages: {	// 메뉴에서는 상세 페이지로 표현
+                            security_policy_rule: {
+                                name: 'security_policy_rule',
+                                icon: "iaasSecurityPolicyRule",
+                                stateKey: 'iaasSecurityPolicyRule',
+                                url: '/iaas/securityPolicy/securityPolicyRule/:policyid',
+                                controller: 'iaasSecurityPolicyRuleCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/securityPolicy/securityPolicyRule.html',
                             }
                         }
                     },
+                    keypair: {
+                        name: "server_keypair",
+                        icon: "server_keypair",
+                        stateKey: 'iaasKeypair',
+                        url: '/iaas/keypair/keypair',
+                        controller: 'iaasKeypairCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/keypair/keypair.html',
+                        subPages: {	// 메뉴에서는 상세 페이지로 표현
+                            keypair_instance: {
+                                name: 'server_keypair_instance',
+                                icon: "iaasKeypairInstance",
+                                stateKey: 'iaasKeypairInstance',
+                                url: '/iaas/keypair/keypair/:keypairName',
+                                controller: 'iaasKeypairInstanceCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/keypair/keypairInstance.html',
+                            }
+                        }
+                    },
+*/
+/*
                     storage: {
                         name: "storage",
                         icon: "iaasStorage",
@@ -145,7 +170,7 @@ angular.module('app')
                                 name: "storage_main",
                                 icon: "storageMain",
                                 stateKey: 'iaasStorageMain',
-                                url: '/iaas/storage/',
+                                url: '/iaas/storage',
                                 controller: 'iaasStorageCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/storage/storage.html',
                                 subPages: {
@@ -166,15 +191,6 @@ angular.module('app')
 				                    }
                                 }
                             },
-                            storage_snapshot: {
-                                
-                                name: "storage_snapshot",
-                                icon: "storage_snapshot",
-                                stateKey: 'iaasStorageSnapshot',
-                                url: '/iaas/storage/snapshot',
-                                controller: 'iaasStorageSnapshotCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/storage/storageSnapshot.html',
-                            },
                             object_storage: {
                                 name: "object_storage",
                                 icon: "object_storage",
@@ -185,6 +201,8 @@ angular.module('app')
                             }
                         }
                     },
+*/
+/*
                     network: {
                         name: "network",
                         icon: "iaasNetwork",
@@ -226,6 +244,7 @@ angular.module('app')
                             }
                         }
                     }
+*/
                 }
             }
         }

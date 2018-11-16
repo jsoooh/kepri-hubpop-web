@@ -1,27 +1,18 @@
-	<!-- 작업 추가 및 선택 -->
-	<div ng-if="main.projectType == 'pjt'" ng-if="main.projectType == 'pjt'" class="projt-selWarp">
-		<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
-		<div class="pull-right">
-			<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
-		</div>
-	</div>
-	<!-- //작업 추가 및 선택 -->
-	
 	<!-- 탭영역 -->
 	<div role="tabpanel" class="tabWrap type1">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist" style="border-bottom:none;">
-			<li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">서버 백업 이미지<span>(13)</span></a></li>
-			<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">디스크 백업 이미지<span>(13)</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 백업 이미지<span>({{contents.instanceSnapshotList.length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">디스크 백업 이미지<span>({{contents.storageSnapshotList.length}})</span></a></li>
 		</ul>
 	
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<!-- tab1 cnt -->
-			<div role="tabpanel" class="tab-pane in active" id="tab1">
+			<div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 0}">
 				<!-- panel -->
 				<ul class="ul-panel">
-					<li>
+					<li ng-repeat="instanceSnapshot in contents.instanceSnapshotList">
 						<div class="panelWrap">
 							<div class="panel type6">
 								<div class="panel_head">
@@ -66,14 +57,61 @@
 					</li>
 				</ul>
 				<!-- //panel -->
+				<!-- table -->
+				<div class="tbl type1">
+					<table class="table">
+						<colgroup>
+							<col style="width:18%" />
+							<col style="width:21%" />
+							<col style="width:21%"/>
+							<col style="width:7%" />
+							<col style="width:7%" />
+							<col style="width:13%" />
+							<col style="width:13%"/>
+						</colgroup>
+						<thead>
+						<tr>
+							<th scope="col">이름</th>
+							<th scope="col">설명</th>
+							<th scope="col">인스턴스</th>
+							<th scope="col">크기</th>
+							<th scope="col">상태</th>
+							<th scope="col">생성일자</th>
+							<th scope="col">관리</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="snapshot in contents.instanceSnapshotList">
+							<td><span>{{snapshot.snapShotName}}</span></td>
+							<td class="text-left">{{snapshot.description}}</td>
+							<td class="text-left" style="text-decoration: underline;">
+								<a href="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+snapshot.instanceId,snapshot.instanceName,true)" tooltip-placement="top" uib-tooltip="{{snapshot.instanceName}}">{{snapshot.instanceName}}</a>
+							</td>
+							<td>{{snapshot.size | displayVolume:'GB'}}</td>
+							<td snapshot-status-observe observe-action="snapshot.observeAction" ng-model="snapshot.observeAction" ng-init="snapshot.observeAction = 'ready'">
+								<span ng-if="snapshot.status == 'active'" class="stateBox type1 color1">{{snapshot.status}}</span>
+								<span ng-if="snapshot.status != 'active'" class="stateBox type1 color2">{{snapshot.status}}</span>
+							</td>
+							<td>{{snapshot.createDate}}</td>
+							<td>
+								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-resto-s only-ico" data-user="aside" data-username="#aside-restore" title="복원" ng-click="contents.formOpen(snapshot);"><span class="ico">복원</span></button>
+								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteSnapshot(snapshot);"><span class="ico">삭제<span></button>
+							</td>
+						</tr>
+						<tr ng-if="contents.snapshotList.length == 0">
+							<td colspan="7" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<!-- //tab1 cnt -->
 	
 			<!-- tab2 cnt -->
-			<div role="tabpanel" class="tab-pane" id="tab2">
+			<div role="tabpanel" class="tab-pane" ng-class="{'active' : contents.tabIndex == 1}">
 				<!-- panel -->
 				<ul class="ul-panel">
-					<li>
+					<li ng-repeat="storageSnapshot in contents.storageSnapshotList">
 						<div class="panelWrap">
 							<div class="panel type6">
 								<div class="panel_head">
@@ -118,9 +156,54 @@
 					</li>
 				</ul>
 				<!-- //panel -->
+				<div class="tbl type1">
+					<table class="table">
+						<colgroup>
+							<col style="width:21%" />
+							<col style="width:21%" />
+							<col style="width:21%"/>
+							<col style="width:7%" />
+							<col style="width:8%" />
+							<col style="width:14%" />
+							<col style="width:8%"/>
+						</colgroup>
+						<thead>
+						<tr>
+							<th>이름</th>
+							<th>설명</th>
+							<th>볼륨</th>
+							<th>크기</th>
+							<th>상태</th>
+							<th>생성일자</th>
+							<th>관리</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="snapshot in contents.storageSnapshotList">
+							<td>{{snapshot.snapshotName}}</td>
+							<td>{{snapshot.description}}</td>
+							<td style="text-decoration: underline;"><a href="javascript:void(0);" ng-click="main.moveToAppPage('/iaas/storage/detail/'+snapshot.volumeId,snapshot.volumeName)" tooltip-placement="bottom" uib-tooltip="{{snapshot.volumeName}}">{{snapshot.volumeName}}<a></td>
+							<td>{{snapshot.size}} GB</td>
+							<td>
+								<span ng-if="snapshot.status == 'in-use'" class="stateMark type1"></span>
+								<span ng-if="snapshot.status == 'creating' || snapshot.status == 'deleting' || snapshot.status == 'queued'" class="stateMark type4"></span>
+								<span ng-if="snapshot.status == 'available' || snapshot.status == 'deleted'" class="stateMark type3"></span>
+								<span class="state-txt" volume-snapshot-status-observe observe-action="snapshot.observeAction" ng-model="snapshot.observeAction" ng-init="snapshot.observeAction = 'ready'" >{{snapshot.status}}</span>
+							</td>
+							<td>{{snapshot.createDate}}</td>
+							<td>
+								<button type="button" ng-disabled="snapshot.status != 'available'" class="btn btn-ico-resto-s only-ico"  ng-click="contents.fn.formOpen($event,snapshot)" title="볼륨 복원" ><span class="ico">복원</span></button>
+								<button type="button" ng-disabled="snapshot.status != 'available'" class="btn btn-ico-del-s only-ico"  ng-click="contents.fn.deleteSnapshot(snapshot)" title="삭제" ><span class="ico">삭제</span></button>
+							</td>
+						</tr>
+						<tr ng-if="!contents.snapshotList || contents.snapshotList.length == 0">
+							<td colspan="7" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<!-- //tab2 cnt -->
 		</div>
 	</div>
 	<!-- 탭영역 -->
-	
