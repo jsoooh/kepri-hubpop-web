@@ -6,26 +6,9 @@ angular.module('paas.controllers')
 
         var ct = this;
         var serviceInstance = $scope.serviceInstance = {};
-        var userServiceInstance = $scope.userServiceInstance = {};
         ct.serviceInstanceData  = {};
 
-        // paging
-        serviceInstance.pageOptions = {
-            currentPage : 1,
-            pageSize : 10,
-            total : 1
-        };
-
-        $scope.serviceInstance.serviceInstances = [];
-
-        // paging
-        userServiceInstance.pageOptions = {
-            currentPage : 1,
-            pageSize : 10,
-            total : 1
-        };
-
-        userServiceInstance.serviceInstances = [];
+        ct.serviceInstances = [];
 
         // main changeOrganization 와 연결
         $scope.$on('organizationChanged', function(event, orgItem) {
@@ -44,38 +27,37 @@ angular.module('paas.controllers')
             serviceLabel : ''
         };
 
-        ct.listServiceInstances = function (currentPage) {
+        ct.listAllServiceInstances = function (currentPage) {
             ct.loadingServiceInstances = true;
             if (angular.isDefined(currentPage) && currentPage != null) {
                 serviceInstance.pageOptions.currentPage = currentPage;
             }
-            var serviceInstancePromise = serviceInstanceService.listServiceInstances($scope.$parent.contents.sltOrganizationGuid, '', serviceInstance.pageOptions.pageSize, serviceInstance.pageOptions.currentPage);
+            var serviceInstancePromise = serviceInstanceService.listAllServiceInstances($scope.main.sltOrganizationGuid, '');
             serviceInstancePromise.success(function (data) {
                 /* 서비스 내 바인딩돼있는 이름과 현재 앱의 이름을 비교하기 위한 로직
                 - content 안에 serviceNameEqIdx 변수를 만들어 for 문을 통해 이름이 같을 경우 index 를 그 변수에 넣어준다.
                 - 같지 않을 경우 공백으로 넣어줌. */
                 ct.existAppName = function(appName){
 
-                    for(var i=0; i < data.content.length; i++){
-                        if(data.content[i].serviceBindings.length > 0){
+                    for(var i=0; i < data.length; i++){
+                        if(data[i].serviceBindings.length > 0){
 
                             for(var j=0; j<data.content[i].serviceBindings.length; j++){
-                                if(data.content[i].serviceBindings[j].appName == appName){
+                                if(data[i].serviceBindings[j].appName == appName){
 
-                                    data.content[i]["serviceNameEqIdx"] = "" + j + "";
+                                    data[i]["serviceNameEqIdx"] = "" + j + "";
                                     break;
                                 }else{
-                                    data.content[i]["serviceNameEqIdx"] = "";
+                                    data[i]["serviceNameEqIdx"] = "";
                                 }
                             }
                         }else{
-                            data.content[i]["serviceNameEqIdx"] = "";
+                            data[i]["serviceNameEqIdx"] = "";
                         }
                     }
                 };
 
-                $scope.serviceInstance.serviceInstances = data;
-                serviceInstance.pageOptions.total = data.totalElements;
+                ct.serviceInstances = data;
                 ct.loadingServiceInstances = false;
             });
             serviceInstancePromise.error(function (data) {
@@ -84,37 +66,8 @@ angular.module('paas.controllers')
             });
         };
 
-        ct.listUserServiceInstances = function (currentPage) {
-            $scope.main.loadingMainBody = true;
-            if (angular.isDefined(currentPage) && currentPage != null) {
-                userServiceInstance.pageOptions.currentPage = currentPage;
-            }
-            var serviceInstancePromise = serviceInstanceService.listUserServiceInstances($scope.main.sltOrganizationGuid, $scope.main.sltSpaceGuid, userServiceInstance.pageOptions.pageSize, userServiceInstance.pageOptions.currentPage);
-            serviceInstancePromise.success(function (data) {
-                userServiceInstance.userServiceInstances = data;
-                userServiceInstance.pageOptions.total = data.totalElements;
-                $scope.main.loadingMainBody = false;
-            });
-            serviceInstancePromise.error(function (data) {
-                userServiceInstance.userServiceInstances = [];
-                $scope.main.loadingMainBody = false;
-            });
-        };
-
         ct.replaceServiceInstance = function (data) {
-            ct.listServiceInstances();
-        };
-
-        ct.updateReplaceServiceInstance = function (data) {
-            ct.listServiceInstances(serviceInstance.pageOptions.currentPage);
-        };
-
-        ct.replaceUserServiceInstance = function (data) {
-            ct.listUserServiceInstances();
-        };
-
-        ct.updateReplaceUserServiceInstance = function (data) {
-            ct.listUserServiceInstances(serviceInstance.pageOptions.currentPage);
+            ct.listAllServiceInstances();
         };
 
         $scope.actionLoading = false; // action loading
@@ -132,7 +85,7 @@ angular.module('paas.controllers')
             ct.serviceInstanceData	= angular.copy(serviceInstance);
             $scope.dialogOptions = {
                 controller : "serviceInstanceFormCtrl",
-                callBackFunction : ct.updateReplaceServiceInstance
+                callBackFunction : ct.replaceServiceInstance
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -153,47 +106,6 @@ angular.module('paas.controllers')
             serviceInstancePromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.replaceServiceInstance(data);
-            });
-            serviceInstancePromise.error(function (data) {
-                $scope.main.loadingMainBody = false;
-            });
-        };
-
-        ct.createUserServiceInstance = function ($event) {
-            ct.userServiceInstanceData = {};
-            $scope.dialogOptions = {
-                controller : "userServiceInstanceFormCtrl",
-                callBackFunction : ct.replaceUserServiceInstance
-            };
-            $scope.actionBtnHied = false;
-            common.showDialog($scope, $event, $scope.dialogOptions);
-            $scope.actionLoading = true; // action loading
-        };
-
-        ct.updateUserServiceInstance = function ($event, serviceInstance) {
-            ct.userServiceInstanceData	= angular.copy(serviceInstance);
-            $scope.dialogOptions = {
-                controller : "userServiceInstanceFormCtrl",
-                callBackFunction : ct.updateReplaceUserServiceInstance
-            };
-            $scope.actionBtnHied = false;
-            common.showDialog($scope, $event, $scope.dialogOptions);
-            $scope.actionLoading = true; // action loading
-        };
-
-        ct.deleteUserServiceInstance = function (guid, name) {
-            var showConfirm = common.showConfirmWarning($translate.instant('label.del') + "(" + name + ")", $translate.instant('message.mq_delete_service_instance'));
-            showConfirm.then(function () {
-                common.mdDialogHide();
-                ct.deleteUserServiceInstanceAction(guid);
-            });
-        };
-
-        ct.deleteUserServiceInstanceAction = function (guid) {
-            $scope.main.loadingMainBody = true;
-            var serviceInstancePromise = serviceInstanceService.deleteUserServiceInstance(guid);
-            serviceInstancePromise.success(function (data) {
-                ct.replaceUserServiceInstance(data);
             });
             serviceInstancePromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -297,7 +209,7 @@ angular.module('paas.controllers')
                 serviceNameTxt.style.display = 'none';
                 buttonDiv.style.display ='block';
             }
-        }
+        };
 
         $scope.updateName = function (serviceName) {
             if (serviceName.length < 3) {
@@ -321,7 +233,7 @@ angular.module('paas.controllers')
                 $scope.main.loadingMainBody = false;
                 $scope.actionBtnHied = false;
                 common.showAlert("", $translate.instant("message.mi_update_service_instance"));
-                ct.listServiceInstances();
+                ct.listAllServiceInstances();
             });
             serviceInstancePromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -329,7 +241,7 @@ angular.module('paas.controllers')
             });
         };
 
-        ct.listServiceInstances();
+        ct.listAllServiceInstances();
     })
     .controller('serviceInstanceCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, user, common, serviceInstanceService, ValidationService, CONSTANTS) {
         _DebugConsoleLog("serviceInstanceControllers.js : serviceInstanceCreateCtrl", 1);

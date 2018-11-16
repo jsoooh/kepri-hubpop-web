@@ -1,326 +1,65 @@
-			<!-- content -->
-			<div class="content">
-				<!-- cBox -->
-				<div class="cBox type2 appCnt-sev appDrag">
-					<div class="cBox-cnt">
-						<div class="appDrag-txt">이미지를 드래그해 서비스를 연결 추가하실 수 있습니다. </div>
-						<div class="in">
-							<ul class="sev-list">
-								<li class="sevBox on">
-									<img src="images/thum/im_app_sev4_on.png" alt="MariaDB">
-									<p class="txt1">MariaDB</p>
-								</li>
-								<li class="sevBox on">
-									<img src="images/thum/im_app_sev5_on.png" alt="redis">
-									<p class="txt1">Redis</p>
-								</li>
-								<li class="sevBox on">
-									<img src="images/thum/im_app_sev4_on.png" alt="MariaDB">
-									<p class="txt1">MariaDB</p>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- //cBox -->
 
-				<!-- cBox -->
-				<div class="cBox type2 appCnt-sev appDrop">
-					<div class="cBox-hd">
-						<h4 class="c-tit">연결 서비스 <em class="point1">(3)</em></h4>
-					</div>
-
-					<div class="cBox-cnt">
-						<div class="in">
-							<ul class="sev-list">
-								<li class="sevBox on">
-									<img src="images/thum/im_app_sev1_on.png" alt="mongoDB">
-									<p class="txt1">MongoDB</p>
-									<p class="txt2"></p>
-								</li>
-								<li class="sevBox on">
-									<img src="images/thum/im_app_sev2_on.png" alt="PostgreSQL">
-									<p class="txt1">PostgreSQL</p>
-									<!--<p class="txt2"></p>-->
-									<div class="dropdown btn-option">
-		                <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-		                  <span class="ico">실행 설정</span>
-		                </button>
-		                <ul class="dropdown-menu dropdown-menu-left" role="btn-optionn" aria-labelledby="btn-option">
-		                  <li><a href="#">서비스 정보보기</a></li>
-		                  <li class="renameApp2"><a href="#">서비스 이름변경</a></li>
-		                  <li><a href="#">서비스 삭제</a></li>
-		                </ul>
-		              </div>
-								</li>
-								<li class="sevBox on">
-									<img src="images/thum/im_app_sev3_on.png" alt="Oracle">
-									<p class="txt1">Oracle</p>
-									<!--<p class="txt2"></p>-->
-									<div class="dropdown btn-option">
-		                <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-		                  <span class="ico">실행 설정</span>
-		                </button>
-		                <ul class="dropdown-menu dropdown-menu-left" role="btn-optionn" aria-labelledby="btn-option">
-		                  <li><a href="#">서비스 정보보기</a></li>
-		                  <li class="renameApp2"><a href="#">서비스 이름변경</a></li>
-		                  <li><a href="#">서비스 삭제</a></li>
-		                </ul>
-		              </div>
-								</li>
-								<li class="sevBox dndArea">
-<!-- 									<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-database" ng-click="main.asideShow({selectors : '#aside-database'});"><img src="images/thum/im_app_dragNdrop.png" alt="dndArea"></button> -->
-									<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-database" ng-click="main.asideShow({selectors : '#aside-aside1'});"><img src="images/thum/im_app_dragNdrop.png" alt="dndArea"></button>
-							</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- //cBox -->
-			</div>
-			<!-- //content -->
-
-<div ng-if="0">
-	<!-- gnb menu -->
-    <div class="gnbMenu">
-        <div class="gnb-in">
-            <h1 class="gnb-logo"><a href="#"><img ng-src="{{main.topLogoIcon}}" alt="CloudXpert"></a></h1>
-            <ul class="gnb-menu">
-                <li>
-                    <a href="#" class="gm"><span class="ico ico-bul ico1"></span>대시보드</a><!-- selected class="gm on" -->
-                </li>
-                <li>
-                    <a href="#" class="gm"><span class="ico ico-bul ico2"></span>프로젝트<span class="ico ico-arr"></span></a><!-- selected class="gm on" -->
-                    <ul class="lnb">
-                        <li class="lm"><a href="#" class="mm">프로젝트 관리</a></li>
-                        <li class="lm"><a href="#" class="mm">작업 관리</a></li>
+<!-- 버튼영역 -->
+<div class="btnWrap">
+    <button type="button" class="btn_lg" ng-click="main.goToPage('/paas/serviceInstanceCreate')">
+        <span class="ico ico_create_app"></span>서비스 만들기
+    </button>
+</div>
+<!-- //버튼영역 -->
+<!-- panel area-->
+<ul class="ul-panel">
+    <li ng-repeat="(key, serviceItem) in contents.serviceInstances">
+        <!-- panel -->
+        <div class="panelWrap">
+            <div class="panel type3">
+                <div class="panel_head">
+                    <div class="logo">
+                        <img ng-src="images/thum/im_logo_{{ serviceItem.serviceLabel }}_cir.png" alt="{{ serviceItem.serviceLabel }}" />
+                    </div>
+                    <p id="txt-{{serviceItem.name}}" class="tit"><a href="">{{ serviceItem.name }}</a></p>
+                    <div id="renameService-{{serviceItem.name}}" style="display:none; width:240px;">
+                        <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
+                        <div class="sdBtnWrap">
+                            <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
+                            <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="ins.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
+                        </div>
+                    </div>
+                    <p class="txt nolink">S/W : {{serviceItem.serviceLabel}}</p>
+                    <div class="dropdown btn-option">
+                        <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                            <span class="ico">실행 설정</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                            <li><a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a></li>
+                            <li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="ins.renameInst(serviceItem.name)">서비스 이름변경</a></li>
+                            <li><a href="javascript:void(0);" ng-click="ins.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel_body">
+                    <ul class="ul-in">
+                        <li class="col1 type2">
+                            <div class="up">
+                                <p class="txt"><strong>연결앱 수</strong><span>{{ serviceItem.serviceBindings.length }}</span></p>
+                            </div>
+                            <div class="down">
+                                <span class="stateWrap"><span class="stateMark type1">정상배포</span><span class="state-txt">실행</span></span>
+                            </div>
+                        </li>
+                        <li class="col2 type2">
+                            <div class="service_plan">
+                                <span class="tit">서비스플랜</span>
+                                <span class="txt_bg">{{ serviceItem.servicePlan.name }}</span>
+                            </div>
+                        </li>
                     </ul>
-                </li>
-                <li>
-                    <a href="#" class="gm" title="플랫폼 서비스"><span class="ico ico-bul ico3"></span>플랫폼 서비스<span class="ico ico-arr"></span></a>
-                    <ul class="lnb">
-                        <li class="lm"><a href="#" class="mm">전력SW 개발 프레임워크</a></li>
-                        <li class="lm"><a href="#" class="mm">표준 APP. 개발 서비스</a></li>
-                        <li class="lm"><a href="#" class="mm">인터페이스 허브 서비스</a></li>
-                        <li class="lm"><a href="#" class="mm">분석 허브 서비스</a></li>
-                        <li class="lm"><a href="#" class="mm">서버 가상화 서비스</a></li>
-                        <li class="lm"><a href="#" class="mm">GIS 플랫폼 서비스</a></li>
-                        <li class="lm"><a href="#" class="mm">API Gateway 서비스</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="gm" title="데이터 연계"><span class="ico ico-bul ico4"></span>데이터 연계<span class="ico ico-arr"></span></a><!-- selected class="gm on" -->
-                    <ul class="lnb">
-                        <li class="lm"><a href="#" class="mm">허브팝 데이터 연계 및 보유 현황</a></li>
-                        <li class="lm"><a href="#" class="mm">데이터 연계 신청 처리 현황</a></li>
-                        <li class="lm"><a href="#" class="mm">데이터 연계 신청</a></li>
-                    </ul>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
-        <button type="button" name="button" class="gnb-close" data-user="gnb-close"><span class="ico"></span></button>
-    </div>
-    <!-- //gnb menu -->
-</div>
-
-<div ng-if="0">
-	<!-- aside aside1 -->
-	<div class="aside" id="aside-database">
-		<!-- aside aside1 title -->
-		<div class="sideTitWrap asideCnt">
-			<h2 class="c_tit">Database 설정정보</h2>
-			<button type="button" name="button" class="btn btn-close" data-user="aside-close" ng-click="main.asideHide({selectors : '#aside-database'});"><span class="ico">닫기</span></button>
-		</div>
-		<!-- //aside aside1 title -->
-
-		<!-- aside aside1 cnt -->
-		<div class="sideCntWrap">
-			<!-- sideInWrap -->
-			<div class="sideInWrap">
-				<ol class="app-set">
-					<li>
-						<p class="app-tit">1. Database명을 입력해 주세요.</p>
-						<input type="text" name="" value="" class="form-control">
-					</li>
-					<li>
-						<p class="app-tit">2. 서비스 플랜(용량)을 선택해주세요.</p>
-						<ul>
-							<li>
-								<div class="radio radio-inline">
-									<input type="radio" name="radio1" id="app-radio1-1">
-									<label for="app-radio1-1" class="label">Light</label>
-									<img src="images/thum/aside_database_01.png" alt="database01" class="databaseEx">
-								</div>
-							</li>
-							<li>
-								<div class="radio radio-inline">
-									<input type="radio" name="radio1" id="app-radio1-2">
-									<label for="app-radio1-2" class="label">Medium</label>
-									<img src="images/thum/aside_database_02.png" alt="database02" class="databaseEx">
-								</div>
-							</li>
-							<li>
-								<div class="radio radio-inline">
-									<input type="radio" name="radio1" id="app-radio1-3">
-									<label for="app-radio1-3" class="label">Premium</label>
-									<img src="images/thum/aside_database_03.png" alt="database03" class="databaseEx">
-								</div>
-							</li>
-							<li>
-								<div class="radio radio-inline">
-									<input type="radio" name="radio1" id="app-radio1-4">
-									<label for="app-radio1-4" class="label">Big</label>
-									<img src="images/thum/aside_database_04.png" alt="database04" class="databaseEx">
-								</div>
-							</li>
-						</ul>
-					</li>
-				</ol>
-			</div>
-			<!-- //sideInWrap -->
-		</div>
-		<!-- //aside aside1 cnt -->
-
-		<!-- aside aside1 btm -->
-		<div class="sideBtmWrap">
-			<button type="button" name="button" class="btn" data-user="aside" data-username="aside-database" ng-click="main.asideHide({selectors : '#aside-database'});">확인</button>
-		</div>
-		<!-- //aside aside1 btm -->
-	</div>
-	<!-- //aside aside1 -->
-</div>
-
-<div class="mainWrap container-fluid" ng-if="0">
-    <div class="main tabContainer">
-        <button ng-if="contents.activeTabIndex == 1" type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.refresh' | translate }}" ng-click="contents.listServiceInstances(1);"><img src="img/btn_tabrefresh.png" width="20" height="15" alt="{{ 'label.refresh' | translate }}" /></button>
-        <button ng-if="contents.activeTabIndex == 2" type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.refresh' | translate }}" ng-click="contents.listUserServiceInstances(1);"><img src="img/btn_tabrefresh.png" width="20" height="15" alt="" /></button>
-        <uib-tabset active="contents.activeTabIndex" class="tab-animation">
-            <uib-tab index="1" select="contents.listServiceInstances(1);"><!-- 앱 -->
-                <uib-tab-heading>{{ 'label.paas_service' | translate }}</uib-tab-heading>
-                <div class="topFunctionWrap">
-                    <div class="btnWrap">
-                        <ul class="systemBtnWrap">
-                            <li>
-                                <button type="button" class="btn btn-add" tooltip-placement="bottom" uib-tooltip="{{ 'label.paas_service_add' | translate }}" ng-click="contents.createServiceInstance($event);"><img src="img/ico_add.png" width="9" height="9" alt="" />{{ 'label.paas_service_add' | translate }}</button><!-- PaaS 서비스 추가 -->
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="tableWrap">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>{{ 'label.no' | translate }}</th><!-- 번호 -->
-                            <th>{{ 'label.org' | translate }}</th><!-- 조직 -->
-                            <th>{{ 'label.space' | translate }}</th><!-- 영역 -->
-                            <th>{{ 'label.service_instance' | translate }}</th><!-- 서비스 인스턴스 -->
-                            <th>{{ 'label.service' | translate }}</th><!-- 서비스 -->
-                            <th>{{ 'label.service_plan' | translate }}</th><!-- 서비스 플랜 -->
-                            <th>{{ 'label.binding_apps' | translate }}</th><!-- 바인딩 앱 수 -->
-                            <th>{{ 'label.set' | translate }}</th><!-- 설정 -->
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="(key, serviceItem) in serviceInstance.serviceInstances.content">
-                            <td>{{ ((serviceInstance.serviceInstances.number - 1) * serviceInstance.serviceInstances.size) + key + 1 }}</td>
-                            <td class="text-left">{{ serviceItem.organizationName }}</td>
-                            <td class="text-left">{{ serviceItem.spaceName }}</td>
-                            <td class="text-left">{{ serviceItem.name }}</td>
-                            <td class="text-left">{{ serviceItem.serviceLabel }}</td>
-                            <td class="text-left">{{ serviceItem.servicePlanName }}</td>
-                            <td>{{ serviceItem.serviceBindings.length }}</td>
-                            <td>
-                                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.paas_service_edit' | translate }}" ng-click="contents.updateServiceInstance($event, serviceItem);"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.paas_service_edit' | translate }}" /></button>
-                                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.paas_service_del' | translate }}" ng-click="contents.deleteServiceInstance(serviceItem.guid, serviceItem.name);"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.paas_service_del' | translate }}" /></button>
-                            </td>
-                        </tr>
-                        <tr ng-if="serviceInstance.pageOptions.total == 0">
-                            <td colspan="8">{{ 'message.mi_dont_exist_list' | translate }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="paginationWrap">
-                    <div class="totalWrap">
-                        {{ 'label.total' | translate }} {{ serviceInstance.pageOptions.total }} {{ 'label.count' | translate }}
-                    </div>
-                    <paging
-                            page="serviceInstance.pageOptions.currentPage"
-                            page-size="serviceInstance.pageOptions.pageSize"
-                            total="serviceInstance.pageOptions.total"
-                            pg-href=""
-                            show-prev-next="true"
-                            show-first-last="true"
-                            paging-action="contents.listServiceInstances(page)"
-                            text-first-class="firstPage"
-                            text-last-class="lastPage"
-                            text-next-class="nextPage"
-                            text-prev-class="prevPage">
-                    </paging>
-                </div>
-            </uib-tab>
-            <uib-tab index="2" select="contents.listUserServiceInstances(1);"><!-- 앱 -->
-                <uib-tab-heading>{{ 'label.user_service' | translate }}</uib-tab-heading>
-                <div class="topFunctionWrap">
-                    <div class="btnWrap">
-                        <ul class="systemBtnWrap">
-                            <li>
-                                <button type="button" class="btn btn-add" tooltip-placement="bottom" uib-tooltip="{{ 'label.user_service_add' | translate }}" ng-click="contents.createUserServiceInstance($event);"><img src="img/ico_add.png" width="9" height="9" alt="" />{{ 'label.user_service_add' | translate }}</button><!-- 사용자 서비스 추가 -->
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="tableWrap">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>{{ 'label.no' | translate }}</th><!-- 번호 -->
-                            <th>{{ 'label.org' | translate }}</th><!-- 조직 -->
-                            <th>{{ 'label.space' | translate }}</th><!-- 영역 -->
-                            <th>{{ 'label.service_instance' | translate }}</th><!-- 서비스 인스턴스 명 -->
-                            <th>{{ 'label.service_desc' | translate }}</th><!-- 서비스 설명 -->
-                            <th>{{ 'label.binding_apps' | translate }}</th><!-- 바인딩 앱 수 -->
-                            <th>{{ 'label.set' | translate }}</th><!-- 설정 -->
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="(key, serviceItem) in userServiceInstance.userServiceInstances.content">
-                            <td>{{ ((userServiceInstance.userServiceInstances.number - 1) * userServiceInstance.userServiceInstances.size) + key + 1 }}</td>
-                            <td class="text-left">{{ serviceItem.organizationName }}</td>
-                            <td class="text-left">{{ serviceItem.spaceName }}</td>
-                            <td class="text-left">{{ serviceItem.name }}</td>
-                            <td class="text-left">{{ 'label.user_service' | translate }}</td><!-- 사용자 서비스 -->
-                            <td>{{ serviceItem.serviceBindings.length }}</td>
-                            <td>
-                                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.user_service_edit' | translate }}" ng-click="contents.updateUserServiceInstance($event, serviceItem);"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.user_service_edit' | translate }}" /></button>
-                                <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.user_service_del' | translate }}" ng-click="contents.deleteUserServiceInstance(serviceItem.guid, serviceItem.name);"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.user_service_del' | translate }}" /></button>
-                            </td>
-                        </tr>
-                        <tr ng-if="userServiceInstance.pageOptions.total == 0">
-                            <td colspan="7">{{ 'message.mi_dont_exist_list' | translate }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="paginationWrap">
-                    <div class="totalWrap">
-                        {{ 'label.total' | translate }} {{ userServiceInstance.pageOptions.total }} {{ 'label.count' | translate }}
-                    </div>
-                    <paging
-                            page="userServiceInstance.pageOptions.currentPage"
-                            page-size="userServiceInstance.pageOptions.pageSize"
-                            total="userServiceInstance.pageOptions.total"
-                            pg-href=""
-                            show-prev-next="true"
-                            show-first-last="true"
-                            paging-action="contents.listUserServiceInstances(page)"
-                            text-first-class="firstPage"
-                            text-last-class="lastPage"
-                            text-next-class="nextPage"
-                            text-prev-class="prevPage">
-                    </paging>
-                </div>
-            </uib-tab>
-        </uib-tabset>
-    </div>
-</div>
+        <!-- //panel -->
+    </li>
+    <li style="padding-bottom:3.5%;">
+        <button type="submit" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" id="aside-aside" ng-click="ins.showForm(serviceInstance.serviceInstances)"><span class="ico"></span><span class="txt">연결 서비스 추가</span></button>
+    </li>
+</ul>
+<!-- //cBox -->

@@ -16,7 +16,7 @@ angular.module('app')
                     application: {
                         name: 'applications',
                         stateKey: 'paasApplications',
-                        url: '/paas',
+                        url: '/paas/apps',
                         controller: 'paasApplicationsCtrl',
                         templateUrl: _PAAS_VIEWS_ + '/application/apps.html',
                         subPages: {
@@ -34,13 +34,22 @@ angular.module('app')
                                 url: '/paas/appsPush',
                                 controller: 'paasApplicationPushCtrl',
                                 templateUrl: _PAAS_VIEWS_+'/application/applicationPush.html',
-                            },
+                            }
+                        }
+                    }, // services
+                    service: {
+                        name: 'service_instances',
+                        stateKey: 'paasServiceInstances',
+                        url: '/paas/serviceInstances',
+                        controller: 'paasServiceInstancesCtrl',
+                        templateUrl: _PAAS_VIEWS_ + '/serviceInstance/serviceInstances.html',
+                        subPages: {
                             serviceInstanceCreate: {
                                 name: 'service_instance_create',
                                 stateKey: 'paasServiceInstanceCreate',
                                 url: '/paas/serviceInstanceCreate',
                                 controller: 'paasServiceInstanceCreateCtrl',
-                                templateUrl: _PAAS_VIEWS_+'/application/serviceInstanceCreate.html',
+                                templateUrl: _PAAS_VIEWS_+'/serviceInstance/serviceInstanceCreate.html',
                             }
                         }
                     }, // application

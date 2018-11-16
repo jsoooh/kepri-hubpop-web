@@ -2901,7 +2901,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 if (rejection) {
                     var main = angular.element(document.getElementById("mainCtrl")).scope().main;
                     console.log(rejection);
-                    if(rejection.status == 307 && rejection.url && rejection.url.indexOf('/iaas-api/') == 0) {
+                    if(rejection.status == 307 && rejection.config && rejection.config.url && rejection.config.url.indexOf('/paas-api/') == -1) {
                         if (angular.isDefined(main) && angular.isFunction(main.logout)) {
                             $(function () {
                                 main.logout();
