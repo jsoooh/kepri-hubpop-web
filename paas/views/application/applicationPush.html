@@ -3,6 +3,7 @@
 	<div class="msg_txt"><span>‘APP 만들기’를 통해 컨테이너 기반의 APP 실행환경을 생성할 수 있습니다. </span></div>
 </div>
 
+<form name="{{contents.formName}}" method="POST" novalidate>
 <div class="panel_area">
 	<div class="panel_box pn_l">
 		<div class="pn_head">
@@ -15,7 +16,7 @@
 					<div class="pnb_tit">
 						<i class="i_star"></i> APP 이름<span class="ico_info"></span>
 					</div>
-					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요.">
+					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요." id="appName" name="appName" ng-model="contents.appPushData.appName" ng-change="contents.appPushData.domainFirstName = contents.appPushData.appName" validation="min_len:3|max_len:50|required">
 				</li>
 				<li>
 					<div class="pnb_tit">
@@ -23,16 +24,16 @@
 					</div>
 					<div class="app-form-two">
 						<div class="two_box">
-							<input type="text" class="form-control" maxlength="50" placeholder="APP 도메인을 입력하세요.">
+							<input type="text" class="form-control" maxlength="50" id="domainFirstName" name="domainFirstName" ng-model="contents.appPushData.domainFirstName" ng-change="contents.hostDup = false" validation="alpha_dash|min_len:3|max_len:50|required" placeholder="APP 도메인을 입력하세요.">
 						</div>
 						<div class="two_box">
-							<select name="" title="검색 구분 선택">
-								<option value="">apps.hubpop.io</option>
-								<option value="">apps.hubpop.io_1</option>
-								<option value="">apps.hubpop.io_2</option>
+							<select name="" title="검색 구분 선택" id="domainName" name="domainName" ng-model="contents.sltDomainName">
+								<option ng-repeat="domainItem in contents.domains" value="{{ domainItem.name }}">{{ domainItem.name }}</option>
 							</select>
 						</div>
 					</div>
+					<div ng-if="contents.appPushForm01.domainFirstName.$touched && contents.appPushForm01.domainFirstName.$invalid" class="validation validation-domainFirstName text-danger"></div>
+					<div ng-if="contents.hostDup" class="validation text-danger"><span class="validation-icon"></span>이미 사용 중인 도메인입니다.</div>
 				</li>
 				<li>
 					<div class="pnb_tit">
@@ -40,12 +41,12 @@
 					</div>
 					<div class="mt20">
 						<div class="radio radio-inline">
-							<input type="radio" name="radio00" id="radio00-1">
-							<label for="radio00-1" class="label">빌드팩(Buildpack)</label>
+							<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="contents.appPushData.pushType" >
+							<label for="app-radio1-1" class="label">빌드팩(Buildpack)</label>
 						</div>
 						<div class="radio radio-inline">
-							<input type="radio" name="radio00" id="radio00-2">
-							<label for="radio00-2" class="label">도커(Docker) 이미지 기반</label>
+							<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="contents.appPushData.pushType">
+							<label for="app-radio1-2" class="label">도커(Docker) 이미지 기반</label>
 						</div>
 					</div>
 				</li>
@@ -54,66 +55,61 @@
 						<i class="i_star"></i> 빌드팩(Buildpack) 선택<span class="ico_info"></span>
 					</div>
 					<ul class="ul-list1">
-						<li>
+						<li ng-repeat="(key, buildpackItem) in contents.portalBuildpacks track by $index">
 							<div class="radio1 radio-inline">
-							   <input type="radio" name="app-radio3" id="app-radio3-1">
-							   <label for="app-radio3-1" class="label"><img src="images/thum/im_thum_ubuntu.png" alt="" class="im"></label>
+							   <input type="radio" id="buldpack_{{ buildpackItem.id }}" name="buldpack" value="{{ buildpackItem.id }}" ng-model="contents.sltBuildpackId" ng-change="contents.changePortalBuildpack();" />
+							   <label for="buldpack_{{ buildpackItem.id }}" class="label">
+								<img class="im" ng-if="buildpackItem.iconImage != null" ng-src="data:{{ buildpackItem.iconImage.contentType }}; base64, {{ buildpackItem.iconImage.image }}" width="40" height="40">
+								<img class="im" ng-if="buildpackItem.iconImage == null" src="img/default_image.png" width="40" height="40">
+							   </label>
 							</div>
-							<p class="label-txt">ubuntu 16.4</p>
+							<p class="label-txt">{{ buildpackItem.name }}</p>
+							<input type="hidden" ng-if="$last" ng-init="contents.scrollPane()">
+							
+							<!--20181119 sg0730 차후 우측 View 정보 Hidden Val 처리 필요.   -->
+							<!-- <input type="text" ng-model="contents.buildpackName1" value="{{ buildpackItem.name }}">
+							<input type="text" ng-model="contents.buildpackName2" value="{{ buildpackItem.name }}">
+							<input type="text" ng-model="contents.buildpackName3" value="{{ buildpackItem.name }}">
+							<input type="text" ng-model="contents.buildpackName4" value="{{ buildpackItem.name }}"> -->
+							
+							
 						</li>
-						<li>
-						   <div class="radio1 radio-inline">
-							  <input type="radio" name="app-radio3" id="app-radio3-2">
-							  <label for="app-radio3-2" class="label"><img src="images/thum/im_thum_centOS.png" alt="" class="im"></label>
-						   </div>
-							<p class="label-txt">CentOS 7.5</p>
-						</li>
-						<li>
-						   <div class="radio1 radio-inline">
-							  <input type="radio" name="app-radio3" id="app-radio3-3">
-							  <label for="app-radio3-3" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
-						   </div>
-							<p class="label-txt">Windows 10</p>
-						</li>
-						<li>
-						   <div class="radio1 radio-inline">
-							  <input type="radio" name="app-radio3" id="app-radio3-4">
-							  <label for="app-radio3-4" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
-						   </div>
-							<p class="label-txt">Windows 10</p>
-						</li>
-						<li>
-						   <div class="radio1 radio-inline">
-							  <input type="radio" name="app-radio3" id="app-radio3-5">
-							  <label for="app-radio3-5" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
-						   </div>
-							<p class="label-txt">Windows 10</p>
-						</li>
+					
 					</ul>
 				</li>
-				<li>
-					<div class="pnb_tit">
+				<li ng-if="contents.appPushData.pushType == 'DOCKER'">
+					<p class="app-tit">도커(Docker) 이미지 정보를 입력해 주세요. <i class="i_star"></i></p>
+					<input type="text" maxlength="100" name="dockerImage" id="dockerImage" ng-model="contents.appPushData.dockerImage" class="form-control" placeholder="예 : cloudfoundry/lattice-app" validation="required">
+				</li>
+				
+				<li ng-if="contents.appPushData.pushType != 'DOCKER'">
+					<div class="pnb_tit" >
 						APP 실행용 파일 업로드(선택)<span class="ico_info"></span>
 					</div>
 					<div class="mt20">
 						<div class="radio radio-inline">
-							<input type="radio" name="radio00" id="radio00-3">
+							<!-- 20181119 신규 VALUE 세팅 필요 sg0730 START -->
+							<input type="radio" name="radio00" id="radio00-3" value="">
 							<label for="radio00-3" class="label">실행파일 업로드</label>
 						</div>
 						<div class="radio radio-inline">
-							<input type="radio" name="radio00" id="radio00-4">
+							<input type="radio" name="radio00" id="radio00-4" value="">
 							<label for="radio00-4" class="label">소스코드 업로드</label>
+							<!-- 20181119 신규 VALUE 세팅 필요 sg0730 END -->
 						</div>
 					</div>
 					<div class="fileUploadWrap mt20">
-						<input id="fileInput" filestyle="" type="file" data-class-button="btn btn-default" data-class-input="form-control" data-button-text="" data-icon-name="fa fa-upload" class="form-control" tabindex="-1" style="position: absolute; clip: rect(0px 0px 0px 0px);">
+						<!-- <input type="file" maxlength="100" name="file" nv-file-select="" uploader="contents.uploader" class="form-control" style="display: none;" accept=".war, .jar, .zip"/> -->
+						<input id="fileInput"  maxlength="100" nv-file-select="" uploader="contents.uploader" accept=".war, .jar, .zip" filestyle="" type="file" data-class-button="btn btn-default" data-class-input="form-control" data-button-text="" data-icon-name="fa fa-upload" class="form-control" tabindex="-1" style="position: absolute; clip: rect(0px 0px 0px 0px);">
 						<div class="bootstrap-filestyle input-group">
-							<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;">
+							<input type="hidden" name="contents.appFileName" ng-model="contents.appFileItem.file.name" style="display: none;" />
+							<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" readonly value="{{ contents.appFileItem.file.name }}">
 							<span class="group-span-filestyle input-group-btn" tabindex="0">
-								<label for="fileInput" class="btn btn-default ">
-									<span class="btn btn-md btn-color1">파일찾기</span>
+								<label for="fileInput" class="btn btn-default " ng-click="main.fileSelectBtnClick($event);">
+									<span class="btn btn-md btn-color1" >파일찾기</span>
 								</label>
 							</span>
+							<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
 						</div>
 					</div>
 				</li>
@@ -125,8 +121,8 @@
 		</div>
 		<div class="pn_footer">
 			<div class="btn-btm mgt0">
-				<button type="button" name="button" class="btn btn-color1 btn-md">APP 생성</button>
-				<button type="button" name="button" class="btn btn-color2 btn-md">취소</button>
+				<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.appPush();">APP 생성</button>
+				<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToPage('/paas/apps')">취소</button>
 			</div>
 		</div>
 	</div>
@@ -139,20 +135,22 @@
 				<ul>
 					<li>
 						<span class="s_tit">APP 이름</span>
-						<span class="s_txt">수요예측</span>
+						<span class="s_txt">{{contents.appPushData.appName}}</span>
 					</li>
 					<li>
 						<span class="s_tit">APP 도메인</span>
-						<span class="s_txt">devdeand.apps.hubpop.io</span>
+						<span class="s_txt">{{contents.appPushData.domainFirstName}}.{{contents.sltDomainName}}</span>
 					</li>
 					<li>
 						<span class="s_tit">APP 유형</span>
-						<span class="s_txt">빌드팩(Buildpack) 기반</span>
+						<span class="s_txt" ng-if="contents.appPushData.pushType == 'GENERAL'">빌드팩(Buildpack)</span>
+						<span class="s_txt" ng-if="contents.appPushData.pushType == 'DOCKER'">도커(Docker)</span>
 					</li>
 					<li>
 						<span class="s_tit">빌드팩 정보<span class="ico_info"></span></span>
 						<div class="s_inner_cont">
 							<dl>
+								<!-- 20181119 빌드팩 찍어서 값 설정 필요. sg0730 START -->
 								<dt>종류 :</dt>
 								<dd>Java 빌드팩</dd>
 								<dt>버전 :</dt>
@@ -161,6 +159,7 @@
 								<dd class="dd_row">Spring Framework 4.2</dd>
 								<dd class="dd_row">Tomcat 1.8.1</dd>
 								<dd class="dd_row">JRE 1.8.1</dd>
+								<!-- 20181119 빌드팩 찍어서 값 설정 필요. sg0730 END -->
 							</dl>
 						</div>
 					</li>
@@ -176,7 +175,9 @@
 				<ul>
 					<li>
 						<div class="s_inner_cont">
-							<p class="txt">D:/dev/demand.war</p>
+							<!-- 로컬 파일 경로 확인 sg0730  -->
+							<p class="txt" ng-if="contents.appPushData.pushType == 'GENERAL'">{{ contents.appFileItem.file.name }}<!-- D:/dev/demand.war --></p>
+							<p class="txt" ng-if="contents.appPushData.pushType == 'DOCKER'">{{ contents.appPushData.dockerImage }}</p>
 						</div>
 					</li>
 				</ul>
@@ -200,16 +201,18 @@
 									</colgroup>
 									<thead>
 										<tr>
-											<th>Instance</th>
+											<th>인스턴스</th>
 											<th>메모리</th>
 											<th>디스크</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
+											<!-- 20181119 김보람G 퍼블리싱 후에 다시 맵핑 작업 필요 sg0730 START  -->
 											<td>2개</td>
 											<td>1024GB</td>
 											<td>1.5GB</td>
+											<!-- 20181119 김보람G 퍼블리싱 후에 다시 맵핑 작업 필요 sg0730 END  -->
 										</tr>
 									</tbody>
 								</table>
@@ -219,7 +222,7 @@
 				</ul>
 			</div>
 			<div class="btn-btm">
-				<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
+				<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
 			</div>
 		</div>
 	</div>

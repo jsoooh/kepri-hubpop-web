@@ -66,6 +66,7 @@
         "application_del": "앱 삭제",
         "application_deploy": "앱 배포",
         "application_details": "앱 상세조회",
+        "application_details": "앱  만들기",
         "application_file": "앱 파일",
 	    "application_deploy_info": "앱 배포 정보",
         "application_info": "앱 정보",

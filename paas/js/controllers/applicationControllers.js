@@ -475,8 +475,33 @@ angular.module('paas.controllers')
     .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, routeService, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationPushCtrl", 1);
 
-        var ct = this;
-        ct.formName = "appPushForm01";
+        var ct 					= this;
+        ct.formName 			= "appPushForm01";
+        ct.organizations 		= [];
+        ct.sltOrganization 		= {};
+        ct.spaces 				= [];
+        ct.sltSpace  			= {};
+        ct.domains 				= [];
+        ct.sltDomainName;
+        ct.buildpacks 			= [];
+        ct.portalBuildpacks 	= [];
+        ct.portalBuildpackVersions = [];
+        ct.sltPortalBuildpack  	= {};
+        ct.appPushData   		= {};
+        ct.activeTabIndex 		= 1;
+        ct.sltDeployOption 		= "U";
+        
+        // 호스트 중복 체크 확인
+        ct.hostDup 				= false;
+        
+        
+        /*
+         *  1. 빌드팩 정보 필요. (화면 맵핑 필요)
+         *  2. 앱 파일 업로드의 실행파일 / 소스코드의 VALUE값 정의후 구현 추가.
+         *  3. 실행환경 사양설정 : 차후 퍼블리싱 후에 다시 재작업필요.
+         *  4. 우측 빌드팩정보 및 실행소스 및 실행환경 사양 맵핑 필요.
+         *  
+         * */
         
         var uploadFilters = [];
         uploadFilters.push({
@@ -487,13 +512,19 @@ angular.module('paas.controllers')
                 var fileNames =  item.name.split(".");
                 var ftype = '|' + fileNames[fileNames.length - 1].toLowerCase() + '|';
                 var ctype = '';
+                
                 if (contentTypes.length == 2) {
                     ctype =  '|' + contentTypes[1].toLowerCase() + '|';
                 }
+                
+                
                 if ((ctype && '|x-webarchive|x-java-archive|zip|'.indexOf(ctype) !== -1)
-                    || ('|war|jar|zip|'.indexOf(ftype) !== -1)) {
+                    || ('|war|jar|zip|'.indexOf(ftype) !== -1)) 
+                {
                     return true;
-                } else {
+                } 
+                else 
+                {
                     item.error = "error";
                     item.message = "mi_only_app_file";
                     return false;
@@ -505,96 +536,90 @@ angular.module('paas.controllers')
 
         ct.uploader.onWhenAddingFileFailed = function (item) {
             _DebugConsoleInfo('onWhenAddingFileFailed', item);
-            if (item.error && item.message) {
+            
+            if (item.error && item.message) 
+            {
                 var errMessage = "{{ 'message." + item.message + "' | translate }}";
                 ct.appFileItem = null;
-                item.error = null;
-                item.message = null;
+                item.error     = null;
+                item.message   = null;
                 ct.appFileErrorMessage = errMessage;
             }
         };
 
         ct.uploader.onAfterAddingFile = function (fileItem) {
             _DebugConsoleInfo('onAfterAddingFile', fileItem);
+            
             ct.appFileErrorMessage = "";
             ct.appFileItem = fileItem;
         };
 
-        ct.organizations = [];
-        ct.sltOrganization = {};
-        ct.spaces = [];
-        ct.sltSpace  = {};
-        ct.domains = [];
-        ct.sltDomainName;
-        ct.buildpacks = [];
-        ct.portalBuildpacks = [];
-        ct.portalBuildpackVersions = [];
-        ct.sltPortalBuildpack  = {};
-        ct.appPushData   = {};
-        ct.activeTabIndex = 1;
-        ct.sltDeployOption = "U";
-        // 호스트 중복 체크 확인
-        ct.hostDup = false;
+        
         
         // 언어 선택 스크롤 생성
         ct.scrollPane = function (){
-            setTimeout(function() {
+        	
+            setTimeout(function() 
+            {
                 var scrollPane = $('.scroll-pane').jScrollPane({});
             }, 250);
         }
 
-        ct.appPushData.pushType = "GENERAL";
+        ct.appPushData.pushType  = "GENERAL";
         ct.appPushData.withStart = "true";
 
         ct.defaultSetting = {
-            instances: 1,
-            memory: 768,
-            diskQuota: 512
-        };
+					            instances: 1,
+					            memory: 768,
+					            diskQuota: 512
+					        };
 
         ct.instancesSlider = {
-            value : ct.defaultSetting.instances,
-            options: {
-                floor: 0,
-                ceil: 20,
-                step: 1,
-                minLimit: 1,
-                showSelectionBar: true
-            }
-        };
+					            value : ct.defaultSetting.instances,
+					            
+					            options: {
+							                floor: 0,
+							                ceil: 20,
+							                step: 1,
+							                minLimit: 1,
+							                showSelectionBar: true
+							            }
+					        };
 
         ct.memorySlider = {
-            value : ct.defaultSetting.memory,
-            options: {
-                floor: 0,
-                ceil: 4096,
-                step: 128,
-                minLimit: 128,
-                showSelectionBar: true
-            }
-        };
+					            value : ct.defaultSetting.memory,
+					            
+					            options: {
+							                floor: 0,
+							                ceil: 4096,
+							                step: 128,
+							                minLimit: 128,
+							                showSelectionBar: true
+							            }
+					        };
 
         ct.diskQuotaSlider = {
-            value : ct.defaultSetting.diskQuota,
-            options: {
-                floor: 0,
-                ceil: 2048,
-                step: 128,
-                minLimit: 128,
-                showSelectionBar: true
-            }
-        };
+						            value : ct.defaultSetting.diskQuota,
+						            
+						            options: {
+									            floor: 0,
+									            ceil: 2048,
+									            step: 128,
+									            minLimit: 128,
+									            showSelectionBar: true
+									         }
+						      };
 
-        ct.closeForm = function (evt) {
+        /*ct.closeForm = function (evt) {
             $(".aside").stop().animate({"right":"-360px"}, 600);
             ct.activeTabIndex = 1;
-        };
+        };*/
 
-        ct.showSlider = function (evt) {
+/*        ct.showSlider = function (evt) {
             $(evt.target).next(".instBox").slideToggle();
         };
-
-        ct.showForm2 = function () {
+*/
+       /* ct.showForm2 = function () {
             var fileCheck = true;
             if (ct.appPushData.pushType === "GENERAL" && ct.appFileItem == null) {
                 ct.appFileErrorMessage = "선택된 파일이 없습니다.";
@@ -625,11 +650,11 @@ angular.module('paas.controllers')
                 }
             }
         };
-
-        ct.showForm2Action = function () {
+*/
+       /* ct.showForm2Action = function () {
             ct.activeTabIndex++;
 
-            /* range - 오른쪽 영역 범례 */
+             range - 오른쪽 영역 범례 
             $("#ex1Slider1").remove();
             var slider1 = new Slider('.eff-report1', {
                 tooltip_position: "bottom",
@@ -668,105 +693,147 @@ angular.module('paas.controllers')
                     }
                 },
             });
-        };
+        };*/
 
         ct.listAllOrganizations = function () {
+        	
             var organizationPromise = applicationService.listAllOrganizations();
-            organizationPromise.success(function (data) {
+            
+            organizationPromise.success(function (data) 
+            {
                 $scope.main.organizations = angular.copy(data);
                 $scope.main.syncListAllPortalOrgs();
-                ct.organizations = $scope.main.sinkPotalOrgsName(data);
+                
+                ct.organizations 		  = $scope.main.sinkPotalOrgsName(data);
                 ct.changeOrganization();
-                ct.isOrganizationData = true;
-                if (ct.isBuildpackData && ct.isPortalBuildpackData) {
+                
+                ct.isOrganizationData 	  = true;
+                
+                if (ct.isBuildpackData && ct.isPortalBuildpackData) 
+                {
                     $scope.main.loadingMainBody = false;
                 }
             });
             organizationPromise.error(function (data) {
-                ct.organizations = [];
+                ct.organizations 			= [];
                 $scope.main.loadingMainBody = false;
             });
         };
 
         ct.setPortalBuildpacks = function () {
+        	
             ct.portalBuildpacks = [];
-            for (var i=0; i<ct.portalBuildpackVersions.length; i++) {
+            
+            for (var i=0; i<ct.portalBuildpackVersions.length; i++) 
+            {
                 var buildpackName = ct.portalBuildpackVersions[i].portalBuildpack.name + "_buildpack-" + ct.portalBuildpackVersions[i].version;
-                var sltBuildpack = common.objectsFindCopyByField(ct.buildpacks, "name", buildpackName);
-                if (sltBuildpack != null && sltBuildpack.enabled) {
+                var sltBuildpack  = common.objectsFindCopyByField(ct.buildpacks, "name", buildpackName);
+                
+                if (sltBuildpack != null && sltBuildpack.enabled) 
+                {
                     var portalBuildpackId = ct.portalBuildpackVersions[i].portalBuildpack.id;
-                    var addVersion = false;
+                    var addVersion 		  = false;
+                    
                     var version = {
-                        id: ct.portalBuildpackVersions[i].id,
-                        version: ct.portalBuildpackVersions[i].version,
-                        versionName: ct.portalBuildpackVersions[i].version.replace(/-/g, '.'),
-                        description: ct.portalBuildpackVersions[i].description,
-                        url: ct.portalBuildpackVersions[i].url
-                    };
-                    for (var j = 0; j < ct.portalBuildpacks.length; j++) {
-                        if (ct.portalBuildpacks[j].id == portalBuildpackId) {
+				                        id          : ct.portalBuildpackVersions[i].id,
+				                        version     : ct.portalBuildpackVersions[i].version,
+				                        versionName : ct.portalBuildpackVersions[i].version.replace(/-/g, '.'),
+				                        description : ct.portalBuildpackVersions[i].description,
+				                        url         : ct.portalBuildpackVersions[i].url
+				                   };
+                    
+                    for (var j = 0; j < ct.portalBuildpacks.length; j++) 
+                    {
+                        if (ct.portalBuildpacks[j].id == portalBuildpackId) 
+                        {
                             ct.portalBuildpacks[j].versions.push(version);
                             addVersion = true;
                             break;
                         }
                     }
-                    if (!addVersion) {
-                        var portalBuildpack = angular.copy(ct.portalBuildpackVersions[i].portalBuildpack);
+                    
+                    
+                    if (!addVersion) 
+                    {
+                        var portalBuildpack 	 = angular.copy(ct.portalBuildpackVersions[i].portalBuildpack);
                         portalBuildpack.versions = [];
+                        
                         portalBuildpack.versions.push(version);
                         ct.portalBuildpacks.push(portalBuildpack);
                     }
                 }
-            }
+            } 
+            
             ct.sltBuildpackId = null;
             ct.changePortalBuildpack();
             $scope.main.loadingMainBody = false;
         };
 
         ct.listAllBuildpacks = function () {
+        	
             var buildpackPromise = applicationService.listAllBuildpacks();
-            buildpackPromise.success(function (data) {
-                ct.buildpacks = data;
-                ct.isBuildpackData = true;
-                if (ct.isPortalBuildpackData) {
+            
+            buildpackPromise.success(function (data) 
+            {
+                ct.buildpacks 		= data;
+                ct.isBuildpackData  = true;
+                
+                if (ct.isPortalBuildpackData) 
+                {
                     ct.setPortalBuildpacks();
                 }
             });
             buildpackPromise.error(function (data) {
-                ct.organizations = [];
+                ct.organizations 			= [];
                 $scope.main.loadingMainBody = false;
             });
         };
 
         ct.listAllPortalBuildpackVersions = function () {
-            var portalBuildpackPromise = applicationService.listAllPortalBuildpackVersions();
-            portalBuildpackPromise.success(function (data) {
-                ct.portalBuildpackVersions = data;
-                ct.isPortalBuildpackData = true;
-                if (ct.isBuildpackData) {
+            
+        	var portalBuildpackPromise = applicationService.listAllPortalBuildpackVersions();
+            
+            portalBuildpackPromise.success(function (data) 
+            {
+                ct.portalBuildpackVersions  = data;
+                ct.isPortalBuildpackData 	= true;
+                
+                if (ct.isBuildpackData) 
+                {
                     ct.setPortalBuildpacks();
                 }
             });
             portalBuildpackPromise.error(function (data) {
-                ct.portalBuildpacks = [];
+                ct.portalBuildpacks 		= [];
                 $scope.main.loadingMainBody = false;
             });
         };
 
         ct.changePortalBuildpack = function () {
+        	
             ct.sltPortalBuildpack = ct.sltBuildpackId ? common.objectsFindCopyByField(ct.portalBuildpacks, "id", ct.sltBuildpackId) : null;
-            if (ct.sltPortalBuildpack == null) {
+            
+            if (ct.sltPortalBuildpack == null) 
+            {
                 ct.sltPortalBuildpack = ct.portalBuildpacks[0];
-                ct.sltBuildpackId = ct.sltPortalBuildpack.id;
+                ct.sltBuildpackId 	  = ct.sltPortalBuildpack.id;
             }
-            if (ct.sltPortalBuildpack.versions.length > 0) {
+            
+            
+            if (ct.sltPortalBuildpack.versions.length > 0) 
+            {
                 ct.sltBuildpackVersionId = ct.sltPortalBuildpack.versions[0].id;
                 ct.changePortalBuildpackVersion();
-            } else {
+            } 
+            else 
+            {
                 ct.sltBuildpackVersionId = "";
-                ct.sltBuildpackVersion = {};
+                ct.sltBuildpackVersion   = {};
             }
-            if (!ct.sltPortalBuildpack.appFilePath) {
+            
+            
+            if (!ct.sltPortalBuildpack.appFilePath) 
+            {
                 ct.sltDeployOption = "U";
             }
         };
@@ -776,16 +843,25 @@ angular.module('paas.controllers')
         };
 
         ct.changeSpace = function () {
-            if (ct.appPushData.spaceGuid) {
+        	
+            if (ct.appPushData.spaceGuid) 
+            {
                 ct.sltSpace = common.objectsFindCopyByField(ct.spaces, "guid", ct.appPushData.spaceGuid);
-                if (!ct.sltSpace || !ct.sltSpace.guid) {
+                
+                if (!ct.sltSpace || !ct.sltSpace.guid) 
+                {
                     ct.appPushData.spaceGuid = "";
-                } else {
-                    if (ct.sltSpace.serviceInstances && ct.sltSpace.serviceInstances.length > 0) {
-                        ct.serviceInstances = angular.copy(ct.sltSpace.serviceInstances);
+                } 
+                else 
+                {
+                    if (ct.sltSpace.serviceInstances && ct.sltSpace.serviceInstances.length > 0) 
+                    {
+                        ct.serviceInstances 			   = angular.copy(ct.sltSpace.serviceInstances);
                         ct.appPushData.serviceInstanceGuid = "";
-                    } else {
-                        ct.serviceInstances = [];
+                    } 
+                    else 
+                    {
+                        ct.serviceInstances 			   = [];
                         ct.appPushData.serviceInstanceGuid = "";
                     }
                 }
@@ -793,93 +869,108 @@ angular.module('paas.controllers')
         };
 
         ct.changeOrganization = function () {
-            if (ct.appPushData.organizationGuid) {
+            if (ct.appPushData.organizationGuid) 
+            {
                 ct.sltOrganization = common.objectsFindCopyByField(ct.organizations, "guid", ct.appPushData.organizationGuid);
-                ct.spaces = angular.copy(ct.sltOrganization.spaces);
+                ct.spaces 		   = angular.copy(ct.sltOrganization.spaces);
+                
                 ct.changeSpace();
-                if (ct.sltOrganization.domains && ct.sltOrganization.domains.length > 0) {
-                    ct.domains = angular.copy(ct.sltOrganization.domains);
+                
+                if (ct.sltOrganization.domains && ct.sltOrganization.domains.length > 0) 
+                {
+                    ct.domains 		 = angular.copy(ct.sltOrganization.domains);
                     ct.sltDomainName = ct.domains[0].name;
-                } else {
-                    ct.domains = [];
+                } 
+                else 
+                {
+                    ct.domains 		 = [];
                     ct.sltDomainName = "";
                 }
-            } else {
-                ct.sltOrganization = {};
-                ct.spaces = [];
-                ct.sltSpace = {};
+            } 
+            else 
+            {
+                ct.sltOrganization 		 = {};
+                ct.spaces 				 = [];
+                ct.sltSpace 			 = {};
                 ct.appPushData.spaceGuid = "";
-                ct.domains = [];
-                ct.sltDomainName = "";
+                ct.domains 				 = [];
+                ct.sltDomainName 		 = "";
             }
         };
 
-        //다음
-        ct.nextStep = function(){
-
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                return;
-            }
-
-            ct.activeTabIndex++;
-            $(".aside").stop().animate({"right":"-360px"}, 400);
-            $("#aside-aside2").stop().animate({"right":"0"}, 500);
-        }
-
-        ct.previousTab = function () {
-            ct.activeTabIndex--;
-        };
-
+        //Insert
         ct.appPush = function () {
-            if ($scope.actionBtnHied) return;
-            $scope.actionBtnHied = true;
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+            
+        	if ($scope.actionBtnHied) return;
+            
+        	$scope.actionBtnHied = true;
+            
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) 
+            {
                 $scope.actionBtnHied = false;
                 return;
             }
 
-            $scope.main.loadingMain = true;
+            $scope.main.loadingMain 	= true;
             $scope.main.loadingMainBody = true;
-            var appBody = {};
-            appBody.organizationGuid = ct.appPushData.organizationGuid;
-            appBody.spaceGuid = ct.appPushData.spaceGuid;
-            appBody.pushType = ct.appPushData.pushType;
-            if (ct.appPushData.pushType == "DOCKER") {
+            var appBody 				= {};
+            appBody.organizationGuid 	= ct.appPushData.organizationGuid;
+            appBody.spaceGuid 			= ct.appPushData.spaceGuid;
+            appBody.pushType 			= ct.appPushData.pushType;
+            
+            if (ct.appPushData.pushType == "DOCKER") 
+            {
                 appBody.dockerImage = ct.appPushData.dockerImage;
-            } else {
-                appBody.buildpack = ct.sltPortalBuildpack.name + '_buildpack-' + ct.sltBuildpackVersion.version;
+            } 
+            else 
+            {
+                appBody.buildpack 	= ct.sltPortalBuildpack.name + '_buildpack-' + ct.sltBuildpackVersion.version;
             }
-            appBody.appName = ct.appPushData.appName;
-            appBody.hostName = ct.appPushData.domainFirstName + "." + ct.sltDomainName;
-            appBody.withStart = false;
-            var afterStart = false;
-
-            ct.sltDeployOption = "B";                                                                                                           //배포옵션 기본 하드코딩
-            if (ct.sltDeployOption == "B") {
+            
+            appBody.appName 	= ct.appPushData.appName;
+            appBody.hostName 	= ct.appPushData.domainFirstName + "." + ct.sltDomainName;
+            appBody.withStart 	= false;
+            var afterStart 		= false;
+            ct.sltDeployOption 	= "B";  
+            //배포옵션 기본 하드코딩
+            if (ct.sltDeployOption == "B") 
+            {
                 afterStart = true;
                 appBody.appFilePath = ct.sltPortalBuildpack.appFilePath;
-                appBody.instances = ct.instancesSlider.value;
-                appBody.memory = ct.memorySlider.value;
-                appBody.diskQuota = ct.diskQuotaSlider.value;
-            } else {
+                appBody.instances 	= ct.instancesSlider.value;
+                appBody.memory 		= ct.memorySlider.value;
+                appBody.diskQuota 	= ct.diskQuotaSlider.value;
+            } 
+            else 
+            {
                 afterStart = (ct.appPushData.withStart == "true") ? true : false;
-                if (ct.appPushData.serviceInstanceGuid) {
+                
+                if (ct.appPushData.serviceInstanceGuid) 
+                {
                     appBody.serviceInstanceGuid = ct.appPushData.serviceInstanceGuid;
                 }
+                
                 appBody.instances = ct.instancesSlider.value;
-                appBody.memory = ct.memorySlider.value;
+                appBody.memory 	  = ct.memorySlider.value;
                 appBody.diskQuota = ct.diskQuotaSlider.value;
             }
+            
+           // console.log("appBody====>"+ JSON.stringify(appBody));
+            
 
-
-            if (ct.appFileItem) {
-                appBody.file = ct.appFileItem._file;
+            if (ct.appFileItem) 
+            {
+                appBody.file 	   = ct.appFileItem._file;
                 var appPushPromise = applicationService.appFilePush(appBody);
-                appPushPromise.success(function (data) {
-                    $scope.actionBtnHied = false;
-                    $scope.main.loadingMain = false;
+                
+                appPushPromise.success(function (data) 
+                {
+                    $scope.actionBtnHied 		= false;
+                    $scope.main.loadingMain 	= false;
                     $scope.main.loadingMainBody = false;
+                    
                     common.showAlertHtml($translate.instant("label.app") + "(" + data.name + ")", $translate.instant("message.mi_register_success"));
+                    
                     $scope.main.startAppGuid = data.guid;
                     $scope.main.goToPage('/paas/apps/' + data.guid);
                 });
@@ -890,11 +981,15 @@ angular.module('paas.controllers')
                 appPushPromise.progress(function (progress) {
                     _DebugConsoleInfo('progress', progress);
                 });
-            } else {
-                var appPushPromise = applicationService.appPush(appBody);
-                appPushPromise.success(function (data) {
-                    $scope.actionBtnHied = false;
-                    $scope.main.loadingMain = false;
+            } 
+            else 
+            {
+                var appPushPromise 				= applicationService.appPush(appBody);
+                
+                appPushPromise.success(function (data) 
+                {
+                    $scope.actionBtnHied 		= false;
+                    $scope.main.loadingMain 	= false;
                     $scope.main.loadingMainBody = false;
 
                     common.showAlertSuccess($translate.instant("message.mi_register_success"));
@@ -902,6 +997,7 @@ angular.module('paas.controllers')
                     $scope.main.goToPage('/paas/apps/' + data.guid);
 
                 });
+                
                 appPushPromise.error(function (data) {
                     $scope.actionBtnHied = false;
                     $scope.main.loadingMain = false;
@@ -911,18 +1007,21 @@ angular.module('paas.controllers')
         };
 
         ct.pageLoadData = function () {
-            $scope.main.loadingMainBody = true;
-            ct.isOrganizationData = false;
-            ct.isBuildpackData = false;
-            ct.isPortalBuildpackData = false;
-            ct.sltOrganization = $scope.main.sltOrganization;
-            ct.sltOrganizationGuid = $scope.main.sltOrganization.guid;
-            ct.appPushData.organizationGuid = $scope.main.sltOrganization.guid;
-            ct.appPushData.spaceGuid = $scope.main.sltOrganization.spaces[0].guid;
-            if ($scope.main.sltOrganization.domains && $scope.main.sltOrganization.domains.length > 0) {
-                ct.domains = angular.copy($scope.main.sltOrganization.domains);
+            $scope.main.loadingMainBody 		= true;
+            ct.isOrganizationData 				= false;
+            ct.isBuildpackData 					= false;
+            ct.isPortalBuildpackData 			= false;
+            ct.sltOrganization 					= $scope.main.sltOrganization;
+            ct.sltOrganizationGuid 				= $scope.main.sltOrganization.guid;
+            ct.appPushData.organizationGuid 	= $scope.main.sltOrganization.guid;
+            ct.appPushData.spaceGuid 			= $scope.main.sltOrganization.spaces[0].guid;
+            
+            if ($scope.main.sltOrganization.domains && $scope.main.sltOrganization.domains.length > 0) 
+            {
+                ct.domains 		 = angular.copy($scope.main.sltOrganization.domains);
                 ct.sltDomainName = ct.domains[0].name;
             }
+            
             ct.listAllBuildpacks();
             ct.listAllPortalBuildpackVersions();
         };

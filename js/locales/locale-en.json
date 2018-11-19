@@ -66,6 +66,7 @@
         "application_del": "Delete App",
         "application_deploy": "Deploy App",
         "application_details": "Application Detail",
+        "application_details": "Application Create",
         "application_file": "Application File",
 	    "application_deploy_info": "Application Deploy Info",
         "application_info": "Application Info",
