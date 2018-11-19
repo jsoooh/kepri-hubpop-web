@@ -22,40 +22,14 @@
 						<i class="i_star"></i> 서비스 S/W<span class="ico_info"></span>
 					</div>
 					<ul class="ul-list1">
-						<li>
+						<li ng-repeat="(key, serviceItem) in contents.services">
 							<div class="radio1 radio-inline">
-							   <input type="radio" name="app-radio3" id="app-radio3-1">
-							   <label for="app-radio3-1" class="label"><img src="images/thum/im_thum_ubuntu.png" alt="" class="im"></label>
+								<input type="radio" name="sevSel-radio" id="sevSel-radio-{{key}}" ng-model="radio.name" ng-value="serviceItem.guid" ng-model="contents.sltServiceGuid" ng-change="contents.sltServiceChange(contents.sltServiceGuid);">
+								<label for="sevSel-radio-{{key}}" class="label">
+									<img ng-src="images/thum/im_app_{{ serviceItem.label }}_on.png" alt="{{ serviceItem.label }}" class="im" />
+								</label>
 							</div>
-							<p class="label-txt">ubuntu 16.4</p>
-						</li>
-						<li>
-						   <div class="radio1 radio-inline">
-							  <input type="radio" name="app-radio3" id="app-radio3-2">
-							  <label for="app-radio3-2" class="label"><img src="images/thum/im_thum_centOS.png" alt="" class="im"></label>
-						   </div>
-							<p class="label-txt">CentOS 7.5</p>
-						</li>
-						<li>
-						   <div class="radio1 radio-inline">
-							  <input type="radio" name="app-radio3" id="app-radio3-3">
-							  <label for="app-radio3-3" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
-						   </div>
-							<p class="label-txt">Windows 10</p>
-						</li>
-						<li>
-						   <div class="radio1 radio-inline">
-							  <input type="radio" name="app-radio3" id="app-radio3-4">
-							  <label for="app-radio3-4" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
-						   </div>
-							<p class="label-txt">Windows 10</p>
-						</li>
-						<li>
-						   <div class="radio1 radio-inline">
-							  <input type="radio" name="app-radio3" id="app-radio3-5">
-							  <label for="app-radio3-5" class="label"><img src="images/thum/im_thum_windows.png" alt="" class="im"></label>
-						   </div>
-							<p class="label-txt">Windows 10</p>
+							<p class="label-txt">{{ serviceItem.label }}</p>
 						</li>
 					</ul>
 				</li>
@@ -64,19 +38,12 @@
 						<i class="i_star"></i> 서비스 플랜<span class="ico_info"></span>
 					</div>
 					<div class="app-form-two">
-						<div class="two_box pdr10">
+						<div ng-repeat="(key, servicePlan) in contents.servicePlans" class="two_box pdr10">
 							<div class="radio radio-inline">
-							   <input type="radio" name="radio0" id="radio0-1">
-							   <label for="radio0-1">10MB</label>
-						   </div>
-						   <div class="txt_box">Shard My SQL Server</div>
-						</div>
-						<div class="two_box pdl10">
-							<div class="radio radio-inline">
-							   <input type="radio" name="radio0" id="radio0-2">
-							   <label for="radio0-2">20MB</label>
-						   </div>
-						   <div class="txt_box">Shard My SQL Server</div>
+								<input type="radio" class="radio radio-inline" name="radioSev" ng-model="contents.sltServicePlanGuid" ng-value="servicePlan.guid" id="sev-plan-radio-{{key}}" ng-change="contents.sltServicePlanChange(contents.sltServicePlanGuid)">
+								<label for="sev-plan-radio-{{key}}" class="label plan_label">{{ servicePlan.name }}</label>
+							</div>
+							<div class="txt_box">{{servicePlan.description}}</div>
 						</div>
 					</div>
 				</li>
@@ -84,18 +51,13 @@
 					<div class="pnb_tit">
 						연결대상 APP<span class="ico_info"></span>
 					</div>
-					<div class="select_dropdown">
-						<div class="sel_box on">연결 대상 APP을 선택합니다.(선택사항)</div>
-						<div class="down_box">
-							<input type="text" class="form-control" maxlength="100" placeholder="검색어를 입력하세요.">
-							<button class="ico_del_x">내용 지우기</button>
-							<ul>
-								<li class="on"><a href="">수요예측 APP</a></li>
-								<li><a href="">Microservice app 01</a></li>
-								<li><a href="">Microservice app 02</a></li>
-							</ul>
-						</div>
-					</div>
+					<select ui-select-two="main.usSelectTwoOptions" name="sltBindApp" id="addApp" ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);" data-placeholder="연결 대상 APP을 선택합니다.(선택사항)">
+						<option value=""></option>
+						<option value="1" option-html="<span style='color: blue;'>{text}</span>">수요예측 APP</option>
+						<option value="2" option-html="<span style='color: red;'>{text}</span>">Microservice app 01</option>
+						<option value="3" option-html="<span style='color: #AAAAA'>{text}</span>">Microservice app 02</option>
+						<option ng-repeat="appItem in contents.spaceApps" value="{{ appItem.guid }}" option-html="<span style='color: #0a4ed8'>{text}</span>">{{ appItem.name }}</option>
+					</select>
 				</li>
 			</ul>
 		</div>

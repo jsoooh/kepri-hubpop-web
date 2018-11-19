@@ -144,7 +144,7 @@ angular.module('app')
                             options.minimumResultsForSearch = Infinity;
                         }
                         $(element).select2(options);
-                    }
+                    };
                     start();
                 }
             }

@@ -34,6 +34,10 @@ angular.module('paas.services')
             }
         };
 
+        serviceInstanceService.listAllSpaceApps = function (spaceGuid) {
+            return cloudFoundry.spaces.listAllSpaceApps(spaceGuid, "", 1);
+        };
+
         serviceInstanceService.getService = function (guid) {
             return cloudFoundry.services.getService(guid, 1);
         };

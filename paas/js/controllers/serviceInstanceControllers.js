@@ -244,298 +244,116 @@ angular.module('paas.controllers')
         ct.listAllServiceInstances();
     })
     .controller('paasServiceInstanceCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, user, common, serviceInstanceService, ValidationService, CONSTANTS) {
-        _DebugConsoleLog("serviceInstanceControllers.js : serviceInstanceCreateCtrl", 1);
+        _DebugConsoleLog("serviceInstanceControllers.js : paasServiceInstanceCreateCtrl", 1);
 
         var ct = this;
-        var vs = new ValidationService();
 
-        ct.organizations = angular.copy($scope.main.organizations);
-        ct.serviceInstance = {};
-        ct.sltOrganizationGuid = "";
-        ct.sltOrganization = {};
-        ct.spaces = [];
-        ct.sltSpace = {};
-        ct.sltSpaceGuid = "";
+        ct.sltSpace = $scope.main.sltOrganization.spaces[0];
         ct.services = [];
-        ct.sltServiceInstanceName = "";
-        ct.sltServiceGuid = "";
-        ct.sltServiceLabel = "";
-        ct.sltService = {};
         ct.servicePlans = [];
+        ct.spaceApps = [];
+
+        ct.sltService = {};
+        ct.sltServiceGuid = "";
+
         ct.sltServicePlan = {};
         ct.sltServicePlanGuid = "";
-        ct.apps = [];
-        ct.sltAppGuids = [];
-        ct.serviceBindings = [];
 
-        ct.formName = "serviceInstanceForm";
-        ct.sltOrganizationGuid = $scope.main.sltOrganizationGuid;
+        ct.sltBindingApp = {};
+        ct.sltBindingAppGuid = "";
 
-        ct.getServiceInstance = function (guid) {
-            var servicePromise = serviceInstanceService.getServiceInstance(guid);
-            servicePromise.success(function (data) {
-                ct.sltServiceInstanceName = data.name;
-                ct.sltOrganizationGuid = data.organizationGuid;
-                ct.sltOrganizationName = data.organizationName;
-                ct.sltSpaceGuid = data.spaceGuid;
-                ct.sltSpaceName = data.spaceName;
-                ct.sltServiceGuid = data.serviceGuid;
-                ct.sltServiceLabel = data.serviceLabel;
-                ct.sltServicePlanGuid = data.servicePlanGuid;
-                ct.sltServicePlanName = data.servicePlanName;
-                ct.serviceInstanceData = angular.copy(data);
-                ct.serviceInstance = angular.copy(data);
-                ct.changeSpace();
-                $scope.main.loadingMainBody = false;
-            });
-            servicePromise.error(function (data) {
-                ct.sltOrganization = {};
-                $scope.main.loadingMainBody = false;
-            });
+        ct.serviceInstances = [];
+        ct.actionBtnHied = false; // btn enabled
+        ct.spaceAppsLoad = false;
+
+
+
+        ct.radio = {
+            name: '',
+            description : '',
+            inputName : '',
+            planName : '',
+            planId : '',
+            serviceId : ''
         };
 
-        ct.getOrganization = function (guid) {
-            var organizationPromise = serviceInstanceService.getOrganization(guid);
-            organizationPromise.success(function (data) {
-                ct.sltOrganization = data;
-                ct.sltOrganizationGuid = data.guid;
-                ct.sltOrganizationName = data.name;
-                ct.spaces = angular.copy(data.spaces);
-                $scope.main.loadingMainBody = false;
-            });
-            organizationPromise.error(function (data) {
-                ct.sltOrganization = {};
-                $scope.main.loadingMainBody = false;
-            });
-        };
-
-        ct.changeOrganization = function () {
-            if (ct.sltOrganizationGuid) {
-                ct.sltOrganization = common.objectsFindCopyByField(ct.organizations, "guid", ct.sltOrganizationGuid);
-                ct.spaces = angular.copy(ct.sltOrganization.spaces);
-                if (ct.serviceInstance.spaceGuid) {
-                    ct.sltSpace = common.objectsFindCopyByField(ct.spaces, "guid", ct.serviceInstanceData.spaceGuid);
-                    if (!ct.sltSpace || !ct.sltSpace.guid) {
-                        ct.sltSpaceGuid = "";
-                    } else {
-                        ct.sltSpaceGuid = ct.serviceInstance.spaceGuid;
-                    }
-                } else {
-                    ct.sltSpace = {};
-                    ct.sltSpaceGuid = "";
-                }
+        ct.sltServiceChange = function (serviceGuid) {
+            var sltService = common.objectsFindCopyByField(ct.services, "guid", serviceGuid);
+            if (sltService && sltService.guid) {
+                ct.sltService = sltService;
+                ct.sltServiceGuid = sltService.guid;
+                ct.servicePlans = angular.copy(sltService.servicePlans);
+                ct.sltServicePlan = {};
+                ct.sltServicePlanGuid = "";
             } else {
-                ct.sltOrganization = {};
-                ct.spaces = [];
-                ct.sltSpace = {};
-                ct.sltSpaceGuid = "";
-            }
-            ct.changeSpace();
-        };
-
-        ct.changeSpace = function () {
-            if (ct.sltSpaceGuid) {
-                if (ct.serviceInstance.spaceGuid) {
-                    ct.sltSpace = angular.copy(ct.serviceInstance.space);
-                    ct.serviceBindings = angular.copy(ct.serviceInstance.serviceBindings);
-                } else {
-                    ct.sltSpace = common.objectsFindCopyByField(ct.spaces, "guid", ct.sltSpaceGuid);
-                    ct.serviceBindings = [];
-                }
-                ct.sltSpaceName = ct.sltSpace.name;
-                ct.resetDataApps();
-                ct.sltAppGuids = [];
-            } else {
-                ct.sltSpace = {};
-                ct.servicePlans = [];
-                ct.sltSpacePlan = {};
-                ct.serviceInstanceData.servicePlanGuid = "";
-                ct.apps = [];
-                ct.sltAppGuids = [];
-                ct.serviceBindings = [];
-            }
-        };
-
-        ct.resetDataApps = function () {
-            ct.apps    = [];
-            for (var i=0; i<ct.sltSpace.apps.length; i++) {
-                var isBindingApp = false;
-                for (var j=0; j<ct.serviceBindings.length; j++) {
-                    if (ct.serviceBindings[j].appGuid == ct.sltSpace.apps[i].guid) {
-                        isBindingApp = true;
-                        break;
-                    }
-                }
-                if (!isBindingApp) {
-                    ct.apps.push(angular.copy(ct.sltSpace.apps[i]));
-                }
-            }
-        };
-
-        ct.listAllOrganizations = function () {
-            var organizationPromise = serviceInstanceService.listAllOrganizations();
-            organizationPromise.success(function (data) {
-                $scope.main.organizations = angular.copy(data);
-                $scope.main.syncListAllPortalOrgs();
-                ct.organizations = $scope.main.sinkPotalOrgsName(data);
-                ct.changeOrganization();
-                $scope.main.loadingMainBody = false;
-            });
-            organizationPromise.error(function (data) {
-                ct.organizations = [];
-                $scope.main.loadingMainBody = false;
-            });
-        };
-
-        ct.getService = function (guid) {
-            var servicePromise = serviceInstanceService.getService(guid);
-            servicePromise.success(function (data) {
-                ct.sltService = data;
-                ct.sltServicePlanGuid = ct.serviceInstance.servicePlanGuid;
-                ct.servicePlans = angular.copy(ct.sltService.servicePlans);
-                if (ct.sltServicePlanGuid) {
-                    ct.sltServicePlan = common.objectsFindCopyByField(ct.servicePlans, "guid", ct.sltServicePlanGuid);
-                }
-            });
-            servicePromise.error(function (data) {
                 ct.sltService = {};
-                $scope.main.loadingMainBody = false;
+                ct.sltServiceGuid = "";
+                ct.servicePlans = [];
+                ct.sltServicePlan = {};
+                ct.sltServicePlanGuid = "";
+            }
+        };
+
+        ct.sltServicePlanChange = function (planId, serviceGuid) {
+            ct.radio.planId = planId;
+            ct.radio.serviceId = serviceGuid;
+        };
+
+        ct.listAllSpaceApps = function (spaceGuid) {
+            ct.spaceApps    = [];
+            var resultPromise = serviceInstanceService.listAllSpaceApps(spaceGuid);
+            resultPromise.success(function (data) {
+                ct.spaceApps = data;
+                ct.spaceAppsLoad = true;
+            });
+            resultPromise.error(function (data, status, headers) {
+                ct.spaceApps = [];
+                ct.spaceAppsLoad = true;
             });
         };
 
-        ct.listAllServices = function (guid) {
-            var servicePromise = serviceInstanceService.listAllServices(guid);
-            servicePromise.success(function (data) {
+        /*Service 목록 조회*/
+        ct.listAllServices = function () {
+            $scope.main.loadingMainBody = true;
+            var resultPromise = serviceInstanceService.listAllServices();
+            resultPromise.success(function (data) {
                 ct.services = data;
+                $scope.main.loadingMainBody = false;
             });
-            servicePromise.error(function (data) {
+            resultPromise.error(function (data, status, headers) {
                 ct.services = [];
                 $scope.main.loadingMainBody = false;
             });
         };
 
-        ct.changeService = function () {
-            if (ct.sltServiceGuid) {
-                ct.sltService = common.objectsFindCopyByField(ct.services, "guid", ct.sltServiceGuid);
-                if (ct.sltService && ct.sltService.servicePlans) {
-                    ct.servicePlans = angular.copy(ct.sltService.servicePlans);
-                } else {
-                    ct.servicePlans = [];
-                }
-                ct.sltServicePlanGuid = "";
-                ct.sltServicePlan = {};
-            } else {
-                ct.sltService = {};
-                ct.servicePlans = [];
-                ct.sltServicePlan = {};
-                ct.sltServicePlanGuid = "";
-            }
-        };
-
-        ct.createServiceInstanceAction = function () {
-            if (ct.actionBtnHied) return;
-            ct.actionBtnHied = true;
-            if (!vs.checkFormValidity($scope[ct.formName])) {
-                ct.actionBtnHied = false;
-                common.showAlert("", $translate.instant("message.mi_check_input"));
+        ct.serviceInstanceCreate = function () {
+            if ($scope.radio.inputName.length < 3) {
+                common.showAlert("", "최소 3자 이상이어야 합니다.");
                 return;
             }
+
             $scope.main.loadingMainBody = true;
             var serviceInstanceBody = {};
-            serviceInstanceBody.name = ct.sltServiceInstanceName;
-            serviceInstanceBody.spaceGuid = ct.sltSpaceGuid;
-            serviceInstanceBody.servicePlanGuid = ct.sltServicePlanGuid;
-            var serviceBindings = [];
-            if (ct.serviceBindings && ct.serviceBindings.length > 0) {
-                serviceBindings = angular.copy(ct.serviceBindings);
-            }
-            if (ct.sltAppGuids && ct.sltAppGuids.length > 0) {
-                for (var i=0; i<ct.sltAppGuids.length; i++) {
-                    serviceBindings.push({ "appGuid" : ct.sltAppGuids[i] });
-                }
-            }
-            if (serviceBindings && serviceBindings.length > 0) {
-                serviceInstanceBody.serviceBindings = serviceBindings;
-            }
-            $scope.main.sltService = {};
+            serviceInstanceBody.name = ct.radio.inputName;
+            serviceInstanceBody.spaceGuid = ct.sltSpace.guid;
+            serviceInstanceBody.servicePlanGuid = ct.radio.planId;
+
             var serviceInstancePromise = serviceInstanceService.createServiceInstance(serviceInstanceBody);
             serviceInstancePromise.success(function (data) {
-                $scope.main.loadingMainBody = false;
                 ct.actionBtnHied = false;
-                $scope.main.goToPage('/paas/service_instances');
+                $scope.main.loadingMainBody = false;
+                common.showAlert("", $translate.instant("message.mi_create_service_instance"));
+                $scope.main.goToPage("/paas/serviceInstances");
             });
             serviceInstancePromise.error(function (data) {
-                $scope.main.loadingMainBody = false;
                 ct.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
             });
         };
 
-        ct.updateServiceInstanceAction = function () {
-            if (ct.actionBtnHied) return;
-            ct.actionBtnHied = true;
+        ct.listAllServices();
+        ct.listAllSpaceApps(ct.sltSpace.guid);
 
-            if (!vs.checkFormValidity($scope[ct.formName])) {
-                ct.actionBtnHied = false;
-                common.showAlert("", $translate.instant("message.mi_check_input"));
-                return;
-            }
-
-            var changed = false;
-            var bindingChanged = false;
-            if (ct.sltServiceInstanceName != ct.serviceInstance.name
-                || ct.sltServicePlanGuid != ct.serviceInstance.servicePlanGuid ) {
-                changed = true;
-            }
-            var serviceBindings = [];
-            if (ct.serviceBindings && ct.serviceBindings.length > 0) {
-                for (var i=0; i<ct.serviceBindings.length; i++) {
-                    if (ct.serviceBindings[i].delCheck) {
-                        bindingChanged = true;
-                    } else {
-                        serviceBindings.push(ct.serviceBindings[i]);
-                    }
-                }
-            }
-            if (ct.sltAppGuids && ct.sltAppGuids.length > 0) {
-                for (var i=0; i<ct.sltAppGuids.length; i++) {
-                    serviceBindings.push({ "appGuid" : ct.sltAppGuids[i] });
-                }
-                bindingChanged = true;
-            }
-
-            $scope.main.loadingMainBody = true;
-            var serviceInstanceBody = {};
-            serviceInstanceBody.name = ct.sltServiceInstanceName;
-            serviceInstanceBody.servicePlanGuid = ct.sltServicePlanGuid;
-            serviceInstanceBody.serviceInstanceUpdate = changed;
-            if (bindingChanged) {
-                serviceInstanceBody.serviceBindings = serviceBindings;
-                serviceInstanceBody.serviceBindingUpdate = true;
-            }
-            var serviceInstancePromise = serviceInstanceService.updateServiceInstance(ct.serviceInstance.guid, serviceInstanceBody);
-            serviceInstancePromise.success(function (data) {
-                $scope.main.loadingMainBody = false;
-                ct.actionBtnHied = false;
-                $scope.popHide();
-                if (angular.isFunction($scope.dialogOptions.callBackFunction)) {
-                    $scope.dialogOptions.callBackFunction(data);
-                }
-            });
-            serviceInstancePromise.error(function (data) {
-                $scope.main.loadingMainBody = false;
-                ct.actionBtnHied = false;
-            });
-        };
-
-        if (ct.serviceInstance && ct.serviceInstance.guid) {
-            ct.getService(ct.serviceInstance.serviceGuid);
-            ct.getServiceInstance(ct.serviceInstance.guid);
-        } else {
-            if (!$scope.main.serviceMarket) {
-                ct.listAllServices();
-            }
-            ct.listAllOrganizations();
-        }
     })
     .controller('serviceInstanceFormCtrl', function ($scope, $location, $state, $stateParams, $translate, user, common, serviceInstanceService, ValidationService, CONSTANTS) {
         _DebugConsoleLog("serviceInstanceControllers.js : serviceInstanceFormCtrl", 1);

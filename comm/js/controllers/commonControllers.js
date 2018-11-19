@@ -952,37 +952,7 @@ angular.module('common.controllers', [])
                     return $(optionHtml);
                 }
             },
-            minimumResultsForSearch: Infinity,
-            allowClear : true
-        };
-
-        /*[IaaS]/[PaaS]/[DevOps]/[Community] 클릭 시 처리*/
-        mc.systemLink = function(systemCode){
-            switch (systemCode){
-                case "IaaS" :
-                    if (mc.userInfo.isIaaS) {
-                        common.goToState("iaas");
-                    } else {
-                        common.showAlert("", $translate.instant("message.mi_company_manager_contact"));
-                    }
-                    break;
-                case "PaaS" :
-                    if(mc.userInfo.isPaaS) {
-                        common.goToState("paas");
-                    } else {
-                        common.showAlert("", $translate.instant("message.mi_company_manager_contact"));
-                    }
-                    break;
-                case "Market" :
-                    common.goToState("market");
-                    break;
-                case "Monit" :
-                    common.goToState("monitDashboard");
-                    break;
-                case "Community" :
-                    common.goToState("commBoard_notice");
-                    break;
-            }
+            minimumResultsForSearch: Infinity
         };
 
         mc.marketSearchTxt = "";
