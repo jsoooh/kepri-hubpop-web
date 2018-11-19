@@ -263,19 +263,11 @@ angular.module('paas.controllers')
         ct.sltBindingAppGuid = "";
 
         ct.serviceInstances = [];
+
+        ct.serviceInstanceName = "";
+
         ct.actionBtnHied = false; // btn enabled
         ct.spaceAppsLoad = false;
-
-
-
-        ct.radio = {
-            name: '',
-            description : '',
-            inputName : '',
-            planName : '',
-            planId : '',
-            serviceId : ''
-        };
 
         ct.sltServiceChange = function (serviceGuid) {
             var sltService = common.objectsFindCopyByField(ct.services, "guid", serviceGuid);
@@ -294,9 +286,15 @@ angular.module('paas.controllers')
             }
         };
 
-        ct.sltServicePlanChange = function (planId, serviceGuid) {
-            ct.radio.planId = planId;
-            ct.radio.serviceId = serviceGuid;
+        ct.sltServicePlanChange = function (servicePlanGuid) {
+            var sltServicePlan = common.objectsFindCopyByField(ct.servicePlans, "guid", servicePlanGuid);
+            if (sltServicePlan && sltServicePlan.guid) {
+                ct.sltServicePlan = sltServicePlan;
+                ct.sltServicePlanGuid = sltServicePlan.guid;
+            } else {
+                ct.sltServicePlan = {};
+                ct.sltServicePlanGuid = "";
+            }
         };
 
         ct.listAllSpaceApps = function (spaceGuid) {
@@ -334,9 +332,15 @@ angular.module('paas.controllers')
 
             $scope.main.loadingMainBody = true;
             var serviceInstanceBody = {};
-            serviceInstanceBody.name = ct.radio.inputName;
+            serviceInstanceBody.name = ct.serviceInstanceName;
             serviceInstanceBody.spaceGuid = ct.sltSpace.guid;
-            serviceInstanceBody.servicePlanGuid = ct.radio.planId;
+            serviceInstanceBody.servicePlanGuid = ct.sltServicePlanGuid;
+
+            if (pop.sltBindingAppGuid) {
+                var serviceBindings = [];
+                serviceBindings.push({ "appGuid" : pop.sltBindingAppGuid });
+                serviceInstanceBody.serviceBindings = serviceBindings;
+            }
 
             var serviceInstancePromise = serviceInstanceService.createServiceInstance(serviceInstanceBody);
             serviceInstancePromise.success(function (data) {

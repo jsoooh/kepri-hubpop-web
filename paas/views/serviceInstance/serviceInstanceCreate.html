@@ -15,7 +15,7 @@
 					<div class="pnb_tit">
 						<i class="i_star"></i> 서비스 이름<span class="ico_info"></span>
 					</div>
-					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요.">
+					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName">
 				</li>
 				<li>
 					<div class="pnb_tit">
@@ -24,7 +24,7 @@
 					<ul class="ul-list1">
 						<li ng-repeat="(key, serviceItem) in contents.services">
 							<div class="radio1 radio-inline">
-								<input type="radio" name="sevSel-radio" id="sevSel-radio-{{key}}" ng-model="radio.name" ng-value="serviceItem.guid" ng-model="contents.sltServiceGuid" ng-change="contents.sltServiceChange(contents.sltServiceGuid);">
+								<input type="radio" name="sevSel-radio" id="sevSel-radio-{{key}}" value="{{ serviceItem.guid }}" ng-model="contents.sltServiceGuid" ng-change="contents.sltServiceChange(contents.sltServiceGuid);">
 								<label for="sevSel-radio-{{key}}" class="label">
 									<img ng-src="images/thum/im_app_{{ serviceItem.label }}_on.png" alt="{{ serviceItem.label }}" class="im" />
 								</label>
@@ -51,11 +51,11 @@
 					<div class="pnb_tit">
 						연결대상 APP<span class="ico_info"></span>
 					</div>
-					<select ui-select-two="main.usSelectTwoOptions" name="sltBindApp" id="addApp" ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);" data-placeholder="연결 대상 APP을 선택합니다.(선택사항)">
+					<select ui-select-two="main.usSelectTwoOptions" allow-clear="true" name="sltBindApp" id="sltBindApp"
+							ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);"
+							data-placeholder="연결 대상 APP을 선택합니다.(선택사항)"
+							style="width: 100%;">
 						<option value=""></option>
-						<option value="1" option-html="<span style='color: blue;'>{text}</span>">수요예측 APP</option>
-						<option value="2" option-html="<span style='color: red;'>{text}</span>">Microservice app 01</option>
-						<option value="3" option-html="<span style='color: #AAAAA'>{text}</span>">Microservice app 02</option>
 						<option ng-repeat="appItem in contents.spaceApps" value="{{ appItem.guid }}" option-html="<span style='color: #0a4ed8'>{text}</span>">{{ appItem.name }}</option>
 					</select>
 				</li>
