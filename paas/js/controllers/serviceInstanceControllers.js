@@ -243,7 +243,7 @@ angular.module('paas.controllers')
 
         ct.listAllServiceInstances();
     })
-    .controller('serviceInstanceCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, user, common, serviceInstanceService, ValidationService, CONSTANTS) {
+    .controller('paasServiceInstanceCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, user, common, serviceInstanceService, ValidationService, CONSTANTS) {
         _DebugConsoleLog("serviceInstanceControllers.js : serviceInstanceCreateCtrl", 1);
 
         var ct = this;
