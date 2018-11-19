@@ -552,6 +552,7 @@ angular.module('paas.controllers')
             
             ct.appFileErrorMessage = "";
             ct.appFileItem = fileItem;
+            ct.appFileItem.localFullFileName = ($('#appFileInput').length > 0) ? $('#appFileInput').val() : "";
         };
 
         

@@ -99,13 +99,12 @@
 						</div>
 					</div>
 					<div class="fileUploadWrap mt20">
-						<!-- <input type="file" maxlength="100" name="file" nv-file-select="" uploader="contents.uploader" class="form-control" style="display: none;" accept=".war, .jar, .zip"/> -->
-						<input id="fileInput"  maxlength="100" nv-file-select="" uploader="contents.uploader" accept=".war, .jar, .zip" filestyle="" type="file" data-class-button="btn btn-default" data-class-input="form-control" data-button-text="" data-icon-name="fa fa-upload" class="form-control" tabindex="-1" style="position: absolute; clip: rect(0px 0px 0px 0px);">
 						<div class="bootstrap-filestyle input-group">
 							<input type="hidden" name="contents.appFileName" ng-model="contents.appFileItem.file.name" style="display: none;" />
 							<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" readonly value="{{ contents.appFileItem.file.name }}">
 							<span class="group-span-filestyle input-group-btn" tabindex="0">
-								<label for="fileInput" class="btn btn-default " ng-click="main.fileSelectBtnClick($event);">
+								<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;">
+								<label class="btn btn-default " ng-click="main.fileSelectBtnClick($event);">
 									<span class="btn btn-md btn-color1" >파일찾기</span>
 								</label>
 							</span>
@@ -176,7 +175,7 @@
 					<li>
 						<div class="s_inner_cont">
 							<!-- 로컬 파일 경로 확인 sg0730  -->
-							<p class="txt" ng-if="contents.appPushData.pushType == 'GENERAL'">{{ contents.appFileItem.file.name }}<!-- D:/dev/demand.war --></p>
+							<p class="txt" ng-if="contents.appPushData.pushType == 'GENERAL'">{{ contents.appFileItem.localFullFileName }}<!-- D:/dev/demand.war --></p>
 							<p class="txt" ng-if="contents.appPushData.pushType == 'DOCKER'">{{ contents.appPushData.dockerImage }}</p>
 						</div>
 					</li>
