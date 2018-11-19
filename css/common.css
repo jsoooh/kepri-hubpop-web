@@ -70,6 +70,12 @@
 .pdt0 {padding-top:0 !important;}
 .pdb0 {padding-bottom:0 !important;}
 
+
+/*size*/
+.w100 {width:100% !important;}
+.w50 {width:50% !important;}
+.w_auto {width:auto !important;}
+
 /* form */
 .select{font-size:13px; font-weight:400; height:25px; padding-left:5px;  border:1px solid #eaeaea;  background: url("../images/ico_sel.png") no-repeat; background-size: auto 25px; background-position: center right; -webkit-appearance: listbox; -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; -o-appearance: none; appearance: none;}
 .select::-ms-expand{display: none;}
@@ -427,3 +433,9 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 .dateWrap .date-inpt input[type="text"]{font-size:13px; width:100%; height: 42px; padding:0 35px 0 10px;}
 .dateWrap .date-inpt .ui-datepicker-trigger{position: absolute; top:12px; right:10px; z-index: 0; width:18px; height: 18px; border:0; border-radius: 0; cursor: pointer; background: url("../images/ico_calendar2.gif") no-repeat;}
 .dateWrap .wave{display: inline-block; font-size:14px; width:10%; text-align: center; vertical-align: middle;}
+
+
+
+
+/*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
+.ico-info1 {height:20px; margin-left:3px;}
