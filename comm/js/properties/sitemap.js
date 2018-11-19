@@ -236,7 +236,6 @@ angular.module('app')
                 notEdPAuth: "AA",
                 mainTop: true,
                 menus: {
-/*
                     sampleTable: {
                         name: '1. 일반 테이블',
                         stateKey: 'sampleTable',
@@ -279,7 +278,6 @@ angular.module('app')
                         controller: 'samplePopCtrl',
                         templateUrl: _COMM_VIEWS_ + '/sample/samplePop.html',
                     },
-*/
                     demo: {
                         name: 'demoPage',
                         stateKey: 'demo',
