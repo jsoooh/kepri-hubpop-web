@@ -34,6 +34,26 @@ angular.module('iaas.controllers')
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
         }
 
+        //20181120 sg0730  서버사양변경 PopUp 추가
+        ct.computePopEditServerForm = function ($event) {
+        
+        	 var dialogOptions = {
+                     controller : "iaasComputePopEditServerCtrl" ,
+                     formName   : 'iaasComputePopEditServerForm',
+                     instance : angular.copy(ct.instance),
+                     callBackFunction : ct.reflashCallBackFunction
+                 };
+                 $scope.actionBtnHied = false;
+                 common.showDialog($scope, $event, dialogOptions);
+                 $scope.actionLoading = true; // action loading
+        };
+        
+        ct.reflashCallBackFunction = function () 
+        {
+        	ct.fn.getInstanceInfo();
+            ct.fn.changeSltInfoTab();
+        };
+        
         ct.cpuRoundProgress = {
             label : "{percentage}%",
             percentage : 0
@@ -1684,7 +1704,7 @@ angular.module('iaas.controllers')
             ct.fn.changeSltInfoTab();
         }
         
-    })
+    }) 
     .controller('iaasComputeEditFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeEditFormCtrl", 1);
         
@@ -1761,6 +1781,122 @@ angular.module('iaas.controllers')
         
         pop.fn.getSecurityPolicy();
     })
+    
+    //////////////////////////////////////////////////////////////
+    /////////20181120 sg0730 서버유형 변경 Pop 추가   ////////////////////
+    //////////////////////////////////////////////////////////////
+     .controller('iaasComputePopEditServerCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
+        _DebugConsoleLog("computePopEditServerCtrl.js : iaasComputePopEditServerCtrl", 1);
+        
+        
+        var pop = this;
+
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+        pop.instance 					= $scope.dialogOptions.instance;
+        pop.instanceNm                  = pop.instance.name;
+        pop.uuid                		= pop.instance.spec.uuid;
+        
+        pop.tenantId 					= pop.instance.tenantId;
+        $scope.dialogOptions.title 		= "서버사양 변경";
+        $scope.dialogOptions.okName 	= "변경";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computePopEditServerForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+        pop.specList 	= [];
+        pop.spec 	= {};
+        
+        
+        //스펙그룹의 스펙 리스트 조회
+        /*pop.fn.getSpecList = function() {*/
+        pop.getSpecList = function(specGroup) {
+        	
+            var param 		  = {specGroupName:specGroup};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param,  'application/x-www-form-urlencoded');
+            
+            returnPromise.success(function (data, status, headers) 
+            {
+            	pop.specList = data.content.specs;
+            	pop.initCheck = false;            	
+            });
+            returnPromise.error(function (data, status, headers) 
+            {
+            	$scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+        };
+        
+        pop.selectSpec = function() {
+        	if(pop.specValue){
+        		pop.spec = angular.fromJson(pop.specValue);
+        	}else{
+        		pop.spec.vcpus = 0;
+        		pop.spec.ram   = 0;
+        		pop.spec.disk  = 0;
+        	}
+        };
+        
+
+        $scope.popDialogOk = function () {
+            pop.updateServerFormAction();
+        };
+
+        // 서버사양 변경 
+        pop.updateServerFormAction = function () {
+        	
+        	if (pop.btnClickCheck) return;
+            pop.btnClickCheck = true;
+
+            if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
+            {
+                pop.btnClickCheck = false;
+                return;
+            }
+            
+            $scope.main.loadingMain = true;
+            common.mdDialogHide();
+            
+            var param = {
+            		urlParams : {
+            			instanceId : pop.instance.id,
+            			tenantId   : pop.tenantId,
+            			specId     : pop.spec.uuid
+            		}
+            };
+           
+            
+            // 변경 API정의되면 다시 수정 처리 해야함. 20181120 sg0730
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/resize', 'POST', param );
+            
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("변경 되었습니다.");
+                
+             // 변경 API정의되면 다시 수정 처리 해야함. 20181120 sg0730
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
+                
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function() {
+                clickCheck = false;
+            });
+            
+        };
+        
+        pop.getSpecList();
+      
+
+    })
+    
+    //////////////////////////////////////////////////////////////
     .controller('iaasComputeDomainFormCtrl', function($scope, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDomainFormCtrl", 1);
 

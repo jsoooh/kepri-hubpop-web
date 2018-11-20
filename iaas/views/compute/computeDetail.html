@@ -14,7 +14,12 @@
 					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);">재시작</a></li>
 					<li ng-if="deployServer.deployStatus != 'fail' && contents.instance.vmState == 'active'"><a href="" ng-click="contents.fn.serverActionConfirm('PAUSE',contents.instance)">일시정지</a></li>
 					<li ng-if="deployServer.deployStatus != 'fail' && contents.instance.vmState == 'paused'"><a href="" ng-click="contents.fn.serverActionConfirm('UNPAUSE',contents.instance)">정지해제</a></li>
-					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li>
+					<!-- <li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li> -->
+					
+					<!-- 20181120 sg0730 서버사양변경으로 팝업 메뉴 추가 START  -->
+					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computePopEditServerForm($event);">서버사양변경</a></li>
+					<!-- 20181120 sg0730 서버사양변경으로 팝업 메뉴 추가 END  -->
+					
 					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createSnapshot($event,contents.instance);">이미지 스냅샷</a></li>
 					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createInstanceVolumePop(contents.instance);">볼륨연결</a></li>
 					<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>
@@ -51,7 +56,7 @@
 					</li>
 					<li>
 						<strong class="tit">접속 IP 주소</strong>
-						<div class="txt">{{contents.instance.floatingIp}}</div>
+						<div class="txt">{{contents.instance.floatingIp}} </div>
 					</li>
 					<li>
 						<strong class="tit">접속 URL</strong>

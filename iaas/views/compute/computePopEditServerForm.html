@@ -1,0 +1,26 @@
+
+<!-- table -->
+<div class="tbw type1">
+	<table class="table">
+		<colgroup>
+			<col style="width: 25%;">
+			<col style="width: auto;">
+		</colgroup>
+		<tbody>
+			<tr>
+				<th scope="row">제목<em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="툴팁이 나와요"></em></th>
+				<td><input type="text" name="" value="" class="form-control" 	placeholder="{{pop.instanceNm }}" disabled></td>
+			</tr>
+			<tr>
+				<th scope="row">제목</th>
+				<td>
+					<select class="w100" name="pop.specValue" ng-model="pop.specValue" ng-change="pop.selectSpec();" validation="required">
+						<option value="">선택</option>
+						<option ng-repeat="(key, spec) in pop.specList | filter:{name:'m'}" ng-disabled="(spec.uuid <= pop.uuid)" value="{{spec}}">[{{spec.name}}] vCPU {{spec.vcpus}}개 / MEM {{spec.ram/1024|number}} GB / DISK(HDD) {{spec.disk}} GB</option>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!-- //table -->
