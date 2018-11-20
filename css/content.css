@@ -2262,7 +2262,7 @@ p.no-txt{
 .pnb_box .pnb_bx_cnt .p_cnt_btm ul li.btm_use_right .txt_tit::before {display:inline-block; content:''; width:30px; height:21px; background:#fff; border:1px solid #d3d3d3; vertical-align:middle; margin-right:7px;}
 
 /*표준앱>앱만들기>사양설정 슬라이드*/
-.pnb_box.type2 {border-top:0; border-bottom:0; background:#fff; padding:15px 0; margin-bottom:20px;}
+.pnb_box.type2 {border-top:0; border-bottom:0; background:#fff; padding:15px 0; margin:20px 0;}
 .pnb_box.type2 .pnb_bx_hd {position:relative;}
 .pnb_box.type2 .pnb_bx_hd .hd_tit {font-size:15px; color:#2196f3; line-height:15px; vertical-align:middle; margin-right:4px;}
 .pnb_box.type2 .pnb_bx_hd .ico_arw_sm {display:inline-block; width:19px; height:19px; font-size:0; vertical-align:middle; background:url("../images/ico_arw_sm.png") no-repeat 0 0; }

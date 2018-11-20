@@ -107,10 +107,83 @@
 					</div>
 				</li>
 			</ul>
-			<div class="btn_add_area">
-				<span>실행환경 사양설정</span>
-				<button type="button" class="btn_add"></button>
+			<!-- 사양설정 -->
+			<div class="pnb_box type2 cToggle">
+				<div class="pnb_bx_hd">
+					<span class="hd_tit">실행환경 사양설정</span>
+					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.pnbBoxToggleChange($event);"><span class="ico_arw_sm">열고/닫기</span></button>
+				</div>
+				<div class="pnb_bx_cnt">
+					<ul class="cnt_sliderWrap">
+						<li>
+							<div class="tit"><span>인스턴스 개수</span></div>
+							<div class="slider_area">
+								<div class="disk_area color2">
+									<div class="disk_box">
+										<div class="rangeWrap type2">
+											<span class="s_txt">최대 20개</span>
+											<div class="range_box">
+												<div class="ico_minus">
+													<button type="button" name="button" class="btn" title="minus" ><span>감소</span></button>
+												</div>
+												<div class="rzslider"><rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider></div>
+												<div class="ico_plus">
+													<button type="button" name="button" class="btn" title="minus" ><span>증가</span></button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						
+						<li>
+							<div class="tit"><span>Total Memory</span></div>
+							<div class="slider_area">
+								<div class="disk_area">
+									<div class="disk_box">
+										<div class="rangeWrap type2">
+											<span class="s_txt">최대 4GB</span>
+											<div class="range_box">
+												<div class="ico_minus">
+													<button type="button" name="button" class="btn" title="minus" ><span>감소</span></button>
+												</div>
+												<div class="rzslider"><rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider></div>
+												<div class="ico_plus">
+													<button type="button" name="button" class="btn" title="minus" ><span>증가</span></button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						
+						<li>
+							<div class="tit"><span>Total Disk</span></div>
+							<div class="slider_area">
+								<div class="disk_area color3">
+									<div class="disk_box">
+										<div class="rangeWrap type2">
+											<span class="s_txt">최대 2GB</span>
+											<div class="range_box">
+												<div class="ico_minus">
+													<button type="button" name="button" class="btn" title="minus" ><span>감소</span></button>
+												</div>
+												<div class="rzslider"><rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider></div>
+												<div class="ico_plus">
+													<button type="button" name="button" class="btn" title="minus" ><span>증가</span></button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
 			</div>
+			<!-- //사양설정 -->
 		</div>
 		<div class="pn_footer">
 			<div class="btn-btm mgt0">
