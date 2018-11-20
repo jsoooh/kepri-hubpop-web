@@ -559,12 +559,10 @@ angular.module('paas.controllers')
         
         // 언어 선택 스크롤 생성
         ct.scrollPane = function (){
-        	
-            setTimeout(function() 
-            {
+            setTimeout(function() {
                 var scrollPane = $('.scroll-pane').jScrollPane({});
             }, 250);
-        }
+        };
 
         ct.appPushData.pushType  = "GENERAL";
         ct.appPushData.withStart = "true";
@@ -732,8 +730,10 @@ angular.module('paas.controllers')
                 
                 if (sltBuildpack != null && sltBuildpack.enabled) 
                 {
-                    var portalBuildpackId = ct.portalBuildpackVersions[i].portalBuildpack.id;
+                    var portalBuildpackId   = ct.portalBuildpackVersions[i].portalBuildpack.id;
                     var addVersion 		  = false;
+                    
+                    
                     
                     var version = {
 				                        id          : ct.portalBuildpackVersions[i].id,
@@ -748,6 +748,7 @@ angular.module('paas.controllers')
                         if (ct.portalBuildpacks[j].id == portalBuildpackId) 
                         {
                             ct.portalBuildpacks[j].versions.push(version);
+                           
                             addVersion = true;
                             break;
                         }
@@ -758,7 +759,6 @@ angular.module('paas.controllers')
                     {
                         var portalBuildpack 	 = angular.copy(ct.portalBuildpackVersions[i].portalBuildpack);
                         portalBuildpack.versions = [];
-                        
                         portalBuildpack.versions.push(version);
                         ct.portalBuildpacks.push(portalBuildpack);
                     }
@@ -819,20 +819,16 @@ angular.module('paas.controllers')
                 ct.sltPortalBuildpack = ct.portalBuildpacks[0];
                 ct.sltBuildpackId 	  = ct.sltPortalBuildpack.id;
             }
-            
-            
+                        
             if (ct.sltPortalBuildpack.versions.length > 0) 
             {
                 ct.sltBuildpackVersionId = ct.sltPortalBuildpack.versions[0].id;
                 ct.changePortalBuildpackVersion();
-            } 
-            else 
-            {
+            } else {
                 ct.sltBuildpackVersionId = "";
                 ct.sltBuildpackVersion   = {};
             }
-            
-            
+                        
             if (!ct.sltPortalBuildpack.appFilePath) 
             {
                 ct.sltDeployOption = "U";
