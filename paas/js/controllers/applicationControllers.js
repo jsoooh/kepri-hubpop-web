@@ -564,8 +564,10 @@ angular.module('paas.controllers')
             }, 250);
         };
 
-        ct.appPushData.pushType  = "GENERAL";
-        ct.appPushData.withStart = "true";
+        ct.appPushData.pushType   		 = "GENERAL";
+        ct.appPushData.appName   		 ='app-01' ; 
+        ct.appPushData.domainFirstName   ='app-01' ; 
+        ct.appPushData.withStart 		 = "true";
 
         ct.defaultSetting = {
 					            instances: 1,
