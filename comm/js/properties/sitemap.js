@@ -219,7 +219,23 @@ angular.module('app')
                         url: '/tutorial/4',
                         controller: 'commTutorialCtrl',
                         templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial4.html'
+                    },
+                    tutorial6: {
+                        name: 'tutorial6',
+                        stateKey: 'commTutorial6',
+                        url: '/tutorial/6',
+                        controller: 'commTutorialCtrl',
+                        templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial6.html'
+                    },
+                    tutorial8: {
+                        name: 'tutorial8',
+                        stateKey: 'commTutorial8',
+                        url: '/tutorial/8',
+                        controller: 'commTutorialCtrl',
+                        templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial8.html'
                     }/*,
+                    
+                    /*,
                     tutorial5: {
                         name: 'tutorial5',
                         stateKey: 'commTutorial5',

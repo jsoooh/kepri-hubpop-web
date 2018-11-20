@@ -17,12 +17,13 @@
 						<div class="pnb_tit">
 							<i class="i_star"></i> 서버 이름<span class="ico_info"></span>
 						</div>
-						<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
+						<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-init="contents.data.name='instance-01'" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
 					</li>
 					<li>
 						<div class="pnb_tit">
 							<i class="i_star"></i> OS 선택<span class="ico_info"></span>
 						</div>
+						<div class="scroll-pane">
 						<ul class="ul-list1">
 							<li ng-repeat="image in contents.imageList">
 								<div class="radio1 radio-inline">
@@ -40,8 +41,9 @@
 								<input type="hidden" ng-if="$last" ng-init="contents.scrollPane()">
 								<input type="hidden" ng-model="contents.imageTmpNm" ng-init="image.serviceName">
 							</li>
-							<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
 						</ul>
+						</div>
+							<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
 					</li>
 					<li>
 						<div class="pnb_tit">
