@@ -514,6 +514,8 @@ angular.module('portal.controllers')
         ct.showDialog = function ($event) {
             var dialogOptions = {
                 controller : "samplePopFormCtrl",
+                projectId : ct.sltProjectId,
+                instance : ct.sltInstance,
                 callBackFunction : ct.popCallBackFunction
             };
             ct.popDialog = common.showDialog($scope, $event, dialogOptions);
@@ -564,9 +566,13 @@ angular.module('portal.controllers')
         $scope.dialogOptions.okName =  $translate.instant("label.add");
         $scope.dialogOptions.cancelName =  $translate.instant("label.cancel");
 
+        pop.sltProjectId = $scope.dialogOptions.sltProjectId;
+        pop.sltInstance = angular.copy($scope.dialogOptions.sltInstance);
+
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/sample/samplePopForm.html" + _VersionTail();
 
         // Dialog ok 버튼 클릭 시 액션 정의
+
         $scope.dialogOptions.popDialogOk = function () {
             if (angular.isFunction($scope.dialogOptions.callBackFunction)) {
                 $scope.dialogOptions.callBackFunction();

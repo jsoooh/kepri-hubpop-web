@@ -38,7 +38,7 @@
 				<div spin="defaultSpinnerConfig" spin-if="error"></div>
 			</div>
 		</div>
-		<form ng-if="!dialogOptions.notForm" name="{{ dialogOptions.formName }}" novalidate>
+		<form ng-if="!dialogOptions.notForm" name="{{dialogOptions.controllerAs}}.{{ dialogOptions.formName }}" novalidate>
 			<div ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl" class="tbw type1">
 			</div>
 		</form>
