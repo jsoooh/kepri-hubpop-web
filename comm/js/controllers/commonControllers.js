@@ -1126,6 +1126,15 @@ angular.module('common.controllers', [])
                 _this.removeClass("cToggle-open").find(".cBox-cnt").slideUp();
             }
         };
+        
+        mc.pnbBoxToggleChange = function (evt) {
+            var _this = $(evt.currentTarget).closest(".pnb_box.cToggle");
+            if (!_this.hasClass("cToggle-open")) {
+                _this.addClass("cToggle-open").find(".pnb_bx_cnt").slideDown();
+            } else {
+                _this.removeClass("cToggle-open").find(".pnb_bx_cnt").slideUp();
+            }
+        };
 
         mc.contentsViewType = "thum";
         // IaaS 추가 2018.04.11 S

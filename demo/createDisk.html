@@ -20,9 +20,53 @@
 				<li>
 					<div class="pnb_tit">
 						<i class="i_star"></i> 저장공간 크기<span class="ico_info"></span>
-						<div class="disk_info">최대 100GB</div>
+					</div>
+					<div class="pnb_box cToggle">
+						<div class="pnb_bx_hd">
+							<span class="hd_tit">프로젝트 사용가능 디스크 정보</span>
+							<button type="button" name="button" class="btn btn-toggle" title="열고/닫기" ng-click="main.pnbBoxToggleChange($event);"><span class="ico_arw">열고/닫기</span></button>
+						</div>
+						<div class="pnb_bx_cnt">
+							<div class="p_cnt_top">
+								<span>디스크 사용량</span>
+								<div class="txt_top">
+									<span class="sty01">전체 디스크 공간</span>
+									<span class="sty02">13.72</span>
+									<span class="sty03">GB</span>
+								</div>
+							</div>
+							<div class="p_cnt_mid">
+								<span class="txt fl_l">0</span>
+								<span class="txt fl_r">100</span>
+								<div class="cnt_usage">
+									<div class="use_left" style="width:40.4%;">
+										<span>40.4%</span>
+									</div>
+									<div class="use_right" style="width:59.6%;">
+										<span>59.6%</span>
+									</div>
+								</div>
+							</div>
+							<div class="p_cnt_btm">
+								<ul>
+									<li class="btm_use_left">
+										<div>
+											<span class="txt_tit">사용중</span>
+											<span class="txt_val">5.55<span class="txt_sm">GB</span></span>
+										</div>
+									</li>
+									<li class="btm_use_right">
+										<div>
+											<span class="txt_tit">남은 공간</span>
+											<span class="txt_val">8.18<span class="txt_sm">GB</span></span>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 					<div class="disk_area">
+						<div class="disk_info">최대 100GB</div>
 						<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
 						<div class="disk_box">
 							<div class="rangeWrap type2">
