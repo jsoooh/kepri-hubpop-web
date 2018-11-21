@@ -1,0 +1,28 @@
+<!-- table -->
+<div class="tbw type1">
+	<table class="table">
+		<colgroup>
+			<col style="width: 25%;">
+			<col style="width: auto;">
+		</colgroup>
+		<tbody>
+			<tr>
+				<th scope="row">서버 이름<em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="툴팁이 필요"></em></th>
+				<td><input type="text" name="" value="" class="form-control" 	placeholder="{{pop.instance.name}}" disabled></td>
+			</tr>
+			<tr>
+				<th scope="row">백업 이미지 이름 <em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="백업이미지 툴팁이 필요"></em></th>
+				<td><input type="text" name="snapshotName" maxlength="50" data-toggle="tooltip" name="" value="" class="form-control" 	placeholder="이미지 이름(영문)을 입력하세요." ng-model="pop.data.snapShotName" validation="alpha_dash|required"></td>
+			</tr>
+			<tr>
+				<th scope="row">백업 이미지 설명</th>
+				<td>
+					<textarea type="text"id="description" name="description" ng-model="pop.data.description"  placeholder="이미지 설명을 입력하세요." class="form-control volTxt" ng-keyup="pop.fn.checkByte(pop.data.description,50)"></textarea>
+					<span class="txt_limit"><em>{{pop.data.description | stringToBytes}}</em>/50자</span>
+					<div class="validation validation-description text-danger" ng-show="pop.checkByte > 50">50Byte까지 작성 가능합니다.</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!-- //table -->

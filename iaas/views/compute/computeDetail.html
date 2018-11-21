@@ -20,7 +20,8 @@
 					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computePopEditServerForm($event);">서버사양변경</a></li>
 					<!-- 20181120 sg0730 서버사양변경으로 팝업 메뉴 추가 END  -->
 					
-					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createSnapshot($event,contents.instance);">이미지 스냅샷</a></li>
+					<!-- <li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createSnapshot($event,contents.instance);">이미지 스냅샷</a></li> -->
+					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createPopSnapshot($event,contents.instance);">백업이미지 생성</a></li>
 					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createInstanceVolumePop(contents.instance);">볼륨연결</a></li>
 					<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>
 					<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>
