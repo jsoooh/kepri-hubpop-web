@@ -2812,7 +2812,10 @@ angular.module('common.services', ['LocalStorageModule'])
     })
     .factory('cookies', function ($cookies) {
         var cookies = {};
-        var cookiesOption = {domain: _COOKIES_DOMAIN_, path: _COOKIES_PATH_};
+        var cookiesOption = {path: _COOKIES_PATH_};
+        if (_DOMAIN_ && _DOMAIN_ == "www.kepri-demo.crossent.com") {
+            var cookiesOption = {domain: _DOMAIN_.substring(3), path: _COOKIES_PATH_};
+        }
 
         cookies.getLanguageKey = function () {
             return $cookies.get(_LANGUAGE_KEY_COOKIE_NAME_);

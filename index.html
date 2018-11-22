@@ -8,11 +8,6 @@
     var _VERSION_TAIL_HEAD_ = "?version=" + _VERSION_;
     var _VERSION_TAIL_ = _VERSION_TAIL_HEAD_ + ((_MODE_ == "DEBUG" && _DEBUG_LEVEL_ > 1) ? "." + _TOME_ : "");
 
-    var _COOKIES_DOMAIN_ = _DOMAIN_;
-    if (_DOMAIN_ && _DOMAIN_ == "www.kepri-demo.crossent.com") {
-        _COOKIES_DOMAIN_ = _DOMAIN_.substring(3);
-	}
-
     // upload 진행 바 표현 최소 파일 사이즈 - 작은 사이즈의 경우 표현이 의미 없음
     var _UPLOADING_VIEW_MIN_SIZE_ = 10240; // 10MB
 
