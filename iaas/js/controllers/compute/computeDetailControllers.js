@@ -71,10 +71,10 @@ angular.module('iaas.controllers')
             }
         };
         
-        ct.reflashCallBackFunction = function () 
+        //sg0730 차후 서버 이미지 생성 후 페이지 이동.
+        ct.reflashSnapShotCallBackFunction = function () 
         {
-        	ct.fn.getInstanceInfo();
-            ct.fn.changeSltInfoTab();
+        	 $scope.main.moveToAppPage('/iaas/compute');
         };
         
         ct.cpuRoundProgress = {
@@ -2319,12 +2319,8 @@ angular.module('iaas.controllers')
         pop.instance 					= $scope.dialogOptions.selectInstance;
         pop.fn 							= {};
         pop.data						= {};
-        //pop.formName 					= "createSnapshotForm";
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         
-       // pop.instanceNm                  = pop.instance.name;
-       // pop.uuid                		= pop.instance.spec.uuid;
-       // pop.tenantId 					= pop.instance.tenantId;
         $scope.dialogOptions.title 		= "백업 이미지 생성";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
@@ -2347,15 +2343,6 @@ angular.module('iaas.controllers')
                  return;
              }
              
-             // 작동해랴@@
-             pop.checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
-             
-         	 if(pop.checkByte > 50)
-         	 {
-                 $scope.actionBtnHied = false;
-         		return;
-         	 }
-         	
              pop.fn.createSnapshot();
         };
         
@@ -2381,7 +2368,9 @@ angular.module('iaas.controllers')
                 common.showAlertSuccess("생성 되었습니다.");
                 
                 //생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
-                $scope.main.moveToAppPage('/iaas/compute/snapshot');
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
                 
             });
             returnPromise.error(function (data, status, headers) 
@@ -2394,12 +2383,6 @@ angular.module('iaas.controllers')
                 $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });
-        }
-        
-        
-        //20181120 sg0730  기존 체크 로직이 작동 되지 않는듯함.
-        pop.fn.checkByte = function (text, maxValue){
-           pop.checkByte = $bytes.lengthInUtf8Bytes(text);
         }
     })
     ///////////////////////////////////////////////////////////////////////////////

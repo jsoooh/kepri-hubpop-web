@@ -182,7 +182,7 @@ angular.module('iaas.controllers')
                     	if(data.content.instanceStatus == 'active') {
                         	common.showAlert('메세지',data.content.instanceName + '이 실행 중입니다. 인스턴스를 종료하고 시도해주세요.');
                         } else {
-                            ct.fn.createSnapshotPop($event,volume);
+                        	ct.fn.createPopSnapshot($event,volume);
                         }
                     });
                     returnPromise.error(function (data, status, headers) {
@@ -202,22 +202,51 @@ angular.module('iaas.controllers')
         $scope.actionLoading = false; // action loading
         $scope.authenticating = false; // action loading massage contents
         $scope.actionBtnHied = false; // btn enabled
-        ct.fn.createSnapshotPop = function ($event,volume) {
-            $scope.dialogOptions = {
-                controller : "iaasCreateStorageSnapshotFormCtrl",
-                callBackFunction : null,
-                volume : volume
-            };
-            $scope.actionBtnHied = false;
-            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
-            var name = $($event.currentTarget).attr("data-username"),
-    		top = $(window).scrollTop();
-
-			$(".aside").stop().animate({"right":"-360px"}, 400);
-			$("#aside-aside1").stop().animate({"right":"0"}, 500);
-            $scope.actionLoading = true; // action loading
+        
+        ///////////////////////////////////////////////////////////////////
+        ////////2018.11.22 sg0730//////////////////////////////////////////
+        ///////* 기존 레이어 팝업 호출 폼에서 모달팝업으로 변경.////////////////////////////
+        ///////* AS-IS : iaasCreateStorageSnapshotFormCtrl/////////////////
+        ///////* TO-BE : iaasCreateStorageSnapshotPopFormCtrl/////////////////
+        ///////////////////////////////////////////////////////////////////
+        
+        ct.fn.createPopSnapshot = function($event,volume) {
+        	
+        	var dialogOptions =  {
+			            			controller       : "iaasCreateStorageSnapshotPopFormCtrl" ,
+			            			formName         : 'iaasCreatePopStorageSnapshotForm',
+			            			selectStorage    : angular.copy(volume),
+			            			callBackFunction : ct.reStorageSnapShotCallBackFunction
+				            	};
+        	
+            	$scope.actionBtnHied = false;
+            	common.showDialog($scope, $event, dialogOptions);
+            	$scope.actionLoading = true; // action loading
+               
+            
+        };
+        
+        ct.reStorageSnapShotCallBackFunction = function () 
+        {
+        	 $scope.main.moveToAppPage('/iaas/storage');
+        };
+        
+/*        ct.fn.createSnapshotPop = function ($event,volume) {
+        	$scope.dialogOptions = {
+        			controller : "iaasCreateStorageSnapshotPopFormCtrl",
+        			callBackFunction : null,
+        			volume : volume
+        	};
+        	$scope.actionBtnHied = false;
+        	$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
+        	var name = $($event.currentTarget).attr("data-username"),
+        	top = $(window).scrollTop();
+        	
+        	$(".aside").stop().animate({"right":"-360px"}, 400);
+        	$("#aside-aside1").stop().animate({"right":"0"}, 500);
+        	$scope.actionLoading = true; // action loading
         }
-
+*/
         if(ct.data.tenantId) {
             ct.fn.getStorageList(1);
         }
@@ -759,4 +788,84 @@ angular.module('iaas.controllers')
             });
         }
     })
+    
+     .controller('iaasCreateStorageSnapshotPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("storageControllers.js : iaasCreateStorageSnapshotPopFormCtrl", 1);
+
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
+        pop.volume 						= $scope.dialogOptions.selectStorage;
+        pop.fn 							= {};
+        pop.data						= {};
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+        
+        $scope.dialogOptions.title 		= "볼륨  스냅샷  생성";
+        $scope.dialogOptions.okName 	= "등록";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageCreatePopSnapshotForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+        pop.validDisabled 				= true;
+        
+       // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+        	
+        	
+        	 if ($scope.actionBtnHied) return;
+        	 
+             $scope.actionBtnHied = true;
+             
+             if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
+             {
+                 $scope.actionBtnHied = false;
+                 return;
+             }
+             
+             pop.fn.createStorageSnapshot();
+        };
+        
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+        
+       
+        pop.fn.createStorageSnapshot = function() {
+        	
+            $scope.main.loadingMainBody = true;
+            pop.data.tenantId = pop.userTenant.id;
+            pop.data.volumeId = pop.volume.volumeId;
+            pop.data.name 	  = pop.volume.name;
+            
+            common.mdDialogHide();
+
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'POST', {volumeSnapShot:pop.data});
+            
+            returnPromise.success(function (data, status, headers) 
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("생성 되었습니다.");
+                
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
+                
+            });
+            returnPromise.error(function (data, status, headers) 
+            {
+                $scope.main.loadingMainBody = false;
+            	common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) 
+            {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+    })
+    
 ;

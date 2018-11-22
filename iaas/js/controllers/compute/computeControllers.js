@@ -195,7 +195,7 @@ angular.module('iaas.controllers')
         };
 
         ct.selectedValues = {};
-        ct.fnServerConfirm = function(action,instance,index) {
+        ct.fnServerConfirm = function(action,instance,index,$event) {
             if(action == "START") {
                 common.showConfirm('메세지',instance.name +' 서버를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
@@ -219,7 +219,8 @@ angular.module('iaas.controllers')
             } else if(action == "DELETE") {
                 ct.deleteInstanceJob(instance.id);
             } else if(action == "SNAPSHOT") {
-                ct.fn.createSnapshot(instance);
+                //ct.fn.createSnapshot(instance);
+            	ct.fn.createPopSnapshot ($event,instance) ;
             } else if(action == "VOLUME"){
                 ct.fn.createInstanceVolumePop(instance);
             } else if(action == "IPCONNECT"){
@@ -273,19 +274,38 @@ angular.module('iaas.controllers')
             }
         };
 
+        
+        
         // SnapShot 생성
-        ct.fn.createSnapshot = function(instance) {
-            if(instance.vmState != 'stopped') {
+        //20181120 sg0730  백업 이미지 생성 PopUp 추가
+        ct.fn.createPopSnapshot = function($event,instance) {
+        	
+        	var dialogOptions = {};
+        	
+        	if(instance.vmState != 'stopped') {
                 common.showAlertWarning('서버를 종료 후 생성가능합니다.');
                 return;
             } else {
-                ct.selectInstance = instance;
-                $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeSnapshotForm.html" + _VersionTail();
-                $(".aside").stop().animate({"right":"-360px"}, 400);
-                $("#aside-aside1").stop().animate({"right":"0"}, 500);
+            	dialogOptions = {
+            			controller : "iaasCreatePopSnapshotCtrl" ,
+            			formName   : 'iaasCreatePopSnapshotForm',
+            			selectInstance : angular.copy(instance),
+            			callBackFunction : ct.reflashSnapShotCallBackFunction
+            	};
+            	$scope.actionBtnHied = false;
+            	common.showDialog($scope, $event, dialogOptions);
+            	$scope.actionLoading = true; // action loading
+               
             }
+        }; 
+        
+        // sg0730 차후 서버 이미지 생성 후 페이지 이동.
+        ct.reflashSnapShotCallBackFunction = function () 
+        {
+        	 $scope.main.moveToAppPage('/iaas/compute');
         };
-
+        
+    
         //인스턴스 볼륨 생성 팝업
         ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;

@@ -15,7 +15,7 @@
 					<div class="pnb_tit">
 						<i class="i_star"></i> 서비스 이름<span class="ico_info"></span>
 					</div>
-					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName">
+					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName" ng-init="contents.serviceInstanceName='service-001'" >
 				</li>
 				<li>
 					<div class="pnb_tit">
@@ -24,12 +24,19 @@
 					<ul class="ul-list1">
 						<li ng-repeat="(key, serviceItem) in contents.services">
 							<div class="radio1 radio-inline">
-								<input type="radio" name="sevSel-radio" id="sevSel-radio-{{key}}" value="{{ serviceItem.guid }}" ng-model="contents.sltServiceGuid" ng-change="contents.sltServiceChange(contents.sltServiceGuid);">
+								<input type="radio" 
+									   name="sevSel-radio" 
+									   id="sevSel-radio-{{key}}" 
+									   value="{{ serviceItem.guid }}" 
+									   ng-model="contents.sltServiceGuid" 
+									   ng-change="contents.sltServiceChange(contents.sltServiceGuid);">
 								<label for="sevSel-radio-{{key}}" class="label">
 									<img ng-src="images/thum/im_app_{{ serviceItem.label }}_on.png" alt="{{ serviceItem.label }}" class="im" />
 								</label>
 							</div>
 							<p class="label-txt">{{ serviceItem.label }}</p>
+							<input type="hidden" ng-if="$last" ng-init="contents.scrollPane()">
+							<input type="hidden" ng-model="contents.dbTmpNm" ng-init="serviceItem.label">
 						</li>
 					</ul>
 				</li>
@@ -40,10 +47,17 @@
 					<div class="app-form-two">
 						<div ng-repeat="(key, servicePlan) in contents.servicePlans" class="two_box pdr10">
 							<div class="radio radio-inline">
-								<input type="radio" class="radio radio-inline" name="radioSev" ng-model="contents.sltServicePlanGuid" ng-value="servicePlan.guid" id="sev-plan-radio-{{key}}" ng-change="contents.sltServicePlanChange(contents.sltServicePlanGuid)">
+								<input type="radio" 
+								       class="radio radio-inline" 
+								       name="radioSev" 
+								       ng-model="contents.sltServicePlanGuid" 
+								       ng-value="servicePlan.guid" 
+								       id="sev-plan-radio-{{key}}" 
+								       ng-change="contents.sltServicePlanChange(contents.sltServicePlanGuid)">
 								<label for="sev-plan-radio-{{key}}" class="label plan_label">{{ servicePlan.name }}</label>
 							</div>
 							<div class="txt_box">{{servicePlan.description}}</div>
+							<input type="hidden" ng-model="contents.Desc" ng-init="contents.Desc = servicePlan.description ">
 						</div>
 					</div>
 				</li>
@@ -77,13 +91,13 @@
 				<ul>
 					<li>
 						<span class="s_tit">서비스 이름</span>
-						<span class="s_txt">dev-mariadb-001</span>
+						<span class="s_txt">{{contents.serviceInstanceName}}</span>
 					</li>
 					<li>
 						<span class="s_tit">서비스 유형<span class="ico_info"></span></span>
 						<span class="s_txt">관계형 데이터 베이스</span>
 					</li>
-					<li>
+					<li ng-if="contents.dbTmpNm == 'p-mysql'">
 						<span class="s_tit">서비스 S/W 정보</span>
 						<div class="s_inner_cont">
 							<dl>
@@ -93,10 +107,19 @@
 								<dd>1.8.2</dd>
 								<dt>설명 :</dt>
 								<dd>오픈소스 관계형 데이터 베이스</dd>
-								<!-- <dt>주요구성 SW</dt>
-								<dd class="dd_row">Spring Framework 4.2</dd>
-								<dd class="dd_row">Tomcat 1.8.1</dd>
-								<dd class="dd_row">JRE 1.8.1</dd> -->
+							</dl>
+						</div>
+					</li>
+					<li ng-if="contents.dbTmpNm == 'p-redis'">
+						<span class="s_tit">서비스 S/W 정보</span>
+						<div class="s_inner_cont">
+							<dl>
+								<dt>S/W :</dt>
+								<dd>Redis DB</dd>
+								<dt>버전 :</dt>
+								<dd>2.0.2</dd>
+								<dt>설명 :</dt>
+								<dd>Redis 데이터 베이스</dd>
 							</dl>
 						</div>
 					</li>
@@ -109,24 +132,25 @@
 		<div class="pn_body">
 			<div class="s_cont_box">
 				<ul>
-					<li>
+					<li ng-if="contents.dbTmpNm == 'p-mysql'">
 						<span class="s_tit">서비스 용량</span>
-						<span class="s_txt">10 Megabyte</span>
+						<span class="s_txt" >{{contents.TmpStr}}</span>
 					</li>
-					<li>
+					<li ng-if="contents.dbTmpNm == 'p-mysql'">
 						<span class="s_tit">서비스 사용 모델<span class="ico_info"></span></span>
-						<span class="s_txt">공유형</span>
+						<span class="s_txt" ng-if="contents.sltServicePlan.public">공유형</span>
+						<span class="s_txt" ng-if="!contents.sltServicePlan.public">단독형</span>
 					</li>
 					<li>
 						<span class="s_tit">서비스 플랜 설명</span>
 						<div class="s_inner_cont">
-							Shared MySQL Server
+							{{contents.Desc}}
 						</div>
 					</li>
 				</ul>
 			</div>
 			<div class="btn-btm">
-				<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
+				<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
 			</div>
 		</div>
 	</div>
