@@ -2222,6 +2222,37 @@ p.no-txt{
 .panel_area .pn_body .text_wrap {width:100%; border:1px solid #dedede; border-radius:5px; background:#f3f3f3; padding:20px;}
 .panel_area .pn_body .text_wrap textarea {height:100px;}
 
+/*서버가상화 목록 > 생성 후 진행상태 UI */
+.pnb_progress_wrap {padding:20px 50px;}
+.progress_box {position:relative; margin-top:15px;}
+.progress_box .bar_bg {position:absolute; top:50px; z-index:1; display:inline-block; width:100%; height:4px; background:#cad4dd; }
+.progress_box ul {position:absolute; top:16px; left:0; z-index:2; display:table; width:100%; padding:20px 0;}
+.progress_box ul li {display:table-cell; box-sizing:border-box; width:30%; text-align:center;}
+.progress_box ul li:first-child {text-align:left;}
+.progress_box ul li:last-child {text-align:right;}
+.progress_box ul li > div.state_box {}
+.progress_box ul li .state_ico {position:relative; display:inline-block; width:32px; height:32px; font-size:18px; text-align:center; line-height:23px; background:#fff; border:4px solid #cad4dd; border-radius:50px;}
+.progress_box ul li .state_ico::before {position:absolute; top:3px; left:-16px; display:inline-block; content:''; width:14px; height:16px; background:url("../images/progress_bg.png") no-repeat 0 0; }
+.progress_box ul li .state_ico::after {position:absolute; top:2px; right:-16px; display:inline-block; content:''; width:14px; height:16px; background:url("../images/progress_bg.png") no-repeat 0 -15px; }
+.progress_box ul li:first-child .state_ico::before {display:none;} 
+.progress_box ul li:last-child .state_ico::after {display:none;} 
+.progress_box ul li.complete .state_ico {background:url("../images/ico_state01.gif") no-repeat left top;}
+.progress_box ul li.complete .state_ico span {visibility:hidden;}
+.progress_box ul li.creating .state_ico {color:#fff; background:url("../images/ico_state02.gif") no-repeat left top;}
+.progress_box ul li.standby .state_ico {color:#fff; background:#cad4dd;}
+.progress_box ul li .state_txt {position:relative; text-align:center; margin-top:10px;}
+.progress_box ul li .state_txt span {font-size:14px;}
+.progress_box ul li:first-child .state_txt span {position:absolute; left:-10px;}
+.progress_box ul li:last-child .state_txt span {position:absolute; right:-20px;}
+.progress_box ul li.complete .state_txt span {color:#337ab7;}
+.progress_box ul li.creating .state_txt span {color:#5acc27;}
+.progress_box ul li.standby .state_txt span {color:#cad4dd;}
+.progress_box .progress_txt {position:absolute; top:140px; width:100%; text-align:center;}
+.progress_box .progress_txt p {font-size:14px; color:#666; padding-left:10px;}
+.progress_box .progress_txt p::before {position:absolute; left:46px; display:inline-block; content:''; width:18px; height:18px; background:url("../images/ico_clock.gif") no-repeat left top;}
+.progress_box .progress_txt span {display:block; margin-top:10px;}
+
+
 /*디스크 만들기 > 사용량표시*/
 .pnb_box {border-top:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3; background:#f3f3f3; padding:15px 20px; margin-bottom:20px;}
 .pnb_box .pnb_bx_hd {position:relative;}
@@ -2377,6 +2408,20 @@ p.no-txt{
 .btnWrap .btn_lg .ico.ico_create_app {width:22px; height:22px; background:url("../images/ico_app.png") no-repeat left -28px;}
 .btnWrap .btn_lg:hover .ico.ico_create_app {background:url("../images/ico_app.png") no-repeat left 3px;}
 
+/*가상서버 대시보드 목록 드롭다운(접속정보)*/
+.panel.type5 .panel_head .btn_txt {display:inline-block; font-size:12px; color:#fff; background:#707070; border-radius:2px; padding:1px 10px 2px 10px; margin-top:6px;}
+.panel.type5 .panel_head .btn_txt:hover {background:#4d4d4d;}
+.panel.type5 .panel_head .btn-option.type2 {position:absolute; left:96px; right:0; top:50px; z-index: 5;}
+.panel.type5 .panel_head .btn-option.type2 .dropdown-menu {position:absolute; top:70px; left:-74px; width:320px; height:245px; background:#f4f4f4; border-radius:7px; padding:0 25px;}
+.panel.type5 .panel_head .btn-option.type2 .drdw_head .tit {position:relative;}
+.panel.type5 .panel_head .btn-option.type2 .drdw_head .tit {font-size:17px; color:#333; padding:15px 0;}
+.panel_head button.close_sm {position:absolute; top:15px; right:15px; display:inline-block; width:25px; height:25px; font-size:0; background:url("../images/btn_pop_close_sm.png") no-repeat left top;}
+.panel_head button.close_sm:hover {background:url("../images/btn_pop_close_sm.png") no-repeat left -30px;}
+.panel.type5 .panel_head .btn-option.type2 .drdw_body  li {font-size:14px; color:#777; line-height:28px;}
+.panel.type5 .panel_head .btn-option.type2 .drdw_body  li:before {display:inline-block; content:''; width:4px; height:4px; border-radius:100%; background:#555; vertical-align:middle; margin-right:4px;}
+.panel.type5 .panel_head .btn-option.type2 .drdw_body  strong {font-size:15px; font-weight:500; color:#333; margin-right:5px;}
+.ico_file_dw {display:inline-block; width:17px; height:17px; font-size:0; background:url("../images/ico_down.png") no-repeat left top; margin-left:7px;}
+.ico_file_dw:hover {background:url("../images/ico_down.png") no-repeat left -23px;}
 
 /*---- 디스크 만들기 ----*/
 /*디스크 목록*/
@@ -2467,8 +2512,8 @@ p.no-txt{
 
 .disk_area .rzslider .rz-bubble {bottom:-36px; font-size:13px; color:#000; background:#ffae00; border-radius:4px; padding:3px 7px;}
 
-.disk_area .rzslider .rz-bubble::before {display:inline-block; content:''; position:absolute; top:-6px; left:40%; width:12px; height:12px; background:url("../images/tooltip_arrow_bg.png") no-repeat 0 0;}
-.disk_area .rzslider .rz-bubble::after {display:inline-block; content:'GB'; font-size:13px; color:#000;}
+.disk_area .rzslider .rz-bubble::before {display:inline-block; content:'' ; position:absolute; top:-6px; left:40%; width:12px; height:12px; background:url("../images/tooltip_arrow_bg.png") no-repeat 0 0;}
+.disk_area .rzslider .rz-bubble::after {display:inline-block; content:'' ; font-size:13px; color:#000;}
 .disk_area .rzslider .rz-bubble.rz-limit {top:3px; color:#666; background:none; padding:0; border-radius:0;}
 .disk_area .rzslider .rz-bubble.rz-limit::before {background:none;}
 .disk_area .rzslider .rz-bubble.rz-limit::after{display:none;}
@@ -2506,3 +2551,5 @@ p.no-txt{
 
 .panel.type6 .panel_body .ul-in .down {height:auto; padding-top:13px;}
 .panel_box .form_list .app-form-two .two_box {vertical-align:top;}
+
+.panel.type3 .panel_head .logo img {width:100%; height:100%;}
