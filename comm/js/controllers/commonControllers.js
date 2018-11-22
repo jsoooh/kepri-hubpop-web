@@ -1127,6 +1127,8 @@ angular.module('common.controllers', [])
             }
         };
         
+        mc.visible 				= false;
+        
         mc.pnbBoxToggleChange = function (evt) {
             var _this = $(evt.currentTarget).closest(".pnb_box.cToggle");
             if (!_this.hasClass("cToggle-open")) {
@@ -1134,7 +1136,19 @@ angular.module('common.controllers', [])
             } else {
                 _this.removeClass("cToggle-open").find(".pnb_bx_cnt").slideUp();
             }
+          //2018.11.22 sg0730 RzSlider Refresh Func Add
+            mc.visible = !mc.visible;
+            if (mc.visible)
+                mc.refreshSlider();
         };
+        
+      //2018.11.22 sg0730 RzSlider Refresh Func Add
+        mc.refreshSlider = function () {
+            $timeout(function () {
+              $scope.$broadcast('rzSliderForceRender');
+            });
+          };
+    
 
         mc.contentsViewType = "thum";
         // IaaS 추가 2018.04.11 S

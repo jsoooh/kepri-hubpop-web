@@ -1016,7 +1016,7 @@ angular.module('iaas.controllers')
             {
                 ct.volume.resource = data.content[0];
                 ct.volume.resourceDefault = angular.copy(ct.volume.resource);
-                ct.volumeSliderOptions.ceil = ct.volume.resource.maxResource.volumeGigabytes - ct.volume.resource.usedResource.volumeGigabytes ;
+                ct.volumeSlider.options.ceil = ct.volume.resource.maxResource.volumeGigabytes - ct.volume.resource.usedResource.volumeGigabytes ;
             });
             
             returnPromise.error(function (data, status, headers) 
@@ -1170,12 +1170,12 @@ angular.module('iaas.controllers')
         };
 
         ct.volumeSize = 10;
-        ct.volumeSliderOptions = 
+        ct.volumeSlider = 
         {
-        	showSelectionBar : true,
         	minValue : 1,
         	
         	options: {
+        		showSelectionBar : true,
                 floor: 0,
                 ceil: 100,
                 step: 30

@@ -493,6 +493,7 @@ angular.module('paas.controllers')
         
         // 호스트 중복 체크 확인
         ct.hostDup 				= false;
+      
         
         
         /*
@@ -568,134 +569,170 @@ angular.module('paas.controllers')
         ct.appPushData.appName   		 ='app-01' ; 
         ct.appPushData.domainFirstName   ='app-01' ; 
         ct.appPushData.withStart 		 = "true";
-
-        ct.defaultSetting = {
+        
+        //감소버튼 클릭시 이벤트 sg0730
+        ct.minValCheck = function (val) {
+        	
+        	if (val == 1) 
+        	{
+        		if(ct.defaultSet.instances > ct.insSlider.options.minLimit)
+    			{
+    				ct.defaultSet.instances = (ct.defaultSet.instances - ct.insSlider.options.step);
+    			}
+        		else
+        		{
+        			return false;
+        		}		
+			}
+        	else if (val == 2) 
+        	{
+        		if(ct.defaultSet.memory > ct.memorySlider.options.minLimit)
+    			{
+    				ct.defaultSet.memory = (ct.defaultSet.memory - ct.memorySlider.options.step);
+    			}
+        		else
+        		{
+        			return false;
+        		}	
+        			
+			} 
+        	else if (val == 3) 
+        	{
+        		if(ct.defaultSet.diskQuota > ct.diskQuotaSlider.options.minLimit)
+    			{
+    				ct.defaultSet.diskQuota = (ct.defaultSet.diskQuota - ct.diskQuotaSlider.options.step);
+    			}
+        		else
+        		{
+        			return false;
+        		}	
+			} 
+        };
+        
+        
+        
+        
+        //증가 버튼 클릭시 이벤트 sg0730
+        ct.maxValCheck = function (val) {
+        	
+        	if (val == 1) 
+        	{
+        		if(ct.defaultSet.instances <= ct.insSlider.options.ceil)
+    			{
+    				ct.defaultSet.instances = (ct.defaultSet.instances + ct.insSlider.options.step);
+    				
+    				if (ct.defaultSet.instances > ct.insSlider.options.ceil) 
+    				{
+    					ct.defaultSet.instances = ct.insSlider.options.ceil ;
+					}
+    			}
+        		else
+        		{
+        			return false;
+        		}		
+			}
+        	else if (val == 2) 
+        	{
+        		if(ct.defaultSet.memory <= ct.memorySlider.options.ceil)
+    			{
+    				ct.defaultSet.memory = (ct.defaultSet.memory + ct.memorySlider.options.step);
+    				
+    				if (ct.defaultSet.memory > ct.memorySlider.options.ceil) 
+    				{
+    					ct.defaultSet.memory = ct.memorySlider.options.ceil ;
+					}
+    				
+    			}
+        		else
+        		{
+        			return false;
+        		}	
+        			
+			} 
+        	else if (val == 3) 
+        	{
+        		if(ct.defaultSet.diskQuota <= ct.diskQuotaSlider.options.ceil)
+    			{
+    				ct.defaultSet.diskQuota = (ct.defaultSet.diskQuota + ct.diskQuotaSlider.options.step);
+    				
+    				if (ct.defaultSet.diskQuota > ct.diskQuotaSlider.options.ceil) 
+    				{
+    					ct.defaultSet.diskQuota = ct.diskQuotaSlider.options.ceil ;
+					}
+    			}
+        		else
+        		{
+        			return false;
+        		}	
+			} 
+        };
+        
+        // ct.visible 				= false; 
+        
+       /* ct.toggle = function () {
+            ct.visible = !ct.visible;
+            if (ct.visible)
+              ct.refreshSlider();
+        };*/
+          
+      /*  ct.refreshSlider = function () {
+            $timeout(function () {
+              $scope.$broadcast('rzSliderForceRender');
+            });
+          };
+        */
+        
+        
+        
+        ct.defaultSet = {
 					            instances: 1,
 					            memory: 768,
 					            diskQuota: 512
 					        };
-
-        ct.instancesSlider = {
-					            value : ct.defaultSetting.instances,
-					            
-					            options: {
-							                floor: 0,
-							                ceil: 20,
-							                step: 1,
-							                minLimit: 1,
-							                showSelectionBar: true
-							            }
+        
+       // ct.insVal = 1;
+        
+        ct.insSlider = {
+        			        	options: {
+        			        		showSelectionBar : true,
+        			                floor: 0,
+        			                ceil: 20,
+        			                step: 1,
+        			                minLimit: 1,
+        			                translate: function(value) {
+        			                    return value + '개';
+        			                }
+        			        	}
 					        };
 
         ct.memorySlider = {
-					            value : ct.defaultSetting.memory,
-					            
 					            options: {
 							                floor: 0,
 							                ceil: 4096,
 							                step: 128,
 							                minLimit: 128,
-							                showSelectionBar: true
+							                maxLimit: 4096,
+							                showSelectionBar: true,
+		        			                translate: function(value) {
+		        			                    return value + 'M';
+		        			                }
 							            }
 					        };
 
         ct.diskQuotaSlider = {
-						            value : ct.defaultSetting.diskQuota,
-						            
 						            options: {
 									            floor: 0,
 									            ceil: 2048,
 									            step: 128,
 									            minLimit: 128,
-									            showSelectionBar: true
+									            showSelectionBar: true,
+			        			                translate: function(value) {
+			        			                    return value + 'M';
+			        			                }
 									         }
 						      };
 
-        /*ct.closeForm = function (evt) {
-            $(".aside").stop().animate({"right":"-360px"}, 600);
-            ct.activeTabIndex = 1;
-        };*/
-
-/*        ct.showSlider = function (evt) {
-            $(evt.target).next(".instBox").slideToggle();
-        };
-*/
-       /* ct.showForm2 = function () {
-            var fileCheck = true;
-            if (ct.appPushData.pushType === "GENERAL" && ct.appFileItem == null) {
-                ct.appFileErrorMessage = "선택된 파일이 없습니다.";
-                fileCheck = false;
-            }
-
-            if (!new ValidationService().checkFormValidity($scope[ct.formName]) || !fileCheck) {
-                return;
-            }
-
-            // 이미 사용하고 있는 호스트인지 확인
-            for (var i = 0; i < ct.domains.length; i++) {
-                if (ct.domains[i].name == ct.sltDomainName) {
-                    $scope.main.loadingMainBody = true;
-                    var routePromise = routeService.checkDuplRoute(ct.domains[i].guid, ct.appPushData.domainFirstName);
-                    routePromise.success(function (data) {
-                        $scope.main.loadingMainBody = false;
-                        if (!data) {
-                            ct.showForm2Action();
-                        } else {
-                            ct.hostDup = true;
-                        }
-                    });
-                    routePromise.error(function (data) {
-                        $scope.main.loadingMainBody = false;
-                    });
-                    break;
-                }
-            }
-        };
-*/
-       /* ct.showForm2Action = function () {
-            ct.activeTabIndex++;
-
-             range - 오른쪽 영역 범례 
-            $("#ex1Slider1").remove();
-            var slider1 = new Slider('.eff-report1', {
-                tooltip_position: "bottom",
-                formatter: function formatter(val) {
-                    var txt = $('.eff-report1').attr("data-slider-tool");
-                    if (Array.isArray(val)) {
-                        return val[0] + " : " + val[1];
-                    } else {
-                        return val + " " + txt;
-                    }
-                },
-            });
-
-            $("#ex1Slider2").remove();
-            var slider2 = new Slider('.eff-report2', {
-                tooltip_position: "bottom",
-                formatter: function formatter(val) {
-                    var txt = $('.eff-report2').attr("data-slider-tool");
-                    if (Array.isArray(val)) {
-                        return val[0] + " : " + val[1];
-                    } else {
-                        return val + " " + txt;
-                    }
-                },
-            });
-
-            $("#ex1Slider3").remove();
-            var slider3 = new Slider('.eff-report3', {
-                tooltip_position: "bottom",
-                formatter: function formatter(val) {
-                    var txt = $('.eff-report3').attr("data-slider-tool");
-                    if (Array.isArray(val)) {
-                        return val[0] + " : " + val[1];
-                    } else {
-                        return val + " " + txt;
-                    }
-                },
-            });
-        };*/
-
+     
         ct.listAllOrganizations = function () {
         	
             var organizationPromise = applicationService.listAllOrganizations();
@@ -936,9 +973,9 @@ angular.module('paas.controllers')
             {
                 afterStart = true;
                 appBody.appFilePath = ct.sltPortalBuildpack.appFilePath;
-                appBody.instances 	= ct.instancesSlider.value;
-                appBody.memory 		= ct.memorySlider.value;
-                appBody.diskQuota 	= ct.diskQuotaSlider.value;
+                appBody.instances 	= ct.defaultSet.instances;
+                appBody.memory 		= ct.defaultSet.memory;
+                appBody.diskQuota 	= ct.defaultSet.diskQuota;
             } 
             else 
             {
@@ -949,9 +986,9 @@ angular.module('paas.controllers')
                     appBody.serviceInstanceGuid = ct.appPushData.serviceInstanceGuid;
                 }
                 
-                appBody.instances = ct.instancesSlider.value;
-                appBody.memory 	  = ct.memorySlider.value;
-                appBody.diskQuota = ct.diskQuotaSlider.value;
+                appBody.instances = ct.defaultSet.instances;
+                appBody.memory 	  = ct.defaultSet.memory;
+                appBody.diskQuota = ct.defaultSet.diskQuota;
             }
             
            // console.log("appBody====>"+ JSON.stringify(appBody));

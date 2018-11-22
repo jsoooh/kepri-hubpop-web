@@ -284,7 +284,7 @@ angular.module('iaas.controllers')
             return series;
         };
 
-        // 도메인 연결 버튼
+       /* // 도메인 연결 버튼
         ct.fn.connectDomainFormOpen = function() {
             if (ct.instance.floatingIp == '') {
                 common.showAlertError('접속 IP 주소가 없으면 도메인 연결을 할 수 없습니다.');
@@ -295,7 +295,31 @@ angular.module('iaas.controllers')
 
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
+        };*/
+        
+        //20181120 sg0730  도메인연결 PopUp 추가
+        ct.fn.popConnDomainForm = function($event) {
+        	
+        	var dialogOptions = {
+            			controller       : "iaasPopConnDomainFormCtrl" ,
+            			formName         : 'iaasPopConnDomainForm',
+            			callBackFunction : ct.refalshDomainCallBackFunction
+            	};
+            	$scope.actionBtnHied = false;
+            	common.showDialog($scope, $event, dialogOptions);
+            	$scope.actionLoading = true; // action loading
+               
+            
         };
+        
+        // sg0730 차후 callback 처리 고민.
+        ct.refalshDomainCallBackFunction = function () 
+        {
+        	//ct.fn.changeSltInfoTab('domain');
+        	ct.fn.changeSltInfoTab();
+        };
+        
+        
 
         // 도메인 반환 버튼
         ct.fn.publicIpReturn = function(domain) {
@@ -2377,5 +2401,94 @@ angular.module('iaas.controllers')
         pop.fn.checkByte = function (text, maxValue){
            pop.checkByte = $bytes.lengthInUtf8Bytes(text);
         }
+    })
+    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////2018.11.21 sg0730 도메인 등록 팝업////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    .controller('iaasPopConnDomainFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
+    	_DebugConsoleLog("iaasPopConnDomainFormCtrl.js : iaasPopConnDomainFormCtrl", 1);
+    	
+    	var pop = this;
+    	pop.validationService 			= new ValidationService({controllerAs: pop});
+    	pop.formName 					= $scope.dialogOptions.formName;
+    	pop.fn 							= {};
+    	pop.data						= {};
+    	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+    	//pop.userTenant 					= angular.copy($scope.main.userTenant);
+    	//pop.instance 					= $scope.dialogOptions.selectInstance;
+    	
+    	$scope.dialogOptions.title 		= "도메인 등록";
+    	$scope.dialogOptions.okName 	= "등록";
+    	$scope.dialogOptions.closeName 	= "닫기";
+    	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeCreatePopDomainForm.html" + _VersionTail();
+    	
+    	$scope.actionLoading 			= false;
+    	pop.btnClickCheck 				= false;
+    	
+    	// Dialog ok 버튼 클릭 시 액션 정의
+    	$scope.actionBtnHied = false;
+    	
+    	$scope.popDialogOk = function () {
+    		/*if ($scope.actionBtnHied) return;
+    		
+    		$scope.actionBtnHied = true;
+    		
+    		if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
+    		{
+    			$scope.actionBtnHied = false;
+    			return;
+    		}
+    		
+    		// 작동해랴@@
+    		pop.checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
+    		
+    		if(pop.checkByte > 50)
+    		{
+    			$scope.actionBtnHied = false;
+    			return;
+    		}
+    		
+    		pop.fn.createSnapshot();*/
+    	};
+    	
+    	$scope.popCancel = function() {
+    		$scope.dialogClose = true;
+    		common.mdDialogCancel();
+    	};
+    	
+    	
+    	/*pop.fn.createSnapshot = function() {
+    		
+    		$scope.main.loadingMainBody = true;
+    		pop.data.tenantId 			= pop.userTenant.id;
+    		pop.data.instanceId 		= pop.instance.id;
+    		
+    		common.mdDialogHide();
+    		
+    		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'POST', {instanceSnapShot:pop.data});
+    		
+    		returnPromise.success(function (data, status, headers) 
+    				{
+    			$scope.main.loadingMainBody = false;
+    			common.showAlertSuccess("생성 되었습니다.");
+    			
+    			//생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
+    			$scope.main.moveToAppPage('/iaas/compute/snapshot');
+    			
+    				});
+    		returnPromise.error(function (data, status, headers) 
+    				{
+    			$scope.main.loadingMainBody = false;
+    			common.showAlertError(data.message);
+    				});
+    		returnPromise.finally(function (data, status, headers) 
+    				{
+    			$scope.actionBtnHied = false;
+    			$scope.main.loadingMainBody = false;
+    				});
+    	}*/
+    	
     })
 ;

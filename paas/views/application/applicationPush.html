@@ -50,7 +50,7 @@
 						</div>
 					</div>
 				</li>
-				<li>
+				<li ng-if="contents.appPushData.pushType != 'DOCKER'">
 					<div class="pnb_tit">
 						<i class="i_star"></i> 빌드팩(Buildpack) 선택<span class="ico_info"></span>
 					</div>
@@ -71,7 +71,7 @@
 					</div>	
 				</li>
 				<li ng-if="contents.appPushData.pushType == 'DOCKER'">
-					<p class="app-tit">도커(Docker) 이미지 정보를 입력해 주세요. <i class="i_star"></i></p>
+					<p class="pnb_tit">도커(Docker) 이미지 정보를 입력해 주세요. <i class="i_star"></i></p>
 					<input type="text" maxlength="100" name="dockerImage" id="dockerImage" ng-model="contents.appPushData.dockerImage" class="form-control" placeholder="예 : cloudfoundry/lattice-app" validation="required">
 				</li>
 				
@@ -97,13 +97,13 @@
 							<input type="hidden" name="contents.appFileName" ng-model="contents.appFileItem.file.name" style="display: none;" />
 							<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" readonly value="{{ contents.appFileItem.file.name }}">
 							<span class="group-span-filestyle input-group-btn" tabindex="0">
-								<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;">
+								<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
 								<label class="btn btn-default " ng-click="main.fileSelectBtnClick($event);">
 									<span class="btn btn-md btn-color1" >파일찾기</span>
 								</label>
 							</span>
-							<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
 						</div>
+						<span class="mt10" ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
 					</div>
 				</li>
 			</ul>
@@ -113,7 +113,8 @@
 					<span class="hd_tit">실행환경 사양설정</span>
 					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.pnbBoxToggleChange($event);"><span class="ico_arw_sm">열고/닫기</span></button>
 				</div>
-				<div class="pnb_bx_cnt">
+				<div class="pnb_bx_cnt" ng-show="main.visible">
+				<!-- <div class="pnb_bx_cnt" > -->
 					<ul class="cnt_sliderWrap">
 						<li>
 							<div class="tit"><span>인스턴스 개수</span></div>
@@ -121,16 +122,20 @@
 								<div class="disk_area color2">
 									<div class="disk_box">
 										<div class="rangeWrap type2">
-											<span class="s_txt">최대 20개</span>
+											<span class="s_txt">최대 {{contents.insSlider.options.ceil}}개</span>
 											<div class="range_box">
 												<div class="ico_minus">
-													<button type="button" name="button" class="btn" title="minus" ><span>감소</span></button>
+													<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(1);" ><span>감소</span></button>
 												</div>
-												<div class="rzslider"><rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider></div>
+												<div class="rzslider">
+													<rzslider rz-slider-model="contents.defaultSet.instances" rz-slider-options="contents.insSlider.options"></rzslider>
+												</div>
 												<div class="ico_plus">
-													<button type="button" name="button" class="btn" title="minus" ><span>증가</span></button>
+													<!-- <button type="button" name="button" class="btn" title="minus" ng-click="if(contents.defaultSet.instances <= contents.insSlider.options.ceil )contents.defaultSet.instances = (contents.defaultSet.instances + contents.insSlider.options.step);"><span>증가</span></button> -->
+													<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(1);"><span>증가</span></button>
 												</div>
 											</div>
+										
 										</div>
 									</div>
 								</div>
@@ -138,19 +143,19 @@
 						</li>
 						
 						<li>
-							<div class="tit"><span>Total Memory</span></div>
+							<div class="tit"><span>메모리 용량</span></div>
 							<div class="slider_area">
 								<div class="disk_area">
 									<div class="disk_box">
 										<div class="rangeWrap type2">
-											<span class="s_txt">최대 4GB</span>
+											<span class="s_txt">최대  {{ (contents.memorySlider.options.ceil < 1024) ?  (contents.memorySlider.options.ceil|number:0)  : (contents.memorySlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
 											<div class="range_box">
 												<div class="ico_minus">
-													<button type="button" name="button" class="btn" title="minus" ><span>감소</span></button>
+													<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(2);" ><span>감소</span></button>
 												</div>
-												<div class="rzslider"><rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider></div>
+												<div class="rzslider"><rzslider rz-slider-model="contents.defaultSet.memory" rz-slider-options="contents.memorySlider.options"></rzslider></div>
 												<div class="ico_plus">
-													<button type="button" name="button" class="btn" title="minus" ><span>증가</span></button>
+													<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(2);"><span>증가</span></button>
 												</div>
 											</div>
 										</div>
@@ -160,19 +165,19 @@
 						</li>
 						
 						<li>
-							<div class="tit"><span>Total Disk</span></div>
+							<div class="tit"><span>디스크 용량</span></div>
 							<div class="slider_area">
 								<div class="disk_area color3">
 									<div class="disk_box">
 										<div class="rangeWrap type2">
-											<span class="s_txt">최대 2GB</span>
+											<span class="s_txt">최대 {{ (contents.diskQuotaSlider.options.ceil < 1024) ?  (contents.diskQuotaSlider.options.ceil|number:0)  : (contents.diskQuotaSlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
 											<div class="range_box">
 												<div class="ico_minus">
-													<button type="button" name="button" class="btn" title="minus" ><span>감소</span></button>
+													<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(3);" ><span>감소</span></button>
 												</div>
-												<div class="rzslider"><rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider></div>
+												<div class="rzslider"><rzslider rz-slider-model="contents.defaultSet.diskQuota" rz-slider-options="contents.diskQuotaSlider.options"></rzslider></div>
 												<div class="ico_plus">
-													<button type="button" name="button" class="btn" title="minus" ><span>증가</span></button>
+													<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(3);" ><span>증가</span></button>
 												</div>
 											</div>
 										</div>
@@ -231,16 +236,15 @@
 			</div>
 		</div>
 		
-		<div class="pn_head brdt">
+		<div class="pn_head brdt" ng-if="contents.appPushData.pushType == 'GENERAL'">
 			<h4 class="pnh_tit ico06">APP 실행 소스코드</h4>
 		</div>
-		<div class="pn_body">
+		<div class="pn_body" ng-if="contents.appPushData.pushType == 'GENERAL'">
 			<div class="s_cont_box">
 				<ul>
 					<li>
 						<div class="s_inner_cont">
-							<p class="txt" ng-if="contents.appPushData.pushType == 'GENERAL'">{{ contents.appFileItem.localFullFileName }}<!-- D:/dev/demand.war --></p>
-							<p class="txt" ng-if="contents.appPushData.pushType == 'DOCKER'">{{ contents.appPushData.dockerImage }}</p>
+							<p class="txt" >{{ contents.appFileItem.localFullFileName }}<!-- D:/dev/demand.war --></p>
 						</div>
 					</li>
 				</ul>
@@ -271,11 +275,13 @@
 									</thead>
 									<tbody>
 										<tr>
-											<!-- 20181119 김보람G 퍼블리싱 후에 다시 맵핑 작업 필요 sg0730 START  -->
-											<td>2개</td>
-											<td>1024GB</td>
-											<td>1.5GB</td>
-											<!-- 20181119 김보람G 퍼블리싱 후에 다시 맵핑 작업 필요 sg0730 END  -->
+											<td>{{contents.defaultSet.instances}} 개</td>
+											<td>
+												{{ (contents.defaultSet.memory < 1024) ?  (contents.defaultSet.memory|number:0)  : (contents.defaultSet.memory/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (contents.defaultSet.memory < 1024) ?  'MB' : 'GB'}}</em></span>
+											</td>
+											<td>
+												{{ (contents.defaultSet.diskQuota < 1024) ?  (contents.defaultSet.diskQuota|number:0)  : (contents.defaultSet.diskQuota/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (contents.defaultSet.diskQuota < 1024) ?  'MB' : 'GB'}}</em></span>
+											</td>
 										</tr>
 									</tbody>
 								</table>

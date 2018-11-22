@@ -36,31 +36,15 @@
 			<div class="col info-txt useChart" style="padding-top: 30px;">
 				<ul>
 					<li>
-						<strong class="tit">인스턴스 이름</strong>
+						<strong class="tit">서버 이름</strong>
 						<div class="txt">{{contents.instance.name}}</div>
 					</li>
 					<li>
-						<strong class="tit">OS 이미지</strong>
+						<strong class="tit">서버 OS </strong>
 						<div class="txt">{{contents.instance.image.serviceName}}</div>
 					</li>
 					<li>
-						<strong class="tit">IP 주소</strong>
-						<div class="txt">{{contents.instance.fixedIp}}</div>
-					</li>
-					<li>
-						<strong class="tit">키페어</strong>
-						<div class="txt">{{contents.instance.keypair.name}}</div>
-					</li>
-					<li>
-						<strong class="tit">보안그룹</strong>
-						<div class="txt">{{contents.instance.securityPolicies | join:' ,':'name'}}</div>
-					</li>
-					<li>
-						<strong class="tit">접속 IP 주소</strong>
-						<div class="txt">{{contents.instance.floatingIp}} </div>
-					</li>
-					<li>
-						<strong class="tit">접속 URL</strong>
+						<strong class="tit">외부 접속 도메인</strong>
 						<div class="txt">
 							<p ng-repeat="item in contents.instance.instanceDomainLinkInfos">
 								<a ng-if="item.protocolType == 'http' && !item.sslUsed && item.sourcePort == '8080'" ng-href="http://{{ item.domainInfo.domain }}" target="_blank">http://{{ item.domainInfo.domain }}</a>
@@ -70,7 +54,22 @@
 						</div>
 					</li>
 					<li>
-						<strong class="tit">생성일</strong>
+						<strong class="tit">외부 접속 IP</strong>
+						<div class="txt">{{contents.instance.fixedIp}}</div>
+					</li>
+					<li>
+						<strong class="tit">내부 IP</strong>
+						<div class="txt">{{contents.instance.floatingIp}} </div>
+					</li>
+						<strong class="tit">키페어</strong>
+						<div class="txt">{{contents.instance.keypair.name}}</div>
+					</li>
+					<li>
+						<strong class="tit">보안그룹</strong>
+						<div class="txt">{{contents.instance.securityPolicies | join:' ,':'name'}}</div>
+					</li>
+					<li>
+						<strong class="tit">생성일시</strong>
 						<div class="txt">{{contents.instance.created | date : 'yyyy-MM-dd HH:mm:ss'}}</div>
 					</li>
 					<li>
@@ -81,10 +80,11 @@
 									<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2"></span>
 									<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized'" class="stateMark type4"></span>
 									<span ng-if="contents.instance.vmState == 'stopped'" class="stateMark type3"></span>
-									<span class="state-txt">{{contents.instance.vmState}}</span>
+									<span class="state-txt">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
 								</span>
 						</div>
 					</li>
+					
 				</ul>
 			</div>
 			<!-- //app 정보 -->
@@ -156,7 +156,8 @@
 <!-- cBox -->
 <div class="cBox type2 appCnt-vol strgList">
 	<div class="cBox-hd">
-		<h4 class="c-tit">볼륨 연결 정보 <em class="point1">({{contents.instanceVolListLength}})</em></h4>
+		<!-- <h4 class="c-tit">볼륨 연결 정보 <em class="point1">({{contents.instanceVolListLength}})</em></h4> -->
+		<h4 class="c-tit">디스크 연결 정보 <em class="point1">({{contents.instanceVolListLength}})</em></h4>
 	</div>
 
 	<div class="cBox-cnt">
@@ -192,7 +193,7 @@
 
 <!-- title -->
 <div class="cont-titWrap">
-	<h3 class="h-tit3">가상머신 정보</h3>
+	<h3 class="h-tit3">디스크 정보</h3>
 </div>
 <!-- //title -->
 
@@ -259,7 +260,9 @@
 					<div class="panel_head">
 						<div class="tit pull-left">도메인</div>
 						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><span class="ico">추가</span></button>
+							<!-- 20181121 sg0730 접속 도메인 연결 기능 변경으로 인한 팝업 호출  -->
+							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
+							<!-- <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><span class="ico">추가</span></button> -->
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
 						</div>
 					</div>
