@@ -248,35 +248,59 @@ angular.module('paas.controllers')
 
         var ct = this;
 
-        ct.sltSpace = $scope.main.sltOrganization.spaces[0];
-        ct.services = [];
-        ct.servicePlans = [];
-        ct.spaceApps = [];
-
-        ct.sltService = {};
-        ct.sltServiceGuid = "";
-
-        ct.sltServicePlan = {};
-        ct.sltServicePlanGuid = "";
-
-        ct.sltBindingApp = {};
-        ct.sltBindingAppGuid = "";
-
-        ct.serviceInstances = [];
-
-        ct.serviceInstanceName = "";
-
-        ct.actionBtnHied = false; // btn enabled
-        ct.spaceAppsLoad = false;
-
+        ct.sltSpace 			= $scope.main.sltOrganization.spaces[0];
+        ct.services 			= [];
+        ct.servicePlans 		= [];
+        ct.spaceApps 			= [];
+        ct.sltService 			= {};
+        ct.sltServiceGuid 		= "";
+        ct.sltServicePlan 		= {};
+        ct.sltServicePlanGuid 	= "";
+        ct.sltBindingApp 		= {};
+        ct.sltBindingAppGuid 	= "";
+        ct.serviceInstances 	= [];
+        ct.serviceInstanceName 	= "";
+        ct.actionBtnHied 		= false; // btn enabled
+        ct.spaceAppsLoad 		= false;
+        ct.TmpStr = "";
+        
+        ct.regMatch = function (str) {
+        	
+        	//var tmpStr = str
+        	
+        	if (str.match('mb')) 
+        	{
+				ct.TmpStr = str.replace("mb", ' Megabyte');
+			}
+        	
+        		
+        	//alert(ct.TmpStr);
+        };
+        
+    
+        
         ct.sltServiceChange = function (serviceGuid) {
             var sltService = common.objectsFindCopyByField(ct.services, "guid", serviceGuid);
+            
             if (sltService && sltService.guid) {
                 ct.sltService = sltService;
                 ct.sltServiceGuid = sltService.guid;
                 ct.servicePlans = angular.copy(sltService.servicePlans);
                 ct.sltServicePlan = {};
-                ct.sltServicePlanGuid = "";
+                //ct.sltServicePlanChange(ct.servicePlans[0].guid);
+                
+                if (ct.servicePlans[0].guid != null) 
+                {
+                	ct.sltServicePlanGuid = ct.servicePlans[0].guid ;
+                	ct.regMatch(ct.servicePlans[0].name);
+				}
+                else
+                {
+                	ct.sltServicePlanGuid = "";
+                }	
+                
+                ct.dbTmpNm = sltService.label; 
+                
             } else {
                 ct.sltService = {};
                 ct.sltServiceGuid = "";
@@ -284,18 +308,30 @@ angular.module('paas.controllers')
                 ct.sltServicePlan = {};
                 ct.sltServicePlanGuid = "";
             }
+            
+            
+            
+            
         };
 
-        ct.sltServicePlanChange = function (servicePlanGuid) {
+        ct.sltServicePlanChange = function (servicePlanGuid) 
+        {
             var sltServicePlan = common.objectsFindCopyByField(ct.servicePlans, "guid", servicePlanGuid);
-            if (sltServicePlan && sltServicePlan.guid) {
+            
+            if (sltServicePlan && sltServicePlan.guid)  
+            {
                 ct.sltServicePlan = sltServicePlan;
                 ct.sltServicePlanGuid = sltServicePlan.guid;
-            } else {
+                ct.regMatch(sltServicePlan.name);
+            } 
+            else 
+            {
                 ct.sltServicePlan = {};
                 ct.sltServicePlanGuid = "";
             }
         };
+        
+      
 
         ct.listAllSpaceApps = function (spaceGuid) {
             ct.spaceApps    = [];
@@ -317,6 +353,9 @@ angular.module('paas.controllers')
             resultPromise.success(function (data) {
                 ct.services = data;
                 $scope.main.loadingMainBody = false;
+                
+                //sg0730
+                ct.sltServiceChange(ct.services[0].guid);
             });
             resultPromise.error(function (data, status, headers) {
                 ct.services = [];

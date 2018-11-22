@@ -15,26 +15,28 @@
                 <div class="panel_head">
                     <div class="logo">
                         <img ng-src="images/thum/im_logo_{{ serviceItem.serviceLabel }}_cir.png" alt="{{ serviceItem.serviceLabel }}" />
+                        <!-- <img ng-src="images/thum/im_logo_{{ serviceItem.serviceLabel }}_{{ (serviceItem.service.active == true) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}"> -->
                     </div>
-                    <p id="txt-{{serviceItem.name}}" class="tit"><a href="">{{ serviceItem.name }}</a></p>
-                    <div id="renameService-{{serviceItem.name}}" style="display:none; width:240px;">
-                        <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
-                        <div class="sdBtnWrap">
-                            <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
-                            <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="ins.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
-                        </div>
-                    </div>
-                    <p class="txt nolink">S/W : {{serviceItem.serviceLabel}}</p>
                     <div class="dropdown btn-option">
                         <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
                             <span class="ico">실행 설정</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
                             <li><a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a></li>
-                            <li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="ins.renameInst(serviceItem.name)">서비스 이름변경</a></li>
-                            <li><a href="javascript:void(0);" ng-click="ins.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
+                            <li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="contents.renameInst(serviceItem.name)">서비스 이름변경</a></li>
+                            <li><a href="javascript:void(0);" ng-click="contents.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
                         </ul>
                     </div>
+                    <p id="txt-{{serviceItem.name}}" class="tit"><a href="">{{ serviceItem.name }}</a></p>
+                    <div id="renameService-{{serviceItem.name}}" style="display:none; width:240px;">
+                        <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
+                        <div class="sdBtnWrap">
+                            <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
+                            <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
+                        </div>
+                    </div>
+                    <p class="txt nolink">S/W : {{serviceItem.serviceLabel}}</p>
+                    
                 </div>
                 <div class="panel_body">
                     <ul class="ul-in">
@@ -58,8 +60,8 @@
         </div>
         <!-- //panel -->
     </li>
-    <li style="padding-bottom:3.5%;">
+<!--     <li style="padding-bottom:3.5%;">
         <button type="submit" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" id="aside-aside" ng-click="ins.showForm(serviceInstance.serviceInstances)"><span class="ico"></span><span class="txt">연결 서비스 추가</span></button>
-    </li>
+    </li> -->
 </ul>
 <!-- //cBox -->
