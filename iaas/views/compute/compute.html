@@ -37,17 +37,19 @@
 								<span class="ico">실행 설정</span>
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);">시작</a></li>
-								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);">중지</a></li>
-								<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);">재시작</a></li>
-								<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>
-								<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">삭제</a></li>
+								<li ng-class="{'on_disablec' : instance.vmState != 'active'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);">시작</a></li>
+								<li ng-class="{'on_disablec' : instance.vmState == 'active'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);">재시작</a></li>
+								<li ng-class="{'on_disablec' : instance.vmState != 'stopped'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);">정지</a></li>
+								<li><a href="" ng-click="contents.computePopEditServerForm($event);">서버 사양 변경</a></li>
+								<li ng-class="{'on_disablec' : instance.vmState == 'stopped'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);">백업 이미지 생성</a></li>
+								<li><a href="javascript:void(0);" ng-click="">키페어 다운로드</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">디스크 추가</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">서버 삭제</a></li>
+								<!--<li ng-class="{'on_disablec' : instance.vmState == 'active'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
+								<!--<li ng-class="{'on_disablec' : instance.vmState == 'paused'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
 								<!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 스냅샷</a></li> -->
-								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);">백업이미지 생성</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">볼륨연결</a></li>
-								<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>
-								<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>
+								<!--<li ng-class="{'on_disablec' : instance.floatingIp == ''}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>-->
+								<!--<li ng-class="{'on_disablec' : instance.floatingIp != ''}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>-->
 							</ul>
 						</div>
 					</div>

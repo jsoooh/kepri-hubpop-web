@@ -24,8 +24,8 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="" ng-class="{'disabled' : instanceSnapshot.status != 'active'}" ng-click="main.goToPage('/iaas/snapshot/instanceCreate');">서버 백업 이미지 복원</a></li>
-											<li><a href="" ng-class="{'disabled' : instanceSnapshot.status != 'active'}" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">서버 백업 이미지 삭제</a></li>
+											<li><a href="" ng-class="{'disabled' : instanceSnapshot.status != 'active'}" ng-click="main.goToPage('/iaas/snapshot/instanceCreate');">서버 생성</a></li>
+											<li><a href="" ng-class="{'disabled' : instanceSnapshot.status != 'active'}" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
 										</ul>
 									</div>
 								</div>
@@ -93,8 +93,8 @@
 							</td>
 							<td>{{instanceSnapshot.createDate}}</td>
 							<td>
-								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-resto-s only-ico" data-user="aside" data-username="#aside-restore" title="복원" ng-click="contents.formOpen(instanceSnapshot);"><span class="ico">복원</span></button>
-								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteSnapshot(instanceSnapshot);"><span class="ico">삭제<span></button>
+								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-resto-s only-ico" data-user="aside" data-username="#aside-restore" title="복원" ng-click="contents.formOpen(instanceSnapshot);"><span class="ico">디스크 생성</span></button>
+								<button type="button" ng-disabled="snapshot.status != 'active'" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);"><span class="ico">이미지 삭제</span></button>
 							</td>
 						</tr>
 						<tr ng-if="contents.snapshotList.length == 0">
@@ -123,8 +123,8 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'active'}" ng-click="main.goToPage('/iaas/snapshot/storageCreate');">디스크 백업 이미지 복원</a></li>
-											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'active'}" ng-click="contents.fn.deleteVolumeSnapshot(storageSnapshot);">디스크 백업 이미지 삭제</a></li>
+											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'active'}" ng-click="main.goToPage('/iaas/snapshot/storageCreate');">디스크 생성</a></li>
+											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'active'}" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
 										</ul>
 									</div>
 								</div>
@@ -192,7 +192,7 @@
 							<td>{{snapshot.createDate}}</td>
 							<td>
 								<button type="button" ng-disabled="snapshot.status != 'available'" class="btn btn-ico-resto-s only-ico"  ng-click="contents.fn.formOpen($event,snapshot)" title="볼륨 복원" ><span class="ico">복원</span></button>
-								<button type="button" ng-disabled="snapshot.status != 'available'" class="btn btn-ico-del-s only-ico"  ng-click="contents.fn.deleteSnapshot(snapshot)" title="삭제" ><span class="ico">삭제</span></button>
+								<button type="button" ng-disabled="snapshot.status != 'available'" class="btn btn-ico-del-s only-ico"  ng-click="contents.fn.deleteStorageSnapshot(snapshot)" title="삭제" ><span class="ico">삭제</span></button>
 							</td>
 						</tr>
 						<tr ng-if="!contents.snapshotList || contents.snapshotList.length == 0">

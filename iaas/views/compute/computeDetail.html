@@ -11,20 +11,18 @@
 					<span class="ico">실행 설정</span>
 				</button>
 				<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);">재시작</a></li>
-					<li ng-if="deployServer.deployStatus != 'fail' && contents.instance.vmState == 'active'"><a href="" ng-click="contents.fn.serverActionConfirm('PAUSE',contents.instance)">일시정지</a></li>
-					<li ng-if="deployServer.deployStatus != 'fail' && contents.instance.vmState == 'paused'"><a href="" ng-click="contents.fn.serverActionConfirm('UNPAUSE',contents.instance)">정지해제</a></li>
-					<!-- <li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li> -->
-					
-					<!-- 20181120 sg0730 서버사양변경으로 팝업 메뉴 추가 START  -->
-					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computePopEditServerForm($event);">서버사양변경</a></li>
-					<!-- 20181120 sg0730 서버사양변경으로 팝업 메뉴 추가 END  -->
-					
+					<li ng-class="{'on_disablec' : deployServer.deployStatus != 'fail'}"><a href="" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);">재시작</a></li>
+					<li ng-class="{'on_disablec' : deployServer.deployStatus != 'fail'}"><a href="" ng-click="contents.computePopEditServerForm($event);">서버 사양 변경</a></li>
+					<li ng-class="{'on_disablec' : deployServer.deployStatus != 'fail'}"><a href="" ng-click="contents.fn.createPopSnapshot($event,contents.instance);">백업 이미지 생성</a></li>
+					<li ng-class="{'on_disablec' : deployServer.deployStatus != 'fail'}"><a href="" ng-click="contents.fn.createInstanceVolumePop(contents.instance);">디스크 추가</a></li>
+					<li><a href="javascript:void(0);" ng-click="">키페어 다운로드</a></li>
+					<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">서버 삭제</a></li>
+					<!--<li ng-class="{'on_disablec' : contents.instance.floatingIp == ''}"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>-->
+					<!--<li ng-class="{'on_disablec' : contents.instance.floatingIp != ''}"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>-->
+					<!--<li ng-class="{'on_disablec' : (deployServer.deployStatus != 'fail' && contents.instance.vmState == 'active')}"><a href="" ng-click="contents.fn.serverActionConfirm('PAUSE',contents.instance)">일시정지</a></li>-->
+					<!--<li ng-class="{'on_disablec' : (deployServer.deployStatus != 'fail' && contents.instance.vmState == 'paused'}}"><a href="" ng-click="contents.fn.serverActionConfirm('UNPAUSE',contents.instance)">정지해제</a></li>-->
 					<!-- <li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createSnapshot($event,contents.instance);">이미지 스냅샷</a></li> -->
-					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createPopSnapshot($event,contents.instance);">백업이미지 생성</a></li>
-					<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createInstanceVolumePop(contents.instance);">볼륨연결</a></li>
-					<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>
-					<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>
+					<!-- <li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li> -->
 				</ul>
 			</div>
 		</div>

@@ -1,12 +1,3 @@
-<!-- 작업 추가 및 선택 -->
-<div ng-if="main.projectType == 'pjt'" class="projt-selWarp">
-	<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
-	<div class="pull-right">
-		<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
-	</div>
-</div>
-<!-- //작업 추가 및 선택 -->
-
 <!-- cBox -->
 <div class="cBox type1 workCnt-info">
 	<div class="cBox-hd">
@@ -17,9 +8,12 @@
 					<span class="ico">실행 설정</span>
 				</button>
 				<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-					<li ng-click="contents.fn.dettachVolume()" ng-show="contents.volume.status == 'in-use'" ><a href="javascript:void(0);" >연결해제</a></li>
-					<li ng-click="contents.fn.formOpen($event, 'storageEdit', contents.volume);"><a href="javascript:void(0);">수정</a></li>
-					<li ng-click="contents.fn.formOpen($event, 'snapshot', contents.volume);"><a href="javascript:void(0);">볼륨 스냅샷 생성</a></li>
+					<li ng-click="contents.fn.formOpen($event, 'snapshot', contents.volume);"><a href="javascript:void(0);">백업 이미지 생성</a></li>
+					<li ng-click=""><a href="javascript:void(0);">디스크 크기 변경</a></li>
+					<li ng-class="{'on_disablec' : contents.volume.status == 'in-use'}" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" >서버 연결 해제</a></li>
+					<li ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a href="javascript:void(0);">삭제</a></li>
+					<!--<li ng-click=""><a href="javascript:void(0);">디스크 이름 변경</a></li>-->
+					<!--<li ng-click="contents.fn.formOpen($event, 'storageEdit', contents.volume);"><a href="javascript:void(0);">수정</a></li>-->
 				</ul>
 			</div>
 		</div>

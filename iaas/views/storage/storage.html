@@ -1,11 +1,3 @@
-<!-- 작업 추가 및 선택 -->
-<div ng-if="main.projectType == 'pjt'" class="projt-selWarp">
-	<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
-	<div class="pull-right">
-		<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
-	</div>
-</div>
-
 <!-- 2018.11.14 sg0730 디스크 만들기 버튼 추가.-->
 <!-- button area Start-->
 <div class="btnWrap">
@@ -16,7 +8,7 @@
 <!-- button area end-->
 
 <!-- panel area-->
-<ul ng-if="main.contentsViewType == 'thum'" class="ul-panel">
+<ul class="ul-panel">
 	<li ng-repeat="volume in contents.storageMainList">
 		<!-- panel -->
 		<div class="panelWrap" style="height:370px; width: 365px;">
@@ -33,8 +25,11 @@
 							<span class="ico">실행 설정</span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li ng-click="contents.fn.formOpen($event, 'snapshot', volume);"><a href="javascript:void(0);">스냅샷 생성</a></li>
+							<li ng-click="contents.fn.formOpen($event, 'snapshot', volume);"><a href="javascript:void(0);">백업 이미지 생성</a></li>
+							<li ng-click=""><a href="javascript:void(0);">디스크 크기 변경</a></li>
+							<li ng-click="contents.fn.dettachVolume()" ng-show="contents.volume.status == 'in-use'" ><a href="javascript:void(0);" >서버 연결 해제</a></li>
 							<li ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a href="javascript:void(0);">삭제</a></li>
+							<!--<li ng-click=""><a href="javascript:void(0);">디스크 이름 변경</a></li>-->
 						</ul>
 					</div>
 				</div>
@@ -44,7 +39,7 @@
 						<div class="cnt_wrap">
 							<div class="cnt_imgBox">
 								<span class="cnt_img ico01"></span>
-								<div class="cnt_txt"><span class="txt_name">{{volume.type}}</span><span class="color1"><span count-to="{{volume.size | number : 0}}" duration="1" count-from="0" filter="number"></span>GB</span> / <span class="color2"><span count-to="{{volume.size | number : 0}}" duration="1" count-from="0" filter="number"></span>GB</span></div>
+								<div class="cnt_txt"><span class="txt_name">{{volume.type}}</span><span class="color1"><span count-to="{{volume.size | number : 0}}" duration="1" count-from="0" filter="number"></span>GB</span></div>
 								<!-- UI사용 예시: 10GB(사용량) / 100GB(전체용량) 필요. -->
 							</div>
 							<div class="cnt_infoBox">
@@ -64,7 +59,6 @@
 								<span class="stateMark type4" ng-if="volume.status == 'creating' || volume.status == 'deleting'">대기</span>
 								<span class="stateMark type3" ng-if="volume.status == 'available' || volume.status == 'deleted'">중지</span>
 								<span class="state-txt">{{ 'iaas.label.volume_' + volume.status | translate }}</span>
-								<!-- <span class="state-txt">{{ 'iaas.label.instance_' + volume.status | translate }}</span> -->
 							</span>
 						</div>
 					</div>
@@ -85,11 +79,5 @@
 		</div>
 		<!-- //panel -->
 	</li>
-	<!-- <li>
-		<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-add" style="height:320px; width: 365px;" ng-click="contents.fn.formOpen($event, 'storage');">
-			<span class="ico"></span>
-			<span class="txt">서비스 추가</span>
-		</button>
-	</li> -->
 </ul>
 <!-- //panel area-->
