@@ -45,6 +45,7 @@ angular.module('app')
                         url: '/comm/projects',
                         controller: 'commOrgProjectsCtrl',
                         templateUrl: _COMM_VIEWS_+'/org/orgProjects.html',
+                        mainContentsClass: 'pd0',
                         subPages: {
                             firstProjectMain: {
                                 mainTop: true,

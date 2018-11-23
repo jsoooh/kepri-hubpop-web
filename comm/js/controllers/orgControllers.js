@@ -6,12 +6,26 @@ angular.module('portal.controllers')
 
         var ct = this;
 
+        ct.selectItemKey = 0;
+
+        ct.userAuth  = $scope.main.userAuth;
+
+        ct.extendItem = function(evt) {
+            console.log('extendItem', evt);
+            if($(evt.target).closest('.NotCloseFirstOrgProjecItem').length == 0) {
+                ct.selectItemKey = 0;
+            }
+        };
+
+        ct.changeItem = function(evt, itemKey) {
+            console.log('changeItem', evt);
+            ct.selectItemKey = itemKey;
+        };
+
         // portalOrg 선택 제거
         $scope.main.setPortalOrg(null);
 
         $scope.main.loadingMainBody = true;
-
-        ct.userAuth  = $scope.main.userAuth;
 
         ct.schType = 'orgName';
 
