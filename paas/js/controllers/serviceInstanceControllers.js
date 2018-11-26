@@ -257,7 +257,7 @@ angular.module('paas.controllers')
         ct.sltServicePlan 		= {};
         ct.sltServicePlanGuid 	= "";
         ct.sltBindingApp 		= {};
-        ct.sltBindingAppGuid 	= "";
+        ct.sltBindingAppGuid 	= "null";
         ct.serviceInstances 	= [];
         ct.serviceInstanceName 	= "";
         ct.actionBtnHied 		= false; // btn enabled
@@ -375,7 +375,7 @@ angular.module('paas.controllers')
             serviceInstanceBody.spaceGuid = ct.sltSpace.guid;
             serviceInstanceBody.servicePlanGuid = ct.sltServicePlanGuid;
 
-            if (pop.sltBindingAppGuid) {
+            if (pop.sltBindingAppGuid && pop.sltBindingAppGuid != "null") {
                 var serviceBindings = [];
                 serviceBindings.push({ "appGuid" : pop.sltBindingAppGuid });
                 serviceInstanceBody.serviceBindings = serviceBindings;

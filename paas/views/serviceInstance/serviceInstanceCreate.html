@@ -65,13 +65,15 @@
 					<div class="pnb_tit">
 						연결대상 APP<span class="ico_info"></span>
 					</div>
-					<select ui-select-two="main.usSelectTwoOptions" allow-clear="true" name="sltBindApp" id="sltBindApp"
-							ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);"
-							data-placeholder="연결 대상 APP을 선택합니다.(선택사항)"
-							style="width: 100%;">
-						<option value=""></option>
-						<option ng-repeat="appItem in contents.spaceApps" value="{{ appItem.guid }}" option-html="<span style='color: #0a4ed8'>{text}</span>">{{ appItem.name }}</option>
-					</select>
+					<div class="select_ui_style">
+						<select ui-select-two="main.usSelectTwoOptions" name="sltBindApp" id="sltBindApp"
+								ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);"
+								data-placeholder="선택 없음"
+								style="width: 100%;">
+							<option ng-repeat="appItem in contents.spaceApps" value="{{ appItem.guid }}" option-html="<span class='ico_list_dot'>{text}</span>">{{ appItem.name }}</option>
+							<option value="null" option-html="<span>{text}</span>">선택 없음</option>
+						</select>
+					</div>
 				</li>
 			</ul>
 		</div>
