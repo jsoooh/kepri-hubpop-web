@@ -285,6 +285,7 @@
 <div class="tabWrap type1 mt30">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs padding40">
+        <li ng-class="{'active':contents.sltInfoTab == 'appLog'}"><a href="" ng-click="contents.changeSltInfoTab('appLog');">App 로그</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'service'}"><a href="" ng-click="contents.changeSltInfoTab('service');">연결 서비스</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'env'}"><a href="" ng-click="contents.changeSltInfoTab('env');">환경 변수</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'ssh'}"><a href="" ng-click="contents.changeSltInfoTab('ssh');">SSH</a></li>
@@ -384,6 +385,13 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- //panel -->
+        </div>
+        <div ng-if="contents.sltInfoTab == 'appLog'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'appLog'}">
+            <!-- 환경 변수 panel -->
+            <div class="panelWrap" ng-if="contents.app.guid != null">
+                <div class="panel type2" ng-controller="tabAppWebLogCtrl as tab" ng-include="tab.tabBodytemplateUri"></div>
             </div>
             <!-- //panel -->
         </div>
