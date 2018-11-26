@@ -781,7 +781,8 @@ angular.module('iaas.controllers')
             }, 250);
         };
         
-
+     
+        
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
             var param = {
@@ -1036,7 +1037,7 @@ angular.module('iaas.controllers')
             {
                 ct.volume.resource = data.content[0];
                 ct.volume.resourceDefault = angular.copy(ct.volume.resource);
-                ct.volumeSlider.options.ceil = ct.volume.resource.maxResource.volumeGigabytes - ct.volume.resource.usedResource.volumeGigabytes ;
+                ct.volumeSliderOptions.ceil = ct.volume.resource.maxResource.volumeGigabytes - ct.volume.resource.usedResource.volumeGigabytes ;
             });
             
             returnPromise.error(function (data, status, headers) 
@@ -1158,6 +1159,7 @@ angular.module('iaas.controllers')
                 ct.volume.name = instance.name+'_volume01';
                 ct.volume.type = 'HDD';
                 ct.volume.size = ct.volumeSize;
+                //ct.volume.size = ct.volumeSlider.minValue;
                 ct.volume.tenantId = ct.data.tenantId;
           
                 instance.spec = ct.data.spec;
@@ -1188,22 +1190,20 @@ angular.module('iaas.controllers')
             }
 
         };
-
+        
+      //볼륨생성 변수
         ct.volumeSize = 10;
-        ct.volumeSlider = 
+        ct.volumeSliderOptions = 
         {
+        	showSelectionBar : true,
         	minValue : 1,
         	
         	options: {
-        		showSelectionBar : true,
                 floor: 0,
                 ceil: 100,
                 step: 30
             }
         };
-      
-        
-        
         
         
     })
