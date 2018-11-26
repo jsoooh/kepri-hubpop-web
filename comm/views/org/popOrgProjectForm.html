@@ -11,16 +11,16 @@
             <!-- modal body -->
             <div class="modal-body">
                 <form name="{{dialogOptions.formName}}" novalidate>
-                <div class="cnt_box">
-                    <span class="pop_logo"></span>
-                    <p class="txt">프로젝트명을 입력하여 <em>프로젝트를 생성</em>하세요.</p>
-                    <input type="text" name="orgName" ng-model="pop.orgProject.orgName" ng-key-enter="popDialogOk();" class="form-control" placeholder="프로젝트명을 입력하세요" validation="min:2|max:20|required" maxlength="20" />
-                    <div class="btn_area">
-                        <button type="button" class="btn_create" aria-label="Close" ng-click="popDialogOk();">
-                            <span>프로젝트 생성</span>
-                        </button>
+                    <div class="cnt_box">
+                        <span class="pop_logo"></span>
+                        <p class="txt">프로젝트명을 입력하여 <em>프로젝트를 생성</em>하세요.</p>
+                        <input type="text" name="orgName" ng-model="pop.orgProject.orgName" ng-key-enter="popDialogOk();" class="form-control" placeholder="프로젝트명을 입력하세요" validation="min:2|max:20|required" maxlength="20" />
+                        <div class="btn_area">
+                            <button type="button" class="btn_create" ng-click="popDialogOk();">
+                                <span>프로젝트 생성</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
                 </form>
             </div>
             <!-- //modal body -->

@@ -20,6 +20,13 @@ angular.module('app')
                         controller: 'paasApplicationsCtrl',
                         templateUrl: _PAAS_VIEWS_ + '/application/apps.html',
                         subPages: {
+                            applicationPush: {
+                                name: 'applications',
+                                stateKey: 'paasApplicationPush',
+                                url: '/paas/appsPush',
+                                controller: 'paasApplicationPushCtrl',
+                                templateUrl: _PAAS_VIEWS_+'/application/applicationPush.html',
+                            },
                             applicationDetail: {
                                 name: 'application_details',
                                 stateKey: 'paasApplicationDetail',
@@ -28,13 +35,6 @@ angular.module('app')
                                 templateUrl: _PAAS_VIEWS_ + '/application/appDetail.html',
                                 ngClick: "main.moveToAppPage('/paas/apps/' + main.stateParams.guid);",
                             },
-                            applicationPush: {
-                                name: 'applications_create',
-                                stateKey: 'paasApplicationPush',
-                                url: '/paas/appsPush',
-                                controller: 'paasApplicationPushCtrl',
-                                templateUrl: _PAAS_VIEWS_+'/application/applicationPush.html',
-                            }
                         }
                     }, // services
                     service: {

@@ -14,6 +14,7 @@ angular.module('iaas.controllers')
         ct.network = {};
         ct.consoleLogLimit = '50';
         ct.actionLogLimit = '10';
+        ct.pageFirstLoad = true;
 
         ct.formOpen = function (){
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateForm.html" + _VersionTail();
@@ -56,6 +57,14 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.firstInstanceCreatePop = function() {
+            var dialogOptions = {
+                controllerAs: "pop",
+                templateUrl : _IAAS_VIEWS_ + "/compute/firstInstanceCreatePop.html" + _VersionTail(),
+            };
+            common.showCustomDialog($scope, null, dialogOptions);
+        };
+
         // 서버메인 tenant list 함수
         ct.fnGetServerMainList = function(currentPage) {
             $scope.main.loadingMainBody = true;
@@ -91,6 +100,10 @@ angular.module('iaas.controllers')
                             }, 1000);
                         }
                     });
+
+                    if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
+                        ct.firstInstanceCreatePop();
+                    }
                     ct.fnGetUsedResource();
                 }
             });
