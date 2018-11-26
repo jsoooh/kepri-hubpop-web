@@ -7,15 +7,21 @@
 		<h4 class="tit">조회</h4>
 		<div class="p_cont">
 			<div class="searchBox">
-				<div class="form-group">
-					<select name="searchKey" ng-model="pop.schKey" title="검색 구분 선택">
-						<option value="">전체</option>
-						<option value="email">ID</option>
-						<option value="name">이름</option>
-					</select>
-					<input type="text" placeholder="검색어를 입력해 주세요." style="width:358px;" ng-model="pop.schText" ng-key-enter="pop.setOrgNotUsers();">
+				<div class="form-group type2">
+					<div class="frm_select">
+						<select name="searchKey" ng-model="pop.schKey" title="검색 구분 선택">
+							<option value="">전체</option>
+							<option value="email">ID</option>
+							<option value="name">이름</option>
+						</select>
+					</div>
+					<div class="frm_input">
+						<input type="text" placeholder="검색어를 입력해 주세요." style="width:100%;" ng-model="pop.schText" ng-key-enter="pop.setOrgNotUsers();">
+					</div>
+					<div class="frm_btn">
+						<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="pop.setOrgNotUsers();"><span class="ico">검색</span></button>
+					</div>
 				</div>
-				<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="pop.setOrgNotUsers();"><span class="ico">검색</span></button>
 			</div>
 
 			<!-- table -->

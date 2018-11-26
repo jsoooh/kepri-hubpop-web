@@ -585,6 +585,13 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .searchBox .btn-sch{width:38px; height:38px;}
 .searchBox .btn-sch .ico{width:24px; height:24px; background-position:-193px -249px;}
 
+/*팝업 컨텐츠가 좌/우 2단 구조일 때 검색박스 영역*/
+.searchBox .form-group.type2 {display:table;}
+.searchBox .form-group.type2 >div {display:table-cell; box-sizing:border-box;}
+.searchBox .form-group.type2 >div.frm_select {width:75px; padding-right:8px;}
+.searchBox .form-group.type2 >div.frm_input {width:100%;}
+.searchBox .form-group.type2 >div.frm_btn {width:40px;}
+
 select, select.form-control,
 .searchBox input{height:38px;}
 
