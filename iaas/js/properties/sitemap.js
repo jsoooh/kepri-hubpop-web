@@ -31,14 +31,14 @@ angular.module('app')
                         templateUrl: _IAAS_VIEWS_+'/compute/compute.html',
                         subPages: {	// 메뉴에서는 상세 페이지로 표현
                             serverDetail: {
-                                name: 'server_details',
+                                name: 'server_main',
                                 stateKey: 'iaasComputeDetail',
                                 url: '/iaas/compute/detail/:instanceId',
                                 controller: 'iaasComputeDetailCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/compute/computeDetail.html',
                             },
                             serverCreate: {
-                                name: 'server_create',
+                                name: 'server_main',
                                 stateKey: 'iaasComputeCreate',
                                 url: '/iaas/compute/create',
                                 controller: 'iaasComputeCreateCtrl',

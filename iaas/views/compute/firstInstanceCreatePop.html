@@ -1,0 +1,27 @@
+<md-dialog draggable drag-handle=".modal-header" aria-label="{{ dialogOptions.title }}" class="{{ dialogOptions.dialogClassName }} modal-content">
+	<div class="modal-type-proj">
+		<div class="modal-content">
+			<!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+			<!-- modal header -->
+			<div class="modal-header brdb0">
+				<button type="button" class="close" aria-label="Close" ng-click="popCancel()">X</button>
+			</div>
+			<!-- //modal header -->
+
+			<!-- modal body -->
+			<div class="modal-body">
+				<div class="cnt_box">
+					<span class="pop_logo"></span>
+					<div class="pop_box">
+						<span class="ico01">서버가상화 서비스</span>
+					</div>
+					<p class="txt pdb0">서버가상화 서비스에 오신것을 환영합니다.<br><em>서버 만들기</em>를 통해 서비스 사용을 시작 할 수 있습니다.</p>
+					<div class="btn_area">
+						<button type="button" class="btn_create ico_none" ng-click="main.goToPage('/iaas/compute/create');"><span>서버 만들기</span></button>
+					</div>
+				</div>
+			</div>
+			<!-- //modal body -->
+		</div>
+	</div>
+</md-dialog>

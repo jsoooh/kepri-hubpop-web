@@ -19,7 +19,7 @@ angular.module('paas.controllers')
         ct.sltSpaceGuid = "";
 
         ct.old_orgSelected = [];
-
+        ct.pageFirstLoad = true;
         ct.appStateCnt = 0;
 
         // paging
@@ -66,7 +66,7 @@ angular.module('paas.controllers')
         ct.changeSpace = function (orgItem) {
             $scope.main.setPortalOrg(orgItem);
             ct.getOrganizationByName();
-            ct.listApps();
+            ct.listAllApps();
         };
 
         ct.getOrganizationByName = function () {
@@ -85,20 +85,25 @@ angular.module('paas.controllers')
             spacePromise.success(function (data) {
                 ct.sltOrganizationGuid = data.organizationGuid;
                 ct.sltSpaceGuid = data.guid;
-                ct.listApps();
+                ct.listAllApps();
             });
             spacePromise.error(function (data) {
                 ct.sltOrganizationGuid = "";
                 ct.sltSpaceGuid = "";
-                ct.listApps();
+                ct.listAllApps();
             });
         };
 
-        ct.listApps = function (currentPage) {
+        ct.firstAppCreatePop = function() {
+            var dialogOptions = {
+                controllerAs: "pop",
+                templateUrl : _PAAS_VIEWS_ + "/application/firstAppPushPop.html" + _VersionTail(),
+            };
+            common.showCustomDialog($scope, null, dialogOptions);
+        };
+
+        ct.listAllApps = function () {
             $scope.main.loadingMainBody = true;
-            if (angular.isDefined(currentPage) && currentPage != null) {
-                ct.pageOptions.currentPage = currentPage;
-            }
             var conditions = [];
             if(ct.sltOrganizationGuid) {
                 conditions.push("organization_guid:" + ct.sltOrganizationGuid);
@@ -112,18 +117,18 @@ angular.module('paas.controllers')
                 conditions.push("name:" + ct.sltAppNames.join(","));
             }
 
-            var appPromise = applicationService.listApps(ct.pageOptions.pageSize, ct.pageOptions.currentPage, conditions);
+            var appPromise = applicationService.listAllApps(conditions);
             appPromise.success(function (data) {
                 ct.isAppsLoad = true;
                 $scope.main.loadingMainBody = !ct.isSpacesLoad;
                 ct.apps = data;
 
                 // 좌측 메뉴가 바뀌어서 추가한 구문 앱런타임 바로 볼 수 있도록 수정
-                if (ct.apps.content.length != 0) {
-                  $scope.main.appGuid = ct.apps.content[0].guid;
+                if (ct.apps.length != 0) {
+                  $scope.main.appGuid = ct.apps[0].guid;
                 }
 
-                angular.forEach(ct.apps.content, function(option, mainKey) {
+                angular.forEach(ct.apps, function(option, mainKey) {
                     if (option.spaceQuota && option.spaceQuota.guid) {
                         option["memoryMax"] = option.spaceQuota.instanceMemoryLimit;
                     } else if (option.organization && option.organization.guid && option.organization.quotaDefinition && option.organization.quotaDefinition.guid) {
@@ -188,6 +193,12 @@ angular.module('paas.controllers')
                         $scope.main.loadingMain = false;
                     });
                 });
+
+                if (ct.pageFirstLoad && (!ct.apps || ct.apps.length == 0)) {
+                    ct.firstAppCreatePop();
+                    ct.pageFirstLoad = false;
+                }
+
                 $scope.main.loadingMainBody = false;
                 $scope.main.loadingMain = false;
                 ct.pageOptions.total = data.totalElements;
@@ -353,7 +364,7 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.deleteApp(guid);
             appPromise.success(function (data) {
-                ct.listApps();
+                ct.listAllApps();
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -444,7 +455,7 @@ angular.module('paas.controllers')
 
           var appPromise = applicationService.updateAppNameAction(guid, inputName);
           appPromise.success(function (data) {
-              ct.listApps();
+              ct.listAllApps();
           });
           appPromise.error(function (data) {
               $scope.main.loadingMainBody = false;

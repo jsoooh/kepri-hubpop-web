@@ -2414,64 +2414,48 @@ angular.module('iaas.controllers')
     	$scope.actionBtnHied = false;
     	
     	$scope.popDialogOk = function () {
-    		/*if ($scope.actionBtnHied) return;
-    		
-    		$scope.actionBtnHied = true;
-    		
-    		if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
-    		{
-    			$scope.actionBtnHied = false;
-    			return;
-    		}
-    		
-    		// 작동해랴@@
-    		pop.checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
-    		
-    		if(pop.checkByte > 50)
-    		{
-    			$scope.actionBtnHied = false;
-    			return;
-    		}
-    		
-    		pop.fn.createSnapshot();*/
+            //pop.fn.addDomain();
     	};
     	
     	$scope.popCancel = function() {
     		$scope.dialogClose = true;
     		common.mdDialogCancel();
     	};
-    	
-    	
-    	/*pop.fn.createSnapshot = function() {
-    		
-    		$scope.main.loadingMainBody = true;
+
+        $scope.actionBtnHied = false;
+    	pop.fn.addDomain = function() {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
+                $scope.actionBtnHied = false;
+                return;
+            }
+
+            $scope.main.loadingMainBody = true;
     		pop.data.tenantId 			= pop.userTenant.id;
     		pop.data.instanceId 		= pop.instance.id;
     		
     		common.mdDialogHide();
     		
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'POST', {instanceSnapShot:pop.data});
-    		
-    		returnPromise.success(function (data, status, headers) 
-    				{
-    			$scope.main.loadingMainBody = false;
-    			common.showAlertSuccess("생성 되었습니다.");
-    			
-    			//생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
-    			$scope.main.moveToAppPage('/iaas/compute/snapshot');
-    			
-    				});
-    		returnPromise.error(function (data, status, headers) 
-    				{
-    			$scope.main.loadingMainBody = false;
-    			common.showAlertError(data.message);
-    				});
-    		returnPromise.finally(function (data, status, headers) 
-    				{
-    			$scope.actionBtnHied = false;
-    			$scope.main.loadingMainBody = false;
-    				});
-    	}*/
+            returnPromise.success(function (data, status, headers)
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("생성 되었습니다.");
+                //생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
+                $scope.main.moveToAppPage('/iaas/compute/snapshot');
+
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+
+    	}
     	
     })
 ;
