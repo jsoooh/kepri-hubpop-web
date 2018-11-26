@@ -103,6 +103,7 @@ angular.module('iaas.controllers')
 
                     if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
                         ct.firstInstanceCreatePop();
+                        ct.pageFirstLoad = false;
                     }
                     ct.fnGetUsedResource();
                 }

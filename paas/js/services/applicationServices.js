@@ -13,6 +13,14 @@ angular.module('paas.services')
             }
         };
 
+        applicationService.listAllApps = function (conditions) {
+            var condition = "";
+            if (conditions && conditions.length > 0) {
+                condition = conditions.join(";");
+            }
+            return cloudFoundry.apps.listAllApps(condition, 2);
+        };
+
         applicationService.listApps = function (size, page, conditions) {
             var condition = "";
             if (conditions && conditions.length > 0) {
