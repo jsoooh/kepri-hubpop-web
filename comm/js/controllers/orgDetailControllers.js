@@ -247,7 +247,7 @@ angular.module('portal.controllers')
             if (tmpCode == '0000') {
                 //ct.dataReq4 = { };
                 ser1.name = "사용율";
-                ser1.data = chartData.cpuTotUsed;
+                ser1.data = chartData.cpuTotUsed.toFixed(1);
                 reqJsonArray.push(ser1);
 
                 ser2.name = "미사용율";
@@ -277,7 +277,7 @@ angular.module('portal.controllers')
 
             if (tmpCode == '0000') {
                 ser1.name = "사용율";
-                ser1.data = chartData.ramSizeTot;
+                ser1.data = chartData.ramSizeTot.toFixed(1);
                 reqJsonArray.push(ser1);
 
                 ser2.name = "미사용율";
@@ -310,7 +310,7 @@ angular.module('portal.controllers')
                 ser1.name = "사용율";
                 // STRAGE 기준을 instance disk 로 할 것인지 volume으로 할 것인지 확인 필요
                 //ser1.data = chartData.instanceDiskGigabytesTot; // instance disk
-                ser1.data = chartData.objectStorageGigaByteTot; // volume
+                ser1.data = chartData.objectStorageGigaByteTot.toFixed(1) // volume
                 reqJsonArray.push(ser1);
 
                 ser2.name = "미사용율";
