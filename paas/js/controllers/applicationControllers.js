@@ -748,8 +748,7 @@ angular.module('paas.controllers')
         	
             var organizationPromise = applicationService.listAllOrganizations();
             
-            organizationPromise.success(function (data) 
-            {
+            organizationPromise.success(function (data) {
                 $scope.main.organizations = angular.copy(data);
                 $scope.main.syncListAllPortalOrgs();
                 
@@ -758,8 +757,7 @@ angular.module('paas.controllers')
                 
                 ct.isOrganizationData 	  = true;
                 
-                if (ct.isBuildpackData && ct.isPortalBuildpackData) 
-                {
+                if (ct.isBuildpackData && ct.isPortalBuildpackData) {
                     $scope.main.loadingMainBody = false;
                 }
             });
@@ -773,13 +771,11 @@ angular.module('paas.controllers')
         	
             ct.portalBuildpacks = [];
             
-            for (var i=0; i<ct.portalBuildpackVersions.length; i++) 
-            {
+            for (var i=0; i<ct.portalBuildpackVersions.length; i++)  {
                 var buildpackName = ct.portalBuildpackVersions[i].portalBuildpack.name + "_buildpack-" + ct.portalBuildpackVersions[i].version;
                 var sltBuildpack  = common.objectsFindCopyByField(ct.buildpacks, "name", buildpackName);
                 
-                if (sltBuildpack != null && sltBuildpack.enabled) 
-                {
+                if (sltBuildpack != null && sltBuildpack.enabled) {
                     var portalBuildpackId   = ct.portalBuildpackVersions[i].portalBuildpack.id;
                     var addVersion 		  = false;
                     
@@ -793,8 +789,7 @@ angular.module('paas.controllers')
 				                        url         : ct.portalBuildpackVersions[i].url
 				                   };
                     
-                    for (var j = 0; j < ct.portalBuildpacks.length; j++) 
-                    {
+                    for (var j = 0; j < ct.portalBuildpacks.length; j++) {
                         if (ct.portalBuildpacks[j].id == portalBuildpackId) 
                         {
                             ct.portalBuildpacks[j].versions.push(version);
@@ -805,8 +800,7 @@ angular.module('paas.controllers')
                     }
                     
                     
-                    if (!addVersion) 
-                    {
+                    if (!addVersion) {
                         var portalBuildpack 	 = angular.copy(ct.portalBuildpackVersions[i].portalBuildpack);
                         portalBuildpack.versions = [];
                         portalBuildpack.versions.push(version);
@@ -824,13 +818,11 @@ angular.module('paas.controllers')
         	
             var buildpackPromise = applicationService.listAllBuildpacks();
             
-            buildpackPromise.success(function (data) 
-            {
+            buildpackPromise.success(function (data) {
                 ct.buildpacks 		= data;
                 ct.isBuildpackData  = true;
                 
-                if (ct.isPortalBuildpackData) 
-                {
+                if (ct.isPortalBuildpackData) {
                     ct.setPortalBuildpacks();
                 }
             });
@@ -844,13 +836,11 @@ angular.module('paas.controllers')
             
         	var portalBuildpackPromise = applicationService.listAllPortalBuildpackVersions();
             
-            portalBuildpackPromise.success(function (data) 
-            {
+            portalBuildpackPromise.success(function (data) {
                 ct.portalBuildpackVersions  = data;
                 ct.isPortalBuildpackData 	= true;
                 
-                if (ct.isBuildpackData) 
-                {
+                if (ct.isBuildpackData) {
                     ct.setPortalBuildpacks();
                 }
             });
