@@ -62,8 +62,8 @@
 .scrollableContainer .scrollArea .table td .btnWrap .btn + .btn{margin-left:5px;}
 .scrollableContainer .scrollArea .table td select{height:30px;}
 .scrollableContainer .scrollArea .table td .stateMark{vertical-align: middle;}
-.scrollableContainer .scrollArea .table td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 ?��???갱신 margin-left:6px*/
-.scrollableContainer .scrollArea .table td .noti td{font-weight: 700;font-size:16px; color:#2957cc;}/*180409 ?��???갱신 font-size:16px; color:#2957cc;*/
+.scrollableContainer .scrollArea .table td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 ?��???갱신 margin-left:6px*/
+.scrollableContainer .scrollArea .table td .noti td{font-weight: 700;font-size:16px; color:#2957cc;}/*180409 ?��???갱신 font-size:16px; color:#2957cc;*/
 .scrollableContainer .scrollArea .table td .no-data{font-size:18px; line-height: 30px !important; height:200px !important; }
 .scrollableContainer .scrollArea .table td a:hover{color:#2f3b48;}
 
@@ -100,14 +100,14 @@ paging > ul.pagination > li.disabled a.end, paging > ul.pagination > li.disabled
 
 /** chart **/
 .doughnut-label-box{text-anchor: middle; text-align:center;}
-.doughnut-label-box > ul > li{text-anchor: middle; text-align:center; padding:0 !important; height:auto !important;}/*180515 padding 기본�?0?�로 ?�정(?�위 div??li css?�속?�는문제)*/
+.doughnut-label-box > ul > li{text-anchor: middle; text-align:center; padding:0 !important; height:auto !important;}/*180515 padding 기본�?0?�로 ?�정(?�위 div??li css?�속?�는문제)*/
 .doughnut-label-box > ul > li:first-child > span:first-child{color: rgb(68, 68, 68); font-size:40px;font-weight: 900;}
 .doughnut-label-box > ul > li:first-child > span:last-child{color: rgb(68, 68, 68); font-size: 18px;font-weight: 200;}
 .doughnut-label-box > ul > li:last-child > span{font-size: 12px; color: rgb(162, 162, 162);font-weight: 200;}
 
-.doughnut-label-box > ul > li:first-child > span:first-child{font-size:26px}/*180723 ?�트값수??(?�넛 차트 ?�수 3?�리 ?�상?�때 깨�??�문??*/
+.doughnut-label-box > ul > li:first-child > span:first-child{font-size:26px}/*180723 ?�트값수??(?�넛 차트 ?�수 3?�리 ?�상?�때 깨�??�문??*/
 
-.chartWrap .doughnut-label-box{margin-top: -107px;}/*180515 margin-top:-110px -> -107px�??�정*/
+.chartWrap .doughnut-label-box{margin-top: -107px;}/*180515 margin-top:-110px -> -107px�??�정*/
 
 /** left fav icon menu **/
 #container .leftMenu.pageLoad.on{transition: none;}
@@ -155,11 +155,11 @@ paging > ul.pagination > li.disabled a.end, paging > ul.pagination > li.disabled
 .aside .dateWrap .date-inpt{z-index: 200;}
 
 /** validation **/
-/*180515 validation padding-top�?0px�??�정*/
-select.ng-touched.ng-invalid-validation, input.ng-touched.ng-invalid-validation{border-color:#ff0740 !important; }
+/*180515 validation padding-top�?0px�??�정*/
+select.ng-touched.ng-invalid-validation, input.ng-touched.ng-invalid-validation{border-color:#ff0740 !important;}
 .ng-touched.ng-invalid-validation{color: #d40031 !important; line-height: 18px !important; }
 
-select.ng-touched.ng-valid-validation, input.ng-touched.ng-valid-validation{border-color:#2ecc71 !important; }
+select.ng-touched.ng-valid-validation, input.ng-touched.ng-valid-validation{border-color:#2ecc71 !important;}
 .ng-touched.ng-valid-validation{color: #2ecc71 !important; line-height: 18px !important; }
 
 .validation.text-danger{ color: #d40031; line-height: 18px; margin-top:10px; }
@@ -173,3 +173,8 @@ select.ng-touched.ng-valid-validation, input.ng-touched.ng-valid-validation{bord
 
 /** modal **/
 .modal-lg { width:940px !important; min-width:940px;}
+
+/*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
+/*input validation check icon추가*/
+input.ng-touched.ng-invalid-validation{background: url("../images/ico_invalid.png") no-repeat 99% center;}
+input.ng-touched.ng-valid-validation{background: url("../images/ico_valid.png") no-repeat 99% center;}
