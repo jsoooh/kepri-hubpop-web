@@ -1987,8 +1987,8 @@ angular.module('iaas.controllers')
         	pop.checkByte = $bytes.lengthInUtf8Bytes(text);
         }
     })
-    .controller('iaasComputeVolumeFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        _DebugConsoleLog("computeDetailControllers.js : iaasComputeVolumeFormCtrl", 1);
+    .controller('iaasComputeVolumePopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("computeDetailControllers.js : iaasComputeVolumePopFormCtrl", 1);
 
         $scope.contents = common.getMainContentsCtrlScope().contents;
         
@@ -2212,8 +2212,8 @@ angular.module('iaas.controllers')
 
         $scope.actionLoading 			= false;
         pop.btnClickCheck 				= false;
-        pop.specList 	= [];
-        pop.spec 	= {};
+        pop.specList 					= [];
+        pop.spec 						= {};
         
         
         //스펙그룹의 스펙 리스트 조회
@@ -2457,5 +2457,91 @@ angular.module('iaas.controllers')
 
     	}
     	
+    })
+     .controller('iaasComputeVolumeFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("computeDetailControllers.js : iaasComputeVolumeFormCtrl", 1);
+
+        var pop 						= this;
+        var ct 							= $scope.contents;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+    	pop.formName 					= $scope.dialogOptions.formName;
+        pop.fn 							= {};
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
+        pop.instance 					= $scope.dialogOptions.selectInstance;
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+        //pop.formName 		= "computeVolumeForm";
+        $scope.dialogOptions.title 		= "디스크 추가";
+        $scope.dialogOptions.okName 	= "변경";
+    	$scope.dialogOptions.closeName 	= "닫기";
+    	$scope.dialogOptions.templateUrl= _IAAS_VIEWS_ + "/compute/computeServerConnVolPopForm.html" + _VersionTail();
+    	$scope.actionLoading 			= false;
+    	pop.btnClickCheck 				= false;
+
+        
+      //볼륨 리스트 조회
+        pop.fn.getVolumeList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+			                tenantId       : ct.data.tenantId,
+			                conditionKey   : "status",
+			                conditionValue : "available"
+			            };
+            
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param , 'application/x-www-form-urlencoded');
+            
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                pop.volumeList = data.content.volumes;
+            });
+
+            $scope.main.loadingMainBody = false;
+            
+            returnPromise.error(function (data, status, headers) {
+            	common.showAlertError(data.message);
+                //common.showAlert("message",data.message);
+            });
+            
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //인스턴스 볼륨 셋팅
+        pop.fn.setInstanceVolume = function(volume) {
+            pop.volume = volume;
+        };
+
+        //인스턴스 볼륨 추가
+        pop.fn.addInstanceVolume = function() {
+            var param = {
+			                instanceId : $scope.contents.selectInstance.id,
+			                tenantId : $scope.contents.data.tenantId,
+			                volumeId : pop.volume.volumeId
+			            };
+            
+            $scope.main.loadingMainBody = true;
+            $scope.main.asideClose();
+            
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceAttach', 'POST', {volumeAttach : param});
+            
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("볼륨이 추가 되었습니다.");
+            	$scope.contents.fn.searchInstanceVolumeList();
+            });
+            
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            	common.showAlertError(data.message);
+                //common.showAlert("message",data.message);
+            });
+            
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.getVolumeList();
+
     })
 ;
