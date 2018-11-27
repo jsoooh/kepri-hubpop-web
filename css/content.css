@@ -2533,6 +2533,12 @@ p.no-txt{
 .tbw .disk_area {padding-bottom:35px;}
 .tbw .disk_area p {font-size:14px; margin-bottom:10px;}
 
+/*disabled 유형 추가*/
+.dropdown-menu > li > a.disabled {color:#bdbdbd; cursor:not-allowed;}
+.dropdown-menu > li > a:hover.disabled {background:none;}
+.dropdown-menu > li > a.highlight {color:#ff0000;}
+
+
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 
 .aside .radio input[type="radio"] + label::after{margin-top: -6px;}

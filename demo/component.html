@@ -1,0 +1,35 @@
+<div class="message_area">
+	<div class="msg_bg"></div>
+	<div class="msg_txt"><span>'서버 만들기'를 통해 가상 서버를 생성하고 사용할 수 있습니다.</span></div>
+</div>
+
+<div class="panel_area">
+	<div class="panel_box pn_l">
+		<div class="pn_head">
+			<h4 class="pnh_tit">서버 만들기</h4>
+		</div>
+		<div class="pn_body">
+			<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+			<ul class="form_list">
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> 서버 이름<span class="ico_info"></span>
+					</div>
+					<div class="loading_box"></div>
+					<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-init="contents.data.name='server-01'" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
+				</li>
+				<li>
+					<div class="cnt_msg_box msg-warnning">프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
+					<div class="cnt_msg_box msg-info">서버 기본 사양에서 제공하는 디스크에 추가적인 디스크 공간을 할당할 수 있습니다.</div>
+					<select class="form-control ico_refresh" style="margin-top:20px;">
+						<option>test1</option>
+						<option>test2</option>
+						<option>test3</option>
+					</select>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="panel_box pn_r">
+	</div>
+</div>
