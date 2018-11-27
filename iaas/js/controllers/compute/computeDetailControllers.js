@@ -2414,7 +2414,7 @@ angular.module('iaas.controllers')
     	$scope.actionBtnHied = false;
     	
     	$scope.popDialogOk = function () {
-            //pop.fn.addDomain();
+            pop.fn.addDomain();
     	};
     	
     	$scope.popCancel = function() {
@@ -2475,7 +2475,8 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.closeName 	= "닫기";
     	$scope.dialogOptions.templateUrl= _IAAS_VIEWS_ + "/compute/computeServerConnVolPopForm.html" + _VersionTail();
     	$scope.actionLoading 			= false;
-    	pop.btnClickCheck 				= false;
+    	pop.checkValFlag 				= false;
+    	$scope.actionBtnHied = false;
 
         
       //볼륨 리스트 조회
@@ -2509,25 +2510,53 @@ angular.module('iaas.controllers')
         //인스턴스 볼륨 셋팅
         pop.fn.setInstanceVolume = function(volume) {
             pop.volume = volume;
+            pop.checkValFlag = true;
         };
-
+        
+        $scope.popDialogOk = function () {
+        	pop.fn.addInstanceVolume();
+    	};
+    	
+    	$scope.popCancel = function() {
+    		$scope.dialogClose = true;
+    		common.mdDialogCancel();
+    	};
+        
+        
         //인스턴스 볼륨 추가
         pop.fn.addInstanceVolume = function() {
+        	
+        	if (pop.checkValFlag == false ) 
+        	{	
+        		//common.showAlertWarning('추가할 디스크를 선택 하십시요.');
+				return;
+			}
+        	
+        	if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+        	
+        	/* if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
+                 $scope.actionBtnHied = false;
+                 return;
+             }
+        	*/
             var param = {
-			                instanceId : $scope.contents.selectInstance.id,
-			                tenantId : $scope.contents.data.tenantId,
+			                instanceId : pop.instance.id,
+			                tenantId : pop.userTenant.tenantId,
 			                volumeId : pop.volume.volumeId
 			            };
             
             $scope.main.loadingMainBody = true;
-            $scope.main.asideClose();
+            common.mdDialogHide();
             
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceAttach', 'POST', {volumeAttach : param});
             
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("볼륨이 추가 되었습니다.");
-            	$scope.contents.fn.searchInstanceVolumeList();
+                common.showAlertSuccess("디스크가 추가 되었습니다.");
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
             });
             
             returnPromise.error(function (data, status, headers) {
