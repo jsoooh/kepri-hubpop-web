@@ -1,81 +1,30 @@
 
 <!-- table -->
-<div class="tbw type1">
+<div class="tbl type1">
 	<table class="table">
 		<colgroup>
-			<col style="width: 25%;">
-			<col style="width: auto;">
+			<col style="width:5%" />
+			<col style="width:auto" />
+			<col style="width:20%" />
+			<col style="width:25%" />
 		</colgroup>
+		<thead>
+			<th>&nbsp;</th>
+			<th>볼륨명</th>
+			<th>부팅볼륨</th>
+			<th>SIZE</th>
+		</thead>
 		<tbody>
-			
-			<tr>
-				<th scope="row">디스크 목록</th>
+			<tr ng-repeat="volume in pop.volumeList">
 				<td>
-					<select class="w100" name="">
-						<option value="">선택</option>
-						<option value="">[ml.tiny] vCPU 1개/ MEM 0.5GB / DISK(HDD) 10GB</option>
-						<option value="">[ml.small] vCPU 1개/ MEM 0.5GB / DISK(HDD) 10GB</option>
-						<option value="">[ml.medium] vCPU 2개/ MEM 0.5GB / DISK(HDD) 10GB</option>
-					</select>
+					<input type="radio" name="volumeRadio" id="{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)">
 				</td>
+				<td>{{volume.name}}</td>
+				<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>
+				<td>{{volume.size}}GB</td>
 			</tr>
-			<tr>
-				<th scope="row">제목</th>
-				<td>
-					<div class="checkbox checkbox-inline">
-						<input type="checkbox" id="check-id1">
-						<label class="label-txt" for="check-id1">가로 항목</label>
-					</div>
-					<div class="checkbox checkbox-inline">
-						<input type="checkbox" id="check-id2">
-						<label class="label-txt" for="check-id2">가로 항목</label>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">제목</th>
-				<td>
-					<div class="radio radio-inline">
-					   <input type="radio" name="radio1" id="radio1-1">
-					   <label for="radio1-1" class="label">가로 항목1</label>
-				   </div>
-				   <div class="radio radio-inline">
-					  <input type="radio" name="radio1" id="radio1-2">
-					  <label for="radio1-2" class="label">가로 항목2</label>
-				   </div>
-				   <div class="radio radio-inline">
-					  <input type="radio" name="radio1" id="radio1-3">
-					  <label for="radio1-3" class="label">가로 항목3</label>
-				   </div>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">제목</th>
-				<td>
-					<textarea type="text" name="" value="" class="form-control volTxt">설명을 입력하세요</textarea>
-					<span class="txt_limit"><em>25</em>/50자</span>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">제목</th>
-				<td>
-					<div class="disk_area">
-						<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
-						<div class="disk_box">
-							<div class="rangeWrap type2">
-								<div class="range_box rb_l">
-									<rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
-								</div>
-								<div class="range_box rb_r">
-									<div class="range-text">
-										<input type="text" class="form-control" ng-model="contents.volumeSize" name="volumeSize" maxlength="4" only-digits style="width:60px; display: inline-block;"> 
-										<span class="app-tit">GB</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</td>
+			<tr ng-if="pop.volumeList == 0">
+				<td colspan="4">{{ 'message.mi_dont_exist_list' | translate }}</td>
 			</tr>
 		</tbody>
 	</table>
