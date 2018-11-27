@@ -28,6 +28,7 @@ angular.module('paas.controllers')
         };
 
         ct.listAllServiceInstances = function (currentPage) {
+            $scope.main.loadingMainBody = true;
             ct.loadingServiceInstances = true;
             if (angular.isDefined(currentPage) && currentPage != null) {
                 serviceInstance.pageOptions.currentPage = currentPage;
@@ -58,10 +59,12 @@ angular.module('paas.controllers')
                 };
 
                 ct.serviceInstances = data;
+                $scope.main.loadingMainBody = false;
                 ct.loadingServiceInstances = false;
             });
             serviceInstancePromise.error(function (data) {
                 serviceInstance.serviceInstances = [];
+                $scope.main.loadingMainBody = false;
                 ct.loadingServiceInstances = false;
             });
         };

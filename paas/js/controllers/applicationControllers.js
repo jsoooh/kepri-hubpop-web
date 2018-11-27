@@ -65,33 +65,7 @@ angular.module('paas.controllers')
 
         ct.changeSpace = function (orgItem) {
             $scope.main.setPortalOrg(orgItem);
-            ct.getOrganizationByName();
             ct.listAllApps();
-        };
-
-        ct.getOrganizationByName = function () {
-            var orgPromise = applicationService.getOrganizationByName($scope.main.sltPortalOrg.orgId);
-            orgPromise.success(function (data) {
-                if (data.guid != null && data.name != null) {
-                    ct.getSpaceByName(data.guid, data.name);
-                }
-            });
-            orgPromise.error(function (data) {
-            });
-        };
-
-        ct.getSpaceByName = function (orgGuid, orgName) {
-            var spacePromise = applicationService.getSpaceByName(orgGuid, orgName);
-            spacePromise.success(function (data) {
-                ct.sltOrganizationGuid = data.organizationGuid;
-                ct.sltSpaceGuid = data.guid;
-                ct.listAllApps();
-            });
-            spacePromise.error(function (data) {
-                ct.sltOrganizationGuid = "";
-                ct.sltSpaceGuid = "";
-                ct.listAllApps();
-            });
         };
 
         ct.firstAppCreatePop = function() {
@@ -373,11 +347,11 @@ angular.module('paas.controllers')
 
 
         ct.startAppState = function(guid, name, type) {
-          if (type == 'restart') {
-            var showConfirm = common.showConfirm($translate.instant('label.restart') + "(" + name + ")", $translate.instant('message.mq_start_app'));
-          } else {
-            var showConfirm = common.showConfirm($translate.instant('label.start') + "(" + name + ")", $translate.instant('message.mq_start_app'));
-          }
+            if (type == 'restart') {
+                var showConfirm = common.showConfirm($translate.instant('label.restart') + "(" + name + ")", $translate.instant('message.mq_start_app'));
+            } else {
+                var showConfirm = common.showConfirm($translate.instant('label.start') + "(" + name + ")", $translate.instant('message.mq_start_app'));
+            }
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.updateAppStateAction(guid, "STARTED");
@@ -418,27 +392,25 @@ angular.module('paas.controllers')
         ct.pageLoadData = function () {
             if ($scope.main.sltOrganizationGuid) {
                 $scope.main.loadingMainBody = true;
-                ct.isSpacesLoad = false;
-                ct.isAppsLoad = false;
                 ct.sltOrganizationGuid = $scope.main.sltOrganizationGuid;
-                ct.getOrganizationByName();
+                ct.listAllApps();
             } else {
                 ct.sltOrganizationGuid = "";
             }
         };
 
         ct.renameApp = function (appName, type)  {
-          var appNameTxt = document.getElementById('txt-renameApp-'+appName);
-          var buttonDiv = document.getElementById('renameAppButton-'+appName);
+            var appNameTxt = document.getElementById('txt-renameApp-'+appName);
+            var buttonDiv = document.getElementById('renameAppButton-'+appName);
 
-          if(appNameTxt.style.display=='none') {
-            appNameTxt.style.display = 'block';
-            buttonDiv.style.display ='none';
-          } else {
-            appNameTxt.style.display = 'none';
-            buttonDiv.style.display ='block';
-          }
-        }
+            if(appNameTxt.style.display=='none') {
+                appNameTxt.style.display = 'block';
+                buttonDiv.style.display ='none';
+            } else {
+                appNameTxt.style.display = 'none';
+                buttonDiv.style.display ='block';
+            }
+        };
 
         ct.updateAppName = function(inputName, guid) {
             if (inputName.length < 3) {
@@ -446,21 +418,20 @@ angular.module('paas.controllers')
                 return;
             }
 
-          $scope.main.loadingMainBody = true;
-          if(guid == null) {
-            var inputName = document.getElementById('inputAppName-'+inputName);
-            var guid = inputName.dataset.guid;
-            inputName = inputName.value;
-          }
+            $scope.main.loadingMainBody = true;
+            if(guid == null) {
+                var inputName = document.getElementById('inputAppName-'+inputName);
+                var guid = inputName.dataset.guid;
+            }
 
-          var appPromise = applicationService.updateAppNameAction(guid, inputName);
-          appPromise.success(function (data) {
-              ct.listAllApps();
-          });
-          appPromise.error(function (data) {
-              $scope.main.loadingMainBody = false;
-          });
-        }
+            var appPromise = applicationService.updateAppNameAction(guid, inputName);
+            appPromise.success(function (data) {
+                ct.listAllApps();
+            });
+            appPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
 
         ct.renameAppList = function (guid, name, $event) {
             var pop = $scope.pop = {}; // popup modal에서 사용 할 객체 선언
@@ -476,8 +447,8 @@ angular.module('paas.controllers')
             common.showDialog($scope, $event, $scope.dialogOptions);
             // Dialog ok 버튼 클릭 시 액션 정의
             $scope.popDialogOk = function () {
-              ct.updateAppName(pop.newName, guid);
-              $scope.popHide();
+                ct.updateAppName(pop.newName, guid);
+                $scope.popHide();
             };
         };
 
@@ -529,14 +500,10 @@ angular.module('paas.controllers')
                     ctype =  '|' + contentTypes[1].toLowerCase() + '|';
                 }
                 
-                
                 if ((ctype && '|x-webarchive|x-java-archive|zip|'.indexOf(ctype) !== -1)
-                    || ('|war|jar|zip|'.indexOf(ftype) !== -1)) 
-                {
+                    || ('|war|jar|zip|'.indexOf(ftype) !== -1)) {
                     return true;
-                } 
-                else 
-                {
+                } else {
                     item.error = "error";
                     item.message = "mi_only_app_file";
                     return false;
@@ -549,8 +516,7 @@ angular.module('paas.controllers')
         ct.uploader.onWhenAddingFileFailed = function (item) {
             _DebugConsoleInfo('onWhenAddingFileFailed', item);
             
-            if (item.error && item.message) 
-            {
+            if (item.error && item.message) {
                 var errMessage = "{{ 'message." + item.message + "' | translate }}";
                 ct.appFileItem = null;
                 item.error     = null;
@@ -567,8 +533,6 @@ angular.module('paas.controllers')
             ct.appFileItem.localFullFileName = ($('#appFileInput').length > 0) ? $('#appFileInput').val() : "";
         };
 
-        
-        
         // 언어 선택 스크롤 생성
         ct.scrollPane = function (){
             setTimeout(function() {
@@ -584,37 +548,23 @@ angular.module('paas.controllers')
         //감소버튼 클릭시 이벤트 sg0730
         ct.minValCheck = function (val) {
         	
-        	if (val == 1) 
-        	{
-        		if(ct.defaultSet.instances > ct.insSlider.options.minLimit)
-    			{
+        	if (val == 1) {
+        		if(ct.defaultSet.instances > ct.insSlider.options.minLimit) {
     				ct.defaultSet.instances = (ct.defaultSet.instances - ct.insSlider.options.step);
-    			}
-        		else
-        		{
+    			} else {
         			return false;
         		}		
-			}
-        	else if (val == 2) 
-        	{
-        		if(ct.defaultSet.memory > ct.memorySlider.options.minLimit)
-    			{
+			} else if (val == 2) {
+        		if(ct.defaultSet.memory > ct.memorySlider.options.minLimit) {
     				ct.defaultSet.memory = (ct.defaultSet.memory - ct.memorySlider.options.step);
-    			}
-        		else
-        		{
+    			} else {
         			return false;
         		}	
         			
-			} 
-        	else if (val == 3) 
-        	{
-        		if(ct.defaultSet.diskQuota > ct.diskQuotaSlider.options.minLimit)
-    			{
+			} else if (val == 3) {
+        		if(ct.defaultSet.diskQuota > ct.diskQuotaSlider.options.minLimit) {
     				ct.defaultSet.diskQuota = (ct.defaultSet.diskQuota - ct.diskQuotaSlider.options.step);
-    			}
-        		else
-        		{
+    			} else {
         			return false;
         		}	
 			} 
@@ -625,54 +575,36 @@ angular.module('paas.controllers')
         
         //증가 버튼 클릭시 이벤트 sg0730
         ct.maxValCheck = function (val) {
-        	
-        	if (val == 1) 
-        	{
+        	if (val == 1) {
         		if(ct.defaultSet.instances <= ct.insSlider.options.ceil)
     			{
     				ct.defaultSet.instances = (ct.defaultSet.instances + ct.insSlider.options.step);
     				
-    				if (ct.defaultSet.instances > ct.insSlider.options.ceil) 
-    				{
+    				if (ct.defaultSet.instances > ct.insSlider.options.ceil) {
     					ct.defaultSet.instances = ct.insSlider.options.ceil ;
 					}
-    			}
-        		else
-        		{
+    			} else {
         			return false;
         		}		
-			}
-        	else if (val == 2) 
-        	{
-        		if(ct.defaultSet.memory <= ct.memorySlider.options.ceil)
-    			{
+			} else if (val == 2) {
+        		if(ct.defaultSet.memory <= ct.memorySlider.options.ceil) {
     				ct.defaultSet.memory = (ct.defaultSet.memory + ct.memorySlider.options.step);
     				
-    				if (ct.defaultSet.memory > ct.memorySlider.options.ceil) 
-    				{
+    				if (ct.defaultSet.memory > ct.memorySlider.options.ceil) {
     					ct.defaultSet.memory = ct.memorySlider.options.ceil ;
 					}
     				
-    			}
-        		else
-        		{
+    			} else {
         			return false;
         		}	
-        			
-			} 
-        	else if (val == 3) 
-        	{
-        		if(ct.defaultSet.diskQuota <= ct.diskQuotaSlider.options.ceil)
-    			{
+			} else if (val == 3) {
+        		if(ct.defaultSet.diskQuota <= ct.diskQuotaSlider.options.ceil) {
     				ct.defaultSet.diskQuota = (ct.defaultSet.diskQuota + ct.diskQuotaSlider.options.step);
     				
-    				if (ct.defaultSet.diskQuota > ct.diskQuotaSlider.options.ceil) 
-    				{
+    				if (ct.defaultSet.diskQuota > ct.diskQuotaSlider.options.ceil) {
     					ct.defaultSet.diskQuota = ct.diskQuotaSlider.options.ceil ;
 					}
-    			}
-        		else
-        		{
+    			} else {
         			return false;
         		}	
 			} 
@@ -778,9 +710,6 @@ angular.module('paas.controllers')
                 if (sltBuildpack != null && sltBuildpack.enabled) {
                     var portalBuildpackId   = ct.portalBuildpackVersions[i].portalBuildpack.id;
                     var addVersion 		  = false;
-                    
-                    
-                    
                     var version = {
 				                        id          : ct.portalBuildpackVersions[i].id,
 				                        version     : ct.portalBuildpackVersions[i].version,
@@ -869,8 +798,7 @@ angular.module('paas.controllers')
                 ct.sltBuildpackVersion   = {};
             }
                         
-            if (!ct.sltPortalBuildpack.appFilePath) 
-            {
+            if (!ct.sltPortalBuildpack.appFilePath) {
                 ct.sltDeployOption = "U";
             }
         };
@@ -881,23 +809,16 @@ angular.module('paas.controllers')
 
         ct.changeSpace = function () {
         	
-            if (ct.appPushData.spaceGuid) 
-            {
+            if (ct.appPushData.spaceGuid) {
                 ct.sltSpace = common.objectsFindCopyByField(ct.spaces, "guid", ct.appPushData.spaceGuid);
                 
-                if (!ct.sltSpace || !ct.sltSpace.guid) 
-                {
+                if (!ct.sltSpace || !ct.sltSpace.guid)  {
                     ct.appPushData.spaceGuid = "";
-                } 
-                else 
-                {
-                    if (ct.sltSpace.serviceInstances && ct.sltSpace.serviceInstances.length > 0) 
-                    {
+                } else {
+                    if (ct.sltSpace.serviceInstances && ct.sltSpace.serviceInstances.length > 0) {
                         ct.serviceInstances 			   = angular.copy(ct.sltSpace.serviceInstances);
                         ct.appPushData.serviceInstanceGuid = "";
-                    } 
-                    else 
-                    {
+                    } else {
                         ct.serviceInstances 			   = [];
                         ct.appPushData.serviceInstanceGuid = "";
                     }
@@ -906,26 +827,20 @@ angular.module('paas.controllers')
         };
 
         ct.changeOrganization = function () {
-            if (ct.appPushData.organizationGuid) 
-            {
+            if (ct.appPushData.organizationGuid) {
                 ct.sltOrganization = common.objectsFindCopyByField(ct.organizations, "guid", ct.appPushData.organizationGuid);
                 ct.spaces 		   = angular.copy(ct.sltOrganization.spaces);
                 
                 ct.changeSpace();
                 
-                if (ct.sltOrganization.domains && ct.sltOrganization.domains.length > 0) 
-                {
+                if (ct.sltOrganization.domains && ct.sltOrganization.domains.length > 0) {
                     ct.domains 		 = angular.copy(ct.sltOrganization.domains);
                     ct.sltDomainName = ct.domains[0].name;
-                } 
-                else 
-                {
+                } else {
                     ct.domains 		 = [];
                     ct.sltDomainName = "";
                 }
-            } 
-            else 
-            {
+            } else {
                 ct.sltOrganization 		 = {};
                 ct.spaces 				 = [];
                 ct.sltSpace 			 = {};
@@ -942,8 +857,7 @@ angular.module('paas.controllers')
             
         	$scope.actionBtnHied = true;
             
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) 
-            {
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
                 $scope.actionBtnHied = false;
                 return;
             }
@@ -995,8 +909,7 @@ angular.module('paas.controllers')
            // console.log("appBody====>"+ JSON.stringify(appBody));
             
 
-            if (ct.appFileItem) 
-            {
+            if (ct.appFileItem) {
                 appBody.file 	   = ct.appFileItem._file;
                 var appPushPromise = applicationService.appFilePush(appBody);
                 
@@ -1018,13 +931,10 @@ angular.module('paas.controllers')
                 appPushPromise.progress(function (progress) {
                     _DebugConsoleInfo('progress', progress);
                 });
-            } 
-            else 
-            {
+            } else {
                 var appPushPromise 				= applicationService.appPush(appBody);
                 
-                appPushPromise.success(function (data) 
-                {
+                appPushPromise.success(function (data) {
                     $scope.actionBtnHied 		= false;
                     $scope.main.loadingMain 	= false;
                     $scope.main.loadingMainBody = false;
@@ -1053,8 +963,7 @@ angular.module('paas.controllers')
             ct.appPushData.organizationGuid 	= $scope.main.sltOrganization.guid;
             ct.appPushData.spaceGuid 			= $scope.main.sltOrganization.spaces[0].guid;
             
-            if ($scope.main.sltOrganization.domains && $scope.main.sltOrganization.domains.length > 0) 
-            {
+            if ($scope.main.sltOrganization.domains && $scope.main.sltOrganization.domains.length > 0) {
                 ct.domains 		 = angular.copy($scope.main.sltOrganization.domains);
                 ct.sltDomainName = ct.domains[0].name;
             }
@@ -1258,7 +1167,7 @@ angular.module('paas.controllers')
         $scope.moveDashboard = function (index, systemId, name) {
           $scope.main.hubpop.orgSelected = $scope.main.hubpop.projectSelected.orgs[index];
           $location.path("/paas");
-        }
+        };
 
         var originName = "";
 
