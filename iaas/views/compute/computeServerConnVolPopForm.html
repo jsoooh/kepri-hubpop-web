@@ -1,15 +1,14 @@
-
 <!-- table -->
 <div class="tbl type1">
 	<table class="table">
 		<colgroup>
-			<col style="width:5%" />
+			<col style="width:20%" />
 			<col style="width:auto" />
 			<col style="width:20%" />
 			<col style="width:25%" />
 		</colgroup>
 		<thead>
-			<th>&nbsp;</th>
+			<th>선택</th>
 			<th>볼륨명</th>
 			<th>부팅볼륨</th>
 			<th>SIZE</th>
@@ -17,7 +16,10 @@
 		<tbody>
 			<tr ng-repeat="volume in pop.volumeList">
 				<td>
-					<input type="radio" name="volumeRadio" id="{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)">
+					<div class="radio radio-only">
+						<input type="radio" name="volumeRadio" id="{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)">
+						<label for="{{volume.volumeId}}"></label>
+					</div>
 				</td>
 				<td>{{volume.name}}</td>
 				<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>
