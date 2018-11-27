@@ -2,7 +2,7 @@
 
 angular.module('iaas.controllers')
     .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
-        _DebugConsoleLog("computeDetailControllers.js : iaasComputeSystemDetailCtrl", 1);
+        _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
 
         $scope.actionBtnHied = true;
         var ct = this;
@@ -455,12 +455,40 @@ angular.module('iaas.controllers')
         };
 
         //인스턴스 볼륨 생성 팝업
-        ct.fn.createInstanceVolumePop = function(instance) {
+       /* ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
+        };*/
+        
+        //인스턴스 볼륨 생성 팝업
+        ct.fn.createInstanceVolumePop = function($event,instance) {
+        	
+        	///iaas/compute/detail/ct.instance.id
+        	
+        	var dialogOptions =  {
+			            			controller : "iaasComputeVolumeFormCtrl" ,
+			            			formName   : 'iaasComputeVolumeForm',
+			            			selectInstance : angular.copy(instance),
+			            			callBackFunction : ct.creInsVolPopCallBackFunction
+				            	};
+        	
+            	$scope.actionBtnHied = false;
+            	common.showDialog($scope, $event, dialogOptions);
+            	$scope.actionLoading = true; // action loading
+               
+        }; 
+        
+        
+        // sg0730 인스턴스 볼륨 생성 팝업
+        ct.creInsVolPopCallBackFunction = function () 
+        {
+        	 //$scope.main.moveToAppPage('/iaas/compute');
+        	ct.fn.getInstanceInfo();
+            ct.fn.changeSltInfoTab();
         };
+        
 
         // 접속 IP 설정 팝업
         ct.fn.IpConnectPop = function() {
@@ -1045,12 +1073,39 @@ angular.module('iaas.controllers')
         };
 
         //인스턴스 볼륨 생성 팝업
-        ct.fn.createInstanceVolumePop = function(instance) {
+        /*ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
 			$(".aside").stop().animate({"right":"-360px"}, 400);
 			$("#aside-aside1").stop().animate({"right":"0"}, 500);
+        };*/
+        
+        ct.fn.createInstanceVolumePop = function($event,instance) {
+        	
+        	///iaas/compute/detail/ct.instance.id
+        	
+        	var dialogOptions =  {
+			            			controller : "iaasComputeVolumeFormCtrl" ,
+			            			formName   : 'iaasComputeVolumeForm',
+			            			selectInstance : angular.copy(instance),
+			            			callBackFunction : ct.creInsVolPopCallBackFunction
+				            	};
+        	
+            	$scope.actionBtnHied = false;
+            	common.showDialog($scope, $event, dialogOptions);
+            	$scope.actionLoading = true; // action loading
+               
+        }; 
+        
+        
+        // sg0730 인스턴스 볼륨 생성 팝업
+        ct.creInsVolPopCallBackFunction = function () 
+        {
+        	 //$scope.main.moveToAppPage('/iaas/compute');
+        	ct.fn.getInstanceInfo();
+            ct.fn.changeSltInfoTab();
         };
+        
         
         // 접속 IP 설정 팝업
         ct.fn.IpConnectPop = function() {
