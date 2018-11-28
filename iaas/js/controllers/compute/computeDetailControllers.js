@@ -313,8 +313,7 @@ angular.module('iaas.controllers')
         };
         
         // sg0730 차후 callback 처리 고민.
-        ct.refalshDomainCallBackFunction = function () 
-        {
+        ct.refalshDomainCallBackFunction = function () {
         	//ct.fn.changeSltInfoTab('domain');
         	ct.fn.changeSltInfoTab();
         };
@@ -482,8 +481,7 @@ angular.module('iaas.controllers')
         
         
         // sg0730 인스턴스 볼륨 생성 팝업
-        ct.creInsVolPopCallBackFunction = function () 
-        {
+        ct.creInsVolPopCallBackFunction = function () {
         	 //$scope.main.moveToAppPage('/iaas/compute');
         	ct.fn.getInstanceInfo();
             ct.fn.changeSltInfoTab();
@@ -2316,8 +2314,7 @@ angular.module('iaas.controllers')
         	if (pop.btnClickCheck) return;
             pop.btnClickCheck = true;
 
-            if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
-            {
+            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
                 pop.btnClickCheck = false;
                 return;
             }
@@ -2352,7 +2349,7 @@ angular.module('iaas.controllers')
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function() {
-                clickCheck = false;
+                pop.btnClickCheck = false;
             });
             
         };

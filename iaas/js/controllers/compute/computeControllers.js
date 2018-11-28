@@ -314,8 +314,7 @@ angular.module('iaas.controllers')
         }; 
         
         // sg0730 차후 서버 이미지 생성 후 페이지 이동.
-        ct.reflashSnapShotCallBackFunction = function () 
-        {
+        ct.reflashSnapShotCallBackFunction = function () {
         	 $scope.main.moveToAppPage('/iaas/compute');
         };
         
@@ -330,24 +329,20 @@ angular.module('iaas.controllers')
         
         //인스턴스 볼륨 생성 팝업
         ct.fn.createInstanceVolumePop = function($event,instance) {
-        	
         	var dialogOptions =  {
 			            			controller : "iaasComputeVolumeFormCtrl" ,
 			            			formName   : 'iaasComputeVolumeForm',
 			            			selectInstance : angular.copy(instance),
 			            			callBackFunction : ct.creInsVolPopCallBackFunction
 				            	};
-        	
-            	$scope.actionBtnHied = false;
-            	common.showDialog($scope, $event, dialogOptions);
-            	$scope.actionLoading = true; // action loading
-               
-        }; 
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
         
         
         // sg0730 인스턴스 볼륨 생성 팝업
-        ct.creInsVolPopCallBackFunction = function () 
-        {
+        ct.creInsVolPopCallBackFunction = function () {
         	 $scope.main.moveToAppPage('/iaas/compute');
         };
         
