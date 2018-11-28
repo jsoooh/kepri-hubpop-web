@@ -28,7 +28,7 @@
 							<li ng-click="contents.fn.formOpen($event, 'snapshot', volume);"><a href="javascript:void(0);">백업 이미지 생성</a></li>
 							<li ng-click=""><a href="javascript:void(0);">디스크 크기 변경</a></li>
 							<li ng-click="contents.fn.dettachVolume()" ng-show="contents.volume.status == 'in-use'" ><a href="javascript:void(0);" >서버 연결 해제</a></li>
-							<li ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a href="javascript:void(0);">삭제</a></li>
+							<li ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a href="javascript:void(0);">디스크 삭제</a></li>
 							<!--<li ng-click=""><a href="javascript:void(0);">디스크 이름 변경</a></li>-->
 						</ul>
 					</div>
@@ -46,19 +46,21 @@
 							<div class="cnt_infoBox">
 								<dl>
 									<dt>연결서버</dt>
-									<dd>server001</dd>
+									<dd ng-if="volume.status == 'in-use'"><a href="" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>
+									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
 									<dt>장치정보</dt>
-									<dd>/dev/sdb</dd>
+									<dd ng-if="volume.status == 'in-use'">{{volume.volumeAttachment.device}}</dd>
+									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
 								</dl>
 								<span class="cnt_tooltip type01">설명<span class="ico_tip"></span></span>
 							</div>
 						</div>
 						<div class="down">
 							<span class="stateWrap">
-								<span class="stateMark type1" ng-if="volume.status == 'in-use'">정상배포</span>
+								<span class="stateMark type1" ng-if="volume.status == 'in-use'">정상연결</span>
 								<span class="stateMark type2" ng-if="volume.status == 'error'">오류</span>
-								<span class="stateMark type4" ng-if="volume.status == 'creating' || volume.status == 'deleting'">대기</span>
-								<span class="stateMark type3" ng-if="volume.status == 'available' || volume.status == 'deleted'">중지</span>
+								<span class="stateMark type3" ng-if="volume.status == 'available'">정상비연결</span>
+								<span class="stateMark type4" ng-if="volume.status == 'creating' || volume.status == 'deleting' || volume.status == 'deleted'">대기</span>
 								<span class="state-txt">{{ 'iaas.label.volume_' + volume.status | translate }}</span>
 							</span>
 						</div>
