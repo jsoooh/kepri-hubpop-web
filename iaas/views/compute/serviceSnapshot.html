@@ -84,8 +84,8 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'active'}" ng-click="main.goToPage('/iaas/snapshot/storageCreate');">디스크 생성</a></li>
-											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'active'}" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
+											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'available'}" ng-click="main.goToPage('/iaas/snapshot/storageCreate');">디스크 생성</a></li>
+											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'available'}" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
 										</ul>
 									</div>
 								</div>
@@ -94,12 +94,12 @@
 										<div class="cnt_wrap">
 											<div class="cnt_imgBox">
 												<span class="cnt_img ico02"></span>
-												<div class="cnt_txt"><span class="txt_name">disk-001-snapshot</span></div>
+												<div class="cnt_txt"><span class="txt_name">{{storageSnapshot.size | displayVolume:'GB'}}</span></div>
 											</div>
 											<div class="cnt_infoBox">
 												<dl>
 													<dt>원본 디스크</dt>
-													<dd><a href="" ng-click="main.moveToAppPage('/iaas/storage/detail/'+storageSnapshot.volumeId, storageSnapshot.volumeName, true)">{{storageSnapshot.instanceName}}</a></dd>
+													<dd><a href="" ng-click="main.moveToAppPage('/iaas/storage/detail/'+storageSnapshot.volumeId, storageSnapshot.volumeName, true)">{{storageSnapshot.volumeName}}</a></dd>
 													<dt>백업 생성일시</dt>
 													<dd>{{ storageSnapshot.createDate }}</dd>
 												</dl>
