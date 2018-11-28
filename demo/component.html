@@ -13,9 +13,9 @@
 			<ul class="form_list">
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> 서버 이름<span class="ico_info"></span>
+						<i class="i_star"></i> <span class="pnb_t_txt">서버 이름</span><span class="ico_info"></span>
 					</div>
-					<div class="loading_box"></div>
+					<div class="loading_box mt10 mb10"></div>
 					<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-init="contents.data.name='server-01'" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
 				</li>
 				<li>
@@ -26,6 +26,53 @@
 						<option>test2</option>
 						<option>test3</option>
 					</select>
+				</li>
+				<li>
+					<div class="pnb_tit">
+						<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span><span class="ico_info"></span><img class="ico_tit_refresh" src="images/ico_refresh.gif"><img class="ico_tit_refresh" src="images/loading_sm.gif"><!-- <img ng-if="!contents.specUuid" src="images/loading_sm.gif"> -->
+					</div>
+					<div class="loading_box"></div>
+					<div class="tbl type1">
+						<table class="table">
+							<colgroup>
+								<col style="width:10%;">
+								<col style="width:15%;">
+								<col style="width:20%;">
+								<col style="width:20%;">
+								<col style="width:20%;">
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col"></th>
+									<th scope="col">종류</th>
+									<th scope="col">vCPU</th>
+									<th scope="col">메모리</th>
+									<th scope="col">디스크(OS설치/여유)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m'}"  >
+									<td>
+										<div class="radio radio-only" >
+											<input type="radio" 
+												   name="spec_radio" 
+												   ng-model="contents.specUuid" 
+												   id="spec_radio_{{key}}" 
+												   value="{{spec.uuid}}" 
+												   ng-change="contents.fn.selectSpec();">
+									
+											<label for="spec_radio_{{key}}"></label>
+										</div>
+									</td>
+									<td>{{spec.name}}</td>
+									<td>{{spec.vcpus}} Core</td>
+									<td>{{spec.ram/1024|number}}GB</td>
+									<td>{{spec.disk}}GB</td>
+								</tr>
+						
+							</tbody>
+						</table>
+					</div>
 				</li>
 			</ul>
 		</div>

@@ -2194,8 +2194,12 @@ p.no-txt{
 .panel_area .pn_body {padding:15px 30px;}
 .panel_area .pn_body .sm_txt {display:block; font-size:14px; color:#ff0000; text-align:right;}
 .panel_area .pn_body .form_list li {margin-top:35px;}
+/* .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;} */
 .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;}
-.panel_area .pn_body .pnb_tit .ico_info {position:absolute; top:1px; display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer;}
+.panel_area .pn_body .pnb_tit .pnb_t_txt {vertical-align:middle;}
+.panel_area .pn_body .pnb_tit .ico_info {display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer; vertical-align:middle;}
+.ico_tit_refresh {margin-left:5px;}
+/* .panel_area .pn_body .pnb_tit .ico_info {position:absolute; top:1px; display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer;} */
 .panel_area .pn_body .pnb_tit .disk_info {position:absolute; top:-7px; right:0; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 15px 6px 15px; background:#888;}
 .panel_area .pn_body .disk_area {position:relative; border:1px solid #dedede; border-radius:3px; background:#fff; padding:30px;}
 .panel_area .pn_body .disk_area .disk_info {position:absolute; top:17px; right:20px; display:inline-block; font-size:12px; color:#fff; border-radius:5px; padding:4px 8px 6px 8px; background:#a1a1a1;}
@@ -2566,3 +2570,6 @@ p.no-txt{
 .panel_box .form_list .app-form-two .two_box {vertical-align:top;}
 
 .panel.type3 .panel_head .logo img {width:100%; height:100%;}
+
+.tab-content .tab-pane {height:440px;}
+.panel.type2 .cBox-cnt.mh300 {min-height:300px;}
