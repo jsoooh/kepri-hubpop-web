@@ -48,6 +48,17 @@ angular.module('iaas.controllers')
                  $scope.actionLoading = true; // action loading
         };
         
+      //sg0730 차후 서버 이미지 생성 후 페이지 이동.
+        ct.reflashCallBackFunction = function () 
+        {
+        	 $scope.main.moveToAppPage('/iaas/compute');
+        	
+        	/*if(ct.data.tenantId) {
+                ct.fn.getInstanceInfo();
+                ct.fn.changeSltInfoTab();
+            }*/
+        };
+        
         // SnapShot 생성
         //20181120 sg0730  백업 이미지 생성 PopUp 추가
         ct.fn.createPopSnapshot = function($event,instance) {
@@ -2266,6 +2277,13 @@ angular.module('iaas.controllers')
         pop.uuid                		= pop.instance.spec.uuid;
         
         pop.tenantId 					= pop.instance.tenantId;
+        
+        if (!pop.tenantId) 
+        {
+        	pop.tenantId = common.getMainCtrlScope().main.userTenant.id;
+		}
+        
+        
         $scope.dialogOptions.title 		= "서버사양 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";

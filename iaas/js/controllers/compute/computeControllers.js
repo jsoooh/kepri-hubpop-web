@@ -23,6 +23,31 @@ angular.module('iaas.controllers')
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
+        
+      //20181120 sg0730  서버사양변경 PopUp 추가
+        ct.computePopEditServerForm = function (instance,$event) {
+        	
+        	 var dialogOptions = {
+                     controller : "iaasComputePopEditServerCtrl" ,
+                     formName   : 'iaasComputePopEditServerForm',
+                     instance : angular.copy(instance),
+                     callBackFunction : ct.reflashCallBackFunction
+                 };
+                 $scope.actionBtnHied = false;
+                 common.showDialog($scope, $event, dialogOptions);
+                 $scope.actionLoading = true; // action loading
+        };
+        
+      //sg0730 차후 서버 이미지 생성 후 페이지 이동.
+        ct.reflashCallBackFunction = function () 
+        {
+        	 $scope.main.moveToAppPage('/iaas/compute');
+        	
+        	/*if(ct.data.tenantId) {
+                ct.fn.getInstanceInfo();
+                ct.fn.changeSltInfoTab();
+            }*/
+        };
 
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = common.getMainCtrlScope().main.userTenant.id;
