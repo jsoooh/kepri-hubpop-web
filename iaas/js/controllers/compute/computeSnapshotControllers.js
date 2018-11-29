@@ -34,7 +34,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-            	ct.instanceSnapshotList = data.content.instanceSnapShots;
+            	ct.instanceSnapshotList = data.content;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

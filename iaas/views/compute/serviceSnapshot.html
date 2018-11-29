@@ -17,8 +17,8 @@
 							<div class="panel type6">
 								<div class="panel_head">
 									<!--<img class="logo" alt="" src="images/thum/ico_thum_svr.png"/>-->
-									<p class="tit">{{instanceSnapshot.snapShotName}}</p>
-									<p>{{ instanceSnapshot.createDate }}</p>
+									<p class="tit">{{instanceSnapshot.name}}</p>
+									<p>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss'}}</p>
 									<!--<button class="btn_txt" ng-click="main.moveToAppPage('/iaas/compute/detail/'+snapshot.instanceId, snapshot.instanceName, true)">{{instanceSnapshot.instanceName}}</button>-->
 									<div class="dropdown btn-option">
 										<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -35,26 +35,22 @@
 										<div class="cnt_wrap">
 											<div class="cnt_imgBox">
 												<span class="cnt_img ico02"></span>
-												<div class="cnt_txt"><span class="txt_name">{{instanceSnapshot.size | displayVolume:'GB'}}</span></div>
+												<div class="cnt_txt"><span class="txt_name">{{instanceSnapshot.disk | displayVolume:'GB'}}</span></div>
 											</div>
 											<div class="cnt_infoBox">
 												<dl>
 													<dt>원본 서버</dt>
 													<dd><a href="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instanceSnapshot.instanceId, instanceSnapshot.instanceName, true)">{{instanceSnapshot.instanceName}}</a></dd>
-													<dt>백업 생성일시</dt>
-													<dd>{{ instanceSnapshot.createDate }}</dd>
+													<dt>OS 이미지</dt>
+													<dd>{{ instanceSnapshot.imageName }}</dd>
 												</dl>
 												<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip="{{instanceSnapshot.description}}">설명<span class="ico_tip"></span></button>
 											</div>
 										</div>
 										<div class="down">
 											<span class="stateWrap">
-												<span class="stateMark type1" ng-if="instanceSnapshot.status == 'active'">사용가능</span>
-												<span class="stateMark type2" ng-if="instanceSnapshot.status == 'error'">오류</span>
-												<span class="stateMark type4" ng-if="instanceSnapshot.status != 'active' && instanceSnapshot.status != 'error'">대기</span>
-												<span class="state-txt" ng-if="instanceSnapshot.status == 'active'">사용가능</span>
-												<span class="state-txt" ng-if="instanceSnapshot.status == 'error'">오류</span>
-												<span class="state-txt" ng-if="instanceSnapshot.status != 'active' && instanceSnapshot.status != 'error'">대기</span>
+												<span class="stateMark" ng-class="{'type1' : (instanceSnapshot.status == 'active'), 'type2': (instanceSnapshot.status == 'error'), 'type4' : (instanceSnapshot.status != 'active' && instanceSnapshot.status != 'error')}"></span>
+												<span class="state-txt">{{'iaas.label.instance_snapshot_' +instanceSnapshot.status | translate}}</span>
 											</span>
 										</div>
 									</div>
@@ -100,8 +96,8 @@
 												<dl>
 													<dt>원본 디스크</dt>
 													<dd><a href="" ng-click="main.moveToAppPage('/iaas/storage/detail/'+storageSnapshot.volumeId, storageSnapshot.volumeName, true)">{{storageSnapshot.volumeName}}</a></dd>
-													<dt>백업 생성일시</dt>
-													<dd>{{ storageSnapshot.createDate }}</dd>
+													<dt>디스크 유형</dt>
+													<dd>볼륨스토리지</dd>
 												</dl>
 												<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip="{{storageSnapshot.description}}">설명<span class="ico_tip"></span></button>
 											</div>
