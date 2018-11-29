@@ -12,10 +12,21 @@ angular.module('iaas.controllers')
 
         ct.fn.formOpen = function($event, state, data){
         	ct.formType = state;
-    		if(state == 'storage'){
+    		if(state == 'storage')
+    		{
     			ct.fn.createStorage($event);
-    		}else if (state == 'snapshot'){
-    			ct.createSnapshotPopBefore($event, data);
+    		}
+    		else if (state == 'snapshot')
+    		{
+    			ct.fn.createPopSnapshot($event,data);
+    		}
+    		else if (state == 'rename')
+    		{
+    			ct.fn.reNamePopStorage($event,data);
+    		}
+    		else if (state == 'resize')
+    		{
+    			ct.fn.reSizePopStorage($event,data);
     		}
         }
         
@@ -231,22 +242,58 @@ angular.module('iaas.controllers')
         	 $scope.main.moveToAppPage('/iaas/storage');
         };
         
-/*        ct.fn.createSnapshotPop = function ($event,volume) {
-        	$scope.dialogOptions = {
-        			controller : "iaasCreateStorageSnapshotPopFormCtrl",
-        			callBackFunction : null,
-        			volume : volume
-        	};
-        	$scope.actionBtnHied = false;
-        	$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
-        	var name = $($event.currentTarget).attr("data-username"),
-        	top = $(window).scrollTop();
+        
+        ct.fn.reNamePopStorage = function($event,volume) {
         	
-        	$(".aside").stop().animate({"right":"-360px"}, 400);
-        	$("#aside-aside1").stop().animate({"right":"0"}, 500);
-        	$scope.actionLoading = true; // action loading
-        }
-*/
+        	var dialogOptions =  {
+			            			controller       : "iaasReNamePopStorageCtrl" ,
+			            			formName         : 'iaasReNamePopStorageForm',
+			            			selectStorage    : angular.copy(volume),
+			            			callBackFunction : ct.reNamePopStorageCallBackFunction
+				            	};
+        	
+            	$scope.actionBtnHied = false;
+            	common.showDialog($scope, $event, dialogOptions);
+            	$scope.actionLoading = true; // action loading
+               
+            
+        };
+        
+        ct.reNamePopStorageCallBackFunction = function () 
+        {
+        	 $scope.main.moveToAppPage('/iaas/storage');
+        };
+        
+        
+        ct.reStorageSnapShotCallBackFunction = function () 
+        {
+        	 $scope.main.moveToAppPage('/iaas/storage');
+        };
+        
+        //////////////////////////////////////////////////////////////////////////
+        //////////       2018.11.29 디스크 사이즈 변경 팝업      sg0730       ////////////////
+        //////////////////////////////////////////////////////////////////////////    
+        ct.fn.reSizePopStorage = function($event,volume) {
+        	
+        	var dialogOptions =  {
+			            			controller       : "iaasReSizePopStorageCtrl" ,
+			            			formName         : 'iaasReSizePopStorageForm',
+			            			selectStorage    : angular.copy(volume),
+			            			callBackFunction : ct.reSizePopStorCallBackFunc
+				            	};
+        	
+            	$scope.actionBtnHied = false;
+            	common.showDialog($scope, $event, dialogOptions);
+            	$scope.actionLoading = true; // action loading
+               
+            
+        };
+        
+        ct.reSizePopStorCallBackFunc = function () 
+        {
+        	 $scope.main.moveToAppPage('/iaas/storage');
+        };
+        
         if(ct.data.tenantId) {
             ct.fn.getStorageList(1);
         }
@@ -518,7 +565,9 @@ angular.module('iaas.controllers')
 
             ct.resource.usedResource.volumeGigabytes = ct.expandVolumeSize - ct.volume.size + ct.resourceDefault.usedResource.volumeGigabytes;
         };
-
+        
+        
+        //sg0730
         ct.fn.storageEdit = function ($event, data) {
             $scope.dialogOptions = {
                 controller : "iaasStorageEditFormCtrl",
@@ -730,6 +779,10 @@ angular.module('iaas.controllers')
             pop.fn.getStorageInfo();
         }
     })
+    
+    //////////////////////////////////////////////////////////////////////////
+    //////////////       2018.11.21 디스크 생성 폼      sg0730       //////////////////
+    //////////////////////////////////////////////////////////////////////////
     .controller('iaasCreateStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasCreateStorageSnapshotFormCtrl", 1);
 
@@ -788,7 +841,9 @@ angular.module('iaas.controllers')
             });
         }
     })
-    
+    //////////////////////////////////////////////////////////////////////////
+    //////////////       2018.11.22 디스크 백업이미지 생성 팝업      sg0730 ///////////////
+    //////////////////////////////////////////////////////////////////////////    
      .controller('iaasCreateStorageSnapshotPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasCreateStorageSnapshotPopFormCtrl", 1);
 
@@ -801,7 +856,7 @@ angular.module('iaas.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         
-        $scope.dialogOptions.title 		= "볼륨  스냅샷  생성";
+        $scope.dialogOptions.title 		= "백업 이미지  생성";
         $scope.dialogOptions.okName 	= "등록";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageCreatePopSnapshotForm.html" + _VersionTail();
@@ -866,6 +921,173 @@ angular.module('iaas.controllers')
             });
         }
 
+    })
+    //////////////////////////////////////////////////////////////////////////
+    //////////       2018.11.21 디스크 이름 변경 팝업      sg0730       ////////////////
+    //////////////////////////////////////////////////////////////////////////    
+    .controller('iaasReNamePopStorageCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+    	_DebugConsoleLog("storageControllers.js : iaasReNamePopStorageCtrl", 1);
+    	
+    	var pop = this;
+    	pop.validationService 			= new ValidationService({controllerAs: pop});
+    	pop.formName 					= $scope.dialogOptions.formName;
+    	pop.userTenant 					= angular.copy($scope.main.userTenant);
+    	pop.volume 						= $scope.dialogOptions.selectStorage;
+    	pop.fn 							= {};
+    	pop.data						= {};
+    	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+    	
+    	$scope.dialogOptions.title 		= "디스크 이름 변경";
+    	$scope.dialogOptions.okName 	= "변경";
+    	$scope.dialogOptions.closeName 	= "닫기";
+    	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reNameStoragePopForm.html" + _VersionTail();
+    	
+    	$scope.actionLoading 			= false;
+    	pop.btnClickCheck 				= false;
+    	pop.validDisabled 				= true;
+    	
+    	// Dialog ok 버튼 클릭 시 액션 정의
+    	$scope.popDialogOk = function () {
+    		
+    		if ($scope.actionBtnHied) return;
+    		
+    		$scope.actionBtnHied = true;
+    		
+    		if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
+    		{
+    			$scope.actionBtnHied = false;
+    			return;
+    		}
+    		
+    		pop.fn.reNmStor();
+    	};
+    	
+    	$scope.popCancel = function() {
+    		$scope.dialogClose = true;
+    		common.mdDialogCancel();
+    	};
+    	
+    	pop.fn.reNmStor = function() {
+
+    		$scope.main.loadingMainBody = true;
+    		
+    		var param = {
+		                    tenantId : pop.userTenant.id,
+		                    volumeId : pop.volume.volumeId,
+		                    name     : pop.newVolNm
+		                }
+    		
+    		
+    	/*	pop.data.tenantId 			= pop.userTenant.id;
+    		pop.data.volumeId 			= pop.volume.volumeId;
+    		pop.data.name 				= pop.newVolNm;
+    		*/
+    		common.mdDialogHide();
+    		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
+    		
+    		returnPromise.success(function (data, status, headers) 
+    				{
+    			$scope.main.loadingMainBody = false;
+    			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
+    			
+    			if ( angular.isFunction(pop.callBackFunction) ) {
+    				pop.callBackFunction();
+    			}
+    			
+    				});
+    		returnPromise.error(function (data, status, headers) 
+    				{
+    			$scope.main.loadingMainBody = false;
+    			common.showAlertError(data.message);
+    				});
+    		returnPromise.finally(function (data, status, headers) 
+    				{
+    			$scope.actionBtnHied = false;
+    			$scope.main.loadingMainBody = false;
+    				});
+    	}
+    	
+    })
+    //////////////////////////////////////////////////////////////////////////
+    //////////       2018.11.21 디스크 사이즈 변경 팝업      sg0730       ////////////////
+    //////////////////////////////////////////////////////////////////////////    
+    .controller('iaasReSizePopStorageCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+    	_DebugConsoleLog("storageControllers.js : iaasReSizePopStorageCtrl", 1);
+    	
+    	var pop = this;
+    	pop.validationService 			= new ValidationService({controllerAs: pop});
+    	pop.formName 					= $scope.dialogOptions.formName;
+    	pop.userTenant 					= angular.copy($scope.main.userTenant);
+    	pop.volume 						= $scope.dialogOptions.selectStorage;
+    	pop.fn 							= {};
+    	pop.data						= {};
+    	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+    	
+    	$scope.dialogOptions.title 		= "디스크 크기 변경";
+    	$scope.dialogOptions.okName 	= "변경";
+    	$scope.dialogOptions.closeName 	= "닫기";
+    	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
+    	
+    	$scope.actionLoading 			= false;
+    	pop.btnClickCheck 				= false;
+    	pop.validDisabled 				= true;
+    	
+    	// Dialog ok 버튼 클릭 시 액션 정의
+    	$scope.popDialogOk = function () {
+    		
+    		if ($scope.actionBtnHied) return;
+    		
+    		$scope.actionBtnHied = true;
+    		
+    		if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
+    		{
+    			$scope.actionBtnHied = false;
+    			return;
+    		}
+    		
+    		pop.fn.reNmStor();
+    	};
+    	
+    	$scope.popCancel = function() {
+    		$scope.dialogClose = true;
+    		common.mdDialogCancel();
+    	};
+    	
+    	pop.fn.reNmStor = function() {
+
+    		$scope.main.loadingMainBody = true;
+    		
+    		var param = {
+		                    tenantId : pop.userTenant.id,
+		                    volumeId : pop.volume.volumeId,
+		                    name     : pop.newVolNm
+		                }
+    		
+    		common.mdDialogHide();
+    		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
+    		
+    		returnPromise.success(function (data, status, headers) 
+    				{
+    			$scope.main.loadingMainBody = false;
+    			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
+    			
+    			if ( angular.isFunction(pop.callBackFunction) ) {
+    				pop.callBackFunction();
+    			}
+    			
+    				});
+    		returnPromise.error(function (data, status, headers) 
+    				{
+    			$scope.main.loadingMainBody = false;
+    			common.showAlertError(data.message);
+    				});
+    		returnPromise.finally(function (data, status, headers) 
+    				{
+    			$scope.actionBtnHied = false;
+    			$scope.main.loadingMainBody = false;
+    				});
+    	}
+    	
     })
     
 ;
