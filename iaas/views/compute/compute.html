@@ -10,15 +10,15 @@
 	<!-- 프로젝트 정보 -->
 	<div class="cBox type0 projt-mana">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 서버 <em class="point1">({{contents.orgProjects.length}})</em></h4>
+			<h4 class="c-tit">전체 서버 <em class="point1">({{contents.serverMainList.length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
 			<div class="searchBox type2">
 				<div class="form-group">
-					<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listOrgProjects() : null;">
+					<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schFilterText">
 				</div>
-				<button type="button" name="button" class="btn btn-sch" title="검색어를 입력하세요" ng-click="contents.listOrgProjects();"><span class="ico">검색</span></button>
+				<button type="button" name="button" class="btn btn-sch" title="검색어를 입력하세요"><span class="ico">검색</span></button>
 			</div>
 			<!-- //검색 -->
 		</div>
@@ -40,7 +40,7 @@
 	<!-- panel area-->
 	<!-- <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel thum_style"> -->
 	<ul  class="ul-panel thum_style">
-		<li ng-repeat="(key, instance) in contents.serverMainList">
+		<li ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText }">
 			<!-- panel -->
 			<div class="panelWrap">
 				<div class="panel type5">
@@ -58,7 +58,7 @@
 									<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
 								</div>
 								<!-- ubuntu  -->
-								<div class="tgb_body">
+								<div ng-if="instance.image.osType == 'ubuntu'" class="tgb_body">
 									<ul>
 										<li><strong>접속 프로토콜 :</strong>SSH</li>
 										<li><strong>접속 IP :</strong>192.168.200.199</li>
@@ -67,7 +67,7 @@
 									</ul>
 								</div>
 								<!-- centos  -->
-								<div class="tgb_body">
+								<div ng-if="instance.image.osType == 'centos'" class="tgb_body">
 									<ul>
 										<li><strong>접속 프로토콜 :</strong>SSH</li>
 										<li><strong>접속 IP :</strong>192.168.200.199</li>
@@ -76,12 +76,12 @@
 									</ul>
 								</div>
 								<!-- windows  -->
-								<div class="tgb_body">
+								<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
 									<ul>
 										<li><strong>접속 프로토콜 :</strong>RDP</li>
 										<li><strong>접속 도메인 :</strong>aaa.wins.hubpop.io:20025</li>
 										<li><strong>접속 계정 :</strong>Administrator</li>
-										<li><strong>접속 비밀번호 :</strong>**********</li>
+										<li><strong>접속 비밀번호 :</strong>(사용자 정의)</li>
 									</ul>
 								</div>
 							</div>
