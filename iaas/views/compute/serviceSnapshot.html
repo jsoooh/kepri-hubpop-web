@@ -38,7 +38,7 @@
 									<!--<img class="logo" alt="" src="images/thum/ico_thum_svr.png"/>-->
 									<p class="tit">{{instanceSnapshot.name}}</p>
 									<p>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss'}}</p>
-									<!--<button class="btn_txt" ng-click="main.moveToAppPage('/iaas/compute/detail/'+snapshot.instanceId, snapshot.instanceName, true)">{{instanceSnapshot.instanceName}}</button>-->
+									<!--<button class="btn_txt" ng-click="main.goToPage('/iaas/compute/detail/'+snapshot.instanceId)">{{instanceSnapshot.instanceName}}</button>-->
 									<div class="dropdown btn-option">
 										<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 											<span class="ico">실행 설정</span>
@@ -59,7 +59,7 @@
 											<div class="cnt_infoBox">
 												<dl>
 													<dt>원본 서버</dt>
-													<dd><a href="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instanceSnapshot.instanceId, instanceSnapshot.instanceName, true)">{{instanceSnapshot.instanceName}}</a></dd>
+													<dd><a href="" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a></dd>
 													<dt>OS 이미지</dt>
 													<dd>{{ instanceSnapshot.imageName }}</dd>
 												</dl>
@@ -93,7 +93,7 @@
 									<!--<img class="logo" alt="" src="images/thum/ico_thum_disk.png"/>-->
 									<p class="tit">{{storageSnapshot.volumeName}}</p>
 									<p>{{ storageSnapshot.createDate }}</p>
-									<!--<button class="btn_txt" ng-click="main.moveToAppPage('/iaas/storage/detail/'+storageSnapshot.volumeId, storageSnapshot.volumeName)">{{storageSnapshot.volumeName}}</button>-->
+									<!--<button class="btn_txt" ng-click="main.goToPage('/iaas/storage/detail/'+storageSnapshot.volumeId)">{{storageSnapshot.volumeName}}</button>-->
 									<div class="dropdown btn-option">
 										<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 											<span class="ico">실행 설정</span>
@@ -114,7 +114,7 @@
 											<div class="cnt_infoBox">
 												<dl>
 													<dt>원본 디스크</dt>
-													<dd><a href="" ng-click="main.moveToAppPage('/iaas/storage/detail/'+storageSnapshot.volumeId, storageSnapshot.volumeName, true)">{{storageSnapshot.volumeName}}</a></dd>
+													<dd><a href="" ng-click="main.goToPage('/iaas/storage/detail/'+storageSnapshot.volumeId)">{{storageSnapshot.volumeName}}</a></dd>
 													<dt>디스크 유형</dt>
 													<dd>볼륨스토리지</dd>
 												</dl>

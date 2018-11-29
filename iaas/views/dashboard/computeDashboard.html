@@ -9,7 +9,7 @@
 
 <!-- 버튼영역 -->
 <div class="btnWrap">
-	<button type="button" class="btn_lg" ng-click="main.moveToAppPage('/iaas/compute/detail')">
+	<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/detail')">
 		<span class="ico ico_create" ></span>서버 만들기
 	</button>
 	<button type="button" class="btn_lg">
@@ -31,10 +31,10 @@
 		<div class="panelWrap">
 			<div class="panel type5">
 				<div class="panel_head">
-					<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="logo" alt="" ng-click="contents.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >
-					<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >
-					<p class="tit" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >{{instance.name}}</p>
-					<p class="txt" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >{{instance.image.serviceName}}</p>
+					<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="logo" alt="" ng-click="contents.goToPage('/iaas/compute/detail/'+instance.id)" >
+					<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
+					<p class="tit" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.name}}</p>
+					<p class="txt" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.image.serviceName}}</p>
 
 					<div class="dropdown btn-option">
 						<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -55,7 +55,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="panel_body" ng-if="instance.vmState != 'building'" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >
+				<div class="panel_body" ng-if="instance.vmState != 'building'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
 					<div class="ul-in" ng-if="instance.vmState != 'starting' && instance.vmState != 'stopping' && instance.vmState != 'pausing' && instance.vmState != 'unpausing' && instance.vmState != 'rebooting'">
 						<div class="up">
 							<ul class="ul-prog">
@@ -232,7 +232,7 @@
 						</span>
 				</td>
 				<td style="text-decoration: underline;">
-					<a href="javascript:void(0)" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" tooltip-placement="bottom" uib-tooltip="{{instance.name}}">
+					<a href="javascript:void(0)" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" tooltip-placement="bottom" uib-tooltip="{{instance.name}}">
 						{{instance.name}}
 					</a>
 				</td>
@@ -302,8 +302,8 @@
 		<div class="panelWrap">
 			<div class="panel type6">
 				<div class="panel_head">
-					<p class="tit" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">{{volume.name}}</p>
-					<p class="txt" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">볼륨스토리지</p>
+					<p class="tit" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">{{volume.name}}</p>
+					<p class="txt" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">볼륨스토리지</p>
 					<div class="dropdown btn-option">
 						<button id="btn-optionthum" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 							<span class="ico">실행 설정</span>
@@ -314,7 +314,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="panel_body" ng-show="volume.status != 'creating'" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">
+				<div class="panel_body" ng-show="volume.status != 'creating'" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">
 					<div class="ul-in">
 						<div class="up">
 							<div class="hardProg">
@@ -432,7 +432,7 @@
 		<tbody>
 		<tr ng-repeat="volume in contents.storageMainList" ng-if="volume.status != 'deleted'">
 			<td style="text-decoration: underline;">
-				<a href="javascript:void(0)" tooltip-placement="bottom" uib-tooltip="{{volume.name}}" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">{{volume.name}}</a>
+				<a href="javascript:void(0)" tooltip-placement="bottom" uib-tooltip="{{volume.name}}" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">{{volume.name}}</a>
 			</td>
 			<td>
 				{{volume.type}}

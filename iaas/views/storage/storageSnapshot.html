@@ -38,7 +38,7 @@
 			<tr ng-repeat="snapshot in contents.snapshotList">
 				<td>{{snapshot.snapshotName}}</td>
 				<td>{{snapshot.description}}</td>
-				<td style="text-decoration: underline;"><a href="javascript:void(0);" ng-click="main.moveToAppPage('/iaas/storage/detail/'+snapshot.volumeId,snapshot.volumeName)" tooltip-placement="bottom" uib-tooltip="{{snapshot.volumeName}}">{{snapshot.volumeName}}<a></td>
+				<td style="text-decoration: underline;"><a href="javascript:void(0);" ng-click="main.goToPage('/iaas/storage/detail/'+snapshot.volumeId)" tooltip-placement="bottom" uib-tooltip="{{snapshot.volumeName}}">{{snapshot.volumeName}}<a></td>
 				<td>{{snapshot.size}} GB</td>
 				<td>
 					<span ng-if="snapshot.status == 'in-use'" class="stateMark type1"></span>

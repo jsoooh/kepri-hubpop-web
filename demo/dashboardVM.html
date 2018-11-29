@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="btnWrap">
 	<button type="button" class="btn_lg">
 		<span class="ico ico_create"></span>서버 만들기
@@ -280,4 +281,288 @@
 	
 	
 </ul>
+=======
+<div class="btnWrap">
+	<button type="button" class="btn_lg">
+		<span class="ico ico_create"></span>서버 만들기
+	</button>
+	<button type="button" class="btn_lg">
+		<span class="ico ico_copy"></span>다른서버 복사하기
+	</button>
+</div>
+
+<!-- panel area-->
+<ul class="ul-panel thum_style">
+	<li>
+		<!-- panel -->
+		<div class="panelWrap">
+			<div class="panel type5 new-create">
+				<div class="panel_head">
+					<!-- <img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="logo" alt="" ng-click="contents.goToPage('/iaas/compute/detail/'+instance.id,instance.name,true)" > -->
+					<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id,instance.name)" >
+					<p class="tit">instanceName</p>
+					<p class="txt">Version</p>
+
+					<div class="dropdown btn-option">
+						<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+							<span class="ico">실행 설정</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+							<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);">시작</a></li>
+							<!-- 중지 -> 정지로 변경 2018.08.24 sg0730  -->
+							<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);">정지</a></li>
+							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);">재시작</a></li>
+							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>
+							<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">삭제</a></li>
+							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 스냅샷</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">볼륨연결</a></li>
+							<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>
+							<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="panel_body">
+					<div class="ul-in">
+						<div class="up">
+							<ul class="ul-prog">
+								<li>
+									<div class="progressWrap type1">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}" class="progress">
+												<div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="percent_txt">{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}<span>%</span></span>
+									<strong class="tit mt10">CPU</strong>
+									<span class="flavor_info">{{instance.spec.vcpus}} 개</span>
+								</li>
+								<li>
+									<div class="progressWrap type1">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}" class="progress">
+												<div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="percent_txt">{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}<span>%</span></span>
+									<strong class="tit mt10">Memory</strong>
+									<span class="flavor_info">{{(instance.spec.ram/1024|number:1).replace('.0', '')}} GB</span>
+								</li>
+								<li>
+									<div class="progressWrap type1">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}" class="progress">
+												<div class="progress-bar" role="progressbar" tooltip-placement="top" uib-tooltip="{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="percent_txt">{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}<span>%</span></span>
+									<strong class="tit mt10">Disk</strong>
+									<span class="flavor_info">{{instance.spec.disk}} GB</span>
+								</li>
+							</ul>
+						</div>
+						<div class="down">
+							<span class="stateWrap">
+								<span class="stateMark type1">정상배포</span>
+								<!-- <span class="stateMark type2">오류</span>
+								<span class="stateMark type3">정지</span>
+								<span class="stateMark type4">대기</span> -->
+								<span class="state-txt">운전중</span>
+							</span>
+						</div>
+					</div>
+
+					
+				</div>
+				
+			</div>
+		</div>
+		<!-- //panel -->
+	</li>
+	
+	<!-- 접속정보 레이어 드롭다운 관련 디자인 UI -->
+	<li>
+		<!-- panel -->
+		<div class="panelWrap">
+			<div class="panel type5">
+				<div class="panel_head">
+					<!-- <img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="logo" alt="" ng-click="contents.goToPage('/iaas/compute/detail/'+instance.id,instance.name)" > -->
+					<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id,instance.name)" >
+					<p class="tit">instanceName</p>
+					<div class="tg_box_area btn-option type2">
+						<button id="btn-option" type="button" class="btn_txt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">접속정보</button>
+						<div class="tg_box" role="btn-optionn" aria-labelledby="btn-option">
+							<div class="tgb_head">
+								<p class="tit">접속 정보</p>
+								<button class="close_sm">닫기</button>
+							</div>
+							<div class="tgb_body">
+								<ul>
+									<li><strong>접속 프로토콜 :</strong>SSH</li>
+									<li><strong>접속 IP :</strong>192.168.200.199</li>
+									<li><strong>접속 계정 :</strong>ubuntu</li>
+									<li><strong>접속 인증 키(KEY) :</strong>defaultpem<button type="button"><span class="ico_file_dw">파일다운로드</span></button></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="dropdown btn-option">
+						<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+							<span class="ico">실행 설정</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+							<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);">시작</a></li>
+							<!-- 중지 -> 정지로 변경 2018.08.24 sg0730  -->
+							<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);">정지</a></li>
+							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);">재시작</a></li>
+							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>
+							<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">삭제</a></li>
+							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 스냅샷</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">볼륨연결</a></li>
+							<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>
+							<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="panel_body">
+					<div class="ul-in">
+						<div class="up">
+							<ul class="ul-prog">
+								<li>
+									<div class="progressWrap type1">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}" class="progress">
+												<div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="percent_txt">{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}<span>%</span></span>
+									<strong class="tit mt10">CPU</strong>
+									<span class="flavor_info">{{instance.spec.vcpus}} 개</span>
+								</li>
+								<li>
+									<div class="progressWrap type1">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}" class="progress">
+												<div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="percent_txt">{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}<span>%</span></span>
+									<strong class="tit mt10">Memory</strong>
+									<span class="flavor_info">{{(instance.spec.ram/1024|number:1).replace('.0', '')}} GB</span>
+								</li>
+								<li>
+									<div class="progressWrap type1">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}" class="progress">
+												<div class="progress-bar" role="progressbar" tooltip-placement="top" uib-tooltip="{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="percent_txt">{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}<span>%</span></span>
+									<strong class="tit mt10">Disk</strong>
+									<span class="flavor_info">{{instance.spec.disk}} GB</span>
+								</li>
+							</ul>
+						</div>
+						<div class="down">
+							<span class="stateWrap">
+								<span class="stateMark type1">정상배포</span>
+								<!-- <span class="stateMark type2">오류</span>
+								<span class="stateMark type3">정지</span>
+								<span class="stateMark type4">대기</span> -->
+								<span class="state-txt">운전중</span>
+							</span>
+						</div>
+					</div>
+
+					
+				</div>
+				
+			</div>
+		</div>
+		<!-- //panel -->
+	</li>
+	<!-- //접속정보 레이어 드롭다운 관련 디자인 UI -->
+	
+	<!-- 서버생성중 생성상태 Progress 관련 디자인 UI -->
+	<li>
+		<!-- panel -->
+		<div class="panelWrap">
+			<div class="panel type5">
+				<div class="panel_head">
+					<!-- <img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="logo" alt="" ng-click="contents.goToPage('/iaas/compute/detail/'+instance.id,instance.name,true)" > -->
+					<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >
+					<p class="tit">instanceName</p>
+					<p class="txt">Version</p>
+
+					<div class="dropdown btn-option">
+						<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+							<span class="ico">실행 설정</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+							<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);">시작</a></li>
+							<!-- 중지 -> 정지로 변경 2018.08.24 sg0730  -->
+							<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);">정지</a></li>
+							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);">재시작</a></li>
+							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>
+							<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">삭제</a></li>
+							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 스냅샷</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">볼륨연결</a></li>
+							<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>
+							<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="panel_body">
+					<div class="ul-in">
+						<div class="pnb_progress_wrap">
+							<div class="progress_box">
+								<span class="bar_bg"></span>
+								<ul>
+									<li class="complete">
+										<div class="state_box">
+											<span class="state_ico"><span>1</span></span>
+										</div>
+										<div class="state_txt"><span>서버 생성<span></div>
+									</li>
+									<li class="creating">
+										<div class="state_box">
+											<span class="state_ico"><span>2</span></span>
+										</div>
+										<div class="state_txt"><span>네트워크 연결</span></div>
+									</li>
+									<li class="standby">
+										<div class="state_box">
+											<span class="state_ico"><span>3</span></span>
+										</div>
+										<div class="state_txt"><span>디스크 구성</span></div>
+									</li>
+								</ul>
+								<div class="progress_txt">
+									<p>인스턴스 생성 중입니다.</p>
+									<span>10초</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					
+				</div>
+				
+			</div>
+		</div>
+		<!-- //panel -->
+	</li>
+	<!-- //서버생성중 생성상태 Progress 관련 디자인 UI -->
+	
+	
+</ul>
+>>>>>>> branch 'master' of http://git.kepri-demo.crossent.com/kepri-dev/kepri-hubpop-web.git
 <!-- //panel area-->

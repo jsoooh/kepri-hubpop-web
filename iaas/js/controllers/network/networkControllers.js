@@ -160,7 +160,7 @@ angular.module('iaas.controllers')
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
-            $scope.main.moveToAppPage("/iaas/network");
+            $scope.main.goToPage("/iaas/network");
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
             // ct.fn.getPortList();

@@ -78,7 +78,7 @@
 							<strong class="tit">가상서버</strong>
 							<div class="txt">
 								<ui>
-									<il ng-repeat="item in contents.deployServer.deployInstances" style="padding-right: 20px;"><a href="" ng-click="main.moveToAppPage('/iaas/deploy_server/compute/detail/'+item.instanceId,item.instanceName,true)">{{item.instanceName}}</a></il>
+									<il ng-repeat="item in contents.deployServer.deployInstances" style="padding-right: 20px;"><a href="" ng-click="main.goToPage('/iaas/deploy_server/compute/detail/'+item.instanceId)">{{item.instanceName}}</a></il>
 								</ui>
 							</div>
 						</li>

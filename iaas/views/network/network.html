@@ -35,7 +35,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="network in contents.networkMainList">
-				<td style="text-decoration: underline;"><a href="#/iaas/network/detail/{{network.id}}" ng-click="main.moveToAppPage('/iaas/network/detail/'+network.id, network.description)"  tooltip-placement="bottom" uib-tooltip="{{network.description}}">{{network.description}}</a></td>
+				<td style="text-decoration: underline;"><a href="#/iaas/network/detail/{{network.id}}" ng-click="main.goToPage('/iaas/network/detail/'+network.id)"  tooltip-placement="bottom" uib-tooltip="{{network.description}}">{{network.description}}</a></td>
 				<td>{{network.realDescription}}</td>
 				<td>{{network.subnets[0].cidr}}</td>
 				<td>{{network.subnets[0].gateway}}</td>

@@ -86,7 +86,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.lbService = data.content.lbNetworkService;
                 if(!ct.lbService) {
-                    $scope.main.moveToAppPage('/network/loadBalancer');
+                    $scope.main.goToPage('/network/loadBalancer');
                 } else {
                     ct.data.sessionPersitenceType = 'SOURCE_IP';
                     ct.data.algorithm = 'ROUND_ROBIN';
@@ -111,7 +111,7 @@ angular.module('iaas.controllers')
 
                 var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/nfv/lb/lb', 'POST', {loadbalancer : ct.data,tenantId : ct.data.tenantId});
                 returnPromise.success(function (data, status, headers) {
-                    $scope.main.moveToAppPage('/network/loadBalancer/'+ct.nsId);
+                    $scope.main.goToPage('/network/loadBalancer/'+ct.nsId);
                 });
                 returnPromise.error(function (data, status, headers) {
                     common.showAlert("message",data.message);

@@ -96,7 +96,7 @@ angular.module('iaas.controllers')
         }else if(!$scope.main.hubpop.projectIdSelected && !$scope.main.currentProjectId){ // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
             showAlert.then(function () {
-                $scope.main.moveToAppPage("/");
+                $scope.main.goToPage("/");
             });
             return false;
         }

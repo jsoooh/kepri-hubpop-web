@@ -61,10 +61,10 @@
 					<td>
 						{{key+1}}
 					</td>
-					<td class="text-left" style="text-decoration: underline;"><a href="javascript:void(0)" ng-click="main.moveToAppPage('/iaas/securityPolicy/securityPolicyRule/'+policy.id,policy.name,true)">{{policy.name}}</a></td>
+					<td class="text-left" style="text-decoration: underline;"><a href="javascript:void(0)" ng-click="main.goToPage('/iaas/securityPolicy/securityPolicyRule/'+policy.id)">{{policy.name}}</a></td>
 					<td class="text-left" style="white-space:pre-line;">{{policy.description}}</td>
 					<td class="">
-						<button type="button" name="button" class="btn btn-ico-set-s only-ico" title="규칙관리" ng-click="main.moveToAppPage('/iaas/securityPolicy/securityPolicyRule/'+policy.id,policy.name,true)"><span class="ico">규칙관리</span></button>
+						<button type="button" name="button" class="btn btn-ico-set-s only-ico" title="규칙관리" ng-click="main.goToPage('/iaas/securityPolicy/securityPolicyRule/'+policy.id)"><span class="ico">규칙관리</span></button>
 						<button ng-show="policy.name != 'default'" type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteSecurityPolicyJob(policy.id)"><span class="ico">삭제</span></button>
 						<button ng-show="policy.name != 'default'" type="button" name="button" class="btn btn-ico-modi-s only-ico" title="수정" data-user="aside" data-username="#aside-modi" ng-click="contents.fn.formOpen($event, 'edit', policy);"><span class="ico">수정</span></button>
 					</td>

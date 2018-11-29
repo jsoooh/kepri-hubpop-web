@@ -42,7 +42,7 @@ angular.module('iaas.controllers')
       //sg0730 차후 서버 이미지 생성 후 페이지 이동.
         ct.reflashCallBackFunction = function () 
         {
-        	 $scope.main.moveToAppPage('/iaas/compute');
+        	 $scope.main.goToPage('/iaas/compute');
         	
         	/*if(ct.data.tenantId) {
                 ct.fn.getInstanceInfo();
@@ -351,7 +351,7 @@ angular.module('iaas.controllers')
         
         // sg0730 차후 서버 이미지 생성 후 페이지 이동.
         ct.reflashSnapShotCallBackFunction = function () {
-        	 $scope.main.moveToAppPage('/iaas/compute');
+        	 $scope.main.goToPage('/iaas/compute');
         };
         
         ct.showInfo = function (instance) {
@@ -381,7 +381,7 @@ angular.module('iaas.controllers')
         
         // sg0730 인스턴스 볼륨 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
-        	 $scope.main.moveToAppPage('/iaas/compute');
+        	 $scope.main.goToPage('/iaas/compute');
         };
         
 
@@ -427,7 +427,7 @@ angular.module('iaas.controllers')
         } else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
             showAlert.then(function () {
-                $scope.main.moveToAppPage("/");
+                $scope.main.goToPage("/");
             });
             return false;
         }

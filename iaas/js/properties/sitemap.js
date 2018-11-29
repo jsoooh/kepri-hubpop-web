@@ -43,6 +43,13 @@ angular.module('app')
                                 url: '/iaas/compute/create',
                                 controller: 'iaasComputeCreateCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/compute/computeCreateForm.html',
+                            },
+                            serverCopy: {
+                                name: 'server_main',
+                                stateKey: 'iaasComputeCopy',
+                                url: '/iaas/compute/copy',
+                                controller: 'iaasComputeCopyCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/compute/computeCopyForm.html',
                             }
                         },
                     },

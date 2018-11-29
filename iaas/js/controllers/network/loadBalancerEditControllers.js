@@ -18,7 +18,7 @@ angular.module('iaas.controllers')
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
-            $scope.main.moveToAppPage("/network/loadBalancer/base");
+            $scope.main.goToPage("/network/loadBalancer/base");
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
         });
@@ -61,7 +61,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.lbService = data.content.lbNetworkService;
                 if(!ct.lbService) {
-                    $scope.main.moveToAppPage('/network/loadBalancer/base');
+                    $scope.main.goToPage('/network/loadBalancer/base');
                 } else {
                     ct.fn.getLBInfo();
                 }
@@ -86,7 +86,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.data = data.content.loadbalancer;
                 if(!ct.data) {
-                    $scope.main.moveToAppPage('/network/loadBalancer/base');
+                    $scope.main.goToPage('/network/loadBalancer/base');
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -106,7 +106,7 @@ angular.module('iaas.controllers')
 
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/nfv/lb/lb', 'PUT', {loadbalancer : ct.data,tenantId : ct.data.tenantId});
                     returnPromise.success(function (data, status, headers) {
-                        $scope.main.moveToAppPage('/network/loadBalancer/'+ct.nsId);
+                        $scope.main.goToPage('/network/loadBalancer/'+ct.nsId);
                     });
                     returnPromise.error(function (data, status, headers) {
                         common.showAlert("message",data.message);
@@ -139,7 +139,7 @@ angular.module('iaas.controllers')
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
-            $scope.main.moveToAppPage("/network/loadBalancer/base");
+            $scope.main.goToPage("/network/loadBalancer/base");
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
         });
@@ -154,7 +154,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.lbService = data.content.lbNetworkService;
                 if(!ct.lbService) {
-                    $scope.main.moveToAppPage('/network/loadBalancer/base');
+                    $scope.main.goToPage('/network/loadBalancer/base');
                 } else {
                     ct.fn.getLBInfo();
                 }
@@ -179,7 +179,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.data = data.content.loadbalancer;
                 if(!ct.data) {
-                    $scope.main.moveToAppPage('/network/loadBalancer/base');
+                    $scope.main.goToPage('/network/loadBalancer/base');
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -198,7 +198,7 @@ angular.module('iaas.controllers')
 
                 var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/nfv/lb/lbSslCert', 'PUT', {loadbalancer : ct.data,tenantId : ct.data.tenantId});
                 returnPromise.success(function (data, status, headers) {
-                    $scope.main.moveToAppPage('/network/loadBalancer/'+ct.nsId);
+                    $scope.main.goToPage('/network/loadBalancer/'+ct.nsId);
                 });
                 returnPromise.error(function (data, status, headers) {
                     common.showAlert("message",data.message);
@@ -230,7 +230,7 @@ angular.module('iaas.controllers')
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
-            $scope.main.moveToAppPage("/network/loadBalancer/base");
+            $scope.main.goToPage("/network/loadBalancer/base");
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
         });
@@ -268,7 +268,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.lb = data.content.loadbalancer;
                 if(!ct.lb) {
-                    $scope.main.moveToAppPage('/network/loadBalancer/base');
+                    $scope.main.goToPage('/network/loadBalancer/base');
                 }
                 ct.fn.getLBServerList();
             });
@@ -294,7 +294,7 @@ angular.module('iaas.controllers')
                 $($("#mainList").find("input[type='checkbox']")[0]).prop("checked",false);
                 ct.lbMemberList = data.content.lbMembers;
                 if(!ct.lbMemberList) {
-                    $scope.main.moveToAppPage('/network/loadBalancer/base');
+                    $scope.main.goToPage('/network/loadBalancer/base');
                 }
             });
             returnPromise.error(function (data, status, headers) {
