@@ -301,13 +301,13 @@
             <!-- 연결 서비스 panel -->
             <div class="panelWrap" ng-if="contents.app.guid != null">
                 <div class="panel type2 cBox appCnt-sev" ng-controller="paasServiceInstancesCtrl as ins">
-                    <div ng-if="ins.loadingServiceInstances">
+                    <!-- <div ng-if="ins.loadingServiceInstances>
                         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-                    </div>
+                    </div> -->
                     <div class="cBox-hd">
                         <h4 class="c-tit">연결 서비스 <em class="point1">({{ serviceInstance.serviceInstances.content.length || 0 }})</em></h4>
                     </div>
-                    <div class="cBox-cnt">
+                    <div class="cBox-cnt mh300">
                         <div class="in">
                             <ul class="sev-list">
                                 <h3 ng-if="serviceInstance.serviceInstances.content.length == 0">생성한 서비스가 없습니다.</h3>

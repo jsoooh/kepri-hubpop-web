@@ -1231,7 +1231,7 @@ angular.module('paas.controllers')
                 var _this = $("#monitoring");
                 if(_this.hasClass("on")){
                     $('.visualizeItem').css("width", "465px");
-                    $("#instance_monitoring_panel").css('width', '665px');
+                    $("#instance_monitoring_panel").css('width', '1585px');
                     $(window).scrollTop(panelTop);
                     _this.removeClass("on").closest(".panel").removeClass("zoom").resize();
                 }else{
@@ -1247,7 +1247,7 @@ angular.module('paas.controllers')
             }else if(type == 'event'){
                 var _this = $("#event");
                 if(_this.hasClass("on")){
-                    $("#tabAppEventsTable").css('width', '665px');
+                    $("#tabAppEventsTable").css('width', '1585px');
                     $(window).scrollTop(panelTop);
                     _this.removeClass("on").closest(".panel").removeClass("zoom").resize();
                 }else{
@@ -1261,7 +1261,7 @@ angular.module('paas.controllers')
             }else if(type == 'set'){
                 var _this = $("#set");
                 if(_this.hasClass("on")){
-                    $("#tabAppEnvVarTable").css('width', '665px');
+                    $("#tabAppEnvVarTable").css('width', '1585px');
                     _this.removeClass("on").closest(".panel").removeClass("zoom").resize();
                 }else{
                     $("#tabAppEnvVarTable").css('width', '');
@@ -1272,7 +1272,7 @@ angular.module('paas.controllers')
             }else if(type == 'route'){
                 var _this = $("#route");
                 if(_this.hasClass("on")){
-                    $("#tabAppRoutesTable").css('width', '665px');
+                    $("#tabAppRoutesTable").css('width', '1585px');
                     _this.removeClass("on").closest(".panel").removeClass("zoom").resize();
                 }else{
                     $("#tabAppRoutesTable").css('width', '');

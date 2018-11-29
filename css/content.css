@@ -2194,8 +2194,12 @@ p.no-txt{
 .panel_area .pn_body {padding:15px 30px;}
 .panel_area .pn_body .sm_txt {display:block; font-size:14px; color:#ff0000; text-align:right;}
 .panel_area .pn_body .form_list li {margin-top:35px;}
+/* .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;} */
 .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;}
-.panel_area .pn_body .pnb_tit .ico_info {position:absolute; top:1px; display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer;}
+.panel_area .pn_body .pnb_tit .pnb_t_txt {vertical-align:middle;}
+.panel_area .pn_body .pnb_tit .ico_info {display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer; vertical-align:middle;}
+.ico_tit_refresh {margin-left:5px;}
+/* .panel_area .pn_body .pnb_tit .ico_info {position:absolute; top:1px; display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer;} */
 .panel_area .pn_body .pnb_tit .disk_info {position:absolute; top:-7px; right:0; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 15px 6px 15px; background:#888;}
 .panel_area .pn_body .disk_area {position:relative; border:1px solid #dedede; border-radius:3px; background:#fff; padding:30px;}
 .panel_area .pn_body .disk_area .disk_info {position:absolute; top:17px; right:20px; display:inline-block; font-size:12px; color:#fff; border-radius:5px; padding:4px 8px 6px 8px; background:#a1a1a1;}
@@ -2344,7 +2348,7 @@ p.no-txt{
 .panel_area .ul-list1{display: table; font-size:0; margin-left: -18px;}
 .panel_area .ul-list1 li .scroll-pane{overflow-y: hidden;}
 .panel_area .ul-list1 li{display: table-cell; font-size:14px; min-width: 98px; padding-left: 18px; padding-bottom:12px; vertical-align: top;}
-.panel_area .ul-list1 li .im{display: block; width: 100%; height: auto; }
+.panel_area .ul-list1 li .im{display: block; width: 100%; height: 100%; }
 .panel_area .ul-list1 li .radio-inline.radio label {padding:0;}
 .panel_area .ul-list1 .ul-txt{line-height: 1; margin-top:5px; text-align: center;}
 .panel_area .ul-list1 li select{font-size: 12px; height:28px !important; padding:0 25px 0 5px !important; margin-top: 8px; background-position: right -5px center !important;}
@@ -2352,7 +2356,7 @@ p.no-txt{
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {.panel_area .ul-list1 li select{padding:0 25px 0 5px !important; background-position: right -5px center !important; }}
 .panel_area .ul-list1 .label-txt{font-size:13px; color:#666; margin-top: 5px; text-align: center;}
 .panel_area .radio1 {padding:0; text-align:center;}
-.panel_area .radio1 label {display: inline-block; position: relative; font-size: 14px; color:#8992a9; font-weight: 500; line-height: 75px; width:100px; height: 100px; padding:0; vertical-align: middle; border-radius: 5px; border: 1px solid #cccccc; overflow: hidden; background: #fff;}
+.panel_area .radio1 label {display: inline-block; position: relative; font-size: 14px; color:#8992a9; font-weight: 500; line-height: 75px; width:90px; height: 90px; padding:0; vertical-align: middle; border-radius: 5px; border: 1px solid #cccccc; overflow: hidden; background: #fff;}
 .panel_area .radio1 .label.reductHeight{padding-top:5px;}
 .panel_area .radio1 label img{max-width:100%; height:auto; margin:0; border:0; border-radius: 0; vertical-align: middle;}
 .panel_area .radio1 input[type="radio"] {width:1px; height:1px; opacity: 0; }
@@ -2566,3 +2570,20 @@ p.no-txt{
 .panel_box .form_list .app-form-two .two_box {vertical-align:top;}
 
 .panel.type3 .panel_head .logo img {width:100%; height:100%;}
+
+.tab-content .tab-pane {height:440px;}
+.panel.type2 .cBox-cnt.mh300 {min-height:300px;}
+
+.tooltip-inner {word-break:break-all; max-width: 240px;}
+
+/*서버 생성 후 박스 깜빡임 효과*/
+.panel.type5.new-create {animation: new-create 0.7s linear 7 alternate; -webkit-animation: new-create 0.7s linear 7 alternate;}
+
+@-webkit-keyframes new-create  {
+    /* 0% {border:1px solid #1e80ef;}
+    33% {border:1px solid #4d99ee;}
+    66% {border:1px solid #6fabee;}
+    100% {border:1px solid #9ec4ee;} */
+   from {border:2px solid #1e80ef;}
+    to {border:2px solid #afdafa;} 
+}
