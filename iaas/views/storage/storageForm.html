@@ -17,7 +17,7 @@
 					<div class="pnb_tit">
 						<i class="i_star"></i> 디스크 이름<span class="ico_info"></span>
 					</div>
-					<input type="text" ng-model="contents.volume.name" name="volumeName" ng-init="contents.volume.name='disk-01'"  validation="required" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요.">
+					<input type="text" ng-model="contents.volume.name" name="volumeName" ng-init="contents.volume.name='disk-01'"  validation="required" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요." >
 				</li>
 				<li>
 					<div class="pnb_tit">
@@ -90,7 +90,7 @@
 						설명<span class="ico_info"></span>
 					</div>
 					<div class="text_wrap">
-						<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." ></textarea>
+						<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100|required"></textarea>
 					</div>
 				</li>
 				<li>
