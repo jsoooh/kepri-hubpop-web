@@ -353,9 +353,8 @@ angular.module('iaas.controllers')
         	 $scope.main.moveToAppPage('/iaas/compute');
         };
         
-        ct.showInfo = function () {
-        	ct.showVal = !ct.showVal;
-        	console.log(ct.showVal);
+        ct.showInfo = function (instance) {
+            instance.showVal = !instance.showVal;
         };
         //인스턴스 볼륨 생성 팝업
        /* ct.fn.createInstanceVolumePop = function(instance) {
