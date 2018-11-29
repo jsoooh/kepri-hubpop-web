@@ -31,7 +31,25 @@
 						<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >
 						<p class="tit" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >{{instance.name}}</p>
 						<p class="txt" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >{{instance.image.serviceName}}</p>
-
+						<!-- 접속정보 -->
+						<div class="dropdown btn-option type2">
+							<button id="btn-option" type="button" class="btn_txt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">접속정보</button>
+							<div class="dropdown-menu" role="btn-optionn" aria-labelledby="btn-option">
+								<div class="drdw_head">
+									<p class="tit">접속 정보</p>
+									<button class="close_sm">닫기</button>
+								</div>
+								<div class="drdw_body">
+									<ul>
+										<li><strong>접속 프로토콜 :</strong>SSH</li>
+										<li><strong>접속 IP :</strong>192.168.200.199</li>
+										<li><strong>접속 계정 :</strong>ubuntu</li>
+										<li><strong>접속 인증 키(KEY) :</strong>defaultpem<button type="button"><span class="ico_file_dw">파일다운로드</span></button></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- //접속정보 -->
 						<div class="dropdown btn-option">
 							<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 								<span class="ico">실행 설정</span>
