@@ -22,7 +22,7 @@
 	<!-- panel area-->
 	<!-- <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel thum_style"> -->
 	<ul  class="ul-panel thum_style">
-		<li ng-repeat="instance in contents.serverMainList">
+		<li ng-repeat="(key, instance) in contents.serverMainList">
 			<!-- panel -->
 			<div class="panelWrap">
 				<div class="panel type5">
@@ -32,14 +32,14 @@
 						<p class="tit" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >{{instance.name}}</p>
 						<!-- <p class="txt" ng-click="main.moveToAppPage('/iaas/compute/detail/'+instance.id,instance.name,true)" >{{instance.image.serviceName}}</p> -->
 						<!-- 접속정보 -->
-						<div class="dropdown btn-option type2">
-							<button id="btn-option" type="button" class="btn_txt" ng-click="contents.showInfo();">접속정보</button>
-							 <div ng-show="contents.showVal"> 
-								<div class="drdw_head">
+						<div class="tg_box_area btn-option type2">
+							<button type="button" class="btn_txt" ng-click="contents.showInfo(instance);">접속정보</button>
+							<div class="tg_box" ng-show="instance.showVal">
+								<div class="tgb_head">
 									<p class="tit">접속 정보</p>
-									<button class="close_sm" ng-click="contents.showInfo();">닫기</button>
+									<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
 								</div>
-								<div class="drdw_body">
+								<div class="tgb_body">
 									<ul>
 										<li><strong>접속 프로토콜 :</strong>SSH</li>
 										<li><strong>접속 IP :</strong>192.168.200.199</li>
@@ -51,7 +51,7 @@
 						</div>
 						<!-- //접속정보 -->
 						<div class="dropdown btn-option">
-							<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+							<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 								<span class="ico">실행 설정</span>
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
