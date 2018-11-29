@@ -140,6 +140,12 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .radio.radio-only label::before{margin-left: -20px;}
 .radio.radio-only input[type="radio"]:checked + label::after{margin-left:-18px;}
 
+.inputbox label { position: relative; display: inline-block; line-height: 20px; height: 20px; padding-left: 0px; vertical-align: middle;}
+.inputbox label.label-txt{font-size:14px; padding:3px 0 0 5px;}
+.inputbox {width:100%; margin: 0;}
+.input-inline {position: relative; display: inline-block; margin-bottom: 0; font-weight: normal; vertical-align: middle; cursor: pointer;}
+.inputbox.input-inline input[type="text"] {display:inline-block;}
+
 /* button */
 .btn {display:inline-block; font-weight: 400; padding:0; text-align:center; vertical-align: middle; border-radius: 2px;}
 .btn .btn-txt{display: inline-block; padding:0;}
