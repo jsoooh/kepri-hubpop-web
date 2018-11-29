@@ -1032,6 +1032,70 @@ angular.module('iaas.controllers')
     	pop.btnClickCheck 				= false;
     	pop.validDisabled 				= true;
     	
+    	 pop.newVolNm = 1;
+         pop.reSizeSliderOptions = 
+         {
+         	showSelectionBar : true,
+         	minValue : 1,
+         	
+         	options: {
+                 floor: 0,
+                 ceil: 100,
+                 step: 30
+             }
+         };
+    	
+    	
+         pop.fn.getStorageInfo = function() {
+             $scope.main.loadingMainBody = true;
+             
+             var param = {
+            		 		 tenantId : pop.userTenant.id,
+			                 volumeId : pop.volume.volumeId
+			             }
+             
+             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
+             
+             returnPromise.success(function (data, status, headers) {
+                 pop.volume = data.content.volumes[0];
+                 pop.newVolNm 	= pop.volume.size;
+                 
+                 pop.fn.getTenantResource();
+                 
+             });
+             returnPromise.error(function (data, status, headers) {
+                 common.showAlert("message",data.message);
+             });
+             returnPromise.finally(function (data, status, headers) {
+                 $scope.main.loadingMainBody = false;
+             });
+         };
+         
+         pop.fn.getTenantResource = function() {
+             var params = {
+            		 			tenantId : pop.userTenant.id,
+			             }
+             $scope.main.loadingMainBody = true;
+             
+             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+             
+             returnPromise.success(function (data, status, headers) {
+                 pop.resource 		 = angular.copy(data.content[0]);
+                 pop.resourceDefault = angular.copy(data.content[0]);
+                 pop.reSizeSliderOptions.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes ;
+             });
+             returnPromise.error(function (data, status, headers) {
+                 $scope.main.loadingMainBody = false;
+                 common.showAlert("message",data.message);
+             });
+             returnPromise.finally(function (data, status, headers) {
+                 $scope.main.loadingMainBody = false;
+             });
+         }
+         
+         
+         
+    	
     	// Dialog ok 버튼 클릭 시 액션 정의
     	$scope.popDialogOk = function () {
     		
@@ -1088,6 +1152,29 @@ angular.module('iaas.controllers')
     				});
     	}
     	
+    	if(pop.userTenant) {
+    		pop.fn.getStorageInfo();
+    	}
+    	
     })
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 ;
