@@ -6,15 +6,16 @@ angular.module('iaas.controllers')
 
         $scope.actionBtnEnabled = true;
 
-        var ct = this;
-        ct.list = {};
-        ct.fn = {};
-        ct.data = {};
-        ct.roles = [];
-        ct.network = {};
-        ct.consoleLogLimit = '50';
-        ct.actionLogLimit = '10';
-        ct.pageFirstLoad = true;
+        var ct 				= this;
+        ct.list 			= {};
+        ct.fn 				= {};
+        ct.data 			= {};
+        ct.roles 			= [];
+        ct.network 			= {};
+        ct.consoleLogLimit 	= '50';
+        ct.actionLogLimit 	= '10';
+        ct.pageFirstLoad 	= true;
+        ct.showVal			= false;
 
         ct.formOpen = function (){
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateForm.html" + _VersionTail();
@@ -35,6 +36,15 @@ angular.module('iaas.controllers')
             ct.network = ct.networks[0];
             ct.fnGetServerMainList();
         });
+        
+        // 2018.11.29 keypair 파일 다운로드 추가.
+        ct.fn.getKeyFile = function(keypair,type) {
+            var param = {
+                tenantId : ct.data.tenantId,
+                name : keypair.keypairName
+            }
+            location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&keypairName="+keypair.keypairName;
+        };
 
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
@@ -318,7 +328,10 @@ angular.module('iaas.controllers')
         	 $scope.main.moveToAppPage('/iaas/compute');
         };
         
-    
+        ct.showInfo = function () {
+        	ct.showVal = !ct.showVal;
+        	console.log(ct.showVal);
+        };
         //인스턴스 볼륨 생성 팝업
        /* ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
