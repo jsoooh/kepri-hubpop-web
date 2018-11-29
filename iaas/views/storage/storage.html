@@ -74,15 +74,11 @@
 							</div>
 						</div>
 						<div class="down">
-							<span class="stateWrap">
-								<!-- <span class="stateMark type1" ng-if="volume.status == 'in-use'">정상연결</span>
-								<span class="stateMark type2" ng-if="volume.status == 'error'">오류</span>
-								<span class="stateMark type3" ng-if="volume.status == 'available'">정상비연결</span>
-								<span class="stateMark type4" ng-if="volume.status == 'creating' || volume.status == 'deleting' || volume.status == 'deleted'">대기</span> -->
-								
-								<!-- 2018.11.29 sg0730 용어변경 및 기능 함축  -->
-								<span class="stateMark type1" ng-if="volume.status != 'available'">사용중</span>	 							
-								<span class="stateMark type4" ng-if="volume.status == 'available'">사용가능</span> 
+							<span ng-switch="volume.status" class="stateWrap">
+								<span ng-switch-when="in-use" class="stateMark type1"></span>
+								<span ng-switch-when="available" class="stateMark type3" ng-if="volume.status == 'available'"></span>
+								<span ng-switch-when="error" class="stateMark type2" ng-if="volume.status == 'error'"></span>
+								<span ng-switch-default class="stateMark type4"></span>
 								<span class="state-txt">{{ 'iaas.label.volume_' + volume.status | translate }}</span>
 							</span>
 						</div>
