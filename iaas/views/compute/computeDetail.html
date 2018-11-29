@@ -17,7 +17,7 @@
 					<li ng-if="contents.instance.vmState == 'fail'"><a href="" class="disabled" title="">서버 사양 변경</a></li>
 					<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.fn.createPopSnapshot($event,contents.instance);">백업 이미지 생성</a></li>
 					<li ng-if="contents.instance.vmState == 'fail'"><a href="" class="disabled" title="">백업 이미지 생성</a></li>
-					<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 추가</a></li>
+					<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
 					<li ng-if="contents.instance.vmState == 'fail'"><a href="" class="disabled" title="">디스크 추가</a></li>
 					<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>
 					<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">서버 삭제</a></li>
