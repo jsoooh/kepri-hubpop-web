@@ -416,8 +416,8 @@
 		<div class="panelWrap" style="height:370px; width: 365px;">
 			<div class="panel type6" style="height:320px; width: 365px;">
 				<div class="panel_head">
-					<p class="tit" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">{{volume.name}}</p>
-					<p class="txt" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">볼륨스토리지</p>
+					<p class="tit" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">{{volume.name}}</p>
+					<p class="txt" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">볼륨스토리지</p>
 					<div class="dropdown btn-option">
 						<button type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 							<span class="ico">실행 설정</span>
@@ -428,7 +428,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="panel_body" ng-if="volume.status != 'creating'" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">
+				<div class="panel_body" ng-if="volume.status != 'creating'" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">
 					<div class="ul-in">
 						<div class="up">
 							<div class="hardProg">
@@ -517,7 +517,7 @@
 		<tbody>
 			<tr ng-repeat="volume in contents.storageMainList">
 				<td style="text-decoration: underline;">
-					<a href="javascript:void(0)" tooltip-placement="bottom" uib-tooltip="{{volume.name}}" ng-click="main.moveToAppPage('/iaas/storage/detail/'+volume.volumeId,volume.name)">{{volume.name}}</a>
+					<a href="javascript:void(0)" tooltip-placement="bottom" uib-tooltip="{{volume.name}}" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">{{volume.name}}</a>
 				</td>
 				<td>
 					{{volume.type}}

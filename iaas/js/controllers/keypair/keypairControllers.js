@@ -265,7 +265,7 @@ angular.module('iaas.controllers')
         $scope.$on('userTenantChanged',function(event,status) {
             // ct.data.tenantId = status.tenantId;
             // ct.fn.getKeypairInstanceList();
-            $scope.main.moveToAppPage('/iaas/keypair/keypair');
+            $scope.main.goToPage('/iaas/keypair/keypair');
         });
 
         ct.fn.getKeypairInstanceList = function(page) {

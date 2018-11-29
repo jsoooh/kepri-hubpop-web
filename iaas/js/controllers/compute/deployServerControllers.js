@@ -42,9 +42,9 @@ angular.module('iaas.controllers')
 
         ct.moveToDetailPage = function(deployServer) {
             if (deployServer.viewType == "deploy") {
-                $scope.main.moveToAppPage('/iaas/deploy_server/detail/'+deployServer.deployId,deployServer.name,true)
+                $scope.main.goToPage('/iaas/deploy_server/detail/'+deployServer.deployId,deployServer.name)
             } else {
-                $scope.main.moveToAppPage('/iaas/compute/detail/'+deployServer.id,deployServer.name,true)
+                $scope.main.goToPage('/iaas/compute/detail/'+deployServer.id,deployServer.name)
             }
         };
 
@@ -805,7 +805,7 @@ angular.module('iaas.controllers')
         ct.tabDeployMonitTemplateUrl = _IAAS_VIEWS_ + "/compute/config/tabDeploySWMonit.html" + _VersionTail();
 
         $scope.$on('userTenantChanged',function(event,status) {
-            $scope.main.moveToAppPage("/iaas");
+            $scope.main.goToPage("/iaas");
         });
 
         ct.configSettingZoom = false;

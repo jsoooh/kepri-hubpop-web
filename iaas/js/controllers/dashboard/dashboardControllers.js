@@ -672,7 +672,7 @@ angular.module('iaas.controllers')
         }else if(!$scope.main.hubpop.projectIdSelected && !$scope.main.currentProjectId){ // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
             showAlert.then(function () {
-                $scope.main.moveToAppPage("/");
+                $scope.main.goToPage("/");
             });
             return false;
         }
@@ -771,9 +771,9 @@ angular.module('iaas.controllers')
 
         ct.moveToDetailPage = function(deployServer) {
             if (deployServer.viewType == "deploy") {
-                $scope.main.moveToAppPage('/iaas/deploy_server/detail/'+deployServer.deployId,deployServer.name,true)
+                $scope.main.goToPage('/iaas/deploy_server/detail/'+deployServer.deployId)
             } else {
-                $scope.main.moveToAppPage('/iaas/compute/detail/'+deployServer.id,deployServer.name,true)
+                $scope.main.goToPage('/iaas/compute/detail/'+deployServer.id)
             }
         };
 

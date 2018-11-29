@@ -91,7 +91,7 @@ angular.module('iaas.controllers')
         ct.fn.changeRouter= function(vrouter)
         {
             alert(vrouter.name);
-            $scope.main.moveToAppPage('/network/vpn'+ vrouter.nsid, vrouter.name)
+            $scope.main.goToPage('/network/vpn'+ vrouter.nsid)
 
         }
         ct.fn.routerServiceStatusActionJob= function(path,vrouter)

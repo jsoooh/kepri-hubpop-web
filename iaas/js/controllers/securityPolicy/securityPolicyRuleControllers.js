@@ -13,7 +13,7 @@ angular.module('iaas.controllers')
         ct.data.tenantId = $scope.main.userTenantId;
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event, status) {
-            $scope.main.moveToAppPage("/iaas/securityPolicy/securityPolicy");
+            $scope.main.goToPage("/iaas/securityPolicy/securityPolicy");
             ct.data.tenantId = status.tenantId;
             // ct.fn.getPolicyManagementList();
         });

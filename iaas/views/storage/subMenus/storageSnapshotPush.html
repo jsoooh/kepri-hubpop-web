@@ -268,7 +268,7 @@ $(document).ready(function(){
             <button ng-if="contents.activeTabIndex != 1" ng-disabled="actionBtnHied" type="button" class="btn btn-prev" ng-click="contents.previousTab();"  tooltip-placement="bottom" uib-tooltip="이전">{{ 'label.previous' | translate }}</button>
             <button ng-if="contents.activeTabIndex < 2" ng-disabled="actionBtnHied" type="button" class="btn btn-add" ng-click="contents.nextTab();"  tooltip-placement="bottom" uib-tooltip="다음">{{ 'label.next' | translate }}</button>
             <button ng-if="contents.activeTabIndex == 2" ng-disabled="actionBtnHied" type="button" class="btn btn-add" ng-click="contents.fn.createServer();"  tooltip-placement="bottom" uib-tooltip="생성">서버 생성</button>
-            <!-- <button type="button" class="btn" ng-click="main.moveToAppPage('/server/snapshot')">{{ 'label.cancel' | translate }}</button> -->
+            <!-- <button type="button" class="btn" ng-click="main.goToPage('/server/snapshot')">{{ 'label.cancel' | translate }}</button> -->
         </div>
     </div>
 </div>

@@ -305,7 +305,7 @@ angular.module('iaas.controllers')
                 var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : pop.data});
                 returnPromise.success(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
-                	$scope.main.moveToAppPage("/iaas");
+                	$scope.main.goToPage("/iaas");
                     common.showAlertSuccess("생성 되었습니다.");
                 });
                 returnPromise.error(function (data, status, headers) {

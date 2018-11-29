@@ -32,8 +32,7 @@ angular.module('app')
                                 stateKey: 'paasApplicationDetail',
                                 url: '/paas/apps/:guid',
                                 controller: 'paasApplicationDetailCtrl',
-                                templateUrl: _PAAS_VIEWS_ + '/application/appDetail.html',
-                                ngClick: "main.moveToAppPage('/paas/apps/' + main.stateParams.guid);",
+                                templateUrl: _PAAS_VIEWS_ + '/application/appDetail.html'
                             },
                         }
                     }, // services

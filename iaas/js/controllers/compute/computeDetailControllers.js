@@ -51,7 +51,7 @@ angular.module('iaas.controllers')
       //sg0730 차후 서버 이미지 생성 후 페이지 이동.
         ct.reflashCallBackFunction = function () 
         {
-        	 $scope.main.moveToAppPage('/iaas/compute');
+        	 $scope.main.goToPage('/iaas/compute');
         	
         	/*if(ct.data.tenantId) {
                 ct.fn.getInstanceInfo();
@@ -85,7 +85,7 @@ angular.module('iaas.controllers')
         //sg0730 차후 서버 이미지 생성 후 페이지 이동.
         ct.reflashSnapShotCallBackFunction = function () 
         {
-        	 $scope.main.moveToAppPage('/iaas/compute');
+        	 $scope.main.goToPage('/iaas/compute');
         };
         
         ct.cpuRoundProgress = {
@@ -152,7 +152,7 @@ angular.module('iaas.controllers')
 
 
         $scope.$on('userTenantChanged',function(event,status) {
-            $scope.main.moveToAppPage("/iaas");
+            $scope.main.goToPage("/iaas");
         });
 
         ct.fn.getUsedResource = function() {
@@ -501,7 +501,7 @@ angular.module('iaas.controllers')
         
         // sg0730 인스턴스 볼륨 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
-        	 //$scope.main.moveToAppPage('/iaas/compute');
+        	 //$scope.main.goToPage('/iaas/compute');
         	ct.fn.getInstanceInfo();
             ct.fn.changeSltInfoTab();
         };
@@ -717,7 +717,7 @@ angular.module('iaas.controllers')
         
         
         $scope.$on('userTenantChanged',function(event,status) {
-            $scope.main.moveToAppPage("/iaas");
+            $scope.main.goToPage("/iaas");
         });
         
         //인스턴스 상세 정보 조회
@@ -1118,7 +1118,7 @@ angular.module('iaas.controllers')
         // sg0730 인스턴스 볼륨 생성 팝업
         ct.creInsVolPopCallBackFunction = function () 
         {
-        	 //$scope.main.moveToAppPage('/iaas/compute');
+        	 //$scope.main.goToPage('/iaas/compute');
         	ct.fn.getInstanceInfo();
             ct.fn.changeSltInfoTab();
         };
@@ -1851,7 +1851,7 @@ angular.module('iaas.controllers')
 	                $scope.main.loadingMainBody = false;
 	                common.showAlertSuccess("수정되었습니다");
 	            	//common.showAlert("message","수정되었습니다.");
-	                $scope.main.moveToAppPage("/iaas");
+	                $scope.main.goToPage("/iaas");
 	            });
 	            returnPromise.error(function (data, status, headers) {
 	                $scope.main.loadingMainBody = false;
@@ -2043,7 +2043,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("생성 되었습니다.");
-                $scope.main.moveToAppPage('/iaas/compute/snapshot');
+                $scope.main.goToPage('/iaas/compute/snapshot');
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -2521,7 +2521,7 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("생성 되었습니다.");
                 //생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
-                $scope.main.moveToAppPage('/iaas/compute/snapshot');
+                $scope.main.goToPage('/iaas/compute/snapshot');
 
             });
             returnPromise.error(function (data, status, headers) {

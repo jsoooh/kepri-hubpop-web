@@ -239,7 +239,7 @@ angular.module('iaas.controllers')
         
         ct.reStorageSnapShotCallBackFunction = function () 
         {
-        	 $scope.main.moveToAppPage('/iaas/storage');
+        	 $scope.main.goToPage('/iaas/storage');
         };
         
         
@@ -261,13 +261,13 @@ angular.module('iaas.controllers')
         
         ct.reNamePopStorageCallBackFunction = function () 
         {
-        	 $scope.main.moveToAppPage('/iaas/storage');
+        	 $scope.main.goToPage('/iaas/storage');
         };
         
         
         ct.reStorageSnapShotCallBackFunction = function () 
         {
-        	 $scope.main.moveToAppPage('/iaas/storage');
+        	 $scope.main.goToPage('/iaas/storage');
         };
         
         //////////////////////////////////////////////////////////////////////////
@@ -291,7 +291,7 @@ angular.module('iaas.controllers')
         
         ct.reSizePopStorCallBackFunc = function () 
         {
-        	 $scope.main.moveToAppPage('/iaas/storage');
+        	 $scope.main.goToPage('/iaas/storage');
         };
         
         if(ct.data.tenantId) {
@@ -454,8 +454,8 @@ angular.module('iaas.controllers')
         
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
-            //$scope.main.moveToAppPage("/iaas/storage/detail/"+ct.data.volumeId);
-        	$scope.main.moveToAppPage("/iaas");
+            //$scope.main.goToPage("/iaas/storage/detail/"+ct.data.volumeId);
+        	$scope.main.goToPage("/iaas");
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
             ct.fn.getStorageInfo();
@@ -519,7 +519,7 @@ angular.module('iaas.controllers')
             }
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             returnPromise.success(function (data, status, headers) {
-                $scope.main.moveToAppPage('/iaas/storage');
+                $scope.main.goToPage('/iaas/storage');
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
@@ -831,7 +831,7 @@ angular.module('iaas.controllers')
             pop.data.volumeId = pop.volume.volumeId;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'POST', {volumeSnapShot:pop.data});
             returnPromise.success(function (data, status, headers) {
-                $scope.main.moveToAppPage('/iaas/storage/snapshot');
+                $scope.main.goToPage('/iaas/storage/snapshot');
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert('메세지',data.message);
