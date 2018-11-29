@@ -2202,8 +2202,19 @@ p.no-txt{
 /* .panel_area .pn_body .pnb_tit .ico_info {position:absolute; top:1px; display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer;} */
 .panel_area .pn_body .pnb_tit .disk_info {position:absolute; top:-7px; right:0; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 15px 6px 15px; background:#888;}
 .panel_area .pn_body .disk_area {position:relative; border:1px solid #dedede; border-radius:3px; background:#fff; padding:30px;}
-.panel_area .pn_body .disk_area .disk_info {position:absolute; top:17px; right:20px; display:inline-block; font-size:12px; color:#fff; border-radius:5px; padding:4px 8px 6px 8px; background:#a1a1a1;}
+.panel_area .pn_body .disk_area .disk_info {position:absolute; top:17px; right:20px; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 8px 6px 8px; background:#a1a1a1;}
 .panel_area .pn_body .disk_area p {font-size:16px; color:#666; text-align:center; margin-top:15px;}
+
+/*테이블 inner 디스크 설정영역*/
+.tbw .disk_area {position:relative; border:1px solid #dedede; border-radius:3px; background:#fff; padding:10px; margin:10px 0;}
+.tbw .disk_area .disk_info {position:absolute; top:17px; right:20px; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 8px 6px 8px; background:#a1a1a1;}
+.tbw .disk_area p {font-size:14px; color:#666; text-align:left; padding-left:30px; margin:10px 0;}
+.tbw .disk_area input {font-size: 14px; height: 35px;}
+.tbw .disk_area .rangeWrap {display:table; width:100%; padding:10px 20px 20px; margin:0;}
+.tbw .disk_area .rangeWrap .range_box {display:table-cell; box-sizing:border-box;}
+.tbw .disk_area .rangeWrap .range_box.rb_r {width:120px; text-align:right;}
+.tbw .disk_area .rangeWrap .range_box .app-tit {vertical-align:middle; padding-left:5px; color:#666;}
+
 
 .panel_area .pn_body .s_cont_box ul > li {line-height:30px; padding:10px 0; border-bottom:1px dashed #e3e3e3;}
 .panel_area .pn_body .s_cont_box ul > li:first-child {padding-top:0;}
@@ -2533,9 +2544,6 @@ p.no-txt{
 .disk_area .rangeWrap .range_box {display:table-cell; box-sizing:border-box;}
 .disk_area .rangeWrap .range_box.rb_r {width:120px; text-align:right;}
 .disk_area .rangeWrap .range_box .app-tit {vertical-align:middle; padding-left:5px; color:#666;}
-
-.tbw .disk_area {padding-bottom:35px;}
-.tbw .disk_area p {font-size:14px; margin-bottom:10px;}
 
 /*disabled 유형 추가*/
 .dropdown-menu > li > a.disabled {color:#bdbdbd; cursor:not-allowed;}
