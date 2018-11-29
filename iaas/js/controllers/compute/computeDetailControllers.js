@@ -371,6 +371,14 @@ angular.module('iaas.controllers')
             }
         };
 
+        ct.fn.getKeyFile = function(keypair,type) {
+            var param = {
+                tenantId : ct.data.tenantId,
+                name : keypair.name
+            };
+            location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
+        };
+
         ct.fnSingleInstanceAction = function(action,instance) {
             if(typeof id !== 'string' && typeof action !== 'string'){
                 console.log('type missmatch error');
@@ -425,7 +433,7 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
-        }
+        };
 
         // 볼륨 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
