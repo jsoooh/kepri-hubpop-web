@@ -98,7 +98,7 @@
 								<li><a href="" ng-click="contents.computePopEditServerForm(instance,$event);">서버 사양 변경</a></li>
 								<li ng-class="{'on_disablec' : instance.vmState == 'stopped'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);">백업 이미지 생성</a></li>
 								<li><a href="javascript:void(0);" ng-click="">키페어 다운로드</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);">디스크 추가</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);">디스크 연결</a></li>
 								<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">서버 삭제</a></li>
 								<!--<li ng-class="{'on_disablec' : instance.vmState == 'active'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
 								<!--<li ng-class="{'on_disablec' : instance.vmState == 'paused'}"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
