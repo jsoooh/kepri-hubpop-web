@@ -1,15 +1,16 @@
 	<!-- 프로젝트 정보 -->
 	<div class="cBox type0 projt-mana">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 서버 <em class="point1">({{contents.orgProjects.length}})</em></h4>
+			<h4 class="c-tit">전체 백업 이미지 <em class="point1">(서버 : {{contents.instanceSnapshotList.length}} / 디스크 : {{contents.storageSnapshotList.length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
 			<div class="searchBox type2">
 				<div class="form-group">
-					<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schFilterText">
+					<input ng-if="contents.tabIndex == 0" type="text" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schInstanceFilterText">
+					<input ng-if="contents.tabIndex == 1" type="text" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schStorageFilterText">
 				</div>
-				<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
+				<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schInstanceFilterText = ''; contents.schStorageFilterText = ''"><span class="ico">지우기</span></button>
 			</div>
 			<!-- //검색 -->
 		</div>
@@ -30,7 +31,7 @@
 			<div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 0}">
 				<!-- panel -->
 				<ul class="ul-panel">
-					<li ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schFilterText }">
+					<li ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText }">
 						<div class="panelWrap">
 							<div class="panel type6">
 								<div class="panel_head pdlr30">
@@ -85,7 +86,7 @@
 			<div role="tabpanel" class="tab-pane" ng-class="{'active' : contents.tabIndex == 1}">
 				<!-- panel -->
 				<ul class="ul-panel">
-					<li ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ name: contents.schFilterText }">
+					<li ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText }">
 						<div class="panelWrap">
 							<div class="panel type6">
 								<div class="panel_head pdlr30">
