@@ -48,16 +48,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>프로젝트</td>
-				<td>server_01</td>
-				<td>2개 / 40개</td>
-				<td>2GB / 100GB</td>
-				<td>20GB / 2,000GB</td>
-				<td>2018-11-09 16:01:20</td>
-				<td>서버 복사</td>
-			</tr>
-			<tr>
+			<tr ng-repeat="(key, instance) in constants.instanceSnapshotList | filter:{ name: contents.schFilterText }">
 				<td>프로젝트</td>
 				<td>server_01</td>
 				<td>2개 / 40개</td>

@@ -49,7 +49,7 @@ angular.module('app')
                                 stateKey: 'iaasComputeCopy',
                                 url: '/iaas/compute/copy',
                                 controller: 'iaasComputeCopyCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/compute/computeCopyForm.html',
+                                templateUrl: _IAAS_VIEWS_+'/compute/computeCopyList.html',
                             }
                         },
                     },
@@ -79,7 +79,7 @@ angular.module('app')
                         templateUrl: _IAAS_VIEWS_+'/compute/serviceSnapshot.html',
                         subPages: {
                             instanceSnashotCreate: {
-                                name: 'instance_snapshot_create',
+                                name: 'server_snapshot_create',
                                 stateKey: 'iaasInstanceSnapshotCreate',
                                 url: '/iaas/snapshot/instanceCreate',
                                 controller: 'iaasInstanceSnapshotCreateCtrl',

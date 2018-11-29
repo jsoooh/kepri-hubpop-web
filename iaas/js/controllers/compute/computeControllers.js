@@ -1282,9 +1282,32 @@ angular.module('iaas.controllers')
         _DebugConsoleLog("computeControllers.js : iaasComputeCopyCtrl start", 1);
 
         var ct               = this;
+        ct.tenantId          = $scope.main.userTenantId;
         ct.fn                = {};
         ct.formName          = "computeCopyForm";
 
+        // Snapshot List
+        ct.fn.getInstanceSnapshotList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.tenantId
+            };
+            ct.instanceSnapshotList = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList/others', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                ct.instanceSnapshotList = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.getInstanceSnapshotList();
 
     })
 ;
