@@ -16,6 +16,7 @@ angular.module('iaas.controllers')
         ct.actionLogLimit 	= '10';
         ct.pageFirstLoad 	= true;
         ct.showVal			= false;
+        ct.schFilterText    = "";
 
         ct.formOpen = function (){
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeCreateForm.html" + _VersionTail();
@@ -1276,5 +1277,14 @@ angular.module('iaas.controllers')
         };
         
         
+    })
+    .controller('iaasComputeCopyCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
+        _DebugConsoleLog("computeControllers.js : iaasComputeCopyCtrl start", 1);
+
+        var ct               = this;
+        ct.fn                = {};
+        ct.formName          = "computeCopyForm";
+
+
     })
 ;
