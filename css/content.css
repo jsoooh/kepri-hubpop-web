@@ -2540,7 +2540,7 @@ p.no-txt{
 /*disabled 유형 추가*/
 .dropdown-menu > li > a.disabled {color:#bdbdbd; cursor:not-allowed;}
 .dropdown-menu > li > a:hover.disabled {background:none;}
-.dropdown-menu > li > a.highlight {color:#ff0000;}
+.dropdown-menu > li > a.delete {color:#ff0000;}
 
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
