@@ -12,6 +12,9 @@ angular.module('iaas.controllers')
         ct.instanceSnapshotList = [];
         ct.storageSnapshotList = [];
 
+        ct.schInstanceFilterText = "";
+        ct.schStorageFilterText = "";
+
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantName = $scope.main.userTenant.korName;
