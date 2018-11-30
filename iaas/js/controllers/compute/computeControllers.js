@@ -1261,18 +1261,37 @@ angular.module('iaas.controllers')
             }
 
         };
-        
+
+        ct.inputVolumeSizeChange = function () {
+            if (ct.inputVolumeSize >= 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+                ct.volumeSize = ct.inputVolumeSize;
+            }
+        };
+
+        ct.inputVolumeSizeBlur = function () {
+            if (ct.inputVolumeSize < 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+                ct.inputVolumeSize = ct.volumeSize;
+            } else {
+                ct.volumeSize = ct.inputVolumeSize;
+            }
+        };
+
+        ct.sliderVolumeSizeChange = function () {
+            ct.inputVolumeSize = ct.volumeSize;
+        };
+
       //볼륨생성 변수
+        ct.inputVolumeSize = 10;
         ct.volumeSize = 10;
         ct.volumeSliderOptions = 
         {
         	showSelectionBar : true,
         	minValue : 1,
-        	
         	options: {
                 floor: 0,
                 ceil: 100,
-                step: 30
+                step: 30,
+                onChange : ct.sliderVolumeSizeChange
             }
         };
         
@@ -1282,11 +1301,18 @@ angular.module('iaas.controllers')
         _DebugConsoleLog("computeControllers.js : iaasComputeCopyCtrl start", 1);
 
         var ct               = this;
+        ct.projectId          = $scope.main.sltProjectId;
+        ct.sltPortalOrgId    = $scope.main.sltPortalOrgId;
         ct.tenantId          = $scope.main.userTenantId;
         ct.fn                = {};
         ct.formName          = "computeCopyForm";
 
+        ct.portalOrgs = angular.copy($scope.main.portalOrgs);
         ct.instanceSnapshotList = [];
+        ct.userTenants = [];
+        ct.schPortalOrgId = "";
+        ct.schFilterTenantId = "";
+        ct.schFilterText = "";
 
         ct.pageOptions = {
             currentPage : 1,
@@ -1305,6 +1331,12 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 ct.instanceSnapshotList = data.content;
+                angular.forEach(ct.instanceSnapshotList, function (item) {
+                    var userTenant = common.objectsFindCopyByField(ct.userTenants, "id", item.tenantId);
+                    if (userTenant && userTenant.korName) {
+                        item.portalOrgName = userTenant.korName;
+                    }
+                });
                 ct.pageOptions.total = ct.instanceSnapshotList.length;
             });
             returnPromise.error(function (data, status, headers) {
@@ -1316,11 +1348,45 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.fn.getUserTenants = function() {
+            var param = {
+                orgCode : ct.projectId
+            };
+            ct.userTenants = [];
+            $scope.main.loadingMainBody = false;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.length > 0 && data.content[0].teams && data.content[0].teams.length > 0) {
+                    ct.userTenants = data.content[0].teams;
+                    angular.forEach(ct.userTenants, function (item) {
+                        var portalOrg = common.objectsFindCopyByField(ct.portalOrgs, "orgId", item.teamCode);
+                        if (portalOrg && portalOrg.orgName) {
+                            item.korName = portalOrg.orgName;
+                        }
+                    });
+                }
+                ct.fn.getInstanceSnapshotList();
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+        };
+
+        ct.fn.onChangeSchPortalOrg = function(schPortalOrgId) {
+            var userTenant = null;
+            if (schPortalOrgId) {
+                userTenant = common.objectsFindCopyByField(ct.userTenants, "teamCode", schPortalOrgId);
+            }
+            if (userTenant && userTenant.id) {
+                ct.schFilterTenantId = userTenant.id;
+            } else {
+                ct.schFilterTenantId = "";
+            }
+        };
+
         ct.fn.changeCurrentPage = function(currentPage) {
             ct.pageOptions.currentPage = currentPage;
         };
 
-        ct.fn.getInstanceSnapshotList();
-
+        ct.fn.getUserTenants();
     })
 ;
