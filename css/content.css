@@ -2495,6 +2495,17 @@ p.no-txt{
 .form_list .fileUploadWrap input {height:35px;}
 .cBox .form_box {line-height:80px;}
 
+/* table 한 라인에 폼이 두개일경우의 스타일 추가 */
+.tbw .app-form-two {display:table; table-layout:fixed; width:100%; margin-top:5px;}
+.tbw .app-form-two.mgt0 {margin-top:0;}
+.tbw .app-form-two .two_box {display:table-cell; box-sizing:border-box; vertical-align:middle; padding-right:5px;}
+.tbw .app-form-two .two_box.w60 {width:60%;}
+.tbw .app-form-two > div:last-child {padding-right:0;}
+.tbw .app-form-two .two_box.pdr10 {padding-right:10px;}
+.tbw .app-form-two .two_box.pdl10 {padding-left:10px;}
+.tbw .app-form-two input{font-size:14px; width:100%; height:44px;}
+.tbw .app-form-two select{font-size:14px; width:100%; height:44px; border-radius:4px;}
+
 /*드롭다운*/
 .select_dropdown .sel_box {position:relative; width:100%; height:44px; line-height:44px; color:#777; border:1px solid #ccc; border-radius:2px; background:url("../images/ico_sel.png") no-repeat #fff center right; padding:0px 50px 0px 10px;}
 .select_dropdown .sel_box:hover {border:1px solid #69b4f9; cursor:pointer;}
@@ -2583,6 +2594,9 @@ p.no-txt{
 .panel.type2 .cBox-cnt.mh300 {min-height:300px;}
 
 .tooltip-inner {word-break:break-all; max-width: 240px;}
+
+.panel.type2 .panel_body .in.type2 {overflow-y:hidden !important; height:160px;}
+.panel.type2.zoom .panel_body .in.type2 {overflow-y:hidden !important; height:auto;}
 
 /*서버 생성 후 박스 깜빡임 효과*/
 .panel.type5.new-create {animation: new-create 0.7s linear 7 alternate; -webkit-animation: new-create 0.7s linear 7 alternate;}
