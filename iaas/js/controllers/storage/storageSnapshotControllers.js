@@ -91,6 +91,151 @@ angular.module('iaas.controllers')
             ct.fn.getStorageSnapshotList(1);
         }
     })
+    .controller('iaasStorageSnapshotCreateCtrl', function ($scope, $location, $state, $window, $translate, $timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);
+
+        var ct = this;
+
+        ct.userTenant = angular.copy($scope.main.userTenant);
+
+        ct.fn = {};
+        ct.data = {};
+        ct.data.size = 1;
+        ct.roles = [];
+        ct.formName = "storageSnapshotForm";
+
+        ct.data.volumeId = $stateParams.snapshotId;
+
+        ct.checkClickBtn = false;
+
+        ct.snapshotAndCreateStorage = function () {
+            if (ct.checkClickBtn) return;
+            ct.checkClickBtn = true;
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                ct.checkClickBtn = false;
+                return;
+            }
+
+            if(Number(ct.data.size) < ct.snapshotVolume.size){
+                common.showAlertWarning("볼륨 크기는 size up만 가능 합니다. 볼륨 크기 최소값 : " + ct.snapshotVolume.size + ", 입력값 : " + ct.data.size );
+                ct.data.size = ct.snapshotVolume.size;
+                ct.checkClickBtn = false;
+                return;
+            }
+
+            if(Number(ct.data.size) > (ct.resource.maxResource.volumeGigabytes - ct.resource.usedResource.volumeGigabytes)){
+                common.showAlertWarning("볼륨 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (ct.resource.maxResource.volumeGigabytes - ct.resource.usedResource.volumeGigabytes) + ", 입력값 : " + ct.data.size );
+                ct.data.size = ct.snapshotVolume.size;
+                ct.checkClickBtn = false;
+                return;
+            }
+
+            ct.createStorageVolumeAction();
+        };
+
+        ct.cancelAction = function () {
+            $window.history.back();
+        };
+
+        ct.fn.getTenantResource = function() {
+            var params = {
+                tenantId : ct.userTenant.tenantId
+            };
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.resource = data.content[0];
+                ct.resourceDefault = angular.copy(ct.resource);
+                ct.resource.usedResource.volumeGigabytes += ct.data.size;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.getStorageInfo = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.userTenant.tenantId,
+                volumeId : ct.data.volumeId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                ct.snapshotVolume = data.content.volumes[0];
+                ct.data.type = ct.snapshotVolume.type;
+                ct.data.size = ct.snapshotVolume.size;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.getStorageInfo = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.userTenant.tenantId,
+                volumeId : ct.data.volumeId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                ct.snapshotVolume = data.content.volumes[0];
+                ct.data.type = ct.snapshotVolume.type;
+                ct.data.size = ct.snapshotVolume.size;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.volumeSizeAction = function(flag) {
+            if(flag) {
+                ct.data.size = Number(ct.data.size) + 1;
+                if(Number(ct.resourceDefault.maxResource.volumeGigabytes) < (Number(ct.data.size) + Number(ct.resourceDefault.usedResource.volumeGigabytes))){
+                    ct.data.size = Number(ct.data.size) - 1;
+                }
+            } else {
+                if(Number(ct.data.size) - 1 >= 1) {
+                    ct.data.size = Number(ct.data.size) - 1;
+                }
+            }
+            ct.resource.usedResource.volumeGigabytes = Number(ct.data.size) + Number(ct.resourceDefault.usedResource.volumeGigabytes);
+        };
+
+        ct.fn.changeVolumeSize = function() {
+            // ct.resource.usedResource.volumeGigabytes = Number(ct.data.size) + Number(ct.resourceDefault.usedResource.volumeGigabytes);
+        };
+
+        ct.createStorageVolumeAction = function() {
+            $scope.main.loadingMainBody = true;
+            ct.data.tenantId = ct.userTenant.tenantId;
+            var param = {
+                newVolumeInfo : ct.data,
+                volumeSnapShot : ct.snapshot
+            };
+
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.goToPage('/iaas/storage');
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlert("message",data.message);
+            });
+        };
+
+        ct.fn.getStorageInfo();
+        ct.fn.getTenantResource();
+    })
     .controller('iaasStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);
 

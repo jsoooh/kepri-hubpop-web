@@ -75,20 +75,20 @@ angular.module('app')
                         icon: "server_snapshot",
                         stateKey: 'iaasServiceSnapshot',
                         url: '/iaas/snapshot',
-                        controller: 'iaasServiceSnapshotCtrl',
-                        templateUrl: _IAAS_VIEWS_+'/compute/serviceSnapshot.html',
+                        controller: 'iaasServerSnapshotCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/compute/serverSnapshot.html',
                         subPages: {
                             instanceSnashotCreate: {
                                 name: 'server_snapshot_create',
-                                stateKey: 'iaasInstanceSnapshotCreate',
-                                url: '/iaas/snapshot/instanceCreate',
-                                controller: 'iaasInstanceSnapshotCreateCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/compute/instanceSnapshotCreate.html',
+                                stateKey: 'iaasServerSnapshotCreate',
+                                url: '/iaas/snapshot/serverCreate/:snapshotId',
+                                controller: 'iaasServerSnapshotCreateCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/compute/serverSnapshotCreate.html',
                             },
                             storageSnashotCreate: {
                                 name: 'storage_snapshot_create',
                                 stateKey: 'iaasStorageSnapshotCreate',
-                                url: '/iaas/snapshot/storageCreate',
+                                url: '/iaas/snapshot/storageCreate/:snapshotId',
                                 controller: 'iaasStorageSnapshotCreateCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/storage/storageSnapshotCreate.html',
                             }

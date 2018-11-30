@@ -42,65 +42,33 @@
 									<th scope="col">종류</th>
 									<th scope="col">vCPU</th>
 									<th scope="col">메모리</th>
-									<th scope="col">디스크(OS설치/여유)</th>
+									<th scope="col">디스크</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>
-										<div class="radio radio-only">
-											<input type="radio" name="radio0" id="radio0-1" checked>
-											<label for="radio0-1"></label>
-										</div>
-									</td>
-									<td>소형</td>
-									<td>1 Core</td>
-									<td>2GB</td>
-									<td>20GB<span>(10GB/10GB)</span></td>
-								</tr>
-								<tr>
-									<td>
-										<div class="radio radio-only">
-											<input type="radio" name="radio0" id="radio0-2">
-											<label for="radio0-2"></label>
-										</div>
-									</td>
-									<td>중형</td>
-									<td>2 Core</td>
-									<td>4GB</td>
-									<td>40GB<span>(10GB/30GB)</span></td>
-								</tr>
-								<tr>
-									<td>
-										<div class="radio radio-only">
-											<input type="radio" name="radio0" id="radio0-3">
-											<label for="radio0-3"></label>
-										</div>
-									</td>
-									<td>대형</td>
-									<td>4 Core</td>
-									<td>8GB</td>
-									<td>80GB<span>(10GB/70GB)</span></td>
-								</tr>
-								<tr class="tbl_disabled">
-									<td>
-										<div class="radio radio-only">
-											<input type="radio" name="radio0" id="radio0-4" disabled>
-											<label for="radio0-4"></label>
-										</div>
-									</td>
-									<td>초대형</td>
-									<td>8 Core</td>
-									<td>16GB</td>
-									<td>160GB<span>(10GB/150GB)</span></td>
-								</tr>
+							<tr ng-repeat="(key, spec) in contents.specList | filter: {name:'m'} " ng-class="{'tbl_disabled': ()}"  >
+								<td>
+									<div class="radio radio-only" >
+										<input type="radio"
+											   name="spec_radio"
+											   ng-model="contents.specUuid"
+											   id="spec_radio_{{key}}"
+											   value="{{spec.uuid}}"
+											   ng-change="contents.fn.selectSpec();">
+										<label for="spec_radio_{{key}}"></label>
+									</div>
+								</td>
+								<td>{{spec.name}}</td>
+								<td>{{spec.vcpus}} Core</td>
+								<td>{{spec.ram | displayVolume:'MB'}}</td>
+								<td>{{spec.disk | displayVolume:'GB'}}</td>
+							</tr>
 							</tbody>
 						</table>
 					</div>
 				</li>
 				<li>
-					<div class="pnb_tit">
-						설명<span class="ico_info"></span>
+					<div class="pnb_tit">설명<span class="ico_info"></span>
 					</div>
 					<div class="text_wrap">
 						<textarea rows="5" cols=""></textarea>

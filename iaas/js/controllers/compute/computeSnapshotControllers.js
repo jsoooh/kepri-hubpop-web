@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasServiceSnapshotCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
-        _DebugConsoleLog("computeSnapshotControllers.js : iaasServiceSnapshotCtrl", 1);
+    .controller('iaasServerSnapshotCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
+        _DebugConsoleLog("computeSnapshotControllers.js : iaasServerSnapshotCtrl", 1);
 
         var ct = this;
         ct.data = {};
@@ -117,6 +117,178 @@ angular.module('iaas.controllers')
         if(ct.data.tenantId) {
             ct.fn.getInstanceSnapshotList();
             ct.fn.getStorageSnapshotList(1);
+        }
+    })
+    .controller('iaasServerSnapshotCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {
+        _DebugConsoleLog("computeSnapshotControllers.js : iaasServerSnapshotCreateCtrl start", 1);
+
+        var ct = this;
+        ct.data = {};
+        ct.fn = {};
+        ct.ui = {};
+        ct.roles = [];
+        ct.data.spec = {};
+        ct.data.networks = [];
+        ct.data.keypair = {};
+        ct.data.initScript = {};
+        ct.data.securityPolicies = [];
+        ct.subnet = {};
+        ct.networks = [];
+        ct.data.tenantId = $scope.main.userTenantId;
+        ct.data.tenantName = $scope.main.userTenant.korName;
+        ct.formName = "computeCreateForm";
+
+        ct.snapshotId = $stateParams.snapshotId;
+
+        ct.fn.getSnapshotInfo = function(snapshotId) {
+            $scope.main.loadingMainBody = true;
+            var params = {
+                tenantId : ct.data.tenantId,
+                snapShotId : snapshotId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'GET', params);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.id) {
+                    ct.data.snapshotInfo = data.content;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.getSecurityPolicy = function() {
+            ct.securityPolicyList = [];
+            ct.roles = [];
+            var param = {tenantId:ct.data.tenantId};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.length > 0) {
+                    ct.securityPolicyList = data.content;
+                    ct.roles.push(ct.securityPolicyList[0]);
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+        };
+
+        ct.fn.changeSecurityPolicy = function() {
+            ct.securityPolicies = ct.roles;
+        };
+
+        ct.fn.getKeypairList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {tenantId:ct.data.tenantId};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param );
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                ct.keypairList = data.content;
+                if (ct.keypairList && ct.keypairList.length > 0) {
+                    ct.keypairValue = ct.keypairList[0];
+                    ct.data.keypair = angular.fromJson(ct.keypairValue);
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+        };
+
+        var clickCheck = false;
+        ct.fn.createServer = function() {
+            if(clickCheck) return;
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                return;
+            }
+            clickCheck = true;
+            ct.data.spec.type = ct.data.spec.name;
+            ct.data.image.type = 'snapshot';
+            //ct.data.vmType = 'SNAPSHOT'
+            $scope.main.loadingMainBody = true;
+            $scope.main.asideClose();
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : ct.data});
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("생성 되었습니다.");
+                $scope.main.goToPage('/iaas/compute');
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                clickCheck = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function() {
+            });
+
+        };
+
+        ct.fn.getSpecList = function() {
+            $scope.main.loadingMainBody = true;
+            ct.specList = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET');
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                ct.specList = data.content.specs;
+
+                for(var i=0; i < ct.specList.length; i++) {
+                    ct.specList[i].title = '[' + ct.specList[i].name + '] vCPU ' + ct.specList[i].vcpus + '개 / MEM ' + ct.specList[i].ram / 1024 + ' GB / DISK(HDD) ' + ct.specList[i].disk + ' GB';
+                    if(ct.specList[i].name == ct.data.snapshotInfo.name) {
+                        ct.specValue = ct.specList[i];
+                        ct.data.spec = angular.fromJson(ct.specValue);
+                    }
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+        };
+
+        ct.fn.selectSpec = function() {
+            if(ct.specValue){
+                ct.data.spec = angular.fromJson(ct.specValue);
+            }else{
+                ct.data.spec.vcpus = 0;
+                ct.data.spec.ram = 0;
+                ct.data.spec.disk = 0;
+            }
+        };
+
+        // 네트워크 리스트 조회
+        ct.fn.networkListSearch = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                isExternal : false
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                ct.networks = data.content;
+                if(ct.networks.length > 0) {
+                    ct.network = ct.networks[0];
+                    ct.data.networks.push(ct.networks[0]);
+                    ct.subnet.cidr_A = ct.network.subnets[0].cidr_A;
+                    ct.subnet.cidr_B = ct.network.subnets[0].cidr_B;
+                    ct.subnet.cidr_C = ct.network.subnets[0].cidr_C;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+        };
+
+        if(ct.data.tenantId && ct.snapshotId) {
+            $scope.main.loadingMainBody = true;
+            ct.fn.getSnapshotInfo(ct.snapshotId);
+            ct.fn.networkListSearch();
+            ct.fn.getKeypairList();
+            ct.fn.getSecurityPolicy();
+            ct.fn.getSpecList();
         }
     })
     .controller('iaasComputeRestoreCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {
