@@ -193,18 +193,12 @@
 </div>
 <!-- //cBox -->
 
-<!-- title -->
-<div class="cont-titWrap">
-	<h3 class="h-tit3">디스크 정보</h3>
-</div>
-<!-- //title -->
-
 <div class="tabWrap type1 mt30">
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs padding40">
-		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">액션 이벤트</a></li>
-		<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">도메인</a></li>
-		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">부트 로그</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">서버 이벤트</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">서비스 도메인</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">서버 부트 로그</a></li>
 	</ul>
 	<!-- //Nav tabs -->
 
@@ -215,13 +209,19 @@
 			<div class="panelWrap">
 				<div class="panel type2" style="cursor: unset;">
 					<div class="panel_head">
-						<div class="tit pull-left">이벤트</div>
+						<div class="tit pull-left">서버 이벤트</div>
 						<div class="pull-right">
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'actEvent')"><span class="ico">확대/축소</span></button>
 						</div>
 					</div>
-					<div ng-if="contents.instance.actionLogs" class="panel_body" style="height: 400px;">
+					<div ng-if="contents.instance.actionLogs" class="panel_body">
 						<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_event_panel" class="in">
+						<!-- 메세지영역 -->
+						<div class="pop_message_area mb20">
+							<div class="msg_bg"></div>
+							<div class="msg_txt"><span>사용자가 서버에 명령하는 시작, 중지 등의 액션에 대한 실행 이력을 표시합니다.</span></div>
+						</div>
+						<!-- //메세지영역 -->
 							<div class="tbl type1">
 								<table class="table">
 									<colgroup>
@@ -260,7 +260,7 @@
 			<div class="panelWrap">
 				<div class="panel type2" style="cursor: unset;">
 					<div class="panel_head">
-						<div class="tit pull-left">도메인</div>
+						<div class="tit pull-left">서비스 도메인</div>
 						<div class="pull-right">
 							<!-- 20181121 sg0730 접속 도메인 연결 기능 변경으로 인한 팝업 호출  -->
 							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
@@ -268,8 +268,19 @@
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
 						</div>
 					</div>
-					<div ng-if="contents.instance.actionLogs" class="panel_body" style="height: 400px;">
+					<div ng-if="contents.instance.actionLogs" class="panel_body">
 						<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_domain_panel" class="in">
+							<!-- 메세지영역 -->
+							<div class="pop_message_area mb20">
+								<div class="msg_bg"></div>
+								<div class="msg_txt"><span>서버에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</span></div>
+							</div>
+							<!-- //메세지영역 -->
+							<!-- <div class="tb-top">
+								<div class="pull-right">
+									<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
+								</div>
+							</div> -->
 							<div class="tbl type1">
 								<table class="table">
 									<colgroup>
@@ -311,14 +322,20 @@
 			<div class="panelWrap">
 				<div class="panel type2" style="cursor: unset;">
 					<div class="panel_head">
-						<div class="tit pull-left">부트 로그</div>
+						<div class="tit pull-left">서버 부트 로그</div>
 						<div class="pull-right">
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'bootLog')"><span class="ico">확대/축소</span></button>
 						</div>
 					</div>
-					<div class="panel_body" style="height: 400px;">
-						<div id="boot_log_terminal_panel" class="in">
-							<div id="boot_log_terminal" style="height: 100%;"></div>
+					<div class="panel_body">
+						<!-- 메세지영역 -->
+						<div class="pop_message_area mb20">
+							<div class="msg_bg"></div>
+							<div class="msg_txt"><span>서버가 시작될 때 기록되는 Booting Log를 실시간으로 표시합니다.</span></div>
+						</div>
+						<!-- //메세지영역 -->
+						<div id="boot_log_terminal_panel" class="in type2">
+							<div id="boot_log_terminal"></div>
 						</div>
 					</div>
 				</div>
@@ -331,7 +348,7 @@
 </div>
 
 <!-- tb btm -->
-<div class="btn-btm" style="margin-top: 0px;">
+<div class="btn-btm">
 	<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage(main.moveParentUrl);">목록</button>
 </div>
 <!-- //tb btm -->
