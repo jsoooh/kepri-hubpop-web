@@ -222,18 +222,18 @@ angular.module('portal.services', [])
                 prjcCd : prjcCd
             };
             /*return common.retrieveResource(common.resourcePromise('http://168.78.82.189:8086/dcp/api/userConsoleDashboard.do', 'GET', getParams));*/
-            return common.retrieveResource(common.resourcePromise('http://hubpop.kepri.re.kr/dcp/api/userConsoleDashboard/'+prjcCd, 'GET'));
+            return common.retrieveResource(common.resourcePromise('/dcp/api/userConsoleDashboard/'+prjcCd, 'GET'));
         };
 
         portal.dashboard.getPipelineDashBoardInfo = function (p_proj_id) {
             var getParams = {
                 p_proj_id : p_proj_id
             };
-            return common.retrieveResource(common.resourcePromise('http://hubpop.kepri.re.kr/dpl/pipeline/pipelineDashBoardApi.json', 'GET', getParams));
+            return common.retrieveResource(common.resourcePromise('/dpl/pipeline/pipelineDashBoardApi.json', 'GET', getParams));
         };
 
         portal.dashboard.getApipDashBoardInfo = function () {
-            return common.retrieveResource(common.resourcePromise('http://hubpop.kepri.re.kr/apip/com/dashboard.json', 'GET'));
+            return common.retrieveResource(common.resourcePromise('/apip/com/dashboard.json', 'GET'));
         };
 
         portal.dashboard.getGisDashBoardInfo = function (prjcCd) {
@@ -241,7 +241,7 @@ angular.module('portal.services', [])
                 prjcCd : prjcCd
             };
             /*return common.retrieveResource(common.resourcePromise('http://168.78.82.183:58080/gis/api/projectInfo.do', 'GET', getParams));*/
-            return common.retrieveResource(common.resourcePromise('http://hubpop.kepri.re.kr/gis/api/projectInfo.do', 'GET', getParams));
+            return common.retrieveResource(common.resourcePromise('/gis/api/projectInfo.do', 'GET', getParams));
         };
 
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   End  ///////////////////////////////////

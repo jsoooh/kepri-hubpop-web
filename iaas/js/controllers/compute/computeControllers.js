@@ -1286,6 +1286,14 @@ angular.module('iaas.controllers')
         ct.fn                = {};
         ct.formName          = "computeCopyForm";
 
+        ct.instanceSnapshotList = [];
+
+        ct.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
+
         // Snapshot List
         ct.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = true;
@@ -1297,6 +1305,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 ct.instanceSnapshotList = data.content;
+                ct.pageOptions.total = ct.instanceSnapshotList.length;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -1305,6 +1314,10 @@ angular.module('iaas.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
+        };
+
+        ct.fn.changeCurrentPage = function(currentPage) {
+            ct.pageOptions.currentPage = currentPage;
         };
 
         ct.fn.getInstanceSnapshotList();
