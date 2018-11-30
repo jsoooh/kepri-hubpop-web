@@ -58,6 +58,8 @@ angular.module('iaas.controllers')
                 param.number = currentPage;
             }
             
+            param.size = 0;
+            
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
             	ct.pageOptions = paging.makePagingOptions(data);
@@ -944,7 +946,7 @@ angular.module('iaas.controllers')
     	
     	$scope.actionLoading 			= false;
     	pop.btnClickCheck 				= false;
-    	pop.validDisabled 				= true;
+    	
     	
     	// Dialog ok 버튼 클릭 시 액션 정의
     	$scope.popDialogOk = function () {
@@ -977,11 +979,7 @@ angular.module('iaas.controllers')
 		                    name     : pop.newVolNm
 		                }
     		
-    		
-    	/*	pop.data.tenantId 			= pop.userTenant.id;
-    		pop.data.volumeId 			= pop.volume.volumeId;
-    		pop.data.name 				= pop.newVolNm;
-    		*/
+    	
     		common.mdDialogHide();
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		
@@ -1029,18 +1027,15 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
-    	pop.btnClickCheck 				= false;
-    	pop.validDisabled 				= true;
     	
-    	 pop.newVolNm = 1;
+    	 pop.newVolSize = 1;
          pop.reSizeSliderOptions = 
          {
          	showSelectionBar : true,
-         	minValue : 1,
-         	
          	options: {
                  floor: 0,
                  ceil: 100,
+                 minValue : 1,
                  step: 30
              }
          };
@@ -1058,7 +1053,7 @@ angular.module('iaas.controllers')
              
              returnPromise.success(function (data, status, headers) {
                  pop.volume = data.content.volumes[0];
-                 pop.newVolNm 	= pop.volume.size;
+                 pop.newVolSize 	= pop.volume.size;
                  
                  pop.fn.getTenantResource();
                  
@@ -1103,13 +1098,13 @@ angular.module('iaas.controllers')
     		
     		$scope.actionBtnHied = true;
     		
-    		if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
-    		{
-    			$scope.actionBtnHied = false;
-    			return;
-    		}
-    		
-    		pop.fn.reNmStor();
+    		/* if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
+             {
+                 $scope.actionBtnHied = false;
+                 return;
+             }
+    		*/
+    		pop.fn.reSizeStor();
     	};
     	
     	$scope.popCancel = function() {
@@ -1117,39 +1112,39 @@ angular.module('iaas.controllers')
     		common.mdDialogCancel();
     	};
     	
-    	pop.fn.reNmStor = function() {
+    	pop.fn.reSizeStor = function() {
 
     		$scope.main.loadingMainBody = true;
     		
     		var param = {
 		                    tenantId : pop.userTenant.id,
 		                    volumeId : pop.volume.volumeId,
-		                    name     : pop.newVolNm
+		                    size     : pop.newVolSize
 		                }
     		
     		common.mdDialogHide();
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		
     		returnPromise.success(function (data, status, headers) 
-    				{
+    		{
     			$scope.main.loadingMainBody = false;
-    			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
+    			common.showAlertSuccess("디스크 크키가 변경 되었습니다.");
     			
     			if ( angular.isFunction(pop.callBackFunction) ) {
     				pop.callBackFunction();
     			}
     			
-    				});
+    		});
     		returnPromise.error(function (data, status, headers) 
-    				{
-    			$scope.main.loadingMainBody = false;
-    			common.showAlertError(data.message);
-    				});
+    		{
+		    			$scope.main.loadingMainBody = false;
+		    			common.showAlertError(data.message);
+    		});
     		returnPromise.finally(function (data, status, headers) 
-    				{
+    		{
     			$scope.actionBtnHied = false;
     			$scope.main.loadingMainBody = false;
-    				});
+    		});
     	}
     	
     	if(pop.userTenant) {
@@ -1157,24 +1152,6 @@ angular.module('iaas.controllers')
     	}
     	
     })
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+       
     
 ;
