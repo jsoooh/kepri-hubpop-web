@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasServerSnapshotCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
+    .controller('iaasServerSnapshotCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
         _DebugConsoleLog("computeSnapshotControllers.js : iaasServerSnapshotCtrl", 1);
 
         var ct = this;

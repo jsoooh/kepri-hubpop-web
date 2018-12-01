@@ -164,7 +164,7 @@
 											<tr>
 												<td>{{contents.data.spec.vcpus}} Core</td>
 												<td>{{contents.data.spec.ram /1024|number}}GB</td>
-												<td>{{contents.data.spec.disk}}GB</td>
+												<td>{{contents.data.spec.disk | displayVolume : 'GB'}}</td>
 											</tr>
 										</tbody>
 									</table>
@@ -184,7 +184,7 @@
 					<ul>
 						<li>
 							<span class="s_tit">크기</span>
-							<span class="s_txt">{{contents.volumeSize}}GB</span>
+							<span class="s_txt">{{contents.volumeSize | displayVolume : 'GB'}}</span>
 						</li>
 						<li>
 							<span class="s_tit">유형<span class="ico_info"></span></span>
