@@ -302,7 +302,8 @@ angular.module('iaas.controllers')
 
         ct.specDisabledAllSetting = false;
         ct.fn.defaultSelectSpec = function() {
-            if(ct.specMinDisabledSetting && ct.specMaxDisabledSetting){
+            if(!ct.specMinDisabledSetting && ct.specMaxDisabledSetting){
+                ct.specDisabledAllSetting = true;
                 var sltSpec = null;
                 for (var i=0; i<ct.specList.length; i++) {
                     if (!ct.specList[i].disabled) {
@@ -313,13 +314,16 @@ angular.module('iaas.controllers')
                 if (sltSpec) {
                     ct.fn.selectSpec(sltSpec);
                 }
-                ct.specDisabledAllSetting = true;
             }
         };
 
         ct.fn.selectSpec = function(sltSpec) {
             if (ct.specDisabledAllSetting || sltSpec.disabled) return;
+            angular.forEach(ct.specList, function (spec) {
+                spec.selected = false;
+            });
             if(sltSpec && sltSpec.uuid) {
+                sltSpec.selected = true;
                 ct.data.spec = angular.copy(sltSpec);
                 ct.specUuid = ct.data.spec.uuid;
             } else {
