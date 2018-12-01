@@ -846,14 +846,6 @@ angular.module('iaas.controllers')
         //볼륨생성 변수
         ct.data.size = 1;
 
-        ct.scrollPane = function (){
-            setTimeout(function() {
-                var scrollPane = $('.scroll-pane').jScrollPane({});
-            }, 250);
-        };
-        
-     
-        
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
             var param = {
@@ -884,17 +876,11 @@ angular.module('iaas.controllers')
                         ct.data.securityPolicys = ct.roles;
                     }
                 }
-                ct.fn.getKeypairList();
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
                 $scope.main.loadingMainBody = false;
             });
-        };
-
-        //보안정책 setting
-        ct.fn.changeSecurityPolicy = function() {
-            ct.data.securityPolicys = ct.roles;
         };
 
         //키페어 조회
@@ -939,13 +925,6 @@ angular.module('iaas.controllers')
             });
         };
 
-        //키페어 setting
-        ct.fn.changeKeypair = function() {
-            if(ct.keypairValue){
-                ct.data.keypair = angular.fromJson(ct.keypairValue);
-            }
-        };
-
         //스펙그룹의 스펙 리스트 조회
         ct.fn.getSpecList = function(specGroup) {
             ct.specList = [];
@@ -954,10 +933,6 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param , 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 ct.specList = data.content.specs;
-
-                ct.initCheck = false;
-                ct.fn.initScriptSet();
-                ct.fn.getInitScriptList();
                 ct.fn.selectSpec();
             });
             returnPromise.error(function (data, status, headers) {
@@ -983,49 +958,7 @@ angular.module('iaas.controllers')
             
         };
 
-        //초기화스크립트 리스트 조회
-        ct.fn.getInitScriptList = function() {
-            var param = {
-                tenantId : ct.data.tenantId
-            };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/initScriptAll', 'GET', param , 'application/x-www-form-urlencoded');
-            returnPromise.success(function (data, status, headers) {
-                ct.initScriptList = data.content;
-            });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                common.showAlertError(data.message);
-            });
-        };
-
-        //초기화스크립트 조회
-        ct.fn.getInitScript = function(scriptId) {
-            $scope.main.loadingMainBody = true;
-            var param = {
-                scriptId : scriptId
-            };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/initScriptId', 'GET', param , 'application/x-www-form-urlencoded');
-            returnPromise.success(function (data, status, headers) {
-                ct.data.initScript = data.content[0];
-                $scope.main.loadingMainBody = false;
-            });
-            returnPromise.error(function (data, status, headers) {
-                common.showAlertError(data.message);
-            });
-        };
-
-
-        //초기화 스크립트 변경
-        ct.fn.changeInitScript = function() {
-            if(ct.initScriptValue == "") {
-                ct.data.initScript = {};
-            } else {
-                ct.fn.getInitScript(angular.fromJson(ct.initScriptValue).scriptId);
-            }
-        };
-        
-        
-        
+        ct.imageListLoad = false;
         //이미지 리스트 조회
         ct.fn.imageListSearch = function() {
             $scope.main.loadingMainBody = true;
@@ -1039,26 +972,26 @@ angular.module('iaas.controllers')
                 param.imageUseCase = ct.conditionValue;
             }
             param.imageType = ct.imageType;
+            ct.imageList  = [];
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                ct.imageList  = data.content.images;
-                ct.data.image = ct.imageList[0];
-                ct.fn.imageClick (ct.data.image) ;
-                ct.fn.getSecurityPolicy();
+                if (data && data.content && data.content.images && data.content.images.length > 0) {
+                    ct.imageList  = data.content.images;
+                    ct.fn.imageClick(ct.imageList[0]);
+                }
+                ct.imageListLoad = true;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
+                ct.imageListLoad = true;
                 common.showAlertError(data.message);
             });
         };
         
-        ct.fn.imageClick = function (image)
-        {
-        	var sltSpec = common.objectsFindCopyByField(ct.specList, "uuid", ct.specUuid);
-        	ct.data.image = image ;
-        	ct.serviceNm = image.serviceName
-        	ct.imageTmpNm = image.serviceName; 
-        }
+        ct.fn.imageClick = function (image) {
+            ct.data.image = angular.copy(image);
+            ct.sltImageId = ct.data.image.id;
+        };
         
         // 네트워크 리스트 조회
         ct.fn.networkListSearch = function() {
@@ -1161,14 +1094,6 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
-        };
-
-        //초기화 스크립트 체크
-        ct.fn.initScriptSet = function() {
-            if(!ct.initCheck) {
-                ct.data.initScript = {};
-                ct.initScriptValue = "";
-            }
         };
 
         //자동&수동할당 체크
@@ -1279,10 +1204,12 @@ angular.module('iaas.controllers')
         };
 
         if(ct.data.tenantId) {
+            ct.fn.getTenantResource();
             ct.fn.getSpecList();
             ct.fn.imageListSearch();
+            ct.fn.getSecurityPolicy();
             ct.fn.networkListSearch();
-            ct.fn.getTenantResource();
+            ct.fn.getKeypairList();
         }
 
     })
