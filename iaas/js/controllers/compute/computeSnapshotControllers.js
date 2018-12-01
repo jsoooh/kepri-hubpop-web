@@ -127,16 +127,18 @@ angular.module('iaas.controllers')
         ct.fn = {};
         ct.ui = {};
         ct.roles = [];
+        ct.tenantResource = {};
         ct.data.spec = {};
         ct.data.networks = [];
         ct.data.keypair = {};
-        ct.data.initScript = {};
         ct.data.securityPolicies = [];
         ct.subnet = {};
+        ct.snapshotInfo = {};
         ct.networks = [];
         ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantName = $scope.main.userTenant.korName;
         ct.formName = "computeCreateForm";
+        ct.data.name = 'server-01';
 
         ct.snapshotId = $stateParams.snapshotId;
 
@@ -149,8 +151,10 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'GET', params);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.id) {
-                    ct.data.snapshotInfo = data.content;
+                    ct.snapshotInfo = data.content;
+                    ct.fn.setSpecMinDisabled();
                 }
+                $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
@@ -170,8 +174,9 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
+            });
+            returnPromise.finally(function() {
             });
         };
 
@@ -180,11 +185,9 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.getKeypairList = function() {
-            $scope.main.loadingMainBody = true;
             var param = {tenantId:ct.data.tenantId};
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param );
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 ct.keypairList = data.content;
                 if (ct.keypairList && ct.keypairList.length > 0) {
                     ct.keypairValue = ct.keypairList[0];
@@ -192,8 +195,9 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
+            });
+            returnPromise.finally(function() {
             });
         };
 
@@ -222,23 +226,46 @@ angular.module('iaas.controllers')
             });
             returnPromise.finally(function() {
             });
-
         };
 
-        ct.fn.getSpecList = function() {
-            $scope.main.loadingMainBody = true;
-            ct.specList = [];
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET');
+        ct.fn.getTenantResource = function() {
+            var params = {
+                tenantId : ct.data.tenantId
+            };
+            ct.tenantResource = {};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                ct.specList = data.content.specs;
+                if (data && data.content && data.content.length > 0) {
+                    ct.tenantResource = data.content[0];
+                    ct.tenantResource.available = {};
+                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
+                    ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
+                    ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
+                    ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
+                    ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
+                    ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+                    ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
+                    ct.fn.setSpecMaxDisabled();
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                //common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function() {
+            });
+        };
 
-                for(var i=0; i < ct.specList.length; i++) {
-                    ct.specList[i].title = '[' + ct.specList[i].name + '] vCPU ' + ct.specList[i].vcpus + '개 / MEM ' + ct.specList[i].ram / 1024 + ' GB / DISK(HDD) ' + ct.specList[i].disk + ' GB';
-                    if(ct.specList[i].name == ct.data.snapshotInfo.name) {
-                        ct.specValue = ct.specList[i];
-                        ct.data.spec = angular.fromJson(ct.specValue);
-                    }
+        //스펙그룹의 스펙 리스트 조회
+        ct.fn.getSpecList = function(specGroup) {
+            ct.specList = [];
+            ct.data.spec = {};
+            var param = {specGroupName:specGroup};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.specs && data.content.specs.length > 0) {
+                    ct.specList = data.content.specs;
+                    ct.fn.setSpecMinDisabled();
+                    ct.fn.setSpecMaxDisabled();
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -247,26 +274,68 @@ angular.module('iaas.controllers')
             });
         };
 
-        ct.fn.selectSpec = function() {
-            if(ct.specValue){
-                ct.data.spec = angular.fromJson(ct.specValue);
-            }else{
-                ct.data.spec.vcpus = 0;
-                ct.data.spec.ram = 0;
-                ct.data.spec.disk = 0;
+        ct.specMinDisabledSetting = false;
+        ct.fn.setSpecMinDisabled = function () {
+            if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.snapshotInfo && ct.snapshotInfo.id) {
+                angular.forEach(ct.specList, function (spec) {
+                    if (spec.disk < ct.snapshotInfo.disk) {
+                        spec.disabled = true;
+                    }
+                });
+                ct.specMinDisabledSetting = true;
+                ct.fn.defaultSelectSpec();
+            }
+        };
+
+        ct.specMaxDisabledSetting = false;
+        ct.fn.setSpecMaxDisabled = function () {
+            if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
+                angular.forEach(ct.specList, function (spec) {
+                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
+                        spec.disabled = true;
+                    }
+                });
+                ct.specMaxDisabledSetting = true;
+                ct.fn.defaultSelectSpec();
+            }
+        };
+
+        ct.specDisabledAllSetting = false;
+        ct.fn.defaultSelectSpec = function() {
+            if(ct.specMinDisabledSetting && ct.specMaxDisabledSetting){
+                var sltSpec = null;
+                for (var i=0; i<ct.specList.length; i++) {
+                    if (!ct.specList[i].disabled) {
+                        sltSpec = ct.specList[i];
+                        break;
+                    }
+                }
+                if (sltSpec) {
+                    ct.fn.selectSpec(sltSpec);
+                }
+                ct.specDisabledAllSetting = true;
+            }
+        };
+
+        ct.fn.selectSpec = function(sltSpec) {
+            if (ct.specDisabledAllSetting || sltSpec.disabled) return;
+            if(sltSpec && sltSpec.uuid) {
+                ct.data.spec = angular.copy(sltSpec);
+                ct.specUuid = ct.data.spec.uuid;
+            } else {
+                ct.data.spec = {};
+                ct.specUuid = "";
             }
         };
 
         // 네트워크 리스트 조회
         ct.fn.networkListSearch = function() {
-            $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 ct.networks = data.content;
                 if(ct.networks.length > 0) {
                     ct.network = ct.networks[0];
@@ -277,13 +346,13 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
         };
 
         if(ct.data.tenantId && ct.snapshotId) {
             $scope.main.loadingMainBody = true;
+            ct.fn.getTenantResource();
             ct.fn.getSnapshotInfo(ct.snapshotId);
             ct.fn.networkListSearch();
             ct.fn.getKeypairList();

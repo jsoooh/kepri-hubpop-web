@@ -15,17 +15,17 @@
 					<div class="pnb_tit">
 						백업 이미지 이름<span class="ico_info"></span>
 					</div>
-					<input type="text" class="form-control" maxlength="50" placeholder="backupImage_name" disabled>
+					<input type="text" class="form-control" maxlength="50" ng-value="contents.snapshotInfo.name" disabled>
 				</li>
 				<li>
 					<div class="pnb_tit">
 						<i class="i_star"></i>서버 이름<span class="ico_info"></span>
 					</div>
-					<input type="text" class="form-control" maxlength="50" placeholder="서버 이름을 입력하세요.">
+					<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
 				</li>
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> 사양 선택<span class="ico_info"></span>
+						<i class="i_star"></i> 사양 선택<span class="ico_info"></span> <img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif">
 					</div>
 					<div class="tbl type1">
 						<table class="table">
@@ -46,7 +46,7 @@
 								</tr>
 							</thead>
 							<tbody>
-							<tr ng-repeat="(key, spec) in contents.specList | filter: {name:'m'} " ng-class="{'tbl_disabled': ()}"  >
+							<tr ng-repeat="(key, spec) in contents.specList | filter: {name:'m'} " ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled)}" ng-click="contents.fn.selectSpec(spec);">
 								<td>
 									<div class="radio radio-only" >
 										<input type="radio"
@@ -54,7 +54,7 @@
 											   ng-model="contents.specUuid"
 											   id="spec_radio_{{key}}"
 											   value="{{spec.uuid}}"
-											   ng-change="contents.fn.selectSpec();">
+											   ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)">
 										<label for="spec_radio_{{key}}"></label>
 									</div>
 								</td>
