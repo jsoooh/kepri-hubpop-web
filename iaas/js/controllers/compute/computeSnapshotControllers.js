@@ -274,12 +274,17 @@ angular.module('iaas.controllers')
             });
         };
 
+        // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+        ct.isMinSpecDisabled = false;
+        // spec loading 체크
         ct.specMinDisabledSetting = false;
         ct.fn.setSpecMinDisabled = function () {
+            ct.isMinSpecDisabled = false;
             if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.snapshotInfo && ct.snapshotInfo.id) {
                 angular.forEach(ct.specList, function (spec) {
                     if (spec.disk < ct.snapshotInfo.disk) {
                         spec.disabled = true;
+                        ct.isMinSpecDisabled = true;
                     }
                 });
                 ct.specMinDisabledSetting = true;
@@ -287,12 +292,17 @@ angular.module('iaas.controllers')
             }
         };
 
+        // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+        ct.isMinSpecDisabled = false;
+        // spec loading 체크
         ct.specMaxDisabledSetting = false;
         ct.fn.setSpecMaxDisabled = function () {
+            ct.isMaxSpecDisabled = false;
             if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
                     if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
                         spec.disabled = true;
+                        ct.isMaxSpecDisabled = true;
                     }
                 });
                 ct.specMaxDisabledSetting = true;
@@ -300,9 +310,10 @@ angular.module('iaas.controllers')
             }
         };
 
+        // spec loading 체크
         ct.specDisabledAllSetting = false;
         ct.fn.defaultSelectSpec = function() {
-            if(!ct.specMinDisabledSetting && ct.specMaxDisabledSetting){
+            if(ct.specMinDisabledSetting && ct.specMaxDisabledSetting){
                 ct.specDisabledAllSetting = true;
                 var sltSpec = null;
                 for (var i=0; i<ct.specList.length; i++) {
@@ -318,7 +329,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.selectSpec = function(sltSpec) {
-            if (ct.specDisabledAllSetting || sltSpec.disabled) return;
+            if (!ct.specDisabledAllSetting || sltSpec.disabled) return;
             angular.forEach(ct.specList, function (spec) {
                 spec.selected = false;
             });

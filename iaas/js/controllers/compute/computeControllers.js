@@ -561,6 +561,9 @@ angular.module('iaas.controllers')
             });
         };
 
+        // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+        ct.isMinSpecDisabled = false;
+        // spec loading 체크
         ct.specMinDisabledSetting = false;
         ct.fn.setSpecMinDisabled = function () {
             if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.data.image && ct.data.image.id) {
@@ -580,6 +583,9 @@ angular.module('iaas.controllers')
             }
         };
 
+        // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+        ct.isMinSpecDisabled = false;
+        // spec loading 체크
         ct.specMaxDisabledSetting = false;
         ct.fn.setSpecMaxDisabled = function () {
             if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
@@ -593,6 +599,7 @@ angular.module('iaas.controllers')
             }
         };
 
+        // spec loading 체크
         ct.specDisabledAllSetting = false;
         ct.fn.defaultSelectSpec = function() {
             if(ct.specMinDisabledSetting && ct.specMaxDisabledSetting){
