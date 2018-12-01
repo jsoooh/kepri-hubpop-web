@@ -852,7 +852,7 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
                 ct.networks.unshift({id:"",name:'',description:"네트워크 선택"});
@@ -867,7 +867,7 @@ angular.module('iaas.controllers')
         //보안정책 조회
         ct.fn.getSecurityPolicy = function() {
             var param = {tenantId:ct.data.tenantId};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param , 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.securityPolicyList = data.content;
                 for(var i = 0; i < ct.securityPolicyList.length; i++){
@@ -886,7 +886,7 @@ angular.module('iaas.controllers')
         //키페어 조회
         ct.fn.getKeypairList = function(keypairName) {
             var param = {tenantId:ct.data.tenantId};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param , 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.keypairList = data.content;
                 if(ct.keypairList.length == 0){
@@ -930,7 +930,7 @@ angular.module('iaas.controllers')
             ct.specList = [];
             ct.data.spec = {};
             var param = {specGroupName:specGroup};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param , 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.specList = data.content.specs;
                 ct.fn.selectSpec();
@@ -999,7 +999,7 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
                 if(ct.networks.length > 0) {
@@ -1035,7 +1035,7 @@ angular.module('iaas.controllers')
             {
                 tenantId : ct.data.tenantId
             }
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
             
             returnPromise.success(function (data, status, headers) 
             {
@@ -1077,7 +1077,7 @@ angular.module('iaas.controllers')
                 networkId : ct.network.id,
                 ipaddr : ct.subnet.cidr_A + '.' + ct.subnet.cidr_B + '.' + ct.subnet.cidr_C + '.' + ct.subnet.cidr_D
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/fixedIps', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/fixedIps', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if(!data.content.ipinfos[0].used) {
                     ct.data.fixedIp = data.content.ipinfos[0].addr;
