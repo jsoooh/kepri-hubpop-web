@@ -366,7 +366,7 @@ angular.module('iaas.controllers')
                 return;
             }*/
 
-	            ct.createStorageVolumeAction();
+	            ct.fn.createStorageVolumeAction();
             }
         };
 
@@ -399,7 +399,7 @@ angular.module('iaas.controllers')
         };
         
         // val 통과 실제 볼륨 생성 호출
-        ct.createStorageVolumeAction = function() 
+        ct.fn.createStorageVolumeAction = function()
         {
             $scope.main.loadingMainBody = true;
         

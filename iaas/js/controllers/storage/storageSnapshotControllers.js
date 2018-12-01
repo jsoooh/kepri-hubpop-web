@@ -130,7 +130,7 @@ angular.module('iaas.controllers')
                 return;
             }
 
-            ct.createStorageVolumeAction();
+            ct.fn.createStorageVolumeAction();
         };
 
         ct.cancelAction = function () {
@@ -215,7 +215,7 @@ angular.module('iaas.controllers')
             // ct.resource.usedResource.volumeGigabytes = Number(ct.data.size) + Number(ct.resourceDefault.usedResource.volumeGigabytes);
         };
 
-        ct.createStorageVolumeAction = function() {
+        ct.fn.createStorageVolumeAction = function() {
             $scope.main.loadingMainBody = true;
             ct.data.tenantId = ct.userTenant.tenantId;
             var param = {
@@ -292,7 +292,7 @@ angular.module('iaas.controllers')
             }
 
 
-            pop.createStorageVolumeAction();
+            pop.fn.createStorageVolumeAction();
         };
 
         pop.popCancel = function () {
@@ -358,7 +358,7 @@ angular.module('iaas.controllers')
             // pop.resource.usedResource.volumeGigabytes = Number(pop.data.size) + Number(pop.resourceDefault.usedResource.volumeGigabytes);
         }
 
-        pop.createStorageVolumeAction = function() {
+        pop.fn.createStorageVolumeAction = function() {
             $scope.main.loadingMainBody = true;
             pop.data.tenantId = pop.userTenant.tenantId;
             var param = {
