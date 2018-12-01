@@ -1188,23 +1188,6 @@ angular.module('iaas.controllers')
             }
         };
 
-        if(ct.data.tenantId) {
-        	ct.fn.getSpecList();
-            ct.fn.imageListSearch();
-            ct.fn.networkListSearch();
-            ct.fn.getTenantResource();
-        }
-
-        ct.fn.getKeyFile = function(keypair,type) {
-            var param = {
-                tenantId : ct.data.tenantId,
-                name : keypair.name
-            };
-            location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
-        }
-        
-        
-       
         //서버 생성
         var clickCheck = false;
         ct.fn.createServer = function() 
@@ -1294,8 +1277,14 @@ angular.module('iaas.controllers')
                 onChange : ct.sliderVolumeSizeChange
             }
         };
-        
-        
+
+        if(ct.data.tenantId) {
+            ct.fn.getSpecList();
+            ct.fn.imageListSearch();
+            ct.fn.networkListSearch();
+            ct.fn.getTenantResource();
+        }
+
     })
     .controller('iaasComputeCopyCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCopyCtrl start", 1);
