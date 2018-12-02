@@ -17,7 +17,7 @@
 			<tr>
 				<th scope="row">백업 이미지 설명</th>
 				<td>
-					<textarea type="text"id="description" name="description" ng-model="pop.data.description"  placeholder="이미지 설명을 입력하세요." class="form-control volTxt" validation="max_len:50|required" ></textarea>
+					<textarea type="text" id="description" name="description" ng-model="pop.data.description" placeholder="이미지 설명을 입력하세요." class="form-control volTxt" validation="max_len:50|required" ></textarea>
 					<span class="txt_limit"><em ng-class="{'red' : (pop.data.description.length > 50)}">{{pop.data.description.length}}</em>/50자</span>
 					<div class="validation validation-description text-danger" ng-show="pop.data.description.length > 50">50Byte까지 작성 가능합니다.</div>
 				</td>

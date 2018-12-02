@@ -78,6 +78,11 @@ angular.module('common.controllers', [])
             common.goToState(stateKey);
         };
 
+        // 이전 페이지로 이동
+        mc.goToHistoryBack = function () {
+            $window.history.back();
+        };
+
         mc.moveToAppPage = function(path, title) {
             if(title) {
                 mc.sltOrganizationName = title;
