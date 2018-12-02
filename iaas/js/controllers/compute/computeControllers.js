@@ -26,7 +26,7 @@ angular.module('iaas.controllers')
         };
         
       //20181120 sg0730  서버사양변경 PopUp 추가
-        ct.computePopEditServerForm = function (instance,$event) {
+        ct.computePopEditServerForm = function (instance, $event, $index) {
         	
         	 var dialogOptions = {
                      controller : "iaasComputePopEditServerCtrl" ,
