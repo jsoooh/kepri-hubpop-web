@@ -34,13 +34,6 @@ angular.module('paas.controllers')
             ct.pageLoadData();
         });
 
-        ct.showForm = function () {
-            $scope.main.layerTemplateUrl = _PAAS_VIEWS_ + "/application/appPushUrl.html" + _VersionTail();
-
-            $(".aside").stop().animate({"right":"-360px"}, 400);
-            $("#aside-aside1").stop().animate({"right":"0"}, 500);
-        };
-        
         ct.listSpaces = function () {
             var spacePromise = applicationService.listAllSpaces(ct.sltOrganizationGuid);
             spacePromise.success(function (data) {
@@ -454,7 +447,7 @@ angular.module('paas.controllers')
 
         ct.pageLoadData();
     })
-    .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, routeService, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
+    .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationPushCtrl", 1);
 
         var ct 					= this;
