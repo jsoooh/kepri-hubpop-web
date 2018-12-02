@@ -170,7 +170,12 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.length > 0) {
                     ct.securityPolicyList = data.content;
-                    ct.roles.push(ct.securityPolicyList[0]);
+                    for(var i = 0; i < ct.securityPolicyList.length; i++){
+                        if(ct.securityPolicyList[i].name == "default"){
+                            ct.roles.push(ct.securityPolicyList[i]);
+                            ct.data.securityPolicys = ct.roles;
+                        }
+                    }
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -204,20 +209,31 @@ angular.module('iaas.controllers')
         var clickCheck = false;
         ct.fn.createServer = function() {
             if(clickCheck) return;
+            clickCheck = true;
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                clickCheck = false;
                 return;
             }
-            clickCheck = true;
-            ct.data.spec.type = ct.data.spec.name;
-            ct.data.image.type = 'snapshot';
-            //ct.data.vmType = 'SNAPSHOT'
+
+            var params = {};
+
+            var instance              = {};
+            instance.name             = ct.data.name;
+            instance.tenantId         = ct.data.tenantId;
+            instance.networks         = [{ id: ct.data.networks[0].id }];
+            instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
+            instance.keypair          = { keypairName: ct.data.keypair.keypairName };
+            instance.securityPolicies = angular.copy(ct.data.securityPolicys);
+            instance.spec = ct.data.spec;
+
+            params.instance = instance;
             $scope.main.loadingMainBody = true;
-            $scope.main.asideClose();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : ct.data});
             returnPromise.success(function (data, status, headers) {
+                clickCheck = false;
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("생성 되었습니다.");
-                $scope.main.goToPage('/iaas/compute');
+                $scope.main.goToHistoryBack();
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

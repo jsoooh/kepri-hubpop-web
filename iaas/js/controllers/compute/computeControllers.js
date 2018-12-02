@@ -792,52 +792,51 @@ angular.module('iaas.controllers')
         //서버 생성
         var clickCheck = false;
         ct.fn.createServer = function()  {
-            if(!clickCheck) {
-                clickCheck = true;
+            if(clickCheck) return;
+            clickCheck = true;
 
-                if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                    clickCheck = false;
-                    return;
-                }
-
-                var params = {};
-
-                var instance              = {};
-                instance.name             = ct.data.name;
-                instance.tenantId         = ct.data.tenantId;
-                instance.networks         = [{ id: ct.data.networks[0].id }];
-                instance.image            = {id: ct.data.image.id};
-                instance.keypair          = { keypairName: ct.data.keypair.keypairName };
-                instance.securityPolicies = angular.copy(ct.data.securityPolicys);
-                params.instance = instance;
-
-                if (ct.volumeSize > 0) {
-                    params.volume = {};
-                    params.volume.name = instance.name+'_volume01';
-                    params.volume.type = 'HDD';
-                    params.volume.size = ct.volumeSize;
-                    params.volume.tenantId = ct.data.tenantId;
-                }
-
-                instance.spec = ct.data.spec;
-                $scope.main.loadingMainBody = true;
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
-                returnPromise.success(function (data, status, headers)  {
-                	// 서버생성후 -> 볼륨 생성 후 sucess 처리.
-                    $scope.main.loadingMainBody = false;
-                    common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
-                    // 페이지 이동으로 바꿔야 하고
-                    $scope.main.goToPage("/iaas/compute");
-                });
-                returnPromise.error(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                    common.showAlertError(data.message);
-                });
-                returnPromise.finally(function() {
-                    clickCheck = false;
-                });
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                clickCheck = false;
+                return;
             }
 
+            var params = {};
+
+            var instance              = {};
+            instance.name             = ct.data.name;
+            instance.tenantId         = ct.data.tenantId;
+            instance.networks         = [{ id: ct.data.networks[0].id }];
+            instance.image            = {id: ct.data.image.id};
+            instance.keypair          = { keypairName: ct.data.keypair.keypairName };
+            instance.securityPolicies = angular.copy(ct.data.securityPolicys);
+            instance.spec = ct.data.spec;
+
+            params.instance = instance;
+
+            if (ct.volumeSize > 0) {
+                params.volume = {};
+                params.volume.name = instance.name+'_volume01';
+                params.volume.type = 'HDD';
+                params.volume.size = ct.volumeSize;
+                params.volume.tenantId = ct.data.tenantId;
+            }
+
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
+            returnPromise.success(function (data, status, headers)  {
+                // 서버생성후 -> 볼륨 생성 후 sucess 처리.
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                // 페이지 이동으로 바꿔야 하고
+                $scope.main.goToPage("/iaas/compute");
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function() {
+                clickCheck = false;
+            });
         };
 
         ct.inputVolumeSizeChange = function () {
