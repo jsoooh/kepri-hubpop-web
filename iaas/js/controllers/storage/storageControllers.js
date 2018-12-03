@@ -316,7 +316,7 @@ angular.module('iaas.controllers')
         ct.formName          = "storageForm";
         ct.validDisabled = true;
         $scope.actionLoading = false;
-        
+        ct.sltInstance = {};
         //볼륨생성 변수
         ct.volumeSize = 10;
         ct.volumeSliderOptions = 
@@ -330,6 +330,30 @@ angular.module('iaas.controllers')
                 step: 30
             }
         };
+        
+       /*ct.byteVal = function formatBytes(bytes, decimals, binaryUnits) {
+            if(bytes == 0) {
+                return '0 Bytes';
+            }
+            var unitMultiple = (binaryUnits) ? 1024 : 1000; 
+            var unitNames = (unitMultiple === 1024) ? // 1000 bytes in 1 Kilobyte (KB) or 1024 bytes for the binary version (KiB)
+                ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']: 
+                ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+            var unitChanges = Math.floor(Math.log(bytes) / Math.log(unitMultiple));
+            return parseFloat((bytes / Math.pow(unitMultiple, unitChanges)).toFixed(decimals || 0)) + ' ' + unitNames[unitChanges];
+        }*/
+        
+        /*function formatBytes(bytes, decimals) {
+            if(bytes== 0)
+            {
+                return "0 Byte";
+            }
+            var k = 1024; //Or 1 kilo = 1000
+            var sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB"];
+            var i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + " " + sizes[i];
+        }*/
+        
       
         // Dialog ok 버튼 클릭 시 액션 정의
         var clickCheck = false;
@@ -381,9 +405,11 @@ angular.module('iaas.controllers')
             
             returnPromise.success(function (data, status, headers) 
             {
-                ct.volume.resource = data.content[0];
-                ct.volume.resourceDefault = angular.copy(ct.volume.resource);
+                ct.volume.resource 			= data.content[0];
+                ct.volume.resourceDefault 	= angular.copy(ct.volume.resource);
                 ct.volumeSliderOptions.ceil = ct.volume.resource.maxResource.volumeGigabytes - ct.volume.resource.usedResource.volumeGigabytes ;
+                ct.currUsedPur 				= (ct.volume.resource.usedResource.volumeGigabytes / ct.volume.resource.maxResource.volumeGigabytes).toFixed(1);
+                ct.usedPur 					= 100 - ct.currUsedPur;
             });
             
             returnPromise.error(function (data, status, headers) 
@@ -398,6 +424,40 @@ angular.module('iaas.controllers')
             });
         };
         
+        // 인스턴스 조회 부분 추가 2018.11.30 sg0730
+        ct.fn.getInstanceInfo = function() 
+        {
+        	var params = {
+				        	tenantId : ct.data.tenantId
+				         }
+        	
+        	var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', params, 'application/x-www-form-urlencoded');
+        	ct.instances = [];
+        	returnPromise.success(function (data, status, headers) 
+        	{
+        		ct.instances 				= data.content.instances;
+        	});
+        	
+        	returnPromise.error(function (data, status, headers) 
+        	{
+        		$scope.main.loadingMainBody = false;
+        		common.showAlert("message",data.message);
+        	});
+        	
+        	returnPromise.finally(function (data, status, headers) 
+        	{
+        		$scope.main.loadingMainBody = false;
+        	});
+        };
+        
+        ct.fn.onInstanceChange = function (insId) {
+        	ct.sltInstance = {};
+        	if (insId) {
+            	ct.sltInstance = common.objectsFindCopyByField(ct.instances, "id", insId);
+            	
+        	}
+        };
+        
         // val 통과 실제 볼륨 생성 호출
         ct.fn.createStorageVolumeAction = function()
         {
@@ -407,7 +467,11 @@ angular.module('iaas.controllers')
             ct.volume.type = 'HDD';
             ct.volume.size = ct.volumeSize;
             ct.volume.tenantId = ct.data.tenantId;
+            ct.volume.volumeAttachment = {};
             
+            //sg0730 서버 선택시 인스턴스 ID 넘겨야함.
+            ct.volume.volumeAttachment.instanceId = ct.insId;
+           
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'POST', {volume:ct.volume});
             
             returnPromise.success(function (data, status, headers) 
@@ -432,6 +496,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.getTenantResource();
+        ct.fn.getInstanceInfo();
     })
     .controller('iaasStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageDetailCtrl", 1);
@@ -984,7 +1049,7 @@ angular.module('iaas.controllers')
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		
     		returnPromise.success(function (data, status, headers) 
-    				{
+    		{
     			$scope.main.loadingMainBody = false;
     			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
     			
@@ -992,17 +1057,17 @@ angular.module('iaas.controllers')
     				pop.callBackFunction();
     			}
     			
-    				});
+    		});
     		returnPromise.error(function (data, status, headers) 
-    				{
+    		{
     			$scope.main.loadingMainBody = false;
     			common.showAlertError(data.message);
-    				});
+    		});
     		returnPromise.finally(function (data, status, headers) 
-    				{
+    		{
     			$scope.actionBtnHied = false;
     			$scope.main.loadingMainBody = false;
-    				});
+    		});
     	}
     	
     })
@@ -1027,19 +1092,56 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
-    	
-    	 pop.newVolSize = 1;
-         pop.reSizeSliderOptions = 
-         {
-         	showSelectionBar : true,
-         	options: {
-                 floor: 0,
-                 ceil: 100,
-                 minValue : 1,
-                 step: 30
+    	pop.inputVolumeSize 			= 1;
+    	pop.newVolSize 					= 1;
+        pop.inputVolumeSizeChange = function () {
+             
+        	 if (typeof pop.inputVolumeSize === 'undefined' ) 
+             {
+            	 pop.inputVolumeSize = pop.newVolSize ;
              }
+        	 else if (pop.inputVolumeSize < pop.volume.size  ) 
+             {
+            	 //pop.newVolSize = pop.inputVolumeSize;
+            	 pop.inputVolumeSize = pop.newVolSize ;
+             }
+             else if (pop.inputVolumeSize > pop.reSizeSliderOptions.ceil)
+             {
+            	 pop.inputVolumeSize = pop.reSizeSliderOptions.ceil  ;
+            	 //pop.newVolSize      = pop.reSizeSliderOptions.ceil  ;
+             }	 
+             else
+             {
+            	 //pop.newVolSize = pop.inputVolumeSize;
+            	 pop.newVolSize = pop.inputVolumeSize ;
+            	 
+             }	 
          };
-    	
+
+         pop.inputVolumeSizeBlur = function () {
+        	 if (typeof pop.inputVolumeSize === 'undefined' ) 
+             {
+            	 pop.inputVolumeSize = pop.newVolSize ;
+             }
+        	 else if (pop.inputVolumeSize < pop.volume.size  ) 
+             {
+            	 pop.inputVolumeSize = pop.newVolSize ;
+             }
+             else if (pop.inputVolumeSize > pop.reSizeSliderOptions.options.ceil)
+             {
+            	 pop.inputVolumeSize = pop.reSizeSliderOptions.options.ceil  ;
+            	 pop.newVolSize      = pop.inputVolumeSize  ;
+             }	 
+             else
+             {
+            	 pop.newVolSize = pop.inputVolumeSize ;
+            	 
+             }	
+         };
+
+         pop.sliderVolumeSizeChange = function () {
+        	 pop.inputVolumeSize = pop.newVolSize;
+         };
     	
          pop.fn.getStorageInfo = function() {
              $scope.main.loadingMainBody = true;
@@ -1052,8 +1154,10 @@ angular.module('iaas.controllers')
              var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
              
              returnPromise.success(function (data, status, headers) {
-                 pop.volume = data.content.volumes[0];
-                 pop.newVolSize 	= pop.volume.size;
+                 pop.volume 							  = data.content.volumes[0];
+                 pop.inputVolumeSize 					  = pop.volume.size;
+                 pop.newVolSize 						  = pop.volume.size;
+                 pop.reSizeSliderOptions.options.minLimit = pop.volume.size ;
                  
                  pop.fn.getTenantResource();
                  
@@ -1064,6 +1168,19 @@ angular.module('iaas.controllers')
              returnPromise.finally(function (data, status, headers) {
                  $scope.main.loadingMainBody = false;
              });
+         };
+         
+         
+         pop.reSizeSliderOptions = 
+         {
+         	options: {
+                 floor: 0,
+                 ceil: 100,
+                 step: 1,
+                 minLimit : 1,
+                 showSelectionBar : true,
+                 onChange : pop.sliderVolumeSizeChange
+             }
          };
          
          pop.fn.getTenantResource = function() {
@@ -1077,7 +1194,9 @@ angular.module('iaas.controllers')
              returnPromise.success(function (data, status, headers) {
                  pop.resource 		 = angular.copy(data.content[0]);
                  pop.resourceDefault = angular.copy(data.content[0]);
-                 pop.reSizeSliderOptions.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes ;
+                 pop.reSizeSliderOptions.options.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes ;
+                 
+                 
              });
              returnPromise.error(function (data, status, headers) {
                  $scope.main.loadingMainBody = false;
