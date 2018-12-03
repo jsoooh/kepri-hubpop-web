@@ -52,6 +52,8 @@ angular.module('common.controllers', [])
         }
         mc.portalOrgDropdownTempeUrl = _COMM_VIEWS_+'/portalOrgDropdown.html'+_VERSION_TAIL_;
 
+        mc.portalOrgSelectTemplateUrl = _COMM_VIEWS_ + '/menu/portalOrgSelect.html' + _VERSION_TAIL_;
+
         mc.commLeftFav.sortableOptions = {
             stop: function(event, ui) {
                 if (!mc.commLeftFav.setMode) {

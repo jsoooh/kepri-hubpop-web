@@ -96,50 +96,46 @@ angular.module('iaas.controllers')
 
         var ct               = this;
         ct.data              = {};
+        ct.data.tenantId     = $scope.main.userTenant.id;
+        ct.data.tenantName   = $scope.main.userTenant.korName;
         ct.fn                = {};
-        ct.ui                = {};
-        ct.roles             = [];
         ct.volume            = {};
         ct.instances         = [];
         ct.sltInstance       = {};
-        ct.data.tenantId     = $scope.main.userTenant.id;
-        ct.data.tenantName   = $scope.main.userTenant.korName;
         ct.formName          = "storageSnapshotForm";
-        ct.validDisabled = true;
         ct.isTenantResourceLoad = false;
 
         ct.volume.name      = 'disk-01';
+
+        ct.data.volumeId = $stateParams.snapshotId;
 
         //볼륨생성 변수
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
             showSelectionBar : true,
             minValue : 10,
-            options: {
-                floor: 0,
-                ceil: 100,
-                step: 30
+            floor: 0,
+            ceil: 100,
+            step: 10,
+            onChange : ct.sliderVolumeSizeChange
+        };
+
+        ct.inputVolumeSizeChange = function () {
+            if (ct.inputVolumeSize >= 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+                ct.volumeSize = ct.inputVolumeSize;
             }
         };
 
-
-        ct.data.volumeId = $stateParams.snapshotId;
-
-        ct.checkClickBtn = false;
-
-        ct.snapshotAndCreateStorage = function () {
-            if (ct.checkClickBtn) return;
-            ct.checkClickBtn = true;
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                ct.checkClickBtn = false;
-                return;
+        ct.inputVolumeSizeBlur = function () {
+            if (ct.inputVolumeSize < 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+                ct.inputVolumeSize = ct.volumeSize;
+            } else {
+                ct.volumeSize = ct.inputVolumeSize;
             }
-
-            ct.fn.createStorageVolumeAction();
         };
 
-        ct.cancelAction = function () {
-            $window.history.back();
+        ct.sliderVolumeSizeChange = function () {
+            ct.inputVolumeSize = ct.volumeSize;
         };
 
         ct.fn.getTenantResource = function() {
@@ -232,6 +228,28 @@ angular.module('iaas.controllers')
             // ct.resource.usedResource.volumeGigabytes = Number(ct.data.size) + Number(ct.resourceDefault.usedResource.volumeGigabytes);
         };
 
+        // 서버메인 tenant list 함수
+        ct.isServerListLoad = false;
+        ct.fn.serverList = function() {
+            var param = {
+                tenantId : ct.data.tenantId
+            };
+            ct.instances         = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
+                    ct.instances = data.content.instances;
+                }
+                ct.isServerListLoad = true;
+            });
+            returnPromise.error(function (data, status, headers) {
+                //common.showAlertError(data.message);
+                ct.isServerListLoad = true;
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };
+
         ct.fn.createStorageVolumeAction = function() {
             $scope.main.loadingMainBody = true;
             ct.data.tenantId = ct.data.tenantId,
@@ -250,7 +268,24 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.checkClickBtn = false;
+        ct.snapshotAndCreateStorage = function () {
+            if (ct.checkClickBtn) return;
+            ct.checkClickBtn = true;
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                ct.checkClickBtn = false;
+                return;
+            }
+
+            ct.fn.createStorageVolumeAction();
+        };
+
+        ct.cancelAction = function () {
+            $window.history.back();
+        };
+
         ct.fn.getStorageInfo();
+        ct.fn.serverList();
         ct.fn.getTenantResource();
     })
     .controller('iaasStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {

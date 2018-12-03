@@ -1,0 +1,16 @@
+   <ul class="gnb-menu dept1 depth1">
+       <li class="dept1">
+           <a class="dept1" href="javascript:void(0);" onclick="depthProjectOrgClick(event);"><span class="ico ico-bul ico2"></span>{{main.sltPortalOrgDisplayName ? main.sltPortalOrgDisplayName : "프로젝트"}}<span class="ico ico-arr"></span></a>
+           <ul class="dept2" style="display:none" onmouseleave="depth3Leave();">
+               <li ng-if="main.userAuth == 'M'" href="" class="dept2" onmouseover="depth2LiHover(event, 'no');">
+                   <a class="btn_create_proj" ng-click="main.addOrgProjectFormOpen($event)">프로젝트 생성</a>
+               </li>
+               <li ng-repeat="orgItem in main.portalOrgs" class="dept2" onmouseover="depth2LiHover(event, 'no');">
+                   <a class="dept2" href="" onmouseover="depth2Hover(event, 'no');" ng-click="main.goToPortalOrgPage(orgItem);">{{orgItem.orgName}}</a>
+               </li>
+               <li class="dept2" onmouseover="depth2LiHover(event, 'no');">
+                   <a class="btn_all_proj" href="/#/comm/projects">전체프로젝트</a>
+               </li>
+           </ul>
+       </li>
+   </ul>

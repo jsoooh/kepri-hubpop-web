@@ -199,6 +199,30 @@ function nowHrefFunction (depth){
     }
 
 }
+
+//1depth click event
+function depthProjectOrgClick (evt) {
+    var target = $(evt.currentTarget);
+
+    var parentTarget = target.closest('div.gnb-in');
+
+    if (target.hasClass("open")) {
+        parentTarget.find('ul.dept2').hide(200);
+        parentTarget.find('a.dept1').removeClass("open on");
+
+        nowHrefFunction("dept1");
+
+    } else {
+        parentTarget.find('ul.dept2').hide(200);
+        parentTarget.find('a.dept1').removeClass("open on");
+
+        nowHrefFunction("dept1");
+
+        target.addClass("open on");
+        $(target).closest("li.dept1").find("ul.dept2").toggle(200);
+    }
+};
+
 //1depth click event
 function depth1Click (evt) {
 
@@ -212,15 +236,17 @@ function depth1Click (evt) {
 
     var target = $(evt.currentTarget);
 
+    var parentTarget = target.closest('div.gnb-in');
+
     if (target.hasClass("open")) {
-        $("#leftMenu").find('ul.dept2').hide(200);
-        $("#leftMenu").find('a.dept1').removeClass("open on");
+        parentTarget.find('ul.dept2').hide(200);
+        parentTarget.find('a.dept1').removeClass("open on");
 
         nowHrefFunction("dept1");
 
     } else {
-        $("#leftMenu").find('ul.dept2').hide(200);
-        $("#leftMenu").find('a.dept1').removeClass("open on");
+        parentTarget.find('ul.dept2').hide(200);
+        parentTarget.find('a.dept1').removeClass("open on");
 
         nowHrefFunction("dept1");
 

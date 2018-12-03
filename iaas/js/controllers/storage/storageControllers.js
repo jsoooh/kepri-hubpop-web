@@ -318,6 +318,17 @@ angular.module('iaas.controllers')
 
         ct.volume.name      = 'disk-01';
 
+        //볼륨생성 변수
+        ct.volumeSize = 100;
+        ct.volumeSliderOptions = {
+        	showSelectionBar : true,
+        	minValue : 10,
+            floor: 0,
+            ceil: 100,
+            step: 10,
+            onChange : ct.sliderVolumeSizeChange
+        };
+
         ct.inputVolumeSizeChange = function () {
             if (ct.inputVolumeSize >= 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
                 ct.volumeSize = ct.inputVolumeSize;
@@ -336,19 +347,6 @@ angular.module('iaas.controllers')
             ct.inputVolumeSize = ct.volumeSize;
         };
 
-        //볼륨생성 변수
-        ct.volumeSize = 100;
-        ct.volumeSliderOptions = {
-        	showSelectionBar : true,
-        	minValue : 10,
-        	options: {
-                floor: 0,
-                ceil: 100,
-                step: 10,
-                onChange : ct.sliderVolumeSizeChange
-            }
-        };
-      
         // Dialog ok 버튼 클릭 시 액션 정의
         var clickCheck = false;
         ct.checkVal = function () {

@@ -67,6 +67,7 @@
     var _REGION_KEY_COOKIE_NAME_     = "REGION-KEY";
     var _USER_INFO_COOKIE_NAME_      = "USER-INFO";
     var _LEFT_MENU_SHOW_COOKIE_NAME_ = "LEFT-MENU-SHOW";
+    var _PROJECT_ID_COOKIE_NAME_     = "PROJECT-ID";
 
     var _ACCESS_TOKEN_CASHE_NAME_    = "cmm.accessToken";
     var _LANGUAGE_KEY_CASHE_NAME_    = "cmm.languageKey";
@@ -231,7 +232,12 @@
     document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="main.navigationTemplateUrl"></header>');
     document.writeln('	<div id="container" ng-class="main.containerLayoutClass">');
     if (_MENU_TYPE_ == 'db') {
-        document.writeln('		<div ng-if="main.isLoginPage" class="leftCnt on"><div class="gnbMenu"><div class="gnb-in" id="leftMenu"></div></div></div>');	// Left Menu 구조 변경 TEST용
+        document.writeln('		<div ng-if="main.isLoginPage" class="leftCnt on">');
+        document.writeln('			<div class="gnbMenu">');
+        document.writeln('				<div class="gnb-in" ng-include="main.portalOrgSelectTemplateUrl"></div>');
+        document.writeln('				<div class="gnb-in" id="leftMenu"></div>');
+        document.writeln('			</div>');
+        document.writeln('		</div>');
 	} else {
         document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
 	}
