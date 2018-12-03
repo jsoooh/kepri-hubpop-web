@@ -13,13 +13,15 @@
 			<ul class="form_list">
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> 서비스 이름<span class="ico_info"></span>
+						<i class="i_star"></i> <span class="pnb_t_txt">서비스 이름</span>
+						<button type="button" tooltip-placement="right" uib-tooltip="영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다."><span class="ico_info"></span></button>
 					</div>
 					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName" ng-init="contents.serviceInstanceName='service-001'" >
 				</li>
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> 서비스 S/W<span class="ico_info"></span>
+						<i class="i_star"></i> <span class="pnb_t_txt">서비스 S/W</span>
+						<button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
 					</div>
 					<ul class="ul-list1">
 						<li ng-repeat="(key, serviceItem) in contents.services">
@@ -42,7 +44,8 @@
 				</li>
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> 서비스 플랜<span class="ico_info"></span>
+						<i class="i_star"></i> <span class="pnb_t_txt">서비스 플랜</span>
+						<button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
 					</div>
 					<div class="app-form-two">
 						<div ng-repeat="(key, servicePlan) in contents.servicePlans" class="two_box pdr10">
@@ -61,18 +64,22 @@
 						</div>
 					</div>
 				</li>
-				<li>
+				<li class="pn-Toggle">
 					<div class="pnb_tit">
-						연결대상 APP<span class="ico_info"></span>
+						<span class="pnb_t_txt">연결대상 APP</span>
+						<button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 					</div>
-					<div class="select_ui_style">
-						<select ui-select-two="main.usSelectTwoOptions" name="sltBindApp" id="sltBindApp"
-								ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);"
-								data-placeholder="선택 없음"
-								style="width: 100%;">
-							<option ng-repeat="appItem in contents.spaceApps" value="{{ appItem.guid }}" option-html="<span class='ico_list_dot'>{text}</span>">{{ appItem.name }}</option>
-							<option value="null" option-html="<span>{text}</span>">선택 없음</option>
-						</select>
+					<div class="s_cont_box">
+						<div class="select_ui_style">
+							<select ui-select-two="main.usSelectTwoOptions" name="sltBindApp" id="sltBindApp"
+									ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);"
+									data-placeholder="선택 없음"
+									style="width: 100%;">
+								<option ng-repeat="appItem in contents.spaceApps" value="{{ appItem.guid }}" option-html="<span class='ico_list_dot'>{text}</span>">{{ appItem.name }}</option>
+								<option value="null" option-html="<span>{text}</span>">선택 없음</option>
+							</select>
+						</div>
 					</div>
 				</li>
 			</ul>
@@ -96,7 +103,7 @@
 						<span class="s_txt">{{contents.serviceInstanceName}}</span>
 					</li>
 					<li>
-						<span class="s_tit">서비스 유형<span class="ico_info"></span></span>
+						<span class="s_tit">서비스 유형</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
 						<span class="s_txt">관계형 데이터 베이스</span>
 					</li>
 					<li ng-if="contents.dbTmpNm == 'p-mysql'">
@@ -128,32 +135,36 @@
 				</ul>
 			</div>
 		</div>
-		<div class="pn_head">
-			<h4 class="pnh_tit ico08">서비스 플랜(Plan)정보</h4>
+		
+		<div class="pn-Toggle">
+			<div class="pn_head brdt">
+				<h4 class="pnh_tit ico08">서비스 플랜(Plan)정보</h4>
+				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+			</div>
+			<div class="pn_body">
+				<div class="s_cont_box">
+					<ul>
+						<li ng-if="contents.dbTmpNm == 'p-mysql'">
+							<span class="s_tit">서비스 용량</span>
+							<span class="s_txt" >{{contents.TmpStr}}</span>
+						</li>
+						<li ng-if="contents.dbTmpNm == 'p-mysql'">
+							<span class="s_tit">서비스 사용 모델</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+							<span class="s_txt" ng-if="contents.sltServicePlan.public">공유형</span>
+							<span class="s_txt" ng-if="!contents.sltServicePlan.public">단독형</span>
+						</li>
+						<li>
+							<span class="s_tit">서비스 플랜 설명</span>
+							<div class="s_inner_cont">
+								{{contents.Desc}}
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
-		<div class="pn_body">
-			<div class="s_cont_box">
-				<ul>
-					<li ng-if="contents.dbTmpNm == 'p-mysql'">
-						<span class="s_tit">서비스 용량</span>
-						<span class="s_txt" >{{contents.TmpStr}}</span>
-					</li>
-					<li ng-if="contents.dbTmpNm == 'p-mysql'">
-						<span class="s_tit">서비스 사용 모델<span class="ico_info"></span></span>
-						<span class="s_txt" ng-if="contents.sltServicePlan.public">공유형</span>
-						<span class="s_txt" ng-if="!contents.sltServicePlan.public">단독형</span>
-					</li>
-					<li>
-						<span class="s_tit">서비스 플랜 설명</span>
-						<div class="s_inner_cont">
-							{{contents.Desc}}
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div class="btn-btm">
-				<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
-			</div>
+		<div class="btn-btm">
+			<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
 		</div>
 	</div>
 </div>
