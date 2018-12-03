@@ -14,13 +14,13 @@
 			<ul class="form_list">
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> APP 이름<span class="ico_info"></span>
+						<i class="i_star"></i> <span class="pnb_t_txt">APP 이름</span><button type="button" tooltip-placement="right" uib-tooltip="영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다."><span class="ico_info"></span></button>
 					</div>
 					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요." id="appName" name="appName" ng-model="contents.appPushData.appName" ng-change="contents.appPushData.domainFirstName = contents.appPushData.appName" validation="min_len:3|max_len:50|required">
 				</li>
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> APP 도메인<span class="ico_info"></span>
+						<i class="i_star"></i> <span class="pnb_t_txt">APP 도메인</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
 					</div>
 					<div class="app-form-two">
 						<div class="two_box w60">
@@ -37,7 +37,7 @@
 				</li>
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> APP 유형<span class="ico_info"></span>
+						<i class="i_star"></i> <span class="pnb_t_txt">APP 유형</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
 					</div>
 					<div class="mt20">
 						<div class="radio radio-inline">
@@ -52,7 +52,7 @@
 				</li>
 				<li ng-if="contents.appPushData.pushType != 'DOCKER'">
 					<div class="pnb_tit">
-						<i class="i_star"></i> 빌드팩(Buildpack) 선택<span class="ico_info"></span>
+						<i class="i_star"></i> <span class="pnb_t_txt">빌드팩(Buildpack) 선택</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
 					</div>
 					<div class="scroll-pane">
 						<ul class="ul-list1">
@@ -71,13 +71,14 @@
 					</div>	
 				</li>
 				<li ng-if="contents.appPushData.pushType == 'DOCKER'">
-					<p class="pnb_tit">도커(Docker) 이미지 정보를 입력해 주세요. <i class="i_star"></i></p>
+					<div class="pnb_tit" ><i class="i_star"></i> <span class="pnb_t_txt">도커(Docker) 이미지 정보 입력</span></div>
 					<input type="text" maxlength="100" name="dockerImage" id="dockerImage" ng-model="contents.appPushData.dockerImage" class="form-control" placeholder="예 : cloudfoundry/lattice-app" validation="required">
 				</li>
 				
-				<li ng-if="contents.appPushData.pushType != 'DOCKER'">
+				<li class="pn-Toggle" ng-if="contents.appPushData.pushType != 'DOCKER'">
 					<div class="pnb_tit" >
-						APP 실행용 파일 업로드(선택)<span class="ico_info"></span>
+						<span class="pnb_t_txt">APP 실행용 파일 업로드(선택)</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 					</div>
 					<!-- 20181119 연구원 기능제한으로 인한 구현제거 sg0730 
 						<div class="mt20">
@@ -92,18 +93,20 @@
 							20181119 신규 VALUE 세팅 필요 sg0730 END
 						</div>
 					</div> -->
-					<div class="fileUploadWrap mt20">
-						<div class="bootstrap-filestyle input-group">
-							<input type="hidden" name="contents.appFileName" ng-model="contents.appFileItem.file.name" style="display: none;" />
-							<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" readonly value="{{ contents.appFileItem.file.name }}">
-							<span class="group-span-filestyle input-group-btn" tabindex="0">
-								<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
-								<label class="btn btn-default " ng-click="main.fileSelectBtnClick($event);">
-									<span class="btn btn-md btn-color1" >파일찾기</span>
-								</label>
-							</span>
+					<div class="s_cont_box">
+						<div class="fileUploadWrap mt20">
+							<div class="bootstrap-filestyle input-group">
+								<input type="hidden" name="contents.appFileName" ng-model="contents.appFileItem.file.name" style="display: none;" />
+								<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" readonly value="{{ contents.appFileItem.file.name }}">
+								<span class="group-span-filestyle input-group-btn" tabindex="0">
+									<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
+									<label class="btn btn-default " ng-click="main.fileSelectBtnClick($event);">
+										<span class="btn btn-md btn-color1" >파일찾기</span>
+									</label>
+								</span>
+							</div>
+							<span class="mt10" ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
 						</div>
-						<span class="mt10" ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
 					</div>
 				</li>
 			</ul>
@@ -218,7 +221,7 @@
 						<span class="s_txt" ng-if="contents.appPushData.pushType == 'DOCKER'">도커(Docker)</span>
 					</li>
 					<li ng-if="contents.appPushData.pushType == 'GENERAL'">
-						<span class="s_tit">빌드팩 정보<span class="ico_info"></span></span>
+						<span class="s_tit">빌드팩 정보</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
 						<div class="s_inner_cont">
 							<dl>
 								<dt>종류 :</dt>
@@ -236,63 +239,69 @@
 			</div>
 		</div>
 		
-		<div class="pn_head brdt" ng-if="contents.appPushData.pushType == 'GENERAL'">
-			<h4 class="pnh_tit ico06">APP 실행 소스코드</h4>
-		</div>
-		<div class="pn_body" ng-if="contents.appPushData.pushType == 'GENERAL'">
-			<div class="s_cont_box">
-				<ul>
-					<li>
-						<div class="s_inner_cont">
-							<p class="txt" >{{ contents.appFileItem.localFullFileName }}<!-- D:/dev/demand.war --></p>
-						</div>
-					</li>
-				</ul>
+		<div class="pn-Toggle brd0">
+			<div class="pn_head brdt" ng-if="contents.appPushData.pushType == 'GENERAL'">
+				<h4 class="pnh_tit ico06">APP 실행 소스코드</h4>
+				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+			</div>
+			<div class="pn_body" ng-if="contents.appPushData.pushType == 'GENERAL'">
+				<div class="s_cont_box">
+					<ul>
+						<li>
+							<div class="s_inner_cont">
+								<p class="txt" >{{ contents.appFileItem.localFullFileName }}<!-- D:/dev/demand.war --></p>
+							</div>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 		
-		<div class="pn_head brdt">
-			<h4 class="pnh_tit ico05">APP 실행환경 사양</h4>
-		</div>
-		<div class="pn_body">
-			<div class="s_cont_box">
-				<ul>
-					<li>
-						<div class="s_inner_cont">
-							<div class="innr_tbl">
-								<table>
-									<colgroup>
-										<col width="30" />
-										<col width="30" />
-										<col width="30" />
-									</colgroup>
-									<thead>
-										<tr>
-											<th>인스턴스</th>
-											<th>메모리</th>
-											<th>디스크</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>{{contents.defaultSet.instances}} 개</td>
-											<td>
-												{{ (contents.defaultSet.memory < 1024) ?  (contents.defaultSet.memory|number:0)  : (contents.defaultSet.memory/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (contents.defaultSet.memory < 1024) ?  'MB' : 'GB'}}</em></span>
-											</td>
-											<td>
-												{{ (contents.defaultSet.diskQuota < 1024) ?  (contents.defaultSet.diskQuota|number:0)  : (contents.defaultSet.diskQuota/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (contents.defaultSet.diskQuota < 1024) ?  'MB' : 'GB'}}</em></span>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+		<div class="pn-Toggle">
+			<div class="pn_head brdt">
+				<h4 class="pnh_tit ico05">APP 실행환경 사양</h4>
+				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+			</div>
+			<div class="pn_body">
+				<div class="s_cont_box">
+					<ul>
+						<li>
+							<div class="s_inner_cont">
+								<div class="innr_tbl">
+									<table>
+										<colgroup>
+											<col width="30" />
+											<col width="30" />
+											<col width="30" />
+										</colgroup>
+										<thead>
+											<tr>
+												<th>인스턴스</th>
+												<th>메모리</th>
+												<th>디스크</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>{{contents.defaultSet.instances}} 개</td>
+												<td>
+													{{ (contents.defaultSet.memory < 1024) ?  (contents.defaultSet.memory|number:0)  : (contents.defaultSet.memory/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (contents.defaultSet.memory < 1024) ?  'MB' : 'GB'}}</em></span>
+												</td>
+												<td>
+													{{ (contents.defaultSet.diskQuota < 1024) ?  (contents.defaultSet.diskQuota|number:0)  : (contents.defaultSet.diskQuota/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (contents.defaultSet.diskQuota < 1024) ?  'MB' : 'GB'}}</em></span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
-						</div>
-					</li>
-				</ul>
+						</li>
+					</ul>
+				</div>
 			</div>
-			<div class="btn-btm">
-				<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
-			</div>
+		</div>
+		<div class="btn-btm">
+			<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
 		</div>
 	</div>
 </div>
