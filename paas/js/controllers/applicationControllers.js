@@ -457,7 +457,7 @@ angular.module('paas.controllers')
         ct.spaces 				= [];
         ct.sltSpace  			= {};
         ct.domains 				= [];
-        ct.sltDomainName;
+        ct.sltDomainName        = "";
         ct.buildpacks 			= [];
         ct.portalBuildpacks 	= [];
         ct.portalBuildpackVersions = [];
