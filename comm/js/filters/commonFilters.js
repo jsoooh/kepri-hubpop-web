@@ -30,7 +30,7 @@ angular.module('app')
     })
     .filter('displayVolume', function () {
         return function (value, unit, options) {
-            var out = (angular.isUndefined(value) || value == null) ? 0 : parseFloat(value);;
+            var out = (angular.isUndefined(value) || value == null) ? 0 : parseFloat(value);
             if (!options) {
                 options = {};
             }
@@ -42,7 +42,9 @@ angular.module('app')
             }
             var unitLabel   = "KB";
             // 계산을 일률적으로 하기 위해 KB 단위로 설정
-            if (unit.toUpperCase() == "MB") {
+            if (unit.toUpperCase() == "BYTE") {
+                out = out/1024;
+            } if (unit.toUpperCase() == "MB") {
                 out = out*1024;
             } else if (unit.toUpperCase() == "GB") {
                 out = out*1024*1024;

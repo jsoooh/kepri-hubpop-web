@@ -79,7 +79,7 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
                 ct.networks.unshift({id:"",name:'',description:"네트워크 선택"});
@@ -158,7 +158,7 @@ angular.module('iaas.controllers')
             var params = {
                 tenantId : ct.data.tenantId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
             returnPromise.success(function (data, status, headers) {
                 ct.tenantResource = data.content[0];
             });
@@ -176,7 +176,7 @@ angular.module('iaas.controllers')
                     tenantId : ct.data.tenantId,
                     instanceId : id
                 };
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'DELETE', param)
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'DELETE', param);
                 returnPromise.success(function (data, status, headers) {
                     if (status == 200 && data) {
                         var action = "";
@@ -190,7 +190,7 @@ angular.module('iaas.controllers')
                                 action : action,
                                 tenantId : tenantId
                             };
-                            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
+                            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
                             returnPromise.success(function (data, status, headers) {
                                 if (status == 200 && data) {
                                     var requestAction = $filter('lowercase')(action);
@@ -568,7 +568,8 @@ angular.module('iaas.controllers')
         ct.fn.setSpecMinDisabled = function () {
             if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.data.image && ct.data.image.id) {
                 angular.forEach(ct.specList, function (spec) {
-                    if (spec.disk < ct.data.image.minDisk) {
+                    ct.data.image.sizeGb = ct.data.image.size/(1024*1024*1024);
+                    if (spec.disk < ct.data.image.sizeGb) {
                         spec.disabled = true;
                     }
                 });
@@ -862,13 +863,11 @@ angular.module('iaas.controllers')
         ct.inputVolumeSize = ct.volumeSize;
         ct.volumeSliderOptions = {
         	showSelectionBar : true,
-        	minValue : 1,
-        	options: {
-                floor: 0,
-                ceil: 100,
-                step: 30,
-                onChange : ct.sliderVolumeSizeChange
-            }
+        	minValue : 0,
+            floor: 0,
+            ceil: 0,
+            step: 10,
+            onChange : ct.sliderVolumeSizeChange
         };
 
         if(ct.data.tenantId) {

@@ -94,15 +94,34 @@ angular.module('iaas.controllers')
     .controller('iaasStorageSnapshotCreateCtrl', function ($scope, $location, $state, $window, $translate, $timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);
 
-        var ct = this;
+        var ct               = this;
+        ct.data              = {};
+        ct.fn                = {};
+        ct.ui                = {};
+        ct.roles             = [];
+        ct.volume            = {};
+        ct.instances         = [];
+        ct.sltInstance       = {};
+        ct.data.tenantId     = $scope.main.userTenant.id;
+        ct.data.tenantName   = $scope.main.userTenant.korName;
+        ct.formName          = "storageSnapshotForm";
+        ct.validDisabled = true;
+        ct.isTenantResourceLoad = false;
 
-        ct.userTenant = angular.copy($scope.main.userTenant);
+        ct.volume.name      = 'disk-01';
 
-        ct.fn = {};
-        ct.data = {};
-        ct.data.size = 1;
-        ct.roles = [];
-        ct.formName = "storageSnapshotForm";
+        //볼륨생성 변수
+        ct.volumeSize = 100;
+        ct.volumeSliderOptions = {
+            showSelectionBar : true,
+            minValue : 10,
+            options: {
+                floor: 0,
+                ceil: 100,
+                step: 30
+            }
+        };
+
 
         ct.data.volumeId = $stateParams.snapshotId;
 
@@ -116,20 +135,6 @@ angular.module('iaas.controllers')
                 return;
             }
 
-            if(Number(ct.data.size) < ct.snapshotVolume.size){
-                common.showAlertWarning("볼륨 크기는 size up만 가능 합니다. 볼륨 크기 최소값 : " + ct.snapshotVolume.size + ", 입력값 : " + ct.data.size );
-                ct.data.size = ct.snapshotVolume.size;
-                ct.checkClickBtn = false;
-                return;
-            }
-
-            if(Number(ct.data.size) > (ct.resource.maxResource.volumeGigabytes - ct.resource.usedResource.volumeGigabytes)){
-                common.showAlertWarning("볼륨 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (ct.resource.maxResource.volumeGigabytes - ct.resource.usedResource.volumeGigabytes) + ", 입력값 : " + ct.data.size );
-                ct.data.size = ct.snapshotVolume.size;
-                ct.checkClickBtn = false;
-                return;
-            }
-
             ct.fn.createStorageVolumeAction();
         };
 
@@ -139,28 +144,40 @@ angular.module('iaas.controllers')
 
         ct.fn.getTenantResource = function() {
             var params = {
-                tenantId : ct.userTenant.tenantId
+                tenantId : ct.data.tenantId
             };
-            $scope.main.loadingMainBody = true;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
+
             returnPromise.success(function (data, status, headers) {
-                ct.resource = data.content[0];
-                ct.resourceDefault = angular.copy(ct.resource);
-                ct.resource.usedResource.volumeGigabytes += ct.data.size;
+                if (data && data.content && data.content.length > 0) {
+                    ct.tenantResource = data.content[0];
+                    ct.tenantResource.available = {};
+                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
+                    ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
+                    ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
+                    ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
+                    ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
+                    ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+                    ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
+
+                    ct.tenantResource.usedResource.volumePercent = (ct.tenantResource.usedResource.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
+                    ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
+                }
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
+                ct.isTenantResourceLoad = true;
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                ct.isTenantResourceLoad = true;
                 common.showAlert("message",data.message);
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
             });
         };
 
         ct.fn.getStorageInfo = function() {
             $scope.main.loadingMainBody = true;
             var param = {
-                tenantId : ct.userTenant.tenantId,
+                tenantId : ct.data.tenantId,
                 volumeId : ct.data.volumeId
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
@@ -180,7 +197,7 @@ angular.module('iaas.controllers')
         ct.fn.getStorageInfo = function() {
             $scope.main.loadingMainBody = true;
             var param = {
-                tenantId : ct.userTenant.tenantId,
+                tenantId : ct.data.tenantId,
                 volumeId : ct.data.volumeId
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
@@ -217,10 +234,10 @@ angular.module('iaas.controllers')
 
         ct.fn.createStorageVolumeAction = function() {
             $scope.main.loadingMainBody = true;
-            ct.data.tenantId = ct.userTenant.tenantId;
+            ct.data.tenantId = ct.data.tenantId,
             var param = {
                 newVolumeInfo : ct.data,
-                volumeSnapShot : ct.snapshot
+                volumeSnapShot : ct.snapshotVolume
             };
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', param);
