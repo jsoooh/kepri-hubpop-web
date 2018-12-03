@@ -1147,6 +1147,17 @@ angular.module('common.controllers', [])
                 mc.refreshSlider();
         };
         
+        /*만들기 화면 토글*/
+        mc.panelToggleChange = function (evt) {
+            var _this = $(evt.currentTarget).closest(".pn-Toggle");
+            if (!_this.hasClass("Toggle-open")) {
+                _this.addClass("Toggle-open").find(".s_cont_box").slideDown();
+            } else {
+                _this.removeClass("Toggle-open").find(".s_cont_box").slideUp();
+            }
+        };
+        mc.visible 				= false;
+        
       //2018.11.22 sg0730 RzSlider Refresh Func Add
         mc.refreshSlider = function () {
             $timeout(function () {

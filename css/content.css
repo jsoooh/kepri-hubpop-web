@@ -2179,7 +2179,7 @@ p.no-txt{
 .panel_area .pn_r {width:489px; margin-left:20px;}
 .panel_area .pn_head {padding:20px; border-bottom:1px solid #e3e3e3; }
 .panel_area .pn_head .pnh_tit {display:inline-block; font-size:20px; color:#333; }
-.panel_area .pn_r .pn_head {border-bottom:0; }
+.panel_area .pn_r .pn_head {position:relative; border-bottom:0;}
 .panel_area .pn_r .pn_head .pnh_tit {font-size:18px; height:23px; line-height:22px; background:url("../images/s_tit_ico.png") no-repeat; padding-left:30px;}
 .panel_area .pn_r .pn_head .pnh_tit.ico01 {background-position:0 0;}
 .panel_area .pn_r .pn_head .pnh_tit.ico02 {background-position:0 -27px;}
@@ -2192,12 +2192,28 @@ p.no-txt{
 .panel_area .pn_r .pn_head.brdt {border-top:1px solid  #e3e3e3;}
 .panel_area .pn_r .pn_body {padding-top:0;}
 .panel_area .pn_body {padding:15px 30px;}
+.panel_area .pn_r .pn_body {padding:0 30px;}
 .panel_area .pn_body .sm_txt {display:block; font-size:14px; color:#ff0000; text-align:right;}
 .panel_area .pn_body .form_list li {margin-top:35px;}
 /* .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;} */
 .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;}
 .panel_area .pn_body .pnb_tit .pnb_t_txt {vertical-align:middle;}
 .panel_area .pn_body .pnb_tit .ico_info {display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer; vertical-align:middle;}
+
+/*만들기 화면 컨텐츠 토글*/
+.panel_area .pn-Toggle {border-bottom:1px solid #ddd;}
+.panel_area .pn-Toggle.Toggle-open {border-bottom:0;}
+.panel_area .pn-Toggle .btn_add_toggle {position:absolute; top:0; right:0;}
+.panel_area .pn-Toggle .btn_add_toggle .ico_arw_sm_gray {display:inline-block; width:19px; height:19px; font-size:0; vertical-align:middle; background:url("../images/ico_arw_sm_gray.png") no-repeat 0 0; }
+.panel_area .pn-Toggle.Toggle-open .btn_add_toggle .ico_arw_sm_gray {background-position:left -21px;}
+.panel_area .pn-Toggle .s_cont_box {display:none;}
+
+.panel_area .pn_r .pn-Toggle {border-bottom:1px solid #ddd;}
+.panel_area .pn_r .pn-Toggle.Toggle-open {border-bottom:0;}
+.panel_area .pn_r .pn-Toggle .pn_head .btn_add_toggle {position:absolute; top:20px; right:20px;}
+.panel_area .pn_r .pn-Toggle .s_cont_box {padding:15px 0;}
+
+
 .ico_tit_refresh {margin-left:5px;}
 /* .panel_area .pn_body .pnb_tit .ico_info {position:absolute; top:1px; display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer;} */
 .panel_area .pn_body .pnb_tit .disk_info {position:absolute; top:-7px; right:0; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 15px 6px 15px; background:#888;}
@@ -2414,7 +2430,7 @@ p.no-txt{
 
 /*가상서버 대시보드 목록*/
 .btnWrap {margin-bottom:30px;}
-.btnWrap .btn_lg {display:inline-block; height:60px; line-height:60px; font-size:16px; font-weight:500; color:#666; border-radius:5px; border:1px solid #d3d3d3; background:#fff; padding:0 60px; margin-right:5px;}
+.btnWrap .btn_lg {display:inline-block; min-width:280px; height:60px; line-height:60px; font-size:16px; font-weight:500; color:#666; border-radius:5px; border:1px solid #d3d3d3; background:#fff; padding:0 30px; margin-right:5px;}
 .btnWrap .btn_lg:hover {color:#fff; border:1px solid #3360c5; background:#3360c5;}
 .btnWrap .btn_lg .ico {display:inline-block; vertical-align:text-top; margin-right:10px;}
 
@@ -2442,6 +2458,9 @@ p.no-txt{
 .panel.type5 .panel_head .btn-option.type2 .tgb_body  li {font-size:14px; color:#777; line-height:28px;}
 .panel.type5 .panel_head .btn-option.type2 .tgb_body  li:before {display:inline-block; content:''; width:4px; height:4px; border-radius:100%; background:#555; vertical-align:middle; margin-right:4px;}
 .panel.type5 .panel_head .btn-option.type2 .tgb_body  strong {font-size:15px; font-weight:500; color:#333; margin-right:5px;}
+.panel.type5 .panel_head .btn-option.type2 .tgb_body .guide_link {text-align:right; padding:10px 0 2px 0;}
+.panel.type5 .panel_head .btn-option.type2 .tgb_body .guide_link a {display:inline-block; font-size:14px; color:#2196f3; background:url("../images/external-link.png") no-repeat right center; padding-right:20px;}
+.panel.type5 .panel_head .btn-option.type2 .tgb_body .guide_link a:hover {border-bottom:1px solid #2196f3;}
 .ico_file_dw {display:inline-block; width:17px; height:17px; font-size:0; background:url("../images/ico_down.png") no-repeat left top; margin-left:7px;}
 .ico_file_dw:hover {background:url("../images/ico_down.png") no-repeat left -23px;}
 

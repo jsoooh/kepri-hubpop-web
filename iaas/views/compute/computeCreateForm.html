@@ -57,53 +57,57 @@
 										<col style="width:20%;">
 									</colgroup>
 									<thead>
-									<tr>
-										<th scope="col"></th>
-										<th scope="col">종류</th>
-										<th scope="col">vCPU</th>
-										<th scope="col">메모리</th>
-										<th scope="col">디스크(OS설치/여유)</th>
-									</tr>
+										<tr>
+											<th scope="col"></th>
+											<th scope="col">종류</th>
+											<th scope="col">vCPU</th>
+											<th scope="col">메모리</th>
+											<th scope="col">디스크(OS설치/여유)</th>
+										</tr>
 									</thead>
 									<tbody>
 
-									<tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m'}" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': spec.selected}" ng-click="contents.fn.selectSpec(spec);">
-										<td>
-											<div class="radio radio-only" >
-												<input type="radio"
-													   name="spec_radio"
-													   ng-model="contents.specUuid"
-													   id="spec_radio_{{key}}"
-													   value="{{spec.uuid}}" ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)">
-												<label for="spec_radio_{{key}}"></label>
-											</div>
-										</td>
-										<td>{{spec.name}}</td>
-										<td>{{spec.vcpus}} Core</td>
-										<td>{{spec.ram/1024|number}}GB</td>
-										<td>{{spec.disk}}GB</td>
-									</tr>
+										<tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m'}" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': spec.selected}" ng-click="contents.fn.selectSpec(spec);">
+											<td>
+												<div class="radio radio-only" >
+													<input type="radio"
+														   name="spec_radio"
+														   ng-model="contents.specUuid"
+														   id="spec_radio_{{key}}"
+														   value="{{spec.uuid}}" ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)">
+
+													<label for="spec_radio_{{key}}"></label>
+												</div>
+											</td>
+											<td>{{spec.name}}</td>
+											<td>{{spec.vcpus}} Core</td>
+											<td>{{spec.ram | displayVolume : 'MB'}}</td>
+											<td>{{spec.disk | displayVolume : 'GB'}}</td>
+										</tr>
 
 									</tbody>
 								</table>
 							</div>
 						</li>
-						<li>
+						<li class="pn-Toggle">
 							<div class="pnb_tit">
 								디스크 추가<span class="ico_info"></span> <img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif">
-								<div ng-if="contents.specDisabledAllSetting" class="disk_info">최대 {{contents.volumeSliderOptions.ceil | number:0}} GB</div>
+								<div ng-if="contents.specDisabledAllSetting" class="disk_info">최대 {{contents.volumeSliderOptions.ceil | number:0}}GB</div>
 							</div>
-							<div ng-if="contents.specDisabledAllSetting" class="disk_area">
-								<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
-								<div class="disk_box">
-									<div class="rangeWrap type2">
-										<div class="range_box rb_l">
-											<rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
-										</div>
-										<div class="range_box rb_r">
-											<div class="range-text">
-												<input type="text" class="form-control" ng-model="contents.inputVolumeSize" ng-change="contents.inputVolumeSizeChange()" ng-blur="contents.inputVolumeSizeBlur()" name="volumeSize" maxlength="4" style="width:60px; display: inline-block;">
-												<span class="app-tit">GB</span>
+							<div class="s_cont_box">
+								<div ng-if="contents.specDisabledAllSetting" class="disk_area">
+									<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
+									<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil | number:0}} GB</div>
+									<div class="disk_box">
+										<div class="rangeWrap type2">
+											<div class="range_box rb_l">
+												<rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
+											</div>
+											<div class="range_box rb_r">
+												<div class="range-text">
+													<input type="text" class="form-control" ng-model="contents.inputVolumeSize" ng-change="contents.inputVolumeSizeChange()" ng-blur="contents.inputVolumeSizeBlur()" name="volumeSize" maxlength="4" style="width:60px; display: inline-block;">
+													<span class="app-tit">GB</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -176,25 +180,30 @@
 				</div>
 			</div>
 			
-			<div class="pn_head brdt">
-				<h4 class="pnh_tit ico02">추가 디스크</h4>
+			<div class="pn-Toggle">
+				<div class="pn_head brdt">
+					<h4 class="pnh_tit ico02">추가 디스크</h4>
+					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+				</div>
+				<div class="pn_body">
+					<div class="s_cont_box">
+						<ul>
+							<li>
+								<span class="s_tit">크기</span>
+								<span class="s_txt">{{contents.volumeSize | displayVolume : 'GB'}}</span>
+							</li>
+							<li>
+								<span class="s_tit">유형<span class="ico_info"></span></span>
+								<span class="s_txt">Volume Storage</span>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
-			<div class="pn_body">
-				<div class="s_cont_box">
-					<ul>
-						<li>
-							<span class="s_tit">크기</span>
-							<span class="s_txt">{{contents.volumeSize | displayVolume : 'GB'}}</span>
-						</li>
-						<li>
-							<span class="s_tit">유형<span class="ico_info"></span></span>
-							<span class="s_txt">Volume Storage</span>
-						</li>
-					</ul>
-				</div>
-				<div class="btn-btm">
-					<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button>
-				</div>
+			<div class="btn-btm">
+				<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button>
 			</div>
 		</div>
+
 	</div>
+</div>
