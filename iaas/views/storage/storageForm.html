@@ -33,7 +33,7 @@
 								<span>디스크 사용량</span>
 								<div class="txt_top">
 									<span class="sty01">전체 디스크 공간</span>
-									<span class="sty02">13.72</span>
+									<span class="sty02">{{contents.volume.resource.maxResource.volumeGigabytes}}</span>
 									<span class="sty03">GB</span>
 								</div>
 							</div>
@@ -41,11 +41,11 @@
 								<span class="txt fl_l">0</span>
 								<span class="txt fl_r">100</span>
 								<div class="cnt_usage">
-									<div class="use_left" style="width:40.4%;">
-										<span>40.4%</span>
+									<div class="use_left" style="width:{{contents.currUsedPur}}%;">
+										<span>{{contents.currUsedPur}}%</span>
 									</div>
-									<div class="use_right" style="width:59.6%;">
-										<span>59.6%</span>
+									<div class="use_right" style="width:{{contents.usedPur}}%;">
+										<span>{{contents.usedPur}}%</span>
 									</div>
 								</div>
 							</div>
@@ -54,13 +54,13 @@
 									<li class="btm_use_left">
 										<div>
 											<span class="txt_tit">사용중</span>
-											<span class="txt_val">5.55<span class="txt_sm">GB</span></span>
+											<span class="txt_val">{{contents.volume.resource.usedResource.volumeGigabytes}}<span class="txt_sm">GB</span></span>
 										</div>
 									</li>
 									<li class="btm_use_right">
 										<div>
 											<span class="txt_tit">남은 공간</span>
-											<span class="txt_val">8.18<span class="txt_sm">GB</span></span>
+											<span class="txt_val">{{contents.volumeSliderOptions.ceil}}<span class="txt_sm">GB</span></span>
 										</div>
 									</li>
 								</ul>
@@ -90,27 +90,32 @@
 						설명<span class="ico_info"></span>
 					</div>
 					<div class="text_wrap">
+						<textarea rows="5" 
+								  cols="" 
+								  id="volumeDescription" 
+								  name="volumeDescription" 
+								  style="height:150px;" 
+								  ng-model="contents.volume.description" 
+								  class="form-control"  
+								  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
 						<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100|required"></textarea>
 						<!--<span class="txt_limit"><em ng-class="{'red' : (contents.volume.description.length > 100)}">{{contents.volume.description.length}}</em>/100자</span>-->
 					</div>
 				</li>
 				<li>
 					<div class="pnb_tit">
-						<i class="i_star"></i> 가상서버와 연결<span class="ico_info"></span>
+						가상서버와 연결<span class="ico_info"></span>
 					</div>
 					<div> <!--2018.11.14 sg0730 차후 가상서버 API받아와야함. -->
-						<select name="" class="form-control">
-							<option value="">KEPCOPROJECT-A-VM-001</option>
-							<option value="">KEPCOPROJECT-A-VM-002</option>
-							<option value="">KEPCOPROJECT-A-VM-003</option>
+						<select name="selectInstance" class="form-control" ng-model="contents.insId" ng-change="contents.fn.onInstanceChange(contents.insId)">
+							<option value="">-- 선택 하세요. --</option>
+							<option ng-repeat="instance in contents.instances" value="{{ instance.id }}">{{ instance.name }}</option>
 						</select>
+					
 					</div>
 				</li>
 			</ul>
-			<div class="btn_add_area">
-				<span>추가기능 설정하기</span>
-				<button type="button" class="btn_add"></button>
-			</div>
+			
 		</div>
 		<div class="pn_footer">
 			<div class="btn-btm mgt0">
@@ -150,6 +155,28 @@
 		</div>
 		</form>
 		
+		
+		<div class="pn_head brdt">
+			<h4 class="pnh_tit ico03">프로젝트 사용가능 디스크 정보</h4>
+		</div>
+		<div class="pn_body">
+			<div class="s_cont_box">
+				<ul>
+					<li>
+						<span class="s_tit">전체 쿼터</span>
+						<span class="s_txt">{{contents.volume.resource.maxResource.volumeGigabytes}} GB</span>
+					</li>
+					<li>
+						<span class="s_tit">현재 사용량</span>
+						<span class="s_txt">{{contents.volume.resource.usedResource.volumeGigabytes}}<span class="txt_sm">GB</span></span>
+					</li>
+					<li>
+						<span class="s_tit">잔여 용량</span>
+						<span class="s_txt">{{contents.volumeSliderOptions.ceil}}<span class="txt_sm">GB</span></span>
+					</li>
+				</ul>
+			</div>
+		</div>
 		<div class="pn_head brdt">
 			<h4 class="pnh_tit ico01">연결대상 가상서버 정보</h4>
 		</div>
@@ -158,19 +185,19 @@
 				<ul>
 					<li>
 						<span class="s_tit">서버 이름</span>
-						<span class="s_txt">10GB</span>
+						<span class="s_txt">{{contents.sltInstance.name}}</span>
 					</li>
 					<li>
 						<span class="s_tit">서버 OS</span>
-						<span class="s_txt">Ubuntu 16.4</span>
+						<span class="s_txt">{{contents.sltInstance.image.osType}}</span>
 					</li>
 					<li>
 						<span class="s_tit">서버 접속IP</span>
-						<span class="s_txt">192.168.200.35</span>
+						<span class="s_txt">{{contents.sltInstance.floatingIp}}</span>
 					</li>
 					<li>
 						<span class="s_tit">서버 사양</span>
-						<span class="s_txt">소형</span>
+						<span class="s_txt">{{contents.sltInstance.spec.name}}</span>
 						<div class="s_inner_cont">
 							<div class="innr_tbl">
 								<table>
@@ -188,9 +215,9 @@
 									</thead>
 									<tbody>
 										<tr>
-											<td>2Core</td>
-											<td>4GB</td>
-											<td>10GB</td>
+											<td>{{contents.sltInstance.spec.vcpus}}Core</td>
+											<td>{{contents.sltInstance.spec.ram}}MB</td>
+											<td>{{contents.sltInstance.spec.disk}}GB</td>
 										</tr>
 									</tbody>
 								</table>
@@ -200,31 +227,9 @@
 				</ul>
 			</div>
 		</div>
-		
-		<div class="pn_head brdt">
-			<h4 class="pnh_tit ico03">프로젝트 사용가능 디스크 정보</h4>
-		</div>
-		<div class="pn_body">
-			<div class="s_cont_box">
-				<ul>
-					<li>
-						<span class="s_tit">전체 쿼터</span>
-						<span class="s_txt">10TB</span>
-					</li>
-					<li>
-						<span class="s_tit">현재 사용량</span>
-						<span class="s_txt">1.5TB</span>
-					</li>
-					<li>
-						<span class="s_tit">잔여 용량</span>
-						<span class="s_txt">8.5TB</span>
-					</li>
-				</ul>
-			</div>
 			<div class="btn-btm">
 				<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
 			</div>
-		</div>
 		
 	</div>
 </div>
