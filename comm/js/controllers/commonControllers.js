@@ -1132,10 +1132,11 @@ angular.module('common.controllers', [])
             }
         };
         
-        mc.pnbBoxToggleChange = function (evt) {
+        mc.pnbBoxToggleChange = function (evt, isReSlider) {
             var _this = $(evt.currentTarget).closest(".pnb_box.cToggle");
             if (!_this.hasClass("cToggle-open")) {
                 _this.addClass("cToggle-open").find(".pnb_bx_cnt").slideDown();
+                if (isReSlider) mc.refreshSlider();
             } else {
                 _this.removeClass("cToggle-open").find(".pnb_bx_cnt").slideUp();
             }
@@ -1154,9 +1155,9 @@ angular.module('common.controllers', [])
       //2018.11.22 sg0730 RzSlider Refresh Func Add
         mc.refreshSlider = function () {
             $timeout(function () {
-              $scope.$broadcast('rzSliderForceRender');
+                $scope.$broadcast('rzSliderForceRender');
             });
-          };
+        };
     
 
         mc.contentsViewType = "thum";
