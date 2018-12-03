@@ -14,39 +14,63 @@
 					<ul class="form_list">
 						<li>
 							<div class="pnb_tit">
-								<i class="i_star"></i> 서버 이름<span class="ico_info"></span>
+								<i class="i_star"></i> <span class="pnb_t_txt">서버 이름</span>
+								<button type="button" tooltip-placement="right" uib-tooltip="영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다."><span class="ico_info"></span></button>
 							</div>
 							<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
 						</li>
 						<li>
 							<div class="pnb_tit">
-								<i class="i_star"></i> OS 선택<span class="ico_info"></span>
+								<i class="i_star"></i> <span class="pnb_t_txt">OS 선택</span>
+								<button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 설치되는 OS(운영체제, Operation System)를 선택할 수 있습니다."><span class="ico_info"></span></button>
 							</div>
 							<div ng-if="contents.imageListLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="os_select_panel">
-								<ul class="ul-list1">
-									<li ng-repeat="image in contents.imageList">
-										<div class="radio1 radio-inline">
-											<input type="radio"
-												   id="{{image.$$hashKey}}"
-												   name="slt_imageId"
-												   ng-model="contents.sltImageId"
-												   value="{{image.id}}"
-												   ng-click="contents.fn.imageClick(image);">
-											<label for="{{image.$$hashKey}}" class="label">
-												<img ng-src="images/thum/{{image.iconFileName}}.png"  class="im">
-											</label>
-										</div>
-										<p class="label-txt" >{{image.serviceName}}</p>
-									</li>
-								</ul>
+							<ul class="ul-list1">
+								<li ng-repeat="image in contents.imageList">
+									<div class="radio1 radio-inline">
+									   <input type="radio"  
+									   	      id="{{image.$$hashKey}}" 
+									   	      name="slt_imageId"
+									   	      ng-model="contents.sltImageId"
+									   	       value="{{image.id}}"
+									   	      ng-click="contents.fn.imageClick(image);">
+									   <label for="{{image.$$hashKey}}" class="label">
+											<img ng-src="images/thum/{{image.iconFileName}}.png"  class="im">
+									   </label>
+									</div>
+									<p class="label-txt" >{{image.serviceName}}</p>
+								</li>
+							</ul>
 							</div>
-							<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
+								<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
+						</li>
+						<li class="pn-Toggle">
+							<div class="pnb_tit">
+								<span class="pnb_t_txt">접속 도메인</span>
+								<button type="button" tooltip-placement="right" uib-tooltip="생성된 윈도우 서버에 접속하기 위한 도메인 정보를 구성합니다."><span class="ico_info"></span></button>
+								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+							</div>
+							<div class="s_cont_box">
+								<div class="app-form-two mgt0">
+									<div class="two_box">
+										<input type="text" class="form-control" maxlength="50" placeholder="APP 도메인을 입력하세요.">
+									</div>
+									<div class="two_box">
+										<select name="" title="검색 구분 선택">
+											<option value="">apps.hubpop.io</option>
+											<option value="">apps.hubpop.io_1</option>
+											<option value="">apps.hubpop.io_2</option>
+										</select>
+									</div>
+								</div>
+								<div class="cnt_msg_box msg-info">서버 기본 사양에서 제공하는 디스크에 추가적인 디스크 공간을 할당할 수 있습니다.</div>
+							</div>
 						</li>
 						<li>
 							<div class="pnb_tit">
-								<i class="i_star"></i> 사양 선택<span class="ico_info"></span> <img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif">
+								<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span><button type="button" tooltip-placement="right" uib-tooltip="가상 서버의 사양을 선택할 수 있습니다. 선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다."><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" />
 							</div>
-
+							
 							<div class="tbl type1">
 								<table class="table">
 									<colgroup>
@@ -66,16 +90,16 @@
 										</tr>
 									</thead>
 									<tbody>
-
+										
 										<tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m'}" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': spec.selected}" ng-click="contents.fn.selectSpec(spec);">
 											<td>
 												<div class="radio radio-only" >
-													<input type="radio"
-														   name="spec_radio"
-														   ng-model="contents.specUuid"
-														   id="spec_radio_{{key}}"
+													<input type="radio" 
+														   name="spec_radio" 
+														   ng-model="contents.specUuid" 
+														   id="spec_radio_{{key}}" 
 														   value="{{spec.uuid}}" ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)">
-
+											
 													<label for="spec_radio_{{key}}"></label>
 												</div>
 											</td>
@@ -84,20 +108,20 @@
 											<td>{{spec.ram | displayVolume : 'MB'}}</td>
 											<td>{{spec.disk | displayVolume : 'GB'}}</td>
 										</tr>
-
+								
 									</tbody>
 								</table>
 							</div>
 						</li>
 						<li class="pn-Toggle">
 							<div class="pnb_tit">
-								디스크 추가<span class="ico_info"></span> <img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif">
-								<div ng-if="contents.specDisabledAllSetting" class="disk_info">최대 {{contents.volumeSliderOptions.ceil | number:0}}GB</div>
+								<span class="pnb_t_txt">디스크 추가</span><button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다."><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" />
+								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 							</div>
 							<div class="s_cont_box">
-								<div ng-if="contents.specDisabledAllSetting" class="disk_area">
+								<div class="disk_area" ng-if="contents.specDisabledAllSetting">
 									<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
-									<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil | number:0}} GB</div>
+									<div ng-if="contents.specDisabledAllSetting" class="disk_info">최대 {{contents.volumeSliderOptions.ceil | number:0}}GB</div>
 									<div class="disk_box">
 										<div class="rangeWrap type2">
 											<div class="range_box rb_l">
@@ -115,12 +139,12 @@
 							</div>
 						</li>
 					</ul>
-<!--
+	<!--
 					<div class="btn_add_area">
 						<span>추가기능 설정하기</span>
 						<button type="button" class="btn_add"></button>
 					</div>
--->
+	-->
 				</div>
 				<div class="pn_footer">
 					<div class="btn-btm mgt0">
@@ -130,7 +154,7 @@
 				</div>
 			</div>
 		</form>
-
+		
 		<div class="panel_box pn_r">
 			<div class="pn_head">
 				<h4 class="pnh_tit ico01">서버 기본정보</h4>
@@ -204,6 +228,6 @@
 				<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button>
 			</div>
 		</div>
-
+		
 	</div>
 </div>

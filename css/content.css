@@ -2199,6 +2199,7 @@ p.no-txt{
 .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;}
 .panel_area .pn_body .pnb_tit .pnb_t_txt {vertical-align:middle;}
 .panel_area .pn_body .pnb_tit .ico_info {display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer; vertical-align:middle;}
+.panel_area .pn_body .pnb_tit img {margin:3px 0 0 5px;}
 
 /*만들기 화면 컨텐츠 토글*/
 .panel_area .pn-Toggle {border-bottom:1px solid #ddd;}
