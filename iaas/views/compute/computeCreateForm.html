@@ -15,14 +15,14 @@
 						<li>
 							<div class="pnb_tit">
 								<i class="i_star"></i> <span class="pnb_t_txt">서버 이름</span>
-								<button type="button" tooltip-placement="right" uib-tooltip="영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다."><span class="ico_info"></span></button>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
 						</li>
 						<li>
 							<div class="pnb_tit">
 								<i class="i_star"></i> <span class="pnb_t_txt">OS 선택</span>
-								<button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 설치되는 OS(운영체제, Operation System)를 선택할 수 있습니다."><span class="ico_info"></span></button>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버에 설치되는 OS(운영체제, Operation System)를 선택할 수 있습니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<div ng-if="contents.imageListLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="os_select_panel">
 							<ul class="ul-list1">
@@ -47,7 +47,7 @@
 						<li class="pn-Toggle">
 							<div class="pnb_tit">
 								<span class="pnb_t_txt">접속 도메인</span>
-								<button type="button" tooltip-placement="right" uib-tooltip="생성된 윈도우 서버에 접속하기 위한 도메인 정보를 구성합니다."><span class="ico_info"></span></button>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성된 윈도우 서버에 접속하기 위한 도메인 정보를 구성합니다.'"><span class="ico_info"></span></button></div>
 								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 							</div>
 							<div class="s_cont_box">
@@ -68,7 +68,8 @@
 						</li>
 						<li>
 							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span><button type="button" tooltip-placement="right" uib-tooltip="가상 서버의 사양을 선택할 수 있습니다. 선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다."><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" />
+								<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
 							</div>
 							
 							<div class="tbl type1">
@@ -115,8 +116,9 @@
 						</li>
 						<li class="pn-Toggle">
 							<div class="pnb_tit">
-								<span class="pnb_t_txt">디스크 추가</span><button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다."><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" />
-								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event, true);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+								<span class="pnb_t_txt">디스크 추가</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
+								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 							</div>
 							<div class="s_cont_box">
 								<div class="disk_area" ng-if="contents.specDisabledAllSetting">
@@ -217,7 +219,8 @@
 								<span class="s_txt">{{contents.volumeSize | displayVolume : 'GB'}}</span>
 							</li>
 							<li>
-								<span class="s_tit">유형</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+								<span class="s_tit">유형</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
 								<span class="s_txt">Volume Storage</span>
 							</li>
 						</ul>

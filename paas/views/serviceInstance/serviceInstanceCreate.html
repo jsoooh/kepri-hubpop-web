@@ -14,14 +14,15 @@
 				<li>
 					<div class="pnb_tit">
 						<i class="i_star"></i> <span class="pnb_t_txt">서비스 이름</span>
-						<button type="button" tooltip-placement="right" uib-tooltip="영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다."><span class="ico_info"></span></button>
+						<!-- <button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다." tooltip-class="tooltip_type2"><span class="ico_info"></span></button> -->
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'<strong>가상 서버에 추가 디스크를 연결할 수 있습니다.</strong><br>필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다.'"><span class="ico_info"></span></button></div>
 					</div>
 					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName" ng-init="contents.serviceInstanceName='service-001'" >
 				</li>
 				<li>
 					<div class="pnb_tit">
 						<i class="i_star"></i> <span class="pnb_t_txt">서비스 S/W</span>
-						<button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
 					</div>
 					<ul class="ul-list1">
 						<li ng-repeat="(key, serviceItem) in contents.services">
@@ -45,7 +46,7 @@
 				<li>
 					<div class="pnb_tit">
 						<i class="i_star"></i> <span class="pnb_t_txt">서비스 플랜</span>
-						<button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
 					</div>
 					<div class="app-form-two">
 						<div ng-repeat="(key, servicePlan) in contents.servicePlans" class="two_box pdr10">
@@ -67,7 +68,7 @@
 				<li class="pn-Toggle">
 					<div class="pnb_tit">
 						<span class="pnb_t_txt">연결대상 APP</span>
-						<button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
 						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 					</div>
 					<div class="s_cont_box">
@@ -103,7 +104,8 @@
 						<span class="s_txt">{{contents.serviceInstanceName}}</span>
 					</li>
 					<li>
-						<span class="s_tit">서비스 유형</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+						<span class="s_tit">서비스 유형</span>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
 						<span class="s_txt">관계형 데이터 베이스</span>
 					</li>
 					<li ng-if="contents.dbTmpNm == 'p-mysql'">
@@ -149,7 +151,8 @@
 							<span class="s_txt" >{{contents.TmpStr}}</span>
 						</li>
 						<li ng-if="contents.dbTmpNm == 'p-mysql'">
-							<span class="s_tit">서비스 사용 모델</span><button type="button" tooltip-placement="right" uib-tooltip="툴팁내용입력"><span class="ico_info"></span></button>
+							<span class="s_tit">서비스 사용 모델</span>
+							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
 							<span class="s_txt" ng-if="contents.sltServicePlan.public">공유형</span>
 							<span class="s_txt" ng-if="!contents.sltServicePlan.public">단독형</span>
 						</li>
