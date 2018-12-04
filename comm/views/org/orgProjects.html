@@ -94,9 +94,9 @@
 			<!-- 검색 -->
 			<div class="searchBox type2">
 				<div class="form-group">
-					<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listOrgProjects() : null;">
+					<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schFilterText">
 				</div>
-				<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.listOrgProjects();"><span class="ico">검색</span></button>
+				<!--<button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>-->
 			</div>
 			<!-- //검색 -->
 		</div>
@@ -114,7 +114,7 @@
 	<!-- 프로젝트 리스트 -->
 	<div class="proj_list_area" ng-if="contents.orgProjects.length > 0">
 		<ul class="ul-panel dash_list">
-			<li ng-repeat="org in contents.orgProjects" ng-if="org.statusCode != 'deleting'">
+			<li ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText }" ng-if="org.statusCode != 'deleting'">
 				<a ng-click="main.goToPortalOrgPage(org);">
 					<div class="thum">
 						<span ng-if="org.iconImage && org.iconImage.image" class="thum_in img_line">

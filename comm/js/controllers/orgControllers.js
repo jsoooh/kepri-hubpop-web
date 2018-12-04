@@ -2,13 +2,15 @@
 
 angular.module('portal.controllers')
     .controller('commOrgProjectsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common) {
-        _DebugConsoleLog("orgControllers.js : commOrgsCtrl", 1);
+        _DebugConsoleLog("orgControllers.js : commOrgProjectsCtrl", 1);
 
         var ct = this;
 
         ct.selectItemKey = 0;
 
         ct.userAuth  = $scope.main.userAuth;
+
+        ct.schFilterText = "";
 
         ct.extendItem = function(evt) {
             console.log('extendItem', evt);
@@ -50,12 +52,8 @@ angular.module('portal.controllers')
             var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                if (angular.isArray(data.items)) {
-                    angular.forEach(data.items, function (orgProject, key) {
-                        if (!schText || (orgProject.orgName && (orgProject.orgName.toLowerCase().indexOf(schText.toLowerCase()) >= 0))) {
-                            ct.orgProjects.push(orgProject);
-                        }
-                    });
+                if (data && data.items  && data.items.length > 0) {
+                    ct.orgProjects = angular.copy(data.items);
                     $scope.main.setListAllPortalOrgs(data.items);
                 } else {
                     $scope.main.setListAllPortalOrgs();
