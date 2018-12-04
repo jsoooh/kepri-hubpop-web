@@ -32,7 +32,7 @@ angular.module('portal.services', [])
 
         portal.menu = {};
 
-        /* 메뉴 모록 */
+        /* 메뉴 목록 */
         portal.menu.getMenuList = function() {
             return common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/menus', 'GET');
         };

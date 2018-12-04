@@ -387,6 +387,9 @@ angular.module('common.controllers', [])
 
         // Organization 값 셋팅
         mc.setPortalOrg = function(portalOrg) {
+            if (!mc.dbMenuList || mc.dbMenuList.length == 0) {
+                mc.setDbMenuList();
+            }
             if (angular.isObject(portalOrg) && portalOrg.id) {
                 $timeout(function () {
                     mc.desplayDbMenuList(portalOrg.myRoleName);
@@ -1226,8 +1229,6 @@ angular.module('common.controllers', [])
         mc.setMainLanguage(common.getLanguageKey());
         mc.sltProjectId = common.getProjectKey();
         mc.sltPortalOrgId = common.getPortalOrgKey();
-
-        mc.setDbMenuList();
 
         // PassRegion
         mc.syncSetPassRegionSet();
