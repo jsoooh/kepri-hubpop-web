@@ -15,7 +15,7 @@
                     <li>
                         <div class="pnb_tit">백업 이미지 이름<span class="ico_info"></span>
                         </div>
-                        <input type="text" class="form-control" ng-value="contents.snapshotVolume.name" disabled>
+                        <input type="text" class="form-control" ng-value="contents.snapshotVolume.snapshotName" disabled>
                     </li>
                     <li>
                         <div class="pnb_tit">
@@ -89,19 +89,24 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <div class="pnb_tit">설명<span class="ico_info"></span>
+                    <li class="pn-Toggle">
+                        <div class="pnb_tit">
+                            <span class="pnb_t_txt">설명</span>
+                            <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'추가할 디스크에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+                            <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
                         </div>
-                        <div class="text_wrap">
-                            <textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100|required"></textarea>
-                            <!--<span class="txt_limit"><em ng-class="{'red' : (contents.volume.description.length > 100)}">{{contents.volume.description.length}}</em>/100자</span>-->
+                        <div class="s_cont_box">
+                            <div class="text_wrap">
+                                <textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
+                                <!--<span class="txt_limit"><em ng-class="{'red' : (contents.volume.description.length > 100)}">{{contents.volume.description.length}}</em>/100자</span>-->
+                            </div>
                         </div>
                     </li>
                     <li>
                         <div class="pnb_tit">
                             <i class="i_star"></i> 가상서버와 연결<span class="ico_info"></span>
                         </div>
-                        <div> <!--2018.11.14 sg0730 차후 가상서버 API받아와야함. -->
+                        <div>
                             <select class="form-control" ng-model="contents.sltInstanceId" ng-change="contents.fn.sltInstanceChange(contents.sltInstanceId);">
                                 <option value="">연결 할 가상서버 선택</option>
                                 <option ng-repeat="instance in contents.instances" value="{{instance.id}}">{{instance.name}}</option>
@@ -112,8 +117,8 @@
             </div>
             <div class="pn_footer">
                 <div class="btn-btm mgt0">
-                    <button type="button" name="button" class="btn btn-color1 btn-md">디스크 추가</button>
-                    <button type="button" name="button" class="btn btn-color2 btn-md">취소</button>
+                    <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.snapshotAndCreateStorage()">디스크 만들기</button>
+                    <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
                 </div>
             </div>
         </div>

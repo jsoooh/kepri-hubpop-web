@@ -174,8 +174,8 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.isStorageSnapshotLoad = false;
         ct.fn.getStorageSnapshotInfo = function() {
-            $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
                 snapshotId : ct.data.snapshotId
@@ -185,15 +185,17 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.volumeSnapShot && data.content.volumeSnapShot.snapshotId) {
                     ct.snapshotVolume = data.content.volumeSnapShot;
-                    ct.volume.type = ct.snapshotVolume.type;
-                    ct.volume.size = ct.snapshotVolume.size;
+                    ct.volumeSize = ct.snapshotVolume.size;
+                    ct.inputVolumeSize = ct.snapshotVolume.size;
+                    ct.volumeSliderOptions.minLimit = ct.snapshotVolume.size;
                 }
+                ct.isStorageSnapshotLoad = false;
             });
             returnPromise.error(function (data, status, headers) {
+                ct.isStorageSnapshotLoad = false;
                 common.showAlert("message",data.message);
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -241,8 +243,8 @@ angular.module('iaas.controllers')
             params.newVolumeInfo = {};
             params.newVolumeInfo.instanceId = ct.data.tenantId;
             params.newVolumeInfo.name = ct.volume.name;
-            params.newVolumeInfo.type = ct.volume.type;
-            params.newVolumeInfo.size = ct.volume.size;
+            params.newVolumeInfo.type = 'HDD';
+            params.newVolumeInfo.size = ct.volumeSize;
             params.newVolumeInfo.description = ct.volume.description;
 
             if (ct.sltInstance && ct.sltInstance.id) {
@@ -263,7 +265,7 @@ angular.module('iaas.controllers')
         };
 
         ct.checkClickBtn = false;
-        ct.snapshotAndCreateStorage = function () {
+        ct.fn.snapshotAndCreateStorage = function () {
             if (ct.checkClickBtn) return;
             ct.checkClickBtn = true;
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
