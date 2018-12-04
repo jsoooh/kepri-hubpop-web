@@ -232,8 +232,9 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 clickCheck = false;
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("생성 되었습니다.");
-                $scope.main.goToHistoryBack();
+                common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                // 페이지 이동으로 바꿔야 하고
+                $scope.main.goToPage("/iaas/compute");
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
