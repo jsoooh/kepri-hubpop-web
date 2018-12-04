@@ -2,7 +2,7 @@
 
 angular.module('common.controllers', [])
 // 최초 접속 혹은 새로고침 시 as main
-    .controller('mainCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $interval, $cookies, cache, cookies, user, common, portal, userSettingService, CONSTANTS, FileUploader) {
+    .controller('mainCtrl', function ($scope, $location, $state, $stateParams, $translate, $window, $timeout, $interval, $cookies, cache, cookies, user, common, portal, userSettingService, CONSTANTS, FileUploader) {
         _DebugConsoleLog('commonControllers.js : mainCtrl Start, path : ' + $location.path(), 1);
 
         var mc = this;
