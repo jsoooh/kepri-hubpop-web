@@ -28,7 +28,7 @@ angular.module('iaas.controllers')
     		{
     			ct.fn.reSizePopStorage($event,data);
     		}
-        }
+        };
         
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenantId;
@@ -40,9 +40,9 @@ angular.module('iaas.controllers')
             ct.fn.getStorageList();
         });
         var conditionValue = $stateParams.volumeName;
-        if($stateParams.volumeName) {
+        if(conditionValue) {
             ct.conditionKey = 'name';
-            ct.conditionValue = $stateParams.volumeName;
+            ct.conditionValue = conditionValue;
         } else {
             ct.conditionKey = '';
         }
@@ -53,14 +53,14 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 conditionKey : ct.conditionKey,
                 conditionValue : ct.conditionValue,
-            }
+            };
             if (currentPage != undefined) {
                 param.number = currentPage;
             }
             
             param.size = 0;
             
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
             returnPromise.success(function (data, status, headers) {
             	ct.pageOptions = paging.makePagingOptions(data);
             	ct.storageMainList = data.content.volumes;
@@ -71,7 +71,7 @@ angular.module('iaas.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         //추가 전체 볼륨 크기E
         $scope.actionLoading = false; // action loading
@@ -92,7 +92,7 @@ angular.module('iaas.controllers')
             
             //common.showDialog($scope, $event, $scope.dialogOptions);
             $scope.actionLoading = true; // action loading
-        }
+        };
 
         ct.fn.checkAll = function($event) {
             ct.roles = [];
@@ -104,7 +104,7 @@ angular.module('iaas.controllers')
                 }
             }
 
-        }
+        };
 
         ct.fn.checkOne = function($event,id) {
             if($event.currentTarget.checked) {
@@ -114,7 +114,7 @@ angular.module('iaas.controllers')
             } else {
                 $($("#mainList").find("input[type='checkbox']")[0]).prop("checked",false);
             }
-        }
+        };
 
         ct.deleteVolumes = function(type, id) {
         	if(type == 'thum'){
@@ -131,7 +131,7 @@ angular.module('iaas.controllers')
                 }
         	}
             
-        }
+        };
 
 
         // 스토리지 삭제
@@ -155,7 +155,7 @@ angular.module('iaas.controllers')
             }).catch(function(e){
                 common.showAlert('메세지',e);
             });
-        }
+        };
 
         // 스토리지 삭제
         ct.deleteVolumesJob = function(id) {
@@ -167,7 +167,7 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : ct.data.tenantId,
                 volumeId : id
-            }
+            };
             
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
             returnPromise.success(function (data, status, headers) {
@@ -210,7 +210,7 @@ angular.module('iaas.controllers')
             } else {
                 common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
             }
-        }
+        };
 
         $scope.actionLoading = false; // action loading
         $scope.authenticating = false; // action loading massage contents
@@ -322,24 +322,27 @@ angular.module('iaas.controllers')
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
         	showSelectionBar : true,
-        	minValue : 10,
+            minLimit : 10,
             floor: 0,
             ceil: 100,
-            step: 10,
+            step: 1,
             onChange : ct.sliderVolumeSizeChange
         };
 
         ct.inputVolumeSizeChange = function () {
-            if (ct.inputVolumeSize >= 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
+            if (volumeSize >= contents.volumeSliderOptions.minLimit && volumeSize <= contents.volumeSliderOptions.ceil) {
                 ct.volumeSize = ct.inputVolumeSize;
             }
         };
 
         ct.inputVolumeSizeBlur = function () {
-            if (ct.inputVolumeSize < 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
+            if (volumeSize < contents.volumeSliderOptions.minLimit || volumeSize > contents.volumeSliderOptions.ceil) {
                 ct.inputVolumeSize = ct.volumeSize;
             } else {
-                ct.volumeSize = ct.inputVolumeSize;
+                ct.inputVolumeSize = volumeSize;
+                ct.volumeSize = volumeSize;
             }
         };
 
@@ -401,6 +404,7 @@ angular.module('iaas.controllers')
             var params = {};
 
             params.volume = {};
+            params.volume.type = ct.volume.name;
             params.volume.type = 'HDD';
             params.volume.size = ct.volumeSize;
             params.volume.tenantId = ct.data.tenantId;
@@ -1063,132 +1067,89 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
-    	pop.inputVolumeSize 			= 1;
-    	pop.newVolSize 					= 1;
+    	pop.inputVolumeSize 			= pop.volume.size;
+    	pop.volumeSize 					= pop.volume.size;
+
+        pop.sliderVolumeSizeChange = function () {
+            pop.inputVolumeSize = pop.volumeSize;
+        };
+
+        pop.reSizeSliderOptions = {
+            floor: 0,
+            ceil: 100,
+            step: 1,
+            minLimit : pop.volume.size,
+            showSelectionBar : true,
+            onChange : pop.sliderVolumeSizeChange
+        };
+
         pop.inputVolumeSizeChange = function () {
+            var volumeSize = pop.inputVolumeSize ? pop.inputVolumeSize : 0;
+            if (volumeSize >= pop.volumeSliderOptions.minLimit && volumeSize <= pop.volumeSliderOptions.ceil) {
+                pop.volumeSize = pop.inputVolumeSize;
+            }
+        };
 
-        	 if (typeof pop.inputVolumeSize === 'undefined' )
-             {
-            	 pop.inputVolumeSize = pop.newVolSize ;
-             }
-        	 else if (pop.inputVolumeSize < pop.volume.size  )
-             {
-            	 //pop.newVolSize = pop.inputVolumeSize;
-            	 pop.inputVolumeSize = pop.newVolSize ;
-             }
-             else if (pop.inputVolumeSize > pop.reSizeSliderOptions.ceil)
-             {
-            	 pop.inputVolumeSize = pop.reSizeSliderOptions.ceil  ;
-            	 //pop.newVolSize      = pop.reSizeSliderOptions.ceil  ;
-             }
-             else
-             {
-            	 //pop.newVolSize = pop.inputVolumeSize;
-            	 pop.newVolSize = pop.inputVolumeSize ;
+        pop.inputVolumeSizeBlur = function () {
+            var volumeSize = pop.inputVolumeSize ? pop.inputVolumeSize : 0;
+            if (volumeSize < pop.volumeSliderOptions.minLimit || volumeSize > pop.volumeSliderOptions.ceil) {
+                pop.inputVolumeSize = pop.volumeSize;
+            } else {
+                pop.inputVolumeSize = volumeSize;
+                pop.volumeSize = volumeSize;
+            }
+        };
 
-             }
-         };
+        pop.fn.getStorageInfo = function() {
+            $scope.main.loadingMainBody = true;
 
-         pop.inputVolumeSizeBlur = function () {
-        	 if (typeof pop.inputVolumeSize === 'undefined' )
-             {
-            	 pop.inputVolumeSize = pop.newVolSize ;
-             }
-        	 else if (pop.inputVolumeSize < pop.volume.size  )
-             {
-            	 pop.inputVolumeSize = pop.newVolSize ;
-             }
-             else if (pop.inputVolumeSize > pop.reSizeSliderOptions.options.ceil)
-             {
-            	 pop.inputVolumeSize = pop.reSizeSliderOptions.options.ceil  ;
-            	 pop.newVolSize      = pop.inputVolumeSize  ;
-             }
-             else
-             {
-            	 pop.newVolSize = pop.inputVolumeSize ;
+            var param = {
+                tenantId : pop.userTenant.id,
+                volumeId : pop.volume.volumeId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                pop.volume 							  = data.content.volumes[0];
+                pop.inputVolumeSize 				  = pop.volume.size;
+                pop.volumeSize 						  = pop.volume.size;
+                pop.reSizeSliderOptions.minLimit       = pop.volume.size ;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
 
-             }
-         };
+        pop.isTenantResourceLoad = false;
+        pop.fn.getTenantResource = function() {
+            var params = {
+                tenantId : pop.userTenant.id,
+            };
+            $scope.main.loadingMainBody = true;
 
-         pop.sliderVolumeSizeChange = function () {
-        	 pop.inputVolumeSize = pop.newVolSize;
-         };
-    	
-         pop.fn.getStorageInfo = function() {
-             $scope.main.loadingMainBody = true;
-             
-             var param = {
-            		 		 tenantId : pop.userTenant.id,
-			                 volumeId : pop.volume.volumeId
-			             }
-             
-             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
-             
-             returnPromise.success(function (data, status, headers) {
-                 pop.volume 							  = data.content.volumes[0];
-                 pop.inputVolumeSize 					  = pop.volume.size;
-                 pop.newVolSize 						  = pop.volume.size;
-                 pop.reSizeSliderOptions.options.minLimit = pop.volume.size ;
-                 
-                 pop.fn.getTenantResource();
-                 
-             });
-             returnPromise.error(function (data, status, headers) {
-                 common.showAlert("message",data.message);
-             });
-             returnPromise.finally(function (data, status, headers) {
-                 $scope.main.loadingMainBody = false;
-             });
-         };
-         
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
 
-         pop.reSizeSliderOptions =
-         {
-         	options: {
-                 floor: 0,
-                 ceil: 100,
-                 step: 1,
-                 minLimit : 1,
-                 showSelectionBar : true,
-                 onChange : pop.sliderVolumeSizeChange
-             }
-         };
+            returnPromise.success(function (data, status, headers) {
+                pop.resource 		 = angular.copy(data.content[0]);
+                pop.resourceDefault = angular.copy(data.content[0]);
+                pop.reSizeSliderOptions.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes ;
+                pop.isTenantResourceLoad = true;
+            });
+            returnPromise.error(function (data, status, headers) {
+                pop.isTenantResourceLoad = true;
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };
 
-         pop.fn.getTenantResource = function() {
-             var params = {
-            		 			tenantId : pop.userTenant.id,
-			             }
-             $scope.main.loadingMainBody = true;
-             
-             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
-             
-             returnPromise.success(function (data, status, headers) {
-                 pop.resource 		 = angular.copy(data.content[0]);
-                 pop.resourceDefault = angular.copy(data.content[0]);
-                 pop.reSizeSliderOptions.options.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes ;
-
-
-             });
-             returnPromise.error(function (data, status, headers) {
-                 $scope.main.loadingMainBody = false;
-                 common.showAlert("message",data.message);
-             });
-             returnPromise.finally(function (data, status, headers) {
-                 $scope.main.loadingMainBody = false;
-             });
-         }
-         
-         
-         
-    	
     	// Dialog ok 버튼 클릭 시 액션 정의
     	$scope.popDialogOk = function () {
-    		
     		if ($scope.actionBtnHied) return;
-    		
     		$scope.actionBtnHied = true;
-    		
-    		/* if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
+    		/* if (!pop.validationService.checkFormValidity(pop[pop.formName]))
              {
                  $scope.actionBtnHied = false;
                  return;
@@ -1207,10 +1168,10 @@ angular.module('iaas.controllers')
     		$scope.main.loadingMainBody = true;
     		
     		var param = {
-		                    tenantId : pop.userTenant.id,
-		                    volumeId : pop.volume.volumeId,
-		                    size     : pop.newVolSize
-		                }
+                tenantId : pop.userTenant.id,
+                volumeId : pop.volume.volumeId,
+                size     : pop.volumeSize
+            };
     		
     		common.mdDialogHide();
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
@@ -1235,9 +1196,10 @@ angular.module('iaas.controllers')
     			$scope.actionBtnHied = false;
     			$scope.main.loadingMainBody = false;
     		});
-    	}
+    	};
     	
-    	if(pop.userTenant) {
+    	if(pop.userTenant && pop.userTenant.id) {
+            pop.fn.getTenantResource();
     		pop.fn.getStorageInfo();
     	}
     	

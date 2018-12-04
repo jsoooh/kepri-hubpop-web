@@ -460,9 +460,6 @@ angular.module('iaas.controllers')
 
         ct.data.name = 'server-01';
 
-        //볼륨생성 변수
-        ct.data.size = 1;
-
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
             var param = {
@@ -840,34 +837,37 @@ angular.module('iaas.controllers')
             });
         };
 
+        //볼륨생성 변수
+        ct.volumeSize = 0;
+        ct.inputVolumeSize = ct.volumeSize;
+        ct.volumeSliderOptions = {
+            showSelectionBar : true,
+            minLimit : 0,
+            floor: 0,
+            ceil: 100,
+            step: 1,
+            onChange : ct.sliderVolumeSizeChange
+        };
+
         ct.inputVolumeSizeChange = function () {
-            if (ct.inputVolumeSize >= 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
+            if (volumeSize >= contents.volumeSliderOptions.minLimit && volumeSize <= contents.volumeSliderOptions.ceil) {
                 ct.volumeSize = ct.inputVolumeSize;
             }
         };
 
         ct.inputVolumeSizeBlur = function () {
-            if (ct.inputVolumeSize < 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
+            if (volumeSize < contents.volumeSliderOptions.minLimit || volumeSize > contents.volumeSliderOptions.ceil) {
                 ct.inputVolumeSize = ct.volumeSize;
             } else {
-                ct.volumeSize = ct.inputVolumeSize;
+                ct.inputVolumeSize = volumeSize;
+                ct.volumeSize = volumeSize;
             }
         };
 
         ct.sliderVolumeSizeChange = function () {
             ct.inputVolumeSize = ct.volumeSize;
-        };
-
-      //볼륨생성 변수
-        ct.volumeSize = 0;
-        ct.inputVolumeSize = ct.volumeSize;
-        ct.volumeSliderOptions = {
-        	showSelectionBar : true,
-        	minValue : 0,
-            floor: 0,
-            ceil: 0,
-            step: 10,
-            onChange : ct.sliderVolumeSizeChange
         };
 
         if(ct.data.tenantId) {

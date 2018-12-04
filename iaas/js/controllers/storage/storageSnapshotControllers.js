@@ -34,7 +34,7 @@ angular.module('iaas.controllers')
                 volumeName: ct.volumeName,
                 number : page
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotList', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotList', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.snapshotList = data.content.volumeSnapShots;
             });
@@ -44,7 +44,7 @@ angular.module('iaas.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
 
         ct.fn.deleteSnapshot = function(snapshot) {
@@ -92,7 +92,7 @@ angular.module('iaas.controllers')
         }
     })
     .controller('iaasStorageSnapshotCreateCtrl', function ($scope, $location, $state, $window, $translate, $timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);
+        _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotCreateCtrl", 1);
 
         var ct               = this;
         ct.data              = {};
@@ -107,30 +107,34 @@ angular.module('iaas.controllers')
 
         ct.volume.name      = 'disk-01';
 
-        ct.data.volumeId = $stateParams.snapshotId;
+        ct.data.snapshotId = $stateParams.snapshotId;
 
         //볼륨생성 변수
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
             showSelectionBar : true,
-            minValue : 10,
+            minLimit : 0,
+//            maxLimit : 100,
             floor: 0,
             ceil: 100,
-            step: 10,
+            step: 1,
             onChange : ct.sliderVolumeSizeChange
         };
 
         ct.inputVolumeSizeChange = function () {
-            if (ct.inputVolumeSize >= 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
+            if (volumeSize >= contents.volumeSliderOptions.minLimit && volumeSize <= contents.volumeSliderOptions.ceil) {
                 ct.volumeSize = ct.inputVolumeSize;
             }
         };
 
         ct.inputVolumeSizeBlur = function () {
-            if (ct.inputVolumeSize < 10 || ct.inputVolumeSize > contents.volumeSliderOptions.ceil) {
+            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
+            if (volumeSize < contents.volumeSliderOptions.minLimit || volumeSize > contents.volumeSliderOptions.ceil) {
                 ct.inputVolumeSize = ct.volumeSize;
             } else {
-                ct.volumeSize = ct.inputVolumeSize;
+                ct.inputVolumeSize = volumeSize;
+                ct.volumeSize = volumeSize;
             }
         };
 
@@ -170,17 +174,20 @@ angular.module('iaas.controllers')
             });
         };
 
-        ct.fn.getStorageInfo = function() {
+        ct.fn.getStorageSnapshotInfo = function() {
             $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
-                volumeId : ct.data.volumeId
+                snapshotId : ct.data.snapshotId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
+            ct.snapshotVolume = {};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                ct.snapshotVolume = data.content.volumes[0];
-                ct.data.type = ct.snapshotVolume.type;
-                ct.data.size = ct.snapshotVolume.size;
+                if (data && data.content && data.content.volumeSnapShot && data.content.volumeSnapShot.snapshotId) {
+                    ct.snapshotVolume = data.content.volumeSnapShot;
+                    ct.volume.type = ct.snapshotVolume.type;
+                    ct.volume.size = ct.snapshotVolume.size;
+                }
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
@@ -190,42 +197,18 @@ angular.module('iaas.controllers')
             });
         };
 
-        ct.fn.getStorageInfo = function() {
-            $scope.main.loadingMainBody = true;
-            var param = {
-                tenantId : ct.data.tenantId,
-                volumeId : ct.data.volumeId
-            };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
-            returnPromise.success(function (data, status, headers) {
-                ct.snapshotVolume = data.content.volumes[0];
-                ct.data.type = ct.snapshotVolume.type;
-                ct.data.size = ct.snapshotVolume.size;
-            });
-            returnPromise.error(function (data, status, headers) {
-                common.showAlert("message",data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-            });
-        };
-
-        ct.fn.volumeSizeAction = function(flag) {
-            if(flag) {
-                ct.data.size = Number(ct.data.size) + 1;
-                if(Number(ct.resourceDefault.maxResource.volumeGigabytes) < (Number(ct.data.size) + Number(ct.resourceDefault.usedResource.volumeGigabytes))){
-                    ct.data.size = Number(ct.data.size) - 1;
-                }
-            } else {
-                if(Number(ct.data.size) - 1 >= 1) {
-                    ct.data.size = Number(ct.data.size) - 1;
-                }
+        ct.fn.sltInstanceChange = function (sltInstanceId) {
+            var sltInstance = null;
+            if (sltInstanceId) {
+                sltInstance = common.objectsFindCopyByField(ct.instances, "id", sltInstanceId);
             }
-            ct.resource.usedResource.volumeGigabytes = Number(ct.data.size) + Number(ct.resourceDefault.usedResource.volumeGigabytes);
-        };
-
-        ct.fn.changeVolumeSize = function() {
-            // ct.resource.usedResource.volumeGigabytes = Number(ct.data.size) + Number(ct.resourceDefault.usedResource.volumeGigabytes);
+            if (sltInstance && sltInstance.id) {
+                ct.sltInstance = sltInstance;
+                ct.sltInstanceId = sltInstanceId;
+            } else {
+                ct.sltInstance = {};
+                ct.sltInstanceId = "";
+            }
         };
 
         // 서버메인 tenant list 함수
@@ -252,13 +235,24 @@ angular.module('iaas.controllers')
 
         ct.fn.createStorageVolumeAction = function() {
             $scope.main.loadingMainBody = true;
-            ct.data.tenantId = ct.data.tenantId,
-            var param = {
-                newVolumeInfo : ct.data,
-                volumeSnapShot : ct.snapshotVolume
-            };
+            ct.data.tenantId = ct.data.tenantId;
+            var params = {};
+            params.volumeSnapShot = ct.snapshotVolume;
+            params.newVolumeInfo = {};
+            params.newVolumeInfo.instanceId = ct.data.tenantId;
+            params.newVolumeInfo.name = ct.volume.name;
+            params.newVolumeInfo.type = ct.volume.type;
+            params.newVolumeInfo.size = ct.volume.size;
+            params.newVolumeInfo.description = ct.volume.description;
 
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', param);
+            if (ct.sltInstance && ct.sltInstance.id) {
+                params.volumeAttachment = {};
+                params.volumeAttachment.instanceId = ct.sltInstance.id;
+                params.volumeAttachment.instanceName = ct.sltInstance.name;
+                params.volumeAttachment.instanceId = ct.sltInstance.id;
+            }
+
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', params);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.goToPage('/iaas/storage');
             });
@@ -284,9 +278,9 @@ angular.module('iaas.controllers')
             $window.history.back();
         };
 
-        ct.fn.getStorageInfo();
         ct.fn.serverList();
         ct.fn.getTenantResource();
+        ct.fn.getStorageSnapshotInfo();
     })
     .controller('iaasStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);

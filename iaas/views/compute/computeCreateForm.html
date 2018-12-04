@@ -116,7 +116,7 @@
 						<li class="pn-Toggle">
 							<div class="pnb_tit">
 								<span class="pnb_t_txt">디스크 추가</span><button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다."><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" />
-								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event, true);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 							</div>
 							<div class="s_cont_box">
 								<div class="disk_area" ng-if="contents.specDisabledAllSetting">

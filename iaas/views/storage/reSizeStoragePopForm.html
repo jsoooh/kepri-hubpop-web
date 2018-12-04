@@ -20,26 +20,22 @@
 				<th scope="row">디스크 크기(변경 후)</th>
 				<td>
 					<div class="inputbox input-inline">
-						<input type="number"  ng-model="pop.inputVolumeSize"  ng-blur="pop.inputVolumeSizeBlur();" name="volumeSize" maxlength="4" class="form-control" placeholder="내용입력" style="width:90%;">
+						<input type="number"  ng-model="pop.inputVolumeSize" ng-change="pop.inputVolumeSizeChange();" ng-blur="pop.inputVolumeSizeBlur();" name="volumeSize" maxlength="4" class="form-control" placeholder="내용입력" style="width:90%;">
 						<label class="label-txt">GB</label>
 					</div>
 					
 				</td>
 				
 			</tr>
-			<!-- <tr>
-				<td colspan="2">
-				</td>
-			</tr> -->
 		</tbody>
 	</table>
-	<div class="disk_area">
-		<div class="disk_info ng-binding">최대 {{pop.reSizeSliderOptions.options.ceil}}GB</div>
+	<div ng-if="pop.isTenantResourceLoad" class="disk_area">
+		<div class="disk_info ng-binding">최대 {{pop.reSizeSliderOptions.ceil | displayVolume : 'GB'}}</div>
 		<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
 		<div class="disk_box">
 			<div class="rangeWrap type2">
 				<div class="range_box">
-					<rzslider rz-slider-model="pop.newVolSize" rz-slider-options="pop.reSizeSliderOptions.options"></rzslider>
+					<rzslider rz-slider-model="pop.volumeSize" rz-slider-options="pop.reSizeSliderOptions"></rzslider>
 				</div>
 				
 			</div>

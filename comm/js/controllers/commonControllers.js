@@ -1125,10 +1125,11 @@ angular.module('common.controllers', [])
             }
         }
 
-        mc.cBoxToggleChange = function (evt) {
+        mc.cBoxToggleChange = function (evt, isReSlider) {
             var _this = $(evt.currentTarget).closest(".cBox.cToggle");
             if (!_this.hasClass("cToggle-open")) {
                 _this.addClass("cToggle-open").find(".cBox-cnt").slideDown();
+                if (isReSlider) mc.refreshSlider();
             } else {
                 _this.removeClass("cToggle-open").find(".cBox-cnt").slideUp();
             }
@@ -1145,10 +1146,11 @@ angular.module('common.controllers', [])
         };
         
         /*만들기 화면 토글*/
-        mc.panelToggleChange = function (evt) {
+        mc.panelToggleChange = function (evt, isReSlider) {
             var _this = $(evt.currentTarget).closest(".pn-Toggle");
             if (!_this.hasClass("Toggle-open")) {
                 _this.addClass("Toggle-open").find(".s_cont_box").slideDown();
+                if (isReSlider) mc.refreshSlider();
             } else {
                 _this.removeClass("Toggle-open").find(".s_cont_box").slideUp();
             }
