@@ -344,6 +344,50 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu > li > ul > li > ul > li > a:hover {background:#4c515f;}
 .gnb-menu > li > ul > li > ul > li > a.on {background:#4c515f;}
 
+/*--------- 메뉴 - 프로젝트 목록 ---------*/
+.gnb_m_proj .gnb-menu > li > a{display: block; position: relative; width:250px; font-size:15px; color:#fff; background-color:#00bfff; padding:20px 0 20px 47px;}/*180712 gnb font-size 수정*/
+.gnb_m_proj .gnb-menu > li > a .ico-bul{position: absolute; left:19px; top:20px; z-index: 1; width:26px; height: 20px; background: url("../images/ico_gnbmenu_proj.png") no-repeat; background-position: 0 0;}
+.gnb_m_proj .gnb-menu > li > a .ico-arr{position: absolute; right:30px; top:21px; z-index: 1; width:19px; height: 19px; background-position: -28px -100px;;}
+.gnb_m_proj .gnb-menu > li > a:hover, .gnb_m_proj .gnb-menu > li > a.on{color:#fff; background-color:#00bfff;}
+.gnb_m_proj .gnb-menu > li > a:hover .ico-arr{background-position: -28px -100px;}
+.gnb_m_proj .gnb-menu > li > a:hover::before, .gnb_m_proj .gnb-menu > li > a.on::before{display: inline-block; position: absolute; left:0; top:0; z-index: 1; content: ''; width:4px; height:100%; background-color: #00bfff; }
+.gnb_m_proj .gnb-menu > li > a.on .ico-arr{background-position: -83px -100px;}
+.gnb_m_proj .gnb-menu > li > a::after {position:absolute; right: 0; bottom: -10px; content: ''; border-top: 10px solid #195a70 !important; border-left: 0px solid transparent !important; border-right: 10px solid transparent !important; border-bottom: 0px !important;}
+
+/*메뉴 - 프로젝트 목록 -프로젝트생성, 전체프로젝트 버튼*/
+.gnb_m_proj .gnb-menu .pj_name {display:inline-block; width:145px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; vertical-align:middle;}
+.gnb_m_proj .gnb-menu > li > ul {padding:0; background:#2b2f39;}
+.gnb_m_proj .gnb-menu > li > ul > li {position:relative; background:none; padding:0;}
+.gnb_m_proj .gnb-menu > li > ul > li > a{display:block; font-size:14px; color:#8d96ad; line-height:24px; word-break:break-all; padding:0 23px; background:none;}
+.gnb_m_proj .gnb-menu > li > ul > li.pj_create {padding:0;}
+.gnb_m_proj .gnb-menu > li > ul > li.pj_create > a {font-style:italic; background: url("../images/ico_plus12x12.png") no-repeat #3b4152 27px center; padding:0 27px 0 46px; height:50px; line-height:50px; color:#fff;}
+.gnb_m_proj .gnb-menu > li > ul > li.pj_create > a:hover {cursor:pointer; text-decoration:underline;}
+.gnb_m_proj .gnb-menu > li > ul > li > a.on{color:#fff;}
+.gnb_m_proj .gnb-menu > li > ul > li.pj_all {padding:20px;}
+.gnb_m_proj .gnb-menu > li > ul > li.pj_all > a {color:#fff; background:url("../images/ico_pj_all.png") no-repeat 45px center; border:1px solid #74767e; padding:4px 10px 5px 65px;}
+.gnb_m_proj .gnb-menu > li > ul > li.pj_all:hover > a, .gnb_m_proj .gnb-menu > li > ul > li > a.on {background:url("../images/ico_pj_all.png") no-repeat #74767e 45px center;}
+
+/*메뉴 - 프로젝트 목록 3depth*/
+.gnb_m_proj .gnb-menu > li > ul > li > ul {position:relative; top:0; left:0; background:none; padding:8px 10px 8px 30px;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li {position:relative; background: url("../images/ico_gnb_dot1.png") repeat-y; background-position: 0 7px; padding:7px 0;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li > a {display:block; width: 200px; font-size:14px; color:#fff; line-height:24px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; word-break:break-all; background:url("../images/ico_gnb_dot2.png") no-repeat; background-position: 0 14px; padding:0 23px;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li > a:hover {color:#00bfff;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li > a.on {color:#00bfff;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li > a::before {content:none;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child {padding-bottom:0;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child {background:url("../images/ico_gnb_dot8.png") no-repeat; background-position: 0 -5px;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li:first-child {background:url("../images/ico_gnb_dot7.png") no-repeat; background-position: 0 19px;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li:first-child > a {background:none;}
+.gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child > a {background:none;}
+
+
+
+
+
+
+
+
+
 
 .aside {position: fixed; top:0px; right:-360px; bottom:0; z-index:100; color:#8d97ad; width:360px; padding:70px 0 60px; background:#4c515f; overflow: hidden;}
 .aside > div.ng-scope {height:100%; overflow:hidden; overflow-y:auto;}/*180517 슬라이드 레이어 인클루드 div에 스타일 추가함*/
