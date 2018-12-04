@@ -2204,7 +2204,7 @@ p.no-txt{
 /*만들기 화면 컨텐츠 토글*/
 .panel_area .pn-Toggle {border-bottom:1px solid #ddd;}
 .panel_area .pn-Toggle.Toggle-open {border-bottom:0;}
-.panel_area .pn-Toggle .btn_add_toggle {position:absolute; top:0; right:0;}
+.panel_area .pn-Toggle .btn_add_toggle {position:absolute; top:0; right:0; z-index:2;}
 .panel_area .pn-Toggle .btn_add_toggle .ico_arw_sm_gray {display:inline-block; width:19px; height:19px; font-size:0; vertical-align:middle; background:url("../images/ico_arw_sm_gray.png") no-repeat 0 0; }
 .panel_area .pn-Toggle.Toggle-open .btn_add_toggle .ico_arw_sm_gray {background-position:left -21px;}
 .panel_area .pn-Toggle .s_cont_box {display:none;}
@@ -2235,7 +2235,7 @@ p.no-txt{
 .tbw .disk_area .rangeWrap .range_box .app-tit {vertical-align:middle; padding-left:5px; color:#666;}
 
 
-.panel_area .pn_body .s_cont_box ul > li {line-height:30px; padding:10px 0; border-bottom:1px dashed #e3e3e3;}
+.panel_area .pn_body .s_cont_box ul > li {position:relative; line-height:30px; padding:10px 0; border-bottom:1px dashed #e3e3e3;}
 .panel_area .pn_body .s_cont_box ul > li:first-child {padding-top:0;}
 .panel_area .pn_body .s_cont_box ul > li:last-child {border-bottom:0;}
 .panel_area .pn_body .s_cont_box ul > li span {display:inline-block;}
@@ -2597,8 +2597,16 @@ p.no-txt{
 .projIistWrap .ul-quick .quickBox .tit{font-size:26px;}
 .memWrap .mem-foot .text-left{font-size: 15px;}
 .memWrap .mem-foot .text-right{font-size: 15px;}
+/*테이블 툴팁(레이어)*/
 .layer_info_tooltip_tbl {position:absolute; top:87px; right:287px; z-index:999; width:inherit; border:1px solid #0268f4; border-radius:5px; background:#d6f0f9; padding:15px; color:#434344; opacity:0.95; text-align:left;}
 .layer_info_tooltip_tbl::before {content:''; position:absolute; bottom:-7px; right:50%; width:12px; height:13px; background:url("../images/info_bg2.png") no-repeat left center;}
+
+/*툴팁 type2(bootstrap 제공 tooltip 재정의)*/
+.t_tip_bx {position:absolute; z-index:1; display:inline-block; width:70%;}
+.t_tip_bx .tooltip {left:0 !important;}
+.t_tip_bx .tooltip.right .tooltip-arrow {top:50%; left: -1px; margin-top: -5px; width:13px; height:12px; background:url("../images/tooltip_type2_arrow.png") no-repeat left center; border:0 !important;}
+.t_tip_bx .tooltip.top .tooltip-arrow {bottom:-1px; left: 17px !important; margin-top: -5px; width:12px; height:13px; background:url("../images/info_bg2.png") no-repeat left center; border:0 !important;}
+.t_tip_bx .tooltip .tooltip-inner {max-width:100%; background-color: #d6f0f9 !important; border: 1px solid #0268f4 !important; padding: 15px; text-align:left;}
 
 .cBox.type0 .searchBox {margin-top:18px}
 .searchBox.type2 input{border:0; /*font-size: 15px; 삭제*/}
