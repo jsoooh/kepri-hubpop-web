@@ -318,27 +318,16 @@ angular.module('iaas.controllers')
 
         ct.volume.name      = 'disk-01';
 
-        //볼륨생성 변수
-        ct.volumeSize = 100;
-        ct.volumeSliderOptions = {
-        	showSelectionBar : true,
-            minLimit : 10,
-            floor: 0,
-            ceil: 100,
-            step: 1,
-            onChange : ct.sliderVolumeSizeChange
-        };
-
         ct.inputVolumeSizeChange = function () {
-            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
-            if (volumeSize >= contents.volumeSliderOptions.minLimit && volumeSize <= contents.volumeSliderOptions.ceil) {
+            var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
+            if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
                 ct.volumeSize = ct.inputVolumeSize;
             }
         };
 
         ct.inputVolumeSizeBlur = function () {
-            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
-            if (volumeSize < contents.volumeSliderOptions.minLimit || volumeSize > contents.volumeSliderOptions.ceil) {
+            var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
+            if (volumeSize < ct.volumeSliderOptions.minLimit || volumeSize > ct.volumeSliderOptions.ceil) {
                 ct.inputVolumeSize = ct.volumeSize;
             } else {
                 ct.inputVolumeSize = volumeSize;
@@ -348,6 +337,17 @@ angular.module('iaas.controllers')
 
         ct.sliderVolumeSizeChange = function () {
             ct.inputVolumeSize = ct.volumeSize;
+        };
+
+        //볼륨생성 변수
+        ct.volumeSize = 100;
+        ct.volumeSliderOptions = {
+            showSelectionBar : true,
+            minLimit : 10,
+            floor: 0,
+            ceil: 100,
+            step: 1,
+            onChange : ct.sliderVolumeSizeChange
         };
 
         // Dialog ok 버튼 클릭 시 액션 정의
@@ -1074,6 +1074,23 @@ angular.module('iaas.controllers')
             pop.inputVolumeSize = pop.volumeSize;
         };
 
+        pop.inputVolumeSizeChange = function () {
+            var volumeSize = pop.inputVolumeSize ? parseInt(pop.inputVolumeSize, 10) : 0;
+            if (volumeSize >= pop.volumeSliderOptions.minLimit && volumeSize <= pop.volumeSliderOptions.ceil) {
+                pop.volumeSize = pop.inputVolumeSize;
+            }
+        };
+
+        pop.inputVolumeSizeBlur = function () {
+            var volumeSize = pop.inputVolumeSize ? parseInt(pop.inputVolumeSize, 10) : 0;
+            if (volumeSize < pop.volumeSliderOptions.minLimit || volumeSize > pop.volumeSliderOptions.ceil) {
+                pop.inputVolumeSize = pop.volumeSize;
+            } else {
+                pop.inputVolumeSize = volumeSize;
+                pop.volumeSize = volumeSize;
+            }
+        };
+
         pop.reSizeSliderOptions = {
             floor: 0,
             ceil: 100,
@@ -1081,23 +1098,6 @@ angular.module('iaas.controllers')
             minLimit : pop.volume.size,
             showSelectionBar : true,
             onChange : pop.sliderVolumeSizeChange
-        };
-
-        pop.inputVolumeSizeChange = function () {
-            var volumeSize = pop.inputVolumeSize ? pop.inputVolumeSize : 0;
-            if (volumeSize >= pop.volumeSliderOptions.minLimit && volumeSize <= pop.volumeSliderOptions.ceil) {
-                pop.volumeSize = pop.inputVolumeSize;
-            }
-        };
-
-        pop.inputVolumeSizeBlur = function () {
-            var volumeSize = pop.inputVolumeSize ? pop.inputVolumeSize : 0;
-            if (volumeSize < pop.volumeSliderOptions.minLimit || volumeSize > pop.volumeSliderOptions.ceil) {
-                pop.inputVolumeSize = pop.volumeSize;
-            } else {
-                pop.inputVolumeSize = volumeSize;
-                pop.volumeSize = volumeSize;
-            }
         };
 
         pop.fn.getStorageInfo = function() {

@@ -88,7 +88,33 @@ angular.module('iaas.controllers')
             common.showCustomDialog($scope, null, dialogOptions);
         };
 
-        ct.noIngStates = ['active', 'stopped', 'error', 'paused'];
+        ct.creatingTimmerSetting = function () {
+            var isCreatingTimmerStop = true;
+            if (ct.serverMainList && ct.serverMainList.length > 0) {
+                var nowDate = new Date();
+                angular.forEach(ct.serverMainList, function (serverMain) {
+                    if (serverMain.procState != 'end') {
+                        isCreatingTimmerStop = false;
+                    }
+                    if (serverMain.created) {
+                        var createdDate = new Date(serverMain.created);
+                        serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000);
+                    } else {
+                        if (!serverMain.creatingTimmer) serverMain.creatingTimmer = 0;
+                        serverMain.creatingTimmer++;
+                    }
+                });
+            }
+            if (isCreatingTimmerStop) {
+                if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
+                    $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
+                    $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
+                }
+            }
+        };
+
+        ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'error_ip', 'error_volume'];
+        ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
         // 서버메인 tenant list 함수
         ct.fnGetServerMainList = function() {
@@ -105,16 +131,33 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     ct.serverMainList = data.content.instances;
                     var isServerStatusCheck = false;
-                    for (var i=0; i<= ct.serverMainList; i++) {
-                        if (ct.noIngStates.indexOf(ct.serverMainList[i].uiTask) == -1) {
+                    var nowDate = new Date();
+                    angular.forEach(ct.serverMainList, function (serverMain) {
+                        if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
                             isServerStatusCheck = true;
-                            break;
                         }
-                    }
+                        ct.fn.setProcState(serverMain);
+                        if (serverMain.created) {
+                            var createdDate = new Date(serverMain.created);
+                            serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000);
+                        } else {
+                            if (!serverMain.creatingTimmer) serverMain.creatingTimmer = 0;
+                            serverMain.creatingTimmer++;
+                        }
+                    });
                     if (isServerStatusCheck) {
-                        $timeout(function () {
+                        if ($scope.main.reloadTimmer['instanceServerStateList']) {
+                            $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
+                            $scope.main.reloadTimmer['instanceServerStateList'] = null;
+                        }
+                        $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
                             ct.fn.checkServerState();
                         }, 1000);
+                        if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
+                            $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
+                            $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
+                        }
+                        $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                     }
                 }
                 if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
@@ -129,6 +172,16 @@ angular.module('iaas.controllers')
             });
             returnPromise.finally(function (data, status, headers) {
             });
+        };
+
+        ct.fn.setProcState = function (instance) {
+            if (ct.noIngStates.indexOf(instance.uiTask) >= 0) {
+                instance.procState = "end";
+            } else if (ct.creatingStates.indexOf(instance.uiTask) >= 0) {
+                instance.procState = "creating";
+            } else {
+                instance.procState = "ing";
+            }
         };
 
         ct.fn.mergeServerInfo = function (serverItem, instance) {
@@ -166,13 +219,22 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
+                        var instance = data.content.instances[0];
                         var serverItem = common.objectsFindByField(ct.serverMainList, "id", data.content.instances[0].id);
-                        ct.fn.mergeServerInfo(serverItem, data.content.instances[0]);
+                        if (serverItem && serverItem.id) {
+                            ct.fn.setProcState(instance);
+                            ct.fn.mergeServerInfo(serverItem, instance);
+                            serverItem.newCreated = true;
+                            $timeout(function () {
+                                serverItem.newCreated = false;
+                            }, 5000);
+                        }
                     } else {
                         if (ct.serverMainList.length > data.content.instances.length) {
                             ct.deployServerList.splice(data.content.instances.length, ct.serverMainList.length - data.content.instances.length);
                         }
                         angular.forEach(data.content.instances, function (instance, inKey) {
+                            ct.fn.setProcState(instance);
                             if (ct.serverMainList[inKey]) {
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
                             } else {
@@ -195,9 +257,15 @@ angular.module('iaas.controllers')
             };
             if (instanceId) {
                 param.instanceId = instanceId;
-                if ($scope.main.reloadTimmer['instanceServerState_' + instanceId]) $timeout.cancel($scope.main.reloadTimmer['instanceServerState_' + instanceId]);
+                if ($scope.main.reloadTimmer['instanceServerState_' + instanceId]) {
+                    $timeout.cancel($scope.main.reloadTimmer['instanceServerState_' + instanceId]);
+                    $scope.main.reloadTimmer['instanceServerState_' + instanceId] = null;
+                }
             } else {
-                if ($scope.main.reloadTimmer['instanceServerStateList']) $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
+                if ($scope.main.reloadTimmer['instanceServerStateList']) {
+                    $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
+                    $scope.main.reloadTimmer['instanceServerStateList'] = null;
+                }
             }
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/states', 'GET', param);
             returnPromise.success(function (data, status, headers) {
@@ -209,7 +277,8 @@ angular.module('iaas.controllers')
                                 ct.fn.checkServerState(instanceStateInfo.id);
                             }, 1000);
                             var serverItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
-                            if (serverItem) {
+                            if (serverItem && serverItem.id) {
+                                ct.fn.setProcState(serverItem);
                                 angular.forEach(instanceStateInfo, function(value, key) {
                                     serverItem[key] = value;
                                 });
@@ -237,17 +306,25 @@ angular.module('iaas.controllers')
                             if (ct.noIngStates.indexOf(serverItem.uiTask) == -1) {
                                 isServerStatusCheck = true;
                                 if (ct.serverMainList[inKey]) {
+                                    ct.fn.setProcState(serverItem);
                                     ct.fn.mergeServerInfo(ct.serverMainList[inKey], serverItem);
                                 } else {
                                     ct.serverMainList.push(serverItem);
-                                    ct.fn.replaceServerInfo(serverItem.id);
+                                    //ct.fn.replaceServerInfo(serverItem.id);
                                 }
                             } else {
-                                isReplaceServerInfo = true;
                                 if (!ct.serverMainList[inKey]) {
                                     ct.serverMainList.push(serverItem);
+                                } else {
+                                    var serverStateItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
+                                    if (serverStateItem && serverStateItem.id && ct.noIngStates.indexOf(serverStateItem.uiTask) == -1) {
+                                        isReplaceServerInfo = true;
+                                        ct.serverMainList[inKey].uiTask = "created_complete";
+                                        $timeout(function () {
+                                            ct.fn.replaceServerInfo(serverItem.id);
+                                        }, 100);
+                                    }
                                 }
-                                ct.fn.replaceServerInfo(serverItem.id);
                             }
                         });
                         if (isServerStatusCheck) {
@@ -293,59 +370,8 @@ angular.module('iaas.controllers')
                 var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'DELETE', param);
                 returnPromise.success(function (data, status, headers) {
                     if (status == 200 && data) {
-                        var action = "";
-                        var instance = {};
-                        var tenantId = ct.data.tenantId;
-                        var value = "";
-
-                        var recursive = function() {
-                            var param = {
-                                instanceId : id,
-                                action : action,
-                                tenantId : tenantId
-                            };
-                            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
-                            returnPromise.success(function (data, status, headers) {
-                                if (status == 200 && data) {
-                                    var requestAction = $filter('lowercase')(action);
-                                    var responseAction = $filter('lowercase')(data.content.instances[0].vmState);
-                                    if(responseAction || responseAction == "error") {
-                                        if(responseAction == 'deleted') {
-                                            $scope.main.loadingMainBody = false;
-                                            common.showAlertSuccess('삭제되었습니다.');
-                                            ct.fnGetServerMainList();
-                                        }
-                                    }else if(responseAction == 'deleted') {
-                                        $scope.main.loadingMainBody = false;
-                                        common.showAlertSuccess('삭제되었습니다.');
-                                        ct.fnGetServerMainList();
-                                    }else {
-                                        instance.taskState = data.content.instances[0].taskState;
-                                        directiveWatch();
-                                    }
-                                } else {
-                                    instance.vmState = "error";
-                                }
-                            });
-                            returnPromise.error(function (data, status, headers) {
-                                $scope.main.loadingMainBody = false;
-                                instance.vmState = "error";
-                            });
-                        };
-
-                        var directiveWatch = function() {
-                            if(instance.taskState == "deleting") {
-                                value="DELETE";
-                            }
-
-                            if(value != "ready") {
-                                if(value == "DELETE") {
-                                    action = "deleted";
-                                }
-                                $timeout(recursive,5000);
-                            }
-                        };
-                        directiveWatch();
+                        common.showAlertSuccess('삭제되었습니다.');
+                        ct.fnGetServerMainList();
                     } else {
                         $scope.main.loadingMainBody = false;
                         common.showAlertError('오류가 발생하였습니다.');
@@ -699,6 +725,14 @@ angular.module('iaas.controllers')
             }
         };
 
+        ct.fn.setSpecAllEnabled = function () {
+            if (ct.specList && ct.specList.length && ct.specList.length > 0) {
+                angular.forEach(ct.specList, function (spec) {
+                    spec.disabled = false;
+                });
+            }
+        };
+
         // spec loading 체크
         ct.specDisabledAllSetting = false;
         ct.fn.defaultSelectSpec = function() {
@@ -766,7 +800,9 @@ angular.module('iaas.controllers')
         ct.fn.imageClick = function (image) {
             ct.data.image = angular.copy(image);
             ct.sltImageId = ct.data.image.id;
+            ct.fn.setSpecAllEnabled();
             ct.fn.setSpecMinDisabled();
+            ct.fn.setSpecMaxDisabled();
         };
         
         // 네트워크 리스트 조회
@@ -910,8 +946,13 @@ angular.module('iaas.controllers')
             instance.keypair          = { keypairName: ct.data.keypair.keypairName };
             instance.securityPolicies = angular.copy(ct.data.securityPolicys);
             instance.spec = ct.data.spec;
-
+            if (ct.data.image.osType == 'windows') {
+                if (ct.data.domainName && ct.data.domainSubName) {
+                    instance.rdpDomain = ct.data.domainSubName + "." + ct.data.domainName;
+                }
+            }
             params.instance = instance;
+
 
             if (ct.volumeSize > 0) {
                 params.volume = {};
@@ -939,6 +980,27 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.inputVolumeSizeChange = function () {
+            var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
+            if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
+                ct.volumeSize = ct.inputVolumeSize;
+            }
+        };
+
+        ct.inputVolumeSizeBlur = function () {
+            var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
+            if (volumeSize < ct.volumeSliderOptions.minLimit || volumeSize > ct.volumeSliderOptions.ceil) {
+                ct.inputVolumeSize = ct.volumeSize;
+            } else {
+                ct.inputVolumeSize = volumeSize;
+                ct.volumeSize = volumeSize;
+            }
+        };
+
+        ct.sliderVolumeSizeChange = function () {
+            ct.inputVolumeSize = ct.volumeSize;
+        };
+
         //볼륨생성 변수
         ct.volumeSize = 0;
         ct.inputVolumeSize = ct.volumeSize;
@@ -949,27 +1011,6 @@ angular.module('iaas.controllers')
             ceil: 100,
             step: 1,
             onChange : ct.sliderVolumeSizeChange
-        };
-
-        ct.inputVolumeSizeChange = function () {
-            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
-            if (volumeSize >= contents.volumeSliderOptions.minLimit && volumeSize <= contents.volumeSliderOptions.ceil) {
-                ct.volumeSize = ct.inputVolumeSize;
-            }
-        };
-
-        ct.inputVolumeSizeBlur = function () {
-            var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
-            if (volumeSize < contents.volumeSliderOptions.minLimit || volumeSize > contents.volumeSliderOptions.ceil) {
-                ct.inputVolumeSize = ct.volumeSize;
-            } else {
-                ct.inputVolumeSize = volumeSize;
-                ct.volumeSize = volumeSize;
-            }
-        };
-
-        ct.sliderVolumeSizeChange = function () {
-            ct.inputVolumeSize = ct.volumeSize;
         };
 
         if(ct.data.tenantId) {

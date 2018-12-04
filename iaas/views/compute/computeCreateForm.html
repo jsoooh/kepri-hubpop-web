@@ -17,7 +17,7 @@
 								<i class="i_star"></i> <span class="pnb_t_txt">서버 이름</span>
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 							</div>
-							<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
+							<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
 						</li>
 						<li>
 							<div class="pnb_tit">
@@ -42,24 +42,22 @@
 								</li>
 							</ul>
 							</div>
-								<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
+							<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
 						</li>
-						<li class="pn-Toggle">
+						<li ng-if="contents.data.image.osType == 'windows'" class="pn-Toggle">
 							<div class="pnb_tit">
-								<span class="pnb_t_txt">접속 도메인</span>
+								<i class="i_star"></i> <span class="pnb_t_txt">접속 도메인</span>
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성된 윈도우 서버에 접속하기 위한 도메인 정보를 구성합니다.'"><span class="ico_info"></span></button></div>
-								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+								<!--<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>-->
 							</div>
-							<div class="s_cont_box">
+							<div class="s_cont_box" style="display: block;">
 								<div class="app-form-two mgt0">
 									<div class="two_box">
-										<input type="text" class="form-control" maxlength="50" placeholder="APP 도메인을 입력하세요.">
+										<input type="text" class="form-control" name="domainSubName" maxlength="50" placeholder="APP 도메인을 입력하세요." ng-model="contents.data.domainSubName" validation="alpha_dash_spaces|required">
 									</div>
 									<div class="two_box">
-										<select name="" title="검색 구분 선택">
-											<option value="">apps.hubpop.io</option>
-											<option value="">apps.hubpop.io_1</option>
-											<option value="">apps.hubpop.io_2</option>
+										<select name="contents.data.domainName" title="검색 구분 선택">
+											<option value="wins.hubpop.io">wins.hubpop.io</option>
 										</select>
 									</div>
 								</div>
@@ -118,7 +116,7 @@
 							<div class="pnb_tit">
 								<span class="pnb_t_txt">디스크 추가</span>
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
-								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event, true);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 							</div>
 							<div class="s_cont_box">
 								<div class="disk_area" ng-if="contents.specDisabledAllSetting">

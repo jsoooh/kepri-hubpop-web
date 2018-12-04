@@ -109,18 +109,6 @@ angular.module('iaas.controllers')
 
         ct.data.snapshotId = $stateParams.snapshotId;
 
-        //볼륨생성 변수
-        ct.volumeSize = 100;
-        ct.volumeSliderOptions = {
-            showSelectionBar : true,
-            minLimit : 0,
-//            maxLimit : 100,
-            floor: 0,
-            ceil: 100,
-            step: 1,
-            onChange : ct.sliderVolumeSizeChange
-        };
-
         ct.inputVolumeSizeChange = function () {
             var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
             if (volumeSize >= contents.volumeSliderOptions.minLimit && volumeSize <= contents.volumeSliderOptions.ceil) {
@@ -140,6 +128,18 @@ angular.module('iaas.controllers')
 
         ct.sliderVolumeSizeChange = function () {
             ct.inputVolumeSize = ct.volumeSize;
+        };
+
+        //볼륨생성 변수
+        ct.volumeSize = 100;
+        ct.volumeSliderOptions = {
+            showSelectionBar : true,
+            minLimit : 0,
+//            maxLimit : 100,
+            floor: 0,
+            ceil: 100,
+            step: 1,
+            onChange : ct.sliderVolumeSizeChange
         };
 
         ct.fn.getTenantResource = function() {

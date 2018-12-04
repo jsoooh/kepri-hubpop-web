@@ -10,7 +10,7 @@
 	<!-- 프로젝트 정보 -->
 	<div class="cBox type0 projt-mana">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 서버 <em class="point1">({{contents.serverMainList.length}})</em></h4>
+			<h4 class="c-tit">전체 서버 <em class="point1">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
@@ -40,17 +40,17 @@
 	<!-- panel area-->
 	<!-- <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel thum_style"> -->
 	<ul  class="ul-panel thum_style">
-		<li ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText }">
+		<li ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
 			<!-- panel -->
 			<div class="panelWrap">
-				<div class="panel type5">
+				<div class="panel type5" ng-class="{'new-create' : instance.newCreated}">
 					<div class="panel_head">
 						<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="logo" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
 						<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
 						<p class="tit" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.name}}</p>
 						<!-- <p class="txt" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.image.serviceName}}</p> -->
 						<!-- 접속정보 -->
-						<div class="tg_box_area btn-option type2">
+						<div ng-if="instance.procState == 'end'" class="tg_box_area btn-option type2">
 							<button type="button" class="btn_txt" ng-click="contents.showInfo(instance);">접속정보</button>
 							<div class="tg_box" ng-show="instance.showVal">
 								<div class="tgb_head">
@@ -58,22 +58,12 @@
 									<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
 								</div>
 								<!-- ubuntu  -->
-								<div ng-if="instance.image.osType == 'ubuntu'" class="tgb_body">
+								<div ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'" class="tgb_body">
 									<ul>
 										<li><strong>접속 프로토콜 :</strong>SSH</li>
-										<li><strong>접속 IP :</strong>192.168.200.199</li>
-										<li><strong>접속 계정 :</strong>ubuntu</li>
-										<li><strong>접속 인증 키(KEY) :</strong>defaultpem<button type="button"><span class="ico_file_dw">파일다운로드</span></button></li>
-									</ul>
-									<div class="guide_link"><a href="#">접속방법 가이드</a></div>
-								</div>
-								<!-- centos  -->
-								<div ng-if="instance.image.osType == 'centos'" class="tgb_body">
-									<ul>
-										<li><strong>접속 프로토콜 :</strong>SSH</li>
-										<li><strong>접속 IP :</strong>192.168.200.199</li>
-										<li><strong>접속 계정 :</strong>centos</li>
-										<li><strong>접속 인증 키(KEY) :</strong>defaultpem<button type="button"><span class="ico_file_dw">파일다운로드</span></button></li>
+										<li><strong>접속 IP :</strong>{{instance.floatingIp}}</li>
+										<li><strong>접속 계정 :</strong>{{instance.image.osType}}</li>
+										<li><strong>접속 인증 키(KEY) :</strong>{{instance.keypair.name}}<button type="button"><span class="ico_file_dw">파일다운로드</span></button></li>
 									</ul>
 									<div class="guide_link"><a href="#">접속방법 가이드</a></div>
 								</div>
@@ -90,7 +80,7 @@
 							</div>
 						</div>
 						<!-- //접속정보 -->
-						<div class="dropdown btn-option">
+						<div ng-if="instance.procState == 'end'" class="dropdown btn-option">
 							<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 								<span class="ico">실행 설정</span>
 							</button>
@@ -116,8 +106,8 @@
 							</ul>
 						</div>
 					</div>
-					<div class="panel_body" ng-if="instance.vmState != 'building'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
-						<div class="ul-in" ng-if="instance.vmState != 'starting' && instance.vmState != 'stopping' && instance.vmState != 'pausing' && instance.vmState != 'unpausing' && instance.vmState != 'rebooting'">
+					<div class="panel_body" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
+						<div ng-if="instance.procState == 'end'" class="ul-in">
 							<div class="up">
 								<ul class="ul-prog">
 									<li>
@@ -168,19 +158,38 @@
 								</span>
 							</div>
 						</div>
-
-						<!--<div class="ul-in2" ng-if="instance.vmState == 'starting' || instance.vmState == 'stopping' || instance.vmState == 'pausing' || instance.vmState == 'unpausing' || instance.vmState == 'rebooting'">
-							<div class="info-chart">
-								<div class="chartWrap" style="height:180px;">
-									<div stop-watch-d3-circular-progress max="180" start="true" size="180" options="{type:'seconds'}" on-stop="contents.stopProgress()" class="progress-indicator"></div>
+						<div ng-if="instance.procState == 'creating'" class="ul-in">
+							<div class="pnb_progress_wrap">
+								<div class="progress_box">
+									<span class="bar_bg"></span>
+									<ul>
+										<li ng-class="{'creating' : (instance.uiTask == 'creating'), 'complete' : (instance.uiTask != 'creating')}">
+											<div class="state_box">
+												<span class="state_ico"><span>1</span></span>
+											</div>
+											<div class="state_txt"><span>서버 생성</span></div>
+										</li>
+										<li ng-class="{'standby' : (instance.uiTask == 'creating'), 'creating' : (instance.uiTask == 'networking'), 'complete' : (instance.uiTask == 'block_device_mapping' || instance.uiTask == 'created_complete')}">
+											<div class="state_box">
+												<span class="state_ico"><span>2</span></span>
+											</div>
+											<div class="state_txt"><span>네트워크 연결</span></div>
+										</li>
+										<li ng-if="instance.uiTaskType == 'v'" ng-class="{'standby' : (instance.uiTask == 'creating' || instance.uiTask == 'networking'), 'creating' : (instance.uiTask == 'block_device_mapping'), 'complete' : (instance.uiTask == 'created_complete') }">
+											<div class="state_box">
+												<span class="state_ico"><span>3</span></span>
+											</div>
+											<div class="state_txt"><span>디스크 구성</span></div>
+										</li>
+									</ul>
+									<div class="progress_txt">
+										<p>{{'iaas.label.instance_ui_' + instance.uiTask | translate}}</p>
+										<span>{{instance.creatingTimmer}}초</span>
+									</div>
 								</div>
 							</div>
-
-							<div class="info-txt">
-								<p class="txt"><span class="ico ico-timer"></span>{{instance.vmState | iaasVmState}}</p>
-							</div>
-						</div>-->
-						<div class="ul-in2 spinner_area" ng-if="instance.vmState == 'starting' || instance.vmState == 'stopping' || instance.vmState == 'pausing' || instance.vmState == 'unpausing' || instance.vmState == 'rebooting'"><!-- 스피너 들어갈경우에만 이 영역에 class명 추가해줌(.spinner_area) -->
+						</div>
+						<div ng-if="instance.procState == 'ing'" class="ul-in2 spinner_area">
 							<div class="info-chart">
 								<div class="chartWrap">
 									<ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
@@ -212,22 +221,14 @@
 								</div>
 							</div>
 							<div class="info-txt">
-								<div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>
+								<!--<div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>-->
 								<p class="txt"><span class="ico ico-timer"></span>{{instance.vmState | iaasVmState}}입니다.</p>
 							</div>
 						</div>
 					</div>
+<!--
 					<div class="panel_body" ng-if="instance.vmState == 'building'">
 						<div class="ul-in2 spinner_area">
-							<!-- 기존소스
-                            <div class="info-chart">
-                                <div class="chartWrap">
-                                    <div stop-watch-d3-circular-progress max="180" start="true" size="180" options="{type:'seconds'}" on-stop="contents.stopProgress()" class="progress-indicator"></div>
-                                </div>
-                            </div>
-                            <div class="info-txt">
-                                <p class="txt"><span class="ico ico-timer"></span>생성중</p>
-                            </div> -->
 							<div class="info-chart">
 								<div class="chartWrap">
 									<ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
@@ -264,6 +265,7 @@
 							</div>
 						</div>
 					</div>
+-->
 				</div>
 			</div>
 			<!-- //panel -->
