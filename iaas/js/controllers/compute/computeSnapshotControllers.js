@@ -123,9 +123,10 @@ angular.module('iaas.controllers')
         _DebugConsoleLog("computeSnapshotControllers.js : iaasServerSnapshotCreateCtrl start", 1);
 
         var ct = this;
+        ct.data.tenantId = $scope.main.userTenantId;
+        ct.data.tenantName = $scope.main.userTenant.korName;
         ct.data = {};
         ct.fn = {};
-        ct.ui = {};
         ct.roles = [];
         ct.tenantResource = {};
         ct.data.spec = {};
@@ -135,8 +136,9 @@ angular.module('iaas.controllers')
         ct.subnet = {};
         ct.snapshotInfo = {};
         ct.networks = [];
-        ct.data.tenantId = $scope.main.userTenantId;
-        ct.data.tenantName = $scope.main.userTenant.korName;
+
+        ct.volume            = {};
+
         ct.formName = "computeCreateForm";
         ct.data.name = 'server-01';
 
@@ -195,8 +197,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.keypairList = data.content;
                 if (ct.keypairList && ct.keypairList.length > 0) {
-                    ct.keypairValue = ct.keypairList[0];
-                    ct.data.keypair = angular.fromJson(ct.keypairValue);
+                    ct.data.keypair = ct.keypairList[0];
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -217,16 +218,29 @@ angular.module('iaas.controllers')
 
             var params = {};
 
-            var instance              = {};
-            instance.name             = ct.data.name;
-            instance.tenantId         = ct.data.tenantId;
-            instance.networks         = [{ id: ct.data.networks[0].id }];
-            instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
-            instance.keypair          = { keypairName: ct.data.keypair.keypairName };
-            instance.securityPolicies = angular.copy(ct.data.securityPolicys);
-            instance.spec = ct.data.spec;
+            params.instance              = {};
+            params.instance.name             = ct.data.name;
+            params.instance.tenantId         = ct.data.tenantId;
+            params.instance.networks         = [{ id: ct.data.networks[0].id }];
+            params.instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
+            params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
+            params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
+            params.instance.spec = ct.data.spec;
 
-            params.instance = instance;
+            if (ct.data.image.osType == 'windows') {
+                if (ct.data.baseDomainName && ct.data.subDomainName) {
+                    params.instance.rdpDomain = ct.data.subDomainName + "." + ct.data.baseDomainName;
+                }
+            }
+
+            if (ct.volumeSize > 0) {
+                params.volume = {};
+                params.volume.name = instance.name+'_volume01';
+                params.volume.type = 'HDD';
+                params.volume.size = ct.volumeSize;
+                params.volume.tenantId = ct.data.tenantId;
+            }
+
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : ct.data});
             returnPromise.success(function (data, status, headers) {

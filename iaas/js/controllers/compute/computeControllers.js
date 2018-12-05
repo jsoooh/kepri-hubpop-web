@@ -578,10 +578,7 @@ angular.module('iaas.controllers')
         ct.subnet            = {};
         ct.networks          = [];
         ct.volume            = {};
-        ct.keypairValue      = '';
-        ct.initScriptValue   = '';
         ct.ipFlag            = true;
-        ct.activeTabIndex    = 1;
         ct.data.tenantId     = $scope.main.userTenant.id;
         ct.data.tenantName   = $scope.main.userTenant.korName;
         ct.formName          = "computeCreateForm";
@@ -650,12 +647,11 @@ angular.module('iaas.controllers')
                 }else{
                     for(var i = 0; i < ct.keypairList.length; i++){
                         if(ct.keypairList[i].name == "default"){
-                            ct.keypairValue = ct.keypairList[i];
-                            ct.data.keypair = angular.fromJson(ct.keypairValue);
-                        }else{
-                            ct.keypairValue = ct.keypairList[0];
-                            ct.data.keypair = angular.fromJson(ct.keypairValue);
+                            ct.data.keypair = ct.keypairList[i];
                         }
+                    }
+                    if (!ct.data.keypair) {
+                        ct.data.keypair = ct.keypairList[0];
                     }
                     $scope.main.loadingMainBody = false;
                     ct.fn.getSpecList();
@@ -938,21 +934,19 @@ angular.module('iaas.controllers')
 
             var params = {};
 
-            var instance              = {};
-            instance.name             = ct.data.name;
-            instance.tenantId         = ct.data.tenantId;
-            instance.networks         = [{ id: ct.data.networks[0].id }];
-            instance.image            = {id: ct.data.image.id};
-            instance.keypair          = { keypairName: ct.data.keypair.keypairName };
-            instance.securityPolicies = angular.copy(ct.data.securityPolicys);
-            instance.spec = ct.data.spec;
+            params.instance              = {};
+            params.instance.name             = ct.data.name;
+            params.instance.tenantId         = ct.data.tenantId;
+            params.instance.networks         = [{ id: ct.data.networks[0].id }];
+            params.instance.image            = {id: ct.data.image.id};
+            params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
+            params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
+            params.instance.spec = ct.data.spec;
             if (ct.data.image.osType == 'windows') {
-                if (ct.data.domainName && ct.data.domainSubName) {
-                    instance.rdpDomain = ct.data.domainSubName + "." + ct.data.domainName;
+                if (ct.data.baseDomainName && ct.data.subDomainName) {
+                    params.instance.rdpDomain = ct.data.subDomainName + "." + ct.data.baseDomainName;
                 }
             }
-            params.instance = instance;
-
 
             if (ct.volumeSize > 0) {
                 params.volume = {};
