@@ -61,6 +61,10 @@ angular.module('app')
             myJobsKey: "MY_JOBS",
             myQuickMenusKey: "MY_QUICK_MENUS"
         },
+        rdpConnect : {
+            baseDomain : "wins.hubpop.io",
+            port : "20025"
+        },
         loadingProgressBar : {
         	top : 80,
             down : 30

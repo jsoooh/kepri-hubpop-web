@@ -122,11 +122,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.getKeyFile = function(keypair,type) {
-            var param = {
-                tenantId : ct.data.tenantId,
-                name : keypair.keypairName
-            }
-            location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&keypairName="+keypair.keypairName;
+            document.location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
         };
         if(ct.data.tenantId) {
             ct.fn.searchKeypairList();

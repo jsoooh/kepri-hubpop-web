@@ -32,11 +32,11 @@
 					<div class="s_cont_box" style="display: block;">
 						<div class="app-form-two mgt0">
 							<div class="two_box">
-								<input type="text" class="form-control" name="subDomainName" maxlength="50" placeholder="접속 서브 도메인을 입력하세요." ng-model="contents.data.subDomainName" validation="alpha_dash_spaces|required">
+								<input type="text" class="form-control" name="subDomainName" maxlength="50" placeholder="접속 서브 도메인을 입력하세요." ng-model="contents.data.subDomainName" validation="alpha_num|required|custom:contents.fn.subDomainCustomValidationCheck(contents.data.subDomainName)">
 							</div>
 							<div class="two_box">
-								<select name="baseDomainName" ng-model="contents.data.baseDomainName" title="검색 구분 선택">
-									<option value="wins.hubpop.io">wins.hubpop.io</option>
+								<select name="baseDomainName" ng-model="contents.data.baseDomainName">
+									<option value="{{contents.rdpBaseDomain}}">{{contents.rdpBaseDomain}}</option>
 								</select>
 							</div>
 						</div>

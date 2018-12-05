@@ -20,13 +20,16 @@ angular.module('iaas.controllers')
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.instance.id = $stateParams.instanceId;
+        ct.data.instanceId = $stateParams.instanceId;
         ct.viewType = 'instance';
         if ($scope.main.stateKey == "iaasDeployServerComputeDetail") {
             ct.viewType = 'deploy';
         }
         ct.sltInfoTab = 'actEvent';
         ct.deployTypes = angular.copy(CONSTANTS.deployTypes);
+
+        ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
+        ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
 
         ct.computeEditFormOpen = function (){
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
@@ -180,12 +183,26 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.fn.setRdpConnectDomain = function (instance) {
+            if (instance.image && instance.image.osType == "windows" && instance.instanceDomainLinkInfos && instance.instanceDomainLinkInfos.length > 0) {
+                var rdpDomain = "";
+                for (var i=0; i<instance.instanceDomainLinkInfos.length; i++) {
+                    if (instance.instanceDomainLinkInfos[i].domainInfo && instance.instanceDomainLinkInfos[i].domainInfo.domain
+                        && instance.instanceDomainLinkInfos[i].domainInfo.domain.substring(instance.instanceDomainLinkInfos[i].domainInfo.domain.length - ct.rdpBaseDomain.length) == ct.rdpBaseDomain) {
+                        rdpDomain = instance.instanceDomainLinkInfos[i].domainInfo.domain;
+                        break;
+                    }
+                }
+                instance.rdpConnectDomain = rdpDomain;
+            }
+        };
+
         //인스턴스 상세 정보 조회
         ct.fn.getInstanceInfo = function(action) {
             $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
-                instanceId : ct.instance.id,
+                instanceId : ct.data.instanceId,
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
@@ -196,6 +213,7 @@ angular.module('iaas.controllers')
                     }
 
                     ct.instance = data.content.instances[0];
+                    ct.fn.setRdpConnectDomain(ct.instance);
                     ct.instance.tenantId = ct.data.tenantId;
 
                     ct.instance.changeName = ct.instance.name;
@@ -383,11 +401,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.getKeyFile = function(keypair,type) {
-            var param = {
-                tenantId : ct.data.tenantId,
-                name : keypair.name
-            };
-            location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
+            document.location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
         };
 
         ct.fnSingleInstanceAction = function(action,instance) {
@@ -433,12 +447,14 @@ angular.module('iaas.controllers')
         ct.fn.searchInstanceVolumeList = function() {
             var param = {
                 tenantId : ct.data.tenantId,
-                instanceId : ct.instance.id
+                instanceId : ct.data.instanceId
             };
+            ct.instanceVolList = [];
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                ct.instanceVolList = data.content.volumeAttaches;
-                ct.instanceVolListLength = ct.instanceVolList.length;
+                if (data && data.content && data.content.volumeAttaches && data.content.volumeAttaches.length > 0) {
+                    ct.instanceVolList = data.content.volumeAttaches;
+                }
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -483,7 +499,7 @@ angular.module('iaas.controllers')
         //인스턴스 볼륨 생성 팝업
         ct.fn.createInstanceVolumePop = function($event,instance) {
         	
-        	///iaas/compute/detail/ct.instance.id
+        	///iaas/compute/detail/ct.data.instanceId
         	
         	var dialogOptions =  {
 			            			controller : "iaasComputeVolumeFormCtrl" ,
@@ -518,7 +534,7 @@ angular.module('iaas.controllers')
         ct.fn.ipConnectionSet = function(type) {
             var param = {
                 tenantId : ct.data.tenantId,
-                instanceId : ct.instance.id
+                instanceId : ct.data.instanceId
             };
             if(ct.instance.floatingIp) {
                 param.floatingIp = ct.instance.floatingIp;
@@ -560,7 +576,7 @@ angular.module('iaas.controllers')
             }
             var params = {
                 urlPaths: {
-                    resource_uuid: ct.instance.id
+                    resource_uuid: ct.data.instanceId
                 },
                 page: (page - 1),
                 size: size
@@ -633,7 +649,7 @@ angular.module('iaas.controllers')
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.instance.id = $stateParams.instanceId;
+        ct.data.instanceId = $stateParams.instanceId;
         ct.viewType = 'instance';
         if ($scope.main.stateKey == "iaasDeployServerComputeDetail") {
             ct.viewType = 'deploy';
@@ -725,7 +741,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
-                instanceId : ct.instance.id,
+                instanceId : ct.data.instanceId,
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
@@ -839,7 +855,7 @@ angular.module('iaas.controllers')
             var params = {
                 urlPaths: {
                     server_type: "vm",
-                    server_uuid: ct.instance.id
+                    server_uuid: ct.data.instanceId
                 },
                 start_time: start_time
             };
@@ -870,7 +886,7 @@ angular.module('iaas.controllers')
             var params = {
                 urlPaths: {
                     server_type: "vm",
-                    server_uuid: ct.instance.id
+                    server_uuid: ct.data.instanceId
                 },
                 start_time: start_time
             };
@@ -904,7 +920,7 @@ angular.module('iaas.controllers')
             var params = {
                 urlPaths: {
                     server_type: "vm",
-                    server_uuid: ct.instance.id
+                    server_uuid: ct.data.instanceId
                 },
                 start_time: start_time
             };
@@ -1050,12 +1066,14 @@ angular.module('iaas.controllers')
         ct.fn.searchInstanceVolumeList = function() {
             var param = {
                 tenantId : ct.data.tenantId,
-                instanceId : ct.instance.id
+                instanceId : ct.data.instanceId
             };
+            ct.instanceVolList = [];
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                ct.instanceVolList = data.content.volumeAttaches;
-                ct.instanceVolListLength = ct.instanceVolList.length;
+                if (data && data.content && data.content.volumeAttaches && data.content.volumeAttaches.length > 0) {
+                    ct.instanceVolList = data.content.volumeAttaches;
+                }
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -1099,7 +1117,7 @@ angular.module('iaas.controllers')
         
         ct.fn.createInstanceVolumePop = function($event,instance) {
         	
-        	///iaas/compute/detail/ct.instance.id
+        	///iaas/compute/detail/ct.data.instanceId
         	
         	var dialogOptions =  {
 			            			controller : "iaasComputeVolumeFormCtrl" ,
@@ -1135,7 +1153,7 @@ angular.module('iaas.controllers')
         ct.fn.ipConnectionSet = function(type) {
             var param = {
                 tenantId : ct.data.tenantId,
-                instanceId : ct.instance.id
+                instanceId : ct.data.instanceId
             };
             if(ct.instance.floatingIp) {
                 param.floatingIp = ct.instance.floatingIp;
@@ -1180,7 +1198,7 @@ angular.module('iaas.controllers')
             }
             var params = {
                 urlPaths: {
-                    resource_uuid: ct.instance.id
+                    resource_uuid: ct.data.instanceId
                 },
                 page: (page - 1),
                 size: size
@@ -1224,7 +1242,7 @@ angular.module('iaas.controllers')
             }
             var params = {
                 urlPaths: {
-                    server_uuid: ct.instance.id
+                    server_uuid: ct.data.instanceId
                 },
                 rangeType: rangeType,
                 page: (page - 1),
@@ -1329,7 +1347,7 @@ angular.module('iaas.controllers')
             var params = {
                 urlPaths: {
                     server_type: "vm",
-                    server_uuid: ct.instance.id
+                    server_uuid: ct.data.instanceId
                 },
                 time_step : ct.selPeriod + "m",
                 start_time : ct.selTimeRange + "h"
@@ -1411,7 +1429,7 @@ angular.module('iaas.controllers')
             var params = {
                 urlPaths: {
                     server_type: "vm",
-                    server_uuid: ct.instance.id
+                    server_uuid: ct.data.instanceId
                 },
                 time_step : ct.selPeriod + "m",
                 start_time : ct.selTimeRange + "h"
@@ -1490,7 +1508,7 @@ angular.module('iaas.controllers')
             var params = {
                 urlPaths: {
                     server_type: "vm",
-                    server_uuid: ct.instance.id
+                    server_uuid: ct.data.instanceId
                 },
                 time_step : ct.selPeriod + "m",
                 start_time : ct.selTimeRange + "h"
@@ -1642,7 +1660,7 @@ angular.module('iaas.controllers')
             var params = {
                 urlPaths: {
                     server_type: "vm",
-                    server_uuid: ct.instance.id
+                    server_uuid: ct.data.instanceId
                 },
                 time_step : ct.selPeriod + "m",
                 start_time : ct.selTimeRange + "h"
@@ -1857,12 +1875,12 @@ angular.module('iaas.controllers')
 	                $scope.main.loadingMainBody = false;
 	            	common.showAlertError(data.message);
 	                //common.showAlert("message",data.message);
-	            })
+	            });
 	            returnPromise.finally(function() {
 	                $scope.main.loadingMainBody = false;
 	            });
         	});
-        }
+        };
         
         //보안정책 조회 후 셋팅
         pop.fn.getSecurityPolicy = function() {
@@ -1891,17 +1909,15 @@ angular.module('iaas.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         //보안정책 셋팅
         pop.fn.changeSecurityPolicy = function() {
         	pop.instance.securityPolicies = pop.roles;
-        }
+        };
         
         pop.fn.getSecurityPolicy();
     })
-    
-    
     .controller('iaasComputeDomainFormCtrl', function($scope, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDomainFormCtrl", 1);
 
@@ -2218,7 +2234,7 @@ angular.module('iaas.controllers')
             if(pop.instance){
                 instanceId = pop.instance.id;
             }else{
-                instanceId = ct.instance.id;
+                instanceId = ct.data.instanceId;
             }
 
             var param = {
@@ -2384,9 +2400,7 @@ angular.module('iaas.controllers')
       
 
     })
-    
     //////////////////////////////////////////////////////////////
-    
      .controller('iaasCreatePopSnapshotCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("iaasCreatePopSnapshotCtrl.js : iaasCreatePopSnapshotCtrl", 1);
 
@@ -2467,7 +2481,6 @@ angular.module('iaas.controllers')
     ///////////////2018.11.21 sg0730 도메인 등록 팝업////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
-    
     .controller('iaasPopConnDomainFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
     	_DebugConsoleLog("iaasPopConnDomainFormCtrl.js : iaasPopConnDomainFormCtrl", 1);
     	
@@ -2536,7 +2549,7 @@ angular.module('iaas.controllers')
     	}
     	
     })
-     .controller('iaasComputeVolumeFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+    .controller('iaasComputeVolumeFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeVolumeFormCtrl", 1);
 
         var pop 						= this;

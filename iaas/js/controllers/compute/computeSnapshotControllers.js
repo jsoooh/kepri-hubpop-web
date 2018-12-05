@@ -143,6 +143,12 @@ angular.module('iaas.controllers')
         ct.formName = "computeCreateForm";
         ct.data.name = 'server-01';
 
+        ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
+        ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
+
+        ct.data.baseDomainName = ct.rdpBaseDomain;
+        ct.data.subDomainName = "";
+
         ct.snapshotId = $stateParams.snapshotId;
 
         ct.fn.getSnapshotInfo = function(snapshotId) {
@@ -202,58 +208,6 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.error(function (data, status, headers) {
-                common.showAlertError(data.message);
-            });
-            returnPromise.finally(function() {
-            });
-        };
-
-        var clickCheck = false;
-        ct.fn.createServer = function() {
-            if(clickCheck) return;
-            clickCheck = true;
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                clickCheck = false;
-                return;
-            }
-
-            var params = {};
-
-            params.instance              = {};
-            params.instance.name             = ct.data.name;
-            params.instance.tenantId         = ct.data.tenantId;
-            params.instance.networks         = [{ id: ct.data.networks[0].id }];
-            params.instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
-            params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
-            params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
-            params.instance.spec = ct.data.spec;
-
-            if (ct.data.image.osType == 'windows') {
-                if (ct.data.baseDomainName && ct.data.subDomainName) {
-                    params.instance.rdpDomain = ct.data.subDomainName + "." + ct.data.baseDomainName;
-                }
-            }
-
-            if (ct.volumeSize > 0) {
-                params.volume = {};
-                params.volume.name = instance.name+'_volume01';
-                params.volume.type = 'HDD';
-                params.volume.size = ct.volumeSize;
-                params.volume.tenantId = ct.data.tenantId;
-            }
-
-            $scope.main.loadingMainBody = true;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : ct.data});
-            returnPromise.success(function (data, status, headers) {
-                clickCheck = false;
-                $scope.main.loadingMainBody = false;
-                common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
-                // 페이지 이동으로 바꿔야 하고
-                $scope.main.goToPage("/iaas/compute");
-            });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                clickCheck = false;
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function() {
@@ -398,6 +352,49 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.usingDomainList = [];
+        ct.usingDomainNames = [];
+        ct.fn.getDomainUsingList = function() {
+            ct.usingDomainList = [];
+            ct.usingDomainNames = [];
+            var param = {};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/domain/all', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && angular.isArray(data.content) && data.content.length > 0) {
+                    ct.usingDomainList = data.content;
+                    angular.forEach(ct.usingDomainList, function (domain, key) {
+                        ct.usingDomainNames.push(domain.domain);
+                    });
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+        };
+
+        ct.fn.subDomainCustomValidationCheck = function(subDomain) {
+            if (subDomain && angular.isArray(ct.usingDomainNames) && ct.usingDomainNames.length > 0) {
+                var domainName = subDomain + "." + ct.data.baseDomainName;
+                if ((ct.formMode != "mod" || ct.orgDomain.domain != domainName) && ct.usingDomainNames.indexOf(domainName) >= 0) {
+                    return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
+                }
+            }
+            return {isValid : true};
+        };
+
+        //볼륨생성 변수
+        ct.volumeSize = 0;
+        ct.inputVolumeSize = ct.volumeSize;
+        ct.volumeSliderOptions = {
+            showSelectionBar : true,
+            minLimit : 0,
+            floor: 0,
+            ceil: 100,
+            step: 1,
+            onChange : function () {
+                ct.inputVolumeSize = ct.volumeSize;
+            }
+        };
+
         ct.inputVolumeSizeChange = function () {
             var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
             if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
@@ -415,23 +412,63 @@ angular.module('iaas.controllers')
             }
         };
 
-        //볼륨생성 변수
-        ct.volumeSize = 0;
-        ct.inputVolumeSize = ct.volumeSize;
-        ct.volumeSliderOptions = {
-            showSelectionBar : true,
-            minLimit : 0,
-            floor: 0,
-            ceil: 100,
-            step: 1,
-            onChange : function () {
-                ct.inputVolumeSize = ct.volumeSize;
+
+        var clickCheck = false;
+        ct.fn.createServer = function() {
+            if(clickCheck) return;
+            clickCheck = true;
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                clickCheck = false;
+                return;
             }
+
+            var params = {};
+
+            params.instance              = {};
+            params.instance.name             = ct.data.name;
+            params.instance.tenantId         = ct.data.tenantId;
+            params.instance.networks         = [{ id: ct.data.networks[0].id }];
+            params.instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
+            params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
+            params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
+            params.instance.spec = ct.data.spec;
+
+            if (ct.data.image.osType == 'windows') {
+                if (ct.data.baseDomainName && ct.data.subDomainName) {
+                    params.instance.rdpDomain = ct.data.subDomainName + "." + ct.data.baseDomainName;
+                }
+            }
+
+            if (ct.volumeSize > 0) {
+                params.volume = {};
+                params.volume.name = instance.name+'_volume01';
+                params.volume.type = 'HDD';
+                params.volume.size = ct.volumeSize;
+                params.volume.tenantId = ct.data.tenantId;
+            }
+
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : ct.data});
+            returnPromise.success(function (data, status, headers) {
+                clickCheck = false;
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                // 페이지 이동으로 바꿔야 하고
+                $scope.main.goToPage("/iaas/compute");
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                clickCheck = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function() {
+            });
         };
 
         if(ct.data.tenantId && ct.snapshotId) {
             $scope.main.loadingMainBody = true;
             ct.fn.getTenantResource();
+            ct.fn.getDomainUsingList();
             ct.fn.getSnapshotInfo(ct.snapshotId);
             ct.fn.networkListSearch();
             ct.fn.getKeypairList();
@@ -602,11 +639,7 @@ angular.module('iaas.controllers')
         };
 
         pop.fn.getKeyFile = function(keypair, type) {
-            var param = {
-                tenantId : pop.data.tenantId,
-                name : keypair.name
-            };
-            location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+pop.data.tenantId+"&name="+keypair.name;
+            document.location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+pop.data.tenantId+"&name="+keypair.name;
         };
         
         var clickCheck = false;
