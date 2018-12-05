@@ -2639,3 +2639,6 @@ p.no-txt{
    from {border:2px solid #1e80ef;}
     to {border:2px solid #afdafa;} 
 }
+
+/*상단 타이틀영역 폰트사이즈 수정*/
+#container .rightCnt .titWrap .h2 {font-size:22px; vertical-align:middle; line-heigh:22px;}
