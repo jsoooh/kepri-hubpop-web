@@ -123,8 +123,6 @@ angular.module('iaas.controllers')
         _DebugConsoleLog("computeSnapshotControllers.js : iaasServerSnapshotCreateCtrl start", 1);
 
         var ct = this;
-        ct.data.tenantId = $scope.main.userTenantId;
-        ct.data.tenantName = $scope.main.userTenant.korName;
         ct.data = {};
         ct.fn = {};
         ct.roles = [];
@@ -138,6 +136,9 @@ angular.module('iaas.controllers')
         ct.networks = [];
 
         ct.volume            = {};
+
+        ct.data.tenantId = $scope.main.userTenantId;
+        ct.data.tenantName = $scope.main.userTenant.korName;
 
         ct.formName = "computeCreateForm";
         ct.data.name = 'server-01';
