@@ -473,7 +473,8 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .panel.type5{height:390px;}
 /*.panel.type5:hover {border-color: #333; -webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); -webkit-transform: translate(0, -4px); transform: translate(0, -4px);}*/
 .panel.type5 .panel_head{position: relative; min-height: 104px; border-bottom:1px solid #eee; padding:24px 60px 0 95px;}
-.panel.type5 .panel_head .logo{position: absolute; left:20px; top:24px; z-index: 1; width:54px; height:54px; margin-top: 2px; border-radius: 50px; overflow: hidden;}
+.panel.type5 .panel_head .logo{position: absolute; left:20px; top:24px; z-index: 1; width:54px; height:54px; margin-top: 2px; border: 1px solid #ddd; border-radius: 50px; overflow: hidden;}
+.panel.type5 .panel_head .logo img {width:100%; height:auto;}
 .panel.type5 .panel_head .tit{font-size: 24px; line-height: 1.4; font-weight: 700; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .panel.type5 .panel_head .txt{font-size:13px; color:#888; margin-top: 6px;}
 .panel.type5 .panel_body{height: 286px; padding:0px; }
@@ -2290,7 +2291,7 @@ p.no-txt{
 .progress_box ul li.standby .state_txt span {color:#cad4dd;}
 .progress_box .progress_txt {position:absolute; top:140px; width:100%; text-align:center;}
 .progress_box .progress_txt p {font-size:14px; color:#666; padding-left:10px;}
-.progress_box .progress_txt p::before {position:absolute; left:46px; display:inline-block; content:''; width:18px; height:18px; background:url("../images/ico_clock.gif") no-repeat left top;}
+.progress_box .progress_txt p::before {display:inline-block; content:''; width:18px; height:18px; background:url("../images/ico_clock.gif") no-repeat left top; vertical-align:bottom; margin-right:5px;}
 .progress_box .progress_txt span {display:block; margin-top:10px;}
 
 
