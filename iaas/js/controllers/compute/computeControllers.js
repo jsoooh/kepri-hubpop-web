@@ -17,8 +17,12 @@ angular.module('iaas.controllers')
         ct.pageFirstLoad 	= true;
         ct.showVal			= false;
         ct.schFilterText    = "";
+        // 공통 레프트 메뉴의 userTenantId
+        ct.data.tenantId = $scope.main.userTenant.id;
+        ct.data.tenantName = $scope.main.userTenant.korName;
 
-      //20181120 sg0730  서버사양변경 PopUp 추가
+
+        //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function (instance, $event, $index) {
         	 var dialogOptions = {
                      controller : "iaasComputePopEditServerCtrl" ,
@@ -35,10 +39,6 @@ angular.module('iaas.controllers')
             ct.fnGetServerMainList();
             ct.fnGetUsedResource();
         };
-
-        // 공통 레프트 메뉴의 userTenantId
-        ct.data.tenantId = $scope.main.userTenant.id;
-        ct.data.tenantName = $scope.main.userTenant.korName;
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
@@ -991,10 +991,6 @@ angular.module('iaas.controllers')
             }
         };
 
-        ct.sliderVolumeSizeChange = function () {
-            ct.inputVolumeSize = ct.volumeSize;
-        };
-
         //볼륨생성 변수
         ct.volumeSize = 0;
         ct.inputVolumeSize = ct.volumeSize;
@@ -1004,7 +1000,9 @@ angular.module('iaas.controllers')
             floor: 0,
             ceil: 100,
             step: 1,
-            onChange : ct.sliderVolumeSizeChange
+            onChange : function () {
+                ct.inputVolumeSize = ct.volumeSize;
+            }
         };
 
         if(ct.data.tenantId) {

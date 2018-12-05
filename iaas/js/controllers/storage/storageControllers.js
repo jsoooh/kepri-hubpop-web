@@ -310,7 +310,7 @@ angular.module('iaas.controllers')
         ct.volume            = {};
         ct.instances         = [];
         ct.sltInstance       = {};
-        ct.data.tenantId     = $scope.main.userTenant.id;
+        ct.data.tenantId     = $scope.main.userTenantId;
         ct.data.tenantName   = $scope.main.userTenant.korName;
         ct.formName          = "storageForm";
         ct.validDisabled = true;
@@ -335,10 +335,6 @@ angular.module('iaas.controllers')
             }
         };
 
-        ct.sliderVolumeSizeChange = function () {
-            ct.inputVolumeSize = ct.volumeSize;
-        };
-
         //볼륨생성 변수
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
@@ -347,7 +343,9 @@ angular.module('iaas.controllers')
             floor: 0,
             ceil: 100,
             step: 1,
-            onChange : ct.sliderVolumeSizeChange
+            onChange : function () {
+                ct.inputVolumeSize = ct.volumeSize;
+            }
         };
 
         // Dialog ok 버튼 클릭 시 액션 정의
@@ -1070,10 +1068,6 @@ angular.module('iaas.controllers')
     	pop.inputVolumeSize 			= pop.volume.size;
     	pop.volumeSize 					= pop.volume.size;
 
-        pop.sliderVolumeSizeChange = function () {
-            pop.inputVolumeSize = pop.volumeSize;
-        };
-
         pop.inputVolumeSizeChange = function () {
             var volumeSize = pop.inputVolumeSize ? parseInt(pop.inputVolumeSize, 10) : 0;
             if (volumeSize >= pop.volumeSliderOptions.minLimit && volumeSize <= pop.volumeSliderOptions.ceil) {
@@ -1097,7 +1091,9 @@ angular.module('iaas.controllers')
             step: 1,
             minLimit : pop.volume.size,
             showSelectionBar : true,
-            onChange : pop.sliderVolumeSizeChange
+            onChange : function () {
+                ct.inputVolumeSize = ct.volumeSize;
+            }
         };
 
         pop.fn.getStorageInfo = function() {

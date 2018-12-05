@@ -277,6 +277,7 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     ct.fn.setSpecMaxDisabled();
                 }
             });
@@ -395,6 +396,37 @@ angular.module('iaas.controllers')
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
             });
+        };
+
+        ct.inputVolumeSizeChange = function () {
+            var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
+            if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
+                ct.volumeSize = ct.inputVolumeSize;
+            }
+        };
+
+        ct.inputVolumeSizeBlur = function () {
+            var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
+            if (volumeSize < ct.volumeSliderOptions.minLimit || volumeSize > ct.volumeSliderOptions.ceil) {
+                ct.inputVolumeSize = ct.volumeSize;
+            } else {
+                ct.inputVolumeSize = volumeSize;
+                ct.volumeSize = volumeSize;
+            }
+        };
+
+        //볼륨생성 변수
+        ct.volumeSize = 0;
+        ct.inputVolumeSize = ct.volumeSize;
+        ct.volumeSliderOptions = {
+            showSelectionBar : true,
+            minLimit : 0,
+            floor: 0,
+            ceil: 100,
+            step: 1,
+            onChange : function () {
+                ct.inputVolumeSize = ct.volumeSize;
+            }
         };
 
         if(ct.data.tenantId && ct.snapshotId) {

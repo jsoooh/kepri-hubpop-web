@@ -444,6 +444,7 @@ angular.module('common.controllers', [])
             if (angular.isObject(userTenant) && userTenant.tenantId) {
                 mc.userTenant = userTenant;
                 mc.userTenantId = userTenant.tenantId;
+                mc.userTenant.id = userTenant.tenantId;
                 mc.userTenant.korName = mc.sltPortalOrg.orgName;
                 mc.uaerTenantDisplayName = mc.userTenant.korName;
             } else {

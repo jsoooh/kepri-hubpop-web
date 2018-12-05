@@ -96,7 +96,7 @@ angular.module('iaas.controllers')
 
         var ct               = this;
         ct.data              = {};
-        ct.data.tenantId     = $scope.main.userTenant.id;
+        ct.data.tenantId     = $scope.main.userTenantId;
         ct.data.tenantName   = $scope.main.userTenant.korName;
         ct.fn                = {};
         ct.volume            = {};
@@ -126,10 +126,6 @@ angular.module('iaas.controllers')
             }
         };
 
-        ct.sliderVolumeSizeChange = function () {
-            ct.inputVolumeSize = ct.volumeSize;
-        };
-
         //볼륨생성 변수
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
@@ -139,7 +135,9 @@ angular.module('iaas.controllers')
             floor: 0,
             ceil: 100,
             step: 1,
-            onChange : ct.sliderVolumeSizeChange
+            onChange : function () {
+                ct.inputVolumeSize = ct.volumeSize;
+            }
         };
 
         ct.fn.getTenantResource = function() {
