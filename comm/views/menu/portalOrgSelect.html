@@ -8,7 +8,7 @@
 				<li>
 					<ul>
 						<li ng-repeat="orgItem in main.portalOrgs" class="dept2" onmouseover="depth2LiHover(event, 'no');">
-							<a class="dept2" href="" onmouseover="depth2Hover(event, 'no');" ng-click="main.goToPortalOrgPage(orgItem);">{{orgItem.orgName}}</a>
+							<a class="dept2" ng-class="{'on': main.sltPortalOrgId == orgItem.id}" href="" onmouseover="depth2Hover(event, 'no');" ng-click="main.goToPortalOrgPage(orgItem);">{{orgItem.orgName}}</a>
 						</li>
 					</ul>
 				</li>
