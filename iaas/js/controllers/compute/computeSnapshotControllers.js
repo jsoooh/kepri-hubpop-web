@@ -243,6 +243,7 @@ angular.module('iaas.controllers')
         };
 
         //스펙그룹의 스펙 리스트 조회
+        ct.isSpecLoad = false;
         ct.fn.getSpecList = function(specGroup) {
             ct.specList = [];
             ct.data.spec = {};
@@ -251,12 +252,15 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
                     ct.specList = data.content.specs;
-                    ct.fn.setSpecMinDisabled();
-                    ct.fn.setSpecMaxDisabled();
                 }
+                ct.isSpecLoad = true;
+                ct.fn.setSpecMinDisabled();
+                ct.fn.setSpecMaxDisabled();
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                ct.isSpecLoad = true;
+                ct.fn.setSpecMinDisabled();
+                ct.fn.setSpecMaxDisabled();
                 common.showAlertError(data.message);
             });
         };
@@ -267,7 +271,7 @@ angular.module('iaas.controllers')
         ct.specMinDisabledSetting = false;
         ct.fn.setSpecMinDisabled = function () {
             ct.isMinSpecDisabled = false;
-            if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.snapshotInfo && ct.snapshotInfo.id) {
+            if (ct.isSpecLoad && ct.snapshotInfo && ct.snapshotInfo.id) {
                 angular.forEach(ct.specList, function (spec) {
                     if (spec.disk < ct.snapshotInfo.disk) {
                         spec.disabled = true;
@@ -285,7 +289,7 @@ angular.module('iaas.controllers')
         ct.specMaxDisabledSetting = false;
         ct.fn.setSpecMaxDisabled = function () {
             ct.isMaxSpecDisabled = false;
-            if (ct.specList && ct.specList.length && ct.specList.length > 0 && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
+            if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
                     if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
                         spec.disabled = true;
