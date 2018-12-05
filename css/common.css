@@ -452,3 +452,6 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 .ico-info1 {height:20px; margin-left:3px;}
+
+/*IE에서 validation check 이미지 안나오게 재정의*/
+input::-ms-clear {display:none;}
