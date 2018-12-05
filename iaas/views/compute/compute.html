@@ -45,8 +45,10 @@
 			<div class="panelWrap">
 				<div class="panel type5" ng-class="{'new-create' : instance.newCreated}">
 					<div class="panel_head">
-						<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="logo" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
-						<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
+						<div class="logo">
+							<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
+							<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
+						</div>
 						<p class="tit" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.name}}</p>
 						<!-- <p class="txt" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.image.serviceName}}</p> -->
 						<!-- 접속정보 -->

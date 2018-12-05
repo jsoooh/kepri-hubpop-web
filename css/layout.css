@@ -381,14 +381,6 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child > a {background:none;}
 
 
-
-
-
-
-
-
-
-
 .aside {position: fixed; top:0px; right:-360px; bottom:0; z-index:100; color:#8d97ad; width:360px; padding:70px 0 60px; background:#4c515f; overflow: hidden;}
 .aside > div.ng-scope {height:100%; overflow:hidden; overflow-y:auto;}/*180517 슬라이드 레이어 인클루드 div에 스타일 추가함*/
 .aside .sideTitWrap{position: absolute; top:0; left:0;  z-index: 1; width:100%; height:70px; padding:0 30px; background: #184eda;}/*180404 스타일 변경 padding:0 45px 0 25px*/
@@ -441,3 +433,6 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 /*180704 좌측메뉴 간격 스타일 재정의(1depth)*/
 .gnb-menu .gm {padding:23px 0 23px 46px;}
 .gnb-menu .gm .ico-bul {top:22px; left:17px;}
+
+#container .rightCnt .titWrap {height:67px; padding:23px 40px;}
+#container .rightCnt .titWrap .btnArea {bottom:20px;}
