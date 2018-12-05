@@ -80,16 +80,17 @@
 <html ng-app="app">
 <head>
 	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>HUB-POP</title>
 	<link rel="icon" type="image/png" href="/images/favicon.ico" />
 	<script type="text/javascript">
 
         function loadCssLink(file) {
-            document.writeln('<link rel="stylesheet" href="'+file+'"/>');
+            document.writeln('<link rel="stylesheet" href="'+file+'" type="text/css"/>');
         }
 
         function loadJavascript(file) {
-            document.writeln('<script src="'+file+'"></\script>');
+            document.writeln('<script src="'+file+'" type="text/javascript"></\script>');
         }
 
         var _MIN_ = (_MODE_ == "RUN") ? ".min" : "";
