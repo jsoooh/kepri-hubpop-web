@@ -73,7 +73,7 @@
 								<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
 									<ul>
 										<li><strong>접속 프로토콜 :</strong>RDP</li>
-										<li><strong>접속 도메인 :</strong>aaa.wins.hubpop.io:20025</li>
+										<li><strong>접속 도메인 :</strong>{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</li>
 										<li><strong>접속 계정 :</strong>Administrator</li>
 										<li><strong>접속 비밀번호 :</strong>(사용자 정의)</li>
 									</ul>
