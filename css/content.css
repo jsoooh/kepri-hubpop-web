@@ -2304,6 +2304,7 @@ p.no-txt{
 .pnb_box.cToggle-open .pnb_bx_hd .btn-toggle .ico_arw {background-position:left -32px;}
 
 .pnb_box .pnb_bx_cnt {display:none;}
+.pnb_box .pnb_bx_cnt.ds_block {display:block;}
 .pnb_box .pnb_bx_cnt .p_cnt_top {position:relative; vertical-align:middle; margin-top:30px;}
 .pnb_box .pnb_bx_cnt .p_cnt_top > span {display:inline-block; position:absolute; top:0; left:30px; font-size:14px; font-weight:500; color:#fff; background:#0cc2aa; border-radius:50px; padding:3px 20px 4px 20px;}
 .pnb_box .pnb_bx_cnt .p_cnt_top .txt_top {text-align:center; padding-left:50px;}
@@ -2335,13 +2336,23 @@ p.no-txt{
 .pnb_box .pnb_bx_cnt .p_cnt_btm ul li.btm_use_right .txt_tit::before {display:inline-block; content:''; width:30px; height:21px; background:#fff; border:1px solid #d3d3d3; vertical-align:middle; margin-right:7px;}
 
 /*표준앱>앱만들기>사양설정 슬라이드*/
+/*png_box type2 기본 타이틀영역*/
 .pnb_box.type2 {border-top:0; border-bottom:0; background:#fff; padding:15px 0; margin:20px 0;}
 .pnb_box.type2 .pnb_bx_hd {position:relative;}
 .pnb_box.type2 .pnb_bx_hd .hd_tit {font-size:15px; color:#2196f3; line-height:15px; vertical-align:middle; margin-right:4px;}
 .pnb_box.type2 .pnb_bx_hd .ico_arw_sm {display:inline-block; width:19px; height:19px; font-size:0; vertical-align:middle; background:url("../images/ico_arw_sm.png") no-repeat 0 0; }
 .pnb_box.type2.cToggle-open .pnb_bx_hd .btn_add_toggle .ico_arw_sm {background-position:left -21px;}
 
-.pnb_box.type2 .pnb_bx_cnt ul {margin-top:10px; padding:0 40px;}
+/*png_box type2 타이틀영역 type2*/
+.pnb_box.type2.hd_type .pnb_bx_hd {position:relative;}
+.pnb_box.type2.hd_type .pnb_bx_hd .hd_tit {vertical-align: middle; font-size: 18px; font-weight: 500; color: #333; margin: 0 0 15px 0;}
+.panel_area .hd_type.cToggle {border-bottom:1px solid #ddd;}
+.panel_area .hd_type.cToggle.cToggle-open {border-bottom:0;}
+.panel_area .hd_type.cToggle .btn_add_toggle {position:absolute; top:0; right:0; z-index:2;}
+.panel_area .hd_type.cToggle .btn_add_toggle .ico_arw_sm_gray {display:inline-block; width:19px; height:19px; font-size:0; vertical-align:middle; background:url("../images/ico_arw_sm_gray.png") no-repeat 0 0; }
+.panel_area .hd_type.cToggle.cToggle-open .btn_add_toggle .ico_arw_sm_gray {background-position:left -21px;}
+
+.pnb_box.type2 .pnb_bx_cnt ul {margin-top:20px; padding:0 40px;}
 .pnb_box.type2 .pnb_bx_cnt ul li {display:table; width:100%;}
 .pnb_box.type2 .pnb_bx_cnt ul li > div {display:table-cell; box-sizing:border-box; vertical-align:middle;}
 .pnb_box.type2 .pnb_bx_cnt ul li > div.tit {position:relative; width:160px; font-size:16px; color:#333; text-align:center;}
@@ -2643,3 +2654,5 @@ p.no-txt{
 
 /*상단 타이틀영역 폰트사이즈 수정*/
 #container .rightCnt .titWrap .h2 {font-size:22px; vertical-align:middle; line-heigh:22px;}
+
+.cBox.appCnt-info .info-chart {padding:60px 0 0 70px !important;}

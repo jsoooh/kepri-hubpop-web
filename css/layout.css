@@ -423,7 +423,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 
 .gnbMenu {position:absolute; top:80px; left:0; z-index:1100; color:#8d97ad; background:#4c515f; /* height:100%; overflow: hidden; overflow-y:auto; */}
 .gnbMenu .jspDrag{background: rgba(0,0,0,.3);}
-.gnbMenu .gnb-in{padding-bottom:20px;}
+.gnbMenu .gnb-in{padding-bottom:0;}
 .gnbMenu .gnb-logo{margin:0;}
 
 .rightCnt{position:relative; z-index:2; display: table-cell; vertical-align: top; width:100%; height:100%; padding-left:240px;}
