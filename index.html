@@ -264,8 +264,9 @@
 	document.writeln('	<div class="aside" id="aside-modi"><div ng-include="main.layerTemplateUrlModi"></div></div>'); // 프로젝트 상세 > 프로젝트  수정
 	document.writeln('	<div class="aside" id="aside-quota-req"><div ng-include="main.layerTemplateUrlQuotaReq"></div></div>'); // 작업 상세 > 용량
 	document.writeln('	<div class="aside" id="aside-quota-res"><div ng-include="main.layerTemplateUrlQuotaRes"></div></div>'); // 작업 상세 > 용량
+    document.writeln('	<div id="slider-contents-container" class="md-dialog-container" tabindex="-1" style="top: 0px; height: 100%; background-color: #aaaaaa; display: none; opacity: 0.6;"></div>'); // 가이드
     document.writeln('	<div class="aside" id="slider-contents"></div>');
-    document.writeln('</div>');
+	document.writeln('</div>');
     document.writeln('<div growl></div>');
     document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
     document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'none\' : \'block\' }">'); //로딩바 영역

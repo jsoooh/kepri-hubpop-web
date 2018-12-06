@@ -1196,6 +1196,7 @@ angular.module('common.controllers', [])
             if (selector) {
                 mc.thisAsideClose(selector);
             } else {
+                $("#slider-contents-container").css('display', 'none');
                 $(".aside > div").remove();
                 angular.forEach($(".aside"), function (aside) {
                     var asideWidth = $(aside).width();
