@@ -2135,6 +2135,9 @@ p.no-txt{
 .proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_ico.no_08 {position:absolute; bottom:-9px; left:750px; background-position:left bottom;}
 .proj_main_cont .p_main_cont .p_cont_list .guide_box .gbox_txt {display:inline-block; width:750px; font-size:16px; color:#333; line-height:20px; padding:0 0 0 105px}
 
+/*프로젝트 메인 > role 스타일 해제*/
+.proj_main_cont[role="button"] {cursor:default;}
+
 .c_blue {display:inline; color:#3360c5;}
 
 /*---- 조회등록 ----*/
