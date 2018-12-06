@@ -624,7 +624,7 @@ select, select.form-control,
 .cBox.type0 h4.c-tit em{font-weight:700;}/*180406 스타일 갱신 > 라인 추가*/
 .cBox.type0 .searchBox{margin-top:18px;}
 
-.cBox.type1 .cBox-cnt .in{display: table; width:100%;}
+.cBox.type1 .cBox-cnt > .in {display: table; width:100%;}
 .cBox.type1 .cBox-cnt .col{display: table-cell; padding:20px; text-align: center; vertical-align: top;}
 /*.cBox.type1 .cBox-cnt .col + .col{border-left:1px solid #eee;}*//*180409 스타일 갱신을 위한 주석처리*/
 
@@ -668,9 +668,10 @@ p.no-txt{font-weight:700;}/*180409 스타일 추가*/
 .cBox.appCnt-info .cBox-cnt .btnArea .btn{width:80px;}
 .cBox.appCnt-info .cBox-cnt li{display: table; width:100%; height: 38px; padding:10px 0;}
 .cBox.appCnt-info .cBox-cnt li .state-txt{font-size:14px;}
-.cBox.appCnt-info .info-txt .tit{display: table-cell; font-size: 18px; color:#333; font-weight: 500; width:140px; vertical-align: top;}
+.cBox.appCnt-info .info-txt .tit {display: table-cell; font-size: 18px; color:#333; font-weight: 500; width:140px; vertical-align: middle;}
 .cBox.appCnt-info .info-txt .tit::before{display: inline-block; content:'ㆍ' ; clear: both;}
-.cBox.appCnt-info .info-txt .txt{display: table-cell; font-size: 16px; color:#888; line-height: 1.2; word-break: break-all; vertical-align: top;}
+.cBox.appCnt-info .info-txt .txt {display: table-cell; font-size: 16px; color:#888; /* line-height: 1.2; */ word-break: break-all; vertical-align: middle;}
+.cBox.appCnt-info .info-txt .txt_s_wrap {display:inline-block; vertical-align: middle;}
 .cBox.appCnt-info .info-txt .txt a {display:inline-block; max-width:310px; font-size:13px; color:#888; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:20px; background:url("../images/ico_window.png") no-repeat right center;}/*180515 대시보드 패널 링크연결 텍스트에 아이콘 추가*/
 .cBox.appCnt-info .col.info-txt2, .cBox.appCnt-info .col.info-txt3{display:inline-block;padding-left:120px !important;margin-top:30px;}
 .cBox.appCnt-info .info-txt .count{position:relative;right:-240px;top:-35px;}
@@ -2471,7 +2472,7 @@ p.no-txt{
 .panel_head button.close_sm {position:absolute; top:15px; right:15px; display:inline-block; width:25px; height:25px; font-size:0; background:url("../images/btn_pop_close_sm.png") no-repeat left top;}
 .panel_head button.close_sm:hover {background:url("../images/btn_pop_close_sm.png") no-repeat left -30px;}
 .panel.type5 .panel_head .btn-option.type2 .tgb_body  li {font-size:14px; color:#777; line-height:25px;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_body  li:before {display:inline-block; content:''; width:4px; height:4px; border-radius:100%; background:#555; vertical-align:middle; margin-right:4px;}
+.panel.type5 .panel_head .btn-option.type2 .tgb_body  li:before {display:inline-block; content:''; width:4px; height:4px; border-radius:100%; background:#555; margin-right:4px;}
 .panel.type5 .panel_head .btn-option.type2 .tgb_body  strong {font-size:15px; font-weight:500; color:#333; vertical-align:middle; margin-right:5px;}
 .panel.type5 .panel_head .btn-option.type2 .tgb_body  li .tb_tit {display:inline-block; vertical-align:middle;}
 .panel.type5 .panel_head .btn-option.type2 .tgb_body  li .tb_txt {display:inline-block; vertical-align:middle;}
