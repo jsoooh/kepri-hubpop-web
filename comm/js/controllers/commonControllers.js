@@ -1197,7 +1197,10 @@ angular.module('common.controllers', [])
                 mc.thisAsideClose(selector);
             } else {
                 $(".aside > div").remove();
-                $(".aside").stop().animate({"right":"-360px"}, 400);
+                angular.forEach($(".aside"), function (aside) {
+                    var asideWidth = $(aside).width();
+                    $(aside).stop().animate({"right":"-"+asideWidth+"px"}, 400);
+                });
             }
         };
 
