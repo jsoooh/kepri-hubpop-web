@@ -6,6 +6,9 @@ angular.module('portal.controllers')
 
         var ct = this;
 
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
+
         ct.paramId = $stateParams.orgId;
         ct.isOrgManager = false;
         ct.sltInfoTab = 'dashboard';

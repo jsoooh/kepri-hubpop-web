@@ -1240,6 +1240,8 @@ angular.module('common.controllers', [])
         mc.sltProjectId = common.getProjectKey();
         mc.sltPortalOrgId = common.getPortalOrgKey();
 
+        mc.displayHistoryBtn = false;
+
         // PassRegion
         mc.syncSetPassRegionSet();
 
@@ -1269,6 +1271,8 @@ angular.module('common.controllers', [])
         $scope.main.pageStage = $scope.$resolve.pageStage ? $scope.$resolve.pageStage : "comm";
 
         $scope.main.replaceSeting();
+
+        $scope.main.displayHistoryBtn = false;
 
         // 로그인 여부 체크
         if (!common.isAuthenticated()) {

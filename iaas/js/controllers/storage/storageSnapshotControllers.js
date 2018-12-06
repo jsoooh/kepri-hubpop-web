@@ -94,6 +94,9 @@ angular.module('iaas.controllers')
     .controller('iaasStorageSnapshotCreateCtrl', function ($scope, $location, $state, $window, $translate, $timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotCreateCtrl", 1);
 
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
+
         var ct               = this;
         ct.data              = {};
         ct.data.tenantId     = $scope.main.userTenantId;

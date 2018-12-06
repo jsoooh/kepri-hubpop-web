@@ -122,6 +122,9 @@ angular.module('iaas.controllers')
     .controller('iaasServerSnapshotCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("computeSnapshotControllers.js : iaasServerSnapshotCreateCtrl start", 1);
 
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
+
         var ct = this;
         ct.data = {};
         ct.fn = {};

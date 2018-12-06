@@ -692,6 +692,7 @@ angular.module('paas.controllers')
             });
         };
 
+        ct.portalBuildpacksLoad = false;
         ct.setPortalBuildpacks = function () {
         	
             ct.portalBuildpacks = [];
@@ -733,11 +734,12 @@ angular.module('paas.controllers')
             
             ct.sltBuildpackId = null;
             ct.changePortalBuildpack();
+            ct.portalBuildpacksLoad = true;
             $scope.main.loadingMainBody = false;
         };
 
         ct.listAllBuildpacks = function () {
-        	
+            ct.buildpacks = [];
             var buildpackPromise = applicationService.listAllBuildpacks();
             
             buildpackPromise.success(function (data) {
@@ -749,7 +751,7 @@ angular.module('paas.controllers')
                 }
             });
             buildpackPromise.error(function (data) {
-                ct.organizations 			= [];
+                ct.portalBuildpacksLoad = true;
                 $scope.main.loadingMainBody = false;
             });
         };

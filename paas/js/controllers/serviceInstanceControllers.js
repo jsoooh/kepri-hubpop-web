@@ -265,45 +265,20 @@ angular.module('paas.controllers')
         ct.serviceInstanceName 	= "";
         ct.actionBtnHied 		= false; // btn enabled
         ct.spaceAppsLoad 		= false;
-        ct.TmpStr = "";
-        
-        ct.regMatch = function (str) {
-        	
-        	//var tmpStr = str
-        	
-        	if (str.match('mb')) 
-        	{
-				ct.TmpStr = str.replace("mb", ' Megabyte');
-			}
-        	
-        		
-        	//alert(ct.TmpStr);
-        };
-        
-    
-        
+
         ct.sltServiceChange = function (serviceGuid) {
             var sltService = common.objectsFindCopyByField(ct.services, "guid", serviceGuid);
-            
+            ct.sltService = {};
+            ct.servicePlans = [];
+            ct.sltServicePlan = {};
+            ct.sltServicePlanGuid = "";
             if (sltService && sltService.guid) {
                 ct.sltService = sltService;
                 ct.sltServiceGuid = sltService.guid;
-                ct.servicePlans = angular.copy(sltService.servicePlans);
-                ct.sltServicePlan = {};
-                //ct.sltServicePlanChange(ct.servicePlans[0].guid);
-                
-                if (ct.servicePlans[0].guid != null) 
-                {
-                	ct.sltServicePlanGuid = ct.servicePlans[0].guid ;
-                	ct.regMatch(ct.servicePlans[0].name);
-				}
-                else
-                {
-                	ct.sltServicePlanGuid = "";
-                }	
-                
-                ct.dbTmpNm = sltService.label; 
-                
+                if (sltService.servicePlans && sltService.servicePlans.length && sltService.servicePlans.length > 0) {
+                    ct.servicePlans = angular.copy(sltService.servicePlans);
+                    ct.sltServicePlanChange(ct.servicePlans[0].guid);
+                }
             } else {
                 ct.sltService = {};
                 ct.sltServiceGuid = "";
@@ -311,31 +286,19 @@ angular.module('paas.controllers')
                 ct.sltServicePlan = {};
                 ct.sltServicePlanGuid = "";
             }
-            
-            
-            
-            
         };
 
-        ct.sltServicePlanChange = function (servicePlanGuid) 
-        {
+        ct.sltServicePlanChange = function (servicePlanGuid) {
             var sltServicePlan = common.objectsFindCopyByField(ct.servicePlans, "guid", servicePlanGuid);
-            
-            if (sltServicePlan && sltServicePlan.guid)  
-            {
+            if (sltServicePlan && sltServicePlan.guid) {
                 ct.sltServicePlan = sltServicePlan;
                 ct.sltServicePlanGuid = sltServicePlan.guid;
-                ct.regMatch(sltServicePlan.name);
-            } 
-            else 
-            {
+            } else {
                 ct.sltServicePlan = {};
                 ct.sltServicePlanGuid = "";
             }
         };
         
-      
-
         ct.listAllSpaceApps = function (spaceGuid) {
             ct.spaceApps    = [];
             var resultPromise = serviceInstanceService.listAllSpaceApps(spaceGuid);
@@ -355,10 +318,13 @@ angular.module('paas.controllers')
             var resultPromise = serviceInstanceService.listAllServices();
             resultPromise.success(function (data) {
                 ct.services = data;
-                $scope.main.loadingMainBody = false;
-                
-                //sg0730
+                angular.forEach(ct.services, function (service) {
+                    angular.forEach(service.servicePlans, function (servicePlan) {
+                        servicePlan.quota = servicePlan.name.replace("mb", ' Megabyte');
+                    });
+                });
                 ct.sltServiceChange(ct.services[0].guid);
+                $scope.main.loadingMainBody = false;
             });
             resultPromise.error(function (data, status, headers) {
                 ct.services = [];
@@ -366,33 +332,38 @@ angular.module('paas.controllers')
             });
         };
 
+        ct.actionCheck = false;
         ct.serviceInstanceCreate = function () {
-            if ($scope.radio.inputName.length < 3) {
+            if (ct.actionCheck) return;
+            ct.actionCheck = true;
+
+            if (ct.serviceInstanceName.length < 3) {
                 common.showAlert("", "최소 3자 이상이어야 합니다.");
+                ct.actionCheck = false;
                 return;
             }
 
-            $scope.main.loadingMainBody = true;
             var serviceInstanceBody = {};
             serviceInstanceBody.name = ct.serviceInstanceName;
             serviceInstanceBody.spaceGuid = ct.sltSpace.guid;
             serviceInstanceBody.servicePlanGuid = ct.sltServicePlanGuid;
 
-            if (pop.sltBindingAppGuid && pop.sltBindingAppGuid != "null") {
+            if (ct.sltBindingAppGuid && ct.sltBindingAppGuid != "null") {
                 var serviceBindings = [];
-                serviceBindings.push({ "appGuid" : pop.sltBindingAppGuid });
+                serviceBindings.push({ "appGuid" : ct.sltBindingAppGuid });
                 serviceInstanceBody.serviceBindings = serviceBindings;
             }
 
+            $scope.main.loadingMainBody = true;
             var serviceInstancePromise = serviceInstanceService.createServiceInstance(serviceInstanceBody);
             serviceInstancePromise.success(function (data) {
-                ct.actionBtnHied = false;
+                ct.actionCheck = false;
                 $scope.main.loadingMainBody = false;
                 common.showAlert("", $translate.instant("message.mi_create_service_instance"));
                 $scope.main.goToPage("/paas/serviceInstances");
             });
             serviceInstancePromise.error(function (data) {
-                ct.actionBtnHied = false;
+                ct.actionCheck = false;
                 $scope.main.loadingMainBody = false;
             });
         };

@@ -584,6 +584,9 @@ angular.module('iaas.controllers')
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);
 
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
+
         var ct               = this;
         ct.data              = {};
         ct.fn                = {};

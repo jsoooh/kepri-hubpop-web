@@ -304,6 +304,9 @@ angular.module('iaas.controllers')
     .controller('iaasStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageFormCtrl", 1);
 
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
+
         var ct               = this;
         ct.data              = {};
         ct.fn                = {};
@@ -473,6 +476,9 @@ angular.module('iaas.controllers')
     })
     .controller('iaasStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageDetailCtrl", 1);
+
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
 
         var ct = this;
         ct.fn = {};

@@ -4,6 +4,9 @@ angular.module('iaas.controllers')
     .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
 
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
+
         $scope.actionBtnHied = true;
         var ct = this;
         ct.fn = {};

@@ -2,15 +2,15 @@
 <!-- 프로젝트 정보 -->
 	<div class="cBox type0 projt-mana">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 서버 <em class="point1">({{contents.orgProjects.length}})</em></h4>
+			<h4 class="c-tit">전체 APP <em class="point1">({{contents.apps.length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
 			<div class="searchBox type2">
 				<div class="form-group">
-					<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schText" ng-keyup="$event.keyCode == 13 ? contents.listOrgProjects() : null;">
+					<input type="text" placeholder="프로젝트 검색" style="width:300px;" ng-model="contents.schFilterText">
 				</div>
-				<button type="button" name="button" class="btn btn-sch" title="검색어를 입력하세요" ng-click="contents.listOrgProjects();"><span class="ico">검색</span></button>
+				<!--<button type="button" name="button" class="btn btn-sch" title="검색어를 입력하세요"><span class="ico">검색</span></button>-->
 			</div>
 			<!-- //검색 -->
 		</div>
@@ -27,7 +27,7 @@
 
     <!-- panel area-->
     <ul class="ul-panel">
-        <li ng-repeat="(key, appItem) in contents.apps">
+        <li ng-repeat="(key, appItem) in contents.apps | filter:{name : contents.schFilterText}">
             <!-- panel -->
             <div class="panelWrap">
                 <div class="panel type3">
