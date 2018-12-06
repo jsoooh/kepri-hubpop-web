@@ -1,0 +1,16 @@
+<div class="sideTitWrap asideCnt">
+    <h2 class="c_tit">{{ dialogOptions.title | translate }}</h2>
+    <button type="button" name="button" class="btn btn-close" data-user="aside-close" ng-click="dialogOptions.popCancel();"><span class="ico">{{ 'label.close' | translate }}</span></button>
+</div>
+<!-- //aside title -->
+
+<!-- aside cnt -->
+<div class="sideCntWrap" ng-include="dialogOptions.templateUrl">
+</div>
+<!-- //aside cnt -->
+
+<!-- aside btm -->
+<div class="sideBtmWrap">
+    <button type="button" name="button" class="btn" ng-click="dialogOptions.popDialogOk();">{{ dialogOptions.okName | translate }}</button>
+</div>
+<!-- //aside btm -->

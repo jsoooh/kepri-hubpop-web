@@ -1882,9 +1882,9 @@ angular.module('common.services', ['LocalStorageModule'])
 
             if (!dialogOptions.controller) {
                 dialogOptions.controller = function ($scope, ValidationService) {
+                    _DebugConsoleLog("popCommFormCtrl", 3);
                     var vm = this;
                     vm.validationService = new ValidationService({controllerAs: vm});
-                    _DebugConsoleLog("popCommFormCtrl", 3);
                 };
             }
             if (!dialogOptions.controllerAs) {
@@ -1964,9 +1964,9 @@ angular.module('common.services', ['LocalStorageModule'])
 
             if (!dialogOptions.controller) {
                 dialogOptions.controller = function (ValidationService) {
+                    _DebugConsoleLog("popMultipleCommFormCtrl", 3);
                     var vm = this;
                     vm.validationService = new ValidationService({controllerAs: vm});
-                    _DebugConsoleLog("popMultipleCommFormCtrl", 3);
                 };
             }
             if (!dialogOptions.controllerAs) {
@@ -2012,6 +2012,26 @@ angular.module('common.services', ['LocalStorageModule'])
             return dialog;
         };
 
+        common.showRightSliderContents = function ($scope, templateUrl, sliderWidth) {
+
+            var dialogOptions	= {};
+            dialogOptions.dialogClassName = "modal-right-dialog";
+            dialogOptions.controllerAs = "spop";
+
+            dialogOptions.controller = function ($scope) {
+                _DebugConsoleLog("rightSliderContentsCtrl", 3);
+                var vm = this;
+                vm.data = (dialogOptions.data) ? dialogOptions : {};
+                vm.templateUrl = templateUrl ? templateUrl : "";
+            };
+
+            dialogOptions.dialogId = "aside-md";
+            dialogOptions.sliderWidth = (sliderWidth) ? sliderWidth : 600;
+            dialogOptions.dialogTemplateUrl = _COMM_VIEWS_+'/common/rightCommSliderContents.html' + _VersionTimeTail();
+
+            return common.showRightDialog($scope, dialogOptions);
+        };
+
         common.showRightDialog = function ($scope, dialogOptions) {
             if (!angular.isUndefined(dialogOptions)) {
                 if (angular.isString(dialogOptions)) {
@@ -2034,24 +2054,25 @@ angular.module('common.services', ['LocalStorageModule'])
                 };
             }
 
-            var dialogId = "#aside-md";
-
+            var dialogId = (dialogOptions.dialogId) ? "#" + dialogOptions.dialogId : "#aside-md";
+            dialogOptions.sliderWidth = (dialogOptions.sliderWidth) ? dialogOptions.sliderWidth : 600;
             var onShowing = function($scope, element) {
-                $(dialogId).stop().animate({"right":"-360px"}, 400);
+                $(dialogId).stop().animate({"right":"-" + dialogOptions.sliderWidth + "px"}, 400);
                 $(dialogId).stop().animate({"right":"0"}, 500);
             };
-
             var onRemoving = function($scope, element) {
                 $(dialogId).find('> dev').remove();
-                $(dialogId).stop().animate({"right":"-360px"}, 400);
+                $(dialogId).stop().animate({"right":"-" + dialogOptions.sliderWidth + "px"}, 400);
             };
+
+            dialogOptions.dialogTemplateUrl = (dialogOptions.dialogTemplateUrl) ? dialogOptions.dialogTemplateUrl : _COMM_VIEWS_+'/common/rightPopCommForm.html' + _VersionTimeTail();
 
             $scope.dialogOptions = dialogOptions;
 
             var optionsOrPreset = {
                 controller: dialogOptions.controller,
                 controllerAs: dialogOptions.controllerAs,
-                templateUrl: _COMM_VIEWS_+'/common/rightPopCommForm.html' + _VersionTimeTail(),
+                templateUrl: dialogOptions.dialogTemplateUrl + _VersionTimeTail(),
                 parent: $(dialogId),
                 scope: $scope,
                 locals: { popType: 'pop' },
