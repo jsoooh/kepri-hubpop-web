@@ -1225,6 +1225,12 @@ angular.module('common.controllers', [])
             $(selectors).stop().animate({'right' : '-360px'}, 400);
         };
 
+        mc.showRightSliderContents = function(templateUrl, sliderWidth) {
+            templateUrl = _COMM_VIEWS_ + templateUrl;
+            //mc.sliderContentsWidth = sliderWidth ? sliderWidth : 1000;
+            common.showRightSliderContents($scope, templateUrl, sliderWidth);
+        };
+
         mc.resetInit();
         mc.setMainLanguage(common.getLanguageKey());
         mc.sltProjectId = common.getProjectKey();

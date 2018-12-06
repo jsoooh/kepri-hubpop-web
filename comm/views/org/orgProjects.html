@@ -1,4 +1,4 @@
-<div ng-if="contents.orgProjects.length == 0" class="proj_main_cont" ng-click="contents.extendItem($event);">
+<div ng-if="({contents.orgProjects | filter:{ statusCode: '!deleting' }).length == 0" class="proj_main_cont" ng-click="contents.extendItem($event);">
 	<div class="p_main_top">
 		<div class="top_txt">
 			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
@@ -84,11 +84,11 @@
 		</div>
 	</div>
 </div>
-<div ng-if="contents.orgProjects.length > 0" class="pdContent">
+<div ng-if="(contents.orgProjects | filter:{ statusCode: '!deleting' }).length > 0" class="pdContent">
 	<!-- 프로젝트 정보 -->
 	<div class="cBox type0 projt-mana">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 프로젝트 <em class="point1">({{contents.orgProjects.length}})</em></h4>
+			<h4 class="c-tit">전체 프로젝트 <em class="point1">({{(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
@@ -112,9 +112,9 @@
 	<!-- //table top -->
 
 	<!-- 프로젝트 리스트 -->
-	<div class="proj_list_area" ng-if="contents.orgProjects.length > 0">
+	<div class="proj_list_area" ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0">
 		<ul class="ul-panel dash_list">
-			<li ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText }" ng-if="org.statusCode != 'deleting'">
+			<li ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }" ng-if="org.statusCode != 'deleting'">
 				<a ng-click="main.goToPortalOrgPage(org);">
 					<div class="thum">
 						<span ng-if="org.iconImage && org.iconImage.image" class="thum_in img_line">

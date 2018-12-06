@@ -2022,12 +2022,13 @@ angular.module('common.services', ['LocalStorageModule'])
                 _DebugConsoleLog("rightSliderContentsCtrl", 3);
                 var vm = this;
                 vm.data = (dialogOptions.data) ? dialogOptions : {};
-                vm.templateUrl = templateUrl ? templateUrl : "";
             };
 
-            dialogOptions.dialogId = "aside-md";
-            dialogOptions.sliderWidth = (sliderWidth) ? sliderWidth : 600;
-            dialogOptions.dialogTemplateUrl = _COMM_VIEWS_+'/common/rightCommSliderContents.html' + _VersionTimeTail();
+            dialogOptions.dialogId = "slider-contents";
+            dialogOptions.sliderWidth = (sliderWidth) ? sliderWidth : 1000;
+            $('#' + dialogOptions.dialogId).css('width', dialogOptions.sliderWidth);
+            dialogOptions.dialogTemplateUrl = _COMM_VIEWS_ + '/common/rightCommSliderContents.html' + _VersionTimeTail();
+            dialogOptions.templateUrl = templateUrl ? templateUrl + _VersionTimeTail() : "";
 
             return common.showRightDialog($scope, dialogOptions);
         };
@@ -2055,7 +2056,7 @@ angular.module('common.services', ['LocalStorageModule'])
             }
 
             var dialogId = (dialogOptions.dialogId) ? "#" + dialogOptions.dialogId : "#aside-md";
-            dialogOptions.sliderWidth = (dialogOptions.sliderWidth) ? dialogOptions.sliderWidth : 600;
+            dialogOptions.sliderWidth = (dialogOptions.sliderWidth) ? dialogOptions.sliderWidth : 360;
             var onShowing = function($scope, element) {
                 $(dialogId).stop().animate({"right":"-" + dialogOptions.sliderWidth + "px"}, 400);
                 $(dialogId).stop().animate({"right":"0"}, 500);
