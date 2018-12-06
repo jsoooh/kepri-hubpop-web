@@ -4,7 +4,7 @@
 </div>
 <div class="cont-titWrap mt50">
 	<h3 class="h-tit3">
-		다른 프로젝트의 서버 복사 <span class="point1">({{contents.instanceSnapshotList.length}})</span>
+		다른 프로젝트의 서버 복사
 	</h3>
 </div>
 <div class="searchWrap text-center">
@@ -35,6 +35,7 @@
 		</colgroup>
 		<thead>
 			<tr>
+				<th scope="row" rowspan="2" class="bd_r">번호</th>
 				<th scope="row" rowspan="2" class="bd_r">프로젝트</th>
 				<th scope="col" colspan="4" class="bd_r">원본서버</th>
 				<th scope="col" colspan="4" class="bd_r">백업이미지</th>
@@ -53,6 +54,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="(key, instanceSnapshot) in (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText })"  ng-if="(key >= (contents.pageOptions.pageSize * (contents.pageOptions.currentPage-1))) && (key < (contents.pageOptions.pageSize * (contents.pageOptions.currentPage)))">
+				<td>{{ (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length - key }}</td>
 				<td>{{ instanceSnapshot.portalOrgName }}</td>
 				<td>{{ instanceSnapshot.instanceName }}</td>
 				<td>{{ instanceSnapshot.imageName }}</td>
