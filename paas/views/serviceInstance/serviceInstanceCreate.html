@@ -1,12 +1,12 @@
 <div class="message_area">
 	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>배포 된 APP과 연결되어 사용되는 백엔드 서비스를 만들 수 있습니다.</span></div>
+	<div class="msg_txt"><span>‘서비스 만들기’를 통해 배포된 APP과 연결되어 사용되는 백엔드 서비스를 만들수 있습니다. 백엔드 서비스는 배포된 모든 APP이 공유할 수 있습니다.</span></div>
 </div>
 
 <div class="panel_area">
 	<div class="panel_box pn_l">
 		<div class="pn_head">
-			<h4 class="pnh_tit">APP 만들기</h4>
+			<h4 class="pnh_tit">서비스 만들기</h4>
 		</div>
 		<div class="pn_body">
 			<span class="sm_txt">* 는 필수입력 사항입니다.</span>
@@ -15,14 +15,14 @@
 					<div class="pnb_tit">
 						<i class="i_star"></i> <span class="pnb_t_txt">서비스 이름</span>
 						<!-- <button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다." tooltip-class="tooltip_type2"><span class="ico_info"></span></button> -->
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'<strong>가상 서버에 추가 디스크를 연결할 수 있습니다.</strong><br>필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다.'"><span class="ico_info"></span></button></div>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 서비스 이름을 입력합니다.</br> 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 					</div>
-					<input type="text" class="form-control" maxlength="50" placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName" ng-init="contents.serviceInstanceName='service-001'" >
+					<input type="text" class="form-control" maxlength="20"  placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName" ng-init="contents.serviceInstanceName='service-001'"  validation="min_len:3|max_len:20|required">
 				</li>
 				<li>
 					<div class="pnb_tit">
 						<i class="i_star"></i> <span class="pnb_t_txt">서비스 S/W</span>
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포된 APP과 연결하여 사용하는 백엔드 서비스(back-end service) S/W를 선택합니다.</br>일반적으로, 백엔드 서비스는 APP의 데이터를 저장하기 위한 데이터베이스 </br>또는 WEB 세션 공유를 위한 인-메모리(in-memory) 저장소 등으로 제공됩니다.'"><span class="ico_info"></span></button></div>
 					</div>
 					<ul class="ul-list1">
 						<li ng-repeat="(key, serviceItem) in contents.services">
@@ -44,7 +44,7 @@
 				<li>
 					<div class="pnb_tit">
 						<i class="i_star"></i> <span class="pnb_t_txt">서비스 플랜</span>
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'서비스S/W가 제공하는 자원용량계획을 표시합니다.</br>서비스S/W별 특성에 따라 제공되는 자원용량계획이 다를 수 있습니다.'"><span class="ico_info"></span></button></div>
 					</div>
 					<div class="app-form-two">
 						<div ng-repeat="(key, servicePlan) in contents.servicePlans" class="two_box pdr10">
@@ -65,7 +65,7 @@
 				<li class="pn-Toggle">
 					<div class="pnb_tit">
 						<span class="pnb_t_txt">연결대상 APP</span>
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'서비스S/W와 연결되는 APP을 선택합니다.'"><span class="ico_info"></span></button></div>
 						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 					</div>
 					<div class="s_cont_box">
@@ -102,7 +102,7 @@
 					</li>
 					<li>
 						<span class="s_tit">서비스 유형</span>
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
+						<!-- <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div> -->
 						<span class="s_txt">관계형 데이터 베이스</span>
 					</li>
 					<li ng-if="contents.sltService.label == 'p-mysql'">
@@ -134,7 +134,7 @@
 				</ul>
 			</div>
 		</div>
-		
+		<!-- 
 		<div class="pn-Toggle">
 			<div class="pn_head brdt">
 				<h4 class="pnh_tit ico08">서비스 플랜(Plan)정보</h4>
@@ -163,6 +163,7 @@
 				</div>
 			</div>
 		</div>
+		 -->
 		<div class="btn-btm">
 			<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
 		</div>
