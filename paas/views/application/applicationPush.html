@@ -228,7 +228,8 @@
 					<li ng-if="contents.appPushData.pushType == 'GENERAL'">
 						<span class="s_tit">빌드팩 정보</span>
 						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'빌드팩에 대한 상세정보를 제공합니다.</br> Cloud Foundry 플랫폼에서 공식적으로 </br>제공하는 공개된 정보를 표시합니다.'"><span class="ico_info"></span></button></div>
-						<div class="s_inner_cont">
+						
+						<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'java'">
 							<dl>
 							<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
 								<dt>종류 :</dt>
@@ -237,10 +238,20 @@
 								<dd>{{contents.sltBuildpackVersion.versionName}}</dd>
 								<dt>주요구성 SW</dt>
 							</dl>
-							<pre>
+							<dd class="dd_row">OpenJDK JRE v1.8.0</dd>
+							<dd class="dd_row">Spring Boot v1.5.13</dd>
+							<dd class="dd_row">Tomcat v8.5.31</dd>
+							<dd class="dd_row">MariaDB JDBC Driver v2.2.3</dd>
+							<dd class="dd_row">PostgreSQL JDBC Driver v9.4.1212</dd>
+							<dd class="dd_row">Redis Session Store v1.3.6</dd>
+							</br>
+							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/java-buildpack/releases</dd>
+							
+							<!-- <pre>
 								{{contents.sltBuildpackVersion.description}}
-							</pre>
+							</pre> -->
 						</div>
+						
 					</li>
 				</ul>
 			</div>
