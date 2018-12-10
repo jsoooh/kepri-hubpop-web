@@ -39,7 +39,7 @@
 
 	<!-- panel area-->
 	<!-- <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel thum_style"> -->
-	<ul  class="ul-panel thum_style">
+	<ul ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length > 0" class="ul-panel thum_style">
 		<li ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
 			<!-- panel -->
 			<div class="panelWrap">
