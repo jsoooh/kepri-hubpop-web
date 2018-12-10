@@ -285,3 +285,12 @@
 		</li> -->
 	</ul>
 	<!-- //panel area-->
+	<div ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length == 0" class="welcome_layer">
+		<div class="guide_fnt arrw_btm">신규 가상서버를 만듭니다.</div>
+		<div class="guide_fnt arrw_top">다른 프로젝트의 백업 이미지로부터 신규 가상서버를 만듭니다.</div>
+		<div class="guide_cnt">
+			서버가상화 서비스에서는 <span class="fnt20"><span class="color1">리눅스(Linux)</span> 또는 <span class="color1">윈도우(Windows)</span>를 실행하는 <span class="color1">가상 서버</span></span>를 만듭니다. <br>
+			사용자 스스로가 쉽고 빠르게 필요한 서버를 만들고 활용할 수 있습니다. <br>
+			<span class="fnt20"><spna class="color1">‘서버 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+		</div>
+	</div>

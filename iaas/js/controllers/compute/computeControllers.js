@@ -164,9 +164,11 @@ angular.module('iaas.controllers')
                         $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                     }
                 }
+/*
                 if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
                     ct.firstInstanceCreatePop();
                 }
+*/
                 ct.pageFirstLoad = false;
             });
             returnPromise.error(function (data, status, headers) {

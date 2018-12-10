@@ -26,7 +26,7 @@
 <!-- //버튼영역 -->
 
     <!-- panel area-->
-    <ul class="ul-panel">
+    <ul ng-if="contents.apps.length > 0" class="ul-panel">
         <li ng-repeat="appItem in contents.apps | filter : {name: contents.schFilterText}">
             <!-- panel -->
             <div class="panelWrap">
@@ -128,6 +128,15 @@
         </li>
     </ul>
     <!-- //panel area-->
+    <div ng-if="contents.apps.length == 0" class="welcome_layer">
+        <div class="guide_fnt arrw_btm">컨테이너 기반의 신규 APP을 만듭니다.</div>
+        <!-- <div class="guide_fnt arrw_top">다른 프로젝트의 백업 이미지로부터 신규 가상서버를 만듭니다.</div> -->
+        <div class="guide_cnt">
+            표준APP.개발 서비스에서는 <span class="fnt20">다양한 <span class="color1">애플리케이션 개발언어 별</span>로 <span class="color1">표준화된 실행환경</span>을 자동으로 구성</span>할 수 있습니다.(Ex. Java, Python, Node.js, Go, etc,..)<br>
+            사용자는 제작한 애플리케이션을 빠르게 <span class="color1">컨테이너 환경에 배포</span>하고 <span class="color1">테스트</span> 해볼 수 있습니다. <br>
+            <span class="fnt20"><spna class="color1">‘APP 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+        </div>
+    </div>
 
 
 <!-- //content -->

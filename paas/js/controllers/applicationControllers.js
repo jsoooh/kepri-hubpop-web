@@ -156,10 +156,12 @@ angular.module('paas.controllers')
                     });
                 });
 
+/*
                 if (ct.pageFirstLoad && (!ct.apps || ct.apps.length == 0)) {
                     ct.firstAppCreatePop();
                     ct.pageFirstLoad = false;
                 }
+*/
 
                 $scope.main.loadingMainBody = false;
                 $scope.main.loadingMain = false;
