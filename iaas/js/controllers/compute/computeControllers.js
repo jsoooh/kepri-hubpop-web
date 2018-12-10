@@ -463,9 +463,9 @@ angular.module('iaas.controllers')
                 }else if(action == "REBOOT"){
                     vmStateChange = "rebooting";
                 }
-                ct.serverMainList[index].vmState = vmStateChange;
                 ct.serverMainList[index].observeAction = action;
                 ct.serverMainList[index].vmStateSec = 0;
+                $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
