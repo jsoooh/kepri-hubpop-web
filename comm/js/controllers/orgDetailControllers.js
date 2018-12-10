@@ -679,7 +679,7 @@ angular.module('portal.controllers')
                         ct.iaasInstanceUsage.disk.usedQuota = ct.iaasResourceUsed.usedResource.instanceDiskGigabytes;
                         ct.iaasInstanceUsage.disk.percentUsedQuota = (ct.iaasInstanceUsage.disk.usedQuota/ct.iaasInstanceUsage.disk.maxQuota) * 100;
 
-                        // 할당 볼륨 용량 Giga Byte
+                        // 할당 디스크 용량 Giga Byte
                         ct.iaasInstanceUsage.volume.maxQuota = ct.iaasResourceUsed.maxResource.volumeGigabytes;
                         ct.iaasInstanceUsage.volume.usedQuota = ct.iaasResourceUsed.usedResource.volumeGigabytes;
                         ct.iaasInstanceUsage.volume.percentUsedQuota = (ct.iaasInstanceUsage.volume.usedQuota/ct.iaasInstanceUsage.volume.maxQuota) * 100;

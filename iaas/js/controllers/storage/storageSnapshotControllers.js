@@ -48,7 +48,7 @@ angular.module('iaas.controllers')
 
 
         ct.fn.deleteSnapshot = function(snapshot) {
-            common.showConfirm('스냅샷 삭제',snapshot.snapshotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('백업이미지 삭제',snapshot.snapshotName+' 백업이미지을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : snapshot.tenantId,
@@ -129,7 +129,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        //볼륨생성 변수
+        //디스크생성 변수
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
             showSelectionBar : true,
@@ -305,7 +305,7 @@ angular.module('iaas.controllers')
         pop.formName = "storageSnapshotForm";
         pop.validDisabled = true;
         pop.dialogClassName = "modal-lg";
-        pop.title = "볼륨 복원";
+        pop.title = "디스크 복원";
 
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageSnapshotForm.html" + _VersionTail();
 
@@ -321,20 +321,20 @@ angular.module('iaas.controllers')
             
             var checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
         	if(checkByte > 255){
-                common.showAlertWarning("볼륨 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
         		$scope.actionBtnHied = false;
         		return;
         	}
 
         	if(Number(pop.data.size) < pop.snapshotVolume.size){
-                common.showAlertWarning("볼륨 크기는 size up만 가능 합니다. 볼륨 크기 최소값 : " + pop.snapshotVolume.size + ", 입력값 : " + pop.data.size );
+                common.showAlertWarning("디스크 크기는 size up만 가능 합니다. 디스크 크기 최소값 : " + pop.snapshotVolume.size + ", 입력값 : " + pop.data.size );
                 pop.data.size = pop.snapshotVolume.size;
                 $scope.actionBtnHied = false;
                 return;
             }
 
             if(Number(pop.data.size) > (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)){
-                common.showAlertWarning("볼륨 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.data.size );
+                common.showAlertWarning("디스크 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.data.size );
                 pop.data.size = pop.snapshotVolume.size;
                 $scope.actionBtnHied = false;
                 return;

@@ -1456,7 +1456,7 @@ td.tdTit{text-align:center;}
 .panel.type5 .panel_body .ul-in2.spinner_area .lds-box div:nth-child(3) {left: 107px;}
 .panel.type5 .panel_body .ul-in2.spinner_area .lds-box div:nth-child(4) {left: 140px;}
 
-/*180910 대시보드 > 볼륨 생성 > spinner*/
+/*180910 대시보드 > 디스크 생성 > spinner*/
 .panel.type6 .panel_body .ul-in2.spinner_area .info-chart {height:130px; padding:0;}
 .panel.type6 .panel_body .ul-in2.spinner_area .info-txt {border-top:0;}
 .panel.type6 .panel_body .ul-in2.spinner_area .info-txt > .txt {display:inline-block; font-size:14px; color:#333; text-align:center; height:0; line-height:0;}

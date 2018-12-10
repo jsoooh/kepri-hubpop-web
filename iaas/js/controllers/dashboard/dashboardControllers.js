@@ -457,7 +457,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        //인스턴스 볼륨 생성 팝업
+        //인스턴스 디스크 생성 팝업
         ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
@@ -503,7 +503,7 @@ angular.module('iaas.controllers')
         };
 
         // 인스턴스 E
-        // 볼륨 스토리지 S
+        // 디스크 스토리지 S
         var conditionValue = $stateParams.volumeName;
         if($stateParams.volumeName) {
             ct.conditionKey = 'name';
@@ -512,7 +512,7 @@ angular.module('iaas.controllers')
             ct.conditionKey = '';
         }
 
-        //볼륨 리스트
+        //디스크 리스트
         ct.fn.getStorageList = function(currentPage) {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -539,14 +539,14 @@ angular.module('iaas.controllers')
 
         ct.fn.deleteVolumes = function(type, id) {
             if(type == 'thum'){
-                common.showConfirm('볼륨 삭제','볼륨을 삭제 하시겠습니까?').then(function(){
+                common.showConfirm('디스크 삭제','디스크을 삭제 하시겠습니까?').then(function(){
                     ct.deleteVolumesAction(type, id);
                 });
             }else if(type == 'tbl'){
                 if(ct.roles.length == 0) {
-                    common.showAlert('메세지','선택된 볼륨이 없습니다.');
+                    common.showAlert('메세지','선택된 디스크이 없습니다.');
                 } else {
-                    common.showConfirm('볼륨 삭제','선택된 '+ct.roles.length+'개의 볼륨을 삭제 하시겠습니까?').then(function(){
+                    common.showConfirm('디스크 삭제','선택된 '+ct.roles.length+'개의 디스크을 삭제 하시겠습니까?').then(function(){
                         ct.deleteVolumesAction(type, id);
                     });
                 }
@@ -643,7 +643,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','백업이미지을 생성할 수 있는 상태가 아닙니다.');
             }
         };
 
@@ -663,7 +663,7 @@ angular.module('iaas.controllers')
 
             $scope.actionLoading = true; // action loading
         };
-        //볼륨 스토리지 E
+        //디스크 스토리지 E
 
         if(ct.data.tenantId) {
             ct.fn.imageListSearch();    //이미지 리스트 조회
@@ -1520,7 +1520,7 @@ angular.module('iaas.controllers')
             });
         }
 // 인스턴스 E
-// 볼륨 스토리지 S
+// 디스크 스토리지 S
         var conditionValue = $stateParams.volumeName;
         if($stateParams.volumeName) {
             ct.conditionKey = 'name';
@@ -1529,7 +1529,7 @@ angular.module('iaas.controllers')
             ct.conditionKey = '';
         }
 
-        //볼륨 리스트
+        //디스크 리스트
         ct.fn.getStorageList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -1553,14 +1553,14 @@ angular.module('iaas.controllers')
         };
         ct.fn.deleteVolumes = function(type, id) {
         	if(type == 'thum'){
-        		common.showConfirm('볼륨 삭제','볼륨을 삭제 하시겠습니까?').then(function(){
+        		common.showConfirm('디스크 삭제','디스크을 삭제 하시겠습니까?').then(function(){
                     ct.deleteVolumesAction(type, id);
                 });
         	} else if(type == 'tbl'){
         		if(ct.roles.length == 0) {
-                    common.showAlert('메세지','선택된 볼륨이 없습니다.');
+                    common.showAlert('메세지','선택된 디스크이 없습니다.');
                 } else {
-                    common.showConfirm('볼륨 삭제','선택된 '+ct.roles.length+'개의 볼륨을 삭제 하시겠습니까?').then(function(){
+                    common.showConfirm('디스크 삭제','선택된 '+ct.roles.length+'개의 디스크을 삭제 하시겠습니까?').then(function(){
                         ct.deleteVolumesAction(type, id);
                     });
                 }
@@ -1658,7 +1658,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','백업이미지을 생성할 수 있는 상태가 아닙니다.');
             }
         }
 
@@ -1677,7 +1677,7 @@ angular.module('iaas.controllers')
             $scope.actionLoading = true; // action loading
         }
 
-//볼륨 스토리지 E
+//디스크 스토리지 E
 
         if(ct.data.tenantId) {
             ct.fn.getUsedResource();

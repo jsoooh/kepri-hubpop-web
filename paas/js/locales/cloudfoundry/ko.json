@@ -425,7 +425,7 @@
 			"message_key": "Support for volume mount services is disabled",
 			"name": "VolumeMountServiceDisabled",
 			"http_code": 403,
-			"message": "볼륨 탑재 서비스 지원이 비활성화되었습니다."
+			"message": "디스크 탑재 서비스 지원이 비활성화되었습니다."
 		},
 		"60026": {
 			"message_type": "preserve",

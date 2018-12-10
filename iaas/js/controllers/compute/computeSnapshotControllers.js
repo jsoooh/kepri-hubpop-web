@@ -49,7 +49,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.deleteInstanceSnapshot = function(instanceSnapshot) {
-            common.showConfirm('스냅샷 삭제', instanceSnapshot.snapShotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('백업이미지 삭제', instanceSnapshot.snapShotName+' 백업이미지을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : instanceSnapshot.tenantId,
@@ -95,7 +95,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.deleteStorageSnapshot = function(storageSnapshot) {
-            common.showConfirm('스냅샷 삭제', storageSnapshot.snapshotName+' 스냅샷을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('백업이미지 삭제', storageSnapshot.snapshotName+' 백업이미지을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : storageSnapshot.tenantId,
@@ -388,7 +388,7 @@ angular.module('iaas.controllers')
             return {isValid : true};
         };
 
-        //볼륨생성 변수
+        //디스크생성 변수
         ct.volumeSize = 0;
         ct.inputVolumeSize = ct.volumeSize;
         ct.volumeSliderOptions = {

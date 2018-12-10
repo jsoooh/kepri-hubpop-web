@@ -27,7 +27,7 @@
 			<tr>
 				<th>이름</th>
                 <th>설명</th>
-                <th>볼륨</th>
+                <th>디스크</th>
                 <th>크기</th>
                 <th>상태</th>
                 <th>생성일자</th>
@@ -48,7 +48,7 @@
 				</td>
 				<td>{{snapshot.createDate}}</td>
 				<td>
-					<button type="button" ng-disabled="snapshot.status != 'available'" class="btn btn-ico-resto-s only-ico"  ng-click="contents.fn.formOpen($event,snapshot)" title="볼륨 복원" ><span class="ico">복원</span></button>
+					<button type="button" ng-disabled="snapshot.status != 'available'" class="btn btn-ico-resto-s only-ico"  ng-click="contents.fn.formOpen($event,snapshot)" title="디스크 복원" ><span class="ico">복원</span></button>
 					<button type="button" ng-disabled="snapshot.status != 'available'" class="btn btn-ico-del-s only-ico"  ng-click="contents.fn.deleteSnapshot(snapshot)" title="삭제" ><span class="ico">삭제</span></button>
 				</td>
 			</tr>

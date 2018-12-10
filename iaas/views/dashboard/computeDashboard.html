@@ -48,8 +48,8 @@
 							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>
 							<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>
 							<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">삭제</a></li>
-							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 스냅샷</a></li>
-							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">볼륨연결</a></li>
+							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업이미지</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">디스크연결</a></li>
 							<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>
 							<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>
 						</ul>
@@ -256,8 +256,8 @@
 						<option ng-if="instance.vmState == 'active'" value="PAUSE">일시정지</option>
 						<option ng-if="instance.vmState == 'paused'" value="UNPAUSE">정지해제</option>
 						<option value="DELETE">삭제</option>
-						<option ng-if="instance.vmState == 'stopped'" value="SNAPSHOT">이미지 스냅샷</option>
-						<option value="VOLUME">볼륨연결</option>
+						<option ng-if="instance.vmState == 'stopped'" value="SNAPSHOT">이미지 백업이미지</option>
+						<option value="VOLUME">디스크연결</option>
 						<option ng-if="instance.floatingIp == ''" value="IPCONNECT">접속IP설정</option>
 						<option ng-if="instance.floatingIp != ''" value="IPDISCONNECT">접속IP해제</option>
 					</select>
@@ -292,7 +292,7 @@
 
 <!-- cont tit -->
 <div class="cont-titWrap mt50" style="margin-bottom:20px;">
-	<h3 class="h-tit3">볼륨 스토리지</h3>
+	<h3 class="h-tit3">디스크 스토리지</h3>
 </div>
 <!-- //cont tit -->
 <!-- panel area-->
@@ -303,14 +303,14 @@
 			<div class="panel type6">
 				<div class="panel_head">
 					<p class="tit" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">{{volume.name}}</p>
-					<p class="txt" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">볼륨스토리지</p>
+					<p class="txt" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)">디스크스토리지</p>
 					<div class="dropdown btn-option">
 						<button id="btn-optionthum" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 							<span class="ico">실행 설정</span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionthumn" aria-labelledby="btn-optionthum">
-							<li ng-click="contents.formOpen($event, 'volume', 'snapshot', volume);"><a href="javascript:void(0);">볼륨 스냅샷</a></li>
-							<li ng-click="contents.fn.deleteVolumes('thum', volume.volumeId);"><a href="javascript:void(0);">볼륨 삭제</a></li>
+							<li ng-click="contents.formOpen($event, 'volume', 'snapshot', volume);"><a href="javascript:void(0);">디스크 백업이미지</a></li>
+							<li ng-click="contents.fn.deleteVolumes('thum', volume.volumeId);"><a href="javascript:void(0);">디스크 삭제</a></li>
 						</ul>
 					</div>
 				</div>
@@ -356,7 +356,7 @@
 							<p class="txt"><span class="ico ico-timer"></span>생성중</p>
 						</div>
 					</div> -->
-					<!-- 스피너영역(볼륨생성) -->
+					<!-- 스피너영역(디스크생성) -->
 					<div class="ul-in2 spinner_area">
 						<div class="info-chart">
 							<div class="chartWrap">
@@ -376,7 +376,7 @@
 							<p class="txt"><span class="ico ico-timer"></span>생성중입니다.</p>
 						</div>
 					</div>
-					<!-- //스피너영역(볼륨생성) -->
+					<!-- //스피너영역(디스크생성) -->
 				</div>
 			</div>
 		</div>
@@ -386,7 +386,7 @@
 	<li>
 		<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-add" style="height:320px;" ng-click="contents.formOpen($event, 'volume', 'storage');">
 			<span class="ico"></span>
-			<span class="txt">볼륨 추가</span>
+			<span class="txt">디스크 추가</span>
 		</button>
 	</li>
 </ul>
@@ -405,7 +405,7 @@
 			</div>
 		</div>
 		<div class="pull-right">
-			<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-add" title="볼륨 추가" ng-click="contents.formOpen($event, 'volume', 'storage');"><span class="ico">볼륨 추가</span></button>
+			<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-add" title="디스크 추가" ng-click="contents.formOpen($event, 'volume', 'storage');"><span class="ico">디스크 추가</span></button>
 		</div>
 	</div>
 	<!-- tb top -->
@@ -421,11 +421,11 @@
 		<thead>
 		<tr>
 			<th>이름</th>
-			<th>볼륨 타입</th>
+			<th>디스크 타입</th>
 			<th>크기</th>
 			<th>상태</th>
 			<th>연결정보</th>
-			<th>스냅샷</th>
+			<th>백업이미지</th>
 			<th>관리</th>
 		</tr>
 		</thead>
@@ -457,7 +457,7 @@
 			</td>
 			<td class="text-left">{{volume.volumeAttachment.device}}&nbsp;&nbsp;<span ng-if="volume.volumeAttachment.instanceName">({{volume.volumeAttachment.instanceName}})</span></td>
 			<td>
-				<button type="button" class="btn btn-ico-resto-s only-ico" tooltip-placement="bottom" title="볼륨 스냅샷 생성" ng-click="contents.formOpen($event, 'volume', 'snapshot', volume);"><span class="ico">볼륨 스냅샷 생성</span></button>
+				<button type="button" class="btn btn-ico-resto-s only-ico" tooltip-placement="bottom" title="디스크 백업이미지 생성" ng-click="contents.formOpen($event, 'volume', 'snapshot', volume);"><span class="ico">디스크 백업이미지 생성</span></button>
 			</td>
 			<td>
 				<button type="button" class="btn btn-ico-del-s only-ico" tooltip-placement="bottom" title="삭제" ng-click="contents.fn.deleteVolumes('thum', volume.volumeId);"><span class="ico">삭제</span></button>

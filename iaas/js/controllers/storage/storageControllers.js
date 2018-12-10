@@ -73,7 +73,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        //추가 전체 볼륨 크기E
+        //추가 전체 디스크 크기E
         $scope.actionLoading = false; // action loading
         $scope.authenticating = false; // action loading massage contents
         $scope.actionBtnHied = false; // btn enabled
@@ -118,14 +118,14 @@ angular.module('iaas.controllers')
 
         ct.deleteVolumes = function(type, id) {
         	if(type == 'thum'){
-        		common.showConfirm('볼륨 삭제','볼륨을 삭제 하시겠습니까?').then(function(){
+        		common.showConfirm('디스크 삭제','디스크을 삭제 하시겠습니까?').then(function(){
                     ct.deleteVolumesAction(type, id);
                 });
         	}else if(type == 'tbl'){
         		if(ct.roles.length == 0) {
-                    common.showAlert('메세지','선택된 볼륨이 없습니다.');
+                    common.showAlert('메세지','선택된 디스크이 없습니다.');
                 } else {
-                    common.showConfirm('볼륨 삭제','선택된 '+ct.roles.length+'개의 볼륨을 삭제 하시겠습니까?').then(function(){
+                    common.showConfirm('디스크 삭제','선택된 '+ct.roles.length+'개의 디스크을 삭제 하시겠습니까?').then(function(){
                         ct.deleteVolumesAction(type, id);
                     });
                 }
@@ -208,7 +208,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','백업이미지을 생성할 수 있는 상태가 아닙니다.');
             }
         };
 
@@ -338,7 +338,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        //볼륨생성 변수
+        //디스크생성 변수
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
             showSelectionBar : true,
@@ -365,7 +365,7 @@ angular.module('iaas.controllers')
             ct.fn.createStorageVolumeAction();
         };
 
-        // 볼륨 생성 부분 추가 2018.11.13 sg0730
+        // 디스크 생성 부분 추가 2018.11.13 sg0730
         ct.fn.getTenantResource = function() {
             var params = {
                 tenantId : ct.data.tenantId
@@ -398,7 +398,7 @@ angular.module('iaas.controllers')
             });
         };
         
-        // val 통과 실제 볼륨 생성 호출
+        // val 통과 실제 디스크 생성 호출
         ct.fn.createStorageVolumeAction = function() {
             $scope.main.loadingMainBody = true;
 
@@ -419,7 +419,7 @@ angular.module('iaas.controllers')
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'POST', params);
             returnPromise.success(function (data, status, headers) {
-            	// 서버생성후 -> 볼륨 생성 후 sucess 처리.
+            	// 서버생성후 -> 디스크 생성 후 sucess 처리.
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess(ct.volume.name+" 디스크 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고
@@ -657,7 +657,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','백업이미지을 생성할 수 있는 상태가 아닙니다.');
             }
         }
         
@@ -696,7 +696,7 @@ angular.module('iaas.controllers')
         pop.formName = "snapshotEditForm";
         pop.validDisabled = true;
         pop.dialogClassName = "modal-lg";
-        pop.title = "볼륨 수정";
+        pop.title = "디스크 수정";
 
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/subMenus/storageEditForm.html" + _VersionTail();
 
@@ -771,18 +771,18 @@ angular.module('iaas.controllers')
             
             var checkByte = $bytes.lengthInUtf8Bytes(pop.volume.description);
         	if(checkByte > 255){
-                common.showAlertWarning("볼륨 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
         		return;
         	}
 
             if(Number(pop.expandVolumeSize) < pop.volume.size){
-                common.showAlertWarning("볼륨 크기는 size up만 가능 합니다. 볼륨 크기 최소값 : " + pop.volume.size + ", 입력값 : " + pop.expandVolumeSize);
+                common.showAlertWarning("디스크 크기는 size up만 가능 합니다. 디스크 크기 최소값 : " + pop.volume.size + ", 입력값 : " + pop.expandVolumeSize);
                 pop.expandVolumeSize = pop.volume.size;
                 return;
             }
 
             if(Number(pop.expandVolumeSize) > (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)){
-                common.showAlertWarning("볼륨 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.expandVolumeSize );
+                common.showAlertWarning("디스크 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.expandVolumeSize );
                 pop.expandVolumeSize = pop.volume.size;
                 return;
             }
@@ -844,7 +844,7 @@ angular.module('iaas.controllers')
         pop.formName = "createSnapshotForm";
         pop.validDisabled = true;
         pop.dialogClassName = "modal-lg";
-        pop.title = "볼륨 스냅샷 생성";
+        pop.title = "디스크 백업이미지 생성";
 
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
 

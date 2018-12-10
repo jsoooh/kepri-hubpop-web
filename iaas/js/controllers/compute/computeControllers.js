@@ -350,7 +350,7 @@ angular.module('iaas.controllers')
                         if (isServerStatusCheck) {
                             $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
                                 ct.fn.checkServerState();
-                            }, 1000);
+                            }, 2000);
                         }
                         if (isReplaceServerInfo) {
                             ct.fnGetUsedResource();
@@ -463,9 +463,15 @@ angular.module('iaas.controllers')
                 }else if(action == "REBOOT"){
                     vmStateChange = "rebooting";
                 }
-                ct.serverMainList[index].observeAction = action;
-                ct.serverMainList[index].vmStateSec = 0;
+                var sltInstance = ct.serverMainList[index]
+                sltInstance.vmState = vmStateChange;
+                sltInstance.uiTask = vmStateChange;
+                sltInstance.vmStateSec = 0;
+                ct.fn.setProcState(sltInstance);
                 $scope.main.loadingMainBody = false;
+                $scope.main.reloadTimmer['instanceServerState_' + sltInstance.id] = $timeout(function () {
+                    ct.fn.checkServerState(sltInstance.id);
+                }, 1000);
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -476,9 +482,7 @@ angular.module('iaas.controllers')
         // SnapShot 생성
         //20181120 sg0730  백업 이미지 생성 PopUp 추가
         ct.fn.createPopSnapshot = function($event,instance) {
-        	
         	var dialogOptions = {};
-        	
         	if(instance.vmState != 'stopped') {
                 common.showAlertWarning('서버를 종료 후 생성가능합니다.');
                 return;
@@ -504,7 +508,7 @@ angular.module('iaas.controllers')
         ct.showInfo = function (instance) {
             instance.showVal = !instance.showVal;
         };
-        //인스턴스 볼륨 생성 팝업
+        //인스턴스 디스크 생성 팝업
        /* ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
@@ -512,7 +516,7 @@ angular.module('iaas.controllers')
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };*/
         
-        //인스턴스 볼륨 생성 팝업
+        //인스턴스 디스크 생성 팝업
         ct.fn.createInstanceVolumePop = function($event,instance) {
         	var dialogOptions =  {
 			            			controller : "iaasComputeVolumeFormCtrl" ,
@@ -526,7 +530,7 @@ angular.module('iaas.controllers')
         };
         
         
-        // sg0730 인스턴스 볼륨 생성 팝업
+        // sg0730 인스턴스 디스크 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
         	 $scope.main.goToPage('/iaas/compute');
         };
@@ -873,7 +877,7 @@ angular.module('iaas.controllers')
             }
         };
         
-        // 볼륨 생성 부분 추가 2018.11.13 sg0730
+        // 디스크 생성 부분 추가 2018.11.13 sg0730
         ct.fn.getTenantResource = function()  {
             var params = {
                 tenantId : ct.data.tenantId
@@ -1004,7 +1008,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        //볼륨생성 변수
+        //디스크생성 변수
         ct.volumeSize = 0;
         ct.inputVolumeSize = ct.volumeSize;
         ct.volumeSliderOptions = {
@@ -1057,7 +1061,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers)  {
-                // 서버생성후 -> 볼륨 생성 후 sucess 처리.
+                // 서버생성후 -> 디스크 생성 후 sucess 처리.
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고

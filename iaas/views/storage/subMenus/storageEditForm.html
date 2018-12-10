@@ -17,7 +17,7 @@
 						<input type="text" class="form-control" ng-model="pop.volume.name" maxlength="50" name="volumeName" validation="required" placeholder="이름을 입력해 주세요." />
 					</li>
 					<li>
-						<p class="app-tit">볼륨 크기 입력</p>
+						<p class="app-tit">디스크 크기 입력</p>
 						<!-- <input type="text" class="form-control" ng-model="pop.expandVolumeSize" name="expandVolumeSize" ng-change="pop.fn.changeVolumeSize()" maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span>
 						<button class="btn btn-plus"  ng-click="pop.fn.volumeSizeAction(true)" tooltip-placement="bottom" uib-tooltip="증가"><img src="images/ico_plus.png" width="10" height="10" alt="" /></button>
 						<button class="btn btn-minus"  ng-click="pop.fn.volumeSizeAction(false)" tooltip-placement="bottom" uib-tooltip="감소"><img src="images/ico_minus.png" width="10" height="10" alt="" /></button>
@@ -25,7 +25,7 @@
 							<li>
 								<div class="rangeWrap type2">
 									<div class="range-text">
-										<strong class="range-tit">볼륨크기</strong>
+										<strong class="range-tit">디스크크기</strong>
 										<p class="text-letter">{{pop.resource.usedResource.volumeGigabytes | number : 0}}GB / {{pop.resource.maxResource.volumeGigabytes | number:0}}GB</p>
 									</div>
 									<scalable-progress-bar swidth="90" max="100" top="80" scalable="{{(pop.expandVolumeSize - pop.resourceDefault.usedResource.volumeGigabytes) / pop.resource.maxResource.volumeGigabytes * 100 | number: 0}}" bar="{{pop.resource.usedResource.volumeGigabytes / pop.resource.maxResource.volumeGigabytes * 100 | number: 0}}" from="0" duration="1" base="{{pop.resourceDefault.usedResource.volumeGigabytes / pop.resourceDefault.maxResource.volumeGigabytes * 100 | number: 0}}" >%</scalable-progress-bar>
@@ -38,7 +38,7 @@
 								<li>
 									<div class="rangeWrap type2">
 										<div class="range-text">
-											<!-- <strong class="range-tit">볼륨 크기</strong> -->
+											<!-- <strong class="range-tit">디스크 크기</strong> -->
 											<input type="text" class="form-control" ng-model="pop.expandVolumeSize" name="expandVolumeSize" ng-change="pop.fn.changeVolumeSize()" maxlength="4" only-digits style="width:25%; display: inline-block;"> <span class="app-tit">GB</span>
 											<span class="range-txt">최대 {{(pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) | number:0}}G</span>
 										</div>
@@ -56,7 +56,7 @@
 									</div>
 								</li>
 							</ul>
-							<p class="inst-txt">마우스를 움직여 생성하실 볼륨의 크기를 설정해 주세요.</p>
+							<p class="inst-txt">마우스를 움직여 생성하실 디스크의 크기를 설정해 주세요.</p>
 						</div>
 					</li>
 					<li>

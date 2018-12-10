@@ -23,7 +23,7 @@ angular.module('portal.controllers').controller('commServiceCatalogCataViewCtrl'
 			c : 'C/C APP',
 			net : '.Net APP',
 			compute : '가상서버',
-			volume : '볼륨 스토리지',
+			volume : '디스크 스토리지',
 			object : '오브젝트 스토리지',
 		};
 

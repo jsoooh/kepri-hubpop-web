@@ -446,7 +446,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        //인스턴스 볼륨 조회
+        //인스턴스 디스크 조회
         ct.fn.searchInstanceVolumeList = function() {
             var param = {
                 tenantId : ct.data.tenantId,
@@ -465,21 +465,21 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 볼륨 반환 버튼
+        // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
-            common.showConfirm('볼륨 반환','※'+volume.volumeName+' 볼륨을 반환 합니다. 반환된 볼륨에 대한 관리는 스토리지 관리에서 가능합니다').then(function(){
+            common.showConfirm('디스크 반환','※'+volume.volumeName+' 디스크을 반환 합니다. 반환된 디스크에 대한 관리는 스토리지 관리에서 가능합니다').then(function(){
                 ct.fn.restorationVolume(volume);
             });
         };
 
-        //볼륨 반환 job
+        //디스크 반환 job
         ct.fn.restorationVolume = function(volume) {
             volume.tenantId = ct.data.tenantId;
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach:volume});
             returnPromise.success(function (data, status, headers) {
                 ct.fn.searchInstanceVolumeList();
-                common.showAlertSuccess("볼륨이 반환 되었습니다.");
+                common.showAlertSuccess("디스크이 반환 되었습니다.");
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -491,7 +491,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        //인스턴스 볼륨 생성 팝업
+        //인스턴스 디스크 생성 팝업
        /* ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
@@ -499,7 +499,7 @@ angular.module('iaas.controllers')
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };*/
         
-        //인스턴스 볼륨 생성 팝업
+        //인스턴스 디스크 생성 팝업
         ct.fn.createInstanceVolumePop = function($event,instance) {
         	
         	///iaas/compute/detail/ct.data.instanceId
@@ -518,7 +518,7 @@ angular.module('iaas.controllers')
         }; 
         
         
-        // sg0730 인스턴스 볼륨 생성 팝업
+        // sg0730 인스턴스 디스크 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
         	 //$scope.main.goToPage('/iaas/compute');
         	ct.fn.getInstanceInfo();
@@ -1065,7 +1065,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        //인스턴스 볼륨 조회
+        //인스턴스 디스크 조회
         ct.fn.searchInstanceVolumeList = function() {
             var param = {
                 tenantId : ct.data.tenantId,
@@ -1084,21 +1084,21 @@ angular.module('iaas.controllers')
             });
         }
 
-        // 볼륨 반환 버튼
+        // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
-            common.showConfirm('볼륨 반환','※'+volume.volumeName+' 볼륨을 반환 합니다. 반환된 볼륨에 대한 관리는 스토리지 관리에서 가능합니다').then(function(){
+            common.showConfirm('디스크 반환','※'+volume.volumeName+' 디스크을 반환 합니다. 반환된 디스크에 대한 관리는 스토리지 관리에서 가능합니다').then(function(){
                 ct.fn.restorationVolume(volume);
             });
         };
 
-        //볼륨 반환 job
+        //디스크 반환 job
         ct.fn.restorationVolume = function(volume) {
             volume.tenantId = ct.data.tenantId;
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach:volume});
             returnPromise.success(function (data, status, headers) {
                 ct.fn.searchInstanceVolumeList();
-                common.showAlertSuccess("볼륨이 반환 되었습니다.");
+                common.showAlertSuccess("디스크이 반환 되었습니다.");
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -1110,7 +1110,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        //인스턴스 볼륨 생성 팝업
+        //인스턴스 디스크 생성 팝업
         /*ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
@@ -1136,7 +1136,7 @@ angular.module('iaas.controllers')
         }; 
         
         
-        // sg0730 인스턴스 볼륨 생성 팝업
+        // sg0730 인스턴스 디스크 생성 팝업
         ct.creInsVolPopCallBackFunction = function () 
         {
         	 //$scope.main.goToPage('/iaas/compute');
@@ -2032,7 +2032,7 @@ angular.module('iaas.controllers')
         
         pop.fn = {};
         pop.formName = "createSnapshotForm";
-        pop.title = "인스턴스 스냅샷 생성";
+        pop.title = "인스턴스 백업이미지 생성";
         
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.actionBtnHied = false;
@@ -2091,9 +2091,9 @@ angular.module('iaas.controllers')
         
         pop.fn = {};
         pop.formName = "computeVolumeForm";
-        pop.title = "볼륨 연결";
+        pop.title = "디스크 연결";
 
-      //볼륨 리스트 조회
+      //디스크 리스트 조회
         pop.fn.getVolumeList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -2116,12 +2116,12 @@ angular.module('iaas.controllers')
             });
         };
 
-        //인스턴스 볼륨 셋팅
+        //인스턴스 디스크 셋팅
         pop.fn.setInstanceVolume = function(volume) {
             pop.volume = volume;
         };
 
-        //인스턴스 볼륨 추가
+        //인스턴스 디스크 추가
         pop.fn.addInstanceVolume = function() {
             var param = {
                 instanceId : $scope.contents.selectInstance.id,
@@ -2133,7 +2133,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceAttach', 'POST', {volumeAttach : param});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("볼륨이 추가 되었습니다.");
+                common.showAlertSuccess("디스크이 추가 되었습니다.");
             	$scope.contents.fn.searchInstanceVolumeList();
             });
             returnPromise.error(function (data, status, headers) {
@@ -2573,7 +2573,7 @@ angular.module('iaas.controllers')
     	$scope.actionBtnHied = false;
 
         
-      //볼륨 리스트 조회
+      //디스크 리스트 조회
         pop.fn.getVolumeList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -2601,7 +2601,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        //인스턴스 볼륨 셋팅
+        //인스턴스 디스크 셋팅
         pop.fn.setInstanceVolume = function(volume) {
             pop.volume = volume;
             pop.checkValFlag = true;
@@ -2617,7 +2617,7 @@ angular.module('iaas.controllers')
     	};
         
         
-        //인스턴스 볼륨 추가
+        //인스턴스 디스크 추가
         pop.fn.addInstanceVolume = function() {
         	
         	if (pop.checkValFlag == false ) 

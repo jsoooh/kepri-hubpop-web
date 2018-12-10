@@ -31,8 +31,8 @@
 							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>
 							<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>
 							<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">삭제</a></li>
-							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 스냅샷</a></li>
-							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">볼륨연결</a></li>
+							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업이미지</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">디스크연결</a></li>
 							<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>
 							<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>
 						</ul>
@@ -137,8 +137,8 @@
 							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>
 							<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>
 							<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">삭제</a></li>
-							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 스냅샷</a></li>
-							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">볼륨연결</a></li>
+							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업이미지</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">디스크연결</a></li>
 							<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>
 							<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>
 						</ul>
@@ -229,8 +229,8 @@
 							<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>
 							<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>
 							<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">삭제</a></li>
-							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 스냅샷</a></li>
-							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">볼륨연결</a></li>
+							<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업이미지</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop(instance);">디스크연결</a></li>
 							<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>
 							<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>
 						</ul>
