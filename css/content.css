@@ -2384,6 +2384,9 @@ p.no-txt{
 /*테이블 tr 비활성화 처리*/
 .tbl.type1 .tbl_disabled td {background:#f3f3f3; color:#bdbdbd;}
 
+/*테이블 tr 선택된 행 표시*/
+.table .tbl_selected td {background:#e5f0fa;}
+
 /*추가기능 설정하기 버튼*/
 .btn_add_area {margin:30px 0;}
 .btn_add_area span{display:inline-block; font-size:15px; color:#2196f3;}
