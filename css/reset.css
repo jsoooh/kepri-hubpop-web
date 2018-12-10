@@ -53,6 +53,18 @@
         url("../fonts/notosanskr/NotoSansKR-Bold.woff") format("woff"),
         url("../fonts/notosanskr/NotoSansKR-Bold.otf") format("opentype");
  }
+ 
+ @font-face {
+    font-family: 'NanumPen';
+    font-style: normal;
+    font-weight: 400;
+    src: local('※'),
+        url("../fonts/nanumpen/NanumPen.woff2") format('woff2'), 
+        url("../fonts/nanumpen/NanumPen.woff") format('woff'),
+        url("../fonts/nanumpen/NanumPen.ttf") format('truetype'),
+        url("../fonts/nanumpen/NanumPen.otf") format('opentype'),
+        url("../fonts/nanumpen/NanumPen.eot") format('embedded-opentype');
+}
 
 /*@font-face {
    font-family: 'Noto Sans CJKkr';
