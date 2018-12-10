@@ -90,19 +90,19 @@
 								<span class="ico">실행 설정</span>
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);">시작</a></li>
-								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled">시작</a></li>
-								<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);">재시작</a></li>
-								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled">재시작</a></li>
-								<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);">정지</a></li>
-								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled">정지</a></li>
-								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm(instance,$event);">서버 사양 변경</a></li>
-								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled">서버 사양 변경</a></li>
-								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);">백업 이미지 생성</a></li>
-								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled">백업 이미지 생성</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);">디스크 연결</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);">서버 삭제</a></li>
+								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);" title="시작">시작</a></li>
+								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="시작">시작</a></li>
+								<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);" title="재시작">재시작</a></li>
+								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="재시작">재시작</a></li>
+								<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);" title="정지">정지</a></li>
+								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="정지">정지</a></li>
+								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm(instance,$event);" title="서버 사양 변경">서버 사양 변경</a></li>
+								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버 사양 변경">서버 사양 변경</a></li>
+								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="백업 이미지 생성">백업 이미지 생성</a></li>
+								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="백업 이미지 생성">백업 이미지 생성</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="디스크 연결">디스크 연결</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);" title="서버 삭제">서버 삭제</a></li>
 								<!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
 								<!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
 								<!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업이미지</a></li> -->
