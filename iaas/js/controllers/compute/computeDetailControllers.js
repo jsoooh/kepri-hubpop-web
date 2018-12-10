@@ -2569,42 +2569,39 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.closeName 	= "닫기";
     	$scope.dialogOptions.templateUrl= _IAAS_VIEWS_ + "/compute/computeServerConnVolPopForm.html" + _VersionTail();
     	$scope.actionLoading 			= false;
-    	pop.checkValFlag 				= false;
     	$scope.actionBtnHied = false;
+        pop.volumeList = [];
+        pop.sltVolume = {};
+        pop.sltVolumeId = "";
 
-        
       //디스크 리스트 조회
+        pop.isVolumeListLoad = false;
         pop.fn.getVolumeList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
-			                tenantId       : ct.data.tenantId,
-			                conditionKey   : "status",
-			                conditionValue : "available"
-			            };
-            
+                tenantId       : ct.data.tenantId,
+                conditionKey   : "status",
+                conditionValue : "available"
+            };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param , 'application/x-www-form-urlencoded');
-            
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 pop.volumeList = data.content.volumes;
+                pop.isVolumeListLoad = true;
             });
-
-            $scope.main.loadingMainBody = false;
-            
-            returnPromise.error(function (data, status, headers) {
-            	common.showAlertError(data.message);
-                //common.showAlert("message",data.message);
-            });
-            
-            returnPromise.finally(function (data, status, headers) {
+           returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
+                pop.isVolumeListLoad = true;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
             });
         };
 
         //인스턴스 디스크 셋팅
         pop.fn.setInstanceVolume = function(volume) {
-            pop.volume = volume;
-            pop.checkValFlag = true;
+            pop.sltVolume = angular.copy(volume);
+            pop.sltVolumeId = volume.volumeId;
         };
         
         $scope.popDialogOk = function () {
@@ -2616,35 +2613,25 @@ angular.module('iaas.controllers')
     		common.mdDialogCancel();
     	};
         
-        
         //인스턴스 디스크 추가
+        $scope.actionBtnHied = false;
         pop.fn.addInstanceVolume = function() {
-        	
-        	if (pop.checkValFlag == false ) 
-        	{	
-        		//common.showAlertWarning('추가할 디스크를 선택 하십시요.');
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+        	if (pop.sltVolume == false ) {
+        		common.showAlertWarning('추가할 디스크를 선택 하십시요.');
+                $scope.actionBtnHied = false;
 				return;
 			}
-        	
-        	if ($scope.actionBtnHied) return;
-            $scope.actionBtnHied = true;
-        	
-        	/* if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
-                 $scope.actionBtnHied = false;
-                 return;
-             }
-        	*/
             var param = {
-			                instanceId : pop.instance.id,
-			                tenantId : pop.userTenant.tenantId,
-			                volumeId : pop.volume.volumeId
-			            };
+                instanceId : pop.instance.id,
+                tenantId : pop.userTenant.tenantId,
+                volumeId : pop.sltVolume.volumeId
+            };
             
             $scope.main.loadingMainBody = true;
             common.mdDialogHide();
-            
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceAttach', 'POST', {volumeAttach : param});
-            
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("디스크가 추가 되었습니다.");
@@ -2652,15 +2639,11 @@ angular.module('iaas.controllers')
                     pop.callBackFunction();
                 }
             });
-            
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             	common.showAlertError(data.message);
-                //common.showAlert("message",data.message);
             });
-            
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
             });
         };
 

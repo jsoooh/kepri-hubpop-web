@@ -8,6 +8,7 @@
 			"application_push": "앱 만들기",
 			"application_details": "APP 상세",
 			"service_instances": "서비스 관리",
+			"service_instance_create": "서비스 만들기",
 			"paas_market": "마켓플레이스",
 			"paas_market_app": "앱",
 			"paas_market_app_view": "앱 상세",

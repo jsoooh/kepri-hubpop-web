@@ -1,4 +1,36 @@
 <!-- table -->
+<scrollable-table watch="pop.volumeList" class="tableHeight400"><!-- resizable 는 싸이즈 조절이 필요한 곳 만 적용 -->
+	<table class="table">
+		<thead>
+		<tr>
+			<th sortable-header style="width:20%;">선택</th>
+			<th sortable-header style="width:auto;">디스크명</th>
+			<!--<th sortable-header style="width:20%;">부팅디스크</th>-->
+			<th sortable-header style="width:25%;">SIZE</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="volume in pop.volumeList" row-id="{{ item.volumeId }}" ng-class="{'selected': volume.volumeId == pop.sltVolume.volumeId}"  ng-click="pop.fn.setInstanceVolume(volume)">
+			<td>
+				<div class="radio radio-only">
+					<input type="radio" name="volumeRadio" ng-model="pop.sltVolumeId" value="{{volume.volumeId}}" id="volume-{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)">
+					<label for="volume-{{volume.volumeId}}"></label>
+				</div>
+			</td>
+			<td>{{volume.name}}</td>
+			<!--<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>-->
+			<td>{{volume.size | displayVolume:'GB'}}</td>
+		</tr>
+		<tr ng-if="!pop.isVolumeListLoad">
+			<td colspan="3">로딩 중 입니다.</td>
+		</tr>
+		<tr ng-if="pop.isVolumeListLoad && pop.volumeList == 0">
+			<td colspan="3">{{ 'message.mi_dont_exist_list' | translate }}</td>
+		</tr>
+		</tbody>
+	</table>
+</scrollable-table>
+<!--
 <div class="tbl type1">
 	<table class="table">
 		<colgroup>
@@ -31,4 +63,5 @@
 		</tbody>
 	</table>
 </div>
+-->
 <!-- //table -->

@@ -101,7 +101,7 @@
 								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="백업 이미지 생성">백업 이미지 생성</a></li>
 								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="백업 이미지 생성">백업 이미지 생성</a></li>
 								<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="디스크 연결">디스크 연결</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
 								<li><a href="javascript:void(0);" ng-click="contents.deleteInstanceJob(instance.id);" title="서버 삭제">서버 삭제</a></li>
 								<!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
 								<!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
