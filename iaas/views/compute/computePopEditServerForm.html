@@ -11,10 +11,10 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr ng-repeat="spec in pop.specList" row-id="{{ item.uuid }}" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': spec.uuid == pop.sltSpecUuid}" ng-click="pop.setInstanceSpec(spec)">
+		<tr ng-repeat="spec in pop.specList" row-id="{{ item.uuid }}" ng-if="pop.specDisabledAllSetting" ng-class="{'tbl_disabled': (!pop.specDisabledAllSetting || spec.disabled), 'tbl_selected': spec.uuid == pop.sltSpecUuid}" ng-click="pop.setInstanceSpec(spec)">
 			<td>
 				<div class="radio radio-only">
-					<input type="radio" name="volumeRadio" ng-model="pop.sltSpecUuid" value="{{spec.uuid}}" id="spec-{{spec.uuid}}" ng-click="pop.setInstanceSpec(spec)">
+					<input type="radio" name="specRadio" ng-model="pop.sltSpecUuid" ng-disabled="(!pop.specDisabledAllSetting || spec.disabled)" value="{{spec.uuid}}" id="spec-{{spec.uuid}}" ng-click="pop.setInstanceSpec(spec)">
 					<label for="spec-{{spec.uuid}}"></label>
 				</div>
 			</td>
@@ -23,10 +23,10 @@
 			<td>{{spec.ram | displayVolume:'MB'}}</td>
 			<td>{{spec.disk | displayVolume:'GB'}}</td>
 		</tr>
-		<tr ng-if="!pop.isSpecLoad">
+		<tr ng-if="!pop.isSpecLoad || !pop.specDisabledAllSetting">
 			<td colspan="5"><p class="txt"><span class="ico ico-timer"></span> 데이터 로딩 중 입니다.</p></td>
 		</tr>
-		<tr ng-if="pop.isSpecLoad && pop.specList == 0">
+		<tr ng-if="pop.isSpecLoad && pop.specDisabledAllSetting && pop.specList == 0">
 			<td colspan="5">{{ 'message.mi_dont_exist_list' | translate }}</td>
 		</tr>
 		</tbody>

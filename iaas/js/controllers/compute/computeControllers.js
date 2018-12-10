@@ -27,19 +27,25 @@ angular.module('iaas.controllers')
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function (instance, $event, $index) {
         	 var dialogOptions = {
-                     controller : "iaasComputePopEditServerCtrl" ,
-                     formName   : 'iaasComputePopEditServerForm',
-                     instance : angular.copy(instance),
-                     callBackFunction : ct.reflashCallBackFunction
-                 };
-                 $scope.actionBtnHied = false;
-                 common.showDialog($scope, $event, dialogOptions);
-                 $scope.actionLoading = true; // action loading
+                 controller : "iaasComputePopEditServerCtrl" ,
+                 formName   : 'iaasComputePopEditServerForm',
+                 instance : angular.copy(instance),
+                 callBackFunction : ct.reflashCallBackFunction
+             };
+             $scope.actionBtnHied = false;
+             common.showDialog($scope, $event, dialogOptions);
+             $scope.actionLoading = true; // action loading
         };
         
-        ct.reflashCallBackFunction = function ()  {
-            ct.fnGetServerMainList();
-            ct.fnGetUsedResource();
+        ct.reflashCallBackFunction = function (instance)  {
+            var reInstance = common.objectsFindByField(ct.serverMainList, "id", instance.id);
+            reInstance.vmState = instance.vmState;
+            reInstance.uiTask = instance.uiTask;
+            ct.fn.setProcState(reInstance);
+            $timeout(function () {
+                //ct.fn.checkServerState(instance.id);
+                ct.fn.checkServerState();
+            }, 1000);
         };
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
@@ -244,8 +250,8 @@ angular.module('iaas.controllers')
                             if(serverItem.procState == "creating") {
                                 newItem = true;
                             }
-                            ct.fn.setProcState(instance);
                             ct.fn.mergeServerInfo(serverItem, instance);
+                            ct.fn.setProcState(serverItem);
                             ct.fn.setRdpConnectDomain(serverItem);
                             if(newItem) {
                                 serverItem.newCreated = true;
@@ -259,11 +265,13 @@ angular.module('iaas.controllers')
                             ct.deployServerList.splice(data.content.instances.length, ct.serverMainList.length - data.content.instances.length);
                         }
                         angular.forEach(data.content.instances, function (instance, inKey) {
-                            ct.fn.setProcState(instance);
-                            ct.fn.setRdpConnectDomain(instance);
                             if (ct.serverMainList[inKey]) {
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
+                                ct.fn.setProcState(ct.serverMainList[inKey]);
+                                ct.fn.setRdpConnectDomain(ct.serverMainList[inKey]);
                             } else {
+                                ct.fn.setProcState(instance);
+                                ct.fn.setRdpConnectDomain(instance);
                                 ct.serverMainList.push(instance);
                             }
                         });

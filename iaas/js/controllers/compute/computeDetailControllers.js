@@ -2282,18 +2282,14 @@ angular.module('iaas.controllers')
     //////////////////////////////////////////////////////////////
     /////////20181120 sg0730 서버유형 변경 Pop 추가   ////////////////////
     //////////////////////////////////////////////////////////////
-    .controller('iaasComputePopEditServerCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
+    .controller('iaasComputePopEditServerCtrl', function ($scope, $location, $state, $sce, $timeout, $stateParams,$filter,$q,$translate, $bytes, ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("computePopEditServerCtrl.js : iaasComputePopEditServerCtrl", 1);
         
         var pop = this;
 
-        pop.validationService 			= new ValidationService({controllerAs: pop});
         pop.formName 					= $scope.dialogOptions.formName;
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         pop.instance 					= $scope.dialogOptions.instance;
-        if (pop.instance.spec && pop.instance.spec.uuid) {
-
-        }
         pop.instanceNm                  = pop.instance.name;
         pop.uuid                		= pop.instance.spec.uuid;
 
@@ -2312,7 +2308,7 @@ angular.module('iaas.controllers')
         pop.btnClickCheck 				= false;
         pop.specList 					= [];
         pop.spec 						= {};
-
+        $scope.dialogOptions.authenticate = true;
 
         //스펙그룹의 스펙 리스트 조회
         pop.isSpecLoad = false;
@@ -2337,14 +2333,16 @@ angular.module('iaas.controllers')
             });
         };
 
-        pop.setInstanceSpec = function(spec) {
+        pop.setInstanceSpec = function(sltSpec) {
             if (!pop.specDisabledAllSetting || sltSpec.disabled) return;
-        	if(pop.spec && spec.uuid){
-        		pop.sltSpec = angular.copy(spec);
-                pop.sltSpecUuid = spec.uuid;
+        	if(pop.spec && sltSpec.uuid){
+        		pop.sltSpec = angular.copy(sltSpec);
+                pop.sltSpecUuid = sltSpec.uuid;
+                $scope.dialogOptions.authenticate = false;
         	}else{
         		pop.sltSpec = {};
                 pop.sltSpecUuid = "";
+                $scope.dialogOptions.authenticate = true;
             }
         };
 
@@ -2366,7 +2364,6 @@ angular.module('iaas.controllers')
                     pop.tenantResource.available.instanceDiskGigabytes = pop.tenantResource.maxResource.instanceDiskGigabytes - pop.tenantResource.usedResource.instanceDiskGigabytes;
                     pop.tenantResource.available.volumeGigabytes = pop.tenantResource.maxResource.volumeGigabytes - pop.tenantResource.usedResource.volumeGigabytes;
                     pop.tenantResource.available.objectStorageGigaByte = pop.tenantResource.maxResource.objectStorageGigaByte - pop.tenantResource.usedResource.objectStorageGigaByte;
-                    pop.volumeSliderOptions.ceil = pop.tenantResource.available.volumeGigabytes;
                     pop.setSpecMaxDisabled();
                 }
             });
@@ -2381,22 +2378,20 @@ angular.module('iaas.controllers')
 
         // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
         pop.isMinSpecDisabled = false;
+
         // spec loading 체크
         pop.specMinDisabledSetting = false;
+        pop.specDisabledAllSetting = false;
         pop.setSpecMinDisabled = function () {
-            if (pop.isSpecLoad && pop.instance.spec && pop.instance.spec.uuid) {
+            if (pop.isSpecLoad) {
                 angular.forEach(pop.specList, function (spec) {
                     if (spec.disk <= pop.instance.spec.disk || spec.ram <= pop.instance.spec.ram) {
                         spec.disabled = true;
                     }
                 });
                 pop.specMinDisabledSetting = true;
-                if(pop.sltSpec && pop.sltSpec.uuid) {
-                    if (pop.sltSpec.disk <= pop.instance.spec.disk || pop.sltSpec.ram <= pop.instance.spec.ram) {
-                        pop.defaultSelectSpec();
-                    }
-                } else {
-                    pop.defaultSelectSpec();
+                if(pop.specMaxDisabledSetting){
+                    pop.specDisabledAllSetting = true;
                 }
             }
         };
@@ -2411,7 +2406,9 @@ angular.module('iaas.controllers')
                     }
                 });
                 pop.specMaxDisabledSetting = true;
-                pop.defaultSelectSpec();
+                if(pop.specMinDisabledSetting){
+                    pop.specDisabledAllSetting = true;
+                }
             }
         };
 
@@ -2420,14 +2417,6 @@ angular.module('iaas.controllers')
                 angular.forEach(pop.specList, function (spec) {
                     spec.disabled = false;
                 });
-            }
-        };
-
-        // spec loading 체크
-        pop.specDisabledAllSetting = false;
-        pop.defaultSelectSpec = function() {
-            if(pop.specMinDisabledSetting && pop.specMaxDisabledSetting){
-                pop.specDisabledAllSetting = true;
             }
         };
 
@@ -2445,28 +2434,29 @@ angular.module('iaas.controllers')
         	if (pop.btnClickCheck) return;
             pop.btnClickCheck = true;
 
-            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
+            if (!pop.sltSpecUuid) {
+                common.showAlertWarning("변경 할 사양을 선택 하십시오.");
                 pop.btnClickCheck = false;
                 return;
             }
-            
-            $scope.main.loadingMain = true;
-            common.mdDialogHide();
+
             var param = {
-            		urlParams : {
-            			instanceId : pop.instance.id,
-            			tenantId   : pop.tenantId,
-            			specId     : pop.sltSpec.uuid
-            		}
+                urlParams : {
+                    instanceId : pop.instance.id,
+                    tenantId   : pop.tenantId,
+                    specId     : pop.sltSpecUuid
+                }
             };
+            common.mdDialogHide();
+            $scope.main.loadingMain = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/resize', 'POST', param );
             
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                $scope.main.loadingMain = false;
                 common.showAlertSuccess("변경 되었습니다.");
                 pop.btnClickCheck = false;
                 if (angular.isFunction(pop.callBackFunction) ) {
-                    pop.callBackFunction();
+                    pop.callBackFunction(pop.instance);
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -2479,6 +2469,7 @@ angular.module('iaas.controllers')
             
         };
 
+        pop.getTenantResource();
         pop.getSpecList();
 
     })
@@ -2643,8 +2634,8 @@ angular.module('iaas.controllers')
         pop.instance 					= $scope.dialogOptions.selectInstance;
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         //pop.formName 		= "computeVolumeForm";
-        $scope.dialogOptions.title 		= "디스크 추가";
-        $scope.dialogOptions.okName 	= "변경";
+        $scope.dialogOptions.title 		= "디스크 연결";
+        $scope.dialogOptions.okName 	= "연결";
     	$scope.dialogOptions.closeName 	= "닫기";
     	$scope.dialogOptions.templateUrl= _IAAS_VIEWS_ + "/compute/computeServerConnVolPopForm.html" + _VersionTail();
     	$scope.actionLoading 			= false;
@@ -2652,6 +2643,9 @@ angular.module('iaas.controllers')
         pop.volumeList = [];
         pop.sltVolume = {};
         pop.sltVolumeId = "";
+
+        // 버튼 disabled
+        $scope.dialogOptions.authenticate = true;
 
       //디스크 리스트 조회
         pop.isVolumeListLoad = false;
@@ -2682,9 +2676,11 @@ angular.module('iaas.controllers')
             if (volume && volume.volumeId) {
                 pop.sltVolume = angular.copy(volume);
                 pop.sltVolumeId = volume.volumeId;
+                $scope.dialogOptions.authenticate = false;
             } else {
                 pop.sltVolume = {};
                 pop.sltVolumeId = "";
+                $scope.dialogOptions.authenticate = true;
             }
         };
         
