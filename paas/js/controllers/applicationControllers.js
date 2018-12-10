@@ -12,7 +12,7 @@ angular.module('paas.controllers')
         ct.sltSpaceGuid = "";
         ct.searchAppNames = [];
         ct.sltAppNames = [];
-        ct.apps = {};
+        ct.apps = [];
         ct.checkedApps = [];
 
         ct.sltOrganizationGuid = "";
@@ -22,12 +22,7 @@ angular.module('paas.controllers')
         ct.pageFirstLoad = true;
         ct.appStateCnt = 0;
 
-        // paging
-        ct.pageOptions = {
-            currentPage : 1,
-            pageSize : 10,
-            total : 1
-        };
+        ct.schFilterText = "";
 
         // main changeOrganization 와 연결
         $scope.$on('organizationChanged', function(event, orgItem) {
@@ -168,7 +163,6 @@ angular.module('paas.controllers')
 
                 $scope.main.loadingMainBody = false;
                 $scope.main.loadingMain = false;
-                ct.pageOptions.total = data.totalElements;
             });
             appPromise.error(function (data) {
                 ct.apps = [];

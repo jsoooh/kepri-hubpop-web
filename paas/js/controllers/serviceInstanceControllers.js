@@ -265,6 +265,7 @@ angular.module('paas.controllers')
         ct.serviceInstanceName 	= "";
         ct.actionBtnHied 		= false; // btn enabled
         ct.spaceAppsLoad 		= false;
+        ct.serviceInstanceName ='service-001';
 
         ct.sltServiceChange = function (serviceGuid) {
             var sltService = common.objectsFindCopyByField(ct.services, "guid", serviceGuid);

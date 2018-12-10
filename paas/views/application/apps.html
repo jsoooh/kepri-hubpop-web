@@ -27,7 +27,7 @@
 
     <!-- panel area-->
     <ul class="ul-panel">
-        <li ng-repeat="(key, appItem) in contents.apps | filter:{name : contents.schFilterText}">
+        <li ng-repeat="appItem in contents.apps | filter : {name: contents.schFilterText}">
             <!-- panel -->
             <div class="panelWrap">
                 <div class="panel type3">

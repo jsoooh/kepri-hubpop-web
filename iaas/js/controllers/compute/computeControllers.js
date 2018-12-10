@@ -240,13 +240,19 @@ angular.module('iaas.controllers')
                         var instance = data.content.instances[0];
                         var serverItem = common.objectsFindByField(ct.serverMainList, "id", data.content.instances[0].id);
                         if (serverItem && serverItem.id) {
+                            var newItem = false;
+                            if(serverItem.procState == "creating") {
+                                newItem = true;
+                            }
                             ct.fn.setProcState(instance);
                             ct.fn.mergeServerInfo(serverItem, instance);
                             ct.fn.setRdpConnectDomain(serverItem);
-                            serverItem.newCreated = true;
-                            $timeout(function () {
-                                serverItem.newCreated = false;
-                            }, 5000);
+                            if(newItem) {
+                                serverItem.newCreated = true;
+                                $timeout(function () {
+                                    serverItem.newCreated = false;
+                                }, 5000);
+                            }
                         }
                     } else {
                         if (ct.serverMainList.length > data.content.instances.length) {

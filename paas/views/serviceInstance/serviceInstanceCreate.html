@@ -17,7 +17,7 @@
 						<!-- <button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다." tooltip-class="tooltip_type2"><span class="ico_info"></span></button> -->
 						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 서비스 이름을 입력합니다.</br> 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 					</div>
-					<input type="text" class="form-control" maxlength="20"  placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName" ng-init="contents.serviceInstanceName='service-001'"  validation="min_len:3|max_len:20|required">
+					<input type="text" name="serviceInstanceName" class="form-control" maxlength="20"  placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName"  validation="min_len:3|max_len:20|required">
 				</li>
 				<li>
 					<div class="pnb_tit">
