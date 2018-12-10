@@ -897,6 +897,12 @@ angular.module('common.services', ['LocalStorageModule'])
                 }
             }
 
+            if (pathUrl.indexOf('?') > 0) {
+                pathUrl += "&vt=v" + new Date().getTime();
+            } else {
+                pathUrl += "?&vt=v" + new Date().getTime();
+            }
+
             var acceptString = "application/json;charset=UTF-8";
             var contentTypeString = "application/json;charset=UTF-8";
             if (accept != undefined) {
@@ -1186,7 +1192,13 @@ angular.module('common.services', ['LocalStorageModule'])
 	                pathUrl += "?" + $.param(params);
 	            }
 	        }
-	
+
+            if (pathUrl.indexOf('?') > 0) {
+                pathUrl += "&vt=v" + new Date().getTime();
+            } else {
+                pathUrl += "?&vt=v" + new Date().getTime();
+            }
+
 	        var acceptString = "application/json";
 	        var contentTypeString = "application/json";
 	        if (contentType != undefined) {

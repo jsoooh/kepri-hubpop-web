@@ -45,11 +45,16 @@
 			<div class="panelWrap">
 				<div class="panel type5" ng-class="{'new-create' : instance.newCreated}">
 					<div class="panel_head">
-						<div class="logo">
-							<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" class="" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
+						<div class="logo" ng-if="instance.procState != 'end'" >
+							<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" >
+							<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" >
+						</div>
+						<div class="logo" ng-if="instance.procState == 'end'" >
+							<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
 							<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
 						</div>
-						<p class="tit" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.name}}</p>
+						<p class="tit" ng-if="instance.procState != 'end'" >{{instance.name}}</p>
+						<p class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.name}}</p>
 						<!-- <p class="txt" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.image.serviceName}}</p> -->
 						<!-- 접속정보 -->
 						<div ng-if="instance.procState == 'end'" class="tg_box_area btn-option type2">
@@ -111,8 +116,8 @@
 							</ul>
 						</div>
 					</div>
-					<div class="panel_body" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >
-						<div ng-if="instance.procState == 'end'" class="ul-in">
+					<div class="panel_body">
+						<div ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id);" class="ul-in">
 							<div class="up">
 								<ul class="ul-prog">
 									<li>
@@ -227,7 +232,7 @@
 							</div>
 							<div class="info-txt">
 								<!--<div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>-->
-								<p class="txt"><span class="ico ico-timer"></span>{{instance.vmState | iaasVmState}}입니다.</p>
+								<p class="txt"><span class="ico ico-timer"></span>{{'iaas.label.instance_' + instance.vmState | translate}} 입니다.</p>
 							</div>
 						</div>
 					</div>

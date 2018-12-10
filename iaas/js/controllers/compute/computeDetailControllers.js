@@ -2282,9 +2282,8 @@ angular.module('iaas.controllers')
     //////////////////////////////////////////////////////////////
     /////////20181120 sg0730 서버유형 변경 Pop 추가   ////////////////////
     //////////////////////////////////////////////////////////////
-     .controller('iaasComputePopEditServerCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
+    .controller('iaasComputePopEditServerCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("computePopEditServerCtrl.js : iaasComputePopEditServerCtrl", 1);
-        
         
         var pop = this;
 
@@ -2292,17 +2291,18 @@ angular.module('iaas.controllers')
         pop.formName 					= $scope.dialogOptions.formName;
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         pop.instance 					= $scope.dialogOptions.instance;
+        if (pop.instance.spec && pop.instance.spec.uuid) {
+
+        }
         pop.instanceNm                  = pop.instance.name;
         pop.uuid                		= pop.instance.spec.uuid;
-        
+
         pop.tenantId 					= pop.instance.tenantId;
-        
-        if (!pop.tenantId) 
-        {
-        	pop.tenantId = common.getMainCtrlScope().main.userTenant.id;
-		}
-        
-        
+
+        if (!pop.tenantId) {
+            pop.tenantId = $scope.main.userTenantId;
+        }
+
         $scope.dialogOptions.title 		= "서버사양 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
@@ -2312,37 +2312,124 @@ angular.module('iaas.controllers')
         pop.btnClickCheck 				= false;
         pop.specList 					= [];
         pop.spec 						= {};
-        
-        
+
+
         //스펙그룹의 스펙 리스트 조회
-        /*pop.fn.getSpecList = function() {*/
-        pop.getSpecList = function(specGroup) {
-        	
-            var param 		  = {specGroupName:specGroup};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param,  'application/x-www-form-urlencoded');
-            
-            returnPromise.success(function (data, status, headers) 
-            {
-            	pop.specList = data.content.specs;
-            	pop.initCheck = false;            	
+        pop.isSpecLoad = false;
+        //스펙그룹의 스펙 리스트 조회
+        pop.getSpecList = function() {
+            pop.specList = [];
+            pop.sltSpec = {};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET');
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.specs && data.content.specs.length > 0) {
+                    pop.specList = data.content.specs;
+                }
+                pop.isSpecLoad = true;
+                pop.setSpecMinDisabled();
+                pop.setSpecMaxDisabled();
             });
-            returnPromise.error(function (data, status, headers) 
-            {
-            	$scope.main.loadingMainBody = false;
+            returnPromise.error(function (data, status, headers) {
+                pop.isSpecLoad = true;
+                pop.setSpecMinDisabled();
+                pop.setSpecMaxDisabled();
                 common.showAlertError(data.message);
             });
         };
-        
-        pop.selectSpec = function() {
-        	if(pop.specValue){
-        		pop.spec = angular.fromJson(pop.specValue);
+
+        pop.setInstanceSpec = function(spec) {
+            if (!pop.specDisabledAllSetting || sltSpec.disabled) return;
+        	if(pop.spec && spec.uuid){
+        		pop.sltSpec = angular.copy(spec);
+                pop.sltSpecUuid = spec.uuid;
         	}else{
-        		pop.spec.vcpus = 0;
-        		pop.spec.ram   = 0;
-        		pop.spec.disk  = 0;
-        	}
+        		pop.sltSpec = {};
+                pop.sltSpecUuid = "";
+            }
         };
-        
+
+        // 디스크 생성 부분 추가 2018.11.13 sg0730
+        pop.getTenantResource = function()  {
+            var params = {
+                tenantId : pop.tenantId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
+
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.length > 0) {
+                    pop.tenantResource = data.content[0];
+                    pop.tenantResource.available = {};
+                    pop.tenantResource.available.instances = pop.tenantResource.maxResource.instances - pop.tenantResource.usedResource.instances;
+                    pop.tenantResource.available.floatingIps = pop.tenantResource.maxResource.floatingIps - pop.tenantResource.usedResource.floatingIps;
+                    pop.tenantResource.available.cores = pop.tenantResource.maxResource.cores - pop.tenantResource.usedResource.cores;
+                    pop.tenantResource.available.ramSize = pop.tenantResource.maxResource.ramSize - pop.tenantResource.usedResource.ramSize;
+                    pop.tenantResource.available.instanceDiskGigabytes = pop.tenantResource.maxResource.instanceDiskGigabytes - pop.tenantResource.usedResource.instanceDiskGigabytes;
+                    pop.tenantResource.available.volumeGigabytes = pop.tenantResource.maxResource.volumeGigabytes - pop.tenantResource.usedResource.volumeGigabytes;
+                    pop.tenantResource.available.objectStorageGigaByte = pop.tenantResource.maxResource.objectStorageGigaByte - pop.tenantResource.usedResource.objectStorageGigaByte;
+                    pop.volumeSliderOptions.ceil = pop.tenantResource.available.volumeGigabytes;
+                    pop.setSpecMaxDisabled();
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+        pop.isMinSpecDisabled = false;
+        // spec loading 체크
+        pop.specMinDisabledSetting = false;
+        pop.setSpecMinDisabled = function () {
+            if (pop.isSpecLoad && pop.instance.spec && pop.instance.spec.uuid) {
+                angular.forEach(pop.specList, function (spec) {
+                    if (spec.disk <= pop.instance.spec.disk || spec.ram <= pop.instance.spec.ram) {
+                        spec.disabled = true;
+                    }
+                });
+                pop.specMinDisabledSetting = true;
+                if(pop.sltSpec && pop.sltSpec.uuid) {
+                    if (pop.sltSpec.disk <= pop.instance.spec.disk || pop.sltSpec.ram <= pop.instance.spec.ram) {
+                        pop.defaultSelectSpec();
+                    }
+                } else {
+                    pop.defaultSelectSpec();
+                }
+            }
+        };
+
+        // spec loading 체크
+        pop.specMaxDisabledSetting = false;
+        pop.setSpecMaxDisabled = function () {
+            if (pop.isSpecLoad && pop.tenantResource && pop.tenantResource.maxResource &&  pop.tenantResource.usedResource) {
+                angular.forEach(pop.specList, function (spec) {
+                    if (spec.vcpus > pop.tenantResource.available.cores || spec.ram > pop.tenantResource.available.ramSize || spec.disk > pop.tenantResource.available.instanceDiskGigabytes) {
+                        spec.disabled = true;
+                    }
+                });
+                pop.specMaxDisabledSetting = true;
+                pop.defaultSelectSpec();
+            }
+        };
+
+        pop.setSpecAllEnabled = function () {
+            if (pop.specList && pop.specList.length && pop.specList.length > 0) {
+                angular.forEach(pop.specList, function (spec) {
+                    spec.disabled = false;
+                });
+            }
+        };
+
+        // spec loading 체크
+        pop.specDisabledAllSetting = false;
+        pop.defaultSelectSpec = function() {
+            if(pop.specMinDisabledSetting && pop.specMaxDisabledSetting){
+                pop.specDisabledAllSetting = true;
+            }
+        };
 
         $scope.popDialogOk = function () {
             pop.updateServerFormAction();
@@ -2353,9 +2440,8 @@ angular.module('iaas.controllers')
             common.mdDialogCancel();
         };
         
-        // 서버사양 변경 
+        // 서버사양 변경
         pop.updateServerFormAction = function () {
-        	
         	if (pop.btnClickCheck) return;
             pop.btnClickCheck = true;
 
@@ -2366,41 +2452,34 @@ angular.module('iaas.controllers')
             
             $scope.main.loadingMain = true;
             common.mdDialogHide();
-            
             var param = {
             		urlParams : {
             			instanceId : pop.instance.id,
             			tenantId   : pop.tenantId,
-            			specId     : pop.spec.uuid
+            			specId     : pop.sltSpec.uuid
             		}
             };
-           
-            
-            // 변경 API정의되면 다시 수정 처리 해야함. 20181120 sg0730
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/resize', 'POST', param );
             
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("변경 되었습니다.");
-                
-             // 변경 API정의되면 다시 수정 처리 해야함. 20181120 sg0730
-                if ( angular.isFunction(pop.callBackFunction) ) {
+                pop.btnClickCheck = false;
+                if (angular.isFunction(pop.callBackFunction) ) {
                     pop.callBackFunction();
                 }
-                
             });
             returnPromise.error(function (data, status, headers) {
+                pop.btnClickCheck = false;
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function() {
-                pop.btnClickCheck = false;
             });
             
         };
-        
+
         pop.getSpecList();
-      
 
     })
     //////////////////////////////////////////////////////////////
@@ -2600,8 +2679,13 @@ angular.module('iaas.controllers')
 
         //인스턴스 디스크 셋팅
         pop.fn.setInstanceVolume = function(volume) {
-            pop.sltVolume = angular.copy(volume);
-            pop.sltVolumeId = volume.volumeId;
+            if (volume && volume.volumeId) {
+                pop.sltVolume = angular.copy(volume);
+                pop.sltVolumeId = volume.volumeId;
+            } else {
+                pop.sltVolume = {};
+                pop.sltVolumeId = "";
+            }
         };
         
         $scope.popDialogOk = function () {

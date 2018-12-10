@@ -792,11 +792,7 @@ angular.module('iaas.controllers')
         //사양선택 이벤트 2018.11.13 sg0730 add
         ct.fn.selectSpec = function(sltSpec) {
             if (!ct.specDisabledAllSetting || sltSpec.disabled) return;
-            angular.forEach(ct.specList, function (spec) {
-                spec.selected = false;
-            });
             if(sltSpec && sltSpec.uuid) {
-                sltSpec.selected = true;
                 ct.data.spec = angular.copy(sltSpec);
                 ct.specUuid = ct.data.spec.uuid;
             } else {

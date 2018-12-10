@@ -1,5 +1,40 @@
+<!-- table -->
+<scrollable-table watch="pop.volumeList" class="tableHeight350"><!-- resizable 는 싸이즈 조절이 필요한 곳 만 적용 -->
+	<table class="table">
+		<thead>
+		<tr>
+			<th style="width:15%;">선택</th>
+			<th style="width:auto;">디스크명</th>
+			<th style="width:20%;">vCPU</th>
+			<th style="width:20%;">MEM</th>
+			<th style="width:20%;">DISK</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="spec in pop.specList" row-id="{{ item.uuid }}" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': spec.uuid == pop.sltSpecUuid}" ng-click="pop.setInstanceSpec(spec)">
+			<td>
+				<div class="radio radio-only">
+					<input type="radio" name="volumeRadio" ng-model="pop.sltSpecUuid" value="{{spec.uuid}}" id="spec-{{spec.uuid}}" ng-click="pop.setInstanceSpec(spec)">
+					<label for="spec-{{spec.uuid}}"></label>
+				</div>
+			</td>
+			<td>{{spec.name}}</td>
+			<td>{{spec.vcpus}} 개</td>
+			<td>{{spec.ram | displayVolume:'MB'}}</td>
+			<td>{{spec.disk | displayVolume:'GB'}}</td>
+		</tr>
+		<tr ng-if="!pop.isSpecLoad">
+			<td colspan="5"><p class="txt"><span class="ico ico-timer"></span> 데이터 로딩 중 입니다.</p></td>
+		</tr>
+		<tr ng-if="pop.isSpecLoad && pop.specList == 0">
+			<td colspan="5">{{ 'message.mi_dont_exist_list' | translate }}</td>
+		</tr>
+		</tbody>
+	</table>
+</scrollable-table>
 
 <!-- table -->
+<!--
 <div class="tbw type1">
 	<table class="table">
 		<colgroup>
@@ -23,4 +58,5 @@
 		</tbody>
 	</table>
 </div>
+-->
 <!-- //table -->
