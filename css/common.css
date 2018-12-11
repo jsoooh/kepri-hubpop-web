@@ -145,6 +145,7 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .inputbox {width:100%; margin: 0;}
 .input-inline {position: relative; display: inline-block; margin-bottom: 0; font-weight: normal; vertical-align: middle; cursor: pointer;}
 .inputbox.input-inline input[type="text"] {display:inline-block;}
+.inputbox.input-inline input[type="number"] {display:inline-block;}
 
 /* button */
 .btn {display:inline-block; font-weight: 400; padding:0; text-align:center; vertical-align: middle; border-radius: 2px;}
