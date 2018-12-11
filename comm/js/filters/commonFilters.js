@@ -140,4 +140,13 @@ angular.module('app')
             return value.charAt(0).toUpperCase() + value.slice(1);
         };
     })
+    .filter('enterByNbr', function() {
+        return function(value) {
+            if (angular.isString(value)) {
+                return value.replace(/\n/g, '<br />');
+            } else {
+                return value;
+            }
+        };
+    })
 ;

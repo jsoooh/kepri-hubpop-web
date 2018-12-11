@@ -29,7 +29,7 @@
             "instance_error" : "오류",
             "instance_paused" : "일시정지",
             "instance_resized" : "사양 변경 중",
-            "instance_starting" : "재시작 중",
+            "instance_starting" : "시작 중",
             "instance_stopping" : "정지 중",
             "instance_pausing" : "일시정지 중",
             "instance_unpausing" : "정지해제 중",

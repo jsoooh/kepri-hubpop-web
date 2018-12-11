@@ -63,7 +63,7 @@
 													<dt>OS 이미지</dt>
 													<dd>{{ instanceSnapshot.imageName }}</dd>
 												</dl>
-												<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip="{{instanceSnapshot.description}}">설명<span class="ico_tip"></span></button>
+												<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'">설명<span class="ico_tip"></span></button>
 											</div>
 										</div>
 										<div class="down">
@@ -118,7 +118,7 @@
 													<dt>디스크 유형</dt>
 													<dd>디스크스토리지</dd>
 												</dl>
-												<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip="{{storageSnapshot.description}}">설명<span class="ico_tip"></span></button>
+												<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'">설명<span class="ico_tip"></span></button>
 											</div>
 										</div>
 										<div class="down">

@@ -45,7 +45,7 @@ angular.module('iaas.controllers')
             $timeout(function () {
                 //ct.fn.checkServerState(instance.id);
                 ct.fn.checkServerState();
-            }, 1000);
+            }, 10000);
         };
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
@@ -327,7 +327,7 @@ angular.module('iaas.controllers')
                         var isServerStatusCheck = false;
                         var isReplaceServerInfo = false;
                         if (ct.serverMainList.length > serverStates.length) {
-                            ct.deployServerList.splice(serverStates.length, ct.serverMainList.length - serverStates.length);
+                            ct.serverMainList.splice(serverStates.length, ct.serverMainList.length - serverStates.length);
                         }
                         var serverMainList = angular.copy(ct.serverMainList);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
@@ -423,23 +423,23 @@ angular.module('iaas.controllers')
         ct.selectedValues = {};
         ct.fnServerConfirm = function(action,instance,index,$event) {
             if(action == "START") {
-                common.showConfirm('메세지',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('메세지',instance.name +' 서버를 종료하시겠습니까?').then(function(){
+                common.showConfirm('종료',instance.name +' 서버를 종료하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if(action == "PAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if(action == "UNPAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if(action == "REBOOT") {
-                common.showConfirm('메세지',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if(action == "DELETE") {
@@ -487,7 +487,7 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 $scope.main.reloadTimmer['instanceServerState_' + sltInstance.id] = $timeout(function () {
                     ct.fn.checkServerState(sltInstance.id);
-                }, 1000);
+                }, 5000);
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

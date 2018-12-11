@@ -998,29 +998,29 @@ angular.module('iaas.controllers')
 
         ct.fn.serverActionConfirm = function(action,instance) {
             if(action == "START") {
-                common.showConfirm('메세지',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('메세지',instance.name +' 서버를 종료하시겠습니까?').then(function(){
+                common.showConfirm('종료',instance.name +' 서버를 종료하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "PAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "UNPAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "REBOOT") {
-                common.showConfirm('메세지',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "IPCONNECT"){
                 ct.fn.IpConnectPop();
             } else if(action == "IPDISCONNECT"){
-            	common.showConfirm('메세지',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
+            	common.showConfirm('접속 IP를 해제',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
             		ct.fn.ipConnectionSet("detach");
             	});
             }
@@ -2456,6 +2456,8 @@ angular.module('iaas.controllers')
                 common.showAlertSuccess("변경 되었습니다.");
                 pop.btnClickCheck = false;
                 if (angular.isFunction(pop.callBackFunction) ) {
+                    pop.instance.uiTask = "resized";
+                    pop.instance.vmState = "resized";
                     pop.callBackFunction(pop.instance);
                 }
             });
