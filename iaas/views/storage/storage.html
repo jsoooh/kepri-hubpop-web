@@ -45,7 +45,7 @@
 							<li ng-click="contents.fn.formOpen($event, 'rename', volume);"><a href="javascript:void(0);" title="디스크 이름 변경">디스크 이름 변경</a></li>
 							<li ng-click="contents.fn.formOpen($event, 'resize', volume);"><a href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
 							<li ng-click="contents.fn.dettachVolume()" ng-show="contents.volume.status == 'in-use'" ><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>
-							<li ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
+							<li ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
 						</ul>
 					</div>
 				</div>
