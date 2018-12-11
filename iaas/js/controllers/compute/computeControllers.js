@@ -203,9 +203,9 @@ angular.module('iaas.controllers')
                     if (instance.instanceDomainLinkInfos[i].domainInfo && instance.instanceDomainLinkInfos[i].domainInfo.domain
                         && instance.instanceDomainLinkInfos[i].domainInfo.domain.substring(instance.instanceDomainLinkInfos[i].domainInfo.domain.length - ct.rdpBaseDomain.length) == ct.rdpBaseDomain) {
                         rdpDomain = instance.instanceDomainLinkInfos[i].domainInfo.domain;
-                        instance.instanceDomainLinkInfos[i].domainInfo.isRdpDomain = true;
+                        instance.instanceDomainLinkInfos[i].isRdpDomain = true;
                     } else {
-                        instance.instanceDomainLinkInfos[i].domainInfo.isRdpDomain = false;
+                        instance.instanceDomainLinkInfos[i].isRdpDomain = false;
                     }
                 }
                 instance.rdpConnectDomain = rdpDomain;
