@@ -235,7 +235,8 @@
 								<dt>종류 :</dt>
 								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
 								<dt>버전 :</dt>
-								<dd>{{contents.sltBuildpackVersion.versionName}}</dd>
+								<!-- <dd>{{contents.sltBuildpackVersion.versionName}}</dd> -->
+								<dd> v4.12 release</dd>
 								<dt>주요구성 SW</dt>
 							</dl>
 							<dd class="dd_row">OpenJDK JRE v1.8.0</dd>
@@ -250,6 +251,70 @@
 							<!-- <pre>
 								{{contents.sltBuildpackVersion.description}}
 							</pre> -->
+						</div>
+						
+						
+						<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'staticfile'">
+							<dl>
+							<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
+								<dt>종류 :</dt>
+								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
+								<dt>버전 :</dt>
+								<!-- <dd>{{contents.sltBuildpackVersion.versionName}}</dd> -->
+								<dd>v1.4.28 release</dd>
+								<dt>주요구성 SW</dt>
+							</dl>
+							<dd class="dd_row">nginx v1.15.0</dd>
+							
+							</br>
+							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/staticfile-buildpack/releases</dd>
+						</div>
+						
+						<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'ruby'">
+							<dl>
+							<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
+								<dt>종류 :</dt>
+								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
+								<dt>버전 :</dt>								
+								<dd>v1.6.17 release</dd>
+								<dt>주요구성 SW</dt>
+							</dl>
+							<dd class="dd_row">python v3.6.5</dd>
+							
+							</br>
+							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/python-buildpack/releases</dd>
+						</div>
+						
+						<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'nodejs'">
+							<dl>
+							<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
+								<dt>종류 :</dt>
+								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
+								<dt>버전 :</dt>								
+								<dd>v1.6.25 release</dd>
+								<dt>주요구성 SW</dt>
+							</dl>
+							<dd class="dd_row">node v10.3.0</dd>
+							<dd class="dd_row">yarn v1.7.0</dd>
+							
+							</br>
+							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/nodejs-buildpack/releases</dd>
+						</div>
+						
+						
+						<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'go'">
+							<dl>
+							<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
+								<dt>종류 :</dt>
+								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
+								<dt>버전 :</dt>								
+								<dd>v1.8.23 release</dd>
+								<dt>주요구성 SW</dt>
+							</dl>
+							<dd class="dd_row">go v1.10.2</dd>
+							
+							</br>
+							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/go-buildpack/releases</dd>
 						</div>
 						
 					</li>
