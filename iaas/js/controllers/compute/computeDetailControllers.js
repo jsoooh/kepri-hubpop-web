@@ -2299,7 +2299,7 @@ angular.module('iaas.controllers')
             pop.tenantId = $scope.main.userTenantId;
         }
 
-        $scope.dialogOptions.title 		= "서버사양 변경";
+        $scope.dialogOptions.title 		= "서버 사양 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computePopEditServerForm.html" + _VersionTail();
