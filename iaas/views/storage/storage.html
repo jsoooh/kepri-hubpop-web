@@ -69,8 +69,8 @@
 									<dd ng-if="volume.status == 'in-use'">{{volume.volumeAttachment.device}}</dd>
 									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
 								</dl>
-								<!-- <button uib-tooltip="{{volume.description}}"> <span class="cnt_tooltip type01">설명<span class="ico_tip"></span></span> </button> -->
-								<button uib-tooltip="{{volume.description}}"> <span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
+								<!-- <button tooltip-placement="bottom" uib-tooltip="{{volume.description}}"> <span class="cnt_tooltip type01">설명<span class="ico_tip"></span></span> </button> -->
+								<button tooltip-placement="bottom" uib-tooltip="{{volume.description}}"> <span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
 							</div>
 						</div>
 						<div class="down">

@@ -405,10 +405,11 @@ angular.module('iaas.controllers')
             var params = {};
 
             params.volume = {};
-            params.volume.type = ct.volume.name;
+            params.volume.tenantId = ct.data.tenantId;
+            params.volume.name = ct.volume.name;
             params.volume.type = 'HDD';
             params.volume.size = ct.volumeSize;
-            params.volume.tenantId = ct.data.tenantId;
+            params.volume.description = ct.volume.description;
 
             if (ct.sltInstance && ct.sltInstance.id) {
                 params.volumeAttachment = {};
