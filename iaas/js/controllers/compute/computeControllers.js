@@ -314,10 +314,10 @@ angular.module('iaas.controllers')
                             }, 1000);
                             var serverItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
                             if (serverItem && serverItem.id) {
-                                ct.fn.setProcState(serverItem);
                                 angular.forEach(instanceStateInfo, function(value, key) {
                                     serverItem[key] = value;
                                 });
+                                ct.fn.setProcState(serverItem);
                             }
                         } else {
                             ct.fn.replaceServerInfo(instanceStateInfo.id);
@@ -466,7 +466,6 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-
                 var vmStateChange = "";
                 if(action == "START"){
                     vmStateChange = "starting";

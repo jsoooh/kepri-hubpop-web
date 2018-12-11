@@ -24,7 +24,7 @@
 			<td>{{spec.disk | displayVolume:'GB'}}</td>
 		</tr>
 		<tr ng-if="!pop.isSpecLoad || !pop.specDisabledAllSetting">
-			<td colspan="5"><p class="txt"><span class="ico ico-timer"></span> 데이터 로딩 중 입니다.</p></td>
+			<td colspan="5"><p class="txt"><img src="images/loading_sm.gif"> 데이터 로딩 중 입니다.</p></td>
 		</tr>
 		<tr ng-if="pop.isSpecLoad && pop.specDisabledAllSetting && pop.specList == 0">
 			<td colspan="5">{{ 'message.mi_dont_exist_list' | translate }}</td>

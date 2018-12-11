@@ -34,6 +34,9 @@ angular.module('iaas.controllers')
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
 
+        ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'error_ip', 'error_volume'];
+        ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
+
         ct.computeEditFormOpen = function (){
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
             $(".aside").stop().animate({"right":"-360px"}, 400);
@@ -53,24 +56,111 @@ angular.module('iaas.controllers')
                  common.showDialog($scope, $event, dialogOptions);
                  $scope.actionLoading = true; // action loading
         };
-        
-      //sg0730 차후 서버 이미지 생성 후 페이지 이동.
-        ct.reflashCallBackFunction = function () 
-        {
-        	 $scope.main.goToPage('/iaas/compute');
-        	
-        	/*if(ct.data.tenantId) {
-                ct.fn.getInstanceInfo();
-                ct.fn.changeSltInfoTab();
-            }*/
+
+        ct.fn.setProcState = function (instance) {
+            if (ct.noIngStates.indexOf(instance.uiTask) >= 0) {
+                instance.procState = "end";
+            } else if (ct.creatingStates.indexOf(instance.uiTask) >= 0) {
+                instance.procState = "creating";
+            } else {
+                instance.procState = "ing";
+            }
         };
-        
+
+        // 서버 상태
+        ct.fn.checkServerState = function(instanceId) {
+            var param = {
+                tenantId : ct.data.tenantId,
+            };
+            param.instanceId = instanceId;
+            if ($scope.main.reloadTimmer['instanceServerState_' + instanceId]) {
+                $timeout.cancel($scope.main.reloadTimmer['instanceServerState_' + instanceId]);
+                $scope.main.reloadTimmer['instanceServerState_' + instanceId] = null;
+            }
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/states', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
+                    var instanceStateInfo = data.content.instances[0];
+                    if (ct.noIngStates.indexOf(instanceStateInfo.uiTask) == -1) {
+                        $scope.main.reloadTimmer['instanceServerState_' + instanceStateInfo.id] = $timeout(function () {
+                            ct.fn.checkServerState(instanceStateInfo.id);
+                        }, 1000);
+                        angular.forEach(instanceStateInfo, function (value, key) {
+                            ct.instance[key] = value;
+                        });
+                        ct.fn.setProcState(ct.instance);
+                    } else {
+                        ct.fn.replaceServerInfo(instanceStateInfo.id);
+                    }
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };
+
+        ct.fn.mergeServerInfo = function (serverItem, instance) {
+/*
+            angular.forEach(serverItem, function(value, key) {
+                if (angular.isUndefined(instance[key])) {
+                    delete serverItem[key];
+                }
+            });
+*/
+            angular.forEach(instance, function(value, key) {
+                if (angular.isArray(value)) {
+                    if (!angular.isArray(serverItem[key])) serverItem[key] = [];
+                    angular.forEach(value, function(val, k) {
+                        serverItem[key][k] = val;
+                    });
+                } else if (angular.isObject(value)) {
+                    if (!angular.isObject(serverItem[key])) serverItem[key] = {};
+                    angular.forEach(value, function(val, k) {
+                        serverItem[key][k] = val;
+                    });
+                } else {
+                    serverItem[key] = value;
+                }
+            });
+        };
+
+        ct.fn.replaceServerInfo = function(instanceId) {
+            var param = {
+                tenantId : ct.data.tenantId,
+            };
+            param.instanceId = instanceId;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
+                    var instance = data.content.instances[0];
+                    ct.fn.mergeServerInfo(ct.instance, instance);
+                    ct.fn.setProcState(ct.instance);
+                    ct.fn.setRdpConnectDomain(ct.instance);
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };
+
+      //sg0730 차후 서버 이미지 생성 후 페이지 이동.
+        ct.reflashCallBackFunction = function (instance) {
+            ct.instance.vmState = instance.vmState;
+            ct.instance.uiTask = instance.uiTask;
+            ct.fn.setProcState(ct.instance);
+            $timeout(function () {
+                //ct.fn.checkServerState(instance.id);
+                ct.fn.checkServerState();
+            }, 10000);
+        };
+
         // SnapShot 생성
         //20181120 sg0730  백업 이미지 생성 PopUp 추가
         ct.fn.createPopSnapshot = function($event,instance) {
-        	
         	var dialogOptions = {};
-        	
         	if(instance.vmState != 'stopped') {
                 common.showAlertWarning('서버를 종료 후 생성가능합니다.');
                 return;
@@ -89,9 +179,8 @@ angular.module('iaas.controllers')
         };
         
         //sg0730 차후 서버 이미지 생성 후 페이지 이동.
-        ct.reflashSnapShotCallBackFunction = function () 
-        {
-        	 $scope.main.goToPage('/iaas/compute');
+        ct.reflashSnapShotCallBackFunction = function () {
+        	 $scope.main.goToPage('/iaas/snapshot');
         };
         
         ct.cpuRoundProgress = {
@@ -216,6 +305,7 @@ angular.module('iaas.controllers')
                     }
 
                     ct.instance = data.content.instances[0];
+                    ct.fn.setProcState(ct.instance);
                     ct.fn.setRdpConnectDomain(ct.instance);
                     ct.instance.tenantId = ct.data.tenantId;
 
@@ -229,21 +319,18 @@ angular.module('iaas.controllers')
                         ct.instance.vmDeployType = angular.copy(ct.deployTypes[0]);
                     }
 
-                    ct.specValue = '';
-                    if(ct.instance.spec !== undefined && ct.instance.spec != null) {
-                        if(ct.instance.spec.name) ct.specValue +='['+ct.instance.spec.name+']';
-                        if(ct.instance.spec.vcpus) ct.specValue += ' cpu'+ct.instance.spec.vcpus+'개';
-                        if(ct.instance.spec.ram) ct.specValue += ', ram'+ct.instance.spec.ram + 'MB';
-                        if(ct.instance.spec.disk) ct.specValue += ', disk'+ct.instance.spec.disk + 'GB';
-                    }
 
                     ct.fn.getUsedResource();
                     ct.fn.searchInstanceVolumeList();
 
-                    if (ct.instance.vmState != 'active' && ct.instance.vmState != 'stopped' && ct.instance.vmState != 'paused' ) {
-                        $scope.main.reloadTimmer['deployServerDetail'] = $timeout(function () {
-                            ct.fn.getInstanceInfo();
-                        }, 10000)
+                    if (ct.noIngStates.indexOf(ct.instance.uiTask) == -1) {
+                        if ($scope.main.reloadTimmer['instanceServerStateList']) {
+                            $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
+                            $scope.main.reloadTimmer['instanceServerStateList'] = null;
+                        }
+                        $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
+                            ct.fn.checkServerState();
+                        }, 1000);
                     }
 
                     if (ct.instance.console) {
@@ -346,11 +433,9 @@ angular.module('iaas.controllers')
         
         // sg0730 차후 callback 처리 고민.
         ct.refalshDomainCallBackFunction = function () {
-        	//ct.fn.changeSltInfoTab('domain');
         	ct.fn.changeSltInfoTab();
+            ct.fn.changeSltInfoTab('domain');
         };
-        
-        
 
         // 도메인 반환 버튼
         ct.fn.publicIpReturn = function(domain) {
@@ -375,29 +460,29 @@ angular.module('iaas.controllers')
 
         ct.fn.serverActionConfirm = function(action,instance) {
             if(action == "START") {
-                common.showConfirm('메세지',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('메세지',instance.name +' 서버를 종료하시겠습니까?').then(function(){
+                common.showConfirm('종료',instance.name +' 서버를 종료하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "PAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "UNPAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "REBOOT") {
-                common.showConfirm('메세지',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "IPCONNECT"){
                 ct.fn.IpConnectPop();
             } else if(action == "IPDISCONNECT"){
-                common.showConfirm('메세지',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
+                common.showConfirm('접속 IP를 해제',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
                     ct.fn.ipConnectionSet("detach");
                 });
             }
@@ -420,9 +505,26 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                $timeout(function () {
-                    ct.fn.getInstanceInfo(action);
-                }, 1500);
+                var vmStateChange = "";
+                if(action == "START"){
+                    vmStateChange = "starting";
+                }else if(action == "STOP"){
+                    vmStateChange = "stopping";
+                }else if(action == "PAUSE"){
+                    vmStateChange = "pausing";
+                }else if(action == "UNPAUSE"){
+                    vmStateChange = "unpausing";
+                }else if(action == "REBOOT"){
+                    vmStateChange = "rebooting";
+                }
+                ct.instance.vmState = vmStateChange;
+                ct.instance.uiTask = vmStateChange;
+                ct.instance.vmStateSec = 0;
+                ct.fn.setProcState(ct.instance);
+                $scope.main.loadingMainBody = false;
+                $scope.main.reloadTimmer['instanceServerState_' + ct.instance.id] = $timeout(function () {
+                    ct.fn.checkServerState(ct.instance.id);
+                }, 5000);
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -501,9 +603,7 @@ angular.module('iaas.controllers')
         
         //인스턴스 디스크 생성 팝업
         ct.fn.createInstanceVolumePop = function($event,instance) {
-        	
         	///iaas/compute/detail/ct.data.instanceId
-        	
         	var dialogOptions =  {
 			            			controller : "iaasComputeVolumeFormCtrl" ,
 			            			formName   : 'iaasComputeVolumeForm',
@@ -520,9 +620,7 @@ angular.module('iaas.controllers')
         
         // sg0730 인스턴스 디스크 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
-        	 //$scope.main.goToPage('/iaas/compute');
-        	ct.fn.getInstanceInfo();
-            ct.fn.changeSltInfoTab();
+            ct.fn.searchInstanceVolumeList();
         };
         
 

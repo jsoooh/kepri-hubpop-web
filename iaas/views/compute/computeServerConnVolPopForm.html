@@ -21,7 +21,7 @@
 			<td>{{volume.size | displayVolume:'GB'}}</td>
 		</tr>
 		<tr ng-if="!pop.isVolumeListLoad">
-			<td colspan="3"><p class="txt"><span class="ico ico-timer"></span> 데이터 로딩 중 입니다.</p></td>
+			<td colspan="3"><p class="txt"><img src="images/loading_sm.gif"> 데이터 로딩 중 입니다.</p></td>
 		</tr>
 		<tr ng-if="pop.isVolumeListLoad && pop.volumeList == 0">
 			<td colspan="3">{{ 'message.mi_dont_exist_list' | translate }}</td>

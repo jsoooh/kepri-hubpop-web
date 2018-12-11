@@ -2,10 +2,13 @@
 <div class="cBox type1 appCnt-info">
 	<div class="cBox-hd">
 		<h4 class="c-tit"><img ng-if="contents.instance.image.icon" ng-src="data:{{ contents.instance.image.contentType }}; base64, {{ contents.instance.image.icon }}" class="logo" alt=""><img ng-if="!contents.instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="">{{contents.instance.name}}</h4>
-		<div class="pull-right">
-			<button type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-if="contents.instance.vmState == 'stopped'" ng-click="contents.fn.serverActionConfirm('START',contents.instance);"><span class="ico">시작</span></button>
-			<button type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="정지" ng-if="contents.instance.vmState == 'active'" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);"><span class="ico">정지</span></button>
-			<button ng-if="main.projectType == 'pjt'" type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+		<div ng-if="contents.instance.procState != 'end'" class="pull-right">
+			<img src="images/loading_sm.gif">
+		</div>
+		<div ng-if="contents.instance.procState == 'end'" class="pull-right">
+			<button ng-if="contents.instance.vmState == 'stopped'" type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-click="contents.fn.serverActionConfirm('START',contents.instance);"><span class="ico">시작</span></button>
+			<button ng-if="contents.instance.vmState == 'active'" type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="정지" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);"><span class="ico">정지</span></button>
+			<!--<button ng-if="main.projectType == 'pjt'" type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>-->
 			<div class="dropdown btn-option">
 				<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 					<span class="ico">실행 설정</span>
@@ -67,7 +70,10 @@
 					</li>
 					<li>
 						<strong class="tit">상태</strong>
-						<div class="txt">
+						<div ng-if="contents.instance.procState != 'end'" class="txt">
+							<p><img src="images/loading_sm.gif"> {{'iaas.label.instance_' + contents.instance.vmState | translate}} 입니다.</p>
+						</div>
+						<div ng-if="contents.instance.procState == 'end'" class="txt">
 								<span class="stateWrap">
 									<span ng-if="contents.instance.vmState == 'active'" class="stateMark type1"></span>
 									<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2"></span>
@@ -337,9 +343,3 @@
 	</div>
 	<!-- //Tab panes -->
 </div>
-
-<!-- tb btm -->
-<div class="btn-btm">
-	<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage(main.moveParentUrl);">목록</button>
-</div>
-<!-- //tb btm -->
