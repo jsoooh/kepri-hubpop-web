@@ -2705,6 +2705,16 @@ angular.module('common.services', ['LocalStorageModule'])
             }, 200);
         };
 
+        common.copyToClipboard = function (clipboard) {
+            if (clipboard) {
+                var $temp_input = $("<input>");
+                $("body").append($temp_input);
+                $temp_input.val(clipboard).select();
+                document.execCommand("copy");
+                $temp_input.remove();
+            }
+        };
+
         return common;
     })
     .factory('cache', function (localStorageService) {

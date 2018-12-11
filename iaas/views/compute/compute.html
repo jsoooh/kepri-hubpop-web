@@ -70,7 +70,7 @@
 										<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
 										<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span></li>
 										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
-										<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw">파일다운로드</span></button></li>
+										<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw">파일다운로드</span></button></li>
 									</ul>
 									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents();">접속방법 가이드</a></div>
 								</div>
@@ -79,7 +79,7 @@
 									<ul>
 										<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">RDP</span></li>
 										<li>
-											<strong><span class="tb_tit">접속 도메인</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'"><span class="ico_sm ico_copy">복사</span></button>
+											<strong><span class="tb_tit">접속 도메인</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyToRdpConnectUrl(instance)"><span class="ico_sm ico_copy">복사</span></button>
 											<a class="domain_txt" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
 										</li>
 										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
