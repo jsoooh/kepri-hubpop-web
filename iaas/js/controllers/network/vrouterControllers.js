@@ -56,7 +56,7 @@ angular.module('iaas.controllers')
                 });
             } else {
                 var path='ActionStop';
-                common.showConfirm('vRouter 서비스','※' + vrouter.name + '을 종료 하시겠습니까?').then(function(){
+                common.showConfirm('vRouter 서비스','※' + vrouter.name + '을 정지 하시겠습니까?').then(function(){
                     ct.fn.routerServiceStatusActionJob(path,vrouter);
                 });
             }

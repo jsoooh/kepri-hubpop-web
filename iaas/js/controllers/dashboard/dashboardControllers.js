@@ -447,7 +447,7 @@ angular.module('iaas.controllers')
         // SnapShot 생성
         ct.fn.createSnapshot = function(instance) {
             if(instance.vmState != 'stopped') {
-                common.showAlertWarning('서버를 종료 후 생성가능합니다.');
+                common.showAlertWarning('서버를 정지 후 생성가능합니다.');
                 return;
             } else {
                 ct.selectInstance = instance;
@@ -628,7 +628,7 @@ angular.module('iaas.controllers')
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     returnPromise.success(function (data, status, headers) {
                         if(data.content.instanceStatus == 'active') {
-                            common.showAlert('메세지',data.content.instanceName + '이 실행 중입니다. 인스턴스를 종료하고 시도해주세요.');
+                            common.showAlert('경고',data.content.instanceName + '이 실행 중입니다. 인스턴스를 정지하고 시도해주세요.');
                         } else {
                             ct.fn.createSnapshotPop($event,volume);
                         }
@@ -1404,23 +1404,23 @@ angular.module('iaas.controllers')
 
         ct.fn.serverActionConfirm = function(action,instance,index) {
             if(action == "START") {
-                common.showConfirm('메세지', instance.name +' 서버를 시작 하시겠습니까?').then(function(){
+                common.showConfirm('시작', instance.name +' 서버를 시작 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('메세지', instance.name +' 서버를 종료 하시겠습니까?').then(function(){
+                common.showConfirm('정지', instance.name +' 서버를 정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "PAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "UNPAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "REBOOT") {
-                common.showConfirm('메세지',instance.name +' 서버를 재시작 하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 서버를 재시작 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "DELETE") {
@@ -1430,7 +1430,7 @@ angular.module('iaas.controllers')
             } else if(action == "IPCONNECT"){
                 ct.fn.IpConnectPop(instance,index);
             } else if(action == "IPDISCONNECT"){
-                common.showConfirm('메세지',instance.name +' 서버의 접속 IP를 해제 하시겠습니까?').then(function(){
+                common.showConfirm('접속 IP를 해제',instance.name +' 서버의 접속 IP를 해제 하시겠습니까?').then(function(){
                     ct.fn.ipConnectionSet(instance, "detach",index);
                 });
             }
@@ -1474,8 +1474,7 @@ angular.module('iaas.controllers')
         // SnapShot 생성
         ct.fn.createSnapshot = function(instance) {
             if(instance.vmState != 'stopped') {
-            	common.showAlertWarning('서버를 종료 후 생성가능합니다.');
-                //common.showAlert('메세지','서버를 종료 후 생성가능합니다.');
+            	common.showAlertWarning('서버를 정지 후 생성가능합니다.');
                 return;
             } else {
             	ct.selectInstance = instance;
@@ -1643,13 +1642,13 @@ angular.module('iaas.controllers')
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     returnPromise.success(function (data, status, headers) {
                         if(data.content.instanceStatus == 'active') {
-                            common.showAlert('메세지',data.content.instanceName + '이 실행 중입니다. 인스턴스를 종료하고 시도해주세요.');
+                            common.showAlert('경고',data.content.instanceName + '이 실행 중입니다. 인스턴스를 정지하고 시도해주세요.');
                         } else {
                             ct.fn.createSnapshotPop($event,volume);
                         }
                     });
                     returnPromise.error(function (data, status, headers) {
-                        common.showAlert('메세지',data.message);
+                        common.showAlert('에러',data.message);
                     });
                     returnPromise.finally(function (data, status, headers) {
                         $scope.main.loadingMainBody = false;

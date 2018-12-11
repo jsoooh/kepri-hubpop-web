@@ -135,9 +135,27 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     var instance = data.content.instances[0];
+                    var beforUiTask = instance.uiTask;
                     ct.fn.mergeServerInfo(ct.instance, instance);
                     ct.fn.setProcState(ct.instance);
                     ct.fn.setRdpConnectDomain(ct.instance);
+                    var massage = '"' + serverItem.name + '" ';
+                    if (beforUiTask == "starting") {
+                        massage += '서버가 시작 되었습니다.'
+                    } else if (beforUiTask == "stopping")  {
+                        massage += '서버가 정지 되었습니다.'
+                    } else if (beforUiTask == "pausing")  {
+                        massage += '서버가 일시정지 되었습니다.'
+                    } else if (beforUiTask == "unpausing")  {
+                        massage += '서버가 정지해제 되었습니다.'
+                    } else if (beforUiTask == "rebooting")  {
+                        massage += '서버가 재시작 되었습니다.'
+                    } else if (beforUiTask == "resized")  {
+                        massage += '서버의 사양이 되었습니다.'
+                    } else {
+                        massage += '서버에 적용 되었습니다.'
+                    }
+                    common.showAlertSuccess(massage);
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -162,7 +180,7 @@ angular.module('iaas.controllers')
         ct.fn.createPopSnapshot = function($event,instance) {
         	var dialogOptions = {};
         	if(instance.vmState != 'stopped') {
-                common.showAlertWarning('서버를 종료 후 생성가능합니다.');
+                common.showAlertWarning('서버를 정지 후 생성가능합니다.');
                 return;
             } else {
             	dialogOptions = {
@@ -319,7 +337,6 @@ angular.module('iaas.controllers')
                         ct.instance.vmDeployType = angular.copy(ct.deployTypes[0]);
                     }
 
-
                     ct.fn.getUsedResource();
                     ct.fn.searchInstanceVolumeList();
 
@@ -464,7 +481,7 @@ angular.module('iaas.controllers')
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('종료',instance.name +' 서버를 종료하시겠습니까?').then(function(){
+                common.showConfirm('정지',instance.name +' 서버를 정지하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "PAUSE") {
@@ -537,8 +554,7 @@ angular.module('iaas.controllers')
         // SnapShot 생성
         ct.fn.createSnapshot = function($event,instance) {
             if(instance.vmState != 'stopped') {
-                common.showAlertWarning('서버를 종료 후 생성가능합니다.');
-                //common.showAlert('메세지','서버를 종료 후 생성가능합니다.');
+                common.showAlertWarning('서버를 정지 후 생성가능합니다.');
                 return;
             } else {
                 ct.selectInstance = instance;
@@ -1100,7 +1116,7 @@ angular.module('iaas.controllers')
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('종료',instance.name +' 서버를 종료하시겠습니까?').then(function(){
+                common.showConfirm('정지',instance.name +' 서버를 정지하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "PAUSE") {
@@ -1152,8 +1168,7 @@ angular.module('iaas.controllers')
         // SnapShot 생성
         ct.fn.createSnapshot = function($event,instance) {
             if(instance.vmState != 'stopped') {
-            	common.showAlertWarning('서버를 종료 후 생성가능합니다.');
-                //common.showAlert('메세지','서버를 종료 후 생성가능합니다.');
+            	common.showAlertWarning('서버를 정지 후 생성가능합니다.');
                 return;
             } else {
             	ct.selectInstance = instance;

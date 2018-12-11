@@ -652,23 +652,23 @@ angular.module('iaas.controllers')
 
         ct.fn.serverActionConfirm = function(action,instance,index) {
             if(action == "START") {
-                common.showConfirm('메세지', instance.name +' 서버를 시작 하시겠습니까?').then(function(){
+                common.showConfirm('시작', instance.name +' 서버를 시작 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('메세지', instance.name +' 서버를 종료 하시겠습니까?').then(function(){
+                common.showConfirm('정지', instance.name +' 서버를 정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "PAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "UNPAUSE") {
-                common.showConfirm('메세지', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "REBOOT") {
-                common.showConfirm('메세지',instance.name +' 서버를 재시작 하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 서버를 재시작 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if(action == "DELETE") {
@@ -678,7 +678,7 @@ angular.module('iaas.controllers')
             } else if(action == "IPCONNECT"){
                 ct.fn.IpConnectPop(instance,index);
             } else if(action == "IPDISCONNECT"){
-                common.showConfirm('메세지',instance.name +' 서버의 접속 IP를 해제 하시겠습니까?').then(function(){
+                common.showConfirm('접속 IP를 해제',instance.name +' 서버의 접속 IP를 해제 하시겠습니까?').then(function(){
                     ct.fn.ipConnectionSet(instance, "detach",index);
                 });
             }
@@ -722,8 +722,7 @@ angular.module('iaas.controllers')
         // SnapShot 생성
         ct.fn.createSnapshot = function(instance) {
             if(instance.vmState != 'stopped') {
-                common.showAlertWarning('서버를 종료 후 생성가능합니다.');
-                //common.showAlert('메세지','서버를 종료 후 생성가능합니다.');
+                common.showAlertWarning('서버를 정지 후 생성가능합니다.');
                 return;
             } else {
                 ct.selectInstance = instance;

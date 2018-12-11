@@ -165,7 +165,7 @@ angular.module('iaas.controllers')
                     ct.fn.lbServiceStatusActionJob(path,lb);
                 });
             } else {
-                common.showConfirm('LB 서비스','※' + lb.name + '을 종료 하시겠습니까?').then(function(){
+                common.showConfirm('LB 서비스','※' + lb.name + '을 정지 하시겠습니까?').then(function(){
                     path = "lbServiceStop";
                     ct.fn.lbServiceStatusActionJob(path,lb);
                 });

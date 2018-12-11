@@ -101,7 +101,7 @@ angular.module('iaas.controllers')
         ct.fn.vpnStartStopAction = function(type) {
             var action = "시작";
             if(type == 'vpnServiceStop') {
-                action = "종료";
+                action = "정지";
             }
             common.showConfirm('VPN 서비스','서비스를 '+action+' 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;

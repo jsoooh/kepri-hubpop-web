@@ -193,13 +193,13 @@ angular.module('iaas.controllers')
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     returnPromise.success(function (data, status, headers) {
                     	if(data.content.instanceStatus == 'active') {
-                        	common.showAlert('메세지',data.content.instanceName + '이 실행 중입니다. 인스턴스를 종료하고 시도해주세요.');
+                        	common.showAlert('경고',data.content.instanceName + '이 실행 중입니다. 인스턴스를 정지하고 시도해주세요.');
                         } else {
                         	ct.fn.createPopSnapshot($event,volume);
                         }
                     });
                     returnPromise.error(function (data, status, headers) {
-                        common.showAlert('메세지',data.message);
+                        common.showAlert('오류',data.message);
                     });
                     returnPromise.finally(function (data, status, headers) {
                         $scope.main.loadingMainBody = false;
@@ -643,13 +643,13 @@ angular.module('iaas.controllers')
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     returnPromise.success(function (data, status, headers) {
                     	if(data.content.instanceStatus == 'active') {
-                        	common.showAlert('메세지',data.content.instanceName + '이 실행 중입니다. 인스턴스를 종료하고 시도해주세요.');
+                        	common.showAlert('경고',data.content.instanceName + '이 실행 중입니다. 인스턴스를 정지하고 시도해주세요.');
                         } else {
                             ct.fn.createSnapshotPop($event,volume);
                         }
                     });
                     returnPromise.error(function (data, status, headers) {
-                        common.showAlert('메세지',data.message);
+                        common.showAlert('에러',data.message);
                     });
                     returnPromise.finally(function (data, status, headers) {
                         $scope.main.loadingMainBody = false;
