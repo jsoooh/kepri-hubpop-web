@@ -21,7 +21,7 @@
 .cBox + .cont-titWrap{margin-top: 50px;}
 
 /* ico */
-.ico{display:inline-block; position: relative; font-size: 0; vertical-align:middle; background:url("../images/ico_com.png") no-repeat; }
+.ico{display:inline-block; position: relative; font-size: 0; vertical-align:middle; background:url("../images/ico_com.png?v=1") no-repeat; }
 .ico-info1{width:17px; height:17px; background-position: -110px -304px;}
 .ico-info2{width:17px; height:17px; vertical-align: middle; margin-left: 5px; background-position: -137px -304px;}
 .ico-info3{position:absolute; z-index:999; top:14px; right:18px; width:17px; height:17px; vertical-align: middle; margin-left: 5px; background-position: -109px -304px;}
@@ -188,7 +188,8 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .btn-only-more:hover, .btn-only-more:active, .btn-only-more:focus{color:#fff;}
 
 .btn-list{font-size: 12px; color:#888; font-weight: 400; padding:0; box-shadow: none !important;}
-.btn-list + .btn-list{margin-left:40px;}
+.btn-list + .btn-list{margin-left:20px;}
+.btn-list + div + .btn-list{margin-left:20px;}
 .btn-list:hover, .btn-list.on {color:#333;}
 .btn-list .ico{width:18px; height: 18px; margin-right: 10px; vertical-align: text-bottom;}
 .btn-list.type1 .ico{background-position: -498px -0px;}
@@ -198,6 +199,7 @@ select.has-error, input.has-error{border-color:#ff0740;}
 
 .only-ico{line-height: 0; padding:0; border:0;}
 .ico-refresh .ico{width:34px; height:27px; background-position: -430px -139px;}
+.ico-back .ico{width:26px; height:25px; background-position: -567px -410px;}
 .ico-start .ico{width:30px;height:30px;background-position:-566px -331px;}
 .ico-pause .ico{width:30px;height:30px;background-position:-566px -365px;}
 .btn-ico-refresh .ico{width:25px; height:25px; background-position:-363px -248px;}
