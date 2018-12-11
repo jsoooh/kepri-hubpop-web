@@ -41,13 +41,16 @@
 
 
 /* scrollable table */
-.scrollableContainer { padding-top: 48px; }
-.tableHeight350 .scrollableContainer{height: 332px}
-.tableHeight420 .scrollableContainer{height: 426px}
-.tableHeight600 .scrollableContainer{height: 567px}
-.tableHeight650 .scrollableContainer{height: 614px}
+.scrollableContainer { padding-top: 47px; }
+.tableHeight280 .scrollableContainer{height: 286px;}
+.tableHeight350 .scrollableContainer{height: 332px;}
+.tableHeight420 .scrollableContainer{height: 426px;}
+.tableHeight600 .scrollableContainer{height: 567px;}
+.tableHeight650 .scrollableContainer{height: 614px;}
 .scrollableContainer .scrollArea .table{table-layout: fixed; border-bottom:1px solid #d6d6d6;}
 .scrollableContainer .headerSpacer {border: 0; position: absolute; height: 47px; top: 0; right: 0; left: 0; background: #3e424d;}
+.scrollArea {border:0;}
+.scrollArea table th .box {border-left:0;}
 .scrollableContainer .scrollArea .table th .th-inner { height:47px; background: #3e424d;}
 .scrollableContainer .scrollArea .table th .th-inner .box {padding:16px 5px 11px 5px; height:47px; border-bottom:0;  font-size:15px; font-weight: 500; color:#fff; line-height: 1; vertical-align: middle; text-align: center;}/** border-color: #3e424d; **/
 .scrollableContainer .scrollArea .table th .th-inner .box > div{ padding-right: 20px; height:47px; }
@@ -66,6 +69,7 @@
 .scrollableContainer .scrollArea .table td .noti td{font-weight: 700;font-size:16px; color:#2957cc;}/*180409 ?��???갱신 font-size:16px; color:#2957cc;*/
 .scrollableContainer .scrollArea .table td .no-data{font-size:18px; line-height: 30px !important; height:200px !important; }
 .scrollableContainer .scrollArea .table td a:hover{color:#2f3b48;}
+
 
 /* paging */
 paging > ul{margin:0; vertical-align: middle;}
