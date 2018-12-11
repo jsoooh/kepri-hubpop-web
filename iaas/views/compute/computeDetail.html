@@ -53,7 +53,7 @@
 					</li>
 					<li ng-if="contents.instance.image.osType != 'windows'">
 						<strong class="tit">키페어</strong>
-						<div class="txt"><span class="txt_s_wrap">{{contents.instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" tooltip-trigger="'click'" ng-dddclick="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw">파일다운로드</span></button></div>
+						<div class="txt"><span class="txt_s_wrap">{{contents.instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw">파일다운로드</span></button></div>
 					</li>
 <!--
 					<li>

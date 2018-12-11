@@ -70,7 +70,7 @@
 										<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
 										<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span></li>
 										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
-										<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'"><span class="ico_sm ico_file_dw">파일다운로드</span></button></li>
+										<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw">파일다운로드</span></button></li>
 									</ul>
 									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents();">접속방법 가이드</a></div>
 								</div>
@@ -285,7 +285,7 @@
 		</li> -->
 	</ul>
 	<!-- //panel area-->
-	<div ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length == 0" class="welcome_layer">
+	<div ng-if="contents.pageFirstLoad && (contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length == 0" class="welcome_layer">
 		<div class="guide_fnt arrw_btm">신규 가상서버를 만듭니다.</div>
 		<div class="guide_fnt arrw_top">다른 프로젝트의 백업 이미지로부터 신규 가상서버를 만듭니다.</div>
 		<div class="guide_cnt">
