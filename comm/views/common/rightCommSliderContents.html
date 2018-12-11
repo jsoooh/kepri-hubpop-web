@@ -1,16 +1,22 @@
-<div class="sideTitWrap asideCnt">
-    <h2 class="c_tit">{{ dialogOptions.title | translate }}</h2>
+<div class="acss_info sideTitWrap asideCnt">
+    <!-- <h2 class="c_tit">{{ dialogOptions.title | translate }}</h2> -->
+    <h2 class="c_tit">접속방법 가이드</h2>
     <button type="button" name="button" class="btn btn-close" data-user="aside-close" ng-click="dialogOptions.popCancel();"><span class="ico">{{ 'label.close' | translate }}</span></button>
 </div>
 <!-- //aside title -->
 
 <!-- aside cnt -->
-<div class="sideCntWrap" ng-include="dialogOptions.templateUrl">
+<div class="acss_info sideCntWrap ovflw_auto" ng-include="dialogOptions.templateUrl">
 </div>
 <!-- //aside cnt -->
 
 <!-- aside btm -->
-<div class="sideBtmWrap">
-    <button type="button" name="button" class="btn" ng-click="dialogOptions.popDialogOk();">닫기</button>
+<div class="acss_info sideBtmWrap two">
+	<div class="btn_t_box">
+		<button type="button" name="button" class="btn" ng-click="dialogOptions.popDialogOk();">닫기</button>
+	</div>
+	<div class="btn_t_box">
+		<button type="button" name="button" class="btn btn-color6" data-user="aside-close"><span class="ico_top ">TOP</span></button>
+	</div>
 </div>
 <!-- //aside btm -->

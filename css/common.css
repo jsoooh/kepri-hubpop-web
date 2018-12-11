@@ -444,7 +444,7 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 
 /*================== 신규추가 CSS(2018-10 ~) 작성자:김보람 =================*/
 /*공통 컴포넌트 스타일 추가*/
-.cnt_msg_box {border-radius:5px; height:47px; line-height:22px; padding:12px 20px 12px 50px; margin-top:15px;}
+.cnt_msg_box {border-radius:5px;/*  height:47px;  */line-height:22px; padding:12px 20px 12px 50px; margin-top:15px;}
 .cnt_msg_box span {font-size:14px;}
 .cnt_msg_box.msg-warnning {border:1px solid #fec6aa; background: url("../images/ico_warnning.png") no-repeat #fdeee5 15px center;}
 .cnt_msg_box.msg-info {border:1px solid #b9cdff; background: url("../images/ico_msg_info.png") no-repeat #eaf0fe 15px center;}

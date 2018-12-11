@@ -72,7 +72,7 @@
 										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
 										<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw">파일다운로드</span></button></li>
 									</ul>
-									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents();">접속방법 가이드</a></div>
+									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents('/guideInfo/accessGuideInfo01.html');">접속방법 가이드</a></div>
 								</div>
 								<!-- windows  -->
 								<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
@@ -85,7 +85,7 @@
 										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
 										<li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li>
 									</ul>
-									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents('/guideInfo/accessGuideInfo01.html');">접속방법 가이드</a></div>
+									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents('/guideInfo/accessGuideInfo02.html');">접속방법 가이드</a></div>
 								</div>
 							</div>
 						</div>

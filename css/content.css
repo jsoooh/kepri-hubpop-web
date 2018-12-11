@@ -2625,8 +2625,63 @@ p.no-txt{
 .welcome_layer .guide_cnt .color1 {color:#335cc4;}
 
 /*우측 팝업(접속정보 가이드)*/
-.sideCntWrap.ovflw_auto {overflow-y:auto;}
+.right_asideCntWrap {border:1px solid red;}
+.acss_info.sideCntWrap.ovflw_auto {overflow-y:auto;}
+.aside .acss_info.sideTitWrap{position: absolute; top:0; left:0;  z-index: 1; width:100%; height:70px; padding:0 30px; background: #414653;}
+.aside .acss_info.sideTitWrap h2{display: block; font-size: 20px; color:#fff; line-height: 70px; font-weight: 400; margin:0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.aside .acss_info.sideTitWrap .btn-close{position: absolute; right:30px; top:50%; width:16px; height:18px; padding:0; margin-top: -9px;}
+.aside .acss_info.sideTitWrap .btn-close .ico{width:100%; height:100%; vertical-align: top; background-position: -460px 0;}
+.aside .acss_info.sideCntWrap{height:100%; padding:40px 30px 40px; /*overflow: hidden; overflow-y: auto;*/ position:relative; background:#fff;}
+.aside .acss_info.sideBtmWrap{position: absolute; left:0; bottom:0; z-index: 1; width:100%;}
+.aside .acss_info.sideBtmWrap{position: absolute; left:0; bottom:0; z-index: 1; width:100%;}
+.aside .acss_info.sideBtmWrap .btn{font-size:18px; color:#fff; font-weight:400; width:100%; height:60px; text-align: center; border-radius: 0; background: #299cc2;}
+.aside .acss_info.sideBtmWrap .btn.asideBtnColor1{background:#348ba8;}
+.aside .acss_info.sideBtmWrap.two {display:table;}
+.aside .acss_info.sideBtmWrap.two .btn_t_box {display:table-cell; width:50%; box-sizing:border-box;}
+.aside .acss_info.sideBtmWrap.two .btn {width:100%;;}
+.aside .acss_info.sideBtmWrap.two .btn + .btn{margin-left: 1px;}
+.aside .acss_info.sideBtmWrap.two .btn-color6{background: #acacac;}
+.aside .acss_info.sideBtmWrap.two .btn .ico_top {display:block; font-size:13px; text-align:center; padding-top:25px; background: url("../images/ico_top.png") no-repeat center 7px; }
+.aside .acss_info.sideStepWrap{padding-bottom:20px; border-bottom:1px solid #8d96ad; background: url("../images/aside_step_bg.png") no-repeat; background-position: center;}
+.aside .acss_info.sideStepWrap ul:after{display: block; content: ''; clear: both;}
+.aside .acss_info.sideStepWrap li{color:#8d96ad; width:105px;}
+.aside .acss_info.sideStepWrap li.on{color:#fff;}
+.aside .acss_info.sideStepWrap li em{display: block; font-size:12px; line-height: 1.1;}
+.aside .acss_info.sideStepWrap li span{display: block; font-size:16px; line-height: 1.1; margin-top: 5px;}
+.aside .acss_info.sideInWrap{position:relative; padding-bottom:20px;}
+.aside .acss_info.sideStepWrap + .sideInWrap{padding-top:20px;}
+.aside .btn-btm .btn{min-width:auto;}
 
+.aside .acss_info .tbl.type1 th{font-size:15px; font-weight: 500; color:#fff; line-height: 1; padding:11px 5px; height:47px; vertical-align: middle; text-align: center; border-bottom:0; background: #3e424d;}
+.aside .acss_info .tbl.type1 td{font-size:15px; color:#888; padding:10px 5px; height:47px; text-align: center; vertical-align: middle; border-color:#d6d6d6; background: #fff;}
+.aside .acss_info .tbl.type1 td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 스타일 갱신 margin-left:6px*/
+.aside .acss_info .tbl.type1 td a {color:#3975ee;}
+.aside .acss_info .tbl.type1 td a:hover {text-decoration:underline;}
+.aside .acss_info .tbl.type1 .table{table-layout: fixed; border-bottom:1px solid #d6d6d6;}
+.aside .acss_info .tbl.type1 th .ico-info2{vertical-align: top;}
+.aside .acss_info .tbl.type1 tr:first-child td{border:0;}
+.aside .acss_info .tbl.type1 tr:nth-child(even) td{background: #fff;}
+
+.accss_guideWrap h2 {font-size:20px; font-weight:700; color:#333; /* padding:20px 0; */}
+.accss_guideWrap h3 {font-size:18px; font-weight:700; color:#333; padding-top:40px;}
+.accss_guideWrap h4 {font-size:16px; font-weight:700; color:#333; padding:40px 0 0 10px;}
+.accss_guideWrap p {position:relative;}
+.accss_guideWrap p.txt_level1 {font-size:15px; color:#333; padding:15px 0 25px 30px;}
+.accss_guideWrap p.txt_level1::before {position:absolute; top:24px; left:17px; display:inline-block; content:''; width:7px; height:2px; background:#4a4a4a; margin-right:5px;}
+.accss_guideWrap p.txt_level1.blt_none {padding:15px 0 0 20px;}
+.accss_guideWrap p.txt_level1.blt_none::before {display:none;}
+.accss_guideWrap p.txt_level2 {font-size:15px; color:#333; padding:15px 0 25px 40px;}
+.accss_guideWrap p.txt_level2::before {position:absolute; top:23px; left:30px; display:inline-block; content:''; width:4px; height:4px; border-radius:10px; background:#4a4a4a; margin-right:5px;}
+.accss_guideWrap p.txt_level2 em.ico_dw {display:inline-block; width:17px; height:17px; font-size:0; vertical-align:middle; background: url("../images/ico_down.png") no-repeat 0 0; margin:0 2px 0 7px;}
+.accss_guideWrap p.txt_level2 em.ico_BvSsh {display:inline-block; width:67px; height:12px; font-size:0; vertical-align:middle; background: url("../images/ico_BvSsh.png") no-repeat 0 0; margin:0 2px 0 7px;}
+.accss_guideWrap p.txt_level3 {font-size:14px; color:#555; padding:5px 0 0 50px;}
+.accss_guideWrap p.txt_level3::before {position:absolute; top:15px; left:40px; display:inline-block; content:''; width:4px; height:2px; background:#8e8e8e; margin-right:5px;}
+.accss_guideWrap p.txt_level4 {font-size:14px; color:#777; padding:8px 0 0 45px;}
+.accss_guideWrap p.txt_level4 em {display:inline-block; margin-right:3px;}
+.accss_guideWrap .imgWrap {border:1px solid #d6d6d6; text-align:center; padding:10px; margin:80px 0 10px 0;}
+.accss_guideWrap h4 + .imgWrap {margin-top:20px;}
+.accss_guideWrap p.txt_level1 + h4 {padding-top:60px;}
+.accss_guideWrap p.txt_level4 + h4 {padding-top:60px;}
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 
