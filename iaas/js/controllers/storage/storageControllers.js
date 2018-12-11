@@ -1076,14 +1076,14 @@ angular.module('iaas.controllers')
 
         pop.inputVolumeSizeChange = function () {
             var volumeSize = pop.inputVolumeSize ? parseInt(pop.inputVolumeSize, 10) : 0;
-            if (volumeSize >= pop.volumeSliderOptions.minLimit && volumeSize <= pop.volumeSliderOptions.ceil) {
+            if (volumeSize >= pop.reSizeSliderOptions.minLimit && volumeSize <= pop.reSizeSliderOptions.ceil) {
                 pop.volumeSize = pop.inputVolumeSize;
             }
         };
 
         pop.inputVolumeSizeBlur = function () {
             var volumeSize = pop.inputVolumeSize ? parseInt(pop.inputVolumeSize, 10) : 0;
-            if (volumeSize < pop.volumeSliderOptions.minLimit || volumeSize > pop.volumeSliderOptions.ceil) {
+            if (volumeSize < pop.reSizeSliderOptions.minLimit || volumeSize > pop.reSizeSliderOptions.ceil) {
                 pop.inputVolumeSize = pop.volumeSize;
             } else {
                 pop.inputVolumeSize = volumeSize;
@@ -1098,7 +1098,7 @@ angular.module('iaas.controllers')
             minLimit : pop.volume.size,
             showSelectionBar : true,
             onChange : function () {
-                ct.inputVolumeSize = ct.volumeSize;
+                pop.inputVolumeSize = pop.volumeSize;
             }
         };
 
@@ -1109,7 +1109,7 @@ angular.module('iaas.controllers')
                 tenantId : pop.userTenant.id,
                 volumeId : pop.volume.volumeId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 pop.volume 							  = data.content.volumes[0];
                 pop.inputVolumeSize 				  = pop.volume.size;
@@ -1131,7 +1131,7 @@ angular.module('iaas.controllers')
             };
             $scope.main.loadingMainBody = true;
 
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
 
             returnPromise.success(function (data, status, headers) {
                 pop.resource 		 = angular.copy(data.content[0]);

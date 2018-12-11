@@ -159,15 +159,16 @@ angular.module('paas.controllers')
 /*
                 if (ct.pageFirstLoad && (!ct.apps || ct.apps.length == 0)) {
                     ct.firstAppCreatePop();
-                    ct.pageFirstLoad = false;
                 }
 */
 
+                ct.pageFirstLoad = false;
                 $scope.main.loadingMainBody = false;
                 $scope.main.loadingMain = false;
             });
             appPromise.error(function (data) {
                 ct.apps = [];
+                ct.pageFirstLoad = false;
                 $scope.main.loadingMainBody = false;
                 $scope.main.loadingMain = false;
             });
