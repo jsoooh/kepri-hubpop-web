@@ -903,7 +903,7 @@ angular.module('iaas.controllers')
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         
         $scope.dialogOptions.title 		= "백업 이미지  생성";
-        $scope.dialogOptions.okName 	= "등록";
+        $scope.dialogOptions.okName 	= "생성";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageCreatePopSnapshotForm.html" + _VersionTail();
 
