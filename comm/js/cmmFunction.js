@@ -236,7 +236,7 @@ function depth1Click (evt) {
 
     var target = $(evt.currentTarget);
 
-    var parentTarget = target.closest('div.gnb-in');
+    var parentTarget = target.closest('div.gnbMenu');
 
     if (target.hasClass("open")) {
         parentTarget.find('ul.dept2').hide(200);
