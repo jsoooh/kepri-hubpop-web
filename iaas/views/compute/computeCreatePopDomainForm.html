@@ -1,44 +1,33 @@
-
-			<div class="tbw type1">
-				<table class="table">
-					<colgroup>
-						<col style="width: 25%;">
-						<col style="width: auto;">
-					</colgroup>
-					<tbody>
-						<tr>
-							<th scope="row">통신 방식</th>
-							<td>
-								<div class="radio radio-inline">
-								   <input type="radio" name="radio1" id="radio1-1" checked>
-								   <label for="radio1-1" class="label">HTTP</label>
-							   </div>
-							   <div class="radio radio-inline">
-								  <input type="radio" name="radio1" id="radio1-2">
-								  <label for="radio1-2" class="label">RDP</label>
-							   </div>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row" >접속도메인</th>
-							<td>
-								<div class="app-form-two">
-									<div class="two_box">
-										<input type="text" name="" value="" class="form-control" 	placeholder="내용입력">
-									</div>
-									<div class="two_box">
-										<select name="">
-											<option value="">선택</option>
-											<option value="">inf.kepri.re.kr</option>
-										</select>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row" rowspan="2">접속 포트</th>
-							<td><input type="text" name="" value="" class="form-control" 	placeholder="내용입력"></td> 
-						</tr>	
-					</tbody>
-				</table>
-			</div>
+<div class="tbw type1">
+	<table class="table">
+		<colgroup>
+			<col style="width: 25%;">
+			<col style="width: auto;">
+		</colgroup>
+		<tbody>
+			<tr>
+				<th scope="row" >접속도메인</th>
+				<td>
+					<div class="app-form-two">
+						<div class="two_box">
+							<input type="text" class="form-control" maxlength="30" name="subDomain" ng-model="pop.domain.subDomain" validation="alpha_num|required|custom:pop.fn.subDomainCustomValidationCheck(pop.domain.subDomain)" placeholder="서브 도메인명을 입력하세요.">
+						</div>
+						<div class="two_box">
+							<select name="selectBaseDomain" class="form-control" ng-model="pop.domain.baseDomain" validation="required">
+								<option ng-if="!pop.baseDomains || pop.baseDomains.length == 0" value="">도메인 없음</option>
+								<option ng-repeat="item in pop.baseDomains" value="{{item.domain}}">{{item.domain}}</option>
+							</select>
+						</div>
+					</div>
+					<div class="validation validation-subDomain validation-selectBaseDomain text-danger"></div>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row" rowspan="2">접속 포트</th>
+				<td>
+					<input type="number" class="form-control" name="http_source_port" ng-model="pop.domain.sourcePort" min="1" max="99999" max-number-length="5" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.domain.sourcePort)">
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

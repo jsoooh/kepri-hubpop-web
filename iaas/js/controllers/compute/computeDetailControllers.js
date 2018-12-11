@@ -28,7 +28,7 @@ angular.module('iaas.controllers')
         if ($scope.main.stateKey == "iaasDeployServerComputeDetail") {
             ct.viewType = 'deploy';
         }
-        ct.sltInfoTab = 'actEvent';
+        ct.sltInfoTab = 'domain';
         ct.deployTypes = angular.copy(CONSTANTS.deployTypes);
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
@@ -58,7 +58,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.setProcState = function (instance) {
-            if (ct.noIngStates.indexOf(instance.uiTask) >= 0) {
+            if (ct.noIngStates.indexOf(instance.uiTask) >= 0 && !instance.taskState) {
                 instance.procState = "end";
             } else if (ct.creatingStates.indexOf(instance.uiTask) >= 0) {
                 instance.procState = "creating";
@@ -81,14 +81,14 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     var instanceStateInfo = data.content.instances[0];
-                    if (ct.noIngStates.indexOf(instanceStateInfo.uiTask) == -1) {
-                        $scope.main.reloadTimmer['instanceServerState_' + instanceStateInfo.id] = $timeout(function () {
-                            ct.fn.checkServerState(instanceStateInfo.id);
-                        }, 1000);
+                    ct.fn.setProcState(instanceStateInfo);
+                    if (instanceStateInfo.procState != 'end') {
                         angular.forEach(instanceStateInfo, function (value, key) {
                             ct.instance[key] = value;
                         });
-                        ct.fn.setProcState(ct.instance);
+                        $scope.main.reloadTimmer['instanceServerState_' + instanceStateInfo.id] = $timeout(function () {
+                            ct.fn.checkServerState(instanceStateInfo.id);
+                        }, 1000);
                     } else {
                         ct.fn.replaceServerInfo(instanceStateInfo.id);
                     }
@@ -101,13 +101,11 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.mergeServerInfo = function (serverItem, instance) {
-/*
             angular.forEach(serverItem, function(value, key) {
                 if (angular.isUndefined(instance[key])) {
                     delete serverItem[key];
                 }
             });
-*/
             angular.forEach(instance, function(value, key) {
                 if (angular.isArray(value)) {
                     if (!angular.isArray(serverItem[key])) serverItem[key] = [];
@@ -139,7 +137,27 @@ angular.module('iaas.controllers')
                     ct.fn.mergeServerInfo(ct.instance, instance);
                     ct.fn.setProcState(ct.instance);
                     ct.fn.setRdpConnectDomain(ct.instance);
-                    var massage = '"' + serverItem.name + '" ';
+                    ct.instance.tenantId = ct.data.tenantId;
+                    ct.instance.changeName = ct.instance.name;
+                    var vmDeployType = common.objectsFindCopyByField(ct.deployTypes, "type", ct.instance.vmType);
+                    if (angular.isObject(vmDeployType) && vmDeployType.id) {
+                        ct.instance.vmDeployType = vmDeployType;
+                    } else {
+                        ct.instance.vmDeployType = angular.copy(ct.deployTypes[0]);
+                    }
+                    if (ct.instance.console) {
+                        ct.instance.consoleArr = ct.instance.console.split("\n");
+                    } else {
+                        ct.instance.consoleArr = [];
+                    }
+                    for (var i=0; i<ct.instance.consoleArr.length; i++) {
+                        ct.instance.consoleArr[i] = common.replaceAll(ct.instance.consoleArr[i], "(\\[[0-9;]{1,}m(.){1,})\\[0m", "\x1B$1\x1B[0m");
+                    }
+                    $timeout(function () {
+                        $('#action_event_panel.scroll-pane').jScrollPane({});
+                    }, 100);
+
+                    var massage = '"' + instance.name + '" ';
                     if (beforUiTask == "starting") {
                         massage += '서버가 시작 되었습니다.'
                     } else if (beforUiTask == "stopping")  {
@@ -300,7 +318,9 @@ angular.module('iaas.controllers')
                     if (instance.instanceDomainLinkInfos[i].domainInfo && instance.instanceDomainLinkInfos[i].domainInfo.domain
                         && instance.instanceDomainLinkInfos[i].domainInfo.domain.substring(instance.instanceDomainLinkInfos[i].domainInfo.domain.length - ct.rdpBaseDomain.length) == ct.rdpBaseDomain) {
                         rdpDomain = instance.instanceDomainLinkInfos[i].domainInfo.domain;
-                        break;
+                        instance.instanceDomainLinkInfos[i].isRdpDomain = true;
+                    } else {
+                        instance.instanceDomainLinkInfos[i].isRdpDomain = false;
                     }
                 }
                 instance.rdpConnectDomain = rdpDomain;
@@ -328,7 +348,6 @@ angular.module('iaas.controllers')
                     ct.instance.tenantId = ct.data.tenantId;
 
                     ct.instance.changeName = ct.instance.name;
-                    $scope.main.sltOrganizationName = ct.instance.name;
 
                     var vmDeployType = common.objectsFindCopyByField(ct.deployTypes, "type", ct.instance.vmType);
                     if (angular.isObject(vmDeployType) && vmDeployType.id) {
@@ -340,14 +359,14 @@ angular.module('iaas.controllers')
                     ct.fn.getUsedResource();
                     ct.fn.searchInstanceVolumeList();
 
-                    if (ct.noIngStates.indexOf(ct.instance.uiTask) == -1) {
-                        if ($scope.main.reloadTimmer['instanceServerStateList']) {
-                            $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
-                            $scope.main.reloadTimmer['instanceServerStateList'] = null;
+                    if (ct.instance.procState != 'end') {
+                        if ($scope.main.reloadTimmer['instanceServerInfo_'+ct.instance.id]) {
+                            $timeout.cancel($scope.main.reloadTimmer['instanceServerInfo']);
+                            $scope.main.reloadTimmer['instanceServerInfo'+ct.instance.id] = null;
                         }
-                        $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
+                        $scope.main.reloadTimmer['instanceServerInfo'+ct.instance.id] = $timeout(function () {
                             ct.fn.checkServerState();
-                        }, 1000);
+                        }, 2000);
                     }
 
                     if (ct.instance.console) {
@@ -437,37 +456,56 @@ angular.module('iaas.controllers')
         ct.fn.popConnDomainForm = function($event) {
         	
         	var dialogOptions = {
-            			controller       : "iaasPopConnDomainFormCtrl" ,
-            			formName         : 'iaasPopConnDomainForm',
-            			callBackFunction : ct.refalshDomainCallBackFunction
-            	};
-            	$scope.actionBtnHied = false;
-            	common.showDialog($scope, $event, dialogOptions);
-            	$scope.actionLoading = true; // action loading
-               
-            
+                controller : "iaasPopConnDomainFormCtrl" ,
+                formName : 'iaasPopConnDomainForm',
+                formMode : "add",
+                instance : angular.copy(ct.instance),
+                callBackFunction : ct.refalshDomainCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
         };
-        
+
+        ct.fn.popModDomainForm = function($event, domainLinkInfo) {
+
+            var dialogOptions = {
+                controller : "iaasPopConnDomainFormCtrl" ,
+                formName : 'iaasPopConnDomainForm',
+                formMode : "mod",
+                instance : angular.copy(ct.instance),
+                domainLinkInfo : angular.copy(domainLinkInfo),
+                callBackFunction : ct.refalshDomainCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+
         // sg0730 차후 callback 처리 고민.
         ct.refalshDomainCallBackFunction = function () {
-        	ct.fn.changeSltInfoTab();
-            ct.fn.changeSltInfoTab('domain');
+            ct.fn.getInstanceInfo();
         };
 
         // 도메인 반환 버튼
-        ct.fn.publicIpReturn = function(domain) {
-            common.showConfirm('도메인 반환','※'+domain.domainInfo.domain+' 도메인을 반환 합니다. 반환된 도메인에 대한 관리는 도메인 관리에서 가능합니다').then(function(){
-                ct.fn.restorationDomain(domain);
+        ct.fn.deleteDomain = function(domainLink) {
+            common.showConfirm('도메인 삭제','※'+domainLink.domainInfo.domain+' 도메인을 삭제 합니다.').then(function(){
+                ct.fn.deleteDomainAction(domainLink);
             });
         };
 
-        // 도메인 반환 job
-        ct.fn.restorationDomain = function(domain) {
+        // 도메인 삭제 job
+        ct.fn.deleteDomainAction = function(domainLink) {
             $scope.main.loadingMainBody = true;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain', 'DELETE', {instanceDomainLinkId:domain.id});
+            var param = {
+                instanceDomainLinkId : domainLink.id,
+                domainId : domainLink.domainInfo.id
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain/service', 'DELETE', param);
             returnPromise.success(function (data, status, headers) {
                 ct.fn.getInstanceInfo();
-                common.showAlertSuccess("도메인이 반환 되었습니다.");
+                common.showAlertSuccess("도메인이 삭제 되었습니다.");
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
@@ -725,7 +763,7 @@ angular.module('iaas.controllers')
 
         ct.fn.changeSltInfoTab = function (sltInfoTab) {
             if (!sltInfoTab) {
-                sltInfoTab = 'actEvent';
+                sltInfoTab = 'domain';
                 ct.sltInfoTab = sltInfoTab;
             } else {
                 if (ct.sltInfoTab != sltInfoTab) {
@@ -2675,34 +2713,123 @@ angular.module('iaas.controllers')
     	var pop = this;
     	pop.validationService 			= new ValidationService({controllerAs: pop});
     	pop.formName 					= $scope.dialogOptions.formName;
+    	pop.formMode 					= $scope.dialogOptions.formMode;
     	pop.fn 							= {};
-    	pop.data						= {};
+    	pop.domain						= {};
+        pop.orgDomain					= {};
+        pop.orgDomainLinkInfo   = {};
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
-    	//pop.userTenant 					= angular.copy($scope.main.userTenant);
-    	//pop.instance 					= $scope.dialogOptions.selectInstance;
-    	
-    	$scope.dialogOptions.title 		= "도메인 등록";
-    	$scope.dialogOptions.okName 	= "등록";
+    	pop.instance 					= $scope.dialogOptions.instance;
+
+        if (pop.formMode == "mod") {
+            $scope.dialogOptions.title = "도메인 수정";
+            $scope.dialogOptions.okName =  "수정";
+            pop.orgDomainLinkInfo = angular.copy($scope.dialogOptions.domainLinkInfo);
+            pop.domain.tenantId = pop.orgDomainLinkInfo.tenantId;
+            pop.domain.instanceId = pop.orgDomainLinkInfo.instanceId;
+            pop.domain.id = pop.orgDomainLinkInfo.id;
+            pop.domain.domainId = pop.orgDomainLinkInfo.domainInfo.id;
+            pop.domain.floatingIp = pop.instance.floatingIp;
+            pop.domain.domain = pop.orgDomainLinkInfo.domainInfo.domain;
+            pop.domain.sourcePort = pop.orgDomainLinkInfo.sourcePort;
+            pop.domain.protocolType = pop.orgDomainLinkInfo.protocolType;
+            pop.domain.sslUsed = false;
+        } else {
+            $scope.dialogOptions.title = "도메인 등록";
+            $scope.dialogOptions.okName =  "등록";
+            pop.domain.tenantId = pop.instance.tenantId;
+            pop.domain.instanceId = pop.instance.id;
+            pop.domain.floatingIp = pop.instance.floatingIp;
+            pop.domain.sourcePort = 80;
+            pop.domain.protocolType = "http";
+            pop.domain.sslUsed = false;
+        }
+
     	$scope.dialogOptions.closeName 	= "닫기";
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeCreatePopDomainForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
     	pop.btnClickCheck 				= false;
-    	
-    	// Dialog ok 버튼 클릭 시 액션 정의
-    	$scope.actionBtnHied = false;
-    	
+
+        pop.fn.getBaseDomainList = function() {
+            pop.baseDomains = [];
+            var param = {};
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/baseDomain/all', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && angular.isArray(data.content) && data.content.length > 0) {
+                    pop.baseDomains = data.content;
+                    if (pop.formMode == "mod") {
+                        angular.forEach(pop.baseDomains, function (baseDomain) {
+                            if (pop.domain.domain.indexOf(baseDomain.domain) > 0) {
+                                pop.domain.baseDomain = baseDomain.domain;
+                                pop.domain.subDomain = pop.domain.domain.substring(0, pop.domain.domain.indexOf(baseDomain.domain)-1);
+                            }
+                        });
+                    } else {
+                        pop.domain.baseDomain = pop.baseDomains[0].domain;
+                    }
+                }
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.getDomainUsingList = function() {
+            pop.usingDomainList = [];
+            pop.usingDomainNames = [];
+            var param = {};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/domain/all', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && angular.isArray(data.content) && data.content.length > 0) {
+                    pop.usingDomainList = data.content;
+                    angular.forEach(pop.usingDomainList, function (domain, key) {
+                        pop.usingDomainNames.push(domain.domain);
+                    });
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+        };
+
+        pop.fn.subDomainCustomValidationCheck = function(subDomain) {
+            if (subDomain && angular.isArray(pop.usingDomainNames) && pop.usingDomainNames.length > 0) {
+                var domainName = subDomain + "." + pop.domain.baseDomain;
+                if (pop.formMode == "mod") {
+                    if (pop.orgDomainLinkInfo.domainInfo.domain != domainName && pop.usingDomainNames.indexOf(domainName) >= 0) {
+                        return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
+                    }
+                } else {
+                    if (pop.usingDomainNames.indexOf(domainName) >= 0) {
+                        return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
+                    }
+                }
+            }
+            return {isValid : true};
+        };
+
+        pop.fn.systemPortCustomValidationCheck = function(port) {
+            if (port == undefined || port == null || port == "") return;
+            if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
+                return {isValid : true};
+            } else {
+                return {isValid : false, message: "포트범위는 [80, 443, 1024~65535] 입니다."};
+            }
+        };
+
+        $scope.actionBtnHied = false;
     	$scope.popDialogOk = function () {
-            pop.fn.addDomain();
+            pop.fn.actionDomain();
     	};
-    	
     	$scope.popCancel = function() {
     		$scope.dialogClose = true;
     		common.mdDialogCancel();
     	};
 
         $scope.actionBtnHied = false;
-    	pop.fn.addDomain = function() {
+    	pop.fn.actionDomain = function() {
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
             if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
@@ -2710,20 +2837,45 @@ angular.module('iaas.controllers')
                 return;
             }
 
+            pop.domain.domain =  pop.domain.subDomain + "." + pop.domain.baseDomain;
+
+            if (pop.formMode == "mod") {
+                if (pop.orgDomainLinkInfo.domainInfo.domain == pop.domain.domain && pop.orgDomainLinkInfo.sourcePort == pop.domain.sourcePort) {
+                    $scope.actionBtnHied = false;
+                    common.showAlertWarning("변경된 정보가 없습니다.");
+                    return;
+                }
+            }
+
             $scope.main.loadingMainBody = true;
-    		pop.data.tenantId 			= pop.userTenant.id;
-    		pop.data.instanceId 		= pop.instance.id;
-    		
+            var method = "POST";
+            var params = {};
+            params.tenantId 		= pop.domain.tenantId;
+            params.instanceId 		= pop.domain.instanceId;
+            if (pop.formMode == "mod") {
+                method = "PUT";
+                params.id = pop.domain.id;
+                params.domainId = pop.domain.domainId;
+            }
+            params.domain = pop.domain.domain;
+            params.floatingIp = pop.domain.floatingIp;
+            params.sourcePort = pop.domain.sourcePort;
+            params.protocolType = pop.domain.protocolType;
+            params.sslUsed = pop.domain.sslUsed;
+
     		common.mdDialogHide();
     		
-    		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'POST', {instanceSnapShot:pop.data});
-            returnPromise.success(function (data, status, headers)
-            {
+    		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain/service', method, params);
+            returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("생성 되었습니다.");
-                //생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
-                $scope.main.goToPage('/iaas/compute/snapshot');
-
+                if (pop.formMode == "mod") {
+                    common.showAlertSuccess("수정 되었습니다.");
+                } else {
+                    common.showAlertSuccess("생성 되었습니다.");
+                }
+                if (angular.isFunction(pop.callBackFunction)) {
+                    pop.callBackFunction();
+                }
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -2734,8 +2886,11 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             });
 
-    	}
-    	
+    	};
+
+        pop.fn.getBaseDomainList();
+        pop.fn.getDomainUsingList();
+
     })
     .controller('iaasComputeVolumeFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeVolumeFormCtrl", 1);

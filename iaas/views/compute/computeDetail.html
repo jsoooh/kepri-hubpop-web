@@ -70,7 +70,7 @@
 					</li>
 					<li>
 						<strong class="tit">상태</strong>
-						<div ng-if="contents.instance.procState != 'end'" class="txt">
+						<div ng-if="contents.instance.procState != 'end' && contents.instance.vmState" class="txt">
 							<p><img src="images/loading_sm.gif"> {{'iaas.label.instance_' + contents.instance.vmState | translate}} 입니다.</p>
 						</div>
 						<div ng-if="contents.instance.procState == 'end'" class="txt">
@@ -160,7 +160,7 @@
 	</div>
 
 	<div class="cBox-cnt">
-		<div class="in scroll-pane">
+		<div ng-if="contents.instanceVolList.length > 0" class="in scroll-pane">
 			<ul class="ul-volume">
 				<li ng-repeat="volume in contents.instanceVolList">
 					<div style=" margin-left:90px;">
@@ -186,6 +186,9 @@
 				</li>
 			</ul>
 		</div>
+		<div ng-if="contents.instanceVolList.length == 0">
+			연결 디스크 정보가 없습니다.
+		</div>
 	</div>
 </div>
 <!-- //cBox -->
@@ -193,14 +196,73 @@
 <div class="tabWrap type1 mt30">
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs padding40">
-		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">서버 이벤트</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">서비스 도메인</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">서버 이벤트</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">서버 부트 로그</a></li>
 	</ul>
 	<!-- //Nav tabs -->
 
 	<!-- Tab panes -->
 	<div class="tab-content inst">
+		<div ng-if="contents.sltInfoTab == 'domain'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'domain'}">
+			<!-- panel -->
+			<div class="panelWrap">
+				<div class="panel type2" style="cursor: unset;">
+					<div class="panel_head">
+						<div class="tit pull-left">서비스 도메인</div>
+						<div class="pull-right">
+							<!-- 20181121 sg0730 접속 도메인 연결 기능 변경으로 인한 팝업 호출  -->
+							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
+							<!-- <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><span class="ico">추가</span></button> -->
+							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
+						</div>
+					</div>
+					<div ng-if="contents.instance.instanceDomainLinkInfos" class="panel_body">
+						<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_domain_panel" class="in">
+							<!-- 메세지영역 -->
+							<div class="pop_message_area mb20">
+								<div class="msg_bg"></div>
+								<div class="msg_txt"><span>서버에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</span></div>
+							</div>
+							<div class="tbl type1">
+								<table class="table">
+									<colgroup>
+										<col style="width:30%;">
+										<col style="width:25%;">
+										<col style="width:25%;">
+										<col style="width:20%;">
+									</colgroup>
+									<thead>
+									<tr>
+										<th scope="col">도메인</th>
+										<th scope="col">프로토콜 타입</th>
+										<th scope="col">포트</th>
+										<th scope="col">삭제</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-if="(contents.instance.instanceDomainLinkInfos | filter : {isRdpDomain: false}).length == 0">
+										<td colspan="4">연결된 도메인이 없습니다.</td>
+									</tr>
+									<tr ng-repeat="item in contents.instance.instanceDomainLinkInfos | filter : {isRdpDomain: false}">
+										<td>{{ item.domainInfo.domain }}</td>
+										<td>{{ item.protocolType }}</td>
+										<td>{{ item.sourcePort }}</td>
+										<td>
+											<button type="button" name="button" class="btn btn-ico-modi-s only-ico ng-scope" ng-click="contents.fn.popModDomainForm($event, item);" tooltip-placement="bottom" uib-tooltip="수정"><span class="ico">수정</span></button>
+											<button type="button" name="button" class="btn btn-ico-del-s only-ico ng-scope" ng-click="contents.fn.deleteDomain(item);" tooltip-placement="bottom" uib-tooltip="삭제"><span class="ico">삭제</span></button>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- panel -->
+		</div>
+
 		<div ng-if="contents.sltInfoTab == 'actEvent'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'actEvent'}">
 			<!-- panel -->
 			<div class="panelWrap">
@@ -241,68 +303,6 @@
 									</tr>
 									<tr ng-if="contents.instance.actionLogs == null">
 										<td colspan="3" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
-									</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- panel -->
-		</div>
-
-		<div ng-if="contents.sltInfoTab == 'domain'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'domain'}">
-			<!-- panel -->
-			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset;">
-					<div class="panel_head">
-						<div class="tit pull-left">서비스 도메인</div>
-						<div class="pull-right">
-							<!-- 20181121 sg0730 접속 도메인 연결 기능 변경으로 인한 팝업 호출  -->
-							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
-							<!-- <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><span class="ico">추가</span></button> -->
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
-						</div>
-					</div>
-					<div ng-if="contents.instance.actionLogs" class="panel_body">
-						<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_domain_panel" class="in">
-							<!-- 메세지영역 -->
-							<div class="pop_message_area mb20">
-								<div class="msg_bg"></div>
-								<div class="msg_txt"><span>서버에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</span></div>
-							</div>
-							<!-- //메세지영역 -->
-							<!-- <div class="tb-top">
-								<div class="pull-right">
-									<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
-								</div>
-							</div> -->
-							<div class="tbl type1">
-								<table class="table">
-									<colgroup>
-										<col style="width:30%;">
-										<col style="width:25%;">
-										<col style="width:25%;">
-										<col style="width:20%;">
-									</colgroup>
-									<thead>
-									<tr>
-										<th scope="col">도메인</th>
-										<th scope="col">프로토콜 타입</th>
-										<th scope="col">포트</th>
-										<th scope="col">삭제</th>
-									</tr>
-									</thead>
-									<tbody>
-									<tr ng-if="contents.instance.instanceDomainLinkInfos.length == 0">
-										<td colspan="4">연결된 도메인이 없습니다.</td>
-									</tr>
-									<tr ng-repeat="item in contents.instance.instanceDomainLinkInfos">
-										<td>{{ item.domainInfo.domain }}</td>
-										<td>{{ item.protocolType }}</td>
-										<td>{{ item.sourcePort }}</td>
-										<td><button type="button" name="button" class="btn btn-ico-del-s only-ico ng-scope" ng-click="contents.fn.publicIpReturn(item);" tooltip-placement="bottom" uib-tooltip="반납"><span class="ico">반납</span></button></td>
 									</tr>
 									</tbody>
 								</table>

@@ -900,7 +900,7 @@ angular.module('common.services', ['LocalStorageModule'])
             if (pathUrl.indexOf('?') > 0) {
                 pathUrl += "&vt=v" + new Date().getTime();
             } else {
-                pathUrl += "?&vt=v" + new Date().getTime();
+                pathUrl += "?vt=v" + new Date().getTime();
             }
 
             var acceptString = "application/json;charset=UTF-8";
@@ -1196,7 +1196,7 @@ angular.module('common.services', ['LocalStorageModule'])
             if (pathUrl.indexOf('?') > 0) {
                 pathUrl += "&vt=v" + new Date().getTime();
             } else {
-                pathUrl += "?&vt=v" + new Date().getTime();
+                pathUrl += "?vt=v" + new Date().getTime();
             }
 
 	        var acceptString = "application/json";

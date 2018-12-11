@@ -181,7 +181,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.setProcState = function (instance) {
-            if (ct.noIngStates.indexOf(instance.uiTask) >= 0) {
+            if (ct.noIngStates.indexOf(instance.uiTask) >= 0 && !instance.taskState) {
                 instance.procState = "end";
             } else if (ct.creatingStates.indexOf(instance.uiTask) >= 0) {
                 instance.procState = "creating";
@@ -203,7 +203,9 @@ angular.module('iaas.controllers')
                     if (instance.instanceDomainLinkInfos[i].domainInfo && instance.instanceDomainLinkInfos[i].domainInfo.domain
                         && instance.instanceDomainLinkInfos[i].domainInfo.domain.substring(instance.instanceDomainLinkInfos[i].domainInfo.domain.length - ct.rdpBaseDomain.length) == ct.rdpBaseDomain) {
                         rdpDomain = instance.instanceDomainLinkInfos[i].domainInfo.domain;
-                        break;
+                        instance.instanceDomainLinkInfos[i].domainInfo.isRdpDomain = true;
+                    } else {
+                        instance.instanceDomainLinkInfos[i].domainInfo.isRdpDomain = false;
                     }
                 }
                 instance.rdpConnectDomain = rdpDomain;
@@ -328,7 +330,8 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
                         var instanceStateInfo = data.content.instances[0];
-                        if (ct.noIngStates.indexOf(instanceStateInfo.uiTask) == -1) {
+                        ct.fn.setProcState(instanceStateInfo);
+                        if (instanceStateInfo.procState != 'end') {
                             $scope.main.reloadTimmer['instanceServerState_' + instanceStateInfo.id] = $timeout(function () {
                                 ct.fn.checkServerState(instanceStateInfo.id);
                             }, 1000);
@@ -337,7 +340,6 @@ angular.module('iaas.controllers')
                                 angular.forEach(instanceStateInfo, function(value, key) {
                                     serverItem[key] = value;
                                 });
-                                ct.fn.setProcState(serverItem);
                             }
                         } else {
                             ct.fn.replaceServerInfo(instanceStateInfo.id);
@@ -359,10 +361,10 @@ angular.module('iaas.controllers')
                             } else {
                                 serverItem = instanceStateInfo;
                             }
-                            if (ct.noIngStates.indexOf(serverItem.uiTask) == -1) {
+                            ct.fn.setProcState(serverItem);
+                            if (serverItem.procState != 'end') {
                                 isServerStatusCheck = true;
                                 if (ct.serverMainList[inKey]) {
-                                    ct.fn.setProcState(serverItem);
                                     ct.fn.mergeServerInfo(ct.serverMainList[inKey], serverItem);
                                 } else {
                                     ct.serverMainList.push(serverItem);
