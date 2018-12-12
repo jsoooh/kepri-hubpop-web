@@ -663,7 +663,7 @@ p.no-txt{font-weight:700;}/*180409 스타일 추가*/
 .cBox.appCnt-info .cBox-hd{position:relative;}
 .cBox.appCnt-info .cBox-hd .c-tit{position: relative;padding-left:70px;}
 .cBox.appCnt-info .cBox-hd .c-tit.noLogo{padding-left:0;}/*180406 스타일 추가*/
-.cBox.appCnt-info .cBox-hd .c-tit .logo{position: absolute; left:0px; top:12px; z-index: 1; width:54px; height: 54px; border-radius: 50px;}
+.cBox.appCnt-info .cBox-hd .c-tit .logo{position: absolute; left:0px; top:12px; z-index: 1; width:54px; height: 54px; border-radius: 50px; border:1px solid #ddd;}
 .cBox.appCnt-info .cBox-hd .logo{position: absolute; left:30px; top:12px; z-index: 1; width:54px; height: 54px; border-radius: 50px;}
 .cBox.appCnt-info .cBox-hd .btnArea{display:inline-block;padding:25px 10px;position:absolute;right:157px;}
 .cBox.appCnt-info .cBox-hd .pull-right .btn + .btn,
