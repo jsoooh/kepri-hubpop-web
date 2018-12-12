@@ -23,6 +23,14 @@
 .aside .radio1 input[type="radio"]:focus + label{color:#333; border: 4px solid #17a0ce; background:#fff;}
 .aside .radio1 input[type="radio"]:checked + label{color:#333; border: 4px solid #17a0ce; background:#fff;}
 
+.form_list .radio1 {padding:0; text-align: center;}
+.form_list .radio1 label {display: inline-block; position: relative; font-size: 14px; color:#8992a9; font-weight: 500; line-height: 75px; width:80px; height: 80px; padding:0; vertical-align: middle; border-radius: 5px; border: 4px solid #fff; overflow: hidden; background: #fff;}
+.form_list .radio1 .label.reductHeight{padding-top:5px;}
+.form_list .radio1 label img{max-width:100%; height:auto; margin:0; border:0; border-radius: 0; vertical-align: middle;}
+.form_list .radio1 input[type="radio"] {position:absolute; top:-4px; left:20px;z-index:99999;width:80px;height:80px;opacity:0;}/*180530 슬라이드 이미지선택 라디오버튼 수정 */
+.form_list .radio1 input[type="radio"]:focus + label{color:#333; border: 4px solid #17a0ce; background:#fff;}
+.form_list .radio1 input[type="radio"]:checked + label{color:#333; border: 4px solid #17a0ce; background:#fff;}
+
 
 .aside .radio-inline + .radio-inline{margin-left:10px;}
 
@@ -2409,7 +2417,7 @@ p.no-txt{
 .panel_area .radio1 label {display: inline-block; position: relative; font-size: 14px; color:#8992a9; font-weight: 500; line-height: 75px; width:90px; height: 90px; padding:0; vertical-align: middle; border-radius: 5px; border: 1px solid #cccccc; overflow: hidden; background: #fff;}
 .panel_area .radio1 .label.reductHeight{padding-top:5px;}
 .panel_area .radio1 label img{max-width:100%; height:auto; margin:0; border:0; border-radius: 0; vertical-align: middle;}
-.panel_area .radio1 input[type="radio"] {width:1px; height:1px; opacity: 0; }
+/* .panel_area .radio1 input[type="radio"] {width:1px; height:1px; opacity: 0; } */
 .panel_area .radio1 input[type="radio"]:focus + label{color:#333; border: 1px solid #69b4f9; background:#fff;}
 .panel_area .radio1 input[type="radio"]:checked + label{color:#333; border: 3px solid #69b4f9; background:#fff;}
 .panel_area .radio-inline + .radio-inline{margin-left:10px;}
@@ -2488,7 +2496,7 @@ p.no-txt{
 .panel.type5 .panel_head .btn-option.type2 .tgb_body .guide_link a {display:inline-block; font-size:14px; color:#2196f3; background:url("../images/external-link.png") no-repeat right center; padding-right:20px;}
 .panel.type5 .panel_head .btn-option.type2 .tgb_body .guide_link a:hover {border-bottom:1px solid #2196f3;}
 
-.ico_sm {display:inline-block; width:17px; height:17px; font-size:0; background:url("../images/ico_sm_info.png") no-repeat; margin-left:7px;}
+.ico_sm {display:inline-block; width:17px; height:17px; font-size:0; background:url("../images/ico_sm_info.png") no-repeat; vertical-align:middle; margin-left:7px;}
 .ico_sm.ico_file_dw {background-position:0 0;}
 .ico_sm.ico_file_dw:hover {background-position:0 -23px;}
 .ico_sm.ico_copy {background-position:0 -46px; margin-left:0;}
@@ -2689,6 +2697,7 @@ p.no-txt{
 
 .accss_guideWrap .txt_level_list {margin-top:5px;}
 .accss_guideWrap .txt_level_list dl {padding:5px 0 0 30px;}
+.accss_guideWrap .txt_level_list dl::after {display:block; content:''; clear:both;}
 .accss_guideWrap .txt_level_list dl dt {float:left; font-weight:500;}
 .accss_guideWrap .txt_level_list dl dt + dd + dt {clear:both;}
 .accss_guideWrap .txt_level_list dl dd {float:left; color:#1360ec; padding-left:3px;}
