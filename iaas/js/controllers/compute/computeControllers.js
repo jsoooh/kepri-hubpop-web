@@ -100,10 +100,10 @@ angular.module('iaas.controllers')
                         isCreatingTimmerStop = false;
                     }
                     if (!serverMain.creatingTimmer) {
-                        var createdDate = new Date(serverMain.created);
                         if (angular.isObject(serverMain.elapsed)) {
                             serverMain.creatingTimmer = parseInt(serverMain.elapsed.time/1000, 10);
                         } else {
+                            var createdDate = new Date(serverMain.created);
                             serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                         }
                     } else {
@@ -144,10 +144,10 @@ angular.module('iaas.controllers')
                         }
                         ct.fn.setProcState(serverMain);
                         ct.fn.setRdpConnectDomain(serverMain);
-                        var createdDate = new Date(serverMain.created);
                         if (angular.isObject(serverMain.elapsed)) {
                             serverMain.creatingTimmer = parseInt(serverMain.elapsed.time/1000, 10);
                         } else {
+                            var createdDate = new Date(serverMain.created);
                             serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                         }
                     });
