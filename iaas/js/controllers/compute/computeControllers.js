@@ -353,15 +353,16 @@ angular.module('iaas.controllers')
                         }
                         var serverMainList = angular.copy(ct.serverMainList);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
+                            ct.fn.setProcState(instanceStateInfo);
                             var serverItem = common.objectsFindByField(serverMainList, "id", instanceStateInfo.id);
                             if (serverItem && serverItem.id) {
+                                delete serverItem.taskState;
                                 angular.forEach(instanceStateInfo, function(value, key) {
                                     serverItem[key] = value;
                                 });
                             } else {
                                 serverItem = instanceStateInfo;
                             }
-                            ct.fn.setProcState(serverItem);
                             if (serverItem.procState != 'end') {
                                 isServerStatusCheck = true;
                                 if (ct.serverMainList[inKey]) {
@@ -866,7 +867,7 @@ angular.module('iaas.controllers')
                         image.minDisk = (image.minDisk > sizeGb) ? image.minDisk : sizeGb;
                         image.minRam = (image.minRam > 0) ? image.minRam/(1024) : 0;
                     });
-                    ct.fn.imageClick(ct.imageList[0]);
+                    ct.fn.imageChange(ct.imageList[0].id);
                 }
                 ct.imageListLoad = true;
             });
@@ -877,9 +878,13 @@ angular.module('iaas.controllers')
             });
         };
         
-        ct.fn.imageClick = function (image) {
-            ct.data.image = angular.copy(image);
-            ct.sltImageId = ct.data.image.id;
+        ct.fn.imageChange = function (imageId) {
+            ct.data.image = common.objectsFindCopyByField(ct.imageList, "id", imageId);
+            if (ct.data.image && ct.data.image.id) {
+                ct.sltImageId = ct.data.image.id;
+            } else {
+                ct.sltImageId = "";
+            }
             ct.fn.setSpecAllEnabled();
             ct.fn.setSpecMinDisabled();
             ct.fn.setSpecMaxDisabled();
