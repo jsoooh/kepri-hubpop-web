@@ -2048,7 +2048,7 @@ angular.module('common.services', ['LocalStorageModule'])
             dialogOptions.controller = function ($scope) {
                 _DebugConsoleLog("rightSliderContentsCtrl", 3);
                 var vm = this;
-                vm.data = (data) ? dialogOptions : {};
+                vm.data = (data) ? data : {};
             };
 
             dialogOptions.dialogId = "slider-contents";

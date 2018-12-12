@@ -6,7 +6,7 @@
 <!-- //aside title -->
 
 <!-- aside cnt -->
-<div class="acss_info sideCntWrap ovflw_auto" ng-include="dialogOptions.templateUrl">
+<div id="riteSliderBody" class="acss_info sideCntWrap ovflw_auto" ng-include="dialogOptions.templateUrl">
 </div>
 <!-- //aside cnt -->
 
@@ -16,7 +16,7 @@
 		<button type="button" name="button" class="btn" ng-click="dialogOptions.popDialogOk();">닫기</button>
 	</div>
 	<div class="btn_t_box">
-		<button type="button" name="button" class="btn btn-color6" data-user="aside-close"><span class="ico_top ">TOP</span></button>
+		<button type="button" name="button" class="btn btn-color6" ng-click="main.targetScrollTop('riteSliderBody');" ><span class="ico_top ">TOP</span></button>
 	</div>
 </div>
 <!-- //aside btm -->

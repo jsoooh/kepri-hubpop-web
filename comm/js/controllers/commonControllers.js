@@ -1234,6 +1234,10 @@ angular.module('common.controllers', [])
             common.showRightSliderContents($scope, templateUrl, data, sliderWidth);
         };
 
+        mc.targetScrollTop = function (id) {
+            $('#' + id)[0].scrollTop = 0
+        };
+
         mc.resetInit();
         mc.setMainLanguage(common.getLanguageKey());
         mc.sltProjectId = common.getProjectKey();
