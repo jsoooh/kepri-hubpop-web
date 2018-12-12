@@ -41,11 +41,13 @@
 							<span class="ico">실행 설정</span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li ng-click="contents.fn.formOpen($event, 'snapshot', volume);"><a href="javascript:void(0);" title="연결된 서버가 ‘정지’상태인 경우 이미지 생성이 가능합니다.">백업 이미지 생성</a></li>
-							<li ng-click="contents.fn.formOpen($event, 'rename', volume);"><a href="javascript:void(0);" title="디스크 이름 변경">디스크 이름 변경</a></li>
-							<li ng-click="contents.fn.formOpen($event, 'resize', volume);"><a href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
-							<li ng-click="contents.fn.dettachVolume()" ng-show="contents.volume.status == 'in-use'" ><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>
-							<li ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="연결된 서버가 ‘정지’상태인 경우 이미지 생성이 가능합니다.">백업 이미지 생성</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="디스크 이름 변경">디스크 이름 변경</a></li>
+							<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="디스크 크기 변경">디스크 크기 변경</a></li>
+							<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
+							<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
+							<li ng-if="volume.status =='available'" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 삭제">디스크 삭제</a></li>
+							<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
 						</ul>
 					</div>
 				</div>

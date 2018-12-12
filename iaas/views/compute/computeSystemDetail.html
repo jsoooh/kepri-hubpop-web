@@ -15,7 +15,7 @@
 						<li ng-if="deployServer.deployStatus != 'fail' && contents.instance.vmState == 'active'"><a href="" ng-click="contents.fn.serverActionConfirm('PAUSE',contents.instance)">일시정지</a></li>
 						<li ng-if="deployServer.deployStatus != 'fail' && contents.instance.vmState == 'paused'"><a href="" ng-click="contents.fn.serverActionConfirm('UNPAUSE',contents.instance)">정지해제</a></li>
 						<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li>
-						<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createSnapshot($event,contents.instance);">이미지 백업이미지</a></li>
+						<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createSnapshot($event,contents.instance);">이미지 백업 이미지</a></li>
 						<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createInstanceVolumePop(contents.instance);">디스크연결</a></li>
 						<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>
 						<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>
@@ -183,8 +183,8 @@
 								</p>
 							</div>
 							<div class="dropdown">
-								<button type="button" class="txt2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-									<span class="ico">실행 설정</span>
+								<button type="button" class="txt2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="연결해제">
+									<span class="ico">연결해제</span>
 								</button>
 								<ul class="dropdown-menu dropdown-menu-right" role="btn-volum" aria-labelledby="btn-volum">
 									<li><a href="javascript:void(0);" ng-click="contents.fn.restorationConfirm(volume);">연결해제</a></li>

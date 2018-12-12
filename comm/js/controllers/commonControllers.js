@@ -1229,10 +1229,9 @@ angular.module('common.controllers', [])
             $(selectors).stop().animate({'right' : '-360px'}, 400);
         };
 
-        mc.showRightSliderContents = function(templateUrl, sliderWidth) {
+        mc.showRightSliderContents = function(templateUrl, data, sliderWidth) {
             templateUrl = _COMM_VIEWS_ + templateUrl;
-            //mc.sliderContentsWidth = sliderWidth ? sliderWidth : 1000;
-            common.showRightSliderContents($scope, templateUrl, sliderWidth);
+            common.showRightSliderContents($scope, templateUrl, data, sliderWidth);
         };
 
         mc.resetInit();

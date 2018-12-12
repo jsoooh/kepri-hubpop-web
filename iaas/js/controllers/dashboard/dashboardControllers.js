@@ -643,7 +643,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','백업이미지을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','백업 이미지을 생성할 수 있는 상태가 아닙니다.');
             }
         };
 
@@ -1657,7 +1657,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','백업이미지을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','백업 이미지을 생성할 수 있는 상태가 아닙니다.');
             }
         }
 

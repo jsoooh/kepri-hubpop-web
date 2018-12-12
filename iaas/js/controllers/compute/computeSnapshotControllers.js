@@ -49,7 +49,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.deleteInstanceSnapshot = function(instanceSnapshot) {
-            common.showConfirm('백업이미지 삭제', instanceSnapshot.snapShotName+' 백업이미지을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('백업 이미지 삭제', instanceSnapshot.snapShotName+' 백업 이미지을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : instanceSnapshot.tenantId,
@@ -95,7 +95,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.deleteStorageSnapshot = function(storageSnapshot) {
-            common.showConfirm('백업이미지 삭제', storageSnapshot.snapshotName+' 백업이미지을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('백업 이미지 삭제', storageSnapshot.snapshotName+' 백업 이미지을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : storageSnapshot.tenantId,
@@ -434,7 +434,7 @@ angular.module('iaas.controllers')
 
             if (ct.volumeSize > 0) {
                 params.volume = {};
-                params.volume.name = instance.name+'_volume01';
+                params.volume.name = ct.data.name+'_volume01';
                 params.volume.type = 'HDD';
                 params.volume.size = ct.volumeSize;
                 params.volume.tenantId = ct.data.tenantId;

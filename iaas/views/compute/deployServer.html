@@ -29,7 +29,7 @@
 								<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState != 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('STOP',deployServer,diployIndex);">중지</a></li>
 								<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',deployServer,diployIndex);">재시작</a></li>
 								<li><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('DELETE',deployServer,diployIndex);">삭제</a></li>
-								<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('SNAPSHOT', deployServer, diployIndex);">이미지 백업이미지</a></li>
+								<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('SNAPSHOT', deployServer, diployIndex);">이미지 백업 이미지</a></li>
 								<li ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('IPCONNECT', deployServer, diployIndex);">접속IP할당</a></li>
 								<li ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT', deployServer, diployIndex);">접속IP해제</a></li>
 							</ul>
@@ -225,7 +225,7 @@
 								<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState != 'stopped'" value="STOP">중지</option>
 								<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'active'" value="REBOOT">재시작</option>
 								<option value="DELETE">삭제</option>
-								<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'" value="SNAPSHOT">이미지 백업이미지</option>
+								<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'" value="SNAPSHOT">이미지 백업 이미지</option>
 								<option ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp == ''" value="IPCONNECT">접속IP할당</option>
 								<option ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp != ''" value="IPDISCONNECT">접속IP해제</option>
 							</select>

@@ -24,7 +24,7 @@
             "instance_ui_error_ip" : "네트워크 생성 오류 입니다.",
             "instance_ui_error_volume" : "디스크 생성 오류 입니다.",
             "instance_ui_created_complete" : "인스턴스 완료 하였습니다.",
-            "instance_active" : "정상",
+            "instance_active" : "활성",
             "instance_stopped" : "정지",
             "instance_error" : "오류",
             "instance_paused" : "일시정지",
