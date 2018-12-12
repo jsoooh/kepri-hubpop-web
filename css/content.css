@@ -2747,9 +2747,17 @@ p.no-txt{
 .panel.type2.zoom .panel_body .in.type2 {overflow-y:hidden !important; height:auto;}
 
 /*서버 생성 후 박스 깜빡임 효과*/
-.panel.type5.new-create {animation: new-create ease-in-out 0.7s infinite alternate; -webkit-animation: new-create ease-in-out 0.7s infinite alternate;}
+.panel.type5.new-create {animation: new-create ease-in-out 0.7s infinite alternate; -webkit-animation: new-create ease-in-out 0.7s infinite alternate; -ms-animation: new-create ease-in-out 0.7s infinite alternate;}
 
 @-webkit-keyframes new-create  {
+    /* 0% {border:1px solid #1e80ef;}
+    33% {border:1px solid #4d99ee;}
+    66% {border:1px solid #6fabee;}
+    100% {border:1px solid #9ec4ee;} */
+   from {border:2px solid #1e80ef;}
+    to {border:2px solid #afdafa;} 
+}
+@-ms-keyframes new-create  {
     /* 0% {border:1px solid #1e80ef;}
     33% {border:1px solid #4d99ee;}
     66% {border:1px solid #6fabee;}
