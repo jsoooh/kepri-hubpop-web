@@ -623,7 +623,7 @@ angular.module('iaas.controllers')
 
         // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
-            common.showConfirm('디스크 반환','※'+volume.volumeName+' 디스크을 반환 합니다. 반환된 디스크에 대한 관리는 스토리지 관리에서 가능합니다').then(function(){
+            common.showConfirm('디스크 연결해제','서버와의 연결을 해제 하시겠습니까?').then(function(){
                 ct.fn.restorationVolume(volume);
             });
         };
@@ -635,7 +635,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach:volume});
             returnPromise.success(function (data, status, headers) {
                 ct.fn.searchInstanceVolumeList();
-                common.showAlertSuccess("디스크이 반환 되었습니다.");
+                common.showAlertSuccess("서버와의 연결을 해제 되었습니다.");
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -1237,7 +1237,7 @@ angular.module('iaas.controllers')
 
         // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
-            common.showConfirm('디스크 반환','※'+volume.volumeName+' 디스크을 반환 합니다. 반환된 디스크에 대한 관리는 스토리지 관리에서 가능합니다').then(function(){
+            common.showConfirm('디스크 연결해제','서버와의 연결을 해제 하시겠습니까?').then(function(){
                 ct.fn.restorationVolume(volume);
             });
         };
@@ -1249,7 +1249,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach:volume});
             returnPromise.success(function (data, status, headers) {
                 ct.fn.searchInstanceVolumeList();
-                common.showAlertSuccess("디스크이 반환 되었습니다.");
+                common.showAlertSuccess("서버와의 연결을 해제 되었습니다.");
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -2183,7 +2183,7 @@ angular.module('iaas.controllers')
         
         pop.fn = {};
         pop.formName = "createSnapshotForm";
-        pop.title = "인스턴스 백업이미지 생성";
+        pop.title = "인스턴스 백업 이미지 생성";
         
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.actionBtnHied = false;

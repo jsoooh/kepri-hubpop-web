@@ -72,7 +72,7 @@
 										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
 										<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw">파일다운로드</span></button></li>
 									</ul>
-									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents('/guideInfo/accessGuideInfo01.html');">접속방법 가이드</a></div>
+									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents('/guideInfo/accessGuideInfo01.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">접속방법 가이드</a></div>
 								</div>
 								<!-- windows  -->
 								<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
@@ -85,7 +85,7 @@
 										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
 										<li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li>
 									</ul>
-									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents('/guideInfo/accessGuideInfo02.html');">접속방법 가이드</a></div>
+									<div class="guide_link"><a href="" ng-click="main.showRightSliderContents('/guideInfo/accessGuideInfo02.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">접속방법 가이드</a></div>
 								</div>
 							</div>
 						</div>
@@ -110,7 +110,7 @@
 								<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="서버 삭제">서버 삭제</a></li>
 								<!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
 								<!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
-								<!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업이미지</a></li> -->
+								<!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업 이미지</a></li> -->
 								<!--<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>-->
 								<!--<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>-->
 							</ul>
@@ -164,7 +164,7 @@
 									<span ng-if="instance.vmState == 'error'" class="stateMark type2">오류</span>
 									<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building'" class="stateMark type4">대기</span>
 									<span ng-if="instance.vmState == 'stopped'" class="stateMark type3">중지</span>
-									<span class="state-txt">{{instance.vmState | iaasVmState}}</span>
+									<span class="state-txt">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
 								</span>
 							</div>
 						</div>

@@ -1095,7 +1095,7 @@ angular.module('iaas.controllers')
 
             if (ct.volumeSize > 0) {
                 params.volume = {};
-                params.volume.name = instance.name+'_volume01';
+                params.volume.name = ct.data.name+'_volume01';
                 params.volume.type = 'HDD';
                 params.volume.size = ct.volumeSize;
                 params.volume.tenantId = ct.data.tenantId;

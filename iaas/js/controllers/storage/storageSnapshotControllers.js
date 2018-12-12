@@ -48,7 +48,7 @@ angular.module('iaas.controllers')
 
 
         ct.fn.deleteSnapshot = function(snapshot) {
-            common.showConfirm('백업이미지 삭제',snapshot.snapshotName+' 백업이미지을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('백업 이미지 삭제',snapshot.snapshotName+' 백업 이미지을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : snapshot.tenantId,

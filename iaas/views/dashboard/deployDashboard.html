@@ -183,7 +183,7 @@
 							<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState != 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('STOP',deployServer,diployIndex);">중지</a></li>
 							<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',deployServer,diployIndex);">재시작</a></li>
 							<li><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('DELETE',deployServer,diployIndex);">삭제</a></li>
-							<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('SNAPSHOT', deployServer, diployIndex);">이미지 백업이미지</a></li>
+							<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('SNAPSHOT', deployServer, diployIndex);">이미지 백업 이미지</a></li>
 							<li ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('IPCONNECT', deployServer, diployIndex);">접속IP할당</a></li>
 							<li ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT', deployServer, diployIndex);">접속IP해제</a></li>
 						</ul>
@@ -380,7 +380,7 @@
 						<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState != 'stopped'" value="STOP">중지</option>
 						<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'active'" value="REBOOT">재시작</option>
 						<option value="DELETE">삭제</option>
-						<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'" value="SNAPSHOT">이미지 백업이미지</option>
+						<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'" value="SNAPSHOT">이미지 백업 이미지</option>
 						<option ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp == ''" value="IPCONNECT">접속IP할당</option>
 						<option ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp != ''" value="IPDISCONNECT">접속IP해제</option>
 					</select>
@@ -423,7 +423,7 @@
 							<span class="ico">실행 설정</span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li ng-click="contents.formOpen($event, 'volume', 'snapshot', volume);"><a href="javascript:void(0);">디스크 백업이미지</a></li>
+							<li ng-click="contents.formOpen($event, 'volume', 'snapshot', volume);"><a href="javascript:void(0);">디스크 백업 이미지</a></li>
 							<li ng-click="contents.fn.deleteVolumes('thum', volume.volumeId);"><a href="javascript:void(0);">디스크 삭제</a></li>
 						</ul>
 					</div>
@@ -510,7 +510,7 @@
 				<th>크기</th>
 				<th>상태</th>
 				<th>연결정보</th>
-				<th>백업이미지</th>
+				<th>백업 이미지</th>
 				<th>관리</th>
 			</tr>
 		</thead>
@@ -534,7 +534,7 @@
 				</td>
 				<td class="text-left">{{volume.volumeAttachment.device}}&nbsp;&nbsp;<span ng-if="volume.volumeAttachment.instanceName">({{volume.volumeAttachment.instanceName}})</span></td>
 				<td>
-					<button type="button" class="btn btn-ico-resto-s only-ico" tooltip-placement="bottom" title="디스크 백업이미지 생성" ng-click="contents.formOpen($event, 'volume', 'snapshot', volume);"><span class="ico">디스크 백업이미지 생성</span></button>
+					<button type="button" class="btn btn-ico-resto-s only-ico" tooltip-placement="bottom" title="디스크 백업 이미지 생성" ng-click="contents.formOpen($event, 'volume', 'snapshot', volume);"><span class="ico">디스크 백업 이미지 생성</span></button>
 				</td>
 				<td>
 					<button type="button" class="btn btn-ico-del-s only-ico" tooltip-placement="bottom" title="삭제" ng-click="contents.fn.deleteVolumes('thum', volume.volumeId);"><span class="ico">삭제</span></button>

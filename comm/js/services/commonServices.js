@@ -2039,7 +2039,7 @@ angular.module('common.services', ['LocalStorageModule'])
             return dialog;
         };
 
-        common.showRightSliderContents = function ($scope, templateUrl, sliderWidth) {
+        common.showRightSliderContents = function ($scope, templateUrl, data, sliderWidth) {
 
             var dialogOptions	= {};
             dialogOptions.dialogClassName = "modal-right-dialog";
@@ -2048,7 +2048,7 @@ angular.module('common.services', ['LocalStorageModule'])
             dialogOptions.controller = function ($scope) {
                 _DebugConsoleLog("rightSliderContentsCtrl", 3);
                 var vm = this;
-                vm.data = (dialogOptions.data) ? dialogOptions : {};
+                vm.data = (data) ? dialogOptions : {};
             };
 
             dialogOptions.dialogId = "slider-contents";

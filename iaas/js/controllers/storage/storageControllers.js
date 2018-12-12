@@ -121,9 +121,9 @@ angular.module('iaas.controllers')
         		common.showConfirm('디스크 삭제','디스크을 삭제 하시겠습니까?').then(function(){
                     ct.deleteVolumesAction(type, id);
                 });
-        	}else if(type == 'tbl'){
+        	} else if(type == 'tbl'){
         		if(ct.roles.length == 0) {
-                    common.showAlert('메세지','선택된 디스크이 없습니다.');
+                    common.showAlert('메세지','선택된 디스크가 없습니다.');
                 } else {
                     common.showConfirm('디스크 삭제','선택된 '+ct.roles.length+'개의 디스크을 삭제 하시겠습니까?').then(function(){
                         ct.deleteVolumesAction(type, id);
@@ -139,7 +139,7 @@ angular.module('iaas.controllers')
             var prom = [];
             if(type == 'thum'){
             	prom.push(ct.deleteVolumesJob(id));
-            }else if(type == 'tbl'){
+            } else if(type == 'tbl'){
             	for(var i=0; i< ct.roles.length; i++) {
                     prom.push(ct.deleteVolumesJob(ct.roles[i]));
                 }
@@ -150,6 +150,7 @@ angular.module('iaas.controllers')
                         common.showAlert('메세지','오류가 발생하였습니다.');
                     }
                 }
+                common.showAlertSuccess('디스크가 삭제 되었습니다.');
                 ct.fn.getStorageList();
                 ct.roles = [];
             }).catch(function(e){
@@ -208,7 +209,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','백업이미지을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','백업 이미지을 생성할 수 있는 상태가 아닙니다.');
             }
         };
 
@@ -658,7 +659,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','백업이미지을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','백업 이미지을 생성할 수 있는 상태가 아닙니다.');
             }
         }
         
@@ -845,7 +846,7 @@ angular.module('iaas.controllers')
         pop.formName = "createSnapshotForm";
         pop.validDisabled = true;
         pop.dialogClassName = "modal-lg";
-        pop.title = "디스크 백업이미지 생성";
+        pop.title = "디스크 백업 이미지 생성";
 
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
 
@@ -889,7 +890,7 @@ angular.module('iaas.controllers')
         }
     })
     //////////////////////////////////////////////////////////////////////////
-    //////////////       2018.11.22 디스크 백업이미지 생성 팝업      sg0730 ///////////////
+    //////////////       2018.11.22 디스크 백업 이미지 생성 팝업      sg0730 ///////////////
     //////////////////////////////////////////////////////////////////////////    
      .controller('iaasCreateStorageSnapshotPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasCreateStorageSnapshotPopFormCtrl", 1);
