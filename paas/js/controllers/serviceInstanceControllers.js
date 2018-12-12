@@ -266,6 +266,7 @@ angular.module('paas.controllers')
         ct.actionBtnHied 		= false; // btn enabled
         ct.spaceAppsLoad 		= false;
         ct.serviceInstanceName ='service-001';
+        ct.servicesLoad         = false;
 
         ct.sltServiceChange = function (serviceGuid) {
             var sltService = common.objectsFindCopyByField(ct.services, "guid", serviceGuid);
@@ -325,10 +326,12 @@ angular.module('paas.controllers')
                     });
                 });
                 ct.sltServiceChange(ct.services[0].guid);
+                ct.servicesLoad = true;
                 $scope.main.loadingMainBody = false;
             });
             resultPromise.error(function (data, status, headers) {
                 ct.services = [];
+                ct.servicesLoad = true;
                 $scope.main.loadingMainBody = false;
             });
         };

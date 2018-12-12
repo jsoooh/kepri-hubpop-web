@@ -58,7 +58,7 @@
 						<i class="i_star"></i> <span class="pnb_t_txt">빌드팩(Buildpack) 선택</span>
 						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'빌드팩(Buildpack)은 사용자가 제작한 APP이 실행되는 환경을 자동으로 구성하기 위한 S/W 패키지입니다. 일반적으로 APP을 개발한 언어에 맞춰 빌드팩을 지정합니다.'"><span class="ico_info"></span></button></div>
 					</div>
-					<div ng-if="contents.portalBuildpacksLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="os_select_panel">
+					<div ng-if="contents.portalBuildpacksLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="buildpack_select_panel">
 						<ul class="ul-list1">
 							<li ng-repeat="(key, buildpackItem) in contents.portalBuildpacks track by $index">
 								<div class="radio1 radio-inline">
