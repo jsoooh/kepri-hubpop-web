@@ -941,8 +941,8 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             pop.data.tenantId = pop.userTenant.id;
             pop.data.volumeId = pop.volume.volumeId;
-            pop.data.name 	  = pop.volume.name;
-            
+            pop.data.volumeName = pop.volume.name;
+
             common.mdDialogHide();
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'POST', {volumeSnapShot:pop.data});

@@ -99,11 +99,14 @@ angular.module('iaas.controllers')
                     if (serverMain.procState != 'end') {
                         isCreatingTimmerStop = false;
                     }
-                    if (serverMain.created) {
+                    if (!serverMain.creatingTimmer) {
                         var createdDate = new Date(serverMain.created);
-                        serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000);
+                        if (angular.isObject(serverMain.elapsed)) {
+                            serverMain.creatingTimmer = parseInt(serverMain.elapsed.time/1000, 10);
+                        } else {
+                            serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
+                        }
                     } else {
-                        if (!serverMain.creatingTimmer) serverMain.creatingTimmer = 0;
                         serverMain.creatingTimmer++;
                     }
                 });
@@ -141,12 +144,11 @@ angular.module('iaas.controllers')
                         }
                         ct.fn.setProcState(serverMain);
                         ct.fn.setRdpConnectDomain(serverMain);
-                        if (serverMain.created) {
-                            var createdDate = new Date(serverMain.created);
-                            serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000);
+                        var createdDate = new Date(serverMain.created);
+                        if (angular.isObject(serverMain.elapsed)) {
+                            serverMain.creatingTimmer = parseInt(serverMain.elapsed.time/1000, 10);
                         } else {
-                            if (!serverMain.creatingTimmer) serverMain.creatingTimmer = 0;
-                            serverMain.creatingTimmer++;
+                            serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                         }
                     });
                     if (isServerStatusCheck) {
