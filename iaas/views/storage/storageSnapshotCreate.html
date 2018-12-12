@@ -4,18 +4,18 @@
 </div>
 
 <div class="panel_area">
-    <form name="{{contents.formName}}" novalidate>
-        <div class="panel_box pn_l">
-            <div class="pn_head">
-                <h4 class="pnh_tit">백업이미지 디스크 만들기</h4>
-            </div>
+    <div class="panel_box pn_l">
+        <div class="pn_head">
+            <h4 class="pnh_tit">백업이미지 디스크 만들기</h4>
+        </div>
+        <form name="{{contents.formName}}" novalidate>
             <div class="pn_body">
                 <span class="sm_txt">* 는 필수입력 사항입니다.</span>
                 <ul class="form_list">
                     <li>
                         <div class="pnb_tit">백업 이미지 이름<span class="ico_info"></span>
                         </div>
-                        <input type="text" class="form-control" ng-value="contents.snapshotVolume.snapshotName" disabled>
+                        <input type="text" class="form-control" ng-value="contents.snapshotVolume.volumeName" disabled>
                     </li>
                     <li>
                         <div class="pnb_tit">
@@ -115,119 +115,119 @@
                     </li>
                 </ul>
             </div>
-            <div class="pn_footer">
-                <div class="btn-btm mgt0">
-                    <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.snapshotAndCreateStorage()">디스크 만들기</button>
-                    <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
-                </div>
+        </form>
+        <div class="pn_footer">
+            <div class="btn-btm mgt0">
+                <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.snapshotAndCreateStorage()">디스크 만들기</button>
+                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
             </div>
         </div>
-        <div class="panel_box pn_r">
-            <div class="pn_head">
-                <h4 class="pnh_tit ico02">디스크 기본정보</h4>
-            </div>
-            <div class="pn_body">
-                <div class="s_cont_box">
-                    <ul>
-                        <li>
-                            <span class="s_tit">디스크 이름</span>
-                            <span class="s_txt">{{contents.volume.name}}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">디스크 크기</span>
-                            <span class="s_txt">{{contents.volumeSize | displayVolume:'GB'}}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">디스크 유형<span class="ico_info"></span></span>
-                            <span class="s_txt">Volume Storage</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">디스크 설명</span>
-                            <!-- <span class="s_txt">text-area</span> -->
-                            <div class="s_inner_cont">
-                                <pre>{{contents.volume.description}}</pre>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pn_head brdt">
-                <h4 class="pnh_tit ico01">연결대상 가상서버 정보</h4>
-            </div>
-            <div class="pn_body">
-                <div class="s_cont_box">
-                    <ul>
-                        <li>
-                            <span class="s_tit">서버 이름</span>
-                            <span class="s_txt">{{contents.sltInstance.name}}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">서버 OS</span>
-                            <span class="s_txt">{{contents.sltInstance.image.serviceName}}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">서버 접속IP</span>
-                            <span class="s_txt">{{contents.sltInstance.floatingIp}}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">서버 사양</span>
-                            <span class="s_txt">소형</span>
-                            <div class="s_inner_cont">
-                                <div class="innr_tbl">
-                                    <table>
-                                        <colgroup>
-                                            <col width="30" />
-                                            <col width="30" />
-                                            <col width="30" />
-                                        </colgroup>
-                                        <thead>
-                                        <tr>
-                                            <th>vCPU</th>
-                                            <th>메모리</th>
-                                            <th>디스크</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>{{contents.sltInstance.spec.vcpus}} Core</td>
-                                            <td>{{contents.sltInstance.spec.ram | displayVolume:'MB'}}</td>
-                                            <td>{{contents.sltInstance.spec.disk | displayVolume:'GB'}}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pn_head brdt">
-                <h4 class="pnh_tit ico03">프로젝트 사용가능 디스크 정보</h4>
-            </div>
-            <div class="pn_body">
-                <div class="s_cont_box">
-                    <ul>
-                        <li>
-                            <span class="s_tit">전체 쿼터</span>
-                            <span class="s_txt">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB' }}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">현재 사용량</span>
-                            <span class="s_txt">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB' }}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">잔여 용량</span>
-                            <span class="s_txt">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB' }}</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btn-btm">
-                    <button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
-                </div>
-            </div>
-
+    </div>
+    <div class="panel_box pn_r">
+        <div class="pn_head">
+            <h4 class="pnh_tit ico02">디스크 기본정보</h4>
         </div>
-    </form>
+        <div class="pn_body">
+            <div class="s_cont_box">
+                <ul>
+                    <li>
+                        <span class="s_tit">디스크 이름</span>
+                        <span class="s_txt">{{contents.volume.name}}</span>
+                    </li>
+                    <li>
+                        <span class="s_tit">디스크 크기</span>
+                        <span class="s_txt">{{contents.volumeSize | displayVolume:'GB'}}</span>
+                    </li>
+                    <li>
+                        <span class="s_tit">디스크 유형<span class="ico_info"></span></span>
+                        <span class="s_txt">Volume Storage</span>
+                    </li>
+                    <li>
+                        <span class="s_tit">디스크 설명</span>
+                        <!-- <span class="s_txt">text-area</span> -->
+                        <div class="s_inner_cont">
+                            <pre>{{contents.volume.description}}</pre>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="pn_head brdt">
+            <h4 class="pnh_tit ico01">연결대상 가상서버 정보</h4>
+        </div>
+        <div class="pn_body">
+            <div class="s_cont_box">
+                <ul>
+                    <li>
+                        <span class="s_tit">서버 이름</span>
+                        <span class="s_txt">{{contents.sltInstance.name}}</span>
+                    </li>
+                    <li>
+                        <span class="s_tit">서버 OS</span>
+                        <span class="s_txt">{{contents.sltInstance.image.serviceName}}</span>
+                    </li>
+                    <li>
+                        <span class="s_tit">서버 접속IP</span>
+                        <span class="s_txt">{{contents.sltInstance.floatingIp}}</span>
+                    </li>
+                    <li>
+                        <span class="s_tit">서버 사양</span>
+                        <span class="s_txt">소형</span>
+                        <div class="s_inner_cont">
+                            <div class="innr_tbl">
+                                <table>
+                                    <colgroup>
+                                        <col width="30" />
+                                        <col width="30" />
+                                        <col width="30" />
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>vCPU</th>
+                                        <th>메모리</th>
+                                        <th>디스크</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{contents.sltInstance.spec.vcpus}} Core</td>
+                                        <td>{{contents.sltInstance.spec.ram | displayVolume:'MB'}}</td>
+                                        <td>{{contents.sltInstance.spec.disk | displayVolume:'GB'}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="pn_head brdt">
+            <h4 class="pnh_tit ico03">프로젝트 사용가능 디스크 정보</h4>
+        </div>
+        <div class="pn_body">
+            <div class="s_cont_box">
+                <ul>
+                    <li>
+                        <span class="s_tit">전체 쿼터</span>
+                        <span class="s_txt">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB' }}</span>
+                    </li>
+                    <li>
+                        <span class="s_tit">현재 사용량</span>
+                        <span class="s_txt">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB' }}</span>
+                    </li>
+                    <li>
+                        <span class="s_tit">잔여 용량</span>
+                        <span class="s_txt">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB' }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-btm">
+                <button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
+            </div>
+        </div>
+
+    </div>
 </div>

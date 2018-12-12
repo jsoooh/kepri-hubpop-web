@@ -56,15 +56,30 @@ angular.module('common.services', ['LocalStorageModule'])
 
         // PortalOrg
         common.getPortalOrgKey = function () {
-            return cache.getPortalOrgKey();
+            return cookies.getPortalOrgKey();
         };
 
         common.setPortalOrgKey = function (portalOrgId) {
             cookies.setPortalOrgKey(portalOrgId);
+            common.setTeamCode(common.getProjectKey() + "-" + portalOrgId);
         };
 
         common.clearPortalOrgKey = function () {
             cookies.clearPortalOrgKey();
+            common.setTeamCode();
+        };
+
+        // TeamCode
+        common.getTeamCode = function () {
+            return cookies.getTeamCode();
+        };
+
+        common.setTeamCode = function (teamCode) {
+            cookies.setTeamCode(teamCode);
+        };
+
+        common.setTemeCode = function () {
+            cookies.setTeamCode();
         };
 
         // company
@@ -2925,6 +2940,19 @@ angular.module('common.services', ['LocalStorageModule'])
 
         cookies.clearPortalOrgKey = function () {
             $cookies.remove(_PROJECT_ID_COOKIE_NAME_, cookiesOption);
+        };
+
+        // TeamCode
+        cookies.getTeamCode = function () {
+            return $cookies.get(_PROJECT_CODE_COOKIE_NAME_);
+        };
+
+        cookies.setTeamCode = function (teamCode) {
+            $cookies.put(_PROJECT_CODE_COOKIE_NAME_, teamCode, cookiesOption);
+        };
+
+        cookies.setTemeCode = function () {
+            $cookies.remove(_PROJECT_CODE_COOKIE_NAME_, cookiesOption);
         };
 
         cookies.getLeftMenuShow = function () {

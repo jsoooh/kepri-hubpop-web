@@ -412,10 +412,10 @@ angular.module('iaas.controllers')
             params.volume.description = ct.volume.description;
 
             if (ct.sltInstance && ct.sltInstance.id) {
-                params.volumeAttachment = {};
-                params.volumeAttachment.instanceId = ct.sltInstance.id;
-                params.volumeAttachment.instanceName = ct.sltInstance.name;
-                params.volumeAttachment.instanceId = ct.sltInstance.id;
+                params.volume.volumeAttachment = {};
+                params.volume.volumeAttachment.id = ct.sltInstance.id;
+                params.volume.volumeAttachment.instanceName = ct.sltInstance.name;
+                params.volume.volumeAttachment.instanceId = ct.sltInstance.id;
             }
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'POST', params);

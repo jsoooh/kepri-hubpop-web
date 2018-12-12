@@ -249,10 +249,10 @@ angular.module('iaas.controllers')
             params.newVolumeInfo.description = ct.volume.description;
 
             if (ct.sltInstance && ct.sltInstance.id) {
-                params.volumeAttachment = {};
-                params.volumeAttachment.instanceId = ct.sltInstance.id;
-                params.volumeAttachment.instanceName = ct.sltInstance.name;
-                params.volumeAttachment.instanceId = ct.sltInstance.id;
+                params.newVolumeInfo.volumeAttachment = {};
+                params.newVolumeInfo.volumeAttachment.id = ct.sltInstance.id;
+                params.newVolumeInfo.volumeAttachment.instanceName = ct.sltInstance.name;
+                params.newVolumeInfo.volumeAttachment.instanceId = ct.sltInstance.id;
             }
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', params);
@@ -413,7 +413,7 @@ angular.module('iaas.controllers')
             var param = {
                 newVolumeInfo : pop.data,
                 volumeSnapShot : pop.snapshot
-            }
+            };
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', param);
             returnPromise.success(function (data, status, headers) {

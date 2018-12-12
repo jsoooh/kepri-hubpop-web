@@ -374,16 +374,6 @@ angular.module('iaas.controllers')
             });
         };
 
-        ct.fn.subDomainCustomValidationCheck = function(subDomain) {
-            if (subDomain && angular.isArray(ct.usingDomainNames) && ct.usingDomainNames.length > 0) {
-                var domainName = subDomain + "." + ct.data.baseDomainName;
-                if ((ct.formMode != "mod" || ct.orgDomain.domain != domainName) && ct.usingDomainNames.indexOf(domainName) >= 0) {
-                    return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
-                }
-            }
-            return {isValid : true};
-        };
-
         //디스크생성 변수
         ct.volumeSize = 0;
         ct.inputVolumeSize = ct.volumeSize;
@@ -436,7 +426,7 @@ angular.module('iaas.controllers')
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
             params.instance.spec = ct.data.spec;
 
-            if (ct.data.image.osType == 'windows') {
+            if (ct.snapshotInfo.osType == 'windows') {
                 if (ct.data.baseDomainName && ct.data.subDomainName) {
                     params.instance.rdpDomain = ct.data.subDomainName + "." + ct.data.baseDomainName;
                 }
@@ -451,7 +441,7 @@ angular.module('iaas.controllers')
             }
 
             $scope.main.loadingMainBody = true;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', {instance : ct.data});
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers) {
                 clickCheck = false;
                 $scope.main.loadingMainBody = false;
