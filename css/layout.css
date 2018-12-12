@@ -359,9 +359,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb_m_proj .gnb-menu > li > ul {padding:0;}
 .gnb_m_proj .gnb-menu > li > ul > li {position:relative; background:none; padding:0;}
 .gnb_m_proj .gnb-menu > li > ul > li > a{display:block; font-size:14px; color:#8d96ad; line-height:24px; word-break:break-all; padding:0 23px; background:none;}
-.gnb_m_proj .gnb-menu > li > ul > li.pj_create {padding:5px 20px;}
-/* .gnb_m_proj .gnb-menu > li > ul > li.pj_create > a {font-style:italic; background: url("../images/ico_plus12x12.png") no-repeat #3b4152 27px center; padding:0 27px 0 46px; height:50px; line-height:50px; color:#fff;}
-.gnb_m_proj .gnb-menu > li > ul > li.pj_create > a:hover {cursor:pointer; text-decoration:underline;} */
+.gnb_m_proj .gnb-menu > li > ul > li.pj_create {padding:15px 20px 5px 20px;}
 .gnb_m_proj .gnb-menu > li > ul > li.pj_create > a {color:#fff; background:url("../images/ico_plus12x12.png") no-repeat #3b4152 45px center; border-radius:5px; padding:4px 10px 5px 65px;}
 .gnb_m_proj .gnb-menu > li > ul > li.pj_create:hover > a, .gnb_m_proj .gnb-menu > li > ul > li > a.on {background:url("../images/ico_plus12x12.png") no-repeat #3360c5 45px center;}
 .gnb_m_proj .gnb-menu > li > ul > li > a.on{color:#fff;}
