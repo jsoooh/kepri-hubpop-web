@@ -2689,6 +2689,7 @@ p.no-txt{
 
 .accss_guideWrap .txt_level_list {margin-top:5px;}
 .accss_guideWrap .txt_level_list dl {padding:5px 0 0 30px;}
+.accss_guideWrap .txt_level_list dl::after {display:block; content:''; clear:both;}
 .accss_guideWrap .txt_level_list dl dt {float:left; font-weight:500;}
 .accss_guideWrap .txt_level_list dl dt + dd + dt {clear:both;}
 .accss_guideWrap .txt_level_list dl dd {float:left; color:#1360ec; padding-left:3px;}
