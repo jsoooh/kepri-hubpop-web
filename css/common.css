@@ -21,7 +21,7 @@
 .cBox + .cont-titWrap{margin-top: 50px;}
 
 /* ico */
-.ico{display:inline-block; position: relative; font-size: 0; vertical-align:middle; background:url("../images/ico_com.png?v=1") no-repeat; }
+.ico{display:inline-block; position: relative; font-size: 0; vertical-align:middle; background:url("../images/ico_com.png?v=2") no-repeat; }
 .ico-info1{width:17px; height:17px; background-position: -110px -304px;}
 .ico-info2{width:17px; height:17px; vertical-align: middle; margin-left: 5px; background-position: -137px -304px;}
 .ico-info3{position:absolute; z-index:999; top:14px; right:18px; width:17px; height:17px; vertical-align: middle; margin-left: 5px; background-position: -109px -304px;}
@@ -293,6 +293,9 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .btn-ico-row_plus .ico{width:17px; height:17px; background:url("../images/ico_plus_b.png") no-repeat;}
 .btn-ico-row_minus .ico{width:17px; height:17px; background:url("../images/ico_minus_b.png") no-repeat;}
 
+/*181212 copy아이콘추가*/
+.btn-ico-copy-s .ico{width:52px; height:15px; background-position: -165px -407px;}
+.btn-ico-copy-s:hover .ico{width:52px; height:15px; background-position: -165px -390px;}
 
 .btn-btm{margin-top: 50px; text-align: center;}
 .btn-btm .btn{min-width:100px;}
