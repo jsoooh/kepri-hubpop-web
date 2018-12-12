@@ -547,6 +547,31 @@ angular.module('iaas.controllers')
             document.location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
         };
 
+        // 서버삭제
+        ct.deleteInstanceJob = function(id) {
+            common.showConfirm('서버 삭제','선택한 서버를 삭제하시겠습니까?').then(function(){
+                $scope.main.loadingMainBody = true;
+                var param = {
+                    tenantId : ct.data.tenantId,
+                    instanceId : id
+                };
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'DELETE', param);
+                returnPromise.success(function (data, status, headers) {
+                    if (status == 200 && data) {
+                        common.showAlertSuccess('삭제되었습니다.');
+                        $scope.main.goToPage('/iaas/compute');
+                    } else {
+                        $scope.main.loadingMainBody = false;
+                        common.showAlertError('오류가 발생하였습니다.');
+                    }
+                });
+                returnPromise.error(function (data, status, headers) {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertError(data.message);
+                });
+            });
+        };
+
         ct.fnSingleInstanceAction = function(action,instance) {
             if(typeof id !== 'string' && typeof action !== 'string'){
                 console.log('type missmatch error');

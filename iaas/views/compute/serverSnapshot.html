@@ -68,7 +68,7 @@
 										</div>
 										<div class="down">
 											<span class="stateWrap">
-												<span class="stateMark" ng-class="{'type1' : (instanceSnapshot.status == 'active'), 'type2': (instanceSnapshot.status == 'error'), 'type4' : (instanceSnapshot.status != 'active' && instanceSnapshot.status != 'error')}"></span>
+												<span class="stateMark" ng-class="{'type3' : (instanceSnapshot.status == 'active'), 'type2': (instanceSnapshot.status == 'error'), 'type4' : (instanceSnapshot.status != 'active' && instanceSnapshot.status != 'error')}"></span>
 												<span class="state-txt">{{'iaas.label.instance_snapshot_' +instanceSnapshot.status | translate}}</span>
 											</span>
 										</div>
@@ -124,12 +124,8 @@
 										</div>
 										<div class="down">
 											<span class="stateWrap">
-												<span class="stateMark type1" ng-if="storageSnapshot.status == 'available'">사용가능</span>
-												<span class="stateMark type2" ng-if="storageSnapshot.status == 'error'">오류</span>
-												<span class="stateMark type4" ng-if="storageSnapshot.status != 'available' && storageSnapshot.status != 'error'">대기</span>
-												<span class="state-txt" ng-if="storageSnapshot.status == 'available'">사용가능</span>
-												<span class="state-txt" ng-if="storageSnapshot.status == 'error'">오류</span>
-												<span class="state-txt" ng-if="storageSnapshot.status != 'available' && storageSnapshot.status != 'error'">대기</span>
+												<span class="stateMark" ng-class="{'type3' : (storageSnapshot.status == 'available'), 'type2': (storageSnapshot.status == 'error'), 'type4' : (storageSnapshot.status != 'available' && storageSnapshot.status != 'error')}"></span>
+												<span class="state-txt">{{'iaas.label.volume_snapshot_' +storageSnapshot.status | translate}}</span>
 											</span>
 										</div>
 									</div>

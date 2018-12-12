@@ -46,7 +46,7 @@
             "volume_creating" : "생성중",
             "volume_deleting" : "삭제중",
             "volume_deleted" : "삭제",
-            "volume_snapshot_available" : "정상",
+            "volume_snapshot_available" : "사용가능",
             "volume_snapshot_error" : "오류",
             "volume_snapshot_creating" : "생성중",
             "volume_snapshot_deleting" : "삭제중",
