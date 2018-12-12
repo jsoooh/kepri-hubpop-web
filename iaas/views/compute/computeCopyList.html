@@ -64,7 +64,9 @@
 				<td>{{ instanceSnapshot.disk | displayVolume:'GB' }}</td>
 				<td><a tooltip-placement="bottom" uib-tooltip="{{ instanceSnapshot.description }}">설명</a></td>
 				<td>{{ instanceSnapshot.name }}</td>
-				<td><button ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id)">서버 복사</button></td>
+				<td><button type="button" name="button" class="btn btn-ico-copy-s only-ico" title="다운로드" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id)"><span class="ico">서버 복사</span></button></td>
+<!-- 				<td><button ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id)">서버 복사</button></td> -->
+				
 			</tr>
 			<tr ng-if="(contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length == 0">
 				<td colspan="11">{{ 'message.mi_dont_exist_list' | translate }}</td>
