@@ -199,17 +199,17 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.setRdpConnectDomain = function (instance) {
-            if (instance.image && instance.image.osType == "windows" && instance.instanceDomainLinkInfos && instance.instanceDomainLinkInfos.length > 0) {
+            if (instance.instanceDomainLinkInfos && instance.instanceDomainLinkInfos.length > 0) {
                 var rdpDomain = "";
-                for (var i=0; i<instance.instanceDomainLinkInfos.length; i++) {
-                    if (instance.instanceDomainLinkInfos[i].domainInfo && instance.instanceDomainLinkInfos[i].domainInfo.domain
-                        && instance.instanceDomainLinkInfos[i].domainInfo.domain.substring(instance.instanceDomainLinkInfos[i].domainInfo.domain.length - ct.rdpBaseDomain.length) == ct.rdpBaseDomain) {
-                        rdpDomain = instance.instanceDomainLinkInfos[i].domainInfo.domain;
-                        instance.instanceDomainLinkInfos[i].isRdpDomain = true;
+                angular.forEach(instance.instanceDomainLinkInfos, function (domainLinkInfo) {
+                    if (domainLinkInfo.domainInfo && domainLinkInfo.domainInfo.domain
+                        && domainLinkInfo.domainInfo.domain.substring(domainLinkInfo.domainInfo.domain.length - ct.rdpBaseDomain.length) == ct.rdpBaseDomain) {
+                        rdpDomain = domainLinkInfo.domainInfo.domain;
+                        domainLinkInfo.isRdpDomain = true;
                     } else {
-                        instance.instanceDomainLinkInfos[i].isRdpDomain = false;
+                        domainLinkInfo.isRdpDomain = false;
                     }
-                }
+                });
                 instance.rdpConnectDomain = rdpDomain;
             }
         };

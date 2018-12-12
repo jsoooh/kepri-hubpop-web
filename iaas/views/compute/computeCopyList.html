@@ -67,7 +67,7 @@
 				<td><button ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id)">서버 복사</button></td>
 			</tr>
 			<tr ng-if="(contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length == 0">
-				<td colspan="10">{{ 'message.mi_dont_exist_list' | translate }}</td>
+				<td colspan="11">{{ 'message.mi_dont_exist_list' | translate }}</td>
 			</tr>
 		</tbody>
 	</table>
