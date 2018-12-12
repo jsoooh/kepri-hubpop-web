@@ -2534,8 +2534,8 @@ p.no-txt{
 
 /*디스크목록 헤더영역*/
 .panel.type6 .panel_head {padding:24px 60px 0 95px;}
-.panel.type6 .panel_head .tit {width:200px;}
-.panel.type6 .panel_head.pdlr30 {padding:24px 30px 0 30px;}
+/* .panel.type6 .panel_head .tit {width:200px;} */
+.panel.type6 .panel_head.pdlr30 {padding:24px 60px 0 30px;}
 .panel.type6 .panel_head .btn_txt {display:inline-block; font-size:12px; color:#fff; background:#707070; border-radius:2px; padding:1px 10px 2px 10px; margin-top:6px;}
 .panel.type6 .panel_head .btn_txt:hover {background:#4d4d4d;}
 .panel.type6 .panel_head .link_info {position:absolute; top:30px; right:55px; display:inline-block; width:42px; height:42px; font-size:0; background:url("../images/ico_link_lg.png") no-repeat;}
