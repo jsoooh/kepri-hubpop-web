@@ -304,10 +304,10 @@
                     <!-- <div ng-if="ins.loadingServiceInstances>
                         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
                     </div> -->
-                    <div class="cBox-hd">
-                        <h4 class="c-tit">연결 서비스 <em class="point1">({{ serviceInstance.serviceInstances.content.length || 0 }})</em></h4>
+                    <div class="panel_head">
+                        <div class="tit pull-left">연결 서비스<span class="countList">전체 : {{serviceInstance.serviceInstances.content.length || 0 }}건</span></div>
                     </div>
-                    <div class="cBox-cnt mh300">
+                    <div class="panel_body">
                         <div class="in">
                             <ul class="sev-list">
                                 <h3 ng-if="serviceInstance.serviceInstances.content.length == 0">생성한 서비스가 없습니다.</h3>
