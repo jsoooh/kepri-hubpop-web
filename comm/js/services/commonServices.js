@@ -2718,9 +2718,9 @@ angular.module('common.services', ['LocalStorageModule'])
             angular.forEach(source, function (value, key) {
                 if (target[key]) {
                     if (angular.isArray(value) && angular.isArray(target[key])) {
-                        common.mergeData(target[key], value);
+                        common.objectOrArrayMergeData(target[key], value);
                     } else  if (angular.isObject(value) && angular.isObject(target[key])) {
-                        common.mergeData(target[key], value);
+                        common.objectOrArrayMergeData(target[key], value);
                     } else {
                         target[key] = value;
                     }
