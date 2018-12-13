@@ -239,8 +239,8 @@ function depth1Click (evt) {
     var parentTarget = target.closest('div.gnbMenu');
 
     if (target.hasClass("open")) {
-        parentTarget.find('ul.dept2').hide(200);
-        parentTarget.find('a.dept1').removeClass("open on");
+        target.closest('li.dept1').find('ul.dept2').hide(200);
+        target.removeClass("open on");
 
         nowHrefFunction("dept1");
 
@@ -253,6 +253,12 @@ function depth1Click (evt) {
         target.addClass("open on");
         $(target).closest("li.dept1").find("ul.dept2").toggle(200);
     }
+};
+
+function depth2Click (evt) {
+    var target = $(evt.currentTarget).closest('div.gnbMenu').find('div.gnb_m_proj');
+    target.find('ul.dept2').hide(200);
+    target.find('a.dept1').removeClass("open on");
 };
 
 //2depth hover event

@@ -83,19 +83,19 @@ angular.module('portal.services', [])
                 if(repeatData[i].level == '2' && repeatData[i].parentId == parentId1){
                     if(repeatData[i].urlPath){
                         leftMenu += "				<li class='dept2' onmouseover='depth2LiHover(event,\"no\");'>\n";
-                        leftMenu += "					<a class='dept2' href='" + repeatData[i].urlPath + "' onmouseover='depth2Hover(event,\"no\");'>" + repeatData[i].depth2 + "</a>\n";
+                        leftMenu += "					<a class='dept2' href='" + repeatData[i].urlPath + "' onmouseover='depth2Hover(event,\"no\");' onclick='depth2Click(event);'>" + repeatData[i].depth2 + "</a>\n";
                         leftMenu += "				</li>\n";
                     }else{
                         parentId2 = repeatData[i].id;
                         leftMenu += "				<li class='dept2' onmouseover='depth2LiHover(event);'>\n";
-                        leftMenu += "					<a class='dept2' href='javascript:void(0);' onmouseover='depth2Hover(event);'>" + repeatData[i].depth2 + "<span class='ico ico-arr'></span></a>\n";
+                        leftMenu += "					<a class='dept2' href='javascript:void(0);' onmouseover='depth2Hover(event);' onclick='depth2Click(event);'>" + repeatData[i].depth2 + "<span class='ico ico-arr'></span></a>\n";
                         leftMenu += "					<ul class='dept3' style='display:none' >\n";
                     }
                 }
                 // Depth 3
                 if(repeatData[i].level == '3' && repeatData[i].parentId == parentId2){
                     leftMenu += "						<li class='dept3'>\n";
-                    leftMenu += "							<a class='dept3' href='" + repeatData[i].urlPath + "' onclick='depth3Click(event);'>" + repeatData[i].depth3 + "</a>\n";
+                    leftMenu += "							<a class='dept3' href='" + repeatData[i].urlPath + "' onclick='depth3Click(event);' onclick='depth2Click(event);'>" + repeatData[i].depth3 + "</a>\n";
                     leftMenu += "						</li>\n";
                 }
                 if(i == repeatData.length-1){
@@ -152,11 +152,11 @@ angular.module('portal.services', [])
                         if($(this).hasClass("dept3")){
                             $(this).closest("li.dept2").find("a.dept2").toggleClass("on");
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
-                            $(this).closest("li.dept1").find("a.dept1").toggleClass("on");
+                            $(this).closest("li.dept1").find("a.dept1").toggleClass("on open");
                         };
                         if($(this).hasClass("dept2")){
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
-                            $(this).closest("li.dept1").find("a.dept1").toggleClass("on");
+                            $(this).closest("li.dept1").find("a.dept1").toggleClass("on open");
                         };
                         if($(this).hasClass("dept1")){
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
