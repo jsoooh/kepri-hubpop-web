@@ -1751,7 +1751,7 @@ angular.module('paas.controllers')
 
         ct.getAppStats(true);
         ct.getAppSummary();
-        ct.changeSltInfoTab('appLog'); //20181126 sg0730 kepri 통합 요청으로 인한 Applog 제일 상단 배치
+        ct.changeSltInfoTab('service'); //20181126 sg0730 kepri 통합 요청으로 인한 Applog 제일 상단 배치
     })
     .controller('applicationRePushFormCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, ValidationService, FileUploader, common, CONSTANTS) {
         _DebugConsoleLog("applicationControllers.js : applicationRePushFormCtrl", 1);

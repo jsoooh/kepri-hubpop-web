@@ -27,24 +27,32 @@ angular.module('paas.controllers')
             serviceLabel : ''
         };
 
-        ct.listAllServiceInstances = function (currentPage) {
+        ct.listAllServiceInstances = function () {
             $scope.main.loadingMainBody = true;
             ct.loadingServiceInstances = true;
-            if (angular.isDefined(currentPage) && currentPage != null) {
-                serviceInstance.pageOptions.currentPage = currentPage;
-            }
             var serviceInstancePromise = serviceInstanceService.listAllServiceInstances($scope.main.sltOrganizationGuid, '');
             serviceInstancePromise.success(function (data) {
                 var serviceInstances = [];
                 if (data && angular.isArray(data)) {
                     serviceInstances = data;
                 }
+                angular.forEach(serviceInstances, function (serviceInstance, key) {
+                    serviceInstance.serviceNameEqIdx = "";
+                    if(serviceInstance.serviceBindings.length > 0) {
+                        for (var j = 0; j < serviceInstance.serviceBindings.length; j++) {
+                            if(serviceInstance.serviceBindings[j].appName == $scope.contents.app.name){
+                                serviceInstance.serviceNameEqIdx = "" + j + "";
+                            }
+                            break;
+                        }
+                    }
+                });
                 common.objectOrArrayMergeData(ct.serviceInstances, serviceInstances);
                 $scope.main.loadingMainBody = false;
                 ct.loadingServiceInstances = false;
             });
             serviceInstancePromise.error(function (data) {
-                serviceInstance.serviceInstances = [];
+                ct.serviceInstances = [];
                 $scope.main.loadingMainBody = false;
                 ct.loadingServiceInstances = false;
             });
@@ -112,20 +120,16 @@ angular.module('paas.controllers')
                 }
             }
 
-
             if(result){
                 if (binding.length > 0) {
                     for (var i = 0; i < binding.length; i++) {
                         if (binding[i].appGuid == appGuid) {
-                            uri = 'images/thum/im_app_' + serviceInstances.serviceLabel + '_on.png';
-                            return uri;
+                            return 'images/thum/im_app_' + serviceInstances.serviceLabel + '_on.png';
                         }
                     }
-                    uri = 'images/thum/im_app_' + serviceInstances.serviceLabel + '_off.png';
-                    return uri;
-                }else{
-                    uri = 'images/thum/im_app_' + serviceInstances.serviceLabel + '_off.png';
-                    return uri;
+                    return 'images/thum/im_app_' + serviceInstances.serviceLabel + '_off.png';
+                } else {
+                    return 'images/thum/im_app_' + serviceInstances.serviceLabel + '_off.png';
                 }
             }
         };

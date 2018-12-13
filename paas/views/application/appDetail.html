@@ -285,8 +285,8 @@
 <div class="tabWrap type1 mt30">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs padding40">
-        <li ng-class="{'active':contents.sltInfoTab == 'appLog'}"><a href="" ng-click="contents.changeSltInfoTab('appLog');">앱 로그</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'service'}"><a href="" ng-click="contents.changeSltInfoTab('service');">연결 서비스</a></li>
+        <li ng-class="{'active':contents.sltInfoTab == 'appLog'}"><a href="" ng-click="contents.changeSltInfoTab('appLog');">앱 로그</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'env'}"><a href="" ng-click="contents.changeSltInfoTab('env');">환경 변수</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'ssh'}"><a href="" ng-click="contents.changeSltInfoTab('ssh');">SSH</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'route'}"><a href="" ng-click="contents.changeSltInfoTab('route');">라우트</a></li>
@@ -305,13 +305,13 @@
                         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
                     </div> -->
                     <div class="panel_head">
-                        <div class="tit pull-left">연결 서비스<span class="countList">전체 : {{serviceInstance.serviceInstances.content.length || 0 }}건</span></div>
+                        <div class="tit pull-left">연결 서비스<span class="countList">전체 : {{ins.serviceInstances.length || 0 }}건</span></div>
                     </div>
                     <div class="panel_body">
                         <div class="in">
                             <ul class="sev-list">
-                                <h3 ng-if="serviceInstance.serviceInstances.content.length == 0">생성한 서비스가 없습니다.</h3>
-                                <li class="sevBox on" ng-repeat="(key, serviceItem) in serviceInstance.serviceInstances.content">
+                                <h3 ng-if="ins.serviceInstances.length == 0">생성한 서비스가 없습니다.</h3>
+                                <li class="sevBox on" ng-repeat="(key, serviceItem) in ins.serviceInstances">
                                     <img ng-src="{{ins.getImageUriBinding(serviceItem, contents.appGuid)}}" alt="{{ serviceItem.serviceLabel }}">
                                     <!--<img ng-src="images/thum/im_app_{{ serviceItem.serviceLabel }}_{{ (serviceItem.serviceBindings.length > 0) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}">-->
                                     <div class="dropdown btn-option" ng-controller="tabAppServiceBindingsCtrl as bind">
