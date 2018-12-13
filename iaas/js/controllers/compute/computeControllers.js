@@ -130,12 +130,21 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 queryType : 'list'
             };
-            ct.serverMainList = [];
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     ct.serverMainList = data.content.instances;
+                    if (ct.serverMainList.length > data.content.instances.length) {
+                        ct.deployServerList.splice(data.content.instances.length, ct.serverMainList.length - data.content.instances.length);
+                    }
+                    angular.forEach(data.content.instances, function (instance, inKey) {
+                        if (ct.serverMainList[inKey]) {
+                            ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
+                        } else {
+                            ct.serverMainList.push(instance);
+                        }
+                    });
                     var isServerStatusCheck = false;
                     var nowDate = new Date();
                     angular.forEach(ct.serverMainList, function (serverMain) {

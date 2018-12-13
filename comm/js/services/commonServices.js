@@ -2688,6 +2688,33 @@ angular.module('common.services', ['LocalStorageModule'])
             }
         };
 
+        common.objectOrArrayMergeData = function (target, source) {
+            if (angular.isArray(target)) {
+                if (target.length > source.length) {
+                    target.splice(source.length, target.length - source.length);
+                }
+            } else if (angular.isObject(target)) {
+                angular.forEach(target, function (item, key) {
+                    if (angular.isUndefined(source[key])) {
+                        delete target[key];
+                    }
+                });
+            }
+            angular.forEach(source, function (value, key) {
+                if (target[key]) {
+                    if (angular.isArray(value) && angular.isArray(target[key])) {
+                        common.mergeData(target[key], value);
+                    } else  if (angular.isObject(value) && angular.isObject(target[key])) {
+                        common.mergeData(target[key], value);
+                    } else {
+                        target[key] = value;
+                    }
+                } else {
+                    target[key] = value;
+                }
+            });
+        };
+
         common.getProcessBar = function (amt) {
             var obj = {};
             obj.countTo = amt;
