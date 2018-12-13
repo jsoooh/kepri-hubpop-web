@@ -104,3 +104,11 @@
 	</li>
 </ul>
 <!-- //panel area-->
+<div ng-if="!contents.pageFirstLoad && (contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length == 0" class="welcome_layer">
+	<div class="guide_fnt arrw_btm">신규 디스크를 만들고 가상서버와 연결하세요.</div>
+	<div class="guide_cnt">
+		디스크 관리는 <span class="fnt20"><span class="color1">Block Storage 기반의 데이터 저장공간 서비스를 제공</span></span>합니다.<br>
+		할당된 클라우드 자원 용량 내에서 사용자 스스로 필요한 만큼 디스크를 만들고, 생성된 가상 서버와 연결하는 방식으로 디스크를 수평적으로 확장할 수 있습니다.<br>
+		<span class="fnt20"><spna class="color1">‘디스크 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+	</div>
+</div>
