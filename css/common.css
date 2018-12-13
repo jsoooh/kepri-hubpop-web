@@ -476,7 +476,7 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 
 /*백그라운드 깔린 레이어 띄워줄 때 사용. body fixed*/
 .body_fixed {position:fixed;}
-
+.html_hidden_scroll {overflow: scroll; overflow-y: hidden; overflow-x: hidden;}
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 .ico-info1 {height:20px; margin-left:3px;}
