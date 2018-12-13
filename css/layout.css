@@ -437,4 +437,4 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu .gm .ico-bul {top:22px; left:17px;}
 
 #container .rightCnt .titWrap {height:67px; padding:23px 40px;}
-#container .rightCnt .titWrap .btnArea {bottom:20px;}
+#container .rightCnt .titWrap .btnArea {right:10px; bottom:20px; width:120px;}
