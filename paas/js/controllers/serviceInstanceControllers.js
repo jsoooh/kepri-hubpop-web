@@ -234,6 +234,9 @@ angular.module('paas.controllers')
     .controller('paasServiceInstanceCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, user, common, serviceInstanceService, ValidationService, CONSTANTS) {
         _DebugConsoleLog("serviceInstanceControllers.js : paasServiceInstanceCreateCtrl", 1);
 
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
+
         var ct = this;
 
         ct.sltSpace 			= $scope.main.sltOrganization.spaces[0];

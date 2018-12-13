@@ -1658,6 +1658,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     if (!textContent) return;
                     if (textContent == "Unauthorized") return;
                     if (textContent == "Not Found") return;
+                    if (textContent == "No message available") return;
                     if (textContent == "Error") return;
                     if (textContent == "-1") return;
                 }
@@ -1749,6 +1750,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     if (!htmlContent) return;
                     if (htmlContent == "Unauthorized") return;
                     if (htmlContent == "Not Found") return;
+                    if (htmlContent == "No message available") return;
                     if (htmlContent == "Error") return;
                     if (htmlContent == "-1") return;
                 }

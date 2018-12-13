@@ -452,6 +452,9 @@ angular.module('paas.controllers')
     .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationPushCtrl", 1);
 
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
+
         var ct 					= this;
         ct.formName 			= "appPushForm01";
         ct.organizations 		= [];
@@ -964,6 +967,9 @@ angular.module('paas.controllers')
     })
     .controller('paasApplicationDetailCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, portal, applicationService, ValidationService, common, CONSTANTS, $compile, $interval) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationDetailCtrl", 1);
+
+        // 뒤로 가기 버튼 활성화
+        $scope.main.displayHistoryBtn = true;
 
         var ct = this;
         ct.sltOrganizationGuid = "";
