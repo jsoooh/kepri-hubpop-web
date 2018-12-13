@@ -1228,7 +1228,10 @@ angular.module('common.controllers', [])
             $(selectors).stop().animate({'right' : '-360px'}, 400);
         };
 
-        mc.showRightSliderContents = function(templateUrl, data, sliderWidth) {
+        mc.showRightSliderContents = function(evt, templateUrl, data, sliderWidth) {
+            if (evt && evt.currentTarget) {
+                $(evt.currentTarget).blur();
+            }
             templateUrl = _COMM_VIEWS_ + templateUrl;
             common.showRightSliderContents($scope, templateUrl, data, sliderWidth);
         };
@@ -1496,7 +1499,7 @@ angular.module('common.controllers', [])
 
         $scope.main.asideClose();
         $scope.main.isLoadPageBody = true;
-
+        $('body').removeClass('fixed');
         _DebugConsoleLog("commonControllers.js : mainBodyCtrl End, path : " + $location.path(), 1);
 
     })
