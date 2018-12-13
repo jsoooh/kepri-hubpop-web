@@ -345,9 +345,9 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu > li > ul > li > ul > li > a.on {background:#4c515f;}
 
 /*--------- 메뉴 - 프로젝트 목록 ---------*/
-.gnb_m_proj .gnb-menu > li > a{display: block; position: relative; width:250px; font-size:15px; color:#fff; background-color:#00bfff; padding:20px 0 20px 47px;}/*180712 gnb font-size 수정*/
-.gnb_m_proj .gnb-menu > li > a .ico-bul{position: absolute; left:19px; top:20px; z-index: 1; width:26px; height: 20px; background: url("../images/ico_gnbmenu_proj.png") no-repeat; background-position: 0 0;}
-.gnb_m_proj .gnb-menu > li > a .ico-arr{position: absolute; right:30px; top:21px; z-index: 1; width:19px; height: 19px; background-position: -28px -100px;;}
+.gnb_m_proj .gnb-menu > li > a{display: block; position: relative; width:250px; font-size:18px; font-weight:700; font-style:italic; color:#fff; background-color:#00bfff; padding:20px 0 20px 47px;}/*180712 gnb font-size 수정*/
+.gnb_m_proj .gnb-menu > li > a .ico-bul{position: absolute; left:19px; top:22px; z-index: 1; width:26px; height: 20px; background: url("../images/ico_gnbmenu_proj.png") no-repeat; background-position: 0 0;}
+.gnb_m_proj .gnb-menu > li > a .ico-arr{position: absolute; right:30px; top:22px; z-index: 1; width:19px; height: 19px; background-position: -28px -100px;;}
 .gnb_m_proj .gnb-menu > li > a:hover, .gnb_m_proj .gnb-menu > li > a.on{color:#fff; background-color:#00bfff;}
 .gnb_m_proj .gnb-menu > li > a:hover .ico-arr{background-position: -28px -100px;}
 .gnb_m_proj .gnb-menu > li > a:hover::before, .gnb_m_proj .gnb-menu > li > a.on::before{display: inline-block; position: absolute; left:0; top:0; z-index: 1; content: ''; width:4px; height:100%; background-color: #00bfff; }
