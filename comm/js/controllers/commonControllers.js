@@ -329,15 +329,11 @@ angular.module('common.controllers', [])
                 mc.regions = response.data;
                 if (mc.regions.length > 0) {
                     mc.sltRegion = mc.regions[0];
-                    if(mc.sltRegion && $scope.main.sltRegion.url) {
-                        var regionUrl = $scope.main.sltRegion.url;
-                        var regionTailUrl = regionUrl.substring(regionUrl.indexOf('.'), regionUrl.length);
-                        mc.sltRegion.mysqlDbWebXpertUrl = $location.protocol() + "://" + CONSTANTS.xpertHosts.mysqlDB + regionTailUrl;
-                        mc.sltRegion.webLogXpertUrl = $location.protocol() + "://" + CONSTANTS.xpertHosts.webLog + regionTailUrl;
-                        mc.sltRegion.terminalXpertUrl = $location.protocol() + "://" + CONSTANTS.xpertHosts.terminal + regionTailUrl;
-                        mc.sltRegion.autoScalerXpertUrl = $location.protocol() + "://" +  _DOMAIN_ + ":" + $location.port() + "/" + CONSTANTS.xpertHosts.autoScaler;
-                        mc.sltRegion.autoScalerEnabled = false;
-                    }
+                    mc.sltRegion.mysqlDbWebXpertUrl = $location.protocol() + "://" + CONSTANTS.xpertHosts.mysqlDB;
+                    mc.sltRegion.webLogXpertUrl = $location.protocol() + "://" + CONSTANTS.xpertHosts.webLog;
+                    mc.sltRegion.terminalXpertUrl = $location.protocol() + "://" + CONSTANTS.xpertHosts.terminal;
+                    mc.sltRegion.autoScalerXpertUrl = $location.protocol() + "://" +  _DOMAIN_ + ":" + $location.port() + "/" + CONSTANTS.xpertHosts.autoScaler;
+                    mc.sltRegion.autoScalerEnabled = false;
                 }
             } else {
                 mc.regions = [];
