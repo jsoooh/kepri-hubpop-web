@@ -2054,7 +2054,8 @@ angular.module('common.services', ['LocalStorageModule'])
             dialogOptions.dialogId = "slider-contents";
             dialogOptions.sliderWidth = (sliderWidth) ? sliderWidth : 1000;
             $('#' + dialogOptions.dialogId).css('width', dialogOptions.sliderWidth);
-            $('body').addClass('body-fixed');
+            $('body').addClass('body_fixed');
+            $('html').addClass('html_hidden_scroll');
             $("#slider-contents-container").css('display', 'block');
             dialogOptions.dialogTemplateUrl = _COMM_VIEWS_ + '/common/rightCommSliderContents.html' + _VersionTimeTail();
             dialogOptions.templateUrl = templateUrl ? templateUrl + _VersionTimeTail() : "";
@@ -2091,7 +2092,8 @@ angular.module('common.services', ['LocalStorageModule'])
                 $(dialogId).stop().animate({"right":"0"}, 500);
             };
             var onRemoving = function($scope, element) {
-                $('body').removeClass('body-fixed');
+                $('body').removeClass('body_fixed');
+                $('html').addClass('html_hidden_scroll');
                 $("#slider-contents-container").css('display', 'none');
                 $(dialogId).find('> dev').remove();
                 $(dialogId).stop().animate({"right":"-" + dialogOptions.sliderWidth + "px"}, 400);
