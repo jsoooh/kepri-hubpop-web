@@ -36,17 +36,19 @@ angular.module('paas.controllers')
                 if (data && angular.isArray(data)) {
                     serviceInstances = data;
                 }
-                angular.forEach(serviceInstances, function (serviceInstance, key) {
-                    serviceInstance.serviceNameEqIdx = "";
-                    if(serviceInstance.serviceBindings.length > 0) {
-                        for (var j = 0; j < serviceInstance.serviceBindings.length; j++) {
-                            if(serviceInstance.serviceBindings[j].appName == $scope.contents.app.name){
-                                serviceInstance.serviceNameEqIdx = "" + j + "";
+                if($scope.contents && $scope.contents.app && $scope.contents.app.name) {
+                    angular.forEach(serviceInstances, function (serviceInstance, key) {
+                        serviceInstance.serviceNameEqIdx = "";
+                        if(serviceInstance.serviceBindings.length > 0) {
+                            for (var j = 0; j < serviceInstance.serviceBindings.length; j++) {
+                                if(serviceInstance.serviceBindings[j].appName == $scope.contents.app.name){
+                                    serviceInstance.serviceNameEqIdx = "" + j + "";
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                });
+                    });
+                }
                 common.objectOrArrayMergeData(ct.serviceInstances, serviceInstances);
                 $scope.main.loadingMainBody = false;
                 ct.loadingServiceInstances = false;
