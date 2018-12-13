@@ -2088,15 +2088,17 @@ angular.module('common.services', ['LocalStorageModule'])
             var dialogId = (dialogOptions.dialogId) ? "#" + dialogOptions.dialogId : "#aside-md";
             dialogOptions.sliderWidth = (dialogOptions.sliderWidth) ? dialogOptions.sliderWidth : 360;
             var onShowing = function($scope, element) {
-                $(dialogId).stop().animate({"right":"-" + dialogOptions.sliderWidth + "px"}, 400);
-                $(dialogId).stop().animate({"right":"0"}, 500);
+                $(dialogId).stop().animate({"right": "-" + dialogOptions.sliderWidth + "px"}, 400);
+                $(dialogId).stop().animate({"right": "0"}, 500);
             };
             var onRemoving = function($scope, element) {
-                $('body').removeClass('body_fixed');
-                $('html').addClass('html_hidden_scroll');
-                $("#slider-contents-container").css('display', 'none');
-                $(dialogId).find('> dev').remove();
                 $(dialogId).stop().animate({"right":"-" + dialogOptions.sliderWidth + "px"}, 400);
+                $timeout(function () {
+                    $(dialogId).find('> dev').remove();
+                    $("#slider-contents-container").css('display', 'none');
+                    $('body').removeClass('body_fixed');
+                    $('html').removeClass('html_hidden_scroll');
+                }, 400);
             };
 
             dialogOptions.dialogTemplateUrl = (dialogOptions.dialogTemplateUrl) ? dialogOptions.dialogTemplateUrl : _COMM_VIEWS_+'/common/rightPopCommForm.html' + _VersionTimeTail();
