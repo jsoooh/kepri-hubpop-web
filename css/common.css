@@ -209,7 +209,7 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .btn-list + .btn-list{margin-left:30px;}
 .btn-list + div + .btn-list{margin-left:30px;}
 .btn-list:hover, .btn-list.on {color:#333;}
-.btn-list .ico{width:18px; height: 18px; /* margin-right: 10px;  */vertical-align: text-bottom;}
+.btn-list .ico{width:18px; height: 18px; margin-right: 10px; vertical-align: text-bottom;}
 .btn-list.type1 .ico{background-position: -498px -0px;}
 .btn-list.type1:hover .ico, .btn-list.type1.on .ico{background-position: -527px 0px;}
 .btn-list.type2 .ico{background-position: -555px 0px;}
@@ -473,6 +473,10 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 .cnt_msg_box.msg-info {border:1px solid #b9cdff; background: url("../images/ico_msg_info.png") no-repeat #eaf0fe 15px center;}
 .form-control.ico_refresh {background:#fff url("../images/ico_refresh.gif") no-repeat 99% center; cursor:pointer;}
 .loading_box {height:5px; background:url("../images/loading_bar.gif") no-repeat left top; margin:0 auto;}
+
+/*백그라운드 깔린 레이어 띄워줄 때 사용. body fixed*/
+.body_fixed {position:fixed;}
+
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 .ico-info1 {height:20px; margin-left:3px;}
