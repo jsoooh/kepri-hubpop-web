@@ -1653,19 +1653,26 @@ angular.module('common.services', ['LocalStorageModule'])
                     textContent = args[start + 1];
                     alertType = args[start + 2];
                 }
-                if (_MODE_ == "DEBUG" || (textContent && textContent != "Unauthorized")) {
-                    $timeout(function () {
-                        if (alertType == "success") {
-                            growl.addSuccessMessage(textContent, {ttl: time, enableHtml: false});
-                        } else if (alertType == "warn") {
-                            growl.addWarnMessage(textContent, {ttl: time, enableHtml: false});
-                        } else if (alertType == "error") {
-                            growl.addErrorMessage(textContent, {ttl: time, enableHtml: false});
-                        } else {
-                            growl.addInfoMessage(textContent, {ttl: time, enableHtml: false});
-                        }
-                    }, 10);
+                _DebugConsoleLog("showAlertMessageHtml : " + textContent, 1);
+                if (_DOMAIN_ != 'localhost') {
+                    if (!textContent) return;
+                    if (textContent == "Unauthorized") return;
+                    if (textContent == "Not Found") return;
+                    if (textContent == "Error") return;
+                    if (textContent == "-1") return;
                 }
+                console.log("showAlertMessage : " + textContent);
+                $timeout(function () {
+                    if (alertType == "success") {
+                        growl.addSuccessMessage(textContent, {ttl: time, enableHtml: false});
+                    } else if (alertType == "warn") {
+                        growl.addWarnMessage(textContent, {ttl: time, enableHtml: false});
+                    } else if (alertType == "error") {
+                        growl.addErrorMessage(textContent, {ttl: time, enableHtml: false});
+                    } else {
+                        growl.addInfoMessage(textContent, {ttl: time, enableHtml: false});
+                    }
+                }, 10);
             }
         };
 
@@ -1736,6 +1743,14 @@ angular.module('common.services', ['LocalStorageModule'])
                 } else if (args.length >= start + 3) {
                     htmlContent = args[start + 1];
                     alertType = args[start + 2];
+                }
+                _DebugConsoleLog("showAlertMessageHtml : " + htmlContent, 1);
+                if (_DOMAIN_ != 'localhost') {
+                    if (!htmlContent) return;
+                    if (htmlContent == "Unauthorized") return;
+                    if (htmlContent == "Not Found") return;
+                    if (htmlContent == "Error") return;
+                    if (htmlContent == "-1") return;
                 }
                 $timeout(function () {
                     if (alertType == "success") {

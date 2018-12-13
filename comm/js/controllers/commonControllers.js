@@ -1105,28 +1105,6 @@ angular.module('common.controllers', [])
             common.setAccessToken($stateParams.token);
         }
 
-        if (common.isAuthenticated()) {
-            if (!user.checkAccessToken(common.getAccessToken())) {
-                common.clearAccessToken();
-                common.logout();
-            }
-        } else {
-            // TODO : SSO 연계 추가 작성
-            if (common.getPgsecuid()) {
-                mc.checkSsoPgsecuid(common.getPgsecuid());
-/* 동기 방식
-                if (!user.checkPgsecuid(common.getPgsecuid())) {
-                    common.clearAccessToken();
-                    common.logout();
-                } else {
-                    common.moveHomePage();
-                }
-*/
-            } else {
-                common.moveLoginPage();
-            }
-        }
-
         mc.cBoxToggleChange = function (evt, isReSlider) {
             var _this = $(evt.currentTarget).closest(".cBox.cToggle");
             if (!_this.hasClass("cToggle-open")) {
@@ -1249,6 +1227,28 @@ angular.module('common.controllers', [])
 
         // PassRegion
         mc.syncSetPassRegionSet();
+
+        if (common.isAuthenticated()) {
+            if (!user.checkAccessToken(common.getAccessToken())) {
+                common.clearAccessToken();
+                common.logout();
+            }
+        } else {
+            // TODO : SSO 연계 추가 작성
+            if (common.getPgsecuid()) {
+                mc.checkSsoPgsecuid(common.getPgsecuid());
+                /* 동기 방식
+                                if (!user.checkPgsecuid(common.getPgsecuid())) {
+                                    common.clearAccessToken();
+                                    common.logout();
+                                } else {
+                                    common.moveHomePage();
+                                }
+                */
+            } else {
+                common.moveLoginPage();
+            }
+        }
 
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
