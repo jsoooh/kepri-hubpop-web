@@ -47,17 +47,16 @@ angular.module('portal.controllers')
         /*Org 목록 조회*/
         ct.listOrgProjects = function () {
             ct.orgProjects = [];
-            var schText = !ct.schText ? "" : ct.schText;
             $scope.main.loadingMainBody = true;
             var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
             promise.success(function (data) {
-                $scope.main.loadingMainBody = false;
-                if (data && data.items  && data.items.length > 0) {
-                    ct.orgProjects = angular.copy(data.items);
+                if (data && data.items && angular.isArray(data.items)) {
+                    common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
                     $scope.main.setListAllPortalOrgs(data.items);
                 } else {
                     $scope.main.setListAllPortalOrgs();
                 }
+                $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

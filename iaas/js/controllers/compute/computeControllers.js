@@ -12,6 +12,7 @@ angular.module('iaas.controllers')
         ct.data 			= {};
         ct.roles 			= [];
         ct.network 			= {};
+        ct.serverMainList   = [];
         ct.consoleLogLimit 	= '50';
         ct.actionLogLimit 	= '10';
         ct.pageFirstLoad 	= true;
@@ -133,47 +134,39 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
-                    ct.serverMainList = data.content.instances;
-                    if (ct.serverMainList.length > data.content.instances.length) {
-                        ct.deployServerList.splice(data.content.instances.length, ct.serverMainList.length - data.content.instances.length);
+                var instances = [];
+                if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
+                    instances = data.content.instances;
+                }
+                var isServerStatusCheck = false;
+                common.objectOrArrayMergeData(ct.serverMainList, instances);
+                var nowDate = new Date();
+                angular.forEach(ct.serverMainList, function (serverMain) {
+                    if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
+                        isServerStatusCheck = true;
                     }
-                    angular.forEach(data.content.instances, function (instance, inKey) {
-                        if (ct.serverMainList[inKey]) {
-                            ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
-                        } else {
-                            ct.serverMainList.push(instance);
-                        }
-                    });
-                    var isServerStatusCheck = false;
-                    var nowDate = new Date();
-                    angular.forEach(ct.serverMainList, function (serverMain) {
-                        if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
-                            isServerStatusCheck = true;
-                        }
-                        ct.fn.setProcState(serverMain);
-                        ct.fn.setRdpConnectDomain(serverMain);
-                        if (angular.isObject(serverMain.elapsed)) {
-                            serverMain.creatingTimmer = parseInt(serverMain.elapsed.time/1000, 10);
-                        } else {
-                            var createdDate = new Date(serverMain.created);
-                            serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
-                        }
-                    });
-                    if (isServerStatusCheck) {
-                        if ($scope.main.reloadTimmer['instanceServerStateList']) {
-                            $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
-                            $scope.main.reloadTimmer['instanceServerStateList'] = null;
-                        }
-                        $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
-                            ct.fn.checkServerState();
-                        }, 1000);
-                        if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
-                            $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
-                            $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
-                        }
-                        $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
+                    ct.fn.setProcState(serverMain);
+                    ct.fn.setRdpConnectDomain(serverMain);
+                    if (angular.isObject(serverMain.elapsed)) {
+                        serverMain.creatingTimmer = parseInt(serverMain.elapsed.time/1000, 10);
+                    } else {
+                        var createdDate = new Date(serverMain.created);
+                        serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                     }
+                });
+                if (isServerStatusCheck) {
+                    if ($scope.main.reloadTimmer['instanceServerStateList']) {
+                        $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
+                        $scope.main.reloadTimmer['instanceServerStateList'] = null;
+                    }
+                    $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
+                        ct.fn.checkServerState();
+                    }, 1000);
+                    if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
+                        $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
+                        $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
+                    }
+                    $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                 }
 /*
                 if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
@@ -1175,18 +1168,19 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : ct.tenantId
             };
-            ct.instanceSnapshotList = [];
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList/others', 'GET', param);
             returnPromise.success(function (data, status, headers) {
+                if (data && data.content && angular.isArray(data.content)) {
+                    common.objectOrArrayMergeData(ct.instanceSnapshotList, data.content);
+                    angular.forEach(ct.instanceSnapshotList, function (item) {
+                        var userTenant = common.objectsFindCopyByField(ct.userTenants, "id", item.tenantId);
+                        if (userTenant && userTenant.korName) {
+                            item.portalOrgName = userTenant.korName;
+                        }
+                    });
+                    ct.pageOptions.total = ct.instanceSnapshotList.length;
+                }
                 $scope.main.loadingMainBody = false;
-                ct.instanceSnapshotList = data.content;
-                angular.forEach(ct.instanceSnapshotList, function (item) {
-                    var userTenant = common.objectsFindCopyByField(ct.userTenants, "id", item.tenantId);
-                    if (userTenant && userTenant.korName) {
-                        item.portalOrgName = userTenant.korName;
-                    }
-                });
-                ct.pageOptions.total = ct.instanceSnapshotList.length;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

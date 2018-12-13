@@ -33,11 +33,14 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : ct.data.tenantId
             };
-            ct.instanceSnapshotList = [];
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param);
             returnPromise.success(function (data, status, headers) {
+                var instanceSnapshots = [];
+                if (data && angular.isArray(data.content)) {
+                    instanceSnapshots = data.content;
+                }
+                common.objectOrArrayMergeData(ct.instanceSnapshotList, instanceSnapshots);
                 $scope.main.loadingMainBody = false;
-            	ct.instanceSnapshotList = data.content;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -84,13 +87,18 @@ angular.module('iaas.controllers')
             ct.storageSnapshotList = [];
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotList', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                ct.storageSnapshotList = data.content.volumeSnapShots;
+                var volumeSnapShots = [];
+                if (data && data.content && angular.isArray(data.content.volumeSnapShots)) {
+                    volumeSnapShots = data.content.volumeSnapShots;
+                }
+                common.objectOrArrayMergeData(ct.storageSnapshotList, volumeSnapShots);
+                $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 common.showAlert("message",data.message);
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
             });
         };
 

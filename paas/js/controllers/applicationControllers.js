@@ -83,7 +83,12 @@ angular.module('paas.controllers')
             appPromise.success(function (data) {
                 ct.isAppsLoad = true;
                 $scope.main.loadingMainBody = !ct.isSpacesLoad;
-                ct.apps = data;
+                var apps = [];
+                if (data && angular.isArray(data)) {
+                    apps = data;
+                }
+
+                common.objectOrArrayMergeData(ct.apps, apps);
 
                 // 좌측 메뉴가 바뀌어서 추가한 구문 앱런타임 바로 볼 수 있도록 수정
                 if (ct.apps.length != 0) {
@@ -671,10 +676,15 @@ angular.module('paas.controllers')
             var organizationPromise = applicationService.listAllOrganizations();
             
             organizationPromise.success(function (data) {
-                $scope.main.organizations = angular.copy(data);
+                var organizations = [];
+                if (data && angular.isArray(data)) {
+                    organizations = data;
+                }
+
+                $scope.main.organizations = angular.copy(organizations);
                 $scope.main.syncListAllPortalOrgs();
-                
-                ct.organizations 		  = $scope.main.sinkPotalOrgsName(data);
+                ct.organizations = $scope.main.sinkPotalOrgsName(organizations);
+
                 ct.changeOrganization();
                 
                 ct.isOrganizationData 	  = true;

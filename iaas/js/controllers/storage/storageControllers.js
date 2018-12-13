@@ -8,6 +8,7 @@ angular.module('iaas.controllers')
         ct.fn = {};
         ct.data = {};
         ct.roles = [];
+        ct.storageMainList = [];
         ct.typeState = true;
 
         ct.fn.formOpen = function($event, state, data){
@@ -47,6 +48,7 @@ angular.module('iaas.controllers')
             ct.conditionKey = '';
         }
 
+        ct.isStorageMainListLoad = false;
         ct.fn.getStorageList = function(currentPage) {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -62,14 +64,20 @@ angular.module('iaas.controllers')
             
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-            	ct.pageOptions = paging.makePagingOptions(data);
-            	ct.storageMainList = data.content.volumes;
+                var volumes = [];
+                if (data && data.content && data.content.volumes && angular.isArray(data.content.volumes)) {
+                    volumes = data.content.volumes;
+                }
+                common.objectOrArrayMergeData(ct.storageMainList, volumes);
+                $scope.main.loadingMainBody = false;
+                ct.isStorageMainListLoad = true;
             });
             returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 common.showAlert("message",data.message);
+                ct.isStorageMainListLoad = true;
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
             });
         };
 

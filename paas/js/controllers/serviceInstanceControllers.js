@@ -35,30 +35,11 @@ angular.module('paas.controllers')
             }
             var serviceInstancePromise = serviceInstanceService.listAllServiceInstances($scope.main.sltOrganizationGuid, '');
             serviceInstancePromise.success(function (data) {
-                /* 서비스 내 바인딩돼있는 이름과 현재 앱의 이름을 비교하기 위한 로직
-                - content 안에 serviceNameEqIdx 변수를 만들어 for 문을 통해 이름이 같을 경우 index 를 그 변수에 넣어준다.
-                - 같지 않을 경우 공백으로 넣어줌. */
-                ct.existAppName = function(appName){
-
-                    for(var i=0; i < data.length; i++){
-                        if(data[i].serviceBindings.length > 0){
-
-                            for(var j=0; j<data.content[i].serviceBindings.length; j++){
-                                if(data[i].serviceBindings[j].appName == appName){
-
-                                    data[i]["serviceNameEqIdx"] = "" + j + "";
-                                    break;
-                                }else{
-                                    data[i]["serviceNameEqIdx"] = "";
-                                }
-                            }
-                        }else{
-                            data[i]["serviceNameEqIdx"] = "";
-                        }
-                    }
-                };
-
-                ct.serviceInstances = data;
+                var serviceInstances = [];
+                if (data && angular.isArray(data)) {
+                    serviceInstances = data;
+                }
+                common.objectOrArrayMergeData(ct.serviceInstances, serviceInstances);
                 $scope.main.loadingMainBody = false;
                 ct.loadingServiceInstances = false;
             });
