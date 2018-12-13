@@ -17,7 +17,7 @@
 						<i class="i_star"></i> <span class="pnb_t_txt">APP 이름</span>
 						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 APP 이름을 입력합니다. 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 					</div>
-					<input type="text" class="form-control" maxlength="20" placeholder="APP 이름을 입력하세요." id="appName" name="appName" ng-model="contents.appPushData.appName" ng-change="contents.appPushData.domainFirstName = contents.appPushData.appName" validation="min_len:3|max_len:20|required">
+					<input type="text" class="form-control" maxlength="20" placeholder="APP 이름을 입력하세요." id="appName" name="appName" ng-model="contents.appPushData.appName" ng-change="contents.appPushData.domainFirstName = contents.appPushData.appName" validation="alpha_dash|min_len:3|max_len:20|required">
 				</li>
 				<li>
 					<div class="pnb_tit">
