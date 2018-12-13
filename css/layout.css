@@ -374,11 +374,6 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb_m_proj .gnb-menu > li > ul > li > ul > li > a:hover {color:#00bfff;}
 .gnb_m_proj .gnb-menu > li > ul > li > ul > li > a.on {color:#00bfff;}
 .gnb_m_proj .gnb-menu > li > ul > li > ul > li > a::before {content:none;}
-/* .gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child {padding-bottom:0;}
-.gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child {background:url("../images/ico_gnb_dot8.png") no-repeat; background-position: 0 -5px;}
-.gnb_m_proj .gnb-menu > li > ul > li > ul > li:first-child {background:url("../images/ico_gnb_dot7.png") no-repeat; background-position: 0 19px;}
-.gnb_m_proj .gnb-menu > li > ul > li > ul > li:first-child > a {background:none;}
-.gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child > a {background:none;} */
 .gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child {padding-bottom:0;}
 .gnb_m_proj .gnb-menu > li > ul > li > ul > li:last-child > a{background: url("../images/ico_gnb_dot3.png") no-repeat; background-position: 0 0px;}
 
@@ -437,4 +432,4 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu .gm .ico-bul {top:22px; left:17px;}
 
 #container .rightCnt .titWrap {height:67px; padding:23px 40px;}
-#container .rightCnt .titWrap .btnArea {bottom:20px;}
+#container .rightCnt .titWrap .btnArea {right:10px; bottom:20px; width:120px;}

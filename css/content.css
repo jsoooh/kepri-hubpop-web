@@ -2741,7 +2741,8 @@ p.no-txt{
 .tab-content .tab-pane {height:440px;}
 .panel.type2 .cBox-cnt.mh300 {min-height:300px;}
 
-.tooltip-inner {word-break:break-all; max-width: 240px;}
+.tooltip-inner {/* word-break:break-all;  max-width: 240px;*/}
+.tooltip_long .tooltip-inner {max-width:300px; text-align:left;}
 
 .panel.type2 .panel_body .in.type2 {overflow-y:hidden !important; height:160px;}
 .panel.type2.zoom .panel_body .in.type2 {overflow-y:hidden !important; height:auto;}

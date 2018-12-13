@@ -206,10 +206,10 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .btn-only-more:hover, .btn-only-more:active, .btn-only-more:focus{color:#fff;}
 
 .btn-list{font-size: 12px; color:#888; font-weight: 400; padding:0; box-shadow: none !important;}
-.btn-list + .btn-list{margin-left:20px;}
-.btn-list + div + .btn-list{margin-left:20px;}
+.btn-list + .btn-list{margin-left:30px;}
+.btn-list + div + .btn-list{margin-left:30px;}
 .btn-list:hover, .btn-list.on {color:#333;}
-.btn-list .ico{width:18px; height: 18px; margin-right: 10px; vertical-align: text-bottom;}
+.btn-list .ico{width:18px; height: 18px; /* margin-right: 10px;  */vertical-align: text-bottom;}
 .btn-list.type1 .ico{background-position: -498px -0px;}
 .btn-list.type1:hover .ico, .btn-list.type1.on .ico{background-position: -527px 0px;}
 .btn-list.type2 .ico{background-position: -555px 0px;}
