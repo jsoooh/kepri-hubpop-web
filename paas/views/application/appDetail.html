@@ -315,7 +315,7 @@
                                     <img ng-src="{{ins.getImageUriBinding(serviceItem, contents.appGuid)}}" alt="{{ serviceItem.serviceLabel }}">
                                     <!--<img ng-src="images/thum/im_app_{{ serviceItem.serviceLabel }}_{{ (serviceItem.serviceBindings.length > 0) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}">-->
                                     <div class="dropdown btn-option" ng-controller="tabAppServiceBindingsCtrl as bind">
-                                        <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-click="ins.existAppName(contents.app.name);">
+                                        <button type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-click="ins.existAppName(contents.app.name);">
                                             <span class="ico">실행 설정</span>
                                         </button>
                                         <!-- serviceNameEqIdx 값이 공백이 아닐 때 -->

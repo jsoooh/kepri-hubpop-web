@@ -1085,11 +1085,10 @@ angular.module('common.controllers', [])
             mc.ssoUserLoginChecking = true;
             var promise = user.getCheckSsoPgsecuid(pgsecuid);
             promise.success(function (data, status, headers) {
-                var userInfo = data;
-                var accessToken = userInfo.token;
-                if (accessToken) {
+                if (data && data.token) {
+                    var userInfo = data;
                     mc.ssoUserLogin = true;
-                    common.setAccessToken(accessToken);
+                    common.setAccessToken(userInfo.token);
                     common.setUser(userInfo);
                     common.moveHomePage();
                 }
