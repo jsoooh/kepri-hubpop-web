@@ -422,7 +422,7 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .panel.type2 .panel_head .tit .countList{display:inline-block;font-size:14px;color:#888;font-weight:400;padding-left:20px;}/*180411 스타일 추가*/
 .panel.type2 .panel_head .pull-right .btn{margin-top: 6px;}
 .panel.type2 .panel_head .pull-right .btn + .btn{margin-left: 10px;}
-.panel.type2 .panel_body{height: 300px; padding:30px; }
+.panel.type2 .panel_body{height: 400px; padding:30px; }
 .panel.type2 .panel_body .in{height: 100%; overflow:hidden;}
 .panel.type2 .panel_body .tbl.type1 td{overflow: hidden; white-space: nowrap;   text-overflow: ellipsis;}
 .panel.type2 .panel_body .tbl.type1 td.over-visible{overflow: visible;}
@@ -2702,6 +2702,8 @@ p.no-txt{
 .accss_guideWrap .txt_level_list dl dt + dd + dt {clear:both;}
 .accss_guideWrap .txt_level_list dl dd {float:left; color:#1360ec; padding-left:3px;}
 
+.backdrop_type {position:fixed; top: 0px; height: 100%; background-color: #aaaaaa; display: none; opacity: 0.6;}
+
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 
 .aside .radio input[type="radio"] + label::after{margin-top: -6px;}
@@ -2744,7 +2746,7 @@ p.no-txt{
 .tooltip-inner {/* word-break:break-all;  max-width: 240px;*/}
 .tooltip_long .tooltip-inner {max-width:300px; text-align:left;}
 
-.panel.type2 .panel_body .in.type2 {overflow-y:hidden !important; height:160px;}
+.panel.type2 .panel_body .in.type2 {overflow-y:hidden !important; height:260px;}
 .panel.type2.zoom .panel_body .in.type2 {overflow-y:hidden !important; height:auto;}
 
 /*서버 생성 후 박스 깜빡임 효과*/
@@ -2774,3 +2776,10 @@ p.no-txt{
 
 /*패널 마우스커서 스타일 재정의*/
 .panel {cursor:default;}
+
+/*상세화면 탭영역 hight값 추가*/
+.tab-content.inst {height:530px;}
+
+/*툴팁(긴 글 유형 박스 z-index 재정의)*/
+.panel_box .pn_body .form_list {z-index:1;}
+.panel_box .pn_body .pnb_box {position:relative; z-index:2;}
