@@ -871,52 +871,38 @@ angular.module('paas.controllers')
             appBody.spaceGuid 			= ct.appPushData.spaceGuid;
             appBody.pushType 			= ct.appPushData.pushType;
             
-            if (ct.appPushData.pushType == "DOCKER") 
-            {
+            if (ct.appPushData.pushType == "DOCKER") {
                 appBody.dockerImage = ct.appPushData.dockerImage;
-            } 
-            else 
-            {
+            } else {
                 appBody.buildpack 	= ct.sltPortalBuildpack.name + '_buildpack-' + ct.sltBuildpackVersion.version;
             }
             
             appBody.appName 	= ct.appPushData.appName;
             appBody.hostName 	= ct.appPushData.domainFirstName + "." + ct.sltDomainName;
             appBody.withStart 	= false;
-            var afterStart 		= false;
-            ct.sltDeployOption 	= "B";  
+
             //배포옵션 기본 하드코딩
-            if (ct.sltDeployOption == "B") 
-            {
-                afterStart = true;
+            if (ct.sltDeployOption == "B") {
                 appBody.appFilePath = ct.sltPortalBuildpack.appFilePath;
                 appBody.instances 	= ct.defaultSet.instances;
                 appBody.memory 		= ct.defaultSet.memory;
                 appBody.diskQuota 	= ct.defaultSet.diskQuota;
-            } 
-            else 
-            {
-                afterStart = (ct.appPushData.withStart == "true") ? true : false;
-                
-                if (ct.appPushData.serviceInstanceGuid) 
-                {
+            } else {
+                if (ct.appPushData.serviceInstanceGuid) {
                     appBody.serviceInstanceGuid = ct.appPushData.serviceInstanceGuid;
                 }
-                
                 appBody.instances = ct.defaultSet.instances;
                 appBody.memory 	  = ct.defaultSet.memory;
                 appBody.diskQuota = ct.defaultSet.diskQuota;
             }
             
            // console.log("appBody====>"+ JSON.stringify(appBody));
-            
 
             if (ct.appFileItem) {
                 appBody.file 	   = ct.appFileItem._file;
                 var appPushPromise = applicationService.appFilePush(appBody);
                 
-                appPushPromise.success(function (data) 
-                {
+                appPushPromise.success(function (data) {
                     $scope.actionBtnHied 		= false;
                     $scope.main.loadingMain 	= false;
                     $scope.main.loadingMainBody = false;
