@@ -2745,6 +2745,7 @@ p.no-txt{
 
 .tooltip-inner {/* word-break:break-all;  max-width: 240px;*/}
 .tooltip_long .tooltip-inner {max-width:300px; text-align:left;}
+.tooltip_maxW .tooltip-inner {max-width:unset;}
 
 .panel.type2 .panel_body .in.type2 {overflow-y:hidden !important; height:260px;}
 .panel.type2.zoom .panel_body .in.type2 {overflow-y:hidden !important; height:auto;}
