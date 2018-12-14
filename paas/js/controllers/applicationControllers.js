@@ -69,11 +69,9 @@ angular.module('paas.controllers')
             var conditions = [];
             if(ct.sltOrganizationGuid) {
                 conditions.push("organization_guid:" + ct.sltOrganizationGuid);
-                $cookies.put('sltOrganizationGuid', ct.sltOrganizationGuid);
             }
             if(ct.sltSpaceGuid) {
                 conditions.push("space_guid:" + ct.sltSpaceGuid);
-                $cookies.put('sltSpaceGuid', ct.sltSpaceGuid);
             }
             if(ct.sltAppNames && ct.sltAppNames.length > 0) {
                 conditions.push("name:" + ct.sltAppNames.join(","));

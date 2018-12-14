@@ -194,7 +194,7 @@
 									</ul>
 									<div class="progress_txt">
 										<p>{{'iaas.label.instance_ui_' + instance.uiTask | translate}}</p>
-										<span>{{instance.creatingTimmer}}초</span>
+										<span ng-if="instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping'">{{instance.creatingTimmer}}초</span>
 									</div>
 								</div>
 							</div>
