@@ -1214,6 +1214,13 @@ angular.module('common.controllers', [])
             $('#' + id)[0].scrollTop = 0
         };
 
+        mc.copyToClipboard = function (clipboard, message) {
+            common.copyToClipboard(clipboard);
+            if (message) {
+                common.showAlertInfo(message);
+            }
+        };
+
         mc.resetInit();
         mc.setMainLanguage(common.getLanguageKey());
         mc.sltProjectId = common.getProjectKey();

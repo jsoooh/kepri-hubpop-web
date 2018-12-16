@@ -40,7 +40,7 @@
 	<div class="txt_level_list">
 		<p class="txt_level3 type2">서버 접속 정보</p>
 		<dl>
-			<dt>- 접속 도메인 :</dt><dd>{{spop.data.floatingIp}}</dd>
+			<dt>- 접속 도메인 :</dt><dd>{{spop.data.rdpConnectUrl}} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="main.copyToClipboard(spop.data.rdpConnectUrl, '클립보드에 복사 되었습니다.')"><span class="ico_sm ico_copy">복사</span></button></dd>
 			<dt>- 접속 계정 :</dt><dd>administrator</dd>
 			<dt>- 접속 비밀번호 :</dt><dd>kepri!234</dd>
 		</dl>

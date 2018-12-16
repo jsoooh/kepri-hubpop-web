@@ -619,7 +619,7 @@ angular.module('iaas.controllers')
             var rdpConnectUrl = (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + ct.rdpConnectPort : '';
             if (rdpConnectUrl) {
                 common.copyToClipboard(rdpConnectUrl);
-                common.showAlertInfo('"' + rdpConnectUrl + '"가 클립보드에 복사 되었습니다.');
+                $scope.main.copyToClipboard(rdpConnectUrl, '"' + rdpConnectUrl + '"가 클립보드에 복사 되었습니다.');
             } else {
                 common.showAlertWarning("접속 URL이 존재하지 않습니다.");
             }
