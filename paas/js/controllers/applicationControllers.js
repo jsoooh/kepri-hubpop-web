@@ -1740,7 +1740,8 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.deleteApp(guid);
             appPromise.success(function (data) {
-                $scope.main.goToPage("/paas");
+                common.showAlertSuccess("삭제 되었습니다.");
+                $scope.main.goToPage("/paas/apps");
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
