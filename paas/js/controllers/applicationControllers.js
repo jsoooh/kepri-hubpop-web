@@ -1531,12 +1531,14 @@ angular.module('paas.controllers')
                 ct.routesLength = data.routes.length;
                 ct.instanceStats = angular.copy(ct.app.instanceStats);
 
+/*
                 if (data.organizationGuid) {
                     var organization = common.objectsFindCopyByField($scope.main.organizations, "guid", data.organizationGuid);
                     if (organization && angular.isDefined(organization.name)) {
                         $scope.main.detailOrgName = organization.name + "(" + organization.orgName + ")";
                     }
                 }
+*/
                 ct.setRoundProgressData();
                 $scope.main.spaceName = data.space.name;
                 $scope.main.applicationName = data.name;
@@ -1909,7 +1911,7 @@ angular.module('paas.controllers')
         var tab = this;
         var vs = new ValidationService();
         tab.app = angular.copy($scope.contents.app);
-        tab.appGuid = tab.app.guid;
+        tab.appGuid = $scope.contents.appGuid
         tab.appServiceBindings = null;
 
         tab.tabBodytemplateUri = _PAAS_VIEWS_ + "/application/tabAppServiceBindings.html" + _VersionTail();
