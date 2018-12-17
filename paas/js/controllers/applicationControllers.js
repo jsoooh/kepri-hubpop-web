@@ -1099,13 +1099,29 @@ angular.module('paas.controllers')
                 document.getElementsByClassName('btn btn-list type2')[0].classList.add('on');
             }
         };
-        
-        ct.showFormRePush = function () {
+
+        ct.showRightFormRePush = function ($event) {
             $scope.main.layerTemplateUrl = _PAAS_VIEWS_ + "/application/appRePush.html" + _VersionTail();
             console.log($scope.main.layerTemplateUrl);
 
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
+        };
+
+        ct.showFormRePush = function ($event) {
+
+            var dialogOptions = {
+                controller : "paasApplicationRePushFormCtrl" ,
+                formName   : 'paasApplicationRePushForm',
+                callBackFunction : ct.rePushCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = false; // action loading
+        };
+
+        ct.rePushCallBackFunction = function () {
+            ct.getAppStats(false);
         };
 
         ct.closeFormRePush = function (evt) {
@@ -1513,6 +1529,7 @@ angular.module('paas.controllers')
             }
             var appPromise = applicationService.getAppStats(ct.appGuid);
             appPromise.success(function (data) {
+                $scope.main.loadingMainBody = false;
 	            ct.app = angular.copy(data);
                 ct.sltOrganizationGuid = ct.app.organizationGuid;
                 ct.sltSpaceGuid = ct.app.spaceGuid;
@@ -1573,9 +1590,7 @@ angular.module('paas.controllers')
                 }
             });
             appPromise.error(function (data) {
-                if (init) {
-                    $scope.main.loadingMainBody = false;
-                }
+                $scope.main.loadingMainBody = false;
                 ct.app = {};
                 ct.instanceStats = [];
             });
@@ -1622,7 +1637,6 @@ angular.module('paas.controllers')
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.getAppStats(true);
             });
         };
 
@@ -1634,7 +1648,6 @@ angular.module('paas.controllers')
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.getAppStats(true);
             });
         };
 
@@ -1666,7 +1679,6 @@ angular.module('paas.controllers')
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.getAppStats(true);
             });
         };
 
@@ -1760,8 +1772,49 @@ angular.module('paas.controllers')
         ct.getAppSummary();
         ct.changeSltInfoTab('service'); //20181126 sg0730 kepri 통합 요청으로 인한 Applog 제일 상단 배치
     })
-    .controller('applicationRePushFormCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, ValidationService, FileUploader, common, CONSTANTS) {
-        _DebugConsoleLog("applicationControllers.js : applicationRePushFormCtrl", 1);
+    .controller('paasApplicationRePushFormCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, common, CONSTANTS) {
+        _DebugConsoleLog("applicationControllers.js : paasApplicationRePushFormCtrl", 1);
+
+        var pop = this;
+        var ct = $scope.contents;
+
+        pop.formName = $scope.dialogOptions.formName;
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
+        $scope.dialogOptions.dialogClassName = "modal-lg";
+        $scope.dialogOptions.title = $translate.instant("label.redeploy");
+        $scope.dialogOptions.okName =  $translate.instant("label.redeploy");
+        $scope.dialogOptions.templateUrl = _PAAS_VIEWS_ + "/application/popAppRePushForm.html" + _VersionTail();
+
+        pop.updateAppScale = function(guid, name) {
+            var message = (ct.originalMemory != ct.memorySlider.value || ct.originalDisk != ct.diskQuotaSlider.value) ? $translate.instant('message.mi_memory_or_disk_changed_restage_info') + " " : "";
+            var showConfirm = common.showConfirm($translate.instant('label.save') + "(" + name + ")", message + $translate.instant('message.mq_save_app'));
+            showConfirm.then(function () {
+                common.mdDialogHide();
+                pop.updateAppScaleAction(guid, ct.instancesSlider.value, ct.memorySlider.value, ct.diskQuotaSlider.value);
+            });
+        };
+
+        pop.updateAppScaleAction = function(guid, instances, memory, diskQuota) {
+            $scope.main.loadingMainBody = true;
+            var appPromise = applicationService.updateAppScale(guid, instances, memory, diskQuota);
+            appPromise.success(function (data) {
+                if (angular.isFunction(pop.callBackFunction)) {
+                    pop.callBackFunction();
+                }
+            });
+            appPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            pop.updateAppScale(ct.app.guid);
+        };
+
+    })
+    .controller('paasApplicationReUploadPushFormCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, ValidationService, FileUploader, common, CONSTANTS) {
+        _DebugConsoleLog("applicationControllers.js : paasApplicationReUploadPushFormCtrl", 1);
 
         var pop = this;
         var vs = new ValidationService();
@@ -1817,7 +1870,7 @@ angular.module('paas.controllers')
         $scope.dialogOptions.dialogClassName = "modal-lg";
         $scope.dialogOptions.title = $translate.instant("label.redeploy");
         $scope.dialogOptions.okName =  $translate.instant("label.redeploy");
-        $scope.dialogOptions.templateUrl = _PAAS_VIEWS_ + "/application/popAppRePushForm.html" + _VersionTail();
+        $scope.dialogOptions.templateUrl = _PAAS_VIEWS_ + "/application/popAppReUploadPushForm.html" + _VersionTail();
         if (angular.isObject(pop.app.marketAppPush) && angular.isObject(pop.app.marketAppPush.marketApp)
             && angular.isNumber(pop.app.marketAppPush.marketApp.id) && pop.app.marketAppPush.marketApp.id > 0) {
             pop.appPushData.pushType = "MARKET";

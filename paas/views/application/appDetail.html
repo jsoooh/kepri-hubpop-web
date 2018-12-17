@@ -5,7 +5,7 @@
         <img ng-if="contents.app.buildpackName != null" ng-src="images/thum/im_logo_{{ contents.app.buildpackName | lowercase }}.png" class="logo" alt="" style="width:54px; height:54px;">
         <h4 class="c-tit">{{ contents.app.name }}</h4>
         <div class="pull-right">
-            <!--<button type="button" name="button" class="btn btn-sm btn-color1" tooltip-placement="bottom" uib-tooltip="재배포" ng-click="contents.showFormRePush();">재배포</button>-->
+            <!--<button type="button" name="button" class="btn btn-sm btn-color1" tooltip-placement="bottom" uib-tooltip="재배포" ng-click="contents.showFormRePush($event);">재배포</button>-->
             <button type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-show="contents.app.state == 'STOPPED'" ng-click="contents.startAppState(contents.appGuid, contents.app.name);"><span class="ico">시작</span></button>
             <button type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="중지" ng-show="contents.app.state == 'STARTED'" ng-click="contents.stopAppState(contents.appGuid, contents.app.name);"><span class="ico">중지</span></button>
             <!--<button type="button" name="button" class="btn ico-refresh only-ico" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="contents.refreshApp();"><span class="ico">새로고침</span></button>-->
@@ -73,7 +73,8 @@
                     </li>
                     <li>
                         <strong class="btnArea">
-                            <button type="button" name="button" class="btn btn-sm btn-color1" data-user="aside" data-username="#aside-rework" ng-click="contents.showFormRePush();">재배포</button>
+                            <button type="button" name="button" class="btn btn-sm btn-color1" data-user="aside" data-username="#aside-rework" ng-click="contents.showFormRePush($event);">재배포</button>
+                            <button type="button" name="button" class="btn btn-sm btn-color1" data-user="aside" data-username="#aside-rework" ng-click="contents.showRightFormRePush($event);">재배포</button>
                         </strong>
                     </li>
                 </ul>
