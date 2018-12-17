@@ -53,9 +53,13 @@
                     <li>
                         <strong class="tit">상태</strong>
                         <div class="txt">
-                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED')">
+                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED') && (contents.app.insState == 'RUNNING')">
                                 <span class="stateMark type1">시작</span>
                                 <span class="state-txt">시작</span>
+                            </span>
+                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED') && (contents.app.insState != 'RUNNING')">
+                                <span class="stateMark type4">시작중</span>
+                                <span class="state-txt">시작중</span>
                             </span>
                             <div class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'PENDING')">
                                 <span class="stateMark type4">배포 진행 중</span>

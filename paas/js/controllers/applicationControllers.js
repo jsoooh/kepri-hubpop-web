@@ -1052,6 +1052,7 @@ angular.module('paas.controllers')
             }
         };
 
+        ct.originalInstances = 0;
         ct.originalMemory = 0;
         ct.originalDisk = 0;
 
@@ -1314,6 +1315,7 @@ angular.module('paas.controllers')
 
         ct.setRoundProgressData = function () {
             if (ct.instanceStats && ct.instanceStats.length > 0) {
+                var instaceState = "RUNNING";
                 var instanceStatsUsageCpu = 0;
                 var instanceStatsUsageMemory = 0;
                 var instanceStatsUsageDisk = 0;
@@ -1326,6 +1328,17 @@ angular.module('paas.controllers')
                 var instanceStatsDiskQuotaValue = 0;
 
                 for (var i=0; i<ct.instanceStats.length; i++) {
+                    if (ct.instanceStats[i].state == "DOWN") {
+                        instaceState = ct.instanceStats[i].state;
+                    } else if (ct.instanceStats[i].state == "STARTING") {
+                        if (instaceState == "RUNNING") {
+                            instaceState = ct.instanceStats[i].state;
+                        }
+                    } else {
+                        if (instaceState != "DOWN") {
+                            instaceState = ct.instanceStats[i].state;
+                        }
+                    }
                     if (ct.instanceStats[i].usage != null) {
                         instanceStatsUsageCpu += ct.instanceStats[i].usage.cpu * 100;
                         instanceStatsUsageCpuValue += ct.instanceStats[i].usage.cpu;
@@ -1343,6 +1356,16 @@ angular.module('paas.controllers')
                         instanceStatsDiskQuotaValue += parseInt(ct.instanceStats[i].diskQuota, 10);
                     }
                 }
+
+                ct.app.insState = instaceState;
+
+                ct.originalInstances = ct.app.instances;
+                ct.instancesSlider.value = ct.app.instances;
+                ct.originalMemory = ct.app.memory;
+                ct.memorySlider.value = ct.app.memory;
+                ct.originalDisk = ct.app.diskQuota;
+                ct.diskQuotaSlider.value = ct.app.diskQuota;
+
                 var memoryByte = (instanceStatsUsageMemoryValue / ct.instanceStats.length);
                 var diskByte = (instanceStatsUsageDiskValue / ct.instanceStats.length);
                 var cpuByte = (instanceStatsUsageCpuValue / ct.instanceStats.length);
@@ -1544,10 +1567,21 @@ angular.module('paas.controllers')
                 var time = year + '-' + month + '-' + date + ' ' + hour + ':' + min + ':' + sec ;
                 ct.app.created = time;
 
-                ct.serviceBindingsLength = data.serviceBindings.length;
-                ct.routesLength = data.routes.length;
-                ct.instanceStats = angular.copy(ct.app.instanceStats);
-
+                if (data.serviceBindings && angular.isArray(data.serviceBindings)) {
+                    ct.serviceBindingsLength = data.serviceBindings.length;
+                } else {
+                    ct.serviceBindingsLength = 0;
+                }
+                if (data.routes && angular.isArray(data.routes)) {
+                    ct.routesLength = data.routes.length;
+                } else {
+                    ct.routesLength = 0;
+                }
+                if (data.instanceStats && angular.isArray(data.instanceStats)) {
+                    ct.instanceStats = angular.copy(ct.app.instanceStats);
+                } else {
+                    ct.instanceStats = [];
+                }
 /*
                 if (data.organizationGuid) {
                     var organization = common.objectsFindCopyByField($scope.main.organizations, "guid", data.organizationGuid);
@@ -1785,8 +1819,16 @@ angular.module('paas.controllers')
         $scope.dialogOptions.okName =  $translate.instant("label.redeploy");
         $scope.dialogOptions.templateUrl = _PAAS_VIEWS_ + "/application/popAppRePushForm.html" + _VersionTail();
 
+        pop.checkClick = false;
         pop.updateAppScale = function(guid, name) {
-            var message = (ct.originalMemory != ct.memorySlider.value || ct.originalDisk != ct.diskQuotaSlider.value) ? $translate.instant('message.mi_memory_or_disk_changed_restage_info') + " " : "";
+            if (pop.checkClick) return;
+            pop.checkClick = true;
+            if (ct.originalInstances == ct.instancesSlider.value && ct.originalMemory == ct.memorySlider.value && ct.originalDisk == ct.diskQuotaSlider.value) {
+                common.showAlertWarning("변경된 사항이 없습니다.");
+                pop.checkClick = false;
+                return;
+            }
+            var message = $translate.instant('message.mi_memory_or_disk_changed_restage_info') + " ";
             var showConfirm = common.showConfirm($translate.instant('label.save') + "(" + name + ")", message + $translate.instant('message.mq_save_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
@@ -1809,7 +1851,7 @@ angular.module('paas.controllers')
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-            pop.updateAppScale(ct.app.guid);
+            pop.updateAppScale(ct.app.guid, ct.app.name);
         };
 
     })
