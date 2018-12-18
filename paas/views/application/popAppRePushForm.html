@@ -1,6 +1,137 @@
-        <!-- aside cnt -->
-        <div class="sideCntWrap">
-            <!-- sideInWrap -->
+<div class="tbw type1">
+    <table class="table">
+        <colgroup>
+            <col style="width: 33%;">
+            <col style="width: auto;">
+        </colgroup>
+        <tbody>
+        <tr>
+            <th scope="row">인스턴스 수</th>
+            <td>{{contents.instancesSlider.value}} 개</td>
+        </tr>
+        <tr>
+            <th scope="row">전체 메모리</th>
+            <td>{{ contents.memorySlider.value | displayVolume:'MB' }}</td>
+        </tr>
+        <tr>
+            <th scope="row">전체 디스크</th>
+            <td>{{ contents.diskQuotaSlider.value | diskQuotaSlider:'MB' }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pnb_bx_cnt">
+        <!-- <div class="pnb_bx_cnt" > -->
+        <ul class="cnt_sliderWrap">
+            <li>
+                <div class="tit"><span>인스턴스 수</span></div>
+                <div class="slider_area">
+                    <div class="disk_area color2">
+                        <div class="disk_box">
+                            <div class="rangeWrap type2">
+                                <span class="s_txt">최대 {{contents.instancesSlider.options.ceil}}개</span>
+                                <div class="range_box">
+                                    <div class="ico_minus">
+                                        <button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(1);" ><span>감소</span></button>
+                                    </div>
+                                    <div class="rzslider">
+                                        <rzslider rz-slider-model="contents.instancesSlider.value" rz-slider-options="contents.instancesSlider.options"></rzslider>
+                                    </div>
+                                    <div class="ico_plus">
+                                        <!-- <button type="button" name="button" class="btn" title="minus" ng-click="if(contents.defaultSet.instances <= contents.insSlider.options.ceil )contents.defaultSet.instances = (contents.defaultSet.instances + contents.insSlider.options.step);"><span>증가</span></button> -->
+                                        <button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(1);"><span>증가</span></button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="tit"><span>인스턴스 메모리</span></div>
+                <div class="slider_area">
+                    <div class="disk_area">
+                        <div class="disk_box">
+                            <div class="rangeWrap type2">
+                                <span class="s_txt">최대  {{ (contents.memorySlider.options.ceil < 1024) ?  (contents.memorySlider.options.ceil|number:0)  : (contents.memorySlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
+                                <div class="range_box">
+                                    <div class="ico_minus">
+                                        <button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(2);" ><span>감소</span></button>
+                                    </div>
+                                    <div class="rzslider"><rzslider rz-slider-model="contents.memorySlider.value" rz-slider-options="contents.memorySlider.options"></rzslider></div>
+                                    <div class="ico_plus">
+                                        <button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(2);"><span>증가</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="tit"><span>인스턴스 디스크</span></div>
+                <div class="slider_area">
+                    <div class="disk_area color3">
+                        <div class="disk_box">
+                            <div class="rangeWrap type2">
+                                <span class="s_txt">최대 {{ (contents.diskQuotaSlider.options.ceil < 1024) ?  (contents.diskQuotaSlider.options.ceil|number:0)  : (contents.diskQuotaSlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
+                                <div class="range_box">
+                                    <div class="ico_minus">
+                                        <button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(3);" ><span>감소</span></button>
+                                    </div>
+                                    <div class="rzslider"><rzslider rz-slider-model="contents.diskQuotaSlider.value" rz-slider-options="contents.diskQuotaSlider.options"></rzslider></div>
+                                    <div class="ico_plus">
+                                        <button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(3);" ><span>증가</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+<!--
+    <div class="disk_area">
+        <div class="disk_info ng-binding">최대 {{contents.instancesSlider.options.ceil | displayVolume : 'GB'}}</div>
+        <p>마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
+        <div class="disk_box">
+            <div class="rangeWrap type2">
+                <div class="range_box">
+                    <rzslider rz-slider-model="contents.instancesSlider.value" rz-slider-options="contents.instancesSlider.options"></rzslider>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="disk_area">
+        <div class="disk_info ng-binding">최대 {{contents.memorySlider.options.ceil | displayVolume : 'GB'}}</div>
+        <p>마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
+        <div class="disk_box">
+            <div class="rangeWrap type2">
+                <div class="range_box">
+                    <rzslider rz-slider-model="contents.memorySlider.value" rz-slider-options="contents.memorySlider.options"></rzslider>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="disk_area">
+        <div class="disk_info ng-binding">최대 {{contents.diskQuotaSlider.options.ceil | displayVolume : 'GB'}}</div>
+        <p>마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
+        <div class="disk_box">
+            <div class="rangeWrap type2">
+                <div class="range_box">
+                    <rzslider rz-slider-model="contents.diskQuotaSlider.value" rz-slider-options="contents.diskQuotaSlider.options"></rzslider>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+</div>
+<!-- aside cnt -->
+ <!--       <div class="sideCntWrap">
+            &lt;!&ndash; sideInWrap &ndash;&gt;
             <div class="sideInWrap">
                 <ul class="app-set2">
                     <li>
@@ -16,7 +147,7 @@
                     </li>
                     <li>
                         <p class="app-tit">마우스를 움직여 리소스 정보를<br>변경 할 수 있습니다.</p>
-                        <!-- inst dropdown -->
+                        &lt;!&ndash; inst dropdown &ndash;&gt;
                         <div class="instSelWrap">
                             <button type="button" name="button" class="btn" ng-click="contents.resourceForm($event);">리소스 변경하기<span class="ico"></span></button>
                             <div class="instBox">
@@ -51,10 +182,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <!-- inst dropdown -->
+                        &lt;!&ndash; inst dropdown &ndash;&gt;
                     </li>
                 </ul>
             </div>
-            <!-- //sideInWrap -->
+            &lt;!&ndash; //sideInWrap &ndash;&gt;
         </div>
-        <!-- //aside cnt -->
+-->        <!-- //aside cnt -->

@@ -60,10 +60,12 @@
                             <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED') && (contents.app.insState != 'RUNNING')">
                                 <span class="stateMark type4">시작중</span>
                                 <span class="state-txt">시작중</span>
+                                <img src="images/loading_sm.gif" />
                             </span>
                             <div class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'PENDING')">
                                 <span class="stateMark type4">배포 진행 중</span>
                                 <span class="state-txt">배포 진행 중</span>
+                                <img src="images/loading_sm.gif" />
                             </div>
                             <span class="stateWrap" ng-if="(contents.app.state == 'STOPPED') && (contents.app.packageState != 'FAILED')">
                                 <span class="stateMark type2">정지</span>

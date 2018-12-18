@@ -21,7 +21,7 @@
 						<div class="pnb_tit">
 							<i class="i_star"></i>서버 이름<span class="ico_info"></span>
 						</div>
-						<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름을 입력하세요." validation="alpha_dash_spaces|required">
+						<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required">
 					</li>
 					<li ng-if="contents.snapshotInfo.osType == 'windows'" class="pn-Toggle">
 						<div class="pnb_tit">
@@ -32,7 +32,7 @@
 						<div class="s_cont_box" style="display: block;">
 							<div class="app-form-two mgt0">
 								<div class="two_box">
-									<input type="text" class="form-control" name="subDomainName" maxlength="50" placeholder="접속 서브 도메인을 입력하세요." ng-model="contents.data.subDomainName" validation="alpha_num|required|custom:contents.fn.subDomainCustomValidationCheck(contents.data.subDomainName)">
+									<input type="text" class="form-control" name="subDomainName" maxlength="50" placeholder="접속 서브 도메인을 입력하세요." ng-model="contents.data.subDomainName" validation="alpha_dash|required|custom:contents.fn.subDomainCustomValidationCheck(contents.data.subDomainName)">
 								</div>
 								<div class="two_box">
 									<select name="baseDomainName" ng-model="contents.data.baseDomainName">

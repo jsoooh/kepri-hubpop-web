@@ -45,7 +45,7 @@
 					<div class="mt20">
 						<div class="radio radio-inline">
 							<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="contents.appPushData.pushType" >
-							<label for="app-radio1-1" class="label">빌드팩(Buildpack)</label>
+							<label for="app-radio1-1" class="label">빌드팩(Buildpack) 기반</label>
 						</div>
 						<div class="radio radio-inline">
 							<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="contents.appPushData.pushType"  disabled> <!-- 2018.12.13 disabled 처리  -->
@@ -81,7 +81,7 @@
 				<!-- <li class="pn-Toggle" ng-if="contents.appPushData.pushType != 'DOCKER'"> --> <!-- 2018.12.13 필수값으로 변경되면서 토글 해제. 파일 필수값 validation 추가 필요. sg0730  -->
 				<li ng-if="contents.appPushData.pushType != 'DOCKER'">
 					<div class="pnb_tit" >
-						<i class="i_star"></i> <span class="pnb_t_txt">APP 실행용 파일 업로드</span>
+						<i class="i_star"></i> <span class="pnb_t_txt">APP 실행 파일 업로드</span>
 						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'파일찾기를 통해 사용자가 제작한 APP을 업로드하고 컨테이너에 배포할 수 있습니다. </br>업로드 되는 파일은 jar, war, zip 포멧을 지원합니다.'"><span class="ico_info"></span></button></div>
 						<!-- <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button> -->
 					</div>
@@ -107,15 +107,15 @@
 			<!-- 사양설정 -->
 			<div class="pnb_box type2 hd_type cToggle">
 				<div class="pnb_bx_hd">
-					<span class="hd_tit">실행환경 사양설정</span>
-					<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'＊ 사용자 APP에 대한 자원사용 사양을 설정합니다. </br>&nbsp;&nbsp;&nbsp;· 인스턴스 수 : 배포되는 APP에 대한 인스턴스 수를 지정, 설정된 수만큼 Scale-Out</br>&nbsp;&nbsp;&nbsp;· 메모리 용량 : 배포되는 APP이 사용 가능한 최대 메모리 용량을 설정</br>&nbsp;&nbsp;&nbsp;· 디스크 용량 : 배포되는 APP이 사용 가능한 최대 디스크 용량을 설정'"><span class="ico_info"></span></button></div>
+					<span class="hd_tit">APP 사양설정</span>
+					<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'＊ 사용자 APP에 대한 자원사용 사양을 설정합니다. </br>&nbsp;&nbsp;&nbsp;· 인스턴스 수 : 배포되는 APP에 대한 인스턴스 수를 지정, 설정된 수만큼 Scale-Out</br>&nbsp;&nbsp;&nbsp;· 메모리 용량 : 배포되는 APP 인스턴스 별 사용 가능한 최대 메모리 용량을 설정</br>&nbsp;&nbsp;&nbsp;· 디스크 용량 : 배포되는 APP 인스턴스 별 사용 가능한 최대 디스크 용량을 설정'"><span class="ico_info"></span></button></div>
 					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.pnbBoxToggleChange($event, true);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 				</div>
 				<div class="pnb_bx_cnt">
 				<!-- <div class="pnb_bx_cnt" > -->
 					<ul class="cnt_sliderWrap">
 						<li>
-							<div class="tit"><span>인스턴스 개수</span></div>
+							<div class="tit"><span>인스턴스 수</span></div>
 							<div class="slider_area">
 								<div class="disk_area color2">
 									<div class="disk_box">
@@ -141,7 +141,7 @@
 						</li>
 						
 						<li>
-							<div class="tit"><span>메모리 용량</span></div>
+							<div class="tit"><span>인스턴스 메모리</span></div>
 							<div class="slider_area">
 								<div class="disk_area">
 									<div class="disk_box">
@@ -163,7 +163,7 @@
 						</li>
 						
 						<li>
-							<div class="tit"><span>디스크 용량</span></div>
+							<div class="tit"><span>인스턴스 디스크</span></div>
 							<div class="slider_area">
 								<div class="disk_area color3">
 									<div class="disk_box">
@@ -212,8 +212,8 @@
 					</li>
 					<li>
 						<span class="s_tit">APP 유형</span>
-						<span class="s_txt" ng-if="contents.appPushData.pushType == 'GENERAL'">빌드팩(Buildpack)</span>
-						<span class="s_txt" ng-if="contents.appPushData.pushType == 'DOCKER'">도커(Docker)</span>
+						<span class="s_txt" ng-if="contents.appPushData.pushType == 'GENERAL'">빌드팩(Buildpack) 기반</span>
+						<span class="s_txt" ng-if="contents.appPushData.pushType == 'DOCKER'">도커(Docker) 이미지 기반</span>
 					</li>
 					<li ng-if="contents.appPushData.pushType == 'GENERAL'">
 						<span class="s_tit">빌드팩 정보</span>
@@ -227,7 +227,7 @@
 								<dt>버전 :</dt>
 								<!-- <dd>{{contents.sltBuildpackVersion.versionName}}</dd> -->
 								<dd> v4.12 release</dd>
-								<dt>주요구성 SW</dt>
+								<dt>주요구성 S/W</dt>
 							</dl>
 							<dd class="dd_row">OpenJDK JRE v1.8.0</dd>
 							<dd class="dd_row">Spring Boot v1.5.13</dd>
@@ -252,7 +252,7 @@
 								<dt>버전 :</dt>
 								<!-- <dd>{{contents.sltBuildpackVersion.versionName}}</dd> -->
 								<dd>v1.4.28 release</dd>
-								<dt>주요구성 SW</dt>
+								<dt>주요구성 S/W</dt>
 							</dl>
 							<dd class="dd_row">nginx v1.15.0</dd>
 							
@@ -267,7 +267,7 @@
 								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
 								<dt>버전 :</dt>								
 								<dd>v1.6.17 release</dd>
-								<dt>주요구성 SW</dt>
+								<dt>주요구성 S/W</dt>
 							</dl>
 							<dd class="dd_row">python v3.6.5</dd>
 							
@@ -281,7 +281,7 @@
 								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
 								<dt>버전 :</dt>								
 								<dd>v1.6.17 release</dd>
-								<dt>주요구성 SW</dt>
+								<dt>주요구성 S/W</dt>
 							</dl>
 							<dd class="dd_row">python v3.6.5</dd>
 							
@@ -296,7 +296,7 @@
 								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
 								<dt>버전 :</dt>								
 								<dd>v1.6.25 release</dd>
-								<dt>주요구성 SW</dt>
+								<dt>주요구성 S/W</dt>
 							</dl>
 							<dd class="dd_row">node v10.3.0</dd>
 							<dd class="dd_row">yarn v1.7.0</dd>
@@ -313,7 +313,7 @@
 								<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
 								<dt>버전 :</dt>								
 								<dd>v1.8.23 release</dd>
-								<dt>주요구성 SW</dt>
+								<dt>주요구성 S/W</dt>
 							</dl>
 							<dd class="dd_row">go v1.10.2</dd>
 							
@@ -328,7 +328,7 @@
 		
 		<div class="pn-Toggle brd0">
 			<div class="pn_head brdt" ng-if="contents.appPushData.pushType == 'GENERAL'">
-				<h4 class="pnh_tit ico06">APP 실행용 파일 업로드</h4>
+				<h4 class="pnh_tit ico06">APP 실행 파일 업로드</h4>
 				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 			</div>
 			<div class="pn_body" ng-if="contents.appPushData.pushType == 'GENERAL'">
@@ -347,7 +347,7 @@
 		
 		<div class="pn-Toggle">
 			<div class="pn_head brdt">
-				<h4 class="pnh_tit ico05">APP 실행환경 사양</h4>
+				<h4 class="pnh_tit ico05">APP 전체 사양</h4>
 				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 			</div>
 			<div class="pn_body">
@@ -364,20 +364,16 @@
 										</colgroup>
 										<thead>
 											<tr>
-												<th>인스턴스</th>
-												<th>메모리</th>
-												<th>디스크</th>
+												<th>인스턴스 수</th>
+												<th>전체 메모리</th>
+												<th>전체 디스크</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
 												<td>{{contents.defaultSet.instances}} 개</td>
-												<td>
-													{{ (contents.defaultSet.memory < 1024) ?  (contents.defaultSet.memory|number:0)  : (contents.defaultSet.memory/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (contents.defaultSet.memory < 1024) ?  'MB' : 'GB'}}</em></span>
-												</td>
-												<td>
-													{{ (contents.defaultSet.diskQuota < 1024) ?  (contents.defaultSet.diskQuota|number:0)  : (contents.defaultSet.diskQuota/1024|number:2).replace('.00', '').replace('.0', '')}}<em>{{ (contents.defaultSet.diskQuota < 1024) ?  'MB' : 'GB'}}</em></span>
-												</td>
+												<td>{{(contents.defaultSet.memory * contents.defaultSet.instances) | displayVolume:'MB' }}</td>
+												<td>{{(contents.defaultSet.diskQuota * contents.defaultSet.instances) | displayVolume:'MB' }}</td>
 											</tr>
 										</tbody>
 									</table>
