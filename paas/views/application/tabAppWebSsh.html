@@ -11,7 +11,11 @@
 </div>
 <div class="panel_body">
 	<div class="in scroll-pane">
-		<div>
+		<div class="pr10">
+			<div class="pop_message_area mb20">
+				<div class="msg_bg"></div>
+				<div class="msg_txt"><span>APP 인스턴스 컨테이너에 접속할 수 있습니다. 접속 시 허브팝 로그인 정보를 입력하세요.</span></div>
+			</div>
 			<h3 ng-if="tab.sltInstanceStatsId == ''">선택된 앱 인스턴스가 없습니다.</h3>
 			<div ng-if="tab.sltInstanceStatsId != ''" style="width: 100%; border:1px solid #d7d7d7 !important; height:640px;" dynamic-template="tab.appWebSshIframe"></div>
 		</div>

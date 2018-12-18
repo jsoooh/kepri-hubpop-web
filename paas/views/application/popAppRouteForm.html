@@ -1,23 +1,25 @@
-<table class="table table-bordered">
-	<colgroup>
-		<col style="width:25%;">
-		<col style="width:auto;">
-	</colgroup>
-	<tbody>
-	<tr>
-		<th scope="row">{{ 'label.host_name' | translate }}</th>
-		<td>
-			<input type="text" maxlength="20" name="hostName" style="width: 280px;" placeholder="{{ 'label.host_name' | translate }}" ng-model="pop.route.host" validation="alpha_dash|min_len:3|max_len:20|required" />
-            <div ng-if="createAppRouteForm.hostName.$touched && createAppRouteForm.hostName.$invalid" class="validation validation-hostName text-danger"></div>
-		</td>
-	</tr>
-	<tr>
-		<th scope="row">{{ 'label.domain_name' | translate }}</th>
-		<td>
-			<select name="hostName2" ng-model="pop.route.domainGuid" style="width: 280px;" validation="required">
-				<option ng-repeat="domainItem in pop.domains" value="{{ domainItem.guid }}">{{ domainItem.name }}</option>
-			</select>
-		</td>
-	</tr>
-	</tbody>
-</table>
+<div class="tbw type1">
+	<table class="table table-bordered">
+		<colgroup>
+			<col style="width:25%;">
+			<col style="width:auto;">
+		</colgroup>
+		<tbody>
+		<tr>
+			<th scope="row">{{ 'label.host_name' | translate }}</th>
+			<td>
+				<input type="text" class="form-control" maxlength="50" name="hostName" placeholder="{{ 'label.host_name' | translate }}" ng-model="pop.route.host" validation="alpha_dash|min_len:3|max_len:20|required" />
+	            <div ng-if="createAppRouteForm.hostName.$touched && createAppRouteForm.hostName.$invalid" class="validation validation-hostName text-danger"></div>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">{{ 'label.domain_name' | translate }}</th>
+			<td>
+				<select class="form-control" name="hostName2" ng-model="pop.route.domainGuid" validation="required">
+					<option ng-repeat="domainItem in pop.domains" value="{{ domainItem.guid }}">{{ domainItem.name }}</option>
+				</select>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>

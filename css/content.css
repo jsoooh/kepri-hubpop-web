@@ -2714,7 +2714,7 @@ p.no-txt{
 .s_cont_box .s_progress_box ul li span.txt_count {display:table-cell; box-sizing:border-box;}
 .s_cont_box .s_progress_box ul li > span {font-size:13px; font-weight:500; }
 .s_cont_box .s_progress_box ul li span.tit_txt {width:60px; float:left;}
-.s_cont_box .s_progress_box ul li span.txt_count {width:75px; color:#848484; float:right; text-align:right;}
+.s_cont_box .s_progress_box ul li span.txt_count {width:110px; color:#848484; float:right; text-align:right;}
 .s_cont_box .progressWrap .progress, .progress_layout_two .progressWrap .progress-bar{box-shadow: none;}
 .s_cont_box .progressWrap.type2{display:inline-block; position: relative; width:70%; height:15px; margin:0; padding:7px 0px; vertical-align:middle;}
 .s_cont_box .progressWrap.type2 .progress-bar{position: absolute; left:0; bottom:0; z-index: 2; height:7px; border-radius: 10px; background: #0a4ed8; box-shadow: none;}
