@@ -1454,7 +1454,7 @@ td.tdTit{text-align:center;}
 
 
 /*180807 대시보드 > 가상서버 생성 > spinner*/
-.panel.type5 .panel_body .ul-in2.spinner_area .info-chart {height:170px; padding:0;}
+.panel.type5 .panel_body .ul-in2.spinner_area .info-chart {height:170px; padding:60px 0 0 0;/* padding:0; */}
 .panel.type5 .panel_body .ul-in2.spinner_area .info-txt > .txt {display:inline-block; font-size:14px; color:#333; text-align:center; height:0; line-height:0;}
 .panel.type5 .panel_body .ul-in2.spinner_area .info-txt > .sec_txt {display:block; font-size:13px; color:#333; text-align:center; margin-bottom:20px;}
 .panel.type5 .panel_body .ul-in2.spinner_area .info-txt > .sec_txt span {font-size:26px;}
