@@ -256,8 +256,10 @@
                     </div>
                     <div class="panel_body">
                         <div class="in">
-                            <ul class="sev-list">
-                                <h3 ng-if="ins.serviceInstances.length == 0">생성한 서비스가 없습니다.</h3>
+                            <div ng-if="ins.serviceInstances.length == 0">
+
+                            </div>
+                            <ul ng-if="ins.serviceInstances.length > 0" class="sev-list">
                                 <li class="sevBox on" ng-repeat="(key, serviceItem) in ins.serviceInstances">
                                     <img ng-src="{{ins.getImageUriBinding(serviceItem, contents.appGuid)}}" alt="{{ serviceItem.serviceLabel }}">
                                     <!--<img ng-src="images/thum/im_app_{{ serviceItem.serviceLabel }}_{{ (serviceItem.serviceBindings.length > 0) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}">-->
