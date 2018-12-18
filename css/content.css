@@ -2202,6 +2202,7 @@ p.no-txt{
 .panel_area .pn_r .pn_head .pnh_tit.ico06 {background-position:0 -130px;}
 .panel_area .pn_r .pn_head .pnh_tit.ico07 {background-position:0 -155px;}
 .panel_area .pn_r .pn_head .pnh_tit.ico08 {background-position:0 -181px;}
+.panel_area .pn_r .pn_head .pnh_tit.ico09 {background-position:0 -208px;}
 .panel_area .pn_r .pn_head.brdt {border-top:1px solid  #e3e3e3;}
 .panel_area .pn_r .pn_body {padding-top:0;}
 .panel_area .pn_body {padding:15px 30px;}
@@ -2225,7 +2226,7 @@ p.no-txt{
 .panel_area .pn_r .pn-Toggle {border-bottom:1px solid #ddd;}
 .panel_area .pn_r .pn-Toggle.Toggle-open {border-bottom:0;}
 .panel_area .pn_r .pn-Toggle .pn_head .btn_add_toggle {position:absolute; top:20px; right:20px;}
-.panel_area .pn_r .pn-Toggle .s_cont_box {padding:15px 0;}
+.panel_area .pn_r .pn-Toggle .s_cont_box {padding: 0 0 15px 0;}
 .panel_area .pn_r .pn-Toggle + div.pn-Toggle {border-bottom:0;}
 .panel_area .pn_r .pn-Toggle.brd0 {border-bottom:0;}
 
@@ -2268,10 +2269,12 @@ p.no-txt{
 .panel_area .pn_body .s_cont_box ul > li .s_inner_cont dt {display:inline-block; font-size:14px; font-weight:500; color:#333; padding:2px 0;}
 .panel_area .pn_body .s_cont_box ul > li .s_inner_cont dt::before {display:inline-block; content:''; width:3px; height:3px; background:#707070; vertical-align:middle; margin-right:4px;}
 .panel_area .pn_body .s_cont_box ul > li .s_inner_cont dd {display:inline-block; width:330px; font-size:14px; color:#777; padding:2px 0;}
-.panel_area .pn_body .s_cont_box ul > li .s_inner_cont dd.dd_row {display:block; line-height:22px; padding:0 0 0 8px;}
+.panel_area .pn_body .s_cont_box ul > li .s_inner_cont dd.dd_row {display:block; width:100%; line-height:18px; word-break:break-all; padding:0 0 0 8px;}
+.panel_area .pn_body .s_cont_box ul > li .s_inner_cont dd.dd_row + dt {padding-top:5px;}
 .panel_area .pn_body .s_cont_box ul > li .s_inner_cont dd.dd_row::before {display:inline-block; content:''; width:4px; height:1px; background:#777; vertical-align:middle; margin-right:3px;}
 
-.panel_area .pn_body .s_cont_box .info_txt {display:block; height:22px; line-height:22px; font-size:13px; color:#0096ff; margin-top:10px;}
+.panel_area .pn_body .s_cont_box .info_txt {display:block; height:22px; line-height:22px; font-size:13px; color:#0096ff; margin-top:12px;}
+.panel_area .pn_body .s_cont_box .info_txt + .info_txt {margin-top:0;}
 .panel_area .pn_body .s_cont_box ul > li .ico_info {display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:3px; cursor:pointer; vertical-align:middle;}
 .panel_area .pn_body .text_wrap {width:100%; border:1px solid #dedede; border-radius:5px; background:#f3f3f3; padding:20px;}
 .panel_area .pn_body .text_wrap textarea {height:100px;}
@@ -2367,7 +2370,7 @@ p.no-txt{
 .pnb_box.type2 .pnb_bx_cnt ul {margin-top:20px; padding:0 40px;}
 .pnb_box.type2 .pnb_bx_cnt ul li {display:table; width:100%;}
 .pnb_box.type2 .pnb_bx_cnt ul li > div {display:table-cell; box-sizing:border-box; vertical-align:middle;}
-.pnb_box.type2 .pnb_bx_cnt ul li > div.tit {position:relative; width:160px; font-size:16px; color:#333; text-align:center;}
+.pnb_box.type2 .pnb_bx_cnt ul li > div.tit {position:relative; width:160px; font-size:15px; color:#333; text-align:center;}
 .pnb_box.type2 .pnb_bx_cnt ul li > div.tit span {position:absolute; left:0; top:17px;}
 .pnb_box.type2 .pnb_bx_cnt ul li > div.slider_area {position:relative;}
 .pnb_box.type2 .pnb_bx_cnt ul li > div.slider_area .s_txt {position:absolute; top:4px; right:32px; font-size:13px; color:#999;}
@@ -2703,6 +2706,20 @@ p.no-txt{
 .accss_guideWrap .txt_level_list dl dd {float:left; color:#1360ec; padding-left:3px;}
 
 .backdrop_type {position:fixed; top: 0px; height: 100%; background-color: #aaaaaa; display: none; opacity: 0.6;}
+
+/*프로젝트 자원계획(만들기화면)*/
+.s_cont_box .s_progress_box ul li {display:table;}
+.s_cont_box .s_progress_box ul li span.tit_txt, 
+.s_cont_box .s_progress_box ul li div.progressWrap, 
+.s_cont_box .s_progress_box ul li span.txt_count {display:table-cell; box-sizing:border-box;}
+.s_cont_box .s_progress_box ul li > span {font-size:13px; font-weight:500; }
+.s_cont_box .s_progress_box ul li span.tit_txt {width:60px; float:left;}
+.s_cont_box .s_progress_box ul li span.txt_count {width:75px; color:#848484; float:right; text-align:right;}
+.s_cont_box .progressWrap .progress, .progress_layout_two .progressWrap .progress-bar{box-shadow: none;}
+.s_cont_box .progressWrap.type2{display:inline-block; position: relative; width:70%; height:15px; margin:0; padding:7px 0px; vertical-align:middle;}
+.s_cont_box .progressWrap.type2 .progress-bar{position: absolute; left:0; bottom:0; z-index: 2; height:7px; border-radius: 10px; background: #0a4ed8; box-shadow: none;}
+.s_cont_box .progressWrap.type2 .progress{position: relative; width: 100%; height:7px; margin-bottom: 0px; border-radius: 10px; vertical-align: bottom; box-shadow: none; background-color: #eee; overflow: inherit;}
+.s_cont_box .s_progress_box ul li:nth-child(even) div.progressWrap.type2 .progress-bar {background:#02a0cf !important;}
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 

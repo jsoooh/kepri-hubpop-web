@@ -81,7 +81,7 @@
 				<!-- <li class="pn-Toggle" ng-if="contents.appPushData.pushType != 'DOCKER'"> --> <!-- 2018.12.13 필수값으로 변경되면서 토글 해제. 파일 필수값 validation 추가 필요. sg0730  -->
 				<li ng-if="contents.appPushData.pushType != 'DOCKER'">
 					<div class="pnb_tit" >
-						<i class="i_star"></i> <span class="pnb_t_txt">APP 실행 파일 업로드</span>
+						<i class="i_star"></i> <span class="pnb_t_txt">APP 실행파일 업로드</span>
 						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'파일찾기를 통해 사용자가 제작한 APP을 업로드하고 컨테이너에 배포할 수 있습니다. </br>업로드 되는 파일은 jar, war, zip 포멧을 지원합니다.'"><span class="ico_info"></span></button></div>
 						<!-- <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button> -->
 					</div>
@@ -108,7 +108,7 @@
 			<div class="pnb_box type2 hd_type cToggle">
 				<div class="pnb_bx_hd">
 					<span class="hd_tit">APP 사양설정</span>
-					<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'＊ 사용자 APP에 대한 자원사용 사양을 설정합니다. </br>&nbsp;&nbsp;&nbsp;· 인스턴스 수 : 배포되는 APP에 대한 인스턴스 수를 지정, 설정된 수만큼 Scale-Out</br>&nbsp;&nbsp;&nbsp;· 메모리 용량 : 배포되는 APP 인스턴스 별 사용 가능한 최대 메모리 용량을 설정</br>&nbsp;&nbsp;&nbsp;· 디스크 용량 : 배포되는 APP 인스턴스 별 사용 가능한 최대 디스크 용량을 설정'"><span class="ico_info"></span></button></div>
+					<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'＊ 사용자 APP에 대한 자원사용 사양을 설정합니다. </br>&nbsp;&nbsp;· 인스턴스 수 : 배포되는 APP에 대한 인스턴스 수를 지정, 설정된 수만큼 Scale-Out</br>&nbsp;&nbsp;· 인스턴스 메모리 : 배포되는 APP 인스턴스 별 사용 가능한 최대 메모리 용량을 설정</br>&nbsp;&nbsp;· 인스턴스 디스크 : 배포되는 APP 인스턴스 별 사용 가능한 최대 디스크 용량을 설정'"><span class="ico_info"></span></button></div>
 					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.pnbBoxToggleChange($event, true);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 				</div>
 				<div class="pnb_bx_cnt">
@@ -184,6 +184,7 @@
 							</div>
 						</li>
 					</ul>
+					<div class="cnt_msg_box msg-info mt40">인스턴스 메모리와 디스크는 APP 인스턴스 1개가 가질 수 있는 최대 크기를 설정합니다.</div>
 				</div>
 			</div>
 			<!-- //사양설정 -->
@@ -228,15 +229,15 @@
 								<!-- <dd>{{contents.sltBuildpackVersion.versionName}}</dd> -->
 								<dd> v4.12 release</dd>
 								<dt>주요구성 S/W</dt>
+								<dd class="dd_row">OpenJDK JRE v1.8.0</dd>
+								<dd class="dd_row">Spring Boot v1.5.13</dd>
+								<dd class="dd_row">Tomcat v8.5.31</dd>
+								<dd class="dd_row">MariaDB JDBC Driver v2.2.3</dd>
+								<dd class="dd_row">PostgreSQL JDBC Driver v9.4.1212</dd>
+								<dd class="dd_row">Redis Session Store v1.3.6</dd>
+								<dt>Official Release Site</dt>
+								<dd class="dd_row">https://github.com/cloudfoundry/java-buildpack/releases</dd>
 							</dl>
-							<dd class="dd_row">OpenJDK JRE v1.8.0</dd>
-							<dd class="dd_row">Spring Boot v1.5.13</dd>
-							<dd class="dd_row">Tomcat v8.5.31</dd>
-							<dd class="dd_row">MariaDB JDBC Driver v2.2.3</dd>
-							<dd class="dd_row">PostgreSQL JDBC Driver v9.4.1212</dd>
-							<dd class="dd_row">Redis Session Store v1.3.6</dd>
-							</br>
-							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/java-buildpack/releases</dd>
 							
 							<!-- <pre>
 								{{contents.sltBuildpackVersion.description}}
@@ -253,11 +254,10 @@
 								<!-- <dd>{{contents.sltBuildpackVersion.versionName}}</dd> -->
 								<dd>v1.4.28 release</dd>
 								<dt>주요구성 S/W</dt>
+								<dd class="dd_row">nginx v1.15.0</dd>
+								<dt>Official Release Site</dt>
+								<dd class="dd_row">https://github.com/cloudfoundry/staticfile-buildpack/releases</dd>
 							</dl>
-							<dd class="dd_row">nginx v1.15.0</dd>
-							
-							</br>
-							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/staticfile-buildpack/releases</dd>
 						</div>
 						
 						<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'python'">
@@ -268,11 +268,10 @@
 								<dt>버전 :</dt>								
 								<dd>v1.6.17 release</dd>
 								<dt>주요구성 S/W</dt>
+								<dd class="dd_row">python v3.6.5</dd>
+								<dt>Official Release Site</dt>
+								<dd class="dd_row">https://github.com/cloudfoundry/python-buildpack/releases</dd>
 							</dl>
-							<dd class="dd_row">python v3.6.5</dd>
-							
-							</br>
-							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/python-buildpack/releases</dd>
 						</div>
 						<!-- <div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'ruby'">
 							<dl>
@@ -282,11 +281,10 @@
 								<dt>버전 :</dt>								
 								<dd>v1.6.17 release</dd>
 								<dt>주요구성 S/W</dt>
+								<dd class="dd_row">python v3.6.5</dd>
+								<dt>Official Release Site</dt>
+								<dd class="dd_row">https://github.com/cloudfoundry/python-buildpack/releases</dd>
 							</dl>
-							<dd class="dd_row">python v3.6.5</dd>
-							
-							</br>
-							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/python-buildpack/releases</dd>
 						</div> -->
 						
 						<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'nodejs'">
@@ -297,12 +295,11 @@
 								<dt>버전 :</dt>								
 								<dd>v1.6.25 release</dd>
 								<dt>주요구성 S/W</dt>
+								<dd class="dd_row">node v10.3.0</dd>
+								<dd class="dd_row">yarn v1.7.0</dd>
+								<dt>Official Release Site</dt>
+								<dd class="dd_row">https://github.com/cloudfoundry/nodejs-buildpack/releases</dd>
 							</dl>
-							<dd class="dd_row">node v10.3.0</dd>
-							<dd class="dd_row">yarn v1.7.0</dd>
-							
-							</br>
-							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/nodejs-buildpack/releases</dd>
 						</div>
 						
 						
@@ -314,21 +311,28 @@
 								<dt>버전 :</dt>								
 								<dd>v1.8.23 release</dd>
 								<dt>주요구성 S/W</dt>
+								<dd class="dd_row">go v1.10.2</dd>
+								<dt>Official Release Site</dt>
+								<dd class="dd_row">https://github.com/cloudfoundry/go-buildpack/releases</dd>
 							</dl>
-							<dd class="dd_row">go v1.10.2</dd>
-							
-							</br>
-							<dd class="dd_row">Official Release Site : https://github.com/cloudfoundry/go-buildpack/releases</dd>
 						</div>
-						
+					</li>
+					<li>
+						<span class="s_tit">APP 실행파일 업로드</span>
+						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'빌드팩에 대한 상세정보를 제공합니다.</br> Cloud Foundry 플랫폼에서 공식적으로 </br>제공하는 공개된 정보를 표시합니다.'"><span class="ico_info"></span></button></div>
+						<div class="s_inner_cont">
+							<p class="txt" ng-if="contents.appFileItem.file.name" >{{ contents.appFileItem.localFullFileName }}<!-- D:/dev/demand.war --></p>
+							<p class="txt" ng-if="!contents.appFileItem.file.name" >선택된 파일이 없습니다.</p>
+						</div>
 					</li>
 				</ul>
 			</div>
 		</div>
 		
-		<div class="pn-Toggle brd0">
+		<!-- 'APP 실행용 파일 업로드' 영역 상위로 이동 -->
+		<!-- <div class="pn-Toggle brd0">
 			<div class="pn_head brdt" ng-if="contents.appPushData.pushType == 'GENERAL'">
-				<h4 class="pnh_tit ico06">APP 실행 파일 업로드</h4>
+				<h4 class="pnh_tit ico06">APP 실행용 파일 업로드</h4>
 				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 			</div>
 			<div class="pn_body" ng-if="contents.appPushData.pushType == 'GENERAL'">
@@ -336,16 +340,16 @@
 					<ul>
 						<li>
 							<div class="s_inner_cont">
-								<p class="txt" ng-if="contents.appFileItem.file.name" >{{ contents.appFileItem.localFullFileName }}<!-- D:/dev/demand.war --></p>
+								<p class="txt" ng-if="contents.appFileItem.file.name" >{{ contents.appFileItem.localFullFileName }}D:/dev/demand.war</p>
 								<p class="txt" ng-if="!contents.appFileItem.file.name" >선택된 파일이 없습니다.</p>
 							</div>
 						</li>
 					</ul>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		
-		<div class="pn-Toggle">
+		<div class="pn-Toggle brd0">
 			<div class="pn_head brdt">
 				<h4 class="pnh_tit ico05">APP 전체 사양</h4>
 				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
@@ -378,12 +382,69 @@
 										</tbody>
 									</table>
 								</div>
+								<span class="info_txt">* 전체 메모리 = 인스턴스 수 x 설정된 메모리 크기</span>
+								<span class="info_txt">* 전체 디스크 = 인스턴스 수 x 설정된 디스크 크기</span>
 							</div>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
+
+		<div class="pn-Toggle">
+				<div class="pn_head brdt">
+					<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
+					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+				</div>
+				<div class="pn_body">
+					<div class="s_cont_box">
+						<div class="s_progress_box wd_tit">
+							<ul>
+								<li>
+									<span class="tit_txt">인스턴스</span>
+									<div class="progressWrap type2">
+										<div class="progress">
+											<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 13%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="13%">
+                                               </div> -->
+											<div percent-progress-bar-animate bar-type="width" percent="13" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="13%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="txt_count">(20/{{contents.project.quota.quotaIaas.computingVcpus | number}}개)</span>
+								</li>
+								<li>
+									<span class="tit_txt">메모리</span>
+									<div class="progressWrap type2">
+										<div class="progress">
+											<!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 50%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="50%">
+                                               </div> -->
+											<div percent-progress-bar-animate bar-type="width" percent="50" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="50%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="txt_count">(200/{{contents.project.quota.quotaIaas.computingRam | number}}GB)</span>
+								</li>
+								<li>
+									<span class="tit_txt">디스크</span>
+									<div class="progressWrap type2">
+										<div class="progress">
+										  <!-- <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 4%;" data-toggle="tooltip" data-placement="top" title="" data-original-title="4%">
+										  </div> -->
+										  <div percent-progress-bar-animate bar-type="width" percent="4" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="4%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="txt_count">(300/{{contents.project.quota.quotaIaas.computingHdd | number}}GB)</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		<div class="btn-btm">
 			<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
 		</div>
