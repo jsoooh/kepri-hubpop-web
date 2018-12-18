@@ -1658,6 +1658,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     if (!textContent) return;
                     if (textContent == "Unauthorized") return;
                     if (textContent == "Not Found") return;
+                    if (textContent == "Bad Gateway") return;
                     if (textContent == "No message available") return;
                     if (textContent == "Error") return;
                     if (textContent == "-1") return;
@@ -1750,6 +1751,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     if (!htmlContent) return;
                     if (htmlContent == "Unauthorized") return;
                     if (htmlContent == "Not Found") return;
+                    if (htmlContent == "Bad Gateway") return;
                     if (htmlContent == "No message available") return;
                     if (htmlContent == "Error") return;
                     if (htmlContent == "-1") return;
@@ -2707,29 +2709,44 @@ angular.module('common.services', ['LocalStorageModule'])
 
         common.objectOrArrayMergeData = function (target, source) {
             if (angular.isArray(target)) {
-                if (target.length > source.length) {
-                    target.splice(source.length, target.length - source.length);
-                }
-            } else if (angular.isObject(target)) {
-                angular.forEach(target, function (item, key) {
-                    if (angular.isUndefined(source[key])) {
-                        delete target[key];
+                if (angular.isArray(source)) {
+                    if (target.length > source.length) {
+                        target.splice(source.length, target.length - source.length);
                     }
-                });
-            }
-            angular.forEach(source, function (value, key) {
-                if (target[key]) {
-                    if (angular.isArray(value) && angular.isArray(target[key])) {
-                        common.objectOrArrayMergeData(target[key], value);
-                    } else  if (angular.isObject(value) && angular.isObject(target[key])) {
-                        common.objectOrArrayMergeData(target[key], value);
-                    } else {
-                        target[key] = value;
+                    for (var i=0; i<source.length; i++) {
+                        if (angular.isArray(target[i]) || angular.isObject(target[i])) {
+                            common.objectOrArrayMergeData(target[i], source[i]);
+                        } else {
+                            target[i] = source[i];
+                        }
                     }
                 } else {
-                    target[key] = value;
+                    target = source;
                 }
-            });
+            } else if (angular.isObject(target)) {
+                if (angular.isObject(source)) {
+                    angular.forEach(target, function (item, key) {
+                        if (angular.isUndefined(source[key])) {
+                            delete target[key];
+                        }
+                    });
+                    angular.forEach(source, function (value, key) {
+                        if (angular.isArray(target) || angular.isObject(source)[key]) {
+                            if (angular.isArray(target[key]) && angular.isArray(target[target[key]])) {
+                                common.objectOrArrayMergeData(target[key], value);
+                            } else {
+                                target[key] = value;
+                            }
+                        } else {
+                            target[key] = value;
+                        }
+                    });
+                } else {
+                    target = source;
+                }
+            } else {
+                target = source;
+            }
         };
 
         common.getProcessBar = function (amt) {

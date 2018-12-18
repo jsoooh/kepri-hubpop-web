@@ -53,10 +53,13 @@
     		                  <span class="ico">실행 설정</span>
     		                </button>
     		                <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-    		                  <li><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">시작</a></li>
-    		                  <li><a href="javascript:void(0);" ng-click="contents.stopAppState(appItem.guid, appItem.name)">중지</a></li>
-    		                  <li><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">재시작</a></li>
-    		                  <li><a href="javascript:void(0);" ng-click="contents.deleteApp(appItem.guid, appItem.name)">삭제</a></li>
+    		                  <li ng-if="appItem.state == 'STOPPED'"><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">시작</a></li>
+    		                  <li ng-if="appItem.state != 'STOPPED'"><a href="javascript:void(0);" class="disabled" title="APP가‘정지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
+    		                  <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.stopAppState(appItem.guid, appItem.name)">중지</a></li>
+    		                  <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
+    		                  <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">재시작</a></li>
+    		                  <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+    		                  <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteApp(appItem.guid, appItem.name)">삭제</a></li>
     		                  <li class="renameApp"><a href="javascript:void(0);" ng-click="contents.renameApp(appItem.name)">APP 이름변경</a></li>
     		                </ul>
     		              </div>

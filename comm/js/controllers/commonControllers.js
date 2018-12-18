@@ -906,6 +906,11 @@ angular.module('common.controllers', [])
             accordionGroup.find('#' + targetAccordion).collapse('toggle');
         };
 
+        mc.reloadTimmerStart = function (key, fun, time) {
+            mc.reloadTimmerStopByKey(key);
+            $scope.main.reloadTimmer[key] = $timeout(fun, time);
+        };
+
         mc.reloadTimmerStop = function () {
             if (angular.isObject(mc.reloadTimmer)) {
                 angular.forEach(mc.reloadTimmer, function (timmer, key) {
@@ -921,6 +926,17 @@ angular.module('common.controllers', [])
             }
         };
 
+        mc.reloadTimmerStopByKey = function (key) {
+            if (mc.reloadTimmer[key]) {
+                $timeout.cancel(mc.reloadTimmer[key]);
+                mc.reloadTimmer[key] = null;
+            }
+        };
+
+        mc.refreshIntervalStart = function (key, fun, time) {
+            mc.refreshIntervalStopByKey(key);
+            $scope.main.refreshInterval[key] = $interval(fun, time);
+        };
         mc.refreshIntervalStop = function () {
             if (angular.isObject(mc.refreshInterval)) {
                 angular.forEach(mc.refreshInterval, function (interval, key) {
@@ -935,7 +951,14 @@ angular.module('common.controllers', [])
                 });
             }
         };
-        
+
+        mc.refreshIntervalStopByKey = function (key) {
+            if (mc.refreshInterval[key]) {
+                $interval.cancel(mc.refreshInterval[key]);
+                mc.refreshInterval[key] = null;
+            }
+        };
+
         mc.replacePage = function () {
             $state.reload();
         };

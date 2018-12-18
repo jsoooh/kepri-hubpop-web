@@ -182,7 +182,7 @@ angular.module('paas.controllers')
             var appPromise = applicationService.getApp(guid, 0);
             appPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                var updateApp = common.objectsFindByField(ct.apps.content, "guid", data.guid);
+                var updateApp = common.objectsFindByField(ct.apps, "guid", data.guid);
                 if (updateApp && updateApp.guid) {
                     updateApp.state = data.state;
                 }
@@ -232,7 +232,7 @@ angular.module('paas.controllers')
         ct.checkStartApp = function () {
             var startApps = [];
             for (var i=0; i<ct.checkedApps.length; i++) {
-                var updateApp = common.objectsFindCopyByField(ct.apps.content, "guid", ct.checkedApps[i]);
+                var updateApp = common.objectsFindCopyByField(ct.apps, "guid", ct.checkedApps[i]);
                 if (updateApp && updateApp.guid && updateApp.state == "STOPPED") {
                     startApps.push(ct.checkedApps[i]);
                 }
@@ -253,7 +253,7 @@ angular.module('paas.controllers')
         ct.checkStopApp = function () {
             var stopApps = [];
             for (var i=0; i<ct.checkedApps.length; i++) {
-                var updateApp = common.objectsFindCopyByField(ct.apps.content, "guid", ct.checkedApps[i]);
+                var updateApp = common.objectsFindCopyByField(ct.apps, "guid", ct.checkedApps[i]);
                 if (updateApp && updateApp.guid && updateApp.state == "STARTED") {
                     stopApps.push(ct.checkedApps[i]);
                 }
@@ -300,14 +300,14 @@ angular.module('paas.controllers')
             var appPromise = applicationService.startApp(guid);
             appPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                var updateApp = common.objectsFindByField(ct.apps.content, "guid", data.guid);
+                var updateApp = common.objectsFindByField(ct.apps, "guid", data.guid);
                 if (updateApp && updateApp.guid) {
                     updateApp.state = data.state;
+                    updateApp.packageState = data.packageState;
                 }
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.getAppState(guid);
             });
         };
 
@@ -316,14 +316,14 @@ angular.module('paas.controllers')
             var appPromise = applicationService.stopApp(guid);
             appPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                var updateApp = common.objectsFindByField(ct.apps.content, "guid", data.guid);
+                var updateApp = common.objectsFindByField(ct.apps, "guid", data.guid);
                 if (updateApp && updateApp.guid) {
                     updateApp.state = data.state;
+                    updateApp.packageState = data.packageState;
                 }
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.getAppState(guid);
             });
         };
 
@@ -364,14 +364,14 @@ angular.module('paas.controllers')
             var appPromise = applicationService.updateAppState(guid, state);
             appPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                var updateApp = common.objectsFindByField(ct.apps.content, "guid", data.guid);
+                var updateApp = common.objectsFindByField(ct.apps, "guid", data.guid);
                 if (updateApp && updateApp.guid) {
                     updateApp.state = data.state;
+                    updateApp.packageState = data.packageState;
                 }
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.getAppState(guid);
             });
         };
 
@@ -466,7 +466,6 @@ angular.module('paas.controllers')
         ct.portalBuildpackVersions = [];
         ct.sltPortalBuildpack  	= {};
         ct.appPushData   		= {};
-        ct.activeTabIndex 		= 1;
         ct.sltDeployOption 		= "U";
         
         // 호스트 중복 체크 확인
@@ -973,7 +972,6 @@ angular.module('paas.controllers')
         ct.sltOrganizationGuid = "";
         ct.sltSpaceGuid = "";
         ct.appGuid = $stateParams.guid;
-        $scope.main.appGuid = ct.appGuid;
         ct.app = {};
         ct.appStateCnt = 0;
         ct.sltInfoTab = 'service';
@@ -1479,7 +1477,7 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.getApp(ct.appGuid);
             appPromise.success(function (data) {
-                ct.app = angular.copy(data);
+                common.objectOrArrayMergeData(ct.app, data);
                 ct.serviceBindingsLength = data.serviceBindings.length;
                 ct.routesLength = data.routes.length;
                 if (data.organizationGuid) {
@@ -1503,29 +1501,21 @@ angular.module('paas.controllers')
                 $scope.main.reloadTimmerStop();
                 return;
             }
-            $scope.main.loadingMainBody = true;
-            ct.instanceStats = [];
             var appPromise = applicationService.listAllAppInstanceStats(ct.appGuid);
             appPromise.success(function (data) {
-                ct.instanceStats = angular.copy(data);
+                common.objectOrArrayMergeData(ct.instanceStats, data);
                 ct.setRoundProgressData();
-                $scope.main.loadingMainBody = false;
                 ct.reloadAppInstanceStats();
             });
             appPromise.error(function (data) {
-                $scope.main.loadingMainBody = false;
                 ct.app = {};
                 ct.instanceStats = [];
             });
         };
 
         ct.createReloadTimmer = function () {
-            $scope.main.reloadTimmer = $timeout(function () {
-                if (ct.activeTabIndex == 1) {
-                    ct.listAllAppInstanceStats();
-                } else {
-                    ct.createReloadTimmer();
-                }
+            $scope.main.reloadTimmerStart('reloadListAllAppInstanceStats', function () {
+                ct.listAllAppInstanceStats();
             }, 5000);
         };
 
@@ -1553,19 +1543,11 @@ angular.module('paas.controllers')
             var appPromise = applicationService.getAppStats(ct.appGuid);
             appPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-	            ct.app = angular.copy(data);
+                common.objectOrArrayMergeData(ct.app, data);
                 ct.sltOrganizationGuid = ct.app.organizationGuid;
                 ct.sltSpaceGuid = ct.app.spaceGuid;
 
-                var a = new Date(ct.app.created);
-                var year = a.getFullYear();
-                var month = a.getMonth() + 1;
-                var date = a.getDate();
-                var hour = a.getHours();
-                var min = a.getMinutes();
-                var sec = a.getSeconds();
-                var time = year + '-' + month + '-' + date + ' ' + hour + ':' + min + ':' + sec ;
-                ct.app.created = time;
+                ct.app.createdTime = new Date(ct.app.created).getTime();
 
                 if (data.serviceBindings && angular.isArray(data.serviceBindings)) {
                     ct.serviceBindingsLength = data.serviceBindings.length;
@@ -1577,19 +1559,16 @@ angular.module('paas.controllers')
                 } else {
                     ct.routesLength = 0;
                 }
+
                 if (data.instanceStats && angular.isArray(data.instanceStats)) {
-                    ct.instanceStats = angular.copy(ct.app.instanceStats);
+                    if (angular.isUndefined(ct.instanceStats)) {
+                        ct.instanceStats = [];
+                    }
+                    common.objectOrArrayMergeData(ct.instanceStats, ct.app.instanceStats);
                 } else {
                     ct.instanceStats = [];
                 }
-/*
-                if (data.organizationGuid) {
-                    var organization = common.objectsFindCopyByField($scope.main.organizations, "guid", data.organizationGuid);
-                    if (organization && angular.isDefined(organization.name)) {
-                        $scope.main.detailOrgName = organization.name + "(" + organization.orgName + ")";
-                    }
-                }
-*/
+
                 ct.setRoundProgressData();
                 $scope.main.spaceName = data.space.name;
                 $scope.main.applicationName = data.name;
@@ -1667,7 +1646,7 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.startApp(guid);
             appPromise.success(function (data) {
-                ct.getAppStats(true);
+                ct.getAppStats(false);
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -1678,7 +1657,7 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.stopApp(guid);
             appPromise.success(function (data) {
-                ct.getAppStats(true);
+                ct.getAppStats(false);
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -1709,7 +1688,11 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.updateAppState(guid, state);
             appPromise.success(function (data) {
-                ct.getAppStats(true);
+                if (data && data.guid) {
+                    ct.app.state = data.state;
+                    ct.app.packageState = data.packageState;
+                }
+                ct.getAppStats(false);
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -1749,7 +1732,11 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.restageApp(guid);
             appPromise.success(function (data) {
-                ct.getAppStats(true);
+                if (data && data.guid) {
+                    ct.app.state = data.state;
+                    ct.app.packageState = data.packageState;
+                }
+                ct.getAppStats(false);
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -1769,7 +1756,7 @@ angular.module('paas.controllers')
 
         ct.redeployCallBackFunction = function() {
             common.showAlertHtml($translate.instant("label.redeploy") + "(" + ct.app.name + ")", $translate.instant("message.mi_redeploy_app")).then(function () {
-                ct.getAppStats(true);
+                ct.getAppStats(false);
             });
         };
 
@@ -1798,7 +1785,7 @@ angular.module('paas.controllers')
             ct.sltInfoTab = sltInfoTab;
         };
 
-        $scope.main.refreshInterval['appStats'] = $interval(function () {
+        $scope.main.refreshIntervalStart('appStats', function () {
             ct.getAppStats(false);
         }, 60000);
 
