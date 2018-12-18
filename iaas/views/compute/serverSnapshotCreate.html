@@ -13,13 +13,15 @@
 				<span class="sm_txt">* 는 필수입력 사항입니다.</span>
 				<ul class="form_list">
 					<li>
-						<div class="pnb_tit">백업 이미지 이름<span class="ico_info"></span>
+						<div class="pnb_tit">
+							<span class="pnb_t_txt">백업 이미지 이름</span>
 						</div>
 						<input type="text" class="form-control" maxlength="50" ng-value="contents.snapshotInfo.name" disabled>
 					</li>
 					<li>
 						<div class="pnb_tit">
-							<i class="i_star"></i>서버 이름<span class="ico_info"></span>
+							<i class="i_star"></i> <span class="pnb_t_txt">서버 이름</span>
+							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 						</div>
 						<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required">
 					</li>
@@ -45,7 +47,8 @@
 					</li>
 					<li>
 						<div class="pnb_tit">
-							<i class="i_star"></i> 사양 선택<span class="ico_info"></span> <img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif">
+							<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span>
+							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
 						</div>
 						<div class="tbl type1">
 							<table class="table">
@@ -141,7 +144,7 @@
 					</li>
 					<li>
 						<span class="s_tit">서버 사양</span>
-						<span class="s_txt">소형</span>
+						<span class="s_txt">{{contents.data.spec.name}}</span>
 						<div class="s_inner_cont">
 							<div class="innr_tbl">
 								<table>
@@ -172,10 +175,77 @@
 				</ul>
 			</div>
 		</div>
-		<div class="pn_body">
-			<div class="btn-btm">
-				<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
+		<div class="pn-Toggle brd0">
+			<div class="pn_head brdt">
+				<h4 class="pnh_tit ico02">추가 디스크</h4>
+				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 			</div>
+			<div class="pn_body">
+				<div class="s_cont_box">
+					<ul>
+						<li>
+							<span class="s_tit">크기</span>
+							<span class="s_txt">{{contents.volumeSize | displayVolume : 'GB'}}</span>
+						</li>
+						<li>
+							<span class="s_tit">유형</span>
+							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
+							<span class="s_txt">Volume Storage</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="pn-Toggle">
+			<div class="pn_head brdt">
+				<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
+				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+			</div>
+			<div class="pn_body">
+				<div class="s_cont_box">
+					<div class="s_progress_box wd_tit">
+						<ul>
+							<li>
+								<span class="tit_txt">vcpu</span>
+								<div class="progressWrap type2">
+									<div class="progress">
+										<div percent-progress-bar-animate bar-type="width" percent="13" class="progress">
+											<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="13%"></div>
+										</div>
+									</div>
+								</div>
+								<span class="txt_count">({{(contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)}} 개 / {{contents.tenantResource.maxResource.cores}} 개)</span>
+							</li>
+							<li>
+								<span class="tit_txt">메모리</span>
+								<div class="progressWrap type2">
+									<div class="progress">
+										<div percent-progress-bar-animate bar-type="width" percent="50" class="progress">
+											<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="50%"></div>
+										</div>
+									</div>
+								</div>
+								<span class="txt_count">({{(contents.tenantResource.usedResource.ramSize + contents.data.spec.ram) | displayVolume:'MB'}} / {{contents.tenantResource.maxResource.ramSize | displayVolume:'MB'}})</span>
+							</li>
+							<li>
+								<span class="tit_txt">디스크</span>
+								<div class="progressWrap type2">
+									<div class="progress">
+										<div percent-progress-bar-animate bar-type="width" percent="4" class="progress">
+											<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="4%"></div>
+										</div>
+									</div>
+								</div>
+								<span class="txt_count">({{(contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB'}})</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="btn-btm">
+			<button type="button" name="button" class="btn_tutorial">서비스 튜토리얼 바로가기</button>
 		</div>
 
 	</div>
