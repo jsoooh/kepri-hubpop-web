@@ -414,12 +414,12 @@
 									<span class="tit_txt">메모리</span>
 									<div class="progressWrap type2">
 										<div class="progress">
-											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.memoryUsage + contents.defaultSet.memory)/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}" class="progress">
-												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.memoryUsage + contents.defaultSet.memory)/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}%"></div>
+											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}%"></div>
 											</div>
 										</div>
 									</div>
-									<span class="txt_count">({{(main.sltOrganization.memoryUsage + contents.defaultSet.memory) | displayVolume:'MB'}} / {{main.sltOrganization.quotaDefinition.memoryLimit | displayVolume:'MB'}})</span>
+									<span class="txt_count">({{(main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances) | displayVolume:'MB'}} / {{main.sltOrganization.quotaDefinition.memoryLimit | displayVolume:'MB'}})</span>
 								</li>
 								<li>
 									<span class="tit_txt">디스크</span>
@@ -432,7 +432,7 @@
 										</div>
 									</div>
 -->
-									<span class="txt_count">{{(main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota) | displayVolume:'MB'}} 사용중</span>
+									<span class="txt_count">{{(main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota*contents.defaultSet.instances) | displayVolume:'MB'}} 사용중</span>
 								</li>
 							</ul>
 						</div>
