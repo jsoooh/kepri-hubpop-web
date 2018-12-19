@@ -86,7 +86,7 @@
 		</div>
 		<div class="pn_footer">
 			<div class="btn-btm mgt0">
-				<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.serviceInstanceCreate();">APP 생성</button>
+				<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.serviceInstanceCreate();">서비스 만들기</button>
 				<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
 			</div>
 		</div>
@@ -104,15 +104,10 @@
 					</li>
 					<li>
 						<span class="s_tit">서비스 유형</span>
-						<!-- <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div> -->
+						<span class="s_txt" ng-if="contents.sltService.label == 'oracle'">관계형 데이터 베이스</span>
+						<span class="s_txt" ng-if="contents.sltService.label == 'Mongo-DB'">NoSQL 데이터베이스</span>
 						<span class="s_txt" ng-if="contents.sltService.label == 'p-mysql'">관계형 데이터 베이스</span>
 						<span class="s_txt" ng-if="contents.sltService.label == 'p-redis'">인-메모리(In-Memory)데이터 저장소</span>
-						<!-- contents.sltService.label 정의되고 데이터 표기 해제. sg0730 2018.12.10 -->
-						<!-- 
-						<span class="s_txt" ng-if="contents.sltService.label == 'p-oracle'">관계형 데이터 베이스</span>
-						<span class="s_txt" ng-if="contents.sltService.label == 'p-postgresql'">관계형 데이터 베이스</span>
-						<span class="s_txt" ng-if="contents.sltService.label == 'p-mongodb'">NoSQL 데이터베이스</span>
-						 -->
 					</li>
 					<li ng-if="contents.sltService.label == 'p-mysql'">
 						<span class="s_tit">서비스 S/W 정보</span>
@@ -121,7 +116,7 @@
 								<dt>S/W :</dt>
 								<dd>Maria DB</dd>
 								<dt>버전 :</dt>
-								<dd>1.8.2</dd>
+								<dd>10.1.32</dd>
 								<dt>설명 :</dt>
 								<dd>오픈소스 관계형 데이터베이스 </dd>
 								<dd class="dd_row">고정된 스키마(Schema)에 따라 Table Row에 데이터를 저장.</dd>
@@ -135,7 +130,7 @@
 								<dt>S/W :</dt>
 								<dd>Redis</dd>
 								<dt>버전 :</dt>
-								<dd>2.0.2</dd>
+								<dd>4.0.8</dd>
 								<dt>설명 :</dt>
 								<dd>오픈소스 인-메모리(In-Memory)데이터 저장소</dd> 
 								<dd class="dd_row">Key-Value 형태로 데이터를 저장.</dd>
@@ -164,7 +159,7 @@
 								<dt>S/W :</dt>
 								<dd>MongoDB</dd>
 								<dt>버전 :</dt>
-								<dd>2.0.2</dd>
+								<dd>3.6.3</dd>
 								<dt>설명 :</dt>
 								<dd>오픈소스 NoSQL 데이터베이스</dd> 
 								<dd class="dd_row">JSON 포멧 등의 문서(Document) 형태로 데이터를 저장.</dd>
