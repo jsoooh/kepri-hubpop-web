@@ -227,7 +227,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 
 
 #container .rightCnt{display: table-cell; vertical-align: top;}
-#container .rightCnt .titWrap{position: relative; width:100%; height:85px; padding:25px 40px; background: #fff;}/*180403 로케이션 조정*/
+#container .rightCnt .titWrap{position: relative; z-index:2000; width:100%; height:85px; padding:25px 40px; background: #fff;}/*180403 로케이션 조정*/
 #container .rightCnt .titWrap .h2{display: inline-block; font-size: 40px; color:#1e2d40; font-weight: 700; margin:0; vertical-align: top;}
 #container .rightCnt .titWrap .h2{display: inline-block; font-size: 38px; color:#1e2d40; font-weight: 700; margin:0; vertical-align: top;}/*180403 로케이션 조정*/
 #container .rightCnt .titWrap .breadWrap{display: inline-block;}
@@ -432,4 +432,4 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu .gm .ico-bul {top:22px; left:17px;}
 
 #container .rightCnt .titWrap {height:67px; padding:23px 40px;}
-#container .rightCnt .titWrap .btnArea {right:40px; bottom:20px; width:125px; text-align:right;}
+#container .rightCnt .titWrap .btnArea {right:0; bottom:20px; /* width:125px; */ text-align:right; padding:0 30px;}
