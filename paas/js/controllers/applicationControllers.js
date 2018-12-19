@@ -1050,6 +1050,66 @@ angular.module('paas.controllers')
             }
         };
 
+        //감소버튼 클릭시 이벤트 sg0730
+        ct.minValCheck = function (val) {
+            if (val == 1) {
+                if(ct.instancesSlider.value > ct.instancesSlider.options.minLimit) {
+                    ct.instancesSlider.value = (ct.instancesSlider.value - ct.instancesSlider.options.step);
+                } else {
+                    return false;
+                }
+            } else if (val == 2) {
+                if(ct.memorySlider.value > ct.memorySlider.options.minLimit) {
+                    ct.memorySlider.value = (ct.memorySlider.value - ct.memorySlider.options.step);
+                } else {
+                    return false;
+                }
+
+            } else if (val == 3) {
+                if(ct.diskQuotaSlider.value > ct.diskQuotaSlider.options.minLimit) {
+                    ct.diskQuotaSlider.value = (ct.diskQuotaSlider.value - ct.diskQuotaSlider.options.step);
+                } else {
+                    return false;
+                }
+            }
+        };
+
+        //증가 버튼 클릭시 이벤트 sg0730
+        ct.maxValCheck = function (val) {
+            if (val == 1) {
+                if(ct.instancesSlider.value <= ct.instancesSlider.options.ceil) {
+                    ct.instancesSlider.value = (ct.instancesSlider.value + ct.instancesSlider.options.step);
+
+                    if (ct.instancesSlider.value > ct.instancesSlider.options.ceil) {
+                        ct.instancesSlider.value = ct.instancesSlider.options.ceil ;
+                    }
+                } else {
+                    return false;
+                }
+            } else if (val == 2) {
+                if(ct.memorySlider.value <= ct.memorySlider.options.ceil) {
+                    ct.memorySlider.value = (ct.memorySlider.value + ct.memorySlider.options.step);
+
+                    if (ct.memorySlider.value > ct.memorySlider.options.ceil) {
+                        ct.memorySlider.value = ct.memorySlider.options.ceil ;
+                    }
+
+                } else {
+                    return false;
+                }
+            } else if (val == 3) {
+                if(ct.diskQuotaSlider.value <= ct.diskQuotaSlider.options.ceil) {
+                    ct.diskQuotaSlider.value = (ct.diskQuotaSlider.value + ct.diskQuotaSlider.options.step);
+
+                    if (ct.diskQuotaSlider.value > ct.diskQuotaSlider.options.ceil) {
+                        ct.diskQuotaSlider.value = ct.diskQuotaSlider.options.ceil ;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        };
+
         ct.originalInstances = 0;
         ct.originalMemory = 0;
         ct.originalDisk = 0;
@@ -1108,6 +1168,10 @@ angular.module('paas.controllers')
         };
 
         ct.showFormRePush = function ($event) {
+
+            ct.instancesSlider.value = ct.app.instances;
+            ct.memorySlider.value = ct.app.memory;
+            ct.diskQuotaSlider.value = ct.app.diskQuota;
 
             var dialogOptions = {
                 controller : "paasApplicationRePushFormCtrl" ,
@@ -1358,11 +1422,8 @@ angular.module('paas.controllers')
                 ct.app.insState = instaceState;
 
                 ct.originalInstances = ct.app.instances;
-                ct.instancesSlider.value = ct.app.instances;
                 ct.originalMemory = ct.app.memory;
-                ct.memorySlider.value = ct.app.memory;
                 ct.originalDisk = ct.app.diskQuota;
-                ct.diskQuotaSlider.value = ct.app.diskQuota;
 
                 var memoryByte = (instanceStatsUsageMemoryValue / ct.instanceStats.length);
                 var diskByte = (instanceStatsUsageDiskValue / ct.instanceStats.length);
