@@ -47,6 +47,7 @@
             "volume_snapshot_available" : "정상",
             "volume_snapshot_error" : "오류",
             "volume_snapshot_creating" : "생성중",
+            "volume_snapshot_queued" : "대기중",
             "volume_snapshot_deleting" : "삭제중",
             "volume_snapshot_error_deleting" : "삭제중",
             "public" : "Public",

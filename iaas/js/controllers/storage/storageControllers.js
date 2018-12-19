@@ -959,11 +959,7 @@ angular.module('iaas.controllers')
             {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("생성 되었습니다.");
-                
-                if ( angular.isFunction(pop.callBackFunction) ) {
-                    pop.callBackFunction();
-                }
-                
+                common.locationHref('/#/iaas/snapshot?tabIndex=1');
             });
             returnPromise.error(function (data, status, headers) 
             {

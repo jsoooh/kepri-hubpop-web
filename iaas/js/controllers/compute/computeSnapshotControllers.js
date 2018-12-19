@@ -9,6 +9,11 @@ angular.module('iaas.controllers')
         ct.fn = {};
 
         ct.tabIndex = 0;
+
+        if ($location.$$search.tabIndex) {
+            ct.tabIndex = $location.$$search.tabIndex;
+        }
+
         ct.instanceSnapshotList = [];
         ct.storageSnapshotList = [];
 

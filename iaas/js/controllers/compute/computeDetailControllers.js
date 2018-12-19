@@ -2652,7 +2652,7 @@ angular.module('iaas.controllers')
 
     })
     //////////////////////////////////////////////////////////////
-     .controller('iaasCreatePopSnapshotCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
+     .controller('iaasCreatePopSnapshotCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $timeout, $bytes,ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("iaasCreatePopSnapshotCtrl.js : iaasCreatePopSnapshotCtrl", 1);
 
         var pop = this;
@@ -2665,7 +2665,7 @@ angular.module('iaas.controllers')
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         
         $scope.dialogOptions.title 		= "백업 이미지 생성";
-        $scope.dialogOptions.okName 	= "변경";
+        $scope.dialogOptions.okName 	= "생성";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeCreatePopSnapshotForm.html" + _VersionTail();
 
@@ -2708,13 +2708,9 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) 
             {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("생성 되었습니다.");
-                
                 //생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
-                if ( angular.isFunction(pop.callBackFunction) ) {
-                    pop.callBackFunction();
-                }
-                
+                common.showAlertSuccess("생성 되었습니다.");
+                $scope.main.goToPage('/iaas/snapshot');
             });
             returnPromise.error(function (data, status, headers) 
             {
