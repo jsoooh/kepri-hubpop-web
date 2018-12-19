@@ -957,7 +957,7 @@ angular.module('iaas.controllers')
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlert("message",data.message);
+                common.showAlertError(data.message);
             });
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

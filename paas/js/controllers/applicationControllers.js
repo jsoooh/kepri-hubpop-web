@@ -907,7 +907,7 @@ angular.module('paas.controllers')
                     $scope.main.loadingMain 	= false;
                     $scope.main.loadingMainBody = false;
                     
-                    common.showAlertHtml($translate.instant("label.app") + "(" + data.name + ")", $translate.instant("message.mi_register_success"));
+                    common.showAlertSuccessHtml($translate.instant("label.app") + "(" + data.name + ")", $translate.instant("message.mi_register_success"));
                     
                     $scope.main.startAppGuid = data.guid;
                     $scope.main.goToPage('/paas/apps/' + data.guid);
