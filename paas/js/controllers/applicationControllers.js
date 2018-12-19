@@ -1801,7 +1801,7 @@ angular.module('paas.controllers')
 
         pop.formName = $scope.dialogOptions.formName;
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
-        $scope.dialogOptions.dialogClassName = "modal-lg";
+        $scope.dialogOptions.dialogClassName = "modal-md";
         $scope.dialogOptions.title = $translate.instant("label.redeploy");
         $scope.dialogOptions.okName =  $translate.instant("label.redeploy");
         $scope.dialogOptions.templateUrl = _PAAS_VIEWS_ + "/application/popAppRePushForm.html" + _VersionTail();

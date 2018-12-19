@@ -2721,6 +2721,36 @@ p.no-txt{
 .s_cont_box .progressWrap.type2 .progress{position: relative; width: 100%; height:7px; margin-bottom: 0px; border-radius: 10px; vertical-align: bottom; box-shadow: none; background-color: #eee; overflow: inherit;}
 .s_cont_box .s_progress_box ul li:nth-child(even) div.progressWrap.type2 .progress-bar {background:#02a0cf !important;}
 
+
+/*PaaS > APP 재배포 팝업 컨텐츠 화면*/
+.modal-body .app-reso {display: table; table-layout:fixed; width:100%; border:1px solid #ccc; border-radius: 3px;}
+.modal-body .app-reso li {display: table-cell; width:100%; padding:10px; text-align: center; vertical-align: middle; box-sizing:border-box;}/*180404 스타일변경 padding:15px 10px;*/
+.modal-body .app-reso li + li {border-left:1px solid #ccc;}
+.modal-body .app-reso li span {display: block; font-size:20px; color:#333333; line-height: 1.2;}
+.modal-body .app-reso li span em {font-size:15px;}
+.modal-body .app-reso li strong {display: block; font-size:13px; color:#999999; font-weight:400; line-height: 1.2; margin-top: 5px;}
+
+.modal-body .cnt_sliderWrap {padding:10px;}
+.modal-body .cnt_sliderWrap li {display:table; width:100%; border-bottom:1px dashed #e3e3e3;}
+.modal-body .cnt_sliderWrap li:last-child {border:0;}
+.modal-body .cnt_sliderWrap li > div {display:table-cell; box-sizing:border-box; vertical-align:middle;}
+.modal-body .cnt_sliderWrap li > div.tit {position:relative; width:125px; font-size:15px; font-weight:500; color:#333; text-align:center;}
+.modal-body .cnt_sliderWrap li > div.tit span {position:absolute; left:0; top:17px;}
+.modal-body .cnt_sliderWrap li > div.slider_area {position:relative;}
+.modal-body .cnt_sliderWrap li > div.slider_area .s_txt {position:absolute; top:4px; right:32px; font-size:13px; color:#999;}
+
+.modal-body .cnt_sliderWrap .disk_area {position:relative; border:0; border-radius:0; background:#fff; padding:0;}
+.modal-body .cnt_sliderWrap .disk_area .rangeWrap {padding:0;}
+.modal-body .cnt_sliderWrap .disk_area .range_box {display:table; width:100%;}
+.modal-body .cnt_sliderWrap .disk_area .range_box > div {display:table-cell; box-sizing:border-box; vertical-align:middle;}
+.modal-body .cnt_sliderWrap .disk_area .range_box >div .btn {display:inline-block; width:21px; height:21px; font-size:0; background:url("../images/ico_slider_btn.png") no-repeat; }
+.modal-body .cnt_sliderWrap .disk_area .range_box .btn {font-size:0;}
+.modal-body .cnt_sliderWrap .disk_area .range_box .ico_minus .btn {background-position:0 0; margin-right:7px;}
+.modal-body .cnt_sliderWrap .disk_area .range_box .ico_minus .btn:hover {background-position:-25px 0;}
+.modal-body .cnt_sliderWrap .disk_area .range_box .ico_plus .btn {background-position:0 -25px; margin-left:7px;}
+.modal-body .cnt_sliderWrap .disk_area .range_box .ico_plus .btn:hover {background-position:-25px -25px;}
+.modal-body .cnt_sliderWrap .disk_area .rzslider .rz-bubble {display:none; padding:3px 14px;}
+
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 
 .aside .radio input[type="radio"] + label::after{margin-top: -6px;}
