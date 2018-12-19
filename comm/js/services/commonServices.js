@@ -1762,7 +1762,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     } else if (alertType == "warn") {
                         growl.addWarnMessage(htmlContent, {ttl: time, enableHtml: true});
                     } else if (alertType == "error") {
-                        growl.addInfoMessage(htmlContent, {ttl: time, enableHtml: true});
+                        growl.addErrorMessage(htmlContent, {ttl: time, enableHtml: true});
                     } else {
                         growl.addInfoMessage(htmlContent, {ttl: time, enableHtml: true});
                     }

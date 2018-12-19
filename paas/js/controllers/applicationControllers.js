@@ -1816,7 +1816,7 @@ angular.module('paas.controllers')
         };
 
         ct.redeployCallBackFunction = function() {
-            common.showAlertHtml($translate.instant("label.redeploy") + "(" + ct.app.name + ")", $translate.instant("message.mi_redeploy_app")).then(function () {
+            common.showAlertSuccessHtml($translate.instant("label.redeploy") + "(" + ct.app.name + ")", $translate.instant("message.mi_redeploy_app")).then(function () {
                 ct.getAppStats(false);
             });
         };

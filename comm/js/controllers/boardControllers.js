@@ -420,7 +420,7 @@ angular.module('portal.controllers')
             var updatePromise = boardService.updateBoard(detail.id, param);
             updatePromise.success(function(data, status, headers){
                 $scope.main.loadingMainBody = false;
-                common.showAlertHtml($translate.instant("label.edit"), $translate.instant('message.mi_edit_board')).then(function () {
+                common.showAlertSuccessHtml($translate.instant("label.edit"), $translate.instant('message.mi_edit_board')).then(function () {
                     getBoard(ct.paramId);
                     ct.resetData();
                 });
@@ -447,7 +447,7 @@ angular.module('portal.controllers')
                 var deletePromise = boardService.deleteBoard(id);
                 deletePromise.success(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
-                    common.showAlertHtml($translate.instant("label.bulletin_del"), $translate.instant('message.mi_delete')).then(function () {
+                    common.showAlertSuccessHtml($translate.instant("label.bulletin_del"), $translate.instant('message.mi_delete')).then(function () {
                         common.locationPath("/boards/"+ct.boardCode);
                     });
                 });

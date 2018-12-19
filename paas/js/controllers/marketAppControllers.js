@@ -351,7 +351,7 @@ angular.module('paas.controllers')
                 $scope.actionBtnHied = false;
 	            $scope.main.loadingMain = false;
                 $scope.main.loadingMainBody = false;
-                common.showAlertHtml($translate.instant("label.app") + "(" + data.name + ")", $translate.instant("message.mi_register_success")).then(function () {
+                common.showAlertSuccessHtml($translate.instant("label.app") + "(" + data.name + ")", $translate.instant("message.mi_register_success")).then(function () {
 	                if (afterStart) {
 		                $scope.main.startAppGuid = data.guid;
 	                }
