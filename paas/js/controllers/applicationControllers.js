@@ -624,7 +624,7 @@ angular.module('paas.controllers')
         
         ct.defaultSet = {
 					            instances: 1,
-					            memory: 768,
+					            memory: 1024,
 					            diskQuota: 512
 					        };
         
