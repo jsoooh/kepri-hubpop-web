@@ -762,7 +762,7 @@ angular.module('common.controllers', [])
             common.initFileUploader(mc.uploader);
         };
 
-        mc.getCategoryMemuList = function (selectSiteMap, cate_id) {
+        mc.getCategoryMenuList = function (selectSiteMap, cate_id) {
             var leftCateMenus = [];
             for (var i=0; i< mc.categories.length ;i++) {
                 var categoryItem = mc.categories[i];
@@ -850,7 +850,7 @@ angular.module('common.controllers', [])
         mc.setLeftCateMenuParams = function (cate_id) {
             mc.leftCateMenuParams = [];
             if (mc.selectSiteMap && mc.selectSiteMap.mainKey) {
-                mc.leftCateMenuParams   = mc.getCategoryMemuList(mc.selectSiteMap, cate_id);
+                mc.leftCateMenuParams   = mc.getCategoryMenuList(mc.selectSiteMap, cate_id);
             }
         };
 
