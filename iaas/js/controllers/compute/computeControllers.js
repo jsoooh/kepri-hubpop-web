@@ -776,10 +776,12 @@ angular.module('iaas.controllers')
         // spec loading 체크
         ct.specMinDisabledSetting = false;
         ct.fn.setSpecMinDisabled = function () {
+            ct.isMinSpecDisabled = false;
             if (ct.isSpecLoad && ct.data.image && ct.data.image.id) {
                 angular.forEach(ct.specList, function (spec) {
                     if (spec.disk < ct.data.image.minDisk || spec.ram < ct.data.image.minRam) {
                         spec.disabled = true;
+                        ct.isMinSpecDisabled = true;
                     }
                 });
                 ct.specMinDisabledSetting = true;
@@ -793,15 +795,17 @@ angular.module('iaas.controllers')
             }
         };
 
-        // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
-        ct.isMinSpecDisabled = false;
+        // max spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+        ct.isMaxSpecDisabled = false;
         // spec loading 체크
         ct.specMaxDisabledSetting = false;
         ct.fn.setSpecMaxDisabled = function () {
+            ct.isMaxSpecDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
                     if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
                         spec.disabled = true;
+                        ct.isMaxSpecDisabled = true;
                     }
                 });
                 ct.specMaxDisabledSetting = true;

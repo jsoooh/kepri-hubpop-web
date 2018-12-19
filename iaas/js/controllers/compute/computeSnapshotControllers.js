@@ -294,8 +294,8 @@ angular.module('iaas.controllers')
             }
         };
 
-        // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
-        ct.isMinSpecDisabled = false;
+        // max spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+        ct.isMaxSpecDisabled = false;
         // spec loading 체크
         ct.specMaxDisabledSetting = false;
         ct.fn.setSpecMaxDisabled = function () {
