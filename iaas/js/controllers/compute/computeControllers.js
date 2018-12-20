@@ -185,7 +185,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.setProcState = function (instance) {
-            if (ct.noIngStates.indexOf(instance.uiTask) >= 0 && !instance.taskState) {
+            if (ct.noIngStates.indexOf(instance.uiTask) >= 0 && (!instance.taskState || instance.taskState == 'image_uploading')) {
                 instance.procState = "end";
             } else if (ct.creatingStates.indexOf(instance.uiTask) >= 0) {
                 instance.procState = "creating";
