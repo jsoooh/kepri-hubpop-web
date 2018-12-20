@@ -1534,12 +1534,6 @@ angular.module('portal.controllers')
         $scope.actionBtnHied = false;
         $scope.actionLoading = false;
 
-        $scope.popDialogOk = function () {
-            pop.addCustomOrgUserAction();
-        };
-
-        pop.btnClickCheck = false;
-
         pop.orgRoleNames = CONSTANTS.roleName;
         pop.paramId = $stateParams.orgId;
 
@@ -1689,6 +1683,7 @@ angular.module('portal.controllers')
         };
 
         // 사용자 직접 등록 액션
+        pop.btnClickCheck = false;
         pop.addCustomOrgUserAction = function () {
             if (pop.btnClickCheck) {
                 return;
@@ -1758,6 +1753,10 @@ angular.module('portal.controllers')
                     common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
                 });
             }
+        };
+
+        $scope.popDialogOk = function () {
+            pop.addCustomOrgUserAction();
         };
 
         pop.pageListOrgUsersLoadData = function () {

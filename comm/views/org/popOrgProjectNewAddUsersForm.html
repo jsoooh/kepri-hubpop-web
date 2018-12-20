@@ -26,7 +26,7 @@
 				<th scope="col"></th>
 			</tr>
 			</thead>
-			<tbody>
+			<tbody pop.newOrgUsers>
 			<tr ng-repeat="(key, newOrgUser) in pop.newOrgUsers">
 				<td>{{ (key + 1) }}</td>
 				<td class="tdpd">
@@ -50,6 +50,9 @@
 					<button ng-if="key == (pop.newOrgUsers.length - 1)" type="button" name="button" class="btn btn-ico-row_plus only-ico" title="추가" ng-click="pop.addCustomOrgUser(newOrgUser)"><span class="ico">추가</span></button>
 					<button ng-if="pop.newOrgUsers.length > 1" type="button" name="button" class="btn btn-ico-row_minus only-ico" title="삭제" ng-click="pop.deleteCustomOrgUser(key)"><span class="ico">삭제</span></button>
 				</td>
+			</tr>
+			<tr ng-if="pop.newOrgUsers &&  pop.newOrgUsers.length == 0">
+				<td colspan="7">프로젝트 멤버가 존재하지 않습니다.</td>
 			</tr>
 			</tbody>
 		</table>
