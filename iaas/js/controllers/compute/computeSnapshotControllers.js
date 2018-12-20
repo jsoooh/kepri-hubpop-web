@@ -57,11 +57,11 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.deleteInstanceSnapshot = function(instanceSnapshot) {
-            common.showConfirm('백업 이미지 삭제', instanceSnapshot.snapShotName+' 백업 이미지을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('서버 백업 이미지 삭제', '"'+instanceSnapshot.name+'" 서버 백업 이미지을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : instanceSnapshot.tenantId,
-                    snapShotId : instanceSnapshot.snapShotId
+                    snapShotId : instanceSnapshot.id
                 };
                 var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'DELETE', param);
                 returnPromise.success(function (data, status, headers) {
@@ -108,7 +108,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.deleteStorageSnapshot = function(storageSnapshot) {
-            common.showConfirm('백업 이미지 삭제', storageSnapshot.snapshotName+' 백업 이미지을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('디스크 백업 이미지 삭제', '"'+storageSnapshot.snapshotName+'" 디스크 백업 이미지을 삭제 하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : storageSnapshot.tenantId,
