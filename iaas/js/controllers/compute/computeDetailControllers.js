@@ -2563,6 +2563,7 @@ angular.module('iaas.controllers')
                 angular.forEach(pop.specList, function (spec) {
                     if (spec.disk <= pop.instance.spec.disk || spec.ram <= pop.instance.spec.ram) {
                         spec.disabled = true;
+                        pop.isMinSpecDisabled = true;
                     }
                 });
                 pop.specMinDisabledSetting = true;
@@ -2572,6 +2573,9 @@ angular.module('iaas.controllers')
             }
         };
 
+        // max spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+        pop.isMaxSpecDisabled = false;
+
         // spec loading 체크
         pop.specMaxDisabledSetting = false;
         pop.setSpecMaxDisabled = function () {
@@ -2579,6 +2583,7 @@ angular.module('iaas.controllers')
                 angular.forEach(pop.specList, function (spec) {
                     if (spec.vcpus > pop.tenantResource.available.cores || spec.ram > pop.tenantResource.available.ramSize || spec.disk > pop.tenantResource.available.instanceDiskGigabytes) {
                         spec.disabled = true;
+                        pop.isMaxSpecDisabled = true;
                     }
                 });
                 pop.specMaxDisabledSetting = true;
