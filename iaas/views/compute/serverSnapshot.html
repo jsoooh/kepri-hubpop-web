@@ -30,7 +30,7 @@
 			<!-- tab1 cnt -->
 			<div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 0}">
 				<!-- panel -->
-				<ul class="ul-panel">
+				<ul ng-if="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length > 0" class="ul-panel">
 					<li ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }">
 						<div class="panelWrap">
 							<div class="panel type6">
@@ -79,13 +79,14 @@
 					</li>
 				</ul>
 				<!-- //panel -->
+				<p ng-if="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length == 0" class="result_txt">생성 된 백업 이미지가 없습니다.</p>
 			</div>
 			<!-- //tab1 cnt -->
 	
 			<!-- tab2 cnt -->
 			<div role="tabpanel" class="tab-pane" ng-class="{'active' : contents.tabIndex == 1}">
 				<!-- panel -->
-				<ul class="ul-panel">
+				<ul ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length > 0" class="ul-panel">
 					<li ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }">
 						<div class="panelWrap">
 							<div class="panel type6">
@@ -135,10 +136,10 @@
 					</li>
 				</ul>
 				<!-- //panel -->
+				<p ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0" class="result_txt">생성 된 백업 이미지가 없습니다.</p>
 			</div>
 			<!-- //tab2 cnt -->
 		</div>
 	</div>
 	<!-- 탭영역 -->
 	
-	<p class="result_txt">생성 된 백업 이미지가 없습니다.</p>
