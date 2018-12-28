@@ -2609,7 +2609,7 @@ p.no-txt{
 
 .disk_area .rzslider .rz-bubble {bottom:-36px; font-size:13px; color:#000; background:#ffae00; border-radius:4px; padding:3px 7px;}
 
-.disk_area .rzslider .rz-bubble::before {display:inline-block; content:'' ; position:absolute; top:-6px; left:40%; width:12px; height:12px; background:url("../images/tooltip_arrow_bg.png") no-repeat 0 0;}
+.disk_area .rzslider .rz-bubble::before {display:inline-block; content:'' ; position:absolute; top:-6px; left:50%; transform: translateX(-50%); width:12px; height:12px; background:url("../images/tooltip_arrow_bg.png") no-repeat 0 0;}
 .disk_area .rzslider .rz-bubble::after {display:inline-block; content:'' ; font-size:13px; color:#000;}
 .disk_area .rzslider .rz-bubble.rz-limit {top:3px; color:#666; background:none; padding:0; border-radius:0;}
 .disk_area .rzslider .rz-bubble.rz-limit::before {background:none;}
@@ -2750,6 +2750,10 @@ p.no-txt{
 .modal-body .cnt_sliderWrap .disk_area .range_box .ico_plus .btn {background-position:0 -25px; margin-left:7px;}
 .modal-body .cnt_sliderWrap .disk_area .range_box .ico_plus .btn:hover {background-position:-25px -25px;}
 .modal-body .cnt_sliderWrap .disk_area .rzslider .rz-bubble {display:none; padding:3px 14px;}
+
+/* 컨텐츠 리스트 결과 0일 때 */
+
+.result_txt {font-size:16px; color:#888; text-align:center; padding-top:200px;}
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 
