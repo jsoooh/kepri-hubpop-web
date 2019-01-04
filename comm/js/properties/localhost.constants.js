@@ -37,8 +37,8 @@ angular.module('app')
         popAlertFormUrl2: _COMM_VIEWS_ + '/common/popAlertForm2.html',
         xpertHosts : {
             mysqlDB : "dbwebxpert.kepri-dev.crossent.crossent.com",
-            webLog : "weblog.ps.kepri-dev.crossent.crossent.com",
-            terminal : "terminal.ps.kepri-dev.crossent.crossent.com",
+            webLog : "weblog.kepri-dev.crossent.com",
+            terminal : "terminal.kepri-dev.crossent.com",
             autoScaler : "autoscaler.ps..kepri-dev.crossent.crossent.com",
         },
         homeUrl: '/#/',
