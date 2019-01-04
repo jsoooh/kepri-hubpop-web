@@ -2004,7 +2004,7 @@ p.no-txt{
 .proj_dashboard .type_cloud .panel_body > div {display:table-cell; box-sizing:border-box; width:50%; padding:20px 0;}
 .proj_dashboard .type_cloud .panel_body > div.fl_l {border-right:1px solid #eee;}
 .proj_dashboard .type_cloud .panel_body > div.fl_r {padding-left:25px;}
-.proj_dashboard .type_cloud .cloud_stateWrap {float:left; padding-top:10px;}
+.proj_dashboard .type_cloud .cloud_stateWrap {float:left; height:113px; padding-top:10px;}
 .proj_dashboard .type_cloud .cloud_stateWrap ul {display:table; float:left; width:460px;}
 .proj_dashboard .type_cloud .cloud_stateWrap ul > li {display:table-cell;}
 .proj_dashboard .type_cloud .cloud_stateWrap ul > li > span {display:block; text-align:center;}

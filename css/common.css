@@ -493,6 +493,9 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 .body_fixed {position:fixed;}
 .html_hidden_scroll {overflow: scroll; overflow-y: hidden; overflow-x: hidden;}
 
+/*a태그 클릭해제 스타일*/
+a.none_click:hover {text-decoration:none !important; color:#777 !important; cursor:default !important;}
+
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 .ico-info1 {height:20px; margin-left:3px;}
 
