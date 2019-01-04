@@ -56,20 +56,24 @@
 					<div class="ul-in">
 					
 						<div class="cnt_wrap">
-							<div class="cnt_imgBox">
-								<span class="cnt_img ico01"></span>
-								<div class="cnt_txt"><span class="txt_name">{{volume.type}}</span><span class="color1">{{volume.size | displayVolume:'GB'}}</span></div>
+							<div class="cnt_imgBox pt5">
+								<span class="cnt_img ico04"></span>
+								<div class="cnt_value"><span class="t_lg">{{volume.size}}</span><span class="t_sm">GB</span></div>
+								<div class="cnt_txt">
+									<div class="guide_link"><a href="" ng-click="">접속방법 가이드</a></div>
+								</div>
+								<!-- <div class="cnt_txt"><span class="txt_name">{{volume.type}}</span><span class="color1">{{volume.size | displayVolume:'GB'}}</span></div> -->
 								<!--<div class="cnt_txt"><span class="txt_name">{{volume.type}}</span><span class="color1"><span count-to="{{volume.size | number : 0}}" duration="1" count-from="0" filter="number"></span>GB</span></div>-->
 								<!-- UI사용 예시: 10GB(사용량) / 100GB(전체용량) 필요. -->
 							</div>
 							<div class="cnt_infoBox">
 								<dl>
-									<dt>연결서버</dt>
+									<dt class="mt15">연결서버</dt>
 									<dd ng-if="volume.status == 'in-use'"><a href="" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>
 									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
-									<dt>장치정보</dt>
-									<dd ng-if="volume.status == 'in-use'">{{volume.volumeAttachment.device}}</dd>
-									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
+									<dt>백업이미지 개수 : <span>0개</span></dt>
+									<!-- <dd ng-if="volume.status == 'in-use'">{{volume.volumeAttachment.device}}</dd>
+									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd> -->
 								</dl>
 								<!-- <button tooltip-placement="bottom" uib-tooltip="{{volume.description}}"> <span class="cnt_tooltip type01">설명<span class="ico_tip"></span></span> </button> -->
 								<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{volume.description | enterByNbr}}'"> <span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
