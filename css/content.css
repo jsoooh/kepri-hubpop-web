@@ -2498,6 +2498,7 @@ p.no-txt{
 .guide_link {text-align:left; padding:5px 0 2px 8px;}
 .guide_link a {display:inline-block; font-size:14px; color:#2196f3; background:url("../images/external-link.png") no-repeat right center; padding-right:20px;}
 .guide_link a:hover {border-bottom:1px solid #2196f3;}
+.guide_link .bar {display:inline-block; color:#2196f3; padding:0 10px;}
 
 .ico_sm {display:inline-block; width:17px; height:17px; font-size:0; background:url("../images/ico_sm_info.png") no-repeat; vertical-align:middle; margin-left:7px;}
 .ico_sm.ico_file_dw {background-position:0 0;}

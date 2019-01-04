@@ -6,6 +6,7 @@
 			<img src="images/loading_sm.gif">
 		</div>
 		<div ng-if="contents.instance.procState == 'end'" class="pull-right">
+			<button type="button" name="button" class="btn only-ico ico-ssh" tooltip-placement="bottom" uib-tooltip="웹콘솔" ng-click=""><span class="ico">웹콘솔</span></button>
 			<button ng-if="contents.instance.vmState == 'stopped'" type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-click="contents.fn.serverActionConfirm('START',contents.instance);"><span class="ico">시작</span></button>
 			<button ng-if="contents.instance.vmState == 'active'" type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="정지" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);"><span class="ico">정지</span></button>
 			<!--<button ng-if="main.projectType == 'pjt'" type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>-->
