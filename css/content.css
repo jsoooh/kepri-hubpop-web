@@ -1220,7 +1220,7 @@ td.tdTit{text-align:center;}
 .tabWrap.type1 .tab-content.inst > div{border-top:none;}
 
 /*180523 용량선택 설명박스_레이어 추가*/
-.tbw.type1 td{position:relative;}
+.tbw.type1 td{position:relative; background-clip:padding-box;}/*IE에서 relative로 인해 라인이 가려지는 문제로 background-clip:padding-box 추가*/
 .layer_info {display:block; position:absolute; top:0px; left:0; z-index:999; width:inherit; border-radius:5px; border:1px solid #ddd; background:#fff; padding:14px 15px 16px 15px; color:#434344; text-align:left;}
 .layer_info::before {content:''; position:absolute; top:115px; left:-5px; width:12px; height:12px; background:url("../images/info_bg.png") no-repeat left center;}
 .layer_info dt {font-size:13px; color:#17a0d1; background:url("../images/ico_info_dot.png") no-repeat left center; padding:0 0 0 7px;}
@@ -2752,8 +2752,10 @@ p.no-txt{
 .modal-body .cnt_sliderWrap .disk_area .rzslider .rz-bubble {display:none; padding:3px 14px;}
 
 /* 컨텐츠 리스트 결과 0일 때 */
-
 .result_txt {font-size:16px; color:#888; text-align:center; padding-top:200px;}
+
+/*서버가상화 상세화면 > 디스크 연결정보 > 타이틀*/
+.cBox-cnt .in_tit {position:absolute; top:0; display:inline-block; width:225px; font-size:16px; font-weight:500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; word-break: break-all; padding:3px 0;}
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 
