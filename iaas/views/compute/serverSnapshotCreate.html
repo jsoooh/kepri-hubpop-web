@@ -25,7 +25,7 @@
 						</div>
 						<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required">
 					</li>
-					<li ng-if="contents.snapshotInfo.osType == 'windows'" class="pn-Toggle">
+					<li ng-if="contents.snapshotInfo.osType == 'windows'">
 						<div class="pnb_tit">
 							<i class="i_star"></i> <span class="pnb_t_txt">접속 도메인</span>
 							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성된 윈도우 서버에 접속하기 위한 도메인 정보를 구성합니다.'"><span class="ico_info"></span></button></div>
@@ -192,7 +192,7 @@
 						</li>
 						<li>
 							<span class="s_tit">유형</span>
-							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
+							<!-- <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div> -->
 							<span class="s_txt">Volume Storage</span>
 						</li>
 					</ul>
