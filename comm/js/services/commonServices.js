@@ -1661,6 +1661,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     if (textContent == "Bad Gateway") return;
                     if (textContent == "No message available") return;
                     if (textContent == "Error") return;
+                    if (textContent == "307") return;
                     if (textContent == "-1") return;
                 }
                 console.log("showAlertMessage : " + textContent);
@@ -1754,6 +1755,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     if (htmlContent == "Bad Gateway") return;
                     if (htmlContent == "No message available") return;
                     if (htmlContent == "Error") return;
+                    if (htmlContent == "307") return;
                     if (htmlContent == "-1") return;
                 }
                 $timeout(function () {

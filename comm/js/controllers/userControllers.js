@@ -7,6 +7,41 @@ angular.module('common.controllers')
         var ct = this;
 
         $scope.main.loadingMainBody = false;
+
+        ct.checkSsoPgsecuid = function (pgsecuid) {
+            $scope.main.ssoUserLoginChecking = true;
+            var promise = user.getCheckSsoPgsecuid(pgsecuid);
+            promise.success(function (data, status, headers) {
+                if (data && data.token) {
+                    var userInfo = data;
+                    $scope.main.ssoUserLogin = true;
+                    common.setAccessToken(userInfo.token);
+                    common.setUser(userInfo);
+                    $scope.main.isLoginPage = true;
+                    $scope.main.mainLayoutClass = "main";
+                    if (angular.isObject($scope.mainBody)) {
+                        $scope.mainBody.mainContentsTemplateUrl = "";
+                    }
+                    if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
+                        $scope.main.setDbMenuList();
+                    }
+                    $timeout(function () {
+                        common.moveCommHomePage();
+                    }, 100);
+                }
+                $scope.main.ssoUserLoginChecking = false;
+            });
+            promise.error(function (data, status, headers) {
+                $scope.main.ssoUserLogin = false;
+                $scope.main.ssoUserLoginChecking = false;
+            });
+        };
+
+        // TODO : SSO 연계 추가 작성
+        if (common.getPgsecuid()) {
+            ct.checkSsoPgsecuid(common.getPgsecuid());
+        }
+
         ct.ssoUserCreating = false;
 
         $scope.authenticating = false;
@@ -27,6 +62,9 @@ angular.module('common.controllers')
                     $scope.main.mainLayoutClass = "main";
                     if (angular.isObject($scope.mainBody)) {
                         $scope.mainBody.mainContentsTemplateUrl = "";
+                    }
+                    if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
+                        $scope.main.setDbMenuList();
                     }
                     $timeout(function () {
                         common.moveCommHomePage();
