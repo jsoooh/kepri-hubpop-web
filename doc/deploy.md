@@ -46,7 +46,9 @@
         index index.html;
     
         server_name www.kepri-domo.crossent.com;
-    
+
+        add_header "X-UA-Compatible" "IE=Edge,chrome=1";
+    	    
         client_max_body_size    500m;
         client_body_buffer_size 256k;
         
@@ -97,6 +99,8 @@
     
         server_name admin.kepri-domo.crossent.com;
     
+        add_header "X-UA-Compatible" "IE=Edge,chrome=1";
+
         client_max_body_size    500m;
         client_body_buffer_size 256k;
         
