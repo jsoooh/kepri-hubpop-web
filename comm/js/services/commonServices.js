@@ -1065,7 +1065,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                     if (!common.isPopCreateUserKey) {
                                         common.isPopCreateUserKey = true;
                                         $timeout(function () {
-                                            common.showAlertError("권한", "시스템에 대한 권한이 없습니다.");
+                                            common.showAlertError("권한", "PaaS 시스템에 대한 권한이 없습니다.");
                                             //common.getMainCtrlScope().main.createUserKey();
                                         }, 100);
                                     }
@@ -1376,7 +1376,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                     if (!common.isPopCreateUserKey) {
                                         common.isPopCreateUserKey = true;
                                         $timeout(function () {
-                                            common.showAlertError("권한", "시스템에 대한 권한이 없습니다.");
+                                            common.showAlertError("권한", "PaaS 시스템에 대한 권한이 없습니다.");
                                             //common.getMainCtrlScope().main.createUserKey();
                                         }, 100);
                                     }

@@ -238,11 +238,10 @@ angular.module('iaas.controllers')
 
         ct.fn.createStorageVolumeAction = function() {
             $scope.main.loadingMainBody = true;
-            ct.data.tenantId = ct.data.tenantId;
             var params = {};
             params.volumeSnapShot = ct.snapshotVolume;
             params.newVolumeInfo = {};
-            params.newVolumeInfo.instanceId = ct.data.tenantId;
+            params.newVolumeInfo.tenantId = ct.data.tenantId;
             params.newVolumeInfo.name = ct.volume.name;
             params.newVolumeInfo.type = 'HDD';
             params.newVolumeInfo.size = ct.volumeSize;
