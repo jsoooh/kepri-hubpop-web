@@ -38,8 +38,8 @@
 									<span>디스크 사용량</span>
 									<div class="txt_top">
 										<span class="sty01">전체 디스크 공간</span>
-										<span class="sty02">{{ contents.tenantResource.maxResource.volumeGigabytes }}</span>
-										<span class="sty03">GB</span>
+										<span class="sty02">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB': {viewType:'val'} }}</span>
+										<span class="sty03">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB': {viewType:'unit'} }}</span>
 									</div>
 								</div>
 								<div class="p_cnt_mid">
@@ -59,13 +59,13 @@
 										<li class="btm_use_left">
 											<div>
 												<span class="txt_tit">사용중</span>
-												<span class="txt_val">{{ contents.tenantResource.usedResource.volumeGigabytes }}<span class="txt_sm">GB</span></span>
+												<span class="txt_val">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB':{viewType:'val'} }}<span class="txt_sm">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB':{viewType:'unit'} }}</span></span>
 											</div>
 										</li>
 										<li class="btm_use_right">
 											<div>
 												<span class="txt_tit">남은 공간</span>
-												<span class="txt_val">{{ contents.tenantResource.available.volumeGigabytes }}<span class="txt_sm">GB</span></span>
+												<span class="txt_val">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB':{viewType:'val'} }}<span class="txt_sm">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB':{viewType:'unit'} }}</span></span>
 											</div>
 										</li>
 									</ul>
@@ -73,7 +73,7 @@
 							</div>
 						</div>
 						<div ng-if="contents.isTenantResourceLoad" class="disk_area">
-							<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil}}GB</div>
+							<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil | displayVolume:'GB'}}</div>
 							<p>마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
 							<div class="disk_box">
 								<div class="rangeWrap type2">
@@ -162,7 +162,7 @@
 				</div>
 			</div>
 			
-			<div class="pn-Toggle brd0">
+			<div ng-if="contents.sltInstance.id" class="pn-Toggle brd0">
 				<div class="pn_head brdt">
 					<h4 class="pnh_tit ico01">연결대상 가상서버 정보</h4>
 					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>

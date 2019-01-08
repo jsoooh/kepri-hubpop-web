@@ -105,7 +105,13 @@ angular.module('app')
                     out = out.toFixed(options.minDecimal);
                 }
             }
-            return out + " " + unitLabel;
+            if (options.viewType == "val") {
+                return out;
+            } else if (options.viewType == "unit") {
+                return unitLabel;
+            } else {
+                return out + " " + unitLabel;
+            }
         };
     })
     .filter('range', function() {

@@ -331,6 +331,7 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.deleteApp(guid);
             appPromise.success(function (data) {
+                common.showAlertSuccess("삭제가 완료 되었습니다.");
                 ct.listAllApps();
             });
             appPromise.error(function (data) {
@@ -1834,7 +1835,7 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.deleteApp(guid);
             appPromise.success(function (data) {
-                common.showAlertSuccess("삭제 되었습니다.");
+                common.showAlertSuccess("삭제가 완료 되었습니다.");
                 $scope.main.goToPage("/paas/apps");
             });
             appPromise.error(function (data) {

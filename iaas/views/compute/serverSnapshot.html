@@ -44,8 +44,9 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="" ng-class="{'disabled' : instanceSnapshot.status != 'active'}" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id);">서버 생성</a></li>
-											<li><a href="" ng-class="{'disabled' : instanceSnapshot.status != 'active'}" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
+											<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id);">서버 생성</a></li>
+											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
 										</ul>
 									</div>
 								</div>
@@ -100,8 +101,9 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'available'}" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
-											<li><a href="" ng-class="{'disabled' : storageSnapshot.status != 'available'}" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
+											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
+											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">디스크 생성</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
 										</ul>
 									</div>
 								</div>
