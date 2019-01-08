@@ -988,16 +988,7 @@ angular.module('portal.controllers')
         /**************************************************************************/
 
         // 이미지 변경
-        $scope.pop = {};
-        var pop = $scope.pop;
         ct.createOrgProjectIcon = function($event) {
-            pop.uploadedNoticeFile = [];
-            pop.uploader = common.setDefaultFileUploader($scope);
-            pop.uploader.onAfterAddingFile = function(fileItem) {
-                pop.uploadedNoticeFile.push(fileItem._file);
-                $('#userfile').val(fileItem._file.name);
-            };
-
             var dialogOptions = {
                 title : '프로젝트 이미지 변경',
                 formName : 'popThumModifyForm',
@@ -1006,7 +997,14 @@ angular.module('portal.controllers')
                 okName : '업로드'
             };
             common.showDialog($scope, $event, dialogOptions);
-            
+
+            ct.uploadedNoticeFile = [];
+            ct.uploader = common.setDefaultFileUploader($scope);
+            ct.uploader.onAfterAddingFile = function(fileItem) {
+                ct.uploadedNoticeFile.push(fileItem._file);
+                $('#userfile').val(fileItem._file.name);
+            };
+
             $scope.popDialogOk = function() {
                 ct.createOrgProjectIconAction();
             };
@@ -1019,13 +1017,13 @@ angular.module('portal.controllers')
 
         // 이미지 변경 액션
         ct.createOrgProjectIconAction = function () {
-            if (!pop.uploadedNoticeFile[pop.uploadedNoticeFile.length - 1]) {
+            if (!ct.uploadedNoticeFile[ct.uploadedNoticeFile.length - 1]) {
                 common.showAlertWarning('프로젝트 로고를 선택하십시오.');
                 return;
             }
 
             var body = {};
-            body.iconFile = pop.uploadedNoticeFile[pop.uploadedNoticeFile.length - 1];
+            body.iconFile = ct.uploadedNoticeFile[ct.uploadedNoticeFile.length - 1];
 
             $scope.main.loadingMain = true;
             var promise = orgService.createOrgIcon(ct.paramId, body);

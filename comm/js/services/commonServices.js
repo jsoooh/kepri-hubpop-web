@@ -1932,7 +1932,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 dialogOptions.controller = function ($scope, ValidationService) {
                     _DebugConsoleLog("popCommFormCtrl", 3);
                     var vm = this;
-                    vm.validationService = new ValidationService({controllerAs: vm});
+                    vm.validationService = new ValidationService();
                 };
             }
             if (!dialogOptions.controllerAs) {
