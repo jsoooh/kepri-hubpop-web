@@ -2711,10 +2711,12 @@ p.no-txt{
 
 .accss_guideWrap .txt_level_list {margin-top:5px;}
 .accss_guideWrap .txt_level_list dl {padding:5px 0 0 30px;}
-.accss_guideWrap .txt_level_list dl::after {display:block; content:''; clear:both;}
+.accss_guideWrap .txt_level_list dl::after {display:block; content:''; clear:both; -ms-display:block; -ms-content:''; -ms-clear:both;}
 .accss_guideWrap .txt_level_list dl dt {float:left; font-weight:500;}
 .accss_guideWrap .txt_level_list dl dt + dd + dt {clear:both;}
 .accss_guideWrap .txt_level_list dl dd {float:left; color:#1360ec; padding-left:3px;}
+
+.accss_guideWrap {margin-bottom:30px;}
 
 .guide_t_menu {margin:100px 0 30px 0;}
 .guide_t_menu ul li {display:inline-block;}
