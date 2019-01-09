@@ -52,6 +52,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 /* 우측 정보<공지사항> */
 #header .pull-right .align_r {float:right; display:inline-block;}
 #header .pull-right .col-my .btn .ico.arr{display:inline-block; z-index: 1; width:16px; height:30px; background:url("../images/ico_com.png") no-repeat -83px 10px; margin-left:20px;}
+#header .col-etc:hover,
 #header .col-tuto:hover,
 #header .col-set:hover,
 #header .col-noti:hover{background: #edf0f5;}
@@ -115,6 +116,11 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 #header .col-tuto .btn {display:block; width:80px; height:80px;}
 /* #header .col-tuto .btn .ico{width:23px; height:27px; background-position: -113px 0;}180516 background-position: -317px 0 */
 #header .col-tuto .btn .ico{width:35px; height:28px; background-position: -104px 0;}
+
+/* 우측 정보<기타서비스> */
+#header .col-etc {display:inline-block; position: relative; float:left; width:80px; height:80px; }
+#header .col-etc .btn {display:block; width:80px; height:80px;}
+#header .col-etc .btn .ico{width:35px; height:28px; background-position: -43px 0;}
 
 /* 우측 정보<사용자정보> */
 #header .col-my{width:auto; padding:0; margin-left:15px; display:inline-block; position: relative; float:left; height:80px;}
