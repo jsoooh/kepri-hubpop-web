@@ -2060,17 +2060,13 @@ angular.module('common.services', ['LocalStorageModule'])
             return dialog;
         };
 
-        common.showRightSliderContents = function ($scope, templateUrl, title, data, options) {
+        common.showRightSliderContents = function ($scope, title, templateUrl, data, options) {
 
             var dialogOptions	= {};
             if (options) {
                 dialogOptions = options;
             }
-            if (title) {
-                dialogOptions.title = title;
-            } else {
-                dialogOptions.title = "가이드";
-            }
+            dialogOptions.title = title;
             if (!dialogOptions.dialogClassName) {
                 dialogOptions.dialogClassName = "modal-right-dialog";
             }

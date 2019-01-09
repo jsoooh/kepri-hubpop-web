@@ -1207,12 +1207,12 @@ angular.module('common.controllers', [])
             $(selectors).stop().animate({'right' : '-360px'}, 400);
         };
 
-        mc.showRightSliderContents = function(evt, templateUrl, title, data, sliderWidth) {
+        mc.showRightSliderContents = function(evt, title, templateUrl, data, sliderWidth) {
             if (evt && evt.currentTarget) {
                 $(evt.currentTarget).blur();
             }
             templateUrl = _COMM_VIEWS_ + templateUrl;
-            common.showRightSliderContents($scope, templateUrl, title, data, {sliderWidth : sliderWidth});
+            common.showRightSliderContents($scope, title, templateUrl, data, {sliderWidth : sliderWidth});
         };
 
         mc.targetScrollTop = function (id) {
