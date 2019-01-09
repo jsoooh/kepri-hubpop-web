@@ -2174,7 +2174,7 @@ p.no-txt{
 /*---- 메세지 박스 영역_일반화면 ----*/
 .message_area {display:table; width:100%; border-radius:10px; }
 .message_area > div {display:table-cell; box-sizing:border-box; padding:20px 0;}
-.message_area .msg_bg {width:60px; border-radius:3px 0 0 3px; background:url("../images/msg_box_ico.png") no-repeat #638ce6 center center;}
+.message_area .msg_bg {width:60px; border-radius:3px 0 0 3px; background:url("../images/msg_box_ico03.png") no-repeat #638ce6 center center;}
 .message_area .msg_txt {width:auto; border-radius:0 3px 3px 0; background:#3360c5;}
 .message_area .msg_txt span {display:inline-block; font-size:16px; color:#fff; padding:0 20px;}
 
@@ -2479,6 +2479,9 @@ p.no-txt{
 
 .btnWrap .btn_lg .ico.ico_create_app {width:22px; height:22px; background:url("../images/ico_app.png") no-repeat left -28px;}
 .btnWrap .btn_lg:hover .ico.ico_create_app {background:url("../images/ico_app.png") no-repeat left 3px;}
+
+.btnWrap .btn_lg .ico.ico_create_service {width:22px; height:22px; background:url("../images/ico_service.png") no-repeat left -29px;}
+.btnWrap .btn_lg:hover .ico.ico_create_service {background:url("../images/ico_service.png") no-repeat left top;}
 
 /*가상서버 대시보드 목록 드롭다운(접속정보)*/
 .panel.type5 .panel_head .btn_txt {display:inline-block; font-size:12px; color:#fff; background:#707070; border-radius:2px; padding:1px 10px 2px 10px; margin-top:6px;}
