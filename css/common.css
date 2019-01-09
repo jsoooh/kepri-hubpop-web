@@ -505,5 +505,6 @@ a.none_click:hover {text-decoration:none !important; color:#777 !important; curs
 input::-ms-clear {display:none;}
 
 /*탭 디자인 수정*/
-.tabWrap.type1 .nav-tabs {border:1px solid #e4e4e4; border-bottom:0;}
+.tabWrap.type1 .nav-tabs {border:1px solid #e4e4e4; border-bottom:1px solid #0d2a73;}
 .tabWrap.type1 .nav>li.active >a, .tabWrap.type1 .nav>li.active>a:focus, .tabWrap.type1 .nav>li.active>a:hover, .tabWrap.type1 .nav>li>a:focus, .tabWrap.type1 .nav>li>a:hover {z-index: 3; box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.3); -webkit-box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.3);}
+.tabWrap.type1 .tab-content > div {border-top:0;}
