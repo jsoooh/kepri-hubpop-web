@@ -2060,25 +2060,44 @@ angular.module('common.services', ['LocalStorageModule'])
             return dialog;
         };
 
-        common.showRightSliderContents = function ($scope, templateUrl, data, sliderWidth) {
+        common.showRightSliderContents = function ($scope, templateUrl, title, data, options) {
 
             var dialogOptions	= {};
-            dialogOptions.dialogClassName = "modal-right-dialog";
-            dialogOptions.controllerAs = "spop";
-
+            if (options) {
+                dialogOptions = options;
+            }
+            if (title) {
+                dialogOptions.title = title;
+            } else {
+                dialogOptions.title = "가이드";
+            }
+            if (!dialogOptions.dialogClassName) {
+                dialogOptions.dialogClassName = "modal-right-dialog";
+            }
+            if (!dialogOptions.controllerAs) {
+                dialogOptions.controllerAs = "spop";
+            }
             dialogOptions.controller = function ($scope) {
                 _DebugConsoleLog("rightSliderContentsCtrl", 3);
                 var vm = this;
                 vm.data = (data) ? data : {};
             };
 
-            dialogOptions.dialogId = "slider-contents";
-            dialogOptions.sliderWidth = (sliderWidth) ? sliderWidth : 1000;
+            if (!dialogOptions.dialogId) {
+                dialogOptions.dialogId = "slider-contents";
+            }
+
+            if (!dialogOptions.sliderWidth) {
+                dialogOptions.sliderWidth = 1000;
+            }
+
             $('#' + dialogOptions.dialogId).css('width', dialogOptions.sliderWidth);
             $('body').addClass('body_fixed');
             $('html').addClass('html_hidden_scroll');
             $("#slider-contents-container").css('display', 'block');
-            dialogOptions.dialogTemplateUrl = _COMM_VIEWS_ + '/common/rightCommSliderContents.html' + _VersionTimeTail();
+            if (!dialogOptions.dialogTemplateUrl) {
+                dialogOptions.dialogTemplateUrl = _COMM_VIEWS_ + '/common/rightCommSliderContents.html' + _VersionTimeTail();
+            }
             dialogOptions.templateUrl = templateUrl ? templateUrl + _VersionTimeTail() : "";
 
             return common.showRightDialog($scope, dialogOptions);
