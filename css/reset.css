@@ -179,6 +179,7 @@ a:active,
 a:hover,
 a:focus {color:inherit; text-decoration:none; }
 a:active {background-color:transparent;}
+a:hover {cursor:pointer;}
 
 caption, legend, hr {overflow:hidden; width:0; height:0; font-size:0; line-height:0;}
 address,caption,cite,code,dfn,em,var {font-style:normal; font-weight:normal;}
