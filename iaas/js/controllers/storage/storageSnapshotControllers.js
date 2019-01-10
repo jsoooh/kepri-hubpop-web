@@ -114,14 +114,14 @@ angular.module('iaas.controllers')
 
         ct.inputVolumeSizeChange = function () {
             var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
-            if (volumeSize >= contents.volumeSliderOptions.minLimit && volumeSize <= contents.volumeSliderOptions.ceil) {
+            if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
                 ct.volumeSize = ct.inputVolumeSize;
             }
         };
 
         ct.inputVolumeSizeBlur = function () {
             var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
-            if (volumeSize < contents.volumeSliderOptions.minLimit || volumeSize > contents.volumeSliderOptions.ceil) {
+            if (volumeSize < ct.volumeSliderOptions.minLimit || volumeSize > ct.volumeSliderOptions.ceil) {
                 ct.inputVolumeSize = ct.volumeSize;
             } else {
                 ct.inputVolumeSize = volumeSize;
@@ -165,6 +165,9 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
                 }
                 ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
+                if(ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
+                    ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                }
                 ct.isTenantResourceLoad = true;
             });
             returnPromise.error(function (data, status, headers) {

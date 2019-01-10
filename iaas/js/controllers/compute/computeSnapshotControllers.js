@@ -269,6 +269,10 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
+                    if(ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
+                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                    }
                     ct.fn.setSpecMaxDisabled();
                 }
             });

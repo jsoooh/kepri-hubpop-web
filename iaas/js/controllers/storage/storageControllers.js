@@ -420,6 +420,9 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
                 }
                 ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
+                if(ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
+                    ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                }
                 ct.isTenantResourceLoad = true;
             });
             returnPromise.error(function (data, status, headers) {
@@ -1166,6 +1169,9 @@ angular.module('iaas.controllers')
                 pop.resource 		 = angular.copy(data.content[0]);
                 pop.resourceDefault = angular.copy(data.content[0]);
                 pop.reSizeSliderOptions.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes ;
+                if(pop.reSizeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
+                    pop.reSizeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                }
                 pop.isTenantResourceLoad = true;
             });
             returnPromise.error(function (data, status, headers) {

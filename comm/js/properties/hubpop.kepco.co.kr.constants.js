@@ -65,6 +65,9 @@ angular.module('app')
             baseDomain : "wins.hubpop.io",
             port : "20025"
         },
+        iaasDef : {
+            insMaxDiskSize: 2048
+        },
         loadingProgressBar : {
         	top : 80,
             down : 30
