@@ -1270,12 +1270,6 @@ angular.module('iaas.controllers')
 
             $scope.actionBtnHied = true;
 
-            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
-            {
-                $scope.actionBtnHied = false;
-                return;
-            }
-
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newVolDesc);
             if(checkByte > 255){
                 common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
