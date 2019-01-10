@@ -513,6 +513,22 @@ angular.module('iaas.controllers')
             });
         };
 
+        // 웹콘솔 접근
+        ct.fn.openWebConsole = function(instance) {
+            var param = {
+                instanceId : instance.id,
+                tenantId : ct.data.tenantId
+            };
+             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vnc', 'GET', param);
+             returnPromise.success(function (data, status, headers) {
+                 window.open(data.content, '_blank');
+             });
+             returnPromise.error(function (data, status, headers) {
+                 common.showAlertError(data.message);
+                 $scope.main.loadingMainBody = false;
+             });
+        };
+
         ct.fn.serverActionConfirm = function(action,instance) {
             if(action == "START") {
                 common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){

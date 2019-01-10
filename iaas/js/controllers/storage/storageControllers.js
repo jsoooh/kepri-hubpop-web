@@ -25,6 +25,10 @@ angular.module('iaas.controllers')
     		{
     			ct.fn.reNamePopStorage($event,data);
     		}
+    		else if (state == 'description')
+            {
+                ct.fn.modifyDescription($event,data);
+            }
     		else if (state == 'resize')
     		{
     			ct.fn.reSizePopStorage($event,data);
@@ -49,17 +53,14 @@ angular.module('iaas.controllers')
         }
 
         ct.isStorageMainListLoad = false;
-        ct.fn.getStorageList = function(currentPage) {
+        ct.fn.getStorageList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
                 conditionKey : ct.conditionKey,
                 conditionValue : ct.conditionValue,
             };
-            if (currentPage != undefined) {
-                param.number = currentPage;
-            }
-            
+
             param.size = 0;
             
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
@@ -250,7 +251,7 @@ angular.module('iaas.controllers')
         
         ct.reStorageSnapShotCallBackFunction = function () 
         {
-        	 $scope.main.goToPage('/iaas/storage');
+            ct.fn.getStorageList();
         };
         
         
@@ -272,20 +273,42 @@ angular.module('iaas.controllers')
         
         ct.reNamePopStorageCallBackFunction = function () 
         {
-        	 $scope.main.goToPage('/iaas/storage');
+            ct.fn.getStorageList();
         };
-        
-        
-        ct.reStorageSnapShotCallBackFunction = function () 
+
+
+        // 디스크 설명 수정
+        ct.fn.modifyDescription = function($event,volume) {
+
+            var dialogOptions =  {
+                controller       : "iaasStorageDescriptionCtrl" ,
+                formName         : 'iaasStorageDescriptionForm',
+                selectStorage    : angular.copy(volume),
+                callBackFunction : ct.modifyDescriptionCallBackFunction
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+
+        };
+
+        ct.modifyDescriptionCallBackFunction = function ()
         {
-        	 $scope.main.goToPage('/iaas/storage');
+             $scope.main.replacePage();
         };
-        
+
+
+        ct.reStorageSnapShotCallBackFunction = function ()
+        {
+            ct.fn.getStorageList();
+        };
+
         //////////////////////////////////////////////////////////////////////////
         //////////       2018.11.29 디스크 사이즈 변경 팝업      sg0730       ////////////////
-        //////////////////////////////////////////////////////////////////////////    
+        //////////////////////////////////////////////////////////////////////////
         ct.fn.reSizePopStorage = function($event,volume) {
-        	
+
         	var dialogOptions =  {
 			            			controller       : "iaasReSizePopStorageCtrl" ,
 			            			formName         : 'iaasReSizePopStorageForm',
@@ -302,11 +325,11 @@ angular.module('iaas.controllers')
         
         ct.reSizePopStorCallBackFunc = function () 
         {
-        	 $scope.main.goToPage('/iaas/storage');
+            ct.fn.getStorageList();
         };
         
         if(ct.data.tenantId) {
-            ct.fn.getStorageList(1);
+            ct.fn.getStorageList();
         }
 
     })
@@ -1188,7 +1211,7 @@ angular.module('iaas.controllers')
     		{
     			$scope.main.loadingMainBody = false;
     			common.showAlertSuccess("디스크 크키가 변경 되었습니다.");
-    			
+
     			if ( angular.isFunction(pop.callBackFunction) ) {
     				pop.callBackFunction();
     			}
@@ -1213,5 +1236,89 @@ angular.module('iaas.controllers')
     	
     })
        
-    
+    .controller('iaasStorageDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        	_DebugConsoleLog("storageControllers.js : iaasStorageDescriptionCtrl", 1);
+
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
+        pop.volume 						= $scope.dialogOptions.selectStorage;
+        pop.fn 							= {};
+        pop.data						= {};
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+
+        $scope.dialogOptions.title 		= "디스크 설명 변경";
+        $scope.dialogOptions.okName 	= "변경";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageDescriptionPopForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+
+            if ($scope.actionBtnHied) return;
+
+            $scope.actionBtnHied = true;
+
+            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+            {
+                $scope.actionBtnHied = false;
+                return;
+            }
+
+            var checkByte = $bytes.lengthInUtf8Bytes(pop.newVolDesc);
+            if(checkByte > 255){
+                common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
+                $scope.actionBtnHied = false;
+                return;
+            }
+
+            pop.fn.modifyDesc();
+        };
+
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        pop.fn.modifyDesc = function() {
+
+            $scope.main.loadingMainBody = true;
+
+            var param = {
+                            tenantId : pop.userTenant.id,
+                            volumeId : pop.volume.volumeId,
+                            description : pop.newVolDesc
+                        }
+
+
+            common.mdDialogHide();
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
+
+            returnPromise.success(function (data, status, headers)
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("디스크 설명이 변경 되었습니다.");
+
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
+
+            });
+            returnPromise.error(function (data, status, headers)
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers)
+            {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        }
+    })
 ;

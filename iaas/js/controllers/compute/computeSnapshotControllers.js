@@ -127,6 +127,27 @@ angular.module('iaas.controllers')
             });
         };
 
+        // 백업 이미지 설명 수정
+        ct.fn.modifyDescription = function($event, instanceSnapshot) {
+
+            var dialogOptions =  {
+                controller       : "iaasServerSnapshotDescriptionCtrl" ,
+                formName         : 'iaasServerSnapshotDescriptionForm',
+                selectSnapshot    : angular.copy(instanceSnapshot),
+                callBackFunction : ct.modifyDescriptionCallBackFunction
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+
+        };
+
+        ct.modifyDescriptionCallBackFunction = function ()
+        {
+             $scope.main.replacePage();
+        };
+
         if(ct.data.tenantId) {
             ct.fn.getInstanceSnapshotList();
             ct.fn.getStorageSnapshotList(1);
@@ -800,6 +821,92 @@ angular.module('iaas.controllers')
         if(pop.data.tenantId) {
             pop.fn.getInstanceInfo(pop.instanceId);
             pop.fn.getSnapshotInfo(pop.snapshotId);
+        }
+    })
+
+    .controller('iaasServerSnapshotDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        	_DebugConsoleLog("storageControllers.js : iaasServerSnapshotDescriptionCtrl", 1);
+
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
+        pop.snapShot 					= $scope.dialogOptions.selectSnapshot;
+        pop.fn 							= {};
+        pop.data						= {};
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+
+        $scope.dialogOptions.title 		= "백업 이미지 설명 변경";
+        $scope.dialogOptions.okName 	= "변경";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/serverSnapshotDescriptionPopForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+
+            if ($scope.actionBtnHied) return;
+
+            $scope.actionBtnHied = true;
+
+            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+            {
+                $scope.actionBtnHied = false;
+                return;
+            }
+
+            var checkByte = $bytes.lengthInUtf8Bytes(pop.newSnapshotDesc);
+            if(checkByte > 255){
+                common.showAlertWarning("백업 이미지 설명이 255Byte를 초과하였습니다.");
+                $scope.actionBtnHied = false;
+                return;
+            }
+
+            pop.fn.modifyDesc();
+        };
+
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        pop.fn.modifyDesc = function() {
+
+            $scope.main.loadingMainBody = true;
+
+            var param = {
+                            tenantId : pop.userTenant.id,
+                            snapShotId : pop.snapShot.id,
+                            description : pop.newSnapshotDesc
+                        }
+
+
+            common.mdDialogHide();
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'PUT', {instanceSnapShot : param});
+
+            returnPromise.success(function (data, status, headers)
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
+
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
+
+            });
+            returnPromise.error(function (data, status, headers)
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers)
+            {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
         }
     })
 ;

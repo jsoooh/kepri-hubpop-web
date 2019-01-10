@@ -550,6 +550,23 @@ angular.module('iaas.controllers')
         ct.showInfo = function (instance) {
             instance.showVal = !instance.showVal;
         };
+
+        // 웹콘솔 접근
+        ct.fn.openWebConsole = function(instance) {
+            var param = {
+                instanceId : instance.id,
+                tenantId : ct.data.tenantId
+            };
+             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vnc', 'GET', param);
+             returnPromise.success(function (data, status, headers) {
+                 window.open(data.content, '_blank');
+             });
+             returnPromise.error(function (data, status, headers) {
+                 common.showAlertError(data.message);
+                 $scope.main.loadingMainBody = false;
+             });
+        };
+
         //인스턴스 디스크 생성 팝업
        /* ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
