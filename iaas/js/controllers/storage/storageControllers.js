@@ -1292,7 +1292,7 @@ angular.module('iaas.controllers')
             var param = {
                             tenantId : pop.userTenant.id,
                             volumeId : pop.volume.volumeId,
-                            description : pop.newVolDesc
+                            description : pop.volume.description
                         }
 
 

@@ -878,7 +878,7 @@ angular.module('iaas.controllers')
             var param = {
                             tenantId : pop.userTenant.id,
                             snapShotId : pop.snapShot.id,
-                            description : pop.newSnapshotDesc
+                            description : pop.snapShot.description
                         }
 
 
