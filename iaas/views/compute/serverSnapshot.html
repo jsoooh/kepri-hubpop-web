@@ -64,7 +64,7 @@
 													<dt>OS 이미지</dt>
 													<dd>{{ instanceSnapshot.imageName }}</dd>
 												</dl>
-												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.modifyDescription($event, instanceSnapshot);"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
+												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
 											</div>
 										</div>
 										<div class="down">
@@ -123,7 +123,8 @@
 													<dt>디스크 유형</dt>
 													<dd>디스크스토리지</dd>
 												</dl>
-												<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'">설명<span class="ico_tip"></span></button>
+												<!--<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'">설명<span class="ico_tip"></span></button>-->
+												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot,'storage');"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
 											</div>
 										</div>
 										<div class="down">

@@ -127,14 +127,26 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 백업 이미지 설명 수정
-        ct.fn.modifyDescription = function($event, instanceSnapshot) {
+        // 백업 이미지 설명 팝업
+        ct.fn.descriptionFormOpen = function($event, snapShot, state){
+    		if(state == 'server')
+    		{
+    			ct.fn.modifyServerSnapShotDesc($event, snapShot);
+    		}
+    		else if (state == 'storage')
+    		{
+    		    ct.fn.modifyStorageSnapShotDesc($event, snapShot);
+    		}
+        };
+
+        // 서버 백업 이미지 설명 수정
+        ct.fn.modifyServerSnapShotDesc = function($event, snapshot) {
 
             var dialogOptions =  {
                 controller       : "iaasServerSnapshotDescriptionCtrl" ,
                 formName         : 'iaasServerSnapshotDescriptionForm',
-                selectSnapshot    : angular.copy(instanceSnapshot),
-                callBackFunction : ct.modifyDescriptionCallBackFunction
+                selectSnapshot    : angular.copy(snapshot),
+                callBackFunction : ct.modifyServerSnapShotDescCallBackFunction
             };
 
             $scope.actionBtnHied = false;
@@ -143,7 +155,28 @@ angular.module('iaas.controllers')
 
         };
 
-        ct.modifyDescriptionCallBackFunction = function ()
+        ct.modifyServerSnapShotDescCallBackFunction = function ()
+        {
+             $scope.main.replacePage();
+        };
+
+        // 디스크 백업 이미지 설명 수정
+        ct.fn.modifyStorageSnapShotDesc = function($event, snapshot) {
+
+            var dialogOptions =  {
+                controller       : "iaasStorageSnapshotDescriptionCtrl" ,
+                formName         : 'iaasStorageSnapshotDescriptionForm',
+                selectSnapshot    : angular.copy(snapshot),
+                callBackFunction : ct.modifyStorageSnapShotDescCallBackFunction
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+
+        };
+
+        ct.modifyStorageSnapShotDescCallBackFunction = function ()
         {
              $scope.main.replacePage();
         };
@@ -884,6 +917,88 @@ angular.module('iaas.controllers')
 
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'PUT', {instanceSnapShot : param});
+
+            returnPromise.success(function (data, status, headers)
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
+
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
+
+            });
+            returnPromise.error(function (data, status, headers)
+            {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers)
+            {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        }
+    })
+
+    .controller('iaasStorageSnapshotDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        	_DebugConsoleLog("storageControllers.js : iaasStorageSnapshotDescriptionCtrl", 1);
+
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
+        pop.snapShot 					= $scope.dialogOptions.selectSnapshot;
+        pop.fn 							= {};
+        pop.data						= {};
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+
+        $scope.dialogOptions.title 		= "백업 이미지 설명 변경";
+        $scope.dialogOptions.okName 	= "변경";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/storageSnapshotDescriptionPopForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+
+            if ($scope.actionBtnHied) return;
+
+            $scope.actionBtnHied = true;
+
+            var checkByte = $bytes.lengthInUtf8Bytes(pop.newSnapshotDesc);
+            if(checkByte > 255){
+                common.showAlertWarning("백업 이미지 설명이 255Byte를 초과하였습니다.");
+                $scope.actionBtnHied = false;
+                return;
+            }
+
+            pop.fn.modifyDesc();
+        };
+
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        pop.fn.modifyDesc = function() {
+
+            $scope.main.loadingMainBody = true;
+
+            var param = {
+                            tenantId : pop.userTenant.id,
+                            snapshotId : pop.snapShot.snapshotId,
+                            description : pop.snapShot.description
+                        }
+
+
+            common.mdDialogHide();
+            var returnPromise = {};
+
+            returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'PUT', {volumeSnapShot : param});
 
             returnPromise.success(function (data, status, headers)
             {
