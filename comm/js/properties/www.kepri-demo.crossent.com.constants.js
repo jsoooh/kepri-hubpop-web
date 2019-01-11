@@ -62,11 +62,11 @@ angular.module('app')
             myQuickMenusKey: "MY_QUICK_MENUS"
         },
         rdpConnect : {
-            baseDomain : "wins.hubpop.io",2048
+            baseDomain : "wins.hubpop.io",
             port : "20025"
         },
         iaasDef : {
-            insMaxDiskSize:
+            insMaxDiskSize: 2048
         },
         loadingProgressBar : {
         	top : 80,
