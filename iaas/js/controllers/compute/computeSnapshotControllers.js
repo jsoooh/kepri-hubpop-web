@@ -181,6 +181,10 @@ angular.module('iaas.controllers')
              $scope.main.replacePage();
         };
 
+        ct.fn.showErrorAlert = function() {
+            common.showAlertError('이미 삭제된 인스턴스입니다.');
+        }
+
         if(ct.data.tenantId) {
             ct.fn.getInstanceSnapshotList();
             ct.fn.getStorageSnapshotList(1);
@@ -527,6 +531,16 @@ angular.module('iaas.controllers')
             });
             returnPromise.finally(function() {
             });
+        };
+
+        ct.fn.subDomainCustomValidationCheck = function(subDomain) {
+            if (subDomain && angular.isArray(ct.usingDomainNames) && ct.usingDomainNames.length > 0) {
+                var domainName = subDomain + "." + ct.data.baseDomainName;
+                if ((ct.formMode != "mod" || ct.orgDomain.domain != domainName) && ct.usingDomainNames.indexOf(domainName) >= 0) {
+                    return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
+                }
+            }
+            return {isValid : true};
         };
 
         if(ct.data.tenantId && ct.snapshotId) {

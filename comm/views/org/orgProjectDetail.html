@@ -617,28 +617,26 @@
 										<th rowspan="2" class="bd_r">이름</th>
 										<th colspan="3" class="bd_r">IaaS</th>
 										<th colspan="3" class="bd_r">PaaS</th>
-										<th rowspan="2">적용</th>
 									</tr>
 									<tr>
 										<th>vCPU</th>
-										<th>메모리</th>
-										<th>디스크</th>
-										<th>메모리</th>
+										<th>메모리(GB)</th>
+										<th>디스크(GB)</th>
+										<th>메모리(GB)</th>
 										<th>서비스</th>
 										<th class="bd_r">앱 인스턴스</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>1</td>
-										<td>default</td>
-										<td>20</td>
-										<td>20</td>
-										<td>20</td>
-										<td>20</td>
-										<td>20</td>
-										<td>20</td>
-										<td>적용됨</td>
+										<td>{{ $index + 1 }}</td>
+										<td>{{ contents.selOrgProject.quotaId.name }}</td>
+										<td>{{ contents.selOrgProject.quotaId.quotaIaas.computingVcpus }}</td>
+										<td>{{ contents.selOrgProject.quotaId.quotaIaas.computingRam }}</td>
+										<td>{{ contents.selOrgProject.quotaId.quotaIaas.computingHdd }}</td>
+										<td>{{ contents.selOrgProject.quotaId.quotaPaas.totalMemory }}</td>
+										<td>{{ contents.selOrgProject.quotaId.quotaPaas.serviceInstances }}</td>
+										<td>{{ contents.selOrgProject.quotaId.quotaPaas.appInstances }}</td>
 									</tr>
 								</tbody>
 							</table>

@@ -60,7 +60,10 @@
 											<div class="cnt_infoBox">
 												<dl>
 													<dt>원본 서버</dt>
-													<dd><a href="" title="{{instanceSnapshot.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a></dd>
+													<dd>
+														<a href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>
+														<a href="" title="{{instanceSnapshot.instanceName}}" ng-if="!instanceSnapshot.beInstance" ng-click="contents.fn.showErrorAlert()">{{instanceSnapshot.instanceName}}</a>
+													</dd>
 													<dt>OS 이미지</dt>
 													<dd>{{ instanceSnapshot.imageName }}</dd>
 												</dl>
@@ -118,7 +121,7 @@
 												<dl>
 													<dt>원본 디스크</dt>
 													<!-- <dd><a href="" ng-click="main.goToPage('/iaas/storage/detail/'+storageSnapshot.volumeId)">{{storageSnapshot.volumeName}}</a></dd> -->
-													<dd><a class="none_click" href="" title="{{storageSnapshot.volumeName}}" ng-click="main.goToPage('/iaas/storage/detail/'+storageSnapshot.volumeId)">{{storageSnapshot.volumeName}}</a></dd>
+													<dd><a class="none_click" href="" title="{{storageSnapshot.volumeName}}" >{{storageSnapshot.volumeName}}</a></dd>
 													<!-- <dd>{{storageSnapshot.volumeName}}</dd> -->
 													<dt>디스크 유형</dt>
 													<dd>디스크스토리지</dd>

@@ -1060,7 +1060,7 @@ angular.module('iaas.controllers')
         ct.fn.subDomainCustomValidationCheck = function(subDomain) {
             if (subDomain && angular.isArray(ct.usingDomainNames) && ct.usingDomainNames.length > 0) {
                 var domainName = subDomain + "." + ct.data.baseDomainName;
-                if ((ct.formMode != "mod" || ct.orgDomain.domain != domainName) && ct.usingDomainNames.indexOf(domainName) >= 0) {
+                if ((ct.rdpBaseDomain != domainName) && ct.usingDomainNames.indexOf(domainName) >= 0) {
                     return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
                 }
             }
