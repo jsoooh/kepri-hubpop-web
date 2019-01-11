@@ -71,7 +71,7 @@
 									<dt class="mt15">연결서버</dt>
 									<dd ng-if="volume.status == 'in-use'"><a href="" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>
 									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
-									<dt>백업이미지 개수 : <span>0개</span></dt>
+									<dt>백업이미지 개수 : <span>{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</span></dt>
 									<!-- <dd ng-if="volume.status == 'in-use'">{{volume.volumeAttachment.device}}</dd>
 									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd> -->
 								</dl>
