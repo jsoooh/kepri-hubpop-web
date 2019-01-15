@@ -1358,12 +1358,16 @@ angular.module('portal.controllers')
         // 등록 사용자 목록 조회
         pop.listOrgUsers = function () {
             pop.orgUserEmails = [];
+            pop.isAdmin = false;
             var promise = orgService.listOrgUsers(pop.paramId);
             promise.success(function (data) {
                 var orgUsers = data.items;
                 if (orgUsers && orgUsers.length > 0) {
                     angular.forEach(orgUsers, function (orgUser, key) {
                         pop.orgUserEmails.push(orgUser.usersInfo.email);
+                        if(orgUser.isAdmin){
+                            pop.isAdmin = true;
+                        }
                     });
                 }
                 pop.loadListOrgUsers = true;
@@ -1477,13 +1481,23 @@ angular.module('portal.controllers')
             }
 
             var orgUserRequests = [];
+            var checkAdminCnt = 0;
             angular.forEach(pop.schAddOrgUsers, function (orgUser) {
                 orgUserRequests.push({
                     email : orgUser.email,
                     name : orgUser.name,
                     userRole : orgUser.roleName
                 });
+                if(orgUser.roleName == "ADMIN"){
+                    checkAdminCnt++;
+                }
             });
+
+            if (checkAdminCnt >= 2) {
+                common.showAlertError("사용자 등록시 관리자 역할은 한 명만 지정할 수 있습니다.");
+                pop.btnClickCheck = false;
+                return;
+            }
 
             $scope.main.loadingMain = true;
             common.mdDialogHide();
@@ -1553,12 +1567,16 @@ angular.module('portal.controllers')
         // 등록 사용자 목록 조회
         pop.listOrgUsers = function () {
             pop.orgUserEmails = [];
+            pop.isAdmin = false;
             var promise = orgService.listOrgUsers(pop.paramId);
             promise.success(function (data) {
                 var orgUsers = data.items;
                 if (orgUsers && orgUsers.length > 0) {
                     angular.forEach(orgUsers, function (orgUser, key) {
                         pop.orgUserEmails.push(orgUser.usersInfo.email);
+                        if(orgUser.isAdmin){
+                            pop.isAdmin = true;
+                        }
                     });
                 }
                 pop.loadListOrgUsers = true;
@@ -1688,6 +1706,7 @@ angular.module('portal.controllers')
             }
             pop.btnClickCheck = true;
             pop.orgUserRequests = [];
+            var checkAdminCnt = 0;
             for (var i = 0; i < pop.newOrgUsers.length; i++) {
                 if (!pop.newOrgUsers[i].name) {
                     common.showAlertWarning('이름을 입력하세요');
@@ -1714,6 +1733,15 @@ angular.module('portal.controllers')
                     name : pop.newOrgUsers[i].name,
                     userRole : pop.newOrgUsers[i].roleName
                 });
+                if(pop.newOrgUsers[i].roleName == "ADMIN"){
+                    checkAdminCnt++;
+                }
+            }
+
+            if (checkAdminCnt >= 2) {
+                common.showAlertError("사용자 등록시 관리자 역할은 한 명만 지정할 수 있습니다.");
+                pop.btnClickCheck = false;
+                return;
             }
 
             if (pop.newOrgUsers.length == 0) {

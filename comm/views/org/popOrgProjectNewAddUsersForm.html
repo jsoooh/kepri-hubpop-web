@@ -46,7 +46,7 @@
 				<td>
 					<select ng-model="newOrgUser.roleName">
 						<option value="{{ pop.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
-						<option value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
+						<option ng-if="!pop.isAdmin" value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
 					</select>
 				</td>
 				<td>
