@@ -1043,6 +1043,28 @@ angular.module('app')
             });
         };
     })
+    .directive('input', [ '$parse', function($parse) {
+        return {
+            priority : 2,
+            restrict : 'E',
+            compile : function(element) {
+                element.on('compositionstart', function(e) {
+                    e.stopImmediatePropagation();
+                });
+             }
+        };
+    }])
+    .directive('textarea', [ '$parse', function($parse) {
+        return {
+            priority : 2,
+            restrict : 'E',
+            compile : function(element) {
+                element.on('compositionstart', function(e) {
+                    e.stopImmediatePropagation();
+                });
+            }
+        };
+    }])
     .directive('copyToClipboard', function () {
         return {
             restrict: 'A',
