@@ -45,7 +45,7 @@
                         </ul>
                     </div>
                     <p id="txt-{{serviceItem.name}}" class="tit"><a href="">{{ serviceItem.name }}</a></p>
-                    <div id="renameService-{{serviceItem.name}}" style="display:none; width:240px;">
+                    <div id="renameService-{{serviceItem.name}}" class="renameWrap" style="display:none;">
                         <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
                         <div class="sdBtnWrap">
                             <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>

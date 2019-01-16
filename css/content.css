@@ -2860,3 +2860,6 @@ a.ext_link:hover {text-decoration:underline;}
 /*툴팁(긴 글 유형 박스 z-index 재정의)*/
 .panel_box .pn_body .form_list {z-index:1;}
 .panel_box .pn_body .pnb_box {position:relative; z-index:2;}
+
+.renameWrap {position:relative; width:240px;}
+.renameWrap .sdBtnWrap {position:absolute; top:2px; right:0;}
