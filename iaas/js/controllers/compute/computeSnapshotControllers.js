@@ -925,7 +925,7 @@ angular.module('iaas.controllers')
             var param = {
                             tenantId : pop.userTenant.id,
                             snapShotId : pop.snapShot.id,
-                            description : pop.snapShot.description
+                            description : $('#server_description_toUpdate').val()
                         }
 
 
@@ -1005,7 +1005,7 @@ angular.module('iaas.controllers')
             var param = {
                             tenantId : pop.userTenant.id,
                             snapshotId : pop.snapShot.snapshotId,
-                            description : pop.snapShot.description
+                            description : $('#storage_description_toUpdate').val()
                         }
 
 
