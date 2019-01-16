@@ -187,9 +187,9 @@ angular.module('portal.controllers')
             param.orgManager    = {'email':pop.orgProject.managerEmail, 'userId':pop.orgProject.managerId};
             param.project       = {'id':pop.orgProject.projectId};
             param.quota         = {'id':pop.orgProject.orgQuotaId};
-            param.description   = String(pop.orgProject.orgName);
+            param.description   = pop.orgProject.orgName;
             param.usePublicIp   = true;
-            param.orgName       = String(pop.orgProject.orgName);
+            param.orgName       = pop.orgProject.orgName;
 
             $scope.main.loadingMainBody= true;
 

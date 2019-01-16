@@ -58,7 +58,7 @@ angular.module('app')
                             },
                             projectDetail: {
                                 mainTop: true,
-                                name: 'project_details',
+                                name: 'project_mgmt',
                                 stateKey: 'commProjectDetail',
                                 url: '/comm/projects/projectDetail/:orgId',
                                 controller: 'commOrgProjectDetailCtrl',

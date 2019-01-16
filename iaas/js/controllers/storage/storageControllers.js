@@ -1292,7 +1292,7 @@ angular.module('iaas.controllers')
             var param = {
                             tenantId : pop.userTenant.id,
                             volumeId : pop.volume.volumeId,
-                            description : $('#disk_description_toUpdate').val()
+                            description : pop.volume.description
                         }
 
 

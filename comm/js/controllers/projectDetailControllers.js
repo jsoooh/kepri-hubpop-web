@@ -234,7 +234,7 @@ angular.module('portal.controllers')
 
         ct.pop.memberAdd = function (currentPage) {
 
-            //프로젝트 멤버 등록 팝업 오픈
+            //프로젝트 구성원 등록 팝업 오픈
             var dialogOptions = {
                 title: $translate.instant('label.project_member_add'),
                 formName: "projectUserAddForm",
@@ -387,7 +387,7 @@ angular.module('portal.controllers')
             $location.path('/comm/orgs/orgForm/R/' + param.org.id);
         };
 
-        // 탭클릭 : 작업정보/프로젝트 멤버
+        // 탭클릭 : 작업정보/프로젝트 구성원
         ct.tabNgClick = function (tabId) {
             $('#tab1-1, #tab1-2, #tab1-3').removeClass('active');
             $('#' + tabId).addClass('active');

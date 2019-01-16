@@ -35,13 +35,13 @@ angular.module('portal.services')
 		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/projects/' + id, 'GET'));
 	};
 
-	/*프로젝트 멤버 등록*/
+	/*프로젝트 구성원 등록*/
 	projectService.addUsers = function(params) {
 
 		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/projects/' + params.projectId + '/users/multi', 'POST', params.projectUsers));
 	};
 
-	/*프로젝트 멤버 삭제*/
+	/*프로젝트 구성원 삭제*/
 	projectService.removeUser = function(params) {
 
 		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/projects/' + params.projectId + '/users/' + params.id, 'DELETE'));

@@ -4,7 +4,7 @@
     <ul class="nav nav-tabs">
         <li ng-class="{'active':contents.sltInfoTab == 'dashboard'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('dashboard');">대시보드</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'info'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('info');">프로젝트 개요</a></li>
-        <li ng-class="{'active':contents.sltInfoTab == 'member'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('member');">프로젝트 멤버</a></li>
+        <li ng-class="{'active':contents.sltInfoTab == 'member'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('member');">프로젝트 구성원</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'resource'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('resource');">프로젝트 자원</a></li>
     </ul>
     <!-- //Nav tabs -->
@@ -524,7 +524,7 @@
                     </tr>
                     <!-- 등록된 멤버가 없을 때 -->
                     <tr ng-if="contents.orgUsers.length == 0" class="no-data">
-                        <td colspan="5">등록된 프로젝트 멤버가 없습니다.</td>
+                        <td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
                     </tr>
                     </tbody>
                 </table>
@@ -533,7 +533,7 @@
         </div>
         <!-- //프로젝트 개요 panel -->
 
-        <!-- 프로젝트 멤버 panel -->
+        <!-- 프로젝트 구성원 panel -->
         <div ng-if="contents.sltInfoTab == 'member'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'member'}">
             <!-- table -->
             <div class="tb-top">
@@ -563,7 +563,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="orgUser in contents.orgUsers">
+                    <tr ng-repeat="orgUser in contents.orgUsers | orderBy: '-createDate.time'">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ orgUser.usersInfo.name }}</td>
                         <td>{{ orgUser.usersInfo.email }}</td>
@@ -576,14 +576,14 @@
                     </tr>
                     <!-- 등록된 멤버가 없을 때 -->
                     <tr ng-if="contents.orgUsers.length == 0" class="no-data">
-                        <td colspan="5">등록된 프로젝트 멤버가 없습니다.</td>
+                        <td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <!-- //table -->
         </div>
-        <!-- //프로젝트 멤버 panel -->
+        <!-- //프로젝트 구성원 panel -->
 
         <!-- 프로젝트 자원 panel -->
         <div ng-if="contents.sltInfoTab == 'resource'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'resource'}">

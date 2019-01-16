@@ -1624,7 +1624,7 @@ angular.module('portal.controllers')
                 return;
             }
             if (pop.orgUserEmails.indexOf(email) > -1 ) {
-                common.showAlertError('이미 회원가입/프로젝트 멤버 추가한 아이디(' + email + ')입니다.');
+                common.showAlertError('이미 회원가입/프로젝트 구성원 추가한 아이디(' + email + ')입니다.');
                 return;
             }
             if (pop.notOrgUserEmails.indexOf(email) > -1 ) {
