@@ -2556,7 +2556,7 @@ angular.module('paas.controllers')
         tab.appWebLogIframe = '';
         tab.tabBodytemplateUri = _PAAS_VIEWS_ + "/application/tabAppWebLog.html" + _VersionTail();
 
-        tab.iframeHeight = 400;
+        tab.iframeHeight = 250;
         tab.tailLogAction = false;
 
         tab.tailLog = function (action) {
@@ -2565,7 +2565,7 @@ angular.module('paas.controllers')
                 var accessTokenPromise = portal.users.getAccessToken();
                 accessTokenPromise.success(function (data) {
                     var appWebLogIframeSrc = $scope.main.sltRegion.webLogXpertUrl + "?access_token=" + data.access_token + "&app=" + tab.appGuid;
-                    tab.appWebLogIframe = '<iframe style="width: 100%; height: 100%; border: 0;" src="' + appWebLogIframeSrc + '"></iframe>';
+                    tab.appWebLogIframe = '<iframe style="width: 100%; height: 250px; border: 0;" src="' + appWebLogIframeSrc + '"></iframe>';
                     $scope.main.loadingMainBody = false;
                     tab.tailLogAction = true;
                 });
