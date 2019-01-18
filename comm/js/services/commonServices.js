@@ -1821,7 +1821,11 @@ angular.module('common.services', ['LocalStorageModule'])
             rootScope.main.loadingMain = false;
             rootScope.main.loadingMainBody = false;
             var optionsOrPreset = $mdDialog.alert({skipHide: true, clickOutsideToClose: true}).title(title).htmlContent(htmlContent).ok($translate.instant("label.confirm"));
-            optionsOrPreset._options.templateUrl = CONSTANTS.popAlertFormUrl + _VersionTail();
+            if (alertType == "info"){
+                optionsOrPreset._options.templateUrl = CONSTANTS.popAlertFormUrl2 + _VersionTail();
+            } else {
+                optionsOrPreset._options.templateUrl = CONSTANTS.popAlertFormUrl + _VersionTail();
+            }
             if (angular.isDefined(alertType) && alertType != "info") {
                 optionsOrPreset._options.alertType = alertType;
                 optionsOrPreset._options.ariaLabel = $translate.instant("label." + alertType);

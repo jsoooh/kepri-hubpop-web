@@ -178,7 +178,7 @@ angular.module('iaas.controllers')
 
         ct.modifyStorageSnapShotDescCallBackFunction = function ()
         {
-             $scope.main.replacePage();
+             ct.fn.getStorageSnapshotList(1);
         };
 
         ct.fn.showErrorAlert = function() {

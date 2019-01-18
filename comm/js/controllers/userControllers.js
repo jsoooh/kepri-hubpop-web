@@ -55,20 +55,26 @@ angular.module('common.controllers')
             var authenticationPromise = user.authenticate(param);
             authenticationPromise.success(function (data, status, headers) {
                 if (status == 200 && angular.isObject(data) && data.token) {
-                    common.setAccessToken(headers("U-X-TOKEN"));
-                    common.setUser(data);
-                    // 자연스러운 페이지 변환을 위한 로직
-                    $scope.main.isLoginPage = true;
-                    $scope.main.mainLayoutClass = "main";
-                    if (angular.isObject($scope.mainBody)) {
-                        $scope.mainBody.mainContentsTemplateUrl = "";
+                    if(data.orgCount == 0){
+                        common.showDialogAlertHtml('알림', '현재 참여중인 프로젝트가 없습니다. </br>외부 사용자의 경우, 한전 담당자가 생성한 프로젝트에 참여하여 HUB-PoP을 사용할 수 있습니다.</br>계정 정보를 한전 담당자에게 전달하여 프로젝트 참여자로 등록하도록 요청하여 주세요.', 'info');
+                        $scope.authenticating = false;
+                        $scope.main.loadingMainBody = false;
+                    }else{
+                        common.setAccessToken(headers("U-X-TOKEN"));
+                        common.setUser(data);
+                        // 자연스러운 페이지 변환을 위한 로직
+                        $scope.main.isLoginPage = true;
+                        $scope.main.mainLayoutClass = "main";
+                        if (angular.isObject($scope.mainBody)) {
+                            $scope.mainBody.mainContentsTemplateUrl = "";
+                        }
+                        if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
+                            $scope.main.setDbMenuList();
+                        }
+                        $timeout(function () {
+                            common.moveCommHomePage();
+                        }, 100);
                     }
-                    if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
-                        $scope.main.setDbMenuList();
-                    }
-                    $timeout(function () {
-                        common.moveCommHomePage();
-                    }, 100);
                 } else {
                     common.showDialogAlertError("로그인 오류", $translate.instant('message.mi_wrong_id_or_pwd'));
                     $scope.authenticating = false;
