@@ -2618,8 +2618,6 @@ angular.module('common.services', ['LocalStorageModule'])
                     sAuth = "B";
                 } else if (userInfo.manager) {
                     sAuth = "M";
-                } else if (userInfo.orgManager) {
-                    sAuth = "O";
                 }
                 if(userInfo.scope){
                     if(userInfo.scope.indexOf("company.admin") > -1){

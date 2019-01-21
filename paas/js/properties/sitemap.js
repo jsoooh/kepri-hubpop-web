@@ -28,7 +28,7 @@ angular.module('app')
                                 templateUrl: _PAAS_VIEWS_+'/application/applicationPush.html',
                             },
                             applicationDetail: {
-                                name: 'application_details',
+                                name: 'applications',
                                 stateKey: 'paasApplicationDetail',
                                 url: '/paas/apps/:guid',
                                 controller: 'paasApplicationDetailCtrl',

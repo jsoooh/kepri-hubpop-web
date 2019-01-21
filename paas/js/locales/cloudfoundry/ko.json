@@ -75,7 +75,7 @@
 			"message_key": "Please delete the %s associations for your %s.",
 			"name": "AssociationNotEmpty",
 			"http_code": 400,
-			"message": "%s에 대한 %s 연관을 삭제하십시오."
+			"message": "서비스와 연결된 APP이 존재합니다. APP 연결 해제 후 삭제할 수 있습니다."
 		},
 		"10007": {
 			"message_type": "preserve",
@@ -264,7 +264,7 @@
 			"message_key": "The service instance name is taken: %s",
 			"name": "ServiceInstanceNameTaken",
 			"http_code": 400,
-			"message": "서비스 인스턴스 이름을 사용했습니다: %s"
+			"message": "%s : 이미 사용중인 이름입니다. 다른 이름을 입력하세요."
 		},
 		"60003": {
 			"message_type": "tail",

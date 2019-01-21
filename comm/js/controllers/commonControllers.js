@@ -351,7 +351,7 @@ angular.module('common.controllers', [])
 
         //url정보 체크하여 메뉴 위치 확인
         mc.desplayDbMenuList = function(myRoleName) {
-            portal.menu.setListMenu(mc.dbMenuList, myRoleName);
+            portal.menu.setListMenu(mc, myRoleName);
         };
 
         //url정보 체크하여 메뉴 위치 확인
