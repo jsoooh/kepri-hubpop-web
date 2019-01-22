@@ -70,7 +70,7 @@
 							<div class="cnt_infoBox">
 								<dl>
 									<dt class="mt15">연결서버</dt>
-									<dd ng-if="volume.status == 'in-use'"><a href="" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>
+									<dd ng-if="volume.status == 'in-use'"><a href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>
 									<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
 									<dt>백업 이미지 개수 : <span>{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</span></dt>
 									<!-- <dd ng-if="volume.status == 'in-use'">{{volume.volumeAttachment.device}}</dd>

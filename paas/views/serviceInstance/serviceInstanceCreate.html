@@ -220,8 +220,57 @@
 			</div>
 		</div>
 		 -->
+		 <div class="pn-Toggle">
+				<div class="pn_head brdt">
+					<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
+					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+				</div>
+				<div class="pn_body">
+					<div class="s_cont_box">
+						<div class="s_progress_box wd_tit">
+							<ul>
+								<li>
+									<span class="tit_txt">인스턴스</span>
+									<div class="progressWrap type2">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="txt_count">({{(main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)}} 개 / {{main.sltOrganization.quotaDefinition.appInstanceLimit}} 개)</span>
+								</li>
+								<li>
+									<span class="tit_txt">메모리</span>
+									<div class="progressWrap type2">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="txt_count">({{(main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances) | displayVolume:'MB'}} / {{main.sltOrganization.quotaDefinition.memoryLimit | displayVolume:'MB'}})</span>
+								</li>
+								<li>
+									<span class="tit_txt">디스크</span>
+<!--
+									<div class="progressWrap type2">
+										<div class="progress">
+										  <div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota)/(102400))*100|number:0}}" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota)/(102400))*100|number:0}}%"></div>
+											</div>
+										</div>
+									</div>
+-->
+									<span class="txt_count text-left">현재 {{(main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota*contents.defaultSet.instances) | displayVolume:'MB'}} 사용중</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
 		 
-		 <!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
+		<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
 		<!-- <div class="btn-btm">
 			<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
 		</div> -->
