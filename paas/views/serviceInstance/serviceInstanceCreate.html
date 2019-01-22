@@ -230,6 +230,17 @@
 						<div class="s_progress_box wd_tit">
 							<ul>
 								<li>
+									<span class="tit_txt">서비스 수</span>
+									<div class="progressWrap type2">
+										<div class="progress">
+											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}%"></div>
+											</div>
+										</div>
+									</div>
+									<span class="txt_count">({{(main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)}} 개 / {{main.sltOrganization.quotaDefinition.appInstanceLimit}} 개)</span>
+								</li>
+								<li>
 									<span class="tit_txt">인스턴스</span>
 									<div class="progressWrap type2">
 										<div class="progress">
