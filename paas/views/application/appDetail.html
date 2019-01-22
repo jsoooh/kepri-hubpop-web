@@ -177,8 +177,9 @@
     <div class="cBox-cnt">
         <div class="appCnt-inst">
         <!-- 이미지형 -->
-            <div ng-if="contents.instanceStats" scroll-pane scroll-config="{ contentHeight: '0px' }" id="instance_scroll_panel" class="inst-list type1">
-                <ul class="instUl" style="height: 180px;">
+            <!--<div ng-if="contents.instanceStats" scroll-pane scroll-config="{ contentHeight: '0px' }" id="instance_scroll_panel" class="inst-list type1">-->
+            <div ng-if="contents.instanceStats" id="instance_scroll_panel" class="inst-list type1" style="overflow-x:auto;">
+                <ul class="instUl" style="height: 200px;">
                     <h3 ng-if="contents.instanceStats.length == 0">{{ 'label.app_instance_state' | translate }}</h3>
                     <li ng-repeat="(key, statItem) in contents.instanceStats" class="instBox" ng-class="{'color-type1' : (statItem.state != 'RUNNING' && statItem.state != 'STARTING'), 'color-type2': (statItem.state == 'RUNNING'), 'color-type4' : (statItem.state == 'STARTING')}">
                         <div class="in">
