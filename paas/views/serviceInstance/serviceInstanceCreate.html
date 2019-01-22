@@ -233,34 +233,34 @@
 									<span class="tit_txt">서비스 수</span>
 									<div class="progressWrap type2">
 										<div class="progress">
-											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}" class="progress">
-												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}%"></div>
+											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.servicesUsage+1)/main.sltOrganization.quotaDefinition.totalServices)*100|number:0}}" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.servicesUsage+1)/main.sltOrganization.quotaDefinition.totalServices)*100|number:0}}%"></div>
 											</div>
 										</div>
 									</div>
-									<span class="txt_count">({{(main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)}} 개 / {{main.sltOrganization.quotaDefinition.appInstanceLimit}} 개)</span>
+									<span class="txt_count">({{(main.sltOrganization.servicesUsage+1)}} 개 / {{main.sltOrganization.quotaDefinition.totalServices}} 개)</span>
 								</li>
 								<li>
 									<span class="tit_txt">인스턴스</span>
 									<div class="progressWrap type2">
 										<div class="progress">
-											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}" class="progress">
-												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}%"></div>
+											<div percent-progress-bar-animate bar-type="width" percent="{{(main.sltOrganization.appInstancesUsage/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{(main.sltOrganization.appInstancesUsage/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}%"></div>
 											</div>
 										</div>
 									</div>
-									<span class="txt_count">({{(main.sltOrganization.appInstancesUsage + contents.defaultSet.instances)}} 개 / {{main.sltOrganization.quotaDefinition.appInstanceLimit}} 개)</span>
+									<span class="txt_count">({{main.sltOrganization.appInstancesUsage}} 개 / {{main.sltOrganization.quotaDefinition.appInstanceLimit}} 개)</span>
 								</li>
 								<li>
 									<span class="tit_txt">메모리</span>
 									<div class="progressWrap type2">
 										<div class="progress">
-											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}" class="progress">
-												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances)/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}%"></div>
+											<div percent-progress-bar-animate bar-type="width" percent="{{(main.sltOrganization.memoryUsage/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}" class="progress">
+												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{(main.sltOrganization.memoryUsage/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}%"></div>
 											</div>
 										</div>
 									</div>
-									<span class="txt_count">({{(main.sltOrganization.memoryUsage + contents.defaultSet.memory*contents.defaultSet.instances) | displayVolume:'MB'}} / {{main.sltOrganization.quotaDefinition.memoryLimit | displayVolume:'MB'}})</span>
+									<span class="txt_count">({{main.sltOrganization.memoryUsage | displayVolume:'MB'}} / {{main.sltOrganization.quotaDefinition.memoryLimit | displayVolume:'MB'}})</span>
 								</li>
 								<li>
 									<span class="tit_txt">디스크</span>
@@ -273,7 +273,7 @@
 										</div>
 									</div>
 -->
-									<span class="txt_count text-left">현재 {{(main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota*contents.defaultSet.instances) | displayVolume:'MB'}} 사용중</span>
+									<span class="txt_count text-left">현재 {{main.sltOrganization.diskQuotaUsage | displayVolume:'MB'}} 사용 중</span>
 								</li>
 							</ul>
 						</div>
