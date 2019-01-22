@@ -25,7 +25,7 @@ angular.module('app')
                                 stateKey: 'paasApplicationPush',
                                 url: '/paas/appsPush',
                                 controller: 'paasApplicationPushCtrl',
-                                templateUrl: _PAAS_VIEWS_+'/application/applicationPush.html',
+                                templateUrl: _PAAS_VIEWS_+'/application/applicationPush.html'
                             },
                             applicationDetail: {
                                 name: 'applications',
@@ -33,7 +33,7 @@ angular.module('app')
                                 url: '/paas/apps/:guid',
                                 controller: 'paasApplicationDetailCtrl',
                                 templateUrl: _PAAS_VIEWS_ + '/application/appDetail.html'
-                            },
+                            }
                         }
                     }, // services
                     service: {
@@ -48,12 +48,12 @@ angular.module('app')
                                 stateKey: 'paasServiceInstanceCreate',
                                 url: '/paas/serviceInstanceCreate',
                                 controller: 'paasServiceInstanceCreateCtrl',
-                                templateUrl: _PAAS_VIEWS_+'/serviceInstance/serviceInstanceCreate.html',
+                                templateUrl: _PAAS_VIEWS_+'/serviceInstance/serviceInstanceCreate.html'
                             }
                         }
-                    }, // application
-                }, // menus
-            }, // paasPotal
+                    } // application
+                } // menus
+            } // paasPotal
         } // leftMenus
     }) // PAASSITEMAP
 ;
