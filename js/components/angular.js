@@ -24047,14 +24047,21 @@
 		if (!$sniffer.android) {
 			var composing = false;
 
-			element.on('compositionstart', function () {
-				composing = true;
-			});
+            if (navigator.userAgent.indexOf('Trident') > 0) {
+                element.on('keydown', function() {
+                composing = false;
+                listener();
+                });
+			}else{
+                element.on('compositionstart', function () {
+                    composing = true;
+                });
 
-			element.on('compositionend', function () {
-				composing = false;
-				listener();
-			});
+                element.on('compositionend', function () {
+                    composing = false;
+                    listener();
+                });
+            }
 		}
 
 		var timeout;
