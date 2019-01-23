@@ -4,7 +4,7 @@
 <div class="panel_head">
     <div class="tit pull-left">{{ 'label.route' | translate }}<span class="countList">전체 : {{tab.appRoutes.length}}건</span></div>
     <div class="pull-right">
-        <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="tab.createAppRoute($event);"><span class="ico">추가</span></button>
+        <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="tab.createAppRoute($event);" style="display:none"><span class="ico">추가</span></button>
         <button id="route" type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel('route')"><span class="ico">확대/축소</span></button>
     </div>
 </div>
