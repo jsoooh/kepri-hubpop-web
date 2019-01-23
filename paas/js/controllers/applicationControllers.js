@@ -2334,6 +2334,7 @@ angular.module('paas.controllers')
                 if (data.length > 0) {
                     pop.route.domainGuid = data[0].guid;
                 }
+                $scope.pop.domains = pop.domains ;
                 $scope.actionLoading = false;
             });
             domainPromise.error(function (data) {
@@ -2579,6 +2580,7 @@ angular.module('paas.controllers')
                 tab.appWebLogIframe = '';
             }
         };
+        tab.tailLog('start');
     })
     .controller('tabAppWebSshCtrl', function ($scope, $location, $state, $translate, $stateParams, $timeout, user, portal, common, CONSTANTS) {
         _DebugConsoleLog("applicationControllers.js : tabAppWebSshCtrl", 1);
