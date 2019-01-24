@@ -526,7 +526,11 @@ angular.module('paas.controllers')
             
             ct.appFileErrorMessage = "";
             ct.appFileItem = fileItem;
-            ct.appFileItem.localFullFileName = ($('#appFileInput').length > 0) ? $('#appFileInput').val() : "";
+            var localFullFileName = "";
+            if($('#appFileInput').length > 0){
+                localFullFileName = $('#appFileInput').val().substring($('#appFileInput').val().lastIndexOf('\\')+1);
+            }
+            ct.appFileItem.localFullFileName = localFullFileName;
         };
 
         // 언어 선택 스크롤 생성
