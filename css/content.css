@@ -2678,7 +2678,7 @@ a.ext_link:hover {text-decoration:underline;}
 .aside .acss_info.sideBtmWrap.two .btn-color6{background: #acacac;}
 .aside .acss_info.sideBtmWrap.two .btn .ico_top {display:block; font-size:13px; text-align:center; padding-top:25px; background: url("../images/ico_top.png") no-repeat center 7px; }
 .aside .acss_info.sideStepWrap{padding-bottom:20px; border-bottom:1px solid #8d96ad; background: url("../images/aside_step_bg.png") no-repeat; background-position: center;}
-.aside .acss_info.sideStepWrap ul:after{display: block; content: ''; clear: both;}
+.aside .acss_info.sideStepWrap ul::after{display: block; content: ''; clear: both;}
 .aside .acss_info.sideStepWrap li{color:#8d96ad; width:105px;}
 .aside .acss_info.sideStepWrap li.on{color:#fff;}
 .aside .acss_info.sideStepWrap li em{display: block; font-size:12px; line-height: 1.1;}
