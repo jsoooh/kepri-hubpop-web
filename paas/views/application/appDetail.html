@@ -261,9 +261,9 @@
 								<div class="msg_bg"></div>
 								<div class="msg_txt">
 									<span>배포된 APP과 백엔드서비스 S/W 연결합니다. 연결되지 않은 서비스는 비활성 상태로 표시됩니다.</span>
-									<span ng-if="ins.serviceInstances.length == 0">생성된 서비스가 없습니다. 서비스 관리에서 서비스를 생성하세요.</span>
 								</div>
 							</div>
+                            <h3 ng-if="ins.serviceInstances.length == 0">생성된 서비스가 없습니다. 서비스 관리에서 서비스를 생성하세요.</h3>
                             <ul ng-if="ins.serviceInstances.length > 0" class="sev-list pt50">
                                 <li class="sevBox on" ng-repeat="(key, serviceItem) in ins.serviceInstances">
                                     <img ng-src="{{ins.getImageUriBinding(serviceItem, contents.appGuid)}}" alt="{{ serviceItem.serviceLabel }}">
