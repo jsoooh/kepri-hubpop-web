@@ -2261,6 +2261,8 @@ angular.module('paas.controllers')
         tab.app = angular.copy($scope.contents.app);
         tab.appGuid = tab.app.guid;
         tab.appRoutes = null;
+        tab.domains = [];
+        tab.route = { spaceGuid : tab.app.space.guid };
 
         tab.tabBodytemplateUri = _PAAS_VIEWS_ + "/application/tabAppRoutes.html" + _VersionTail();
 
@@ -2318,13 +2320,11 @@ angular.module('paas.controllers')
                 okName : $translate.instant("label.confirm"),
                 cancelName : $translate.instant("label.cancel")
             };
-            pop.domains = [];
-            pop.route = { spaceGuid : tab.app.space.guid };
 
             common.showDialog($scope, $event, $scope.dialogOptions);
             // Dialog ok 버튼 클릭 시 액션 정의
             $scope.popDialogOk = function () {
-                pop.createAppRouteAction(pop.route);
+                pop.createAppRouteAction(tab.route);
             };
             $scope.actionBtnHied = false;
             $scope.actionLoading = true;
@@ -2334,11 +2334,10 @@ angular.module('paas.controllers')
         pop.listAllDomains = function (guid) {
             var domainPromise = applicationService.listAllDomains(guid);
             domainPromise.success(function (data) {
-                pop.domains = data;
+                tab.domains = data;
                 if (data.length > 0) {
-                    pop.route.domainGuid = data[0].guid;
+                    tab.route.domainGuid = data[0].guid;
                 }
-                $scope.pop.domains = pop.domains ;
                 $scope.actionLoading = false;
             });
             domainPromise.error(function (data) {
@@ -2349,7 +2348,7 @@ angular.module('paas.controllers')
         pop.createAppRouteAction = function (route) {
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
-            if (!vs.checkFormValidity($scope[$scope.dialogOptions.formName])) {
+            if (!vs.checkFormValidity($scope.pop[$scope.dialogOptions.formName])) {
                 $scope.actionBtnHied = false;
                 common.showAlert("", $translate.instant("message.mi_check_input"));
                 return;

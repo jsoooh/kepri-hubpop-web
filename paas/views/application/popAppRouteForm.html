@@ -8,15 +8,15 @@
 		<tr>
 			<th scope="row">{{ 'label.host_name' | translate }}</th>
 			<td>
-				<input type="text" class="form-control" maxlength="50" name="hostName" placeholder="{{ 'label.host_name' | translate }}" ng-model="pop.route.host" validation="alpha_dash|min_len:3|max_len:20|required" />
+				<input type="text" class="form-control" maxlength="50" name="hostName" placeholder="{{ 'label.host_name' | translate }}" ng-model="tab.route.host" validation="alpha_dash|min_len:3|max_len:20|required" />
 	            <div ng-if="createAppRouteForm.hostName.$touched && createAppRouteForm.hostName.$invalid" class="validation validation-hostName text-danger"></div>
 			</td>
 		</tr>
 		<tr>
 			<th scope="row">{{ 'label.domain_name' | translate }}</th>
 			<td>
-				<select class="form-control" name="hostName2" ng-model="pop.route.domainGuid" validation="required">
-					<option ng-repeat="domainItem in pop.domains" value="{{ domainItem.guid }}">{{ domainItem.name }}</option>
+				<select class="form-control" name="hostName2" ng-model="tab.route.domainGuid" validation="required">
+					<option ng-repeat="domainItem in tab.domains" value="{{ domainItem.guid }}">{{ domainItem.name }}</option>
 				</select>
 			</td>
 		</tr>
