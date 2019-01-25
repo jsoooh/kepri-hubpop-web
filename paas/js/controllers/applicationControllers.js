@@ -2454,13 +2454,19 @@ angular.module('paas.controllers')
                 okName : $translate.instant("label.confirm"),
                 cancelName : $translate.instant("label.cancel")
             };
-            pop.appUserEvnKey = "";
-            pop.appUserEvnVal = "";
-            pop.appUserEvnKeyDisabled = false;
+            tab.appUserEvnKey = "";
+            tab.appUserEvnVal = "";
+            tab.appUserEvnKeyDisabled = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
             // Dialog ok 버튼 클릭 시 액션 정의
             $scope.popDialogOk = function () {
-                pop.updateAppEnvironmentAction(pop.appUserEvnKey, pop.appUserEvnVal);
+                for(var i=0; i<tab.appUserEnvVars.length; i++) {
+                    if ($scope.tab.appUserEvnKey == tab.appUserEnvVars[i].key) {
+                        common.showAlertError('동일한 변수 이름이 존재 합니다.');
+                        return;
+                    }
+                }
+                pop.updateAppEnvironmentAction($scope.tab.appUserEvnKey, $scope.tab.appUserEvnVal, tab.appUserEvnKeyDisabled);
             };
             $scope.actionBtnHied = false;
         };
@@ -2474,37 +2480,35 @@ angular.module('paas.controllers')
                 okName : $translate.instant("label.confirm"),
                 cancelName : $translate.instant("label.cancel")
             };
-            pop.appUserEvnKey = envItem.key;
-            pop.appUserEvnVal = envItem.val;
-            pop.appUserEvnKeyDisabled = true;
+            tab.appUserEvnKey = envItem.key;
+            tab.appUserEvnVal = envItem.val;
+            tab.appUserEvnKeyDisabled = true;
             common.showDialog($scope, $event, $scope.dialogOptions);
             // Dialog ok 버튼 클릭 시 액션 정의
             $scope.popDialogOk = function () {
-                pop.updateAppEnvironmentAction(pop.appUserEvnKey, pop.appUserEvnVal);
+                pop.updateAppEnvironmentAction(tab.appUserEvnKey, tab.appUserEvnVal, tab.appUserEvnKeyDisabled);
             };
             $scope.actionBtnHied = false;
         };
 
-        pop.updateAppEnvironmentAction = function (key, val) {
+        pop.updateAppEnvironmentAction = function (key, val, updateFlg) {
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
-            if (!vs.checkFormValidity($scope[$scope.dialogOptions.formName])) {
+            if (!vs.checkFormValidity($scope.pop[$scope.dialogOptions.formName])) {
                 $scope.actionBtnHied = false;
                 common.showAlert("", $translate.instant("message.mi_check_input"));
                 return;
             }
             $scope.actionLoading = true;
             var appUserEnvVar = {};
-            var envUpdate = false;
             for(var i=0; i<tab.appUserEnvVars.length; i++) {
                 if (key == tab.appUserEnvVars[i].key) {
                     appUserEnvVar[tab.appUserEnvVars[i].key] = val;
-                    envUpdate = true;
                 } else {
                     appUserEnvVar[tab.appUserEnvVars[i].key] = tab.appUserEnvVars[i].val;
                 }
             }
-            if (!envUpdate) {
+            if (!updateFlg) {
                 appUserEnvVar[key] = val;
             }
             var routesPromise = applicationService.updateAppUserEnvironment(tab.appGuid, appUserEnvVar);
