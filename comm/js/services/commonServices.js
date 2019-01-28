@@ -1936,7 +1936,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 dialogOptions.controller = function ($scope, ValidationService) {
                     _DebugConsoleLog("popCommFormCtrl", 3);
                     var vm = this;
-                    vm.validationService = new ValidationService();
+                    vm.validationService = new ValidationService({controllerAs: vm});
                 };
             }
             if (!dialogOptions.controllerAs) {
@@ -2014,11 +2014,21 @@ angular.module('common.services', ['LocalStorageModule'])
                 }
             }
 
+            var scopePop = null;
+            if ($scope.pop) {
+                scopePop = $scope.pop;
+            }
+
             if (!dialogOptions.controller) {
                 dialogOptions.controller = function (ValidationService) {
                     _DebugConsoleLog("popMultipleCommFormCtrl", 3);
                     var vm = this;
                     vm.validationService = new ValidationService({controllerAs: vm});
+                    if (scopePop) {
+                       angular.forEach(scopePop, function (val, k) {
+                          vm[k] = val;
+                       });
+                    }
                 };
             }
             if (!dialogOptions.controllerAs) {
