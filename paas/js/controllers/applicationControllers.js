@@ -448,7 +448,7 @@ angular.module('paas.controllers')
 
         ct.pageLoadData();
     })
-    .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
+    .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, cloudFoundry, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationPushCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -468,6 +468,8 @@ angular.module('paas.controllers')
         ct.sltPortalBuildpack  	= {};
         ct.appPushData   		= {};
         ct.sltDeployOption 		= "U";
+        ct.fn   		= {};
+        ct.subDomainList        = [];
         
         // 호스트 중복 체크 확인
         ct.hostDup 				= false;
@@ -881,7 +883,7 @@ angular.module('paas.controllers')
             } else {
                 appBody.buildpack 	= ct.sltPortalBuildpack.name + '_buildpack-' + ct.sltBuildpackVersion.version;
             }
-            
+
             appBody.appName 	= ct.appPushData.appName;
             appBody.hostName 	= ct.appPushData.domainFirstName + "." + ct.sltDomainName;
             appBody.withStart 	= false;
@@ -955,7 +957,7 @@ angular.module('paas.controllers')
             ct.sltOrganizationGuid 				= $scope.main.sltOrganization.guid;
             ct.appPushData.organizationGuid 	= $scope.main.sltOrganization.guid;
             ct.appPushData.spaceGuid 			= $scope.main.sltOrganization.spaces[0].guid;
-            
+
             if ($scope.main.sltOrganization.domains && $scope.main.sltOrganization.domains.length > 0) {
                 ct.domains 		 = angular.copy($scope.main.sltOrganization.domains);
                 ct.sltDomainName = ct.domains[0].name;
@@ -963,6 +965,49 @@ angular.module('paas.controllers')
             
             ct.listAllBuildpacks();
             ct.listAllPortalBuildpackVersions();
+            ct.getSubDomainList();
+        };
+
+
+        ct.getSubDomainList = function () {
+            var condition = '';
+            if (ct.domains[0].guid) {
+                condition = "domain_guid:" + ct.domains[0].guid;
+            }
+
+            var routePromise = cloudFoundry.routes.listRoutes(10, 1, condition, 1)
+            routePromise.success(function (data) {
+                ct.subDomainList = data;
+                $scope.main.loadingMainBody = false;
+            });
+            routePromise.error(function (data) {
+                ct.domainList = [];
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.appNameValidationCheck = function(appName) {
+            if(appName){
+                for(var i = 0; i < ct.sltOrganization.spaces[0].apps.length; i++) {
+                    if (appName == ct.sltOrganization.spaces[0].apps[i].name) {
+                        return {isValid : false, message: "이미 사용중인 APP 이름입니다."};
+                    }
+                }
+                return {isValid : true};
+            }
+        };
+
+        ct.fn.subDomainValidationCheck = function(subDomainName) {
+            if(subDomainName){
+                if(ct.subDomainList.content){
+                    for(var i = 0; i < ct.subDomainList.content.length; i++) {
+                        if (subDomainName == ct.subDomainList.content[i].host) {
+                            return {isValid : false, message: "이미 사용중인 APP 도메인입니다."};
+                        }
+                    }
+                }
+                return {isValid : true};
+            }
         };
 
         ct.pageLoadData();
