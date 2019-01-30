@@ -38,8 +38,8 @@
                     <tbody>
                     <tr ng-repeat="(key, envItem) in tab.appUserEnvVars">
                         <td>{{ key + 1 }}</td>
-                        <td class="text-left">{{ envItem.key }}</td>
-                        <td class="text-left">{{ envItem.val }}</td>
+                        <td>{{ envItem.key }}</td>
+                        <td>{{ envItem.val }}</td>
                         <td>
                             <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.edit' | translate }}" ng-click="tab.updateAppEnvironment($event, envItem);"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.edit' | translate }}" /></button>
                             <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppEnvironment(envItem)"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button>
