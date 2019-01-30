@@ -2343,6 +2343,7 @@ angular.module('paas.controllers')
                 var routePromise = applicationService.deleteRoute(routeGuid);
                 routePromise.success(function (data) {
                     $scope.main.loadingMainBody = false;
+                    common.showAlertSuccess('삭제 되었습니다.');
                     tab.listAllAppRoutes();
                 });
                 routePromise.error(function (data) {
@@ -2406,6 +2407,7 @@ angular.module('paas.controllers')
                     $scope.actionLoading = false;
                     $scope.actionBtnHied = false;
                     $scope.popHide();
+                    common.showAlertSuccess('추가 되었습니다.');
                     tab.listAllAppRoutes();
                 });
                 appRoutesPromise.error(function (appRouteData) {
@@ -2480,6 +2482,7 @@ angular.module('paas.controllers')
             var appRoutePromise = applicationService.updateAppUserEnvironment(tab.appGuid, appUserEnvVar);
             appRoutePromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("삭제 되었습니다.");
                 tab.getAppEnvironment();
             });
             appRoutePromise.error(function (data) {
@@ -2560,6 +2563,11 @@ angular.module('paas.controllers')
                 $scope.actionLoading = false;
                 $scope.actionBtnHied = false;
                 $scope.popHide();
+                if(updateFlg){
+                    common.showAlertSuccess("수정 되었습니다.");
+                }else{
+                    common.showAlertSuccess("추가 되었습니다.");
+                }
                 tab.getAppEnvironment();
             });
             routesPromise.error(function (data) {
