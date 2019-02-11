@@ -1821,18 +1821,22 @@ angular.module('common.services', ['LocalStorageModule'])
             rootScope.main.loadingMain = false;
             rootScope.main.loadingMainBody = false;
             var optionsOrPreset = $mdDialog.alert({skipHide: true, clickOutsideToClose: true}).title(title).htmlContent(htmlContent).ok($translate.instant("label.confirm"));
-            if (alertType == "info"){
+            if (alertType == "info" || alertType == "notice"){
                 optionsOrPreset._options.templateUrl = CONSTANTS.popAlertFormUrl2 + _VersionTail();
             } else {
                 optionsOrPreset._options.templateUrl = CONSTANTS.popAlertFormUrl + _VersionTail();
             }
-            if (angular.isDefined(alertType) && alertType != "info") {
+            if (angular.isDefined(alertType) && alertType != "info" && alertType != "notice") {
                 optionsOrPreset._options.alertType = alertType;
                 optionsOrPreset._options.ariaLabel = $translate.instant("label." + alertType);
             } else {
-                optionsOrPreset._options.alertType = "info";
-                optionsOrPreset._options.ariaLabel = $translate.instant("label.confirm");
-            }
+                 optionsOrPreset._options.alertType = "info";
+                 if(alertType == "notice"){
+                    optionsOrPreset._options.ariaLabel = $translate.instant("label.board_notice");
+                  }else{
+                    optionsOrPreset._options.ariaLabel = $translate.instant("label.notice");
+                 }
+             }
             optionsOrPreset.fullscreen = false;
             optionsOrPreset.multiple = true;
             return $mdDialog.show(optionsOrPreset);
