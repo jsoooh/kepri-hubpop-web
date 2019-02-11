@@ -55,6 +55,9 @@ angular.module('common.controllers')
             var authenticationPromise = user.authenticate(param);
             authenticationPromise.success(function (data, status, headers) {
                 if (status == 200 && angular.isObject(data) && data.token) {
+                    if(ct.notice){
+                        common.showDialogAlertHtml('알림', '2/22 (금) 18:00 이후 23일, 24일 3일간 </br>AI분석 서비스 인프라 이관 작업을 진행합니다. </br>해당 작업기간 동안은 서비스를 이용하실 수 없으니 참고하시기 바랍니다. </br>감사합니다.', 'info');
+                    }
                     if(data.orgCount == 0){
                         common.showDialogAlertHtml('알림', '현재 참여중인 프로젝트가 없습니다. </br>외부 사용자의 경우, 한전 담당자가 생성한 프로젝트에 참여하여 HUB-PoP을 사용할 수 있습니다.</br>계정 정보를 한전 담당자에게 전달하여 프로젝트 참여자로 등록하도록 요청하여 주세요.', 'info');
                         $scope.authenticating = false;

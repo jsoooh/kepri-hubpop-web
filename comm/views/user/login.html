@@ -36,5 +36,7 @@
             <button type="submit" name="button" class="btn btn-color1" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
             <p class="text-right"><a href="/#/signup">계정생성</a></p><!-- | <a href="/">홈</a>  -->
         </div>
+        <div ng-init = "contents.notice = 'true'">
+        </div>
     </form>
     <!-- //login-->
