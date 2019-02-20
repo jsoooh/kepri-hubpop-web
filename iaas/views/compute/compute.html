@@ -293,7 +293,14 @@
 		</li> -->
 	</ul>
 	<!-- //panel area-->
-	<div ng-if="!contents.pageFirstLoad && (contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length == 0" class="welcome_layer">
+
+	<div class="proj_list_area" ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length == 0">
+		<ul class="ul-panel dash_list no_data">
+			<li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
+		</ul>
+	</div>
+
+	<div ng-if="!contents.pageFirstLoad && contents.serverMainList.length == 0" class="welcome_layer">
 		<div class="guide_fnt arrw_btm">신규 가상서버를 만듭니다.</div>
 		<div class="guide_fnt arrw_top">다른 프로젝트의 백업 이미지로부터 신규 가상서버를 만듭니다.</div>
 		<div class="guide_cnt">

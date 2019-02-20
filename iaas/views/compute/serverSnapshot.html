@@ -83,7 +83,11 @@
 					</li>
 				</ul>
 				<!-- //panel -->
-				<p ng-if="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length == 0" class="result_txt">생성 된 서버 백업 이미지가 없습니다.</p>
+				<div class="proj_list_area" ng-if="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length == 0">
+					<ul class="ul-panel dash_list no_data">
+						<li><p class="no_data_txt pd0">생성된 서버 백업 이미지가 없습니다.</p></li>
+					</ul>
+				</div>
 			</div>
 			<!-- //tab1 cnt -->
 	
@@ -143,7 +147,11 @@
 					</li>
 				</ul>
 				<!-- //panel -->
-				<p ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0" class="result_txt">생성 된 디스크 백업 이미지가 없습니다.</p>
+				<div class="proj_list_area" ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
+					<ul class="ul-panel dash_list no_data">
+						<li><p class="no_data_txt pd0">생성된 디스크 백업 이미지가 없습니다.</p></li>
+					</ul>
+				</div>
 			</div>
 			<!-- //tab2 cnt -->
 		</div>

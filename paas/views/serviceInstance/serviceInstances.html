@@ -24,70 +24,79 @@
 </div>
 <!-- //버튼영역 -->
 <!-- panel area-->
-<ul ng-if="contents.serviceInstances.length > 0" class="ul-panel">
-    <li ng-repeat="(key, serviceItem) in contents.serviceInstances | filter:{name : contents.schFilterText}">
-        <!-- panel -->
-        <div class="panelWrap">
-            <div class="panel type3">
-                <div class="panel_head">
-                    <div class="logo">
-                        <img ng-src="images/thum/im_logo_{{ serviceItem.serviceLabel }}_cir.png" alt="{{ serviceItem.serviceLabel }}" />
-                        <!-- <img ng-src="images/thum/im_logo_{{ serviceItem.serviceLabel }}_{{ (serviceItem.service.active == true) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}"> -->
+<div ng-if="(contents.serviceInstances | filter:{ name: contents.schFilterText }).length > 0">
+    <ul class="ul-panel">
+        <li ng-repeat="(key, serviceItem) in contents.serviceInstances | filter:{name : contents.schFilterText}">
+            <!-- panel -->
+            <div class="panelWrap">
+                <div class="panel type3">
+                    <div class="panel_head">
+                        <div class="logo">
+                            <img ng-src="images/thum/im_logo_{{ serviceItem.serviceLabel }}_cir.png" alt="{{ serviceItem.serviceLabel }}" />
+                            <!-- <img ng-src="images/thum/im_logo_{{ serviceItem.serviceLabel }}_{{ (serviceItem.service.active == true) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}"> -->
+                        </div>
+                        <div class="dropdown btn-option">
+                            <button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                                <span class="ico">실행 설정</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                                <li><a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a></li>
+                                <li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="contents.renameInst(serviceItem.name)">서비스 이름변경</a></li>
+                                <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
+                            </ul>
+                        </div>
+                        <p id="txt-{{serviceItem.name}}" class="tit"><a href="">{{ serviceItem.name }}</a></p>
+                        <div id="renameService-{{serviceItem.name}}" class="renameWrap" style="display:none;">
+                            <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
+                            <div class="sdBtnWrap">
+                                <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
+                                <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
+                            </div>
+                        </div>
+                        <p class="txt nolink">S/W : {{serviceItem.serviceLabel}}</p>
+
                     </div>
-                    <div class="dropdown btn-option">
-                        <button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-                            <span class="ico">실행 설정</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-                            <li><a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a></li>
-                            <li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="contents.renameInst(serviceItem.name)">서비스 이름변경</a></li>
-                            <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
+                    <div class="panel_body">
+                        <ul class="ul-in">
+                            <li class="col1 type2">
+                                <div class="up">
+                                    <p class="txt"><strong>연결앱 수</strong><span>{{ serviceItem.serviceBindings.length }}</span></p>
+                                </div>
+                                <div class="down">
+                                    <span class="stateWrap"><span class="stateMark type1">정상배포</span><span class="state-txt">실행</span></span>
+                                </div>
+                            </li>
+                            <li class="col2 type2">
+                                <div class="service_plan">
+                                    <span class="tit">서비스플랜</span>
+                                    <span class="txt_bg">{{ serviceItem.servicePlan.name }}</span>
+                                </div>
+                            </li>
                         </ul>
                     </div>
-                    <p id="txt-{{serviceItem.name}}" class="tit"><a href="">{{ serviceItem.name }}</a></p>
-                    <div id="renameService-{{serviceItem.name}}" class="renameWrap" style="display:none;">
-                        <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
-                        <div class="sdBtnWrap">
-                            <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
-                            <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
-                        </div>
-                    </div>
-                    <p class="txt nolink">S/W : {{serviceItem.serviceLabel}}</p>
-                    
-                </div>
-                <div class="panel_body">
-                    <ul class="ul-in">
-                        <li class="col1 type2">
-                            <div class="up">
-                                <p class="txt"><strong>연결앱 수</strong><span>{{ serviceItem.serviceBindings.length }}</span></p>
-                            </div>
-                            <div class="down">
-                                <span class="stateWrap"><span class="stateMark type1">정상배포</span><span class="state-txt">실행</span></span>
-                            </div>
-                        </li>
-                        <li class="col2 type2">
-                            <div class="service_plan">
-                                <span class="tit">서비스플랜</span>
-                                <span class="txt_bg">{{ serviceItem.servicePlan.name }}</span>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
-        </div>
-        <!-- //panel -->
-    </li>
-<!--     <li style="padding-bottom:3.5%;">
-        <button type="submit" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" id="aside-aside" ng-click="ins.showForm(serviceInstance.serviceInstances)"><span class="ico"></span><span class="txt">연결 서비스 추가</span></button>
-    </li> -->
-</ul>
+            <!-- //panel -->
+        </li>
+    </ul>
+</div>
+
+<div class="proj_list_area" ng-if="(contents.serviceInstances | filter:{ name:contents.schFilterText }).length == 0">
+    <ul class="ul-panel dash_list no_data">
+        <li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
+    </ul>
+</div>
+
+    <!--     <li style="padding-bottom:3.5%;">
+            <button type="submit" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" id="aside-aside" ng-click="ins.showForm(serviceInstance.serviceInstances)"><span class="ico"></span><span class="txt">연결 서비스 추가</span></button>
+        </li> -->
 <!-- //cBox -->
 
 <div ng-if="contents.loadingServiceInstances == false && contents.serviceInstances.length  == 0" class="welcome_layer">
 	<div class="guide_fnt arrw_btm">신규 백엔드 서비스를 만듭니다.</div>
 	<div class="guide_cnt">
-		표준APP.개발 서비스에서는 <span class="fnt20"><span class="color1">애플리케이션과 연결하여 사용하</span>는 다양한 <span class="color1">백엔드 서비스S/W를 제공</span>합니다.(Ex. MariaDB, Redis, MongoDB, Oracle DB, etc..)<br>
+        표준APP.개발 서비스에서는 <span class="fnt20"><span class="color1">애플리케이션과 연결하여 사용하</span></span>는 다양한 <span class="color1">백엔드 서비스S/W를 제공</span>합니다.(Ex. MariaDB, Redis, MongoDB, Oracle DB, etc..)<br>
 		사용자는 별도 코딩(coding) 작업 없이 백엔드 서비스를 만들고 배포된 애플리케이션(APP)과 연결해주는 것만으로 즉시 서비스를 사용할 수 있습니다.<br>
-		<span class="fnt20"><spna class="color1">‘서비스 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+		<span class="fnt20"><span class="color1">‘서비스 만들기’</span></span>를 통해 서비스를 시작해 보세요.
 	</div>
 </div>
