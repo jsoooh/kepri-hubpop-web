@@ -111,14 +111,14 @@
 	</ul>
 </div>
 
-<div class="proj_list_area" ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length == 0">
+<div class="proj_list_area" ng-if="contents.isStorageMainListLoad && (contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length == 0">
 	<ul class="ul-panel dash_list no_data">
 		<li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
 	</ul>
 </div>
 
 <!-- //panel area-->
-<div ng-if="contents.isStorageMainListLoad && (contents.storageMainList | filter:{ taskState : '!deleting' }).length == 0" class="welcome_layer">
+<div ng-if="!contents.isStorageMainListLoad && (contents.storageMainList | filter:{ taskState : '!deleting' }).length == 0" class="welcome_layer">
 	<div class="guide_fnt arrw_btm">신규 디스크를 만들고 가상서버와 연결하세요.</div>
 	<div class="guide_cnt">
 		디스크 관리는 <span class="fnt20"><span class="color1">Block Storage 기반의 데이터 저장공간 서비스를 제공</span></span>합니다.<br>

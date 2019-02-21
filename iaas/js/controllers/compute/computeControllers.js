@@ -16,6 +16,7 @@ angular.module('iaas.controllers')
         ct.consoleLogLimit 	= '50';
         ct.actionLogLimit 	= '10';
         ct.pageFirstLoad 	= true;
+        ct.loadingServerList 	= false;
         ct.showVal			= false;
         ct.schFilterText    = "";
         // 공통 레프트 메뉴의 userTenantId
@@ -137,6 +138,9 @@ angular.module('iaas.controllers')
                 var instances = [];
                 if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
                     instances = data.content.instances;
+                    if(data.totalElements != 0){
+                        ct.loadingServerList = true;
+                    }
                 }
                 var isServerStatusCheck = false;
                 common.objectOrArrayMergeData(ct.serverMainList, instances);

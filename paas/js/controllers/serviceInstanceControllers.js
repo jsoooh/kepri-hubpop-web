@@ -29,12 +29,16 @@ angular.module('paas.controllers')
 
         ct.listAllServiceInstances = function () {
             $scope.main.loadingMainBody = true;
-            ct.loadingServiceInstances = true;
+            ct.loadingServiceInstances = false;
             var serviceInstancePromise = serviceInstanceService.listAllServiceInstances($scope.main.sltOrganizationGuid, '');
             serviceInstancePromise.success(function (data) {
                 var serviceInstances = [];
                 if (data && angular.isArray(data)) {
                     serviceInstances = data;
+                    if(data.length != 0){
+                        ct.loadingServiceInstances = true;
+                    }
+
                 }
                 if($scope.contents && $scope.contents.app && $scope.contents.app.name) {
                     angular.forEach(serviceInstances, function (serviceInstance, key) {
@@ -51,12 +55,10 @@ angular.module('paas.controllers')
                 }
                 common.objectOrArrayMergeData(ct.serviceInstances, serviceInstances);
                 $scope.main.loadingMainBody = false;
-                ct.loadingServiceInstances = false;
             });
             serviceInstancePromise.error(function (data) {
                 ct.serviceInstances = [];
                 $scope.main.loadingMainBody = false;
-                ct.loadingServiceInstances = false;
             });
         };
 

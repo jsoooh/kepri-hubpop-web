@@ -81,7 +81,7 @@
     </ul>
 </div>
 
-<div class="proj_list_area" ng-if="(contents.serviceInstances | filter:{ name:contents.schFilterText }).length == 0">
+<div class="proj_list_area" ng-if="contents.loadingServiceInstances && (contents.serviceInstances | filter:{ name:contents.schFilterText }).length == 0">
     <ul class="ul-panel dash_list no_data">
         <li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
     </ul>
@@ -92,7 +92,7 @@
         </li> -->
 <!-- //cBox -->
 
-<div ng-if="contents.loadingServiceInstances == false && contents.serviceInstances.length  == 0" class="welcome_layer">
+<div ng-if="!contents.loadingServiceInstances && contents.serviceInstances.length  == 0" class="welcome_layer">
 	<div class="guide_fnt arrw_btm">신규 백엔드 서비스를 만듭니다.</div>
 	<div class="guide_cnt">
         표준APP.개발 서비스에서는 <span class="fnt20"><span class="color1">애플리케이션과 연결하여 사용하</span></span>는 다양한 <span class="color1">백엔드 서비스S/W를 제공</span>합니다.(Ex. MariaDB, Redis, MongoDB, Oracle DB, etc..)<br>

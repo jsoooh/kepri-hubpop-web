@@ -68,15 +68,16 @@ angular.module('iaas.controllers')
                 var volumes = [];
                 if (data && data.content && data.content.volumes && angular.isArray(data.content.volumes)) {
                     volumes = data.content.volumes;
+                    if(data.totalElements != 0){
+                        ct.isStorageMainListLoad = true;
+                    }
                 }
                 common.objectOrArrayMergeData(ct.storageMainList, volumes);
                 $scope.main.loadingMainBody = false;
-                ct.isStorageMainListLoad = true;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlert("message",data.message);
-                ct.isStorageMainListLoad = true;
             });
             returnPromise.finally(function (data, status, headers) {
             });

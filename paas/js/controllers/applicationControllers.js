@@ -126,7 +126,7 @@ angular.module('paas.controllers')
                     var appPromise2 = applicationService.listAllAppInstanceStats(option.guid);
                     appPromise2.success(function (data2) {
                         option["instanceStats"] = angular.copy(data2);
-
+                        ct.isAppsLoad = false
                         var instanceStatsUsageCpu = 0;
                         var instanceStatsUsageMemory = 0;
                         var instanceStatsUsageDisk = 0;
