@@ -20,6 +20,9 @@ angular.module('iaas.controllers')
         ct.schInstanceFilterText = "";
         ct.schStorageFilterText = "";
 
+        ct.loadingInstanceSnapshotList = false;
+        ct.loadingStorageSnapshotList = false;
+
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantName = $scope.main.userTenant.korName;
@@ -43,6 +46,9 @@ angular.module('iaas.controllers')
                 var instanceSnapshots = [];
                 if (data && angular.isArray(data.content)) {
                     instanceSnapshots = data.content;
+                    if(data.content.length != 0) {
+                        ct.loadingInstanceSnapshotList = true;
+                    }
                 }
                 common.objectOrArrayMergeData(ct.instanceSnapshotList, instanceSnapshots);
                 $scope.main.loadingMainBody = false;
@@ -95,6 +101,9 @@ angular.module('iaas.controllers')
                 var volumeSnapShots = [];
                 if (data && data.content && angular.isArray(data.content.volumeSnapShots)) {
                     volumeSnapShots = data.content.volumeSnapShots;
+                    if(data.content.volumeSnapShots.length != 0) {
+                        ct.loadingStorageSnapshotList = true;
+                    }
                 }
                 common.objectOrArrayMergeData(ct.storageSnapshotList, volumeSnapShots);
                 $scope.main.loadingMainBody = false;
