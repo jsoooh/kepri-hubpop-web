@@ -512,5 +512,9 @@ input::-ms-clear {display:none;}
 .tabWrap.type1 .nav>li.active >a, .tabWrap.type1 .nav>li.active>a:focus, .tabWrap.type1 .nav>li.active>a:hover, .tabWrap.type1 .nav>li>a:focus, .tabWrap.type1 .nav>li>a:hover {z-index: 3; box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.3); -webkit-box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.3);}
 .tabWrap.type1 .tab-content > div {border-top:0;}
 
+/*탭 디자인 수정-튜토리얼 탭 border 해제*/
+.tabWrap.type1 .navWrap .nav-tabs {border:0;}
+
+
 /*작은설명 텍스트*/
 .sm_point {display:block; text-align:right; font-size: 14px; color: #777;}
