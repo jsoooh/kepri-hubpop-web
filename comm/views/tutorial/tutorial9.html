@@ -1,0 +1,460 @@
+			<!-- content -->
+			<div class="content">
+				
+				<!-- tab wrap -->
+				<div class="tabWrap type1 mb40">
+					<!-- Nav tabs -->
+					<div class="navWrap">
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation"><a href="#/tutorial/1" role="tab" data-toggle="tab">가상 서버 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/2" role="tab" data-toggle="tab">표준APP.개발 활용하기</a></li>
+							<!--
+							<li role="presentation"><a href="#/tutorial/3" role="tab" data-toggle="tab">분석 허브 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/4" role="tab" data-toggle="tab">분석 추상화 활용하기</a></li>
+							 -->
+							<li role="presentation"><a href="#/tutorial/5" role="tab" data-toggle="tab">GIS 플랫폼 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/6" role="tab" data-toggle="tab">개발 파이프라인 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/7" role="tab" data-toggle="tab">개발 프레임워크 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/8" role="tab" data-toggle="tab">API Gateway 활용하기</a></li>
+							<li role="presentation" class="active"><a href="#/tutorial/9" role="tab" data-toggle="tab">데이터 연계 활용하기</a></li>
+						</ul>
+					</div>
+					<!-- //Nav tabs -->
+				</div>
+				<!-- tab wrap -->
+			
+				<div class="in">
+					<h2 class="h-tit2">데이터 카탈로그 포탈 활용하기</h2>
+					
+					<!-- 데이터 요청 포탈 활용하기  -->
+					
+					<!-- 1. 데이터 수집 아키텍처 -->
+					<h3 id="/tutorial/9?content=1" class="h-tit3">데이터 수집 아키텍처</h3>
+					<h5 class="h-tit5">빅데이터 플랫폼 연계 프로세스</h5>
+					<ul class="tuto-ul">
+						<li>DAY + 1 시점에 한전의 레거시시스템 데이터들이 빅데이터플랫폼으로 적재됩니다.</li>
+						<li>
+						DAY + 2 에 연계 요청된 데이터들이 HUB-POP에 전송됩니다. <br/>
+						이를 데이터 수집 툴인 NiFi가 감지하여 데이터공유영역인 ORACLE과 HDFS에 적재되고, 연구과제는 저장된 데이터를 조회하실 수 있습니다.
+						</li>
+					</ul>
+					<p class="tuto-txt">현재, DAS, SCADA 등 여러 시스템들이 빅데이터 플랫폼에 적재되고 있습니다. </p>
+					<img src="images/tutorial/dcp/001.png">
+
+					<!-- 2. 수집데이터 제공 방안 -->
+					<h3 id="/tutorial/9?content=2" class="h-tit3">수집데이터 제공 방안</h3>
+					<h5 class="h-tit5">DB Client를 이용하여 DB 접속 및 조회</h5>
+					<p class="tuto-txt">적재된 전력마스터 데이터, GIS 설비 데이터들을 제공하는 DB 계정을 통해 접근 가능합니다. 신규 과제는 데이터 카탈로그 포털에 접근하시면 별도의 신청 없이 ORACLE, GIS DB 계정을 생성해드리며,
+					카탈로그 포털에서 각 DB 정보 및 계정 정보를 조회하실 수 있습니다. 이를 이용하여 DB 툴을 통한 데이터 조회 또는 KDN 프레임워크를 활용한 프로그램 개발에 활용하실 수 있습니다.</p>
+					<img src="images/tutorial/dcp/100.png">
+					
+					<p class="tuto-txt">ORACLE DB Client를 통한 조회</p>
+					<ul class="tuto-ul">
+						<li>별도의 신청 절차 없이 ORACLE 계정 생성 제공 (데이터 카탈로그 포털 내 DB / 계정 정보 조회 가능)</li>
+						<li>DB Tool을 이용한 데이터 조회 및 JDBC 연계 개발 가능</li>
+					</ul>
+					<img src="images/tutorial/dcp/101.png">
+					
+					<p class="tuto-txt">GIS DB Client를 통한 조회</p>
+					<ul class="tuto-ul">
+						<li>별도의 신청 절차 없이 GIS DB 계정 생성 제공 (데이터 카탈로그 포털 내 DB / 계정 정보 조회 가능)</li>
+						<li>DB Tool을 이용한 데이터 조회 및 JDBC 연계 개발 가능</li>
+					</ul>
+					
+					<h5 class="h-tit5">HDFS 브라우징 및 활용 가능</h5>
+					<p class="tuto-txt">빅데이터 플랫폼을 경유하여 수집하는 데이터들은 연구원 하둡 시스템에도 함께 적재하고 있습니다. 하둡 포털인 ivy를 통해 수집한 데이터를 조회하거나 다운로드 가능합니다.</p>
+					<img src="images/tutorial/dcp/102.png">
+					<ul class="tuto-ul">
+						<li>하둡 포털(ivy)을 통한 수집 데이터 상세 조회</li>
+					</ul>
+					<img src="images/tutorial/dcp/103.png">
+					<ul class="tuto-ul">
+						<li>하둡 포털(ivy)을 통한 수집 데이터 조회 및 다운로드 가능(빅데이터 플랫폼을 경유하여 수집된 전체 데이터 조회 및 다운로드 가능)</li>
+					</ul>
+					
+					<h5 class="h-tit5">Table Data API 제공</h5>
+					<p class="tuto-txt">데이터 카탈로그 포털에서 카탈로그 별 단순 데이터 조회 기능을 제공하고 있습니다. 또한, 카탈로그 별 스키마 정보를 이용한 검색을 통해 데이터를 조회하고 이를 다운로드 받는 기능을 제공합니다.</p>
+					<img src="images/tutorial/dcp/104.png">
+					<ul class="tuto-ul">
+						<li>데이터 카탈로그 포털 내 데이터 카탈로그 별 단순 데이터 조회</li>
+					</ul>
+					<img src="images/tutorial/dcp/105.png">
+					<ul class="tuto-ul">
+						<li>데이터 카탈로그 포털 내 데이터 조건 조회</li>
+						<li>REST API 기반의 데이터 조회 및 개발에 활용</li>
+					</ul>
+					
+					<!-- 3. 사용자 구성 -->
+					<h3 id="/tutorial/9?content=3" class="h-tit3">사용자 구성</h3>
+					<h5 class="h-tit5">HUB-PoP 플랫폼의 사용자에게 데이터 카탈로그 포털 서비스 제공</h5>
+					
+					<p class="tuto-txt">데이터 카탈로그 포털의 사용자는 크게 프로젝트 책임자, 프로젝트 개발자, 그리고 시스템 운영자로 나뉘어집니다. 프로젝트 책임자와 개발자는 역할 구분 없이 데이터 카탈로그 포털에 접근 가능하며, 데이터 수집 요청이 가능합니다. <br/>
+					데이터 카탈로그 포털은 별도 로그인 페이지는 제공하지 않습니다. 허브팝 포털에 로그인 하시고, 화면 하단의 데이터 연계 쪽 메뉴를 클릭하시어 접근하실 수 있습니다.</p>
+					<img src="images/tutorial/dcp/005.png">
+					
+					<!-- 4. 데이터 카탈로그 조회 -->
+					<h3 id="/tutorial/9?content=4" class="h-tit3">데이터 카탈로그 조회</h3>
+					
+					<h5 class="h-tit5">데이터 카탈로그 조회 (자료 검색)</h5>
+					<p class="tuto-txt">
+					배전, 송변전 등 업무에 따라 시스템을 분류하고 시스템 별 카탈로그 목록을 트리 형태로 조회할 수 있습니다. 또한, 카탈로그 트리에서 “S” 표시를 통해 해당 연구과제 별 조회 가능한 테이블을 식별하실 수 있습니다.<br/>
+					그리고 오른쪽에는 업무 대분류, 중분류 그리고 테이블 명 등 검색조건을 통해 찾고자 하는 카탈로그를 검색하실 수 있습니다. 이러한 검색을 통해 하단에는 카탈로그 목록이 조회되며, 카탈로그 목록을 통해 업무 대분류, 중분류, 카탈로그 명, 자료 건수 등의 정보를 확인 하실 수 있습니다.
+					</p>
+					<img src="images/tutorial/dcp/006.png">
+					
+					<p class="tuto-txt">1. 데이터 카탈로그는 2가지 방법으로 조회할 수 있습니다.</p>
+					
+					<p class="tuto-txt">1 - 1)  카탈로그 트리 조회</p>
+					<ul class="tuto-ul">
+						<li>배전, 송변전 등 업무에 따른 시스템을 분류하여 해당 시스템에 속해 있는 테이블을 한 눈에 볼 수 있고, 조회할 수 있습니다.</li>
+						<li>또한, 카탈로그 트리에서 보여지는 테이블에 대하여 Select 권한을 의미하는 [S] 표시를 통해 현재 로그인한 사용자에 대한 데이터 조회 권한 여부를 확인할 수 있습니다.</li>
+					</ul>
+					
+					<p class="tuto-txt">1 - 2) 카탈로그 조건 조회</p>
+					<ul class="tuto-ul">
+						<li>업무 대분류, 중분류, 테이블명 등 검색 조건을 통해 사용자가 찾고자 하는 테이블을 검색할 수 있습니다.</li>
+					</ul>
+					<p class="tuto-txt">2. 데이터 카탈로그 조회를 통한 목록을 확인 할 수 있습니다.</p>
+					
+					<p class="tuto-txt">2 - 1)  카탈로그 목록을 통해 확일 할 수 있는 항목은 다음과 같습니다.</p>
+					<ul class="tuto-ul">
+						<li>업무 대분류 : 배전, 송변전 등 업무분류</li>
+						<li>업무 중분류 : DAS, EVDB 등 시스템명</li>
+						<li>적재 주기: 일,월 등 적재 주기</li>
+						<li>카탈로그ID: 카탈로그 등록 시 생성되는 ID</li>
+						<li>데이터 카탈로그명 : 테이블 한글명과 영문명으로 이뤄진 카탈로그 명</li>
+						<li>자료 건수 : 테이블에 적재되어 있는 건수</li>
+						<li>최종 적재일 : 테이블에 데이터가 최종 적재된 일시</li>
+						<li>수집 이력 : 테이블 내 데이터 적재 이력</li>
+					</ul>
+					
+					<h5 class="h-tit5">데이터 카탈로그 조회 (조회 가능 자료 목록)</h5>
+					<p class="tuto-txt">조회 가능 자료 목록을 클릭하시면 연구과제 별 조회 권한을 부여 받은 테이블을 트리 형태로 제공합니다. 엑셀 다운로드를 통해 조회 가능한 테이블 목록을 엑셀로 다운로드 받을 수 있습니다.</p>
+					<img src="images/tutorial/dcp/009.png">
+					<p class="tuto-txt">조회 가능 자료 목록은 2가지 방법으로 확인 할 수 있습니다.</p>
+					
+					<p class="tuto-txt">1 - 1)  조회 가능 자료 트리 조회</p>
+					<ul class="tuto-ul">
+						<li>조회 가능 자료 목록 버튼을 클릭하여 팝업 내 트리 형태로 보여지는 Select 권한이 있는 테이블을 볼 수 있습니다.</li>
+					</ul>
+					
+					<p class="tuto-txt">1 - 2)  전체 자료 다운로드</p>
+					<ul class="tuto-ul">
+						<li>조회 가능 자료 목록 버튼을 클릭하여 생성된 팝업을 통해 전체 자료 다운로드(EXCEL) 버튼을 클릭하여 Select 권한이 있는 테이블 즉, 조회 가능한 테이블 목록 파일을 다운로드 받을 수 있습니다.</li>
+					</ul>
+					
+					<h5 class="h-tit5">데이터 카탈로그 조회 (조회 가능 자료 목록 - Oracle 계정정보)</h5>
+					<p class="tuto-txt">해당 화면에서는 과제별로 제공하는 DB 정보를 확인하실 수 있습니다. 허브팝 포털에서 신규 연구과제를 생성 후에 데이터 카탈로그 포털에 최초 접속시 Oracle 계정을 생성합니다. 위 화면에서 계정을 포함한 Oracle DB 접속 정보를 확인하실 수 있습니다.</p>
+					<img src="images/tutorial/dcp/008.png">
+					
+					<p class="tuto-txt">연구과제별 제공하는 DB 계정정보를 조회하실 수 있습니다</p>
+					
+					<p class="tuto-txt">1 - 1)  Oracle 계정정보</p>
+					<ul class="tuto-ul">
+						<li>신규 프로젝트 과제가 데이터 카탈로그 포털에 최초접속 시 Oracle 계정을 생성합니다.</li>
+						<li>생성된 계정을 통해 요청 데이터를 조회 가능합니다.</li>
+					</ul>
+
+					<h5 class="h-tit5">데이터 카탈로그 조회 (조회 가능 자료 목록 - GIS 계정정보)</h5>
+					<p class="tuto-txt">
+					또한, GIS DB 접속 정보도 확인하실 수 있습니다. 마찬가지로 카탈로그 포털에 최초 접속 시 GIS DB 계정을 생성하며 위 화면에서 계정을 포함한 GIS DB 접속 정보를 확인하실 수 있습니다.
+					위 정보를 확인하시고, pgadmin을 이용하여 설비 DB를 확인 가능하시며 개발에도 활용하실 수 있을거라 보여집니다.
+					</p>
+					<img src="images/tutorial/dcp/010.png">
+					<p class="tuto-txt">연구과제별 제공하는 DB 계정정보를 조회하실 수 있습니다</p>
+					
+					<p class="tuto-txt">1 - 1)  GIS 계정정보</p>
+					<ul class="tuto-ul">
+						<li>신규 프로젝트 과제가 데이터 카탈로그 포털에 최초 접속 시 GIS 계정을 생성합니다.</li>
+						<li>생성된 계정을 통해 GIS 설비 데이터를 조회 가능합니다.</li>
+					</ul>
+					
+					<h5 class="h-tit5">데이터 카탈로그 조회 (조회 가능 자료 목록 - API 샘플)</h5>
+					<p class="tuto-txt">조회 가능 자료 목록의 API 샘플을 선택하여 TABLE DATA API 메뉴를 확인할 수 있습니다. <br/>TABLE DATA API를 활용하여 허브팝 내 저장된 자료에 대해 조회, 저장 가능하며, 사용방법에 대한 가이드를 제공합니다.</p>
+					<img src="images/tutorial/dcp/011.png">
+					<p class="tuto-txt">TABLE DATA API 샘플 메뉴를 통해 기본적인 조회, 저장 기능을 테스트하고 사용 방법을 익힐 수 있습니다.</p>
+					
+					<p class="tuto-txt">1 - 1)  샘플 조회</p>
+					<ul class="tuto-ul">
+						<li>요청 URL 정보로 자료를 조회합니다.</li>
+						<li>사용방법에는 요청 URL을 작성하는 방법과 예제 소스코드가 제공됩니다.</li>
+					</ul>
+					
+					<p class="tuto-txt">1 - 2)  샘플 저장</p>
+					<ul class="tuto-ul">
+						<li>요청 URL 정보로 조회된 자료를 저장합니다.</li>
+						<li>사용방법에는 요청 URL을 작성하는 방법과 예제 소스코드가 제공됩니다.</li>
+					</ul>
+					
+					<p class="tuto-txt">2 - 1)  기상정보 조회, 삭제</p>
+					<ul class="tuto-ul">
+						<li>요청 URL정보 기준으로 기상정보 데이터를 조회합니다.</li>
+						<li>요청 URL정보로 조회 결과(저장 데이터)에 해당하는 자료를 삭제합니다.</li>
+					</ul>
+					
+					<p class="tuto-txt">2 - 1)  기상정보 저장</p>
+					<ul class="tuto-ul">
+						<li>요청 URL정보와 조회 결과(저장 데이터)를 바탕으로 데이터를 저장합니다.</li>
+					</ul>
+					
+					<h5 class="h-tit5">데이터 카탈로그 상세조회</h5>
+					<ul class="tuto-ul">
+						<li>데이터 카탈로그 목록에서 카탈로그 명 클릭시 해당 카탈로그의 상세 정보를 확인하실 수 있습니다.</li>
+						<li>칼럼명, 커멘트, 사이즈 등의 정보를 확인하실 수 있습니다.</li>
+						<li>해당 카탈로그 스키마는 빅데이터 플랫폼에서 수집된 자료를 일차적으로 활용하였으나, 일부 누락된 카탈로그는 레거시 담당자를 통해 스키마 정보를 수집하여 카탈로그를 구축하였습니다.</li>
+					</ul>
+					<img src="images/tutorial/dcp/012.png">
+					<p class="tuto-txt">데이터 카탈로그 조회 화면 내 카탈로그 목록에서 ‘데이터 카탈로그명’을 클릭하여 상세 조회를 할 수 있습니다.</p>
+
+					<h5 class="h-tit5">데이터 카탈로그 상세조회 (샘플 데이터 조회)</h5>
+					<p class="tuto-txt">카탈로그 상세 화면에서 데이터 조회 클릭시, 해당 카탈로그 별 적재된 일부 데이터를 조회하실 수 있습니다.</p>
+					<img src="images/tutorial/dcp/013.png">
+					<p class="tuto-txt">데이터 카탈로그 상세 화면에서 데이터 조회 클릭시 해당 카탈로그의 적재된 데이터를 조회 하실 수 있습니다.</p>
+
+					<h5 class="h-tit5">데이터 카탈로그 상세조회 (상세 데이터 조회)</h5>
+					<p class="tuto-txt">
+						연구과제별 조회 권한이 부여된 카탈로그에 대해 검색을 통해 데이터를 조회하실 수 있습니다.<br/>
+						필수항목은 해당 카탈로그의 키로 식별된 항목이 검색에 제공되며, 키가 아닌 칼럼에 대해서는 선택항목을 추가하시고 검색을  하실 수 있습니다.<br/>
+						이를 통해 하단의 조회 결과로 데이터를 조회하실 수 있으며, 조회결과에 대해 다운로드 기능을 제공할 예정입니다.</p>
+					<img src="images/tutorial/dcp/014.png">
+					
+					<p class="tuto-txt">데이터 카탈로그 상세 화면에서 데이터 검색 클릭시 해당 카탈로그의 적재된 데이터를 조회 하실 수 있습니다.</p>
+					
+					<p class="tuto-txt">1) 검색조건</p>
+					<ul class="tuto-ul">
+						<li>카탈로그의 스키마 정보를 바탕으로 검색조건을 추가하실 수 있습니다.</li>
+						<li>필수조건 : 해당 스키마 키</li>
+						<li>선택항목 : 해당 스키마의 칼럼</li>
+					</ul>
+					
+					<p class="tuto-txt">2) 조회</p>
+					<ul class="tuto-ul">
+						<li>검색조건을 바탕으로 데이터를 조회 가능합니다.</li>
+					</ul>
+<!-- 					<ul class="tuto-ul">3) 다운로드 -->
+<!-- 						<li>조회된 결과를 엑셀 다운로드 가능합니다.</li> -->
+<!-- 					</ul> -->
+
+					<!-- 5. 데이터 카탈로그 등록 -->
+					<h3 id="/tutorial/9?content=5" class="h-tit3">데이터 카탈로그 등록</h3>
+					
+					<h5 class="h-tit5">데이터 카탈로그 등록 (직접입력)</h5>
+					<img src="images/tutorial/dcp/015.png">
+					<p class="tuto-txt">카탈로그는 기본 정보와 상세 정보로 나뉘어 등록됩니다.</p>
+					
+					<p class="tuto-txt">1)  기본 정보는 아래와 같은 항목으로 이루어져있습니다.</p>
+					<ul class="tuto-ul">
+						<li>데이터 요청서ID : 데이터 요청서를 통해 요청 받은 테이블에 대한 카탈로그를 등록하는 경우에 필요한 ID</li>
+						<li>업무 분류 : 업무에 따른 시스템 분류</li>
+						<li>수집 시스템 : 데이터를 수집해오는 시스템</li>
+						<li>자료 유형 : 데이터 유형</li>
+						<li>자료 영문명 : 테이블 영문명</li>
+						<li>자료 한글명 : 테이블 한글명</li>
+						<li>적재 주기 : 수집 시스템으로부터 적재되는 주기</li>
+						<li>카탈로그 제목 : 테이블에 대한 영문명과 한글명의 조합으로, 자료 영문명과 한글명 입력창에 의해 자동 입력</li>
+						<li>상세 설명 : 테이블에 대한 추가 설명</li>
+					</ul>
+					
+					<p class="tuto-txt">2)  상세 정보는 아래와 같은 항목으로 이루어져있습니다.</p>
+					<ul class="tuto-ul">
+						<li>항목명 : 컬럼 한글명</li>
+						<li>영문명 : 컬럼 영문명</li>
+						<li>유형 : 데이터 타입</li>
+						<li>크기(전체) : 데이터 크기</li>
+						<li>크기(소수부) : Number 타입에서 소수부</li>
+						<li>KEY : 해당 컬럼의 KEY 여부</li>
+						<li>NULL : 해당 컬럼의 NULL 값 여부</li>
+						<li>항목 설명 : 컬럼 설명</li>
+					</ul>
+
+					<h5 class="h-tit5">데이터 카탈로그 등록 (엑셀 업로드)</h5>
+					<p class="tuto-txt">데이터 카탈로그 상세 정보는 직접 입력 이외에도 데이터 카탈로그 양식 파일을 다운로드하여 파일 내 카탈로그 상세 정보를 입력 후 업로드 할 수 있습니다.</p>
+					<img src="images/tutorial/dcp/016.png">
+					<img src="images/tutorial/dcp/017.png">
+					
+					<p class="tuto-txt">1) 데이터 카탈로그 양식.xlsx 다운로드</p>
+					<ul class="tuto-ul">
+						<li>Excel 업로드 버튼을 클릭하여 생성된 팝업 창 내에서 ‘※파일 양식 다운로드 : 데이터 카탈로그 양식.xlsx’ 클릭하여 ‘DataCatl_v1.0.xlsx’ 파일을 다운로드 받을 수 있습니다.</li>
+					</ul>
+					
+					<p class="tuto-txt">2) 데이터 카탈로그 양식 업로드</p>
+					<ul class="tuto-ul">
+						<li>파일찾기 버튼을 클릭하여 다운로드한 양식에 카탈로그 상세 정보를 입력하여 업로드 할 수 있습니다.</li>
+					</ul>
+					
+					<p class="tuto-txt">3) 데이터 카탈로그 양식 파일을 통한 업로드 시 파일 내 오류 또는 양식에 맞지 않는 내용이 있을 경우 ‘엑셀 파일 내 해당 컬럼을 확인하세요＇라는 메시지를 반환합니다.</p>
+
+					<!-- 6. 데이터 사용요청 조회 -->
+					<h3 id="/tutorial/9?content=6" class="h-tit3">데이터 사용요청 조회</h3>
+					
+					<h5 class="h-tit5">데이터 사용요청 조회</h5>
+					<p class="tuto-txt">데이터 사용요청 조회화면입니다. 상단은 진행 상태 등 검색 조건으로 구성되며 검색을 통해 요청서 목록을 확인하실 수 있습니다.<br/>
+					아래의 요청서 목록은 요청서ID, 요청 제목, 진행상태로 구성되어 있습니다. 진행상태는 요청, 접수, 작업중, 완료, 반려 이렇게 5단계로 구성됩니다.<br/>
+					요청은 사용자가 데이터 요청서 작성을 완료한 상태를 말합니다.<br/>
+					접수는 운영자는 사용자가 작성한 데이터 요청건을 확인하고 승인한 상태를 말하며, 데이터 카탈로그를 등록하게 됩니다.<br/>
+					작업중은 해당 요청건에 대한 빅데이터 플랫폼과 연계하여 적재가 진행중인 상태를 말하며, 완료는 요청 데이터에 대한 적재, 그리고 권한 부여 작업이 완료된 상태를 말합니다. <br/> 
+					완료의 상태인 경우에는 연구과제는 해당 요청건에 대한 데이터를 접근하실 수 있습니다.<br/>
+					반려는 요청서 내용에 잘못 기재된 내역이 있을 경우 반려가 가능합니다.
+					</p>
+					<img src="images/tutorial/dcp/018.png">
+					
+					<p class="tuto-txt">1. 데이터 사용요청 조회는 전력 SW 연구개발 플랫폼(허브팝)에 저장되어 있는 데이터를 사용 신청 하는 메뉴로서, 아래와 같은 조건을 설정하여 조회 할 수 있습니다.</p>
+					<p class="tuto-txt">1 - 1)  요청 제목 : 데이터 요청서 제목</p>
+					
+					<p class="tuto-txt">1 - 2)  진행 상태 : 요청, 접수, 작업중, 완료, 반려 총 5단계</p>
+					<ul class="tuto-ul">
+						<li>데이터 요청서ID : 데이터 요청서를 통해 요청 받은 테이블에 대한 카탈로그를 등록하는 경우에 필요한 ID</li>
+						<li>요청 : 사용자가 데이터 요청을 마친 상태</li>
+						<li>접수 : 사용자가 올린 데이터 요청을 관리자가 확인하여 승인하였고, 관리자가 데이터 요청서에 대한 카탈로그 등록을 할 수 있는 상태</li>
+						<li>작업중 : 카탈로그가 등록된 데이터 요청서에 대해 요청 데이터 적재 또는 요청 데이터 권한 부여 작업이 이루어지는 상태</li>
+						<li>완료 : 요청 데이터 적재 또는 요청 데이터 권한 부여 작업이 완료되어 관리자가 해당 데이터에 대해 조회 가능을 최종 승인한 상태</li>
+						<li>반려 : 데이터 요청서에 잘못된 내용, 오류, 요청할 수 없는 데이터에 대한 요청 등이 기재되었을 경우 관리자가 해당 데이터 요청서를 반려한 상태</li>
+					</ul>
+					
+					<p class="tuto-txt">2. 조회한 데이터 요청서에 대해 요청 유형, 요청서ID, 요청제목, 진행상태, 요청자, 요청일자 항목을 볼 수 있습니다.</p>
+
+					<!-- 7. 데이터 사용요청 등록 -->
+					<h3 id="/tutorial/9?content=7" class="h-tit3">데이터 사용요청 등록</h3>
+					
+					<h5 class="h-tit5">데이터 사용요청 등록</h5>
+					<p class="tuto-txt">데이터 사용요청 등록은 허브팝에서 수집한 데이터들에 대한 데이터 조회 권한 요청 절차입니다. 작성 절차는 데이터 카탈로그ID를 클릭하시고 목록에서 선택하신 다음  추가 버튼을 통해 다건을 선택하시면 됩니다.
+					또는, 카탈로그 선택을 통해 요청하시고자 하는 카탈로그를 다건 선택하시어 요청하셔도 됩니다.</p>
+					<img src="images/tutorial/dcp/019.png">
+					<p class="tuto-txt">1. 데이터 사용요청 등록은 기본 정보와 외부데이터/내부데이터 요청 정보로 나뉘어 등록됩니다.</p>
+					
+					<p class="tuto-txt">1 - 1)  요청서 기본 정보</p>
+					<ul class="tuto-ul">
+						<li>요청 유형 : 사용요청</li>
+						<li>요청자 : 허브팝 포털에 로그인한 사용자</li>
+						<li>담당 과제명 : 허브팝 포털에 등록된 담당 과제</li>
+						<li>요청 제목 : 외부 데이터 수집 요청 내역에 따라 자동 입력</li>
+						<li>요청 목적 : 사용자가 데이터를 요청하는 상세 목적</li>
+					</ul>
+					
+					<p class="tuto-txt">2. 데이터 사용요청 요청</p>
+					<ul class="tuto-ul">
+						<li>데이터 카탈로그 ID : 데이터 카탈로그 조회를 통해 검색되는 카탈로그ID</li>
+						<li>업무 시스템 : 요청하는 데이터가 사용되고 있는 시스템</li>
+						<li>자료 한글 명 : 요청하는 테이블 한글명</li>
+						<li>자료 영문 명 : 요청하는 테이블 영문명</li>
+					</ul>
+
+					<h5 class="h-tit5">데이터 사용요청 등록</h5>
+					<p class="tuto-txt">데이터 카탈로그 ID나 카탈로그 선택에서 보시는 화면에서는 기존에 권한 부여가 된 카탈로그는 목록에서 제외됩니다.</p>
+					<img src="images/tutorial/dcp/020.png">
+					<p class="tuto-txt">1. 데이터 사용요청 등록은 2가지 방법으로 등록 할 수 있습니다.</p>
+					
+					<p class="tuto-txt">1 - 1)  카탈로그 ID 조회를 통한 등록</p>
+					<ul class="tuto-ul">
+						<li>내부 데이터 수집 요청 양식 내 ‘추가’버튼을 클릭하여 생성된 양식에서 데이터 카탈로그 ID 입력칸 옆 버튼을 클릭하여 원하는 데이터 카탈로그 정보를 불러올 수 있습니다.</li>
+					</ul>
+					<p class="tuto-txt">1 - 2) 카탈로그 트리 조회를 통한 등록</p>
+					<ul class="tuto-ul">
+						<li>카탈로그 선택 버튼을 클릭하여 생성된 팝업 내 트리 형태로 이루어진 카탈로그 목록에서 요청을 원하는 카탈로그들을 선택 시 해당 데이터들을 불러올 수 있습니다.</li>
+					</ul>
+
+					<!-- 8. 데이터 수집요청 조회 -->
+					<h3 id="/tutorial/9?content=8" class="h-tit3">데이터 수집요청 조회</h3>
+					
+					<h5 class="h-tit5">데이터 수집요청 조회</h5>
+					<p class="tuto-txt">데이터 수집요청 조회화면입니다. 상단은 진행 상태 등 검색 조건으로 구성되며 검색을 통해 요청서 목록을 확인하실 수 있습니다. <br/>
+					아래의 요청서 목록은 요청서ID, 요청 제목, 진행상태로 구성되어 있습니다. 진행상태는 요청, 접수, 작업중, 완료, 반려 이렇게 5단계로 구성됩니다.<br/>
+					요청은 사용자가 데이터 요청서 작성을 완료한 상태를 말합니다. 접수는 운영자는 사용자가 작성한 데이터 요청건을 확인하고 승인한 상태를 말하며, 데이터 카탈로그를 등록하게 됩니다.<br/>
+					작업중은 해당 요청건에 대한 빅데이터 플랫폼과 연계하여 적재가 진행중인 상태를 말하며, 완료는 요청 데이터에 대한 적재, 그리고 권한 부여 작업이 완료된 상태를 말합니다. 완료의 상태인 경우에는 연구과제는 해당 요청 건에 대한 데이터를 접근하실 수 있습니다.<br/>
+					반려는 요청서 내용에 잘못 기재된 내역이 있을 경우 반려가 가능합니다.</p>
+					<img src="images/tutorial/dcp/021.png">
+					<p class="tuto-txt">1. 데이터 수집요청 조회는 전력 SW 연구 개발 플랫폼(허브팝)에 저장되어 있지 않은 데이터<br/>(현재 기준 빅데이터 플랫폼에 요청해야 할 데이터)로서, 아래와 같은 조건을 설정하여 조회 할 수 있습니다.</p>
+					<p class="tuto-txt">1-1) 요청 제목 : 데이터 요청서 제목</p>
+					
+					<p class="tuto-txt">1-2) 진행 상태 : 요청, 접수, 작업중, 완료, 반려 총 5단계</p>
+					<ul class="tuto-ul">
+						<li>요청 : 사용자가 데이터 요청을 마친 상태</li>
+						<li>접수 : 사용자가 올린 데이터 요청을 관리자가 확인하여 승인하였고, 관리자가 데이터 요청서에 대한 카탈로그 등록을 할 수 있는 상태</li>
+						<li>작업중 : 카탈로그가 등록된 데이터 요청서에 대해 요청 데이터 적재 또는 요청 데이터 권한 부여 작업이 이루어지는 상태</li>
+						<li>완료 : 요청 데이터 적재 또는 요청 데이터 권한 부여 작업이 완료되어 관리자가 해당 데이터에 대해 조회 가능을 최종 승인한 상태</li>
+						<li>반려 : 데이터 요청서에 잘못된 내용, 오류, 요청할 수 없는 데이터에 대한 요청 등이 기재되었을 경우 관리자가 해당 데이터 요청서를 반려한 상태</li>
+					</ul>
+					<p class="tuto-txt">2. 조회한 데이터 요청서에 대해 요청 유형, 요청서ID, 요청제목, 진행상태, 요청자, 요청일자 항목을 볼 수 있습니다.</p>
+					
+					<!-- 9. 데이터 수집요청 등록 -->
+					<h3 id="/tutorial/9?content=9" class="h-tit3">데이터 수집요청 등록</h3>
+					
+					<h5 class="h-tit5">데이터 수집요청 등록</h5>
+					<p class="tuto-txt">작성방법은 수집 시스템을 선택하시고, 업무시스템을 선택합니다. 그리고 요청하시는 자료 한글명/영문명 등 요청 정보를 입력하시면 됩니다. <br/>여러건 요청하실 경우에는 추가 버튼을 클릭하시어 다건을 작성하실 수 있습니다.</p>
+					<img src="images/tutorial/dcp/022.png">
+					<p class="tuto-txt">데이터 수집요청 등록은 빅데이터 플랫폼이 보유하고 있는 자료에 대한 수집 요청입니다.</p>
+					
+					<p class="tuto-txt">1) 요청서 기본 정보</p>
+					<ul class="tuto-ul">
+						<li>요청자 : 허브팝 포털에 로그인한 사용자</li>
+						<li>담당 과제명 : 허브팝 포털에 등록된 담당 과제</li>
+						<li>요청 제목 : 데이터 수집 요청 내역에 따라 자동 입력</li>
+						<li>요청 목적 : 사용자가 데이터를 요청하는 상세 목적</li>
+					</ul>
+					
+					<p class="tuto-txt">2) 데이터 수집 요청 양식</p>
+					<ul class="tuto-ul">
+						<li>수집 시스템 : 데이터를 수집해오는 시스템</li>
+						<li>업무 시스템 : 요청하는 데이터가 사용되고 있는 시스템</li>
+						<li>자료 한글 명 : 요청하는 테이블 한글명</li>
+						<li>자료 영문 명 : 요청하는 테이블 영문명</li>
+						<li>자료 유형 : 요청하는 데이터 유형</li>
+						<li>자료 성격 : 요청하는 테이블 상세 정보</li>
+					</ul>
+
+					<h5 class="h-tit5">데이터 수집요청 등록</h5>
+					<p class="tuto-txt">이러한 작업이 번거로우실듯 하여 화면의 EXCEL 업로드를 클릭하시면 팝업에서 샘플 파일을 다운로드 가능합니다. <br/>다운로드 받으신 샘플 양식을 여시고 요청내역을 작성하신 다음 업로드 하시면 됩니다.</p>
+					<img src="images/tutorial/dcp/023.png">
+					<p class="tuto-txt">데이터 수집요청은 2가지 방법으로 등록 할 수 있습니다.</p>
+					<p class="tuto-txt">1) 직접 입력</p>
+					<ul class="tuto-ul">
+						<li>수집 시스템, 업무시스템, 자료한글명, 자료 영문명, 자료 유형을 입력하여 등록합니다.</li>
+					</ul>
+					<p class="tuto-txt">2) Excel 업로드</p>
+					<ul class="tuto-ul">
+						<li>Excel  업로드 버튼을 클릭하여 생성되는 팝업 창 내에서 데이터 요청 양식.xlsx를 다운로드 하여 양식을 다운로드 합니다.</li>
+						<li>다운로드한 양식에 내용을 입력하여 파일 찾기 버튼을 클릭하여 데이터 요청 양식 파일을 업로드할 수 있습니다.</li>
+					</ul>
+					
+					<h5 class="h-tit5">데이터 수집요청 등록</h5>
+					<p class="tuto-txt">
+						다운받으신 업로드 샘플 양식입니다. 화면에서 보신 신청서와 같이 엑셀 항목 구성도 동일합니다.<br/>
+						수집시스템, 업무시스템 등의 정보를 작성하시고 저장하신 다음에 업로드 하시면 됩니다.
+					</p>
+					<img src="images/tutorial/dcp/024.png">
+					<p class="tuto-txt">다운로드 받으신 엑셀을 열어서 엑셀을 작성후에 업로드 하시면 됩니다.</p>
+					<p class="tuto-txt">1) 입력항목</p>
+					<ul class="tuto-ul">
+						<li>수집 시스템 : 데이터를 수집해오는 시스템</li>
+						<li>업무 시스템 : 요청하는 데이터가 사용되고 있는 시스템</li>
+						<li>자료 한글 명 : 요청하는 테이블 한글명</li>
+						<li>자료 영문 명 : 요청하는 테이블 영문명</li>
+						<li>자료 유형 : 요청하는 데이터 유형</li>
+						<li>자료 성격 : 요청하는 테이블 상세 정보</li>
+					</ul>
+				</div>
+				<!-- tutorial menu -->
+				<div class="sideMenu">
+					<dl>
+						<dt>목차</dt>
+						<dd>
+							<ul>
+								<li><a href="#/tutorial/9?content=1" class="on content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">데이터 수집 아키텍처</a></li>
+								<li><a href="#/tutorial/9?content=2" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">수집데이터 제공 방안</a></li>
+								<li><a href="#/tutorial/9?content=3" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">사용자 구성</a></li>
+								<li><a href="#/tutorial/9?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">데이터 카탈로그 조회</a></li>
+								<li><a href="#/tutorial/9?content=5" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">데이터 카탈로그 등록</a></li>
+								<li><a href="#/tutorial/9?content=6" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">데이터 사용요청 조회</a></li>
+								<li><a href="#/tutorial/9?content=7" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">데이터 사용요청 등록</a></li>
+								<li><a href="#/tutorial/9?content=8" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">데이터 수집요청 조회</a></li>
+								<li><a href="#/tutorial/9?content=9" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">데이터 수집요청 등록</a></li>
+							</ul>
+						</dd>
+					</dl>
+					<div class="btn_top_area">
+						<a href="#" class="btn_top"><span class="txt">Top</span></a>
+					</div>
+				</div>
+				<!-- //tutorial menu -->
+			</div>
+			<!-- //content -->

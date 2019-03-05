@@ -8,9 +8,17 @@
 					<div class="navWrap">
 						<ul class="nav nav-tabs" role="tablist">
 							<li role="presentation" class="active"><a href="#/tutorial/1" role="tab" data-toggle="tab">가상 서버 활용하기</a></li>
+							<!-- 2018.10.08 sg0730 SW 개발하기에서 표준APP.개발 활용하기로 문구 변경. -->
 							<li role="presentation"><a href="#/tutorial/2" role="tab" data-toggle="tab">표준APP.개발 활용하기</a></li>
+							<!--
+							<li role="presentation"><a href="#/tutorial/3" role="tab" data-toggle="tab">분석 허브 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/4" role="tab" data-toggle="tab">분석 추상화 활용하기</a></li>
+							 -->
+							<li role="presentation"><a href="#/tutorial/5" role="tab" data-toggle="tab">GIS 플랫폼 활용하기</a></li>
 							<li role="presentation"><a href="#/tutorial/6" role="tab" data-toggle="tab">개발 파이프라인 활용하기</a></li>
-							<li role="presentation" ><a href="#/tutorial/8" role="tab" data-toggle="tab">API Gateway 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/7" role="tab" data-toggle="tab">개발 프레임워크 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/8" role="tab" data-toggle="tab">API Gateway 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/9" role="tab" data-toggle="tab">데이터 연계 활용하기</a></li>
 						</ul>
 					</div>
 					<!-- //Nav tabs -->
@@ -21,7 +29,7 @@
 					<h2 class="h-tit2">가상서버 활용하기</h2>
 
 					<h3 class="h-tit3" id="/tutorial/1?content=1">가상서버 만들기</h3>
-					<p class="tuto-txt">가상서버를 만들기를 통하여 독립된 전용 서버를 자동으로 구축할 수 있습니다. 생성된 가상서버에 스토리지 디스크을 추가하거나, 네트웍을 추가하는 등의 관리가 가능합니다.</p>
+					<p class="tuto-txt">가상서버를 만들기를 통하여 독립된 전용 서버를 자동으로 구축할 수 있습니다. 생성된 가상서버에 스토리지 볼륨을 추가하거나, 네트웍을 추가하는 등의 관리가 가능합니다.</p>
 					
 					<!-- 인스턴스 S -->
 					<img src="images/tutorial/instance.png" alt="">
@@ -45,33 +53,33 @@
 					</ul>
 					<!-- 인스턴스 E -->
 					
-					<!-- 디스크 스토리지 S -->
-					<h3 class="h-tit3" id="/tutorial/1?content=3">디스크 생성</h3>
+					<!-- 볼륨 스토리지 S -->
+					<h3 class="h-tit3" id="/tutorial/1?content=3">볼륨 생성</h3>
 					<p class="tuto-txt">가상서버에서 활용 가능한 스토리지를 생성할 수 있습니다.</p>
 
 					<img src="images/tutorial/iaas/003.png" alt="">
 					<ul class="tuto-ul">
 						<li>[대시보드]메뉴를 클릭합니다.</li>
-						<li>[디스크 추가]버튼을 클릭하여 하단에 [디스크 추가]를 호출합니다.</li>
-						<li>[디스크 추가 레이어 팝업]에서 정보들을 순서에 맞게 정확하게 입력합니다.</li>
-						<li> - [이름]입력, [디스크크기]설정, [설명]입력</li>
-						<li>[저장]버튼을 클릭하여 디스크을 생성합니다.</li>
+						<li>[볼륨 추가]버튼을 클릭하여 하단에 [볼륨 추가]를 호출합니다.</li>
+						<li>[볼륨 추가 레이어 팝업]에서 정보들을 순서에 맞게 정확하게 입력합니다.</li>
+						<li> - [이름]입력, [볼륨크기]설정, [설명]입력</li>
+						<li>[저장]버튼을 클릭하여 볼륨을 생성합니다.</li>
 					</ul>
-					<!-- 디스크 스토리지 E -->
+					<!-- 볼륨 스토리지 E -->
 					
-					<h3 class="h-tit3" id="/tutorial/1?content=4">디스크 연결</h3>
-					<h5 class="h-tit5">가상서버 디스크연결</h5>
+					<h3 class="h-tit3" id="/tutorial/1?content=4">볼륨 연결</h3>
+					<h5 class="h-tit5">가상서버 볼륨연결</h5>
 					<img src="images/tutorial/iaas/004.png" alt="">
 					<ul class="tuto-ul">
 						<li>[대시보드]메뉴를 클릭합니다.</li>
 						<li>가상서버 현황 목록 중에서 연결하고자하는 특정 가상서버의 [···]아이콘을 클릭합니다.
-						<li>드롭 다운 메뉴에서 [디스크 연결] 메뉴를 클릭합니다.</li>
-						<li>[디스크 연결 레이어 팝업]에서 연결할 디스크을 지정합니다.</li>
-						<li>[저장]버튼을 클릭하여 디스크을 연결합니다.</li>
+						<li>드롭 다운 메뉴에서 [볼륨 연결] 메뉴를 클릭합니다.</li>
+						<li>[볼륨 연결 레이어 팝업]에서 연결할 볼륨을 지정합니다.</li>
+						<li>[저장]버튼을 클릭하여 볼륨을 연결합니다.</li>
 					</ul>
-					<!-- 디스크 스토리지 E -->
+					<!-- 볼륨 스토리지 E -->
 
-					<h5 class="h-tit5">SSH 접속을 통한 디스크 마운트</h5>
+					<h5 class="h-tit5">SSH 접속을 통한 볼륨 마운트</h5>
 					<img src="images/tutorial/instanceVolume04.png" alt="">
 					<ul class="tuto-ul">
 						<li>인스턴스 SSH 접속을 합니다.</li>
@@ -315,8 +323,8 @@
 							<ul>
 								<li><a href="#/tutorial/1?content=1" class="on content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">가상서버 만들기</a></li><!-- selected class "on" -->
 								<li><a href="#/tutorial/1?content=2" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">가상서버 생성</a></li>
-								<li><a href="#/tutorial/1?content=3" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">디스크 생성</a></li>
-								<li><a href="#/tutorial/1?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">디스크 연결</a></li>
+								<li><a href="#/tutorial/1?content=3" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">볼륨 생성</a></li>
+								<li><a href="#/tutorial/1?content=4" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">볼륨 연결</a></li>
 								<li><a href="#/tutorial/1?content=5" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">네트워크 연결</a></li>
 								<li><a href="#/tutorial/1?content=6" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">키페어</a></li>
 								<li><a href="#/tutorial/1?content=7" class="content" onclick="$('.sideMenu .content').removeClass('on'); $(this).addClass('on');">보안정책</a></li>

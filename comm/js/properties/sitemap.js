@@ -221,6 +221,13 @@ angular.module('app')
                         controller: 'commTutorialCtrl',
                         templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial4.html'
                     },
+                    tutorial5: {
+                        name: 'tutorial5',
+                        stateKey: 'commTutorial5',
+                        url: '/tutorial/5',
+                        controller: 'commTutorialCtrl',
+                        templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial5.html'
+                    },
                     tutorial6: {
                         name: 'tutorial6',
                         stateKey: 'commTutorial6',
@@ -228,12 +235,26 @@ angular.module('app')
                         controller: 'commTutorialCtrl',
                         templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial6.html'
                     },
+                    tutorial7: {
+                        name: 'tutorial7',
+                        stateKey: 'commTutorial7',
+                        url: '/tutorial/7',
+                        controller: 'commTutorialCtrl',
+                        templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial7.html'
+                    },
                     tutorial8: {
                         name: 'tutorial8',
                         stateKey: 'commTutorial8',
                         url: '/tutorial/8',
                         controller: 'commTutorialCtrl',
                         templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial8.html'
+                    },
+                    tutorial9: {
+                        name: 'tutorial9',
+                        stateKey: 'commTutorial9',
+                        url: '/tutorial/9',
+                        controller: 'commTutorialCtrl',
+                        templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial9.html'
                     }/*,
                     
                     /*,

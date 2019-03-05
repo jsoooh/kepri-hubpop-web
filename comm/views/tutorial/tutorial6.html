@@ -8,8 +8,15 @@
 						<ul class="nav nav-tabs" role="tablist">
 							<li role="presentation"><a href="#/tutorial/1" role="tab" data-toggle="tab">가상 서버 활용하기</a></li>
 							<li role="presentation"><a href="#/tutorial/2" role="tab" data-toggle="tab">표준APP.개발 활용하기</a></li>
+							<!--
+							<li role="presentation"><a href="#/tutorial/3" role="tab" data-toggle="tab">분석 허브 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/4" role="tab" data-toggle="tab">분석 추상화 활용하기</a></li>
+							 -->
+							<li role="presentation"><a href="#/tutorial/5" role="tab" data-toggle="tab">GIS 플랫폼 활용하기</a></li>
 							<li role="presentation" class="active"><a href="#/tutorial/6" role="tab" data-toggle="tab">개발 파이프라인 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/7" role="tab" data-toggle="tab">개발 프레임워크 활용하기</a></li>
 							<li role="presentation"><a href="#/tutorial/8" role="tab" data-toggle="tab">API Gateway 활용하기</a></li>
+							<li role="presentation"><a href="#/tutorial/9" role="tab" data-toggle="tab">데이터 연계 활용하기</a></li>
 						</ul>
 					</div>
 					<!-- //Nav tabs -->
@@ -66,12 +73,15 @@
 							<li>어플리케이션의 hostname을 입력합니다. 디폴트로 빌드잡 이름이 입력됩니다.</li>
 							<li>어플리케이션이 start하는 시간을 입력합니다. 디폴트로 60(s)가 입력됩니다.</li>
 							<li>
-								PAAS에 push할 어플리케이션 파일의 위치를 입력합니다. 디폴트로 빌드가 끝난 파일은 trunk/target폴더에 위치합니다. 
-								파일명은 pom.xml에 입력한 artifactId-version.packaging입니다. 예를 들어 pom파일에 아래와 같이 되어있다면 
-								<groupId>pipeline</groupId>
-								<artifactId>test</artifactId>
-								<version>0.0.1-SNAPSHOT</version>
-								<packaging>war</packaging>빌드후 생성된 파일은 test-0.0.1-SNAPSHOT.war가 됩니다. 따라서 Application Path에는 trunk/target/test-0.0.1-SNAPSHOT.war을 입력합니다.
+								PAAS에 push할 어플리케이션 파일의 위치를 입력합니다. 디폴트로 빌드가 끝난 파일은 trunk/target폴더에 위치합니다.<br/> 
+								파일명은 pom.xml에 입력한 artifactId-version.packaging입니다. <br/>예를 들어 pom파일에 아래와 같이 되어있다면 <br/>
+								<div class="txt_source">
+									<span class="tag_type">&lt;groupId&gt;</span>pipeline<span class="tag_type">&lt;/groupId&gt;</span><br/>
+									<span class="tag_type">&lt;artifactId&gt;</span>tes<span class="tag_type">&lt;/artifactId&gt;</span><br/>
+									<span class="tag_type">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag_type">&lt;/version&gt;</span><br/>
+									<span class="tag_type">&lt;packaging&gt;</span>war<span class="tag_type">&lt;/packaging&gt;</span><br/>
+								</div>
+								빌드후 생성된 파일은 test-0.0.1-SNAPSHOT.war가 됩니다. 따라서 Application Path에는 trunk/target/test-0.0.1-SNAPSHOT.war을 입력합니다.
 							</li>
 						</ul>
 						
