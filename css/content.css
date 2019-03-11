@@ -2700,8 +2700,10 @@ a.ext_link:hover {text-decoration:underline;}
 .accss_guideWrap h2 {font-size:20px; font-weight:700; color:#333; /* padding:20px 0; */}
 .accss_guideWrap h3 {font-size:18px; font-weight:700; color:#333; padding-top:40px;}
 .accss_guideWrap h4 {font-size:16px; font-weight:700; color:#333; padding:40px 0 0 10px;}
+.accss_guideWrap h5 {font-size:16px; font-weight:700; color:#333; padding:50px 0 0 12px;}
+.accss_guideWrap h5::before {display:inline-block; content:''; width:5px; height:13px; background:#2785d5; margin-right:7px;}
 .accss_guideWrap p {position:relative;}
-.accss_guideWrap p.txt_level1 {font-size:15px; color:#333; padding:15px 0 25px 0;}
+.accss_guideWrap p.txt_level1 {font-size:15px; color:#333; line-height:22px; padding:15px 0 25px 0;}
 .accss_guideWrap p.txt_level1::before {position:absolute; top:24px; left:17px; display:none; content:''; width:7px; height:2px; background:#4a4a4a; margin-right:5px;}
 .accss_guideWrap p.txt_level1.blt_none {padding:15px 0 0 20px;}
 .accss_guideWrap p.txt_level1.blt_none::before {display:none;}
@@ -2716,6 +2718,8 @@ a.ext_link:hover {text-decoration:underline;}
 .accss_guideWrap p.txt_level3.type2::before {position:absolute; top:11px; left:20px; display:inline-block; content:''; width:5px; height:7px; background: url("../images/ico_txt_blt.png") no-repeat 0 0;  margin-right:5px;}
 .accss_guideWrap p.txt_level4 {font-size:14px; color:#777; padding:8px 0 0 25px;}
 .accss_guideWrap p.txt_level4 em {display:inline-block; margin-right:3px;}
+.accss_guideWrap span.txt_level4 {font-size:14px; color:#777; padding:8px 0 0 25px;}
+.accss_guideWrap span.txt_level4 em {display:inline-block; margin-right:3px;}
 .accss_guideWrap .imgWrap {border:1px solid #d6d6d6; text-align:center; padding:10px; margin:80px 0 10px 0;}
 .accss_guideWrap h4 + .imgWrap {margin-top:20px;}
 .accss_guideWrap p.txt_level1 + h4 {padding-top:40px;}
