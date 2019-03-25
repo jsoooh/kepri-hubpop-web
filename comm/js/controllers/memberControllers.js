@@ -138,7 +138,7 @@ angular.module('portal.controllers')
                 templateUrl: _COMM_VIEWS_ + "/user/popChangePasswordForm.html" + _VersionTail(),
                 okName : $translate.instant("label.change")
             };
-            pop.changePasswordData = {
+            $scope.pop.changePasswordData = {
                 oldPassword : "",
                 password : "",
                 retypePassword : ""
@@ -146,7 +146,7 @@ angular.module('portal.controllers')
             common.showDialog($scope, $event, dialogOptions);
             // Dialog ok 버튼 클릭 시 액션 정의
             $scope.popDialogOk = function () {
-                pop.changePasswordAction(pop.changePasswordData);
+                pop.changePasswordAction($scope.pop.changePasswordData);
             }
         };
 
