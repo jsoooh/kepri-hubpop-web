@@ -90,14 +90,27 @@ angular.module('common.controllers')
                         break;
                     }
                 }
+
+                //3. 공용계정(AI분석, ex:commonuser11) Check
+                $scope.emailCommonError = false;
+                var arrCommon = $scope.memberInfo.email.split('commonuser');
+
+                if (arrCommon.length ==  2) {
+                    var id2 = arrCommon[1]*1;
+                    if (!isNaN(id2) && typeof id2 === "number") {
+                        $scope.emailCommonError = true;
+                    }
+                }
+
             }
         };
 
 
         $scope.resetEmail = function () {
-            $scope.emailError      = false;     //이메일 dup Check
-            $scope.emailTempError  = false;     //임시 이메일 Check
-            $scope.blurSignupEmail = false;
+            $scope.emailError       = false;     //이메일 dup Check
+            $scope.emailTempError   = false;     //임시 이메일 Check
+            $scope.emailCommonError = false;     //공용계정(AI분석, ex:commonuser11) Check
+            $scope.blurSignupEmail  = false;
         };
 
         // 비밀번호확인 check
@@ -147,6 +160,11 @@ angular.module('common.controllers')
             //임시 이메일 체크
             if ($scope.emailTempError) {
                 common.showAlert($translate.instant('label.signup'),$translate.instant('message.mi_allow_temp_email'));
+                return;
+            }
+            //공용계정(AI분석, ex:commonuser11) Check
+            if ($scope.emailCommonError) {
+                common.showAlert($translate.instant('label.signup'), "[commonuser]+[숫자] 형식의 아이디는 사용하실 수 없습니다.");
                 return;
             }
 
@@ -284,10 +302,10 @@ angular.module('common.controllers')
             link: function(scope, element, attr){
                 element.on('keydown', function(event){
                     var key = (event.which) ? event.which : event.keyCode;
-                    if((key >=48 && key <= 57) || (key >=96 && key <= 105) || (key == 8) || (key == 9) || (key == 13) || (key == 16) || (key == 37) || (key == 39) || (key == 116)){
+                    if ((key >=48 && key <= 57) || (key >=96 && key <= 105) || (key == 8) || (key == 9) || (key == 13) || (key == 16) || (key == 37) || (key == 39) || (key == 116)){
                         return true;
                     }
-                    else{
+                    else {
                         return false;
                     }
                 });

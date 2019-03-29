@@ -18,7 +18,7 @@ angular.module('app')
                 controller: 'commSignupCtrl',
                 templateUrl: _COMM_VIEWS_ + '/user/signup.html',
                 mainBodyTemplateUrl : _COMM_VIEWS_+'/loginLayout.html'+_VERSION_TAIL_
-            },
+            }
         },
         leftMenus: {
             common: {
@@ -54,7 +54,7 @@ angular.module('app')
                                 url: '/comm/projects/first',
                                 controller: 'commFirstOrgProjectMainCtrl',
                                 templateUrl: _COMM_VIEWS_+'/org/firstOrgProjectMain.html',
-                                mainContentsClass: 'pd0',
+                                mainContentsClass: 'pd0'
                             },
                             projectDetail: {
                                 mainTop: true,
@@ -279,42 +279,42 @@ angular.module('app')
                         stateKey: 'sampleTable',
                         url: '/sample/table',
                         controller: 'sampleTableCtrl',
-                        templateUrl: _COMM_VIEWS_ + '/sample/sampleTable.html',
+                        templateUrl: _COMM_VIEWS_ + '/sample/sampleTable.html'
                     },
                     sampleTableScroll: {
                         name: '2. 스크롤 테이블',
                         stateKey: 'sampleTableScroll',
                         url: '/sample/table_scroll',
                         controller: 'sampleTableScrollCtrl',
-                        templateUrl: _COMM_VIEWS_ + '/sample/sampleTableScroll.html',
+                        templateUrl: _COMM_VIEWS_ + '/sample/sampleTableScroll.html'
                     },
                     sampleProgressBar: {
                         name: '3. 프로그래스바',
                         stateKey: 'sampleProgressBar',
                         url: '/sample/progress_bar',
                         controller: 'sampleProgressBarCtrl',
-                        templateUrl: _COMM_VIEWS_ + '/sample/sampleProgressBar.html',
+                        templateUrl: _COMM_VIEWS_ + '/sample/sampleProgressBar.html'
                     },
                     sampleDragAndDrop: {
                         name: '4. 드레그앤드랍',
                         stateKey: 'sampleDragAndDrop',
                         url: '/sample/drag_and_drop',
                         controller: 'sampleDragAndDropCtrl',
-                        templateUrl: _COMM_VIEWS_ + '/sample/sampleDragAndDrop.html',
+                        templateUrl: _COMM_VIEWS_ + '/sample/sampleDragAndDrop.html'
                     },
                     sampleChart: {
                         name: '5. 차트',
                         stateKey: 'sampleChart',
                         url: '/sample/chart',
                         controller: 'sampleChartCtrl',
-                        templateUrl: _COMM_VIEWS_ + '/sample/sampleChart.html',
+                        templateUrl: _COMM_VIEWS_ + '/sample/sampleChart.html'
                     },
                     samplePop: {
                         name: '6. 팝업',
                         stateKey: 'samplePop',
                         url: '/sample/pop',
                         controller: 'samplePopCtrl',
-                        templateUrl: _COMM_VIEWS_ + '/sample/samplePop.html',
+                        templateUrl: _COMM_VIEWS_ + '/sample/samplePop.html'
                     },
                     demo: {
                         name: 'demoPage',
@@ -326,7 +326,7 @@ angular.module('app')
                         stateKey: 'demoNo',
                         mainContentsClass: 'pd0',
                         url: '/sample/demoNo/:demoPage'
-                    },
+                    }
                 }
             }
         } // leftMenus

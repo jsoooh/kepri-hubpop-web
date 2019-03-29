@@ -5,6 +5,7 @@ angular.module('portal.controllers')
         _DebugConsoleLog("memberControllers.js : commUserEditCtrl", 1);
 
         var ct = this;
+        ct.bCommon = (common.getUser() != null && common.getUser().common != null) ? common.getUser().common : false;
 
         // popup modal에서 사용 할 객체 선언
         var pop = $scope.pop = {};
@@ -94,7 +95,7 @@ angular.module('portal.controllers')
 
         /*회원 탈퇴*/
         $scope.signout = function() {
-            var showConfirm = common.showConfirm($translate.instant('label.signout'), "탈퇴하시면 사용중인 자원은 삭제됩니다.\n 정말로 탈퇴 하시겠습니까?", "info");
+            var showConfirm = common.showConfirm($translate.instant('label.signout'), "탈퇴하시면 사용 중인 자원은 삭제됩니다.\n 정말로 탈퇴 하시겠습니까?", "info");
             showConfirm.then(function () {
                 $scope.deleteUser();
             });
