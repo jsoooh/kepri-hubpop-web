@@ -43,7 +43,7 @@ angular.module('common.controllers')
         }
 
         ct.ssoUserCreating = false;
-        ct.notice = true;
+        ct.notice = false;
 
         $scope.authenticating = false;
         $scope.login = function (evt) {
