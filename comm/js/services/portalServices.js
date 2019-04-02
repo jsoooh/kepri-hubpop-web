@@ -644,7 +644,7 @@ angular.module('portal.services', [])
         paging.makePagingOptions = function(data,fn) {
             var opt = {};
             opt.currentPage = data.number;
-            opt.pageSize = 10;
+            opt.pageSize = data.size == null ? 10 : data.size;
             opt.total = data.totalElements;
             return opt;
         };
