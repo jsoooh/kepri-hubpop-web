@@ -13,7 +13,7 @@
 							<input type="text" class="form-control" maxlength="30" name="subDomain" ng-model="pop.domain.subDomain" validation="alpha_num|required|custom:pop.fn.subDomainCustomValidationCheck(pop.domain.subDomain)" placeholder="서브 도메인명을 입력하세요.">
 						</div>
 						<div class="two_box">
-							<select name="selectBaseDomain" class="form-control" ng-model="pop.domain.baseDomain" validation="required">
+							<select name="selectBaseDomain" class="form-control" ng-model="pop.domain.baseDomain" validation="required" style="width:180px;">
 								<option ng-if="!pop.baseDomains || pop.baseDomains.length == 0" value="">도메인 없음</option>
 								<option ng-repeat="item in pop.baseDomains" value="{{item.domain}}">{{item.domain}}</option>
 							</select>

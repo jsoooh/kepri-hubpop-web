@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
+    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, common, ValidationService, CONSTANTS, compuDetailService) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -18,7 +18,7 @@ angular.module('iaas.controllers')
         ct.addNetwork = {};
         ct.roles = [];
         ct.volumeRoles = [];
-        ct.consoleLogLimit = 50 ;
+        ct.consoleLogLimit = 50;
         ct.actionLogLimit = 5;
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenantId;
@@ -41,7 +41,7 @@ angular.module('iaas.controllers')
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
-        }
+        };
 
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function ($event) {
@@ -182,7 +182,7 @@ angular.module('iaas.controllers')
             });
         };
 
-      //sg0730 차후 서버 이미지 생성 후 페이지 이동.
+       //sg0730 차후 서버 이미지 생성 후 페이지 이동.
         ct.reflashCallBackFunction = function (instance) {
             ct.instance.vmState = instance.vmState;
             ct.instance.uiTask = instance.uiTask;
@@ -223,7 +223,6 @@ angular.module('iaas.controllers')
             label : "{percentage}%",
             percentage : 0
         };
-
 
         ct.ramRoundProgress = {
             label : "{percentage}%",
@@ -281,7 +280,6 @@ angular.module('iaas.controllers')
             }
         };
 
-
         $scope.$on('userTenantChanged',function(event,status) {
             $scope.main.goToPage("/iaas");
         });
@@ -332,7 +330,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
-                instanceId : ct.data.instanceId,
+                instanceId : ct.data.instanceId
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
@@ -439,7 +437,7 @@ angular.module('iaas.controllers')
             return series;
         };
 
-       /* // 도메인 연결 버튼
+        /*// 도메인 연결 버튼
         ct.fn.connectDomainFormOpen = function() {
             if (ct.instance.floatingIp == '') {
                 common.showAlertError('접속 IP 주소가 없으면 도메인 연결을 할 수 없습니다.');
@@ -482,10 +480,9 @@ angular.module('iaas.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-
         // sg0730 차후 callback 처리 고민.
         ct.refalshDomainCallBackFunction = function () {
-            ct.fn.getInstanceInfo();
+            ct.fn.listDomains();
         };
 
         // 도메인 반환 버튼
@@ -504,7 +501,7 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain/service', 'DELETE', param);
             returnPromise.success(function (data, status, headers) {
-                ct.fn.getInstanceInfo();
+                ct.fn.listDomains();
                 common.showAlertSuccess("도메인이 삭제 되었습니다.");
             });
             returnPromise.error(function (data, status, headers) {
@@ -689,7 +686,7 @@ angular.module('iaas.controllers')
         };
 
         //인스턴스 디스크 생성 팝업
-       /* ct.fn.createInstanceVolumePop = function(instance) {
+        /*ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
             $(".aside").stop().animate({"right":"-360px"}, 400);
@@ -711,13 +708,11 @@ angular.module('iaas.controllers')
             	$scope.actionLoading = true; // action loading
                
         }; 
-        
-        
+
         // sg0730 인스턴스 디스크 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
             ct.fn.searchInstanceVolumeList();
         };
-        
 
         // 접속 IP 설정 팝업
         ct.fn.IpConnectPop = function() {
@@ -791,6 +786,20 @@ angular.module('iaas.controllers')
                 $timeout(function () {
                     $('#system_event_history_panel.scroll-pane').jScrollPane({});
                 }, 100);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //서비스 도메인 조회
+        ct.fn.listDomains = function() {
+            $scope.main.loadingMainBody = true;
+            var returnPromise = compuDetailService.listDomains(ct.data.instanceId);
+            returnPromise.success(function (data) {
+                ct.instance.instanceDomainLinkInfos = data.content.iaasInstanceDomainLinkInfoObjArray;
+                ct.fn.setRdpConnectDomain(ct.instance);
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -2768,7 +2777,6 @@ angular.module('iaas.controllers')
     ///////////////////////////////////////////////////////////////////////////////
     ///////////////2018.11.21 sg0730 도메인 등록 팝업////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////
     .controller('iaasPopConnDomainFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
     	_DebugConsoleLog("iaasPopConnDomainFormCtrl.js : iaasPopConnDomainFormCtrl", 1);
     	
@@ -2779,7 +2787,7 @@ angular.module('iaas.controllers')
     	pop.fn 							= {};
     	pop.domain						= {};
         pop.orgDomain					= {};
-        pop.orgDomainLinkInfo   = {};
+        pop.orgDomainLinkInfo           = {};
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
     	pop.instance 					= $scope.dialogOptions.instance;
 
