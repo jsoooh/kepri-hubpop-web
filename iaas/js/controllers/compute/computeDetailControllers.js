@@ -795,7 +795,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var returnPromise = computeDetailService.listDomains(ct.data.instanceId);
             returnPromise.success(function (data) {
-                ct.instance.instanceDomainLinkInfos = data.content.iaasInstanceDomainLinkInfoObjArray;
+                ct.instance.instanceDomainLinkInfos = data.content;
                 ct.fn.setRdpConnectDomain(ct.instance);
                 $scope.main.loadingMainBody = false;
             });
