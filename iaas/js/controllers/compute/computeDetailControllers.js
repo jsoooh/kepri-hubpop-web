@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, common, ValidationService, CONSTANTS, compuDetailService) {
+    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, common, ValidationService, CONSTANTS, computeDetailService) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -793,7 +793,7 @@ angular.module('iaas.controllers')
         //서비스 도메인 조회
         ct.fn.listDomains = function() {
             $scope.main.loadingMainBody = true;
-            var returnPromise = compuDetailService.listDomains(ct.data.instanceId);
+            var returnPromise = computeDetailService.listDomains(ct.data.instanceId);
             returnPromise.success(function (data) {
                 ct.instance.instanceDomainLinkInfos = data.content.iaasInstanceDomainLinkInfoObjArray;
                 ct.fn.setRdpConnectDomain(ct.instance);

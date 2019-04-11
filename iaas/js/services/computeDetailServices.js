@@ -1,17 +1,17 @@
 //'use strict';
 
 angular.module('iaas.services')
-    .factory('compuDetailService', function (common, CONSTANTS) {
+    .factory('computeDetailService', function (common, CONSTANTS) {
 
-        var compuDetailService = {};
+        var computeDetailService = {};
 
-        compuDetailService.listDomains = function (instanceId) {
+        computeDetailService.listDomains = function (instanceId) {
             var params = {
                 instanceId : instanceId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain/service', 'GET', params));
         };
 
-        return compuDetailService;
+        return computeDetailService;
     })
 ;
