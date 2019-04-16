@@ -8,13 +8,13 @@
 		<tr>
 			<th scope="row">{{ 'label.variable_name' | translate }}</th>
 			<td>
-				<input type="text" maxlength="20" name="variableName" placeholder="{{ 'label.variable_name' | translate }}" ng-model="tab.appUserEvnKey" ng-disabled="tab.appUserEvnKeyDisabled" validation="min_len:3|max_len:20|required" style="width:300px"/>
+				<input type="text" maxlength="50" name="variableName" placeholder="{{ 'label.variable_name' | translate }}" ng-model="tab.appUserEvnKey" ng-disabled="tab.appUserEvnKeyDisabled" validation="min_len:3|max_len:50|required" style="width:300px"/>
 			</td>
 		</tr>
 		<tr>
 			<th  scope="row">{{ 'label.variable_value' | translate }}</th>
 			<td>
-				<input type="text" maxlength="100" name="VariableValue" placeholder="{{ 'label.variable_value' | translate }}" ng-model="tab.appUserEvnVal" validation="min_len:3|max_len:100|required" style="width:300px"/>
+				<input type="text" maxlength="100" name="VariableValue" placeholder="{{ 'label.variable_value' | translate }}" ng-model="tab.appUserEvnVal" validation="min_len:1|max_len:100|required" style="width:300px"/>
 			</td>
 		</tr>
 		</tbody>
