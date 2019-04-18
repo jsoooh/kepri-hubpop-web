@@ -2716,7 +2716,7 @@ a.ext_link:hover {text-decoration:underline;}
 .accss_guideWrap p.txt_level3::before {position:absolute; top:15px; left:25px; display:inline-block; content:''; width:4px; height:2px; background:#8e8e8e; margin-right:5px;}
 .accss_guideWrap p.txt_level3.type2 {font-size:14px; font-weight:700; color:#333; padding:5px 0 0 30px;}
 .accss_guideWrap p.txt_level3.type2::before {position:absolute; top:11px; left:20px; display:inline-block; content:''; width:5px; height:7px; background: url("../images/ico_txt_blt.png") no-repeat 0 0;  margin-right:5px;}
-.accss_guideWrap p.txt_level4 {font-size:14px; color:#777; padding:8px 0 0 25px;}
+.accss_guideWrap p.txt_level4 {font-size:14px; font-weight:500; color:#333; padding:8px 0 0 25px;}
 .accss_guideWrap p.txt_level4 em {display:inline-block; margin-right:3px;}
 .accss_guideWrap span.txt_level4 {font-size:14px; color:#777; padding:8px 0 0 25px;}
 .accss_guideWrap span.txt_level4 em {display:inline-block; margin-right:3px;}
