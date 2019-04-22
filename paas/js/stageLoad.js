@@ -8,7 +8,7 @@ loadJavascript(_PAAS_STAGE_+'/js/services/organizationServices.js'+_VERSION_TAIL
 //loadJavascript(_PAAS_STAGE_+'/js/services/spaceQuotaServices.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_PAAS_STAGE_+'/js/services/spaceServices.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_PAAS_STAGE_+'/js/services/domainServices.js'+_VERSION_TAIL_HEAD_);
-//loadJavascript(_PAAS_STAGE_+'/js/services/routeServices.js'+_VERSION_TAIL_HEAD_);
+loadJavascript(_PAAS_STAGE_+'/js/services/routeServices.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_PAAS_STAGE_+'/js/services/applicationServices.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_PAAS_STAGE_+'/js/services/serviceInstanceServices.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_PAAS_STAGE_+'/js/services/marketAppServices.js'+_VERSION_TAIL_HEAD_);

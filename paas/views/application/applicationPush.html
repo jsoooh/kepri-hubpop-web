@@ -191,7 +191,7 @@
 		</div>
 		<div class="pn_footer">
 			<div class="btn-btm mgt0">
-				<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.appPush();">APP 생성</button>
+				<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.checkDuplRoute();">APP 생성</button>
 				<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToPage('/paas/apps')">취소</button>
 			</div>
 		</div>
@@ -423,15 +423,13 @@
 								</li>
 								<li>
 									<span class="tit_txt">디스크</span>
-<!--
-									<div class="progressWrap type2">
+									<!--<div class="progressWrap type2">
 										<div class="progress">
 										  <div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota)/(102400))*100|number:0}}" class="progress">
 												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota)/(102400))*100|number:0}}%"></div>
 											</div>
 										</div>
-									</div>
--->
+									</div>-->
 									<span class="txt_count text-left">현재 {{(main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota*contents.defaultSet.instances) | displayVolume:'MB'}} 사용 중</span>
 								</li>
 							</ul>

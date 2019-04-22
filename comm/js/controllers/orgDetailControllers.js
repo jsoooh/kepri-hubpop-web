@@ -135,8 +135,7 @@ angular.module('portal.controllers')
             var options = {
                 chart: {
                     width: 580,
-                    height: 100,
-
+                    height: 100
                 },
                 yAxis: {
 
@@ -179,7 +178,6 @@ angular.module('portal.controllers')
 
             tui.chart.barChart(container, data, options);
         };
-
 
         //////////////////////////////// dcp Chart  ///////////////////////////////////
         ct.dcpChartFunc = function (chartData) {
@@ -300,7 +298,6 @@ angular.module('portal.controllers')
         };
 
         //////////////////////////////// 가상서버 STORAGE      ///////////////////////////////////
-
         ct.iaasStorgeChartFunc = function (chartData) {
             var tmpCode = chartData.code ;
             var reqJsonArray = new Array();
@@ -423,8 +420,7 @@ angular.module('portal.controllers')
         };
 
         //////////////////////////////// API서비스 사용현황 Chart  ///////////////////////////////////
-        ct.pipChartFunc = function (chartData)
-        {
+        ct.pipChartFunc = function (chartData) {
             var tmpCode = chartData.code ;
             var reqJsonArray = new Array();
             var ser1 = new Object();
@@ -483,7 +479,6 @@ angular.module('portal.controllers')
         };
 
         //////////////////////////////// Dcp 데이터수집  ///////////////////////////////////
-
         ct.dcpDashboardInfo = {
             dataSubsNoca: 0,
             dataReqAllNoca: 0,
@@ -610,17 +605,17 @@ angular.module('portal.controllers')
                 mem : {
                     percentUsedQuota : 0, // 할당률 %
                     usedQuota : 0, // 인스턴스 할당량 Byte
-                    maxQuota : 0, // 프로젝트 할당량 Byte
+                    maxQuota : 0 // 프로젝트 할당량 Byte
                 },
                 disk : {
                     percentUsedQuota : 0, // 할당률 %
                     usedQuota : 0, // 인스턴스 할당량 Giga Byte
-                    maxQuota : 0, // 프로젝트 할당량 Giga Byte
+                    maxQuota : 0 // 프로젝트 할당량 Giga Byte
                 },
                 volume : {
                     percentUsedQuota : 0, // 할당률 %
                     usedQuota : 0, // 인스턴스 할당량 Giga Byte
-                    maxQuota : 0, // 프로젝트 할당량 Giga Byte
+                    maxQuota : 0 // 프로젝트 할당량 Giga Byte
                 }
             };
         };
@@ -654,7 +649,6 @@ angular.module('portal.controllers')
         };
 
         // IAAS 가상 서버 할당 정보  리소스 사용 현황
-
         ct.iaasResourceUsed = {};
         ct.getIaasResourceUsed = function (tenantId) {
             ct.iaasInstanceUsageInit();
@@ -702,7 +696,6 @@ angular.module('portal.controllers')
             promise.error(function (data, status, headers) {
             });
         };
-
 
         //////////////////////////////// 표준 앱 CPU 상태     ///////////////////////////////////
         // 가상서버 CPU 상태
@@ -787,17 +780,17 @@ angular.module('portal.controllers')
                 sumCount : 0, // 합산 app 카운트 => 순차적 계산을 위한용도
                 cpu : {
                     percentUsed : 0, // 사용률 %
-                    sumPercentUsed : 0, // 사용률 합산 => 순차적 계산을 위한용도
+                    sumPercentUsed : 0 // 사용률 합산 => 순차적 계산을 위한용도
                 },
                 disk : {
                     percentUsed : 0, // 사용률 %
                     sumUsed : 0, // 사용량 byte
-                    sumQuota : 0, // 할당량 byte
+                    sumQuota : 0 // 할당량 byte
                 },
                 mem : {
                     percentUsed : 0, // 사용률 %
                     sumUsed : 0, // 사용량 byte
-                    sumQuota : 0, // 할당량 byte
+                    sumQuota : 0 // 할당량 byte
                 }
             };
         };
@@ -848,8 +841,6 @@ angular.module('portal.controllers')
             });
         };
 
-
-
         ct.getPaasAppInstanceStatsInfos = function (org_guid, appKey) {
             var promise = portal.dashboard.getPaasAppInstanceStatsInfos(org_guid);
             promise.success(function (data, status, headers) {
@@ -884,7 +875,6 @@ angular.module('portal.controllers')
                 ct.setPaasAppsUsaged();
             });
         };
-
 
         ct.setPaasAppsUsaged = function (usage) {
             if (usage && usage.memQuota && usage.diskQuota) {

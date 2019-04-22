@@ -448,7 +448,7 @@ angular.module('paas.controllers')
 
         ct.pageLoadData();
     })
-    .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, cloudFoundry, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
+    .controller('paasApplicationPushCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, routeService, cloudFoundry, ValidationService, FileUploader, common, CONSTANTS, $cookies) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationPushCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -473,9 +473,7 @@ angular.module('paas.controllers')
         
         // 호스트 중복 체크 확인
         ct.hostDup 				= false;
-      
-        
-        
+
         /*
          *  1. 빌드팩 정보 필요. (화면 맵핑 필요)
          *  2. 앱 파일 업로드의 실행파일 / 소스코드의 VALUE값 정의후 구현 추가.
@@ -571,10 +569,7 @@ angular.module('paas.controllers')
         		}	
 			} 
         };
-        
-        
-        
-        
+
         //증가 버튼 클릭시 이벤트 sg0730
         ct.maxValCheck = function (val) {
         	if (val == 1) {
@@ -614,21 +609,19 @@ angular.module('paas.controllers')
         
         // ct.visible 				= false; 
         
-       /* ct.toggle = function () {
+        /*ct.toggle = function () {
             ct.visible = !ct.visible;
             if (ct.visible)
               ct.refreshSlider();
         };*/
           
-      /*  ct.refreshSlider = function () {
+        /*ct.refreshSlider = function () {
             $timeout(function () {
               $scope.$broadcast('rzSliderForceRender');
             });
           };
         */
-        
-        
-        
+
         ct.defaultSet = {
 					            instances: 1,
 					            memory: 1024,
@@ -859,6 +852,29 @@ angular.module('paas.controllers')
             }
         };
 
+        // 이미 사용하고 있는 호스트인지 확인
+        ct.checkDuplRoute = function () {
+            ct.hostDup = false;
+            for (var i = 0; i < ct.domains.length; i++) {
+                if (ct.domains[i].name == ct.sltDomainName) {
+                    $scope.main.loadingMainBody = true;
+                    var routePromise = routeService.checkDuplRoute(ct.domains[i].guid, ct.appPushData.domainFirstName);
+                    routePromise.success(function (data) {
+                        $scope.main.loadingMainBody = false;
+                        if (!data) {
+                            ct.appPush();
+                        } else {
+                            ct.hostDup = true;
+                        }
+                    });
+                    routePromise.error(function (data) {
+                        $scope.main.loadingMainBody = false;
+                    });
+                    break;
+                }
+            }
+        };
+
         //Insert
         ct.appPush = function () {
             
@@ -871,8 +887,8 @@ angular.module('paas.controllers')
                 return;
             }
 
-            $scope.main.loadingMain 	= true;
-            $scope.main.loadingMainBody = true;
+            //$scope.main.loadingMain 	= true;
+            //$scope.main.loadingMainBody = true;
             var appBody 				= {};
             appBody.organizationGuid 	= ct.appPushData.organizationGuid;
             appBody.spaceGuid 			= ct.appPushData.spaceGuid;
@@ -2105,7 +2121,7 @@ angular.module('paas.controllers')
         var tab = this;
         var vs = new ValidationService();
         tab.app = angular.copy($scope.contents.app);
-        tab.appGuid = $scope.contents.appGuid
+        tab.appGuid = $scope.contents.appGuid;
         tab.appServiceBindings = null;
 
         tab.tabBodytemplateUri = _PAAS_VIEWS_ + "/application/tabAppServiceBindings.html" + _VersionTail();

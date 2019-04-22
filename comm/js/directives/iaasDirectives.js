@@ -107,7 +107,7 @@ angular.module('app')
 		                instanceId : instance.id,
 		                action : action,
 		                tenantId : tenantId
-		            }
+		            };
 		            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
 		            returnPromise.success(function (data, status, headers) {
 		                if (status == 200 && data) {
@@ -136,7 +136,7 @@ angular.module('app')
 						instance.vmState = "error";
 						attrs.observeAction = "ready";
 		            });
-				}
+				};
 
 				var directiveWatch = function(scope) {
 					scope.$watch('observeAction',function(value){
@@ -172,7 +172,7 @@ angular.module('app')
 							// }
 						}
 					});
-				}
+				};
 
 				directiveWatch(scope);
 
@@ -194,7 +194,7 @@ angular.module('app')
 					var param = {
 						tenantId : tenantId,
 		                snapShotId : snapshot.snapShotId
-		            }
+		            };
 		            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'GET', param, 'application/x-www-form-urlencoded');
 		            returnPromise.success(function (data, status, headers) {
 						if(data.content.image) {
@@ -214,7 +214,7 @@ angular.module('app')
 						snapshot.status = "error";
 						attrs.observeAction = "ready";
 		            });
-				}
+				};
 
 				var directiveWatch = function(scope) {
 					scope.$watch('observeAction',function(value){
@@ -229,7 +229,7 @@ angular.module('app')
 							$timeout(recursive,10000,false);
 						}
 					});
-				}
+				};
 				directiveWatch(scope);
 	        }
 	    };
@@ -250,7 +250,7 @@ angular.module('app')
 					var param = {
 		                volumeId : volume.volumeId,
 		                tenantId : tenantId
-		            }
+		            };
 		            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
 		            returnPromise.success(function (data, status, headers) {
 						if(data.content.volumes.length > 0) {
@@ -269,7 +269,7 @@ angular.module('app')
 						volume.status = "error";
 						attrs.observeAction = "ready";
 		            });
-				}
+				};
 
 				var directiveWatch = function(scope) {
 					scope.$watch('observeAction',function(value){
@@ -291,7 +291,7 @@ angular.module('app')
 							// }
 						}
 					});
-				}
+				};
 
 				directiveWatch(scope);
 
@@ -313,7 +313,7 @@ angular.module('app')
 					var param = {
 						tenantId : tenantId,
 		                snapshotId : snapshot.snapshotId
-		            }
+		            };
 		            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'GET', param, 'application/x-www-form-urlencoded');
 		            returnPromise.success(function (data, status, headers) {
 						if(data.content.volumeSnapShot) {
@@ -333,7 +333,7 @@ angular.module('app')
 						snapshot.status = "error";
 						attrs.observeAction = "ready";
 		            });
-				}
+				};
 
 				var directiveWatch = function(scope) {
 					scope.$watch('observeAction',function(value){
@@ -349,7 +349,7 @@ angular.module('app')
 							$timeout(recursive,10000,false);
 						}
 					});
-				}
+				};
 				directiveWatch(scope);
 	        }
 	    };
@@ -391,7 +391,7 @@ angular.module('app')
 						image.status = "error";
 						attrs.observeAction = "ready";
 		            });
-				}
+				};
 
 				var directiveWatch = function(scope) {
 					scope.$watch('observeAction',function(value){
@@ -412,7 +412,7 @@ angular.module('app')
 								$timeout(recursive,5000);
 						}
 					});
-				}
+				};
 
 				directiveWatch(scope);
 
@@ -457,7 +457,7 @@ angular.module('app')
 						interfacer.status = "error";
 						attrs.observeAction = "ready";
 		            });
-				}
+				};
 				var directiveWatch = function(scope) {
 					scope.$watch('observeAction',function(value){
 						if(interfacer.status == 'DOWN') {
@@ -469,7 +469,7 @@ angular.module('app')
 								$timeout(recursive,5000);
 						}
 					});
-				}
+				};
 
 				directiveWatch(scope);
 
@@ -491,7 +491,7 @@ angular.module('app')
 					var param = {
 		                nsId : lb.nsId,
 		                tenantId : tenantId
-		            }
+		            };
 		            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/nfv/lb/lbService', 'GET', param, 'application/x-www-form-urlencoded');
 		            returnPromise.success(function (data, status, headers) {
 						if(data.content.lbNetworkService) {
@@ -510,7 +510,7 @@ angular.module('app')
 						lb.status = "error";
 						attrs.observeAction = "ready";
 		            });
-				}
+				};
 
 				var directiveWatch = function(scope) {
 					scope.$watch('observeAction',function(value){
@@ -535,7 +535,7 @@ angular.module('app')
 							$timeout(recursive,10000,false);
 						}
 					});
-				}
+				};
 				directiveWatch(scope);
 	        }
 	    };
@@ -556,7 +556,7 @@ angular.module('app')
                     var param = {
                         nsId : vrouter.nsid,
                         tenantId : tenantId
-                    }
+                    };
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/nfv/vrouter/vRouterServiceStatus', 'GET', param, 'application/x-www-form-urlencoded');
                     returnPromise.success(function (data, status, headers) {
                         if(data.content.vRouterInfo) {
@@ -575,7 +575,7 @@ angular.module('app')
                         vrouter.status = "error";
                         attrs.observeAction = "ready";
                     });
-                }
+                };
 
                 var directiveWatch = function(scope) {
                     scope.$watch('observeAction',function(value){
@@ -604,7 +604,7 @@ angular.module('app')
                             $timeout(recursive,10000,false);
                         }
                     });
-                }
+                };
                 directiveWatch(scope);
             }
         };
@@ -632,8 +632,7 @@ angular.module('app')
                     console.log('run recursive'+tenantId);
                     var param = {
                         tenantId : tenantId
-                    }
-
+                    };
 
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/nfv/vpn/VpnServiceStatus', 'GET', param, 'application/x-www-form-urlencoded');
                     returnPromise.success(function (data, status, headers) {
@@ -667,11 +666,7 @@ angular.module('app')
                     returnPromise.error(function (data, status, headers) {
                        // scope.$parent.contents.vpn.status= "ready";
                     });
-                }
-
-
-
-
+                };
 
                 var directiveWatch = function(scope) {
 
@@ -684,11 +679,11 @@ angular.module('app')
 						$timeout(recursive, 10000, true);
 
                     });
-                }
+                };
                 var sleepCustom=function (delay) {
                     var start = new Date().getTime();
                     while (new Date().getTime() < start + delay);
-                }
+                };
                 directiveWatch(scope);
             }
         };
