@@ -865,6 +865,7 @@ angular.module('paas.controllers')
                             ct.appPush();
                         } else {
                             ct.hostDup = true;
+                            common.showAlertError("이미 사용 중인 도메인입니다.");
                         }
                     });
                     routePromise.error(function (data) {
@@ -991,7 +992,7 @@ angular.module('paas.controllers')
                 condition = "domain_guid:" + ct.domains[0].guid;
             }
 
-            var routePromise = cloudFoundry.routes.listRoutes(10, 1, condition, 1)
+            var routePromise = cloudFoundry.routes.listRoutes(10, 1, condition, 1);
             routePromise.success(function (data) {
                 ct.subDomainList = data;
                 $scope.main.loadingMainBody = false;
