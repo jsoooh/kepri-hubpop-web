@@ -947,24 +947,20 @@ angular.module('common.services', ['LocalStorageModule'])
                 if (common.xsrfToken) {
                     config.headers[_CSRF_TOKEN_HEADER_NAME_] = common.xsrfToken;
                 }
-/*
-                $http.defaults.useXDomain = true;
+                /*$http.defaults.useXDomain = true;
                 $http.defaults.withCredentials = true;
             } else {
                 $http.defaults.useXDomain = false;
-                $http.defaults.withCredentials = false;
-*/
+                $http.defaults.withCredentials = false;*/
             }
             $http.defaults.useXDomain = false;
             $http.defaults.withCredentials = false;
             if (common.getAccessToken()) {
                 config.headers[_TOKEN_HEADER_NAME_] = common.getAccessToken();
             }
-/*
-            if (common.getRegionKey()) {
+            /*if (common.getRegionKey()) {
                 config.headers[_REGION_HEADER_NAME_] = common.getRegionKey();
-            }
-*/
+            }*/
 
             if (params) {
                 if (contentTypeString.indexOf("multipart/form-data") > -1) {
@@ -1041,6 +1037,7 @@ angular.module('common.services', ['LocalStorageModule'])
             promise.error = function (fn) {
                 promise.then(null, function (response) {
                     if(response == undefined || typeof response == "string") response = {data:{}, status:"", headers:""};
+                    if (response.data && response.data.status == 307) response.status = 307;    //0423. add
                     if (response.status == 307) {
                         if (response.data && response.data.message) {
                             if (response.data.message == "mi_no_login") {
@@ -1227,7 +1224,7 @@ angular.module('common.services', ['LocalStorageModule'])
 	        var headers = {
 				'Accept': acceptString,
 				'Content-Type': contentTypeString
-	        }
+	        };
 	
 	        if (pathUrl.indexOf(CONSTANTS.uaaContextUrl) < 0  && common.xsrfToken) {
 	            headers[_CSRF_TOKEN_HEADER_NAME_] = common.xsrfToken;
@@ -1235,11 +1232,9 @@ angular.module('common.services', ['LocalStorageModule'])
 	        if (pathUrl.indexOf(CONSTANTS.uaaContextUrl) < 0  && common.getAccessToken()) {
 	            headers[_TOKEN_HEADER_NAME_] = common.getAccessToken();
 	        }
-/*
-	        if (pathUrl.indexOf(CONSTANTS.uaaContextUrl) < 0  && common.getRegionKey()) {
+	        /*if (pathUrl.indexOf(CONSTANTS.uaaContextUrl) < 0  && common.getRegionKey()) {
 	            headers[_REGION_HEADER_NAME_] = common.getRegionKey();
-	        }
-*/
+	        }*/
 
 			var data = {};
 	        if (method.toUpperCase() != "GET" && method.toUpperCase() != "DELETE" && params) {
@@ -1443,11 +1438,9 @@ angular.module('common.services', ['LocalStorageModule'])
             if (common.getAccessToken()) {
                 config.headers[_TOKEN_HEADER_NAME_] = common.getAccessToken();
             }
-/*
-            if (common.getRegionKey()) {
+            /*if (common.getRegionKey()) {
                 config.headers[_REGION_HEADER_NAME_] = common.getRegionKey();
-            }
-*/
+            }*/
 
             if (method.toUpperCase() != "GET" && method.toUpperCase() != "DELETE" && params) {
                 if (contentTypeString.indexOf('application/json') > -1) {
@@ -2363,7 +2356,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 clickOutsideToClose: false,
                 escapeToClose: true,
                 fullscreen: false,
-                multiple: true,
+                multiple: true
             };
 
             if (dialogOptions.locals) {

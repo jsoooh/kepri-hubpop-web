@@ -70,7 +70,7 @@ angular.module('iaas.controllers')
         // 서버 상태
         ct.fn.checkServerState = function(instanceId) {
             var param = {
-                tenantId : ct.data.tenantId,
+                tenantId : ct.data.tenantId
             };
             param.instanceId = instanceId;
             if ($scope.main.reloadTimmer['instanceServerState_' + instanceId]) {
@@ -125,7 +125,7 @@ angular.module('iaas.controllers')
 
         ct.fn.replaceServerInfo = function(instanceId) {
             var param = {
-                tenantId : ct.data.tenantId,
+                tenantId : ct.data.tenantId
             };
             param.instanceId = instanceId;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
@@ -182,7 +182,7 @@ angular.module('iaas.controllers')
             });
         };
 
-       //sg0730 차후 서버 이미지 생성 후 페이지 이동.
+        //sg0730 차후 서버 이미지 생성 후 페이지 이동.
         ct.reflashCallBackFunction = function (instance) {
             ct.instance.vmState = instance.vmState;
             ct.instance.uiTask = instance.uiTask;
@@ -288,7 +288,7 @@ angular.module('iaas.controllers')
             var params = {
                 tenantId : ct.data.tenantId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded'));
             returnPromise.success(function (data, status, headers) {
                 ct.tenantResource = data.content[0];
 
@@ -305,7 +305,9 @@ angular.module('iaas.controllers')
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertError(data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
             });
         };
 
@@ -332,7 +334,7 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 instanceId : ct.data.instanceId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded'));
             returnPromise.success(function (data, status, headers) {
                 if(data.content.instances.length == 1) {
                     if(data.content.instances[0].powerState == "deleted"){
@@ -383,7 +385,9 @@ angular.module('iaas.controllers')
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertError(data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
             });
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -647,7 +651,7 @@ angular.module('iaas.controllers')
                 instanceId : ct.data.instanceId
             };
             ct.instanceVolList = [];
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instance', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instance', 'GET', param, 'application/x-www-form-urlencoded'));
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.volumeAttaches && data.content.volumeAttaches.length > 0) {
                     ct.instanceVolList = data.content.volumeAttaches;
@@ -655,7 +659,9 @@ angular.module('iaas.controllers')
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertError(data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
             });
         };
 
@@ -773,7 +779,7 @@ angular.module('iaas.controllers')
                 size: size
             };
             $scope.main.loadingMainBody = true;
-            ct.data.eventHistories == [];
+            ct.data.eventHistories = [];
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitApiContextUrl + '/iaas/event_histories/{resource_uuid}/page', 'GET', params);
             serverStatsPromise.success(function (data, status, headers) {
                 ct.data.eventHistories = data.content;
@@ -886,7 +892,7 @@ angular.module('iaas.controllers')
         	$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
 			$(".aside").stop().animate({"right":"-360px"}, 400);
 			$("#aside-aside1").stop().animate({"right":"0"}, 500);
-        }
+        };
         
         ct.cpuRoundProgress = {
             label : "{percentage}%",
@@ -966,7 +972,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
-                instanceId : ct.data.instanceId,
+                instanceId : ct.data.instanceId
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
@@ -1277,7 +1283,6 @@ angular.module('iaas.controllers')
         ct.fn.createSnapshot = function($event,instance) {
             if(instance.vmState != 'stopped') {
             	common.showAlertWarning('서버를 정지 후 생성가능합니다.');
-                return;
             } else {
             	ct.selectInstance = instance;
             	$scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeSnapshotForm.html" + _VersionTail();
@@ -1303,7 +1308,7 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             	common.showAlertError(data.message);
             });
-        }
+        };
 
         // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
@@ -1428,7 +1433,7 @@ angular.module('iaas.controllers')
                 size: size
             };
             $scope.main.loadingMainBody = true;
-            ct.data.eventHistories == [];
+            ct.data.eventHistories = [];
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitApiContextUrl + '/iaas/event_histories/{resource_uuid}/page', 'GET', params);
             serverStatsPromise.success(function (data, status, headers) {
                 ct.data.eventHistories = data.content;
@@ -1539,7 +1544,7 @@ angular.module('iaas.controllers')
 
         ct.lineChartCpu = {};
         ct.lineChartCpu.options = {
-            elements: { line: { tension: 0, spanGaps: true, }, point: { radius: 0, spanGaps: true, } },
+            elements: { line: { tension: 0, spanGaps: true }, point: { radius: 0, spanGaps: true } },
             //maintainAspectRatio: false,
             scales: {
                 yAxes: [{ ticks: { min : 0, max : 100, stepSize: 20 } }],
@@ -1551,16 +1556,16 @@ angular.module('iaas.controllers')
                                 return value;
                             }
                         },
-                        time: { unit: 'minute' },
-                    },
+                        time: { unit: 'minute' }
+                    }
                 }]
-            },
+            }
         };
         ct.lineChartCpu.series = ['Max', 'Avg', 'Min'];
         ct.lineChartCpu.colors = [
-            { borderColor: "rgba(183,93,218,1)", backgroundColor: "rgba(183,93,218,0.2)", fill: true, },
-            { borderColor: "rgba(22,87,218,1)", backgroundColor: "rgba(22,87,218,0.2)", fill: true, },
-            { borderColor: "rgba(1,160,206,1)", backgroundColor: "rgba(1,160,206,0.2)", fill: true, }
+            { borderColor: "rgba(183,93,218,1)", backgroundColor: "rgba(183,93,218,0.2)", fill: true },
+            { borderColor: "rgba(22,87,218,1)", backgroundColor: "rgba(22,87,218,0.2)", fill: true },
+            { borderColor: "rgba(1,160,206,1)", backgroundColor: "rgba(1,160,206,0.2)", fill: true }
         ];
         ct.lineChartCpu.labels = [];
         ct.lineChartCpu.data = [[], [], []];
@@ -1622,7 +1627,7 @@ angular.module('iaas.controllers')
 
         ct.lineChartMem = {};
         ct.lineChartMem.options = {
-            elements: { line: { tension: 0, spanGaps: true, }, point: { radius: 0, spanGaps: true, } },
+            elements: { line: { tension: 0, spanGaps: true }, point: { radius: 0, spanGaps: true } },
             scales: {
                 yAxes: [{ ticks: { min : 0, max : 100, stepSize: 20 } }],
                 xAxes: [{ type: 'time', distribution: 'series', ticks: {
@@ -1633,10 +1638,10 @@ angular.module('iaas.controllers')
                                 return value;
                             }
                         },
-                        time: { unit: 'minute' },
-                    },
+                        time: { unit: 'minute' }
+                    }
                 }]
-            },
+            }
         };
         ct.lineChartMem.series = ['Max', 'Age', 'Min'];
         ct.lineChartMem.colors = [
@@ -1704,7 +1709,7 @@ angular.module('iaas.controllers')
 
         ct.lineChartDisk = {};
         ct.lineChartDisk.options = {
-            elements: { line: { tension: 0, spanGaps: true, }, point: { radius: 0, spanGaps: true, } },
+            elements: { line: { tension: 0, spanGaps: true }, point: { radius: 0, spanGaps: true } },
             scales: {
                 yAxes: [{ ticks: { min : 0, max : 100, stepSize: 20 } }],
                 xAxes: [{ type: 'time', distribution: 'series', ticks: {
@@ -1715,10 +1720,10 @@ angular.module('iaas.controllers')
                                 return value;
                             }
                         },
-                        time: { unit: 'minute' },
-                    },
+                        time: { unit: 'minute' }
+                    }
                 }]
-            },
+            }
         };
 
         ct.lineChartDisk.series = [];
@@ -1791,7 +1796,7 @@ angular.module('iaas.controllers')
         ct.lineChartNetBytesRecv.colors = [];
         ct.lineChartNetBytesRecv.labels = [];
         ct.lineChartNetBytesRecv.options = {
-            elements: { line: { tension: 0, }, point: { radius: 0, } },
+            elements: { line: { tension: 0 }, point: { radius: 0 } },
             scales: {
                 //yAxes: [{ ticks: { min : 0, } }],
                 xAxes: [{ type: 'time', distribution: 'series', ticks: {
@@ -1802,10 +1807,10 @@ angular.module('iaas.controllers')
                                 return value;
                             }
                         },
-                        time: { unit: 'minute' },
-                    },
+                        time: { unit: 'minute' }
+                    }
                 }]
-            },
+            }
         };
         ct.lineChartNetBytesRecv.data = [];
 
@@ -1814,9 +1819,9 @@ angular.module('iaas.controllers')
         ct.lineChartNetBytesSent.colors = [];
         ct.lineChartNetBytesSent.labels = [];
         ct.lineChartNetBytesSent.options = {
-            elements: { line: { tension: 0, }, point: { radius: 0, } },
+            elements: { line: { tension: 0 }, point: { radius: 0 } },
             scales: {
-                yAxes: [{ ticks: { min : 0, } }],
+                yAxes: [{ ticks: { min : 0 } }],
                 xAxes: [{ type: 'time', distribution: 'series', ticks: {
                         callback: function(value, index, values) {
                             if (values[index]) {
@@ -1825,10 +1830,10 @@ angular.module('iaas.controllers')
                                 return value;
                             }
                         },
-                        time: { unit: 'minute' },
-                    },
+                        time: { unit: 'minute' }
+                    }
                 }]
-            },
+            }
         };
         ct.lineChartNetBytesSent.data = [];
 
@@ -1837,7 +1842,7 @@ angular.module('iaas.controllers')
         ct.lineChartNetPacketsRecv.colors = [];
         ct.lineChartNetPacketsRecv.labels = [];
         ct.lineChartNetPacketsRecv.options = {
-            elements: { line: { tension: 0, }, point: { radius: 0, } },
+            elements: { line: { tension: 0 }, point: { radius: 0 } },
             scales: {
                 //yAxes: [{ ticks: { min : 0 } }],
                 xAxes: [{ type: 'time', distribution: 'series', ticks: {
@@ -1848,10 +1853,10 @@ angular.module('iaas.controllers')
                                 return value;
                             }
                         },
-                        time: { unit: 'minute' },
-                    },
+                        time: { unit: 'minute' }
+                    }
                 }]
-            },
+            }
         };
         ct.lineChartNetPacketsRecv.data = [];
 
@@ -1860,7 +1865,7 @@ angular.module('iaas.controllers')
         ct.lineChartNetPacketsSent.colors = [];
         ct.lineChartNetPacketsSent.labels = [];
         ct.lineChartNetPacketsSent.options = {
-            elements: { line: { tension: 0, }, point: { radius: 0, } },
+            elements: { line: { tension: 0 }, point: { radius: 0 } },
             scales: {
                 //yAxes: [{ ticks: { min : 0, max : 100, stepSize: 20 } }],
                 xAxes: [{ type: 'time', distribution: 'series', ticks: {
@@ -1871,10 +1876,10 @@ angular.module('iaas.controllers')
                                 return value;
                             }
                         },
-                        time: { unit: 'minute' },
-                    },
+                        time: { unit: 'minute' }
+                    }
                 }]
-            },
+            }
         };
         ct.lineChartNetPacketsSent.data = [];
 
@@ -2293,7 +2298,7 @@ angular.module('iaas.controllers')
                 $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         pop.fn.checkByte = function (text, maxValue){
         	pop.checkByte = $bytes.lengthInUtf8Bytes(text);

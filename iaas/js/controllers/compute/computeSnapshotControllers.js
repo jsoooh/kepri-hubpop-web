@@ -41,7 +41,7 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : ct.data.tenantId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param);
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 var instanceSnapshots = [];
                 if (data && angular.isArray(data.content)) {
@@ -55,7 +55,9 @@ angular.module('iaas.controllers')
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-            	common.showAlertError(data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
             });
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -96,7 +98,7 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId
             };
             ct.storageSnapshotList = [];
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotList', 'GET', param, 'application/x-www-form-urlencoded');
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotList', 'GET', param, 'application/x-www-form-urlencoded'));
             returnPromise.success(function (data, status, headers) {
                 var volumeSnapShots = [];
                 if (data && data.content && angular.isArray(data.content.volumeSnapShots)) {
@@ -110,7 +112,9 @@ angular.module('iaas.controllers')
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlert("message",data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
             });
             returnPromise.finally(function (data, status, headers) {
             });
@@ -138,12 +142,9 @@ angular.module('iaas.controllers')
 
         // 백업 이미지 설명 팝업
         ct.fn.descriptionFormOpen = function($event, snapShot, state){
-    		if(state == 'server')
-    		{
+    		if(state == 'server') {
     			ct.fn.modifyServerSnapShotDesc($event, snapShot);
-    		}
-    		else if (state == 'storage')
-    		{
+    		} else if (state == 'storage') {
     		    ct.fn.modifyStorageSnapShotDesc($event, snapShot);
     		}
         };
@@ -164,8 +165,7 @@ angular.module('iaas.controllers')
 
         };
 
-        ct.modifyServerSnapShotDescCallBackFunction = function ()
-        {
+        ct.modifyServerSnapShotDescCallBackFunction = function () {
              $scope.main.replacePage();
         };
 
@@ -185,14 +185,13 @@ angular.module('iaas.controllers')
 
         };
 
-        ct.modifyStorageSnapShotDescCallBackFunction = function ()
-        {
+        ct.modifyStorageSnapShotDescCallBackFunction = function () {
              ct.fn.getStorageSnapshotList(1);
         };
 
         ct.fn.showErrorAlert = function() {
             common.showAlertError('이미 삭제된 인스턴스입니다.');
-        }
+        };
 
         if(ct.data.tenantId) {
             ct.fn.getInstanceSnapshotList();
@@ -620,7 +619,7 @@ angular.module('iaas.controllers')
             });
         };
         
-      //인스턴스 상세 정보 조회
+        //인스턴스 상세 정보 조회
         pop.fn.getInstanceInfo = function(instanceId) {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -758,7 +757,6 @@ angular.module('iaas.controllers')
                     clickCheck = false;
                 });
         	}
-        	
         };
         
         pop.fn.getSpecList = function(specGroup) {
@@ -883,7 +881,6 @@ angular.module('iaas.controllers')
             pop.fn.getSnapshotInfo(pop.snapshotId);
         }
     })
-
     .controller('iaasServerSnapshotDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         	_DebugConsoleLog("storageControllers.js : iaasServerSnapshotDescriptionCtrl", 1);
 
@@ -935,14 +932,12 @@ angular.module('iaas.controllers')
                             tenantId : pop.userTenant.id,
                             snapShotId : pop.snapShot.id,
                             description : pop.snapShot.description
-                        }
+                        };
 
 
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'PUT', {instanceSnapShot : param});
-
-            returnPromise.success(function (data, status, headers)
-            {
+            returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
 
@@ -951,19 +946,16 @@ angular.module('iaas.controllers')
                 }
 
             });
-            returnPromise.error(function (data, status, headers)
-            {
+            returnPromise.error(function (data, status, headers){
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers)
-            {
+            returnPromise.finally(function (data, status, headers){
                 $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });
         }
     })
-
     .controller('iaasStorageSnapshotDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         	_DebugConsoleLog("storageControllers.js : iaasStorageSnapshotDescriptionCtrl", 1);
 
@@ -1015,31 +1007,26 @@ angular.module('iaas.controllers')
                             tenantId : pop.userTenant.id,
                             snapshotId : pop.snapShot.snapshotId,
                             description : pop.snapShot.description
-                        }
+                        };
 
 
             common.mdDialogHide();
             var returnPromise = {};
 
             returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'PUT', {volumeSnapShot : param});
-
-            returnPromise.success(function (data, status, headers)
-            {
+            returnPromise.success(function (data, status, headers){
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
 
                 if ( angular.isFunction(pop.callBackFunction) ) {
                     pop.callBackFunction();
                 }
-
             });
-            returnPromise.error(function (data, status, headers)
-            {
+            returnPromise.error(function (data, status, headers){
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers)
-            {
+            returnPromise.finally(function (data, status, headers){
                 $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });

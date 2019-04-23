@@ -449,10 +449,10 @@ angular.module('portal.controllers')
         ct.usageTrend.options = {
             elements: {
                 line: {
-                    tension: 0, // 꺾은 선형
+                    tension: 0 // 꺾은 선형
                 },
                 point: {
-                    radius: 0, // 점 없음
+                    radius: 0 // 점 없음
                 }
             },
             scales: {
@@ -477,10 +477,10 @@ angular.module('portal.controllers')
                         },
                         time: {
                             unit: 'minute'
-                        },
-                    },
+                        }
+                    }
                 }]
-            },
+            }
         };
 
         ct.usageTrend.labels = [];

@@ -132,7 +132,7 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 queryType : 'list'
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 var instances = [];
@@ -172,17 +172,17 @@ angular.module('iaas.controllers')
                     }
                     $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                 }
-/*
-                if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
+                /*if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
                     ct.firstInstanceCreatePop();
-                }
-*/
+                }*/
                 ct.pageFirstLoad = false;
             });
             returnPromise.error(function (data, status, headers) {
                 ct.pageFirstLoad = false;
                 $scope.main.loadingMainBody = false;
-                common.showAlertError(data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
             });
             returnPromise.finally(function (data, status, headers) {
             });
@@ -245,7 +245,7 @@ angular.module('iaas.controllers')
 
         ct.fn.replaceServerInfo = function(instanceId) {
             var param = {
-                tenantId : ct.data.tenantId,
+                tenantId : ct.data.tenantId
             };
             if (instanceId) {
                 param.instanceId = instanceId;
@@ -319,7 +319,7 @@ angular.module('iaas.controllers')
         // 서버 상태
         ct.fn.checkServerState = function(instanceId) {
             var param = {
-                tenantId : ct.data.tenantId,
+                tenantId : ct.data.tenantId
             };
             if (instanceId) {
                 param.instanceId = instanceId;
@@ -416,12 +416,14 @@ angular.module('iaas.controllers')
             var params = {
                 tenantId : ct.data.tenantId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
             returnPromise.success(function (data, status, headers) {
                 ct.tenantResource = data.content[0];
             });
             returnPromise.error(function (data, status, headers) {
-                common.showAlertError(data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
             });
         };
 
@@ -509,7 +511,7 @@ angular.module('iaas.controllers')
                 }else if(action == "REBOOT"){
                     vmStateChange = "rebooting";
                 }
-                var sltInstance = ct.serverMainList[index]
+                var sltInstance = ct.serverMainList[index];
                 sltInstance.vmState = vmStateChange;
                 sltInstance.uiTask = vmStateChange;
                 sltInstance.vmStateSec = 0;
@@ -531,7 +533,6 @@ angular.module('iaas.controllers')
         	var dialogOptions = {};
         	if(instance.vmState != 'stopped') {
                 common.showAlertWarning('서버를 정지 후 생성가능합니다.');
-                return;
             } else {
             	dialogOptions = {
             			controller : "iaasCreatePopSnapshotCtrl" ,
@@ -1045,9 +1046,9 @@ angular.module('iaas.controllers')
         };
         
         ct.fn.subnetCidrDChange = function() {
-            if(ct.subnet.cidr_D) {
+            if (ct.subnet.cidr_D) {
                 ct.ipFlag = false;
-            }else {
+            } else {
                 ct.ipFlag = true;
             }
         };
