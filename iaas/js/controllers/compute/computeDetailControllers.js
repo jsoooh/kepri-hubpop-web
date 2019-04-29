@@ -199,7 +199,6 @@ angular.module('iaas.controllers')
         	var dialogOptions = {};
         	if(instance.vmState != 'stopped') {
                 common.showAlertWarning('서버를 정지 후 생성가능합니다.');
-                return;
             } else {
             	dialogOptions = {
             			controller : "iaasCreatePopSnapshotCtrl" ,
@@ -635,7 +634,6 @@ angular.module('iaas.controllers')
         ct.fn.createSnapshot = function($event,instance) {
             if(instance.vmState != 'stopped') {
                 common.showAlertWarning('서버를 정지 후 생성가능합니다.');
-                return;
             } else {
                 ct.selectInstance = instance;
                 $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeSnapshotForm.html" + _VersionTail();
