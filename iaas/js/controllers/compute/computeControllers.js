@@ -135,10 +135,15 @@ angular.module('iaas.controllers')
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
+                ct.loadingServerList = false;
                 var instances = [];
                 if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
                     instances = data.content.instances;
-                    if(data.totalElements != 0){
+                    var rtFilter = $filter('filter')(instances, {taskState: '!deleting'});
+                    console.log("instances : ", instances);
+                    console.log("rtFilter : ", rtFilter);
+                    //if (data.totalElements != 0){
+                    if (rtFilter.length != 0){
                         ct.loadingServerList = true;
                     }
                 }
@@ -984,7 +989,7 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    if(ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
+                    if(CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)){
                         ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
                     }
                     ct.fn.setSpecMaxDisabled();
