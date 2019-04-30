@@ -140,8 +140,6 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
                     instances = data.content.instances;
                     var rtFilter = $filter('filter')(instances, {taskState: '!deleting'});
-                    console.log("instances : ", instances);
-                    console.log("rtFilter : ", rtFilter);
                     //if (data.totalElements != 0){
                     if (rtFilter.length != 0){
                         ct.loadingServerList = true;
