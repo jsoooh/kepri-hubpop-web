@@ -25,7 +25,7 @@ angular.module('portal.controllers')
         /*OrgQuota 목록 조회*/
         ct.listOrgQuotas = function (service) {
             $scope.main.loadingMainBody = true;
-            if (service != undefined) ct.searchParams.service = service
+            if (service != undefined) ct.searchParams.service = service;
             var promise = orgQuotaService.listOrgQuotas(ct.searchParams);
             promise.success(function (data) {
                 ct.orgQuotas = data;
@@ -53,10 +53,10 @@ angular.module('portal.controllers')
                         ramTotal = ramTotal + parseInt(data.product.ram * data.productAmount);
                         diskTotal = diskTotal + parseInt(data.product.disk * data.productAmount);
                     }
-                })
+                });
                 ct.orgQuotaTotal = {vcpus : vcpusTotal, ram : ramTotal, disk : diskTotal};
             }
-        }
+        };
 
         ct.isIaaS = true;
         ct.isPaaS = true;
@@ -78,7 +78,7 @@ angular.module('portal.controllers')
                         } else if (serve == 'Monit') {
                             ct.isMonit = false;
                         }
-                    })
+                    });
 
                     // 기업관리자가 아닌경우는 요청,변경요청시 수정불가
                     if ($scope.orgMain.userAuth == 'U' && ($scope.orgMain.statusCode == 'call' || $scope.orgMain.statusCode == 'change_call')) {
@@ -89,7 +89,7 @@ angular.module('portal.controllers')
                     }
                 });
             }
-        }
+        };
 
         /* 상품추가시에 저장 */
         ct.saveOrgQuota = function (addDatas) {
@@ -106,7 +106,7 @@ angular.module('portal.controllers')
                 addDatas = [];
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         /* storage Disk값 변경 */
         ct.plusDisk = function (quota){
@@ -116,7 +116,7 @@ angular.module('portal.controllers')
             }
             quota.useLimit = parseInt(quota.useLimit) + parseInt(quota.product.disk);
             ct.updateOrgQuota(quota);
-        }
+        };
         /* storage Disk값 변경 */
         ct.minusDisk = function (quota){
             if (quota.useLimit <= quota.product.disk) {
@@ -124,14 +124,14 @@ angular.module('portal.controllers')
             }
             quota.useLimit = parseInt(quota.useLimit) - parseInt(quota.product.disk);
             ct.updateOrgQuota(quota);
-        }
+        };
 
         /* 신청수량 변경 */
         ct.plusAmount = function (quota) {
             quota.productAmount++;
             ct.updateOrgQuota(quota);
             if (quota.product.productName == 'computing') ct.setQuotaTotal();
-        }
+        };
 
         /* 신청수량 변경 */
         ct.minusAmount = function (quota) {
@@ -142,7 +142,7 @@ angular.module('portal.controllers')
             quota.productAmount--;
             ct.updateOrgQuota(quota);
             if (quota.product.productName == 'computing') ct.setQuotaTotal();
-        }
+        };
 
         /* 신청수량 변경시 DB데이터 수정 */
         ct.updateOrgQuota = function (quota) {
@@ -155,7 +155,7 @@ angular.module('portal.controllers')
             quotaPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         /* 상품 삭제 */
         ct.removeProduct = function (quota) {
@@ -175,7 +175,7 @@ angular.module('portal.controllers')
                 common.showAlertError("상품 삭제 오류", $translate.instant(data.resultMsg));
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         /* Quota 적용 API Call */
         ct.apiCall = function (service) {
