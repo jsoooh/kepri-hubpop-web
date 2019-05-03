@@ -164,7 +164,7 @@ angular.module('portal.controllers')
                     }
                 }
                 if (!pop.orgProject.orgQuotaId){
-                    common.showAlert('작업 쿼터가 없어 작업을 등록할 수 없습니다.');
+                    common.showAlert('프로젝트 쿼터가 없어 프로젝트를 등록할 수 없습니다.');
                     common.mdDialogHide();
                 }
             });
@@ -212,6 +212,5 @@ angular.module('portal.controllers')
         };
 
         pop.orgProjectDefaultQuota(pop.orgProject.projectId);
-
     })
 ;

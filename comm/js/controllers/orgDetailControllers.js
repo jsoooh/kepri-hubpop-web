@@ -1217,10 +1217,10 @@ angular.module('portal.controllers')
         // 용량 조회
         ct.listOrgQuotas = function () {
             var params = {
-                projectId : ct.selOrgProject.project.id
+                orgId : ct.selOrgProject.id
             };
 
-            var promise = quotaService.listOrgQuotas(params);
+            var promise = quotaService.listOrgProjectQuotas(params);
             promise.success(function (data) {
                 ct.orgQuotas = data.items;
 

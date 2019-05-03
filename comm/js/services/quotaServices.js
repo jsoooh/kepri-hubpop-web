@@ -21,6 +21,14 @@ angular.module('portal.services')
 		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/quotas/org', 'GET', params));
 	};
 
+    /**
+     * 작업 쿼타조회
+     */
+    quotaService.listOrgProjectQuotas = function(params) {
+
+        return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/quotas/orgProject', 'GET', params));
+    };
+
 	/**
 	 * 쿼타수정 요청
 	 */
