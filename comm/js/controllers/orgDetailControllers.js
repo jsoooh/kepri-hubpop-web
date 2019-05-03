@@ -1243,7 +1243,7 @@ angular.module('portal.controllers')
                 title : '용량 변경 요청',
                 formName : 'projectDetailAsideQuotaReqForm',
                 dialogClassName : 'modal-dialog-projectDetailAsideQuotaReq',
-                templateUrl : _COMM_VIEWS_ + '/org/popOrgQuota.html' + _VersionTail(),
+                templateUrl : _COMM_VIEWS_ + '/org/popOrgQuota.html' + _VersionTail()
             };
             common.showDialog($scope, $event, dialogOptions);
 
