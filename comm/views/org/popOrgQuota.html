@@ -15,7 +15,7 @@
                             <dd>{{ projectQuota.description }}</dd>
                         </dl>
                     </div>
-                    <select class="form-control" name="quotaReq" ng-model="contents.quotaHistory.quotaReq" ng-options="projectQuota as projectQuota.name for projectQuota in contents.orgQuotas" required="required">
+                    <select class="form-control" name="quotaReq" ng-model="contents.quotaHistory.quotaReq" ng-options="projectQuota as projectQuota.name disable when projectQuota.available == false for projectQuota in contents.orgQuotas" required="required">
                         <option value="">선택</option>
                     </select>
                     <p class="has-error" ng-show="projectDetailAsideQuotaReqForm.quotaReq.$touched && projectDetailAsideQuotaReqForm.quotaReq.$error.required">변경 요청할 용량을 선택해주세요.</p>
