@@ -273,7 +273,7 @@ angular.module('iaas.controllers')
                     if (isZoom) {
                         ct.fn.systemTerminalResize(180, 40);
                     } else {
-                        ct.fn.systemTerminalResize(170, 20);
+                        ct.fn.systemTerminalResize(170, 15);
                     }
                 }
             }
@@ -824,7 +824,7 @@ angular.module('iaas.controllers')
                     ct.sltInfoTab = sltInfoTab;
                     if (sltInfoTab == 'bootLog') {
                         $timeout(function() {
-                            ct.fn.systemTerminalResize(170, 20);
+                            ct.fn.systemTerminalResize(170, 15);
                         }, 100);
                     } else if (sltInfoTab == 'sysEvent') {
                         ct.fn.listEventHistory(1, 1000);
