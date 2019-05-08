@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('common.controllers')
-    .controller('commLoginCtrl', function ($scope, $location, $timeout, $translate, user, common) {
+    .controller('commLoginCtrl', function ($scope, $location, $timeout, $translate, $mdDialog, user, common) {
         _DebugConsoleLog("userControllers.js : commLoginCtrl", 1);
 
         var ct = this;
@@ -42,8 +42,25 @@ angular.module('common.controllers')
             ct.checkSsoPgsecuid(common.getPgsecuid());
         }
 
+        //platform 교육 관련 공지사항
+        function showNotice(ev) {
+            $mdDialog.show({
+                controller: DialogNoticeController,
+                templateUrl: _COMM_VIEWS_ + '/common/popNoticePlatform.html' + _VersionTail(),
+                //parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: true // Only for -xs, -sm breakpoints.
+            })
+        }
+        function DialogNoticeController($scope, $mdDialog) {
+            $scope.hide = function() {
+                $mdDialog.hide();
+            };
+        }
+
         ct.ssoUserCreating = false;
-        ct.notice = false;
+        ct.notice = true;
 
         $scope.authenticating = false;
         $scope.login = function (evt) {
@@ -56,14 +73,15 @@ angular.module('common.controllers')
             var authenticationPromise = user.authenticate(param);
             authenticationPromise.success(function (data, status, headers) {
                 if (status == 200 && angular.isObject(data) && data.token) {
-                    if(ct.notice){
-                        common.showDialogAlertHtml('알림', '공지사항 내용', 'notice');
+                    if (ct.notice) {
+                        //common.showDialogAlertHtml('알림', '공지사항 내용', 'notice');
+                        showNotice();
                     }
-                    if(data.orgCount == 0){
+                    if (data.orgCount == 0) {
                         common.showDialogAlertHtml('알림', '현재 참여중인 프로젝트가 없습니다. </br>외부 사용자의 경우, 한전 담당자가 생성한 프로젝트에 참여하여 HUB-PoP을 사용할 수 있습니다.</br>계정 정보를 한전 담당자에게 전달하여 프로젝트 참여자로 등록하도록 요청하여 주세요.', 'info');
                         $scope.authenticating = false;
                         $scope.main.loadingMainBody = false;
-                    }else{
+                    } else {
                         common.setAccessToken(headers("U-X-TOKEN"));
                         common.setUser(data);
                         // 자연스러운 페이지 변환을 위한 로직
