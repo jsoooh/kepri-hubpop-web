@@ -853,9 +853,17 @@ angular.module('portal.controllers')
                     angular.forEach(data, function (instance, key) {
                         memQuota += instance.memQuota;
                         diskQuota += instance.diskQuota;
-                        sumPercentUsed += instance.usage.cpu;
-                        memUsed += instance.usage.mem;
-                        diskUsed += instance.usage.disk;
+                        if (instance.usage) {
+                            if (instance.usage.cpu) {
+                                sumPercentUsed += instance.usage.cpu;
+                            }
+                            if (instance.usage.mem) {
+                                memUsed += instance.usage.mem;
+                            }
+                            if (instance.usage.disk) {
+                                diskUsed += instance.usage.disk;
+                            }
+                        }
                     });
                     ct.paasApps[appKey].usage = {};
                     ct.paasApps[appKey].usage.sumPercentUsed = sumPercentUsed;
