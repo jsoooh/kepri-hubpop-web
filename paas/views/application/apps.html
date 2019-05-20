@@ -56,9 +56,9 @@
     		                <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
                                 <li class="renameApp"><a href="javascript:void(0);" ng-click="contents.renameApp(appItem.name)">APP 이름변경</a></li>
                                 <li ng-if="appItem.state == 'STOPPED'"><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">시작</a></li>
-                                <li ng-if="appItem.state != 'STOPPED'"><a href="javascript:void(0);" class="disabled" title="APP가‘정지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
+                                <li ng-if="appItem.state != 'STOPPED'"><a href="javascript:void(0);" class="disabled" title="APP가‘중지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
                                 <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.stopAppState(appItem.guid, appItem.name)">중지</a></li>
-                                <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
+                                <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '중지'가 가능합니다.">중지</a></li>
                                 <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">재시작</a></li>
                                 <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
                                 <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteApp(appItem.guid, appItem.name)">삭제</a></li>
@@ -81,8 +81,8 @@
                                         <span class="state-txt">배포 진행 중</span>
                                     </div>
                                     <div class="stateWrap" ng-if="(appItem.state == 'STOPPED') && (appItem.packageState != 'FAILED')">
-                                        <span class="stateMark type2">정지</span>
-                                        <span class="state-txt">정지</span>
+                                        <span class="stateMark type2">중지</span>
+                                        <span class="state-txt">중지</span>
                                     </div>
                                     <div class="stateWrap" ng-if="appItem.packageState == 'FAILED'">
                                         <span class="stateMark type3">실패</span>

@@ -259,7 +259,7 @@ angular.module('paas.controllers')
                 }
             }
             if (stopApps.length > 0) {
-                var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + stopApps.length + ")", $translate.instant('message.mq_stop_app'));
+                var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + stopApps.length + ")", $translate.instant('message.mq_stop_app'));
                 showConfirm.then(function () {
                     common.mdDialogHide();
                     for (var i=0; i<stopApps.length; i++) {
@@ -267,7 +267,7 @@ angular.module('paas.controllers')
                     }
                 });
             } else {
-                common.showAlertWarning($translate.instant('label.stop'), $translate.instant('message.mi_select_started_apps'));
+                common.showAlertWarning($translate.instant('label.stop2'), $translate.instant('message.mi_select_started_apps'));
             }
         };
 
@@ -280,7 +280,7 @@ angular.module('paas.controllers')
         };
 
         ct.stopApp = function(guid, name) {
-            var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
+            var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.stopAppAction(guid);
@@ -1272,7 +1272,7 @@ angular.module('paas.controllers')
                     } else {
                         return val + " " + txt;
                     }
-                },
+                }
             });
 
             $("#ex1Slider2").remove();
@@ -1285,7 +1285,7 @@ angular.module('paas.controllers')
                     } else {
                         return val + " " + txt;
                     }
-                },
+                }
             });
 
             $("#ex1Slider3").remove();
@@ -1298,7 +1298,7 @@ angular.module('paas.controllers')
                     } else {
                         return val + " " + txt;
                     }
-                },
+                }
             });
         };
 
@@ -1440,7 +1440,6 @@ angular.module('paas.controllers')
             $(".jspPane").css("top", 0);
             $('.scroll-pane').jScrollPane({}).resize();
         };
-
 
         ct.setRoundProgressData = function () {
             if (ct.instanceStats && ct.instanceStats.length > 0) {
@@ -1763,7 +1762,7 @@ angular.module('paas.controllers')
         };
 
         ct.stopApp = function(guid, name) {
-            var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
+            var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.stopAppAction(guid);
@@ -1801,7 +1800,7 @@ angular.module('paas.controllers')
         };
 
         ct.stopAppState = function(guid, name) {
-            var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
+            var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.updateAppStateAction(guid, "STOPPED");
