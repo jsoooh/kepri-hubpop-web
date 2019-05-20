@@ -1849,7 +1849,7 @@ angular.module('paas.controllers')
         };
 
         ct.restageApp = function(guid, name) {
-            var showConfirm = common.showConfirm($translate.instant('label.redeploy') + "(" + name + ")", $translate.instant('message.mq_redeploy_app'));
+            var showConfirm = common.showConfirm($translate.instant('label.restart') + "(" + name + ")", $translate.instant('message.mq_restart_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.restageAppAction(guid);
