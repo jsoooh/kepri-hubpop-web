@@ -77,7 +77,7 @@ angular.module('common.controllers')
                         //common.showDialogAlertHtml('알림', '공지사항 내용', 'notice');
                         //showNotice();
                     }
-                    if (data.orgCount == 0) {
+                    if (!data.manager && data.orgCount == 0) {
                         common.showDialogAlertHtml('알림', '현재 참여중인 프로젝트가 없습니다. </br>외부 사용자의 경우, 한전 담당자가 생성한 프로젝트에 참여하여 HUB-PoP을 사용할 수 있습니다.</br>계정 정보를 한전 담당자에게 전달하여 프로젝트 참여자로 등록하도록 요청하여 주세요.', 'info');
                         $scope.authenticating = false;
                         $scope.main.loadingMainBody = false;
