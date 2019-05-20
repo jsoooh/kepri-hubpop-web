@@ -339,10 +339,9 @@ angular.module('paas.controllers')
             });
         };
 
-
         ct.startAppState = function(guid, name, type) {
             if (type == 'restart') {
-                var showConfirm = common.showConfirm($translate.instant('label.restart') + "(" + name + ")", $translate.instant('message.mq_start_app'));
+                var showConfirm = common.showConfirm($translate.instant('label.restart') + "(" + name + ")", $translate.instant('message.mq_restart_app'));
             } else {
                 var showConfirm = common.showConfirm($translate.instant('label.start') + "(" + name + ")", $translate.instant('message.mq_start_app'));
             }
@@ -363,6 +362,30 @@ angular.module('paas.controllers')
         ct.updateAppStateAction = function(guid, state) {
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.updateAppState(guid, state);
+            appPromise.success(function (data) {
+                $scope.main.loadingMainBody = false;
+                var updateApp = common.objectsFindByField(ct.apps, "guid", data.guid);
+                if (updateApp && updateApp.guid) {
+                    updateApp.state = data.state;
+                    updateApp.packageState = data.packageState;
+                }
+            });
+            appPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.restartApp = function(guid, name) {
+            var showConfirm = common.showConfirm($translate.instant('label.restart') + "(" + name + ")", $translate.instant('message.mq_restart_app'));
+            showConfirm.then(function () {
+                common.mdDialogHide();
+                ct.restartAppAction(guid);
+            });
+        };
+
+        ct.restartAppAction = function(guid) {
+            $scope.main.loadingMainBody = true;
+            var appPromise = applicationService.restartApp(guid);
             appPromise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 var updateApp = common.objectsFindByField(ct.apps, "guid", data.guid);
@@ -1336,7 +1359,6 @@ angular.module('paas.controllers')
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
             });
-
         };
 
         $scope.cancelReName = function () {
@@ -1348,7 +1370,6 @@ angular.module('paas.controllers')
             nameP.contents().unwrap().wrap(compiledElement);
             $(".updateName").remove();
         };
-
 
         // 인스턴스 재시작
         ct.instanceRestart = function (guid, index) {
@@ -1847,17 +1868,17 @@ angular.module('paas.controllers')
             });
         };
 
-        ct.restageApp = function(guid, name) {
+        ct.restartApp = function(guid, name) {
             var showConfirm = common.showConfirm($translate.instant('label.restart') + "(" + name + ")", $translate.instant('message.mq_restart_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
-                ct.restageAppAction(guid);
+                ct.restartAppAction(guid);
             });
         };
 
-        ct.restageAppAction = function(guid) {
+        ct.restartAppAction = function(guid) {
             $scope.main.loadingMainBody = true;
-            var appPromise = applicationService.restageApp(guid);
+            var appPromise = applicationService.restartApp(guid);
             appPromise.success(function (data) {
                 if (data && data.guid) {
                     ct.app.state = data.state;

@@ -59,7 +59,7 @@
                                 <li ng-if="appItem.state != 'STOPPED'"><a href="javascript:void(0);" class="disabled" title="APP가‘중지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
                                 <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.stopAppState(appItem.guid, appItem.name)">중지</a></li>
                                 <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '중지'가 가능합니다.">중지</a></li>
-                                <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">재시작</a></li>
+                                <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.restartApp(appItem.guid, appItem.name)">재시작</a></li>
                                 <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
                                 <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteApp(appItem.guid, appItem.name)">삭제</a></li>
     		                </ul>
