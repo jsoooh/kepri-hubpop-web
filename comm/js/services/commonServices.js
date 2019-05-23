@@ -1037,7 +1037,7 @@ angular.module('common.services', ['LocalStorageModule'])
             promise.error = function (fn) {
                 promise.then(null, function (response) {
                     if(response == undefined || typeof response == "string") response = {data:{}, status:"", headers:""};
-                    if (response.data && response.data.status == 307) response.status = 307;    //0423. add
+                    if (response.data && response.data.status == 307) response.status = 307;    //0423. iaas DOMAIN 토큰 생성 실패 관련 add
                     if (response.status == 307) {
                         if (response.data && response.data.message) {
                             if (response.data.message == "mi_no_login") {
