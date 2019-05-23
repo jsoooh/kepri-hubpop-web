@@ -79,8 +79,9 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
-                common.showAlertError(data.message);
-                //common.showAlert("message",data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -737,7 +738,9 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.error(function (data, status, headers) {
-                common.showAlertError(data.message);
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -993,7 +996,9 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function (data, status, headers) {
