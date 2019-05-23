@@ -71,7 +71,7 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
                 ct.networks.unshift({id:"",name:'',description:"네트워크 선택"});
@@ -726,7 +726,7 @@ angular.module('iaas.controllers')
         //보안정책 조회
         ct.fn.getSecurityPolicy = function() {
             var param = {tenantId:ct.data.tenantId};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param);
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 ct.securityPolicyList = data.content;
                 for(var i = 0; i < ct.securityPolicyList.length; i++){
@@ -973,8 +973,7 @@ angular.module('iaas.controllers')
             var params = {
                 tenantId : ct.data.tenantId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
-            
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.length > 0) {
                     ct.tenantResource = data.content[0];
