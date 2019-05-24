@@ -154,14 +154,14 @@ angular.module('portal.services', [])
                             $(this).closest("li.dept2").find("a.dept2").toggleClass("on");
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
                             $(this).closest("li.dept1").find("a.dept1").toggleClass("on open");
-                        };
+                        }
                         if($(this).hasClass("dept2")){
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
                             $(this).closest("li.dept1").find("a.dept1").toggleClass("on open");
-                        };
+                        }
                         if($(this).hasClass("dept1")){
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
-                        };
+                        }
                     }
                 }
             })
