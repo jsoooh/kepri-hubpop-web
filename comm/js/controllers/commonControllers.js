@@ -807,11 +807,9 @@ angular.module('common.controllers', [])
                 } else {
                     mc.leftMenuParams = common.getLeftMenuList(mc.selectSiteMap, "A", "A");
                     mc.commLeftMenuParams = common.getLeftMenuList({mainKey: 'common', pageStage: 'comm'}, "A", "A");
-/*
-                    if(!mc.commLeftFav.dataLoad) {
+                    /*if(!mc.commLeftFav.dataLoad) {
                         mc.setCommLeftIconMenuParams();
-                    }
-*/
+                    }*/
                 }
             }
         };
@@ -1487,11 +1485,9 @@ angular.module('common.controllers', [])
             }
         }
 
-/*
-		if (!$scope.main.contentsLayoutResizeEvent) {
+		/*if (!$scope.main.contentsLayoutResizeEvent) {
 			$scope.main.contentsLayoutResizeEvent	= true;
-		}
-*/
+		}*/
 
         $scope.main.asideClose();
         $scope.main.isLoadPageBody = true;
