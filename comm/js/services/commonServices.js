@@ -230,7 +230,7 @@ angular.module('common.services', ['LocalStorageModule'])
                         pageStage : subMenuOption.pageStage,
                         contentsView : subMenuOption.contentsView,
                         mainContentsClass : subMenuOption.mainContentsClass,
-                        ngClick : subMenuOption.ngClick,
+                        ngClick : subMenuOption.ngClick
                     };
 
                     common.leftMenus[mainKey][cidx++]	= subMenuSiteMap;
@@ -281,7 +281,7 @@ angular.module('common.services', ['LocalStorageModule'])
                             pageStage : subPageOption.pageStage,
                             contentsView : subPageOption.contentsView,
                             mainContentsClass : subPageOption.mainContentsClass,
-                            ngClick : subPageOption.ngClick,
+                            ngClick : subPageOption.ngClick
                         };
                     });
                 });
@@ -329,7 +329,7 @@ angular.module('common.services', ['LocalStorageModule'])
                         pageStage : subPageOption.pageStage,
                         contentsView : subPageOption.contentsView,
                         mainContentsClass : subPageOption.mainContentsClass,
-                        ngClick : subPageOption.ngClick,
+                        ngClick : subPageOption.ngClick
                     };
                 });
             });
@@ -404,8 +404,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 var menuItem = leftMenus[i];
                 if (!menuItem.menuDisplayNo && !menuItem.subPage) {
                     var isMenuView	= true;
-/*
-                    if (auth != "A") {
+                    /*if (auth != "A") {
                         if ((menuItem.orgType || menuItem.notPAuth) && !pAuth) {
                             isMenuView	= false;
                         }
@@ -419,8 +418,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                 isMenuView	= false;
                             }
                         }
-                    }
-*/
+                    }*/
                     if (isMenuView) {
                         var templateHtml	= "";
                         var iconClassName	= "";
@@ -520,8 +518,7 @@ angular.module('common.services', ['LocalStorageModule'])
                     var menuItem = leftMenus[i];
                     if (!menuItem.menuDisplayNo && !menuItem.subPage) {
                         var isMenuView	= true;
-/*
-                        if (auth != "A") {
+                        /*if (auth != "A") {
                             if ((menuItem.orgType || menuItem.notPAuth) && !pAuth) {
                                 isMenuView	= false;
                             }
@@ -535,8 +532,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                     isMenuView	= false;
                                 }
                             }
-                        }
-*/
+                        }*/
                         if (isMenuView) {
                             var templateHtml	= "";
                             var iconClassName	= "";
