@@ -69,11 +69,15 @@ angular.module('portal.services', [])
                 // Depth 1
                 if(repeatData[i].level == '1'){
                     var icoId = repeatData[i].id.toString().substr(2,1);
-                    if(repeatData[i].urlPath){
+                    if (repeatData[i].childCnt == 0) {
                         leftMenu += "		<li class='dept1'>\n";
-                        leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                        if (repeatData[i].urlPath) {
+                            leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                        } else {
+                            leftMenu += "			<a class='dept1' href='javascript:void(0);'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                        }
                         leftMenu += "		</li>\n";
-                    }else{
+                    } else {
                         parentId1 = repeatData[i].id;
                         leftMenu += "		<li class='dept1'>\n";
                         leftMenu += "			<a class='dept1' href='javascript:void(0);' onclick='depth1Click(event);'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "<span class='ico ico-arr'></span></a>\n";
@@ -82,11 +86,15 @@ angular.module('portal.services', [])
                 }
                 // Depth 2
                 if(repeatData[i].level == '2' && repeatData[i].parentId == parentId1){
-                    if(repeatData[i].urlPath){
+                    if (repeatData[i].childCnt == 0) {
                         leftMenu += "				<li class='dept2' onmouseover='depth2LiHover(event,\"no\");'>\n";
-                        leftMenu += "					<a class='dept2' href='" + repeatData[i].urlPath + "' onmouseover='depth2Hover(event,\"no\");' onclick='depth2Click(event);'>" + repeatData[i].depth2 + "</a>\n";
+                        if (repeatData[i].urlPath) {
+                            leftMenu += "					<a class='dept2' href='" + repeatData[i].urlPath + "' onmouseover='depth2Hover(event,\"no\");' onclick='depth2Click(event);'>" + repeatData[i].depth2 + "</a>\n";
+                        } else {
+                            leftMenu += "					<a class='dept2' href='javascript:void(0);' onmouseover='depth2Hover(event,\"no\");' onclick='depth2Click(event);'>" + repeatData[i].depth2 + "</a>\n";
+                        }
                         leftMenu += "				</li>\n";
-                    }else{
+                     } else {
                         parentId2 = repeatData[i].id;
                         leftMenu += "				<li class='dept2' onmouseover='depth2LiHover(event);'>\n";
                         leftMenu += "					<a class='dept2' href='javascript:void(0);' onmouseover='depth2Hover(event);' onclick='depth2Click(event);'>" + repeatData[i].depth2 + "<span class='ico ico-arr'></span></a>\n";
