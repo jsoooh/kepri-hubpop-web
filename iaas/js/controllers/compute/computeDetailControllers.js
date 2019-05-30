@@ -393,6 +393,29 @@ angular.module('iaas.controllers')
             });
         };
 
+        // 서버 이벤트 조회
+        ct.fn.getInstanceActionLog = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                instanceId : ct.data.instanceId
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/actionlogs', 'GET', param, 'application/x-www-form-urlencoded'));
+            returnPromise.success(function (data, status, headers) {
+                ct.instance = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+
         ct.fn.systemTerminalResize = function(cols, rows) {
             //Terminal.applyAddon(fit);
             if (!cols) {
@@ -823,9 +846,11 @@ angular.module('iaas.controllers')
                 if (ct.sltInfoTab != sltInfoTab) {
                     ct.sltInfoTab = sltInfoTab;
                     if (sltInfoTab == 'bootLog') {
-                        $timeout(function() {
+                        $timeout(function () {
                             ct.fn.systemTerminalResize(170, 15);
                         }, 100);
+                    } else if (sltInfoTab == 'actEvent') {
+                        ct.fn.getInstanceActionLog();
                     } else if (sltInfoTab == 'sysEvent') {
                         ct.fn.listEventHistory(1, 1000);
                     }
