@@ -402,7 +402,37 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/actionlogs', 'GET', param, 'application/x-www-form-urlencoded'));
             returnPromise.success(function (data, status, headers) {
-                ct.instance = data.content;
+                ct.serverEvent = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.getInstanceBootLog = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId: ct.data.tenantId,
+                instanceId: ct.data.instanceId
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/bootlogs', 'GET', param, 'application/x-www-form-urlencoded'));
+            returnPromise.success(function (data, status, headers) {
+                ct.test = data.content;
+                ct.test.consoleArr = ct.test.console.split("\n");
+                for (var i = 0; i < ct.test.consoleArr.length; i++) {
+                    ct.test.consoleArr[i] = common.replaceAll(ct.test.consoleArr[i], "(\\[[0-9;]{1,}m(.){1,})\\[0m", "\x1B$1\x1B[0m");
+                }
+                $timeout(function () {
+                    $('#action_event_panel.scroll-pane').jScrollPane({});
+                    ct.fn.systemTerminalResize(170, 15);
+                    ct.panelFlag = true;
+                }, 100);
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -432,9 +462,9 @@ angular.module('iaas.controllers')
             $('#boot_log_terminal').html('');
             term.open(document.getElementById('boot_log_terminal'));
             //term.fit();
-            if (ct.instance && angular.isArray(ct.instance.consoleArr)) {
-                for (var i=0; i<ct.instance.consoleArr.length; i++) {
-                    term.writeln(ct.instance.consoleArr[i]);
+            if (ct.test && angular.isArray(ct.test.consoleArr)) {
+                for (var i=0; i<ct.test.consoleArr.length; i++) {
+                    term.writeln(ct.test.consoleArr[i]);
                 }
             }
         };
@@ -838,6 +868,7 @@ angular.module('iaas.controllers')
             total : 1
         };
 
+        ct.panelFlag = false;
         ct.fn.changeSltInfoTab = function (sltInfoTab) {
             if (!sltInfoTab) {
                 sltInfoTab = 'domain';
@@ -846,9 +877,12 @@ angular.module('iaas.controllers')
                 if (ct.sltInfoTab != sltInfoTab) {
                     ct.sltInfoTab = sltInfoTab;
                     if (sltInfoTab == 'bootLog') {
-                        $timeout(function () {
-                            ct.fn.systemTerminalResize(170, 15);
-                        }, 100);
+                        if(!ct.panelFlag) {
+                            $timeout(function () {
+                                ct.fn.systemTerminalResize(170, 15);
+                            }, 100);
+                        };
+                        ct.fn.getInstanceBootLog();
                     } else if (sltInfoTab == 'actEvent') {
                         ct.fn.getInstanceActionLog();
                     } else if (sltInfoTab == 'sysEvent') {

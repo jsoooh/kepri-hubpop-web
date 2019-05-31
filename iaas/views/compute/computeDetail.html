@@ -271,7 +271,7 @@
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'actEvent')"><span class="ico">확대/축소</span></button>
 						</div>
 					</div>
-					<div ng-if="contents.instance.actionLogs" class="panel_body">
+					<div ng-if="contents.serverEvent.actionLogs" class="panel_body">
 						<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_event_panel" class="in">
 						<!-- 메세지영역 -->
 						<div class="pop_message_area mb20">
@@ -294,12 +294,12 @@
 									</tr>
 									</thead>
 									<tbody>
-									<tr ng-repeat="actionLog in contents.instance.actionLogs">
+									<tr ng-repeat="actionLog in contents.serverEvent.actionLogs">
 										<td>{{actionLog.userName}}</td>
 										<td>{{actionLog.action}}</td>
 										<td>{{actionLog.time | date : "yyyy-MM-dd HH:mm:ss"}}</td>
 									</tr>
-									<tr ng-if="contents.instance.actionLogs == null">
+									<tr ng-if="contents.serverEvent.actionLogs == null">
 										<td colspan="3" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
 									</tr>
 									</tbody>
