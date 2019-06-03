@@ -2764,7 +2764,7 @@ angular.module('iaas.controllers')
 
     })
     //////////////////////////////////////////////////////////////
-     .controller('iaasCreatePopSnapshotCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $timeout, $bytes,ValidationService, user, common, CONSTANTS) {
+    .controller('iaasCreatePopSnapshotCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $timeout, $bytes,ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("iaasCreatePopSnapshotCtrl.js : iaasCreatePopSnapshotCtrl", 1);
 
         var pop = this;
