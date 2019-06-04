@@ -1970,6 +1970,13 @@ angular
             type: "regex"
           };
           break;
+        case "alpha_lower" :
+          validator = {
+            pattern: /^([a-z])*$/,
+            message: "INVALID_ALPHA_LOWER",
+            type: "regex"
+          };
+          break;
         case "alphaSpaces" :
         case "alpha_spaces" :
           validator = {
