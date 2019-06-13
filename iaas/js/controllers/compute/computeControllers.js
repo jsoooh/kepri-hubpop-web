@@ -264,13 +264,13 @@ angular.module('iaas.controllers')
                         if (serverItem && serverItem.id) {
                             var beforUiTask = serverItem.uiTask;
                             var newItem = false;
-                            if(serverItem.procState == "creating") {
+                            if (serverItem.procState == "creating") {
                                 newItem = true;
                             }
                             ct.fn.mergeServerInfo(serverItem, instance);
                             ct.fn.setProcState(serverItem);
                             ct.fn.setRdpConnectDomain(serverItem);
-                            if(newItem) {
+                            if (newItem) {
                                 common.showAlertSuccess('"' + serverItem.name + '" 서버가 생성 되었습니다.');
                                 serverItem.newCreated = true;
                                 $timeout(function () {
@@ -459,36 +459,36 @@ angular.module('iaas.controllers')
 
         ct.selectedValues = {};
         ct.fnServerConfirm = function(action,instance,index,$event) {
-            if(action == "START") {
+            if (action == "START") {
                 common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
-            } else if(action == "STOP") {
+            } else if (action == "STOP") {
                 common.showConfirm('정지',instance.name +' 서버를 정지하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
-            } else if(action == "PAUSE") {
+            } else if (action == "PAUSE") {
                 common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
-            } else if(action == "UNPAUSE") {
+            } else if (action == "UNPAUSE") {
                 common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
-            } else if(action == "REBOOT") {
+            } else if (action == "REBOOT") {
                 common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
-            } else if(action == "DELETE") {
+            } else if (action == "DELETE") {
                 ct.deleteInstanceJob(instance.id);
-            } else if(action == "SNAPSHOT") {
+            } else if (action == "SNAPSHOT") {
                 //ct.fn.createSnapshot(instance);
             	ct.fn.createPopSnapshot ($event,instance) ;
-            } else if(action == "VOLUME"){
+            } else if (action == "VOLUME"){
                 ct.fn.createInstanceVolumePop($event,instance);
-            } else if(action == "IPCONNECT"){
+            } else if (action == "IPCONNECT"){
                 ct.fn.IpConnectPop(instance,index);
-            } else if(action == "IPDISCONNECT"){
+            } else if (action == "IPDISCONNECT"){
                 ct.fn.ipConnectionSet(instance, "detach",index);
             }
             ct.selectedValues[index] = "";
@@ -504,15 +504,15 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 var vmStateChange = "";
-                if(action == "START"){
+                if (action == "START") {
                     vmStateChange = "starting";
-                }else if(action == "STOP"){
+                }else if (action == "STOP") {
                     vmStateChange = "stopping";
-                }else if(action == "PAUSE"){
+                }else if (action == "PAUSE") {
                     vmStateChange = "pausing";
-                }else if(action == "UNPAUSE"){
+                }else if (action == "UNPAUSE") {
                     vmStateChange = "unpausing";
-                }else if(action == "REBOOT"){
+                }else if (action == "REBOOT") {
                     vmStateChange = "rebooting";
                 }
                 var sltInstance = ct.serverMainList[index];
@@ -535,7 +535,7 @@ angular.module('iaas.controllers')
         //20181120 sg0730  백업 이미지 생성 PopUp 추가
         ct.fn.createPopSnapshot = function($event,instance) {
         	var dialogOptions = {};
-        	if(instance.vmState != 'stopped') {
+        	if (instance.vmState != 'stopped') {
                 common.showAlertWarning('서버를 정지 후 생성가능합니다.');
             } else {
             	dialogOptions = {
@@ -621,7 +621,7 @@ angular.module('iaas.controllers')
                     tenantId : ct.data.tenantId,
                     instanceId : instance.id
                 };
-                if(instance.floatingIp) {
+                if (instance.floatingIp) {
                     param.floatingIp = instance.floatingIp;
                     param.action = type;
                 } else {
@@ -642,15 +642,14 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.copyConnectInfoToClipboard = function (instance) {
-            if(instance.image.osType == 'ubuntu'){
+            if (instance.image.osType == 'ubuntu') {
                 if (instance.floatingIp) {
                     common.copyToClipboard(instance.floatingIp);
                     $scope.main.copyToClipboard(instance.floatingIp, '"' + instance.floatingIp + '"가 클립보드에 복사 되었습니다.');
                 } else {
                     common.showAlertWarning("접속 IP가 존재하지 않습니다.");
                 }
-            }
-            else if(instance.image.osType == 'windows'){
+            } else if (instance.image.osType == 'windows') {
                 var rdpConnectUrl = (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + ct.rdpConnectPort : '';
                 if (rdpConnectUrl) {
                     common.copyToClipboard(rdpConnectUrl);
@@ -661,7 +660,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        if(ct.data.tenantId) {
+        if (ct.data.tenantId) {
             ct.fnGetUsedResource();
             ct.fnGetServerMainList();
         } else { // 프로젝트 선택
@@ -730,8 +729,8 @@ angular.module('iaas.controllers')
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 ct.securityPolicyList = data.content;
-                for(var i = 0; i < ct.securityPolicyList.length; i++){
-                    if(ct.securityPolicyList[i].name == "default"){
+                for (var i = 0; i < ct.securityPolicyList.length; i++) {
+                    if (ct.securityPolicyList[i].name == "default") {
                         ct.roles.push(ct.securityPolicyList[i]);
                         ct.data.securityPolicys = ct.roles;
                     }
@@ -751,7 +750,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.keypairList = data.content;
-                if(ct.keypairList.length == 0){
+                if (ct.keypairList.length == 0) {
                     ct.createKeypair = {};
                     ct.createKeypair.tenantId = ct.data.tenantId;
                     ct.createKeypair.name = "default";
@@ -761,15 +760,15 @@ angular.module('iaas.controllers')
                         keypair : ct.createKeypair
                     };
                     var returnData = common.noMsgSyncHttpResponseJson(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'POST', param);
-                    if(returnData.status == 200) {
+                    if (returnData.status == 200) {
                         ct.fn.getKeypairList();
                     } else {
                         common.showAlertError(returnData.data.responseJSON.message);
                         $scope.main.loadingMainBody = false;
                     }
-                }else{
-                    for(var i = 0; i < ct.keypairList.length; i++){
-                        if(ct.keypairList[i].name == "default"){
+                } else {
+                    for (var i = 0; i < ct.keypairList.length; i++) {
+                        if (ct.keypairList[i].name == "default") {
                             ct.data.keypair = ct.keypairList[i];
                         }
                     }
@@ -823,7 +822,7 @@ angular.module('iaas.controllers')
                     }
                 });
                 ct.specMinDisabledSetting = true;
-                if(ct.data.spec && ct.data.spec.uuid) {
+                if (ct.data.spec && ct.data.spec.uuid) {
                     if (ct.data.spec.disk < ct.data.image.minDisk || ct.data.spec.ram < ct.data.image.minRam) {
                         ct.fn.defaultSelectSpec();
                     }
@@ -862,7 +861,7 @@ angular.module('iaas.controllers')
         // spec loading 체크
         ct.specDisabledAllSetting = false;
         ct.fn.defaultSelectSpec = function() {
-            if(ct.specMinDisabledSetting && ct.specMaxDisabledSetting){
+            if (ct.specMinDisabledSetting && ct.specMaxDisabledSetting) {
                 ct.specDisabledAllSetting = true;
                 var sltSpec = null;
                 for (var i=0; i<ct.specList.length; i++) {
@@ -880,7 +879,7 @@ angular.module('iaas.controllers')
         //사양선택 이벤트 2018.11.13 sg0730 add
         ct.fn.selectSpec = function(sltSpec) {
             if (!ct.specDisabledAllSetting || sltSpec.disabled) return;
-            if(sltSpec && sltSpec.uuid) {
+            if (sltSpec && sltSpec.uuid) {
                 ct.data.spec = angular.copy(sltSpec);
                 ct.specUuid = ct.data.spec.uuid;
             } else {
@@ -896,10 +895,10 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : ct.data.tenantId
             };
-            if(ct.conditionKey == 'imageServiceName') {
+            if (ct.conditionKey == 'imageServiceName') {
                 param.imageServiceName = ct.conditionValue;
             }
-            if(ct.conditionKey == 'imageUseCase') {
+            if (ct.conditionKey == 'imageUseCase') {
                 param.imageUseCase = ct.conditionValue;
             }
             //param.imageType = ct.imageType;
@@ -945,7 +944,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
-                if(ct.networks.length > 0) {
+                if (ct.networks.length > 0) {
                     ct.network = ct.networks[0];
                     ct.data.networks.push(ct.networks[0]);
                     ct.subnet.cidr_A = ct.network.subnets[0].cidr_A;
@@ -961,7 +960,7 @@ angular.module('iaas.controllers')
 
         //네트워크 setting
         ct.fn.networksChange = function() {
-            if(ct.network && ct.network.subnets) {
+            if (ct.network && ct.network.subnets) {
                 ct.subnet.cidr_A = ct.network.subnets[0].cidr_A;
                 ct.subnet.cidr_B = ct.network.subnets[0].cidr_B;
                 ct.subnet.cidr_C = ct.network.subnets[0].cidr_C;
@@ -989,7 +988,7 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    if(CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)){
+                    if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
                         ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
                     }
                     ct.fn.setSpecMaxDisabled();
@@ -1008,13 +1007,13 @@ angular.module('iaas.controllers')
         
         //ip체크
         ct.fn.checkCidr = function() {
-            if(!ct.subnet.cidr_A || !ct.subnet.cidr_B || !ct.subnet.cidr_C || !ct.subnet.cidr_D) {
+            if (!ct.subnet.cidr_A || !ct.subnet.cidr_B || !ct.subnet.cidr_C || !ct.subnet.cidr_D) {
                 common.showAlertWarning("ip를 입력해주세요.");
                 return;
             }
 
             var regExp = /^\b(1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\b/i;
-            if(!regExp.test(ct.subnet.cidr_D)) {
+            if (!regExp.test(ct.subnet.cidr_D)) {
                 common.showAlertWarning("0~255까지의 숫자만 입력가능합니다.");
                 return;
             }
@@ -1026,7 +1025,7 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/fixedIps', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                if(!data.content.ipinfos[0].used) {
+                if (!data.content.ipinfos[0].used) {
                     ct.data.fixedIp = data.content.ipinfos[0].addr;
                     ct.data.portId = data.content.ipinfos[0].id;
                     common.showAlertSuccess("사용가능한 Ip입니다.");
@@ -1046,7 +1045,7 @@ angular.module('iaas.controllers')
         //자동&수동할당 체크
         ct.networkBindCheck = false;
         ct.fn.networkBindSet = function() {
-            if(ct.networkBindCheck) {
+            if (ct.networkBindCheck) {
                 ct.subnet.cidr_D = "";
                 ct.ipFlag = false;
             }
@@ -1174,7 +1173,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        if(ct.data.tenantId) {
+        if (ct.data.tenantId) {
             ct.fn.getTenantResource();
             ct.fn.getDomainUsingList();
             ct.fn.getSpecList();
