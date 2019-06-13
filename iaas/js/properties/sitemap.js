@@ -48,6 +48,13 @@ angular.module('app')
                                 url: '/iaas/compute/copy',
                                 controller: 'iaasComputeCopyCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/compute/computeCopyList.html'
+                            },
+                            serverAlarm: {
+                                name: 'server_main',
+                                stateKey: 'iaasComputeAlarm',
+                                url: '/iaas/compute/alarm',
+                                controller: 'iaasComputeAlarmCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/compute/computeAlarm.html'
                             }
                         }
                     },
