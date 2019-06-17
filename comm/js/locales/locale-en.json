@@ -12,8 +12,7 @@
             "orange": "Orange",
             "usage_trend" : "Usage Trend",
             "usage" : "Usage",
-            "white": "White",
-            "search_period": "Period"
+            "white": "White"
         },
         "message" : {
         }

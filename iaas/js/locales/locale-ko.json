@@ -53,11 +53,7 @@
             "volume_snapshot_deleting" : "삭제중",
             "volume_snapshot_error_deleting" : "삭제중",
             "public" : "공용",
-            "private" : "사용자",
-            "alarm_dt": "발생일시",
-            "alarm_type": "알람타입",
-            "alarm_level": "알람레벨",
-            "action_state": "조치상태"
+            "private" : "사용자"
         },
         "message" : {
         }

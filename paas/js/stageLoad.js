@@ -14,7 +14,7 @@ loadJavascript(_PAAS_STAGE_+'/js/services/serviceInstanceServices.js'+_VERSION_T
 //loadJavascript(_PAAS_STAGE_+'/js/services/marketAppServices.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_PAAS_STAGE_+'/js/services/marketServiceServices.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_PAAS_STAGE_+'/js/services/serviceMarketServices.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_PAAS_STAGE_+'/js/services/nvd3GenServices.js'+_VERSION_TAIL_HEAD_);
+//loadJavascript(_PAAS_STAGE_+'/js/services/nvd3GenServices.js'+_VERSION_TAIL_HEAD_);
 
 loadJavascript(_PAAS_STAGE_+'/js/controllers/paasControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_PAAS_STAGE_+'/js/controllers/organizationControllers.js'+_VERSION_TAIL_HEAD_);

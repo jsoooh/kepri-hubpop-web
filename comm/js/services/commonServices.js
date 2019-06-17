@@ -2808,15 +2808,6 @@ angular.module('common.services', ['LocalStorageModule'])
                 });
             }, 200);
         };
-        
-        common.compareForSort = function (first, second) {
-            if (first.id == second.id)
-                return 0;
-            if (first.id < second.id)
-                return -1;
-            else
-                return 1;
-        };
 
         common.copyToClipboard = function (clipboard) {
             if (clipboard) {
@@ -2826,26 +2817,6 @@ angular.module('common.services', ['LocalStorageModule'])
                 document.execCommand("copy");
                 $temp_input.remove();
             }
-        };
-
-        common.getAlarmType = function () {
-            var nodeJson = CONSTANTS.resourceKey;
-            
-            var typeList = [];
-
-            angular.forEach(Object.keys(nodeJson), function (el, k) {
-                typeList.push({value: nodeJson[el], name: nodeJson[el]});
-            });
-
-            return typeList;
-        };
-
-        common.getAlarmLevel = function () {
-            return angular.copy(CONSTANTS.alarmLevel);
-        };
-
-        common.getResolveStatusCmb = function () {
-            return angular.copy(CONSTANTS.resolveStatus);
         };
 
         return common;

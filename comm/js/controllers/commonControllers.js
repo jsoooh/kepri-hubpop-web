@@ -1244,47 +1244,6 @@ angular.module('common.controllers', [])
             common.moveLoginPage();
         }
 
-        // 알람정책 글로벌
-        mc.CONSTANTS = CONSTANTS;
-        mc.alarmPolicys = {};
-
-        // 알람 색상 매트릭스
-        var colorJson = {
-            'running': '#00aacc',
-            'fail': '#e66b6b',
-            'warning': '#f0a141',
-            'critical':'#ff0000'
-        };
-
-        // 알람별 색상 선택
-        mc.getAlarmColor = function (alarmStatus) {
-            return colorJson[alarmStatus];
-        };
-
-        // 알람 메세지 라벨 세팅
-        mc.getAlarmLabel = function (alarmStatus) {
-            var LABEL_CONSTANTS = 'new_monit.label.';
-            var result = $translate.instant(LABEL_CONSTANTS + alarmStatus);
-            if (result === LABEL_CONSTANTS) result = '-';
-            return result;
-        };
-        
-        // 알람정책 세팅
-        (mc.getAlarmPolicy = function (nodeKey, summary) {
-            
-            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/alarm/policy/' + nodeKey, 'GET');
-            serverStatsPromise.success(function (data, status, headers) {
-                if (data) mc.alarmPolicys[nodeKey] = data;
-                if (summary) summary();
-            });
-            serverStatsPromise.error(function (data, status, headers) {
-                //common.showAlert(data.message);
-            });
-            serverStatsPromise.finally(function (data, status, headers) {
-                // $scope.main.loadingMainBody = false;
-            });
-        })(CONSTANTS.nodeKey.TENANT);
-
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
     // 매인 BODY Conroller
