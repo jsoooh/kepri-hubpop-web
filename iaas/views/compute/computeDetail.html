@@ -385,52 +385,70 @@
 							<div class="msg_txt"><span>서버가 시작될 때 기록되는 Booting Log를 표시합니다.</span></div>
 						</div> -->
 						<!-- //메세지영역 -->
-						<div class="search-group">
-							<div class="pull-left">
-								<div class="form-group">
-									<label for="inputServerName" class="control-label">서버명</label>
-									<div>
-										<input type="text" class="form-control" id="inputServerName" placeholder="Server name"
-											ng-model="serverName">
-									</div>
+						<div class="searchWrap ng-scope" style="height: 68px;">
+									<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required" style="">
+										<div class="searchBox pull-left" style="width: 60%;">
+											<div class="form-group">
+												<input name="searchKeyword_program" type="text" style="width:100px;" ng-model="contents.sysLog.condition.keyword.program" placeholder="프로그램명" ng-keypress="contents.schEnter($event);" class="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+											</div>
+											<div class="form-group">
+												<input name="searchKeyword_message" type="text" style="width:100px;" ng-model="contents.sysLog.condition.keyword.message" placeholder="내용" ng-keypress="contents.schEnter($event);" class="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+											</div>
+											<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.fn.listSystemLog();"><span class="ico ng-binding">검색</span></button>
+										</div>
+										<div class="pull-right" style="padding-left: 20px;">
+											<div style="width: 155px;display: inline-block;">
+												<button class="ng-binding">검색 기간 &nbsp;</button>
+												<select id="timeRange" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+													<option label="1일" value="object:1561">1일</option>
+													<option label="3일" value="object:1562">3일</option>
+													<option label="7일" value="object:1563">7일</option>
+													<option label="1개월" value="object:1564" selected="selected">1개월</option>
+													<option label="6개월" value="object:1565">6개월</option>
+												</select>
+											</div>
+											<div class="datepickerWrap" style="display: inline-block;">
+												<div class="date-inpt">
+													<div class="ADMdtp ADMdtp-container ng-isolate-scope ng-not-empty ng-valid ng-valid-required">
+														<div class="clickOutContainer ng-isolate-scope" click-out="closeCalendar()" alias="adm-7" id="id_0.6766617309066343">
+															<!-- ngIf: defaultTemplate -->
+															<div class="ADMdtpInput masterInput ng-scope">
+																<input type="text" name="startDate" placeholder="YYYY-MM-DD" class="ng-pristine ng-untouched ng-not-empty ng-valid ng-valid-required">
+																<div class="dtp-ig" ng-click="toggleCalendar()" role="button" tabindex="0">
+																	<svg class="dtp-i fakeIcon" viewbox="0 0 24 24"><use xlink:href="#dtp-i-right"></use></svg><svg class="dtp-i calendarIcon" viewbox="0 0 24 24"><use xlink:href="#dtp-i-calendar"></use></svg><svg class="dtp-i closeIcon" viewbox="0 0 24 24"><use xlink:href="#dtp-i-off"></use></svg>
+																</div>
+																<!-- ngIf: dtpValue.formated -->
+																<svg class="removeIcon ng-scope" viewbox="0 0 24 24" ng-if="dtpValue.formated" ng-click="destroy()" role="button" tabindex="0" style=""><use xlink:href="#dtp-i-close"></use></svg>
+																<!-- end ngIf: dtpValue.formated -->
+															</div>
+															<!-- end ngIf: defaultTemplate -->
+														</div>
+														<svg style="display:none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><defs><g id="dtp-i-calendar"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"></path><path d="M0 0h24v24H0z" fill="none"></path></g><g id="dtp-i-clock"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path><path d="M0 0h24v24H0z" fill="none"></path><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></g><g id="dtp-i-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path><path d="M0 0h24v24H0z" fill="none"></path></g><g id="dtp-i-close"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path><path d="M0 0h24v24H0z" fill="none"></path></g><g id="dtp-i-off"><path d="M0 0h24v24H0z" fill="none"></path><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"></path></g></defs></svg>
+													</div>
+												</div>
+												<span class="wave">~</span>
+												<div class="date-inpt">
+													<div class="ADMdtp ADMdtp-container ng-isolate-scope ng-not-empty ng-valid ng-valid-required">
+														<div class="clickOutContainer ng-isolate-scope" click-out="closeCalendar()" alias="adm-8" id="id_0.7661155554844936">
+															<!-- ngIf: defaultTemplate -->
+															<div class="ADMdtpInput masterInput ng-scope">
+																<input type="text" name="endDate" placeholder="YYYY-MM-DD" class="ng-pristine ng-untouched ng-not-empty ng-valid ng-valid-required">
+																<div class="dtp-ig" role="button" tabindex="0">
+																	<svg class="dtp-i fakeIcon" viewbox="0 0 24 24"><use xlink:href="#dtp-i-right"></use></svg><svg class="dtp-i calendarIcon" viewbox="0 0 24 24"><use xlink:href="#dtp-i-calendar"></use></svg><svg class="dtp-i closeIcon" viewbox="0 0 24 24"><use xlink:href="#dtp-i-off"></use></svg>
+																</div>
+																<!-- ngIf: dtpValue.formated -->
+																<svg class="removeIcon ng-scope" viewbox="0 0 24 24" role="button" tabindex="0"><use xlink:href="#dtp-i-close"></use></svg>
+																<!-- end ngIf: dtpValue.formated -->
+															</div>
+															<!-- end ngIf: defaultTemplate -->
+														</div>
+														<svg style="display:none;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><defs><g id="dtp-i-calendar"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"></path><path d="M0 0h24v24H0z" fill="none"></path></g><g id="dtp-i-clock"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path><path d="M0 0h24v24H0z" fill="none"></path><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></g><g id="dtp-i-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path><path d="M0 0h24v24H0z" fill="none"></path></g><g id="dtp-i-close"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path><path d="M0 0h24v24H0z" fill="none"></path></g><g id="dtp-i-off"><path d="M0 0h24v24H0z" fill="none"></path><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"></path></g></defs></svg>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
 								</div>
-								<div class="form-group">
-									<label for="inputMessage" class="control-label">메세지</label>
-									<div>
-										<input type="text" class="form-control" id="inputMessage" placeholder="Message"
-											ng-model="message">
-									</div>
-								</div>
-								<div class="form-group row-centered">
-									<div>
-										<button type="submit" class="btn btn-color1" ng-click="contents.fn.selectLogs()"
-											style="width:80px;">검색</button>
-									</div>
-								</div>
-							</div>
-							<div class="pull-right">
-								<label class="control-label">시간</label>
-								<div class="form-group">
-									<adm-dtp name="'startDate'" ng-model="targetDate" options="{format:'YYYY-MM-DD'}"></adm-dtp>
-									<!-- <div class="tui-datepicker-input tui-datetime-input tui-has-focus" style="width: inherit;">
-										<input type="text" id="datepicker-input" class="form-control" aria-label="Date-Time" readonly="readonly">
-										<span class="tui-ico-date"></span>
-									</div>
-									<div id="wrapper" style="margin-top: -1px;"></div> -->
-								</div>
-								<div class="form-group">
-									<select id="startTime" class="form-control"
-										ng-options="timePicker.value as ( timePicker.name | translate ) for timePicker in contents.timePicker"
-										ng-model="startTime"></select>
-								</div>
-								<span class="wave">~</span>
-								<div class="form-group">
-									<select id="endTime" class="form-control"
-										ng-options="timePicker.value as ( timePicker.name | translate ) for timePicker in contents.timePicker"
-										ng-model="endTime"></select>
-								</div>
-							</div>
-						</div>
 						<div class="tbl type1">
 							<div class="log-row list">
 								<table class="table logs">
