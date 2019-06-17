@@ -14,7 +14,7 @@
 				<option value="">프로젝트</option>
 				<option ng-repeat="orgItem in (contents.portalOrgs | filter : { id: '!' + contents.sltPortalOrgId })" value="{{orgItem.orgId}}">{{orgItem.orgName}}</option>
 			</select>
-			<input type="text" placeholder="검색어를 입력해 주세요." ng-model="contents.schFilterText" style="width: 400px;">
+			<input type="text" placeholder="백업 이미지 이름을 입력해 주세요." ng-model="contents.schFilterText" style="width: 400px;">
 		</div>
 		<button type="button" name="button" class="btn btn-sch" title="검색">
 			<span class="ico">검색</span>
@@ -36,19 +36,19 @@
 		<thead>
 			<tr>
 				<th scope="row" rowspan="2" class="bd_r">번호</th>
-				<th scope="row" rowspan="2" class="bd_r">프로젝트</th>
+				<th scope="row" rowspan="2" class="bd_r" style="text-align:left">프로젝트</th>
 				<th scope="col" colspan="4" class="bd_r">원본서버</th>
 				<th scope="col" colspan="4" class="bd_r">백업 이미지</th>
 				<th scope="row" rowspan="2">서버 복사</th>
 			</tr>
 			<tr>
-				<th>서버명</th>
-				<th>OS 이미지</th>
-				<th>CPU</th>
-				<th>메모리</th>
-				<th>이름</th>
-				<th>크기</th>
-				<th>설명</th>
+				<th style="text-align:left" class="bd_r">서버명</th>
+				<th class="bd_r">OS 이미지</th>
+				<th class="bd_r">CPU</th>
+				<th class="bd_r">메모리</th>
+				<th style="text-align:left" class="bd_r">이름</th>
+				<th class="bd_r">크기</th>
+				<th class="bd_r">설명</th>
 				<th class="bd_r">생성일시</th>
 			</tr>
 		</thead>
