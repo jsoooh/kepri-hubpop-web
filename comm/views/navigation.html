@@ -42,7 +42,15 @@
 							<em class="badge" ng-show="main.alarmCnt > 0">{{ main.alarmCnt }}</em>
 						</span>
 					</button>
-
+					<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
+						<li class="noti-txt ng-binding">총 <em class="ng-binding"></em>개의 알람이 있습니다.</li>
+						<li class="divider"></li>
+						<!-- ngRepeat: (key, item) in main.alarms.content -->
+						<li class="divider"></li>
+						<li class="noti-more">
+							<a href="#/monit/alarm" class="ng-binding">알람 더보기 <span class="ico"><em class="badge ng-binding"></em></span></a>
+						</li>
+					</ul>
 				</div>
 			</div>
 			<div class="col col-my">
