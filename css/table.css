@@ -123,3 +123,28 @@ td .td-attach::before{display: inline-block; position: absolute; top:0; left:0; 
 .tbl.type2 td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 스타일 갱신 margin-left:6px*/
 .tbl.type2 .table{table-layout: fixed; border-bottom:1px solid #d6d6d6;}
 .tbl.type2 th .ico-info2{vertical-align: top;}
+
+/*라벨 스타일 추가*/
+.tbl .label{
+    font-size: 85%;
+    width: 75px;
+    display: inline-block;
+    font-weight: normal;
+}
+.tbl .label.label-normal{
+    background-color: #17a0ce;
+}
+.tbl .label.label-balnk{
+    background-color: #fff;
+    color: #555;
+    border:1px solid #888;
+}
+.tbl .label.label-warning{
+    background-color: #f8ac59;
+}
+.tbl .label.label-danger{
+    background-color: #ff1100;
+}
+.tbl .label.label-fail{
+    background-color: #888;
+}
