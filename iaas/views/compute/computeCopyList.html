@@ -25,28 +25,43 @@
 <div class="tbl type1">
 	<table class="table">
 		<colgroup>
-			<col >
-			<col >
-			<col >
-			<col >
-			<col >
-			<col >
-			<col >
+			<!--번호-->
+			<col width="3%">
+			<!--프로젝트-->
+			<col width="15%">
+			<!--서버명-->
+			<col width="20%">
+			<!--OS이미지-->
+			<col width="10%">
+			<!--CPU-->
+			<col width="3%">
+			<!--메모리-->
+			<col width="5%">
+			<!--이름-->
+			<col width="19%">
+			<!--크기-->
+			<col width="5%">
+			<!--설명-->
+			<col width="5%">
+			<!--생성일시-->
+			<col width="10%">
+			<!--서버 복사-->
+			<col width="5%">
 		</colgroup>
 		<thead>
 			<tr>
-				<th scope="row" rowspan="2" class="bd_r">번호</th>
-				<th scope="row" rowspan="2" class="bd_r" style="text-align:left">프로젝트</th>
+				<th scope="row" rowspan="2" class="bd_r" width="10%">번호</th>
+				<th scope="row" rowspan="2" class="bd_r">프로젝트</th>
 				<th scope="col" colspan="4" class="bd_r">원본서버</th>
 				<th scope="col" colspan="4" class="bd_r">백업 이미지</th>
 				<th scope="row" rowspan="2">서버 복사</th>
 			</tr>
 			<tr>
-				<th style="text-align:left" class="bd_r">서버명</th>
+				<th class="bd_r">서버명</th>
 				<th class="bd_r">OS 이미지</th>
 				<th class="bd_r">CPU</th>
 				<th class="bd_r">메모리</th>
-				<th style="text-align:left" class="bd_r">이름</th>
+				<th class="bd_r">이름</th>
 				<th class="bd_r">크기</th>
 				<th class="bd_r">설명</th>
 				<th class="bd_r">생성일시</th>
@@ -86,6 +101,7 @@
 			text-last-class="end"
 			text-next-class="next"
 			text-prev-class="prev">
+	</paging>
 </nav>
 
 <!-- //page -->
