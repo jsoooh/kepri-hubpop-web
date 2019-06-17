@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, common, ValidationService, CONSTANTS, computeDetailService) {
+    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $interval, $window, $mdDialog, $filter, $bytes, $translate, common, nvd3Generator, ValidationService, CONSTANTS, computeDetailService, tenantChartConfig, tenantNetChartConfig) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -887,6 +887,10 @@ angular.module('iaas.controllers')
                         ct.fn.getInstanceActionLog();
                     } else if (sltInfoTab == 'sysEvent') {
                         ct.fn.listEventHistory(1, 1000);
+                    } else if (sltInfoTab == 'systemLog') { 
+                        ct.fn.selectLogs();
+                    } else if (sltInfoTab == 'virtualMonit') {
+                        ct.fn.selectChartList();
                     }
                 }
             }
@@ -916,7 +920,298 @@ angular.module('iaas.controllers')
             ct.fn.getInstanceInfo();
             ct.fn.changeSltInfoTab();
         }
+        
+        // 시스템 로그 관련
+        var stop = $interval(function () {
+            $scope.serverName = ct.instance.name;
+            if ($scope.serverName) {
+                $interval.cancel(stop);
+            }
+        }, 500);
+        $scope.serverId = $stateParams.instanceId;
+        $scope.message = '';
+        $scope.endTime = '23:55:00';
+        $scope.startTime = '00:00:00';
+        $scope.targetDate = moment().format('YYYY-MM-DD');
 
+        ct.timePicker = computeDetailService.getTimePicker();
+
+        // 페이징 옵션
+        $scope.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
+
+        // 최근 로그 조회
+        ct.fn.selectLogs = function (page) {
+            if (page) {
+                $scope.pageOptions.currentPage = page;
+            } else {
+                page = $scope.pageOptions.currentPage;
+            }
+
+            $scope.main.loadingMainBody = true;
+
+            var param = {
+                serverUUID: $scope.serverId,
+                pageItems: $scope.pageOptions.pageSize,
+                pageIndex: $scope.pageOptions.currentPage,
+                targetDate: $scope.targetDate,
+                startTime: $scope.startTime,
+                endTime: $scope.endTime,
+                keyword: $scope.message
+            };
+            
+            $scope.main.loadingMainBody = true;
+            ct.data.specificLogs = [];
+
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/log/' + $scope.serverId + '/specific', 'GET', param);
+            serverStatsPromise.success(function (data, status, headers) {
+                ct.data.specificLogs = data;
+                
+                if (data.totalCount > 10000) {
+                    $scope.pageOptions.total = 10000;
+                } else {
+                    $scope.pageOptions.total = data.totalCount;
+                }
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        /*
+         * 가상머신 모니터링 차트
+         */
+        
+        // 차트 옵션 초기화
+        $scope.gridsterOpts = {
+            margins: [20, 20],
+            columns: 3,
+            rowHeight: 250,
+            mobileModeEnabled: false,
+            swapping: true,
+            draggable: {
+                handle: 'h4',
+                stop: function (event, $element, widget) {
+                    $timeout(function () {
+                        $log.log(event + ',' + $element + ',' + widget);
+                    }, 400)
+                }
+            },
+            resizable: {
+                enabled: true,
+                handles: ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'],
+                minWidth: 200,
+                layoutChanged: function () {
+                },
+
+                // optional callback fired when resize is started
+                start: function (event, $element, widget) {
+                    $timeout(function () {
+                        $log.log(event + ',' + $element + ',' + widget);
+                    }, 400)
+                },
+
+                // optional callback fired when item is resized,
+                resize: function (event, $element, widget) {
+                    if (widget.chart.api) widget.chart.api.update();
+                },
+
+                // optional callback fired when item is finished resizing
+                stop: function (event, $element, widget) {
+                    $timeout(function () {
+                        if (widget.chart.api) widget.chart.api.update();
+                    }, 400)
+                }
+            }
+        };
+
+        $scope.dashboard = {
+            widgets: [],
+            netWidgets: {}
+        };
+
+        $scope.events = {
+            resize: function (e, scope) {
+                $timeout(function () {
+                    if (scope.api && scope.api.update) scope.api.update();
+                }, 200)
+            }
+        };
+
+        var hostname = $scope.serverId;
+        
+        // 조회조건 설정
+        var condition = {
+            hostname: hostname,
+            groupBy: '12m',
+            defaultTimeRange: '3h'
+        };
+        
+        var count = 0;
+        var widgetLen = 0;
+        var tenantChartConfigOrgin = [];
+        angular.copy(tenantChartConfig, tenantChartConfigOrgin);
+
+        // 인터페이스 목록 조회 후 차트데이터 요청. 네트워크의 경우 인터페이스에 따라 변경됨.
+        ct.fn.selectChartList = function () {
+            $scope.main.loadingMainBody = true;
+            computeDetailService.tenantInterfaceList(condition).then(
+                function (result) {
+                    $scope.interfaceList = result.data.metric;
+                    tenantChartConfig = [];
+                    angular.copy(tenantChartConfigOrgin, tenantChartConfig);
+                    angular.forEach(result.data.metric, function (metricItem, mkey) {
+                        angular.forEach(tenantNetChartConfig, function (netConfig, nkey) {
+                            var distNetConfig = {};
+                            angular.copy(netConfig, distNetConfig);
+                            
+                            var id = tenantChartConfig[tenantChartConfig.length-1].id + 1;
+                            distNetConfig.id = id;
+                            distNetConfig.conditions = {};
+                            distNetConfig.conditions.interface = metricItem;
+                            tenantChartConfig.push(distNetConfig);
+                        });
+                    });
+                    var charts = tenantChartConfig;
+                    for (var i in charts) {
+                        var chartOpt = charts[i];
+                        if (chartOpt.func) {
+                            (function (opt, cnt) {
+                                if (opt.conditions) {
+                                    for (var key in opt.conditions) {
+                                        condition[key] = opt.conditions[key];
+                                    }
+                                }
+                                computeDetailService[opt.func](condition).then(
+                                    function (result) {
+                                        console.log('count', count);
+                                        $scope.setWidget(cnt, opt, result.data);
+                                    },
+                                    function (reason) {
+                                        console.log('fail count', count);
+                                        $scope.setWidget(cnt, opt);
+                                        $log.error(reason);
+                                        $timeout(function () { $exceptionHandler(reason.data.message, { code: reason.data.HttpStatus, message: reason.data.message }); }, 500);
+                                    }
+                                );
+                            })(chartOpt, count);
+                            count++;
+                        }
+                    }
+                },
+                function (reason) {
+                    $scope.setWidget(0, {});
+                    $log.error(reason);
+                    $timeout(function () { $exceptionHandler(reason.data.message, { code: reason.data.HttpStatus, message: reason.data.message }); }, 500);
+                }
+            )
+
+            var stop = $interval(function () {
+                if (count == widgetLen) {
+                    $interval.cancel(stop);
+                    $scope.dashboard.widgets.sort(common.compareForSort);
+                    angular.forEach($scope.dashboard.netWidgets, function (el, k) {
+                        el.sort(common.compareForSort);
+                    })
+                    $scope.main.loadingMainBody = false;
+                }
+            }, 500);
+        };
+
+        $scope.setWidget = function (index, dtvOpt, jsonArr) {
+            var col = dtvOpt.col == undefined ? Math.floor(index % 3) : dtvOpt.col;
+            var row = dtvOpt.row == undefined ? Math.floor(index / 3) : dtvOpt.row;
+            var sizeX = dtvOpt.sizeX == undefined ? 1 : dtvOpt.sizeX;
+            var sizeY = dtvOpt.sizeY == undefined ? 1 : dtvOpt.sizeY;
+
+            var widget = {
+                col: col, row: row, sizeX: sizeX, sizeY: sizeY, name: dtvOpt.name, id: dtvOpt.id, type: dtvOpt.type, conditions: dtvOpt.conditions,
+                chart: {
+                    options: nvd3Generator[dtvOpt.type].options(),
+                    api: {}
+                },
+                func: dtvOpt.func,
+                nodeid: dtvOpt.nodeid,
+                nodeShow: (!dtvOpt.conditions || !dtvOpt.conditions.interface)
+            };
+
+            if (dtvOpt.conditions && dtvOpt.conditions.interface) {
+                widget.netShow = dtvOpt.conditions.interface;
+            }
+
+            if (dtvOpt.percent && jsonArr) {
+                widget.chart.options.chart.forceY = [0, 100];
+                widget.chart.options.chart.yAxis.tickFormat = function (d) { return d3.format('.0%')(d / 100); };
+                widget.percent = dtvOpt.percent;
+            }
+
+            if (dtvOpt.axisLabel) {
+                widget.chart.options.chart.yAxis.axisLabel = dtvOpt.axisLabel;
+                widget.chart.options.chart.yAxis.axisLabelDistance = -5;
+                widget.chart.options.chart.margin.left = 55;
+                widget.axisLabel = dtvOpt.axisLabel;
+            }
+
+            if (jsonArr) {
+                var value, arr = [];
+                var checkData = 0;
+                var metricData = [];
+                for (var i = 0; i < jsonArr.length; i++) {
+                    if (dtvOpt.nodeid == 'cpu_usage' || dtvOpt.nodeid == 'mem_usage') {
+                        metricData = jsonArr[i].metric[0].metric;
+                    } else {
+                        metricData = jsonArr[i].metric;
+                    }
+                    if (metricData) {
+                        for (var j = 0; j < metricData.length; j++) {
+                            metricData[j].totalUsage = metricData[j].usage;
+                            delete metricData[j].usage;
+                        }
+                    }
+                    value = metricData == null ? [{ time: 0, totalUsage: 0 }] : metricData;
+                    arr.push({ values: value, key: jsonArr[i].name, area: true });
+                    for (var j = 0; j < value.length; j++) {
+                        if (value[j] != null) {
+                            if (checkData < value[j].totalUsage) {
+                                checkData = value[j].totalUsage;
+                            }
+                        }
+                    }
+                }
+
+                computeDetailService.setAlarmLine(arr, CONSTANTS.nodeKey.TENANT, $scope.main, dtvOpt.nodeid);
+                widget.chart.data = arr;
+
+                if (dtvOpt.type != 'list') {
+                    if (checkData < 5 && widget.chart.options.chart.forceY == undefined) {
+                        widget.chart.options.chart.forceY = [0, 5];
+                    }
+                    if (checkData > 10000) {
+                        widget.chart.options.chart.yAxis.axisLabelDistance = 20;
+                        widget.chart.options.chart.margin.left = 80;
+                    }
+                }
+            } else {
+                widget.chart.options.chart.forceY = false;
+            }
+
+            delete widget.chart.options.chart.xAxis.ticks;
+            widget.chart.options.chart.xAxis.tickFormat = function (d) { return d3.time.format('%H:%M')(new Date(d * 1000)); };
+
+            if (dtvOpt.conditions && dtvOpt.conditions.interface) {
+                if (!$scope.dashboard.netWidgets[dtvOpt.conditions.interface]) $scope.dashboard.netWidgets[dtvOpt.conditions.interface] = [];
+                $scope.dashboard.netWidgets[dtvOpt.conditions.interface].push(widget);
+            } else {
+                $scope.dashboard.widgets.push(widget);
+            }
+            widgetLen++;
+        };
     })
     .controller('iaasComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeSystemDetailCtrl", 1);
@@ -2104,6 +2399,8 @@ angular.module('iaas.controllers')
                         ct.fn.getServerMemData();
                         ct.fn.getServerDiskData();
                         ct.fn.getServerNetData();
+                    } else if (sltInfoTab == 'systemLog') {
+                    } else if (sltInfoTab == 'virtualMonit') {
                     } else if (sltInfoTab == 'swInfo') {
                     } else if (sltInfoTab == 'swMonit') {
                     }
@@ -2126,7 +2423,7 @@ angular.module('iaas.controllers')
             ct.fn.getNowServerDiskUsedData("10m");
             ct.fn.changeSltInfoTab();
         }
-        
+        console.log(1);
     }) 
     .controller('iaasComputeEditFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeEditFormCtrl", 1);
