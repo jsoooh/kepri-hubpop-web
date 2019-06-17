@@ -38,14 +38,14 @@
     var _MARKET_STAGE_			 = "market";
     var _MONIT_STAGE_			 = "monit";
 
-    var _VIEWS_                  = "views";
-    var _ADMIN_VIEWS_            = "views/admin";
+    var _VIEWS_                  = "./views";
+    var _ADMIN_VIEWS_            = "./views/admin";
 
-    var _COMM_VIEWS_			 = _COMM_STAGE_ +"/views";
-    var _IAAS_VIEWS_			 = _IAAS_STAGE_ +"/views";
-    var _PAAS_VIEWS_			 = _PAAS_STAGE_ +"/views";
-    var _MARKET_VIEWS_			 = _MARKET_STAGE_ +"/views";
-    var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
+    var _COMM_VIEWS_			 = "./" + _COMM_STAGE_ +"/views";
+    var _IAAS_VIEWS_			 = "./" + _IAAS_STAGE_ +"/views";
+    var _PAAS_VIEWS_			 = "./" + _PAAS_STAGE_ +"/views";
+    var _MARKET_VIEWS_			 = "./" + _MARKET_STAGE_ +"/views";
+    var _MONIT_VIEWS_			 = "./" + _MONIT_STAGE_ +"/views";
 
     var _COMM_ADMIN_VIEWS_			= _COMM_VIEWS_+"/admin";
     var _IAAS_ADMIN_VIEWS_			= _IAAS_VIEWS_+"/admin";
@@ -83,15 +83,15 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 	<title>HUB-POP</title>
-	<link rel="icon" type="image/png" href="/images/favicon.ico" />
+	<link rel="icon" type="image/png" href="./images/favicon.ico" />
 	<script type="text/javascript">
 
         function loadCssLink(file) {
-            document.writeln('<link rel="stylesheet" href="'+file+'" type="text/css"/>');
+            document.writeln('<link rel="stylesheet" href="./'+file+'" type="text/css"/>');
         }
 
         function loadJavascript(file) {
-            document.writeln('<script src="'+file+'" type="text/javascript"></\script>');
+            document.writeln('<script src="./'+file+'" type="text/javascript"></\script>');
         }
 
         var _MIN_ = (_MODE_ == "RUN") ? ".min" : "";
