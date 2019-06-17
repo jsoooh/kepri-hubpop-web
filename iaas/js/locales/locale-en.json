@@ -51,7 +51,13 @@
             "volume_snapshot_deleting" : "삭제중",
             "volume_snapshot_error_deleting" : "삭제중",
             "public" : "Public",
-            "private" : "Private"
+            "private" : "Private",
+            "alarm_type": "Alarm Type",
+            "alarm_level": "Alarm Level",
+            "action_state": "Action State",
+            "alarm_dt": "Registered Datetime",
+            "measure": "Measure Time",
+            "alarm_email": "Alarm Email"
         },
         "message" : {
         }

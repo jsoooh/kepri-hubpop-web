@@ -2808,6 +2808,15 @@ angular.module('common.services', ['LocalStorageModule'])
                 });
             }, 200);
         };
+        
+        common.compareForSort = function (first, second) {
+            if (first.id == second.id)
+                return 0;
+            if (first.id < second.id)
+                return -1;
+            else
+                return 1;
+        };
 
         common.copyToClipboard = function (clipboard) {
             if (clipboard) {
@@ -2817,6 +2826,58 @@ angular.module('common.services', ['LocalStorageModule'])
                 document.execCommand("copy");
                 $temp_input.remove();
             }
+        };
+
+        common.getAlarmType = function () {
+            var nodeJson = CONSTANTS.resourceKey;
+            
+            var typeList = [];
+
+            angular.forEach(Object.keys(nodeJson), function (el, k) {
+                typeList.push({value: nodeJson[el], name: nodeJson[el]});
+            });
+
+            return typeList;
+        };
+
+        common.getAlarmLevel = function () {
+            return angular.copy(CONSTANTS.alarmLevel);
+        };
+
+        common.getResolveStatusCmb = function () {
+            return angular.copy(CONSTANTS.resolveStatus);
+        };
+        
+        common.getServiceType = function (tenantYn, stcallback) {
+            var nodeJson = {};
+
+            angular.copy(CONSTANTS.nodeKey, nodeJson);
+            
+            var nodeList = [];
+            if (tenantYn === undefined) tenantYn = false;
+            if (!tenantYn) delete nodeJson.TENANT;
+
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/info', 'GET');
+            serverStatsPromise.success(function (data, status, headers) {
+                if (!data.storageNodeEnabled) delete nodeJson.STORAGE;
+                if (!data.networkNodeEnabled) delete nodeJson.NETWORK;
+
+                angular.forEach(Object.keys(nodeJson), function (el, k) {
+                    nodeList.push({value: nodeJson[el], name: el});
+                });
+
+                if (stcallback) {
+                    stcallback(nodeList);
+                } else {
+                    return nodeList;
+                }
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
         };
 
         return common;

@@ -21,6 +21,7 @@ angular.module('app')
         iaasApiCfContextUrl : '/iaas-api/api/iaas/v1.0',
         iaasApiMarketContextUrl : '/iaas-api/api/iaas/v1.0/market',
         monitApiContextUrl: '/monit-api/api/monit/v1.0',
+        monitNewApiContextUrl: '/monit-new-api/v2',
 		layoutTemplateUrl : {
 			navigation : _LAYOUT_VIEWS_ + '/navigation.html',
 			leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
@@ -303,6 +304,44 @@ angular.module('app')
             "wonwonkrw.date",
             "xoixa.com",
             "yopmail.com"
-        ]
-	})
+        ],
+        nodeKey: {
+            CONTROLLER: 'ctr',
+            STORAGE: 'stg',
+            COMPUTE: 'cpt',
+            NETWORK: 'net',
+            TENANT: 'tnt'
+        },
+        resourceKey: {
+            CPU: 'cpu',
+            MEM: 'memory',
+            DSK: 'disk'
+        },
+        alarmLevel: [
+            {value: 'running', name: '정상'},
+            {value: 'fail', name: '실패'},
+            {value: 'wran', name: '경고'},
+            {value: 'cri', name: '위험'}
+        ],
+        resolveStatus: [
+            {value: '2', name: '처리완료'},
+            {value: '1', name: 'Alarm 발생'}
+        ],
+        alarmBell: 1000*60*5
+    })
+    .constant('tenantChartConfig', [
+        {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},
+        {id: 2, nodeid: 'cpu_load_usage', name: 'CPU Load 사용률',      func: 'tenantCpuLoad1mList',            type: 'lineChart', percent: false, axisLabel: 'Count per 1 minute'},
+        {id: 3, nodeid: 'mem_swap', name: 'Swap',                      func: 'tenantMemorySwapList',           type: 'lineChart', percent: true,  axisLabel: '%'},
+        {id: 4, nodeid: 'mem_usage', name: '메모리 사용률',             func: 'tenantMemoryUsageList',          type: 'lineChart', percent: true,  axisLabel: '%'},
+        {id: 5, nodeid: 'dsk_usage', name: '디스크 사용률',             func: 'tenantDiskUsageList',            type: 'lineChart', percent: true,  axisLabel: '%'},
+        // {id: 6, nodeid: 'dsk_io_read', name: '디스크 IO Read',          func: 'tenantDiskIOReadList',           type: 'lineChart', percent: false, axisLabel: 'KB / Sec'},
+        // {id: 7, nodeid: 'dsk_io_write', name: '디스크 IO Write',        func: 'tenantDiskIOWriteList',          type: 'lineChart', percent: false, axisLabel: 'KB / Sec'}
+        {id: 6, nodeid: 'dsk_io', name: '디스크 IO',                    func: 'tenantDiskIOList',            type: 'lineChart', percent: false,  axisLabel: 'KB / Sec'}
+    ])
+    .constant('tenantNetChartConfig', [
+        {id: 1, nodeid: 'net_io_kb', name: '네트워크 IO KByte',         func: 'tenantNetworkIOKByteList',       type: 'lineChart', percent: false, axisLabel: 'KB / Sec'},
+        {id: 2, nodeid: 'net_error', name: '네트워크 Error',            func: 'tenantNetworkErrorList',         type: 'lineChart', percent: false, axisLabel: 'Count'},
+        {id: 3, nodeid: 'net_drop', name: '네트워크 Dropped Packet',   func: 'tenantNetworkDroppedPacketList', type: 'lineChart', percent: false, axisLabel: 'Count'}
+    ])
 ;
