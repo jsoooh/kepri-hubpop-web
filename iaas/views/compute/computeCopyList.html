@@ -56,11 +56,11 @@
 			<tr ng-repeat="(key, instanceSnapshot) in (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText })"  ng-if="(key >= (contents.pageOptions.pageSize * (contents.pageOptions.currentPage-1))) && (key < (contents.pageOptions.pageSize * (contents.pageOptions.currentPage)))">
 				<td>{{ (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length - key }}</td>
 				<td style="text-align:left">test{{ instanceSnapshot.portalOrgName }}</td>
-				<td>{{ instanceSnapshot.instanceName }}</td>
+				<td style="text-align:left">{{ instanceSnapshot.instanceName }}</td>
 				<td>{{ instanceSnapshot.imageName }}</td>
 				<td>{{ instanceSnapshot.cpu }}</td>
 				<td>{{ instanceSnapshot.ram | displayVolume:'MB' }}</td>
-				<td>{{ instanceSnapshot.name }}</td>
+				<td style="text-align:left">{{ instanceSnapshot.name }}</td>
 				<td>{{ instanceSnapshot.disk | displayVolume:'GB' }}</td>
 				<td><a tooltip-placement="bottom" uib-tooltip="{{ instanceSnapshot.description }}">설명</a></td>
 				<td>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
