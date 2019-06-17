@@ -74,7 +74,7 @@
                         <tr ng-repeat="alarms in contents.alarmData">
                             <td>{{ alarms.regDate }}</td>
                             <td>{{ main.getAlarmLabel(alarms.alarmType) }}</td>
-                            <td ng-style="{ 'color': (main.getAlarmColor(alarms.alarmLevel)) }"><span>{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
+                            <td ng-style="{ 'color': (main.getAlarmColor(alarms.alarmLevel)) }"><span class="label label-warning">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
                             <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.hostName }}</td>
                             <td>{{ alarms.ip }}</td>
                             <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.title }}</td>
@@ -154,12 +154,12 @@
                     </div>
                 </div>
                 <div class="main">
-                    <div class="tbw type1">
+                    <div class="tbl type1">
                         <table class="table" id="alarmDetailAction">
                             <colgroup>
                                 <col style="width:20%" />
                                 <col/>
-                                <col style="width:30%" />
+                                <col style="width:20%" />
                             </colgroup>
                             <thead>
                                 <tr>
@@ -173,8 +173,8 @@
                                     <td>{{ action.modiDate | translate }}</td>
                                     <td>{{ action.alarmActionDesc | translate }}</td>
                                     <td>
-                                        <button ng-click="contents.fn.updateActionForm(action.id, action.alarmActionDesc)" class="btn btn-file ng-binding">Update</button>
-                                        <button ng-click="contents.fn.deleteAction(action.id)" class="btn btn-file ng-binding">Delete</button>
+                                        <button ng-click="contents.fn.updateActionForm(action.id, action.alarmActionDesc)" class="btn btn-color4 btn-sm ng-binding">Update</button>
+                                        <button ng-click="contents.fn.deleteAction(action.id)" class="btn btn-color5 btn-sm ng-binding">Delete</button>
                                     </td>
                                 </tr>
                                 <tr ng-if="contents.data.action.length == 0 || !contents.data.action" class="ng-scope">
@@ -184,11 +184,15 @@
                         </table>
                         <textarea ng-model="contents.actionForm.alarmActionDesc" placeholder="Description" rows="10" style="height: auto;"></textarea>
                     </div>
-                    <div class="bottomBtnWrap">
-                        <button class="btn btn-edit ng-binding" ng-click="contents.fn.saveAction()">저장</button>
-                        <button class="btn btn-more ng-binding" ng-click="contents.fn.completeAction()">조치완료</button>
-                        <button class="btn ng-binding" ng-click="contents.fn.initAction()">초기화</button>
-                    </div>
+                    <div class="alarm-buttons row">
+                        <div class="col-sm-12">
+                            <div class="btn-btm">
+                                <button type="button" class="btn btn-color1 btn-md" id="btn-save" ng-click="contents.fn.saveAlarm()">저장</button>
+                                <button type="button" class="btn btn-color3 btn-md ng-binding" ng-click="contents.fn.completeAction()">조치완료</button>
+                                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">초기화</button>
+                            </div>
+                        </div>
+                     </div>
                 </div>
             </div>
         </div>
