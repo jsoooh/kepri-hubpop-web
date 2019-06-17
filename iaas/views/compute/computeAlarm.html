@@ -3,7 +3,7 @@
         margin-bottom: 20px;
     }
 </style>
-<div class="tabWrap type1">
+<div class="tabWrap type1 newMonitCon">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
         <li ng-class="{'active':contents.sltInfoTab == 'alarmList' || contents.sltInfoTab == 'alarmDetail'}" class="active"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('alarmList');">알람목록</a></li>
@@ -394,8 +394,9 @@
                 </div>
                 <div class="alarm-buttons row">
                     <div class="col-sm-12">
-                        <div class="mt20">
-                            <button type="button" class="btn btn-add" id="btn-save" ng-click="contents.fn.saveAlarm()" style="width: 80px;">저장</button>
+                        <div class="btn-btm">
+                            <button type="button" class="btn btn-color1 btn-md" id="btn-save" ng-click="contents.fn.saveAlarm()">저장</button>
+                            <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
                         </div>
                     </div>
                 </div>
