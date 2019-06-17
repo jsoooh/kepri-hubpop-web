@@ -12,15 +12,15 @@ angular.module('app')
                 , { key : "en", name : "English" }
             ]
 		},
-        loginUrl: '/#/login',
-        uaaContextUrl : '/comm-api/api/portal/v1',
-		paasApiCfContextUrl : '/paas-api/api/portal/v1',
-		paasApiCoreContextUrl : '/paas-api/api/core',
+        loginUrl: './#/login',
+        uaaContextUrl : './comm-api/api/portal/v1',
+		paasApiCfContextUrl : './paas-api/api/portal/v1',
+		paasApiCoreContextUrl : './paas-api/api/core',
         paasApiMarketContextUrl : '/paas-api/api/market',
-        iaasApiContextUrl: '/iaas-api/api/iaas/v1.0',
-        iaasApiCfContextUrl : '/iaas-api/api/iaas/v1.0',
-        iaasApiMarketContextUrl : '/iaas-api/api/iaas/v1.0/market',
-        monitApiContextUrl: '/monit-api/api/monit/v1.0',
+        iaasApiContextUrl: './iaas-api/api/iaas/v1.0',
+        iaasApiCfContextUrl : './iaas-api/api/iaas/v1.0',
+        iaasApiMarketContextUrl : './iaas-api/api/iaas/v1.0/market',
+        monitApiContextUrl: './monit-api/api/monit/v1.0',
 		layoutTemplateUrl : {
 			navigation : _LAYOUT_VIEWS_ + '/navigation.html',
 			leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
