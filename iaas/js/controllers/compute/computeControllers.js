@@ -1277,4 +1277,8 @@ angular.module('iaas.controllers')
 
         ct.fn.getUserTenants();
     })
+    .controller('iaasComputeAlarmCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
+        _DebugConsoleLog("computeControllers.js : iaasComputeAlarmCtrl start", 1);
+
+    })
 ;
