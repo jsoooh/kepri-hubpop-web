@@ -23,7 +23,7 @@
                     <select id="sch_resolve_status" ng-options="resolveStatus.value as ( resolveStatus.name | translate ) for resolveStatus in contents.options.resolveStatus" ng-model="contents.sch_condition.resolveStatus"></select>
                     <button type="button" name="button" class="btn btn-sch" title="{{ 'label.search' | translate }}" ng-click="contents.selectAlarmList();"><span class="ico">{{ 'label.search' | translate }}</span></button>
                 </div>
-                <div class="pull-right" style="padding-left: 20px;width:550px;">
+                <div class="pull-right" style="padding-left: 20px;">
                     <div style="width: 155px;display: inline-block;">
                         <button>{{ 'label.search_period' | translate }} &nbsp;</button>
                         <select id="timeRange" ng-options="timeRange.value+(timeRange.name | translate) for timeRange in contents.timeRanges" ng-change="contents.changeTimeRange(contents.selTimeRange.id);" ng-model="contents.selTimeRange">
