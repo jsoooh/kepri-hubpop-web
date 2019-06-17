@@ -46,10 +46,9 @@
 						<li class="noti-txt ng-binding">총 <em class="ng-binding">{{ main.alarmCnt }}</em>개의 알람이 있습니다.</li>
 						<li class="divider"></li>
 						<!-- ngRepeat: (key, item) in main.alarms.content -->
-						<li ng-repeat="alarm in main.alarmList">
-							{{ alarm.alarmType.substr(0, 1).toUpperCase() }}<br>
-							{{ alarm.title }}<br>
-							{{ alarm.regDate }}
+						<li ng-repeat="alarm in main.alarmList" class="noti-li">
+							<div class="noti-name">{{ alarm.alarmType.substr(0, 1).toUpperCase() }}</div>
+							<a class="ng-binding noti-tit">[controller01]의 memory 상태 [warning]<div class="ng-binding noti-date">2019-06-11 13:19:07</div></a>
 						</li>
 						<li class="divider"></li>
 						<li class="noti-more">
