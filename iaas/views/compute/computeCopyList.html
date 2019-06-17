@@ -55,7 +55,7 @@
 		<tbody>
 			<tr ng-repeat="(key, instanceSnapshot) in (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText })"  ng-if="(key >= (contents.pageOptions.pageSize * (contents.pageOptions.currentPage-1))) && (key < (contents.pageOptions.pageSize * (contents.pageOptions.currentPage)))">
 				<td>{{ (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length - key }}</td>
-				<td style="text-align:left">test{{ instanceSnapshot.portalOrgName }}</td>
+				<td style="text-align:left">{{ instanceSnapshot.portalOrgName }}</td>
 				<td style="text-align:left">{{ instanceSnapshot.instanceName }}</td>
 				<td>{{ instanceSnapshot.imageName }}</td>
 				<td>{{ instanceSnapshot.cpu }}</td>
