@@ -1285,6 +1285,29 @@ angular.module('common.controllers', [])
             });
         })(CONSTANTS.nodeKey.TENANT);
 
+        
+        // 검색
+        (mc.selectAlarmList = function () {
+
+            var params = {
+                pageItems: 100,
+                pageIndex: 1,
+                baremtalYn: 'Y'
+            };
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', params);
+            serverStatsPromise.success(function (data, status, headers) {
+                mc.alarmList = data.data;
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        })();
+
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
     // 매인 BODY Conroller

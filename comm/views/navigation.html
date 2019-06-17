@@ -43,9 +43,14 @@
 						</span>
 					</button>
 					<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
-						<li class="noti-txt ng-binding">총 <em class="ng-binding"></em>개의 알람이 있습니다.</li>
+						<li class="noti-txt ng-binding">총 <em class="ng-binding">{{ main.alarmCnt }}</em>개의 알람이 있습니다.</li>
 						<li class="divider"></li>
 						<!-- ngRepeat: (key, item) in main.alarms.content -->
+						<li ng-repeat="alarm in main.alarmList">
+							{{ alarm.alarmType.substr(0, 1).toUpperCase() }}<br>
+							{{ alarm.title }}<br>
+							{{ alarm.regDate }}
+						</li>
 						<li class="divider"></li>
 						<li class="noti-more">
 							<a href="#/monit/alarm" class="ng-binding">알람 더보기 <span class="ico"><em class="badge ng-binding"></em></span></a>
