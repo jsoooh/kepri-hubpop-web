@@ -57,7 +57,15 @@
             "action_state": "Action State",
             "alarm_dt": "Registered Datetime",
             "measure": "Measure Time",
-            "alarm_email": "Alarm Email"
+            "alarm_email": "Alarm Email",
+            "alarm_message": "Alarm Message",
+            "warning": "Warningg",
+            "critical": "Critical",
+            "fail": "Fail",
+            "failed": "Failed",
+            "running": "Running",
+            "no agent": "No Agent",
+            "alarm_svc_type": "Service Type"
         },
         "message" : {
         }

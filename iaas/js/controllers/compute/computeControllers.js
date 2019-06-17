@@ -1279,6 +1279,426 @@ angular.module('iaas.controllers')
     })
     .controller('iaasComputeAlarmCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeAlarmCtrl start", 1);
+        
+        var ct = this;
+        ct.sltInfoTab = 'alarmList';
+        ct.fn = {};
+        ct.changeSltInfoTab = function (sltInfoTab, alarmId) {
+            if (!sltInfoTab) {
+                sltInfoTab = 'alarmList';
+                ct.sltInfoTab = sltInfoTab;
+            } else {
+                if (ct.sltInfoTab != sltInfoTab) {
+                    ct.sltInfoTab = sltInfoTab;
+                    if (sltInfoTab == 'alarmList') {
+                        ct.selectAlarmList();
+                    } else if (sltInfoTab == 'alarmDetail') { 
+                        ct.alarmId = alarmId;
+                        ct.fn.selectAlarmDetail();
+                    } else if (sltInfoTab == 'alarmConf') {
+                        ct.fn.requestData();
+                    }
+                }
+            }
+        };
 
+        //-- 알람목록 탭 시작
+        // 검색조건 콤보박스 세팅
+        ct.options = {};
+        ct.options.alarmType = common.getAlarmType();
+        ct.options.alarmLevel = common.getAlarmLevel();
+        ct.options.resolveStatus = common.getResolveStatusCmb();
+        ct.options.alarmType.unshift({value: '', name: '알람타입'});
+        ct.options.alarmLevel.unshift({value: '', name: '알람등급'});
+        ct.options.resolveStatus.unshift({value: '', name: '조치상태'});
+
+        // 검색조건 폼 데이터
+        ct.sch_condition = {};
+        ct.sch_condition.alarmType = ct.options.alarmType[0].value;
+        ct.sch_condition.alarmLevel = ct.options.alarmLevel[0].value;
+        ct.sch_condition.resolveStatus = ct.options.resolveStatus[2].value;
+        ct.timeRanges = [];
+        ct.selTimeRange = {};
+
+        //기간검색
+        ct.timeRanges = [
+            {id: '1day', value: '1', name: 'label.day'},
+            {id: '3day', value: '3', name: 'label.days'},
+            {id: '7day', value: '7', name: 'label.days'},
+            {id: '1month', value: '1', name: 'label.month'},
+            {id: '6month', value: '6', name: 'label.months'}
+        ];
+        ct.selTimeRange = common.objectsFindByField(ct.timeRanges, "id", "1month");
+
+        //기간검색 변경
+        ct.changeTimeRange = function (timeRangeId) {
+            var num = 0;
+            var gbn = '';
+            switch (timeRangeId) {
+                case "1day":
+                    num = 1;
+                    gbn = 'day';
+                    break;
+                case "3day":
+                    num = 3;
+                    gbn = 'day';
+                    break;
+                case "7day":
+                    num = 7;
+                    gbn = 'day';
+                    break;
+                case "1month":
+                    num = 1;
+                    gbn = 'month';
+                    break;
+                case "6month":
+                    num = 6;
+                    gbn = 'month';
+                    break;
+                default:
+                    num = 1;
+                    gbn = 'day';
+                    break;
+            }
+            ct.sch_condition.dateFrom = moment().subtract(num, gbn).format('YYYY-MM-DD');
+            ct.sch_condition.dateTo = moment().format('YYYY-MM-DD');
+        };
+
+        // 검색결과 데이터 Repository
+        ct.alarmData = [];
+        
+        // 페이징 옵션
+        ct.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
+
+        // 검색
+        ct.selectAlarmList = function (page) {
+            if (page) ct.pageOptions.currentPage = page;
+            else page = ct.pageOptions.currentPage;
+
+            ct.sch_condition.searchDateFrom = moment(ct.sch_condition.dateFrom + ' 00:00:00').unix();
+            ct.sch_condition.searchDateTo = moment(ct.sch_condition.dateTo + ' 23:59:59').unix();
+            ct.sch_condition.pageItems = ct.pageOptions.pageSize;
+            ct.sch_condition.pageIndex = page;
+            ct.sch_condition.baremetalYn = 'Y';
+            ct.sch_condition.projectId = $scope.main.userTenantId;
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', ct.sch_condition);
+            serverStatsPromise.success(function (data, status, headers) {
+                ct.alarmData = data.data;
+
+                if (data.totalCount > 10000) {
+                    ct.pageOptions.total = 10000;
+                } else {
+                    ct.pageOptions.total = data.totalCount;
+                }
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+        common.getServiceType(false, function (nodeList) {
+            ct.options.serviceType = nodeList;
+            ct.options.serviceType.unshift({value: '', name: '서비스타입'});
+            ct.sch_condition.policyType = ct.options.serviceType[0].value;
+            ct.changeTimeRange('1month');
+            ct.selectAlarmList();
+        });
+        //-- 알람목록 탭 종료
+
+        //-- 알람목록 상세 시작
+        ct.actionForm = {};
+        ct.data = {};
+
+        // 알람 상세정보 조회
+        ct.fn.selectAlarmDetail = function () {
+            
+            $scope.main.loadingMainBody = true;
+            console.log(ct.alarmId);
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/detail/' + ct.alarmId, 'GET');
+            serverStatsPromise.success(function (data, status, headers) {
+                ct.data = data;
+                ct.fn.initAction();
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 알람 조치 이력 수정
+        ct.fn.updateActionForm = function (action_id, desc) {
+            ct.actionForm.id = action_id;
+            ct.actionForm.alarmActionDesc = desc;
+        };
+        
+        // 알람 조치 이력 삭제
+        ct.fn.deleteAction = function (action_id) {
+            
+            common.showConfirm($translate.instant('label.del'), $translate.instant('message.mq_delete_bulletin')).then(function() {
+
+                $scope.main.loadingMainBody = true;
+                var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/action/' + action_id, 'DELETE');
+                serverStatsPromise.success(function (data, status, headers) {
+                    common.showAlert('message', '삭제되었습니다');
+                    ct.fn.selectAlarmDetail();
+                });
+                serverStatsPromise.error(function (data, status, headers) {
+                    common.showAlert(data);
+                });
+                serverStatsPromise.finally(function (data, status, headers) {
+                    $scope.main.loadingMainBody = false;
+                });
+            });
+        };
+        
+        // 알람 조치 이력 저장
+        ct.fn.saveAction = function () {
+            var method = "";
+            if (ct.actionForm.id) {
+                method = "PUT";
+                ct.actionForm.modiUser = common.getUser().email.split('@')[0];
+            } else {
+                method = "POST";
+                ct.actionForm.regUser = common.getUser().email.split('@')[0];
+            }
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/action', method, ct.actionForm);
+            serverStatsPromise.success(function (data, status, headers) {
+                common.showAlert('message', '저장이 완료되었습니다.');
+                ct.fn.selectAlarmDetail();
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                common.showAlert(data);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 조치 완료
+        ct.fn.completeAction = function () {
+            
+            var params = {
+                id: ct.data.id,
+                resolveStatus: '2',
+                modiUser: common.getUser().email.split('@')[0]
+            };
+
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm', "PUT", params);
+            serverStatsPromise.success(function (data, status, headers) {
+                common.showAlert('message', '조치완료 처리되었습니다.');
+                ct.fn.selectAlarmDetail();
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                common.showAlert(data);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 알람 수정 폼 초기화
+        ct.fn.initAction = function () {
+            ct.actionForm = {};
+            ct.actionForm.alarmId = ct.data.id;
+        };
+        //-- 알람목록 탭 종료
+        
+        //-- 알람설정 탭 시작
+        $scope.actionBtnHied = true;
+        ct.condition = {};
+        ct.condition.keyword = {};
+        ct.selServiceType = '';
+        ct.policys = {};
+        
+        ct.cpuwarnSlider = {
+            value : 0,
+            options: {
+                floor: 0,
+                ceil: 100,
+                step: 1,
+                minLimit: 0,
+                showSelectionBar: true
+            }
+        };
+        ct.cpuemerSlider = {};
+        
+        ct.memorywarnSlider = {};
+        ct.memoryemerSlider = {};
+        
+        ct.diskwarnSlider = {};
+        ct.diskemerSlider = {};
+        
+        ct.measuretimeSlider = {};
+
+        angular.copy(ct.cpuwarnSlider, ct.cpuemerSlider);
+        angular.copy(ct.cpuwarnSlider, ct.memorywarnSlider);
+        angular.copy(ct.cpuwarnSlider, ct.memoryemerSlider);
+        angular.copy(ct.cpuwarnSlider, ct.diskwarnSlider);
+        angular.copy(ct.cpuwarnSlider, ct.diskemerSlider);
+        angular.copy(ct.cpuwarnSlider, ct.measuretimeSlider);
+
+        ct.measuretimeSlider.options.onChange = function () {
+            ct.fn.parseTimer();
+        };
+
+        ct.measuretimeSlider.options.ceil = 60 * 60 * 3;
+
+        // 초기 알람정보 조회
+        ct.fn.requestData = function () {
+            $timeout(function () {
+                $scope.main.getAlarmPolicy (ct.selServiceType, function () {
+                    angular.copy($scope.main.alarmPolicys[ct.selServiceType], ct.policys);
+                    ct.measuretimeSlider.value = ct.policys.measureTime;
+        
+                    // 측정시간 초기화
+                    ct.fn.parseTimer();
+        
+                    angular.forEach(ct.policys.detail, function (el, k) {
+                        ct[el.alarmType+'warnSlider'].value = el.warningThreshold;
+                        ct[el.alarmType+'emerSlider'].value = el.criticalThreshold;
+                    });
+        
+                    ct.data.alarmEmail = ct.policys.mailAddress.split('@')[0];
+                    ct.data.alarmEmailHost = ct.policys.mailAddress.split('@')[1];
+                }, 500);
+            });
+        };
+
+        ct.fn.parseTimer = function () {
+            var second = ct.measuretimeSlider.value;
+            var minute = Math.floor(second / 60);
+            var hours = Math.floor(minute / 60);
+            var result = (second % 60) + '초';
+
+            if (minute > 0) {
+                if (hours > 0) {
+                    result = hours + '시간 ' + (minute % 60) + '분 ' + result;
+                } else {
+                    result = minute + '분 ' + result;
+                }
+            }
+            
+            ct.measureTime = result;
+        }
+
+        // 숫자만 입력
+        ct.fn.numberCheck = function () {
+            if (!newMonitAdminService.isNumber(event)) {
+                event.preventDefault();
+            }
+        };
+
+        // 숫자 입력 범위 필터
+        ct.fn.percentCheck = function (modelName) {
+            var val = ct[modelName+'Slider'].value;
+            if (!newMonitAdminService.isNumber(event)) {
+                val = 0;
+                event.preventDefault();
+            }
+            if (val < 0) {
+                val = 0;
+                event.preventDefault();
+            } else if (val > 100) {
+                val = 100;
+                event.preventDefault();
+            } else {
+                val = parseInt(val);
+            }
+            ct[modelName+'Slider'].value = val;
+        };
+
+        // 설정값 저장
+        ct.fn.saveAlarm = function () {
+            var is_valid = new ValidationService().checkFormValidity($scope[ct.alarmFormName]);
+            if (!is_valid) {
+                console.log('save failed');
+                return;
+            };
+
+            var cpuwVal = ct.cpuwarnSlider.value;
+            var cpueVal = ct.cpuemerSlider.value;
+            var memwVal = ct.memorywarnSlider.value;
+            var memeVal = ct.memoryemerSlider.value;
+            var dskwVal = ct.diskwarnSlider.value;
+            var dskeVal = ct.diskemerSlider.value;
+
+            if (cpuwVal > cpueVal) {
+                common.showAlert("error", "CPU 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.");
+                return;
+            }
+            if (memwVal > memeVal) {
+                common.showAlert("error", "Memory 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.");
+                return;
+            }
+            if (dskwVal > dskeVal) {
+                common.showAlert("error", "Disk 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.");
+                return;
+            }
+
+            var detail = [];
+            ct.policys.mailAddress = ct.data.alarmEmail + '@' + ct.data.alarmEmailHost;
+            angular.forEach(ct.policys.detail, function (el, k) {
+                detail.push({
+                    alarmType: el.alarmType,
+                    warningThreshold: ct[el.alarmType+'warnSlider'].value,
+                    criticalThreshold: ct[el.alarmType+'emerSlider'].value
+                });
+                el.warningThreshold = ct[el.alarmType+'warnSlider'].value;
+                el.criticalThreshold = ct[el.alarmType+'emerSlider'].value;
+            });
+            
+            $scope.main.loadingMainBody = true;
+            var params = {
+                "id": ct.policys.id,
+                "policyType": ct.policys.policyType,
+                "projectId": $scope.main.userTenantId,
+                "measureTime": ct.measuretimeSlider.value,
+                "mailAddress": ct.policys.mailAddress,
+                "mailReceiveYn": ct.policys.mailReceiveYn,
+                "comment": ct.policys.comment,
+                "detail": detail
+            };
+
+            var returnPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/policy', 'PUT', params);
+            returnPromise.success(function (data, status, headers) {
+                common.showAlert("message", "저장이 완료되었습니다");
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data);
+            });
+            returnPromise.finally(function() {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        $scope.$on('userTenantChanged',function(event,status) {
+            $scope.main.replacePage();
+        });
+        
+        // 설정값 최초 로드
+        ct.alarmReceives = [
+            {'value': 'Y', 'name': 'new_monit.label.receive'}, 
+            {'value': 'N', 'name': 'new_monit.label.noreceive'}
+        ];
+        ct.alarmFormName = 'saveform';
+        ct.data.alarmReceive = ct.alarmReceives[0].value;
+        ct.selServiceType = CONSTANTS.nodeKey.TENANT;
+        ct.fn.requestData();
+        //-- 알람설정 탭 종료
     })
 ;

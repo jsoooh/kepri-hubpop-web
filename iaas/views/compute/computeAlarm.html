@@ -1,0 +1,418 @@
+<style>
+    #alarmDetailAction, #alarmDetail {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="tabWrap type1">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li ng-class="{'active':contents.sltInfoTab == 'alarmList' || contents.sltInfoTab == 'alarmDetail'}" class="active"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('alarmList');">알람목록</a></li>
+        <li ng-class="{'active':contents.sltInfoTab == 'alarmConf'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('alarmConf');">알람설정</a></li>
+    </ul>
+    <!-- //Nav tabs -->
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- 프로젝트 알람목록 panel -->
+        <div ng-show="contents.sltInfoTab == 'alarmList'" class="tab-pane st_none active" ng-class="{'active':contents.sltInfoTab == 'alarmList'}" aria-hidden="false">
+            <!-- 알람목록 컨텐츠 -->
+            <div class="searchWrap" style="height: 68px;">
+                <div class="searchBox pull-left" style="width: 60%;">
+                    <select id="sch_alarm_type" ng-options="alarmType.value as ( alarmType.name | translate ) for alarmType in contents.options.alarmType" ng-model="contents.sch_condition.alarmType"></select>
+                    <select id="sch_alarm_level" ng-options="alarmLevel.value as ( alarmLevel.name | translate ) for alarmLevel in contents.options.alarmLevel" ng-model="contents.sch_condition.alarmLevel"></select>
+                    <select id="sch_resolve_status" ng-options="resolveStatus.value as ( resolveStatus.name | translate ) for resolveStatus in contents.options.resolveStatus" ng-model="contents.sch_condition.resolveStatus"></select>
+                    <button type="button" name="button" class="btn btn-sch" title="{{ 'label.search' | translate }}" ng-click="contents.selectAlarmList();"><span class="ico">{{ 'label.search' | translate }}</span></button>
+                </div>
+                <div class="pull-right" style="padding-left: 20px;width:550px;">
+                    <div style="width: 155px;display: inline-block;">
+                        <button>{{ 'label.search_period' | translate }} &nbsp;</button>
+                        <select id="timeRange" ng-options="timeRange.value+(timeRange.name | translate) for timeRange in contents.timeRanges" ng-change="contents.changeTimeRange(contents.selTimeRange.id);" ng-model="contents.selTimeRange">
+                        </select>
+                    </div>
+                    <div class="datepickerWrap" style="display: inline-block;">
+                        <div class="date-inpt">
+                            <adm-dtp name="'startDate'" ng-model="contents.sch_condition.dateFrom" options="{format:'YYYY-MM-DD'}" maxdate="'{{contents.sch_condition.dateTo}}'" ng-required=true></adm-dtp>
+                        </div>
+                        <span class="wave">~</span>
+                        <div class="date-inpt">
+                            <adm-dtp name="'endDate'" ng-model="contents.sch_condition.dateTo" options="{format:'YYYY-MM-DD'}" mindate="'{{contents.sch_condition.dateFrom}}'" ng-required=true></adm-dtp>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- search -->
+
+            <!-- table top -->
+            <div class="tb-top">
+                <div class="pull-left ng-binding">전체 : {{ contents.pageOptions.total }} 건</div>
+            </div>
+
+            <!-- tb top -->
+            <div class="tbl type1">
+                <table class="table">
+                    <colgroup>
+                        <col style="width:12%" />
+                        <col style="width:8%" />
+                        <col style="width:12%" />
+                        <col style="width:12%" />
+                        <col style="width:10%" />
+                        <col/>
+                        <col style="width:12%" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>{{ 'iaas.label.alarm_dt' | translate }}</th>
+                        <th>{{ 'iaas.label.alarm_type' | translate }}</th>
+                        <th>{{ 'iaas.label.alarm_level' | translate }}</th>
+                        <th>{{ 'label.instance_name' | translate }}</th>
+                        <th>IP</th>
+                        <th>{{ 'label.message' | translate }}</th>
+                        <th>{{ 'iaas.label.action_state' | translate }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="alarms in contents.alarmData">
+                            <td>{{ alarms.regDate }}</td>
+                            <td>{{ main.getAlarmLabel(alarms.alarmType) }}</td>
+                            <td ng-style="{ 'color': (main.getAlarmColor(alarms.alarmLevel)) }"><span>{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
+                            <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.hostName }}</td>
+                            <td>{{ alarms.ip }}</td>
+                            <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.title }}</td>
+                            <td>{{ alarms.resolveStatus }}</td>
+                        </tr>
+                        <tr ng-if="contents.alarmData.length == 0 || !contents.alarmData" class="ng-scope">
+                            <td colspan="7" class="center ng-binding">목록이 존재하지 않습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav class="pagiWrap">
+                <paging 
+                    page="contents.pageOptions.currentPage"
+                    page-size="contents.pageOptions.pageSize"
+                    total="contents.pageOptions.total"
+                    pg-href=""
+                    show-prev-next="true"
+                    show-first-last="true"
+                    paging-action="contents.selectAlarmList(page)"
+                    text-first-class="first"
+                    text-last-class="end"
+                    text-next-class="next"
+                    text-prev-class="prev"
+                    class="ng-isolate-scope">
+                </paging>
+            </nav>
+            <!-- //알람목록 컨텐츠 -->
+        </div>
+        <!-- //프로젝트 알람목록 panel -->
+
+        <!-- 프로젝트 알람상세 panel -->
+        <div ng-show="contents.sltInfoTab == 'alarmDetail'" class="tab-pane st_none active" ng-class="{'active':contents.sltInfoTab == 'alarmDetail'}" aria-hidden="false">
+            <div class="mainWrap container-fluid newMonitCon">
+                <div class="main">
+                    <div class="tbw type1">
+                        <table class="table" id="alarmDetail">
+                            <colgroup>
+                                <col style="width:15%" />
+                                <col/>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>{{ 'iaas.label.alarm_svc_type' | translate }}</th>
+                                <td>{{ main.getServiceLabel(contents.data.alarmPolicyType) }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'label.service_name' | translate }}</th>
+                                <td>{{ contents.data.hostName }}</td>
+                            </tr>
+                            <tr>
+                                <th>IP</th>
+                                <td>{{ contents.data.ip }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'iaas.label.alarm_level' | translate }}</th>
+                                <td>{{ main.getAlarmLabel(contents.data.alarmLevel) }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'iaas.label.action_state' | translate }}</th>
+                                <td>{{ contents.data.resolveStatus }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'label.title' | translate }}</th>
+                                <td>{{ contents.data.title }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'iaas.label.alarm_message' | translate }}</th>
+                                <td ng-bind-html="contents.data.message | newlines"></td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'iaas.label.alarm_dt' | translate }}</th>
+                                <td>{{ contents.data.regDate }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="tbw type1">
+                        <table class="table" id="alarmDetailAction">
+                            <colgroup>
+                                <col style="width:20%" />
+                                <col/>
+                                <col style="width:30%" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>{{ 'iaas.label.alarm_dt' | translate }}</th>
+                                    <th>{{ 'iaas.label.alarm_message' | translate }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="action in contents.data.action">
+                                    <td>{{ action.modiDate | translate }}</td>
+                                    <td>{{ action.alarmActionDesc | translate }}</td>
+                                    <td>
+                                        <button ng-click="contents.fn.updateActionForm(action.id, action.alarmActionDesc)" class="btn btn-file ng-binding">Update</button>
+                                        <button ng-click="contents.fn.deleteAction(action.id)" class="btn btn-file ng-binding">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr ng-if="contents.data.action.length == 0 || !contents.data.action" class="ng-scope">
+                                    <td colspan="3" class="center ng-binding">목록이 존재하지 않습니다.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <textarea ng-model="contents.actionForm.alarmActionDesc" placeholder="Description" rows="10" style="height: auto;"></textarea>
+                    </div>
+                    <div class="bottomBtnWrap">
+                        <button class="btn btn-edit ng-binding" ng-click="contents.fn.saveAction()">저장</button>
+                        <button class="btn btn-more ng-binding" ng-click="contents.fn.completeAction()">조치완료</button>
+                        <button class="btn ng-binding" ng-click="contents.fn.initAction()">초기화</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //프로젝트 알람상세 panel -->
+
+        <!-- 프로젝트 알람설정 panel -->
+        <div ng-show="contents.sltInfoTab == 'alarmConf'" class="tab-pane st_none active" ng-class="{'active':contents.sltInfoTab == 'alarmConf'}" aria-hidden="false">
+            <!-- 알람 경고/위험 치 설정 -->
+            <div class="alarm-wrap newMonitCon">
+                <div class="alarm-config">
+                    <form name="{{ contents.alarmFormName }}" novalidate>
+                        <div class="config-inner row">
+                            <div class="col-sm-6">
+                                <div class="config-pannel panel wide">
+                                    <div class="pannel-title">
+                                        <span>CPU</span>
+                                    </div>
+                                    <div class="pannel-content">
+                                        <div class="content-warn">
+                                            <p>경고</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" id="warn-cpu"
+                                                                class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength" name="volumeSize"
+                                                                maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false" ng-model="contents.cpuwarnSlider.value"
+                                                                ng-keyup="contents.fn.percentCheck('cpuwarn')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.cpuwarnSlider.value" rz-slider-options="contents.cpuwarnSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="content-emer">
+                                        <p>위험</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength"
+                                                                name="volumeSize" maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false" ng-model="contents.cpuemerSlider.value"
+                                                                ng-keyup="contents.fn.percentCheck('cpuemer')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.cpuemerSlider.value" rz-slider-options="contents.cpuemerSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="config-pannel panel wide">
+                                    <div class="pannel-title">
+                                        <span>{{ 'label.memory' | translate }}</span>
+                                    </div>
+                                    <div class="pannel-content">
+                                        <div class="content-warn">
+                                            <p>경고</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength"
+                                                                name="volumeSize" maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false"
+                                                                ng-model="contents.memorywarnSlider.value" ng-keyup="contents.fn.percentCheck('memorywarn')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.memorywarnSlider.value" rz-slider-options="contents.memorywarnSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="content-emer">
+                                        <p>위험</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength"
+                                                                name="volumeSize" maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false"
+                                                                ng-model="contents.memoryemerSlider.value" ng-keyup="contents.fn.percentCheck('memoryemer')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.memoryemerSlider.value" rz-slider-options="contents.memoryemerSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="config-pannel panel wide">
+                                    <div class="pannel-title">
+                                            <span>{{ 'label.disk' | translate }}</span>
+                                    </div>
+                                    <div class="pannel-content">
+                                        <div class="content-warn">
+                                            <p>경고</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength"
+                                                                name="volumeSize" maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false"
+                                                                ng-model="contents.diskwarnSlider.value" ng-keyup="contents.fn.percentCheck('diskwarn')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.diskwarnSlider.value" rz-slider-options="contents.diskwarnSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="content-emer">
+                                        <p>위험</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength"
+                                                                name="volumeSize" maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false"
+                                                                ng-model="contents.diskemerSlider.value" ng-keyup="contents.fn.percentCheck('diskemer')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.diskemerSlider.value" rz-slider-options="contents.diskemerSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="config-pannel panel">
+                                    <div class="pannel-title">
+                                        <span>{{ 'iaas.label.measure' | translate }}</span>
+                                    </div>
+                                    <div class="pannel-content">
+                                        <div class="content-time w-90">
+                                            <p>시간</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <span class="app-tit" ng-show="contents.measureTime">{{ contents.measureTime }}</span>
+                                                            <input type="text" class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength"
+                                                                name="measureSecond" maxlength="4" style="width:60px; display: inline-block; margin-left: 15px;" aria-invalid="false"
+                                                                ng-model="contents.measuretimeSlider.value" ng-change="contents.fn.parseTimer()" ng-keydown="contents.fn.numberCheck()" validation="required">
+                                                            <span class="app-tit">초</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.measuretimeSlider.value" rz-slider-options="contents.measuretimeSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-show="main.newMonitInfo.emailEnabled">
+                                <div class="config-pannel panel alarm-email">
+                                    <div class="pannel-title">
+                                        <span>{{ 'iaas.label.alarm_email' | translate }}</span>
+                                    </div>
+                                    <div class="pannel-content">
+                                        <div class="form-input">
+                                            <input type="text" id="alarm-email" name="alarm_email" class="form-control"
+                                                ng-model="contents.data.alarmEmail" validation="required" />
+                                        </div>
+                                        <div class="form-input sep">
+                                            <span>@</span>
+                                        </div>
+                                        <div class="form-input">
+                                            <input type="text" id="alarm-email-host" name="alarm_email_host" class="form-control"
+                                                ng-model="contents.data.alarmEmailHost" validation="required" />
+                                        </div>
+                                        <div class="form-input">
+                                            <select id="alarm-receive" name="alarm_receive" ng-model="contents.policys.mailReceiveYn"
+                                                ng-options="alarm.value as (alarm.name | translate) for alarm in contents.alarmReceives"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="alarm-buttons row">
+                    <div class="col-sm-12">
+                        <div class="mt20">
+                            <button type="button" class="btn btn-add" id="btn-save" ng-click="contents.fn.saveAlarm()" style="width: 80px;">저장</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //프로젝트 알람설정 panel -->
+
+        <!-- 프로젝트 개요 panel -->
+        <!-- ngIf: contents.sltInfoTab == 'info' -->
+        <!-- //프로젝트 개요 panel -->
+
+        <!-- 프로젝트 구성원 panel -->
+        <!-- ngIf: contents.sltInfoTab == 'member' -->
+        <!-- //프로젝트 구성원 panel -->
+
+        <!-- 프로젝트 자원 panel -->
+        <!-- ngIf: contents.sltInfoTab == 'resource' -->
+        <!-- //프로젝트 자원 panel -->
+    </div>
+</div>

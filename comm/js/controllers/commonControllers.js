@@ -1263,7 +1263,7 @@ angular.module('common.controllers', [])
 
         // 알람 메세지 라벨 세팅
         mc.getAlarmLabel = function (alarmStatus) {
-            var LABEL_CONSTANTS = 'new_monit.label.';
+            var LABEL_CONSTANTS = 'iaas.label.';
             var result = $translate.instant(LABEL_CONSTANTS + alarmStatus);
             if (result === LABEL_CONSTANTS) result = '-';
             return result;

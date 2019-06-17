@@ -59,7 +59,18 @@
             "alarm_level": "알람레벨",
             "action_state": "조치상태",
             "measure": "측정시간",
-            "alarm_email": "알람 수신 이메일"
+            "alarm_email": "알람 수신 이메일",
+            "alarm_message": "알람 메세지",
+            "warning": "경고",
+            "critical": "위험",
+            "fail": "실패",
+            "failed": "실패",
+            "running": "정상",
+            "no agent": "측정안함",
+            "alarm_svc_type": "서비스타입",
+            "cpu": "CPU",
+            "memory": "Memory",
+            "disk": "Disk"
         },
         "message" : {
         }
