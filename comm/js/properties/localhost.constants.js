@@ -16,7 +16,7 @@ angular.module('app')
         uaaContextUrl : './comm-api/api/portal/v1',
 		paasApiCfContextUrl : './paas-api/api/portal/v1',
 		paasApiCoreContextUrl : './paas-api/api/core',
-        paasApiMarketContextUrl : '/paas-api/api/market',
+        paasApiMarketContextUrl : './paas-api/api/market',
         iaasApiContextUrl: './iaas-api/api/iaas/v1.0',
         iaasApiCfContextUrl : './iaas-api/api/iaas/v1.0',
         iaasApiMarketContextUrl : './iaas-api/api/iaas/v1.0/market',
@@ -24,7 +24,7 @@ angular.module('app')
 		layoutTemplateUrl : {
 			navigation : _LAYOUT_VIEWS_ + '/navigation.html',
 			leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
-			mainTop : _LAYOUT_VIEWS_ + '/mainTop.html',
+			mainTop : _LAYOUT_VIEWS_ + '/mainTop.html'
 		},
 		mainBody: {
 			templateUrl: _LAYOUT_VIEWS_ + '/mainBody.html',
