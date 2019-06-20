@@ -135,12 +135,14 @@ angular.module('portal.controllers')
         $scope.actionBtnHied = false;
         $scope.actionLoading = false;
 
-
         $scope.popDialogOk = function () {
             pop.addOrgProject();
         };
 
         pop.btnClickCheck = false;
+        pop.orgNameCheckError = false;  //프로젝트명 에러여부
+        pop.orgNameErrorString = "";    //문제되는 문자
+        pop.orgNameBlur = false;
 
         pop.orgProjectDefaultQuota = function(projectId) {
             if(!projectId) {
@@ -174,11 +176,10 @@ angular.module('portal.controllers')
         };
 
         pop.addOrgProject = function() {
-
             if (pop.btnClickCheck) return;
             pop.btnClickCheck = true;
 
-            if (!pop.validationService.checkFormValidity($scope[pop.formName])) {
+            if (!pop.validationService.checkFormValidity($scope[pop.formName]) || pop.orgNameCheckError) {
                 pop.btnClickCheck = false;
                 return;
             }
@@ -207,8 +208,27 @@ angular.module('portal.controllers')
             applyPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody=false;
                 pop.btnClickCheck = false;
-                common.showAlertError($translate.instant('label.org_add') + "(" + param.orgName + ")", data);
+                //common.showAlertError($translate.instant('label.org_add') + "(" + param.orgName + ")", data);
             });
+        };
+
+        $scope.validationProjectName = function () {
+            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문,특수문자(.-_)
+            var bInValid = false;
+            var text = pop.orgProject.orgName;
+            if (!text) return;
+            for (var i=0; i<text.length; i++) {
+                if (text.charAt(i) != " " && regexp.test(text.charAt(i)) == false) {
+                    bInValid = true;
+                    pop.orgNameErrorString += text.charAt(i);
+                }
+            }
+            if (bInValid) {
+                pop.orgNameCheckError = true;    //프로젝트명 에러여부
+            } else {
+                pop.orgNameCheckError = false;  //프로젝트명 에러여부
+                pop.orgNameErrorString = "";    //문제되는 문자
+            }
         };
 
         pop.orgProjectDefaultQuota(pop.orgProject.projectId);
