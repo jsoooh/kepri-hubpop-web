@@ -1128,10 +1128,10 @@ angular.module('common.controllers', [])
         mc.panelToggleChange = function (evt, isReSlider) {
             var _this = $(evt.currentTarget).closest(".pn-Toggle");
             if (!_this.hasClass("Toggle-open")) {
-                _this.addClass("Toggle-open").find(".s_cont_box").slideDown();
-                if (isReSlider) mc.refreshSlider();
+                _this.addClass("Toggle-open").find(".s_cont_box").slideUp();
             } else {
-                _this.removeClass("Toggle-open").find(".s_cont_box").slideUp();
+                _this.removeClass("Toggle-open").find(".s_cont_box").slideDown();
+                if (isReSlider) mc.refreshSlider();
             }
         };
 
