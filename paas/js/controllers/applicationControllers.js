@@ -435,15 +435,22 @@ angular.module('paas.controllers')
                 return;
             }
 
-            $scope.main.loadingMainBody = true;
+            var inputName = document.getElementById('inputAppName-'+inputName);
+            var newName = inputName.name;
+            var guid = inputName.dataset.guid;
+
             if(guid == null) {
                 var inputName = document.getElementById('inputAppName-'+inputName);
+                var newName = inputName.name;
                 var guid = inputName.dataset.guid;
             }
 
-            var appPromise = applicationService.updateAppNameAction(guid, inputName);
+            $scope.main.loadingMainBody = true;
+            var appPromise = applicationService.updateAppNameAction(guid, newName);
             appPromise.success(function (data) {
                 ct.listAllApps();
+                $state.go($state.current, {}, {reload: true});
+                $scope.main.loadingMainBody = false;
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -1346,7 +1353,7 @@ angular.module('paas.controllers')
             var newName = $('input[name=renameInst]').val();
 
             if (newName.length < 3) {
-                common.showAlert("", "최소 3자 이상이어야 합니다.");
+                common.showAlert("", "최소 3자 이상이어야 합니다.0 < contents.app.routes.length");
                 return;
             }
 
