@@ -346,6 +346,7 @@ angular.module('iaas.controllers')
         ct.isTenantResourceLoad = false;
 
         ct.volume.name      = 'disk-01';
+        ct.storageNameList = [];
 
         ct.inputVolumeSizeChange = function () {
             var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
@@ -500,8 +501,47 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.fn.getStorageList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                conditionKey : ct.conditionKey,
+                conditionValue : ct.conditionValue
+            };
+
+            param.size = 0;
+
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                var volumes = [];
+                if (data && data.content && data.content.volumes && angular.isArray(data.content.volumes)) {
+                    volumes = data.content.volumes;
+                    for (var i = 0; i < volumes.length; i++) {
+                        ct.storageNameList.push(volumes[i].name);
+                    }
+                }
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlert("message", data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };
+
+        ct.fn.storageNameCustomValidationCheck = function(name) {
+            if (ct.storageNameList.indexOf(name) > -1) {
+                return {isValid : false, message: "이미 사용중인 이름 입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
         ct.fn.getTenantResource();
         ct.fn.serverList();
+        ct.fn.getStorageList();
 
     })
     .controller('iaasStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
