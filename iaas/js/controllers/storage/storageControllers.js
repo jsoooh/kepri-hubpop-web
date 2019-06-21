@@ -259,11 +259,11 @@ angular.module('iaas.controllers')
         ct.fn.reNamePopStorage = function($event,volume) {
         	
         	var dialogOptions =  {
-			            			controller       : "iaasReNamePopStorageCtrl" ,
-			            			formName         : 'iaasReNamePopStorageForm',
-			            			selectStorage    : angular.copy(volume),
-			            			callBackFunction : ct.reNamePopStorageCallBackFunction
-				            	};
+                controller       : "iaasReNamePopStorageCtrl" ,
+                formName         : 'iaasReNamePopStorageForm',
+                selectStorage    : angular.copy(volume),
+                callBackFunction : ct.reNamePopStorageCallBackFunction
+            };
         	
             	$scope.actionBtnHied = false;
             	common.showDialog($scope, $event, dialogOptions);
@@ -307,11 +307,11 @@ angular.module('iaas.controllers')
         ct.fn.reSizePopStorage = function($event,volume) {
 
         	var dialogOptions =  {
-			            			controller       : "iaasReSizePopStorageCtrl" ,
-			            			formName         : 'iaasReSizePopStorageForm',
-			            			selectStorage    : angular.copy(volume),
-			            			callBackFunction : ct.reSizePopStorCallBackFunc
-				            	};
+                controller       : "iaasReSizePopStorageCtrl" ,
+                formName         : 'iaasReSizePopStorageForm',
+                selectStorage    : angular.copy(volume),
+                callBackFunction : ct.reSizePopStorCallBackFunc
+            };
         	
             	$scope.actionBtnHied = false;
             	common.showDialog($scope, $event, dialogOptions);
@@ -1044,9 +1044,11 @@ angular.module('iaas.controllers')
     	pop.formName 					= $scope.dialogOptions.formName;
     	pop.userTenant 					= angular.copy($scope.main.userTenant);
     	pop.volume 						= $scope.dialogOptions.selectStorage;
+    	pop.volumes                     = angular.copy($scope.contents.storageMainList);
     	pop.fn 							= {};
     	pop.data						= {};
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+    	pop.storageNameList             = [];
     	
     	$scope.dialogOptions.title 		= "디스크 이름 변경";
     	$scope.dialogOptions.okName 	= "변경";
@@ -1055,19 +1057,29 @@ angular.module('iaas.controllers')
     	
     	$scope.actionLoading 			= false;
     	pop.btnClickCheck 				= false;
-    	
-    	
+
+
+    	for (var i = 0; i < pop.volumes.length; i++) {
+            pop.storageNameList.push(pop.volumes[i].name);
+        }
+
+    	pop.fn.storageNameCustomValidationCheck = function(name) {
+            if (pop.storageNameList.indexOf(name) > -1) {
+                return {isValid : false, message: "이미 사용중인 이름 입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
     	// Dialog ok 버튼 클릭 시 액션 정의
     	$scope.popDialogOk = function () {
-    		
     		if ($scope.actionBtnHied) return;
-    		
-    		$scope.actionBtnHied = true;
-    		
-    		if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
-    		{
+
+            $scope.actionBtnHied = true;
+
+    		if (pop.storageNameList.indexOf(pop.newVolNm) > -1) {
     			$scope.actionBtnHied = false;
-    			return;
+    			return common.showAlert("이미 사용중인 이름 입니다.");
     		}
     		
     		pop.fn.reNmStor();
