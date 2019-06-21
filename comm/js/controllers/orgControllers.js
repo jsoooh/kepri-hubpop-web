@@ -140,10 +140,6 @@ angular.module('portal.controllers')
         };
 
         pop.btnClickCheck = false;
-        pop.orgNameCheckError = false;  //프로젝트명 에러여부
-        pop.orgNameErrorString = "";    //문제되는 문자
-        pop.orgNameBlur = false;
-
         pop.orgProjectDefaultQuota = function(projectId) {
             if(!projectId) {
                 return;
@@ -179,7 +175,7 @@ angular.module('portal.controllers')
             if (pop.btnClickCheck) return;
             pop.btnClickCheck = true;
 
-            if (!pop.validationService.checkFormValidity($scope[pop.formName]) || pop.orgNameCheckError) {
+            if (!pop.validationService.checkFormValidity($scope[pop.formName])) {
                 pop.btnClickCheck = false;
                 return;
             }
@@ -212,22 +208,22 @@ angular.module('portal.controllers')
             });
         };
 
-        $scope.validationProjectName = function () {
+        $scope.validationOrgProjectName = function (orgProjectName) {
             var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문,특수문자(.-_)
             var bInValid = false;
-            var text = pop.orgProject.orgName;
+            var text = orgProjectName;
+            var orgNameErrorString = "";                //문제되는 문자
             if (!text) return;
             for (var i=0; i<text.length; i++) {
                 if (text.charAt(i) != " " && regexp.test(text.charAt(i)) == false) {
                     bInValid = true;
-                    pop.orgNameErrorString += text.charAt(i);
+                    orgNameErrorString += text.charAt(i);
                 }
             }
             if (bInValid) {
-                pop.orgNameCheckError = true;    //프로젝트명 에러여부
+                return {isValid : false, message: orgNameErrorString + "는 입력 불가능한 문자입니다. (20자 내외, 특수문자 입력 불가)"};
             } else {
-                pop.orgNameCheckError = false;  //프로젝트명 에러여부
-                pop.orgNameErrorString = "";    //문제되는 문자
+                return {isValid : true};
             }
         };
 

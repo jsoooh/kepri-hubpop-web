@@ -14,9 +14,10 @@
                     <div class="cnt_box">
                         <span class="pop_logo"></span>
                         <p class="txt">프로젝트명을 입력하여 <em>프로젝트를 생성</em>하세요.</p>
-                        <input type="text" name="orgName" ng-model="pop.orgProject.orgName" ng-blur="validationProjectName();pop.orgNameBlur=true;" ng-key-enter="popDialogOk();" class="form-control" placeholder="프로젝트명을 입력하세요. (20자 내외, 특수문자 입력 불가)" validation="min:2|max:20|required" maxlength="20" />
-                        <p class="has-error" ng-show="pop.orgNameCheckError">'{{pop.orgNameErrorString}}'는 입력 불가능한 문자입니다. (20자 내외, 특수문자 입력 불가)</p>
-                        <p class="has-error" ng-show="pop.orgNameBlur && popOrgProjectForm.orgName.$invalid">20자 내외, 특수문자 입력 불가</p>
+                        <!--<input type="text" name="orgName" ng-model="pop.orgProject.orgName" ng-blur="validationProjectName();pop.orgNameBlur=true;" ng-key-enter="popDialogOk();" class="form-control" placeholder="프로젝트명을 입력하세요. (20자 내외, 특수문자 입력 불가)" validation="min:2|max:20|required" maxlength="20" />-->
+                        <input type="text" name="orgName" ng-model="pop.orgProject.orgName" ng-key-enter="popDialogOk();" class="form-control" placeholder="프로젝트명을 입력하세요. (20자 내외, 특수문자 입력 불가)" validation="min:2|max:20|required|custom:validationOrgProjectName(pop.orgProject.orgName)" maxlength="20" />
+                        <!--<p class="has-error" ng-show="pop.orgNameCheckError">'{{pop.orgNameErrorString}}'는 입력 불가능한 문자입니다. (20자 내외, 특수문자 입력 불가)</p>-->
+                        <!--<p class="has-error" ng-show="pop.orgNameBlur && popOrgProjectForm.orgName.$invalid">20자 내외, 특수문자 입력 불가</p>-->
                         <div class="btn_area">
                             <button type="button" class="btn_create" ng-click="popDialogOk();">
                                 <span>프로젝트 생성</span>
