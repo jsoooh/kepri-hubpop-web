@@ -384,9 +384,9 @@ angular.module('iaas.controllers')
         	if(clickCheck) return;
             clickCheck = true;
 
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+            if (ct.storageNameList.indexOf(ct.volume.name) > -1) {
                 clickCheck = false;
-                return;
+                return common.showAlert("이미 사용중인 이름 입니다.");
             }
 
             ct.fn.createStorageVolumeAction();
