@@ -1095,7 +1095,7 @@ angular.module('portal.controllers')
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 common.showAlert($translate.instant('label.org_del') + '(' + ct.selOrgProject.orgName + ')', '해당 프로젝트를 삭제 처리 중 입니다.');
-                $scope.main.goToPage('/comm/projects');
+                $scope.main.goToPage('/comm/projects/');
             });
             promise.error(function (data, status) {
                 $scope.main.loadingMainBody = false;

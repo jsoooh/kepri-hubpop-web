@@ -1076,7 +1076,7 @@ angular.module('common.controllers', [])
         };
 
         mc.addOrgProjectFormOpen = function($event) {
-            var orgProject = {};
+            /*var orgProject = {};
             orgProject.managerId    = mc.userInfo.user_id;
             orgProject.managerName  = mc.userInfo.user_name;
             orgProject.managerEmail = mc.userInfo.email;
@@ -1093,7 +1093,8 @@ angular.module('common.controllers', [])
             };
             $scope.actionBtnHied = false;
             $scope.actionLoading = false;
-            common.showCustomDialog($scope, $event, dialogOptions);
+            common.showCustomDialog($scope, $event, dialogOptions);*/
+            $location.path('/comm/projects/popup');
         };
 
         mc.ssoUserLogin = false;

@@ -5,11 +5,9 @@ angular.module('portal.controllers')
         _DebugConsoleLog("orgControllers.js : commOrgProjectsCtrl", 1);
 
         var ct = this;
-
         ct.selectItemKey = 0;
-
-        ct.userAuth  = $scope.main.userAuth;
-
+        ct.userAuth = $scope.main.userAuth;
+        ct.popup = $stateParams.popup;      //프로젝트 생성 팝업 여부
         ct.schFilterText = "";
 
         ct.extendItem = function(evt) {
@@ -26,9 +24,7 @@ angular.module('portal.controllers')
 
         // portalOrg 선택 제거
         $scope.main.setPortalOrg(null);
-
         $scope.main.loadingMainBody = true;
-
         ct.schType = 'orgName';
 
         // 조직추가 시 상단에 조직명, 조직아이디 기본 '' 출력
@@ -57,6 +53,11 @@ angular.module('portal.controllers')
                     $scope.main.setListAllPortalOrgs();
                 }
                 $scope.main.loadingMainBody = false;
+
+                //좌측메뉴 [프로젝트 생성] 클릭으로 넘어온 경우 바로 팝업 띄움. 2019.06.25
+                if ($scope.main.userAuth == 'M' && ct.popup == 'popup') {
+                    ct.addOrgProjectFormOpen();
+                }
             });
             promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -90,7 +91,6 @@ angular.module('portal.controllers')
 
         // 조직 목록 조회
         ct.listOrgProjects();
-
     })
     .controller('commFirstOrgProjectMainCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common) {
         _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);
