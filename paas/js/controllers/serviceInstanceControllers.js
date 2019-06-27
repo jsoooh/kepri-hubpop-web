@@ -245,7 +245,6 @@ angular.module('paas.controllers')
 
         ct.sltSpace 			= $scope.main.sltOrganization.spaces[0];
         ct.services 			= [];
-        ct.tempServices 		= [];
         ct.servicePlans 		= [];
         ct.spaceApps 			= [];
         ct.sltService 			= {};
