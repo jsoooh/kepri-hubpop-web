@@ -2880,6 +2880,79 @@ angular.module('common.services', ['LocalStorageModule'])
             });
         };
 
+        common.getGroupingByTimeRange = function (timeRange, from, to) {
+            var grouping = '';
+            switch (timeRange) {
+                case '15m':
+                    grouping = '1m';
+                    break;
+                case '30m':
+                    grouping = '2m';
+                    break;
+                case '1h':
+                    grouping = '4m';
+                    break;
+                case '3h':
+                    grouping = '12m';
+                    break;
+                case '6h':
+                    grouping = '24m';
+                    break;
+                case '12h':
+                    grouping = '48m';
+                    break;
+                case '1d':
+                    grouping = '96m';
+                    break;
+                case '7d':
+                    grouping = '672m';
+                    break;
+                case '30d':
+                    grouping = '2880m';
+                    break;
+                case 'custom':
+                    grouping = common.selectGroupingByCustomTimeRange(from, to);
+                    break;
+                default:
+                    grouping = '1m';
+            }
+            return grouping;
+        };
+
+        common.selectGroupingByCustomTimeRange = function (from, to) {
+            var fromm = moment(from, 'YYYY-MM-DD hh:mm');
+            var tom = moment(to, 'YYYY-MM-DD hh:mm')
+            var subtraction = tom.diff(fromm, 'minutes');
+            var grouping = '';
+            if (subtraction <= 15) {
+                grouping = '1m';
+            } else if (15 < subtraction && subtraction <= 30) {
+                grouping = '2m';
+            } else if (30 < subtraction && subtraction <= 60) {
+                grouping = '4m';
+            } else if (60 < subtraction && subtraction <= 180) {
+                grouping = '12m';
+            } else if (180 < subtraction && subtraction <= 360) {
+                grouping = '24m';
+            } else if (360 < subtraction && subtraction <= 720) {
+                grouping = '48m';
+            } else if (720 < subtraction && subtraction <= 1440) {
+                grouping = '96m';
+            } else if (1440 < subtraction && subtraction <= 10080) {
+                grouping = '672m';
+            } else if (10080 < subtraction) {
+                grouping = '2880m';
+            }
+            return grouping;
+        };
+
+        common.getTimeRangeFlag = function (from, to) {
+            if (!to) to = moment();
+            var minuteDiff = to.diff(from, 'minutes');
+            
+            return minuteDiff + 'm';
+        };
+
         return common;
     })
     .factory('cache', function (localStorageService) {
@@ -3115,6 +3188,82 @@ angular.module('common.services', ['LocalStorageModule'])
             } else {
                 $cookies.put(_LEFT_MENU_SHOW_COOKIE_NAME_, "N", cookiesOption);
             }
+        };
+
+        var dtFormat = 'YYYY-MM-DD HH:mm';
+        cookies.putDefaultTimeRange = function (defaultTimeRange) {
+            $cookies.put(_DEFAULT_TIMERANGE_, defaultTimeRange);
+        };
+        cookies.getDefaultTimeRange = function () {
+            var r = $cookies.get(_DEFAULT_TIMERANGE_);
+            console.log('getDefaultTimeRange', r);
+            if (!r) {
+                r = angular.element('input:radio[name=radioTimeRange]:first').val();
+                console.log('getDefaultTimeRange in', r);
+                $cookies.put(_DEFAULT_TIMERANGE_, r);
+            }
+            return $cookies.get(_DEFAULT_TIMERANGE_);
+        };
+        cookies.removeDefaultTimeRange = function () {
+            $cookies.remove(_DEFAULT_TIMERANGE_);
+        };
+
+        cookies.putTimeRangeFrom = function (timeRangeFrom) {
+            $cookies.put(_TIMERANGE_FROM_, timeRangeFrom, cookiesOption);
+        };
+        cookies.getTimeRangeFrom = function () {
+            return $cookies.get(_TIMERANGE_FROM_);
+        };
+        cookies.removeTimeRangeFrom = function () {
+            $cookies.remove(_TIMERANGE_FROM_);
+        };
+
+        cookies.getDefaultTimeRangeFrom = function () {
+            var from = moment($cookies.get(_DEFAULT_TIMERANGE_FROM_), dtFormat);
+            var to = moment($cookies.get(_DEFAULT_TIMERANGE_TO_), dtFormat);
+            if (!to._isValid) to = moment();
+            if (!from._isValid) from = moment(to.subtract(3, 'hours').format(dtFormat), dtFormat);
+            return from;
+        };
+        cookies.putDefaultTimeRangeFrom = function (timeRangeFrom) {
+            $cookies.put(_DEFAULT_TIMERANGE_FROM_, timeRangeFrom, cookiesOption);
+        };
+        cookies.removeDefaultTimeRangeFrom = function () {
+            $cookies.remove(_DEFAULT_TIMERANGE_FROM_);
+        };
+
+        cookies.getDefaultTimeRangeTo = function () {
+            var to = moment($cookies.get(_DEFAULT_TIMERANGE_TO_), dtFormat);
+            if (!to._isValid) to = moment();
+            return to;
+        };
+        cookies.putDefaultTimeRangeTo = function (timeRangeTo) {
+            $cookies.put(_DEFAULT_TIMERANGE_TO_, timeRangeTo, cookiesOption);
+        };
+        cookies.removeDefaultTimeRangeTo = function () {
+            $cookies.remove(_DEFAULT_TIMERANGE_TO_);
+        };
+
+        cookies.putTimeRangeTo = function (timeRangeTo) {
+            $cookies.put(_TIMERANGE_TO_, timeRangeTo, cookiesOption);
+        };
+        cookies.getTimeRangeTo = function () {
+            return $cookies.get(_TIMERANGE_TO_);
+        };
+        cookies.removeTimeRangeTo = function () {
+            $cookies.remove(_TIMERANGE_TO_);
+        };
+
+        cookies.putGroupBy = function (groupBy) {
+            $cookies.put(_GROUPBY_, groupBy, cookiesOption);
+        };
+        cookies.getGroupBy = function () {
+            var r = $cookies.get(_GROUPBY_);
+            if (!r) $cookies.put(_GROUPBY_, '12m', cookiesOption);
+            return $cookies.get(_GROUPBY_);
+        };
+        cookies.removeGroupBy = function () {
+            $cookies.remove(_GROUPBY_);
         };
 
         cookies.clearAll = function () {

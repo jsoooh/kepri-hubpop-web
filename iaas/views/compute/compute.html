@@ -129,36 +129,36 @@
 									<li>
 										<div class="progressWrap type1">
 											<div class="progress">
-												<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}" class="progress">
-													<div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}%"></div>
+												<div percent-progress-bar-animate bar-type="height" percent="{{ instance.cpuUsage | number }}" class="progress">
+													<div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{ instance.cpuUsage | number }}%"></div>
 												</div>
 											</div>
 										</div>
-										<span class="percent_txt">{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}<span>%</span></span>
+										<span class="percent_txt">{{ instance.cpuUsage | number }}<span>%</span></span>
 										<strong class="tit mt10">CPU</strong>
 										<span class="flavor_info">{{instance.spec.vcpus}} 개</span>
 									</li>
 									<li>
 										<div class="progressWrap type1">
 											<div class="progress">
-												<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}" class="progress">
-													<div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}%"></div>
+												<div percent-progress-bar-animate bar-type="height" percent="{{ instance.memoryUsage | number }}" class="progress">
+													<div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{ instance.memoryUsage | number }}%"></div>
 												</div>
 											</div>
 										</div>
-										<span class="percent_txt">{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}<span>%</span></span>
+										<span class="percent_txt">{{ instance.memoryUsage | number }}<span>%</span></span>
 										<strong class="tit mt10">Memory</strong>
 										<span class="flavor_info">{{(instance.spec.ram/1024|number:1).replace('.0', '')}} GB</span>
 									</li>
 									<li>
 										<div class="progressWrap type1">
 											<div class="progress">
-												<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}" class="progress">
-													<div class="progress-bar" role="progressbar" tooltip-placement="top" uib-tooltip="{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}%"></div>
+												<div percent-progress-bar-animate bar-type="height" percent="{{ instance.diskUsage | number }}" class="progress">
+													<div class="progress-bar" role="progressbar" tooltip-placement="top" uib-tooltip="{{ instance.diskUsage | number }}%"></div>
 												</div>
 											</div>
 										</div>
-										<span class="percent_txt">{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}<span>%</span></span>
+										<span class="percent_txt">{{ instance.diskUsage | number }}<span>%</span></span>
 										<strong class="tit mt10">Disk</strong>
 										<span class="flavor_info">{{instance.spec.disk}} GB</span>
 									</li>

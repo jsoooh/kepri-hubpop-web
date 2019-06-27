@@ -57,7 +57,6 @@ angular.module('iaas.controllers')
             ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
             ct.network = ct.networks[0];
             ct.fnGetServerMainList();
-            ct.fnGetUsedResource();
         });
         
         ct.fn.getKeyFile = function(keypair,type) {
@@ -135,7 +134,6 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 ct.loadingServerList = false;
                 var instances = [];
                 if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
@@ -153,6 +151,7 @@ angular.module('iaas.controllers')
                     if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
                         isServerStatusCheck = true;
                     }
+                    ct.fnSetInstanceUseRate(serverMain);
                     ct.fn.setProcState(serverMain);
                     ct.fn.setRdpConnectDomain(serverMain);
                     if (angular.isObject(serverMain.elapsed)) {
@@ -176,19 +175,15 @@ angular.module('iaas.controllers')
                     }
                     $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                 }
-                /*if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
-                    ct.firstInstanceCreatePop();
-                }*/
-                ct.pageFirstLoad = false;
             });
             returnPromise.error(function (data, status, headers) {
-                ct.pageFirstLoad = false;
-                $scope.main.loadingMainBody = false;
                 if (status != 307) {
                     common.showAlertError(data.message);
                 }
             });
             returnPromise.finally(function (data, status, headers) {
+                ct.pageFirstLoad = false;
+                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -260,6 +255,7 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
                         var instance = data.content.instances[0];
+                        ct.fnSetInstanceUseRate(instance);
                         var serverItem = common.objectsFindByField(ct.serverMainList, "id", data.content.instances[0].id);
                         if (serverItem && serverItem.id) {
                             var beforUiTask = serverItem.uiTask;
@@ -301,6 +297,7 @@ angular.module('iaas.controllers')
                             ct.deployServerList.splice(data.content.instances.length, ct.serverMainList.length - data.content.instances.length);
                         }
                         angular.forEach(data.content.instances, function (instance, inKey) {
+                            ct.fnSetInstanceUseRate(instance);
                             if (ct.serverMainList[inKey]) {
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
                                 ct.fn.setProcState(ct.serverMainList[inKey]);
@@ -342,6 +339,7 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
                         var instanceStateInfo = data.content.instances[0];
+                        ct.fnSetInstanceUseRate(instanceStateInfo);
                         ct.fn.setProcState(instanceStateInfo);
                         if (instanceStateInfo.procState != 'end') {
                             $scope.main.reloadTimmer['instanceServerState_' + instanceStateInfo.id] = $timeout(function () {
@@ -359,12 +357,13 @@ angular.module('iaas.controllers')
                     } else {
                         var serverStates = data.content.instances;
                         var isServerStatusCheck = false;
-                        var isReplaceServerInfo = false;
+                        // var isReplaceServerInfo = false;
                         if (ct.serverMainList.length > serverStates.length) {
                             ct.serverMainList.splice(serverStates.length, ct.serverMainList.length - serverStates.length);
                         }
                         var serverMainList = angular.copy(ct.serverMainList);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
+                            ct.fnSetInstanceUseRate(instanceStateInfo);
                             ct.fn.setProcState(instanceStateInfo);
                             var serverItem = common.objectsFindByField(serverMainList, "id", instanceStateInfo.id);
                             if (serverItem && serverItem.id) {
@@ -381,7 +380,6 @@ angular.module('iaas.controllers')
                                     ct.fn.mergeServerInfo(ct.serverMainList[inKey], serverItem);
                                 } else {
                                     ct.serverMainList.push(serverItem);
-                                    //ct.fn.replaceServerInfo(serverItem.id);
                                 }
                             } else {
                                 if (!ct.serverMainList[inKey]) {
@@ -389,7 +387,7 @@ angular.module('iaas.controllers')
                                 } else {
                                     var serverStateItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
                                     if (serverStateItem && serverStateItem.id && ct.noIngStates.indexOf(serverStateItem.uiTask) == -1) {
-                                        isReplaceServerInfo = true;
+                                        // isReplaceServerInfo = true;
                                         ct.serverMainList[inKey].uiTask = "created_complete";
                                         $timeout(function () {
                                             ct.fn.replaceServerInfo(serverItem.id);
@@ -403,9 +401,10 @@ angular.module('iaas.controllers')
                                 ct.fn.checkServerState();
                             }, 2000);
                         }
-                        if (isReplaceServerInfo) {
-                            ct.fnGetUsedResource();
-                        }
+                        // fnGetUsedResource 사용안하므로 주석처리
+                        // if (isReplaceServerInfo) {
+                        //     ct.fnGetUsedResource();
+                        // }
                     }
                 }
             });
@@ -416,20 +415,21 @@ angular.module('iaas.controllers')
         };
 
         //추가 S
-        ct.fnGetUsedResource = function() {
-            var params = {
-                tenantId : ct.data.tenantId
-            };
-            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
-            returnPromise.success(function (data, status, headers) {
-                ct.tenantResource = data.content[0];
-            });
-            returnPromise.error(function (data, status, headers) {
-                if (status != 307) {
-                    common.showAlertError(data.message);
-                }
-            });
-        };
+        // [20190621.HYG] 사용안하므로 주석처리
+        // ct.fnGetUsedResource = function() {
+        //     var params = {
+        //         tenantId : ct.data.tenantId
+        //     };
+        //     var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
+        //     returnPromise.success(function (data, status, headers) {
+        //         ct.tenantResource = data.content[0];
+        //     });
+        //     returnPromise.error(function (data, status, headers) {
+        //         if (status != 307) {
+        //             common.showAlertError(data.message);
+        //         }
+        //     });
+        // };
 
         //추가 E
         // 서버삭제
@@ -660,8 +660,31 @@ angular.module('iaas.controllers')
             }
         };
 
+        // [20190621.HYG] It's a func to bind Instance monitoring data
+        // Dev History 
+        // 테넌트 전체 서버 모니터링 데이터 호출 API 는 사용안함
+        // - 서버상태변경(정지->시작) 후 API 호출 할 때 서버의 모니터링 데이터가 0 응답함
+        // - 서버 시작 후 일정 시간 후에 정상데이터 호출 되는데 그 시점을 핸들링 할 수 없음.
+        // - 서버 정보 세팅하는 경우 1개 인스턴스의 모니터링 데이터를 호출하는 방식으로 변경.
+        ct.fnSetInstanceUseRate = function (instance) {
+            if (instance.uiTask && instance.uiTask == 'active') {
+                var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instance/' + instance.id + '/resourceUsage', 'GET');
+                rp.success(function (d) {
+                    instance.cpuUsage = d.cpuUsage;
+                    instance.memoryUsage = d.memUsage;
+                    instance.diskUsage = d.diskUsage;
+                });
+                rp.error(function (d) {
+                    common.showAlertError(d.message);
+                });
+            } else {
+                instance.cpuUsage = 0;
+                instance.memoryUsage = 0;
+                instance.diskUsage = 0;
+            }
+        };
+
         if (ct.data.tenantId) {
-            ct.fnGetUsedResource();
             ct.fnGetServerMainList();
         } else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
@@ -1283,24 +1306,27 @@ angular.module('iaas.controllers')
         var ct = this;
         ct.sltInfoTab = 'alarmList';
         ct.fn = {};
+        ct.alarmId = $location.search().alarmId;
         ct.changeSltInfoTab = function (sltInfoTab, alarmId) {
+            if ($location.search().alarmId) delete $location.search().alarmId;
+            ct.sltInfoTab = sltInfoTab;
             if (!sltInfoTab) {
                 sltInfoTab = 'alarmList';
-                ct.sltInfoTab = sltInfoTab;
             } else {
-                if (ct.sltInfoTab != sltInfoTab) {
-                    ct.sltInfoTab = sltInfoTab;
-                    if (sltInfoTab == 'alarmList') {
-                        ct.selectAlarmList();
-                    } else if (sltInfoTab == 'alarmDetail') { 
-                        ct.alarmId = alarmId;
-                        ct.fn.selectAlarmDetail();
-                    } else if (sltInfoTab == 'alarmConf') {
-                        ct.fn.requestData();
-                    }
+                if (sltInfoTab == 'alarmList') {
+                    ct.selectAlarmList();
+                } else if (sltInfoTab == 'alarmDetail') { 
+                    ct.alarmId = alarmId;
+                    ct.fn.selectAlarmDetail();
+                } else if (sltInfoTab == 'alarmConf') {
+                    ct.fn.requestData();
                 }
             }
         };
+
+        $scope.$on('alarmListOnClick', function (event, datas) {
+            ct.changeSltInfoTab('alarmDetail', datas);
+        });
 
         //-- 알람목록 탭 시작
         // 검색조건 콤보박스 세팅
@@ -1383,7 +1409,7 @@ angular.module('iaas.controllers')
             ct.sch_condition.searchDateTo = moment(ct.sch_condition.dateTo + ' 23:59:59').unix();
             ct.sch_condition.pageItems = ct.pageOptions.pageSize;
             ct.sch_condition.pageIndex = page;
-            ct.sch_condition.baremetalYn = 'Y';
+            ct.sch_condition.baremetalYn = 'N';
             ct.sch_condition.projectId = $scope.main.userTenantId;
             
             $scope.main.loadingMainBody = true;
@@ -1422,7 +1448,6 @@ angular.module('iaas.controllers')
         ct.fn.selectAlarmDetail = function () {
             
             $scope.main.loadingMainBody = true;
-            console.log(ct.alarmId);
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/detail/' + ct.alarmId, 'GET');
             serverStatsPromise.success(function (data, status, headers) {
                 ct.data = data;
@@ -1501,7 +1526,9 @@ angular.module('iaas.controllers')
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm', "PUT", params);
             serverStatsPromise.success(function (data, status, headers) {
                 common.showAlert('message', '조치완료 처리되었습니다.');
-                ct.fn.selectAlarmDetail();
+                ct.changeSltInfoTab('alarmList');
+                $scope.main.selectAlarmList();
+                $scope.main.selectAlarmCount();
             });
             serverStatsPromise.error(function (data, status, headers) {
                 common.showAlert(data);
@@ -1575,7 +1602,7 @@ angular.module('iaas.controllers')
         
                     ct.data.alarmEmail = ct.policys.mailAddress.split('@')[0];
                     ct.data.alarmEmailHost = ct.policys.mailAddress.split('@')[1];
-                }, 500);
+                }, $scope.main.userTenantId);
             });
         };
 
@@ -1665,7 +1692,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var params = {
                 "id": ct.policys.id,
-                "policyType": ct.policys.policyType,
+                "policyType": ct.selServiceType,
                 "projectId": $scope.main.userTenantId,
                 "measureTime": ct.measuretimeSlider.value,
                 "mailAddress": ct.policys.mailAddress,
@@ -1674,7 +1701,8 @@ angular.module('iaas.controllers')
                 "detail": detail
             };
 
-            var returnPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/policy', 'PUT', params);
+            var methodName = ct.selServiceType != ct.policys.policyType ? 'POST' : 'PUT';
+            var returnPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/policy', methodName, params);
             returnPromise.success(function (data, status, headers) {
                 common.showAlert("message", "저장이 완료되었습니다");
             });
@@ -1700,5 +1728,7 @@ angular.module('iaas.controllers')
         ct.selServiceType = CONSTANTS.nodeKey.TENANT;
         ct.fn.requestData();
         //-- 알람설정 탭 종료
+        
+        if (ct.alarmId) ct.changeSltInfoTab('alarmDetail', ct.alarmId);
     })
 ;

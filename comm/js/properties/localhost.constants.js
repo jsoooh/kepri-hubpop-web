@@ -21,7 +21,7 @@ angular.module('app')
         iaasApiCfContextUrl : '/iaas-api/api/iaas/v1.0',
         iaasApiMarketContextUrl : '/iaas-api/api/iaas/v1.0/market',
         monitApiContextUrl: '/monit-api/api/monit/v1.0',
-        monitNewApiContextUrl: '/monit-new-api/v2',
+        monitNewApiContextUrl: '/monit-api/v2',
 		layoutTemplateUrl : {
 			navigation : _LAYOUT_VIEWS_ + '/navigation.html',
 			leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
@@ -327,7 +327,8 @@ angular.module('app')
             {value: '2', name: '처리완료'},
             {value: '1', name: 'Alarm 발생'}
         ],
-        alarmBell: 1000*60*5
+        alarmBell: 1000*60*5,
+        timeRangeFormat: 'YYYY-MM-DD HH:mm'
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},

@@ -173,8 +173,8 @@
                                     <td>{{ action.modiDate | translate }}</td>
                                     <td>{{ action.alarmActionDesc | translate }}</td>
                                     <td>
-                                        <button ng-click="contents.fn.updateActionForm(action.id, action.alarmActionDesc)" class="btn btn-color4 btn-sm ng-binding">Update</button>
-                                        <button ng-click="contents.fn.deleteAction(action.id)" class="btn btn-color5 btn-sm ng-binding">Delete</button>
+                                        <button ng-click="contents.fn.updateActionForm(action.id, action.alarmActionDesc)" class="btn btn-color4 btn-sm ng-binding">선택</button>
+                                        <button ng-click="contents.fn.deleteAction(action.id)" class="btn btn-color5 btn-sm ng-binding">삭제</button>
                                     </td>
                                 </tr>
                                 <tr ng-if="contents.data.action.length == 0 || !contents.data.action" class="ng-scope">
@@ -187,9 +187,9 @@
                     <div class="alarm-buttons row">
                         <div class="col-sm-12">
                             <div class="btn-btm">
-                                <button type="button" class="btn btn-color1 btn-md" id="btn-save" ng-click="contents.fn.saveAlarm()">저장</button>
+                                <button type="button" class="btn btn-color1 btn-md" id="btn-save" ng-click="contents.fn.saveAction()">저장</button>
                                 <button type="button" class="btn btn-color3 btn-md ng-binding" ng-click="contents.fn.completeAction()">조치완료</button>
-                                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">초기화</button>
+                                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="contents.fn.initAction();">초기화</button>
                             </div>
                         </div>
                      </div>

@@ -1270,9 +1270,13 @@ angular.module('common.controllers', [])
         };
         
         // 알람정책 세팅
-        (mc.getAlarmPolicy = function (nodeKey, summary) {
+        mc.getAlarmPolicy = function (nodeKey, summary, projectId) {
             
-            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/alarm/policy/' + nodeKey, 'GET');
+            var params = {
+                projectId: projectId
+            };
+
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/alarm/policy/' + nodeKey, 'GET', params);
             serverStatsPromise.success(function (data, status, headers) {
                 if (data) mc.alarmPolicys[nodeKey] = data;
                 if (summary) summary();
@@ -1281,21 +1285,23 @@ angular.module('common.controllers', [])
                 //common.showAlert(data.message);
             });
             serverStatsPromise.finally(function (data, status, headers) {
-                // $scope.main.loadingMainBody = false;
+                // mc.loadingMainBody = false;
             });
-        })(CONSTANTS.nodeKey.TENANT);
+        };
 
         
         // 검색
-        (mc.selectAlarmList = function () {
+        mc.selectAlarmList = function () {
 
             var params = {
                 pageItems: 100,
                 pageIndex: 1,
-                baremtalYn: 'Y'
+                resolveStatus: 1,
+                projectId: mc.userTenantId,
+                baremetalYn: 'N'
             };
             
-            $scope.main.loadingMainBody = true;
+            mc.loadingMainBody = true;
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', params);
             serverStatsPromise.success(function (data, status, headers) {
                 mc.alarmList = data.data;
@@ -1304,14 +1310,38 @@ angular.module('common.controllers', [])
                 //common.showAlert(data.message);
             });
             serverStatsPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                mc.loadingMainBody = false;
             });
-        })();
+        };
 
+        mc.alarmCnt = 0;
+        
+        // 알람 카운트 조회
+        mc.selectAlarmCount = function () {
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/count/N', 'GET', {projectId: mc.userTenantId});
+            serverStatsPromise.success(function (data, status, headers) {
+                if (data.alarmCnt && mc.alarmCnt !== data.alarmCnt) {
+                    mc.alarmCnt = data.alarmCnt;
+                }
+            });
+        };
+
+        // 알람 내역 클릭
+        mc.alarmListOnClick = function (path, alarmId) {
+            var loc = $location.absUrl();
+            if (loc.indexOf(path) > -1) {
+                $scope.$broadcast('alarmListOnClick', alarmId);
+            } else {
+                common.locationHref(path + '?alarmId=' + alarmId);
+            }
+        };
+
+        $interval(mc.selectAlarmCount, CONSTANTS.alarmBell);
+        
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
     // 매인 BODY Conroller
-    .controller('mainBodyCtrl', function ($scope, $location, $templateCache, $state, $stateParams, $timeout, $window, $translate, user, common, CONSTANTS) {
+    .controller('mainBodyCtrl', function ($scope, $location, $templateCache, $state, $stateParams, $timeout, $interval, $window, $translate, user, common, CONSTANTS) {
         _DebugConsoleLog("commonControllers.js : mainBodyCtrl Start, path : " + $location.path(), 1);
 
         var mb = this;
@@ -1501,6 +1531,9 @@ angular.module('common.controllers', [])
             }
             $scope.main.setLayout();
             $scope.main.commMenuHide();
+            $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
+            $scope.main.selectAlarmCount();
+            $scope.main.selectAlarmList();
 
             if (_MENU_TYPE_ == 'part') {
                 common.leftMenuShow();

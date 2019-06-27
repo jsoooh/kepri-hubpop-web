@@ -9,7 +9,7 @@ angular.module('paas.services')
                         chart: {
                             type: 'lineChart',
                             height: 320,
-                            width: 500,
+                            width: 470,
                             margin: {
                                 top: 20,
                                 right: 30,
@@ -17,7 +17,7 @@ angular.module('paas.services')
                                 left: 55
                             },
                             interpolate: 'linear',
-                            isArea: false,
+                            // isArea: false,
                             legendPosition: 'top',
                             x: function (d) {
                                 return d.time;

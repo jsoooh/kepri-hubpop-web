@@ -105,8 +105,8 @@ angular.module('iaas.services')
                 angular.forEach(criSeries, function (el, k) {
                     el.totalUsage = criValue;
                 });
-                arr.push({values: warnSeries, key: 'Warning', area: false, color: main.getAlarmColor('warning')});
-                arr.push({values: criSeries, key: 'Critical', area: false, color: main.getAlarmColor('critical')});
+                arr.push({values: warnSeries, key: 'Warning', area: false, color: main.getAlarmColor('warning'), legend: false});
+                arr.push({values: criSeries, key: 'Critical', area: false, color: main.getAlarmColor('critical'), legend: false});
             }
         }
 
