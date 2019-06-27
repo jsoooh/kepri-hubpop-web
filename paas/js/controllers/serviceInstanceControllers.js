@@ -317,7 +317,8 @@ angular.module('paas.controllers')
                         servicePlan.quota = servicePlan.name.replace("mb", ' Megabyte');
                     });
                     //서비스브로커 : oracle 제외. 2019.06.27
-                    if (service.label.toLowerCase().indexOf("oracle") == -1) {
+                    //if (service.label.toLowerCase().indexOf("oracle") == -1) {
+                    if (service.label.toLowerCase().indexOf("mysql") == -1) {
                         ct.services.push(service);
                     }
                 });
