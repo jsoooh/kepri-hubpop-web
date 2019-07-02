@@ -1124,9 +1124,20 @@ angular.module('common.controllers', [])
                 _this.removeClass("cToggle-open").find(".pnb_bx_cnt").slideUp();
             }
         };
-        
+
         /*만들기 화면 토글*/
         mc.panelToggleChange = function (evt, isReSlider) {
+            var _this = $(evt.currentTarget).closest(".pn-Toggle");
+            if (!_this.hasClass("Toggle-open")) {
+                _this.addClass("Toggle-open").find(".s_cont_box").slideDown();
+                if (isReSlider) mc.refreshSlider();
+            } else {
+                _this.removeClass("Toggle-open").find(".s_cont_box").slideUp();
+            }
+        };
+
+        /*디스크 관리-디스크 만들기 토글 버튼 전용*/
+        mc.panelToggleChange1 = function (evt, isReSlider) {
             var _this = $(evt.currentTarget).closest(".pn-Toggle");
             if (!_this.hasClass("Toggle-open")) {
                 _this.addClass("Toggle-open").find(".s_cont_box").slideUp();
@@ -1135,6 +1146,7 @@ angular.module('common.controllers', [])
                 if (isReSlider) mc.refreshSlider();
             }
         };
+
 
       //2018.11.22 sg0730 RzSlider Refresh Func Add
         mc.refreshSlider = function () {
