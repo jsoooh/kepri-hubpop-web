@@ -1155,28 +1155,27 @@ angular.module('iaas.controllers')
                 params.volume.tenantId = ct.data.tenantId;
             }
 
-            if (ct.data.spec.uuid == undefined | ct.data.spec.uuid == null) {
-                $scope.main.loadingMainBody = false;
+            if (!ct.data.spec.uuid) {
                 common.showAlertError("사양이 선택되지 않았습니다.");
                 clickCheck = false;
-            } else {
-                $scope.main.loadingMainBody = true;
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
-                returnPromise.success(function (data, status, headers)  {
-                    // 서버생성후 -> 디스크 생성 후 sucess 처리.
-                    $scope.main.loadingMainBody = false;
-                    common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
-                    // 페이지 이동으로 바꿔야 하고
-                    $scope.main.goToPage("/iaas/compute");
-                });
-                returnPromise.error(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                    common.showAlertError(data.message);
-                });
-                returnPromise.finally(function() {
-                    clickCheck = false;
-                });
+                return;
             }
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
+            returnPromise.success(function (data, status, headers)  {
+                // 서버생성후 -> 디스크 생성 후 sucess 처리.
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                // 페이지 이동으로 바꿔야 하고
+                $scope.main.goToPage("/iaas/compute");
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function() {
+                clickCheck = false;
+            });
         };
 
         if (ct.data.tenantId) {
