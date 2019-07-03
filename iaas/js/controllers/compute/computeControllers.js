@@ -1193,7 +1193,7 @@ angular.module('iaas.controllers')
         _DebugConsoleLog("computeControllers.js : iaasComputeCopyCtrl start", 1);
 
         var ct               = this;
-        ct.projectId          = $scope.main.sltProjectId;
+        ct.projectId         = $scope.main.sltProjectId;
         ct.sltPortalOrgId    = $scope.main.sltPortalOrgId;
         ct.tenantId          = $scope.main.userTenantId;
         ct.fn                = {};
