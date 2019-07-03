@@ -33,7 +33,7 @@
 				<ul ng-if="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length > 0" class="ul-panel">
 					<li ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }">
 						<div class="panelWrap">
-							<div class="panel type6">
+							<div class="panel type6 h_auto">
 								<div class="panel_head pdlr30">
 									<!--<img class="logo" alt="" src="images/thum/ico_thum_svr.png"/>-->
 									<p class="tit" title="{{instanceSnapshot.name}}">{{instanceSnapshot.name}}</p>
@@ -50,7 +50,7 @@
 										</ul>
 									</div>
 								</div>
-								<div class="panel_body">
+								<div class="panel_body" style="height:225px;">
 									<div class="ul-in">
 										<div class="cnt_wrap">
 											<div class="cnt_imgBox">
@@ -61,11 +61,11 @@
 												<dl>
 													<dt>원본 서버</dt>
 													<dd>
-														<a href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>
-														<a href="" title="{{instanceSnapshot.instanceName}}" ng-if="!instanceSnapshot.beInstance" ng-click="contents.fn.showErrorAlert()">{{instanceSnapshot.instanceName}}</a>
+														<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>
+														<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="!instanceSnapshot.beInstance" ng-click="contents.fn.showErrorAlert()">{{instanceSnapshot.instanceName}}</a>
 													</dd>
 													<dt>OS 이미지</dt>
-													<dd>{{ instanceSnapshot.imageName }}</dd>
+													<dd class="d_block">{{ instanceSnapshot.imageName }}</dd>
 												</dl>
 												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
 											</div>
@@ -102,7 +102,7 @@
 				<ul ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length > 0" class="ul-panel">
 					<li ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }">
 						<div class="panelWrap">
-							<div class="panel type6">
+							<div class="panel type6 h_auto">
 								<div class="panel_head pdlr30">
 									<!--<img class="logo" alt="" src="images/thum/ico_thum_disk.png"/>-->
 									<p class="tit" title="{{storageSnapshot.snapshotName}}">{{storageSnapshot.snapshotName}}</p>
@@ -119,7 +119,7 @@
 										</ul>
 									</div>
 								</div>
-								<div class="panel_body">
+								<div class="panel_body" style="height:225px;">
 									<div class="ul-in">
 										<div class="cnt_wrap">
 											<div class="cnt_imgBox">
@@ -130,7 +130,7 @@
 												<dl>
 													<dt>원본 디스크</dt>
 													<!-- <dd><a href="" ng-click="main.goToPage('/iaas/storage/detail/'+storageSnapshot.volumeId)">{{storageSnapshot.volumeName}}</a></dd> -->
-													<dd><a class="none_click" href="" title="{{storageSnapshot.volumeName}}" >{{storageSnapshot.volumeName}}</a></dd>
+													<dd><a class="none_click txt_long" href="" title="{{storageSnapshot.volumeName}}" >{{storageSnapshot.volumeName}}</a></dd>
 													<!-- <dd>{{storageSnapshot.volumeName}}</dd> -->
 													<dt>디스크 유형</dt>
 													<dd>디스크스토리지</dd>

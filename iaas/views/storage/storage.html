@@ -30,8 +30,8 @@
 	<ul class="ul-panel">
 		<li ng-repeat="volume in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }">
 			<!-- panel -->
-			<div class="panelWrap" style="height:370px; width: 365px;">
-				<div class="panel type6" style="height:320px; width: 365px;">
+			<div class="panelWrap">
+				<div class="panel type6 h_auto">
 					<div class="panel_head pdlr30">
 						<p class="tit" title="{{volume.name}}">{{volume.name}}</p>
 						<p class="txt" >디스크스토리지</p>
@@ -69,11 +69,11 @@
 									<!-- UI사용 예시: 10GB(사용량) / 100GB(전체용량) 필요. -->
 								</div>
 								<div class="cnt_infoBox">
-									<dl>
-										<dt class="mt15">연결서버</dt>
-										<dd ng-if="volume.status == 'in-use'"><a href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>
+									<dl class="mt15">
+										<dt>연결서버</dt>
+										<dd ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>
 										<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
-										<dt>백업 이미지 개수 : <span>{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</span></dt>
+										<dt>백업 이미지 개수 :</dt><dd>{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</dd>
 										<!-- <dd ng-if="volume.status == 'in-use'">{{volume.volumeAttachment.device}}</dd>
 										<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd> -->
 									</dl>
@@ -81,7 +81,7 @@
 									<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{volume.description | enterByNbr}}'" ng-click="contents.fn.formOpen($event, 'description', volume);"> <span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
 								</div>
 							</div>
-							<div class="down">
+							<div class="down pb10">
 								<span ng-switch="volume.status" class="stateWrap">
 									<span ng-switch-when="in-use" class="stateMark type1"></span>
 									<span ng-switch-when="available" class="stateMark type3" ng-if="volume.status == 'available'"></span>

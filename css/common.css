@@ -3,6 +3,7 @@
 /* Common */
 .scroll-no{overflow: hidden !important;}
 .blind {overflow:hidden;  position:absolute; top:-9999em; left:-9999em; padding:0 !important; height:0; width:0; border:none !important; background:none !important; line-height:0 !important; text-indent:-9999px;}
+.d_block {display:block !important;}
 
 /* title */
 .h-tit1{font-size:40px; line-height: 1.2; font-weight: 700; margin: 0;}
@@ -112,6 +113,7 @@
 .w100 {width:100% !important;}
 .w50 {width:50% !important;}
 .w_auto {width:auto !important;}
+.h_auto {height:auto !important;}
 
 /* form */
 .select{font-size:13px; font-weight:400; height:25px; padding-left:5px;  border:1px solid #eaeaea;  background: url("../images/ico_sel.png") no-repeat; background-size: auto 25px; background-position: center right; -webkit-appearance: listbox; -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; -o-appearance: none; appearance: none;}

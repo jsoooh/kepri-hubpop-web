@@ -59,41 +59,6 @@
 						<!-- 접속정보 -->
 						<div ng-if="instance.procState == 'end'" class="tg_box_area btn-option type2">
 							<button type="button" class="btn_txt" ng-click="contents.showInfo(instance);">접속정보</button>
-							<div class="tg_box" ng-show="instance.showVal">
-								<div class="tgb_head">
-									<p class="tit">접속 정보</p>
-									<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
-								</div>
-								<!-- ubuntu  -->
-								<div ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'" class="tgb_body">
-									<ul>
-										<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
-										<!--<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>--><!-- vnc 사용할 경우 a태그에 class="ext_link" 지정하여 링크스타일 적용. <a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)"></a>-->
-										<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
-										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
-										<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></li>
-									</ul>
-									<div class="guide_link">
-										<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">접속방법 가이드</a>
-									</div>
-								</div>
-								<!-- windows  -->
-								<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
-									<ul>
-										<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">RDP</span></li>
-										<li>
-											<strong><span class="tb_tit">접속 도메인</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
-											<!-- vnc 사용할 경우 a태그에 class="ext_link pd_l14px" 지정하여 링크스타일 적용. <a href="" class="ext_link pd_l14px" ng-click="contents.fn.openWebConsole(instance)"></a> -->
-											<a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
-										</li>
-										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
-										<li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li>
-									</ul>
-									<div class="guide_link">
-										<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '', osType: instance.image.osType, rdpConnectDomain : instance.rdpConnectDomain});">접속방법 가이드</a>
-									</div>
-								</div>
-							</div>
 						</div>
 						<!-- //접속정보 -->
 						<div ng-if="instance.procState == 'end'" class="dropdown btn-option">
@@ -123,6 +88,43 @@
 						</div>
 					</div>
 					<div class="panel_body">
+						<!-- 접속정보 -->
+						<div class="tg_box" ng-show="instance.showVal">
+							<div class="tgb_head">
+								<p class="tit">접속 정보</p>
+								<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+							</div>
+							<!-- ubuntu  -->
+							<div ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'" class="tgb_body">
+								<ul>
+									<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
+									<!--<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>--><!-- vnc 사용할 경우 a태그에 class="ext_link" 지정하여 링크스타일 적용. <a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)"></a>-->
+									<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+									<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
+									<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></li>
+								</ul>
+								<div class="guide_link">
+									<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">접속방법 가이드</a>
+								</div>
+							</div>
+							<!-- windows  -->
+							<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
+								<ul>
+									<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">RDP</span></li>
+									<li>
+										<strong><span class="tb_tit">접속 도메인</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
+										<!-- vnc 사용할 경우 a태그에 class="ext_link pd_l14px" 지정하여 링크스타일 적용. <a href="" class="ext_link pd_l14px" ng-click="contents.fn.openWebConsole(instance)"></a> -->
+										<a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
+									</li>
+									<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
+									<li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li>
+								</ul>
+								<div class="guide_link">
+									<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '', osType: instance.image.osType, rdpConnectDomain : instance.rdpConnectDomain});">접속방법 가이드</a>
+								</div>
+							</div>
+						</div>
+						<!-- //접속정보 -->
 						<div ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id);" class="ul-in">
 							<div class="up">
 								<ul class="ul-prog">
