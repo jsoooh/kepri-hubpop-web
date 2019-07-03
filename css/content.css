@@ -2493,19 +2493,20 @@ p.no-txt{
 
 /*가상서버 대시보드 목록 드롭다운(접속정보)*/
 .panel.type5 .panel_head .btn_txt {display:inline-block; font-size:12px; color:#fff; background:#707070; border-radius:2px; padding:1px 10px 2px 10px; margin-top:6px;}
+.panel.type5 .panel_body {position:relative;}
 .panel.type5 .panel_head .btn_txt:hover {background:#4d4d4d;}
 .panel.type5 .panel_head .btn-option.type2 {position:absolute; left:96px; right:0; top:50px; z-index: 5;}
-.panel.type5 .panel_head .btn-option.type2 .tg_box {position:absolute; top:70px; left:-74px; z-index: 1000; float: left; width:320px; height:245px; font-size: 14px; text-align: left; list-style: none; border:1px solid #ddd; background:#f4f4f4; border-radius:7px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175); box-shadow: 0 6px 12px rgba(0, 0, 0, .175); padding:0 25px; margin: 2px 0 0; cursor:default;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_head .tit {position:relative;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_head .tit {font-size:17px; color:#333; padding:15px 0;}
-.panel_head button.close_sm {position:absolute; top:15px; right:15px; display:inline-block; width:25px; height:25px; font-size:0; background:url("../images/btn_pop_close_sm.png") no-repeat left top;}
-.panel_head button.close_sm:hover {background:url("../images/btn_pop_close_sm.png") no-repeat left -30px;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_body  li {font-size:14px; color:#777; padding-top:8px;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_body  li:before {display:inline-block; content:''; width:4px; height:4px; border-radius:100%; background:#555; margin-right:4px; vertical-align:middle;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_body  strong {font-size:15px; font-weight:500; color:#333; margin-right:5px;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_body  li .tb_tit {display:inline-block;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_body  li .tb_txt {display:inline-block;}
-.panel.type5 .panel_head .btn-option.type2 .tgb_body  a.domain_txt {display:block; font-size:13px; font-weight:400; color:#777; vertical-align:middle; min-width: 270px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding:0 0 3px 14px;}
+.panel.type5 .panel_body .tg_box {position:absolute; top:0; left:5%; z-index: 1000; float: left; width:90%; height:245px; font-size: 14px; text-align: left; list-style: none; border:1px solid #ddd; background:#f4f4f4; border-radius:7px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175); box-shadow: 0 6px 12px rgba(0, 0, 0, .175); padding:0 25px 25px; margin: 17px 0 0; cursor:default;}
+.panel.type5 .panel_body .tgb_head {position:relative;}
+.panel.type5 .panel_body .tgb_head .tit {font-size:17px; font-weight:500; color:#333; padding:15px 0;}
+.panel_body button.close_sm {position:absolute; top:15px; right:0; display:inline-block; width:25px; height:25px; font-size:0; background:url("../images/btn_pop_close_sm.png") no-repeat left top;}
+.panel_body button.close_sm:hover {background:url("../images/btn_pop_close_sm.png") no-repeat left -30px;}
+.panel.type5 .panel_body .tgb_body  li {font-size:14px; color:#777; padding-top:8px;}
+.panel.type5 .panel_body .tgb_body  li:before {display:inline-block; content:''; width:4px; height:4px; border-radius:100%; background:#555; margin-right:4px; vertical-align:middle;}
+.panel.type5 .panel_body .tgb_body  strong {font-size:15px; font-weight:500; color:#333; margin-right:5px;}
+.panel.type5 .panel_body .tgb_body  li .tb_tit {display:inline-block;}
+.panel.type5 .panel_body .tgb_body  li .tb_txt {display:inline-block;}
+.panel.type5 .panel_body .tgb_body  a.domain_txt {display:block; font-size:13px; font-weight:400; color:#777; vertical-align:middle; min-width: 270px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding:0 0 3px 14px;}
 .guide_link {text-align:left; padding:5px 0 2px 8px;}
 .guide_link a {display:inline-block; font-size:14px; color:#2196f3; background:url("../images/external-link.png") no-repeat right center; padding-right:20px;}
 .guide_link a:hover {/* border-bottom:1px solid #2196f3; */ text-decoration:underline;}
@@ -2525,9 +2526,9 @@ a.ext_link:hover {text-decoration:underline;}
 
 /*---- 디스크 만들기 ----*/
 /*디스크 목록*/
-.cnt_wrap {display:table; width:100%; padding:15px 20px;}
+.cnt_wrap {display:table; width:100%; padding:15px;}
 .cnt_wrap > div.cnt_imgBox, .cnt_wrap > div.cnt_infoBox {position:relative; display:table-cell; box-sizing:border-box; vertical-align:top;}
-.cnt_wrap .cnt_imgBox {width:160px; text-align:center;}
+.cnt_wrap .cnt_imgBox {width:130px; text-align:center;}
 .cnt_wrap .cnt_imgBox .cnt_img {display:inline-block; width:100px; height:100px; background:url("../images/ico_card_line.png") no-repeat;}
 .cnt_wrap .cnt_imgBox .cnt_img.ico01 {background-position:0 0;}
 .cnt_wrap .cnt_imgBox .cnt_img.ico02 {background-position:0 -110px;}
@@ -2544,11 +2545,12 @@ a.ext_link:hover {text-decoration:underline;}
 .cnt_wrap .cnt_imgBox .color1 {color:#333;}
 .cnt_wrap .cnt_imgBox .color2 {color:#777;}
 .cnt_wrap .cnt_infoBox {width:160px; padding-left:15px;}
-.cnt_wrap .cnt_infoBox dl dt {display:inline-block; font-size:15px; font-weight:500; color:#333; margin-top:15px;}
+.cnt_wrap .cnt_infoBox dl dt {display:inline-block; font-size:15px; font-weight:500; color:#333; vertical-align:middle;}
 .cnt_wrap .cnt_infoBox dl dt:first-child {margin-top:0px;}
 .cnt_wrap .cnt_infoBox dl dt::before {display:inline-block; content:''; width:4px; height:4px; border-radius:100%; background:#555; vertical-align:middle; margin-right:4px;}
 .cnt_wrap .cnt_infoBox dl dt > span {font-size:14px; color:#777;}
-.cnt_wrap .cnt_infoBox dl dd {display:inline-block; width:130px; font-size:14px; color:#777; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all;padding-left:10px;}
+.cnt_wrap .cnt_infoBox dl dd {display:inline-block; font-size:14px; color:#777; padding-left:10px; vertical-align:middle; line-height:30px; }
+.cnt_wrap .cnt_infoBox dl dd a.txt_long {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all; vertical-align:middle;}
 /* .cnt_wrap .cnt_infoBox dl dd a {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all;} */
 .cnt_wrap .cnt_infoBox dl dd a:hover {text-decoration:underline; color:#2957cc;}
 .cnt_wrap .cnt_infoBox .cnt_tooltip {display:inline-block; font-size:13px; font-weight:500; color:#333; border-radius:50px; padding:5px 10px 4px 13px; margin:15px 0 0 6px;}
