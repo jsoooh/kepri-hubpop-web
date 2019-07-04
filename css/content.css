@@ -2877,3 +2877,38 @@ a.ext_link:hover {text-decoration:underline;}
 
 .renameWrap {position:relative; width:240px;}
 .renameWrap .sdBtnWrap {position:absolute; top:2px; right:0;}
+
+
+/*대시보드 100%비율 CSS 재정의(1903px보다 클때)*/
+.proj_dashboard .ul-panel {display:table; width:100%;}
+.proj_dashboard .ul-panel > li {display:table-cell; box-sizing:border-box; width:38.5%; padding-left:20px; margin-left:0;}
+.proj_dashboard .ul-panel > li:first-child {width:23%; padding-left:0;}
+.proj_dashboard .ul-panel > li:nth-child(4) {width:100%; padding-left:0;}
+.proj_dashboard .ul-panel > li:nth-child(5) {width:35%; padding-left:0;}
+.proj_dashboard .ul-panel > li:nth-child(6) {width:65%;}
+
+.proj_dashboard .type_info {width:auto;}
+.proj_dashboard .type_api {width:auto;}
+.proj_dashboard .type_cloud {width:auto;}
+.proj_dashboard .type_gis {width:auto;}
+.proj_dashboard .type_pipeLine {width:auto;}
+
+.proj_dashboard .type_gis .panel_body {display:table; width:100%;}
+.proj_dashboard .type_gis .panel_body .txt_box {width:33.33%;}
+.proj_dashboard .type_api .panel_body {width:100%;}
+
+.proj_dashboard .panel_body .txt_data {width:auto;}
+.proj_dashboard .panel_body .chart_data {width:245px;}
+
+.proj_dashboard .type_cloud .panel_body > div {text-align:center;}
+.proj_dashboard .type_cloud .cloud_stateWrap {float:unset;}
+.proj_dashboard .type_cloud .cloud_stateWrap ul {width:64%;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {width:auto;}
+.proj_dashboard .type_cloud .cloud_chartWrap > ul {display:table; width:100%;}
+.proj_dashboard .type_cloud .cloud_chartWrap > ul > li {display:table-cell; box-sizing:border-box; width:33.33%;}
+
+.proj_dashboard .type_api .panel_body > div.fl_l {width:75%;}
+.proj_dashboard .type_api .panel_body > div.fl_r {width:25%;}
+
+.proj_dashboard .type_pipeLine .panel_body .donut_chart_data {width:150px;}
+.proj_dashboard .type_pipeLine .panel_body .bar_chart_data {margin:0 auto;}
