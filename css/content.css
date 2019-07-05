@@ -2223,7 +2223,15 @@ p.no-txt{
 .panel_area .pn_body .pnb_tit img {margin:3px 0 0 5px;}
 .ico_info {display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer;/*  vertical-align:middle; */}
 
-/*만들기 화면 컨텐츠 토글*/
+/* '만들기' 화면 비율 100% CSS 재정의 */
+.panel_area > ul.pn_list_style {display:table; width:100%; height:100%;}
+.panel_area > ul.pn_list_style > li {display:table-cell; box-sizing:border-box; height:inherit;}
+.panel_area > ul.pn_list_style > li:first-child {width:70%; padding-right:30px;}
+.panel_area > ul.pn_list_style > li:last-child {width:30%;}
+.panel_area > ul.pn_list_style .pn_l {width:100%;}
+.panel_area > ul.pn_list_style .pn_r {width:100%; margin-left:0;}
+
+/* '만들기' 화면 컨텐츠 토글 */
 .panel_area .pn-Toggle {border-bottom:1px solid #ddd;}
 .panel_area .pn-Toggle.Toggle-open {border-bottom:0;}
 .panel_area .pn-Toggle .btn_add_toggle {position:absolute; top:0; right:0; z-index:2;}
