@@ -664,7 +664,7 @@ angular.module('iaas.controllers')
             ct.fnGetUsedResource();
             ct.fnGetServerMainList();
         } else { // 프로젝트 선택
-            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
+            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
             showAlert.then(function () {
                 $scope.main.goToPage("/");
             });
