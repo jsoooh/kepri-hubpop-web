@@ -1,14 +1,44 @@
 'use strict';
 
 angular.module('portal.controllers')
-    .controller('commOrgProjectsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common) {
+    .controller('commOrgProjectsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common, portal) {
         _DebugConsoleLog("orgControllers.js : commOrgProjectsCtrl", 1);
 
         var ct = this;
+        ct.orgProjects = [];
+        ct.notices = [];
+        ct.tempNotices = [];
         ct.selectItemKey = 0;
         ct.userAuth = $scope.main.userAuth;
         ct.popup = $stateParams.popup;      //프로젝트 생성 팝업 여부
         ct.schFilterText = "";
+        ct.popNoticeCnt = 0;
+        ct.tempData = {
+            "data":[
+                {
+                    "NOTICE_NO":6,
+                    "TITLE":"공지사항",
+                    "POP_YN":"Y",
+                    "START_DT":"2019-05-30",
+                    "END_DT":"2019-08-06",
+                    "CONTENTS":"<p>테스트입니다.</p>\r\n",
+                    "ATTACH_FILE":"206|RTU속성2.txt",
+                    "COMMON_CD":"CD0021",
+                    "COMMON_NM":"공통",
+                    "REG_USER_ID":"hubpop",
+                    "REG_USER_NM":"허브팝",
+                    "REG_DT":"2019-05-30",
+                    "UPT_USER_ID":"hubpop",
+                    "UPT_USER_NM":"허브팝",
+                    "UPT_DT":"2019-05-30",
+                    "DELETE_YN":"N"
+                }
+            ],
+            "status":{
+                "code":200,
+                "name":"OK"
+            }
+        };
 
         ct.extendItem = function(evt) {
             console.log('extendItem', evt);
@@ -89,8 +119,43 @@ angular.module('portal.controllers')
             common.showCustomDialog($scope, $event, dialogOptions);
         };
 
-        // 조직 목록 조회
-        ct.listOrgProjects();
+        /*공지 목록 조회*/
+        ct.listNotices = function () {
+            ct.notices = [];
+            ct.tempNotices = [];
+            ct.popNoticeCnt = 0;
+            $scope.main.loadingMainBody = true;
+            var promise = portal.portalOrgs.getNotices();
+            promise.success(function (data) {
+                ct.tempNotices = data;
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function() {
+                ct.tempNotices = ct.tempData.data;
+                if (ct.tempNotices.length > 0) {
+                    setPopNoties();
+                }
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        function setPopNoties() {
+            var toDay = moment(new Date()).format('YYYY-MM-DD');    //2019-07-11
+            angular.forEach(ct.tempNotices, function (noticeItem) {
+                if (noticeItem.DELETE_YN == "N" && noticeItem.POP_YN == "Y" && noticeItem.START_DT <= toDay && noticeItem.END_DT >= toDay) {
+                    ct.notices.push(noticeItem);
+                }
+            });
+            ct.popNoticeCnt = ct.notices.length;
+            console.log("toDay : ", toDay);
+            console.log("ct.popNoticeCnt : ", ct.popNoticeCnt);
+            console.log("ct.tempNotices : ", ct.tempNotices);
+            console.log("ct.notices : ", ct.notices);
+        }
+
+        ct.listOrgProjects();   //조직 목록 조회
+        ct.listNotices();       //공지 목록 조회
     })
     .controller('commFirstOrgProjectMainCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common) {
         _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);

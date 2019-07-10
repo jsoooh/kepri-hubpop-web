@@ -252,7 +252,6 @@ angular.module('portal.services', [])
             /*return common.retrieveResource(common.resourcePromise('http://168.78.82.183:58080/gis/api/projectInfo.do', 'GET', getParams));*/
             return common.retrieveResource(common.resourcePromise('/gis/api/projectInfo.do', 'GET', getParams));
         };
-
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   End  ///////////////////////////////////
 
         portal.portalOrgs = {};
@@ -314,6 +313,10 @@ angular.module('portal.services', [])
 				"teamCode" : teamCode
             };
             return common.syncHttpResponse(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams, 'application/x-www-form-urlencoded');
+        };
+
+        portal.portalOrgs.getNotices = function () {
+            return common.retrieveResource(common.resourcePromise('/hsvc/api/noti/info/v1.0', 'GET'));
         };
 
         portal.users = {};
@@ -451,7 +454,7 @@ angular.module('portal.services', [])
 				return (memoryLimit/1024).toFixed(1)+'GB';
 			}
 			return memoryLimit+'MB';
-		}
+		};
 
 		commonUtil.getBuildpackInfoOld = function(buildpackName, isSmall) {
 			var name = '';
@@ -521,7 +524,7 @@ angular.module('portal.services', [])
 					image = 'images/' + prefix + '_img8.png';
 			}
 			return {'name': name, 'img': image, 'appFilePath': appFilePath, 'version': version, 'url':url};
-		}
+		};
 
 		commonUtil.getBuildpackInfo = function(buildpackName, isSmall) {
 			var name = '';
@@ -596,7 +599,7 @@ angular.module('portal.services', [])
 					image = 'images/' + prefix + '_img8.png';
 			}
 			return {'name': name, 'img': image, 'appFilePath': appFilePath, 'version': version, 'url':url};
-		}
+		};
 
 		commonUtil.getEnvByBuildpack = function(buildpackName) {
 			var _vs = [];
@@ -637,7 +640,7 @@ angular.module('portal.services', [])
 			}
 			var envs = (_sv == '' && _fw == '') ? null : {servers: _sv, frameworks: _fw};
 			return {versions: _vs, servers: _sv, frameworks: _fw};
-		}
+		};
 
 		commonUtil.go = function(path) {
 			$location.path(path);
