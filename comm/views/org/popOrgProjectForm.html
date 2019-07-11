@@ -14,7 +14,8 @@
                     <div class="cnt_box">
                         <span class="pop_logo"></span>
                         <p class="txt">프로젝트명을 입력하여 <em>프로젝트를 생성</em>하세요.</p>
-                        <input type="text" name="orgName" ng-model="pop.orgProject.orgName" ng-key-enter="popDialogOk();" class="form-control" placeholder="프로젝트명을 입력하세요. (20자 내외, 특수문자 입력 불가)" validation="min_len:2|max_len:20|required|custom:validationOrgProjectName(pop.orgProject.orgName)" maxlength="20" />
+                        <div class="mb10"><span class="point_txt">* 2자 이상 20자 이하, 특수문자 입력 불가</span></div>
+                        <input type="text" name="orgName" ng-model="pop.orgProject.orgName" ng-key-enter="popDialogOk();" class="form-control" placeholder="프로젝트명을 입력하세요." validation="min_len:2|max_len:20|required|custom:validationOrgProjectName(pop.orgProject.orgName)" maxlength="20" />
                         <div class="btn_area">
                             <button type="button" class="btn_create" ng-click="popDialogOk();">
                                 <span>프로젝트 생성</span>
