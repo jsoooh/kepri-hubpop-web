@@ -1076,25 +1076,28 @@ angular.module('common.controllers', [])
         };
 
         mc.addOrgProjectFormOpen = function($event) {
-            /*var orgProject = {};
-            orgProject.managerId    = mc.userInfo.user_id;
-            orgProject.managerName  = mc.userInfo.user_name;
-            orgProject.managerEmail = mc.userInfo.email;
+            if ($location.path() == "/comm/projects/popup") {
+                var orgProject = {};
+                 orgProject.managerId    = mc.userInfo.user_id;
+                 orgProject.managerName  = mc.userInfo.user_name;
+                 orgProject.managerEmail = mc.userInfo.email;
 
-            orgProject.projectId = mc.sltProjectId;
+                 orgProject.projectId = mc.sltProjectId;
 
-            var dialogOptions = {
-                controller : "commAddOrgProjecFormCtrl",
-                controllerAs: "pop",
-                templateUrl : _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail(),
-                formName : "popOrgProjectForm",
-                orgProject : orgProject,
-                callBackFunction : mc.addOrgProjectCallBackFun
-            };
-            $scope.actionBtnHied = false;
-            $scope.actionLoading = false;
-            common.showCustomDialog($scope, $event, dialogOptions);*/
-            $location.path('/comm/projects/popup');
+                 var dialogOptions = {
+                 controller : "commAddOrgProjecFormCtrl",
+                 controllerAs: "pop",
+                 templateUrl : _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail(),
+                 formName : "popOrgProjectForm",
+                 orgProject : orgProject,
+                 callBackFunction : mc.addOrgProjectCallBackFun
+                 };
+                 $scope.actionBtnHied = false;
+                 $scope.actionLoading = false;
+                 common.showCustomDialog($scope, $event, dialogOptions);
+            } else {
+                $location.path('/comm/projects/popup');
+            }
         };
 
         mc.ssoUserLogin = false;
