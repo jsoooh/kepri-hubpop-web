@@ -333,6 +333,8 @@ angular.module('paas.controllers')
             appPromise.success(function (data) {
                 common.showAlertSuccess("삭제가 완료 되었습니다.");
                 ct.listAllApps();
+                //앱 삭제 후 main organization 정보 재조회. 삭제 후 앱 이름 중복 에러 관련. 2019.07.12
+                $scope.main.loadSltOrganization();
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -950,8 +952,6 @@ angular.module('paas.controllers')
                 appBody.diskQuota = ct.defaultSet.diskQuota;
             }
             
-           // console.log("appBody====>"+ JSON.stringify(appBody));
-
             if (ct.appFileItem) {
                 appBody.file 	   = ct.appFileItem._file;
                 var appPushPromise = applicationService.appFilePush(appBody);
@@ -1015,7 +1015,6 @@ angular.module('paas.controllers')
             ct.getSubDomainList();
         };
 
-
         ct.getSubDomainList = function () {
             var condition = '';
             if (ct.domains[0].guid) {
@@ -1034,8 +1033,8 @@ angular.module('paas.controllers')
         };
 
         ct.fn.appNameValidationCheck = function(appName) {
-            if(appName){
-                for(var i = 0; i < ct.sltOrganization.spaces[0].apps.length; i++) {
+            if (appName) {
+                for (var i = 0; i < ct.sltOrganization.spaces[0].apps.length; i++) {
                     if (appName == ct.sltOrganization.spaces[0].apps[i].name) {
                         return {isValid : false, message: "이미 사용중인 APP 이름입니다."};
                     }
@@ -1930,6 +1929,8 @@ angular.module('paas.controllers')
             appPromise.success(function (data) {
                 common.showAlertSuccess("삭제가 완료 되었습니다.");
                 $scope.main.goToPage("/paas/apps");
+                //앱 삭제 후 main organization 정보 재조회. 삭제 후 앱 이름 중복 에러 관련. 2019.07.12
+                $scope.main.loadSltOrganization();
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
