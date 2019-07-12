@@ -1932,9 +1932,9 @@ p.no-txt{
 .proj_dashboard .panel_head{position:relative; height:59px; padding:0px 25px; border-bottom:1px solid #eee;}
 .proj_dashboard .panel_head h4.tit {display:block; float:left; font-size:20px; font-weight:700; color:#333; line-height:32px; padding:13px 0 14px 0;}
 .proj_dashboard .panel_body h5.tit {display:block; font-size:16px; font-weight:500; color:#333; text-align:center;}
-.proj_dashboard .panel_head a.btn_more {position:absolute; top:20px; right:35px; display:inline-block; font-size:12px; font-weight:700; color:#979797;}
-.proj_dashboard .panel_head a.btn_more:hover {color:#555;}
-.proj_dashboard .panel_head a.btn_more .ico_more {position:absolute; top:5px; display:inline-block; width:10px; height:10px; margin-left:5px; background:url("../images/dsbd_btn_arrow.png") no-repeat left top;}
+.proj_dashboard .panel_head a.btn_more {position:absolute; top:20px; right:35px; display:inline-block; font-size:12px; font-weight:500; color:#2196f3;}
+.proj_dashboard .panel_head a.btn_more:hover {text-decoration:underline;}
+.proj_dashboard .panel_head a.btn_more .ico_more {position:absolute; top:4px; display:inline-block; width:8px; height:12px; margin-left:4px; background:url("../images/dsbd_link_arrow.png") no-repeat left top;}
 .proj_dashboard .panel_body .tit_area {position:relative; width:100%; margin-bottom:34px;}
 .proj_dashboard .panel_body a.btn_more {position:absolute; top:0; right:35px; display:inline-block; font-size:12px; font-weight:700; color:#979797;}
 .proj_dashboard .panel_body a.btn_more:hover {color:#555;}
