@@ -1076,7 +1076,7 @@ angular.module('common.controllers', [])
         };
 
         mc.addOrgProjectFormOpen = function($event) {
-            if ($location.path() == "/comm/projects/popup") {
+            if ($location.path().indexOf("/comm/projects/") > -1) {
                 var orgProject = {};
                  orgProject.managerId    = mc.userInfo.user_id;
                  orgProject.managerName  = mc.userInfo.user_name;
