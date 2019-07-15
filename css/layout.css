@@ -309,24 +309,44 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu > li > a:hover::before, .gnb-menu > li > a.on::before{display: inline-block; position: absolute; left:0; top:0; z-index: 1; content: ''; width:4px; height:100%; background-color: #00bfff; }
 .gnb-menu > li > a.on .ico-bul{background-position: -95px -25px;}
 .gnb-menu > li > a.on .ico-arr{background-position: -83px -100px;}
-.gnb-menu > li > a .ico-bul.ico1{ background-position: -25px -31px;}
-.gnb-menu > li > a:hover .ico-bul.ico1, .gnb-menu > li > a.on .ico-bul.ico1{ background-position: -89px -31px;}
-.gnb-menu > li > a .ico-bul.ico2{position: absolute; left:19px; top:22px; background-position: -25px -100px;}
-.gnb-menu > li > a:hover .ico-bul.ico2, .gnb-menu > li > a.on .ico-bul.ico2{ background-position: -89px -100px;}
-.gnb-menu > li > a .ico-bul.ico3{ background-position: -25px -165px;}
-.gnb-menu > li > a:hover .ico-bul.ico3, .gnb-menu > li > a.on .ico-bul.ico3{ background-position: -89px -165px;}
-.gnb-menu > li > a .ico-bul.ico4{ background-position: -25px -231px;}
-.gnb-menu > li > a:hover .ico-bul.ico4, .gnb-menu > li > a.on .ico-bul.ico4{ background-position: -89px -231px;}
-.gnb-menu > li > a .ico-bul.ico5{ background-position: -25px -301px;}
-.gnb-menu > li > a:hover .ico-bul.ico5, .gnb-menu > li > a.on .ico-bul.ico5{ background-position: -89px -301px;}
-.gnb-menu > li > a .ico-bul.ico6{position: absolute; left:13px; top:22px; background-position: -25px -369px;}
-.gnb-menu > li > a:hover .ico-bul.ico6, .gnb-menu > li > a.on .ico-bul.ico6{ background-position: -89px -369px;}
-.gnb-menu > li > a .ico-bul.ico7{ background-position: -25px -432px;}
-.gnb-menu > li > a:hover .ico-bul.ico7, .gnb-menu > li > a.on .ico-bul.ico7{ background-position: -89px -432px;}
-.gnb-menu > li > a .ico-bul.ico8{ background-position: -25px -502px;}
-.gnb-menu > li > a:hover .ico-bul.ico8, .gnb-menu > li > a.on .ico-bul.ico8{ background-position: -89px -502px;}
-.gnb-menu > li > a .ico-bul.ico9{ background-position: -25px -569px;}
-.gnb-menu > li > a:hover .ico-bul.ico9, .gnb-menu > li > a.on .ico-bul.ico9{ background-position: -89px -569px;}
+
+/*-- 대메뉴 아이콘 명 및 아이콘 이미지 변경 190715 --*/
+/*대메뉴 아이콘 1 (서버 가상화: ico_iaas)*/
+.gnb-menu > li > a .ico-bul.ico_iaas{ background-position: -25px -30px;}
+.gnb-menu > li > a:hover .ico-bul.ico_iaas, .gnb-menu > li > a.on .ico-bul.ico_iaas{ background-position: -95px -30px;}
+
+/*대메뉴 아이콘 2 (표준 App개발: ico_paas)*/
+.gnb-menu > li > a .ico-bul.ico_paas{position: absolute; left:19px; top:22px; background-position: -25px -97px;}
+.gnb-menu > li > a:hover .ico-bul.ico_paas, .gnb-menu > li > a.on .ico-bul.ico_paas{ background-position: -95px -97px;}
+
+/*대메뉴 아이콘 3 (데이터 분석: ico_ai)*/
+.gnb-menu > li > a .ico-bul.ico_ai{ background-position: -25px -167px;}
+.gnb-menu > li > a:hover .ico-bul.ico_ai, .gnb-menu > li > a.on .ico-bul.ico_ai{ background-position: -95px -167px;}
+
+/*대메뉴 아이콘 4 (SW 개발환경: ico_iaas)*/
+.gnb-menu > li > a .ico-bul.ico_frwk{ background-position: -25px -235px;}
+.gnb-menu > li > a:hover .ico-bul.ico_frwk, .gnb-menu > li > a.on .ico-bul.ico_frwk{ background-position: -95px -235px;}
+
+/*대메뉴 아이콘 5 (API 게이트웨이: ico_apgw)*/
+.gnb-menu > li > a .ico-bul.ico_apgw{ background-position: -25px -305px;}
+.gnb-menu > li > a:hover .ico-bul.ico_apgw, .gnb-menu > li > a.on .ico-bul.ico_apgw{ background-position: -89px -305px;}
+
+/*대메뉴 아이콘 6 (데이터 서비스: ico_daas)*/
+.gnb-menu > li > a .ico-bul.ico_daas{position: absolute; left:13px; top:22px; background-position: -25px -368px;}
+.gnb-menu > li > a:hover .ico-bul.ico_daas, .gnb-menu > li > a.on .ico-bul.ico_daas{ background-position: -95px -368px;}
+
+/*대메뉴 아이콘 7 (Back-end 서비스: ico_baas)*/
+.gnb-menu > li > a .ico-bul.ico_baas{ background-position: -25px -438px;}
+.gnb-menu > li > a:hover .ico-bul.ico_baas, .gnb-menu > li > a.on .ico-bul.ico_baas{ background-position: -95px -438px;}
+
+/*대메뉴 아이콘 8 (시각화 개발: ico_vdev)*/
+.gnb-menu > li > a .ico-bul.ico_vdev{ background-position: -25px -508px;}
+.gnb-menu > li > a:hover .ico-bul.ico_vdev, .gnb-menu > li > a.on .ico-bul.ico_vdev{ background-position: -95px -508px;}
+
+/*대메뉴 아이콘 9 (기타서비스: ico_etc)*/
+.gnb-menu > li > a .ico-bul.ico_etc{ background-position: -25px -575px;}
+.gnb-menu > li > a:hover .ico-bul.ico_etc, .gnb-menu > li > a.on .ico-bul.ico_etc{ background-position: -95px -575px;}
+
 
 /*메뉴 2depth*/
 .gnb-menu > li > ul {padding:15px 10px 15px 30px;}
