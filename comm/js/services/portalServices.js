@@ -42,20 +42,20 @@ angular.module('portal.services', [])
             var menuList = mc.dbMenuList;
             var repeatData = [];
             if (!angular.isArray(menuList)) return;
-            for(var i = 0; i < menuList.length; i++){
-                if(myRoleName == 'Manager'){
-                    if(menuList[i].isManager){
+            for (var i = 0; i < menuList.length; i++) {
+                if (myRoleName == 'Manager') {
+                    if (menuList[i].isManager) {
                         repeatData.push(menuList[i]);
                     }
-                } else if(myRoleName == 'UserPM'){
-                    if(menuList[i].isUserPm){
+                } else if (myRoleName == 'UserPM') {
+                    if (menuList[i].isUserPm) {
                         repeatData.push(menuList[i]);
                     }
-                } else if(myRoleName == 'User'){
-                    if(menuList[i].isUser){
+                } else if (myRoleName == 'User'){
+                    if (menuList[i].isUser) {
                         repeatData.push(menuList[i]);
                     }
-                } else{
+                } else {
                     repeatData.push(menuList[i]);
                 }
             }
@@ -65,9 +65,9 @@ angular.module('portal.services', [])
             var parentId1 = '';
             var parentId2 = '';
 
-            for(var i = 0; i < repeatData.length; i++){
+            for (var i = 0; i < repeatData.length; i++) {
                 // Depth 1
-                if(repeatData[i].level == '1'){
+                if (repeatData[i].level == '1') {
                     var icoId = repeatData[i].id.toString().substr(2,1);
                     if (repeatData[i].childCnt == 0) {
                         leftMenu += "		<li class='dept1'>\n";
@@ -85,7 +85,7 @@ angular.module('portal.services', [])
                     }
                 }
                 // Depth 2
-                if(repeatData[i].level == '2' && repeatData[i].parentId == parentId1){
+                if (repeatData[i].level == '2' && repeatData[i].parentId == parentId1) {
                     if (repeatData[i].childCnt == 0) {
                         leftMenu += "				<li class='dept2' onmouseover='depth2LiHover(event,\"no\");'>\n";
                         if (repeatData[i].urlPath) {
@@ -102,31 +102,29 @@ angular.module('portal.services', [])
                     }
                 }
                 // Depth 3
-                if(repeatData[i].level == '3' && repeatData[i].parentId == parentId2){
+                if (repeatData[i].level == '3' && repeatData[i].parentId == parentId2) {
                     leftMenu += "						<li class='dept3'>\n";
                     leftMenu += "							<a class='dept3' href='" + repeatData[i].urlPath + "' onclick='depth3Click(event);' onclick='depth2Click(event);'>" + repeatData[i].depth3 + "</a>\n";
                     leftMenu += "						</li>\n";
                 }
-                if(i == repeatData.length-1){
-                    if(repeatData[i].level == '3'){
+                if (i == repeatData.length-1) {
+                    if (repeatData[i].level == '3') {
                         leftMenu += "					</ul>\n";
                         leftMenu += "					<!-- dept3 END -->\n";
                         leftMenu += "				</li>\n";
                     }
-
-                    if(repeatData[i].level == '2' || repeatData[i].level == '3'){
+                    if (repeatData[i].level == '2' || repeatData[i].level == '3') {
                         leftMenu += "			</ul>\n";
                         leftMenu += "			<!-- dept2 END -->\n";
                         leftMenu += "		</li>\n";
                     }
-                }else if(i+1 < repeatData.length){
-                    if((repeatData[i+1].level == '1' || repeatData[i+1].level == '2') && repeatData[i].level == '3' && repeatData[i+1].parentId != parentId2 && repeatData[i].parentId){
+                } else if (i+1 < repeatData.length) {
+                    if ((repeatData[i+1].level == '1' || repeatData[i+1].level == '2') && repeatData[i].level == '3' && repeatData[i+1].parentId != parentId2 && repeatData[i].parentId) {
                         leftMenu += "					</ul>\n";
                         leftMenu += "					<!-- dept3 END -->\n";
                         leftMenu += "				</li>\n";
                     }
-
-                    if(repeatData[i+1].level == '1' && repeatData[i+1].parentId != parentId1 && repeatData[i].parentId){
+                    if (repeatData[i+1].level == '1' && repeatData[i+1].parentId != parentId1 && repeatData[i].parentId) {
                         leftMenu += "			</ul>\n";
                         leftMenu += "			<!-- dept2 END -->\n";
                         leftMenu += "		</li>\n";
@@ -149,25 +147,25 @@ angular.module('portal.services', [])
             $("#leftMenu").find('a').each(function(){
                 var thisHref = $(this).attr("href");
 
-                if(nowHref[1].match(thisHref)){
-                    if($(this).hasClass("on")){
+                if (nowHref[1].match(thisHref)) {
+                    if ($(this).hasClass("on")) {
 
-                    }else{
+                    } else {
                         $("#leftMenu").find('a').removeClass("on");
                         $("#leftMenu").find('ul.dept2').hide(0);
                         $("#leftMenu").find('ul.dept3').hide(0);
                         $(this).toggleClass("on");
 
-                        if($(this).hasClass("dept3")){
+                        if ($(this).hasClass("dept3")) {
                             $(this).closest("li.dept2").find("a.dept2").toggleClass("on");
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
                             $(this).closest("li.dept1").find("a.dept1").toggleClass("on open");
                         }
-                        if($(this).hasClass("dept2")){
+                        if ($(this).hasClass("dept2")) {
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
                             $(this).closest("li.dept1").find("a.dept1").toggleClass("on open");
                         }
-                        if($(this).hasClass("dept1")){
+                        if ($(this).hasClass("dept1")) {
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
                         }
                     }
@@ -424,9 +422,9 @@ angular.module('portal.services', [])
 				var tempMonth = obj.getMonth() + 1;
 				var month = tempMonth < 10 ? "0".concat(tempMonth.toString()) : tempMonth.toString();
 				var fullDate = year.concat(month).concat(date);
-				if(seperator){
+				if (seperator) {
 					return fullDate.toDate(seperator);
-				}else{
+				} else {
 					return fullDate;
 				}
 			}catch(e){
@@ -436,9 +434,9 @@ angular.module('portal.services', [])
 
 		String.prototype.toDate = function(seperator){
 			seperator = seperator || "-";
-			if(this.length != 8){
+			if (this.length != 8) {
 				return "";
-			}else{
+			} else {
 				return (this.substring(0,4) + seperator + this.substring( 4,6 ) + seperator + this.substring( 6,8 ));
 			}
 		};
@@ -450,7 +448,7 @@ angular.module('portal.services', [])
 		var commonUtil = {};
 
 		commonUtil.getMemoryLimit = function(memoryLimit) {
-			if(memoryLimit >= 1024) {
+			if (memoryLimit >= 1024) {
 				return (memoryLimit/1024).toFixed(1)+'GB';
 			}
 			return memoryLimit+'MB';
@@ -463,7 +461,7 @@ angular.module('portal.services', [])
 			var url = '';
 			var appFilePath = 'https://s3.ap-northeast-2.amazonaws.com/basic-app-dev/hello-spring.war';
 			var prefix = 'prog';
-			if(isSmall == 'small') prefix = 'srog';
+			if (isSmall == 'small') prefix = 'srog';
 			switch(buildpackName) {
 				case 'staticfile_buildpack':
 					name = 'STATIC';
@@ -533,7 +531,7 @@ angular.module('portal.services', [])
 			var url = '';
 			var appFilePath = 'https://s3.ap-northeast-2.amazonaws.com/basic-app-dev/hello-spring.war';
 			var prefix = 'prog';
-			if(isSmall == 'small') prefix = 'srog';
+			if (isSmall == 'small') prefix = 'srog';
 			switch(buildpackName) {
 				case 'staticfile_buildpack':
 					name = 'STATIC';
