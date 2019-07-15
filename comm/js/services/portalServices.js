@@ -68,19 +68,20 @@ angular.module('portal.services', [])
             for (var i = 0; i < repeatData.length; i++) {
                 // Depth 1
                 if (repeatData[i].level == '1') {
-                    var icoId = repeatData[i].id.toString().substr(2,1);
+                    //var icoId = repeatData[i].id.toString().substr(2,1);
+                    var icoId = !repeatData[i].iconId ? "" : repeatData[i].iconId.toString();
                     if (repeatData[i].childCnt == 0) {
                         leftMenu += "		<li class='dept1'>\n";
                         if (repeatData[i].urlPath) {
-                            leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                            leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
                         } else {
-                            leftMenu += "			<a class='dept1' href='javascript:void(0);'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                            leftMenu += "			<a class='dept1' href='javascript:void(0);'><span class='ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
                         }
                         leftMenu += "		</li>\n";
                     } else {
                         parentId1 = repeatData[i].id;
                         leftMenu += "		<li class='dept1'>\n";
-                        leftMenu += "			<a class='dept1' href='javascript:void(0);' onclick='depth1Click(event);'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "<span class='ico ico-arr'></span></a>\n";
+                        leftMenu += "			<a class='dept1' href='javascript:void(0);' onclick='depth1Click(event);'><span class='ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "<span class='ico ico-arr'></span></a>\n";
                         leftMenu += "			<ul class='dept2' style='display:none' onmouseleave='depth3Leave();'>\n";
                     }
                 }
