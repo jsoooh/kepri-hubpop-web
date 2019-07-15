@@ -73,15 +73,15 @@ angular.module('portal.services', [])
                     if (repeatData[i].childCnt == 0) {
                         leftMenu += "		<li class='dept1'>\n";
                         if (repeatData[i].urlPath) {
-                            leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                            leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
                         } else {
-                            leftMenu += "			<a class='dept1' href='javascript:void(0);'><span class='ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                            leftMenu += "			<a class='dept1' href='javascript:void(0);'><span class='ico ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
                         }
                         leftMenu += "		</li>\n";
                     } else {
                         parentId1 = repeatData[i].id;
                         leftMenu += "		<li class='dept1'>\n";
-                        leftMenu += "			<a class='dept1' href='javascript:void(0);' onclick='depth1Click(event);'><span class='ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "<span class='ico ico-arr'></span></a>\n";
+                        leftMenu += "			<a class='dept1' href='javascript:void(0);' onclick='depth1Click(event);'><span class='ico ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "<span class='ico ico-arr'></span></a>\n";
                         leftMenu += "			<ul class='dept2' style='display:none' onmouseleave='depth3Leave();'>\n";
                     }
                 }
