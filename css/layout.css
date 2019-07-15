@@ -310,7 +310,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu > li > a.on .ico-bul{background-position: -95px -25px;}
 .gnb-menu > li > a.on .ico-arr{background-position: -83px -100px;}
 
-/*-- 대메뉴 아이콘 명 및 아이콘 이미지 변경 190715 --*/
+/*-- 대메뉴 아이콘 class명 및 아이콘 이미지 변경 190715 --*/
 /*대메뉴 아이콘 1 (서버 가상화: ico_iaas)*/
 .gnb-menu > li > a .ico-bul.ico_iaas{ background-position: -25px -30px;}
 .gnb-menu > li > a:hover .ico-bul.ico_iaas, .gnb-menu > li > a.on .ico-bul.ico_iaas{ background-position: -95px -30px;}
