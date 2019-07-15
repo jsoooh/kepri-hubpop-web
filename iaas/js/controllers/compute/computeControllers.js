@@ -816,14 +816,14 @@ angular.module('iaas.controllers')
             ct.isMinSpecDisabled = false;
             if (ct.isSpecLoad && ct.data.image && ct.data.image.id) {
                 angular.forEach(ct.specList, function (spec) {
-                    if (spec.disk < ct.data.image.minDisk || spec.ram < ct.data.image.minRam) {
+                    if (spec.disk < ct.data.image.minDisk || spec.ram < (ct.data.image.minRam * 1024)) {
                         spec.disabled = true;
                         ct.isMinSpecDisabled = true;
                     }
                 });
                 ct.specMinDisabledSetting = true;
                 if (ct.data.spec && ct.data.spec.uuid) {
-                    if (ct.data.spec.disk < ct.data.image.minDisk || ct.data.spec.ram < ct.data.image.minRam) {
+                    if (ct.data.spec.disk < ct.data.image.minDisk || ct.data.spec.ram < (ct.data.image.minRam)) {
                         ct.fn.defaultSelectSpec();
                     }
                 } else {
