@@ -903,9 +903,11 @@ angular.module('iaas.controllers')
             }
             else if(instance.image.osType == 'windows'){
                 var rdpConnectUrl = (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + ct.rdpConnectPort : '';
-                if (rdpConnectUrl) {
-                    common.copyToClipboard(rdpConnectUrl);
-                    $scope.main.copyToClipboard(rdpConnectUrl, '"' + rdpConnectUrl + '"가 클립보드에 복사 되었습니다.');
+                var rdpDomain = instance.rdpDomain ? instance.rdpDomain : '';
+                var copyUrl = rdpConnectUrl ? rdpConnectUrl : rdpDomain;
+                if (copyUrl) {
+                    common.copyToClipboard(copyUrl);
+                    $scope.main.copyToClipboard(copyUrl, '"' + copyUrl + '"가 클립보드에 복사 되었습니다.');
                 } else {
                     common.showAlertWarning("접속 URL이 존재하지 않습니다.");
                 }

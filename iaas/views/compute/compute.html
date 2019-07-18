@@ -111,16 +111,21 @@
 							<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
 								<ul>
 									<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">RDP</span></li>
-									<li>
+									<li ng-if="!instance.rdpDomain">
 										<strong><span class="tb_tit">접속 도메인</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
 										<!-- vnc 사용할 경우 a태그에 class="ext_link pd_l14px" 지정하여 링크스타일 적용. <a href="" class="ext_link pd_l14px" ng-click="contents.fn.openWebConsole(instance)"></a> -->
 										<a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
+									</li>
+									<li ng-if="instance.rdpDomain">
+										<strong><span class="tb_tit">접속 IP</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
+										<!-- vnc 사용할 경우 a태그에 class="ext_link pd_l14px" 지정하여 링크스타일 적용. <a href="" class="ext_link pd_l14px" ng-click="contents.fn.openWebConsole(instance)"></a> -->
+										<a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ instance.rdpDomain ? instance.rdpDomain : '' }}'">{{ instance.rdpDomain ? instance.rdpDomain : '' }}</a>
 									</li>
 									<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
 									<li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li>
 								</ul>
 								<div class="guide_link">
-									<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '', osType: instance.image.osType, rdpConnectDomain : instance.rdpConnectDomain});">접속방법 가이드</a>
+									<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : instance.rdpDomain, osType: instance.image.osType, rdpConnectDomain : instance.rdpConnectDomain});">접속방법 가이드</a>
 								</div>
 							</div>
 						</div>
