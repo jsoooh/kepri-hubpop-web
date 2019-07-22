@@ -954,15 +954,15 @@ angular.module('paas.controllers')
             
             if (ct.appFileItem) {
                 appBody.file 	   = ct.appFileItem._file;
+                $scope.main.loadingMainBody = true;
                 var appPushPromise = applicationService.appFilePush(appBody);
-                
                 appPushPromise.success(function (data) {
                     $scope.actionBtnHied 		= false;
                     $scope.main.loadingMain 	= false;
                     $scope.main.loadingMainBody = false;
-                    
+
                     common.showAlertSuccessHtml($translate.instant("label.app") + "(" + data.name + ")", $translate.instant("message.mi_register_success"));
-                    
+
                     $scope.main.startAppGuid = data.guid;
                     $scope.main.goToPage('/paas/apps/' + data.guid);
                 });

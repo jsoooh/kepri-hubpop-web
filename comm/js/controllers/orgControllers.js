@@ -278,10 +278,10 @@ angular.module('portal.controllers')
             $scope.main.loadingMainBody= true;
 
             var applyPromise = orgService.requestOrgCreate(param);
-            common.mdDialogHide();
             applyPromise.success(function (data) {
                 $scope.main.loadingMainBody=false;
                 pop.btnClickCheck = false;
+                common.mdDialogHide();
                 //common.showAlert($translate.instant('label.org_add'), $translate.instant('message.mi_apply_org_after_apprv'));
                 common.showAlert($translate.instant('label.org_add'), $translate.instant('message.mi_egov_success_common_insert'));
                 if (angular.isFunction(pop.callBackFunction)) {

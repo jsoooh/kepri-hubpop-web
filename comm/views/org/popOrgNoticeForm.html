@@ -1,0 +1,64 @@
+<md-dialog draggable drag-handle=".modal-header" aria-label="{{ dialogOptions.title }}" class="{{ dialogOptions.dialogClassName }} modal-content">
+    <div class="notice_pop">
+        <div class="modal-content">
+            <!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+            <!-- modal header -->
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+		  <h1 class="modal-title">공지사항</h1>
+		</div>
+		<!-- //modal header -->
+		
+		<!-- modal body -->
+		<div class="modal-body">
+			<div class="pop_tit"><h5>HUB-POP 서비스 내부 점검 안내</h5></div>
+			<div class="noti_cont_area">
+				<pre>
+					HUB-PoP 내부환경 개선을 위한 시스템 보수작업이 있을 예정입니다.
+					다음과 같이 점검시간을 안내하오니 업무에 차질 없으시기 바랍니다.
+						
+					· 작업 일시: 2019-07-17
+					· 작업 시간: 18:00 ~23:00
+					· 작업 내용
+					    - 서버가상화 생성화면 개선 
+				</pre>
+				<!-- <img ng-click="hide();" alt="Lush mango tree" src="images/notice/platform_seminar.png"> -->
+			</div>
+			<!-- table -->
+			<div class="tbw type1">
+				<table class="table">
+					<colgroup>
+					<col style="width:23%;">
+					<col style="width:77%;">
+					</colgroup>
+					<tbody>
+					<tr>
+						<th><span class="ico_link_file">첨부파일 </span></th>
+						<td><a href="">[HUB-POP] 서비스 점검사항 상세 안내.hwp</a></td>
+					</tr>
+					<tr>
+						<th><span class="ico_link_file">첨부파일 </span></th>
+						<td><a href="">서비스 점검 목록.xls</a></td>
+					</tr>
+					<tr>
+						<th><span class="ico_link_file">첨부파일 </span></th>
+						<td><a href="">서비스 점검 목록.xls</a></td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
+			<!-- //table -->
+		</div>
+		<!-- //modal body -->
+		
+		<!-- modal footer -->
+		<div class="modal-footer">
+			<div class="checkbox checkbox-inline">
+				<input type="checkbox" id="check-id1">
+				<label class="label-txt" for="check-id1">오늘 하루 이 창을 띄우지 않음</label>
+			</div>
+		</div>
+		<!-- //modal footer -->
+        </div>
+    </div>
+</md-dialog>
