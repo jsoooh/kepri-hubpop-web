@@ -154,6 +154,28 @@ angular.module('portal.controllers')
             console.log("ct.notices : ", ct.notices);
         }
 
+        ct.noticeListOpen = function($event) {
+            ct.viewNoticeList = {};
+            ct.viewNoticeList.isView11 = true;
+            ct.viewNoticeList.isView12 = true;
+            ct.viewNoticeList.isView13 = true;
+            var dialogOptions = {
+                controller : "commNoticeListFormCtrl",
+                controllerAs: "pop",
+                templateUrl : _COMM_VIEWS_ + "/common/popNoticeListForm.html" + _VersionTail(),
+                formName : "popNoticeListForm",
+                noticeList : ct.notices,
+                viewNoticeList : ct.viewNoticeList,
+                callBackFunction : ct.listNotices
+            };
+            $scope.actionBtnHied = false;
+            $scope.actionLoading = false;
+            common.showCustomDialog($scope, $event, dialogOptions);
+        };
+
+        //임시. 공지팝업 오픈
+        //ct.noticeListOpen();
+
         ct.listOrgProjects();   //조직 목록 조회
         ct.listNotices();       //공지 목록 조회
     })
@@ -183,7 +205,7 @@ angular.module('portal.controllers')
 
     })
     .controller('commAddOrgProjecFormCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, orgService, quotaService, common) {
-        _DebugConsoleLog("orgControllers.js : commOrgsCtrl", 1);
+        _DebugConsoleLog("orgControllers.js : commAddOrgProjecFormCtrl", 1);
 
         var pop = this;
 
@@ -245,7 +267,7 @@ angular.module('portal.controllers')
                 return;
             }
 
-            var param              = {};
+            var param           = {};
             param.orgManager    = {'email':pop.orgProject.managerEmail, 'userId':pop.orgProject.managerId};
             param.project       = {'id':pop.orgProject.projectId};
             param.quota         = {'id':pop.orgProject.orgQuotaId};
@@ -286,12 +308,43 @@ angular.module('portal.controllers')
                 }
             }
             if (bInValid) {
-                return {isValid : false, message: orgNameErrorString + "는 입력 불가능한 문자입니다. (20자 내외, 특수문자 입력 불가)"};
+                return {isValid : false, message: orgNameErrorString + "는 입력 불가능한 문자입니다."};
             } else {
                 return {isValid : true};
             }
         };
 
         pop.orgProjectDefaultQuota(pop.orgProject.projectId);
+    })
+    .controller('commNoticeListFormCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, orgService, quotaService, common) {
+        _DebugConsoleLog("orgControllers.js : commNoticeListFormCtrl", 1);
+
+        var pop = this;
+
+        pop.validationService = new ValidationService();
+
+        pop.formName = $scope.dialogOptions.formName;
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
+        $scope.dialogOptions.title = $translate.instant("label.board_notice");
+        $scope.dialogOptions.clickOutsideToClose = true;    //동작안함
+        //$scope.dialogOptions.okName = "생성";
+        //$scope.dialogOptions.closeName = "취소";
+
+        pop.noticeList = $scope.dialogOptions.noticeList;
+        $scope.popNotice = $scope.dialogOptions.viewNoticeList;
+
+        //공지사항 닫기
+        $scope.popNotice.close = function (id) {
+            switch (id) {
+                case 11 : $scope.popNotice.isView11 = false; break;
+                case 12 : $scope.popNotice.isView12 = false; break;
+                case 13 : $scope.popNotice.isView13 = false; break;
+            }
+            if (!$scope.popNotice.isView11 && !$scope.popNotice.isView12 && !$scope.popNotice.isView13) {
+                $scope.popCancel();
+            }
+        };
+
+        //pop.orgProjectDefaultQuota(pop.orgProject.projectId);
     })
 ;
