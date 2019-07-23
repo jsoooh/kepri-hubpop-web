@@ -3196,10 +3196,8 @@ angular.module('common.services', ['LocalStorageModule'])
         };
         cookies.getDefaultTimeRange = function () {
             var r = $cookies.get(_DEFAULT_TIMERANGE_);
-            console.log('getDefaultTimeRange', r);
             if (!r) {
                 r = angular.element('input:radio[name=radioTimeRange]:first').val();
-                console.log('getDefaultTimeRange in', r);
                 $cookies.put(_DEFAULT_TIMERANGE_, r);
             }
             return $cookies.get(_DEFAULT_TIMERANGE_);
