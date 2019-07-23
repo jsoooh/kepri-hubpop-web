@@ -632,7 +632,7 @@ angular.module('portal.controllers')
             promise.success(function (data, status, headers) {
                 if (data && data.content && data.content.instances && data.content.instances.length > 0) {
                     ct.iaasInstances = data.content.instances;
-                    angular.forEach(ct.paasApps, function (instance, instanceKey) {
+                    angular.forEach(ct.iaasInstances, function (instance, instanceKey) {
                         ct.iaasInstanceStateCount.TOTAL++;
                         if (instance.vmState == "active") {
                             ct.iaasInstanceStateCount.STARTED++;
