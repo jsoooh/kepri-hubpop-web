@@ -206,8 +206,8 @@
                                                         </div>
                                                         <div class="donut_chart_data">
                                                             <div class="data_txt">
-                                                                <span>{{contents.dataReq4.series[0].data}}</span>
-                                                                <span>100</span>
+                                                                <span>{{contents.dataReq4.series[0].cpuUsed}}</span>
+                                                                <span>{{contents.dataReq4.series[0].cpuMax}}</span>
                                                             </div>
                                                             <div id="chart-area3"></div>
                                                         </div>
@@ -215,12 +215,12 @@
                                                     <li>
                                                         <div class="chart_info">
                                                             <span class="tit">MEMORY</span>
-                                                            <span class="txt">{{contents.dataReq5}}<span class="sm_txt">%</span></span>
+                                                            <span class="txt">{{contents.dataReq5.series[0].data}}<span class="sm_txt">%</span></span>
                                                         </div>
                                                         <div class="donut_chart_data">
                                                             <div class="data_txt">
-                                                                <span>{{contents.dataReq5}}</span>
-                                                                <span>100</span>
+                                                                <span>{{contents.dataReq5.series[0].ramSizeUsed | displayVolume:'MB'}}</span>
+                                                                <span>{{contents.dataReq5.series[0].ramSizeMax | displayVolume:'MB'}}</span>
                                                             </div>
                                                             <div id="chart-area4"></div>
                                                         </div>
@@ -228,12 +228,12 @@
                                                     <li>
                                                         <div class="chart_info">
                                                             <span class="tit">STORAGE</span>
-                                                            <span class="txt">{{contents.dataReq6}}<span class="sm_txt">%</span></span>
+                                                            <span class="txt">{{contents.dataReq6.series[0].data}}<span class="sm_txt">%</span></span>
                                                         </div>
                                                         <div class="donut_chart_data">
                                                             <div class="data_txt">
-                                                                <span>{{contents.dataReq6}}</span>
-                                                                <span>100</span>
+                                                                <span>{{contents.dataReq6.series[0].objectStorageGigaByteUsed | displayVolume:'GB'}}</span>
+                                                                <span>{{contents.dataReq6.series[0].objectStorageGigaByteMax | displayVolume:'GB'}}</span>
                                                             </div>
                                                             <div id="chart-area5"></div>
                                                         </div>
