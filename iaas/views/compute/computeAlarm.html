@@ -117,10 +117,10 @@
                                 <col/>
                             </colgroup>
                             <tbody>
-                            <tr>
+                            <!-- <tr>
                                 <th>{{ 'iaas.label.alarm_svc_type' | translate }}</th>
                                 <td>{{ main.getServiceLabel(contents.data.alarmPolicyType) }}</td>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <th>{{ 'label.service_name' | translate }}</th>
                                 <td>{{ contents.data.hostName }}</td>
@@ -189,7 +189,8 @@
                             <div class="btn-btm">
                                 <button type="button" class="btn btn-color1 btn-md" id="btn-save" ng-click="contents.fn.saveAction()">저장</button>
                                 <button type="button" class="btn btn-color3 btn-md ng-binding" ng-click="contents.fn.completeAction()">조치완료</button>
-                                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="contents.fn.initAction();">초기화</button>
+                                <button type="button" class="btn btn-color2 btn-md" ng-click="contents.fn.initAction();">초기화</button>
+                                <button type="button" class="btn btn-color2 btn-md ng-binding" ng-click="contents.changeSltInfoTab('alarmList');">뒤로</button>
                             </div>
                         </div>
                      </div>
@@ -211,8 +212,27 @@
                                         <span>CPU</span>
                                     </div>
                                     <div class="pannel-content">
+                                        <div class="content-minor">
+                                            <p>{{ 'iaas.label.minor' | translate }}</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" id="minor-cpu"
+                                                                class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength" name="volumeSize"
+                                                                maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false" ng-model="contents.cpuminorSlider.value"
+                                                                ng-keyup="contents.fn.percentCheck('cpuminor')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.cpuminorSlider.value" rz-slider-options="contents.cpuminorSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="content-warn">
-                                            <p>경고</p>
+                                            <p>{{ 'iaas.label.warning' | translate }}</p>
                                             <div class="set-bar">
                                                 <div class="rangeWrap type2">
                                                     <div class="range_box rb-r">
@@ -231,7 +251,7 @@
                                             </div>
                                         </div>
                                         <div class="content-emer">
-                                        <p>위험</p>
+                                            <p>{{ 'iaas.label.critical' | translate }}</p>
                                             <div class="set-bar">
                                                 <div class="rangeWrap type2">
                                                     <div class="range_box rb-r">
@@ -257,8 +277,27 @@
                                         <span>{{ 'label.memory' | translate }}</span>
                                     </div>
                                     <div class="pannel-content">
+                                        <div class="content-minor">
+                                            <p>{{ 'iaas.label.minor' | translate }}</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" id="minor-memory"
+                                                                class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength" name="volumeSize"
+                                                                maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false" ng-model="contents.memoryminorSlider.value"
+                                                                ng-keyup="contents.fn.percentCheck('memoryminor')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.memoryminorSlider.value" rz-slider-options="contents.memoryminorSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="content-warn">
-                                            <p>경고</p>
+                                            <p>{{ 'iaas.label.warning' | translate }}</p>
                                             <div class="set-bar">
                                                 <div class="rangeWrap type2">
                                                     <div class="range_box rb-r">
@@ -276,7 +315,7 @@
                                             </div>
                                         </div>
                                         <div class="content-emer">
-                                        <p>위험</p>
+                                            <p>{{ 'iaas.label.critical' | translate }}</p>
                                             <div class="set-bar">
                                                 <div class="rangeWrap type2">
                                                     <div class="range_box rb-r">
@@ -302,8 +341,27 @@
                                             <span>{{ 'label.disk' | translate }}</span>
                                     </div>
                                     <div class="pannel-content">
+                                        <div class="content-minor">
+                                            <p>{{ 'iaas.label.minor' | translate }}</p>
+                                            <div class="set-bar">
+                                                <div class="rangeWrap type2">
+                                                    <div class="range_box rb-r">
+                                                        <div class="range-text">
+                                                            <input type="text" id="minor-disk"
+                                                                class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength" name="volumeSize"
+                                                                maxlength="4" style="width:60px; display: inline-block;" aria-invalid="false" ng-model="contents.diskminorSlider.value"
+                                                                ng-keyup="contents.fn.percentCheck('diskminor')" validation="required">
+                                                            <span class="app-tit">%이상</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="range_box rb-l">
+                                                        <rzslider rz-slider-model="contents.diskminorSlider.value" rz-slider-options="contents.diskminorSlider.options"></rzslider>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="content-warn">
-                                            <p>경고</p>
+                                            <p>{{ 'iaas.label.warning' | translate }}</p>
                                             <div class="set-bar">
                                                 <div class="rangeWrap type2">
                                                     <div class="range_box rb-r">
@@ -321,7 +379,7 @@
                                             </div>
                                         </div>
                                         <div class="content-emer">
-                                        <p>위험</p>
+                                            <p>{{ 'iaas.label.critical' | translate }}</p>
                                             <div class="set-bar">
                                                 <div class="rangeWrap type2">
                                                     <div class="range_box rb-r">

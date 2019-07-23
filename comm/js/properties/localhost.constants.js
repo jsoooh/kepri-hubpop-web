@@ -21,7 +21,7 @@ angular.module('app')
         iaasApiCfContextUrl : '/iaas-api/api/iaas/v1.0',
         iaasApiMarketContextUrl : '/iaas-api/api/iaas/v1.0/market',
         monitApiContextUrl: '/monit-api/api/monit/v1.0',
-        monitNewApiContextUrl: '/monit-api/v2',
+        monitNewApiContextUrl: '/monit-new-api/v2',
 		layoutTemplateUrl : {
 			navigation : _LAYOUT_VIEWS_ + '/navigation.html',
 			leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',

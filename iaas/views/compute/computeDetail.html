@@ -567,6 +567,10 @@
 				<div class="panel type2" style="cursor: unset;">
 					<div class="panel_head">
 						<div class="tit pull-left">가상머신 모니터링
+							<div class="tit-in-info info-minor">
+								<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('minor') }"></span>
+								<span class="info-text">Minor</span>
+							</div>
 							<div class="tit-in-info info-warning">
 								<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('warning') }"></span>
 								<span class="info-text">Warning</span>
@@ -779,7 +783,7 @@
 													<tr ng-repeat="alarms in contents.alarmData">
 														<td>{{ alarms.regDate }}</td>
 														<td>{{ main.getAlarmLabel(alarms.alarmType) }}</td>
-														<td ng-style="{ 'color': (main.getAlarmColor(alarms.alarmLevel)) }"><span class="label label-warning">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
+														<td><span class="label label-{{alarms.alarmLevel}}">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
 														<td ng-click="main.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.hostName }}</td>
 														<td>{{ alarms.ip }}</td>
 														<td ng-click="main.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.title }}</td>

@@ -87,17 +87,24 @@ angular.module('iaas.services')
         computeDetailService.setAlarmLine = function (arr, nodeKey, main, nodeid) {
             if ((nodeid == 'cpu_usage' || nodeid == 'mem_usage' || nodeid == 'dsk_usage') && arr.length > 0) {
                 var alarmType = nodeid.split('_')[0].replace('dsk', 'disk').replace('mem', 'memory');
+                var minorSeries = [];
                 var warnSeries = [];
                 var criSeries = [];
+                angular.copy(arr[0].values, minorSeries);
                 angular.copy(arr[0].values, warnSeries);
                 angular.copy(arr[0].values, criSeries);
+                var minorValue = 100;
                 var warnValue = 100;
                 var criValue = 100;
                 angular.forEach(main.alarmPolicys[nodeKey].detail, function (el, k) {
                     if (el.alarmType == alarmType) {
+                        minorValue = el.minorThreshold;
                         warnValue = el.warningThreshold;
                         criValue = el.criticalThreshold;
                     }
+                });
+                angular.forEach(minorSeries, function (el, k) {
+                    el.totalUsage = minorValue;
                 });
                 angular.forEach(warnSeries, function (el, k) {
                     el.totalUsage = warnValue;
@@ -105,6 +112,7 @@ angular.module('iaas.services')
                 angular.forEach(criSeries, function (el, k) {
                     el.totalUsage = criValue;
                 });
+                arr.push({values: minorSeries, key: 'Minor', area: false, color: main.getAlarmColor('minor'), legend: false});
                 arr.push({values: warnSeries, key: 'Warning', area: false, color: main.getAlarmColor('warning'), legend: false});
                 arr.push({values: criSeries, key: 'Critical', area: false, color: main.getAlarmColor('critical'), legend: false});
             }

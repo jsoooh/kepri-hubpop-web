@@ -1559,51 +1559,55 @@ angular.module('iaas.controllers')
                 ceil: 100,
                 step: 1,
                 minLimit: 0,
-                showSelectionBar: true
+                showSelectionBar: true,
+                onChange: function () {
+                    ct.fn.parseTimer();
+                }
             }
         };
         ct.cpuemerSlider = {};
+        ct.cpuminorSlider = {};
         
         ct.memorywarnSlider = {};
         ct.memoryemerSlider = {};
+        ct.memoryminorSlider = {};
         
         ct.diskwarnSlider = {};
         ct.diskemerSlider = {};
+        ct.diskminorSlider = {};
         
         ct.measuretimeSlider = {};
 
+        angular.copy(ct.cpuwarnSlider, ct.cpuminorSlider);
         angular.copy(ct.cpuwarnSlider, ct.cpuemerSlider);
+        angular.copy(ct.cpuwarnSlider, ct.memoryminorSlider);
         angular.copy(ct.cpuwarnSlider, ct.memorywarnSlider);
         angular.copy(ct.cpuwarnSlider, ct.memoryemerSlider);
+        angular.copy(ct.cpuwarnSlider, ct.diskminorSlider);
         angular.copy(ct.cpuwarnSlider, ct.diskwarnSlider);
         angular.copy(ct.cpuwarnSlider, ct.diskemerSlider);
         angular.copy(ct.cpuwarnSlider, ct.measuretimeSlider);
-
-        ct.measuretimeSlider.options.onChange = function () {
-            ct.fn.parseTimer();
-        };
 
         ct.measuretimeSlider.options.ceil = 60 * 60 * 3;
 
         // 초기 알람정보 조회
         ct.fn.requestData = function () {
-            $timeout(function () {
-                $scope.main.getAlarmPolicy (ct.selServiceType, function () {
-                    angular.copy($scope.main.alarmPolicys[ct.selServiceType], ct.policys);
-                    ct.measuretimeSlider.value = ct.policys.measureTime;
-        
-                    // 측정시간 초기화
-                    ct.fn.parseTimer();
-        
-                    angular.forEach(ct.policys.detail, function (el, k) {
-                        ct[el.alarmType+'warnSlider'].value = el.warningThreshold;
-                        ct[el.alarmType+'emerSlider'].value = el.criticalThreshold;
-                    });
-        
-                    ct.data.alarmEmail = ct.policys.mailAddress.split('@')[0];
-                    ct.data.alarmEmailHost = ct.policys.mailAddress.split('@')[1];
-                }, $scope.main.userTenantId);
-            });
+            $scope.main.getAlarmPolicy (ct.selServiceType, function () {
+                angular.copy($scope.main.alarmPolicys[ct.selServiceType], ct.policys);
+                ct.measuretimeSlider.value = ct.policys.measureTime;
+    
+                // 측정시간 초기화
+                ct.fn.parseTimer();
+    
+                angular.forEach(ct.policys.detail, function (el, k) {
+                    ct[el.alarmType+'minorSlider'].value = el.minorThreshold;
+                    ct[el.alarmType+'warnSlider'].value = el.warningThreshold;
+                    ct[el.alarmType+'emerSlider'].value = el.criticalThreshold;
+                });
+    
+                ct.data.alarmEmail = ct.policys.mailAddress.split('@')[0];
+                ct.data.alarmEmailHost = ct.policys.mailAddress.split('@')[1];
+            }, $scope.main.userTenantId);
         };
 
         ct.fn.parseTimer = function () {
@@ -1657,36 +1661,60 @@ angular.module('iaas.controllers')
                 return;
             };
 
+            var cpumVal = ct.cpuminorSlider.value;
             var cpuwVal = ct.cpuwarnSlider.value;
             var cpueVal = ct.cpuemerSlider.value;
+            var memmVal = ct.memoryminorSlider.value;
             var memwVal = ct.memorywarnSlider.value;
             var memeVal = ct.memoryemerSlider.value;
+            var dskmVal = ct.diskminorSlider.value;
             var dskwVal = ct.diskwarnSlider.value;
             var dskeVal = ct.diskemerSlider.value;
 
+            if (cpumVal > cpuwVal || cpumVal > cpueVal) {
+                angular.element('#minor-cpu').focus();
+                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_cpu_over_we"));
+                return;
+            }
             if (cpuwVal > cpueVal) {
-                common.showAlert("error", "CPU 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.");
+                angular.element('#warn-cpu').focus();
+                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_cpu_over_w"));
+                return;
+            }
+            if (memmVal > memwVal || memmVal > memeVal) {
+                angular.element('#minor-memory').focus();
+                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_memory_over_we"));
                 return;
             }
             if (memwVal > memeVal) {
-                common.showAlert("error", "Memory 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.");
+                angular.element('#warn-memory').focus();
+                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_memory_over_w"));
+                return;
+            }
+            if (dskmVal > dskwVal || dskmVal > dskeVal) {
+                angular.element('#minor-disk').focus();
+                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_disk_over_we"));
                 return;
             }
             if (dskwVal > dskeVal) {
-                common.showAlert("error", "Disk 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.");
+                angular.element('#warn-disk').focus();
+                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_disk_over_w"));
                 return;
             }
 
             var detail = [];
             ct.policys.mailAddress = ct.data.alarmEmail + '@' + ct.data.alarmEmailHost;
             angular.forEach(ct.policys.detail, function (el, k) {
+                var alarmType = el.alarmType == 'mem' ? 'memory' : el.alarmType;
                 detail.push({
-                    alarmType: el.alarmType,
-                    warningThreshold: ct[el.alarmType+'warnSlider'].value,
-                    criticalThreshold: ct[el.alarmType+'emerSlider'].value
+                    alarmType: alarmType,
+                    minorThreshold: ct[alarmType+'minorSlider'].value,
+                    warningThreshold: ct[alarmType+'warnSlider'].value,
+                    criticalThreshold: ct[alarmType+'emerSlider'].value
                 });
-                el.warningThreshold = ct[el.alarmType+'warnSlider'].value;
-                el.criticalThreshold = ct[el.alarmType+'emerSlider'].value;
+                el.minorThreshold = ct[alarmType+'minorSlider'].value;
+                el.warningThreshold = ct[alarmType+'warnSlider'].value;
+                el.criticalThreshold = ct[alarmType+'emerSlider'].value;
             });
             
             $scope.main.loadingMainBody = true;
@@ -1704,7 +1732,7 @@ angular.module('iaas.controllers')
             var methodName = ct.selServiceType != ct.policys.policyType ? 'POST' : 'PUT';
             var returnPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/policy', methodName, params);
             returnPromise.success(function (data, status, headers) {
-                common.showAlert("message", "저장이 완료되었습니다");
+                common.showAlert("message", $translate.instant('message.mi_change'));
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data);

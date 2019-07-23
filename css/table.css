@@ -134,6 +134,9 @@ td .td-attach::before{display: inline-block; position: absolute; top:0; left:0; 
 .tbl .label.label-normal{
     background-color: #17a0ce;
 }
+.tbl .label.label-running{
+    background-color: #17a0ce;
+}
 .tbl .label.label-balnk{
     background-color: #fff;
     color: #555;
@@ -145,6 +148,26 @@ td .td-attach::before{display: inline-block; position: absolute; top:0; left:0; 
 .tbl .label.label-danger{
     background-color: #ff1100;
 }
-.tbl .label.label-fail{
+/* .tbl .label.label-fail{
     background-color: #888;
+} */
+
+.tbl .label.label-clear{
+    background-color: #5acc27;
+}
+.tbl .label.label-minor{
+    background-color: #c000ba;
+}
+.tbl .label.label-warning{
+    background-color: #f8ac59;
+}
+.tbl .label.label-critical{
+    background-color: #ff1100;
+}
+.tbl .label.label-fail, .tbl .label.label-failed{
+    background-color: #363636;
+}
+.tbl .label.label-noagent{
+    background-color: #eee;
+    color: #828282
 }

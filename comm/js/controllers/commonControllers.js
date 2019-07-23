@@ -1249,16 +1249,23 @@ angular.module('common.controllers', [])
         mc.alarmPolicys = {};
 
         // 알람 색상 매트릭스
-        var colorJson = {
-            'running': '#00aacc',
-            'fail': '#e66b6b',
-            'warning': '#f0a141',
-            'critical':'#ff0000'
+        mc.colorJson = {
+            'running': '#337ab7',
+            'fail': '#363636',
+            'clear': '#5acc27',
+            'minor': '#c000ba',
+            'warning': '#f8ac59',
+            'critical':'#ff1100'
         };
 
         // 알람별 색상 선택
         mc.getAlarmColor = function (alarmStatus) {
-            return colorJson[alarmStatus];
+            if (mc.colorJson[alarmStatus]) {
+                return mc.colorJson[alarmStatus];
+            } else {
+                // no agent or no data
+                return '#eee';
+            }
         };
 
         // 알람 메세지 라벨 세팅

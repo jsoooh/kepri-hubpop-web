@@ -1420,13 +1420,6 @@ angular.module('iaas.controllers')
                 })(widget, index);
             });
 
-            var stop = $interval(function () {
-                if (count == widgetLen) {
-                    $interval.cancel(stop);
-                    ct.removeCustomLegend();
-                }
-            }, 500);
-
             ct.fn.getTimeRangeString();
         };
 

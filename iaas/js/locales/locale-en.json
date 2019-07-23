@@ -59,12 +59,14 @@
             "measure": "Measure Time",
             "alarm_email": "Alarm Email",
             "alarm_message": "Alarm Message",
+            "minor": "Minor",
             "warning": "Warningg",
             "critical": "Critical",
             "fail": "Fail",
             "failed": "Failed",
             "running": "Running",
             "no agent": "No Agent",
+            "noAgent": "No Agent",
             "alarm_svc_type": "Service Type"
         },
         "message" : {
