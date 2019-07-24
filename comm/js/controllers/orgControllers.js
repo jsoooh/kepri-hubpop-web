@@ -202,6 +202,9 @@ angular.module('portal.controllers')
                             noticeItem["ATTACH_FILES"] = attachFiles;
                         }
                     }
+                    //CONTENTS 중 ", ' 를 문자 치환
+                    noticeItem.CONTENTS = noticeItem.CONTENTS.replace(/\"/g,"&quot;");
+                    noticeItem.CONTENTS = noticeItem.CONTENTS.replace(/\'/g,"&#39;");
                     ct.notices.push(noticeItem);
                 }
             });
