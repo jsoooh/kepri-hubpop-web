@@ -67,16 +67,18 @@
 .mb60 {margin-bottom:60px !important}
 .mb80 {margin-bottom:80px !important}
 
+.mg0{margin:0 !important;}
 .mgt0{margin-top:0 !important;}
 .mgb0{margin-bottom:0 !important;}
 .mgl0{margin-left:0 !important;}
 .mgr0{margin-right:0 !important;}
-.mg0{margin:0 !important;}
 
 /* padding */
 .pd0 {padding:0 !important;}
 .pdt0 {padding-top:0 !important;}
 .pdb0 {padding-bottom:0 !important;}
+.pdl0 {padding-left:0 !important;}
+.pdr0 {padding-right:0 !important;}
 .pdContent {padding:30px 40px !important;}
 
 .pt5 {padding-top:5px !important}

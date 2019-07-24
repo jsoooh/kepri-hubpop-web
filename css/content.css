@@ -2480,24 +2480,23 @@ p.no-txt{
 
 /*가상서버 대시보드 목록*/
 .btnWrap {margin-bottom:30px;}
-.btnWrap .btn_lg {display:inline-block; min-width:280px; height:60px; line-height:60px; font-size:16px; font-weight:500; color:#666; border-radius:5px; border:1px solid #d3d3d3; background:#fff; padding:0 30px; margin-right:5px;}
-.btnWrap .btn_lg:hover {color:#fff; border:1px solid #3360c5; background:#3360c5;}
-.btnWrap .btn_lg .ico {display:inline-block; vertical-align:text-top; margin-right:10px;}
-
-.btnWrap .btn_lg .ico.ico_create {width:22px; height:22px; background:url("../images/ico_vm.png") no-repeat left -28px;}
-.btnWrap .btn_lg:hover .ico.ico_create {background:url("../images/ico_vm.png") no-repeat left top;}
-
-.btnWrap .btn_lg .ico.ico_copy {width:58px; height:22px; background:url("../images/ico_vm_copy.png") no-repeat left -28px;}
-.btnWrap .btn_lg:hover .ico.ico_copy {background:url("../images/ico_vm_copy.png") no-repeat left top;}
-
-.btnWrap .btn_lg .ico.ico_vlm_str {width:22px; height:22px; background:url("../images/ico_vlm_str.png") no-repeat left -28px;}
-.btnWrap .btn_lg:hover .ico.ico_vlm_str {background:url("../images/ico_vlm_str.png") no-repeat left 4px;}
-
-.btnWrap .btn_lg .ico.ico_create_app {width:22px; height:22px; background:url("../images/ico_app.png") no-repeat left -28px;}
-.btnWrap .btn_lg:hover .ico.ico_create_app {background:url("../images/ico_app.png") no-repeat left 3px;}
-
-.btnWrap .btn_lg .ico.ico_create_service {width:22px; height:22px; background:url("../images/ico_service.png") no-repeat left -29px;}
-.btnWrap .btn_lg:hover .ico.ico_create_service {background:url("../images/ico_service.png") no-repeat left top;}
+.btn_lg {display:inline-block; min-width:280px; height:60px; line-height:60px; font-size:16px; font-weight:500; color:#666; border-radius:5px; border:1px solid #d3d3d3; background:#fff; padding:0 30px; margin-right:5px;}
+.btn_lg:hover {color:#fff; border:1px solid #3360c5; background:#3360c5;}
+.btn_lg .ico {display:inline-block; vertical-align:text-top; margin-right:10px;}
+.btn_lg .ico.ico_create {width:22px; height:22px; background:url("../images/ico_vm.png") no-repeat left -28px;}
+.btn_lg:hover .ico.ico_create {background:url("../images/ico_vm.png") no-repeat left top;}
+.btn_lg .ico.ico_copy {width:58px; height:22px; background:url("../images/ico_vm_copy.png") no-repeat left -28px;}
+.btn_lg:hover .ico.ico_copy {background:url("../images/ico_vm_copy.png") no-repeat left top;}
+.btn_lg .ico.ico_vlm_str {width:22px; height:22px; background:url("../images/ico_vlm_str.png") no-repeat left -28px;}
+.btn_lg:hover .ico.ico_vlm_str {background:url("../images/ico_vlm_str.png") no-repeat left 4px;}
+.btn_lg .ico.ico_create_app {width:22px; height:22px; background:url("../images/ico_app.png") no-repeat left -28px;}
+.btn_lg:hover .ico.ico_create_app {background:url("../images/ico_app.png") no-repeat left 3px;}
+.btn_lg .ico.ico_create_service {width:22px; height:22px; background:url("../images/ico_service.png") no-repeat left -29px;}
+.btn_lg:hover .ico.ico_create_service {background:url("../images/ico_service.png") no-repeat left top;}
+.btn_lg .ico.ico_bk_add {width:22px; height:22px; background:url("../images/ico_add.png") no-repeat left -29px;}
+.btn_lg:hover .ico.ico_bk_add {background:url("../images/ico_add.png") no-repeat left top;}
+.btn_lg .ico.ico_usage_view {width:24px; height:22px; background:url("../images/ico_view.png") no-repeat left -25px;}
+.btn_lg:hover .ico.ico_usage_view {background:url("../images/ico_view.png") no-repeat left 3px;}
 
 /*가상서버 대시보드 목록 드롭다운(접속정보)*/
 .panel.type5 .panel_head .btn_txt {display:inline-block; font-size:12px; color:#fff; background:#707070; border-radius:2px; padding:1px 10px 2px 10px; margin-top:6px;}
@@ -2797,11 +2796,64 @@ a.ext_link:hover {text-decoration:underline;}
 .modal-body .cnt_sliderWrap .disk_area .range_box .ico_plus .btn:hover {background-position:-25px -25px;}
 .modal-body .cnt_sliderWrap .disk_area .rzslider .rz-bubble {display:none; padding:3px 14px;}
 
-/* 컨텐츠 리스트 결과 0일 때 */
+/*==컨텐츠 리스트 결과 0일 때 ==*/
 .result_txt {font-size:16px; color:#888; text-align:center; padding-top:200px;}
 
-/*서버가상화 상세화면 > 디스크 연결정보 > 타이틀*/
+/*==서버가상화 상세화면 > 디스크 연결정보 > 타이틀==*/
 .cBox-cnt .in_tit {position:absolute; top:0; display:inline-block; width:225px; font-size:16px; font-weight:500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; word-break: break-all; padding:3px 0;}
+
+/*==오브젝트 스토리지==*/
+/*패널 리스트*/
+.btn_del_list {position:absolute; top:24px; right:30px; line-height:0;}
+.btn_del_list .ico_list_del {display:inline-block; width:22px; height:25px; font-size:0; background:url("../images/btn_del_list.png") no-repeat 0 0; }
+.btn_del_list .ico_list_del:hover {background-position:0 -35px; }
+.bucketBox {position:relative; width:130px; height:215px; background:url("../images/bg_folder.png") no-repeat center center; margin:0 auto;}
+.bucketBox .cnt_value {position:absolute; top:50px; right:0; display:inline-block; width:60px; height:60px; border-radius:50%; background:#2858ad;}
+.bucketBox .cnt_value span {display:block; color:#fff; text-align:center;}
+.bucketBox .cnt_value .t_lg {font-family: 'Montserrat'; font-size:20px; font-weight:500; padding-top:14px;}
+.bucketBox .cnt_value .t_sm {font-size:12px; font-weight:500;}
+
+/*사용량, 접속정보 영역*/
+.storage_infoWrap ul {display:table; width:100%;} 
+.storage_infoWrap > ul > li {display:table-cell; width:50%; padding-left:20px;} 
+.storage_infoWrap > ul > li:first-child {padding-left:0;} 
+.storage_infoWrap .infoBox {border-radius:5px; background:#fff; border:1px solid #e9ecef;} 
+.storage_infoWrap .info_head {position:relative; padding:15px 25px; border-bottom:1px solid #e6e6e6;} 
+.storage_infoWrap .info_head h5 {display:inline-block; font-size:17px; font-weight:700; color:#333; line-height:20px; background:url("../images/ico_info_box.png") no-repeat; padding-left:25px;} 
+.storage_infoWrap .info_head h5.tit_volume {background-position:left top;} 
+.storage_infoWrap .info_head h5.tit_access {background-position:left bottom;} 
+.storage_infoWrap .info_head .t_sm {font-size:12px; font-weight:500; color:#888; float:right;} 
+
+/*사용량*/
+.storage_infoWrap .info_body {padding:15px 25px;}
+.storage_infoWrap .data_area {position:relative; height:107px; line-height:30px; padding:20px 0;}
+.storage_infoWrap .data_area .txt_l {display:inline-block; float:left;}
+.storage_infoWrap .data_area .txt_r {display:inline-block; float:right;}
+.storage_infoWrap .data_area > span {display:inline-block;}
+.storage_infoWrap .data_area .txt_l .t_lg {font-family: 'Montserrat'; font-size:35px; font-weight:500;}
+.storage_infoWrap .data_area .txt_r .t_lg {font-family: 'Montserrat'; font-size:35px; font-weight:400; color:#666;}
+.storage_infoWrap .data_area .txt_r .t_lg .t_md {font-size:20px; font-weight:400; margin-left:3px;}
+.storage_infoWrap .data_area .t_md {font-size:20px; font-weight:700; color:#666;}
+.storage_infoWrap .data_area .t_sm {font-size:13px; font-weight:500; color:#888;}
+
+/*사용량- 프로그래스*/
+.storage_infoWrap  .info_progBox {clear:both;}
+.info_progBox .progressWrap .progress, .progress_layout_two .progressWrap .progress-bar{box-shadow: none;}
+.info_progBox .progressWrap.type2 {display:inline-block; position: relative; width:100%; height:15px; margin:0; padding:7px 0px; vertical-align:middle;}
+.info_progBox .progressWrap.type2 .progress-bar {position: absolute; left:0; bottom:0; z-index: 2; height:8px; border-radius: 10px; background: #0a4ed8; box-shadow: none;}
+.info_progBox .progressWrap.type2 .progress {position: relative; width: 100%; height:8px; margin-bottom: 0px; border-radius: 10px; vertical-align: bottom; box-shadow: none; background-color: #eee; overflow: inherit;}
+.info_progBox .s_progress_box ul li:nth-child(even) div.progressWrap.type2 .progress-bar {background:#02a0cf !important;}
+
+/*접속정보*/
+.storage_infoWrap .access_info_area ul li {border-top:1px solid #e6e6e6;}
+.storage_infoWrap .access_info_area ul li:first-child {border-top:0;}
+.storage_infoWrap .access_info_area dl {display:table; width:100%; padding:0 20px;}
+.storage_infoWrap .access_info_area dl dt, .storage_infoWrap .access_info_area dl dd  {display:table-cell; font-size:14px; box-sizing:border-box;}
+.storage_infoWrap .access_info_area dl dt {width:250px; font-weight:500; color:#333;}
+.storage_infoWrap .access_info_area dl dt.tit_address:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 0; vertical-align:text-top; margin-right:8px;}
+.storage_infoWrap .access_info_area dl dt.tit_access_key:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 -30px; vertical-align:text-top; margin-right:8px;}
+.storage_infoWrap .access_info_area dl dt.tit_secret:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 -60px; vertical-align:text-top; margin-right:8px;}
+.storage_infoWrap .access_info_area dl dd {font-weight:400; color:#9ca2ab; line-height:45px;}
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 
