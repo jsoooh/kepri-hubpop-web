@@ -66,14 +66,22 @@ angular.module('app')
                         controller: 'iaasStorageCtrl',
                         templateUrl: _IAAS_VIEWS_+'/storage/storage.html',
                         subPages: {
-                            storageCreate: {
-                                name: 'storage_create',
-                                stateKey: 'iaasStorgeCreate',
-                                url: '/iaas/storage/create',
-                                controller: 'iaasStorageFormCtrl',
-                                templateUrl: _IAAS_VIEWS_+'/storage/storageForm.html'
-                            }
                         }
+                    },
+                    storageCreate: {
+                        name: 'storage_create',
+                        stateKey: 'iaasStorgeCreate',
+                        url: '/iaas/storage/create',
+                        controller: 'iaasStorageFormCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/storage/storageForm.html'
+                    },
+                    object_storage: {
+                        name: "object_storage",
+                        icon: "object_storage",
+                        stateKey: 'iaasObjectStorage',
+                        url: '/iaas/storage/object',
+                        controller: 'iaasObjectStorageCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/storage/objectStorage.html'
                     },
                     server_snapshot: {
                         name: "server_snapshot",
@@ -98,7 +106,7 @@ angular.module('app')
                                 templateUrl: _IAAS_VIEWS_+'/storage/storageSnapshotCreate.html'
                             }
                         }
-                    }
+                    },
                     /*storage_snapshot: {
                         name: "storage_snapshot",
                         icon: "storage_snapshot",
@@ -221,7 +229,7 @@ angular.module('app')
                                 templateUrl: _IAAS_VIEWS_+'/storage/objectStorage.html',
                             }
                         }
-                    },*/
+                    }
                     /*network: {
                         name: "network",
                         icon: "iaasNetwork",

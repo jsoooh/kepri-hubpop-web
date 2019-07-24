@@ -249,6 +249,8 @@ angular.module('portal.controllers')
                 //ct.dataReq4 = { };
                 ser1.name = "사용율";
                 ser1.data = chartData.cpuTotUsed.toFixed(1);
+                ser1.cpuMax = chartData.cpuMax;
+                ser1.cpuUsed = chartData.cpuUsed;
                 reqJsonArray.push(ser1);
 
                 ser2.name = "미사용율";
@@ -279,6 +281,8 @@ angular.module('portal.controllers')
             if (tmpCode == '0000') {
                 ser1.name = "사용율";
                 ser1.data = chartData.ramSizeTot.toFixed(1);
+                ser1.ramSizeMax = chartData.ramSizeMax;
+                ser1.ramSizeUsed = chartData.ramSizeUsed;
                 reqJsonArray.push(ser1);
 
                 ser2.name = "미사용율";
@@ -287,7 +291,7 @@ angular.module('portal.controllers')
                 serJsonList.series = reqJsonArray;
             }
 
-            ct.dataReq5 = ser1.data ;
+            ct.dataReq5 = serJsonList;
             var chartArea = 'chart-area4';
             var tmpValue = '%';
             //Memory Chart Color
@@ -310,7 +314,9 @@ angular.module('portal.controllers')
                 ser1.name = "사용율";
                 // STRAGE 기준을 instance disk 로 할 것인지 volume으로 할 것인지 확인 필요
                 //ser1.data = chartData.instanceDiskGigabytesTot; // instance disk
-                ser1.data = chartData.objectStorageGigaByteTot.toFixed(1) // volume
+                ser1.data = chartData.objectStorageGigaByteTot.toFixed(1); // volume
+                ser1.objectStorageGigaByteMax = chartData.objectStorageGigaByteMax;
+                ser1.objectStorageGigaByteUsed = chartData.objectStorageGigaByteUsed;
                 reqJsonArray.push(ser1);
 
                 ser2.name = "미사용율";
@@ -319,7 +325,7 @@ angular.module('portal.controllers')
                 serJsonList.series = reqJsonArray;
             }
 
-            ct.dataReq6 = ser1.data ;
+            ct.dataReq6 = serJsonList;
             var chartArea = 'chart-area5';
             var tmpValue = '%';
             var tmpColor1 = '#fe3392';
@@ -632,7 +638,7 @@ angular.module('portal.controllers')
             promise.success(function (data, status, headers) {
                 if (data && data.content && data.content.instances && data.content.instances.length > 0) {
                     ct.iaasInstances = data.content.instances;
-                    angular.forEach(ct.paasApps, function (instance, instanceKey) {
+                    angular.forEach(ct.iaasInstances, function (instance, instanceKey) {
                         ct.iaasInstanceStateCount.TOTAL++;
                         if (instance.vmState == "active") {
                             ct.iaasInstanceStateCount.STARTED++;
@@ -681,9 +687,15 @@ angular.module('portal.controllers')
                         var chartData = {
                             code: "0000",
                             cpuTotUsed : ct.iaasInstanceUsage.cpu.percentUsedQuota,
+                            cpuMax : ct.iaasInstanceUsage.cpu.maxQuota,
+                            cpuUsed : ct.iaasInstanceUsage.cpu.usedQuota,
                             ramSizeTot : ct.iaasInstanceUsage.mem.percentUsedQuota,
+                            ramSizeMax : ct.iaasInstanceUsage.mem.maxQuota,
+                            ramSizeUsed : ct.iaasInstanceUsage.mem.usedQuota,
                             instanceDiskGigabytesTot : ct.iaasInstanceUsage.disk.percentUsedQuota,
-                            objectStorageGigaByteTot : ct.iaasInstanceUsage.volume.percentUsedQuota
+                            objectStorageGigaByteTot : ct.iaasInstanceUsage.volume.percentUsedQuota,
+                            objectStorageGigaByteMax : ct.iaasInstanceUsage.volume.maxQuota,
+                            objectStorageGigaByteUsed : ct.iaasInstanceUsage.volume.usedQuota,
                         };
 
                         ct.iaasCpuChartFunc(chartData);
