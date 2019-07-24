@@ -43,6 +43,8 @@ angular.module('common.controllers', [])
 
         mc.connectType = _CONNECT_SITE_;
 
+        mc.noticeList = [];     //팝업 공지사항 목록
+
         if (_MENU_TYPE_ == 'part') {
             mc.commLayerMenuTempeUrl = _COMM_VIEWS_ + '/menu/commLayerMenu.html' + _VERSION_TAIL_;
             mc.commMenuContentTempeUrl = _COMM_VIEWS_ + '/menu/commMenuContent.html' + _VERSION_TAIL_;
@@ -654,11 +656,9 @@ angular.module('common.controllers', [])
                     mc.alarms.content[i].updateDttm = cmm.convertStringToDate(mc.alarms.content[i].updateDttm);
                 }
             });
-/*
-            response.error(function (data) {
+            /*response.error(function (data) {
                 mc.alarms = {};
-            });
-*/
+            });*/
         };
 
         // Project 값 셋팅
@@ -1259,6 +1259,12 @@ angular.module('common.controllers', [])
         } else {
             common.moveLoginPage();
         }
+
+        //팝업 공지사항 보여주기
+        mc.desplayNoticeList = function(notices) {
+            mc.noticeList = notices;
+            portal.notice.setNoticeList(mc);
+        };
 
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })

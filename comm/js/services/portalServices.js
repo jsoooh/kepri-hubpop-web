@@ -174,6 +174,65 @@ angular.module('portal.services', [])
             })
         };
 
+        //공지사항 관련
+        portal.notice = {};
+        portal.notice.setNoticeList = function (mc) {
+            var noticeList = mc.noticeList;
+            var noticeHtml = "";
+            angular.forEach(noticeList, function (noticeItem) {
+                noticeHtml += "<div name='notice' id='popNotice" + noticeItem.NOTICE_NO + "' style='position:absolute; top:" + noticeItem.top + "px; left:" + noticeItem.left + "px; z-index: 10;'>\n" +
+                    "    <div class='notice_pop'>\n" +
+                    "        <div class='modal-content'>\n" +
+                    "            <div class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
+                    "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><a href='javascript:void(0);' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></a></button>\n" +
+                    "                <h1 class='modal-title'>공지사항 </h1>\n" +
+                    "            </div>\n" +
+                    "            <div class='modal-body'>\n" +
+                    "                <div class='pop_tit'><h5>" + noticeItem.TITLE + "</h5></div>\n" +
+                    "                <div class='noti_cont_area'>\n" +
+                    "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
+                    "                </div>\n" +
+                    "                <div class='tbw type1'>\n" +
+                    "                    <table class='table'>\n" +
+                    "                        <colgroup>\n" +
+                    "                            <col style='width:23%;'>\n" +
+                    "                            <col style='width:77%;'>\n" +
+                    "                        </colgroup>\n" +
+                    "                        <tbody>\n";
+                if (noticeItem.ATTACH_FILE != "" && noticeItem.ATTACH_FILES != "" && noticeItem.ATTACH_FILES.length > 0) {
+                    for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
+                        noticeHtml += "                        <tr>\n" +
+                            "                            <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
+                            "                            <td><a href='/hsvc/comn-api/api/downloadNoticeAttachFile/" + noticeItem.ATTACH_FILES[i].FILE_NO + "'>" + noticeItem.ATTACH_FILES[i].FILE_NAME + "</a></td>\n" +
+                            "                        </tr>\n";
+                    }
+                } else {
+                    noticeHtml += "                        <tr>\n" +
+                        "                            <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
+                        "                            <td><a href=''></a></td>\n" +
+                        "                        </tr>\n";
+                }
+                noticeHtml += "                        </tbody>\n" +
+                    "                    </table>\n" +
+                    "                </div>\n" +
+                    "            </div>\n" +
+                    "            <div class='modal-footer'>\n" +
+                    "                <div class='checkbox checkbox-inline'>\n" +
+                    "                    <input type='checkbox' id='check-id" + noticeItem.NOTICE_NO + "' onclick='setNotifyCookie(" + noticeItem.NOTICE_NO + ");'>\n" +
+                    "                    <label class='label-txt'>오늘 하루 이 창을 띄우지 않음</label>\n" +
+                    "                </div>\n" +
+                    "            </div>\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>";
+
+            });
+            $("#noticeDiv").html(noticeHtml);
+            angular.forEach(noticeList, function (noticeItem) {
+                $("#popNotice" + noticeItem.NOTICE_NO).draggable();
+            });
+        };
+
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   Start  ///////////////////////////////////
         portal.dashboard = {};
 
