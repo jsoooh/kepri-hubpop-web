@@ -452,6 +452,7 @@ angular.module('paas.controllers')
             appPromise.success(function (data) {
                 ct.listAllApps();
                 $state.go($state.current, {}, {reload: true});
+                $scope.main.loadSltOrganization();
                 $scope.main.loadingMainBody = false;
             });
             appPromise.error(function (data) {
