@@ -192,31 +192,26 @@ angular.module('portal.services', [])
                     "                <div class='pop_tit'><h5>" + noticeItem.TITLE + "</h5></div>\n" +
                     "                <div class='noti_cont_area'>\n" +
                     "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
-                    "                </div>\n" +
-                    "                <div class='tbw type1'>\n" +
+                    "                </div>";
+                if (noticeItem.ATTACH_FILE != "" && noticeItem.ATTACH_FILES != "" && noticeItem.ATTACH_FILES.length > 0) {
+                    for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
+                        noticeHtml += "                <div class='tbw type1'>\n" +
                     "                    <table class='table'>\n" +
                     "                        <colgroup>\n" +
                     "                            <col style='width:23%;'>\n" +
                     "                            <col style='width:77%;'>\n" +
                     "                        </colgroup>\n" +
-                    "                        <tbody>\n";
-                if (noticeItem.ATTACH_FILE != "" && noticeItem.ATTACH_FILES != "" && noticeItem.ATTACH_FILES.length > 0) {
-                    for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
-                        noticeHtml += "                        <tr>\n" +
+                    "                        <tbody>\n" +
+                        "                        <tr>\n" +
                             "                            <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
                             "                            <td><a href='/hsvc/comn-api/api/downloadNoticeAttachFile/" + noticeItem.ATTACH_FILES[i].FILE_NO + "'>" + noticeItem.ATTACH_FILES[i].FILE_NAME + "</a></td>\n" +
                             "                        </tr>\n";
-                    }
-                } /*else {
-                    noticeHtml += "                        <tr>\n" +
-                        "                            <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
-                        "                            <td><a href=''></a></td>\n" +
-                        "                        </tr>\n";
-                }*/
                 noticeHtml += "                        </tbody>\n" +
                     "                    </table>\n" +
-                    "                </div>\n" +
-                    "            </div>\n" +
+                    "                </div>";
+                    }
+                }
+                noticeHtml += "            </div>\n" +
                     "            <div class='modal-footer'>\n" +
                     "                <div class='checkbox checkbox-inline'>\n" +
                     "                    <input type='checkbox' id='check-id" + noticeItem.NOTICE_NO + "' onclick='setNotifyCookie(" + noticeItem.NOTICE_NO + ");'>\n" +
