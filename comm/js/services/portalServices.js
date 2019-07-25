@@ -219,7 +219,7 @@ angular.module('portal.services', [])
                     "            <div class='modal-footer'>\n" +
                     "                <div class='checkbox checkbox-inline'>\n" +
                     "                    <input type='checkbox' id='check-id" + noticeItem.NOTICE_NO + "' onclick='setNotifyCookie(" + noticeItem.NOTICE_NO + ");'>\n" +
-                    "                    <label class='label-txt'>오늘 하루 이 창을 띄우지 않음</label>\n" +
+                    "                    <label for='check-id" + noticeItem.NOTICE_NO + "' class='label-txt'>오늘 하루 이 창을 띄우지 않음</label>\n" +
                     "                </div>\n" +
                     "            </div>\n" +
                     "        </div>\n" +
