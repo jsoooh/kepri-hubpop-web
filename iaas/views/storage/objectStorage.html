@@ -1,7 +1,7 @@
 <!-- 검색영역  -->
 <div class="cBox type0 mb30">
 	<div class="pull-left">
-		<h4 class="c-tit">전체 저장소 <em class="point1">(4)</em></h4>
+		<h4 class="c-tit">전체 저장소 <em class="point1">({{(contents.objectStorageList.length)}})</em></h4>
 	</div>
 	<div class="pull-right">
 		<!-- 검색 -->
@@ -25,24 +25,24 @@
 			<div class="infoBox">
 				<div class="info_head">
 					<h5 class="tit_volume">사용량</h5>
-					<span class="t_sm">2019-07-20 기준</span>
+					<span class="t_sm">{{contents.toDay}} 기준</span>
 				</div>
 				<div class="info_body">
 					<!-- 내부컨텐츠 -->
 					<div class="data_area">
 						<div class="txt_l">
-							<span class="t_lg">26.00</span>
+							<span class="t_lg">{{contents.objecteStorageQuator.quatorUsed}}</span>
 							<span class="t_md">GB</span>
-							<span class="t_sm">(할당량 2,000GB)</span>
+							<span class="t_sm">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
 						</div>
 						<div class="txt_r">
-							<span class="t_lg ">15<span class="t_md">%</span></span>
+							<span class="t_lg ">{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}<span class="t_md">%</span></span>
 						</div>
 						<!-- 프로그래스 박스 -->
 						<div class="info_progBox">
 							<div class="progressWrap type2">
 								<div class="progress">
-									<div percent-progress-bar-animate bar-type="width" percent="15" class="progress">
+									<div percent-progress-bar-animate bar-type="width" percent= "{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}" class="progress">
 										<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="15%"></div>
 									</div>
 								</div>
@@ -68,19 +68,19 @@
 							<li>
 								<dl>
 									<dt class="tit_address">오브젝트 스토리지 접속 주소</dt>
-									<dd>101.55.126.196:7480</dd>
+									<dd>{{contents.sendSecretInfoList.s3RadosEndPoint}}</dd>
 								</dl>
 							</li>
 							<li>
 								<dl>
 									<dt class="tit_access_key">Access Key ID</dt>
-									<dd>17U80SKEWVE8FS1CVWKE</dd>
+									<dd>{{contents.sendSecretInfoList.s3AccessKey}}</dd>
 								</dl>
 							</li>
 							<li>
 								<dl>
 									<dt class="tit_secret">Secret Access Key</dt>
-									<dd>tFBJ9APnCrhGRxDTv10IBFDXZXndvcsML1c84ek5</dd>
+									<dd>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</dd>
 								</dl>
 							</li>
 						</ul>
@@ -97,7 +97,7 @@
 
 <!-- 버튼영역 -->
 <div class="btnWrap">
-	<button type="button" class="btn_lg" ng-click=""><span class="ico ico_bk_add"></span>저장소 만들기</button>
+	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>저장소 만들기</button>
 	<button type="button" class="btn_lg" ng-click=""><span class="ico ico_usage_view"></span>사용법 안내</button>
 </div>
 <!-- //버튼영역 -->
@@ -105,21 +105,21 @@
 
 <!-- 패널리스트 영역 -->
 <ul class="ul-panel thum_style">
-	<li>
+	<li ng-repeat="item in contents.objectStorageList | filter:{ containerName: contents.schFilterText }">
 		<!-- panel -->
 		<div class="panelWrap">
 			<div class="panel type6 h_auto">
 				<div class="panel_head pl30">
-					<p class="tit"><a href="serv_comp_run.html">저장소 01</a></p>
+					<p class="tit">{{item.containerName}}</a></p>
 					<p class="txt">마지막 접속일: <span>2019-07-19</span></p>
-					<button type="button" name="button" class="btn_del_list"><span class="ico_list_del">삭제하기</span></button>
+					<button type="button" name="button" class="btn_del_list"><span class="ico_list_del" ng-click="contents.fn.deleteObjectBucket(item.containerName);">삭제하기</span></button>
 				</div>
 				
 				<div class="panel_body">
 					<div class="ul-in">
 						<div class="bucketBox">
 							<div class="cnt_value">
-								<span class="t_lg">20</span>
+								<span class="t_lg">{{item.usedGiGaByte}}</span>
 								<span class="t_sm">GB</span>
 							</div>
 						</div>
@@ -129,77 +129,7 @@
 		</div>
 		<!-- //panel -->
 	</li>
-	<li>
-		<!-- panel -->
-		<div class="panelWrap">
-			<div class="panel type6 h_auto">
-				<div class="panel_head pl30">
-					<p class="tit"><a href="serv_comp_run.html">저장소 01</a></p>
-					<p class="txt">마지막 접속일: <span>2019-07-19</span></p>
-					<button type="button" name="button" class="btn_del_list"><span class="ico_list_del">삭제하기</span></button>
-				</div>
-				
-				<div class="panel_body">
-					<div class="ul-in">
-						<div class="bucketBox">
-							<div class="cnt_value">
-								<span class="t_lg">20</span>
-								<span class="t_sm">GB</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- //panel -->
-	</li>
-	<li>
-		<!-- panel -->
-		<div class="panelWrap">
-			<div class="panel type6 h_auto">
-				<div class="panel_head pl30">
-					<p class="tit"><a href="serv_comp_run.html">저장소 01</a></p>
-					<p class="txt">마지막 접속일: <span>2019-07-19</span></p>
-					<button type="button" name="button" class="btn_del_list"><span class="ico_list_del">삭제하기</span></button>
-				</div>
-				
-				<div class="panel_body">
-					<div class="ul-in">
-						<div class="bucketBox">
-							<div class="cnt_value">
-								<span class="t_lg">20</span>
-								<span class="t_sm">GB</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- //panel -->
-	</li>
-	<li>
-		<!-- panel -->
-		<div class="panelWrap">
-			<div class="panel type6 h_auto">
-				<div class="panel_head pl30">
-					<p class="tit"><a href="serv_comp_run.html">저장소 01</a></p>
-					<p class="txt">마지막 접속일: <span>2019-07-19</span></p>
-					<button type="button" name="button" class="btn_del_list"><span class="ico_list_del">삭제하기</span></button>
-				</div>
-				
-				<div class="panel_body">
-					<div class="ul-in">
-						<div class="bucketBox">
-							<div class="cnt_value">
-								<span class="t_lg">20</span>
-								<span class="t_sm">GB</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- //panel -->
-	</li>
+
+
 </ul>
 <!-- //패널리스트 영역 -->
