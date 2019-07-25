@@ -180,15 +180,14 @@ angular.module('portal.services', [])
             var noticeList = mc.noticeList;
             var noticeHtml = "";
             angular.forEach(noticeList, function (noticeItem) {
-                //noticeHtml += "<md-dialog draggable drag-handle='.modal-header' aria-label='{{ dialogOptions.title }}' class='{{ dialogOptions.dialogClassName }} modal-content'>" +
                 noticeHtml += "<div name='notice' id='popNotice" + noticeItem.NOTICE_NO + "' style='position:absolute; top:" + noticeItem.top + "px; left:" + noticeItem.left + "px; z-index: 10;'>\n" +
                     "    <div class='notice_pop'>\n" +
                     "        <div class='modal-content'>\n" +
-                    "            <div id='popNoticeHeader" + noticeItem.NOTICE_NO + "' class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
+                    "            <div class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
                     "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><a href='javascript:void(0);' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></a></button>\n" +
                     "                <h1 class='modal-title'>공지사항 </h1>\n" +
                     "            </div>\n" +
-                    "            <div class='modal-body'>\n" +
+                    "            <div id='popNoticeBody" + noticeItem.NOTICE_NO + "' class='modal-body'>\n" +
                     "                <div class='pop_tit'><h5>" + noticeItem.TITLE + "</h5></div>\n" +
                     "                <div class='noti_cont_area'>\n" +
                     "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
@@ -209,10 +208,10 @@ angular.module('portal.services', [])
                     }
                     noticeHtml += "                        </tbody>\n" +
                     "                    </table>\n" +
-                    "                </div>";
+                    "                </div>\n";
                 }
                 noticeHtml += "            </div>\n" +
-                    "            <div class='modal-footer'>\n" +
+                    "            <div class='modal-footer' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
                     "                <div class='checkbox checkbox-inline'>\n" +
                     "                    <input type='checkbox' id='check-id" + noticeItem.NOTICE_NO + "' onclick='setNotifyCookie(" + noticeItem.NOTICE_NO + ");'>\n" +
                     "                    <label for='check-id" + noticeItem.NOTICE_NO + "' class='label-txt'>오늘 하루 이 창을 띄우지 않음</label>\n" +
@@ -221,12 +220,12 @@ angular.module('portal.services', [])
                     "        </div>\n" +
                     "    </div>\n" +
                     "</div>";
-                //"</md-dialog>";
 
             });
             $("#noticeDiv").html(noticeHtml);
             angular.forEach(noticeList, function (noticeItem) {
                 $("#popNotice" + noticeItem.NOTICE_NO).draggable();
+                $("#popNoticeBody" + noticeItem.NOTICE_NO).draggable("option", "disabled", true);
             });
         };
 
