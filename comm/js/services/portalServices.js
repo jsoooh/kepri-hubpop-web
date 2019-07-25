@@ -180,10 +180,11 @@ angular.module('portal.services', [])
             var noticeList = mc.noticeList;
             var noticeHtml = "";
             angular.forEach(noticeList, function (noticeItem) {
+                //noticeHtml += "<md-dialog draggable drag-handle='.modal-header' aria-label='{{ dialogOptions.title }}' class='{{ dialogOptions.dialogClassName }} modal-content'>" +
                 noticeHtml += "<div name='notice' id='popNotice" + noticeItem.NOTICE_NO + "' style='position:absolute; top:" + noticeItem.top + "px; left:" + noticeItem.left + "px; z-index: 10;'>\n" +
                     "    <div class='notice_pop'>\n" +
                     "        <div class='modal-content'>\n" +
-                    "            <div class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
+                    "            <div id='popNoticeHeader" + noticeItem.NOTICE_NO + "' class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
                     "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><a href='javascript:void(0);' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></a></button>\n" +
                     "                <h1 class='modal-title'>공지사항 </h1>\n" +
                     "            </div>\n" +
@@ -225,6 +226,7 @@ angular.module('portal.services', [])
                     "        </div>\n" +
                     "    </div>\n" +
                     "</div>";
+                //"</md-dialog>";
 
             });
             $("#noticeDiv").html(noticeHtml);
