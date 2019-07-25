@@ -224,7 +224,9 @@ angular.module('portal.services', [])
             });
             $("#noticeDiv").html(noticeHtml);
             angular.forEach(noticeList, function (noticeItem) {
-                $("#popNotice" + noticeItem.NOTICE_NO).draggable();
+                $("#popNotice" + noticeItem.NOTICE_NO).draggable({
+                	handle: '.modal-header'
+                });
                 //$("#popNoticeBody" + noticeItem.NOTICE_NO).draggable("option", "disabled", true);
             });
         };
