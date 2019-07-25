@@ -41,7 +41,7 @@ angular.module('portal.controllers')
                     "START_DT":"2019-05-30",
                     "END_DT":"2019-08-06",
                     "CONTENTS":"<p dmcf-pid='NnQZ4VLour' dmcf-ptype='general' style='margin:35px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>(서울=연합뉴스) 이상헌 임형섭 박경준 기자 = 청와대는 24일 러시아 군용기의 독도 영공 침범과 관련해 일본 정부가 자위대 군용기를 긴급 발진하면서 독도를 일본 땅이라는 억지를 부린 데 대해 '일본은 &quot;일본방공식별구역(JADIZ)&quot;에 대한 부분만 갖고 입장을 내면 될 것 같다'는 반박 입장을 밝혔다.</p>\n<p dmcf-pid='N9Zsf0ny0S' dmcf-ptype='general' style='margin:0px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>청와대 관계자는 이날 기자들을 만나 이같이 언급한 뒤 '우리 영공에 대한 문제는 우리가 답할 부분'이라고 말했다.</p><p dmcf-pid='NnQZ4VLour' dmcf-ptype='general' style='margin:35px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>(서울=연합뉴스) 이상헌 임형섭 박경준 기자 = 청와대는 24일 러시아 군용기의 독도 영공 침범과 관련해 일본 정부가 자위대 군용기를 긴급 발진하면서 독도를 일본 땅이라는 억지를 부린 데 대해 '일본은 일본방공식별구역(JADIZ)에 대한 부분만 갖고 입장을 내면 될 것 같다'는 반박 입장을 밝혔다.</p>\n<p dmcf-pid='N9Zsf0ny0S' dmcf-ptype='general' style='margin:0px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>청와대 관계자는 이날 기자들을 만나 이같이 언급한 뒤 '우리 영공에 대한 문제는 우리가 답할 부분'이라고 말했다.</p>",
-                    "ATTACH_FILE":"206|RTU속성1111.txt^210|RTU속성22222.txt^212|RTU속성3333.txt",
+                    "ATTACH_FILE":"206|RTU속성1111.txt,210|RTU속성22222.txt,212|RTU속성3333.txt",
                     "COMMON_CD":"CD0021",
                     "COMMON_NM":"공통",
                     "REG_USER_ID":"hubpop",
@@ -190,8 +190,7 @@ angular.module('portal.controllers')
                     noticeItem["top"] = 100 * i - 50;
                     noticeItem["left"] = 200 * i + 100;
                     if (!!noticeItem.ATTACH_FILE) {
-                        //임시
-                        var arrFiles = noticeItem.ATTACH_FILE.split("^");   //"ATTACH_FILE":"206|RTU속성2.txt^210|RTU속성33.txt"
+                        var arrFiles = noticeItem.ATTACH_FILE.split(",");   //"ATTACH_FILE":"206|RTU속성2.txt,210|RTU속성33.txt"
                         if (!!arrFiles && arrFiles.length > 0) {
                             angular.forEach(arrFiles, function (file) {
                                 var arrFileInfo = file.split("|");      //206|RTU속성2.txt
@@ -209,10 +208,10 @@ angular.module('portal.controllers')
                 }
             });
             ct.popNoticeCnt = ct.notices.length;
-            console.log("toDay : ", toDay);
+            /*console.log("toDay : ", toDay);
             console.log("ct.popNoticeCnt : ", ct.popNoticeCnt);
             console.log("ct.tempNotices : ", ct.tempNotices);
-            console.log("ct.notices : ", ct.notices);
+            console.log("ct.notices : ", ct.notices);*/
             $scope.main.noticeList = [];
             if (ct.popNoticeCnt > 0) {
                 $scope.main.desplayNoticeList(ct.notices);
