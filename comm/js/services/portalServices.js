@@ -187,7 +187,7 @@ angular.module('portal.services', [])
                     "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><a href='javascript:void(0);' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></a></button>\n" +
                     "                <h1 class='modal-title'>공지사항 </h1>\n" +
                     "            </div>\n" +
-                    "            <div id='popNoticeBody" + noticeItem.NOTICE_NO + "' class='modal-body'>\n" +
+                    "            <div class='modal-body'>\n" +
                     "                <div class='pop_tit'><h5>" + noticeItem.TITLE + "</h5></div>\n" +
                     "                <div class='noti_cont_area'>\n" +
                     "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
@@ -224,8 +224,11 @@ angular.module('portal.services', [])
             });
             $("#noticeDiv").html(noticeHtml);
             angular.forEach(noticeList, function (noticeItem) {
-                $("#popNotice" + noticeItem.NOTICE_NO).draggable();
-                //$("#popNoticeBody" + noticeItem.NOTICE_NO).draggable("option", "disabled", true);
+                $("#popNotice" + noticeItem.NOTICE_NO).draggable({
+                        cursor: "pointer", // 커서 모양
+                        cancel: ".modal-body"
+                    }
+                );
             });
         };
 
