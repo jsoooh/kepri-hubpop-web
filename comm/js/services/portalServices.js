@@ -206,12 +206,12 @@ angular.module('portal.services', [])
                             "                            <td><a href='/hsvc/comn-api/api/downloadNoticeAttachFile/" + noticeItem.ATTACH_FILES[i].FILE_NO + "'>" + noticeItem.ATTACH_FILES[i].FILE_NAME + "</a></td>\n" +
                             "                        </tr>\n";
                     }
-                } else {
+                } /*else {
                     noticeHtml += "                        <tr>\n" +
                         "                            <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
                         "                            <td><a href=''></a></td>\n" +
                         "                        </tr>\n";
-                }
+                }*/
                 noticeHtml += "                        </tbody>\n" +
                     "                    </table>\n" +
                     "                </div>\n" +

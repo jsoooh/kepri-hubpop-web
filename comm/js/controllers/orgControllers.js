@@ -187,7 +187,7 @@ angular.module('portal.controllers')
                 var attachFile = {};
                 if (noticeItem.DELETE_YN == "N" && noticeItem.POP_YN == "Y" && noticeItem.START_DT <= toDay && noticeItem.END_DT >= toDay && $cookies.get('notice_' + noticeItem.NOTICE_NO) != 'valid') {
                     noticeItem["isView"] = true;
-                    noticeItem["top"] = 100 * i - 50;
+                    noticeItem["top"] = 50;     //100 * i - 50;
                     noticeItem["left"] = 200 * i + 100;
                     if (!!noticeItem.ATTACH_FILE) {
                         var arrFiles = noticeItem.ATTACH_FILE.split(",");   //"ATTACH_FILE":"206|RTU속성2.txt,210|RTU속성33.txt"
