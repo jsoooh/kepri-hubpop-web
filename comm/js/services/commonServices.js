@@ -1053,6 +1053,8 @@ angular.module('common.services', ['LocalStorageModule'])
                         }
                     } else {
                         try {
+                            //특정 에러 문구 에러 메시지에 나타나지 않도록 수정. 2019.07.25
+                            var arrErrorMessageSkip = ["Not Found", "Internal Server Error"];
                             if (response.data && response.data.message) {
                                 if (response.data.status == 403 && response.data.message == "OAuth2 access denied.") {
                                     if (!common.isPopCreateUserKey) {
@@ -1084,7 +1086,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                         } catch (e) {
                                         }
                                     }
-                                    if (errMessage) {
+                                    if (errMessage && arrErrorMessageSkip.indexOf(errMessage) < 0) {
                                         $timeout(function () {
                                             common.showAlertWarningHtml(errTitle, errMessage);
                                         }, 100);
@@ -1092,7 +1094,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                 }
                             } else {
                                 response.statusText = response.statusText ? response.statusText : (response.status ? response.status : $translate.instant("message.mi_error"));
-                                if (response.statusText) {
+                                if (response.statusText && arrErrorMessageSkip.indexOf(response.statusText) < 0) {
                                     $timeout(function () {
                                         common.showAlertWarningHtml($translate.instant("label.error"), response.statusText);
                                     }, 100);
