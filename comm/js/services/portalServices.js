@@ -192,24 +192,24 @@ angular.module('portal.services', [])
                     "                <div class='pop_tit'><h5>" + noticeItem.TITLE + "</h5></div>\n" +
                     "                <div class='noti_cont_area'>\n" +
                     "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
-                    "                </div>";
+                    "                </div>\n";
                 if (noticeItem.ATTACH_FILE != "" && noticeItem.ATTACH_FILES != "" && noticeItem.ATTACH_FILES.length > 0) {
-                    for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
                         noticeHtml += "                <div class='tbw type1'>\n" +
-                    "                    <table class='table'>\n" +
-                    "                        <colgroup>\n" +
-                    "                            <col style='width:23%;'>\n" +
-                    "                            <col style='width:77%;'>\n" +
-                    "                        </colgroup>\n" +
-                    "                        <tbody>\n" +
-                        "                        <tr>\n" +
-                            "                            <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
-                            "                            <td><a href='/hsvc/comn-api/api/downloadNoticeAttachFile/" + noticeItem.ATTACH_FILES[i].FILE_NO + "'>" + noticeItem.ATTACH_FILES[i].FILE_NAME + "</a></td>\n" +
-                            "                        </tr>\n";
-                noticeHtml += "                        </tbody>\n" +
+                        "                    <table class='table'>\n" +
+                        "                        <colgroup>\n" +
+                        "                            <col style='width:23%;'>\n" +
+                        "                            <col style='width:77%;'>\n" +
+                        "                        </colgroup>\n" +
+                        "                        <tbody>\n";
+                    for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
+                        noticeHtml += "                        <tr>\n" +
+                        "                            <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
+                        "                            <td><a href='/hsvc/comn-api/api/downloadNoticeAttachFile/" + noticeItem.ATTACH_FILES[i].FILE_NO + "'>" + noticeItem.ATTACH_FILES[i].FILE_NAME + "</a></td>\n" +
+                        "                        </tr>\n";
+                    }
+                    noticeHtml += "                        </tbody>\n" +
                     "                    </table>\n" +
                     "                </div>";
-                    }
                 }
                 noticeHtml += "            </div>\n" +
                     "            <div class='modal-footer'>\n" +
