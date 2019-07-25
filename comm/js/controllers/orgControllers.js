@@ -182,10 +182,10 @@ angular.module('portal.controllers')
             var toDay = moment(new Date()).format('YYYY-MM-DD');    //2019-07-11
             var i = 0;
             angular.forEach(ct.tempNotices, function (noticeItem) {
-                i++;
                 var attachFiles = [];
                 var attachFile = {};
                 if (noticeItem.DELETE_YN == "N" && noticeItem.POP_YN == "Y" && noticeItem.START_DT <= toDay && noticeItem.END_DT >= toDay && $cookies.get('notice_' + noticeItem.NOTICE_NO) != 'valid') {
+                    i++;
                     noticeItem["isView"] = true;
                     noticeItem["top"] = 50;     //100 * i - 50;
                     noticeItem["left"] = 200 * i + 100;
