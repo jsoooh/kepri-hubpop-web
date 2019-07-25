@@ -30,7 +30,7 @@ angular.module('app')
     })
     .filter('displayVolume', function () {
         return function (value, unit, options) {
-            var out = (angular.isUndefined(value) || value == null) ? 0 : parseFloat(value);;
+            var out = (angular.isUndefined(value) || value == null) ? 0 : parseFloat(value);
             if (!options) {
                 options = {};
             }
