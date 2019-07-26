@@ -28,6 +28,7 @@ angular.module('app')
             return out;
         };
     })
+
     .filter('displayVolume', function () {
         return function (value, unit, options) {
             var out = (angular.isUndefined(value) || value == null) ? 0 : parseFloat(value);

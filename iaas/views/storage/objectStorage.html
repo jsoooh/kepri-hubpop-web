@@ -111,7 +111,7 @@
 			<div class="panel type6 h_auto">
 				<div class="panel_head pl30">
 					<p class="tit">{{item.containerName}}</a></p>
-					<p class="txt">마지막 접속일: <span>2019-07-19</span></p>
+					<p class="txt">파일 개수: <span>{{item.numObjects}}</span></p>
 					<button type="button" name="button" class="btn_del_list"><span class="ico_list_del" ng-click="contents.fn.deleteObjectBucket(item.containerName);">삭제하기</span></button>
 				</div>
 				
@@ -119,8 +119,8 @@
 					<div class="ul-in">
 						<div class="bucketBox">
 							<div class="cnt_value">
-								<span class="t_lg">{{item.usedGiGaByte}}</span>
-								<span class="t_sm">GB</span>
+								<span class="t_lg">{{item.usedVolume}}</span>
+								<span class="t_sm">{{item.usedVolumeUnit}}</span>
 							</div>
 						</div>
 					</div>
