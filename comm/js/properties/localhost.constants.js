@@ -239,6 +239,11 @@ angular.module('app')
             admin: 'ADMIN',
             user: 'USER'
         },
+        ///특정 에러 문구 에러 메시지에 나타나지 않도록 수정. 2019.07.25
+        errorMessageSkip : [
+            "Not Found",
+            "Internal Server Error"
+        ],
         //임시 이메일 주소 체크
         tempEmail : [
             "ax80mail.com",

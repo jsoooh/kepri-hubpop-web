@@ -1034,6 +1034,10 @@ angular.module('common.services', ['LocalStorageModule'])
                 promise.then(null, function (response) {
                     if(response == undefined || typeof response == "string") response = {data:{}, status:"", headers:""};
                     if (response.data && response.data.status == 307) response.status = 307;    //0423. iaas DOMAIN 토큰 생성 실패 관련 add
+                    if (response.data && response.data.message && response.data.message == "Could not commit JPA transaction; nested exception is javax.persistence.RollbackException: Transaction marked as rollbackOnly") {
+                        response.status = 307;  //0726. 오랜 시간 띄워진 화면 기동 시 발생. api에 로그가 나타나지 않음
+                        response.data.message = "mi_no_login";
+                    }
                     if (response.status == 307) {
                         if (response.data && response.data.message) {
                             if (response.data.message == "mi_no_login") {
@@ -1053,8 +1057,6 @@ angular.module('common.services', ['LocalStorageModule'])
                         }
                     } else {
                         try {
-                            //특정 에러 문구 에러 메시지에 나타나지 않도록 수정. 2019.07.25
-                            var arrErrorMessageSkip = ["Not Found", "Internal Server Error"];
                             if (response.data && response.data.message) {
                                 if (response.data.status == 403 && response.data.message == "OAuth2 access denied.") {
                                     if (!common.isPopCreateUserKey) {
@@ -1086,7 +1088,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                         } catch (e) {
                                         }
                                     }
-                                    if (errMessage && arrErrorMessageSkip.indexOf(errMessage) < 0) {
+                                    if (errMessage && CONSTANTS.errorMessageSkip.indexOf(errMessage) < 0) {
                                         $timeout(function () {
                                             common.showAlertWarningHtml(errTitle, errMessage);
                                         }, 100);
@@ -1094,7 +1096,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                 }
                             } else {
                                 response.statusText = response.statusText ? response.statusText : (response.status ? response.status : $translate.instant("message.mi_error"));
-                                if (response.statusText && arrErrorMessageSkip.indexOf(response.statusText) < 0) {
+                                if (response.statusText && CONSTANTS.errorMessageSkip.indexOf(response.statusText) < 0) {
                                     $timeout(function () {
                                         common.showAlertWarningHtml($translate.instant("label.error"), response.statusText);
                                     }, 100);
@@ -1194,7 +1196,6 @@ angular.module('common.services', ['LocalStorageModule'])
 	
 	    // 동기 방식
 	    common.noMsgSyncHttpResponse = function (pathUrl, method, params, contentType, charset) {
-	
 	        if (method.toUpperCase() != "GET" || method.toUpperCase() != "DELETE" && params) {
 	            if (pathUrl.indexOf('?') > 0) {
 	                pathUrl += "&" + $.param(params);
