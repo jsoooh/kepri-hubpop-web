@@ -2740,10 +2740,20 @@ a.ext_link:hover {text-decoration:underline;}
 .accss_guideWrap .txt_level_list dl dt {float:left; font-weight:500;}
 .accss_guideWrap .txt_level_list dl dt + dd + dt {clear:both;}
 .accss_guideWrap .txt_level_list dl dd {float:left; color:#1360ec; padding-left:3px;}
+.accss_guideWrap .txt_level_list ul {padding:5px 0 0 0;}
+.accss_guideWrap .txt_level_list ul li {font-size:15px; line-height:30px;}
 
 .accss_guideWrap {margin-bottom:30px;}
 .accss_guideWrap a {color:#3975ee;}
 .accss_guideWrap a:hover {text-decoration:underline;}
+.accss_guideWrap a.dw_txt {color:#3975ee;}
+.accss_guideWrap a.dw_txt {color:#3975ee;}
+
+.accss_guideWrap a {display:inline-block; vertical-align:middle;}
+.accss_guideWrap a.link_dw > span:hover {text-decoration:underline;}
+.accss_guideWrap a.link_dw > span {display:inline-block; vertical-align:middle; }
+.accss_guideWrap a.link_dw > span.txt {color:#2196f3; margin-left:5px; }
+.accss_guideWrap a.link_dw > span.ico_dw {width:15px; height:15px; font-size:0; background:url("../images/ico_download.png") no-repeat; margin-left:5px;}
 
 .guide_t_menu {margin:100px 0 30px 0;}
 .guide_t_menu ul li {display:inline-block;}
@@ -2848,12 +2858,22 @@ a.ext_link:hover {text-decoration:underline;}
 .storage_infoWrap .access_info_area ul li {border-top:1px solid #e6e6e6;}
 .storage_infoWrap .access_info_area ul li:first-child {border-top:0;}
 .storage_infoWrap .access_info_area dl {display:table; width:100%; padding:0 20px;}
-.storage_infoWrap .access_info_area dl dt, .storage_infoWrap .access_info_area dl dd  {display:table-cell; font-size:14px; box-sizing:border-box;}
+.storage_infoWrap .access_info_area dl dt, .storage_infoWrap .access_info_area dl dd  {display:table-cell; font-size:14px; box-sizing:border-box; height:45px; line-height:45px;}
 .storage_infoWrap .access_info_area dl dt {width:250px; font-weight:500; color:#333;}
 .storage_infoWrap .access_info_area dl dt.tit_address:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 0; vertical-align:text-top; margin-right:8px;}
 .storage_infoWrap .access_info_area dl dt.tit_access_key:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 -30px; vertical-align:text-top; margin-right:8px;}
 .storage_infoWrap .access_info_area dl dt.tit_secret:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 -60px; vertical-align:text-top; margin-right:8px;}
-.storage_infoWrap .access_info_area dl dd {font-weight:400; color:#9ca2ab; line-height:45px;}
+.storage_infoWrap .access_info_area dl dd {font-weight:400; color:#9ca2ab;}
+
+
+/*== paas 샘플앱 내려받기 ==*/
+.txt_link_box {margin-top:5px; vertical-align:middle;}
+.txt_link_box .txt {display:inline-block; font-size:13px; color:#666; vertical-align:middle;}
+.txt_link_box a {display:inline-block; vertical-align:middle;}
+.txt_link_box a > span:hover {text-decoration:underline;}
+.txt_link_box a > span {display:inline-block; vertical-align:middle; }
+.txt_link_box a > span.app_txt {font-size:13px; color:#2196f3; margin-left:5px; }
+.txt_link_box a > span.ico_dw {width:15px; height:15px; font-size:0; background:url("../images/ico_download.png") no-repeat; margin-left:5px;}
 
 /*================== CSS 재정의(2018-10-31 ~) 작성자:김보람 =================*/
 
