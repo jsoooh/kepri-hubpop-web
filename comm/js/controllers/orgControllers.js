@@ -169,7 +169,7 @@ angular.module('portal.controllers')
             promise.error(function (data, status, headers) {
             });
             promise.finally(function() {
-                ct.tempNotices = ct.tempData.data;
+                //ct.tempNotices = ct.tempData.data;
                 if (ct.tempNotices.length > 0) {
                     setPopNoties();
                 }
