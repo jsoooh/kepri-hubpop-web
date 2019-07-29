@@ -44,12 +44,10 @@ angular.module('portal.controllers')
                     }, 2000);
                 } else {
                     $scope.main.loadingMainBody = false;
-
                     if ($scope.main.reloadTimmer['getOrgProject_' + ct.paramId]) {
                         $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + ct.paramId]);
                         $scope.main.reloadTimmer['getOrgProject_' + ct.paramId] = null;
                     }
-
                     ct.selOrgProject = data;
                     if (ct.selOrgProject.myRoleName == 'OWNER') {
                         ct.isOrgManager = true;
