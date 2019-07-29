@@ -2191,7 +2191,7 @@ p.no-txt{
 .pop_message_area > div {display:table-cell; box-sizing:border-box; padding:20px 0;}
 .pop_message_area .msg_bg {width:60px; height:60px; border-radius:3px 0 0 3px; background:url("../images/msg_box_ico02.png") no-repeat #b8dbf5 center center;}
 .pop_message_area .msg_txt {width:auto; border-radius:0 3px 3px 0; border:1px solid #dddddd; border-left:0; background:#f8f8f8;}
-.pop_message_area .msg_txt span {display:inline-block; font-size:15px; color:#333; padding:0 20px;}
+.pop_message_area .msg_txt span {display:inline-block; font-size:15px; color:#333; line-height:1.3; padding:0 20px;}
 
 /*---- 가상서버 생성하기 컨텐츠 영역 ----*/
 .panel_area {display:flex; -ms-flex: 0 1 auto; width:100%; /* height:1157px; */ margin-top:30px;}
@@ -2864,6 +2864,14 @@ a.ext_link:hover {text-decoration:underline;}
 .storage_infoWrap .access_info_area dl dt.tit_access_key:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 -30px; vertical-align:text-top; margin-right:8px;}
 .storage_infoWrap .access_info_area dl dt.tit_secret:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 -60px; vertical-align:text-top; margin-right:8px;}
 .storage_infoWrap .access_info_area dl dd {font-weight:400; color:#9ca2ab;}
+
+
+
+/*== 190729 테이블 이너 정렬 박스(display:table ==)*/
+.tb_divBox {display:table; width:100%;}
+.tb_divBox > div {display:table-cell; box-sizing:border-box;}
+.tb_divBox > div.tb_div_l {width:13%;}
+.tb_divBox > div.tb_div_r {width:87%;}
 
 
 /*== paas 샘플앱 내려받기 ==*/
