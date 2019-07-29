@@ -26,18 +26,39 @@ angular.module('portal.controllers')
 
         // 조직 정보 조회
         ct.getOrgProject = function () {
-            $scope.main.loadingMainBody = true;
+            ct.searchFirst = false;
+            if (!$scope.main.reloadTimmer['getOrgProject_' + ct.paramId]) {
+                $scope.main.loadingMainBody = true;
+                ct.searchFirst = true;
+            }
             var orgPromise = orgService.getOrg(ct.paramId);
             orgPromise.success(function (data) {
-                $scope.main.loadingMainBody = false;
-                ct.selOrgProject = data;
-                if (ct.selOrgProject.myRoleName == 'OWNER') {
-                    ct.isOrgManager = true;
+                //생성 완료되지 않은 경우 재조회. 2019.07.29
+                if (data.statusCode == "creating") {
+                    if (ct.searchFirst) {
+                        common.showAlertWarning("프로젝트 생성 중입니다.");
+                    }
+                    $scope.main.reloadTimmer['getOrgProject_' + ct.paramId] = $timeout(function () {
+                        console.log("재조회 : getOrgProject_" + ct.paramId);
+                        ct.getOrgProject();
+                    }, 2000);
+                } else {
+                    $scope.main.loadingMainBody = false;
+
+                    if ($scope.main.reloadTimmer['getOrgProject_' + ct.paramId]) {
+                        $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + ct.paramId]);
+                        $scope.main.reloadTimmer['getOrgProject_' + ct.paramId] = null;
+                    }
+
+                    ct.selOrgProject = data;
+                    if (ct.selOrgProject.myRoleName == 'OWNER') {
+                        ct.isOrgManager = true;
+                    }
+                    $timeout(function () {
+                        $scope.main.changePortalOrg(data);
+                        ct.loadDashBoard();
+                    }, 0);
                 }
-                $timeout(function () {
-                    $scope.main.changePortalOrg(data);
-                    ct.loadDashBoard();
-                }, 0);
             });
             orgPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
