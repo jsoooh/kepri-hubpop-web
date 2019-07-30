@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('common.controllers')
-    .controller('commLoginCtrl', function ($scope, $location, $timeout, $translate, $mdDialog, user, common) {
+    .controller('commLoginCtrl', function ($scope, $location, $timeout, $translate, $mdDialog, $cookies, user, common, portal, CONSTANTS) {
         _DebugConsoleLog("userControllers.js : commLoginCtrl", 1);
 
         var ct = this;
+        ct.notices = [];
+        ct.tempNotices = [];
+        ct.popNoticeCnt = 0;
 
         $scope.main.loadingMainBody = false;
 
@@ -25,6 +28,7 @@ angular.module('common.controllers')
                     if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
                         $scope.main.setDbMenuList();
                     }
+                    ct.listNotices();   //공지 목록 조회
                     $timeout(function () {
                         common.moveCommHomePage();
                     }, 100);
@@ -93,6 +97,7 @@ angular.module('common.controllers')
                         if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
                             $scope.main.setDbMenuList();
                         }
+                        ct.listNotices();   //공지 목록 조회
                         $timeout(function () {
                             common.moveCommHomePage();
                         }, 100);
@@ -109,6 +114,68 @@ angular.module('common.controllers')
                 $scope.main.loadingMainBody = false;
             });
         };
+
+        /*공지 목록 조회*/
+        ct.listNotices = function () {
+            ct.notices = [];
+            ct.tempNotices = [];
+            ct.popNoticeCnt = 0;
+            $scope.main.loadingMainBody = true;
+            var promise = portal.portalOrgs.getNotices();
+            promise.success(function (data) {
+                ct.tempNotices = data.data;
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function() {
+                //ct.tempNotices = CONSTANTS.tempNoticeData.data;
+                if (ct.tempNotices.length > 0) {
+                    setPopNoties();
+                }
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        /*팝업 공지사항 목록 세팅 : 팝업여부체크/날짜체크/팝업위치등 설정*/
+        function setPopNoties() {
+            var toDay = moment(new Date()).format('YYYY-MM-DD');    //2019-07-11
+            var i = 0;
+            angular.forEach(ct.tempNotices, function (noticeItem) {
+                var attachFiles = [];
+                var attachFile = {};
+                if (noticeItem.DELETE_YN == "N" && noticeItem.POP_YN == "Y" && noticeItem.START_DT <= toDay && noticeItem.END_DT >= toDay && $cookies.get('notice_' + noticeItem.NOTICE_NO) != 'valid') {
+                    i++;
+                    noticeItem["isView"] = true;
+                    noticeItem["top"] = 50;     //100 * i - 50;
+                    noticeItem["left"] = 200 * i + 100;
+                    if (!!noticeItem.ATTACH_FILE) {
+                        var arrFiles = noticeItem.ATTACH_FILE.split(",");   //"ATTACH_FILE":"206|RTU속성2.txt,210|RTU속성33.txt"
+                        if (!!arrFiles && arrFiles.length > 0) {
+                            angular.forEach(arrFiles, function (file) {
+                                var arrFileInfo = file.split("|");      //206|RTU속성2.txt
+                                attachFile["FILE_NO"] = arrFileInfo[0];      //206
+                                attachFile["FILE_NAME"] = arrFileInfo[1];    //RTU속성2.txt
+                                attachFiles.push(attachFile);
+                            });
+                            noticeItem["ATTACH_FILES"] = attachFiles;
+                        }
+                    }
+                    //CONTENTS 중 ", ' 를 문자 치환
+                    noticeItem.CONTENTS = noticeItem.CONTENTS.replace(/\"/g,"&quot;");
+                    //noticeItem.CONTENTS = noticeItem.CONTENTS.replace(/\'/g,"&#39;");
+                    ct.notices.push(noticeItem);
+                }
+            });
+            ct.popNoticeCnt = ct.notices.length;
+            /*console.log("toDay : ", toDay);
+             console.log("ct.popNoticeCnt : ", ct.popNoticeCnt);
+             console.log("ct.tempNotices : ", ct.tempNotices);
+             console.log("ct.notices : ", ct.notices);*/
+            $scope.main.noticeList = [];
+            if (ct.popNoticeCnt > 0) {
+                $scope.main.desplayNoticeList(ct.notices);
+            }
+        }
 
         if ($scope.main.ssoUserLoginChecking) {
             $scope.main.reloadTimmer['ssoUserCheck'] = $timeout(function () {
