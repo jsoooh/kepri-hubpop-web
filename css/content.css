@@ -2908,7 +2908,7 @@ a.ext_link:hover {text-decoration:underline;}
 .t_tip_bx .tooltip .tooltip-inner {max-width:100%; background-color: #d6f0f9 !important; border: 1px solid #0268f4 !important; padding: 15px; text-align:left;}
 
 .cBox.type0 .searchBox {margin-top:18px}
-.searchBox.type2 input{border:0; /*font-size: 15px; 삭제*/}
+.searchBox.type2 input {border:1px solid #d2dae2; /*font-size: 15px; 삭제*/}
 
 .only-ico.ico-dot_h .ico{width:25px; height:25px; background-position: -510px -139px;}
 .panel.type5 .panel_head .btn-option {position:absolute; right:20px; top:40px; z-index: 5;}
