@@ -164,7 +164,7 @@ angular.module('portal.controllers')
             $scope.main.loadingMainBody = true;
             var promise = portal.portalOrgs.getNotices();
             promise.success(function (data) {
-                ct.tempNotices = data;
+                ct.tempNotices = data.data;
             });
             promise.error(function (data, status, headers) {
             });
