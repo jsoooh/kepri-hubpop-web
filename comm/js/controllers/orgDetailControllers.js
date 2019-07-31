@@ -374,8 +374,14 @@ angular.module('portal.controllers')
             }
 
             ct.dataReq7 = ser1.data ;
-            var chartArea = 'chart-area7';
-            var tmpValue = '%';
+            if (ct.dataReq7 == undefined) {
+                var chartArea = 'chart-area0';
+                var tmpValue = '%';
+            }
+            else {
+                var chartArea = 'chart-area7';
+                var tmpValue = '%';
+            }
 
             //PaaS CPU Color
             var tmpColor1 = '#0a88bd';

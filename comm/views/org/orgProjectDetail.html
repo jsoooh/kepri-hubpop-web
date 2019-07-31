@@ -275,11 +275,22 @@
                                             <div class="cloud_chartWrap" >
                                                 <ul>
                                                     <li>
-                                                        <div class="chart_info" ng-init="contents.dataReq7 ='0.0'">
+                                                        <div class="chart_info" ng-init="contents.dataReq7 ='0.0'" ng-if="contents.dataReq7 == undefined">
+                                                            <span class="tit">CPU</span>
+                                                            <span class="txt">0.0<span class="sm_txt">%</span></span>
+                                                        </div>
+                                                        <div class="chart_info" ng-init="contents.dataReq7 ='0.0'" ng-if="contents.dataReq7 !== undefined">
                                                             <span class="tit">CPU</span>
                                                             <span class="txt">{{contents.dataReq7}}<span class="sm_txt">%</span></span>
                                                         </div>
-                                                        <div class="donut_chart_data">
+                                                        <div class="donut_chart_data" ng-if="contents.dataReq7 == undefined">
+                                                            <div class="data_txt">
+                                                                <span>0</span>
+                                                                <span>100</span>
+                                                            </div>
+                                                            <div id="chart-area0"></div>
+                                                        </div>
+                                                        <div class="donut_chart_data" ng-if="contents.dataReq7 !== undefined">
                                                             <div class="data_txt">
                                                                 <span>{{contents.dataReq7}}</span>
                                                                 <span>100</span>
