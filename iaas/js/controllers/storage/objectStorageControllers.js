@@ -156,8 +156,7 @@ angular.module('iaas.controllers')
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
 
-            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
-            {
+            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
                 $scope.actionBtnHied = false;
                 return;
             }
