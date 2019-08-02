@@ -1981,6 +1981,7 @@ p.no-txt{
 .proj_dashboard .panel_body .chart_data .tui-chart.tui-pie-chart svg > text {font-size:14px !important;}
 .proj_dashboard .panel_body .chart_data #chart-area {position:absolute;  left:-14px; top:-11px;}
 .proj_dashboard .panel_body .chart_data #chart-area1 {position:absolute;  left:-14px; top:-11px;}
+.proj_dashboard .panel_body .donut_chart_data #chart-area0 {position:absolute; left:-12px; top:-20px;}
 .proj_dashboard .panel_body .donut_chart_data #chart-area3 {position:absolute; left:-12px; top:-20px;}
 .proj_dashboard .panel_body .donut_chart_data #chart-area4 {position:absolute; left:-12px; top:-20px;}
 .proj_dashboard .panel_body .donut_chart_data #chart-area5 {position:absolute; left:-12px; top:-20px;}

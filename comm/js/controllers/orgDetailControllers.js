@@ -360,20 +360,20 @@ angular.module('portal.controllers')
             var ser1 = new Object();
             var ser2 = new Object();
             var serJsonList = new Object();
-
+            ser1.data = 0;
+            ser1.data = ser1.data.toFixed(1);
+            ser2.data = 100;
+            ser1.name = "사용율";
+            ser2.name = "미사용율";
             if (tmpCode == '0000') {
-                //ct.dataReq4 = { };
-                ser1.name = "사용율";
                 ser1.data = chartData.cpu.percentUsed.toFixed(1);
-                reqJsonArray.push(ser1);
-
-                ser2.name = "미사용율";
                 ser2.data = parseInt(100 - parseInt(ser1.data));
-                reqJsonArray.push(ser2);
-                serJsonList.series = reqJsonArray;
             }
+            reqJsonArray.push(ser1);
+            reqJsonArray.push(ser2);
+            serJsonList.series = reqJsonArray;
 
-            ct.dataReq7 = ser1.data ;
+            ct.dataReq7 = ser1.data;
             var chartArea = 'chart-area7';
             var tmpValue = '%';
 
@@ -381,7 +381,7 @@ angular.module('portal.controllers')
             var tmpColor1 = '#0a88bd';
             var tmpColor2 = '#ebebeb';
 
-            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2);
         };
 
         //////////////////////////////// 표준 앱 MEMORY    ///////////////////////////////////
@@ -391,27 +391,28 @@ angular.module('portal.controllers')
             var ser1 = new Object();
             var ser2 = new Object();
             var serJsonList = new Object();
+            ser1.data = 0;
+            ser1.data = ser1.data.toFixed(1);
+            ser2.data = 100;
+            ser1.name = "사용율";
+            ser2.name = "미사용율";
 
-            if (tmpCode == '0000')
-            {
-                ser1.name = "사용율";
+            if (tmpCode == '0000') {
                 ser1.data = chartData.mem.percentUsed.toFixed(1);
-                reqJsonArray.push(ser1);
-
-                ser2.name = "미사용율";
                 ser2.data = parseInt(100 - parseInt(ser1.data));
-                reqJsonArray.push(ser2);
-                serJsonList.series = reqJsonArray;
             }
+            reqJsonArray.push(ser1);
+            reqJsonArray.push(ser2);
+            serJsonList.series = reqJsonArray;
 
-            ct.dataReq8 = ser1.data ;
+            ct.dataReq8 = ser1.data;
             var chartArea = 'chart-area8';
             var tmpValue = '%';
 
             var tmpColor1 = '#fe3392';
             var tmpColor2 = '#ebebeb';
 
-            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2);
         };
 
         //////////////////////////////// 표준 앱 STOREGE  ajax sg0730 2018.10.15     ///////////////////////////////////
@@ -421,21 +422,20 @@ angular.module('portal.controllers')
             var ser1 = new Object();
             var ser2 = new Object();
             var serJsonList = new Object();
-
+            ser1.data = 0;
+            ser1.data = ser1.data.toFixed(1);
+            ser2.data = 100;
+            ser1.name = "사용율";
+            ser2.name = "미사용율";
             if (tmpCode == '0000') {
-                //ct.dataReq4 = { };
-                ser1.name = "사용율";
                 ser1.data = chartData.disk.percentUsed.toFixed(1);
-                reqJsonArray.push(ser1);
-
-                ser2.name = "미사용율";
-                //ser2.data = chartData.data2;
-                ser2.data = parseInt(100 - parseInt(ser1.data));;
-                reqJsonArray.push(ser2);
-                serJsonList.series = reqJsonArray;
+                ser2.data = parseInt(100 - parseInt(ser1.data));
             }
+            reqJsonArray.push(ser1);
+            reqJsonArray.push(ser2);
+            serJsonList.series = reqJsonArray;
 
-            ct.dataReq9 = ser1.data ;
+            ct.dataReq9 = ser1.data;
             var chartArea = 'chart-area9';
             var tmpValue = '%';
             var tmpColor1 = '#fe3392';
