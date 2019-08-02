@@ -106,6 +106,7 @@ angular.module('iaas.controllers')
                 });
             });
         };
+
         ct.fn.createObjectStoragePop = function($event) {
             var dialogOptions =  {
                 controller       : "iaasObjectStorageFormCtrl" ,
@@ -156,7 +157,8 @@ angular.module('iaas.controllers')
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
 
-            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
+            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+            {
                 $scope.actionBtnHied = false;
                 return;
             }
@@ -171,7 +173,7 @@ angular.module('iaas.controllers')
         pop.fn.createObjectStorageAction = function() {
             $scope.main.loadingMainBody = true;
             pop.data.tenantId = pop.userTenant.tenantId;
-            var hyphen = "-";
+            var hyphen = "-"
             var params = {
                 tenantId : pop.data.tenantId,
                 bucket : ct.data.sltPortalOrgId+hyphen+ pop.data.containerName
