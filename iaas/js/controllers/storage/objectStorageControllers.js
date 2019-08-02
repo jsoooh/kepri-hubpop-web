@@ -45,7 +45,7 @@ angular.module('iaas.controllers')
                             objectStorage["usedVolume"] = objectStorage.usedKiloByte;
                             objectStorage["usedVolumeUnit"] = "KB";
                         } else if (objectStorage.usedKiloByte >= 1024 && objectStorage.usedKiloByte < 1024*1024 ) {
-                            objectStorage["usedVolume"] = Math.floor(objectStorage.usedKiloByte/1024);
+                            objectStorage["usedVolume"] = Math.round(objectStorage.usedKiloByte/1024);
                             objectStorage["usedVolumeUnit"] = "MB";
                         } else {
                             objectStorage["usedVolume"] = objectStorage.usedGiGaByte;
@@ -53,7 +53,7 @@ angular.module('iaas.controllers')
                         }
                     });
                 }
-                console.log("ct.objectStorageList : ", ct.objectStorageList);
+                //console.log("ct.objectStorageList : ", ct.objectStorageList);
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
@@ -107,7 +107,6 @@ angular.module('iaas.controllers')
             });
         };
         ct.fn.createObjectStoragePop = function($event) {
-
             var dialogOptions =  {
                 controller       : "iaasObjectStorageFormCtrl" ,
                 callBackFunction : ct.objectStorageCallBackFunction
@@ -173,7 +172,7 @@ angular.module('iaas.controllers')
         pop.fn.createObjectStorageAction = function() {
             $scope.main.loadingMainBody = true;
             pop.data.tenantId = pop.userTenant.tenantId;
-            var hyphen = "-"
+            var hyphen = "-";
             var params = {
                 tenantId : pop.data.tenantId,
                 bucket : ct.data.sltPortalOrgId+hyphen+ pop.data.containerName
