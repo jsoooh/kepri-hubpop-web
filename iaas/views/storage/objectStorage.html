@@ -1,7 +1,7 @@
 <!-- 검색영역  -->
 <div class="cBox type0 mb30">
 	<div class="pull-left">
-		<h4 class="c-tit">전체 저장소 <em class="point1">({{(contents.objectStorageList.length)}})</em></h4>
+		<h4 class="c-tit">전체 저장소 <em class="point1" ng-init="contents.objectStorageList.length ='0'">({{(contents.objectStorageList.length)}})</em></h4>
 	</div>
 	<div class="pull-right">
 		<!-- 검색 -->
@@ -31,12 +31,13 @@
 					<!-- 내부컨텐츠 -->
 					<div class="data_area">
 						<div class="txt_l">
-							<span class="t_lg">{{contents.objecteStorageQuator.quatorUsed}}</span>
+							<span class="t_lg" ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</span>
 							<span class="t_md">GB</span>
-							<span class="t_sm">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
+							<span class="t_sm" ng-init="contents.objecteStorageQuator.teamQuator ='0'">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
 						</div>
 						<div class="txt_r">
-							<span class="t_lg ">{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}<span class="t_md">%</span></span>
+							<span class="t_lg" ng-init="contents.objecteStorageQuator.teamQuator ='0'" ng-if="contents.objecteStorageQuator.teamQuator == '0'">0<span class="t_md">%</span></span>
+							<span class="t_lg" ng-if="contents.objecteStorageQuator.teamQuator !== '0'">{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}<span class="t_md">%</span></span>
 						</div>
 						<!-- 프로그래스 박스 -->
 						<div class="info_progBox">
