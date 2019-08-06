@@ -896,9 +896,12 @@ angular.module('paas.controllers')
                         $scope.main.loadingMainBody = false;
                         if (!data) {
                             ct.appPush();
+                        } else if (ct.appPushData.appName == ct.appPushData.domainFirstName) {
+                            ct.hostDup = true;
+                            common.showAlertError("이미 사용중인 APP 이름입니다.");
                         } else {
                             ct.hostDup = true;
-                            common.showAlertError("이미 사용 중인 도메인입니다.");
+                            common.showAlertError("이미 사용중인 APP 도메인입니다.");
                         }
                     });
                     routePromise.error(function (data) {
@@ -918,6 +921,7 @@ angular.module('paas.controllers')
             
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
                 $scope.actionBtnHied = false;
+                common.showAlertError("이미 사용중인 APP 이름입니다.");
                 return;
             }
 
