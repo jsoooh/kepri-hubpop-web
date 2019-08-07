@@ -3097,7 +3097,7 @@ angular.module('common.services', ['LocalStorageModule'])
     .factory('cookies', function ($cookies) {
         var cookies = {};
         var cookiesOption = {path: _COOKIES_PATH_};
-        if (_DOMAIN_ && _DOMAIN_ == "www.kepri-demo.crossent.com") {
+        if (_DOMAIN_ && (_DOMAIN_ == "www.kepri-demo.crossent.com" || _DOMAIN_ == "monit.kepri-demo.crossent.com")) {
             var cookiesOption = {domain: _DOMAIN_.substring(3), path: _COOKIES_PATH_};
         }
 
