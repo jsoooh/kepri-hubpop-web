@@ -3,13 +3,11 @@
 angular.module('iaas.controllers')
     .controller('iaasObjectStorageCtrl', function ($scope, $location, $state,$translate,$filter, $stateParams, user, $q,paging, common, CONSTANTS) {
         _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageCtrl", 1);
-
         var ct = this;
         ct.fn = {};
         ct.data = {};
         ct.objectStorageQuator = {};
         ct.roles = [];
-
         // 공통 레프트 메뉴의 userTenantId
         ct.data.projectId = $scope.main.sltProjectId;
         ct.data.tenantId = $scope.main.userTenantId;
@@ -19,29 +17,33 @@ angular.module('iaas.controllers')
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
             ct.data.tenantId = status.tenantId;
+            ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
 
             ct.fn.getObjectStorageList();
             ct.fn.getSendSecretInfoList();
         });
 
-        ct.presentDate = function() {
-            ct.toDay = moment(new Date()).format('YYYY-MM-DD');
-        };
+        ct.toDay = moment(new Date()).format('YYYY-MM-DD');
+
 
         /*오브젝트 저장소 목록,정보,용량 조회*/
         ct.fn.getObjectStorageList = function() {
             $scope.main.loadingMainBody = true;
+
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/containerList', 'GET', {tenantId:ct.data.tenantId,containerName:ct.containerName}, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 if (data.content) {
                     ct.objectStorageList = data.content.objectContainers;
                     ct.objecteStorageQuator = data.content.objecteStorageQuator;
                 }
-
                 if (ct.objectStorageList && ct.objectStorageList.length > 0) {
                     angular.forEach(ct.objectStorageList, function (objectStorage) {
-                        if (objectStorage.usedKiloByte < 1024) {
+                        if (objectStorage.usedKiloByte == 0) {
+                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
+                            objectStorage["usedVolumeUnit"] = "GB";
+                        }
+                          else if (objectStorage.usedKiloByte < 1024) {
                             objectStorage["usedVolume"] = objectStorage.usedKiloByte;
                             objectStorage["usedVolumeUnit"] = "KB";
                         } else if (objectStorage.usedKiloByte >= 1024 && objectStorage.usedKiloByte < 1024*1024 ) {
@@ -75,9 +77,6 @@ angular.module('iaas.controllers')
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
-                $scope.main.loadingMainBody = false;
-            });
-            returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -125,7 +124,6 @@ angular.module('iaas.controllers')
         if (ct.data.tenantId) {
             ct.fn.getObjectStorageList();
             ct.fn.getSendSecretInfoList();
-            ct.presentDate();
         }
     })
     //오브젝트스토리지 생성 컨트롤
@@ -164,10 +162,14 @@ angular.module('iaas.controllers')
             }
             pop.fn.createObjectStorageAction();
         };
-
         $scope.popCancel = function() {
             $scope.dialogClose = true;
             common.mdDialogCancel();
+        };
+        $scope.schEnter = function (keyEvent){
+            if (keyEvent.which == 13){
+                $scope.popDialogOk();
+            }
         };
 
         pop.fn.createObjectStorageAction = function() {

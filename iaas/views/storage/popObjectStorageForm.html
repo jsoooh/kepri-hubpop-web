@@ -17,7 +17,7 @@
             			<span>{{contents.data.sltPortalOrgId}} -</span>
             		</div>
             		<div class="tb_div_r">
-		                <input type="text" class="form-control" ng-model="pop.data.containerName" maxlength="50" name="containerName" validation="alpha_dash|required" placeholder="저장소명을 입력해 주세요." />
+		                <input type="text" class="form-control" ng-model="pop.data.containerName" maxlength="50" name="containerName" validation="alpha_dash|required" placeholder="저장소명을 입력해 주세요." ng-keypress="schEnter($event)";/>
             		</div>
             	</div>
             </td>
