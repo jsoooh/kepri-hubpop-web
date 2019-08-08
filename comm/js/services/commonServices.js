@@ -2966,7 +2966,9 @@ angular.module('common.services', ['LocalStorageModule'])
     .factory('cookies', function ($cookies) {
         var cookies = {};
         var cookiesOption = {path: _COOKIES_PATH_};
-        if (_DOMAIN_ && _DOMAIN_ == "www.kepri-demo.crossent.com") {
+        if (_DOMAIN_ && _DOMAIN_.indexOf("kepco.co.kr") > -1) {
+            cookiesOption = {domain: ".kepco.co.kr", path: _COOKIES_PATH_};
+        } else if (_DOMAIN_ && _DOMAIN_ == "www.kepri-demo.crossent.com") {
             cookiesOption = {domain: _DOMAIN_.substring(3), path: _COOKIES_PATH_};
         } else if (_DOMAIN_ == "localhost") {
             cookiesOption = {domain: _DOMAIN_, path: _COOKIES_PATH_};
