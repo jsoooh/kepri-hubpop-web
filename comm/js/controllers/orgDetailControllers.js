@@ -235,8 +235,7 @@ angular.module('portal.controllers')
             var ser2 = new Object();
             var serJsonList = new Object();
 
-            if (tmpCode == '0000')
-            {
+            if (tmpCode == '0000') {
                 ser1.name = "비활성";
                 ser1.data = chartData.apiVtlzNCnt;
                 reqJsonArray.push(ser1);
@@ -714,7 +713,7 @@ angular.module('portal.controllers')
                             instanceDiskGigabytesTot : ct.iaasInstanceUsage.disk.percentUsedQuota,
                             objectStorageGigaByteTot : ct.iaasInstanceUsage.volume.percentUsedQuota,
                             objectStorageGigaByteMax : ct.iaasInstanceUsage.volume.maxQuota,
-                            objectStorageGigaByteUsed : ct.iaasInstanceUsage.volume.usedQuota,
+                            objectStorageGigaByteUsed : ct.iaasInstanceUsage.volume.usedQuota
                         };
 
                         ct.iaasCpuChartFunc(chartData);
