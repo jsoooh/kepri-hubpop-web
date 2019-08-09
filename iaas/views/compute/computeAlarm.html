@@ -74,7 +74,7 @@
                         <tr ng-repeat="alarms in contents.alarmData">
                             <td>{{ alarms.regDate }}</td>
                             <td>{{ main.getAlarmLabel(alarms.alarmType) }}</td>
-                            <td ng-style="{ 'color': (main.getAlarmColor(alarms.alarmLevel)) }"><span class="label label-warning">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
+                            <td ng-style="{ 'color': (main.getAlarmColor(alarms.alarmLevel)) }"><span class="label label-{{alarms.alarmLevel}}">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
                             <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.hostName }}</td>
                             <td>{{ alarms.ip }}</td>
                             <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.title }}</td>

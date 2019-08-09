@@ -67,7 +67,11 @@
             "running": "Running",
             "no agent": "No Agent",
             "noAgent": "No Agent",
-            "alarm_svc_type": "Service Type"
+            "alarm_svc_type": "Service Type",
+            "server_name": "Server Name",
+            "log_message": "Message",
+            "program": "Program",
+            "created_date": "Created Date"
         },
         "message" : {
         }

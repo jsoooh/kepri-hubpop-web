@@ -1253,7 +1253,7 @@ angular.module('common.controllers', [])
             'running': '#337ab7',
             'fail': '#363636',
             'clear': '#5acc27',
-            'minor': '#c000ba',
+            'minor': '#7266ba',
             'warning': '#f8ac59',
             'critical':'#ff1100'
         };

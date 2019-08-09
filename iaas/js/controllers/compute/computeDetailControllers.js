@@ -269,12 +269,11 @@ angular.module('iaas.controllers')
                 }, 100);
             } else if (type == 'virtualMonit') {
                 if (isZoom) {
-                    panel.find('#chart').css("height", "");
-                    panel.find('.panel_body').css("height", "90% !important");
+                    panel.find('#chart').css("height", "auto");
                 } else {
-                    panel.find('#chart').css("height", "275px");
+                    panel.find('#chart').css("height", "235px");
                 }
-            } else if (type == 'alarmEvent') {
+            } else if (type == 'alarmEvent' || type == 'systemLog') {
                 if (isZoom) {
                     panel.find('.tbl.type1').css("height", "auto");
                 } else {
@@ -908,7 +907,7 @@ angular.module('iaas.controllers')
                     } else if (sltInfoTab == 'sysEvent') {
                         ct.fn.listEventHistory(1, 1000);
                     } else if (sltInfoTab == 'systemLog') { 
-                        ct.fn.selectLogs();
+                        ct.fn.initLogsTab();
                     } else if (sltInfoTab == 'virtualMonit') {
 
                         $timeout(function () {
@@ -1004,58 +1003,125 @@ angular.module('iaas.controllers')
                 $interval.cancel(stop);
             }
         }, 500);
-        $scope.serverId = $stateParams.instanceId;
-        $scope.message = '';
-        $scope.endTime = '23:55:00';
-        $scope.startTime = '00:00:00';
-        $scope.targetDate = moment().format('YYYY-MM-DD');
-
-        ct.timePicker = computeDetailService.getTimePicker();
-
-        // 페이징 옵션
-        $scope.pageOptions = {
+    
+        ct.scope = $scope;
+        ct.scope.pageOptions = {
             currentPage : 1,
             pageSize : 10,
             total : 0
         };
 
-        // 최근 로그 조회
+        ct.scope.message = '';
+        ct.isPageLoad = true;
+
+        ct.fn.initLogsTab = function () {
+
+            var tuiLogsStop = $interval(function () {
+                if (angular.element('#startDatetime').attr('id')) {
+                    $interval.cancel(tuiLogsStop);
+                    // TUI Datepicker
+                    var today = new Date();
+                    var from = new Date(moment().format('YYYY-MM-DD HH:mm'));
+                    var to = new Date(moment().format('YYYY-MM-DD HH:mm'));
+                    ct.datepicker = tui.DatePicker.createRangePicker({
+                        startpicker: {
+                            date: from,
+                            input: '#startDatetime',
+                            container: '#startDatetime-wrapper'
+                        },
+                        endpicker: {
+                            date: to,
+                            input: '#endDatetime',
+                            container: '#endDatetime-wrapper'
+                        },
+                        format: 'yyyy-MM-dd HH:mm',
+                        language: 'ko',
+                        timepicker: {
+                            inputType: 'spinbox',
+                            showMeridiem: false
+                        },
+                        selectableRanges: [
+                            [null, today],
+                            [null, today]
+                        ]
+                    });
+                }
+            }, 500);
+
+            ct.fn.selectLogs();
+        };
+
         ct.fn.selectLogs = function (page) {
+            ct.data.specificLogs = [];
+            if (ct.isPageLoad) ct.fn.recentLogs(page);
+            else ct.fn.specificLogs(page);
+        };
+
+        // 최근 로그 조회
+        ct.fn.recentLogs = function (page) {
             if (page) {
-                $scope.pageOptions.currentPage = page;
+                ct.scope.pageOptions.currentPage = page;
             } else {
-                page = $scope.pageOptions.currentPage;
+                page = ct.scope.pageOptions.currentPage;
             }
 
             $scope.main.loadingMainBody = true;
+            var params = {
+                projectId: ct.data.tenantId,
+                hostname: ct.scope.serverName,
+                pageItems: ct.scope.pageOptions.pageSize,
+                pageIndex: page,
+                period: '24h'
+            };
+
+            var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/log/recent/N', 'GET', params);
+            rp.success(function (data, status, headers) {
+                ct.data.specificLogs = data;
+                ct.scope.pageOptions.total = data.totalCount;
+            });
+            rp.error(function (data, status, headers) {
+                common.showAlertError('Http api Error', data.message);
+            });
+            rp.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+        // 로그 조회
+        ct.fn.specificLogs = function (page) {
+            if (ct.isPageLoad) ct.scope.pageOptions.currentPage = 1;
+            ct.isPageLoad = false;
+            if (page) {
+                ct.scope.pageOptions.currentPage = page;
+            } else {
+                page = ct.scope.pageOptions.currentPage;
+            }
+
+            $scope.main.loadingMainBody = true;
+            var startDatetime = moment(ct.datepicker.getStartDate()).format('YYYY-MM-DDTHH:mm') + ':00';
+            var endDatetime = moment(ct.datepicker.getEndDate()).format('YYYY-MM-DDTHH:mm') + ':59';
 
             var param = {
-                serverUUID: $scope.serverId,
-                pageItems: $scope.pageOptions.pageSize,
-                pageIndex: $scope.pageOptions.currentPage,
-                targetDate: $scope.targetDate,
-                startTime: $scope.startTime,
-                endTime: $scope.endTime,
-                keyword: $scope.message
+                projectId: ct.data.tenantId,
+                hostname: ct.scope.serverName,
+                pageItems: ct.scope.pageOptions.pageSize,
+                pageIndex: page,
+                startTime: startDatetime,
+                endTime: endDatetime,
+                programName: ct.scope.programName,
+                keyword: ct.scope.message
             };
             
             $scope.main.loadingMainBody = true;
-            ct.data.specificLogs = [];
-
-            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/log/' + $scope.serverId + '/specific', 'GET', param);
-            serverStatsPromise.success(function (data, status, headers) {
+            var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/log/specific/N', 'GET', param);
+            rp.success(function (data, status, headers) {
                 ct.data.specificLogs = data;
-                
-                if (data.totalCount > 10000) {
-                    $scope.pageOptions.total = 10000;
-                } else {
-                    $scope.pageOptions.total = data.totalCount;
-                }
+                ct.scope.pageOptions.total = data.totalCount;
             });
-            serverStatsPromise.error(function (data, status, headers) {
-                //common.showAlert(data.message);
+            rp.error(function (data, status, headers) {
+                common.showAlertError('Http api Error', data.message);
             });
-            serverStatsPromise.finally(function (data, status, headers) {
+            rp.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -1133,7 +1199,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        var hostname = $scope.serverId;
+        var hostname = $stateParams.instanceId;
         
         // 조회조건 설정
         var condition = {

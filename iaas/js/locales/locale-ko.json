@@ -72,7 +72,11 @@
             "alarm_svc_type": "서비스타입",
             "cpu": "CPU",
             "memory": "Memory",
-            "disk": "Disk"
+            "disk": "Disk",
+            "server_name": "서버명",
+            "log_message": "로그 메세지",
+            "program": "프로그램",
+            "created_date": "생성시간"
         },
         "message" : {
         }

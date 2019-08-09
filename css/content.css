@@ -2985,8 +2985,14 @@ a.ext_link:hover {text-decoration:underline;}
 .newMonitCon.alarm-wrap  .rzslider .rz-selection{
     background: #0db9f0;
 }
+.newMonitCon.alarm-wrap .content-minor .rzslider .rz-selection{
+    background: #7266ba;
+}
+.newMonitCon.alarm-wrap .content-warn .rzslider .rz-selection{
+    background: #f8ac59;
+}
 .newMonitCon.alarm-wrap .content-emer .rzslider .rz-selection{
-    background: #f45227;
+    background: #ff1100;
 }
 .newMonitCon.alarm-wrap .rzslider .rz-pointer{
     top: -18px;
@@ -3009,8 +3015,14 @@ a.ext_link:hover {text-decoration:underline;}
     background: #0db9f0;
     border-radius: 20px;
 }
+.newMonitCon.alarm-wrap .content-minor  .rzslider .rz-pointer:after{
+    background: #7266ba;
+}
+.newMonitCon.alarm-wrap .content-warn  .rzslider .rz-pointer:after{
+    background: #f8ac59;
+}
 .newMonitCon.alarm-wrap .content-emer  .rzslider .rz-pointer:after{
-    background: #f45227;
+    background: #ff1100;
 }
 .newMonitCon.alarm-wrap .rzslider .rz-bubble{
     bottom: -36px;
