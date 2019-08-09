@@ -1981,7 +1981,6 @@ p.no-txt{
 .proj_dashboard .panel_body .chart_data .tui-chart.tui-pie-chart svg > text {font-size:14px !important;}
 .proj_dashboard .panel_body .chart_data #chart-area {position:absolute;  left:-14px; top:-11px;}
 .proj_dashboard .panel_body .chart_data #chart-area1 {position:absolute;  left:-14px; top:-11px;}
-.proj_dashboard .panel_body .donut_chart_data #chart-area0 {position:absolute; left:-12px; top:-20px;}
 .proj_dashboard .panel_body .donut_chart_data #chart-area3 {position:absolute; left:-12px; top:-20px;}
 .proj_dashboard .panel_body .donut_chart_data #chart-area4 {position:absolute; left:-12px; top:-20px;}
 .proj_dashboard .panel_body .donut_chart_data #chart-area5 {position:absolute; left:-12px; top:-20px;}
@@ -2010,7 +2009,7 @@ p.no-txt{
 .proj_dashboard .type_cloud {width:1580px; height:389px;}
 .proj_dashboard .type_cloud .panel_body {padding:0 25px;}
 .proj_dashboard .type_cloud .panel_body .tit_area {margin-bottom:20px;}
-.proj_dashboard .type_cloud .panel_body > div {display:table-cell; box-sizing:border-box; width:50%; padding:20px 0;}
+.proj_dashboard .type_cloud .panel_body > div {display:table-cell; box-sizing:border-box; width:50%; height:328px; padding:20px 0;}
 .proj_dashboard .type_cloud .panel_body > div.fl_l {border-right:1px solid #eee;}
 .proj_dashboard .type_cloud .panel_body > div.fl_r {padding-left:25px;}
 .proj_dashboard .type_cloud .cloud_stateWrap {float:left; height:113px; padding-top:10px;}
@@ -2881,6 +2880,7 @@ a.ext_link:hover {text-decoration:underline;}
 .txt_link_box a {display:inline-block; vertical-align:middle;}
 .txt_link_box a > span:hover {text-decoration:underline;}
 .txt_link_box a > span {display:inline-block; vertical-align:middle; }
+.txt_link_box span.normal_txt {display:inline-block; vertical-align:middle; }
 .txt_link_box a > span.app_txt {font-size:13px; color:#2196f3; margin-left:5px; }
 .txt_link_box a > span.ico_dw {width:15px; height:15px; font-size:0; background:url("../images/ico_download.png") no-repeat; margin-left:5px;}
 
@@ -2990,7 +2990,8 @@ a.ext_link:hover {text-decoration:underline;}
 .proj_dashboard .panel_body .chart_data {width:245px;}
 
 .proj_dashboard .type_cloud .panel_body > div {text-align:center;}
-.proj_dashboard .type_cloud .cloud_stateWrap {float:unset;}
+/* .proj_dashboard .type_cloud .cloud_stateWrap {float:unset;} */
+.proj_dashboard .type_cloud .cloud_stateWrap {display:table-cell; box-sizing:border-box; width:100%;}
 .proj_dashboard .type_cloud .cloud_stateWrap ul {width:64%;}
 .proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {width:auto;}
 .proj_dashboard .type_cloud .cloud_chartWrap > ul {display:table; width:100%;}
