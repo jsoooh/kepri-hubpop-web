@@ -55,6 +55,20 @@ angular.module('app')
                                 url: '/iaas/compute/alarm',
                                 controller: 'iaasComputeAlarmCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/compute/computeAlarm.html'
+                            },
+                            lbCreate: {
+                                name: 'server_main',
+                                stateKey: 'iaasLoadbalancerCreate',
+                                url: '/iaas/loadbalancer/create',
+                                controller: 'iaasLoadbalancerCreateCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/loadbalancer/loadbalancerCreateForm.html'
+                            },
+                            lbDetail: {
+                                name: 'server_main',
+                                stateKey: 'iaasLoadbalancerDetail',
+                                url: '/iaas/loadbalancer/detail/:lbInfoId',
+                                controller: 'iaasLoadbalancerDetailCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/loadbalancer/loadbalancerDetail.html'
                             }
                         }
                     },
