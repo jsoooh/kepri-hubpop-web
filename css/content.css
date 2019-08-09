@@ -2993,7 +2993,7 @@ a.ext_link:hover {text-decoration:underline;}
 /* .proj_dashboard .type_cloud .cloud_stateWrap {float:unset;} */
 .proj_dashboard .type_cloud .cloud_stateWrap {display:table-cell; box-sizing:border-box; width:100%;}
 .proj_dashboard .type_cloud .cloud_stateWrap ul {width:64%;}
-.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {/* width:auto; */ width:260px;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {/* width:auto; */ width:260px; heigtht:103px;}
 .proj_dashboard .type_cloud .cloud_chartWrap > ul {display:table; width:100%;}
 .proj_dashboard .type_cloud .cloud_chartWrap > ul > li {display:table-cell; box-sizing:border-box; width:33.33%;}
 
