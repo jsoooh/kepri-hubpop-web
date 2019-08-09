@@ -997,7 +997,9 @@ angular.module('portal.controllers')
 
             // IaaS 정보
             if ($scope.main.userTenantId) {
-                ct.iaasCpuStatusChart();
+                $timeout (function () {
+                    ct.iaasCpuStatusChart();
+                }, 500);
                 ct.getIaasInseanceInfos($scope.main.userTenantId);
                 ct.getIaasResourceUsed($scope.main.userTenantId);
             }
