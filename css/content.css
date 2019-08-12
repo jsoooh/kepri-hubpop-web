@@ -3006,10 +3006,10 @@ a.ext_link:hover {text-decoration:underline;}
 .proj_dashboard .type_pipeLine .panel_body .bar_chart_data {margin:0 auto;}
 
 
-.proj_dashboard .type_cloud .cloud_stateWrap {display:table; width:100%;}
+.proj_dashboard .type_cloud .cloud_stateWrap {display:table; table-layout:fixed; width:100%;}
 .proj_dashboard .type_cloud .cloud_stateWrap > div {/* border:1px solid red; */}
 .proj_dashboard .type_cloud .cloud_stateWrap .state_data {display:table-cell; box-sizing:border-box; width:64%; vertical-align:top;}
 .proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul {display:table; width:100%;}
 .proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul > li {display:table-cell; box-sizing:border-box;}
-.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {display:table-cell; box-sizing:border-box; padding-left:0;}
-.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data .sm_tit {text-align:left;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {display:table-cell; box-sizing:border-box; width:46%; padding-left:0;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data .sm_tit {text-align:left; margin-bottom:0;}

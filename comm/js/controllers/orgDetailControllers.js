@@ -579,7 +579,7 @@ angular.module('portal.controllers')
                     tickInterval: 'auto'
                 },
                 series: {
-                    zoomable: false
+                    zoomable: true
                 },
                 tooltip: {
                     suffix: '%'
