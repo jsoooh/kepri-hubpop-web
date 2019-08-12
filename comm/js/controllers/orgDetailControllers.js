@@ -568,8 +568,8 @@ angular.module('portal.controllers')
             };
             var options = {
                 chart: {
-                    width: 230,     //230
-                    height: 211      //80
+                    width: 230,
+                    height: 80
                 },
                 yAxis: {
                     min: 0,
