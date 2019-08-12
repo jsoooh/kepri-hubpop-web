@@ -568,8 +568,8 @@ angular.module('portal.controllers')
             };
             var options = {
                 chart: {
-                    width: 230,
-                    height: 80
+                    width: 230,     //230
+                    height: 100      //80
                 },
                 yAxis: {
                     min: 0,
@@ -997,11 +997,9 @@ angular.module('portal.controllers')
 
             // IaaS 정보
             if ($scope.main.userTenantId) {
+                ct.iaasCpuStatusChart();
                 ct.getIaasInseanceInfos($scope.main.userTenantId);
                 ct.getIaasResourceUsed($scope.main.userTenantId);
-                $timeout (function () {
-                    ct.iaasCpuStatusChart();
-                }, 500);
             }
 
             // PaaS 정보
