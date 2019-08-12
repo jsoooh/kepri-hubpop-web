@@ -2222,6 +2222,8 @@ p.no-txt{
 /* .panel_area .pn_body .pnb_tit .pnb_t_txt {vertical-align:middle;} */
 .panel_area .pn_body .pnb_tit img {margin:3px 0 0 5px;}
 .ico_info {display:inline-block; width:17px; height:17px; background:url("../images/ico_com.png") no-repeat -109px -304px; margin-left:5px; cursor:pointer;/*  vertical-align:middle; */}
+.panel_area .pn_body .pnb_stit {display:inline-block; font-size:16px; font-weight:500; color:#333; vertical-align:middle; margin-right:15px;}
+
 
 /* '만들기' 화면 비율 100% CSS 재정의 */
 .panel_area > ul.pn_list_style {display:table; width:100%; height:100%;}
@@ -2991,7 +2993,7 @@ a.ext_link:hover {text-decoration:underline;}
 
 .proj_dashboard .type_cloud .panel_body > div {text-align:center;}
 /* .proj_dashboard .type_cloud .cloud_stateWrap {float:unset;} */
-.proj_dashboard .type_cloud .cloud_stateWrap {display:table-cell; box-sizing:border-box; width:100%;}
+/* .proj_dashboard .type_cloud .cloud_stateWrap {display:table-cell; box-sizing:border-box; width:100%;} */
 .proj_dashboard .type_cloud .cloud_stateWrap ul {width:64%;}
 .proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {/* width:auto; */ width:260px; height:103px;}
 .proj_dashboard .type_cloud .cloud_chartWrap > ul {display:table; width:100%;}
@@ -3002,3 +3004,12 @@ a.ext_link:hover {text-decoration:underline;}
 
 .proj_dashboard .type_pipeLine .panel_body .donut_chart_data {width:150px;}
 .proj_dashboard .type_pipeLine .panel_body .bar_chart_data {margin:0 auto;}
+
+
+.proj_dashboard .type_cloud .cloud_stateWrap {display:table; width:100%;}
+.proj_dashboard .type_cloud .cloud_stateWrap > div {/* border:1px solid red; */}
+.proj_dashboard .type_cloud .cloud_stateWrap .state_data {display:table-cell; box-sizing:border-box; width:64%; vertical-align:top;}
+.proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul {display:table; width:100%;}
+.proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul > li {display:table-cell; box-sizing:border-box;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {display:table-cell; box-sizing:border-box; padding-left:0;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data .sm_tit {text-align:left;}
