@@ -569,7 +569,7 @@ angular.module('portal.controllers')
             var options = {
                 chart: {
                     width: 230,     //230
-                    height: 100      //80
+                    height: 211      //80
                 },
                 yAxis: {
                     min: 0,
