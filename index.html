@@ -196,7 +196,11 @@
         loadJavascript(_COMM_STAGE_+'/js/filters/commQuotaFilters.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/filters/commProjectFilters.js'+_VERSION_TAIL_HEAD_);
 
-        loadJavascript(_COMM_STAGE_+'/js/properties/' + _DOMAIN_ + '.constants.js'+_VERSION_TAIL_HEAD_);
+        if (_DOMAIN_.indexOf("kr") > 0 || _DOMAIN_.indexOf("com")) {
+            loadJavascript(_COMM_STAGE_+'/js/properties/' + _DOMAIN_ + '.constants.js'+_VERSION_TAIL_HEAD_);
+        } else {
+            loadJavascript(_COMM_STAGE_+'/js/properties/localhost.constants.js'+_VERSION_TAIL_HEAD_);
+        }
 
         loadJavascript(_COMM_STAGE_+'/js/services/commonServices.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/services/userServices.js'+_VERSION_TAIL_HEAD_);
