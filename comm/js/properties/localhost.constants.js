@@ -327,7 +327,7 @@ angular.module('app')
             {value: '2', name: '처리완료'},
             {value: '1', name: 'Alarm 발생'}
         ],
-        alarmBell: 1000*60*5,
+        alarmBell: 1000*60*3,
         timeRangeFormat: 'YYYY-MM-DD HH:mm'
     })
     .constant('tenantChartConfig', [

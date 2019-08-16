@@ -74,6 +74,14 @@
             "created_date": "Created Date"
         },
         "message" : {
+            "mi_alarm_policy_cpu_over_we": "CPU 'Critical', 'Warning' threshold is lower than 'Minor' value. Please reset.",
+            "mi_alarm_policy_cpu_over_w": "CPU 'Critical' threshold is lower than 'Warning' value. Please reset.",
+            "mi_alarm_policy_memory_over_we": "Memory 'Critical', 'Warning' threshold is lower than 'Minor' value. Please reset.",
+            "mi_alarm_policy_memory_over_w": "Memory 'Critical' threshold is lower than 'Warning' value. Please reset.",
+            "mi_alarm_policy_disk_over_we": "Disk 'Critical', 'Warning' threshold is lower than 'Minor' value. Please reset.",
+            "mi_alarm_policy_disk_over_w": "Disk 'Critical' threshold is lower than 'Warning' value. Please reset.",
+            "mi_alarm_policy_lb_over_we": "Load Balancer 'Critical', 'Warning' threshold is lower than 'Minor' value. Please reset.",
+            "mi_alarm_policy_lb_over_w": "Load Balancer 'Critical' threshold is lower than 'Warning' value. Please reset."
         }
     }
 }

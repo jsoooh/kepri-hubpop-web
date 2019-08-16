@@ -273,11 +273,17 @@ angular.module('iaas.controllers')
                 } else {
                     panel.find('#chart').css("height", "235px");
                 }
-            } else if (type == 'alarmEvent' || type == 'systemLog') {
+            } else if (type == 'alarmEvent') {
                 if (isZoom) {
                     panel.find('.tbl.type1').css("height", "auto");
                 } else {
                     panel.find('.tbl.type1').css("height", "235px");
+                }
+            } else if (type == 'systemLog') {
+                if (isZoom) {
+                    panel.find('.tbl.type1').css("height", "auto");
+                } else {
+                    panel.find('.tbl.type1').css("height", "430px");
                 }
             } else {
                 panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
@@ -929,8 +935,8 @@ angular.module('iaas.controllers')
                                 $interval.cancel(tuiStop);
                 
                                 var today = new Date();
-                                var from = new Date(moment(ct.timeRangeFrom).format('YYYY-MM-DD HH:mm'));
-                                var to = new Date(moment(ct.timeRangeTo).format('YYYY-MM-DD HH:mm'));
+                                var from = new Date(moment(ct.timeRangeFrom).format('YYYY/MM/DD HH:mm'));
+                                var to = new Date(moment(ct.timeRangeTo).format('YYYY/MM/DD HH:mm'));
                                 ct.timeRangePicker = tui.DatePicker.createRangePicker({
                                     startpicker: {
                                         date: from,
@@ -997,6 +1003,10 @@ angular.module('iaas.controllers')
         }
         
         // 시스템 로그 관련
+        ct.fn.setPosition = function () {
+            return navigator.userAgent.indexOf('Trident') > 0 || navigator.userAgent.indexOf('MSIE') > 0 ? 'ie' : '';
+        };
+
         var stop = $interval(function () {
             $scope.serverName = ct.instance.name;
             if ($scope.serverName) {
@@ -1021,8 +1031,8 @@ angular.module('iaas.controllers')
                     $interval.cancel(tuiLogsStop);
                     // TUI Datepicker
                     var today = new Date();
-                    var from = new Date(moment().format('YYYY-MM-DD HH:mm'));
-                    var to = new Date(moment().format('YYYY-MM-DD HH:mm'));
+                    var from = new Date(moment().format('YYYY/MM/DD HH:mm'));
+                    var to = new Date(moment().format('YYYY/MM/DD HH:mm'));
                     ct.datepicker = tui.DatePicker.createRangePicker({
                         startpicker: {
                             date: from,

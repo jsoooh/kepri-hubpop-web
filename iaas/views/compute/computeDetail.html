@@ -110,6 +110,14 @@
 		padding: 30px 40px 52px;
 		overflow: overlay;
 	}
+	.systemlog-datepicker {
+		position: relative;
+		top: -9px;
+	}
+	.systemlog-datepicker.ie {
+		position: relative;
+		top: 2px;
+	}
 </style>
 <!-- cBox -->
 <div class="cBox type1 appCnt-info">
@@ -457,22 +465,22 @@
 		<div ng-if="contents.sltInfoTab == 'systemLog'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'systemLog'}">
 			<!-- panel -->
 			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset;">
+				<div class="panel type2" style="cursor: unset; height: auto;">
 					<div class="panel_head">
 						<div class="tit pull-left">시스템 로그</div>
 						<div class="pull-right">
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'systemLog')"><span class="ico">확대/축소</span></button>
 						</div>
 					</div>
-					<div class="panel_body">
+					<div class="panel_body" style="height: auto;">
 						<div class="in scroll-pane pr10 jspScrollable" tabindex="0" style="overflow: hidden; padding: 0px;">
-							<div class="jspContainer" style="height: 340px;">
+							<div class="jspContainer" style="height: 540px;">
 								<div class="jspPane" style="padding: 0px; top: 0px;">
 									<div class="searchWrap ng-scope" style="height: 68px;">
 										<form name="searchForm">
 											<div class="searchBox pull-left">
-												<div class="form-group" style="position: relative; top: -8px;">
-													<div class="tui-datepicker-input tui-datetime-input tui-has-focus" style="width: inherit;">
+												<div class="form-group" ng-class="contents.fn.setPosition()">
+													<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 														<input type="text" id="startDatetime" aria-label="Date-Time">
 														<span class="tui-ico-date"></span>
 													</div>
@@ -481,8 +489,8 @@
 												<div class="form-group">
 													<span class="wave">~</span>
 												</div>
-												<div class="form-group" style="position: relative; top: -8px;">
-													<div class="tui-datepicker-input tui-datetime-input tui-has-focus" style="width: inherit;">
+												<div class="form-group" ng-class="contents.fn.setPosition()">
+													<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 														<input type="text" id="endDatetime" aria-label="Date-Time">
 														<span class="tui-ico-date"></span>
 													</div>
@@ -500,7 +508,7 @@
 											</div>
 										</form>
 									</div>
-									<div class="tbl type1" style="overflow-y: auto; height: 235px;">
+									<div class="tbl type1" style="overflow-y: auto; height: 430px;">
 										<div class="log-row list">
 											<table class="table logs">
 												<colgroup>

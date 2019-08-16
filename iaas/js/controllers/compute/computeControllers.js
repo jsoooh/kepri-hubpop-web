@@ -1673,32 +1673,32 @@ angular.module('iaas.controllers')
 
             if (cpumVal > cpuwVal || cpumVal > cpueVal) {
                 angular.element('#minor-cpu').focus();
-                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_cpu_over_we"));
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_cpu_over_we"));
                 return;
             }
             if (cpuwVal > cpueVal) {
                 angular.element('#warn-cpu').focus();
-                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_cpu_over_w"));
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_cpu_over_w"));
                 return;
             }
             if (memmVal > memwVal || memmVal > memeVal) {
                 angular.element('#minor-memory').focus();
-                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_memory_over_we"));
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_memory_over_we"));
                 return;
             }
             if (memwVal > memeVal) {
                 angular.element('#warn-memory').focus();
-                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_memory_over_w"));
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_memory_over_w"));
                 return;
             }
             if (dskmVal > dskwVal || dskmVal > dskeVal) {
                 angular.element('#minor-disk').focus();
-                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_disk_over_we"));
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_disk_over_we"));
                 return;
             }
             if (dskwVal > dskeVal) {
                 angular.element('#warn-disk').focus();
-                common.showAlert("error", $translate.instant("monit.message.mi_alarm_policy_disk_over_w"));
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_disk_over_w"));
                 return;
             }
 
@@ -1748,8 +1748,8 @@ angular.module('iaas.controllers')
         
         // 설정값 최초 로드
         ct.alarmReceives = [
-            {'value': 'Y', 'name': 'new_monit.label.receive'}, 
-            {'value': 'N', 'name': 'new_monit.label.noreceive'}
+            {'value': 'Y', 'name': 'iaas.label.receive'}, 
+            {'value': 'N', 'name': 'iaas.label.noreceive'}
         ];
         ct.alarmFormName = 'saveform';
         ct.data.alarmReceive = ct.alarmReceives[0].value;

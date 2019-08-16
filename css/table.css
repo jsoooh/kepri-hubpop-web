@@ -53,6 +53,8 @@
 .pagination > li.next a::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -197px -145px;}
 .pagination > li.end a::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -217px -145px;}
 .pagination > li.disabled:hover a, .pagination > li.disabled:focus a, .pagination > li.disabled:active a{border:1px solid #8c97a4; background: #8c97a4;}
+.paginationWrap {margin-top: 10px;}
+.paginationWrap .totalWrap {float: left;}
 
  .btn-btm.type2 + .pagiWrap{margin-top:-30px;}/*180410 스타일 갱신 버튼과 페이지네이션이 함께있는 경우*/
 
