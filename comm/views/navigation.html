@@ -50,8 +50,8 @@
 							<a class="ng-binding noti-tit">{{ alarm.title }}<div class="ng-binding noti-date">{{ alarm.regDate }}</div></a>
 						</li>
 						<li class="divider"></li>
-						<li class="noti-more">
-							<a href="#/iaas/compute/alarm" class="ng-binding">알람 더보기 <span class="ico"><em class="badge ng-binding"></em></span></a>
+						<li class="noti-more" ng-click="main.alarmMoreOnClick('#/iaas/compute/alarm')">
+							<a class="ng-binding">알람 더보기 <span class="ico"><em class="badge ng-binding"></em></span></a>
 						</li>
 					</ul>
 				</div>

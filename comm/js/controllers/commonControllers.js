@@ -1337,11 +1337,21 @@ angular.module('common.controllers', [])
         mc.alarmListOnClick = function (path, alarmId) {
             var loc = $location.absUrl();
             if (loc.indexOf(path) > -1) {
-                $scope.$broadcast('alarmListOnClick', alarmId);
+                $scope.$broadcast('alarmListOnClick', {path: path, alarmId: alarmId});
             } else {
                 common.locationHref(path + '?alarmId=' + alarmId);
             }
         };
+
+        // 알람 더보기 클릭
+        mc.alarmMoreOnClick = function (path) {
+            var loc = $location.absUrl();
+            if (loc.indexOf(path) > -1) {
+                $scope.$broadcast('alarmMoreOnClick', path);
+            } else {
+                common.locationHref(path);
+            }
+        }
 
         $interval(mc.selectAlarmCount, CONSTANTS.alarmBell);
         

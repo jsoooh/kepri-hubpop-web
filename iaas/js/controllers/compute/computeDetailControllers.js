@@ -246,14 +246,14 @@ angular.module('iaas.controllers')
             var isZoom = false;
             if(panel.hasClass("zoom")) {
                 panel.removeClass("zoom").resize();
-                panel.find('.panel_body').css("height", "400px");
+                if (type != 'virtualMonit' && type != 'systemLog') panel.find('.panel_body').css("height", "400px");
                 $timeout(function () {
                     $(window).scrollTop(document.scrollingElement.scrollHeight);
                 }, 100);
             } else {
                 isZoom = true;
                 panel.addClass("zoom").resize();
-                panel.find('.panel_body').css("height", "90%");
+                if (type != 'virtualMonit' && type != 'systemLog') panel.find('.panel_body').css("height", "90%");
                 $timeout(function () {
                     $(window).scrollTop(0);
                 }, 100);
@@ -269,21 +269,29 @@ angular.module('iaas.controllers')
                 }, 100);
             } else if (type == 'virtualMonit') {
                 if (isZoom) {
+                    panel.css("height", "100%");
                     panel.find('#chart').css("height", "auto");
                 } else {
-                    panel.find('#chart').css("height", "235px");
+                    panel.css("height", "670px");
+                    panel.find('#chart').css("height", "425px");
                 }
             } else if (type == 'alarmEvent') {
                 if (isZoom) {
+                    panel.find('.tbl.type1').css("overflow-y", "hidden");
                     panel.find('.tbl.type1').css("height", "auto");
                 } else {
+                    panel.find('.tbl.type1').css("overflow-y", "auto");
                     panel.find('.tbl.type1').css("height", "235px");
                 }
             } else if (type == 'systemLog') {
                 if (isZoom) {
+                    panel.find('.tbl.type1').css("overflow-y", "hidden");
+                    panel.css("height", "auto");
                     panel.find('.tbl.type1').css("height", "auto");
                 } else {
-                    panel.find('.tbl.type1').css("height", "430px");
+                    panel.find('.tbl.type1').css("overflow-y", "auto");
+                    panel.css("height", "670px");
+                    panel.find('.tbl.type1').css("height", "425px");
                 }
             } else {
                 panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
@@ -901,6 +909,13 @@ angular.module('iaas.controllers')
             } else {
                 if (ct.sltInfoTab != sltInfoTab) {
                     ct.sltInfoTab = sltInfoTab;
+            
+                    if (sltInfoTab == 'systemLog' || sltInfoTab == 'virtualMonit') {
+                        angular.element('.tab-content.inst').css("height", "690px");
+                    } else {
+                        angular.element('.tab-content.inst').css("height", "530px");
+                    }
+
                     if (sltInfoTab == 'bootLog') {
                         if(!ct.panelFlag) {
                             $timeout(function () {
@@ -1021,7 +1036,6 @@ angular.module('iaas.controllers')
             total : 0
         };
 
-        ct.scope.message = '';
         ct.isPageLoad = true;
 
         ct.fn.initLogsTab = function () {
@@ -1065,6 +1079,12 @@ angular.module('iaas.controllers')
             ct.data.specificLogs = [];
             if (ct.isPageLoad) ct.fn.recentLogs(page);
             else ct.fn.specificLogs(page);
+        };
+
+        ct.schEnter = function (keyEvent){
+            if(keyEvent.which == 13){
+                ct.fn.specificLogs();
+            }
         };
 
         // 최근 로그 조회
@@ -1118,8 +1138,8 @@ angular.module('iaas.controllers')
                 pageIndex: page,
                 startTime: startDatetime,
                 endTime: endDatetime,
-                programName: ct.scope.programName,
-                keyword: ct.scope.message
+                programName: ct.programName,
+                keyword: ct.message
             };
             
             $scope.main.loadingMainBody = true;
@@ -1237,7 +1257,6 @@ angular.module('iaas.controllers')
                 condition.defaultTimeRange = ct.selCTimeRange;
             }
 
-            $log.log(condition)
             count = 0;
             widgetLen = 0;
             
@@ -1428,9 +1447,8 @@ angular.module('iaas.controllers')
                 condition.groupBy = datas.selGroupBy;
             }
 
-            count = 0;
-            widgetLen = 0;
-
+            var callCount = 0;
+            $scope.main.loadingMainBody = true;
             angular.forEach(tenantChartConfig, function (config, index) {
                 var widget = {};
                 var tmp = [];
@@ -1487,6 +1505,7 @@ angular.module('iaas.controllers')
                                 opt.chart.data = arr;
                                 opt.chart.api.refresh();
                                 opt.loading = false;
+                                callCount += 1;
                             }
                         },
                         function (reason, status) {
@@ -1495,6 +1514,13 @@ angular.module('iaas.controllers')
                     );
                 })(widget, index);
             });
+
+            var stop = $interval(function () {
+                if (callCount == widgetLen) {
+                    $interval.cancel(stop);
+                    $scope.main.loadingMainBody = false;
+                }
+            }, 500);
 
             ct.fn.getTimeRangeString();
         };
@@ -1574,6 +1600,10 @@ angular.module('iaas.controllers')
             currentPage : 1,
             pageSize : 10,
             total : 0
+        };
+
+        ct.fn.alarmListOnClick = function (path, alarmId) {
+            common.locationHref(path + '?alarmId=' + alarmId + '&serverId=' + $stateParams.instanceId);
         };
 
         // 검색

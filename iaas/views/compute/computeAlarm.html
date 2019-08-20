@@ -187,9 +187,9 @@
                     <div class="alarm-buttons row">
                         <div class="col-sm-12">
                             <div class="btn-btm">
-                                <button type="button" class="btn btn-color1 btn-md" id="btn-save" ng-click="contents.fn.saveAction()">저장</button>
-                                <button type="button" class="btn btn-color3 btn-md ng-binding" ng-click="contents.fn.completeAction()">조치완료</button>
-                                <button type="button" class="btn btn-color2 btn-md" ng-click="contents.fn.initAction();">초기화</button>
+                                <button type="button" class="btn btn-color1 btn-md" id="btn-save" ng-click="contents.fn.saveAction()" ng-show="contents.data.resolveStatus != '처리완료'">저장</button>
+                                <button type="button" class="btn btn-color3 btn-md ng-binding" ng-click="contents.fn.completeAction()" ng-show="contents.data.resolveStatus != '처리완료'">조치완료</button>
+                                <button type="button" class="btn btn-color2 btn-md" ng-click="contents.fn.initAction();" ng-show="contents.data.resolveStatus != '처리완료'">초기화</button>
                                 <button type="button" class="btn btn-color2 btn-md ng-binding" ng-click="contents.changeSltInfoTab('alarmList');">뒤로</button>
                             </div>
                         </div>

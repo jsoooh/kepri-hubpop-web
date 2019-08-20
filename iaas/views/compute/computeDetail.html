@@ -108,15 +108,22 @@
 	}
 	#container .content {
 		padding: 30px 40px 52px;
-		overflow: overlay;
+		/* overflow: overlay; */
 	}
-	.systemlog-datepicker {
+	.datepicker-div {
 		position: relative;
-		top: -9px;
+		top: -8px;
 	}
-	.systemlog-datepicker.ie {
+	.datepicker-div.ie {
 		position: relative;
 		top: 2px;
+	}
+	.height-high .jspContainer {
+		height: 540px !important;
+	}
+	.panel.type2.zoom .panel_body .jspContainer {
+		height: 100% !important;
+		overflow: auto !important;
 	}
 </style>
 <!-- cBox -->
@@ -462,10 +469,10 @@
 			<!-- //panel -->
 		</div>
 
-		<div ng-if="contents.sltInfoTab == 'systemLog'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'systemLog'}">
+		<div ng-if="contents.sltInfoTab == 'systemLog'" class="tab-pane height-high" ng-class="{'active':contents.sltInfoTab == 'systemLog'}">
 			<!-- panel -->
 			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset; height: auto;">
+				<div class="panel type2" style="cursor: unset; height: 670px;">
 					<div class="panel_head">
 						<div class="tit pull-left">시스템 로그</div>
 						<div class="pull-right">
@@ -474,12 +481,12 @@
 					</div>
 					<div class="panel_body" style="height: auto;">
 						<div class="in scroll-pane pr10 jspScrollable" tabindex="0" style="overflow: hidden; padding: 0px;">
-							<div class="jspContainer" style="height: 540px;">
+							<div class="jspContainer">
 								<div class="jspPane" style="padding: 0px; top: 0px;">
 									<div class="searchWrap ng-scope" style="height: 68px;">
 										<form name="searchForm">
 											<div class="searchBox pull-left">
-												<div class="form-group" ng-class="contents.fn.setPosition()">
+												<div class="form-group datepicker-div" ng-class="contents.fn.setPosition()">
 													<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 														<input type="text" id="startDatetime" aria-label="Date-Time">
 														<span class="tui-ico-date"></span>
@@ -489,7 +496,7 @@
 												<div class="form-group">
 													<span class="wave">~</span>
 												</div>
-												<div class="form-group" ng-class="contents.fn.setPosition()">
+												<div class="form-group datepicker-div" ng-class="contents.fn.setPosition()">
 													<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 														<input type="text" id="endDatetime" aria-label="Date-Time">
 														<span class="tui-ico-date"></span>
@@ -498,17 +505,17 @@
 												</div>
 												<div class="form-group">
 													<input name="searchKeyword_program" type="text"
-														ng-model="programName" placeholder="프로그램명" ng-keypress="contents.schEnter($event);" >
+														ng-model="contents.programName" placeholder="프로그램명" ng-keypress="contents.schEnter($event);" >
 												</div>
 												<div class="form-group">
 													<input name="searchKeyword_message" type="text"
-														ng-model="message" placeholder="내용" ng-keypress="contents.schEnter($event);" >
+														ng-model="contents.message" placeholder="내용" ng-keypress="contents.schEnter($event);" >
 												</div>
 												<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.fn.specificLogs();"><span class="ico ng-binding">검색</span></button>
 											</div>
 										</form>
 									</div>
-									<div class="tbl type1" style="overflow-y: auto; height: 430px;">
+									<div class="tbl type1" style="overflow-y: auto; height: 425px;">
 										<div class="log-row list">
 											<table class="table logs">
 												<colgroup>
@@ -569,10 +576,10 @@
 		</div>
 
 		<!-- virtualMonit -->
-		<div ng-if="contents.sltInfoTab == 'virtualMonit'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}">
+		<div ng-if="contents.sltInfoTab == 'virtualMonit'" class="tab-pane height-high" ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}">
 			<!-- panel -->
 			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset;">
+				<div class="panel type2" style="cursor: unset; height: 670px; overflow: hidden;">
 					<div class="panel_head">
 						<div class="tit pull-left">가상머신 모니터링
 							<div class="tit-in-info info-minor">
@@ -594,9 +601,9 @@
 							</button>
 						</div>
 					</div>
-					<div class="panel_body">
+					<div class="panel_body" style="height: 100% !important">
 						<div class="in scroll-pane pr10 jspScrollable" tabindex="0" style="overflow: hidden; padding: 0px;">
-							<div class="jspContainer" style="height: 340px;">
+							<div class="jspContainer">
 								<div class="jspPane" style="padding: 0px; top: 0px;">
 									<div class="chartTabWrap searchWrap ng-scope">
 										<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required">
@@ -637,7 +644,8 @@
 																	<input type="text" id="startDate-input" aria-label="Date-Time"
 																		ng-click="contents.fn.selectCustomBox()"
 																		style="height: 28px;"
-																		readonly="readonly">
+																		readonly="readonly"
+																		ng-style="{ 'background-color': ((contents.selCTimeRange != 'custom') ? '#ddd': '#fff') }">
 																	<span class="tui-ico-date"></span>
 																</div>
 																<div id="startDate-wrapper" style="margin-top: -1px;" ng-click="contents.fn.dateOnClick()"></div>
@@ -648,7 +656,8 @@
 																	<input type="text" id="endDate-input" aria-label="Date-Time"
 																		ng-click="contents.fn.selectCustomBox()"
 																		style="height: 28px;"
-																		readonly="readonly">
+																		readonly="readonly"
+																		ng-style="{ 'background-color': ((contents.selCTimeRange != 'custom') ? '#ddd': '#fff') }">
 																	<span class="tui-ico-date"></span>
 																</div>
 																<div id="endDate-wrapper" style="margin-top: -1px;"></div>
@@ -660,7 +669,7 @@
 											</div>
 										</form>
 									</div>
-									<div id="chart" class="tab-pane fade in active tab-ct" style="overflow-y: auto; height: 235px;">
+									<div id="chart" class="tab-pane fade in active tab-ct" style="overflow-y: auto; height: 425px;">
 										<div gridster="gridsterOpts" style="min-width:1000px;">
 											<ul>
 												<li gridster-item="widget" ng-repeat="widget in dashboard.widgets">
@@ -796,9 +805,9 @@
 														<td>{{ alarms.regDate }}</td>
 														<td>{{ main.getAlarmLabel(alarms.alarmType) }}</td>
 														<td><span class="label label-{{alarms.alarmLevel}}">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
-														<td ng-click="main.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.hostName }}</td>
+														<td ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.hostName }}</td>
 														<td>{{ alarms.ip }}</td>
-														<td ng-click="main.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.title }}</td>
+														<td ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.title }}</td>
 														<td>{{ alarms.resolveStatus }}</td>
 													</tr>
 													<tr ng-if="contents.alarmData.length == 0 || !contents.alarmData" class="ng-scope">

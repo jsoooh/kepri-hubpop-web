@@ -1307,6 +1307,7 @@ angular.module('iaas.controllers')
         ct.sltInfoTab = 'alarmList';
         ct.fn = {};
         ct.alarmId = $location.search().alarmId;
+        ct.serverId = $location.search().serverId;
         ct.changeSltInfoTab = function (sltInfoTab, alarmId) {
             if ($location.search().alarmId) delete $location.search().alarmId;
             ct.sltInfoTab = sltInfoTab;
@@ -1325,7 +1326,15 @@ angular.module('iaas.controllers')
         };
 
         $scope.$on('alarmListOnClick', function (event, datas) {
-            ct.changeSltInfoTab('alarmDetail', datas);
+            ct.serverId = undefined;
+            ct.changeSltInfoTab('alarmDetail', datas.alarmId);
+            common.locationHref(datas.path + '?alarmId=' + datas.alarmId);
+        });
+
+        $scope.$on('alarmMoreOnClick', function (event, datas) {
+            ct.serverId = undefined;
+            ct.changeSltInfoTab('alarmList');
+            common.locationHref(datas);
         });
 
         //-- 알람목록 탭 시작
@@ -1411,6 +1420,10 @@ angular.module('iaas.controllers')
             ct.sch_condition.pageIndex = page;
             ct.sch_condition.baremetalYn = 'N';
             ct.sch_condition.projectId = $scope.main.userTenantId;
+
+            // 테넌트 알람, 인스턴스 알람을 구분
+            if (ct.serverId) ct.sch_condition.instanceId = ct.serverId;
+            else ct.sch_condition.instanceId = undefined
             
             $scope.main.loadingMainBody = true;
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', ct.sch_condition);
