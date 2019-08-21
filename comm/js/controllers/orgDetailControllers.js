@@ -732,7 +732,7 @@ angular.module('portal.controllers')
         ct.paasCpuStatusChart = function () {
             var container = document.getElementById('chart-area6');
             var data = {
-                categories: ['20184.01', '2018.06', '2018.12'],
+                categories: ['2018.01', '2018.06', '2018.12'],
                 series: {
                     area: [
                         {
@@ -774,7 +774,7 @@ angular.module('portal.controllers')
                 },
                 chartExportMenu: {
                     visible: false
-                },
+                }
             };
 
             var theme = {
