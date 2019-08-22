@@ -33,15 +33,14 @@
 		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/copy')">
 			<span class="ico ico_copy"></span>다른서버 복사하기
 		</button>
-		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/create')"><!-- ng-if="false" -->
+		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/create')" ng-if="false">
 			<span class="ico ico_create" ></span>부하 분산 설정
 		</button>
-		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')"><!-- ng-if="false" -->
+		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')" ng-if="false">
 			<span class="ico ico_create" ></span>부하 분산 상세
 		</button>
 	</div>
 	<!-- //버튼영역 -->
-
 
 	<!-- panel area-->
 	<!-- <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel thum_style"> -->
