@@ -4265,7 +4265,7 @@ md-toolbar .md-menu {
 	padding: 0;
 }
 
-@media (max-width: 959px) {
+/* @media (max-width: 959px) {
 	md-menu-content {
 		min-width: 112px;
 	}
@@ -4315,7 +4315,7 @@ md-toolbar .md-menu {
 	md-menu-content[width="7"] {
 		min-width: 448px;
 	}
-}
+} */
 
 md-toolbar.md-menu-toolbar h2.md-toolbar-tools {
 	line-height: 1rem;
