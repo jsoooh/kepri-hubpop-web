@@ -25,6 +25,7 @@ angular.module('iaas.controllers')
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
+        ct.tabIndex = 0;
 
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function (instance, $event, $index) {
