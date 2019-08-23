@@ -207,6 +207,10 @@
                                                             <span class="txt">{{contents.dataReq4.series[0].data}}<span class="sm_txt">%</span></span>
                                                         </div>
                                                         <div class="donut_chart_data">
+                                                            <div ng-if="contents.dataReq4.series[0].cpuUsed == null || contents.dataReq4.series[0].cpuMax == null" class="data_txt">
+                                                                <span>0</span>
+                                                                <span>0</span>
+                                                            </div>
                                                             <div class="data_txt">
                                                                 <span>{{contents.dataReq4.series[0].cpuUsed}}</span>
                                                                 <span>{{contents.dataReq4.series[0].cpuMax}}</span>
