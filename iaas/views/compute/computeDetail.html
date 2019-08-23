@@ -22,6 +22,7 @@
 						<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
 						<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="백업 이미지 생성">백업 이미지 생성</a></li>
 						<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
+						<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스 수정</a></li>
 						<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
 						<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">서버 삭제</a></li>
 						<!--<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>-->
@@ -29,7 +30,6 @@
 						<!--<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>-->
 						<!--<li ng-if="(contents.instance.vmState != 'fail' && contents.instance.vmState == 'active')"><a href="" ng-click="contents.fn.serverActionConfirm('PAUSE',contents.instance)">일시정지</a></li>-->
 						<!--<li ng-if="(contents.instance.vmState != 'fail' && contents.instance.vmState == 'paused')"><a href="" ng-click="contents.fn.serverActionConfirm('UNPAUSE',contents.instance)">정지해제</a></li>-->
-						<!-- <li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li> -->
 					</ul>
 				</div>
 			</div>

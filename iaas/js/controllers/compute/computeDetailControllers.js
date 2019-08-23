@@ -2155,7 +2155,7 @@ angular.module('iaas.controllers')
 	                $scope.main.loadingMainBody = false;
 	                common.showAlertSuccess("수정되었습니다");
 	            	//common.showAlert("message","수정되었습니다.");
-	                $scope.main.goToPage("/iaas");
+	                $scope.main.goToPage("/iaas/compute");
 	            });
 	            returnPromise.error(function (data, status, headers) {
 	                $scope.main.loadingMainBody = false;
