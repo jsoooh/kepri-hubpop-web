@@ -123,7 +123,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'error_ip', 'error_volume'];
+        ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'shelved_offloaded', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
         // 서버메인 tenant list 함수
@@ -289,6 +289,10 @@ angular.module('iaas.controllers')
                                     massage += '서버가 정지해제 되었습니다.'
                                 } else if (beforUiTask == "rebooting")  {
                                     massage += '서버가 재시작 되었습니다.'
+                                } else if (beforUiTask == "shelved")  {
+                                    massage += '서버가 비활성화 되었습니다.'
+                                } else if (beforUiTask == "unshelved")  {
+                                    massage += '서버가 활성화 되었습니다.'
                                 } else if (beforUiTask == "resized")  {
                                     massage += '서버의 사양이 되었습니다.'
                                 } else {
@@ -480,6 +484,14 @@ angular.module('iaas.controllers')
                 common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
+            } else if (action == "SHELVE") {
+                common.showConfirm('비활성화', instance.name + ' 서버를 비활성화 하시겠습니까?').then(function () {
+                    ct.fnSingleInstanceAction(action, instance, index);
+                });
+            } else if (action == "UNSHELVE") {
+                common.showConfirm('비활성화 해제',instance.name +' 서버를 활성화 하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance,index);
+                });
             } else if (action == "DELETE") {
                 ct.deleteInstanceJob(instance.id);
             } else if (action == "SNAPSHOT") {
@@ -515,6 +527,10 @@ angular.module('iaas.controllers')
                     vmStateChange = "unpausing";
                 }else if (action == "REBOOT") {
                     vmStateChange = "rebooting";
+                }else if (action == "SHELVE") {
+                    vmStateChange = "shelved";
+                }else if (action == "UNSHELVE") {
+                    vmStateChange = "unshelved";
                 }
                 var sltInstance = ct.serverMainList[index];
                 sltInstance.vmState = vmStateChange;

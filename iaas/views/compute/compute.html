@@ -77,6 +77,10 @@
 								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
 								<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);" title="정지">정지</a></li>
 								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" class="disabled" title="서버가 ‘활성’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
+								<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SHELVE',instance,$index);" title="비활성화">비활성화</a></li>
+								<li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘비활성화 해제’상태인 경우에만 '비활성화'가 가능합니다.">비활성화</a></li>
+								<li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNSHELVE',instance,$index);" title="비활성화 해제">비활성화 해제</a></li>
+								<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘shelved’상태인 경우에만 '비활성화 해제'가 가능합니다.">비활성화 해제</a></li>
 								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm(instance,$event);" title="서버 사양 변경">서버 사양 변경</a></li>
 								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
 								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="백업 이미지 생성">백업 이미지 생성</a></li>
@@ -173,9 +177,9 @@
 							</div>
 							<div class="down">
 								<span class="stateWrap">
-									<span ng-if="instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+									<span ng-if="instance.vmState == 'active' || instance.vmState == 'active'" class="stateMark type1">정상배포</span>
 									<span ng-if="instance.vmState == 'error'" class="stateMark type2">오류</span>
-									<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building'" class="stateMark type4">대기</span>
+									<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building' || instance.vmState == 'shelved_offloaded'" class="stateMark type4">대기</span>
 									<span ng-if="instance.vmState == 'stopped'" class="stateMark type3">중지</span>
 									<span class="state-txt">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
 								</span>
@@ -247,7 +251,6 @@
 -->
 							</div>
 							<div class="info-txt">
-								<!--<div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>-->
 								<p class="txt"><span class="ico ico-timer"></span>{{'iaas.label.instance_' + instance.vmState | translate}} 입니다.</p>
 							</div>
 						</div>
