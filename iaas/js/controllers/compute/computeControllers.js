@@ -353,6 +353,12 @@ angular.module('iaas.controllers')
                                 ct.fn.checkServerState(instanceStateInfo.id);
                             }, 1000);
                             var serverItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
+                            if (instanceStateInfo.taskState == "shelving_image_uploading" || instanceStateInfo.taskState == "shelving_offloading") {
+                                instanceStateInfo.vmState = "shelved";
+                            }
+                            if (instanceStateInfo.vmState == "shelved_offloaded" && instanceStateInfo.taskState == "spawning") {
+                                instanceStateInfo.vmState = "unshelved";
+                            }
                             if (serverItem && serverItem.id) {
                                 angular.forEach(instanceStateInfo, function(value, key) {
                                     serverItem[key] = value;
