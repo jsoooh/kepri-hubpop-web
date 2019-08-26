@@ -344,6 +344,372 @@
 				<!-- //버튼영역 -->
 
 				<!-- panel -->
+				<ul class="ul-panel thum_style">
+					<li>
+						<!-- panel -->
+						<div class="panelWrap">
+							<div class="panel type5">
+								<div class="panel_head pdlr30">
+									<div class="tit_area">
+										<span class="w180" title="LoadBalance_Test01">LoadBalance_Test01</span><span class="point1">(2)</span>
+										<p class="txt">부하 분산 서버</p>
+									</div>
+									<span class="stateWrap">
+										<span class="stateMark type1">정상배포</span><span class="state-txt">활성</span>
+									</span>
+									<div class="dropdown btn-option">
+										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
+											<li><a class="delete" href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="삭제">삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel_body">
+									<div class="tbl_cont">
+										<table class="table">
+											<colgroup>
+												<col style="width:25%;">
+												<col style="width:25%;">
+												<col style="width:50%;">
+											</colgroup>
+											<thead>
+												<tr>
+													<th>접속포트</th>
+													<th>연결된 서버</th>
+													<th>서버 상태</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>8080</td>
+													<td>4</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>5</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">3</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- //panel -->
+					</li>
+					<li>
+						<!-- panel -->
+						<div class="panelWrap">
+							<div class="panel type5">
+								<div class="panel_head pdlr30">
+									<div class="tit_area">
+										<span class="w180" title="LoadBalance_Test01">LoadBalance_Test01</span><span class="point1">(2)</span>
+										<p class="txt">부하 분산 서버</p>
+									</div>
+									<span class="stateWrap">
+										<span class="stateMark type1">정상배포</span><span class="state-txt">활성</span>
+									</span>
+									<div class="dropdown btn-option">
+										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
+											<li><a class="delete" href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="삭제">삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel_body">
+									<div class="tbl_cont">
+										<table class="table">
+											<colgroup>
+												<col style="width:25%;">
+												<col style="width:25%;">
+												<col style="width:50%;">
+											</colgroup>
+											<thead>
+												<tr>
+													<th>접속포트</th>
+													<th>연결된 서버</th>
+													<th>서버 상태</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>8080</td>
+													<td>2</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">1</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">1</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>3</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">3</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>6</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">4</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>6</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">1</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">5</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- //panel -->
+					</li>
+					<li>
+						<!-- panel -->
+						<div class="panelWrap">
+							<div class="panel type5">
+								<div class="panel_head pdlr30">
+									<div class="tit_area">
+										<span class="w180" title="LoadBalance_Test01">LoadBalance_Test01</span><span class="point1">(2)</span>
+										<p class="txt">부하 분산 서버</p>
+									</div>
+									<span class="stateWrap">
+										<span class="stateMark type1">정상배포</span><span class="state-txt">활성</span>
+									</span>
+									<div class="dropdown btn-option">
+										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
+											<li><a class="delete" href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="삭제">삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel_body">
+									<div class="tbl_cont">
+										<table class="table">
+											<colgroup>
+												<col style="width:25%;">
+												<col style="width:25%;">
+												<col style="width:50%;">
+											</colgroup>
+											<thead>
+												<tr>
+													<th>접속포트</th>
+													<th>연결된 서버</th>
+													<th>서버 상태</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>8080</td>
+													<td>4</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">4</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>2</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">0</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>3</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">1</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>4</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>5</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">3</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>4</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- //panel -->
+					</li>
+					<li>
+						<!-- panel -->
+						<div class="panelWrap">
+							<div class="panel type5">
+								<div class="panel_head pdlr30">
+									<div class="tit_area">
+										<span class="w180" title="LoadBalance_Test01">LoadBalance_Test01</span><span class="point1">(2)</span>
+										<p class="txt">부하 분산 서버</p>
+									</div>
+									<span class="stateWrap">
+										<span class="stateMark type1">정상배포</span><span class="state-txt">활성</span>
+									</span>
+									<div class="dropdown btn-option">
+										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
+											<li><a class="delete" href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="삭제">삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel_body">
+									<div class="tbl_cont">
+										<table class="table">
+											<colgroup>
+												<col style="width:25%;">
+												<col style="width:25%;">
+												<col style="width:50%;">
+											</colgroup>
+											<thead>
+												<tr>
+													<th>접속포트</th>
+													<th>연결된 서버</th>
+													<th>서버 상태</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>8080</td>
+													<td>2</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>4</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>8080</td>
+													<td>4</td>
+													<td>
+														<div class="tbl_cont_state">
+															<ul>
+																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- //panel -->
+					</li>
+				</ul>
 				<!-- //panel -->
 
 				<div class="proj_list_area" ng-if="!contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">

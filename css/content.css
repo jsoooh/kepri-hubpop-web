@@ -3039,3 +3039,22 @@ a.ext_link:hover {text-decoration:underline;}
 .fixed-table-wrapper .fixed-table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
 .fixed-table-wrapper .fixed-table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
 .fixed-table-wrapper .fixed-table .tbl_selected td {background:#e5f0fa !important;}
+
+
+/*부하분산 리스트*/
+.panel.type5 .panel_head.pdlr30 {padding:24px 60px 0 30px;}
+.panel.type5 .panel_head .tit_area {font-size:20px; font-weight:700; line-height:1.4;}
+.panel.type5 .panel_head .tit_area > span {vertical-align:middle;}
+.panel.type5 .panel_head .tit_area .txt {font-weight:400;}
+.panel.type5 .panel_head .tit_area .w180 {display:inline-block; width:180px; overflow:hidden; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.panel.type5 .panel_head .stateWrap {position:absolute; top:44px; right:55px;}
+.tbl_cont .table > thead > tr > th {font-size:14px; border-bottom:1px solid #ddd; text-align:center; padding:10px 8px;}
+.tbl_cont .table > tbody > tr > td {font-size:14px; border-top:0; text-align:center; padding:9px 8px 10px 8px;}
+.tbl_cont .table > tbody > tr:nth-child(odd) > td {background:#f7f7f7;}
+.tbl_cont .table .tbl_cont_state {line-height:1.3;} 
+.tbl_cont .table .tbl_cont_state ul li {display:inline-block; vertical-align:middle;} 
+.tbl_cont .table .tbl_cont_state ul li:first-child {margin-right:10px;}
+.tbl_cont .table .tbl_cont_state ul li span.s_count {display:inline-block; width:18px; height:18px; font-size:11px; font-weight:700; color:#fff; border-radius:50%; line-height:18px; vertical-align:middle; padding:0 5px; margin-right:5px;}
+.tbl_cont .table .tbl_cont_state ul li span.active {background:#5acc27;}
+.tbl_cont .table .tbl_cont_state ul li span.inactive {background:#c3c3c3;}
+.tbl_cont .table .tbl_cont_state ul li span.txt {display:inline-block; font-size:14px; font-weight:400; vertical-align:middle;}
