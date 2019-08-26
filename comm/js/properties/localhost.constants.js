@@ -21,7 +21,7 @@ angular.module('app')
         iaasApiCfContextUrl : '/iaas-api/api/iaas/v1.0',
         iaasApiMarketContextUrl : '/iaas-api/api/iaas/v1.0/market',
         monitApiContextUrl: '/monit-api/api/monit/v1.0',
-        monitNewApiContextUrl: '/monit-new-api/v2',
+        monitNewApiContextUrl: '/monit-api/v2',
 		layoutTemplateUrl : {
 			navigation : _LAYOUT_VIEWS_ + '/navigation.html',
 			leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
@@ -318,16 +318,17 @@ angular.module('app')
             DSK: 'disk'
         },
         alarmLevel: [
-            {value: 'running', name: '정상'},
-            {value: 'fail', name: '실패'},
+            {value: 'failed', name: '다운'},
+            {value: 'minor', name: '주의'},
             {value: 'wran', name: '경고'},
-            {value: 'cri', name: '위험'}
+            {value: 'cri', name: '위험'},
+            {value: 'clear', name: '알람해제'}
         ],
         resolveStatus: [
             {value: '2', name: '처리완료'},
             {value: '1', name: 'Alarm 발생'}
         ],
-        alarmBell: 1000*60*3,
+        alarmBell: 1000*60*1,
         timeRangeFormat: 'YYYY-MM-DD HH:mm'
     })
     .constant('tenantChartConfig', [
@@ -336,8 +337,6 @@ angular.module('app')
         {id: 3, nodeid: 'mem_swap', name: 'Swap',                      func: 'tenantMemorySwapList',           type: 'lineChart', percent: true,  axisLabel: '%'},
         {id: 4, nodeid: 'mem_usage', name: '메모리 사용률',             func: 'tenantMemoryUsageList',          type: 'lineChart', percent: true,  axisLabel: '%'},
         {id: 5, nodeid: 'dsk_usage', name: '디스크 사용률',             func: 'tenantDiskUsageList',            type: 'lineChart', percent: true,  axisLabel: '%'},
-        // {id: 6, nodeid: 'dsk_io_read', name: '디스크 IO Read',          func: 'tenantDiskIOReadList',           type: 'lineChart', percent: false, axisLabel: 'KB / Sec'},
-        // {id: 7, nodeid: 'dsk_io_write', name: '디스크 IO Write',        func: 'tenantDiskIOWriteList',          type: 'lineChart', percent: false, axisLabel: 'KB / Sec'}
         {id: 6, nodeid: 'dsk_io', name: '디스크 IO',                    func: 'tenantDiskIOList',            type: 'lineChart', percent: false,  axisLabel: 'KB / Sec'}
     ])
     .constant('tenantNetChartConfig', [

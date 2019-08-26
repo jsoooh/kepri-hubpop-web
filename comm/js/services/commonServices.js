@@ -2880,42 +2880,106 @@ angular.module('common.services', ['LocalStorageModule'])
             });
         };
 
-        common.getGroupingByTimeRange = function (timeRange, from, to) {
-            var grouping = '';
-            switch (timeRange) {
-                case '15m':
-                    grouping = '1m';
-                    break;
-                case '30m':
-                    grouping = '2m';
-                    break;
-                case '1h':
-                    grouping = '4m';
-                    break;
-                case '3h':
-                    grouping = '12m';
-                    break;
-                case '6h':
-                    grouping = '24m';
-                    break;
-                case '12h':
-                    grouping = '48m';
-                    break;
-                case '1d':
-                    grouping = '96m';
-                    break;
-                case '7d':
-                    grouping = '672m';
-                    break;
-                case '30d':
-                    grouping = '2880m';
-                    break;
-                case 'custom':
-                    grouping = common.selectGroupingByCustomTimeRange(from, to);
-                    break;
-                default:
-                    grouping = '1m';
+        common.getGroupingComboBox = function (timeRange, from, to) {
+            var result = [];
+            var hour = 1;
+            var minTime;
+            var maxTime;
+            var intervalTime = 5;
+            var intervalTimeType = 'h';
+            var intervalTimeTypeName = '시간';
+            
+            if (timeRange == '30d') {
+                minTime = 6;
+                maxTime = 24;
+                intervalTime = 3;
+            } else if (timeRange == '7d') {
+                minTime = 2;
+                maxTime = 16;
+                intervalTime = 2;
+            } else if (timeRange == 'custom') {
+                var fromm = moment(from, 'YY.MM.DD h:mm');
+                var tom = moment(to, 'YY.MM.DD h:mm')
+                hour = tom.diff(fromm, 'hour');
+
+                if (hour <= 24) {
+                    minTime = Math.ceil(hour * 60 / 100);
+                    maxTime = intervalTime * Math.ceil(hour * 60 / 10 / intervalTime);
+                    intervalTimeType = 'm';
+                    intervalTimeTypeName = '분';
+                } else if (hour > 24 && hour <= 168) {
+                    minTime = 2;
+                    maxTime = 16;
+                    intervalTime = 2;
+                } else if (hour > 168 && hour <= 720) {
+                    minTime = 6;
+                    maxTime = 24;
+                    intervalTime = 3;
+                } else if (hour > 720 && hour <= 1440) {
+                    minTime = 12;
+                    maxTime = 48;
+                    intervalTime = 6;
+                } else {
+                    minTime = 24;
+                    maxTime = 96;
+                    intervalTime = 12;
+                }
+            } else {
+                hour = timeRange.replace('h', '');
+                if (timeRange.indexOf('d') > -1 ) hour = timeRange.replace('d', '') * 24;
+                minTime = Math.ceil(hour * 60 / 100);
+                maxTime = intervalTime * Math.ceil(hour * 60 / 10 / intervalTime);
+                intervalTimeType = 'm';
+                intervalTimeTypeName = '분';
             }
+
+            // 24시간 이하일 때 최소 분이 5분이 안되는 경우. 미리 넣어줌
+            if (intervalTimeType == 'm' && minTime < 5) {
+                for (var i = minTime; i < 5; i++) {
+                    result.push({
+                        value: (i + intervalTimeType),
+                        name: (i + intervalTimeTypeName)
+                    });
+                }
+                minTime = 5;
+            }
+
+            // 24시간 이하일 때 최소 분이 5의 배수가 아닌 경우, 해당 값 등록하고, 다음부터 5의 배수로 등록
+            if (intervalTimeType == 'm' && minTime % 5 != 0) {
+                result.push({
+                    value: (minTime + intervalTimeType),
+                    name: (minTime + intervalTimeTypeName)
+                });
+                minTime = Math.ceil(minTime / 5) * 5
+            }
+
+            // 설정된 최소 시간(분), 최대 시간(분), 시간 간격으로 값 설정
+            for (var i = minTime; i <= maxTime; i+=intervalTime) {
+                result.push({
+                    value: (i + intervalTimeType),
+                    name: (i + intervalTimeTypeName)
+                });
+            }
+
+            return result;
+        };
+
+        common.getGroupingByTimeRange = function (timeRange, from, to) {
+            var minutes = 1;
+            if (timeRange.indexOf('h') > -1) {
+                minutes = timeRange.replace('h', '');
+            } else if (timeRange.indexOf('d') > -1) {
+                minutes = timeRange.replace('d', '') * 24;
+            } else if (timeRange == 'custom') {
+                var fromm = moment(from, 'YY.MM.DD h:mm');
+                var tom = moment(to, 'YY.MM.DD h:mm')
+                minutes = tom.diff(fromm, 'minutes');
+            }
+
+            var grouping = Math.ceil(minutes / 100 * 60);
+            if (grouping % 60 == 0) grouping = grouping / 60 + 'm';
+            else grouping += 's';
+
             return grouping;
         };
 
@@ -3190,6 +3254,13 @@ angular.module('common.services', ['LocalStorageModule'])
             }
         };
 
+        cookies.clearAll = function () {
+            cookies.clearAccessToken();
+            cookies.clearAccessToken();
+            //cookies.clearPgsecuid();
+            cookies.clearUser();
+        };
+
         var dtFormat = 'YYYY-MM-DD HH:mm';
         cookies.putDefaultTimeRange = function (defaultTimeRange) {
             $cookies.put(_DEFAULT_TIMERANGE_, defaultTimeRange);
@@ -3198,6 +3269,7 @@ angular.module('common.services', ['LocalStorageModule'])
             var r = $cookies.get(_DEFAULT_TIMERANGE_);
             if (!r) {
                 r = angular.element('input:radio[name=radioTimeRange]:first').val();
+                if (!r) r = '1h';
                 $cookies.put(_DEFAULT_TIMERANGE_, r);
             }
             return $cookies.get(_DEFAULT_TIMERANGE_);
@@ -3232,7 +3304,7 @@ angular.module('common.services', ['LocalStorageModule'])
 
         cookies.getDefaultTimeRangeTo = function () {
             var to = moment($cookies.get(_DEFAULT_TIMERANGE_TO_), dtFormat);
-            if (!to._isValid) to = moment();
+            if (!to._isValid) to = moment(moment().format(dtFormat), dtFormat);
             return to;
         };
         cookies.putDefaultTimeRangeTo = function (timeRangeTo) {
@@ -3262,13 +3334,6 @@ angular.module('common.services', ['LocalStorageModule'])
         };
         cookies.removeGroupBy = function () {
             $cookies.remove(_GROUPBY_);
-        };
-
-        cookies.clearAll = function () {
-            cookies.clearAccessToken();
-            cookies.clearAccessToken();
-            //cookies.clearPgsecuid();
-            cookies.clearUser();
         };
 
         return cookies;

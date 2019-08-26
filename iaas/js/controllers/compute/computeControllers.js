@@ -124,6 +124,29 @@ angular.module('iaas.controllers')
         ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
+        // 서버 알람 상태 체크 함수
+        ct.fnCheckAlarmStatus = function (server) {
+            var params = {
+                limit: 1000 
+            };
+
+            var rp = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instances', 'GET', params));
+            rp.success(function (data) {
+                var alarmInfo = {};
+                angular.forEach(data.metric, function (instance) {
+                    alarmInfo[instance.instance_id] = instance.alarmStatus;
+                });
+
+                if (server && alarmInfo[server.id]) {
+                    server.alarmStatus = alarmInfo[server.id];
+                } else {
+                    angular.forEach(ct.serverMainList, function (serverMain) {
+                        if (alarmInfo[serverMain.id]) serverMain.alarmStatus = alarmInfo[serverMain.id];
+                    });
+                }
+            })
+        };
+
         // 서버메인 tenant list 함수
         ct.fnGetServerMainList = function() {
             $scope.main.loadingMainBody = true;
@@ -146,6 +169,7 @@ angular.module('iaas.controllers')
                 }
                 var isServerStatusCheck = false;
                 common.objectOrArrayMergeData(ct.serverMainList, instances);
+                ct.fnCheckAlarmStatus();
                 var nowDate = new Date();
                 angular.forEach(ct.serverMainList, function (serverMain) {
                     if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
@@ -256,6 +280,7 @@ angular.module('iaas.controllers')
                     if (instanceId) {
                         var instance = data.content.instances[0];
                         ct.fnSetInstanceUseRate(instance);
+                        ct.fnCheckAlarmStatus(instance);
                         var serverItem = common.objectsFindByField(ct.serverMainList, "id", data.content.instances[0].id);
                         if (serverItem && serverItem.id) {
                             var beforUiTask = serverItem.uiTask;
@@ -298,6 +323,7 @@ angular.module('iaas.controllers')
                         }
                         angular.forEach(data.content.instances, function (instance, inKey) {
                             ct.fnSetInstanceUseRate(instance);
+                            ct.fnCheckAlarmStatus(instance);
                             if (ct.serverMainList[inKey]) {
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
                                 ct.fn.setProcState(ct.serverMainList[inKey]);
@@ -1602,6 +1628,7 @@ angular.module('iaas.controllers')
         angular.copy(ct.cpuwarnSlider, ct.measuretimeSlider);
 
         ct.measuretimeSlider.options.ceil = 60 * 60 * 3;
+        ct.measuretimeSlider.options.minLimit = 60;
 
         // 초기 알람정보 조회
         ct.fn.requestData = function () {

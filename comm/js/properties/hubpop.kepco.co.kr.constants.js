@@ -37,10 +37,10 @@ angular.module('app')
         popAlertFormUrl: _COMM_VIEWS_ + '/common/popAlertForm.html',
         popAlertFormUrl2: _COMM_VIEWS_ + '/common/popAlertForm2.html',
         xpertHosts : {
-            mysqlDB : "dbwebxpert.ps.hubpop.io",
-            webLog : "weblog.ps.hubpop.io",
-            terminal : "terminal.ps.hubpop.io",
-            autoScaler : "autoscaler.ps.hubpop.io",
+            mysqlDB : "dbwebxpert.kepri-dev.crossent.crossent.com",
+            webLog : "weblog.kepri-dev.crossent.com",
+            terminal : "terminal.kepri-dev.crossent.com",
+            autoScaler : "autoscaler.ps..kepri-dev.crossent.crossent.com",
         },
         homeUrl: '/#/',
         homePath: '/',
@@ -65,9 +65,6 @@ angular.module('app')
         rdpConnect : {
             baseDomain : "wins.hubpop.io",
             port : "20025"
-        },
-        iaasDef : {
-            insMaxDiskSize: 2048
         },
         loadingProgressBar : {
         	top : 80,
@@ -318,8 +315,7 @@ angular.module('app')
         resourceKey: {
             CPU: 'cpu',
             MEM: 'memory',
-            DSK: 'disk',
-            PROC: 'proc'
+            DSK: 'disk'
         },
         alarmLevel: [
             {value: 'failed', name: '다운'},
@@ -341,8 +337,6 @@ angular.module('app')
         {id: 3, nodeid: 'mem_swap', name: 'Swap',                      func: 'tenantMemorySwapList',           type: 'lineChart', percent: true,  axisLabel: '%'},
         {id: 4, nodeid: 'mem_usage', name: '메모리 사용률',             func: 'tenantMemoryUsageList',          type: 'lineChart', percent: true,  axisLabel: '%'},
         {id: 5, nodeid: 'dsk_usage', name: '디스크 사용률',             func: 'tenantDiskUsageList',            type: 'lineChart', percent: true,  axisLabel: '%'},
-        // {id: 6, nodeid: 'dsk_io_read', name: '디스크 IO Read',          func: 'tenantDiskIOReadList',           type: 'lineChart', percent: false, axisLabel: 'KB / Sec'},
-        // {id: 7, nodeid: 'dsk_io_write', name: '디스크 IO Write',        func: 'tenantDiskIOWriteList',          type: 'lineChart', percent: false, axisLabel: 'KB / Sec'}
         {id: 6, nodeid: 'dsk_io', name: '디스크 IO',                    func: 'tenantDiskIOList',            type: 'lineChart', percent: false,  axisLabel: 'KB / Sec'}
     ])
     .constant('tenantNetChartConfig', [

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $interval, $window, $mdDialog, $filter, $bytes, $translate, $log, common, cookies, nvd3Generator, ValidationService, CONSTANTS, computeDetailService, tenantChartConfig, tenantNetChartConfig) {
+    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $interval, $window, $mdDialog, $filter, $bytes, $translate, $log, $exceptionHandler, common, cookies, ValidationService, CONSTANTS, computeDetailService, tenantChartConfig, tenantNetChartConfig) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -976,10 +976,12 @@ angular.module('iaas.controllers')
                                 
                                 ct.timeRangePicker.on('change:start', function() {
                                     ct.timeRangeFrom = moment(ct.timeRangePicker.getStartDate());
+                                    $timeout(ct.fn.setIntervalTime, 500);
                                 });
                                 
                                 ct.timeRangePicker.on('change:end', function() {
                                     ct.timeRangeTo = moment(ct.timeRangePicker.getEndDate());
+                                    $timeout(ct.fn.setIntervalTime, 500);
                                 });
                             }
                         }, 500);
@@ -1045,7 +1047,7 @@ angular.module('iaas.controllers')
                     $interval.cancel(tuiLogsStop);
                     // TUI Datepicker
                     var today = new Date();
-                    var from = new Date(moment().format('YYYY/MM/DD HH:mm'));
+                    var from = new Date(moment().subtract(1, 'days').format('YYYY/MM/DD HH:mm'));
                     var to = new Date(moment().format('YYYY/MM/DD HH:mm'));
                     ct.datepicker = tui.DatePicker.createRangePicker({
                         startpicker: {
@@ -1175,242 +1177,37 @@ angular.module('iaas.controllers')
             }
             });
         };
+
+        // time range 선택 시 그에 해당하는 group by 선택
+        ct.fn.selectGroupBy = function() {
+            ct.fn.setIntervalTime();
+        };
         
-        // 차트 옵션 초기화
-        $scope.gridsterOpts = {
-            margins: [20, 20],
-            columns: 3,
-            rowHeight: 250,
-            mobileModeEnabled: false,
-            swapping: true,
-            draggable: {
-                handle: 'h4',
-                stop: function (event, $element, widget) {
-                    $timeout(function () {
-                        $log.log(event + ',' + $element + ',' + widget);
-                    }, 400)
-                }
-            },
-            resizable: {
-                enabled: true,
-                handles: ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'],
-                minWidth: 200,
-                layoutChanged: function () {
-                },
-
-                // optional callback fired when resize is started
-                start: function (event, $element, widget) {
-                    $timeout(function () {
-                        $log.log(event + ',' + $element + ',' + widget);
-                    }, 400)
-                },
-
-                // optional callback fired when item is resized,
-                resize: function (event, $element, widget) {
-                    if (widget.chart.api) widget.chart.api.update();
-                },
-                
-                // optional callback fired when item is finished resizing
-                stop: function (event, $element, widget) {
-                    $timeout(function () {
-                        if (widget.chart.api) widget.chart.api.update();
-                    }, 400)
-                }
-            }
-        };
-
-        $scope.events = {
-            resize: function (e, scope) {
-                $timeout(function () {
-                    if (scope.api && scope.api.update) {
-                        scope.api.update();
-                    }
-                }, 200)
-            }
-        };
-
         var hostname = $stateParams.instanceId;
-        
-        // 조회조건 설정
-        var condition = {
-            hostname: hostname
+        var chartDataOption = {
+            chartConfig: tenantChartConfig,
+            netChartConfig: tenantNetChartConfig,
+            nodeKey: CONSTANTS.nodeKey.TENANT,
+            interfaceFunc: 'tenantInterfaceList',
+            hostname: hostname,
+            cookies: cookies,
+            scope: $scope,
+            log: $log,
+            timeout: $timeout,
+            interval: $interval,
+            ex: $exceptionHandler
         };
-        
-        var count = 0;
-        var widgetLen = 0;
-        var tenantChartConfigOrgin = [];
-        angular.copy(tenantChartConfig, tenantChartConfigOrgin);
 
-        // 인터페이스 목록 조회 후 차트데이터 요청. 네트워크의 경우 인터페이스에 따라 변경됨.
+        ct.fn.setIntervalTime = function () {
+            ct.groupResources = common.getGroupingComboBox(ct.selCTimeRange, ct.timeRangeFrom, ct.timeRangeTo)
+            if (ct.groupResources.length > 0) ct.selGroupBy = ct.groupResources[0].value;
+        };
+
         ct.fn.selectChartList = function () {
-
-            $scope.dashboard = {
-                widgets: [],
-                netWidgets: {}
-            };
-
-            condition.groupBy = ct.selGroupBy
-            if (ct.selCTimeRange == 'custom') {
-                condition.timeRangeFrom = common.getTimeRangeFlag(moment(ct.timeRangeTo, 'YYYY-MM-DD HH:mm'));
-                condition.timeRangeTo = common.getTimeRangeFlag(moment(ct.timeRangeFrom, 'YYYY-MM-DD HH:mm'));
-            } else {
-                condition.defaultTimeRange = ct.selCTimeRange;
-            }
-
-            count = 0;
-            widgetLen = 0;
-            
-            $scope.main.loadingMainBody = true;
-            computeDetailService.tenantInterfaceList(condition).then(
-                function (result) {
-                    $scope.interfaceList = result.data.metric;
-                    tenantChartConfig = [];
-                    angular.copy(tenantChartConfigOrgin, tenantChartConfig);
-                    angular.forEach(result.data.metric, function (metricItem, mkey) {
-                        angular.forEach(tenantNetChartConfig, function (netConfig, nkey) {
-                            var distNetConfig = {};
-                            angular.copy(netConfig, distNetConfig);
-                            
-                            var id = tenantChartConfig[tenantChartConfig.length-1].id + 1;
-                            distNetConfig.id = id;
-                            distNetConfig.conditions = {};
-                            distNetConfig.conditions.interface = metricItem;
-                            tenantChartConfig.push(distNetConfig);
-                        });
-                    });
-                    var charts = tenantChartConfig;
-                    for (var i in charts) {
-                        var chartOpt = charts[i];
-                        if (chartOpt.func) {
-                            (function (opt, cnt) {
-                                if (opt.conditions) {
-                                    for (var key in opt.conditions) {
-                                        condition[key] = opt.conditions[key];
-                                    }
-                                }
-                                computeDetailService[opt.func](condition).then(
-                                    function (result) {
-                                        $scope.setWidget(cnt, opt, result.data);
-                                    },
-                                    function (reason) {
-                                        $scope.setWidget(cnt, opt);
-                                        $log.error(reason);
-                                        $timeout(function () { $exceptionHandler(reason.data.message, { code: reason.data.HttpStatus, message: reason.data.message }); }, 500);
-                                    }
-                                );
-                            })(chartOpt, count);
-                            count++;
-                        }
-                    }
-                },
-                function (reason) {
-                    $scope.setWidget(0, {});
-                    $log.error(reason);
-                    $timeout(function () { $exceptionHandler(reason.data.message, { code: reason.data.HttpStatus, message: reason.data.message }); }, 500);
-                }
-            )
-
-            var stop = $interval(function () {
-                if (count == widgetLen) {
-                    $interval.cancel(stop);
-                    $scope.dashboard.widgets.sort(common.compareForSort);
-                    angular.forEach($scope.dashboard.netWidgets, function (el, k) {
-                        el.sort(common.compareForSort);
-                    })
-                    $scope.main.loadingMainBody = false;
-                }
-            }, 500);
+            ct.fn.setIntervalTime();
+            computeDetailService.initChartData(chartDataOption);
         };
-        
-        $scope.setWidget = function (index, dtvOpt, jsonArr) {
-            var col = dtvOpt.col == undefined ? Math.floor(index % 3) : dtvOpt.col;
-            var row = dtvOpt.row == undefined ? Math.floor(index / 3) : dtvOpt.row;
-            var sizeX = dtvOpt.sizeX == undefined ? 1 : dtvOpt.sizeX;
-            var sizeY = dtvOpt.sizeY == undefined ? 1 : dtvOpt.sizeY;
 
-            var widget = {
-                col: col, row: row, sizeX: sizeX, sizeY: sizeY, name: dtvOpt.name, id: dtvOpt.id, type: dtvOpt.type, conditions: dtvOpt.conditions,
-                chart: {
-                    options: nvd3Generator[dtvOpt.type].options(),
-                    api: {}
-                },
-                func: dtvOpt.func,
-                nodeid: dtvOpt.nodeid,
-                nodeShow: (!dtvOpt.conditions || !dtvOpt.conditions.interface)
-            };
-
-            if (dtvOpt.conditions && dtvOpt.conditions.interface) {
-                widget.netShow = dtvOpt.conditions.interface;
-            }
-
-            if (dtvOpt.percent && jsonArr) {
-                widget.chart.options.chart.forceY = [0, 100];
-                widget.chart.options.chart.yAxis.tickFormat = function (d) { return d3.format('.0%')(d / 100); };
-                widget.percent = dtvOpt.percent;
-            }
-
-            if (dtvOpt.axisLabel) {
-                widget.chart.options.chart.yAxis.axisLabel = dtvOpt.axisLabel;
-                widget.chart.options.chart.yAxis.axisLabelDistance = -5;
-                widget.chart.options.chart.margin.left = 55;
-                widget.axisLabel = dtvOpt.axisLabel;
-            }
-
-            if (jsonArr) {
-                var value, arr = [];
-                var checkData = 0;
-                var metricData = [];
-                for (var i = 0; i < jsonArr.length; i++) {
-                    if (dtvOpt.nodeid == 'cpu_usage' || dtvOpt.nodeid == 'mem_usage') {
-                        metricData = jsonArr[i].metric[0].metric;
-                    } else {
-                        metricData = jsonArr[i].metric;
-                    }
-                    if (metricData) {
-                        for (var j = 0; j < metricData.length; j++) {
-                            metricData[j].totalUsage = metricData[j].usage;
-                            delete metricData[j].usage;
-                        }
-                    }
-                    value = metricData == null ? [{ time: 0, totalUsage: 0 }] : metricData;
-                    arr.push({ values: value, key: jsonArr[i].name, area: true });
-                    for (var j = 0; j < value.length; j++) {
-                        if (value[j] != null) {
-                            if (checkData < value[j].totalUsage) {
-                                checkData = value[j].totalUsage;
-                            }
-                        }
-                    }
-                }
-
-                computeDetailService.setAlarmLine(arr, CONSTANTS.nodeKey.TENANT, $scope.main, dtvOpt.nodeid);
-                widget.chart.data = arr;
-
-                if (dtvOpt.type != 'list') {
-                    if (checkData < 5 && widget.chart.options.chart.forceY == undefined) {
-                        widget.chart.options.chart.forceY = [0, 5];
-                    }
-                    if (checkData > 10000) {
-                        widget.chart.options.chart.yAxis.axisLabelDistance = 20;
-                        widget.chart.options.chart.margin.left = 80;
-                    }
-                }
-            } else {
-                widget.chart.options.chart.forceY = false;
-            }
-
-            delete widget.chart.options.chart.xAxis.ticks;
-            widget.chart.options.chart.xAxis.tickFormat = function (d) { return d3.time.format('%H:%M')(new Date(d * 1000)); };
-
-            if (dtvOpt.conditions && dtvOpt.conditions.interface) {
-                if (!$scope.dashboard.netWidgets[dtvOpt.conditions.interface]) $scope.dashboard.netWidgets[dtvOpt.conditions.interface] = [];
-                $scope.dashboard.netWidgets[dtvOpt.conditions.interface].push(widget);
-            } else {
-                $scope.dashboard.widgets.push(widget);
-            }
-            widgetLen++;
-        };
-        
         // 조회주기 및 GroupBy 설정
         ct.fn.saveTimeRange = function () {
             if(ct.selCTimeRange == 'custom') {
@@ -1418,116 +1215,26 @@ angular.module('iaas.controllers')
                 cookies.putTimeRangeTo(common.getTimeRangeFlag(moment(ct.timeRangeTo, 'YYYY-MM-DD HH:mm')));
                 cookies.putDefaultTimeRangeFrom(ct.timeRangeFrom);
                 cookies.putDefaultTimeRangeTo(ct.timeRangeTo);
-                ct.selGroupBy = common.selectGroupingByCustomTimeRange(ct.timeRangeFrom, ct.timeRangeTo);
+                ct.selGroupBy = common.getGroupingByTimeRange(ct.timeRangeFrom, ct.timeRangeTo);
             }
+
             cookies.putDefaultTimeRange(ct.selCTimeRange);
             cookies.putGroupBy(ct.selGroupBy);
 
             var datas = {
-                selCTimeRange: ct.selCTimeRange,
+                selTimeRange: ct.selCTimeRange,
                 selGroupBy: ct.selGroupBy,
                 timeRangeFrom: cookies.getTimeRangeFrom(),
                 timeRangeTo: cookies.getTimeRangeTo()
             };
-            
-            var condition = {
-                hostname: hostname,
-                groupBy: datas.selGroupBy
-            };
 
-            var defaultTimeRange = '';
-
-            if (datas.selCTimeRange == 'custom') {
-                condition.timeRangeFrom = datas.timeRangeTo;
-                condition.timeRangeTo = datas.timeRangeFrom;
-                defaultTimeRange = datas.selCTimeRange;
-            } else {
-                condition.defaultTimeRange = datas.selCTimeRange;
-                defaultTimeRange = datas.selCTimeRange;
-                condition.groupBy = datas.selGroupBy;
-            }
-
-            var callCount = 0;
-            $scope.main.loadingMainBody = true;
-            angular.forEach(tenantChartConfig, function (config, index) {
-                var widget = {};
-                var tmp = [];
-
-                if (config.conditions && config.conditions.interface) {
-                    tmp = $scope.dashboard.netWidgets[config.conditions.interface];
-                } else {
-                    tmp = $scope.dashboard.widgets;    
-                }
-
-                for (var i = 0; i < tmp.length; i++) {
-                    if (tmp[i].id == config.id) {
-                        widget = tmp[i];
-                        break;
-                    }
-                }
-
-                (function (opt, idx) {
-                    if (opt.conditions) {
-                        for (var key in opt.conditions) {
-                            condition[key] = opt.conditions[key];
-                        }
-                    }
-                    computeDetailService[opt.func](condition).then(
-                        function (result) {
-                            if (result) {
-                                if (defaultTimeRange == '1d' || defaultTimeRange == '7d' || defaultTimeRange == '30d') {
-                                    opt.chart.options.chart.xAxis.tickFormat = function (d) { return d3.time.format('%m-%d %H:%M')(new Date(d * 1000)); };
-                                } else if (defaultTimeRange == 'custom' && (condition.groupBy == '96m' || condition.groupBy == '672m' || condition.groupBy == '2880m')) {
-                                    opt.chart.options.chart.xAxis.tickFormat = function (d) { return d3.time.format('%m-%d %H:%M')(new Date(d * 1000)); };
-                                } else {
-                                    opt.chart.options.chart.xAxis.tickFormat = function (d) { return d3.time.format('%H:%M')(new Date(d * 1000)); };
-                                }
-
-                                var jsonArr = result.data;
-                                var value, arr = [];
-                                var metricData = [];
-                                for (var i = 0; i < jsonArr.length; i++) {
-                                    if (opt.nodeid == 'cpu_usage' || opt.nodeid == 'mem_usage') {
-                                        metricData = jsonArr[i].metric[0].metric;
-                                    } else {
-                                        metricData = jsonArr[i].metric;
-                                    }
-                                    if (metricData) {
-                                        for (var j = 0; j < metricData.length; j++) {
-                                            metricData[j].totalUsage = metricData[j].usage;
-                                            delete metricData[j].usage;
-                                        }
-                                    }
-                                    value = metricData == null ? [{ time: 0, totalUsage: 0 }] : metricData;
-                                    arr.push({ values: value, key: jsonArr[i].name, area: true });
-                                }
-                                computeDetailService.setAlarmLine(arr, CONSTANTS.nodeKey.TENANT, $scope.main, opt.nodeid);
-                                opt.chart.data = arr;
-                                opt.chart.api.refresh();
-                                opt.loading = false;
-                                callCount += 1;
-                            }
-                        },
-                        function (reason, status) {
-                            $timeout(function () { $exceptionHandler(reason.Message, { code: status, message: reason.Message }); }, 500);
-                        }
-                    );
-                })(widget, index);
-            });
-
-            var stop = $interval(function () {
-                if (callCount == widgetLen) {
-                    $interval.cancel(stop);
-                    $scope.main.loadingMainBody = false;
-                }
-            }, 500);
-
+            chartDataOption.datas = datas;
+            computeDetailService.reloadChartData(chartDataOption);
             ct.fn.getTimeRangeString();
         };
 
-        // time range 선택 시 그에 해당하는 group by 선택
-        ct.fn.selectGroupBy = function() {
-            ct.selGroupBy = common.getGroupingByTimeRange(ct.selCTimeRange, ct.timeRangeFrom, ct.timeRangeTo);
+        ct.fn.reloadChartDataOne = function (widget) {
+            computeDetailService.reloadChartDataOne(widget, chartDataOption);
         };
 
         // 알람탭 관련

@@ -53,7 +53,7 @@
 		color: inherit;
 	}
 	.tab-content .tab-ct .box-header {
-		padding: 6px 15px;
+		padding: 10px 15px;
 		background: #f2f2f2;
 		border-radius: 3px;
 		margin-bottom: 12px;
@@ -124,6 +124,24 @@
 	.panel.type2.zoom .panel_body .jspContainer {
 		height: 100% !important;
 		overflow: auto !important;
+	}
+	#chart .network-ct.row {
+		margin-right: 0;
+		margin-left: 0;
+	}
+	.dygraph-legend {
+		position: absolute;
+		background-color: rgba(255, 255, 255, 0.7) !important;
+		padding: 4px;
+		border: 1px solid #000;
+		border-radius: 3px;
+		pointer-events: none;
+		width: 100px;
+	}
+	.box-header-btns .ico-item {
+		position: relative;
+		top: -17px;
+		cursor: pointer;
 	}
 </style>
 <!-- cBox -->
@@ -582,7 +600,7 @@
 				<div class="panel type2" style="cursor: unset; height: 670px; overflow: hidden;">
 					<div class="panel_head">
 						<div class="tit pull-left">가상머신 모니터링
-							<div class="tit-in-info info-minor">
+							<!-- <div class="tit-in-info info-minor">
 								<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('minor') }"></span>
 								<span class="info-text">Minor</span>
 							</div>
@@ -593,7 +611,7 @@
 							<div class="tit-in-info info-critical">
 								<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('critical') }"></span>
 								<span class="info-text">Critical</span>
-							</div>
+							</div> -->
 						</div>
 						<div class="pull-right">
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'virtualMonit')">
@@ -608,6 +626,10 @@
 									<div class="chartTabWrap searchWrap ng-scope">
 										<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required">
 											<div class="chartSearchBox">
+												<div class="chartSearchItem">
+													<input type="radio" id="timeRangeType01_00" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="1h" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+													<label for="timeRangeType01_00" class="ng-binding">최근 1시간</label>
+												</div>
 												<div class="chartSearchItem">
 													<input type="radio" id="timeRangeType01_01" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="3h" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
 													<label for="timeRangeType01_01" class="ng-binding">최근 3시간</label>
@@ -665,44 +687,51 @@
 														</div>
 													</div>
 												</div>
+												<div class="chartSearchItem">
+													<select name="group" class="customGroup"
+														ng-options="group.value as group.name for group in contents.groupResources" 
+														ng-model="contents.selGroupBy">
+													</select>
+												</div>
 												<button class="btn btn-color1 ng-binding ng-scope" ng-click="contents.fn.saveTimeRange()" aria-hidden="false">검색</button>
 											</div>
 										</form>
 									</div>
 									<div id="chart" class="tab-pane fade in active tab-ct" style="overflow-y: auto; height: 425px;">
 										<div gridster="gridsterOpts" style="min-width:1000px;">
-											<ul>
-												<li gridster-item="widget" ng-repeat="widget in dashboard.widgets">
+											<ul class="network-ct row">
+												<li gridster-item="widget" ng-repeat="widget in dashboard.widgets" class="col-md-4">
 													<div class="box">
 														<div class="box-header">
 															<h4>{{ widget.name }}</h4>
-															<div class="box-header-btns pull-right" ng-show="widget.loading">
-																<i class="fa fa-spinner fa-pulse fa-fw"></i>
+															<div class="box-header-btns pull-right">
+																<div class="ico-item" ng-show="widget.refreshIconShow">
+																	<img src="img/btn_refresh.png" ng-click="contents.fn.reloadChartDataOne(widget)">
+																</div>
 															</div>
 														</div>
 														<div class="box-content">
-															<nvd3 options="widget.chart.options" data="widget.chart.data"
-																api="widget.chart.api" config="config" events="events" class="with-3d-shadow with-transitions"></nvd3>
+															<div id="{{widget.nodeid}}" class="dygraphs"></div>
 														</div>
 													</div>
 												</li>
 											</ul>
-											<ul class="network-ct" ng-repeat="interface in interfaceList">
-												<li class="tit-in-ct">
+											<ul class="network-ct row" ng-repeat="interface in interfaceList">
+												<li class="tit-in-ct col-md-12">
 													<p>네트워크 인터페이스 <span class="point-txt">{{ interface }}</span></p>
 												</li>
-												<li gridster-item="widget" ng-repeat="widget in dashboard.netWidgets[interface]">
+												<li gridster-item="widget" ng-repeat="widget in dashboard.netWidgets[interface]" class="col-md-4">
 													<div class="box">
 														<div class="box-header">
 															<h4>{{ widget.name }}</h4>
-															<div class="box-header-btns pull-right" ng-show="widget.loading">
-																<i class="fa fa-spinner fa-pulse fa-fw"></i>
+															<div class="box-header-btns pull-right">
+																<div class="ico-item" ng-show="widget.refreshIconShow">
+																	<img src="img/btn_refresh.png" ng-click="contents.fn.reloadChartDataOne(widget)">
+																</div>
 															</div>
 														</div>
 														<div class="box-content">
-															<nvd3 options="widget.chart.options" data="widget.chart.data"
-																api="widget.chart.api" config="config" events="events"
-																class="with-3d-shadow with-transitions"></nvd3>
+															<div id="{{interface + '_' + widget.nodeid}}" class="dygraphs"></div>
 														</div>
 													</div>
 												</li>
@@ -807,7 +836,7 @@
 														<td><span class="label label-{{alarms.alarmLevel}}">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
 														<td ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.hostName }}</td>
 														<td>{{ alarms.ip }}</td>
-														<td ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.title }}</td>
+														<td ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)" class="text-left">{{ alarms.title }}</td>
 														<td>{{ alarms.resolveStatus }}</td>
 													</tr>
 													<tr ng-if="contents.alarmData.length == 0 || !contents.alarmData" class="ng-scope">

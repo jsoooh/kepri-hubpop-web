@@ -157,3 +157,25 @@
     background-color: #444955;
 }
 
+ .state-label.label-running{
+    background: #337ab7 !important;
+ }
+ .state-label.label-minor{
+    background: #7266ba !important;
+ }
+ .state-label.label-warning{
+    background: #f8ac59 !important;
+ }
+ .state-label.label-critical{
+    background: #ff1100 !important;
+ }
+ .state-label.label-failure, .state-label.label-fail, .state-label.label-failed{
+    background: #363636 !important;
+ }
+ .state-label.label-clear{
+    background: #5acc27 !important;
+ }
+ .state-label.label-noagent{
+    background-color: #eee !important;
+    color: #828282 !important;
+ }

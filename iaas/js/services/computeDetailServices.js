@@ -84,39 +84,196 @@ angular.module('iaas.services')
             return common.resourcePromise(tenantUrl + '/net/' + condition.hostname + '/droppacketList', 'GET', condition);
         };
 
-        computeDetailService.setAlarmLine = function (arr, nodeKey, main, nodeid) {
-            if ((nodeid == 'cpu_usage' || nodeid == 'mem_usage' || nodeid == 'dsk_usage') && arr.length > 0) {
-                var alarmType = nodeid.split('_')[0].replace('dsk', 'disk').replace('mem', 'memory');
-                var minorSeries = [];
-                var warnSeries = [];
-                var criSeries = [];
-                angular.copy(arr[0].values, minorSeries);
-                angular.copy(arr[0].values, warnSeries);
-                angular.copy(arr[0].values, criSeries);
-                var minorValue = 100;
-                var warnValue = 100;
-                var criValue = 100;
-                angular.forEach(main.alarmPolicys[nodeKey].detail, function (el, k) {
-                    if (el.alarmType == alarmType) {
-                        minorValue = el.minorThreshold;
-                        warnValue = el.warningThreshold;
-                        criValue = el.criticalThreshold;
+        var options = {
+            width: 460,
+            height: 250,
+            fillGraph: true,
+            fillAlpha: 0.35,
+            highlightCircleSize: 2,
+            strokeWidth: 2,
+            // ylabel: widget.axisLabel,
+            highlightSeriesOpts: {
+                strokeWidth: 3,
+                strokeBorderWidth: 1,
+                highlightCircleSize: 5
+            },
+            legend: 'follow',
+            colors: ['#b9e866','#5cc6d9','#f5da25','#9041d2','#2172e4','#22a581','#ed3131','#9c78df','#ff9936','#2b6e90']
+        };
+
+        computeDetailService.resetChartData = function (widget, data) {
+            var resources = [];
+            var labels = ['time'];
+
+            angular.forEach(data, function (e, k) {
+                labels.push(e.name);
+                var metric = [];
+                if (widget.nodeid == 'cpu_usage' || widget.nodeid == 'mem_usage') {
+                    metric = e.metric[0].metric;
+                } else {
+                    metric = e.metric;
+                }
+                angular.forEach(metric, function (e2, k2) {
+                    if (k == 0) {
+                        resources.push([new Date(e2.time * 1000)]);
                     }
+                    resources[k2].push(e2.usage);
                 });
-                angular.forEach(minorSeries, function (el, k) {
-                    el.totalUsage = minorValue;
-                });
-                angular.forEach(warnSeries, function (el, k) {
-                    el.totalUsage = warnValue;
-                });
-                angular.forEach(criSeries, function (el, k) {
-                    el.totalUsage = criValue;
-                });
-                arr.push({values: minorSeries, key: 'Minor', area: false, color: main.getAlarmColor('minor'), legend: false});
-                arr.push({values: warnSeries, key: 'Warning', area: false, color: main.getAlarmColor('warning'), legend: false});
-                arr.push({values: criSeries, key: 'Critical', area: false, color: main.getAlarmColor('critical'), legend: false});
+            });
+
+            return {
+                resources: resources,
+                labels: labels
             }
-        }
+        };
+
+        computeDetailService.setChartData = function(p) {
+            var widgets = p.interface ? p.scope.dashboard.netWidgets[p.interface] : p.scope.dashboard.widgets;
+            angular.forEach(widgets, function(widget, key) {
+                
+                var interfaceVal = p.interface ? p.interface : undefined;
+                if (interfaceVal) {
+                    p.condition.interface = interfaceVal;
+                    widget.interface = interfaceVal;
+                }
+
+                widget.refreshIconShow = false;
+                widget.hostname = p.hostname;
+                computeDetailService[widget.func](p.condition).then(
+                    function (result) {
+                        computeDetailService.setChart(result, widget);
+                    }
+                );
+            });
+
+            p.interface = undefined;
+        };
+
+        computeDetailService.setChart = function (result, widget) {
+            var resetData = computeDetailService.resetChartData(widget, result.data);
+            var resources = resetData.resources;
+            var labels = resetData.labels;
+            var option = angular.copy(options);
+
+            option.labels = labels.slice();
+            if (widget.percent) option.valueRange = [0, 101];
+            var nodeid = widget.interface ? widget.interface + '_' + widget.nodeid : widget.nodeid;
+            widget.chart = new Dygraph(document.getElementById(nodeid), resources, option);
+            widget.chart.updateOptions({
+                zoomCallback : function (minDate, maxDate, yRange) {
+                    computeDetailService.zoomCallback(minDate, maxDate, widget.hostname, widget, true);
+                }
+            });
+        };
+
+        computeDetailService.zoomCallback = function (minDate, maxDate, hostname, widget, refreshIconShow) {
+            var timeRangeFrom = new Date(minDate);
+            var timeRangeTo = new Date(maxDate);
+            var condition = {
+                hostname: hostname,
+                timeRangeFrom: common.getTimeRangeFlag(moment(timeRangeTo, 'YYYY.MM.DD hh:mm')),
+                timeRangeTo: common.getTimeRangeFlag(moment(timeRangeFrom, 'YYYY.MM.DD hh:mm')),
+                groupBy: common.getGroupingByTimeRange('custom', timeRangeFrom, timeRangeTo)
+            };
+            
+            var rp2 = computeDetailService[widget.func](condition);
+            rp2.success(function (data2) {
+                widget.refreshIconShow = refreshIconShow;
+                var resources2 = computeDetailService.resetChartData(widget, data2).resources;
+                if (resources2.length > 0) widget.chart.updateOptions({file: resources2});
+            });
+        };
+
+        computeDetailService.initChartData = function (p) {
+
+            p.condition = {
+                hostname: p.hostname,
+                groupBy: p.cookies.getGroupBy()
+            };
+            
+            if (p.cookies.getDefaultTimeRange() == 'custom') {
+                p.condition.timeRangeFrom = p.cookies.getTimeRangeTo();
+                p.condition.timeRangeTo = p.cookies.getTimeRangeFrom();
+            } else {
+                p.condition.defaultTimeRange = p.cookies.getDefaultTimeRange();
+            }
+
+            p.scope.interfaceList = [];
+            p.scope.dashboard = {
+                widgets: angular.copy(p.chartConfig),
+                netWidgets: {}
+            };
+
+            p.scope.main.loadingMainBody = true;
+
+            computeDetailService.setChartData(p);
+            computeDetailService[p.interfaceFunc]({hostname: p.hostname}).then(
+                function (result) {
+                    if (result.data.metric) {
+                        angular.forEach(result.data.metric, function (metricItem, mkey) {
+                            p.scope.interfaceList.push(metricItem);
+                            p.scope.dashboard.netWidgets[metricItem] = [];
+                            angular.forEach(p.netChartConfig, function (config) {
+                                p.scope.dashboard.netWidgets[metricItem].push(angular.copy(config));
+                            });
+                            p.interface = metricItem;
+                            computeDetailService.setChartData(p);
+                            p.scope.main.loadingMainBody = false;
+                        });
+                    } else {
+                        p.scope.main.loadingMainBody = false;
+                    }
+                },
+                function (reason) {
+                    p.scope.main.loadingMainBody = false;
+                }
+            );
+        };
+
+        computeDetailService.reloadChartData = function (p) {
+            p.isReload = true;
+            p.condition = {
+                hostname: p.hostname,
+                groupBy: p.datas.selGroupBy
+            };
+
+            p.defaultTimeRange = p.datas.selTimeRange;
+
+            if (p.defaultTimeRange == 'custom') {
+                p.condition.timeRangeFrom = p.datas.timeRangeTo;
+                p.condition.timeRangeTo = p.datas.timeRangeFrom;
+                p.scope.savedCustom = true;
+            } else {
+                p.condition.defaultTimeRange = p.defaultTimeRange;
+                p.condition.groupBy = p.datas.selGroupBy;
+                p.scope.savedCustom = false;
+            }
+
+            p.scope.main.loadingMainBody = true;
+
+            // 노드 데이터 재조회
+            p.chartConfig = p.scope.dashboard.widgets;
+            computeDetailService.setChartData(p);
+
+            // 네트워크 데이터 재조회
+            angular.forEach(p.scope.interfaceList, function (interfaceVal, index) {
+                p.chartConfig = p.scope.dashboard.netWidgets[interfaceVal];
+                p.interface = interfaceVal;
+                computeDetailService.setChartData(p);
+            });
+            p.scope.main.loadingMainBody = false;
+        };
+
+        computeDetailService.reloadChartDataOne = function (widget, p) {
+            widget.refreshIconShow = false;
+            p.scope.main.loadingMainBody = true;
+            computeDetailService[widget.func](p.condition).then(
+                function (result) {
+                    computeDetailService.setChart(result, widget);
+                    p.scope.main.loadingMainBody = false;
+                }
+            );
+        };
 
         return computeDetailService;
     })

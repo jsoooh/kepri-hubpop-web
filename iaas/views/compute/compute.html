@@ -59,6 +59,7 @@
 						<!-- 접속정보 -->
 						<div ng-if="instance.procState == 'end'" class="tg_box_area btn-option type2">
 							<button type="button" class="btn_txt" ng-click="contents.showInfo(instance);">접속정보</button>
+							<button type="button" class="btn_txt state-label label-{{ instance.alarmStatus.replace(' ', '') }}" ng-show="instance.alarmStatus">{{ main.getAlarmLabel(instance.alarmStatus) }}</button>
 							<div class="tg_box" ng-show="instance.showVal">
 								<div class="tgb_head">
 									<p class="tit">접속 정보</p>

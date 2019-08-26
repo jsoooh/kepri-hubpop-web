@@ -77,7 +77,7 @@
                             <td ng-style="{ 'color': (main.getAlarmColor(alarms.alarmLevel)) }"><span class="label label-{{alarms.alarmLevel}}">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
                             <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.hostName }}</td>
                             <td>{{ alarms.ip }}</td>
-                            <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.title }}</td>
+                            <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);" class="text-left">{{ alarms.title }}</td>
                             <td>{{ alarms.resolveStatus }}</td>
                         </tr>
                         <tr ng-if="contents.alarmData.length == 0 || !contents.alarmData" class="ng-scope">
@@ -171,7 +171,7 @@
                             <tbody>
                                 <tr ng-repeat="action in contents.data.action">
                                     <td>{{ action.modiDate | translate }}</td>
-                                    <td>{{ action.alarmActionDesc | translate }}</td>
+                                    <td class="text-left">{{ action.alarmActionDesc | translate }}</td>
                                     <td>
                                         <button ng-click="contents.fn.updateActionForm(action.id, action.alarmActionDesc)" class="btn btn-color4 btn-sm ng-binding">선택</button>
                                         <button ng-click="contents.fn.deleteAction(action.id)" class="btn btn-color5 btn-sm ng-binding">삭제</button>
