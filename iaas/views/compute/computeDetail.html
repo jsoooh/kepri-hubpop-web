@@ -48,9 +48,13 @@
 							<strong class="tit">접속 IP</strong>
 							<div class="txt">{{contents.instance.floatingIp}}<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
 						</li>
-						<li ng-if="contents.instance.image.osType == 'windows'">
+						<li ng-if="contents.instance.image.osType == 'windows' && !contents.instance.rdpDomain">
 							<strong class="tit">접속 도메인</strong>
 							<div class="txt">{{ (contents.instance.rdpConnectDomain) ? contents.instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
+						</li>
+						<li ng-if="contents.instance.image.osType == 'windows' && contents.instance.rdpDomain">
+							<strong class="tit">접속 IP</strong>
+							<div class="txt">{{ contents.instance.rdpDomain ? contents.instance.rdpDomain : '' }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
 						</li>
 						<li>
 							<strong class="tit">내부 IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를<br>사용할 수 있습니다.'"><span class="ico_info"></span></button></strong>

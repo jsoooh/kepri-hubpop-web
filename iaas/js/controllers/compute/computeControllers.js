@@ -674,9 +674,11 @@ angular.module('iaas.controllers')
                 }
             } else if (instance.image.osType == 'windows') {
                 var rdpConnectUrl = (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + ct.rdpConnectPort : '';
-                if (rdpConnectUrl) {
-                    common.copyToClipboard(rdpConnectUrl);
-                    $scope.main.copyToClipboard(rdpConnectUrl, '"' + rdpConnectUrl + '"가 클립보드에 복사 되었습니다.');
+                var rdpDomain = instance.rdpDomain ? instance.rdpDomain : '';
+                var copyUrl = rdpConnectUrl ? rdpConnectUrl : rdpDomain;
+                if (copyUrl) {
+                    common.copyToClipboard(copyUrl);
+                    $scope.main.copyToClipboard(copyUrl, '"' + copyUrl + '"가 클립보드에 복사 되었습니다.');
                 } else {
                     common.showAlertWarning("접속 URL이 존재하지 않습니다.");
                 }
@@ -1164,11 +1166,12 @@ angular.module('iaas.controllers')
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
             params.instance.spec = ct.data.spec;
 
-            if (ct.data.image.osType == 'windows') {
+            //windows RDP 관련 수정. domain 저장하지 않음. 2019.07.16
+            /*if (ct.data.image.osType == 'windows') {
                 if (ct.data.baseDomainName && ct.data.subDomainName) {
                     params.instance.rdpDomain = ct.data.subDomainName + "." + ct.data.baseDomainName;
                 }
-            }
+            }*/
 
             if (ct.volumeSize > 0) {
                 params.volume = {};
