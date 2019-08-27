@@ -33,7 +33,8 @@
 	</div>
 	<p class="txt_level1 blt_none">④  <strong>‘일반’</strong> 탭(tab)으로 이동합니다.</p>
 	<p class="txt_level1 blt_none">⑤  <strong>‘저장’</strong> 버튼을 클릭하여 현재 설정을 영구 보존 합니다.</p>
-	
+
+	<div ng-if="!spop.data.rdpDomain">
 	<h4 class="pt80">3) DNS 설정</h4>
 	<p class="txt_level1 blt_none">윈도우 VM은 가상 네트워크 상에 존재하는 서버로서 사용자가 직접 접속할 수 없습니다. 가상네트워크 상의 윈도우VM으로 접속하기 위해서는 “Hosts 파일을 수정＂하거나 “DNS 서버를 추가” 하여야 합니다.</p>
 	<p class="txt_level4"><em>※</em>현재(2019.3.11) Hosts 파일 수정을 통한 접속방법을 사용하시기를 권장합니다.</p>
@@ -65,8 +66,8 @@
 	</div>
 	<p class="txt_level1 blt_none">②  인터넷 프로토콜 TCP/IPv4 속성 화면 하단의 <strong>‘고급’ 버튼을 클릭</strong>합니다.</p>
 	<p class="txt_level1 blt_none">③  고급 TCP/IP 설정 화면 DNS 탭의 <strong>‘추가’ 버튼을 클릭하여 168.78.82.224를 추가</strong>합니다.</p>
-	
-	
+	</div>
+
 	<h3 class="pt80">2. 접속 방법</h3>
 	<p class="txt_level1 pdb0">접속도구를 통해 생성된 가상 윈도우 서버에 접속하는 방법을 안내합니다.</p>
 	
@@ -80,11 +81,12 @@
 	<div class="imgWrap">
 		<img alt="" src="images/access_guide/access_guide_window_img05.png" alt="">
 	</div>
-	<p class="txt_level1 blt_none">①  생성한 서버의 접속정보 를 참조하여 ‘접속 도메인’, ‘접속 계정’, ‘접속 비밀번호’를 입력하고 ‘확인’ 버튼을 클릭합니다.</p>
+	<p class="txt_level1 blt_none" ng-if="!spop.data.rdpDomain">①  생성한 서버의 접속정보 를 참조하여 ‘접속 도메인’, ‘접속 계정’, ‘접속 비밀번호’를 입력하고 ‘확인’ 버튼을 클릭합니다.</p>
+	<p class="txt_level1 blt_none" ng-if="!!spop.data.rdpDomain">①  생성한 서버의 접속정보 를 참조하여 ‘접속 주소’, ‘접속 계정’, ‘접속 비밀번호’를 입력하고 ‘확인’ 버튼을 클릭합니다.</p>
 	<div class="txt_level_list">
 		<p class="txt_level3 type2">서버 접속 정보</p>
 		<dl>
-			<dt>- 접속 도메인 :</dt><dd>{{spop.data.rdpConnectUrl}} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="main.copyToClipboard(spop.data.rdpConnectUrl, '클립보드에 복사 되었습니다.')"><span class="ico_sm ico_copy"></span></button></dd>
+			<dt ng-if="!spop.data.rdpDomain">- 접속 도메인 :</dt><dt ng-if="!!spop.data.rdpDomain">- 접속 주소 :</dt><dd>{{spop.data.rdpConnectUrl}} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="main.copyToClipboard(spop.data.rdpConnectUrl, '클립보드에 복사 되었습니다.')"><span class="ico_sm ico_copy"></span></button></dd>
 			<dt>- 접속 계정 :</dt><dd>administrator</dd>
 			<dt>- 접속 비밀번호 :</dt><dd>kepri!234</dd>
 		</dl>
