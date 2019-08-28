@@ -46,7 +46,7 @@ angular.module('iaas.controllers')
                 var instanceSnapshots = [];
                 if (data && angular.isArray(data.content)) {
                     instanceSnapshots = data.content;
-                    if(data.content.length != 0) {
+                    if (data.content.length != 0) {
                         ct.loadingInstanceSnapshotList = true;
                     }
                 }
@@ -103,7 +103,7 @@ angular.module('iaas.controllers')
                 var volumeSnapShots = [];
                 if (data && data.content && angular.isArray(data.content.volumeSnapShots)) {
                     volumeSnapShots = data.content.volumeSnapShots;
-                    if(data.content.volumeSnapShots.length != 0) {
+                    if (data.content.volumeSnapShots.length != 0) {
                         ct.loadingStorageSnapshotList = true;
                     }
                 }
@@ -142,7 +142,7 @@ angular.module('iaas.controllers')
 
         // 백업 이미지 설명 팝업
         ct.fn.descriptionFormOpen = function($event, snapShot, state){
-    		if(state == 'server') {
+    		if (state == 'server') {
     			ct.fn.modifyServerSnapShotDesc($event, snapShot);
     		} else if (state == 'storage') {
     		    ct.fn.modifyStorageSnapShotDesc($event, snapShot);
@@ -193,7 +193,7 @@ angular.module('iaas.controllers')
             common.showAlertError('이미 삭제된 인스턴스입니다.');
         };
 
-        if(ct.data.tenantId) {
+        if (ct.data.tenantId) {
             ct.fn.getInstanceSnapshotList();
             ct.fn.getStorageSnapshotList(1);
         }
@@ -261,8 +261,8 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.length > 0) {
                     ct.securityPolicyList = data.content;
-                    for(var i = 0; i < ct.securityPolicyList.length; i++){
-                        if(ct.securityPolicyList[i].name == "default"){
+                    for (var i = 0; i < ct.securityPolicyList.length; i++) {
+                        if (ct.securityPolicyList[i].name == "default") {
                             ct.roles.push(ct.securityPolicyList[i]);
                             ct.data.securityPolicys = ct.roles;
                         }
@@ -315,8 +315,8 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    if(ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
-                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                    if (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
+                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize;
                     }
                     ct.fn.setSpecMaxDisabled();
                 }
@@ -390,7 +390,7 @@ angular.module('iaas.controllers')
         // spec loading 체크
         ct.specDisabledAllSetting = false;
         ct.fn.defaultSelectSpec = function() {
-            if(ct.specMinDisabledSetting && ct.specMaxDisabledSetting){
+            if (ct.specMinDisabledSetting && ct.specMaxDisabledSetting) {
                 ct.specDisabledAllSetting = true;
                 var sltSpec = null;
                 for (var i=0; i<ct.specList.length; i++) {
@@ -407,7 +407,7 @@ angular.module('iaas.controllers')
 
         ct.fn.selectSpec = function(sltSpec) {
             if (!ct.specDisabledAllSetting || sltSpec.disabled) return;
-            if(sltSpec && sltSpec.uuid) {
+            if (sltSpec && sltSpec.uuid) {
                 ct.data.spec = angular.copy(sltSpec);
                 ct.specUuid = ct.data.spec.uuid;
             } else {
@@ -425,7 +425,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
-                if(ct.networks.length > 0) {
+                if (ct.networks.length > 0) {
                     ct.network = ct.networks[0];
                     ct.data.networks.push(ct.networks[0]);
                     ct.subnet.cidr_A = ct.network.subnets[0].cidr_A;
@@ -491,7 +491,7 @@ angular.module('iaas.controllers')
 
         var clickCheck = false;
         ct.fn.createServer = function() {
-            if(clickCheck) return;
+            if (clickCheck) return;
             clickCheck = true;
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
                 clickCheck = false;
@@ -551,10 +551,10 @@ angular.module('iaas.controllers')
             return {isValid : true};
         };
 
-        if(ct.data.tenantId && ct.snapshotId) {
+        if (ct.data.tenantId && ct.snapshotId) {
             $scope.main.loadingMainBody = true;
             ct.fn.getTenantResource();
-            ct.fn.getDomainUsingList();
+            //ct.fn.getDomainUsingList();     //windows rdp 포트포워딩으로 도메인 사용하지 않음
             ct.fn.getSnapshotInfo(ct.snapshotId);
             ct.fn.networkListSearch();
             ct.fn.getKeypairList();
@@ -630,7 +630,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
             	pop.instance = data.content.instances[0];
             	
-            	if(pop.instance.vmState == 'deleted') {
+            	if (pop.instance.vmState == 'deleted') {
             		common.showAlertWarning("원본 인스턴스가 삭제되어있습니다.");
             		//common.showAlert("message","원본 인스턴스가 삭제되어있습니다.");
             	}
@@ -659,10 +659,10 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 pop.securityPolicyList = data.content;
                 
-                for(var i=0; i < pop.securityPolicyList.length; i++) {
-                    if(pop.instance.securityPolicies) {
-                        for(var j=0; j < pop.instance.securityPolicies.length; j++) {
-                            if(pop.securityPolicyList[i].name == pop.instance.securityPolicies[j].name) {
+                for (var i=0; i < pop.securityPolicyList.length; i++) {
+                    if (pop.instance.securityPolicies) {
+                        for (var j=0; j < pop.instance.securityPolicies.length; j++) {
+                            if (pop.securityPolicyList[i].name == pop.instance.securityPolicies[j].name) {
                                 pop.roles.push(pop.securityPolicyList[i]);
                             }
                         }
@@ -688,13 +688,13 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 pop.keypairList = data.content;
                 
-                if(!pop.instance.keypair){
+                if (!pop.instance.keypair) {
                 	pop.instance.keypair = {};
                 	pop.instance.keypair.name = '';
                 }
                 
-                for(var i=0; i < pop.keypairList.length; i++) {
-                	if(pop.keypairList[i].name == pop.instance.keypair.name) {
+                for (var i=0; i < pop.keypairList.length; i++) {
+                	if (pop.keypairList[i].name == pop.instance.keypair.name) {
                 		pop.keypairValue = pop.keypairList[i];
                 		pop.data.keypair = angular.fromJson(pop.keypairValue);
                     }
@@ -730,7 +730,7 @@ angular.module('iaas.controllers')
         
         var clickCheck = false;
         pop.fn.createServer = function() {
-        	if(!clickCheck){
+        	if (!clickCheck) {
         		if (!new ValidationService().checkFormValidity($scope[pop.formName2])) {
                     return;
                 }
@@ -768,14 +768,14 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 pop.specList = data.content.specs;
                 
-                if(!pop.instance.spec) {
+                if (!pop.instance.spec) {
                 	pop.instance.spec = {};
                 	pop.instance.spec.name = '';
                 }
                 
-                for(var i=0; i < pop.specList.length; i++) {
+                for (var i=0; i < pop.specList.length; i++) {
                 	pop.specList[i].title = '[' + pop.specList[i].name + '] vCPU ' + pop.specList[i].vcpus + '개 / MEM ' + pop.specList[i].ram / 1024 + ' GB / DISK(HDD) ' + pop.specList[i].disk + ' GB';
-                	if(pop.specList[i].name == pop.instance.spec.name) {
+                	if (pop.specList[i].name == pop.instance.spec.name) {
                 		pop.specValue = pop.specList[i];
                 		pop.data.spec = angular.fromJson(pop.specValue);
                     }
@@ -789,9 +789,9 @@ angular.module('iaas.controllers')
         };
         
         pop.fn.selectSpec = function() {
-        	if(pop.specValue){
+        	if (pop.specValue) {
         		pop.data.spec = angular.fromJson(pop.specValue);
-        	}else{
+        	} else {
         		pop.data.spec.vcpus = 0;
         		pop.data.spec.ram = 0;
         		pop.data.spec.disk = 0;
@@ -802,14 +802,14 @@ angular.module('iaas.controllers')
             var param = {
                 tenantId : pop.data.tenantId
             };
-            if(scriptId) {
+            if (scriptId) {
                 param.scriptId = scriptId;
             }
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/initScript', 'GET', param , 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                if(scriptId) {
+                if (scriptId) {
                     pop.data.initScript = data.content[0];
                     $scope.main.loadingMainBody = false;
                 } else {
@@ -824,7 +824,7 @@ angular.module('iaas.controllers')
         };
 
         pop.fn.changeInitScript = function() {
-            if(pop.initScriptValue == "") {
+            if (pop.initScriptValue == "") {
                 pop.data.initScript = {};
             } else {
                 pop.fn.getInitScriptList(angular.fromJson(pop.initScriptValue).scriptId);
@@ -832,7 +832,7 @@ angular.module('iaas.controllers')
         };
         
         pop.fn.initScriptSet = function() {
-            if(!pop.initCheck) {
+            if (!pop.initCheck) {
                 pop.data.initScript = {};
                 pop.initScriptValue = "";
             }
@@ -849,7 +849,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 pop.networks = data.content;
-                if(pop.networks.length > 0) {
+                if (pop.networks.length > 0) {
                     pop.network = pop.networks[0];
                     pop.data.networks.push(pop.networks[0]);
                     pop.subnet.cidr_A = pop.network.subnets[0].cidr_A;
@@ -866,7 +866,7 @@ angular.module('iaas.controllers')
 
         //네트워크 setting
         pop.fn.networksChange = function() {
-            if(pop.network && pop.network.subnets) {
+            if (pop.network && pop.network.subnets) {
                 pop.subnet.cidr_A = pop.network.subnets[0].cidr_A;
                 pop.subnet.cidr_B = pop.network.subnets[0].cidr_B;
                 pop.subnet.cidr_C = pop.network.subnets[0].cidr_C;
@@ -876,7 +876,7 @@ angular.module('iaas.controllers')
             }
         };
         
-        if(pop.data.tenantId) {
+        if (pop.data.tenantId) {
             pop.fn.getInstanceInfo(pop.instanceId);
             pop.fn.getSnapshotInfo(pop.snapshotId);
         }
@@ -910,7 +910,7 @@ angular.module('iaas.controllers')
             $scope.actionBtnHied = true;
 
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newSnapshotDesc);
-            if(checkByte > 255){
+            if (checkByte > 255) {
                 common.showAlertWarning("백업 이미지 설명이 255Byte를 초과하였습니다.");
                 $scope.actionBtnHied = false;
                 return;
@@ -985,7 +985,7 @@ angular.module('iaas.controllers')
             $scope.actionBtnHied = true;
 
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newSnapshotDesc);
-            if(checkByte > 255){
+            if (checkByte > 255) {
                 common.showAlertWarning("백업 이미지 설명이 255Byte를 초과하였습니다.");
                 $scope.actionBtnHied = false;
                 return;
