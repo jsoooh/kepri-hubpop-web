@@ -1206,7 +1206,7 @@ angular.module('iaas.controllers')
 
         if (ct.data.tenantId) {
             ct.fn.getTenantResource();
-            ct.fn.getDomainUsingList();
+            //ct.fn.getDomainUsingList();     //windows rdp 포트포워딩으로 도메인 사용하지 않음
             ct.fn.getSpecList();
             ct.fn.imageListSearch();
             ct.fn.getSecurityPolicy();
