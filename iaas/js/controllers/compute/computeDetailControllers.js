@@ -17,6 +17,7 @@ angular.module('iaas.controllers')
         ct.ipFlag = true;
         ct.addNetwork = {};
         ct.roles = [];
+        ct.serverMainList = [];
         ct.volumeRoles = [];
         ct.consoleLogLimit = 50;
         ct.actionLogLimit = 5;
@@ -37,11 +38,22 @@ angular.module('iaas.controllers')
         ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
-        ct.computeEditFormOpen = function (){
-            $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
-            $(".aside").stop().animate({"right":"-360px"}, 400);
-            $("#aside-aside1").stop().animate({"right":"0"}, 500);
+        ct.computeEditFormOpen = function ($event){
+            var dialogOptions =  {
+                controller       : "iaasComputeEditFormCtrl" ,
+                formName         : 'computeEditForm',
+                // selectStorage    : angular.copy(volume),
+                /*callBackFunction : ct.reNamePopServerCallBackFunction*/
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
         };
+
+        /*ct.reNamePopServerCallBackFunction = function () {
+            ct.fnGetServerMainList();
+        };*/
 
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function ($event) {
@@ -56,6 +68,72 @@ angular.module('iaas.controllers')
                  common.showDialog($scope, $event, dialogOptions);
                  $scope.actionLoading = true; // action loading
         };
+
+        /*ct.fnGetServerMainList = function() {
+            $scope.main.loadingMainBody = true;
+
+            var param = {
+                tenantId : ct.data.tenantId,
+                queryType : 'list'
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                ct.loadingServerList = false;
+                var instances = [];
+                if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
+                    instances = data.content.instances;
+                    var rtFilter = $filter('filter')(instances, {taskState: '!deleting'});
+                    //if (data.totalElements != 0){
+                    if (rtFilter.length != 0){
+                        ct.loadingServerList = true;
+                    }
+                }
+                var isServerStatusCheck = false;
+                common.objectOrArrayMergeData(ct.serverMainList, instances);
+                var nowDate = new Date();
+                angular.forEach(ct.serverMainList, function (serverMain) {
+                    if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
+                        isServerStatusCheck = true;
+                    }
+                    ct.fn.setProcState(serverMain);
+                    ct.fn.setRdpConnectDomain(serverMain);
+                    if (angular.isObject(serverMain.elapsed)) {
+                        serverMain.creatingTimmer = parseInt(serverMain.elapsed.time/1000, 10);
+                    } else {
+                        var createdDate = new Date(serverMain.created);
+                        serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
+                    }
+                });
+                if (isServerStatusCheck) {
+                    if ($scope.main.reloadTimmer['instanceServerStateList']) {
+                        $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
+                        $scope.main.reloadTimmer['instanceServerStateList'] = null;
+                    }
+                    $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
+                        ct.fn.checkServerState();
+                    }, 1000);
+                    if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
+                        $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
+                        $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
+                    }
+                    $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
+                }
+                /!*if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
+                    ct.firstInstanceCreatePop();
+                }*!/
+                ct.pageFirstLoad = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                ct.pageFirstLoad = false;
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };*/
 
         ct.fn.setProcState = function (instance) {
             if (ct.noIngStates.indexOf(instance.uiTask) >= 0 && !instance.taskState) {
@@ -2137,74 +2215,76 @@ angular.module('iaas.controllers')
         $scope.contents = angular.copy(common.getMainContentsCtrlScope().contents);
 
         pop.userTenant = angular.copy($scope.main.userTenant);
-
+        pop.serverMainLists = angular.copy($scope.contents.serverMainList);
         pop.fn = {};
-        pop.formName = "computeEditForm";
-        pop.title = "인스턴스 수정";
-        pop.instance = $scope.contents.instance;
+        pop.formName = $scope.dialogOptions.formName;
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
+        if ($scope.contents.instance == undefined) {
+            pop.instance = $scope.dialogOptions.instance;
+            pop.instance.tenantId = pop.userTenant.tenantId;
+            pop.instance.changeName = $scope.dialogOptions.instance.name;
+        } else {
+            pop.instance = $scope.contents.instance;
+        }
+        pop.serverNameList = [];
+
+        $scope.dialogOptions.title 		= "이름 변경";
+        $scope.dialogOptions.okName 	    = "변경";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+
+        for (var i = 0; i < pop.serverMainLists.length; i++) {
+            pop.serverNameList.push(pop.instance.name);
+        }
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+
+            $scope.actionBtnHied = true;
+
+            if (pop.serverNameList.indexOf(pop.instance.changeName) > -1) {
+                $scope.actionBtnHied = false;
+                return common.showAlert("이미 사용중인 이름 입니다.");
+            }
+
+            pop.fn.changeInstance();
+        };
+
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
 
         //인스턴스 상세 정보 변경
         pop.fn.changeInstance = function() {
-        	common.showConfirm('메세지',pop.instance.name +' 서버 정보를 수정하시겠습니까?').then(function(){
-        		if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
-                    return;
-                }
-	            var param = {instance:pop.instance};
-	            $scope.main.loadingMainBody = true;
-                $scope.main.asideClose();
-	            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'PUT', param);
-	            returnPromise.success(function (data, status, headers) {
-	                $scope.main.loadingMainBody = false;
-	                common.showAlertSuccess("수정되었습니다");
-	            	//common.showAlert("message","수정되었습니다.");
-	                $scope.main.goToPage("/iaas/compute");
-	            });
-	            returnPromise.error(function (data, status, headers) {
-	                $scope.main.loadingMainBody = false;
-	            	common.showAlertError(data.message);
-	                //common.showAlert("message",data.message);
-	            });
-	            returnPromise.finally(function() {
-	                $scope.main.loadingMainBody = false;
-	            });
-        	});
-        };
-        
-        //보안정책 조회 후 셋팅
-        pop.fn.getSecurityPolicy = function() {
+            /* detail 페이지와 팝업창의 인스턴스 이름 동기화 방지를 위함.*/
+            pop.instance.name = pop.instance.changeName;
+            var param = {
+                instance : pop.instance
+            };
             $scope.main.loadingMainBody = true;
-        	pop.roles = [];
-            var param = {tenantId:$scope.contents.data.tenantId};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param , 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'PUT', param);
             returnPromise.success(function (data, status, headers) {
-            	pop.securityPolicyList = data.content;
-                for(var i=0; i < pop.securityPolicyList.length; i++) {
-                    if(pop.instance.securityPolicies) {
-                        for(var j=0; j < pop.instance.securityPolicies.length; j++) {
-                            if(pop.securityPolicyList[i].name == pop.instance.securityPolicies[j].name) {
-                            	pop.roles.push(pop.securityPolicyList[i]);
-                            }
-                        }
-                    }
-                }
+                $scope.main.replacePage();
+                common.mdDialogHide();
                 $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("수정되었습니다");
             });
             returnPromise.error(function (data, status, headers) {
+                common.mdDialogHide();
                 $scope.main.loadingMainBody = false;
-            	common.showAlertError(data.message);
-                //common.showAlert("message",data.message);
+                common.showAlertError("실패하였습니다");
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function() {
+                common.mdDialogHide();
                 $scope.main.loadingMainBody = false;
             });
         };
 
-        //보안정책 셋팅
-        pop.fn.changeSecurityPolicy = function() {
-        	pop.instance.securityPolicies = pop.roles;
-        };
-        
-        pop.fn.getSecurityPolicy();
     })
     .controller('iaasComputeDomainFormCtrl', function($scope, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDomainFormCtrl", 1);

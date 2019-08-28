@@ -27,6 +27,23 @@ angular.module('iaas.controllers')
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
         ct.tabIndex = 0;
 
+        ct.computeEditFormOpen = function (instance, $event){
+            var dialogOptions =  {
+                controller       : "iaasComputeEditFormCtrl" ,
+                formName         : 'computeEditForm',
+                instance         : angular.copy(instance)
+                // callBackFunction : ct.reNamePopServerCallBackFunction1
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        // ct.reNamePopServerCallBackFunction1 = function () {
+        //     ct.fnGetServerMainList();
+        // };
+
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function (instance, $event, $index) {
         	 var dialogOptions = {
@@ -138,6 +155,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 ct.loadingServerList = false;
+                ct.serverMainList = [];
                 var instances = [];
                 if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
                     instances = data.content.instances;
@@ -190,6 +208,7 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.finally(function (data, status, headers) {
+                console.debug("serverMainList: ", ct.serverMainList);
             });
         };
 
@@ -509,6 +528,8 @@ angular.module('iaas.controllers')
                 ct.fn.IpConnectPop(instance,index);
             } else if (action == "IPDISCONNECT"){
                 ct.fn.ipConnectionSet(instance, "detach",index);
+            } else if (action == "RENAME") {
+                ct.deleteInstanceJob(instance.id);
             }
             ct.selectedValues[index] = "";
         };
