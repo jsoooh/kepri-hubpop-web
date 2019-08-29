@@ -4,7 +4,7 @@
 			<ul class="dept2" style="display:none;" onmouseleave="depth3Leave();">
 				<li>
 					<ul>
-						<li ng-repeat="orgItem in main.portalOrgs" class="dept2" onmouseover="depth2LiHover(event, 'no');">
+						<li ng-repeat="orgItem in main.portalOrgs" ng-if="$index < 5" class="dept2" onmouseover="depth2LiHover(event, 'no');">
 							<a class="dept2" title="{{orgItem.orgName}}" ng-class="{'on': main.sltPortalOrgId == orgItem.id}" href="" onmouseover="depth2Hover(event, 'no');" ng-click="main.goToPortalOrgPage(orgItem);">{{orgItem.orgName}}</a>
 						</li>
 					</ul>
@@ -13,7 +13,7 @@
 					<a class="btn_create_proj" ng-click="main.addOrgProjectFormOpen($event)">프로젝트 생성</a>
 				</li>
 				<li class="dept2 pj_all" onmouseover="depth2LiHover(event, 'no');">
-					<a class="btn_all_proj" href="/#/comm/projects">전체 프로젝트</a>
+					<a class="btn_all_proj" href="/#/comm/projects/">전체 프로젝트</a>
 				</li>
 			</ul>
 		</li>

@@ -1970,10 +1970,10 @@ angular
             type: "regex"
           };
           break;
-        case "alpha_lower" :
+        case "alpha_lower_num" :
           validator = {
-            pattern: /^([a-z])*$/,
-            message: "INVALID_ALPHA_LOWER",
+            pattern: /^([a-z0-9])*$/,
+            message: "INVALID_ALPHA_LOWER_NUM",
             type: "regex"
           };
           break;

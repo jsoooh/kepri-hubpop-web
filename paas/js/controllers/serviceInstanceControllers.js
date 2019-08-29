@@ -311,11 +311,15 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var resultPromise = serviceInstanceService.listAllServices();
             resultPromise.success(function (data) {
-                ct.services = data;
-                angular.forEach(ct.services, function (service) {
+                //ct.services = data;
+                angular.forEach(data, function (service) {
                     angular.forEach(service.servicePlans, function (servicePlan) {
                         servicePlan.quota = servicePlan.name.replace("mb", ' Megabyte');
                     });
+                    //서비스브로커 : oracle 제외. 2019.06.27
+                    if (service.label.toLowerCase().indexOf("oracle") == -1) {
+                        ct.services.push(service);
+                    }
                 });
                 ct.sltServiceChange(ct.services[0].guid);
                 ct.servicesLoad = true;

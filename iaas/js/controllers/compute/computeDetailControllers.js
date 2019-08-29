@@ -976,12 +976,12 @@ angular.module('iaas.controllers')
                                 
                                 ct.timeRangePicker.on('change:start', function() {
                                     ct.timeRangeFrom = moment(ct.timeRangePicker.getStartDate());
-                                    $timeout(ct.fn.setIntervalTime, 500);
+                                    $timeout(function () { ct.fn.setIntervalTime(true); }, 500);
                                 });
                                 
                                 ct.timeRangePicker.on('change:end', function() {
                                     ct.timeRangeTo = moment(ct.timeRangePicker.getEndDate());
-                                    $timeout(ct.fn.setIntervalTime, 500);
+                                    $timeout(function () { ct.fn.setIntervalTime(true); }, 500);
                                 });
                             }
                         }, 500);
@@ -1180,7 +1180,7 @@ angular.module('iaas.controllers')
 
         // time range 선택 시 그에 해당하는 group by 선택
         ct.fn.selectGroupBy = function() {
-            ct.fn.setIntervalTime();
+            ct.fn.setIntervalTime(true);
         };
         
         var hostname = $stateParams.instanceId;
@@ -1198,9 +1198,13 @@ angular.module('iaas.controllers')
             ex: $exceptionHandler
         };
 
-        ct.fn.setIntervalTime = function () {
-            ct.groupResources = common.getGroupingComboBox(ct.selCTimeRange, ct.timeRangeFrom, ct.timeRangeTo)
-            if (ct.groupResources.length > 0) ct.selGroupBy = ct.groupResources[0].value;
+        ct.fn.setIntervalTime = function (isChange) {
+            ct.groupResources = common.getGroupingComboBox(ct.selCTimeRange, ct.timeRangeFrom, ct.timeRangeTo);
+            if (isChange) {
+                if (ct.groupResources.length > 0) ct.selGroupBy = ct.groupResources[0].value;
+            } else {
+                if (ct.groupResources.length > 0 && cookies.getGroupBy() == undefined) ct.selGroupBy = ct.groupResources[0].value;
+            }
         };
 
         ct.fn.selectChartList = function () {
@@ -1211,11 +1215,15 @@ angular.module('iaas.controllers')
         // 조회주기 및 GroupBy 설정
         ct.fn.saveTimeRange = function () {
             if(ct.selCTimeRange == 'custom') {
+                if (ct.timeRangeTo.diff(ct.timeRangeFrom, 'minutes') < 30) {
+                    ct.timeRangeFrom.subtract(30, 'minutes');
+                    ct.timeRangePicker.setStartDate(new Date(ct.timeRangeFrom.format('YYYY-MM-DD HH:mm')));
+                }
                 cookies.putTimeRangeFrom(common.getTimeRangeFlag(moment(ct.timeRangeFrom, 'YYYY-MM-DD HH:mm')));
                 cookies.putTimeRangeTo(common.getTimeRangeFlag(moment(ct.timeRangeTo, 'YYYY-MM-DD HH:mm')));
                 cookies.putDefaultTimeRangeFrom(ct.timeRangeFrom);
                 cookies.putDefaultTimeRangeTo(ct.timeRangeTo);
-                ct.selGroupBy = common.getGroupingByTimeRange(ct.timeRangeFrom, ct.timeRangeTo);
+                // ct.selGroupBy = common.getGroupingByTimeRange(ct.timeRangeFrom, ct.timeRangeTo);
             }
 
             cookies.putDefaultTimeRange(ct.selCTimeRange);
@@ -1231,10 +1239,6 @@ angular.module('iaas.controllers')
             chartDataOption.datas = datas;
             computeDetailService.reloadChartData(chartDataOption);
             ct.fn.getTimeRangeString();
-        };
-
-        ct.fn.reloadChartDataOne = function (widget) {
-            computeDetailService.reloadChartDataOne(widget, chartDataOption);
         };
 
         // 알람탭 관련
@@ -2585,7 +2589,7 @@ angular.module('iaas.controllers')
 	                $scope.main.loadingMainBody = false;
 	                common.showAlertSuccess("수정되었습니다");
 	            	//common.showAlert("message","수정되었습니다.");
-	                $scope.main.goToPage("/iaas");
+	                $scope.main.goToPage("/iaas/compute");
 	            });
 	            returnPromise.error(function (data, status, headers) {
 	                $scope.main.loadingMainBody = false;

@@ -1,0 +1,334 @@
+	<div class="message_area">
+		<div class="msg_bg"></div>
+		<div class="msg_txt"><span>'부하 분산 설정하기'를 통해 부하 분산 장치를 설정할 수 있습니다.</span></div>
+	</div>
+	<!--ng-click="main.goToPage('/iaas/compute/detail sg0730 차후 iaas 대쉬보드 붙여야함  -->
+	<div class="panel_area">
+		<ul class="pn_list_style">
+			<li>
+				<form name="{{contents.formName}}" novalidate>
+				<div class="panel_box pn_l">
+					<div class="pn_head">
+						<h4 class="pnh_tit">부하 분산 설정하기</h4>
+					</div>
+					<div class="pn_body">
+						<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+						<ul class="form_list">
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">부하 분산 장치 이름</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required">
+							</li>
+							<li class="pn-Toggle">
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">설명</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'추가할 디스크에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+									<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+								</div>
+								<div class="s_cont_box">
+									<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">포트 관리</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="tbw type1">
+									<table class="table">
+										<colgroup>
+											<col style="width:15%;">
+											<col style="width:auto;">
+										</colgroup>
+										<tbody>
+											<tr>
+												<th>포트이름</th>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="포트 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+											</tr>
+											<tr>
+												<th>프로토콜</th>
+												<td>
+													<div class="radio radio-inline">
+													   <input type="radio" name="radio00" id="radio00-1">
+													   <label for="radio00-1" class="label">HTTP</label>
+												   </div>
+													<div class="radio radio-inline">
+													   <input type="radio" name="radio00" id="radio00-2">
+													   <label for="radio00-2" class="label">HTTPS</label>
+												   </div>
+													<div class="radio radio-inline">
+													   <input type="radio" name="radio00" id="radio00-3">
+													   <label for="radio00-3" class="label">TCP</label>
+												   </div>
+												</td>
+											</tr>
+											<tr>
+												<th>포트</th>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="포트(1-65535)를 입력하세요." validation="alpha_dash|required"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">대상 서버 선택</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="mt20">
+									<span class="pnb_stit">- 연결서버 유형 : </span>
+									<div class="radio radio-inline">
+										<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="contents.appPushData.pushType" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="app-radio1-1" class="label">서버</label>
+									</div>
+									<div class="radio radio-inline">
+										<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="contents.appPushData.pushType" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+										<label for="app-radio1-2" class="label" title="현재는 서비스 하지 않습니다.">이미지</label>
+									</div>
+								</div>
+								
+								<!-- 대상서버선택(서버) -->
+								<div class="tbl type1 mt20">
+									<table class="table">
+										<colgroup>
+											<col style="width:10%;">
+											<col style="width:45%;">
+											<col style="width:45%;">
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col">선택</th>
+												<th scope="col">서버이름</th>
+												<th scope="col">내부 IP</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="tbl_selected"><!-- 선택 된 row -->
+												<td>
+													<div class="radio radio-only" >
+														<input type="radio" name="" id="" value="">
+														<label for=""></label>
+													</div>
+												</td>
+												<td>server01</td>
+												<td>10.10.10.5</td>
+											</tr>
+											<tr>
+												<td>
+													<div class="radio radio-only" >
+														<input type="radio" name="" id="" value="">
+														<label for=""></label>
+													</div>
+												</td>
+												<td>server01</td>
+												<td>10.10.10.5</td>
+											</tr>
+											<tr>
+												<td>
+													<div class="radio radio-only" >
+														<input type="radio" name="" id="" value="">
+														<label for=""></label>
+													</div>
+												</td>
+												<td>server01</td>
+												<td>10.10.10.5</td>
+											</tr>
+											<tr>
+												<td>
+													<div class="radio radio-only" >
+														<input type="radio" name="" id="" value="">
+														<label for=""></label>
+													</div>
+												</td>
+												<td>server01</td>
+												<td>10.10.10.5</td>
+											</tr>
+											<tr>
+												<td>
+													<div class="radio radio-only" >
+														<input type="radio" name="" id="" value="">
+														<label for=""></label>
+													</div>
+												</td>
+												<td>server01</td>
+												<td>10.10.10.5</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- //대상서버선택(서버) -->
+								
+								<!-- 대상서버선택(이미지) -->
+								<div class="tbw type1 mt20" ng-if="false">
+									<table class="table">
+										<colgroup>
+											<col style="width:15%;">
+											<col style="width:auto;">
+										</colgroup>
+										<tbody>
+											<tr>
+												<th>대상 백업 이미지</th>
+												<td>
+													<select name="" class="form-control">
+														<option value="">server01-bk</option>
+														<option value="">server02-bk</option>
+														<option value="">server03-bk</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<th>서버 이름</th>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+											</tr>
+											<tr>
+												<th>서버 수</th>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 수를 입력하세요." validation="alpha_dash|required"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- //대상서버선택(이미지) -->
+								
+								
+							</li>
+						</ul>
+					</div>
+					<div class="pn_footer">
+						<div class="btn-btm mgt0">
+							<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createServer();">설정 저장</button>
+							<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
+						</div>
+					</div>
+				</div>
+				</form>
+			</li>
+			<li>
+				<div class="panel_box pn_r">
+					<div class="pn_head">
+						<h4 class="pnh_tit ico01">서버 기본정보</h4>
+					</div>
+					<div class="pn_body">
+						<div class="s_cont_box">
+							<ul>
+								<li>
+									<span class="s_tit">서버 이름</span>
+									<span class="s_txt">-</span>
+								</li>
+								<li>
+									<span class="s_tit">서버 OS</span>
+									<span class="s_txt">-</span>
+								</li>
+								<li>
+									<span class="s_tit">서버 사양</span>
+									<span class="s_txt" >-</span>
+									<div class="s_inner_cont">
+										<div class="innr_tbl">
+											<table>
+												<colgroup>
+													<col width="30" />
+													<col width="30" />
+													<col width="30" />
+												</colgroup>
+												<thead>
+													<tr>
+														<th>vCPU</th>
+														<th>메모리</th>
+														<th>디스크</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Core</td>
+														<td>0 MB</td>
+														<td>0 GB</td>
+													</tr>
+												</tbody>
+											</table>
+											<span class="info_txt">*  ‘디스크’ 크기는 OS 설치에 필요한 디스크 공간을 포함한 수치입니다.</span>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					
+					<div class="pn-Toggle brd0">
+						<div class="pn_head brdt">
+							<h4 class="pnh_tit ico02">추가 디스크</h4>
+							<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+						</div>
+						<div class="pn_body">
+							<div class="s_cont_box">
+								<ul>
+									<li>
+										<span class="s_tit">크기</span>
+										<span class="s_txt">20GB</span>
+									</li>
+									<li>
+										<span class="s_tit">유형</span>
+										<!--<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div> -->
+										<span class="s_txt">Volume Storage</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					<div class="pn-Toggle">
+						<div class="pn_head brdt">
+							<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
+							<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+						</div>
+						<div class="pn_body">
+							<div class="s_cont_box">
+								<div class="s_progress_box wd_tit">
+									<ul>
+										<li>
+											<span class="tit_txt">vcpu</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{(contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)}} 개 / {{contents.tenantResource.maxResource.cores}} 개)</span>
+										</li>
+										<li>
+											<span class="tit_txt">메모리</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{(contents.tenantResource.usedResource.ramSize + contents.data.spec.ram) | displayVolume:'MB'}} / {{contents.tenantResource.maxResource.ramSize | displayVolume:'MB'}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">디스크</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+												  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{(contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB'}})</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
+					<!-- <div class="btn-btm">
+						<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button>
+					</div> -->
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

@@ -42,7 +42,7 @@ angular.module('app')
                         name: 'project',
                         icon: "ico2",
                         stateKey: 'commProjectMgmt',
-                        url: '/comm/projects',
+                        url: '/comm/projects/:popup',
                         controller: 'commOrgProjectsCtrl',
                         templateUrl: _COMM_VIEWS_+'/org/orgProjects.html',
                         mainContentsClass: 'pd0',

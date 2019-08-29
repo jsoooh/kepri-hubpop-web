@@ -4,286 +4,311 @@
 </div>
 
 <div class="panel_area">
-	<div class="panel_box pn_l">
-		<div class="pn_head">
-			<h4 class="pnh_tit">서비스 만들기</h4>
-		</div>
-		<div class="pn_body">
-			<span class="sm_txt">* 는 필수입력 사항입니다.</span>
-			<ul class="form_list">
-				<li>
-					<div class="pnb_tit">
-						<i class="i_star"></i> <span class="pnb_t_txt">서비스 이름</span>
-						<!-- <button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다." tooltip-class="tooltip_type2"><span class="ico_info"></span></button> -->
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 서비스 이름을 입력합니다.</br> 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
-					</div>
-					<input type="text" name="serviceInstanceName" class="form-control" maxlength="20"  placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName"  validation="min_len:3|max_len:20|required">
-				</li>
-				<li>
-					<div class="pnb_tit">
-						<i class="i_star"></i> <span class="pnb_t_txt">서비스 S/W</span>
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포된 APP과 연결하여 사용하는 백엔드 서비스(back-end service) S/W를 선택합니다.</br>일반적으로, 백엔드 서비스는 APP의 데이터를 저장하기 위한 데이터베이스 </br>또는 WEB 세션 공유를 위한 인-메모리(in-memory) 저장소 등으로 제공됩니다.'"><span class="ico_info"></span></button></div>
-					</div>
-					<div ng-if="contents.servicesLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="services_select_panel">
-						<ul class="ul-list1">
-							<li ng-repeat="(key, serviceItem) in contents.services">
-								<div class="radio1 radio-inline">
-									<input type="radio"
-										   name="sevSel-radio"
-										   id="sevSel-radio-{{key}}"
-										   value="{{ serviceItem.guid }}"
-										   ng-model="contents.sltServiceGuid"
-										   ng-change="contents.sltServiceChange(contents.sltServiceGuid);">
-									<label for="sevSel-radio-{{key}}" class="label">
-										<img ng-src="images/thum/im_app_{{ serviceItem.label }}_on.png" alt="{{ serviceItem.label }}" class="im" />
-									</label>
-								</div>
-								<p class="label-txt">{{ serviceItem.label }}</p>
-							</li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<div class="pnb_tit">
-						<i class="i_star"></i> <span class="pnb_t_txt">서비스 플랜</span>
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'서비스S/W가 제공하는 자원용량계획을 표시합니다.</br>서비스S/W별 특성에 따라 제공되는 자원용량계획이 다를 수 있습니다.'"><span class="ico_info"></span></button></div>
-					</div>
-					<div class="app-form-two">
-						<div ng-repeat="(key, servicePlan) in contents.servicePlans" class="two_box pdr10">
-							<div class="radio radio-inline">
-								<input type="radio" 
-								       class="radio radio-inline" 
-								       name="radioSev" 
-								       ng-model="contents.sltServicePlanGuid" 
-								       ng-value="servicePlan.guid" 
-								       id="sev-plan-radio-{{key}}" 
-								       ng-change="contents.sltServicePlanChange(contents.sltServicePlanGuid)">
-								<label for="sev-plan-radio-{{key}}" class="label plan_label">{{ servicePlan.name }}</label>
+	<ul class="pn_list_style">
+		<li>
+			<div class="panel_box pn_l">
+				<div class="pn_head">
+					<h4 class="pnh_tit">서비스 만들기</h4>
+				</div>
+				<div class="pn_body">
+					<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+					<ul class="form_list">
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">서비스 이름</span>
+								<!-- <button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다." tooltip-class="tooltip_type2"><span class="ico_info"></span></button> -->
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 서비스 이름을 입력합니다.</br> 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 							</div>
-							<div class="txt_box">{{servicePlan.description}}</div>
-						</div>
-					</div>
-				</li>
-				<li class="pn-Toggle">
-					<div class="pnb_tit">
-						<span class="pnb_t_txt">연결대상 APP</span>
-						<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'서비스S/W와 연결되는 APP을 선택합니다.'"><span class="ico_info"></span></button></div>
-						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-					</div>
-					<div class="s_cont_box">
-						<div class="select_ui_style">
-							<select ui-select-two="main.usSelectTwoOptions" name="sltBindApp" id="sltBindApp"
-									ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);"
-									data-placeholder="선택 없음"
-									style="width: 100%;">
-								<option ng-repeat="appItem in contents.spaceApps" value="{{ appItem.guid }}" option-html="<span class='ico_list_dot'>{text}</span>">{{ appItem.name }}</option>
-								<option value="null" option-html="<span>{text}</span>">선택 없음</option>
-							</select>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div class="pn_footer">
-			<div class="btn-btm mgt0">
-				<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.serviceInstanceCreate();">서비스 만들기</button>
-				<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
-			</div>
-		</div>
-	</div>
-	<div class="panel_box pn_r">
-		<div class="pn_head">
-			<h4 class="pnh_tit ico07">서비스 기본정보</h4>
-		</div>
-		<div class="pn_body">
-			<div class="s_cont_box">
-				<ul>
-					<li>
-						<span class="s_tit">서비스 이름</span>
-						<span class="s_txt">{{contents.serviceInstanceName}}</span>
-					</li>
-					<li>
-						<span class="s_tit">서비스 유형</span>
-						<span class="s_txt" ng-if="contents.sltService.label == 'oracle'">관계형 데이터 베이스</span>
-						<span class="s_txt" ng-if="contents.sltService.label == 'Mongo-DB'">NoSQL 데이터베이스</span>
-						<span class="s_txt" ng-if="contents.sltService.label == 'p-mysql'">관계형 데이터 베이스</span>
-						<span class="s_txt" ng-if="contents.sltService.label == 'p-redis'">인-메모리(In-Memory)데이터 저장소</span>
-					</li>
-					<li ng-if="contents.sltService.label == 'p-mysql'">
-						<span class="s_tit">서비스 S/W 정보</span>
-						<div class="s_inner_cont">
-							<dl>
-								<dt>S/W :</dt>
-								<dd>Maria DB</dd>
-								<dt>버전 :</dt>
-								<dd>10.1.32</dd>
-								<dt>설명 :</dt>
-								<dd>오픈소스 관계형 데이터베이스 </dd>
-								<dd class="dd_row">고정된 스키마(Schema)에 따라 Table Row에 데이터를 저장.</dd>
-							</dl>
-						</div>
-					</li>
-					<li ng-if="contents.sltService.label == 'p-redis'">
-						<span class="s_tit">서비스 S/W 정보</span>
-						<div class="s_inner_cont">
-							<dl>
-								<dt>S/W :</dt>
-								<dd>Redis</dd>
-								<dt>버전 :</dt>
-								<dd>4.0.8</dd>
-								<dt>설명 :</dt>
-								<dd>오픈소스 인-메모리(In-Memory)데이터 저장소</dd> 
-								<dd class="dd_row">Key-Value 형태로 데이터를 저장.</dd>
-							</dl>
-						</div>
-					</li>
-					<li ng-if="contents.sltService.label == 'oracle'">
-						<span class="s_tit">서비스 S/W 정보</span>
-						<div class="s_inner_cont">
-							<dl>
-								<dt>S/W :</dt>
-								<dd>Oracle</dd>
-								<dt>버전 :</dt>
-								<dd>11g</dd>
-								<dt>설명 :</dt>
-								<dd>상용 관계형 데이터베이스</dd> 
-								<dd class="dd_row">고정된 스키마(Schema)에 따라 Table Row에 데이터를 저장.</dd>
-							</dl>
-						</div>
-					</li>
-					
-					<li ng-if="contents.sltService.label == 'Mongo-DB'">
-						<span class="s_tit">서비스 S/W 정보</span>
-						<div class="s_inner_cont">
-							<dl>
-								<dt>S/W :</dt>
-								<dd>MongoDB</dd>
-								<dt>버전 :</dt>
-								<dd>3.6.3</dd>
-								<dt>설명 :</dt>
-								<dd>오픈소스 NoSQL 데이터베이스</dd> 
-								<dd class="dd_row">JSON 포멧 등의 문서(Document) 형태로 데이터를 저장.</dd>
-							</dl>
-						</div>
-					</li>
-					
-					<!-- 
-					<li ng-if="contents.sltService.label == 'p-postgresql'">
-						<span class="s_tit">서비스 S/W 정보</span>
-						<div class="s_inner_cont">
-							<dl>
-								<dt>S/W :</dt>
-								<dd>PostgreSQL</dd>
-								<dt>버전 :</dt>
-								<dd>2.0.2</dd>
-								<dt>설명 :</dt>
-								<dd>오픈소스 관계형 데이터베이스</dd> 
-								<dd class="dd_row">고정된 스키마(Schema)에 따라 Table Row에 데이터를 저장.</dd>
-							</dl>
-						</div>
-					</li>
-					
-					
-					 -->
-					
-					
-				</ul>
-			</div>
-		</div>
-		<!-- 
-		<div class="pn-Toggle">
-			<div class="pn_head brdt">
-				<h4 class="pnh_tit ico08">서비스 플랜(Plan)정보</h4>
-				<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-			</div>
-			<div class="pn_body">
-				<div class="s_cont_box">
-					<ul>
-						<li ng-if="contents.sltService.label == 'p-mysql'">
-							<span class="s_tit">서비스 용량</span>
-							<span class="s_txt" >{{contents.sltServicePlan.quota}} Megabyte</span>
-						</li>
-						<li ng-if="contents.sltService.label == 'p-mysql'">
-							<span class="s_tit">서비스 사용 모델</span>
-							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
-							<span class="s_txt" ng-if="contents.sltServicePlan.public">공유형</span>
-							<span class="s_txt" ng-if="!contents.sltServicePlan.public">단독형</span>
+							<input type="text" name="serviceInstanceName" class="form-control" maxlength="20"  placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName"  validation="min_len:3|max_len:20|required">
 						</li>
 						<li>
-							<span class="s_tit">서비스 플랜 설명</span>
-							<div class="s_inner_cont">
-								{{contents.Desc}}
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">서비스 S/W</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포된 APP과 연결하여 사용하는 백엔드 서비스(back-end service) S/W를 선택합니다.</br>일반적으로, 백엔드 서비스는 APP의 데이터를 저장하기 위한 데이터베이스 </br>또는 WEB 세션 공유를 위한 인-메모리(in-memory) 저장소 등으로 제공됩니다.'"><span class="ico_info"></span></button></div>
+							</div>
+							<div ng-if="contents.servicesLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="services_select_panel">
+								<ul class="ul-list1">
+									<li ng-repeat="(key, serviceItem) in contents.services">
+										<div class="radio1 radio-inline">
+											<input type="radio"
+												   name="sevSel-radio"
+												   id="sevSel-radio-{{key}}"
+												   value="{{ serviceItem.guid }}"
+												   ng-model="contents.sltServiceGuid"
+												   ng-change="contents.sltServiceChange(contents.sltServiceGuid);">
+											<label for="sevSel-radio-{{key}}" class="label">
+												<img ng-src="images/thum/im_app_{{ serviceItem.label }}_on.png" alt="{{ serviceItem.label }}" class="im" />
+											</label>
+										</div>
+										<p class="label-txt">{{ serviceItem.label }}</p>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">서비스 플랜</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'서비스S/W가 제공하는 자원용량계획을 표시합니다.</br>서비스S/W별 특성에 따라 제공되는 자원용량계획이 다를 수 있습니다.'"><span class="ico_info"></span></button></div>
+							</div>
+							<div class="app-form-two">
+								<div ng-repeat="(key, servicePlan) in contents.servicePlans" class="two_box pdr10">
+									<div class="radio radio-inline">
+										<input type="radio" 
+										       class="radio radio-inline" 
+										       name="radioSev" 
+										       ng-model="contents.sltServicePlanGuid" 
+										       ng-value="servicePlan.guid" 
+										       id="sev-plan-radio-{{key}}" 
+										       ng-change="contents.sltServicePlanChange(contents.sltServicePlanGuid)">
+										<label for="sev-plan-radio-{{key}}" class="label plan_label">{{ servicePlan.name }}</label>
+									</div>
+									<div class="txt_box">{{servicePlan.description}}</div>
+								</div>
+							</div>
+						</li>
+						<li class="pn-Toggle">
+							<div class="pnb_tit">
+								<span class="pnb_t_txt">연결대상 APP</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'서비스S/W와 연결되는 APP을 선택합니다.'"><span class="ico_info"></span></button></div>
+								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+							</div>
+							<div class="s_cont_box">
+								<div class="select_ui_style">
+									<select ui-select-two="main.usSelectTwoOptions" name="sltBindApp" id="sltBindApp"
+											ng-model="contents.sltBindingAppGuid" ng-change="contents.sltBindingAppChange(contents.sltBindingAppGuid);"
+											data-placeholder="선택 없음"
+											style="width: 100%;">
+										<option ng-repeat="appItem in contents.spaceApps" value="{{ appItem.guid }}" option-html="<span class='ico_list_dot'>{text}</span>">{{ appItem.name }}</option>
+										<option value="null" option-html="<span>{text}</span>">선택 없음</option>
+									</select>
+								</div>
 							</div>
 						</li>
 					</ul>
 				</div>
+				<div class="pn_footer">
+					<div class="btn-btm mgt0">
+						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.serviceInstanceCreate();">서비스 만들기</button>
+						<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
+					</div>
+				</div>
 			</div>
-		</div>
-		 -->
-		 <div class="pn-Toggle">
-				<div class="pn_head brdt">
-					<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
-					<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+		</li>
+		<li>
+			<div class="panel_box pn_r">
+				<div class="pn_head">
+					<h4 class="pnh_tit ico07">서비스 기본정보</h4>
 				</div>
 				<div class="pn_body">
 					<div class="s_cont_box">
-						<div class="s_progress_box wd_tit">
+						<ul>
+							<li>
+								<span class="s_tit">서비스 이름</span>
+								<span class="s_txt">{{contents.serviceInstanceName}}</span>
+							</li>
+							<li>
+								<span class="s_tit">서비스 유형</span>
+								<span class="s_txt" ng-if="contents.sltService.label == 'oracle'">관계형 데이터 베이스</span>
+								<span class="s_txt" ng-if="contents.sltService.label == 'Mongo-DB'">NoSQL 데이터베이스</span>
+								<span class="s_txt" ng-if="contents.sltService.label == 'p-mysql'">관계형 데이터 베이스</span>
+								<span class="s_txt" ng-if="contents.sltService.label == 'p-redis'">인-메모리(In-Memory)데이터 저장소</span>
+							</li>
+							<li ng-if="contents.sltService.label == 'p-mysql'">
+								<span class="s_tit">서비스 S/W 정보</span>
+								<div class="s_inner_cont">
+									<dl>
+										<dt>S/W :</dt>
+										<dd>Maria DB</dd>
+									</dl>
+									<dl>
+										<dt>버전 :</dt>
+										<dd>10.1.32</dd>
+									</dl>
+									<dl>
+										<dt>설명 :</dt>
+										<dd>오픈소스 관계형 데이터베이스 </dd>
+										<dd class="dd_row">고정된 스키마(Schema)에 따라 Table Row에 데이터를 저장.</dd>
+									</dl>
+								</div>
+							</li>
+							<li ng-if="contents.sltService.label == 'p-redis'">
+								<span class="s_tit">서비스 S/W 정보</span>
+								<div class="s_inner_cont">
+									<dl>
+										<dt>S/W :</dt>
+										<dd>Redis</dd>
+									</dl>
+									<dl>
+										<dt>버전 :</dt>
+										<dd>4.0.8</dd>
+									</dl>
+									<dl>
+										<dt>설명 :</dt>
+										<dd>오픈소스 인-메모리(In-Memory)데이터 저장소</dd> 
+										<dd class="dd_row">Key-Value 형태로 데이터를 저장.</dd>
+									</dl>
+								</div>
+							</li>
+							<li ng-if="contents.sltService.label == 'oracle'">
+								<span class="s_tit">서비스 S/W 정보</span>
+								<div class="s_inner_cont">
+									<dl>
+										<dt>S/W :</dt>
+										<dd>Oracle</dd>
+									</dl>
+									<dl>
+										<dt>버전 :</dt>
+										<dd>11g</dd>
+									</dl>
+									<dl>
+										<dt>설명 :</dt>
+										<dd>상용 관계형 데이터베이스</dd> 
+										<dd class="dd_row">고정된 스키마(Schema)에 따라 Table Row에 데이터를 저장.</dd>
+									</dl>
+								</div>
+							</li>
+							
+							<li ng-if="contents.sltService.label == 'Mongo-DB'">
+								<span class="s_tit">서비스 S/W 정보</span>
+								<div class="s_inner_cont">
+									<dl>
+										<dt>S/W :</dt>
+										<dd>MongoDB</dd>
+									</dl>
+									<dl>
+										<dt>버전 :</dt>
+										<dd>3.6.3</dd>
+									</dl>
+									<dl>
+										<dt>설명 :</dt>
+										<dd>오픈소스 NoSQL 데이터베이스</dd> 
+										<dd class="dd_row">JSON 포멧 등의 문서(Document) 형태로 데이터를 저장.</dd>
+									</dl>
+								</div>
+							</li>
+							
+							<!-- 
+							<li ng-if="contents.sltService.label == 'p-postgresql'">
+								<span class="s_tit">서비스 S/W 정보</span>
+								<div class="s_inner_cont">
+									<dl>
+										<dt>S/W :</dt>
+										<dd>PostgreSQL</dd>
+									</dl>
+									<dl>
+										<dt>버전 :</dt>
+										<dd>2.0.2</dd>
+									</dl>
+									<dl>
+										<dt>설명 :</dt>
+										<dd>오픈소스 관계형 데이터베이스</dd> 
+										<dd class="dd_row">고정된 스키마(Schema)에 따라 Table Row에 데이터를 저장.</dd>
+									</dl>
+								</div>
+							</li>
+							
+							
+							 -->
+							
+							
+						</ul>
+					</div>
+				</div>
+				<!-- 
+				<div class="pn-Toggle">
+					<div class="pn_head brdt">
+						<h4 class="pnh_tit ico08">서비스 플랜(Plan)정보</h4>
+						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+					</div>
+					<div class="pn_body">
+						<div class="s_cont_box">
 							<ul>
-								<li>
-									<span class="tit_txt">서비스 수</span>
-									<div class="progressWrap type2">
-										<div class="progress">
-											<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.servicesUsage+1)/main.sltOrganization.quotaDefinition.totalServices)*100|number:0}}" class="progress">
-												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.servicesUsage+1)/main.sltOrganization.quotaDefinition.totalServices)*100|number:0}}%"></div>
-											</div>
-										</div>
-									</div>
-									<span class="txt_count">({{(main.sltOrganization.servicesUsage+1)}} 개 / {{main.sltOrganization.quotaDefinition.totalServices}} 개)</span>
+								<li ng-if="contents.sltService.label == 'p-mysql'">
+									<span class="s_tit">서비스 용량</span>
+									<span class="s_txt" >{{contents.sltServicePlan.quota}} Megabyte</span>
+								</li>
+								<li ng-if="contents.sltService.label == 'p-mysql'">
+									<span class="s_tit">서비스 사용 모델</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div>
+									<span class="s_txt" ng-if="contents.sltServicePlan.public">공유형</span>
+									<span class="s_txt" ng-if="!contents.sltServicePlan.public">단독형</span>
 								</li>
 								<li>
-									<span class="tit_txt">인스턴스</span>
-									<div class="progressWrap type2">
-										<div class="progress">
-											<div percent-progress-bar-animate bar-type="width" percent="{{(main.sltOrganization.appInstancesUsage/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}" class="progress">
-												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{(main.sltOrganization.appInstancesUsage/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}%"></div>
-											</div>
-										</div>
+									<span class="s_tit">서비스 플랜 설명</span>
+									<div class="s_inner_cont">
+										{{contents.Desc}}
 									</div>
-									<span class="txt_count">({{main.sltOrganization.appInstancesUsage}} 개 / {{main.sltOrganization.quotaDefinition.appInstanceLimit}} 개)</span>
-								</li>
-								<li>
-									<span class="tit_txt">메모리</span>
-									<div class="progressWrap type2">
-										<div class="progress">
-											<div percent-progress-bar-animate bar-type="width" percent="{{(main.sltOrganization.memoryUsage/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}" class="progress">
-												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{(main.sltOrganization.memoryUsage/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}%"></div>
-											</div>
-										</div>
-									</div>
-									<span class="txt_count">({{main.sltOrganization.memoryUsage | displayVolume:'MB'}} / {{main.sltOrganization.quotaDefinition.memoryLimit | displayVolume:'MB'}})</span>
-								</li>
-								<li>
-									<span class="tit_txt">디스크</span>
-<!--
-									<div class="progressWrap type2">
-										<div class="progress">
-										  <div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota)/(102400))*100|number:0}}" class="progress">
-												<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota)/(102400))*100|number:0}}%"></div>
-											</div>
-										</div>
-									</div>
--->
-									<span class="txt_count text-left">현재 {{main.sltOrganization.diskQuotaUsage | displayVolume:'MB'}} 사용 중</span>
 								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
+				 -->
+				 <div class="pn-Toggle">
+						<div class="pn_head brdt">
+							<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
+							<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+						</div>
+						<div class="pn_body">
+							<div class="s_cont_box">
+								<div class="s_progress_box wd_tit">
+									<ul>
+										<li>
+											<span class="tit_txt">서비스 수</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.servicesUsage+1)/main.sltOrganization.quotaDefinition.totalServices)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.servicesUsage+1)/main.sltOrganization.quotaDefinition.totalServices)*100|number:0}}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{(main.sltOrganization.servicesUsage+1)}} 개 / {{main.sltOrganization.quotaDefinition.totalServices}} 개)</span>
+										</li>
+										<li>
+											<span class="tit_txt">인스턴스</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div percent-progress-bar-animate bar-type="width" percent="{{(main.sltOrganization.appInstancesUsage/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{(main.sltOrganization.appInstancesUsage/main.sltOrganization.quotaDefinition.appInstanceLimit)*100|number:0}}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{main.sltOrganization.appInstancesUsage}} 개 / {{main.sltOrganization.quotaDefinition.appInstanceLimit}} 개)</span>
+										</li>
+										<li>
+											<span class="tit_txt">메모리</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div percent-progress-bar-animate bar-type="width" percent="{{(main.sltOrganization.memoryUsage/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{(main.sltOrganization.memoryUsage/main.sltOrganization.quotaDefinition.memoryLimit)*100|number:0}}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{main.sltOrganization.memoryUsage | displayVolume:'MB'}} / {{main.sltOrganization.quotaDefinition.memoryLimit | displayVolume:'MB'}})</span>
+										</li>
+										<li>
+											<span class="tit_txt">디스크</span>
+		<!--
+											<div class="progressWrap type2">
+												<div class="progress">
+												  <div percent-progress-bar-animate bar-type="width" percent="{{((main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota)/(102400))*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((main.sltOrganization.diskQuotaUsage + contents.defaultSet.diskQuota)/(102400))*100|number:0}}%"></div>
+													</div>
+												</div>
+											</div>
+		-->
+											<span class="txt_count text-left">현재 {{main.sltOrganization.diskQuotaUsage | displayVolume:'MB'}} 사용 중</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				 
+				<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
+				<!-- <div class="btn-btm">
+					<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
+				</div> -->
 			</div>
-		 
-		<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
-		<!-- <div class="btn-btm">
-			<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
-		</div> -->
-	</div>
+		</li>
 </div>

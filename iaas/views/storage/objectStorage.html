@@ -1,71 +1,134 @@
-<!-- 작업 추가 및 선택 -->
-<div ng-if="main.projectType == 'pjt'" class="projt-selWarp">
-    <div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
-    <div class="pull-right">
-        <button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
-    </div>
+<!-- 검색영역  -->
+<div class="cBox type0 mb30">
+	<div class="pull-left">
+		<h4 class="c-tit">전체 저장소 <em class="point1" ng-init="contents.objectStorageList.length ='0'">({{(contents.objectStorageList.length)}})</em></h4>
+	</div>
+	<div class="pull-right">
+		<!-- 검색 -->
+		<div class="searchBox type2">
+			<div class="form-group">
+				<input type="text" placeholder="저장소 검색" style="width:300px;" ng-model="contents.schFilterText" class="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+			</div>
+			<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText =''"><span class="ico">지우기</span></button>
+		</div>
+		<!-- //검색 -->
+	</div>
 </div>
+<!-- //검색영역 -->
 
-<!-- search -->
-<!--<div class="searchWrap">
-    <div class="searchBox">
-        <div class="form-group">
-            <input type="text" placeholder="검색어를 입력해 주세요." style="width:400px;">
-        </div>
-        <button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
-    </div>
-</div>-->
-<!-- search -->
 
-<!-- tb top -->
-<div class="tb-top">
-    <div class="pull-left">
-        <button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="contents.fn.accessInfoBtn()">접근정보 조회</button>
-        <div class="tb_inputBox">
-            <span class="tit">팀 할당량(GB)</span>
-            <input type="text" name="teamQuator" value="{{contents.objectStorageQuator.teamQuator}}" disabled>
-            <span class="tit">전체 사용량(GB)</span>
-            <input type="text" name="quatorUsed" value="{{contents.objectStorageQuator.quatorUsed | number:2}}" disabled>
-        </div>
-    </div>
-    <div class="pull-right">
-        <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-add" title="추가" ng-click="contents.fn.createStorageObjectBtn()"><span class="ico">추가</span></button>
-    </div>
+<!-- 용량정보 및 접속정보 -->
+<div class="storage_infoWrap mb30">
+	<ul>
+		<!-- 사용량 -->
+		<li>
+			<div class="infoBox">
+				<div class="info_head">
+					<h5 class="tit_volume">사용량</h5>
+					<span class="t_sm">{{contents.toDay}} 기준</span>
+				</div>
+				<div class="info_body">
+					<!-- 내부컨텐츠 -->
+					<div class="data_area">
+						<div class="txt_l">
+							<span class="t_lg" ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</span>
+							<span class="t_md">GB</span>
+							<span class="t_sm" ng-init="contents.objecteStorageQuator.teamQuator ='0'">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
+						</div>
+						<div class="txt_r">
+							<span class="t_lg" ng-init="contents.objecteStorageQuator.teamQuator ='0'" ng-if="contents.objecteStorageQuator.teamQuator == '0'">0<span class="t_md">%</span></span>
+							<span class="t_lg" ng-if="contents.objecteStorageQuator.teamQuator !== '0'">{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}<span class="t_md">%</span></span>
+						</div>
+						<!-- 프로그래스 박스 -->
+						<div class="info_progBox">
+							<div class="progressWrap type2">
+								<div class="progress">
+									<div percent-progress-bar-animate bar-type="width" percent= "{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}" class="progress">
+										<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="15%"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- //프로그래스 박스 -->
+					</div>
+					<!-- //내부컨텐츠 -->
+				</div>
+			</div>
+		</li>
+		<!-- //사용량 -->
+		<!-- 접속정보 -->
+		<li>
+			<div class="infoBox">
+				<div class="info_head">
+					<h5 class="tit_access">접속 정보</h5>
+				</div>
+				<div class="info_body pd0">
+					<!-- 내부컨텐츠 -->
+					<div class="access_info_area">
+						<ul>
+							<li>
+								<dl>
+									<dt class="tit_address">오브젝트 스토리지 접속 주소</dt>
+									<dd>{{contents.sendSecretInfoList.s3RadosEndPoint}}</dd>
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt class="tit_access_key">Access Key ID</dt>
+									<dd>{{contents.sendSecretInfoList.s3AccessKey}}</dd>
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt class="tit_secret">Secret Access Key</dt>
+									<dd>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</dd>
+								</dl>
+							</li>
+						</ul>
+					</div>
+					<!-- //내부컨텐츠 -->
+				</div>
+			</div>
+		</li>
+		<!-- //접속정보 -->
+	</ul>
 </div>
-<!-- tb top -->
+<!-- //용량정보 및 접속정보 -->
 
-<!-- table -->
-<div class="tbl type1 strgObj">
-    <table class="table">
-        <colgroup>
-            <col style="width:25%;">
-            <col style="width:25%;">
-            <col style="width:35%;">
-            <col style="width:15%;">
-        </colgroup>
-        <thead>
-        <tr>
-            <th scope="col">컨테이너</th>
-            <th scope="col">사용량(GB)</th>
-            <th scope="col">사용률(%)</th>
-            <th scope="col">관리</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="contItem in contents.objectContainerList">
-            <td>{{contItem.containerName}}</td>
-            <td>{{contItem.usedGiGaByte | number:2}}GB</td>
-            <td>{{contItem.usedRate * 100 | number:2}}%</td>
-            <td>
-                <button type="button" name="button" class="btn btn-ico-key-s only-ico" title="권한" ng-click="contents.fn.popAclInfo($event,contItem)" ng-if="0"><span class="ico">권한</span></button>
-                <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-click="contents.fn.deleteContainer(contItem)"><span class="ico">삭제</span></button>
-            </td>
-        </tr>
-        <tr ng-if="!contents.objectContainerList || contents.objectContainerList.length == 0">
-            <td colspan="4" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
-        </tr>
-        </tbody>
-    </table>
+<!-- 버튼영역 -->
+<div class="btnWrap">
+	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>저장소 만들기</button>
+	<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});"><span class="ico ico_usage_view"></span>사용법 안내</button>
 </div>
+<!-- //버튼영역 -->
+
+<!-- 패널리스트 영역 -->
+<ul class="ul-panel thum_style">
+	<li ng-repeat="item in contents.objectStorageList | filter:{ containerName: contents.schFilterText }">
+		<!-- panel -->
+		<div class="panelWrap">
+			<div class="panel type6 h_auto">
+				<div class="panel_head pl30">
+					<p class="tit">{{item.containerName}}</a></p>
+					<p class="txt">파일 개수: <span>{{item.numFiles}}</span></p>
+					<button type="button" name="button" class="btn_del_list"><span class="ico_list_del" ng-click="contents.fn.deleteObjectBucket(item.containerName);">삭제하기</span></button>
+				</div>
+				
+				<div class="panel_body">
+					<div class="ul-in">
+						<div class="bucketBox">
+							<div class="cnt_value">
+								<span class="t_lg">{{item.usedVolume}}</span>
+								<span class="t_sm">{{item.usedVolumeUnit}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- //panel -->
+	</li>
 
 
+</ul>
+<!-- //패널리스트 영역 -->

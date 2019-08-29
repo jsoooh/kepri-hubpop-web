@@ -3,6 +3,7 @@
 /* Common */
 .scroll-no{overflow: hidden !important;}
 .blind {overflow:hidden;  position:absolute; top:-9999em; left:-9999em; padding:0 !important; height:0; width:0; border:none !important; background:none !important; line-height:0 !important; text-indent:-9999px;}
+.d_block {display:block !important;}
 
 /* title */
 .h-tit1{font-size:40px; line-height: 1.2; font-weight: 700; margin: 0;}
@@ -30,6 +31,7 @@
 /* font */
 .underline{display: inline-block; border-bottom:1px solid;}
 .fwb{font-weight: 700;}
+.point_txt {font-size: 14px; color: #ff0000;}
 
 /* align */
 .text-left{text-align: left !important}
@@ -65,16 +67,18 @@
 .mb60 {margin-bottom:60px !important}
 .mb80 {margin-bottom:80px !important}
 
+.mg0{margin:0 !important;}
 .mgt0{margin-top:0 !important;}
 .mgb0{margin-bottom:0 !important;}
 .mgl0{margin-left:0 !important;}
 .mgr0{margin-right:0 !important;}
-.mg0{margin:0 !important;}
 
 /* padding */
 .pd0 {padding:0 !important;}
 .pdt0 {padding-top:0 !important;}
 .pdb0 {padding-bottom:0 !important;}
+.pdl0 {padding-left:0 !important;}
+.pdr0 {padding-right:0 !important;}
 .pdContent {padding:30px 40px !important;}
 
 .pt5 {padding-top:5px !important}
@@ -112,6 +116,7 @@
 .w100 {width:100% !important;}
 .w50 {width:50% !important;}
 .w_auto {width:auto !important;}
+.h_auto {height:auto !important;}
 
 /* form */
 .select{font-size:13px; font-weight:400; height:25px; padding-left:5px;  border:1px solid #eaeaea;  background: url("../images/ico_sel.png") no-repeat; background-size: auto 25px; background-position: center right; -webkit-appearance: listbox; -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; -o-appearance: none; appearance: none;}
@@ -242,7 +247,7 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .ico-back .ico{width:26px; height:25px; background-position: -567px -410px;}
 .ico-list .ico{width:25px; height:25px; background-position: -567px -500px; margin-right:0;}
 .ico-start .ico{width:30px;height:30px;background-position:-566px -331px;}
-.ico-pause .ico{width:30px;height:30px;background-position:-566px -365px;}
+.ico-pause .ico{width:32px;height:32px;background-position:-565px -364px;}
 .btn-ico-refresh .ico{width:25px; height:25px; background-position:-363px -248px;}
 .btn-ico-refresh:hover .ico{width:25px; height:25px; background-position:-335px -248px;}
 .inst-list.type1 .instBox .only-ico.btn-ico-refresh-s{position:absolute;top:15px;right:15px;}

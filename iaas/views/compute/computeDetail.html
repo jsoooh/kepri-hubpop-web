@@ -568,7 +568,7 @@
 												{{ 'label.total' | translate }} {{ pageOptions.total }} {{ 'label.count' | translate }}
 											</div>
 											<nav class="pagiWrap" style="margin-top: 0;">
-												<paging
+												<paging-custom
 														page="pageOptions.currentPage"
 														page-size="pageOptions.pageSize"
 														total="pageOptions.total"
@@ -580,7 +580,7 @@
 														text-last-class="lastPage"
 														text-next-class="nextPage"
 														text-prev-class="prevPage">
-												</paging>
+												</paging-custom>
 											</nav>
 										</div>
 									</div>
@@ -688,8 +688,10 @@
 													</div>
 												</div>
 												<div class="chartSearchItem">
-													<select name="group" class="customGroup"
+													<label for="groupby" style="margin-right: 5px;">시간간격</label>
+													<select name="group" id="groupby" class="customGroup" style="height: 30px; font-size: 0.9em;"
 														ng-options="group.value as group.name for group in contents.groupResources" 
+														ng-change="contents.fn.selectGroupComboBox()"
 														ng-model="contents.selGroupBy">
 													</select>
 												</div>
@@ -703,12 +705,7 @@
 												<li gridster-item="widget" ng-repeat="widget in dashboard.widgets" class="col-md-4">
 													<div class="box">
 														<div class="box-header">
-															<h4>{{ widget.name }}</h4>
-															<div class="box-header-btns pull-right">
-																<div class="ico-item" ng-show="widget.refreshIconShow">
-																	<img src="img/btn_refresh.png" ng-click="contents.fn.reloadChartDataOne(widget)">
-																</div>
-															</div>
+															<h4>{{ widget.name }} <span class="">({{widget.axisLabel}})</span></h4>
 														</div>
 														<div class="box-content">
 															<div id="{{widget.nodeid}}" class="dygraphs"></div>
@@ -723,12 +720,7 @@
 												<li gridster-item="widget" ng-repeat="widget in dashboard.netWidgets[interface]" class="col-md-4">
 													<div class="box">
 														<div class="box-header">
-															<h4>{{ widget.name }}</h4>
-															<div class="box-header-btns pull-right">
-																<div class="ico-item" ng-show="widget.refreshIconShow">
-																	<img src="img/btn_refresh.png" ng-click="contents.fn.reloadChartDataOne(widget)">
-																</div>
-															</div>
+															<h4>{{ widget.name }} <span class="">({{widget.axisLabel}})</span></h4>
 														</div>
 														<div class="box-content">
 															<div id="{{interface + '_' + widget.nodeid}}" class="dygraphs"></div>
@@ -850,7 +842,7 @@
 												{{ 'label.total' | translate }} {{ alarmPageOptions.total }} {{ 'label.count' | translate }}
 											</div>
 											<nav class="pagiWrap" style="margin-top: 0;">
-												<paging
+												<paging-custom
 														page="alarmPageOptions.currentPage"
 														page-size="alarmPageOptions.pageSize"
 														total="alarmPageOptions.total"
@@ -862,7 +854,7 @@
 														text-last-class="lastPage"
 														text-next-class="nextPage"
 														text-prev-class="prevPage">
-												</paging>
+												</paging-custom>
 											</nav>
 										</div>
 									</div>

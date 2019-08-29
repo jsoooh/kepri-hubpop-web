@@ -1034,6 +1034,10 @@ angular.module('common.services', ['LocalStorageModule'])
                 promise.then(null, function (response) {
                     if(response == undefined || typeof response == "string") response = {data:{}, status:"", headers:""};
                     if (response.data && response.data.status == 307) response.status = 307;    //0423. iaas DOMAIN 토큰 생성 실패 관련 add
+                    if (response.data && response.data.message && response.data.message == "Could not commit JPA transaction; nested exception is javax.persistence.RollbackException: Transaction marked as rollbackOnly") {
+                        response.status = 307;  //0726. 오랜 시간 띄워진 화면 기동 시 발생. api에 로그가 나타나지 않음
+                        response.data.message = "mi_no_login";
+                    }
                     if (response.status == 307) {
                         if (response.data && response.data.message) {
                             if (response.data.message == "mi_no_login") {
@@ -1084,7 +1088,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                         } catch (e) {
                                         }
                                     }
-                                    if (errMessage) {
+                                    if (errMessage && CONSTANTS.errorMessageSkip.indexOf(errMessage) < 0) {
                                         $timeout(function () {
                                             common.showAlertWarningHtml(errTitle, errMessage);
                                         }, 100);
@@ -1092,7 +1096,7 @@ angular.module('common.services', ['LocalStorageModule'])
                                 }
                             } else {
                                 response.statusText = response.statusText ? response.statusText : (response.status ? response.status : $translate.instant("message.mi_error"));
-                                if (response.statusText) {
+                                if (response.statusText && CONSTANTS.errorMessageSkip.indexOf(response.statusText) < 0) {
                                     $timeout(function () {
                                         common.showAlertWarningHtml($translate.instant("label.error"), response.statusText);
                                     }, 100);
@@ -1192,7 +1196,6 @@ angular.module('common.services', ['LocalStorageModule'])
 	
 	    // 동기 방식
 	    common.noMsgSyncHttpResponse = function (pathUrl, method, params, contentType, charset) {
-	
 	        if (method.toUpperCase() != "GET" || method.toUpperCase() != "DELETE" && params) {
 	            if (pathUrl.indexOf('?') > 0) {
 	                pathUrl += "&" + $.param(params);
@@ -2841,7 +2844,7 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         common.getAlarmLevel = function () {
-            return angular.copy(CONSTANTS.alarmLevel);
+            return angular.copy(CONSTANTS.alarmLevel.slice(0,4));
         };
 
         common.getResolveStatusCmb = function () {
@@ -2935,6 +2938,7 @@ angular.module('common.services', ['LocalStorageModule'])
 
             // 24시간 이하일 때 최소 분이 5분이 안되는 경우. 미리 넣어줌
             if (intervalTimeType == 'm' && minTime < 5) {
+                if (minTime <= 0) minTime = 1;
                 for (var i = minTime; i < 5; i++) {
                     result.push({
                         value: (i + intervalTimeType),
@@ -2975,6 +2979,8 @@ angular.module('common.services', ['LocalStorageModule'])
                 var tom = moment(to, 'YY.MM.DD h:mm')
                 minutes = tom.diff(fromm, 'minutes');
             }
+
+            if (minutes <= 30) return 'deny';
 
             var grouping = Math.ceil(minutes / 100 * 60);
             if (grouping % 60 == 0) grouping = grouping / 60 + 'm';
@@ -3161,8 +3167,14 @@ angular.module('common.services', ['LocalStorageModule'])
     .factory('cookies', function ($cookies) {
         var cookies = {};
         var cookiesOption = {path: _COOKIES_PATH_};
-        if (_DOMAIN_ && (_DOMAIN_ == "www.kepri-demo.crossent.com" || _DOMAIN_ == "monit.kepri-demo.crossent.com")) {
-            var cookiesOption = {domain: _DOMAIN_.substring(3), path: _COOKIES_PATH_};
+        if (_DOMAIN_) {
+            if (_DOMAIN_.indexOf("kepco.co.kr") > -1) {
+                cookiesOption.domain = ".kepco.co.kr";
+            } else if (_DOMAIN_ == "www.kepri-demo.crossent.com") {
+                cookiesOption.domain = _DOMAIN_.substring(3);
+            } else if (_DOMAIN_.indexOf('kr') > 0) {
+                cookiesOption.domain = "." + _DOMAIN_;
+            }
         }
 
         cookies.getLanguageKey = function () {
@@ -3256,7 +3268,6 @@ angular.module('common.services', ['LocalStorageModule'])
 
         cookies.clearAll = function () {
             cookies.clearAccessToken();
-            cookies.clearAccessToken();
             //cookies.clearPgsecuid();
             cookies.clearUser();
         };
@@ -3292,7 +3303,7 @@ angular.module('common.services', ['LocalStorageModule'])
             var from = moment($cookies.get(_DEFAULT_TIMERANGE_FROM_), dtFormat);
             var to = moment($cookies.get(_DEFAULT_TIMERANGE_TO_), dtFormat);
             if (!to._isValid) to = moment();
-            if (!from._isValid) from = moment(to.subtract(3, 'hours').format(dtFormat), dtFormat);
+            if (!from._isValid) from = moment(to.subtract(1, 'hours').format(dtFormat), dtFormat);
             return from;
         };
         cookies.putDefaultTimeRangeFrom = function (timeRangeFrom) {
@@ -3328,8 +3339,6 @@ angular.module('common.services', ['LocalStorageModule'])
             $cookies.put(_GROUPBY_, groupBy, cookiesOption);
         };
         cookies.getGroupBy = function () {
-            var r = $cookies.get(_GROUPBY_);
-            if (!r) $cookies.put(_GROUPBY_, '12m', cookiesOption);
             return $cookies.get(_GROUPBY_);
         };
         cookies.removeGroupBy = function () {

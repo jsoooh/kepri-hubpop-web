@@ -98,7 +98,7 @@ angular.module('iaas.services')
                 highlightCircleSize: 5
             },
             legend: 'follow',
-            colors: ['#b9e866','#5cc6d9','#f5da25','#9041d2','#2172e4','#22a581','#ed3131','#9c78df','#ff9936','#2b6e90']
+            colors: ['#7ec500','#5cc6d9','#f5da25','#9041d2','#2172e4','#22a581','#ed3131','#9c78df','#ff9936','#2b6e90']
         };
 
         computeDetailService.resetChartData = function (widget, data) {
@@ -141,7 +141,7 @@ angular.module('iaas.services')
                 widget.hostname = p.hostname;
                 computeDetailService[widget.func](p.condition).then(
                     function (result) {
-                        computeDetailService.setChart(result, widget);
+                        computeDetailService.setChart(result, widget, p);
                     }
                 );
             });
@@ -149,7 +149,7 @@ angular.module('iaas.services')
             p.interface = undefined;
         };
 
-        computeDetailService.setChart = function (result, widget) {
+        computeDetailService.setChart = function (result, widget, p) {
             var resetData = computeDetailService.resetChartData(widget, result.data);
             var resources = resetData.resources;
             var labels = resetData.labels;
@@ -161,27 +161,27 @@ angular.module('iaas.services')
             widget.chart = new Dygraph(document.getElementById(nodeid), resources, option);
             widget.chart.updateOptions({
                 zoomCallback : function (minDate, maxDate, yRange) {
-                    computeDetailService.zoomCallback(minDate, maxDate, widget.hostname, widget, true);
+                    computeDetailService.zoomCallback(minDate, maxDate, p);
                 }
             });
+            p.count++
         };
 
-        computeDetailService.zoomCallback = function (minDate, maxDate, hostname, widget, refreshIconShow) {
+        computeDetailService.zoomCallback = function (minDate, maxDate, p) {
             var timeRangeFrom = new Date(minDate);
             var timeRangeTo = new Date(maxDate);
-            var condition = {
-                hostname: hostname,
-                timeRangeFrom: common.getTimeRangeFlag(moment(timeRangeTo, 'YYYY.MM.DD hh:mm')),
-                timeRangeTo: common.getTimeRangeFlag(moment(timeRangeFrom, 'YYYY.MM.DD hh:mm')),
-                groupBy: common.getGroupingByTimeRange('custom', timeRangeFrom, timeRangeTo)
-            };
             
-            var rp2 = computeDetailService[widget.func](condition);
-            rp2.success(function (data2) {
-                widget.refreshIconShow = refreshIconShow;
-                var resources2 = computeDetailService.resetChartData(widget, data2).resources;
-                if (resources2.length > 0) widget.chart.updateOptions({file: resources2});
-            });
+            p.datas = {
+                selTimeRange: 'custom',
+                timeRangeFrom: common.getTimeRangeFlag(moment(timeRangeFrom, 'YYYY.MM.DD hh:mm')),
+                timeRangeTo: common.getTimeRangeFlag(moment(timeRangeTo, 'YYYY.MM.DD hh:mm')),
+                selGroupBy: common.getGroupingByTimeRange('custom', timeRangeFrom, timeRangeTo)
+            };
+
+            // 30분 이하 줌인 금지.
+            if (p.datas.selGroupBy == 'deny') return false;
+            
+            computeDetailService.reloadChartData(p);
         };
 
         computeDetailService.initChartData = function (p) {
@@ -203,6 +203,8 @@ angular.module('iaas.services')
                 widgets: angular.copy(p.chartConfig),
                 netWidgets: {}
             };
+            p.count = 1;
+            p.widgetsCount = p.chartConfig.length;
 
             p.scope.main.loadingMainBody = true;
 
@@ -210,6 +212,7 @@ angular.module('iaas.services')
             computeDetailService[p.interfaceFunc]({hostname: p.hostname}).then(
                 function (result) {
                     if (result.data.metric) {
+                        p.widgetsCount += (result.data.metric.length * p.netChartConfig.length);
                         angular.forEach(result.data.metric, function (metricItem, mkey) {
                             p.scope.interfaceList.push(metricItem);
                             p.scope.dashboard.netWidgets[metricItem] = [];
@@ -249,6 +252,7 @@ angular.module('iaas.services')
                 p.scope.savedCustom = false;
             }
 
+            p.count = 1;
             p.scope.main.loadingMainBody = true;
 
             // 노드 데이터 재조회
@@ -261,7 +265,13 @@ angular.module('iaas.services')
                 p.interface = interfaceVal;
                 computeDetailService.setChartData(p);
             });
-            p.scope.main.loadingMainBody = false;
+
+            var stop = p.interval(function () {
+                if (p.count >= p.widgetsCount) {
+                    p.interval.cancel(stop);
+                    p.scope.main.loadingMainBody = false;
+                }
+            }, 500);
         };
 
         computeDetailService.reloadChartDataOne = function (widget, p) {

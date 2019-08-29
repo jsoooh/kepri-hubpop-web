@@ -333,6 +333,8 @@ angular.module('paas.controllers')
             appPromise.success(function (data) {
                 common.showAlertSuccess("삭제가 완료 되었습니다.");
                 ct.listAllApps();
+                //앱 삭제 후 main organization 정보 재조회. 삭제 후 앱 이름 중복 에러 관련. 2019.07.12
+                $scope.main.loadSltOrganization();
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -435,15 +437,23 @@ angular.module('paas.controllers')
                 return;
             }
 
-            $scope.main.loadingMainBody = true;
+            var inputName = document.getElementById('inputAppName-'+inputName);
+            var newName = inputName.name;
+            var guid = inputName.dataset.guid;
+
             if(guid == null) {
                 var inputName = document.getElementById('inputAppName-'+inputName);
+                var newName = inputName.name;
                 var guid = inputName.dataset.guid;
             }
 
-            var appPromise = applicationService.updateAppNameAction(guid, inputName);
+            $scope.main.loadingMainBody = true;
+            var appPromise = applicationService.updateAppNameAction(guid, newName);
             appPromise.success(function (data) {
                 ct.listAllApps();
+                $state.go($state.current, {}, {reload: true});
+                $scope.main.loadSltOrganization();
+                $scope.main.loadingMainBody = false;
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
@@ -886,9 +896,12 @@ angular.module('paas.controllers')
                         $scope.main.loadingMainBody = false;
                         if (!data) {
                             ct.appPush();
+                        } else if (ct.appPushData.appName == ct.appPushData.domainFirstName) {
+                            ct.hostDup = true;
+                            common.showAlertError("이미 사용중인 APP 이름입니다.");
                         } else {
                             ct.hostDup = true;
-                            common.showAlertError("이미 사용 중인 도메인입니다.");
+                            common.showAlertError("이미 사용중인 APP 도메인입니다.");
                         }
                     });
                     routePromise.error(function (data) {
@@ -908,6 +921,7 @@ angular.module('paas.controllers')
             
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
                 $scope.actionBtnHied = false;
+                common.showAlertError("이미 사용중인 APP 이름입니다.");
                 return;
             }
 
@@ -943,19 +957,17 @@ angular.module('paas.controllers')
                 appBody.diskQuota = ct.defaultSet.diskQuota;
             }
             
-           // console.log("appBody====>"+ JSON.stringify(appBody));
-
             if (ct.appFileItem) {
                 appBody.file 	   = ct.appFileItem._file;
+                $scope.main.loadingMainBody = true;
                 var appPushPromise = applicationService.appFilePush(appBody);
-                
                 appPushPromise.success(function (data) {
                     $scope.actionBtnHied 		= false;
                     $scope.main.loadingMain 	= false;
                     $scope.main.loadingMainBody = false;
-                    
+
                     common.showAlertSuccessHtml($translate.instant("label.app") + "(" + data.name + ")", $translate.instant("message.mi_register_success"));
-                    
+
                     $scope.main.startAppGuid = data.guid;
                     $scope.main.goToPage('/paas/apps/' + data.guid);
                 });
@@ -1008,7 +1020,6 @@ angular.module('paas.controllers')
             ct.getSubDomainList();
         };
 
-
         ct.getSubDomainList = function () {
             var condition = '';
             if (ct.domains[0].guid) {
@@ -1027,8 +1038,8 @@ angular.module('paas.controllers')
         };
 
         ct.fn.appNameValidationCheck = function(appName) {
-            if(appName){
-                for(var i = 0; i < ct.sltOrganization.spaces[0].apps.length; i++) {
+            if (appName) {
+                for (var i = 0; i < ct.sltOrganization.spaces[0].apps.length; i++) {
                     if (appName == ct.sltOrganization.spaces[0].apps[i].name) {
                         return {isValid : false, message: "이미 사용중인 APP 이름입니다."};
                     }
@@ -1346,7 +1357,7 @@ angular.module('paas.controllers')
             var newName = $('input[name=renameInst]').val();
 
             if (newName.length < 3) {
-                common.showAlert("", "최소 3자 이상이어야 합니다.");
+                common.showAlert("", "최소 3자 이상이어야 합니다.0 < contents.app.routes.length");
                 return;
             }
 
@@ -1923,6 +1934,8 @@ angular.module('paas.controllers')
             appPromise.success(function (data) {
                 common.showAlertSuccess("삭제가 완료 되었습니다.");
                 $scope.main.goToPage("/paas/apps");
+                //앱 삭제 후 main organization 정보 재조회. 삭제 후 앱 이름 중복 에러 관련. 2019.07.12
+                $scope.main.loadSltOrganization();
             });
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;

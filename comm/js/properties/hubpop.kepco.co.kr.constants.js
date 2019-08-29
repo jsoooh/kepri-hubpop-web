@@ -37,10 +37,10 @@ angular.module('app')
         popAlertFormUrl: _COMM_VIEWS_ + '/common/popAlertForm.html',
         popAlertFormUrl2: _COMM_VIEWS_ + '/common/popAlertForm2.html',
         xpertHosts : {
-            mysqlDB : "dbwebxpert.kepri-dev.crossent.crossent.com",
-            webLog : "weblog.kepri-dev.crossent.com",
-            terminal : "terminal.kepri-dev.crossent.com",
-            autoScaler : "autoscaler.ps..kepri-dev.crossent.crossent.com",
+            mysqlDB : "dbwebxpert.ps.hubpop.io",
+            webLog : "weblog.ps.hubpop.io",
+            terminal : "terminal.ps.hubpop.io",
+            autoScaler : "autoscaler.ps.hubpop.io"
         },
         homeUrl: '/#/',
         homePath: '/',
@@ -237,6 +237,11 @@ angular.module('app')
             admin: 'ADMIN',
             user: 'USER'
         },
+        ///특정 에러 문구 에러 메시지에 나타나지 않도록 수정. 2019.07.25
+        errorMessageSkip : [
+            "Not Found",
+            "Internal Server Error"
+        ],
         //임시 이메일 주소 체크
         tempEmail : [
             "ax80mail.com",
@@ -333,7 +338,7 @@ angular.module('app')
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},
-        {id: 2, nodeid: 'cpu_load_usage', name: 'CPU Load 사용률',      func: 'tenantCpuLoad1mList',            type: 'lineChart', percent: false, axisLabel: 'Count per 1 minute'},
+        {id: 2, nodeid: 'cpu_load_usage', name: 'CPU Load 사용률',      func: 'tenantCpuLoad1mList',            type: 'lineChart', percent: false, axisLabel: '1m, 5m, 15m'},
         {id: 3, nodeid: 'mem_swap', name: 'Swap',                      func: 'tenantMemorySwapList',           type: 'lineChart', percent: true,  axisLabel: '%'},
         {id: 4, nodeid: 'mem_usage', name: '메모리 사용률',             func: 'tenantMemoryUsageList',          type: 'lineChart', percent: true,  axisLabel: '%'},
         {id: 5, nodeid: 'dsk_usage', name: '디스크 사용률',             func: 'tenantDiskUsageList',            type: 'lineChart', percent: true,  axisLabel: '%'},

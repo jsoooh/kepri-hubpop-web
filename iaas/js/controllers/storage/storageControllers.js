@@ -72,7 +72,9 @@ angular.module('iaas.controllers')
                         ct.isStorageMainListLoad = true;
                     }
                 }
+                console.log("volumes : ", volumes);
                 common.objectOrArrayMergeData(ct.storageMainList, volumes);
+                console.log("ct.storageMainList : ", ct.storageMainList);
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -257,11 +259,11 @@ angular.module('iaas.controllers')
         ct.fn.reNamePopStorage = function($event,volume) {
         	
         	var dialogOptions =  {
-			            			controller       : "iaasReNamePopStorageCtrl" ,
-			            			formName         : 'iaasReNamePopStorageForm',
-			            			selectStorage    : angular.copy(volume),
-			            			callBackFunction : ct.reNamePopStorageCallBackFunction
-				            	};
+                controller       : "iaasReNamePopStorageCtrl" ,
+                formName         : 'iaasReNamePopStorageForm',
+                selectStorage    : angular.copy(volume),
+                callBackFunction : ct.reNamePopStorageCallBackFunction
+            };
         	
             	$scope.actionBtnHied = false;
             	common.showDialog($scope, $event, dialogOptions);
@@ -305,11 +307,11 @@ angular.module('iaas.controllers')
         ct.fn.reSizePopStorage = function($event,volume) {
 
         	var dialogOptions =  {
-			            			controller       : "iaasReSizePopStorageCtrl" ,
-			            			formName         : 'iaasReSizePopStorageForm',
-			            			selectStorage    : angular.copy(volume),
-			            			callBackFunction : ct.reSizePopStorCallBackFunc
-				            	};
+                controller       : "iaasReSizePopStorageCtrl" ,
+                formName         : 'iaasReSizePopStorageForm',
+                selectStorage    : angular.copy(volume),
+                callBackFunction : ct.reSizePopStorCallBackFunc
+            };
         	
             	$scope.actionBtnHied = false;
             	common.showDialog($scope, $event, dialogOptions);
@@ -344,6 +346,7 @@ angular.module('iaas.controllers')
         ct.isTenantResourceLoad = false;
 
         ct.volume.name      = 'disk-01';
+        ct.storageNameList = [];
 
         ct.inputVolumeSizeChange = function () {
             var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
@@ -381,9 +384,9 @@ angular.module('iaas.controllers')
         	if(clickCheck) return;
             clickCheck = true;
 
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+            if (ct.storageNameList.indexOf(ct.volume.name) > -1) {
                 clickCheck = false;
-                return;
+                return common.showAlert("이미 사용중인 이름 입니다.");
             }
 
             ct.fn.createStorageVolumeAction();
@@ -498,8 +501,47 @@ angular.module('iaas.controllers')
             });
         };
 
+        ct.fn.getStorageList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                conditionKey : ct.conditionKey,
+                conditionValue : ct.conditionValue
+            };
+
+            param.size = 0;
+
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                var volumes = [];
+                if (data && data.content && data.content.volumes && angular.isArray(data.content.volumes)) {
+                    volumes = data.content.volumes;
+                    for (var i = 0; i < volumes.length; i++) {
+                        ct.storageNameList.push(volumes[i].name);
+                    }
+                }
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlert("message", data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };
+
+        ct.fn.storageNameCustomValidationCheck = function(name) {
+            if (ct.storageNameList.indexOf(name) > -1) {
+                return {isValid : false, message: "이미 사용중인 이름 입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
         ct.fn.getTenantResource();
         ct.fn.serverList();
+        ct.fn.getStorageList();
 
     })
     .controller('iaasStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
@@ -1002,9 +1044,11 @@ angular.module('iaas.controllers')
     	pop.formName 					= $scope.dialogOptions.formName;
     	pop.userTenant 					= angular.copy($scope.main.userTenant);
     	pop.volume 						= $scope.dialogOptions.selectStorage;
+    	pop.volumes                     = angular.copy($scope.contents.storageMainList);
     	pop.fn 							= {};
     	pop.data						= {};
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+    	pop.storageNameList             = [];
     	
     	$scope.dialogOptions.title 		= "디스크 이름 변경";
     	$scope.dialogOptions.okName 	= "변경";
@@ -1013,19 +1057,29 @@ angular.module('iaas.controllers')
     	
     	$scope.actionLoading 			= false;
     	pop.btnClickCheck 				= false;
-    	
-    	
+
+
+    	for (var i = 0; i < pop.volumes.length; i++) {
+            pop.storageNameList.push(pop.volumes[i].name);
+        }
+
+    	pop.fn.storageNameCustomValidationCheck = function(name) {
+            if (pop.storageNameList.indexOf(name) > -1) {
+                return {isValid : false, message: "이미 사용중인 이름 입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
     	// Dialog ok 버튼 클릭 시 액션 정의
     	$scope.popDialogOk = function () {
-    		
     		if ($scope.actionBtnHied) return;
-    		
-    		$scope.actionBtnHied = true;
-    		
-    		if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
-    		{
+
+            $scope.actionBtnHied = true;
+
+    		if (pop.storageNameList.indexOf(pop.newVolNm) > -1) {
     			$scope.actionBtnHied = false;
-    			return;
+    			return common.showAlert("이미 사용중인 이름 입니다.");
     		}
     		
     		pop.fn.reNmStor();

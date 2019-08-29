@@ -43,6 +43,8 @@ angular.module('common.controllers', [])
 
         mc.connectType = _CONNECT_SITE_;
 
+        mc.noticeList = [];     //팝업 공지사항 목록
+
         if (_MENU_TYPE_ == 'part') {
             mc.commLayerMenuTempeUrl = _COMM_VIEWS_ + '/menu/commLayerMenu.html' + _VERSION_TAIL_;
             mc.commMenuContentTempeUrl = _COMM_VIEWS_ + '/menu/commMenuContent.html' + _VERSION_TAIL_;
@@ -654,11 +656,9 @@ angular.module('common.controllers', [])
                     mc.alarms.content[i].updateDttm = cmm.convertStringToDate(mc.alarms.content[i].updateDttm);
                 }
             });
-/*
-            response.error(function (data) {
+            /*response.error(function (data) {
                 mc.alarms = {};
-            });
-*/
+            });*/
         };
 
         // Project 값 셋팅
@@ -1076,24 +1076,28 @@ angular.module('common.controllers', [])
         };
 
         mc.addOrgProjectFormOpen = function($event) {
-            var orgProject = {};
-            orgProject.managerId    = mc.userInfo.user_id;
-            orgProject.managerName  = mc.userInfo.user_name;
-            orgProject.managerEmail = mc.userInfo.email;
+            if ($location.path().indexOf("/comm/projects/") > -1) {
+                var orgProject = {};
+                 orgProject.managerId    = mc.userInfo.user_id;
+                 orgProject.managerName  = mc.userInfo.user_name;
+                 orgProject.managerEmail = mc.userInfo.email;
 
-            orgProject.projectId = mc.sltProjectId;
+                 orgProject.projectId = mc.sltProjectId;
 
-            var dialogOptions = {
-                controller : "commAddOrgProjecFormCtrl",
-                controllerAs: "pop",
-                templateUrl : _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail(),
-                formName : "popOrgProjectForm",
-                orgProject : orgProject,
-                callBackFunction : mc.addOrgProjectCallBackFun
-            };
-            $scope.actionBtnHied = false;
-            $scope.actionLoading = false;
-            common.showCustomDialog($scope, $event, dialogOptions);
+                 var dialogOptions = {
+                 controller : "commAddOrgProjecFormCtrl",
+                 controllerAs: "pop",
+                 templateUrl : _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail(),
+                 formName : "popOrgProjectForm",
+                 orgProject : orgProject,
+                 callBackFunction : mc.addOrgProjectCallBackFun
+                 };
+                 $scope.actionBtnHied = false;
+                 $scope.actionLoading = false;
+                 common.showCustomDialog($scope, $event, dialogOptions);
+            } else {
+                $location.path('/comm/projects/popup');
+            }
         };
 
         mc.ssoUserLogin = false;
@@ -1123,7 +1127,7 @@ angular.module('common.controllers', [])
                 _this.removeClass("cToggle-open").find(".pnb_bx_cnt").slideUp();
             }
         };
-        
+
         /*만들기 화면 토글*/
         mc.panelToggleChange = function (evt, isReSlider) {
             var _this = $(evt.currentTarget).closest(".pn-Toggle");
@@ -1134,6 +1138,18 @@ angular.module('common.controllers', [])
                 _this.removeClass("Toggle-open").find(".s_cont_box").slideUp();
             }
         };
+
+        /*디스크 관리-디스크 만들기 토글 버튼 전용*/
+        mc.panelToggleChange1 = function (evt, isReSlider) {
+            var _this = $(evt.currentTarget).closest(".pn-Toggle");
+            if (!_this.hasClass("Toggle-open")) {
+                _this.addClass("Toggle-open").find(".s_cont_box").slideUp();
+            } else {
+                _this.removeClass("Toggle-open").find(".s_cont_box").slideDown();
+                if (isReSlider) mc.refreshSlider();
+            }
+        };
+
 
       //2018.11.22 sg0730 RzSlider Refresh Func Add
         mc.refreshSlider = function () {
@@ -1353,8 +1369,17 @@ angular.module('common.controllers', [])
             }
         }
 
-        $interval(mc.selectAlarmCount, CONSTANTS.alarmBell);
+        $interval(function () {
+            mc.selectAlarmCount();
+            mc.selectAlarmList();
+        }, CONSTANTS.alarmBell);
         
+        //팝업 공지사항 보여주기
+        mc.desplayNoticeList = function(notices) {
+            mc.noticeList = notices;
+            portal.notice.setNoticeList(mc);
+        };
+
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
     // 매인 BODY Conroller

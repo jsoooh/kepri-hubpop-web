@@ -54,19 +54,17 @@ angular.module('app', [
         //$httpProvider.interceptors.push('XSRFInterceptor');
         $httpProvider.interceptors.push('HttpInterceptor');
 
-/*
-        var initInjector = angular.injector(["ng"]);
+        /*var initInjector = angular.injector(["ng"]);
 
         var $http = initInjector.get("$http");
         $http.defaults.useXDomain = true;
         $http.defaults.withCredentials = true;
         $http.defaults.xsrfCookieName = _CSRF_TOKEN_COOKIE_NAME_;
-        $http.defaults.xsrfHeaderName = _CSRF_TOKEN_HEADER_NAME_;
-*/
+        $http.defaults.xsrfHeaderName = _CSRF_TOKEN_HEADER_NAME_;*/
 
 		delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-        $urlRouterProvider.otherwise('/comm/projects');
+        $urlRouterProvider.otherwise('/comm/projects/');
 
         function setState(option) {
             var mainContents	= {};

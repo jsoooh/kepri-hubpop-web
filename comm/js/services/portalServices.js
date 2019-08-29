@@ -42,20 +42,20 @@ angular.module('portal.services', [])
             var menuList = mc.dbMenuList;
             var repeatData = [];
             if (!angular.isArray(menuList)) return;
-            for(var i = 0; i < menuList.length; i++){
-                if(myRoleName == 'Manager'){
-                    if(menuList[i].isManager){
+            for (var i = 0; i < menuList.length; i++) {
+                if (myRoleName == 'Manager') {
+                    if (menuList[i].isManager) {
                         repeatData.push(menuList[i]);
                     }
-                } else if(myRoleName == 'UserPM'){
-                    if(menuList[i].isUserPm){
+                } else if (myRoleName == 'UserPM') {
+                    if (menuList[i].isUserPm) {
                         repeatData.push(menuList[i]);
                     }
-                } else if(myRoleName == 'User'){
-                    if(menuList[i].isUser){
+                } else if (myRoleName == 'User'){
+                    if (menuList[i].isUser) {
                         repeatData.push(menuList[i]);
                     }
-                } else{
+                } else {
                     repeatData.push(menuList[i]);
                 }
             }
@@ -65,27 +65,28 @@ angular.module('portal.services', [])
             var parentId1 = '';
             var parentId2 = '';
 
-            for(var i = 0; i < repeatData.length; i++){
+            for (var i = 0; i < repeatData.length; i++) {
                 // Depth 1
-                if(repeatData[i].level == '1'){
-                    var icoId = repeatData[i].id.toString().substr(2,1);
+                if (repeatData[i].level == '1') {
+                    //var icoId = repeatData[i].id.toString().substr(2,1);
+                    var icoId = !repeatData[i].iconId ? "" : repeatData[i].iconId.toString();
                     if (repeatData[i].childCnt == 0) {
                         leftMenu += "		<li class='dept1'>\n";
                         if (repeatData[i].urlPath) {
-                            leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                            leftMenu += "			<a class='dept1' href='" + repeatData[i].urlPath + "'><span class='ico ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
                         } else {
-                            leftMenu += "			<a class='dept1' href='javascript:void(0);'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
+                            leftMenu += "			<a class='dept1' href='javascript:void(0);'><span class='ico ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "</a>\n";
                         }
                         leftMenu += "		</li>\n";
                     } else {
                         parentId1 = repeatData[i].id;
                         leftMenu += "		<li class='dept1'>\n";
-                        leftMenu += "			<a class='dept1' href='javascript:void(0);' onclick='depth1Click(event);'><span class='ico ico-bul ico" + icoId + "'></span>" + repeatData[i].depth1 + "<span class='ico ico-arr'></span></a>\n";
+                        leftMenu += "			<a class='dept1' href='javascript:void(0);' onclick='depth1Click(event);'><span class='ico ico-bul " + icoId + "'></span>" + repeatData[i].depth1 + "<span class='ico ico-arr'></span></a>\n";
                         leftMenu += "			<ul class='dept2' style='display:none' onmouseleave='depth3Leave();'>\n";
                     }
                 }
                 // Depth 2
-                if(repeatData[i].level == '2' && repeatData[i].parentId == parentId1){
+                if (repeatData[i].level == '2' && repeatData[i].parentId == parentId1) {
                     if (repeatData[i].childCnt == 0) {
                         leftMenu += "				<li class='dept2' onmouseover='depth2LiHover(event,\"no\");'>\n";
                         if (repeatData[i].urlPath) {
@@ -102,31 +103,29 @@ angular.module('portal.services', [])
                     }
                 }
                 // Depth 3
-                if(repeatData[i].level == '3' && repeatData[i].parentId == parentId2){
+                if (repeatData[i].level == '3' && repeatData[i].parentId == parentId2) {
                     leftMenu += "						<li class='dept3'>\n";
                     leftMenu += "							<a class='dept3' href='" + repeatData[i].urlPath + "' onclick='depth3Click(event);' onclick='depth2Click(event);'>" + repeatData[i].depth3 + "</a>\n";
                     leftMenu += "						</li>\n";
                 }
-                if(i == repeatData.length-1){
-                    if(repeatData[i].level == '3'){
+                if (i == repeatData.length-1) {
+                    if (repeatData[i].level == '3') {
                         leftMenu += "					</ul>\n";
                         leftMenu += "					<!-- dept3 END -->\n";
                         leftMenu += "				</li>\n";
                     }
-
-                    if(repeatData[i].level == '2' || repeatData[i].level == '3'){
+                    if (repeatData[i].level == '2' || repeatData[i].level == '3') {
                         leftMenu += "			</ul>\n";
                         leftMenu += "			<!-- dept2 END -->\n";
                         leftMenu += "		</li>\n";
                     }
-                }else if(i+1 < repeatData.length){
-                    if((repeatData[i+1].level == '1' || repeatData[i+1].level == '2') && repeatData[i].level == '3' && repeatData[i+1].parentId != parentId2 && repeatData[i].parentId){
+                } else if (i+1 < repeatData.length) {
+                    if ((repeatData[i+1].level == '1' || repeatData[i+1].level == '2') && repeatData[i].level == '3' && repeatData[i+1].parentId != parentId2 && repeatData[i].parentId) {
                         leftMenu += "					</ul>\n";
                         leftMenu += "					<!-- dept3 END -->\n";
                         leftMenu += "				</li>\n";
                     }
-
-                    if(repeatData[i+1].level == '1' && repeatData[i+1].parentId != parentId1 && repeatData[i].parentId){
+                    if (repeatData[i+1].level == '1' && repeatData[i+1].parentId != parentId1 && repeatData[i].parentId) {
                         leftMenu += "			</ul>\n";
                         leftMenu += "			<!-- dept2 END -->\n";
                         leftMenu += "		</li>\n";
@@ -149,30 +148,87 @@ angular.module('portal.services', [])
             $("#leftMenu").find('a').each(function(){
                 var thisHref = $(this).attr("href");
 
-                if(nowHref[1].match(thisHref)){
-                    if($(this).hasClass("on")){
+                if (nowHref[1].match(thisHref)) {
+                    if ($(this).hasClass("on")) {
 
-                    }else{
+                    } else {
                         $("#leftMenu").find('a').removeClass("on");
                         $("#leftMenu").find('ul.dept2').hide(0);
                         $("#leftMenu").find('ul.dept3').hide(0);
                         $(this).toggleClass("on");
 
-                        if($(this).hasClass("dept3")){
+                        if ($(this).hasClass("dept3")) {
                             $(this).closest("li.dept2").find("a.dept2").toggleClass("on");
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
                             $(this).closest("li.dept1").find("a.dept1").toggleClass("on open");
                         }
-                        if($(this).hasClass("dept2")){
+                        if ($(this).hasClass("dept2")) {
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
                             $(this).closest("li.dept1").find("a.dept1").toggleClass("on open");
                         }
-                        if($(this).hasClass("dept1")){
+                        if ($(this).hasClass("dept1")) {
                             $(this).closest("li.dept1").find("ul.dept2").toggle(0);
                         }
                     }
                 }
             })
+        };
+
+        //공지사항 관련
+        portal.notice = {};
+        portal.notice.setNoticeList = function (mc) {
+            var noticeList = mc.noticeList;
+            var noticeHtml = "";
+            angular.forEach(noticeList, function (noticeItem) {
+                noticeHtml += "<div name='notice' id='popNotice" + noticeItem.NOTICE_NO + "' style='position:absolute; top:" + noticeItem.top + "px; left:" + noticeItem.left + "px; z-index: 10;'>\n" +
+                    "    <div class='notice_pop'>\n" +
+                    "        <div class='modal-content'>\n" +
+                    "            <div class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
+                    "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><a href='javascript:void(0);' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></a></button>\n" +
+                    "                <h1 class='modal-title'>공지사항 </h1>\n" +
+                    "            </div>\n" +
+                    "            <div class='modal-body'>\n" +
+                    "                <div class='pop_tit'><h5>" + noticeItem.TITLE + "</h5></div>\n" +
+                    "                <div class='noti_cont_area'>\n" +
+                    "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
+                    "                </div>\n";
+                if (noticeItem.ATTACH_FILE != "" && noticeItem.ATTACH_FILES != "" && noticeItem.ATTACH_FILES.length > 0) {
+                        noticeHtml += "                <div class='tbw type1'>\n" +
+                        "                    <table class='table'>\n" +
+                        "                        <colgroup>\n" +
+                        "                            <col style='width:23%;'>\n" +
+                        "                            <col style='width:77%;'>\n" +
+                        "                        </colgroup>\n" +
+                        "                        <tbody>\n";
+                    for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
+                        noticeHtml += "                        <tr>\n" +
+                        "                            <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
+                        "                            <td><a href='/hsvc/comn-api/api/downloadNoticeAttachFile/" + noticeItem.ATTACH_FILES[i].FILE_NO + "'>" + noticeItem.ATTACH_FILES[i].FILE_NAME + "</a></td>\n" +
+                        "                        </tr>\n";
+                    }
+                    noticeHtml += "                        </tbody>\n" +
+                    "                    </table>\n" +
+                    "                </div>\n";
+                }
+                noticeHtml += "            </div>\n" +
+                    "            <div class='modal-footer' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
+                    "                <div class='checkbox checkbox-inline'>\n" +
+                    "                    <input type='checkbox' id='check-id" + noticeItem.NOTICE_NO + "' onclick='setNotifyCookie(" + noticeItem.NOTICE_NO + ");'>\n" +
+                    "                    <label for='check-id" + noticeItem.NOTICE_NO + "' class='label-txt'>오늘 하루 이 창을 띄우지 않음</label>\n" +
+                    "                </div>\n" +
+                    "            </div>\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>";
+
+            });
+            $("#noticeDiv").html(noticeHtml);
+            angular.forEach(noticeList, function (noticeItem) {
+                $("#popNotice" + noticeItem.NOTICE_NO).draggable({
+                    cursor: "pointer", // 커서 모양
+                    cancel: ".modal-body"
+                });
+            });
         };
 
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   Start  ///////////////////////////////////
@@ -252,7 +308,6 @@ angular.module('portal.services', [])
             /*return common.retrieveResource(common.resourcePromise('http://168.78.82.183:58080/gis/api/projectInfo.do', 'GET', getParams));*/
             return common.retrieveResource(common.resourcePromise('/gis/api/projectInfo.do', 'GET', getParams));
         };
-
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   End  ///////////////////////////////////
 
         portal.portalOrgs = {};
@@ -314,6 +369,10 @@ angular.module('portal.services', [])
 				"teamCode" : teamCode
             };
             return common.syncHttpResponse(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams, 'application/x-www-form-urlencoded');
+        };
+
+        portal.portalOrgs.getNotices = function () {
+            return common.retrieveResource(common.resourcePromise('/hsvc/api/noti/info/v1.0', 'GET'));
         };
 
         portal.users = {};
@@ -421,9 +480,9 @@ angular.module('portal.services', [])
 				var tempMonth = obj.getMonth() + 1;
 				var month = tempMonth < 10 ? "0".concat(tempMonth.toString()) : tempMonth.toString();
 				var fullDate = year.concat(month).concat(date);
-				if(seperator){
+				if (seperator) {
 					return fullDate.toDate(seperator);
-				}else{
+				} else {
 					return fullDate;
 				}
 			}catch(e){
@@ -433,9 +492,9 @@ angular.module('portal.services', [])
 
 		String.prototype.toDate = function(seperator){
 			seperator = seperator || "-";
-			if(this.length != 8){
+			if (this.length != 8) {
 				return "";
-			}else{
+			} else {
 				return (this.substring(0,4) + seperator + this.substring( 4,6 ) + seperator + this.substring( 6,8 ));
 			}
 		};
@@ -447,11 +506,11 @@ angular.module('portal.services', [])
 		var commonUtil = {};
 
 		commonUtil.getMemoryLimit = function(memoryLimit) {
-			if(memoryLimit >= 1024) {
+			if (memoryLimit >= 1024) {
 				return (memoryLimit/1024).toFixed(1)+'GB';
 			}
 			return memoryLimit+'MB';
-		}
+		};
 
 		commonUtil.getBuildpackInfoOld = function(buildpackName, isSmall) {
 			var name = '';
@@ -460,7 +519,7 @@ angular.module('portal.services', [])
 			var url = '';
 			var appFilePath = 'https://s3.ap-northeast-2.amazonaws.com/basic-app-dev/hello-spring.war';
 			var prefix = 'prog';
-			if(isSmall == 'small') prefix = 'srog';
+			if (isSmall == 'small') prefix = 'srog';
 			switch(buildpackName) {
 				case 'staticfile_buildpack':
 					name = 'STATIC';
@@ -521,7 +580,7 @@ angular.module('portal.services', [])
 					image = 'images/' + prefix + '_img8.png';
 			}
 			return {'name': name, 'img': image, 'appFilePath': appFilePath, 'version': version, 'url':url};
-		}
+		};
 
 		commonUtil.getBuildpackInfo = function(buildpackName, isSmall) {
 			var name = '';
@@ -530,7 +589,7 @@ angular.module('portal.services', [])
 			var url = '';
 			var appFilePath = 'https://s3.ap-northeast-2.amazonaws.com/basic-app-dev/hello-spring.war';
 			var prefix = 'prog';
-			if(isSmall == 'small') prefix = 'srog';
+			if (isSmall == 'small') prefix = 'srog';
 			switch(buildpackName) {
 				case 'staticfile_buildpack':
 					name = 'STATIC';
@@ -596,7 +655,7 @@ angular.module('portal.services', [])
 					image = 'images/' + prefix + '_img8.png';
 			}
 			return {'name': name, 'img': image, 'appFilePath': appFilePath, 'version': version, 'url':url};
-		}
+		};
 
 		commonUtil.getEnvByBuildpack = function(buildpackName) {
 			var _vs = [];
@@ -637,7 +696,7 @@ angular.module('portal.services', [])
 			}
 			var envs = (_sv == '' && _fw == '') ? null : {servers: _sv, frameworks: _fw};
 			return {versions: _vs, servers: _sv, frameworks: _fw};
-		}
+		};
 
 		commonUtil.go = function(path) {
 			$location.path(path);

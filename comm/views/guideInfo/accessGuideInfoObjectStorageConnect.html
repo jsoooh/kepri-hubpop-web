@@ -1,0 +1,61 @@
+<div class="accss_guideWrap">
+	<h2>오브젝트 스토리지 사용 안내</h2>
+	
+	<h3>오브젝트 스토리지란?</h3>
+	<p class="txt_level1 pdb0">
+		오브젝트 스토리지는 파일 계층 구조로 데이터를 관리하는 파일 시스템과 달리 데이터를 객체로 관리 하는 데이터 저장 방법으로, 논리적인 스토리지로 볼 수 있기 때문에 물리적 제약 없이 원하는 만큼 공간을 확장시킬 수 있습니다.	</p>
+	
+	<h3 class="pt50">주요 기능</h3>
+	<div class="txt_level_list">
+		<ul>
+			<li>- 데이터는 파일이나 블록 대신 객체로 노출되고 관리됩니다.</li>
+			<li>- 고유한 주소를 기준으로 개별 데이터 오브젝트를 식별합니다. 더 나은 인덱싱 또는 관리를 위해 메타데이터를 포함할 수 있습니다.</li>
+			<li>- 응용 프로그램이 데이터를 조작 할 수 있도록 프로그래밍 인터페이스를 제공합니다. API 구현은 REST 기반이며 표준 HTTP 호출을 사용할 수 있습니다.</li>
+		</ul>
+	</div>
+
+	<h3 class="pt80">S3 브라우저를 이용한 스토리지 관리</h3>
+	<p class="txt_level1 pdb0">프로젝트 생성 시에 프로젝트별로 접속 정보가 생성됩니다.</p>
+	
+	<h4>1) 사전 준비사항</h4>
+		<p class="txt_level1 blt_none">
+			<a href="/download/s3browser-8-4-1.exe" class="link_dw"><span class="txt">S3 브라우저 다운로드</span><span class="ico_dw">다운로드</span></a>
+		</p>
+	
+	<h4>2) 접속 정보 확인</h4>
+	<p class="txt_level1 blt_none">오브젝트 스토리지의 <strong>[접속 정보]</strong> 에서 접속 정보를 확인합니다.</p>
+	<div class="imgWrap mt30">
+		<img alt="" src="images/access_guide/access_guide_obj_str_img01.png" alt="">
+	</div>
+
+	<h4 class="pt80">3) S3 브라우저에 접속정보 입력</h4>
+	<div class="imgWrap mt30">
+		<img alt="" src="images/access_guide/access_guide_obj_str_img02.png" alt="">
+	</div>
+	<p class="txt_level1 blt_none">①  <strong>‘Add new account’</strong> 를 선택합니다.</p>
+	<p class="txt_level1 blt_none">②  정보 입력 후 <strong>‘Add new account’</strong> 버튼을 클릭하여 생성합니다.</p>
+
+	<h4 class="pt80">4) bucket(저장소) 내 파일 관리</h4>
+	<div class="imgWrap mt30">
+		<img alt="" src="images/access_guide/access_guide_obj_str_img03.png" alt="">
+	</div>
+	<p class="txt_level1 blt_none">①  버켓(저장소) 내부 클릭  >  우측 마우스 클릭으로 <strong>업로드, 다운로드, 삭제, 이름변경 등 파일 관리</strong>가 가능합니다.</p>
+	<p class="txt_level1 blt_none">②  기본적으로 프로젝트 내에서만 접근 및 사용 가능하나 <strong>[Permissions]</strong> 탭에서 하단 <strong>[Make public]</strong> 클릭 시 <strong>모든 사용자가 접근 및 사용 가능하도록 권한을 부여</strong>할 수 있습니다.</p>
+
+
+	<h4 class="pt80">5) 접근 권한이 부여된 파일에 대해서 웹으로 다운로드 가능</h4>
+	<div class="imgWrap mt30">
+		<img alt="" src="images/access_guide/access_guide_obj_str_img04.png" alt="">
+	</div>
+	<div class="txt_level_list">
+		<p class="txt_level3 type2 mt20">[REST Endpoint]/[버켓명]/[파일명]</p>
+		<dl>
+			<dt>예) </dt><dd>http://101.55.126.196:7480/aaaaaa/***.tar.gz</dd>
+		</dl>
+	</div>
+	
+	<h4 class="pt80">6) S3 API관련 참조 URL</h4>
+	<p class="txt_level3">
+		<a>http://docs.ceph.com/docs/master/radosgw/s3/</a>
+	</p>
+</div>

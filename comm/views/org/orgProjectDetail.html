@@ -55,8 +55,7 @@
                             <div class="panel type_api">
                                 <div class="panel_head">
                                     <h4 class="tit">데이터 구독 현황</h4>
-                                    <!-- 차후 링크 페이지 확인후 href 수정요망. 2018.10.18 sg0730  -->
-                                    <a class="btn_more" href="/dcp/comn/doMegaProcessView.do">데이터 구독현황 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="/dcp/cl/doDataCatlView.do">데이터 구독현황 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="fl_l">
@@ -69,17 +68,17 @@
                                                     <li>
                                                         <span class="state_mark type1"></span>
                                                         <span class="state_txt">요청</span>
-                                                        <span class="state_result">{{content.dcpDashboardInfo.dataReqAllNoca}} 건</span>
+                                                        <span class="state_result">{{contents.dcpDashboardInfo.dataReqAllNoca}} 건</span>
                                                     </li>
                                                     <li>
                                                         <span class="state_mark type2"></span>
                                                         <span class="state_txt">승인</span>
-                                                        <span class="state_result"> {{content.dcpDashboardInfo.dataReqAprvNoca}} 건</span>
+                                                        <span class="state_result"> {{contents.dcpDashboardInfo.dataReqAprvNoca}} 건</span>
                                                     </li>
                                                     <li>
                                                         <span class="state_mark type3"></span>
                                                         <span class="state_txt">반려</span>
-                                                        <span class="state_result"><span class="type1"> {{content.dcpDashboardInfo.dataReqRejNoca}} </span>건</span>
+                                                        <span class="state_result"><span class="type1"> {{contents.dcpDashboardInfo.dataReqRejNoca}} </span>건</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -87,7 +86,7 @@
                                                 <div id="chart-area"></div>
                                                 <div class="cht_val">
                                                     <span>0</span>
-                                                    <span>{{content.dcpDashboardInfo.totTmpCnt}}</span>
+                                                    <span>{{contents.dcpDashboardInfo.totTmpCnt}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,7 +95,7 @@
                                         <div class="tit_area">
                                             <h5 class="tit">데이터 구독</h5>
                                         </div>
-                                        <span class="lg_txt">{{content.dcpDashboardInfo.dataSubsNoca}} </span>
+                                        <span class="lg_txt">{{contents.dcpDashboardInfo.dataSubsNoca}} </span>
                                         <span class="sm_txt">Total</span>
                                     </div>
                                 </div>
@@ -111,7 +110,7 @@
                             <div class="panel type_api">
                                 <div class="panel_head">
                                     <h4 class="tit">API 서비스 사용 현황</h4>
-                                    <a class="btn_more" href="/apip/com/process.do">API 서비스 사용 현황 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="/apip/com/main.do">API 서비스 사용 현황 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="fl_l">
@@ -171,34 +170,36 @@
                                     <div class="fl_l">
                                         <div class="tit_area">
                                             <h5 class="tit">가상서버</h5>
-                                            <a class="btn_more" href="#/iaas">가상서버 바로가기<span class="ico_more"></span></a>
+                                            <a class="btn_more" href="#/iaas/compute">가상서버 바로가기<span class="ico_more"></span></a>
                                         </div>
-                                        <div class="cont_area">
+                                        <div class="cont_area_ct">
                                             <div class="cloud_stateWrap">
-                                                <ul>
-                                                    <li class="type1">
-                                                        <span class="sm_txt">TOTAL</span>
-                                                        <span class="lg_txt">{{contents.paasAppsStateCount.TOTAL}}</span>
-                                                    </li>
-                                                    <li class="type2">
-                                                        <span class="sm_txt">STARTED</span>
-                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STARTED}}</span>
-                                                    </li>
-                                                    <li class="type3">
-                                                        <span class="sm_txt">STOPPED</span>
-                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STOPPED}}</span>
-                                                    </li>
-                                                    <li class="type4">
-                                                        <span class="sm_txt">ERROR</span>
-                                                        <span class="lg_txt">{{contents.paasAppsStateCount.ERROR}}</span>
-                                                    </li>
-                                                </ul>
-                                                <!-- <div class="line_chart_data">
+                                            	<div class="state_data">
+	                                                <ul>
+	                                                    <li class="type1">
+	                                                        <span class="sm_txt">TOTAL</span>
+	                                                        <span class="lg_txt">{{contents.iaasInstanceStateCount.TOTAL}}</span>
+	                                                    </li>
+	                                                    <li class="type2">
+	                                                        <span class="sm_txt">STARTED</span>
+	                                                        <span class="lg_txt">{{contents.iaasInstanceStateCount.STARTED}}</span>
+	                                                    </li>
+	                                                    <li class="type3">
+	                                                        <span class="sm_txt">STOPPED</span>
+	                                                        <span class="lg_txt">{{contents.iaasInstanceStateCount.STOPPED}}</span>
+	                                                    </li>
+	                                                    <li class="type4">
+	                                                        <span class="sm_txt">ERROR</span>
+	                                                        <span class="lg_txt">{{contents.iaasInstanceStateCount.ERROR}}</span>
+	                                                    </li>
+	                                                </ul>
+                                            	</div>
+                                                <div class="line_chart_data">
                                                     <span class="sm_tit">CPU 상태</span>
                                                     <div id="chart-area2"></div>
-                                                </div> -->
+                                                </div>
                                             </div>
-                                            <div class="cloud_chartWrap" >
+                                            <div class="cloud_chartWrap">
                                                 <ul>
                                                     <li>
                                                         <div class="chart_info">
@@ -206,9 +207,13 @@
                                                             <span class="txt">{{contents.dataReq4.series[0].data}}<span class="sm_txt">%</span></span>
                                                         </div>
                                                         <div class="donut_chart_data">
+                                                            <div ng-if="contents.dataReq4.series[0].cpuUsed == null || contents.dataReq4.series[0].cpuMax == null" class="data_txt">
+                                                                <span>0</span>
+                                                                <span>0</span>
+                                                            </div>
                                                             <div class="data_txt">
-                                                                <span>{{contents.dataReq4.series[0].data}}</span>
-                                                                <span>100</span>
+                                                                <span>{{contents.dataReq4.series[0].cpuUsed}}</span>
+                                                                <span>{{contents.dataReq4.series[0].cpuMax}}</span>
                                                             </div>
                                                             <div id="chart-area3"></div>
                                                         </div>
@@ -216,12 +221,12 @@
                                                     <li>
                                                         <div class="chart_info">
                                                             <span class="tit">MEMORY</span>
-                                                            <span class="txt">{{contents.dataReq5}}<span class="sm_txt">%</span></span>
+                                                            <span class="txt">{{contents.dataReq5.series[0].data}}<span class="sm_txt">%</span></span>
                                                         </div>
                                                         <div class="donut_chart_data">
                                                             <div class="data_txt">
-                                                                <span>{{contents.dataReq5}}</span>
-                                                                <span>100</span>
+                                                                <span>{{contents.dataReq5.series[0].ramSizeUsed | displayVolume:'MB'}}</span>
+                                                                <span>{{contents.dataReq5.series[0].ramSizeMax | displayVolume:'MB'}}</span>
                                                             </div>
                                                             <div id="chart-area4"></div>
                                                         </div>
@@ -229,12 +234,12 @@
                                                     <li>
                                                         <div class="chart_info">
                                                             <span class="tit">STORAGE</span>
-                                                            <span class="txt">{{contents.dataReq6}}<span class="sm_txt">%</span></span>
+                                                            <span class="txt">{{contents.dataReq6.series[0].data}}<span class="sm_txt">%</span></span>
                                                         </div>
                                                         <div class="donut_chart_data">
                                                             <div class="data_txt">
-                                                                <span>{{contents.dataReq6}}</span>
-                                                                <span>100</span>
+                                                                <span>{{contents.dataReq6.series[0].objectStorageGigaByteUsed | displayVolume:'GB'}}</span>
+                                                                <span>{{contents.dataReq6.series[0].objectStorageGigaByteMax | displayVolume:'GB'}}</span>
                                                             </div>
                                                             <div id="chart-area5"></div>
                                                         </div>
@@ -246,29 +251,31 @@
                                     <div class="fl_r">
                                         <div class="tit_area">
                                             <h5 class="tit">표준 App.</h5>
-                                            <a class="btn_more" href="#/paas">표준 App 바로가기<span class="ico_more"></span></a>
+                                            <a class="btn_more" href="#/paas/apps">표준 App 바로가기<span class="ico_more"></span></a>
                                         </div>
-                                        <div class="cont_area">
+                                        <div class="cont_area_ct">
                                             <div class="cloud_stateWrap">
-                                                <ul>
-                                                    <li class="type1">
-                                                        <span class="sm_txt">TOTAL</span>
-                                                        <span class="lg_txt">{{contents.paasAppsStateCount.TOTAL}}</span>
-                                                    </li>
-                                                    <li class="type2">
-                                                        <span class="sm_txt">STARTED</span>
-                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STARTED}}</span>
-                                                    </li>
-                                                    <li class="type3">
-                                                        <span class="sm_txt">STOPPED</span>
-                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STOPPED}}</span>
-                                                    </li>
-                                                    <li class="type4">
-                                                        <span class="sm_txt">ERROR</span>
-                                                        <span class="lg_txt">{{contents.paasAppsStateCount.ERROR}}</span>
-                                                    </li>
-                                                </ul>
-                                                <!-- <div class="line_chart_data">
+                                            	<div class="state_data">
+	                                                <ul>
+	                                                    <li class="type1">
+	                                                        <span class="sm_txt">TOTAL</span>
+	                                                        <span class="lg_txt">{{contents.paasAppsStateCount.TOTAL}}</span>
+	                                                    </li>
+	                                                    <li class="type2">
+	                                                        <span class="sm_txt">STARTED</span>
+	                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STARTED}}</span>
+	                                                    </li>
+	                                                    <li class="type3">
+	                                                        <span class="sm_txt">STOPPED</span>
+	                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STOPPED}}</span>
+	                                                    </li>
+	                                                    <li class="type4">
+	                                                        <span class="sm_txt">ERROR</span>
+	                                                        <span class="lg_txt">{{contents.paasAppsStateCount.ERROR}}</span>
+	                                                    </li>
+	                                                </ul>
+                                            	</div>
+                                                <div class="line_chart_data">
                                                     <span class="sm_tit">CPU 상태</span>
                                                     <div id="chart-area6"></div>
                                                 </div> -->
@@ -362,6 +369,7 @@
                             <div class="panel type_pipeLine">
                                 <div class="panel_head">
                                     <h4 class="tit">개발 파이프라인 사용 현황</h4>
+                                    <a class="btn_more" href="/dpl/dashboard">개발 파이프라인 사용 현황 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="fl_l">

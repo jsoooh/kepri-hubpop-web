@@ -81,7 +81,7 @@ angular.module('app')
                             progressbarLoading(progressbar, level);
                         }, 400);
                     });
-                }
+                };
 
                 var timoutId;
                 var timeoutStart = function (time) {
@@ -258,9 +258,9 @@ angular.module('app')
         };
         
         var type;
-        if(vm.options.type == 'seconds'){
+        if (vm.options.type == 'seconds') {
         	type = 's';
-        }else{
+        } else {
         	type = '%';
         }
         
@@ -358,7 +358,7 @@ angular.module('app')
                     } else {
                         $scope.mytimeout = $timeout($scope.onTimeout,1000);
                     }
-                }
+                };
 
                 $scope.stop = function() {
                     $timeout.cancel($scope.mytimeout);
@@ -887,7 +887,7 @@ angular.module('app')
 				+ '<div class="progress-bar persent" style="background:bottom;width:100%;top:-100%;" role="progressbar">\n'
 				+ '<span style="z-index:1" max="{{ max }}" count-to="{{ bar }}" count-from="{{ bar+base }}" duration="{{ duration }}" filter="number"></span><span style="z-index:1" ng-transclude></span>'
 				+ '</div>\n'
-				+ '</div>\n'
+				+ '</div>\n';
 
 			return {
 				restrict: 'EA',
@@ -935,7 +935,7 @@ angular.module('app')
 							prbar.removeClass('progress-bar-high');
 							prbar.removeClass('progress-bar-middle');
 						}
-					}
+					};
                     var start = function () {
 						var checkPersent = 0;
                         var defaultPersent = 0;
@@ -977,7 +977,7 @@ angular.module('app')
                                 progressbarLoading(progressbar, level);
                             }, 400);
                         });
-					}
+					};
 
                     var timoutId;
                     var timeoutStart = function (time) {

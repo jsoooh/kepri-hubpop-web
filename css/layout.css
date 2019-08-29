@@ -299,7 +299,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnbMenu .gnb-close{position: absolute; right:0px; top:0; width:40px; height:40px;}
 .gnbMenu .gnb-close .ico{width:16px; height:18px; background-position: -460px 0;}
 
-/*메뉴 1depth*/
+/*============================================== 메뉴 1depth ============================================== */
 .gnb-menu > li > a{display: block; position: relative; font-size:15px; color:#8d96ad; padding:20px 0 20px 47px;}/*180712 gnb font-size 수정*/
 .gnb-menu > li > a .ico-bul{position: absolute; left:19px; top:20px; z-index: 1; width:26px; height: 20px; background: url("../images/ico_gnbmenu.png") no-repeat; background-position: -25px -25px;}
 .gnb-menu > li > a .ico-arr{position: absolute; right:30px; top:21px; z-index: 1; width:19px; height: 19px; background-position: 0 -100px;}
@@ -309,26 +309,46 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu > li > a:hover::before, .gnb-menu > li > a.on::before{display: inline-block; position: absolute; left:0; top:0; z-index: 1; content: ''; width:4px; height:100%; background-color: #00bfff; }
 .gnb-menu > li > a.on .ico-bul{background-position: -95px -25px;}
 .gnb-menu > li > a.on .ico-arr{background-position: -83px -100px;}
-.gnb-menu > li > a .ico-bul.ico1{ background-position: -25px -31px;}
-.gnb-menu > li > a:hover .ico-bul.ico1, .gnb-menu > li > a.on .ico-bul.ico1{ background-position: -89px -31px;}
-.gnb-menu > li > a .ico-bul.ico2{position: absolute; left:19px; top:22px; background-position: -25px -100px;}
-.gnb-menu > li > a:hover .ico-bul.ico2, .gnb-menu > li > a.on .ico-bul.ico2{ background-position: -89px -100px;}
-.gnb-menu > li > a .ico-bul.ico3{ background-position: -25px -165px;}
-.gnb-menu > li > a:hover .ico-bul.ico3, .gnb-menu > li > a.on .ico-bul.ico3{ background-position: -89px -165px;}
-.gnb-menu > li > a .ico-bul.ico4{ background-position: -25px -231px;}
-.gnb-menu > li > a:hover .ico-bul.ico4, .gnb-menu > li > a.on .ico-bul.ico4{ background-position: -89px -231px;}
-.gnb-menu > li > a .ico-bul.ico5{ background-position: -25px -301px;}
-.gnb-menu > li > a:hover .ico-bul.ico5, .gnb-menu > li > a.on .ico-bul.ico5{ background-position: -89px -301px;}
-.gnb-menu > li > a .ico-bul.ico6{position: absolute; left:13px; top:22px; background-position: -25px -369px;}
-.gnb-menu > li > a:hover .ico-bul.ico6, .gnb-menu > li > a.on .ico-bul.ico6{ background-position: -89px -369px;}
-.gnb-menu > li > a .ico-bul.ico7{ background-position: -25px -432px;}
-.gnb-menu > li > a:hover .ico-bul.ico7, .gnb-menu > li > a.on .ico-bul.ico7{ background-position: -89px -432px;}
-.gnb-menu > li > a .ico-bul.ico8{ background-position: -25px -502px;}
-.gnb-menu > li > a:hover .ico-bul.ico8, .gnb-menu > li > a.on .ico-bul.ico8{ background-position: -89px -502px;}
-.gnb-menu > li > a .ico-bul.ico9{ background-position: -25px -569px;}
-.gnb-menu > li > a:hover .ico-bul.ico9, .gnb-menu > li > a.on .ico-bul.ico9{ background-position: -89px -569px;}
 
-/*메뉴 2depth*/
+/*-- 대메뉴 아이콘 class명 및 아이콘 이미지 변경 190715 --*/
+/*대메뉴 아이콘 1 (서버 가상화: ico_iaas)*/
+.gnb-menu > li > a .ico-bul.ico_iaas {background-position: -25px -30px;}
+.gnb-menu > li > a:hover .ico-bul.ico_iaas, .gnb-menu > li > a.on .ico-bul.ico_iaas {background-position: -95px -30px;}
+
+/*대메뉴 아이콘 2 (표준 App개발: ico_paas)*/
+.gnb-menu > li > a .ico-bul.ico_paas {background-position: -25px -97px;}
+.gnb-menu > li > a:hover .ico-bul.ico_paas, .gnb-menu > li > a.on .ico-bul.ico_paas {background-position: -95px -97px;}
+
+/*대메뉴 아이콘 3 (데이터 분석: ico_ai)*/
+.gnb-menu > li > a .ico-bul.ico_ai {background-position: -25px -167px;}
+.gnb-menu > li > a:hover .ico-bul.ico_ai, .gnb-menu > li > a.on .ico-bul.ico_ai {background-position: -95px -167px;}
+
+/*대메뉴 아이콘 4 (SW 개발환경: ico_frwk)*/
+.gnb-menu > li > a .ico-bul.ico_frwk {background-position: -25px -235px;}
+.gnb-menu > li > a:hover .ico-bul.ico_frwk, .gnb-menu > li > a.on .ico-bul.ico_frwk {background-position: -95px -235px;}
+
+/*대메뉴 아이콘 5 (API 게이트웨이: ico_apgw)*/
+.gnb-menu > li > a .ico-bul.ico_apgw {position: absolute; left:13px; top:22px; background-position: -25px -305px;}
+.gnb-menu > li > a:hover .ico-bul.ico_apgw, .gnb-menu > li > a.on .ico-bul.ico_apgw {background-position: -89px -305px;}
+
+/*대메뉴 아이콘 6 (데이터 서비스: ico_daas)*/
+.gnb-menu > li > a .ico-bul.ico_daas {background-position: -25px -368px;}
+.gnb-menu > li > a:hover .ico-bul.ico_daas, .gnb-menu > li > a.on .ico-bul.ico_daas {background-position: -95px -368px;}
+
+/*대메뉴 아이콘 7 (Back-end 서비스: ico_baas)*/
+.gnb-menu > li > a .ico-bul.ico_baas {background-position: -25px -438px;}
+.gnb-menu > li > a:hover .ico-bul.ico_baas, .gnb-menu > li > a.on .ico-bul.ico_baas {background-position: -95px -438px;}
+
+/*대메뉴 아이콘 8 (시각화 개발: ico_vdev)*/
+.gnb-menu > li > a .ico-bul.ico_vdev {background-position: -25px -508px;}
+.gnb-menu > li > a:hover .ico-bul.ico_vdev, .gnb-menu > li > a.on .ico-bul.ico_vdev {background-position: -95px -508px;}
+
+/*대메뉴 아이콘 9 (기타서비스: ico_etc)*/
+.gnb-menu > li > a .ico-bul.ico_etc {background-position: -25px -575px;}
+.gnb-menu > li > a:hover .ico-bul.ico_etc, .gnb-menu > li > a.on .ico-bul.ico_etc {background-position: -95px -575px;}
+
+
+/*==============================================  메뉴 2depth ============================================== */
 .gnb-menu > li > ul {padding:15px 10px 15px 30px;}
 .gnb-menu > li > ul > li {position:relative; background: url("../images/ico_gnb_dot1.png") repeat-y; padding:7px 0;}
 .gnb-menu > li > ul > li > a{display:block; font-size:14px; color:#8d96ad; line-height:24px; word-break:break-all; padding:0 23px; background:url("../images/ico_gnb_dot2.png") no-repeat; background-position: 0 14px;}
@@ -343,14 +363,15 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 .gnb-menu > li > ul > li:last-child > a{background:#4c515f  url("../images/ico_gnb_dot3.png") no-repeat; background-position: 0 0px;}
 .gnb-menu > li > ul > li:hover > a, .gnb-menu > li > ul > li > a.on{color:#fff;}
 
-/*메뉴 3depth*/
+/*==============================================  메뉴 3depth ============================================== */
 .gnb-menu > li > ul > li > ul {position:absolute; top:0; left:210px; background:#6d7384; /*padding:5px 0;*/}
 .gnb-menu > li > ul > li > ul > li > a {display: block; position: relative; width:200px; font-size:14px; color:#fff; word-break: keep-all; padding:10px 30px 11px 30px;}
 .gnb-menu > li > ul > li > ul > li > a::before {display:inline-block; position:absolute; left:23px; top:19px; content:''; width:2px; height:2px; background:#fff;}
 .gnb-menu > li > ul > li > ul > li > a:hover {background:#4c515f;}
 .gnb-menu > li > ul > li > ul > li > a.on {background:#4c515f;}
 
-/*--------- 메뉴 - 프로젝트 목록 ---------*/
+
+/*==============================================  메뉴 - 프로젝트 목록 ============================================== */
 .gnb_m_proj .gnb-menu > li > a{display: block; position: relative; width:250px; font-size:18px; font-weight:700; color:#fff; background-color:#00bfff; padding:20px 0 20px 47px;}/*180712 gnb font-size 수정*/
 .gnb_m_proj .gnb-menu > li > a .ico-bul{position: absolute; left:19px; top:22px; z-index: 1; width:26px; height: 20px; background: url("../images/ico_gnbmenu_proj.png") no-repeat; background-position: 0 0;}
 .gnb_m_proj .gnb-menu > li > a .ico-arr{position: absolute; right:30px; top:22px; z-index: 1; width:19px; height: 19px; background-position: -28px -100px;;}
@@ -418,7 +439,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 /*-- gnb메뉴 스타일 변경(20180716) --*/
 #container .inner{display: table; width: 100%; height:100%; min-height: 1000px;}
 /* #container .content{overflow:visible;} */
-.leftCnt{position:absolute; top:0; left:0; z-index:3; display: table-cell; font-size: 0px; width:0px; height:100%; background: #4c515f; transition:all 0.2s; }
+.leftCnt{position:absolute; top:0; left:0; z-index:3; display: table-cell; font-size: 0px; width:240px; height:100%; background: #4c515f; transition:all 0.2s; }
 .leftCnt.on{ font-size: 16px; width:240px;}
 .leftCnt .gnbMenu {width:240px; top:80px; left:0; transition:  0.2s width; background: #4c515f;}/*스타일재정의*/
 .leftCnt .gnbMenu .gnb-in{width:240px;}

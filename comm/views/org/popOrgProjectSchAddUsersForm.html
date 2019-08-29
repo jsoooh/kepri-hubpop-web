@@ -28,9 +28,9 @@
 			<div class="tbl type1">
 				<table class="table">
 					<colgroup>
-					<col style="width:15%;">
-					<col style="width:15%;">
-					<col style="width:20%;">
+					<col style="width:10%;">
+					<col style="width:10%;">
+					<col style="width:30%;">
 					<col style="width:20%;">
 					<col style="width:30%;">
 					</colgroup>
@@ -52,7 +52,7 @@
 								</div>
 							</td>
 							<td>{{key + 1}}</td>
-							<td>{{user.email}}</td>
+							<td style="text-align:left">{{user.email}}</td>
 							<td>{{user.name}}</td>
 							<td>{{user.position}}</td>
 						</tr>
@@ -96,11 +96,11 @@
 			<div class="tbl type1">
 				<table class="table">
 					<colgroup>
-					<col style="width:15%;">
-					<col style="width:15%;">
-					<col style="width:20%;">
-					<col style="width:20%;">
-					<col style="width:30%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:30%;">
+						<col style="width:20%;">
+						<col style="width:30%;">
 					</colgroup>
 					<thead>
 						<tr>
@@ -120,7 +120,7 @@
 								</div>
 							</td>
 							<td>{{key + 1}}</td>
-							<td>{{orgUser.email}}</td>
+							<td style="text-align:left">{{orgUser.email}}</td>
 							<td>{{orgUser.name}}</td>
 							<td>
 								<select ng-model="orgUser.roleName">

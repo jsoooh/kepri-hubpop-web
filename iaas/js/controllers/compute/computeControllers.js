@@ -25,6 +25,7 @@ angular.module('iaas.controllers')
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
+        ct.tabIndex = 0;
 
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function (instance, $event, $index) {
@@ -121,7 +122,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'error_ip', 'error_volume'];
+        ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'shelved_offloaded', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
         // 서버 알람 상태 체크 함수
@@ -309,6 +310,10 @@ angular.module('iaas.controllers')
                                     massage += '서버가 정지해제 되었습니다.'
                                 } else if (beforUiTask == "rebooting")  {
                                     massage += '서버가 재시작 되었습니다.'
+                                } else if (beforUiTask == "shelved")  {
+                                    massage += '서버가 비활성화 되었습니다.'
+                                } else if (beforUiTask == "unshelved")  {
+                                    massage += '서버가 활성화 되었습니다.'
                                 } else if (beforUiTask == "resized")  {
                                     massage += '서버의 사양이 되었습니다.'
                                 } else {
@@ -372,6 +377,12 @@ angular.module('iaas.controllers')
                                 ct.fn.checkServerState(instanceStateInfo.id);
                             }, 1000);
                             var serverItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
+                            if (instanceStateInfo.taskState == "shelving_image_uploading" || instanceStateInfo.taskState == "shelving_offloading") {
+                                instanceStateInfo.vmState = "shelved";
+                            }
+                            if (instanceStateInfo.vmState == "shelved_offloaded" && instanceStateInfo.taskState == "spawning") {
+                                instanceStateInfo.vmState = "unshelved";
+                            }
                             if (serverItem && serverItem.id) {
                                 angular.forEach(instanceStateInfo, function(value, key) {
                                     serverItem[key] = value;
@@ -505,6 +516,14 @@ angular.module('iaas.controllers')
                 common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
+            } else if (action == "SHELVE") {
+                common.showConfirm('비활성화', instance.name + ' 서버를 비활성화 하시겠습니까?').then(function () {
+                    ct.fnSingleInstanceAction(action, instance, index);
+                });
+            } else if (action == "UNSHELVE") {
+                common.showConfirm('비활성화 해제',instance.name +' 서버를 활성화 하시겠습니까?').then(function(){
+                    ct.fnSingleInstanceAction(action,instance,index);
+                });
             } else if (action == "DELETE") {
                 ct.deleteInstanceJob(instance.id);
             } else if (action == "SNAPSHOT") {
@@ -540,6 +559,10 @@ angular.module('iaas.controllers')
                     vmStateChange = "unpausing";
                 }else if (action == "REBOOT") {
                     vmStateChange = "rebooting";
+                }else if (action == "SHELVE") {
+                    vmStateChange = "shelved";
+                }else if (action == "UNSHELVE") {
+                    vmStateChange = "unshelved";
                 }
                 var sltInstance = ct.serverMainList[index];
                 sltInstance.vmState = vmStateChange;
@@ -713,7 +736,7 @@ angular.module('iaas.controllers')
         if (ct.data.tenantId) {
             ct.fnGetServerMainList();
         } else { // 프로젝트 선택
-            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해주세요.');
+            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
             showAlert.then(function () {
                 $scope.main.goToPage("/");
             });
@@ -865,14 +888,14 @@ angular.module('iaas.controllers')
             ct.isMinSpecDisabled = false;
             if (ct.isSpecLoad && ct.data.image && ct.data.image.id) {
                 angular.forEach(ct.specList, function (spec) {
-                    if (spec.disk < ct.data.image.minDisk || spec.ram < ct.data.image.minRam) {
+                    if (spec.disk < ct.data.image.minDisk || spec.ram < (ct.data.image.minRam * 1024)) {
                         spec.disabled = true;
                         ct.isMinSpecDisabled = true;
                     }
                 });
                 ct.specMinDisabledSetting = true;
                 if (ct.data.spec && ct.data.spec.uuid) {
-                    if (ct.data.spec.disk < ct.data.image.minDisk || ct.data.spec.ram < ct.data.image.minRam) {
+                    if (ct.data.spec.disk < ct.data.image.minDisk || ct.data.spec.ram < (ct.data.image.minRam)) {
                         ct.fn.defaultSelectSpec();
                     }
                 } else {
@@ -1204,6 +1227,11 @@ angular.module('iaas.controllers')
                 params.volume.tenantId = ct.data.tenantId;
             }
 
+            if (!ct.data.spec.uuid) {
+                common.showAlertError("사양이 선택되지 않았습니다.");
+                clickCheck = false;
+                return;
+            }
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers)  {
@@ -1237,7 +1265,7 @@ angular.module('iaas.controllers')
         _DebugConsoleLog("computeControllers.js : iaasComputeCopyCtrl start", 1);
 
         var ct               = this;
-        ct.projectId          = $scope.main.sltProjectId;
+        ct.projectId         = $scope.main.sltProjectId;
         ct.sltPortalOrgId    = $scope.main.sltPortalOrgId;
         ct.tenantId          = $scope.main.userTenantId;
         ct.fn                = {};

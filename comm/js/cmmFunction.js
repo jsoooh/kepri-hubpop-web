@@ -221,7 +221,7 @@ function depthProjectOrgClick (evt) {
         target.addClass("open on");
         $(target).closest("li.dept1").find("ul.dept2").toggle(200);
     }
-};
+}
 
 //1depth click event
 function depth1Click (evt) {
@@ -253,13 +253,13 @@ function depth1Click (evt) {
         target.addClass("open on");
         $(target).closest("li.dept1").find("ul.dept2").toggle(200);
     }
-};
+}
 
 function depth2Click (evt) {
     var target = $(evt.currentTarget).closest('div.gnbMenu').find('div.gnb_m_proj');
     target.find('ul.dept2').hide(200);
     target.find('a.dept1').removeClass("open on");
-};
+}
 
 //2depth hover event
 function depth2Hover (evt,depth) {
@@ -279,7 +279,7 @@ function depth2Hover (evt,depth) {
             target.addClass("open on");
         }
     }
-};
+}
 
 function depth2LiHover(evt,depth){
     var target = $(evt.currentTarget).find("a.dept2");
@@ -309,11 +309,32 @@ function depth3Click (evt) {
     $(target).closest("li.dept1").find("a.dept1").addClass("on");
 
     target.toggleClass("on");
-};
+}
 
 function depth3Leave (){
     $("#leftMenu").find('a.dept2').removeClass("open on");
     $("#leftMenu").find('ul.dept3').hide();
 
     nowHrefFunction("dept2");
+}
+
+/*공지사항 팝업 닫기*/
+function popNoticeClose(id) {
+    $("#popNotice" + id).hide();
+}
+
+/*공지사항 오늘 하루 이 창을 열지 않기*/
+function setNotifyCookie(id) {
+    var now = new Date(), expireDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+    document.cookie = "notice_"+ id + "=valid; path=/; expires=" + expireDate + ";";
+
+    popNoticeClose(id);
+}
+
+/*공지사항 header click 시 z-index 변경*/
+function popNoticeSetZindex(id) {
+    for (var i = 0; i < $("#noticeDiv").find("div[name='notice']").length; i++) {
+        $($("#noticeDiv").find("div[name='notice']")[i]).css("z-index", "10");
+    }
+    $("#popNotice" + id).css("z-index", "11");
 }

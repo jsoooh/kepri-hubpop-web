@@ -141,7 +141,7 @@ angular.module('portal.controllers')
                 promise.success(function (data, status, headers) {
                     $scope.main.syncListAllProjects();	//프로젝트 전체 조회
                     $scope.main.loadingMainBody = false;
-                    $location.path('/comm/projects');
+                    $location.path('/comm/projects/');
                 });
                 promise.error(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
