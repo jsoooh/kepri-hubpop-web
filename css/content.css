@@ -3032,9 +3032,14 @@ a.ext_link:hover {text-decoration:underline;}
 .fixed-table-wrapper {overflow-x: hidden; overflow-y: auto; height: 100%;}
 .fixed-table-wrapper .fixed-table {table-layout:fixed; width:100%; border-collapse:collapse; border-bottom:1px solid #d6d6d6;}
 .fixed-table-wrapper .fixed-table .no-data {font-size:18px; line-height: 30px !important; height:140px !important; }
-.fixed-table-wrapper .fixed-table td {font-size:15px; color:#888; padding:10px; height:47px; text-align: center; vertical-align: middle; border-top:1px solid #d6d6d6;}
+.fixed-table-wrapper .fixed-table td {position:relative; font-size:15px; color:#888; padding:10px; height:47px; text-align: center; vertical-align: middle; border-top:1px solid #d6d6d6;}
+.fixed-table-wrapper .fixed-table td .stateWrap .state-txt  {color:#888; font-weight:400;}
+.fixed-table-wrapper .fixed-table td .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
+.fixed-table-wrapper .fixed-table td .server_con_detail {position:absolute; top:5px; right:-100px; z-index:1; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
+.fixed-table-wrapper .fixed-table td .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
 .fixed-table-wrapper .fixed-table tbody tr:first-child td {border-top:0;}
 .fixed-table-wrapper .fixed-table .th-text {position: absolute; top: 0; font-size:15px; font-weight: 500; color:#fff; line-height:1.6; padding:11px 5px; width: inherit; height:47px; vertical-align: middle; text-align: center; border-bottom:0; background: #3e424d;}
+.fixed-table-wrapper .fixed-table .th-text .t_tip_bx {text-align:left; margin-top:2px;}
 /* .fixed-table-wrapper .fixed-table tbody tr:nth-child(even) {background: #e5f0fa;} */
 .fixed-table-wrapper .fixed-table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
 .fixed-table-wrapper .fixed-table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
@@ -3058,3 +3063,11 @@ a.ext_link:hover {text-decoration:underline;}
 .tbl_cont .table .tbl_cont_state ul li span.active {background:#5acc27;}
 .tbl_cont .table .tbl_cont_state ul li span.inactive {background:#c3c3c3;}
 .tbl_cont .table .tbl_cont_state ul li span.txt {display:inline-block; font-size:14px; font-weight:400; vertical-align:middle;}
+
+
+.tbl.type1 td {position:relative;}
+.tbl.type1 td .stateWrap .state-txt  {color:#888; font-weight:400; vertical-align:middle;}
+.tbl.type1 td .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
+.tbl.type1 td .server_con_detail {position:absolute; top:5px; right:-100px; z-index:1; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
+.tbl.type1 td .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
+.tbl.type1 .t_tip_bx {text-align:left; margin-top:-1px;}

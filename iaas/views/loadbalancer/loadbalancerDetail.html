@@ -69,58 +69,97 @@
 		</div>
 	</div>
 	<div class="cBox-cnt">
-		<div class="in scroll-pane">
-			
-			<div class="fixed-table-container" style="height:197px;">
-				<div class="fixed-table-header-bg"></div>
-				<div class="fixed-table-wrapper">
-					<table class="fixed-table">
-						<thead>
-							<tr>
-								<th scope="col" style="width:10%;"><div class="th-text">NO.</div></th>
-								<th scope="col" style="width:25%;"><div class="th-text">이름</div></th>
-								<th scope="col" style="width:10%;"><div class="th-text">포트</div></th>
-								<th scope="col" style="width:10%;"><div class="th-text">프로토콜</div></th>
-								<th scope="col" style="width:13%;"><div class="th-text">로드 밸런스 유형</div></th>
-								<th scope="col" style="width:20%;"><div class="th-text">연결서버</div></th>
-								<th scope="col" style="width:12%;"><div class="th-text">헬스체크유형</div></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr class="tbl_selected"><!-- 선택된 tr -->
-								<td>1</td>
-								<td>web service port</td>
-								<td>80</td>
-								<td>HTTP</td>
-								<td>라운드로빈</td>
-								<td>10.10.10.5:80<br>10.10.10.5:80<br>10.10.10.5:80</td>
-								<td>HTTP</td>
-							</tr>
-							<tr>
-								<td>2</td>
-								<td>web service port</td>
-								<td>8080</td>
-								<td>HTTP</td>
-								<td>소스</td>
-								<td>10.10.10.5:8080<br>10.10.10.5:8080<br>10.10.10.5:8080</td>
-								<td>HTTP</td>
-							</tr>
-							<tr>
-								<td>3</td>
-								<td>web service port</td>
-								<td>8080</td>
-								<td>HTTP</td>
-								<td>소스</td>
-								<td>10.10.10.5:55<br>10.10.10.5:55<br>10.10.10.5:55</td>
-								<td>HTTP</td>
-							</tr>
-							<tr class="no-data" ng-if="false">
-								<td colspan="9">데이터가 없습니다.</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
+		<div class="tbl type1">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col" style="width:10%;">NO.</th>
+						<th scope="col" style="width:25%;">이름</th>
+						<th scope="col" style="width:10%;">포트</th>
+						<th scope="col" style="width:10%;">프로토콜</th>
+						<th scope="col" style="width:13%;">로드 밸런스 유형<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 로드밸런스 유형<br/> 1. 라운드로빈: 설명<br/>2. 소스: 설명<br/>3. 리스트커넥션:설명'"><span class="ico_info"></span></button></div></th>
+						<th scope="col" style="width:20%;">연결서버</th>
+						<th scope="col" style="width:12%;">헬스체크유형</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="tbl_selected"><!-- 선택된 tr -->
+						<td>1</td>
+						<td>web service port</td>
+						<td>80</td>
+						<td>HTTP</td>
+						<td>라운드로빈</td>
+						<td>
+							<div class="stateWrap">
+								<span class="stateMark type1"></span> <!--서버 상태 표시 -->
+								<span class="state-txt">server01</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
+								<!-- 서버스펙상세 -->
+								<div class="server_con_detail" ng-if="false">
+									<ul>
+										<li><strong>- OS 유형 : </strong>Centos</li>
+										<li><strong>- 접속 IP : </strong>192.168.200.63</li>
+										<li><strong>- 내부 IP : </strong>10.2.1.3</li>
+										<li><strong>- 생성일시 : </strong>	2019-08-21 13:48:58</li>
+									</ul>
+								</div>
+								<!-- //서버스펙상세 -->
+							</div>
+						</td>
+						<td>HTTP</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>web service port</td>
+						<td>8080</td>
+						<td>HTTP</td>
+						<td>소스</td>
+						<td>
+							<div class="stateWrap">
+								<span class="stateMark type1"></span> <!--서버 상태 표시 -->
+								<span class="state-txt">server01</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
+								<!-- 서버스펙상세 -->
+								<div class="server_con_detail">
+									<ul>
+										<li><strong>- OS 유형 : </strong>Centos</li>
+										<li><strong>- 접속 IP : </strong>192.168.200.63</li>
+										<li><strong>- 내부 IP : </strong>10.2.1.3</li>
+										<li><strong>- 생성일시 : </strong>	2019-08-21 13:48:58</li>
+									</ul>
+								</div>
+								<!-- //서버스펙상세 -->
+							</div>
+						</td>
+						<td>HTTP</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>web service port</td>
+						<td>8080</td>
+						<td>HTTP</td>
+						<td>소스</td>
+						<td>
+							<div class="stateWrap">
+								<span class="stateMark type1"></span> <!--서버 상태 표시 -->
+								<span class="state-txt">server01</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
+								<!-- 서버스펙상세 -->
+								<div class="server_con_detail" ng-if="false">
+									<ul>
+										<li><strong>- OS 유형 : </strong>Centos</li>
+										<li><strong>- 접속 IP : </strong>192.168.200.63</li>
+										<li><strong>- 내부 IP : </strong>10.2.1.3</li>
+										<li><strong>- 생성일시 : </strong>	2019-08-21 13:48:58</li>
+									</ul>
+								</div>
+								<!-- //서버스펙상세 -->
+							</div>
+						</td>
+						<td>HTTP</td>
+					</tr>
+					<tr class="no-data" ng-if="false">
+						<td colspan="9">데이터가 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
@@ -129,7 +168,7 @@
 <div class="tabWrap type1 mt30">
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs" role="tablist">
-		<li role="presentation" class="active"><a href="#tab1" role="tab" data-toggle="tab">개요</a></li>
+		<li role="presentation" class="active"><a href="#tab1" role="tab" data-toggle="tab">포트관리</a></li>
 		<li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">연결 서버</a></li>
 	</ul>
 	<!-- //Nav tabs -->
@@ -142,10 +181,10 @@
 			<div class="panelWrap">
 				<div class="panel type2" style="cursor: unset;">
 					<div class="panel_head">
-						<div class="tit pull-left">개요</div>
+						<div class="tit pull-left">포트관리</div>
 						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
+							<button type="button" name="button" class="btn ico-modi only-ico" title="수정"><span class="ico">수정</span></button>
+							<button type="button" name="button" class="btn ico-del only-ico" title="삭제"><span class="ico">삭제</span></button>
 						</div>
 					</div>
 					<div class="panel_body">
@@ -161,15 +200,6 @@
 									<li class="pr40" style="width:50%;">
 										<div class="cont-titWrap pt10">
 											<h4 class="h-tit4 pd0">포트 정보</h3>
-										</div>
-										<div class="dropdown btn-option">
-											<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-												<span class="ico">실행 설정</span>
-											</button>
-											<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-												<li><a href="javascript:void(0);" ng-click="">포트 수정</a></li>
-												<li><a href="javascript:void(0);" class="delete" ng-click="">삭제</a></li>
-											</ul>
 										</div>
 										<div class="tbw type1">
 											<table class="table">
@@ -251,8 +281,8 @@
 					<div class="panel_head">
 						<div class="tit pull-left">연결서버</div>
 						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
+							<button type="button" name="button" class="btn ico-modi only-ico" title="수정"><span class="ico">수정</span></button>
+							<button type="button" name="button" class="btn ico-del only-ico" title="삭제"><span class="ico">삭제</span></button>
 						</div>
 					</div>
 					<div class="panel_body">
@@ -269,14 +299,6 @@
 									<li class="pr40" style="width:50%;">
 										<div class="cont-titWrap pt10">
 											<h4 class="h-tit4 pd0">연결서버 정보</h3>
-										</div>
-										<div class="dropdown btn-option">
-											<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-												<span class="ico">실행 설정</span>
-											</button>
-											<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-												<li><a href="javascript:void(0);" ng-click="">연결서버 수정</a></li>
-											</ul>
 										</div>
 										<div class="tbw type1">
 											<table class="table">
@@ -336,14 +358,6 @@
 									<li class="pr40" style="width:50%;">
 										<div class="cont-titWrap pt10">
 											<h4 class="h-tit4 pd0">연결서버 정보</h3>
-										</div>
-										<div class="dropdown btn-option">
-											<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-												<span class="ico">실행 설정</span>
-											</button>
-											<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-												<li><a href="javascript:void(0);" ng-click="">연결서버 수정</a></li>
-											</ul>
 										</div>
 										<div class="tbw type1">
 											<table class="table">
