@@ -297,27 +297,27 @@ angular.module('iaas.controllers')
                                     serverItem.newCreated = false;
                                 }, 5000);
                             } else {
-                                var massage = '"' + serverItem.name + '" ';
+                                var message = '"' + serverItem.name + '" ';
                                 if (beforUiTask == "starting") {
-                                    massage += '서버가 시작 되었습니다.'
+                                    message += '서버가 시작 되었습니다.'
                                 } else if (beforUiTask == "stopping")  {
-                                    massage += '서버가 정지 되었습니다.'
+                                    message += '서버가 정지 되었습니다.'
                                 } else if (beforUiTask == "pausing")  {
-                                    massage += '서버가 일시정지 되었습니다.'
+                                    message += '서버가 일시정지 되었습니다.'
                                 } else if (beforUiTask == "unpausing")  {
-                                    massage += '서버가 정지해제 되었습니다.'
+                                    message += '서버가 정지해제 되었습니다.'
                                 } else if (beforUiTask == "rebooting")  {
-                                    massage += '서버가 재시작 되었습니다.'
+                                    message += '서버가 재시작 되었습니다.'
                                 } else if (beforUiTask == "shelved")  {
-                                    massage += '서버가 비활성화 되었습니다.'
-                                } else if (beforUiTask == "unshelved")  {
-                                    massage += '서버가 활성화 되었습니다.'
+                                    message += '서버가 비활성화 되었습니다.'
+                                } else if (beforUiTask == "shelved_offloaded")  {
+                                    message += '서버가 활성화 되었습니다.'
                                 } else if (beforUiTask == "resized")  {
-                                    massage += '서버의 사양이 되었습니다.'
+                                    message += '서버의 사양이 되었습니다.'
                                 } else {
-                                    massage += '서버에 적용 되었습니다.'
+                                    message += '서버에 적용 되었습니다.'
                                 }
-                                common.showAlertSuccess(massage);
+                                common.showAlertSuccess(message);
                             }
                         }
                     } else {
@@ -372,10 +372,12 @@ angular.module('iaas.controllers')
                                 ct.fn.checkServerState(instanceStateInfo.id);
                             }, 1000);
                             var serverItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
-                            if (instanceStateInfo.taskState == "shelving_image_uploading" || instanceStateInfo.taskState == "shelving_offloading") {
+                            if (instanceStateInfo.taskState == "shelving_image_uploading" || instanceStateInfo.taskState == "shelving_offloading" || instanceStateInfo.taskState == "shelving" || instanceStateInfo.taskState == "shelving_image_pending_upload") {
                                 instanceStateInfo.vmState = "shelved";
+                            } else if (instanceStateInfo.taskState == "powering-off") {
+                                instanceStateInfo.vmState = "stopping";
                             }
-                            if (instanceStateInfo.vmState == "shelved_offloaded" && instanceStateInfo.taskState == "spawning") {
+                            if (instanceStateInfo.vmState == "shelved_offloaded" && (instanceStateInfo.taskState == "spawning" || instanceStateInfo.taskState == "unshelving")) {
                                 instanceStateInfo.vmState = "unshelved";
                             }
                             if (serverItem && serverItem.id) {

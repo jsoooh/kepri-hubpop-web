@@ -16,20 +16,20 @@ angular.module('app')
                        day : Number(diff.getDate() - 1),
                        hour : Number(diff.getHours() - 9),
                        minute : Number(diff.getMinutes())
-                   }
+                   };
 
                    if(elapse.month < 0 && elapse.month != -1) {
-                       elapse.year -= 1
+                       elapse.year -= 1;
                        elapse.month = 12 + elapse.month;
                    }
 
                    if(elapse.hour < 0 && elapse.month != -9) {
-                       elapse.day -= 1
+                       elapse.day -= 1;
                        elapse.hour = 24 + elapse.hour;
                    }
 
                    if(elapse.minute < 0) {
-                       elapse.hour -= 1
+                       elapse.hour -= 1;
                        elapse.minute = 60 + elapse.minute;
                    }
 
@@ -94,6 +94,8 @@ angular.module('app')
             json['unpausing'] = '정지해제중';
             json['stopping']  = '정지중';
             json['error']     = '오류';
+            json['shelved']  = '비활성화중';
+            json['unshelved']  = '활성화중';
 
             return json[input];
         };
