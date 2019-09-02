@@ -1324,16 +1324,9 @@ angular.module('common.controllers', [])
                 baremetalYn: 'N'
             };
             
-            mc.loadingMainBody = true;
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', params);
             serverStatsPromise.success(function (data, status, headers) {
                 mc.alarmList = data.data;
-            });
-            serverStatsPromise.error(function (data, status, headers) {
-                //common.showAlert(data.message);
-            });
-            serverStatsPromise.finally(function (data, status, headers) {
-                mc.loadingMainBody = false;
             });
         };
 
@@ -1343,9 +1336,7 @@ angular.module('common.controllers', [])
         mc.selectAlarmCount = function () {
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/count/N', 'GET', {projectId: mc.userTenantId});
             serverStatsPromise.success(function (data, status, headers) {
-                if (data.alarmCnt && mc.alarmCnt !== data.alarmCnt) {
-                    mc.alarmCnt = data.alarmCnt;
-                }
+                mc.alarmCnt = data.alarmCnt;
             });
         };
 

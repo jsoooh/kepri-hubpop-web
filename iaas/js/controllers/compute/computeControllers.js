@@ -162,7 +162,11 @@ angular.module('iaas.controllers')
                         if (alarmInfo[serverMain.id]) serverMain.alarmStatus = alarmInfo[serverMain.id];
                     });
                 }
+            });
+            rp.finally(function () {
+                $scope.main.loadingMainBody = false;
             })
+
         };
 
         // 서버메인 tenant list 함수
@@ -226,7 +230,7 @@ angular.module('iaas.controllers')
             });
             returnPromise.finally(function (data, status, headers) {
                 ct.pageFirstLoad = false;
-                $scope.main.loadingMainBody = false;
+                // $scope.main.loadingMainBody = false; // 인스턴스 상태 조회 후 로딩바 해제
             });
         };
 
@@ -1681,7 +1685,8 @@ angular.module('iaas.controllers')
         angular.copy(ct.cpuwarnSlider, ct.measuretimeSlider);
 
         ct.measuretimeSlider.options.ceil = 60 * 60 * 3;
-        ct.measuretimeSlider.options.minLimit = 60;
+        ct.measuretimeSlider.options.minLimit = 60 * 3;
+        ct.measuretimeSlider.options.floor = 60 * 3;
 
         // 초기 알람정보 조회
         ct.fn.requestData = function () {
@@ -1701,6 +1706,14 @@ angular.module('iaas.controllers')
                 ct.data.alarmEmail = ct.policys.mailAddress.split('@')[0];
                 ct.data.alarmEmailHost = ct.policys.mailAddress.split('@')[1];
             }, $scope.main.userTenantId);
+        };
+
+        ct.fn.minimumCheck = function () {
+            // 측정시간 최소값 지정
+            if (ct.measuretimeSlider.value < 180) {
+                ct.measuretimeSlider.value = 180;
+                ct.fn.parseTimer();
+            };
         };
 
         ct.fn.parseTimer = function () {
@@ -1748,11 +1761,6 @@ angular.module('iaas.controllers')
 
         // 설정값 저장
         ct.fn.saveAlarm = function () {
-            var is_valid = new ValidationService().checkFormValidity($scope[ct.alarmFormName]);
-            if (!is_valid) {
-                console.log('save failed');
-                return;
-            };
 
             var cpumVal = ct.cpuminorSlider.value;
             var cpuwVal = ct.cpuwarnSlider.value;

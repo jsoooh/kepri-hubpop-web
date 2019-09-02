@@ -1053,11 +1053,21 @@ angular.module('iaas.controllers')
                                 });
                                 
                                 ct.timeRangePicker.on('change:start', function() {
+                                    var start = moment(ct.timeRangePicker.getStartDate());
+                                    var end = moment(ct.timeRangePicker.getEndDate());
+                                    if (end.diff(start, 'months') >= 6) {
+                                        ct.timeRangePicker.setEndDate(new Date(start.add(6, 'months').format('YYYY/MM/DD HH:mm')));
+                                    }
                                     ct.timeRangeFrom = moment(ct.timeRangePicker.getStartDate());
                                     $timeout(function () { ct.fn.setIntervalTime(true); }, 500);
                                 });
                                 
                                 ct.timeRangePicker.on('change:end', function() {
+                                    var start = moment(ct.timeRangePicker.getStartDate());
+                                    var end = moment(ct.timeRangePicker.getEndDate());
+                                    if (end.diff(start, 'months') >= 6) {
+                                        ct.timeRangePicker.setStartDate(new Date(end.subtract(6, 'months').format('YYYY.MM.DD HH:mm')));
+                                    }
                                     ct.timeRangeTo = moment(ct.timeRangePicker.getEndDate());
                                     $timeout(function () { ct.fn.setIntervalTime(true); }, 500);
                                 });

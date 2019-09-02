@@ -414,7 +414,7 @@
                                                             <span class="app-tit" ng-show="contents.measureTime">{{ contents.measureTime }}</span>
                                                             <input type="text" class="form-control ng-pristine ng-untouched ng-isolate-scope ng-not-empty ng-valid-maxlength"
                                                                 name="measureSecond" maxlength="4" style="width:60px; display: inline-block; margin-left: 15px;" aria-invalid="false"
-                                                                ng-model="contents.measuretimeSlider.value" ng-change="contents.fn.parseTimer()" ng-keydown="contents.fn.numberCheck()" validation="required">
+                                                                ng-model="contents.measuretimeSlider.value" ng-change="contents.fn.parseTimer()" ng-blur="contents.fn.minimumCheck()" ng-keydown="contents.fn.numberCheck()" validation="required">
                                                             <span class="app-tit">초</span>
                                                         </div>
                                                     </div>
