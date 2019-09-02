@@ -1100,7 +1100,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var params = {
                 projectId: ct.data.tenantId,
-                hostname: ct.scope.serverName,
+                serverUUID: $stateParams.instanceId,
                 pageItems: ct.scope.pageOptions.pageSize,
                 pageIndex: page,
                 period: '24h'
@@ -1135,7 +1135,7 @@ angular.module('iaas.controllers')
 
             var param = {
                 projectId: ct.data.tenantId,
-                hostname: ct.scope.serverName,
+                serverUUID: $stateParams.instanceId,
                 pageItems: ct.scope.pageOptions.pageSize,
                 pageIndex: page,
                 startTime: startDatetime,
