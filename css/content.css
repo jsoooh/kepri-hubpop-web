@@ -2013,7 +2013,7 @@ p.no-txt{
 .proj_dashboard .type_cloud .panel_body > div.fl_l {border-right:1px solid #eee;}
 .proj_dashboard .type_cloud .panel_body > div.fl_r {padding-left:25px;}
 .proj_dashboard .type_cloud .cloud_stateWrap {float:left; height:113px; padding-top:10px;}
-.proj_dashboard .type_cloud .cloud_stateWrap ul {display:table; float:left; width:460px;}
+.proj_dashboard .type_cloud .cloud_stateWrap ul {display:table; float:left; width:725px;}
 .proj_dashboard .type_cloud .cloud_stateWrap ul > li {display:table-cell;}
 .proj_dashboard .type_cloud .cloud_stateWrap ul > li > span {display:block; text-align:center;}
 .proj_dashboard .type_cloud .cloud_stateWrap ul > li.type1 {color:#666;}
@@ -2969,6 +2969,235 @@ a.ext_link:hover {text-decoration:underline;}
 .renameWrap {position:relative; width:240px;}
 .renameWrap .sdBtnWrap {position:absolute; top:2px; right:0;}
 
+/*알람설정*/
+/* 알람 */
+.newMonitCon{
+    padding: 0;
+}
+.newMonitCon.alarm-wrap .panel{
+    margin-bottom: 0;
+}
+.newMonitCon.alarm-wrap .service-type{
+    padding: 0px 0 20px;
+}
+.newMonitCon.alarm-wrap .service-type > label{
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: 9px;
+}
+/*
+.newMonitCon.alarm-wrap .service-type > label:before{
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background-color: #09adb1;
+    margin-right: 9px;
+    vertical-align: sub;
+}
+*/
+.newMonitCon.alarm-wrap select{
+    background-color: #fff;
+}
+.newMonitCon.alarm-wrap .config-inner > div:nth-child(odd){
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 30px;
+}
+.newMonitCon.alarm-wrap .config-inner > div:nth-child(even){
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 30px;
+}
+.newMonitCon.alarm-wrap .config-pannel{
+    padding: 0;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-title{
+    height: inherit;
+    padding: 8px 20px;
+    font-weight: 500;
+    border-color: #eaeaea;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content{
+    padding: 20px 20px 40px;
+    margin-top: 0;
+    text-align: center;
+}
+.newMonitCon.alarm-wrap .panel.alarm-email .pannel-content{
+    text-align: left;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content > div p{
+    text-align: left;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content > div{    
+    width: 30%;
+    margin-right: 20px;
+    display: inline-block;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content > div.content-time{
+    width: 90%;
+    margin: 0 auto;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content > div.form-input{
+    width: inherit;
+    margin-right: 6px;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content > div.content-eme{
+    margin-right: 0;
+}
+/*
+.newMonitCon.alarm-wrap .config-pannel .pannel-content .content-warn > p{
+    color: #ffbc00;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content .content-emer > p{
+    color: #ff0000;
+}
+*/
+
+/* 190603 */
+.newMonitCon.alarm-wrap .pannel-content .set-bar .range-text{
+    text-align: right;
+    margin-bottom: 10px;
+}
+.newMonitCon.alarm-wrap .rzslider {
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bar-wrapper{
+    padding-top: 6px;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bar{
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 10px;
+    background: #eee;
+    border-radius: 10px;
+}
+.newMonitCon.alarm-wrap  .rzslider .rz-selection{
+    background: #0db9f0;
+}
+.newMonitCon.alarm-wrap .content-minor .rzslider .rz-selection{
+    background: #7266ba;
+}
+.newMonitCon.alarm-wrap .content-warn .rzslider .rz-selection{
+    background: #f8ac59;
+}
+.newMonitCon.alarm-wrap .content-emer .rzslider .rz-selection{
+    background: #ff1100;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-pointer{
+    top: -18px;
+    z-index: 3;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: none;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-pointer:after{
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 16px;
+    height: 16px;
+    background: #0db9f0;
+    border-radius: 20px;
+}
+.newMonitCon.alarm-wrap .content-minor  .rzslider .rz-pointer:after{
+    background: #7266ba;
+}
+.newMonitCon.alarm-wrap .content-warn  .rzslider .rz-pointer:after{
+    background: #f8ac59;
+}
+.newMonitCon.alarm-wrap .content-emer  .rzslider .rz-pointer:after{
+    background: #ff1100;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bubble{
+    bottom: -36px;
+    font-size: 13px;
+    color: #000;
+    background: #ffae00;
+    border-radius: 4px;
+    padding: 3px 7px;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bubble::before {
+    display: inline-block;
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: url(../images/tooltip_arrow_bg.png) no-repeat 0 0;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bubble.rz-ceil:before, .newMonitCon .rzslider .rz-bubble.rz-limit:before{
+    display: none;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bubble.rz-ceil{
+    right: 0;
+    left: inherit !important;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bubble.point-n{
+    visibility: visible;
+    left: 37px;
+    bottom: -30px;
+    font-size: 12px;
+    color: #000;
+    background: #ffae00;
+    border-radius: 4px;
+    padding: 0 7px;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bubble.point-n:before{
+    display: inline-block;
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 17px;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: url(../../img/tooltip_arrow_bg.png) no-repeat 0 0;
+}
+.newMonitCon.alarm-wrap .rzslider .rz-bubble.point-n{
+    display: none;
+}
+.newMonitCon .rzslider .rz-bubble.rz-limit{
+    display: block;
+    top: 3px;
+    color: #666;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-title{
+    height: 60px;
+    padding: 0 20px;
+    font-size: 16px;
+    border-bottom: 1px solid #ccc;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-title > span {
+    line-height: 60px;
+    font-size: 20px;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content > div p {
+    font-size: 18px;
+}
+.newMonitCon.alarm-wrap .config-pannel .pannel-content > div p {
+    text-align: left;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.content-warn, .content-emer {
+    display: inline-block;
+    width: 49%;
+}
 
 /*대시보드 100%비율 CSS 재정의(1903px보다 클때)*/
 .proj_dashboard .ul-panel {display:table; width:100%;}

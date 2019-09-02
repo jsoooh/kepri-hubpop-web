@@ -64,6 +64,42 @@
 						<!-- 접속정보 -->
 						<div ng-if="instance.procState == 'end'" class="tg_box_area btn-option type2">
 							<button type="button" class="btn_txt" ng-click="contents.showInfo(instance);">접속정보</button>
+							<button type="button" class="btn_txt state-label label-{{ instance.alarmStatus.replace(' ', '') }}" ng-show="instance.alarmStatus">{{ main.getAlarmLabel(instance.alarmStatus) }}</button>
+							<div class="tg_box" ng-show="instance.showVal">
+								<div class="tgb_head">
+									<p class="tit">접속 정보</p>
+									<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+								</div>
+								<!-- ubuntu  -->
+								<div ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'" class="tgb_body">
+									<ul>
+										<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
+										<!--<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>--><!-- vnc 사용할 경우 a태그에 class="ext_link" 지정하여 링크스타일 적용. <a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)"></a>-->
+										<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
+										<li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></li>
+									</ul>
+									<div class="guide_link">
+										<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">접속방법 가이드</a>
+									</div>
+								</div>
+								<!-- windows  -->
+								<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
+									<ul>
+										<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">RDP</span></li>
+										<li>
+											<strong><span class="tb_tit">접속 도메인</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
+											<!-- vnc 사용할 경우 a태그에 class="ext_link pd_l14px" 지정하여 링크스타일 적용. <a href="" class="ext_link pd_l14px" ng-click="contents.fn.openWebConsole(instance)"></a> -->
+											<a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
+										</li>
+										<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
+										<li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li>
+									</ul>
+									<div class="guide_link">
+										<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '', osType: instance.image.osType, rdpConnectDomain : instance.rdpConnectDomain});">접속방법 가이드</a>
+									</div>
+								</div>
+							</div>
 						</div>
 						<!-- //접속정보 -->
 						<div ng-if="instance.procState == 'end'" class="dropdown btn-option">
@@ -146,36 +182,36 @@
 									<li>
 										<div class="progressWrap type1">
 											<div class="progress">
-												<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}" class="progress">
-													<div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}%"></div>
+												<div percent-progress-bar-animate bar-type="height" percent="{{ instance.cpuUsage | number }}" class="progress">
+													<div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{ instance.cpuUsage | number }}%"></div>
 												</div>
 											</div>
 										</div>
-										<span class="percent_txt">{{instance.spec.vcpus / contents.tenantResource.maxResource.cores * 100 | number: 0}}<span>%</span></span>
+										<span class="percent_txt">{{ instance.cpuUsage | number }}<span>%</span></span>
 										<strong class="tit mt10">CPU</strong>
 										<span class="flavor_info">{{instance.spec.vcpus}} 개</span>
 									</li>
 									<li>
 										<div class="progressWrap type1">
 											<div class="progress">
-												<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}" class="progress">
-													<div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}%"></div>
+												<div percent-progress-bar-animate bar-type="height" percent="{{ instance.memoryUsage | number }}" class="progress">
+													<div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{ instance.memoryUsage | number }}%"></div>
 												</div>
 											</div>
 										</div>
-										<span class="percent_txt">{{instance.spec.ram / contents.tenantResource.maxResource.ramSize * 100 | number: 0}}<span>%</span></span>
+										<span class="percent_txt">{{ instance.memoryUsage | number }}<span>%</span></span>
 										<strong class="tit mt10">Memory</strong>
 										<span class="flavor_info">{{(instance.spec.ram/1024|number:1).replace('.0', '')}} GB</span>
 									</li>
 									<li>
 										<div class="progressWrap type1">
 											<div class="progress">
-												<div percent-progress-bar-animate bar-type="height" percent="{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}" class="progress">
-													<div class="progress-bar" role="progressbar" tooltip-placement="top" uib-tooltip="{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}%"></div>
+												<div percent-progress-bar-animate bar-type="height" percent="{{ instance.diskUsage | number }}" class="progress">
+													<div class="progress-bar" role="progressbar" tooltip-placement="top" uib-tooltip="{{ instance.diskUsage | number }}%"></div>
 												</div>
 											</div>
 										</div>
-										<span class="percent_txt">{{instance.spec.disk / contents.tenantResource.maxResource.instanceDiskGigabytes * 100 | number : 0}}<span>%</span></span>
+										<span class="percent_txt">{{ instance.diskUsage | number }}<span>%</span></span>
 										<strong class="tit mt10">Disk</strong>
 										<span class="flavor_info">{{instance.spec.disk}} GB</span>
 									</li>

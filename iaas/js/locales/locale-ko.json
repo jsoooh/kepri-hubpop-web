@@ -56,9 +56,40 @@
             "volume_snapshot_deleting" : "삭제중",
             "volume_snapshot_error_deleting" : "삭제중",
             "public" : "공용",
-            "private" : "사용자"
+            "private" : "사용자",
+            "alarm_dt": "발생일시",
+            "alarm_type": "알람타입",
+            "alarm_level": "알람레벨",
+            "action_state": "조치상태",
+            "measure": "측정시간",
+            "alarm_email": "알람 수신 이메일",
+            "alarm_message": "알람 메세지",
+            "minor": "주의",
+            "warning": "경고",
+            "critical": "위험",
+            "fail": "다운",
+            "failed": "다운",
+            "running": "정상",
+            "no agent": "측정안함",
+            "noAgent": "측정안함",
+            "alarm_svc_type": "서비스타입",
+            "cpu": "CPU",
+            "memory": "Memory",
+            "disk": "Disk",
+            "server_name": "서버명",
+            "log_message": "로그 메세지",
+            "program": "프로그램",
+            "created_date": "생성시간"
         },
         "message" : {
+            "mi_alarm_policy_cpu_over_we": "CPU 위험, 경고 임계치가 주의 수치보다 낮습니다. 재설정하시기 바랍니다.",
+            "mi_alarm_policy_cpu_over_w": "CPU 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.",
+            "mi_alarm_policy_memory_over_we": "Memory 위험, 경고 임계치가 주의 수치보다 낮습니다. 재설정하시기 바랍니다.",
+            "mi_alarm_policy_memory_over_w": "Memory 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.",
+            "mi_alarm_policy_disk_over_we": "Disk 위험, 경고 임계치가 주의 수치보다 낮습니다. 재설정하시기 바랍니다.",
+            "mi_alarm_policy_disk_over_w": "Disk 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다.",
+            "mi_alarm_policy_lb_over_we": "Load Balancer 위험, 경고 임계치가 주의 수치보다 낮습니다. 재설정하시기 바랍니다.",
+            "mi_alarm_policy_lb_over_w": "Load Balancer 위험 임계치가 경고 수치보다 낮습니다. 재설정하시기 바랍니다."
         }
     }
 }

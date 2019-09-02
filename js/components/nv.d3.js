@@ -6110,7 +6110,7 @@ nv.models.legend = function() {
             var wrap = container.selectAll('g.nv-legend').data([data]);
             var gEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-legend').append('g');
             var g = wrap.select('g');
-
+            
             wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
             var series = g.selectAll('.nv-series')
@@ -6121,8 +6121,14 @@ nv.models.legend = function() {
                         return expanded ? true : !n.disengaged;
                     });
                 });
-
             var seriesEnter = series.enter().append('g').attr('class', 'nv-series');
+
+            seriesEnter.each(function (el, k) {
+                if (el.legend !== undefined && !el.legend) {
+                    angular.element(seriesEnter[0][k]).css('display', 'none');
+                }
+            })
+
             var seriesShape;
 
             var versPadding;
@@ -6167,7 +6173,7 @@ nv.models.legend = function() {
                 .attr('class','nv-legend-text')
                 .attr('dy', '.32em')
                 .attr('dx', '8');
-
+                
             var seriesText = series.select('text.nv-legend-text');
 
             series
@@ -6273,8 +6279,10 @@ nv.models.legend = function() {
                     catch(e) {
                         nodeTextLength = nv.utils.calcApproxTextWidth(legendText);
                     }
-
-                    seriesWidths.push(nodeTextLength + padding);
+                    var legendWidth;
+                    if (d && d.legend !== undefined && !d.legend) legendWidth = 0;
+                    else legendWidth = nodeTextLength + padding;
+                    seriesWidths.push(legendWidth);
                 });
 
                 var seriesPerRow = 0;

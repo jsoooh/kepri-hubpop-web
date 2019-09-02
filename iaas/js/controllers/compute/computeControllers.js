@@ -75,7 +75,6 @@ angular.module('iaas.controllers')
             ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
             ct.network = ct.networks[0];
             ct.fnGetServerMainList();
-            ct.fnGetUsedResource();
         });
         
         ct.fn.getKeyFile = function(keypair,type) {
@@ -143,6 +142,29 @@ angular.module('iaas.controllers')
         ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'shelved_offloaded', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
+        // 서버 알람 상태 체크 함수
+        ct.fnCheckAlarmStatus = function (server) {
+            var params = {
+                limit: 1000 
+            };
+
+            var rp = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instances', 'GET', params));
+            rp.success(function (data) {
+                var alarmInfo = {};
+                angular.forEach(data.metric, function (instance) {
+                    alarmInfo[instance.instance_id] = instance.alarmStatus;
+                });
+
+                if (server && alarmInfo[server.id]) {
+                    server.alarmStatus = alarmInfo[server.id];
+                } else {
+                    angular.forEach(ct.serverMainList, function (serverMain) {
+                        if (alarmInfo[serverMain.id]) serverMain.alarmStatus = alarmInfo[serverMain.id];
+                    });
+                }
+            })
+        };
+
         // 서버메인 tenant list 함수
         ct.fnGetServerMainList = function() {
             $scope.main.loadingMainBody = true;
@@ -153,7 +175,6 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 ct.loadingServerList = false;
                 ct.serverMainList = [];
                 var instances = [];
@@ -167,11 +188,13 @@ angular.module('iaas.controllers')
                 }
                 var isServerStatusCheck = false;
                 common.objectOrArrayMergeData(ct.serverMainList, instances);
+                ct.fnCheckAlarmStatus();
                 var nowDate = new Date();
                 angular.forEach(ct.serverMainList, function (serverMain) {
                     if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
                         isServerStatusCheck = true;
                     }
+                    ct.fnSetInstanceUseRate(serverMain);
                     ct.fn.setProcState(serverMain);
                     ct.fn.setRdpConnectDomain(serverMain);
                     if (angular.isObject(serverMain.elapsed)) {
@@ -195,20 +218,15 @@ angular.module('iaas.controllers')
                     }
                     $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                 }
-                /*if (ct.pageFirstLoad && (!ct.serverMainList || ct.serverMainList.length == 0)) {
-                    ct.firstInstanceCreatePop();
-                }*/
-                ct.pageFirstLoad = false;
             });
             returnPromise.error(function (data, status, headers) {
-                ct.pageFirstLoad = false;
-                $scope.main.loadingMainBody = false;
                 if (status != 307) {
                     common.showAlertError(data.message);
                 }
             });
             returnPromise.finally(function (data, status, headers) {
-                console.debug("serverMainList: ", ct.serverMainList);
+                ct.pageFirstLoad = false;
+                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -280,6 +298,8 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
                         var instance = data.content.instances[0];
+                        ct.fnSetInstanceUseRate(instance);
+                        ct.fnCheckAlarmStatus(instance);
                         var serverItem = common.objectsFindByField(ct.serverMainList, "id", data.content.instances[0].id);
                         if (serverItem && serverItem.id) {
                             var beforUiTask = serverItem.uiTask;
@@ -325,6 +345,8 @@ angular.module('iaas.controllers')
                             ct.deployServerList.splice(data.content.instances.length, ct.serverMainList.length - data.content.instances.length);
                         }
                         angular.forEach(data.content.instances, function (instance, inKey) {
+                            ct.fnSetInstanceUseRate(instance);
+                            ct.fnCheckAlarmStatus(instance);
                             if (ct.serverMainList[inKey]) {
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
                                 ct.fn.setProcState(ct.serverMainList[inKey]);
@@ -366,6 +388,7 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
                         var instanceStateInfo = data.content.instances[0];
+                        ct.fnSetInstanceUseRate(instanceStateInfo);
                         ct.fn.setProcState(instanceStateInfo);
                         if (instanceStateInfo.procState != 'end') {
                             $scope.main.reloadTimmer['instanceServerState_' + instanceStateInfo.id] = $timeout(function () {
@@ -391,12 +414,13 @@ angular.module('iaas.controllers')
                     } else {
                         var serverStates = data.content.instances;
                         var isServerStatusCheck = false;
-                        var isReplaceServerInfo = false;
+                        // var isReplaceServerInfo = false;
                         if (ct.serverMainList.length > serverStates.length) {
                             ct.serverMainList.splice(serverStates.length, ct.serverMainList.length - serverStates.length);
                         }
                         var serverMainList = angular.copy(ct.serverMainList);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
+                            ct.fnSetInstanceUseRate(instanceStateInfo);
                             ct.fn.setProcState(instanceStateInfo);
                             var serverItem = common.objectsFindByField(serverMainList, "id", instanceStateInfo.id);
                             if (serverItem && serverItem.id) {
@@ -413,7 +437,6 @@ angular.module('iaas.controllers')
                                     ct.fn.mergeServerInfo(ct.serverMainList[inKey], serverItem);
                                 } else {
                                     ct.serverMainList.push(serverItem);
-                                    //ct.fn.replaceServerInfo(serverItem.id);
                                 }
                             } else {
                                 if (!ct.serverMainList[inKey]) {
@@ -421,7 +444,7 @@ angular.module('iaas.controllers')
                                 } else {
                                     var serverStateItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
                                     if (serverStateItem && serverStateItem.id && ct.noIngStates.indexOf(serverStateItem.uiTask) == -1) {
-                                        isReplaceServerInfo = true;
+                                        // isReplaceServerInfo = true;
                                         ct.serverMainList[inKey].uiTask = "created_complete";
                                         $timeout(function () {
                                             ct.fn.replaceServerInfo(serverItem.id);
@@ -435,9 +458,10 @@ angular.module('iaas.controllers')
                                 ct.fn.checkServerState();
                             }, 2000);
                         }
-                        if (isReplaceServerInfo) {
-                            ct.fnGetUsedResource();
-                        }
+                        // fnGetUsedResource 사용안하므로 주석처리
+                        // if (isReplaceServerInfo) {
+                        //     ct.fnGetUsedResource();
+                        // }
                     }
                 }
             });
@@ -448,20 +472,21 @@ angular.module('iaas.controllers')
         };
 
         //추가 S
-        ct.fnGetUsedResource = function() {
-            var params = {
-                tenantId : ct.data.tenantId
-            };
-            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
-            returnPromise.success(function (data, status, headers) {
-                ct.tenantResource = data.content[0];
-            });
-            returnPromise.error(function (data, status, headers) {
-                if (status != 307) {
-                    common.showAlertError(data.message);
-                }
-            });
-        };
+        // [20190621.HYG] 사용안하므로 주석처리
+        // ct.fnGetUsedResource = function() {
+        //     var params = {
+        //         tenantId : ct.data.tenantId
+        //     };
+        //     var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
+        //     returnPromise.success(function (data, status, headers) {
+        //         ct.tenantResource = data.content[0];
+        //     });
+        //     returnPromise.error(function (data, status, headers) {
+        //         if (status != 307) {
+        //             common.showAlertError(data.message);
+        //         }
+        //     });
+        // };
 
         //추가 E
         // 서버삭제
@@ -708,8 +733,31 @@ angular.module('iaas.controllers')
             }
         };
 
+        // [20190621.HYG] It's a func to bind Instance monitoring data
+        // Dev History 
+        // 테넌트 전체 서버 모니터링 데이터 호출 API 는 사용안함
+        // - 서버상태변경(정지->시작) 후 API 호출 할 때 서버의 모니터링 데이터가 0 응답함
+        // - 서버 시작 후 일정 시간 후에 정상데이터 호출 되는데 그 시점을 핸들링 할 수 없음.
+        // - 서버 정보 세팅하는 경우 1개 인스턴스의 모니터링 데이터를 호출하는 방식으로 변경.
+        ct.fnSetInstanceUseRate = function (instance) {
+            if (instance.uiTask && instance.uiTask == 'active') {
+                var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instance/' + instance.id + '/resourceUsage', 'GET');
+                rp.success(function (d) {
+                    instance.cpuUsage = d.cpuUsage;
+                    instance.memoryUsage = d.memUsage;
+                    instance.diskUsage = d.diskUsage;
+                });
+                rp.error(function (d) {
+                    common.showAlertError(d.message);
+                });
+            } else {
+                instance.cpuUsage = 0;
+                instance.memoryUsage = 0;
+                instance.diskUsage = 0;
+            }
+        };
+
         if (ct.data.tenantId) {
-            ct.fnGetUsedResource();
             ct.fnGetServerMainList();
         } else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
@@ -1333,6 +1381,475 @@ angular.module('iaas.controllers')
     })
     .controller('iaasComputeAlarmCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeAlarmCtrl start", 1);
+        
+        var ct = this;
+        ct.sltInfoTab = 'alarmList';
+        ct.fn = {};
+        ct.alarmId = $location.search().alarmId;
+        ct.serverId = $location.search().serverId;
+        ct.changeSltInfoTab = function (sltInfoTab, alarmId) {
+            if ($location.search().alarmId) delete $location.search().alarmId;
+            ct.sltInfoTab = sltInfoTab;
+            if (!sltInfoTab) {
+                sltInfoTab = 'alarmList';
+            } else {
+                if (sltInfoTab == 'alarmList') {
+                    ct.selectAlarmList();
+                } else if (sltInfoTab == 'alarmDetail') { 
+                    ct.alarmId = alarmId;
+                    ct.fn.selectAlarmDetail();
+                } else if (sltInfoTab == 'alarmConf') {
+                    ct.fn.requestData();
+                }
+            }
+        };
 
+        $scope.$on('alarmListOnClick', function (event, datas) {
+            ct.serverId = undefined;
+            ct.changeSltInfoTab('alarmDetail', datas.alarmId);
+            common.locationHref(datas.path + '?alarmId=' + datas.alarmId);
+        });
+
+        $scope.$on('alarmMoreOnClick', function (event, datas) {
+            ct.serverId = undefined;
+            ct.changeSltInfoTab('alarmList');
+            common.locationHref(datas);
+        });
+
+        //-- 알람목록 탭 시작
+        // 검색조건 콤보박스 세팅
+        ct.options = {};
+        ct.options.alarmType = common.getAlarmType();
+        ct.options.alarmLevel = common.getAlarmLevel();
+        ct.options.resolveStatus = common.getResolveStatusCmb();
+        ct.options.alarmType.unshift({value: '', name: '알람타입'});
+        ct.options.alarmLevel.unshift({value: '', name: '알람등급'});
+        ct.options.resolveStatus.unshift({value: '', name: '조치상태'});
+
+        // 검색조건 폼 데이터
+        ct.sch_condition = {};
+        ct.sch_condition.alarmType = ct.options.alarmType[0].value;
+        ct.sch_condition.alarmLevel = ct.options.alarmLevel[0].value;
+        ct.sch_condition.resolveStatus = ct.options.resolveStatus[2].value;
+        ct.timeRanges = [];
+        ct.selTimeRange = {};
+
+        //기간검색
+        ct.timeRanges = [
+            {id: '1day', value: '1', name: 'label.day'},
+            {id: '3day', value: '3', name: 'label.days'},
+            {id: '7day', value: '7', name: 'label.days'},
+            {id: '1month', value: '1', name: 'label.month'},
+            {id: '6month', value: '6', name: 'label.months'}
+        ];
+        ct.selTimeRange = common.objectsFindByField(ct.timeRanges, "id", "1month");
+
+        //기간검색 변경
+        ct.changeTimeRange = function (timeRangeId) {
+            var num = 0;
+            var gbn = '';
+            switch (timeRangeId) {
+                case "1day":
+                    num = 1;
+                    gbn = 'day';
+                    break;
+                case "3day":
+                    num = 3;
+                    gbn = 'day';
+                    break;
+                case "7day":
+                    num = 7;
+                    gbn = 'day';
+                    break;
+                case "1month":
+                    num = 1;
+                    gbn = 'month';
+                    break;
+                case "6month":
+                    num = 6;
+                    gbn = 'month';
+                    break;
+                default:
+                    num = 1;
+                    gbn = 'day';
+                    break;
+            }
+            ct.sch_condition.dateFrom = moment().subtract(num, gbn).format('YYYY-MM-DD');
+            ct.sch_condition.dateTo = moment().format('YYYY-MM-DD');
+        };
+
+        // 검색결과 데이터 Repository
+        ct.alarmData = [];
+        
+        // 페이징 옵션
+        ct.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
+
+        // 검색
+        ct.selectAlarmList = function (page) {
+            if (page) ct.pageOptions.currentPage = page;
+            else page = ct.pageOptions.currentPage;
+
+            ct.sch_condition.searchDateFrom = moment(ct.sch_condition.dateFrom + ' 00:00:00').unix();
+            ct.sch_condition.searchDateTo = moment(ct.sch_condition.dateTo + ' 23:59:59').unix();
+            ct.sch_condition.pageItems = ct.pageOptions.pageSize;
+            ct.sch_condition.pageIndex = page;
+            ct.sch_condition.baremetalYn = 'N';
+            ct.sch_condition.projectId = $scope.main.userTenantId;
+
+            // 테넌트 알람, 인스턴스 알람을 구분
+            if (ct.serverId) ct.sch_condition.instanceId = ct.serverId;
+            else ct.sch_condition.instanceId = undefined
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', ct.sch_condition);
+            serverStatsPromise.success(function (data, status, headers) {
+                ct.alarmData = data.data;
+
+                if (data.totalCount > 10000) {
+                    ct.pageOptions.total = 10000;
+                } else {
+                    ct.pageOptions.total = data.totalCount;
+                }
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+        common.getServiceType(false, function (nodeList) {
+            ct.options.serviceType = nodeList;
+            ct.options.serviceType.unshift({value: '', name: '서비스타입'});
+            ct.sch_condition.policyType = ct.options.serviceType[0].value;
+            ct.changeTimeRange('1month');
+            ct.selectAlarmList();
+        });
+        //-- 알람목록 탭 종료
+
+        //-- 알람목록 상세 시작
+        ct.actionForm = {};
+        ct.data = {};
+
+        // 알람 상세정보 조회
+        ct.fn.selectAlarmDetail = function () {
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/detail/' + ct.alarmId, 'GET');
+            serverStatsPromise.success(function (data, status, headers) {
+                ct.data = data;
+                ct.fn.initAction();
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 알람 조치 이력 수정
+        ct.fn.updateActionForm = function (action_id, desc) {
+            ct.actionForm.id = action_id;
+            ct.actionForm.alarmActionDesc = desc;
+        };
+        
+        // 알람 조치 이력 삭제
+        ct.fn.deleteAction = function (action_id) {
+            
+            common.showConfirm($translate.instant('label.del'), $translate.instant('message.mq_delete_bulletin')).then(function() {
+
+                $scope.main.loadingMainBody = true;
+                var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/action/' + action_id, 'DELETE');
+                serverStatsPromise.success(function (data, status, headers) {
+                    common.showAlert('message', '삭제되었습니다');
+                    ct.fn.selectAlarmDetail();
+                });
+                serverStatsPromise.error(function (data, status, headers) {
+                    common.showAlert(data);
+                });
+                serverStatsPromise.finally(function (data, status, headers) {
+                    $scope.main.loadingMainBody = false;
+                });
+            });
+        };
+        
+        // 알람 조치 이력 저장
+        ct.fn.saveAction = function () {
+            var method = "";
+            if (ct.actionForm.id) {
+                method = "PUT";
+                ct.actionForm.modiUser = common.getUser().email.split('@')[0];
+            } else {
+                method = "POST";
+                ct.actionForm.regUser = common.getUser().email.split('@')[0];
+            }
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/action', method, ct.actionForm);
+            serverStatsPromise.success(function (data, status, headers) {
+                common.showAlert('message', '저장이 완료되었습니다.');
+                ct.fn.selectAlarmDetail();
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                common.showAlert(data);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 조치 완료
+        ct.fn.completeAction = function () {
+            
+            var params = {
+                id: ct.data.id,
+                resolveStatus: '2',
+                modiUser: common.getUser().email.split('@')[0]
+            };
+
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm', "PUT", params);
+            serverStatsPromise.success(function (data, status, headers) {
+                common.showAlert('message', '조치완료 처리되었습니다.');
+                ct.changeSltInfoTab('alarmList');
+                $scope.main.selectAlarmList();
+                $scope.main.selectAlarmCount();
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                common.showAlert(data);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 알람 수정 폼 초기화
+        ct.fn.initAction = function () {
+            ct.actionForm = {};
+            ct.actionForm.alarmId = ct.data.id;
+        };
+        //-- 알람목록 탭 종료
+        
+        //-- 알람설정 탭 시작
+        $scope.actionBtnHied = true;
+        ct.condition = {};
+        ct.condition.keyword = {};
+        ct.selServiceType = '';
+        ct.policys = {};
+        
+        ct.cpuwarnSlider = {
+            value : 0,
+            options: {
+                floor: 0,
+                ceil: 100,
+                step: 1,
+                minLimit: 0,
+                showSelectionBar: true,
+                onChange: function () {
+                    ct.fn.parseTimer();
+                }
+            }
+        };
+        ct.cpuemerSlider = {};
+        ct.cpuminorSlider = {};
+        
+        ct.memorywarnSlider = {};
+        ct.memoryemerSlider = {};
+        ct.memoryminorSlider = {};
+        
+        ct.diskwarnSlider = {};
+        ct.diskemerSlider = {};
+        ct.diskminorSlider = {};
+        
+        ct.measuretimeSlider = {};
+
+        angular.copy(ct.cpuwarnSlider, ct.cpuminorSlider);
+        angular.copy(ct.cpuwarnSlider, ct.cpuemerSlider);
+        angular.copy(ct.cpuwarnSlider, ct.memoryminorSlider);
+        angular.copy(ct.cpuwarnSlider, ct.memorywarnSlider);
+        angular.copy(ct.cpuwarnSlider, ct.memoryemerSlider);
+        angular.copy(ct.cpuwarnSlider, ct.diskminorSlider);
+        angular.copy(ct.cpuwarnSlider, ct.diskwarnSlider);
+        angular.copy(ct.cpuwarnSlider, ct.diskemerSlider);
+        angular.copy(ct.cpuwarnSlider, ct.measuretimeSlider);
+
+        ct.measuretimeSlider.options.ceil = 60 * 60 * 3;
+        ct.measuretimeSlider.options.minLimit = 60;
+
+        // 초기 알람정보 조회
+        ct.fn.requestData = function () {
+            $scope.main.getAlarmPolicy (ct.selServiceType, function () {
+                angular.copy($scope.main.alarmPolicys[ct.selServiceType], ct.policys);
+                ct.measuretimeSlider.value = ct.policys.measureTime;
+    
+                // 측정시간 초기화
+                ct.fn.parseTimer();
+    
+                angular.forEach(ct.policys.detail, function (el, k) {
+                    ct[el.alarmType+'minorSlider'].value = el.minorThreshold;
+                    ct[el.alarmType+'warnSlider'].value = el.warningThreshold;
+                    ct[el.alarmType+'emerSlider'].value = el.criticalThreshold;
+                });
+    
+                ct.data.alarmEmail = ct.policys.mailAddress.split('@')[0];
+                ct.data.alarmEmailHost = ct.policys.mailAddress.split('@')[1];
+            }, $scope.main.userTenantId);
+        };
+
+        ct.fn.parseTimer = function () {
+            var second = ct.measuretimeSlider.value;
+            var minute = Math.floor(second / 60);
+            var hours = Math.floor(minute / 60);
+            var result = (second % 60) + '초';
+
+            if (minute > 0) {
+                if (hours > 0) {
+                    result = hours + '시간 ' + (minute % 60) + '분 ' + result;
+                } else {
+                    result = minute + '분 ' + result;
+                }
+            }
+            
+            ct.measureTime = result;
+        }
+
+        // 숫자만 입력
+        ct.fn.numberCheck = function () {
+            if (!newMonitAdminService.isNumber(event)) {
+                event.preventDefault();
+            }
+        };
+
+        // 숫자 입력 범위 필터
+        ct.fn.percentCheck = function (modelName) {
+            var val = ct[modelName+'Slider'].value;
+            if (!newMonitAdminService.isNumber(event)) {
+                val = 0;
+                event.preventDefault();
+            }
+            if (val < 0) {
+                val = 0;
+                event.preventDefault();
+            } else if (val > 100) {
+                val = 100;
+                event.preventDefault();
+            } else {
+                val = parseInt(val);
+            }
+            ct[modelName+'Slider'].value = val;
+        };
+
+        // 설정값 저장
+        ct.fn.saveAlarm = function () {
+            var is_valid = new ValidationService().checkFormValidity($scope[ct.alarmFormName]);
+            if (!is_valid) {
+                console.log('save failed');
+                return;
+            };
+
+            var cpumVal = ct.cpuminorSlider.value;
+            var cpuwVal = ct.cpuwarnSlider.value;
+            var cpueVal = ct.cpuemerSlider.value;
+            var memmVal = ct.memoryminorSlider.value;
+            var memwVal = ct.memorywarnSlider.value;
+            var memeVal = ct.memoryemerSlider.value;
+            var dskmVal = ct.diskminorSlider.value;
+            var dskwVal = ct.diskwarnSlider.value;
+            var dskeVal = ct.diskemerSlider.value;
+
+            if (cpumVal > cpuwVal || cpumVal > cpueVal) {
+                angular.element('#minor-cpu').focus();
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_cpu_over_we"));
+                return;
+            }
+            if (cpuwVal > cpueVal) {
+                angular.element('#warn-cpu').focus();
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_cpu_over_w"));
+                return;
+            }
+            if (memmVal > memwVal || memmVal > memeVal) {
+                angular.element('#minor-memory').focus();
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_memory_over_we"));
+                return;
+            }
+            if (memwVal > memeVal) {
+                angular.element('#warn-memory').focus();
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_memory_over_w"));
+                return;
+            }
+            if (dskmVal > dskwVal || dskmVal > dskeVal) {
+                angular.element('#minor-disk').focus();
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_disk_over_we"));
+                return;
+            }
+            if (dskwVal > dskeVal) {
+                angular.element('#warn-disk').focus();
+                common.showAlert("error", $translate.instant("iaas.message.mi_alarm_policy_disk_over_w"));
+                return;
+            }
+
+            var detail = [];
+            ct.policys.mailAddress = ct.data.alarmEmail + '@' + ct.data.alarmEmailHost;
+            angular.forEach(ct.policys.detail, function (el, k) {
+                var alarmType = el.alarmType == 'mem' ? 'memory' : el.alarmType;
+                detail.push({
+                    alarmType: alarmType,
+                    minorThreshold: ct[alarmType+'minorSlider'].value,
+                    warningThreshold: ct[alarmType+'warnSlider'].value,
+                    criticalThreshold: ct[alarmType+'emerSlider'].value
+                });
+                el.minorThreshold = ct[alarmType+'minorSlider'].value;
+                el.warningThreshold = ct[alarmType+'warnSlider'].value;
+                el.criticalThreshold = ct[alarmType+'emerSlider'].value;
+            });
+            
+            $scope.main.loadingMainBody = true;
+            var params = {
+                "id": ct.policys.id,
+                "policyType": ct.selServiceType,
+                "projectId": $scope.main.userTenantId,
+                "measureTime": ct.measuretimeSlider.value,
+                "mailAddress": ct.policys.mailAddress,
+                "mailReceiveYn": ct.policys.mailReceiveYn,
+                "comment": ct.policys.comment,
+                "detail": detail
+            };
+
+            var methodName = ct.selServiceType != ct.policys.policyType ? 'POST' : 'PUT';
+            var returnPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/policy', methodName, params);
+            returnPromise.success(function (data, status, headers) {
+                common.showAlert("message", $translate.instant('message.mi_change'));
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data);
+            });
+            returnPromise.finally(function() {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        $scope.$on('userTenantChanged',function(event,status) {
+            $scope.main.replacePage();
+        });
+        
+        // 설정값 최초 로드
+        ct.alarmReceives = [
+            {'value': 'Y', 'name': 'iaas.label.receive'}, 
+            {'value': 'N', 'name': 'iaas.label.noreceive'}
+        ];
+        ct.alarmFormName = 'saveform';
+        ct.data.alarmReceive = ct.alarmReceives[0].value;
+        ct.selServiceType = CONSTANTS.nodeKey.TENANT;
+        ct.fn.requestData();
+        //-- 알람설정 탭 종료
+        
+        if (ct.alarmId) ct.changeSltInfoTab('alarmDetail', ct.alarmId);
     })
 ;

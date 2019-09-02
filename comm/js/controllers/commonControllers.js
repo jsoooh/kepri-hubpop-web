@@ -1260,6 +1260,120 @@ angular.module('common.controllers', [])
             common.moveLoginPage();
         }
 
+        // 알람정책 글로벌
+        mc.CONSTANTS = CONSTANTS;
+        mc.alarmPolicys = {};
+
+        // 알람 색상 매트릭스
+        mc.colorJson = {
+            'running': '#337ab7',
+            'fail': '#363636',
+            'clear': '#5acc27',
+            'minor': '#7266ba',
+            'warning': '#f8ac59',
+            'critical':'#ff1100'
+        };
+
+        // 알람별 색상 선택
+        mc.getAlarmColor = function (alarmStatus) {
+            if (mc.colorJson[alarmStatus]) {
+                return mc.colorJson[alarmStatus];
+            } else {
+                // no agent or no data
+                return '#eee';
+            }
+        };
+
+        // 알람 메세지 라벨 세팅
+        mc.getAlarmLabel = function (alarmStatus) {
+            var LABEL_CONSTANTS = 'iaas.label.';
+            var result = $translate.instant(LABEL_CONSTANTS + alarmStatus);
+            if (result === LABEL_CONSTANTS) result = '-';
+            return result;
+        };
+        
+        // 알람정책 세팅
+        mc.getAlarmPolicy = function (nodeKey, summary, projectId) {
+            
+            var params = {
+                projectId: projectId
+            };
+
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/alarm/policy/' + nodeKey, 'GET', params);
+            serverStatsPromise.success(function (data, status, headers) {
+                if (data) mc.alarmPolicys[nodeKey] = data;
+                if (summary) summary();
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                // mc.loadingMainBody = false;
+            });
+        };
+
+        
+        // 검색
+        mc.selectAlarmList = function () {
+
+            var params = {
+                pageItems: 100,
+                pageIndex: 1,
+                resolveStatus: 1,
+                projectId: mc.userTenantId,
+                baremetalYn: 'N'
+            };
+            
+            mc.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', params);
+            serverStatsPromise.success(function (data, status, headers) {
+                mc.alarmList = data.data;
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                mc.loadingMainBody = false;
+            });
+        };
+
+        mc.alarmCnt = 0;
+        
+        // 알람 카운트 조회
+        mc.selectAlarmCount = function () {
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/count/N', 'GET', {projectId: mc.userTenantId});
+            serverStatsPromise.success(function (data, status, headers) {
+                if (data.alarmCnt && mc.alarmCnt !== data.alarmCnt) {
+                    mc.alarmCnt = data.alarmCnt;
+                }
+            });
+        };
+
+        // 알람 내역 클릭
+        mc.alarmListOnClick = function (path, alarmId) {
+            var loc = $location.absUrl();
+            if (loc.indexOf(path) > -1) {
+                $scope.$broadcast('alarmListOnClick', {path: path, alarmId: alarmId});
+            } else {
+                common.locationHref(path + '?alarmId=' + alarmId);
+            }
+        };
+
+        // 알람 더보기 클릭
+        mc.alarmMoreOnClick = function (path) {
+            var loc = $location.absUrl();
+            if (loc.indexOf(path) > -1) {
+                $scope.$broadcast('alarmMoreOnClick', path);
+            } else {
+                common.locationHref(path);
+            }
+        }
+
+        $interval(function () {
+            mc.selectAlarmCount();
+            mc.selectAlarmList();
+        }, CONSTANTS.alarmBell);
+        
         //팝업 공지사항 보여주기
         mc.desplayNoticeList = function(notices) {
             mc.noticeList = notices;
@@ -1269,7 +1383,7 @@ angular.module('common.controllers', [])
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
     // 매인 BODY Conroller
-    .controller('mainBodyCtrl', function ($scope, $location, $templateCache, $state, $stateParams, $timeout, $window, $translate, user, common, CONSTANTS) {
+    .controller('mainBodyCtrl', function ($scope, $location, $templateCache, $state, $stateParams, $timeout, $interval, $window, $translate, user, common, CONSTANTS) {
         _DebugConsoleLog("commonControllers.js : mainBodyCtrl Start, path : " + $location.path(), 1);
 
         var mb = this;
@@ -1459,6 +1573,9 @@ angular.module('common.controllers', [])
             }
             $scope.main.setLayout();
             $scope.main.commMenuHide();
+            $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
+            $scope.main.selectAlarmCount();
+            $scope.main.selectAlarmList();
 
             if (_MENU_TYPE_ == 'part') {
                 common.leftMenuShow();

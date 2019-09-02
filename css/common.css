@@ -217,6 +217,9 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .btn-color4:hover, .btn-color4:focus, .btn.btn-color4:hover, .btn.btn-color4:focus{color:#fff; background: #0bc5b6; border:1px solid #0bc5b6;}
 .btn-color4:active{color:#fff; background: #15578e;}
 .btn-color5{color:#fff; border:1px solid #777; background: #777;}
+.btn-color5:hover, .btn-color5:focus, .btn.btn-color5:hover, .btn.btn-color5:focus{color:#fff; background: #555; border:1px solid #555;}
+.btn-color5:active{color:#fff; background: #555;}
+
 /*180704 버튼스타일추가*/
 .btn-color6{color:#333; border:1px solid #ddd; background: #f5f5f5;}
 .btn-color6:hover, .btn-color3:focus{color:#fff; background: #333;}

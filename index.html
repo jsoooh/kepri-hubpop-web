@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <script type="text/javascript">
 	var _DOMAIN_ = document.domain;
-    var _VERSION_ = "0.2";
+    var _VERSION_ = "0.2.M.0.2";
     var _MODE_ = "DEBUG"; // RUN, DEV, DEBUG
     var _DEBUG_LEVEL_ = 3; // 1, 2, 3
     var _TOME_ = new Date().getTime();
@@ -77,6 +77,14 @@
     var _LEFT_MENU_SHOW_CASHE_NAME_  = "cmm.leftMenuShow";
     var _COMPANY_LOGO_CASHE_NAME_    = "cmm.companyLogo";
 
+    var _DEFAULT_TIMERANGE_          = "defaultTimeRange";
+    var _TIMERANGE_FROM_             = "timeRangeFrom";
+    var _TIMERANGE_TO_               = "timeRangeTo";
+    var _GROUPBY_                    = "groupBy";
+    var _REFRESH_TIME_               = "refreshTime";
+    var _DEFAULT_TIMERANGE_FROM_     = "defaultTimeRangeFrom";
+    var _DEFAULT_TIMERANGE_TO_       = "defaultTimeRangeTo";
+
 </script>
 <html ng-app="app">
 <head>
@@ -116,12 +124,16 @@
         loadCssLink('css/components/progress-wizard.min.css');
         //Toast UI Chart css
         loadCssLink('css/components/tui-chart.min.css');
+        loadCssLink('css/components/tui-time-picker.css');
+        loadCssLink('css/components/tui-date-picker.css');
 
         loadCssLink('css/css.css'+_VERSION_TAIL_);
         loadCssLink('css/layout_join.css'+_VERSION_TAIL_);
         loadCssLink('css/content_join.css'+_VERSION_TAIL_);
         loadCssLink('css/common_join.css'+_VERSION_TAIL_);
         loadCssLink('css/component.css'+_VERSION_TAIL_);
+        
+        loadCssLink('css/components/dygraph.css');
 
         loadJavascript('js/components/modernizr-custom.js');
         loadJavascript('js/components/es5-shim.min.js');
@@ -183,6 +195,9 @@
         loadJavascript('js/components/tui-chart/tui-chart-all.js');
         loadJavascript('js/components/tui-chart/tui-code-snippet.min.js');
         loadJavascript('js/components/tui-chart/raphael.min.js');
+        loadJavascript('js/components/tui-time-picker' + _MIN_ + '.js');
+        loadJavascript('js/components/tui-date-picker' + _MIN_ + '.js');
+        loadJavascript('js/components/dygraph.min.js');
 
         loadJavascript(_COMM_STAGE_+'/js/cmmFunction.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/app.js'+_VERSION_TAIL_HEAD_);

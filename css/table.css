@@ -53,6 +53,8 @@
 .pagination > li.next a::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -197px -145px;}
 .pagination > li.end a::before{display: inline-block; content: ''; clear: both; width:9px; height:9px; margin-top:7px; background:url("../images/ico_com.png") no-repeat; background-position: -217px -145px;}
 .pagination > li.disabled:hover a, .pagination > li.disabled:focus a, .pagination > li.disabled:active a{border:1px solid #8c97a4; background: #8c97a4;}
+.paginationWrap {margin-top: 10px;}
+.paginationWrap .totalWrap {float: left;}
 
  .btn-btm.type2 + .pagiWrap{margin-top:-30px;}/*180410 스타일 갱신 버튼과 페이지네이션이 함께있는 경우*/
 
@@ -123,3 +125,51 @@ td .td-attach::before{display: inline-block; position: absolute; top:0; left:0; 
 .tbl.type2 td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 스타일 갱신 margin-left:6px*/
 .tbl.type2 .table{table-layout: fixed; border-bottom:1px solid #d6d6d6;}
 .tbl.type2 th .ico-info2{vertical-align: top;}
+
+/*라벨 스타일 추가*/
+.tbl .label{
+    font-size: 85%;
+    width: 75px;
+    display: inline-block;
+    font-weight: normal;
+}
+.tbl .label.label-normal{
+    background-color: #17a0ce;
+}
+.tbl .label.label-running{
+    background-color: #17a0ce;
+}
+.tbl .label.label-balnk{
+    background-color: #fff;
+    color: #555;
+    border:1px solid #888;
+}
+.tbl .label.label-warning{
+    background-color: #f8ac59;
+}
+.tbl .label.label-danger{
+    background-color: #ff1100;
+}
+/* .tbl .label.label-fail{
+    background-color: #888;
+} */
+
+.tbl .label.label-clear{
+    background-color: #5acc27;
+}
+.tbl .label.label-minor{
+    background-color: #7266ba;
+}
+.tbl .label.label-warning{
+    background-color: #f8ac59;
+}
+.tbl .label.label-critical{
+    background-color: #ff1100;
+}
+.tbl .label.label-fail, .tbl .label.label-failed{
+    background-color: #363636;
+}
+.tbl .label.label-noagent{
+    background-color: #eee;
+    color: #828282
+}

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, common, ValidationService, CONSTANTS, computeDetailService) {
+    .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $interval, $window, $mdDialog, $filter, $bytes, $translate, $log, $exceptionHandler, common, cookies, ValidationService, CONSTANTS, computeDetailService, tenantChartConfig, tenantNetChartConfig) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -307,31 +307,31 @@ angular.module('iaas.controllers')
         };
 
         ct.doughnut = {};
-        ct.doughnut.labels = ['남은 쿼터', '다른 인스턴스 사용', '현재 인스턴스 사용'];
+        ct.doughnut.labels = ['미사용', '사용률'];
 
         ct.doughnut.colors = {};
-        ct.doughnut.colors.cpu = ["rgba(199,143,220,.5)","rgba(183,93,218,.7)", "rgba(183,93,218,1)"];
-        ct.doughnut.colors.ram = ["rgba(145,191,206,.5)","rgba(1,160,206,.7)", "rgba(1,160,206,1)"];
-        ct.doughnut.colors.disk = ["rgba(143,171,234,.5)","rgba(22,87,218,.7)", "rgba(22,87,218,1)"];
+        ct.doughnut.colors.cpu = ["rgba(199,143,220,.5)", "rgba(183,93,218,1)"];
+        ct.doughnut.colors.ram = ["rgba(145,191,206,.5)", "rgba(1,160,206,1)"];
+        ct.doughnut.colors.disk = ["rgba(143,171,234,.5)", "rgba(22,87,218,1)"];
 
         ct.doughnut.data = {};
-        ct.doughnut.data.cpu = [1, 0, 0];
-        ct.doughnut.data.ram = [1, 0, 0];
-        ct.doughnut.data.disk = [1, 0, 0];
+        ct.doughnut.data.cpu = [1, 0];
+        ct.doughnut.data.ram = [1, 0];
+        ct.doughnut.data.disk = [1, 0];
 
         ct.zoomPanel = function(evt, type){
             var panel = $(evt.currentTarget).closest(".panel");
             var isZoom = false;
             if(panel.hasClass("zoom")) {
                 panel.removeClass("zoom").resize();
-                panel.find('.panel_body').css("height", "400px");
+                if (type != 'virtualMonit' && type != 'systemLog') panel.find('.panel_body').css("height", "400px");
                 $timeout(function () {
                     $(window).scrollTop(document.scrollingElement.scrollHeight);
                 }, 100);
             } else {
                 isZoom = true;
                 panel.addClass("zoom").resize();
-                panel.find('.panel_body').css("height", "90%");
+                if (type != 'virtualMonit' && type != 'systemLog') panel.find('.panel_body').css("height", "90%");
                 $timeout(function () {
                     $(window).scrollTop(0);
                 }, 100);
@@ -345,6 +345,32 @@ angular.module('iaas.controllers')
                 $timeout(function () {
                     panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
                 }, 100);
+            } else if (type == 'virtualMonit') {
+                if (isZoom) {
+                    panel.css("height", "100%");
+                    panel.find('#chart').css("height", "auto");
+                } else {
+                    panel.css("height", "670px");
+                    panel.find('#chart').css("height", "425px");
+                }
+            } else if (type == 'alarmEvent') {
+                if (isZoom) {
+                    panel.find('.tbl.type1').css("overflow-y", "hidden");
+                    panel.find('.tbl.type1').css("height", "auto");
+                } else {
+                    panel.find('.tbl.type1').css("overflow-y", "auto");
+                    panel.find('.tbl.type1').css("height", "235px");
+                }
+            } else if (type == 'systemLog') {
+                if (isZoom) {
+                    panel.find('.tbl.type1').css("overflow-y", "hidden");
+                    panel.css("height", "auto");
+                    panel.find('.tbl.type1').css("height", "auto");
+                } else {
+                    panel.find('.tbl.type1').css("overflow-y", "auto");
+                    panel.css("height", "670px");
+                    panel.find('.tbl.type1').css("height", "425px");
+                }
             } else {
                 panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
                 if(type == 'bootLog') {
@@ -361,6 +387,7 @@ angular.module('iaas.controllers')
             $scope.main.goToPage("/iaas");
         });
 
+        // deprecated
         ct.fn.getUsedResource = function() {
             var params = {
                 tenantId : ct.data.tenantId
@@ -373,7 +400,7 @@ angular.module('iaas.controllers')
                 ct.tenantResource.usedResource.cores -= ct.instance.spec.vcpus;
                 ct.tenantResource.usedResource.ramSize -= ct.instance.spec.ram;
                 ct.tenantResource.usedResource.instanceDiskGigabytes -= ct.instance.spec.disk;
-
+                
                 ct.doughnut.data.cpu = [ct.defaultResource.maxResource.cores - ct.defaultResource.usedResource.cores, ct.tenantResource.usedResource.cores, ct.instance.spec.vcpus];
                 ct.doughnut.data.ram = [(ct.defaultResource.maxResource.ramSize - ct.defaultResource.usedResource.ramSize)/1024, ct.tenantResource.usedResource.ramSize/1024, ct.instance.spec.ram/1024];
                 ct.doughnut.data.disk = [ct.defaultResource.maxResource.instanceDiskGigabytes - ct.defaultResource.usedResource.instanceDiskGigabytes, ct.tenantResource.usedResource.instanceDiskGigabytes, ct.instance.spec.disk];
@@ -433,7 +460,13 @@ angular.module('iaas.controllers')
                         ct.instance.vmDeployType = angular.copy(ct.deployTypes[0]);
                     }
 
-                    ct.fn.getUsedResource();
+                    var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + param.tenantId + '/instance/' + param.instanceId + '/resourceUsage', 'GET', param, 'application/x-www-form-urlencoded'));
+                    returnPromise.success(function (data2, status2, headers2) {
+                        ct.doughnut.data.cpu = [100 - data2.cpuUsage, data2.cpuUsage];
+                        ct.doughnut.data.ram = [100 - data2.memUsage, data2.memUsage];
+                        ct.doughnut.data.disk = [100 - data2.diskUsage, data2.diskUsage];
+                    });
+                    // ct.fn.getUsedResource();
                     ct.fn.searchInstanceVolumeList();
 
                     if (ct.instance.procState != 'end') {
@@ -954,6 +987,13 @@ angular.module('iaas.controllers')
             } else {
                 if (ct.sltInfoTab != sltInfoTab) {
                     ct.sltInfoTab = sltInfoTab;
+            
+                    if (sltInfoTab == 'systemLog' || sltInfoTab == 'virtualMonit') {
+                        angular.element('.tab-content.inst').css("height", "690px");
+                    } else {
+                        angular.element('.tab-content.inst').css("height", "530px");
+                    }
+
                     if (sltInfoTab == 'bootLog') {
                         if(!ct.panelFlag) {
                             $timeout(function () {
@@ -965,10 +1005,72 @@ angular.module('iaas.controllers')
                         ct.fn.getInstanceActionLog();
                     } else if (sltInfoTab == 'sysEvent') {
                         ct.fn.listEventHistory(1, 1000);
+                    } else if (sltInfoTab == 'systemLog') { 
+                        ct.fn.initLogsTab();
+                    } else if (sltInfoTab == 'virtualMonit') {
+
+                        $timeout(function () {
+                            // 조회주기 설정 관련
+                            ct.timeRangePicker;
+                            // TimeRange & GroupBy
+                            ct.selCTimeRange = cookies.getDefaultTimeRange();
+                            ct.selGroupBy = cookies.getGroupBy();
+                            // Time Range 수동설정 달력
+                            ct.timeRangeFrom = cookies.getDefaultTimeRangeFrom();
+                            ct.timeRangeTo = cookies.getDefaultTimeRangeTo();
+                        
+                            ct.fn.selectChartList();
+                        }, 500);
+
+                        // 검색조건 수동설정 기간 데이터 설정
+                        var tuiStop = $interval(function () {
+                            if (angular.element('#startDate-input').attr('id')) {
+                                $interval.cancel(tuiStop);
+                
+                                var today = new Date();
+                                var from = new Date(moment(ct.timeRangeFrom).format('YYYY/MM/DD HH:mm'));
+                                var to = new Date(moment(ct.timeRangeTo).format('YYYY/MM/DD HH:mm'));
+                                ct.timeRangePicker = tui.DatePicker.createRangePicker({
+                                    startpicker: {
+                                        date: from,
+                                        input: '#startDate-input',
+                                        container: '#startDate-wrapper'
+                                    },
+                                    endpicker: {
+                                        date: to,
+                                        input: '#endDate-input',
+                                        container: '#endDate-wrapper'
+                                    },
+                                    format: 'yyyy-MM-dd HH:mm',
+                                    language: 'ko',
+                                    timepicker: {
+                                        inputType: 'spinbox'
+                                    },
+                                    selectableRanges: [
+                                        [null, today],
+                                        [null, today]
+                                    ]
+                                });
+                                
+                                ct.timeRangePicker.on('change:start', function() {
+                                    ct.timeRangeFrom = moment(ct.timeRangePicker.getStartDate());
+                                    $timeout(function () { ct.fn.setIntervalTime(true); }, 500);
+                                });
+                                
+                                ct.timeRangePicker.on('change:end', function() {
+                                    ct.timeRangeTo = moment(ct.timeRangePicker.getEndDate());
+                                    $timeout(function () { ct.fn.setIntervalTime(true); }, 500);
+                                });
+                            }
+                        }, 500);
+                    } else if (sltInfoTab == 'alarmEvent') {
+                        ct.changeTimeRange('1month');
+                        ct.fn.selectAlarmList();
                     }
                 }
             }
         };
+
 
         ct.fn.copyConnectInfoToClipboard = function (instance) {
             if(instance.image.osType == 'ubuntu'){
@@ -996,7 +1098,337 @@ angular.module('iaas.controllers')
             ct.fn.getInstanceInfo();
             ct.fn.changeSltInfoTab();
         }
+        
+        // 시스템 로그 관련
+        ct.fn.setPosition = function () {
+            return navigator.userAgent.indexOf('Trident') > 0 || navigator.userAgent.indexOf('MSIE') > 0 ? 'ie' : '';
+        };
 
+        var stop = $interval(function () {
+            $scope.serverName = ct.instance.name;
+            if ($scope.serverName) {
+                $interval.cancel(stop);
+            }
+        }, 500);
+    
+        ct.scope = $scope;
+        ct.scope.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
+
+        ct.isPageLoad = true;
+
+        ct.fn.initLogsTab = function () {
+
+            var tuiLogsStop = $interval(function () {
+                if (angular.element('#startDatetime').attr('id')) {
+                    $interval.cancel(tuiLogsStop);
+                    // TUI Datepicker
+                    var today = new Date();
+                    var from = new Date(moment().subtract(1, 'days').format('YYYY/MM/DD HH:mm'));
+                    var to = new Date(moment().format('YYYY/MM/DD HH:mm'));
+                    ct.datepicker = tui.DatePicker.createRangePicker({
+                        startpicker: {
+                            date: from,
+                            input: '#startDatetime',
+                            container: '#startDatetime-wrapper'
+                        },
+                        endpicker: {
+                            date: to,
+                            input: '#endDatetime',
+                            container: '#endDatetime-wrapper'
+                        },
+                        format: 'yyyy-MM-dd HH:mm',
+                        language: 'ko',
+                        timepicker: {
+                            inputType: 'spinbox',
+                            showMeridiem: false
+                        },
+                        selectableRanges: [
+                            [null, today],
+                            [null, today]
+                        ]
+                    });
+                }
+            }, 500);
+
+            ct.fn.selectLogs();
+        };
+
+        ct.fn.selectLogs = function (page) {
+            ct.data.specificLogs = [];
+            if (ct.isPageLoad) ct.fn.recentLogs(page);
+            else ct.fn.specificLogs(page);
+        };
+
+        ct.schEnter = function (keyEvent){
+            if(keyEvent.which == 13){
+                ct.fn.specificLogs();
+            }
+        };
+
+        // 최근 로그 조회
+        ct.fn.recentLogs = function (page) {
+            if (page) {
+                ct.scope.pageOptions.currentPage = page;
+            } else {
+                page = ct.scope.pageOptions.currentPage;
+            }
+
+            $scope.main.loadingMainBody = true;
+            var params = {
+                projectId: ct.data.tenantId,
+                serverUUID: $stateParams.instanceId,
+                pageItems: ct.scope.pageOptions.pageSize,
+                pageIndex: page,
+                period: '24h'
+            };
+
+            var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/log/recent/N', 'GET', params);
+            rp.success(function (data, status, headers) {
+                ct.data.specificLogs = data;
+                ct.scope.pageOptions.total = data.totalCount;
+            });
+            rp.error(function (data, status, headers) {
+                common.showAlertError('Http api Error', data.message);
+            });
+            rp.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+        // 로그 조회
+        ct.fn.specificLogs = function (page) {
+            if (ct.isPageLoad) ct.scope.pageOptions.currentPage = 1;
+            ct.isPageLoad = false;
+            if (page) {
+                ct.scope.pageOptions.currentPage = page;
+            } else {
+                page = ct.scope.pageOptions.currentPage;
+            }
+
+            $scope.main.loadingMainBody = true;
+            var startDatetime = moment(ct.datepicker.getStartDate()).format('YYYY-MM-DDTHH:mm') + ':00';
+            var endDatetime = moment(ct.datepicker.getEndDate()).format('YYYY-MM-DDTHH:mm') + ':59';
+
+            var param = {
+                projectId: ct.data.tenantId,
+                serverUUID: $stateParams.instanceId,
+                pageItems: ct.scope.pageOptions.pageSize,
+                pageIndex: page,
+                startTime: startDatetime,
+                endTime: endDatetime,
+                programName: ct.programName,
+                keyword: ct.message
+            };
+            
+            $scope.main.loadingMainBody = true;
+            var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/log/specific/N', 'GET', param);
+            rp.success(function (data, status, headers) {
+                ct.data.specificLogs = data;
+                ct.scope.pageOptions.total = data.totalCount;
+            });
+            rp.error(function (data, status, headers) {
+                common.showAlertError('Http api Error', data.message);
+            });
+            rp.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        /*
+         * 가상머신 모니터링 차트
+         */
+        ct.fn.selectCustomBox = function () {
+            ct.selCTimeRange = 'custom';
+            ct.fn.selectGroupBy();
+        };
+
+        ct.fn.getTimeRangeString = function() {
+            $timeout(function() {
+            if(ct.selCTimeRange == 'custom') {
+                var to = ct.timeRangeTo;
+                var from = ct.timeRangeFrom;
+                ct.timeRangeString = (from._i)+' ~ '+(to._i);
+            } else {
+                ct.timeRangeString = angular.element("input[name='radioTimeRange']:checked").parent().text();
+            }
+            });
+        };
+
+        // time range 선택 시 그에 해당하는 group by 선택
+        ct.fn.selectGroupBy = function() {
+            ct.fn.setIntervalTime(true);
+        };
+        
+        var hostname = $stateParams.instanceId;
+        var chartDataOption = {
+            chartConfig: tenantChartConfig,
+            netChartConfig: tenantNetChartConfig,
+            nodeKey: CONSTANTS.nodeKey.TENANT,
+            interfaceFunc: 'tenantInterfaceList',
+            hostname: hostname,
+            cookies: cookies,
+            scope: $scope,
+            log: $log,
+            timeout: $timeout,
+            interval: $interval,
+            ex: $exceptionHandler
+        };
+
+        ct.fn.setIntervalTime = function (isChange) {
+            ct.groupResources = common.getGroupingComboBox(ct.selCTimeRange, ct.timeRangeFrom, ct.timeRangeTo);
+            if (isChange) {
+                if (ct.groupResources.length > 0) ct.selGroupBy = ct.groupResources[0].value;
+            } else {
+                if (ct.groupResources.length > 0 && cookies.getGroupBy() == undefined) ct.selGroupBy = ct.groupResources[0].value;
+            }
+        };
+
+        ct.fn.selectChartList = function () {
+            ct.fn.setIntervalTime();
+            computeDetailService.initChartData(chartDataOption);
+        };
+
+        // 조회주기 및 GroupBy 설정
+        ct.fn.saveTimeRange = function () {
+            if(ct.selCTimeRange == 'custom') {
+                if (ct.timeRangeTo.diff(ct.timeRangeFrom, 'minutes') < 30) {
+                    ct.timeRangeFrom.subtract(30, 'minutes');
+                    ct.timeRangePicker.setStartDate(new Date(ct.timeRangeFrom.format('YYYY-MM-DD HH:mm')));
+                }
+                cookies.putTimeRangeFrom(common.getTimeRangeFlag(moment(ct.timeRangeFrom, 'YYYY-MM-DD HH:mm')));
+                cookies.putTimeRangeTo(common.getTimeRangeFlag(moment(ct.timeRangeTo, 'YYYY-MM-DD HH:mm')));
+                cookies.putDefaultTimeRangeFrom(ct.timeRangeFrom);
+                cookies.putDefaultTimeRangeTo(ct.timeRangeTo);
+                // ct.selGroupBy = common.getGroupingByTimeRange(ct.timeRangeFrom, ct.timeRangeTo);
+            }
+
+            cookies.putDefaultTimeRange(ct.selCTimeRange);
+            cookies.putGroupBy(ct.selGroupBy);
+
+            var datas = {
+                selTimeRange: ct.selCTimeRange,
+                selGroupBy: ct.selGroupBy,
+                timeRangeFrom: cookies.getTimeRangeFrom(),
+                timeRangeTo: cookies.getTimeRangeTo()
+            };
+
+            chartDataOption.datas = datas;
+            computeDetailService.reloadChartData(chartDataOption);
+            ct.fn.getTimeRangeString();
+        };
+
+        // 알람탭 관련
+        // 검색조건 콤보박스 세팅
+        ct.options = {};
+        ct.options.alarmType = common.getAlarmType();
+        ct.options.alarmLevel = common.getAlarmLevel();
+        ct.options.resolveStatus = common.getResolveStatusCmb();
+        ct.options.alarmType.unshift({value: '', name: '알람타입'});
+        ct.options.alarmLevel.unshift({value: '', name: '알람등급'});
+        ct.options.resolveStatus.unshift({value: '', name: '조치상태'});
+
+        // 검색조건 폼 데이터
+        ct.sch_condition = {};
+        ct.sch_condition.alarmType = ct.options.alarmType[0].value;
+        ct.sch_condition.alarmLevel = ct.options.alarmLevel[0].value;
+        ct.sch_condition.resolveStatus = ct.options.resolveStatus[2].value;
+        ct.timeRanges = [];
+        ct.selATimeRange = {};
+
+        //기간검색
+        ct.timeRanges = [
+            {id: '1day', value: '1', name: 'label.day'},
+            {id: '3day', value: '3', name: 'label.days'},
+            {id: '7day', value: '7', name: 'label.days'},
+            {id: '1month', value: '1', name: 'label.month'},
+            {id: '6month', value: '6', name: 'label.months'}
+        ];
+        ct.selATimeRange = common.objectsFindByField(ct.timeRanges, "id", "1month");
+
+        //기간검색 변경
+        ct.changeTimeRange = function (timeRangeId) {
+            var num = 0;
+            var gbn = '';
+            switch (timeRangeId) {
+                case "1day":
+                    num = 1;
+                    gbn = 'day';
+                    break;
+                case "3day":
+                    num = 3;
+                    gbn = 'day';
+                    break;
+                case "7day":
+                    num = 7;
+                    gbn = 'day';
+                    break;
+                case "1month":
+                    num = 1;
+                    gbn = 'month';
+                    break;
+                case "6month":
+                    num = 6;
+                    gbn = 'month';
+                    break;
+                default:
+                    num = 1;
+                    gbn = 'day';
+                    break;
+            }
+            ct.sch_condition.dateFrom = moment().subtract(num, gbn).format('YYYY-MM-DD');
+            ct.sch_condition.dateTo = moment().format('YYYY-MM-DD');
+        };
+
+        // 검색결과 데이터 Repository
+        ct.alarmData = [];
+        
+        // 페이징 옵션
+        $scope.alarmPageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
+
+        ct.fn.alarmListOnClick = function (path, alarmId) {
+            common.locationHref(path + '?alarmId=' + alarmId + '&serverId=' + $stateParams.instanceId);
+        };
+
+        // 검색
+        ct.fn.selectAlarmList = function (page) {
+            if (page) $scope.alarmPageOptions.currentPage = page;
+            else page = $scope.alarmPageOptions.currentPage;
+
+            ct.sch_condition.searchDateFrom = moment(ct.sch_condition.dateFrom + ' 00:00:00').unix();
+            ct.sch_condition.searchDateTo = moment(ct.sch_condition.dateTo + ' 23:59:59').unix();
+            ct.sch_condition.pageItems = $scope.alarmPageOptions.pageSize;
+            ct.sch_condition.pageIndex = page;
+            ct.sch_condition.baremetalYn = 'N';
+            ct.sch_condition.projectId = $scope.main.userTenantId;
+            ct.sch_condition.instanceId = ct.data.instanceId;
+            
+            $scope.main.loadingMainBody = true;
+            var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', ct.sch_condition);
+            serverStatsPromise.success(function (data, status, headers) {
+                ct.alarmData = data.data;
+
+                if (data.totalCount > 10000) {
+                    $scope.alarmPageOptions.total = 10000;
+                } else {
+                    $scope.alarmPageOptions.total = data.totalCount;
+                }
+            });
+            serverStatsPromise.error(function (data, status, headers) {
+                //common.showAlert(data.message);
+            });
+            serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+        // 알람탭 관련 종료
     })
     .controller('iaasComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeSystemDetailCtrl", 1);
@@ -2184,6 +2616,9 @@ angular.module('iaas.controllers')
                         ct.fn.getServerMemData();
                         ct.fn.getServerDiskData();
                         ct.fn.getServerNetData();
+                    } else if (sltInfoTab == 'systemLog') {
+                    } else if (sltInfoTab == 'virtualMonit') {
+                    } else if (sltInfoTab == 'alarmEvent') {
                     } else if (sltInfoTab == 'swInfo') {
                     } else if (sltInfoTab == 'swMonit') {
                     }
@@ -2206,7 +2641,6 @@ angular.module('iaas.controllers')
             ct.fn.getNowServerDiskUsedData("10m");
             ct.fn.changeSltInfoTab();
         }
-        
     }) 
     .controller('iaasComputeEditFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeEditFormCtrl", 1);

@@ -32,14 +32,26 @@
 					<span class="ico"></span>
 				</button>
 			</div> -->
-			<div class="col col-noti" ng-if="false">
+			<div class="col col-noti" ng-show="main.userTenantId">
 				<div class="dropdown">
 					<button type="button" name="button" class="btn btn-noti" data-toggle="dropdown" aria-haspopup="true"
-						aria-expanded="false" title="{{ 'comm.label.alarm' | translate }}" ng-click="main.goToPage('/iaas/compute/alarm')">
+						aria-expanded="false" title="{{ 'comm.label.alarm' | translate }}">
 						<span class="ico">
 							<em class="badge" ng-show="main.alarmCnt > 0">{{ main.alarmCnt }}</em>
 						</span>
 					</button>
+					<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
+						<li class="noti-txt ng-binding">총 <em class="ng-binding">{{ main.alarmCnt }}</em>개의 알람이 있습니다.</li>
+						<li class="divider"></li>
+						<li ng-repeat="alarm in main.alarmList | limitTo:5" class="noti-li" ng-click="main.alarmListOnClick('#/iaas/compute/alarm', alarm.id)">
+							<div class="noti-name">{{ alarm.alarmType.substr(0, 1).toUpperCase() }}</div>
+							<a class="ng-binding noti-tit">{{ alarm.title }}<div class="ng-binding noti-date">{{ alarm.regDate }}</div></a>
+						</li>
+						<li class="divider"></li>
+						<li class="noti-more" ng-click="main.alarmMoreOnClick('#/iaas/compute/alarm')">
+							<a class="ng-binding">알람 더보기 <span class="ico"><em class="badge ng-binding"></em></span></a>
+						</li>
+					</ul>
 				</div>
 			</div>
 			<div class="col col-my">
