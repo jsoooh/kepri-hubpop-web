@@ -162,7 +162,7 @@
 					<span class="ico">실행 설정</span>
 				</button>
 				<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-					<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen($event);">이름 변경</a></li>
+					<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen($event, contents.instance);">이름 변경</a></li>
 					<li ng-if="contents.instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);" title="재시작">재시작</a></li>
 					<li ng-if="contents.instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
 					<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="서버 사양 변경">서버 사양 변경</a></li>

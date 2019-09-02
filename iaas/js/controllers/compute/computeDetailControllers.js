@@ -38,11 +38,11 @@ angular.module('iaas.controllers')
         ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
-        ct.computeEditFormOpen = function ($event){
+        ct.computeEditFormOpen = function ($event, instance){
             var dialogOptions =  {
                 controller       : "iaasComputeEditFormCtrl" ,
                 formName         : 'computeEditForm',
-                // selectStorage    : angular.copy(volume),
+                instance         : angular.copy(instance)
                 /*callBackFunction : ct.reNamePopServerCallBackFunction*/
             };
 
@@ -2646,7 +2646,6 @@ angular.module('iaas.controllers')
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeEditFormCtrl", 1);
         
         var pop = this;
-        $scope.contents = angular.copy(common.getMainContentsCtrlScope().contents);
 
         pop.userTenant = angular.copy($scope.main.userTenant);
         pop.serverMainLists = angular.copy($scope.contents.serverMainList);
