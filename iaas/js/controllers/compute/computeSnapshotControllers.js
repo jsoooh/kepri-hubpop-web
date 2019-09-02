@@ -500,14 +500,14 @@ angular.module('iaas.controllers')
 
             var params = {};
 
-            params.instance              = {};
+            params.instance                  = {};
             params.instance.name             = ct.data.name;
             params.instance.tenantId         = ct.data.tenantId;
             params.instance.networks         = [{ id: ct.data.networks[0].id }];
             params.instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
             params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
-            params.instance.spec = ct.data.spec;
+            params.instance.spec             = ct.data.spec;
 
             if (ct.snapshotInfo.osType == 'windows') {
                 if (ct.data.baseDomainName && ct.data.subDomainName) {
