@@ -2433,7 +2433,7 @@ p.no-txt{
 .panel_area .ul-list1 li select{font-size: 12px; height:28px !important; padding:0 25px 0 5px !important; margin-top: 8px; background-position: right -5px center !important;}
 @media screen and (min-width:0\0){.panel_area .ul-list1 li select{padding:5px !important; background:none;}}
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {.panel_area .ul-list1 li select{padding:0 25px 0 5px !important; background-position: right -5px center !important; }}
-.panel_area .ul-list1 .label-txt{font-size:13px; color:#666; margin-top: 5px; text-align: center;}
+.panel_area .ul-list1 .label-txt{font-size:13px; color:#666; margin-top: 5px; text-align: center; width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .panel_area .radio1 {padding:0; text-align:center;}
 .panel_area .radio1 label {display: inline-block; position: relative; font-size: 14px; color:#8992a9; font-weight: 500; line-height: 75px; width:90px; height: 90px; padding:0; vertical-align: middle; border-radius: 5px; border: 1px solid #cccccc; overflow: hidden; background: #fff;}
 .panel_area .radio1 .label.reductHeight{padding-top:5px;}
