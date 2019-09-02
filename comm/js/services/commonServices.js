@@ -3339,6 +3339,8 @@ angular.module('common.services', ['LocalStorageModule'])
             $cookies.put(_GROUPBY_, groupBy, cookiesOption);
         };
         cookies.getGroupBy = function () {
+            var r = $cookies.get(_GROUPBY_);
+            if (!r) $cookies.put(_GROUPBY_, '1m', cookiesOption);
             return $cookies.get(_GROUPBY_);
         };
         cookies.removeGroupBy = function () {
