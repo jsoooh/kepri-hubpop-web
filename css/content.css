@@ -3294,7 +3294,7 @@ a.ext_link:hover {text-decoration:underline;}
 .tbl_cont .table .tbl_cont_state ul li span.txt {display:inline-block; font-size:14px; font-weight:400; vertical-align:middle;}
 
 
-.tbl.type1 td {position:relative;}
+.tbl.type1 td .stateWrap  {position:relative;}
 .tbl.type1 td .stateWrap .state-txt  {color:#888; font-weight:400; vertical-align:middle;}
 .tbl.type1 td .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
 .tbl.type1 td .server_con_detail {position:absolute; top:5px; right:-100px; z-index:1; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
