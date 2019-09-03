@@ -1358,7 +1358,7 @@ angular.module('common.controllers', [])
             } else {
                 common.locationHref(path);
             }
-        }
+        };
 
         $interval(function () {
             mc.selectAlarmCount();
