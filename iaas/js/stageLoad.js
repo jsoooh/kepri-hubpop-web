@@ -8,6 +8,7 @@ loadJavascript(_IAAS_STAGE_+'/js/services/computeDetailServices.js'+_VERSION_TAI
 
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/dashboard/dashboardControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeControllers.js'+_VERSION_TAIL_HEAD_);
+loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeTempControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeDetailControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/deployServerControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/deployServerTabControllers.js'+_VERSION_TAIL_HEAD_);
@@ -22,7 +23,7 @@ loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeSnapshotControllers.
 loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/storageControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/objectStorageControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/storageSnapshotControllers.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/loadbalancerControllers.js'+_VERSION_TAIL_HEAD_);
+// loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/loadbalancerControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/network/networkControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/network/domainControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/network/domainRouterControllers.js'+_VERSION_TAIL_HEAD_);

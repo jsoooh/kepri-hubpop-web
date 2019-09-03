@@ -7,6 +7,7 @@
 			"storage" : "스토리지",
 			"network" : "네트워크",
 			"server_main" : "서버 관리",
+			"loadbalancer_main" : "부하분산 관리",
 			"deploy_server" : "서비스 인스턴스",
 			"deploy_server_details" : "서비스 인스턴스 상세",
 			"server_snapshot" : "백업 이미지 관리",

@@ -33,8 +33,8 @@
 	<div role="tabpanel" class="tabWrap type1">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.instanceSnapshotList | filter:{ status : '!deleting'}).length}})</span></a></li>
-			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.storageSnapshotList | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.serverMainList | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.lbServiceList | filter:{ status : '!deleting'}).length}})</span></a></li>
 		</ul>
 
 		<!-- Tab panes -->
@@ -81,6 +81,7 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                                            <li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen(instance, $event);">이름 변경</a></li>
 											<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);" title="시작">시작</a></li>
 											<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
 											<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);" title="재시작">재시작</a></li>
@@ -225,36 +226,6 @@
 									<div ng-if="instance.procState == 'ing'" class="ul-in2 spinner_area">
 										<div class="info-chart">
 											<img src="images/loading/loading_cloud.gif" width="140" height="90">
-			<!--
-											<div class="chartWrap">
-												<ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
-													<svg viewBox="0 0 64 64">
-														<g stroke-width="7" stroke-linecap="round">
-															<line x1="10" x2="10" y2="48" y1="16">
-																<animate attributeName="y1" dur="750ms" values="16;18;28;18;16;16" repeatCount="indefinite"></animate>
-																<animate attributeName="y2" dur="750ms" values="48;46;36;44;48;48" repeatCount="indefinite"></animate>
-																<animate attributeName="stroke-opacity" dur="750ms" values="1;.4;.5;.8;1;1" repeatCount="indefinite"></animate>
-															</line>
-															<line x1="24" x2="24" y2="45.2501" y1="17.3749">
-																<animate attributeName="y1" dur="750ms" values="16;16;18;28;18;16" repeatCount="indefinite"></animate>
-																<animate attributeName="y2" dur="750ms" values="48;48;46;36;44;48" repeatCount="indefinite"></animate>
-																<animate attributeName="stroke-opacity" dur="750ms" values="1;1;.4;.5;.8;1" repeatCount="indefinite"></animate>
-															</line>
-															<line x1="38" x2="38" y2="38.5002" y1="24.8747">
-																<animate attributeName="y1" dur="750ms" values="18;16;16;18;28;18" repeatCount="indefinite"></animate>
-																<animate attributeName="y2" dur="750ms" values="44;48;48;46;36;44" repeatCount="indefinite"></animate>
-																<animate attributeName="stroke-opacity" dur="750ms" values=".8;1;1;.4;.5;.8" repeatCount="indefinite"></animate>
-															</line>
-															<line x1="52" x2="52" y2="42.8747" y1="21.1253">
-																<animate attributeName="y1" dur="750ms" values="28;18;16;16;18;28" repeatCount="indefinite"></animate>
-																<animate attributeName="y2" dur="750ms" values="36;44;48;48;46;36" repeatCount="indefinite"></animate>
-																<animate attributeName="stroke-opacity" dur="750ms" values=".5;.8;1;1;.4;.5" repeatCount="indefinite"></animate>
-															</line>
-														</g>
-													</svg>
-												</ion-spinner>
-											</div>
-			-->
 										</div>
 										<div class="info-txt">
 											<!--<div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>-->
@@ -262,53 +233,10 @@
 										</div>
 									</div>
 								</div>
-			<!--
-								<div class="panel_body" ng-if="instance.vmState == 'building'">
-									<div class="ul-in2 spinner_area">
-										<div class="info-chart">
-											<div class="chartWrap">
-												<ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
-													<svg viewBox="0 0 64 64">
-														<g stroke-width="7" stroke-linecap="round">
-															<line x1="10" x2="10" y2="48" y1="16">
-																<animate attributeName="y1" dur="750ms" values="16;18;28;18;16;16" repeatCount="indefinite"></animate>
-																<animate attributeName="y2" dur="750ms" values="48;46;36;44;48;48" repeatCount="indefinite"></animate>
-																<animate attributeName="stroke-opacity" dur="750ms" values="1;.4;.5;.8;1;1" repeatCount="indefinite"></animate>
-															</line>
-															<line x1="24" x2="24" y2="45.2501" y1="17.3749">
-																<animate attributeName="y1" dur="750ms" values="16;16;18;28;18;16" repeatCount="indefinite"></animate>
-																<animate attributeName="y2" dur="750ms" values="48;48;46;36;44;48" repeatCount="indefinite"></animate>
-																<animate attributeName="stroke-opacity" dur="750ms" values="1;1;.4;.5;.8;1" repeatCount="indefinite"></animate>
-															</line>
-															<line x1="38" x2="38" y2="38.5002" y1="24.8747">
-																<animate attributeName="y1" dur="750ms" values="18;16;16;18;28;18" repeatCount="indefinite"></animate>
-																<animate attributeName="y2" dur="750ms" values="44;48;48;46;36;44" repeatCount="indefinite"></animate>
-																<animate attributeName="stroke-opacity" dur="750ms" values=".8;1;1;.4;.5;.8" repeatCount="indefinite"></animate>
-															</line>
-															<line x1="52" x2="52" y2="42.8747" y1="21.1253">
-																<animate attributeName="y1" dur="750ms" values="28;18;16;16;18;28" repeatCount="indefinite"></animate>
-																<animate attributeName="y2" dur="750ms" values="36;44;48;48;46;36" repeatCount="indefinite"></animate>
-																<animate attributeName="stroke-opacity" dur="750ms" values=".5;.8;1;1;.4;.5" repeatCount="indefinite"></animate>
-															</line>
-														</g>
-													</svg>
-												</ion-spinner>
-											</div>
-										</div>
-										<div class="info-txt">
-											<div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>
-											<p class="txt"><span class="ico ico-timer"></span>생성중입니다.</p>
-										</div>
-									</div>
-								</div>
-			-->
 							</div>
 						</div>
 						<!-- //panel -->
 					</li>
-					<!-- <li>
-						<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" style="height:390px;" ng-click="contents.formOpen()"><span class="ico"></span><span class="txt">인스턴스 추가</span></button>
-					</li> -->
 				</ul>
 				<!-- //panel area-->
 
@@ -344,18 +272,23 @@
 				<!-- //버튼영역 -->
 
 				<!-- panel -->
-				<ul class="ul-panel thum_style">
-					<li>
+				<ul ng-if="(contents.lbServiceLists | filter:{ name: contents.schStorageFilterText, taskState : '!deleting' }).length > 0" class="ul-panel thum_style">
+					<li ng-repeat="(key, lbserviceList) in contents.lbServiceLists | filter:{ name: contents.schStorageFilterText, taskState : '!deleting' }">
 						<!-- panel -->
 						<div class="panelWrap">
 							<div class="panel type5">
 								<div class="panel_head pdlr30">
 									<div class="tit_area">
-										<span class="w180" title="LoadBalance_Test01">LoadBalance_Test01</span><span class="point1">(2)</span>
+										<p class="tit" ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbserviceList.iaasLbInfo.id)">{{ lbserviceList.iaasLbInfo.name }}<em class="point1">({{ lbserviceList.iaasLbPortMembers.length }})</em></p>
 										<p class="txt">부하 분산 서버</p>
 									</div>
 									<span class="stateWrap">
-										<span class="stateMark type1">정상배포</span><span class="state-txt">활성</span>
+										<span class="stateMark type1">활성</span>
+										<!--<span class="stateMark type2">비활성</span>-->
+										<!--<span ng-if="instance.provisioningStatus == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building'" class="stateMark type4">대기</span>-->
+										<!--<span ng-if="instance.provisioningStatus == 'stopped'" class="stateMark type3">중지</span>-->
+										<span class="txt">활성</span>
+										<!--<span class="state-txt">{{ 'iaas.label.instance_' + instance[0].checkStatus | translate }}</span>-->
 									</span>
 									<div class="dropdown btn-option">
 										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -363,7 +296,7 @@
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
-											<li><a class="delete" href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="삭제">삭제</a></li>
+											<li><a class="delete" href="javascript:void(0);" ng-click="contents.deleteLb(lbserviceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
 										</ul>
 									</div>
 								</div>
@@ -383,320 +316,14 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>8080</td>
-													<td>4</td>
+												<tr ng-repeat="(key, iaasLbPort) in lbserviceList.iaasLbPorts">
+													<td>{{ iaasLbPort.connectionPort }}</td>
+													<td>{{ lbserviceList.iaasLbPortMembers.length }}</td>
 													<td>
 														<div class="tbl_cont_state">
 															<ul>
-																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>5</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">3</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- //panel -->
-					</li>
-					<li>
-						<!-- panel -->
-						<div class="panelWrap">
-							<div class="panel type5">
-								<div class="panel_head pdlr30">
-									<div class="tit_area">
-										<span class="w180" title="LoadBalance_Test01">LoadBalance_Test01</span><span class="point1">(2)</span>
-										<p class="txt">부하 분산 서버</p>
-									</div>
-									<span class="stateWrap">
-										<span class="stateMark type1">정상배포</span><span class="state-txt">활성</span>
-									</span>
-									<div class="dropdown btn-option">
-										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-											<span class="ico">실행 설정</span>
-										</button>
-										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
-											<li><a class="delete" href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="삭제">삭제</a></li>
-										</ul>
-									</div>
-								</div>
-								<div class="panel_body">
-									<div class="tbl_cont">
-										<table class="table">
-											<colgroup>
-												<col style="width:25%;">
-												<col style="width:25%;">
-												<col style="width:50%;">
-											</colgroup>
-											<thead>
-												<tr>
-													<th>접속포트</th>
-													<th>연결된 서버</th>
-													<th>서버 상태</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>8080</td>
-													<td>2</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">1</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">1</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>3</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">3</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>6</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">4</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>6</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">1</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">5</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- //panel -->
-					</li>
-					<li>
-						<!-- panel -->
-						<div class="panelWrap">
-							<div class="panel type5">
-								<div class="panel_head pdlr30">
-									<div class="tit_area">
-										<span class="w180" title="LoadBalance_Test01">LoadBalance_Test01</span><span class="point1">(2)</span>
-										<p class="txt">부하 분산 서버</p>
-									</div>
-									<span class="stateWrap">
-										<span class="stateMark type1">정상배포</span><span class="state-txt">활성</span>
-									</span>
-									<div class="dropdown btn-option">
-										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-											<span class="ico">실행 설정</span>
-										</button>
-										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
-											<li><a class="delete" href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="삭제">삭제</a></li>
-										</ul>
-									</div>
-								</div>
-								<div class="panel_body">
-									<div class="tbl_cont">
-										<table class="table">
-											<colgroup>
-												<col style="width:25%;">
-												<col style="width:25%;">
-												<col style="width:50%;">
-											</colgroup>
-											<thead>
-												<tr>
-													<th>접속포트</th>
-													<th>연결된 서버</th>
-													<th>서버 상태</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>8080</td>
-													<td>4</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">4</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>2</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">0</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>3</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">1</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>4</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>5</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">3</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>4</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- //panel -->
-					</li>
-					<li>
-						<!-- panel -->
-						<div class="panelWrap">
-							<div class="panel type5">
-								<div class="panel_head pdlr30">
-									<div class="tit_area">
-										<span class="w180" title="LoadBalance_Test01">LoadBalance_Test01</span><span class="point1">(2)</span>
-										<p class="txt">부하 분산 서버</p>
-									</div>
-									<span class="stateWrap">
-										<span class="stateMark type1">정상배포</span><span class="state-txt">활성</span>
-									</span>
-									<div class="dropdown btn-option">
-										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-											<span class="ico">실행 설정</span>
-										</button>
-										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
-											<li><a class="delete" href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="삭제">삭제</a></li>
-										</ul>
-									</div>
-								</div>
-								<div class="panel_body">
-									<div class="tbl_cont">
-										<table class="table">
-											<colgroup>
-												<col style="width:25%;">
-												<col style="width:25%;">
-												<col style="width:50%;">
-											</colgroup>
-											<thead>
-												<tr>
-													<th>접속포트</th>
-													<th>연결된 서버</th>
-													<th>서버 상태</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>8080</td>
-													<td>2</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>4</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
-															</ul>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>8080</td>
-													<td>4</td>
-													<td>
-														<div class="tbl_cont_state">
-															<ul>
-																<li><span class="s_count active">2</span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive">2</span><span class="txt">비활성</span></li>
+																<li><span class="s_count active"></span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive"></span><span class="txt">비활성</span></li>
 															</ul>
 														</div>
 													</td>
