@@ -5,6 +5,21 @@ angular.module('iaas.services')
 
         var computeDetailService = {};
 
+        // 단순 숫자만 체크
+        computeDetailService.numberCheck = function (key) {
+            return /^[0-9]*$/.test(key);
+        };
+
+        // 특수키 체크
+        computeDetailService.specialKeyCheck = function (key) {
+            return ((key >=96 && key <= 105) || (key == 8) || (key == 9) || (key == 13) || (key == 16) || (key == 17) || (key == 18) || (key == 20) || (key == 27) || (key == 35) || (key == 36) || (key == 46) || (key == 91) || (key >= 37 && key <= 40) || (key >= 112 && key <= 123) || (key == 116) || (key == 255));
+        }
+
+        /* 숫자 검증.. angular.isNumber가 검증 못하는 경우 사용.*/
+        computeDetailService.isNumber = function (event) {
+            return (computeDetailService.numberCheck(event.key) || computeDetailService.specialKeyCheck(event.keyCode));
+        };
+
         computeDetailService.listDomains = function (instanceId) {
             var params = {
                 instanceId : instanceId

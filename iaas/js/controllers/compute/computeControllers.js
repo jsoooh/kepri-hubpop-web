@@ -1390,7 +1390,7 @@ angular.module('iaas.controllers')
 
         ct.fn.getUserTenants();
     })
-    .controller('iaasComputeAlarmCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
+    .controller('iaasComputeAlarmCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, computeDetailService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeAlarmCtrl start", 1);
         
         var ct = this;
@@ -1742,7 +1742,7 @@ angular.module('iaas.controllers')
 
         // 숫자만 입력
         ct.fn.numberCheck = function () {
-            if (!newMonitAdminService.isNumber(event)) {
+            if (!computeDetailService.isNumber(event)) {
                 event.preventDefault();
             }
         };
@@ -1750,7 +1750,7 @@ angular.module('iaas.controllers')
         // 숫자 입력 범위 필터
         ct.fn.percentCheck = function (modelName) {
             var val = ct[modelName+'Slider'].value;
-            if (!newMonitAdminService.isNumber(event)) {
+            if (!computeDetailService.isNumber(event)) {
                 val = 0;
                 event.preventDefault();
             }
