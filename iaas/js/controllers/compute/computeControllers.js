@@ -1534,6 +1534,10 @@ angular.module('iaas.controllers')
             });
         }
 
+        ct.setIndent = function (ip) {
+            return ip.replace(',', '<br>');
+        };
+        
         common.getServiceType(false, function (nodeList) {
             ct.options.serviceType = nodeList;
             ct.options.serviceType.unshift({value: '', name: '서비스타입'});
@@ -1656,12 +1660,12 @@ angular.module('iaas.controllers')
         ct.policys = {};
         
         ct.cpuwarnSlider = {
-            value : 0,
+            value : 1,
             options: {
-                floor: 0,
+                floor: 1,
                 ceil: 100,
                 step: 1,
-                minLimit: 0,
+                minLimit: 1,
                 showSelectionBar: true,
                 onChange: function () {
                     ct.fn.parseTimer();
@@ -1867,4 +1871,15 @@ angular.module('iaas.controllers')
         
         if (ct.alarmId) ct.changeSltInfoTab('alarmDetail', ct.alarmId);
     })
+    .directive('krInput', ['$parse', function($parse) { // 알람 메세지 입력 시 한글 실시간 바인드 안되는 현상에 대한 조치
+        return {
+            priority : 2,
+            restrict : 'A',
+            compile : function(element) {
+                element.on('compositionstart', function(e) {
+                    e.stopImmediatePropagation();
+                });
+            },
+        };
+    }])
 ;

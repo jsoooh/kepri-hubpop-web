@@ -3307,7 +3307,7 @@ angular.module('common.services', ['LocalStorageModule'])
             return from;
         };
         cookies.putDefaultTimeRangeFrom = function (timeRangeFrom) {
-            $cookies.put(_DEFAULT_TIMERANGE_FROM_, timeRangeFrom, cookiesOption);
+            $cookies.put(_DEFAULT_TIMERANGE_FROM_, timeRangeFrom.format(dtFormat), cookiesOption);
         };
         cookies.removeDefaultTimeRangeFrom = function () {
             $cookies.remove(_DEFAULT_TIMERANGE_FROM_);
@@ -3319,7 +3319,7 @@ angular.module('common.services', ['LocalStorageModule'])
             return to;
         };
         cookies.putDefaultTimeRangeTo = function (timeRangeTo) {
-            $cookies.put(_DEFAULT_TIMERANGE_TO_, timeRangeTo, cookiesOption);
+            $cookies.put(_DEFAULT_TIMERANGE_TO_, timeRangeTo.format(dtFormat), cookiesOption);
         };
         cookies.removeDefaultTimeRangeTo = function () {
             $cookies.remove(_DEFAULT_TIMERANGE_TO_);

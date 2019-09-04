@@ -76,7 +76,7 @@
                             <td>{{ main.getAlarmLabel(alarms.alarmType) }}</td>
                             <td ng-style="{ 'color': (main.getAlarmColor(alarms.alarmLevel)) }"><span class="label label-{{alarms.alarmLevel}}">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
                             <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);">{{ alarms.hostName }}</td>
-                            <td>{{ alarms.ip }}</td>
+                            <td ng-bind-html="contents.setIndent(alarms.ip)"></td>
                             <td ng-click="contents.changeSltInfoTab('alarmDetail', alarms.id);" class="text-left">{{ alarms.title }}</td>
                             <td>{{ alarms.resolveStatus }}</td>
                         </tr>
@@ -182,7 +182,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <textarea ng-model="contents.actionForm.alarmActionDesc" placeholder="Description" rows="10" style="height: auto;"></textarea>
+                        <textarea ng-model="contents.actionForm.alarmActionDesc" placeholder="Description" kr-input rows="10" style="height: auto;"></textarea>
                     </div>
                     <div class="alarm-buttons row">
                         <div class="col-sm-12">
