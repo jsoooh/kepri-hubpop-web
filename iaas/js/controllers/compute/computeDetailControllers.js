@@ -1338,7 +1338,7 @@ angular.module('iaas.controllers')
         ct.options.alarmLevel = common.getAlarmLevel();
         ct.options.resolveStatus = common.getResolveStatusCmb();
         ct.options.alarmType.unshift({value: '', name: '알람타입'});
-        ct.options.alarmLevel.unshift({value: '', name: '알람등급'});
+        ct.options.alarmLevel.unshift({value: '', name: '알람레벨'});
         ct.options.resolveStatus.unshift({value: '', name: '조치상태'});
 
         // 검색조건 폼 데이터
