@@ -79,10 +79,10 @@
 								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
 								<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);" title="정지">정지</a></li>
 								<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" class="disabled" title="서버가 ‘활성’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
-								<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SHELVE',instance,$index);" title="비활성화">비활성화</a></li>
+								<!--<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SHELVE',instance,$index);" title="비활성화">비활성화</a></li>
 								<li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘비활성화 해제’상태인 경우에만 '비활성화'가 가능합니다.">비활성화</a></li>
 								<li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNSHELVE',instance,$index);" title="비활성화 해제">비활성화 해제</a></li>
-								<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘shelved’상태인 경우에만 '비활성화 해제'가 가능합니다.">비활성화 해제</a></li>
+								<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘shelved’상태인 경우에만 '비활성화 해제'가 가능합니다.">비활성화 해제</a></li>-->
 								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm(instance,$event);" title="서버 사양 변경">서버 사양 변경</a></li>
 								<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
 								<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="백업 이미지 생성">백업 이미지 생성</a></li>
