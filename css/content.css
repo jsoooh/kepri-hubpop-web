@@ -2298,13 +2298,13 @@ p.no-txt{
 .panel_area .pn_body .text_wrap textarea {height:100px;}
 
 /*서버가상화 목록 > 생성 후 진행상태 UI */
-.pnb_progress_wrap {padding:20px 50px;}
+.pnb_progress_wrap {padding:20px 30px;}
 .progress_box {position:relative; margin-top:15px;}
 .progress_box .bar_bg {position:absolute; top:50px; z-index:1; display:inline-block; width:100%; height:4px; background:#cad4dd; }
 .progress_box ul {position:absolute; top:16px; left:0; z-index:2; display:table; width:100%; padding:20px 0;}
-.progress_box ul li {display:table-cell; box-sizing:border-box; width:30%; text-align:center;}
-.progress_box ul li:first-child {text-align:left;}
-.progress_box ul li:last-child {text-align:right;}
+.progress_box ul li {display:table-cell; box-sizing:border-box; width:20%; text-align:center;}
+.progress_box ul li:first-child {width:15%; text-align:left;}
+.progress_box ul li:last-child {width:15%; text-align:right;}
 .progress_box ul li > div.state_box {}
 .progress_box ul li .state_ico {position:relative; display:inline-block; width:32px; height:32px; font-size:18px; text-align:center; line-height:23px; background:#fff; border:4px solid #cad4dd; border-radius:50px;}
 .progress_box ul li .state_ico::before {position:absolute; top:3px; left:-16px; display:inline-block; content:''; width:14px; height:16px; background:url("../images/progress_bg.png") no-repeat 0 0; }
@@ -2316,14 +2316,14 @@ p.no-txt{
 .progress_box ul li.creating .state_ico {color:#fff; background:url("../images/ico_state02.gif") no-repeat left top;}
 .progress_box ul li.standby .state_ico {color:#fff; background:#cad4dd;}
 .progress_box ul li .state_txt {position:relative; text-align:center; margin-top:10px;}
-.progress_box ul li .state_txt span {font-size:14px;}
+.progress_box ul li .state_txt span {font-size:13px;}
 .progress_box ul li:first-child .state_txt span {position:absolute; left:-10px;}
-.progress_box ul li:last-child .state_txt span {position:absolute; right:-20px;}
+.progress_box ul li:last-child .state_txt span {position:absolute; right:-10px;}
 .progress_box ul li.complete .state_txt span {color:#337ab7;}
 .progress_box ul li.creating .state_txt span {color:#5acc27;}
 .progress_box ul li.standby .state_txt span {color:#cad4dd;}
 .progress_box .progress_txt {position:absolute; top:140px; width:100%; text-align:center;}
-.progress_box .progress_txt p {font-size:14px; color:#666; padding-left:10px;}
+.progress_box .progress_txt p {font-size:14px; color:#666;}
 .progress_box .progress_txt p::before {display:inline-block; content:''; width:18px; height:18px; background:url("../images/ico_clock.gif") no-repeat left top; vertical-align:bottom; margin-right:5px;}
 .progress_box .progress_txt span {display:block; margin-top:10px;}
 
