@@ -35,7 +35,7 @@ angular.module('iaas.controllers')
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
 
-        ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'error_ip', 'error_volume'];
+        ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'shelved_offloaded', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
         ct.computeEditFormOpen = function ($event, instance){
