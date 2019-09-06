@@ -17,8 +17,8 @@ angular.module('app')
                         icon: "serverMain",
                         stateKey: 'iaasCompute',
                         url: '/iaas/compute',
-                        controller: 'iaasComputeCtrl',
-                        templateUrl: _IAAS_VIEWS_+'/compute/compute.html',
+                        controller: 'iaasComputeTempCtrl',
+                        templateUrl: _IAAS_VIEWS_+'/compute/computeTemp.html',
                         subPages: {	// 메뉴에서는 상세 페이지로 표현
                             serverDetail: {
                                 name: 'server_main',
