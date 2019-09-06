@@ -13,24 +13,15 @@ angular.module('iaas.controllers')
 
         ct.fn.formOpen = function($event, state, data){
         	ct.formType = state;
-    		if(state == 'storage')
-    		{
+    		if (state == 'storage') {
     			ct.fn.createStorage($event);
-    		}
-    		else if (state == 'snapshot')
-    		{
+    		} else if (state == 'snapshot') {
     			ct.fn.createPopSnapshot($event,data);
-    		}
-    		else if (state == 'rename')
-    		{
+    		} else if (state == 'rename') {
     			ct.fn.reNamePopStorage($event,data);
-    		}
-    		else if (state == 'description')
-            {
+    		} else if (state == 'description') {
                 ct.fn.modifyDescription($event,data);
-            }
-    		else if (state == 'resize')
-    		{
+            } else if (state == 'resize') {
     			ct.fn.reSizePopStorage($event,data);
     		}
         };
@@ -45,7 +36,7 @@ angular.module('iaas.controllers')
             ct.fn.getStorageList();
         });
         var conditionValue = $stateParams.volumeName;
-        if(conditionValue) {
+        if (conditionValue) {
             ct.conditionKey = 'name';
             ct.conditionValue = conditionValue;
         } else {
@@ -68,7 +59,7 @@ angular.module('iaas.controllers')
                 var volumes = [];
                 if (data && data.content && data.content.volumes && angular.isArray(data.content.volumes)) {
                     volumes = data.content.volumes;
-                    if(data.totalElements != 0){
+                    if (data.totalElements != 0) {
                         ct.isStorageMainListLoad = true;
                     }
                 }
@@ -110,19 +101,18 @@ angular.module('iaas.controllers')
 
         ct.fn.checkAll = function($event) {
             ct.roles = [];
-            if($event.currentTarget.checked) {
-                for(var i=0; i < ct.storageMainList.length; i++) {
-                    if(ct.storageMainList[i].status != 'in-use') {
+            if ($event.currentTarget.checked) {
+                for (var i=0; i < ct.storageMainList.length; i++) {
+                    if (ct.storageMainList[i].status != 'in-use') {
                         ct.roles.push(ct.storageMainList[i].volumeId);
                     }
                 }
             }
-
         };
 
         ct.fn.checkOne = function($event,id) {
-            if($event.currentTarget.checked) {
-                if(ct.roles.length == $("#mainList tbody").find("input[type='checkbox']").length) {
+            if ($event.currentTarget.checked) {
+                if (ct.roles.length == $("#mainList tbody").find("input[type='checkbox']").length) {
                     $($("#mainList").find("input[type='checkbox']")[0]).prop("checked",true);
                 }
             } else {
@@ -131,12 +121,12 @@ angular.module('iaas.controllers')
         };
 
         ct.deleteVolumes = function(type, id) {
-        	if(type == 'thum'){
+        	if (type == 'thum') {
         		common.showConfirm('디스크 삭제','디스크을 삭제 하시겠습니까?').then(function(){
                     ct.deleteVolumesAction(type, id);
                 });
-        	} else if(type == 'tbl'){
-        		if(ct.roles.length == 0) {
+        	} else if (type == 'tbl') {
+        		if (ct.roles.length == 0) {
                     common.showAlert('메세지','선택된 디스크가 없습니다.');
                 } else {
                     common.showConfirm('디스크 삭제','선택된 '+ct.roles.length+'개의 디스크을 삭제 하시겠습니까?').then(function(){
@@ -144,22 +134,21 @@ angular.module('iaas.controllers')
                     });
                 }
         	}
-            
         };
 
         // 스토리지 삭제
         ct.deleteVolumesAction = function(type, id) {
             var prom = [];
-            if(type == 'thum'){
+            if (type == 'thum') {
             	prom.push(ct.deleteVolumesJob(id));
-            } else if(type == 'tbl'){
-            	for(var i=0; i< ct.roles.length; i++) {
+            } else if (type == 'tbl') {
+            	for (var i=0; i< ct.roles.length; i++) {
                     prom.push(ct.deleteVolumesJob(ct.roles[i]));
                 }
             }
             $q.all(prom).then(function(results){
-                for(var i=0; i < results.length; i++ ) {
-                    if(!results[i]) {
+                for (var i=0; i < results.length; i++ ) {
+                    if (!results[i]) {
                         common.showAlert('메세지','오류가 발생하였습니다.');
                     }
                 }
@@ -175,7 +164,7 @@ angular.module('iaas.controllers')
         ct.deleteVolumesJob = function(id) {
         	$scope.main.loadingMainBody = true;
             var deferred = $q.defer();
-            if(typeof id !== 'string') {
+            if (typeof id !== 'string') {
                 return;
             }
             var param = {
@@ -198,15 +187,15 @@ angular.module('iaas.controllers')
         };
 
         ct.createSnapshotPopBefore = function ($event,volume) {
-            if(volume.status == 'in-use' || volume.status == 'available') {
-                if(volume.status == 'in-use') {
+            if (volume.status == 'in-use' || volume.status == 'available') {
+                if (volume.status == 'in-use') {
                     var param = {
                         tenantId : volume.tenantId,
                         volumeId : volume.volumeId
                     };
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     returnPromise.success(function (data, status, headers) {
-                    	if(data.content.instanceStatus == 'active') {
+                    	if (data.content.instanceStatus == 'active') {
                         	common.showAlert('경고',data.content.instanceName + '이 실행 중입니다. 인스턴스를 정지하고 시도해주세요.');
                         } else {
                         	ct.fn.createPopSnapshot($event,volume);
@@ -238,7 +227,6 @@ angular.module('iaas.controllers')
         ///////////////////////////////////////////////////////////////////
         
         ct.fn.createPopSnapshot = function($event,volume) {
-        	
         	var dialogOptions =  {
 			            			controller       : "iaasCreateStorageSnapshotPopFormCtrl" ,
 			            			formName         : 'iaasCreatePopStorageSnapshotForm',
@@ -255,21 +243,17 @@ angular.module('iaas.controllers')
             ct.fn.getStorageList();
         };
         
-        
         ct.fn.reNamePopStorage = function($event,volume) {
-        	
         	var dialogOptions =  {
                 controller       : "iaasReNamePopStorageCtrl" ,
                 formName         : 'iaasReNamePopStorageForm',
                 selectStorage    : angular.copy(volume),
                 callBackFunction : ct.reNamePopStorageCallBackFunction
             };
-        	
-            	$scope.actionBtnHied = false;
-            	common.showDialog($scope, $event, dialogOptions);
-            	$scope.actionLoading = true; // action loading
-               
-            
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
         };
         
         ct.reNamePopStorageCallBackFunction = function () {
@@ -289,13 +273,11 @@ angular.module('iaas.controllers')
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, dialogOptions);
             $scope.actionLoading = true; // action loading
-
         };
 
         ct.modifyDescriptionCallBackFunction = function () {
              $scope.main.replacePage();
         };
-
 
         ct.reStorageSnapShotCallBackFunction = function () {
             ct.fn.getStorageList();
@@ -312,17 +294,16 @@ angular.module('iaas.controllers')
                 selectStorage    : angular.copy(volume),
                 callBackFunction : ct.reSizePopStorCallBackFunc
             };
-        	
-            	$scope.actionBtnHied = false;
-            	common.showDialog($scope, $event, dialogOptions);
-            	$scope.actionLoading = true; // action loading
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
         };
         
         ct.reSizePopStorCallBackFunc = function () {
             ct.fn.getStorageList();
         };
         
-        if(ct.data.tenantId) {
+        if (ct.data.tenantId) {
             ct.fn.getStorageList();
         }
 
@@ -381,7 +362,7 @@ angular.module('iaas.controllers')
         // Dialog ok 버튼 클릭 시 액션 정의
         var clickCheck = false;
         ct.checkVal = function () {
-        	if(clickCheck) return;
+        	if (clickCheck) return;
             clickCheck = true;
 
             if (ct.storageNameList.indexOf(ct.volume.name) > -1) {
@@ -415,7 +396,7 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
                 }
                 ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                if(ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
+                if (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
                     ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
                 }
                 ct.isTenantResourceLoad = true;
@@ -561,9 +542,9 @@ angular.module('iaas.controllers')
 
         ct.fn.formOpen = function($event, state, data){
         	ct.formType = state;
-    		if(state == 'storageEdit'){
+    		if (state == 'storageEdit') {
     			ct.fn.storageEdit($event, data);
-    		}else if (state == 'snapshot'){
+    		} else if (state == 'snapshot') {
     			ct.createSnapshotPopBefore($event, data);
     		}
         };
@@ -587,7 +568,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.volume = data.content.volumes[0];
                 ct.expandVolumeSize = ct.volume.size;
-                if(ct.volume.volumeAttachment != null) {
+                if (ct.volume.volumeAttachment != null) {
                     ct.fn.getInstanceInfo(ct.volume.volumeAttachment.instanceId);
                 }
             });
@@ -609,7 +590,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMain = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                if(data.content.instances.length == 1) {
+                if (data.content.instances.length == 1) {
                     ct.instance = data.content.instances[0];
                 }
             });
@@ -622,8 +603,7 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.changeNetwork = function() {
-
-            if(isNaN(Number(ct.expandVolumeSize)))return;
+            if (isNaN(Number(ct.expandVolumeSize))) return;
 
             $scope.main.loadingMainBody = true;
             var param = {
@@ -666,19 +646,16 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.volumeSizeAction = function(flag) {
-
-            if(flag) {
+            if (flag) {
                 ct.expandVolumeSize += 1;
-                if(ct.resourceDefault.maxResource.volumeGigabytes < ct.expandVolumeSize){
+                if (ct.resourceDefault.maxResource.volumeGigabytes < ct.expandVolumeSize) {
                     ct.expandVolumeSize -= 1;
                 }
-
             } else {
-                if(ct.expandVolumeSize - ct.volume.size >= 1) {
+                if (ct.expandVolumeSize - ct.volume.size >= 1) {
                     ct.expandVolumeSize -= 1;
                 }
             }
-
             ct.resource.usedResource.volumeGigabytes = ct.expandVolumeSize - ct.volume.size + ct.resourceDefault.usedResource.volumeGigabytes;
         };
 
@@ -702,15 +679,15 @@ angular.module('iaas.controllers')
         };
         
         ct.createSnapshotPopBefore = function ($event,volume) {
-            if(volume.status == 'in-use' || volume.status == 'available') {
-                if(volume.status == 'in-use') {
+            if (volume.status == 'in-use' || volume.status == 'available') {
+                if (volume.status == 'in-use') {
                     var param = {
                         tenantId : volume.tenantId,
                         volumeId : volume.volumeId
                     };
                     var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     returnPromise.success(function (data, status, headers) {
-                    	if(data.content.instanceStatus == 'active') {
+                    	if (data.content.instanceStatus == 'active') {
                         	common.showAlert('경고',data.content.instanceName + '이 실행 중입니다. 인스턴스를 정지하고 시도해주세요.');
                         } else {
                             ct.fn.createSnapshotPop($event,volume);
@@ -746,7 +723,7 @@ angular.module('iaas.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-        if(ct.data.tenantId) {
+        if (ct.data.tenantId) {
             ct.fn.getStorageInfo();
         }
     })
@@ -814,19 +791,17 @@ angular.module('iaas.controllers')
         };
         
         pop.fn.volumeSizeAction = function(flag) {
-
-            if(flag) {
+            if (flag) {
             	pop.expandVolumeSize += 1;
-                if(pop.resourceDefault.maxResource.volumeGigabytes < pop.expandVolumeSize){
+                if (pop.resourceDefault.maxResource.volumeGigabytes < pop.expandVolumeSize) {
                 	pop.expandVolumeSize -= 1;
                 }
 
             } else {
-                if(pop.expandVolumeSize - pop.volume.size >= 1) {
+                if (pop.expandVolumeSize - pop.volume.size >= 1) {
                 	pop.expandVolumeSize -= 1;
                 }
             }
-
             pop.resource.usedResource.volumeGigabytes = pop.expandVolumeSize - pop.volume.size + pop.resourceDefault.usedResource.volumeGigabytes;
         };
         
@@ -835,22 +810,18 @@ angular.module('iaas.controllers')
         };
         
         pop.fn.updateVolume = function() {
-
-            if(isNaN(Number(pop.expandVolumeSize)))return;
-            
+            if (isNaN(Number(pop.expandVolumeSize))) return;
             var checkByte = $bytes.lengthInUtf8Bytes(pop.volume.description);
-        	if(checkByte > 255){
+        	if (checkByte > 255) {
                 common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
         		return;
         	}
-
-            if(Number(pop.expandVolumeSize) < pop.volume.size){
+            if (Number(pop.expandVolumeSize) < pop.volume.size) {
                 common.showAlertWarning("디스크 크기는 size up만 가능 합니다. 디스크 크기 최소값 : " + pop.volume.size + ", 입력값 : " + pop.expandVolumeSize);
                 pop.expandVolumeSize = pop.volume.size;
                 return;
             }
-
-            if(Number(pop.expandVolumeSize) > (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)){
+            if (Number(pop.expandVolumeSize) > (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)) {
                 common.showAlertWarning("디스크 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.expandVolumeSize );
                 pop.expandVolumeSize = pop.volume.size;
                 return;
@@ -890,11 +861,10 @@ angular.module('iaas.controllers')
 			return data + 'G';
 		};
         
-        if(pop.userTenant.tenantId) {
+        if (pop.userTenant.tenantId) {
             pop.fn.getStorageInfo();
         }
     })
-    
     //////////////////////////////////////////////////////////////////////////
     //////////////       2018.11.21 디스크 생성 폼      sg0730       //////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -927,7 +897,7 @@ angular.module('iaas.controllers')
             }
             
             var checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
-        	if(checkByte > 255){
+        	if (checkByte > 255) {
         		alert("255Byte를 초과하였습니다.");
         		$scope.actionBtnHied = false;
         		return;
@@ -982,56 +952,41 @@ angular.module('iaas.controllers')
         
        // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-        	
-        	
-        	 if ($scope.actionBtnHied) return;
-        	 
-             $scope.actionBtnHied = true;
-             
-             if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
-             {
-                 $scope.actionBtnHied = false;
-                 return;
-             }
-             
-             pop.fn.createStorageSnapshot();
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
+             $scope.actionBtnHied = false;
+             return;
+            }
+            pop.fn.createStorageSnapshot();
         };
         
         $scope.popCancel = function() {
             $scope.dialogClose = true;
             common.mdDialogCancel();
         };
-        
-       
+
         pop.fn.createStorageSnapshot = function() {
-        	
             $scope.main.loadingMainBody = true;
             pop.data.tenantId = pop.userTenant.id;
             pop.data.volumeId = pop.volume.volumeId;
             pop.data.volumeName = pop.volume.name;
-
             common.mdDialogHide();
-
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'POST', {volumeSnapShot:pop.data});
-            
-            returnPromise.success(function (data, status, headers) 
-            {
+            returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("생성 되었습니다.");
                 common.locationHref('/#/iaas/snapshot?tabIndex=1');
             });
-            returnPromise.error(function (data, status, headers) 
-            {
+            returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             	common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers) 
-            {
+            returnPromise.finally(function (data, status, headers) {
                 $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });
         }
-
     })
     //////////////////////////////////////////////////////////////////////////
     //////////       2018.11.21 디스크 이름 변경 팝업      sg0730       ////////////////
@@ -1057,7 +1012,6 @@ angular.module('iaas.controllers')
     	
     	$scope.actionLoading 			= false;
     	pop.btnClickCheck 				= false;
-
 
     	for (var i = 0; i < pop.volumes.length; i++) {
             pop.storageNameList.push(pop.volumes[i].name);
@@ -1091,41 +1045,32 @@ angular.module('iaas.controllers')
     	};
     	
     	pop.fn.reNmStor = function() {
-
     		$scope.main.loadingMainBody = true;
-    		
     		var param = {
 		                    tenantId : pop.userTenant.id,
 		                    volumeId : pop.volume.volumeId,
 		                    name     : pop.newVolNm
 		                };
     		
-    	
     		common.mdDialogHide();
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
-    		
-    		returnPromise.success(function (data, status, headers) 
-    		{
+    		returnPromise.success(function (data, status, headers) {
     			$scope.main.loadingMainBody = false;
     			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
     			
-    			if ( angular.isFunction(pop.callBackFunction) ) {
+    			if (angular.isFunction(pop.callBackFunction)) {
     				pop.callBackFunction();
     			}
-    			
     		});
-    		returnPromise.error(function (data, status, headers) 
-    		{
+    		returnPromise.error(function (data, status, headers) {
     			$scope.main.loadingMainBody = false;
     			common.showAlertError(data.message);
     		});
-    		returnPromise.finally(function (data, status, headers) 
-    		{
+    		returnPromise.finally(function (data, status, headers) {
     			$scope.actionBtnHied = false;
     			$scope.main.loadingMainBody = false;
     		});
     	}
-    	
     })
     //////////////////////////////////////////////////////////////////////////
     //////////       2018.11.21 디스크 사이즈 변경 팝업      sg0730       ////////////////
@@ -1209,12 +1154,11 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
-
             returnPromise.success(function (data, status, headers) {
                 pop.resource 		 = angular.copy(data.content[0]);
                 pop.resourceDefault = angular.copy(data.content[0]);
                 pop.reSizeSliderOptions.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes ;
-                if(pop.reSizeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
+                if (pop.reSizeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
                     pop.reSizeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
                 }
                 pop.isTenantResourceLoad = true;
@@ -1231,12 +1175,11 @@ angular.module('iaas.controllers')
     	$scope.popDialogOk = function () {
     		if ($scope.actionBtnHied) return;
     		$scope.actionBtnHied = true;
-    		/* if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+    		 /*if (!pop.validationService.checkFormValidity(pop[pop.formName]))
              {
                  $scope.actionBtnHied = false;
                  return;
-             }
-    		*/
+             }*/
     		pop.fn.reSizeStor();
     	};
     	
@@ -1246,47 +1189,37 @@ angular.module('iaas.controllers')
     	};
     	
     	pop.fn.reSizeStor = function() {
-
     		$scope.main.loadingMainBody = true;
-    		
     		var param = {
                 tenantId : pop.userTenant.id,
                 volumeId : pop.volume.volumeId,
                 size     : pop.volumeSize
             };
-    		
     		common.mdDialogHide();
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
-    		
-    		returnPromise.success(function (data, status, headers) 
-    		{
+    		returnPromise.success(function (data, status, headers) {
     			$scope.main.loadingMainBody = false;
     			common.showAlertSuccess("디스크 크키가 변경 되었습니다.");
-
     			if ( angular.isFunction(pop.callBackFunction) ) {
     				pop.callBackFunction();
     			}
     			
     		});
-    		returnPromise.error(function (data, status, headers) 
-    		{
+    		returnPromise.error(function (data, status, headers) {
 		    			$scope.main.loadingMainBody = false;
 		    			common.showAlertError(data.message);
     		});
-    		returnPromise.finally(function (data, status, headers) 
-    		{
+    		returnPromise.finally(function (data, status, headers) {
     			$scope.actionBtnHied = false;
     			$scope.main.loadingMainBody = false;
     		});
     	};
     	
-    	if(pop.userTenant && pop.userTenant.id) {
+    	if (pop.userTenant && pop.userTenant.id) {
             pop.fn.getTenantResource();
     		pop.fn.getStorageInfo();
     	}
-    	
     })
-       
     .controller('iaasStorageDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         	_DebugConsoleLog("storageControllers.js : iaasStorageDescriptionCtrl", 1);
 
@@ -1307,21 +1240,16 @@ angular.module('iaas.controllers')
         $scope.actionLoading 			= false;
         pop.btnClickCheck 				= false;
 
-
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-
             if ($scope.actionBtnHied) return;
-
             $scope.actionBtnHied = true;
-
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newVolDesc);
-            if(checkByte > 255){
+            if (checkByte > 255) {
                 common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
                 $scope.actionBtnHied = false;
                 return;
             }
-
             pop.fn.modifyDesc();
         };
 
@@ -1331,36 +1259,28 @@ angular.module('iaas.controllers')
         };
 
         pop.fn.modifyDesc = function() {
-
             $scope.main.loadingMainBody = true;
-
             var param = {
                             tenantId : pop.userTenant.id,
                             volumeId : pop.volume.volumeId,
                             description : pop.volume.description
                         };
 
-
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
-
-            returnPromise.success(function (data, status, headers)
-            {
+            returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("디스크 설명이 변경 되었습니다.");
 
                 if ( angular.isFunction(pop.callBackFunction) ) {
                     pop.callBackFunction();
                 }
-
             });
-            returnPromise.error(function (data, status, headers)
-            {
+            returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers)
-            {
+            returnPromise.finally(function (data, status, headers) {
                 $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });
