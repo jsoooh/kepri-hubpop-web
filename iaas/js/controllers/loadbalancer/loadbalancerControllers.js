@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasLoadbalancerCreate', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
-        _DebugConsoleLog("loadbalancerControllers.js : iaasLoadbalancerCreate start", 1);
+    .controller('iaasLoadbalancerCreateCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
+        _DebugConsoleLog("loadbalancerControllers.js : iaasLoadbalancerCreateCtrl start", 1);
 
         // 뒤로 가기 버튼 활성화
         $scope.main.displayHistoryBtn = true;
@@ -41,49 +41,5 @@ angular.module('iaas.controllers')
         }
 
     })
-    .controller('iaasLoadbalancerDetailCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
-        _DebugConsoleLog("loadbalancerControllers.js : iaasLoadbalancerDetailCtrl", 1);
 
-        $scope.actionBtnEnabled = true;
-
-        var ct 				= this;
-        ct.list 			= {};
-        ct.fn 				= {};
-        ct.data 			= {};
-        ct.roles 			= [];
-
-        // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
-        $scope.$on('userTenantChanged',function(event,status) {
-            ct.data.tenantId = status.id;
-            ct.data.tenantName = status.korName;
-            //ct.fnGetUsedResource();
-        });
-
-        //추가 S
-        ct.fnGetUsedResource = function() {
-            var params = {
-                tenantId : ct.data.tenantId
-            };
-            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
-            returnPromise.success(function (data, status, headers) {
-                ct.tenantResource = data.content[0];
-            });
-            returnPromise.error(function (data, status, headers) {
-                if (status != 307) {
-                    common.showAlertError(data.message);
-                }
-            });
-        };
-
-        if (ct.data.tenantId) {
-            //ct.fnGetUsedResource();
-        } else { // 프로젝트 선택
-            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
-            showAlert.then(function () {
-                $scope.main.goToPage("/");
-            });
-            return false;
-        }
-
-    })
 ;

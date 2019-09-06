@@ -23,7 +23,8 @@ loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeSnapshotControllers.
 loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/storageControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/objectStorageControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/storageSnapshotControllers.js'+_VERSION_TAIL_HEAD_);
-// loadJavascript(_IAAS_STAGE_+'/js/controllers/storage/loadbalancerControllers.js'+_VERSION_TAIL_HEAD_);
+// loadJavascript(_IAAS_STAGE_+'/js/controllers/loadbalancer/loadbalancerControllers.js'+_VERSION_TAIL_HEAD_);
+loadJavascript(_IAAS_STAGE_+'/js/controllers/loadbalancer/loadbalancerDetailControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/network/networkControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/network/domainControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/network/domainRouterControllers.js'+_VERSION_TAIL_HEAD_);

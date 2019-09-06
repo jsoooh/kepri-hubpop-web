@@ -34,7 +34,7 @@
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.serverMainList | filter:{ status : '!deleting'}).length}})</span></a></li>
-			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.lbServiceList | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.lbServiceLists | filter:{ status : '!deleting'}).length}})</span></a></li>
 		</ul>
 
 		<!-- Tab panes -->
@@ -272,7 +272,7 @@
 				<!-- //버튼영역 -->
 
 				<!-- panel -->
-				<ul ng-if="(contents.lbServiceLists | filter:{ name: contents.schStorageFilterText, taskState : '!deleting' }).length > 0" class="ul-panel thum_style">
+				<ul ng-if="(contents.lbServiceLists | filter:{ name: contents.schStorageFilterText, taskState : '!deleting' }).length > 0" class="ul-panel">
 					<li ng-repeat="(key, lbserviceList) in contents.lbServiceLists | filter:{ name: contents.schStorageFilterText, taskState : '!deleting' }">
 						<!-- panel -->
 						<div class="panelWrap">
@@ -295,7 +295,7 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="이름/설명 변경">이름/설명 변경</a></li>
+											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', lbserviceList);" title="이름/설명 변경">이름/설명 변경</a></li>
 											<li><a class="delete" href="javascript:void(0);" ng-click="contents.deleteLb(lbserviceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
 										</ul>
 									</div>
