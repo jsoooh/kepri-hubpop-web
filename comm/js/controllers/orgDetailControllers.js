@@ -533,8 +533,8 @@ angular.module('portal.controllers')
             totTmpCnt : 0
         };
 
-        ct.getApipDashBoardInfo = function () {
-            var promise = portal.dashboard.getApipDashBoardInfo();
+        ct.getApipDashBoardInfo = function (projectId) {
+            var promise = portal.dashboard.getApipDashBoardInfo(projectId);
             promise.success(function (data, status, headers) {
                 if (data.code == '0000' && data.apiTotalCnt > 0 ) {
                     ct.apipeDashboardInfo = data;
@@ -993,7 +993,7 @@ angular.module('portal.controllers')
             // Dcp 정보
             ct.getDcpDashboardInfo(ct.paramId);
             // Apip 정보
-            ct.getApipDashBoardInfo();
+            ct.getApipDashBoardInfo(ct.paramId);
 
             // IaaS 정보
             if ($scope.main.userTenantId) {

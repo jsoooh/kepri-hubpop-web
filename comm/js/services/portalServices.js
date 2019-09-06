@@ -297,8 +297,11 @@ angular.module('portal.services', [])
             return common.retrieveResource(common.resourcePromise('/dpl/pipeline/pipelineDashBoardApi.json', 'GET', getParams));
         };
 
-        portal.dashboard.getApipDashBoardInfo = function () {
-            return common.retrieveResource(common.resourcePromise('/apip/com/dashboard.json', 'GET'));
+        portal.dashboard.getApipDashBoardInfo = function (prjcCd) {
+            var getParams = {
+                prjcCd : prjcCd
+            };
+            return common.retrieveResource(common.resourcePromise('/apip/com/dashboard.json', 'GET', getParams));
         };
 
         portal.dashboard.getGisDashBoardInfo = function (prjcCd) {
