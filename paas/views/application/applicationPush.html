@@ -42,17 +42,17 @@
 						<li>
 							<div class="pnb_tit">
 								<i class="i_star"></i> <span class="pnb_t_txt">APP 유형</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'‘빌드팩(Buildpack) 기반’ 선택 시, </br>CF(Cloud Foundry) 플랫폼에서 제공하는 빌드팩(Buildpack)을 기반으로 컨테이너를 생성하고</br> APP을 배포합니다. </br></br>‘도커(Docker) 이미지 기반’ 선택 시, </br>도커 저장소(Docker Registry)로부터 이미지를 다운로드하여 해당 이미지를 기반으로 컨테이너를 </br>생성합니다. '"><span class="ico_info"></span></button></div>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'‘빌드팩(Buildpack) 기반’ 선택 시, </br>CF(Cloud Foundry) 플랫폼에서 제공하는 빌드팩(Buildpack)을 기반으로 컨테이너를 생성하고</br> APP을 배포합니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<div class="mt20">
 								<div class="radio radio-inline">
 									<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="contents.appPushData.pushType" >
 									<label for="app-radio1-1" class="label">빌드팩(Buildpack) 기반</label>
 								</div>
-								<div class="radio radio-inline">
-									<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="contents.appPushData.pushType"  disabled> <!-- 2018.12.13 disabled 처리  -->
+								<!--<div class="radio radio-inline">
+									<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="contents.appPushData.pushType"  disabled> &lt;!&ndash; 2018.12.13 disabled 처리  &ndash;&gt;
 									<label for="app-radio1-2" class="label" title="현재는 서비스 하지 않습니다." >도커(Docker) 이미지 기반</label>
-								</div>
+								</div>-->
 							</div>
 						</li>
 						<li ng-if="contents.appPushData.pushType != 'DOCKER'">

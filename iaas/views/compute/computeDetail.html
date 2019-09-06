@@ -224,7 +224,7 @@
 								<span class="stateWrap">
 									<span ng-if="contents.instance.vmState == 'active'" class="stateMark type1"></span>
 									<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2"></span>
-									<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized'" class="stateMark type4"></span>
+									<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'shelved_offloaded'" class="stateMark type4"></span>
 									<span ng-if="contents.instance.vmState == 'stopped'" class="stateMark type3"></span>
 									<span ng-if="contents.instance.vmState" class="state-txt">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
 								</span>
