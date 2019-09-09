@@ -81,6 +81,10 @@ angular.module('iaas.controllers')
             document.location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
         };
 
+        ct.fn.getWindowAgentConfFile = function (instance) {
+            return CONSTANTS.iaasApiContextUrl + '/server/windows/script/download?tenantId='+ct.data.tenantId+"&instanceId="+instance.id;
+        }; 
+
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
             $scope.main.loadingMainBody = true;

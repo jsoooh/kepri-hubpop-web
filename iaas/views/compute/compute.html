@@ -117,6 +117,9 @@
 								<div class="guide_link">
 									<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">접속방법 가이드</a>
 								</div>
+								<div class="guide_link">
+									<a href="" ng-click="main.showRightSliderContents($event, 'AGENT 설치 가이드', '/guideInfo/installGuideMonitAgent.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">AGENT 설치 가이드</a>
+								</div>
 							</div>
 							<!-- windows  -->
 							<div ng-if="instance.image.osType == 'windows'" class="tgb_body">
@@ -137,6 +140,9 @@
 								</ul>
 								<div class="guide_link">
 									<a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : instance.rdpDomain, osType: instance.image.osType, rdpConnectDomain: instance.rdpConnectDomain, rdpDomain: instance.rdpDomain});">접속방법 가이드</a>
+								</div>
+								<div class="guide_link">
+									<a href="" ng-click="main.showRightSliderContents($event, 'AGENT 설치 가이드', '/guideInfo/installGuideMonitAgent.html', {floatingIp : instance.floatingIp, osType: instance.image.osType, url: contents.fn.getWindowAgentConfFile(instance)});">AGENT 설치 가이드</a>
 								</div>
 							</div>
 						</div>

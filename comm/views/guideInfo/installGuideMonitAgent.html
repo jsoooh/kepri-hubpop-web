@@ -1,0 +1,141 @@
+<div class="accss_guideWrap">
+	<h2>HubPop 모니터링 Agent({{spop.data.osType}}) 설치</h2>
+	<h3>1. 설치 대상</h3>
+	<p class="txt_level1">본 가이드의 Agent 설치 가이드 대상은 HubPop에서 2019년 9월 이전 생성된 HubPop 가상서버를 대상으로 한다.</p>
+	<div class="tbl type1">
+		<table class="table">
+			<colgroup>
+			<col style="width:25%;">
+			<col style="width:auto;">
+			<col style="width:25%;">
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col">도구</th>
+					<th scope="col">설명</th>
+					<th scope="col">다운로드</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="spop.data.osType == 'centos' || spop.data.osType == 'ubuntu'">
+					<td>agentInstallerDist</td>
+					<td class="text-left">
+						가상 서버의 모니터링 Agent 설치파일입니다.
+					</td>
+					<td><a href="/download/agentInstallerDist.tar">agentInstallerDist.tar</a></td>
+				</tr>
+				<tr ng-show="spop.data.osType == 'windows'">
+					<td>agentInstallerDist</td>
+					<td class="text-left">
+						가상 서버의 모니터링 Agent 설치파일입니다.
+					</td>
+					<td><a href="/download/agentInstallerDist.zip">agentInstallerDist.zip</a></td>
+				</tr>
+				<tr ng-show="spop.data.osType == 'windows'">
+					<td>agentInstallerDist</td>
+					<td class="text-left">
+						가상 서버의 모니터링 Agent 설정파일입니다.
+					</td>
+					<td><a href="{{spop.data.url}}">telegraf.conf</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div ng-show="spop.data.osType == 'centos' || spop.data.osType == 'ubuntu'">
+		<h3>2. 모니터링 Agent 설치 파일 Upload</h3>
+		<p class="txt_level1">다운로드 받은 설치 자동화 파일인 agentInstallerDist.tar를 HubPop 가상서버에 Upload한다.</p>
+		<h3>3. 설치 파일 압축 해제</h3>
+		<p class="txt_level1">다음과 같이 압축을 해제 한다.</p>
+		<div class="cnt_msg_box promp">$ tar xvf agentInstallerDist.tar</div>
+		<p class="txt_level1">agentInstallerDist 디렉토리가 생성 되었음을 확인한다.</p>
+		<h3>4. 모니터링 Agent 설치</h3>
+		<p class="txt_level1">agentInstallerDist 디렉토리로 이동한다</p>
+		<div class="cnt_msg_box promp">$ cd agentInstallerDist</div>
+		<div ng-show="spop.data.osType == 'ubuntu'">
+			<h3>4.1 Ubuntu</h3>
+			<p class="txt_level1">1) 디렉토리로 이동하여 파일을 조회하면 다음과 같은 파일 목록이 보인다.</p>
+			<div class="imgWrap mgt0">
+				<img alt="" src="images/install_guide/install_guide_monit_agent_01.png" alt="">
+			</div>
+			<p class="txt_level1">2) ./set_ubuntu_agent_conf.sh 를 실행하여 Agent를 설치한다.</p>
+			<div class="cnt_msg_box promp">$ sudo ./set_ubuntu_agent_conf.sh</div>
+			<div class="imgWrap mgt0">
+				<img alt="" src="images/install_guide/install_guide_monit_agent_02.png" alt="">
+			</div>
+			<p class="txt_level1">3) Metric Agent가 정상적으로 실행되고 있는지 확인한다.</p>
+			<div class="cnt_msg_box promp">$ sudo service telegraf status</div>
+			<div class="imgWrap mgt0">
+				<img alt="" src="images/install_guide/install_guide_monit_agent_03.png" alt="">
+			</div>
+			<p class="txt_level1">4) Log Agent가 정상적으로 실행되고 있는지 확인한다.</p>
+			<div class="cnt_msg_box promp">$ sudo service filebeat status</div>
+			<div class="imgWrap mgt0">
+				<img alt="" src="images/install_guide/install_guide_monit_agent_04.png" alt="">
+			</div>
+		</div>
+		
+		<div ng-show="spop.data.osType == 'centos'">
+			<h3>4.1 Centos</h3>
+			<p class="txt_level1">1) 디렉토리로 이동하여 파일을 조회하면 다음과 같은 파일 목록이 보인다.</p>
+			<div class="imgWrap mgt0">
+				<img alt="" src="images/install_guide/install_guide_monit_agent_05.png" alt="">
+			</div>
+			<p class="txt_level1">2) ./set_centos_agent_conf.sh 를 실행하여 Agent를 설치한다.</p>
+			<div class="cnt_msg_box promp">$ sudo ./set_centos_agent_conf.sh</div>
+			<div class="cnt_msg_box msg-info">설치 도중 Y/D/N을 물어보면 Y를 선택 후 진행한다.</div>
+			<div class="imgWrap mt30">
+				<img alt="" src="images/install_guide/install_guide_monit_agent_06.png" alt="">
+			</div>
+		</div>
+	</div>
+	<div ng-show="spop.data.osType == 'windows'">
+		<h3>2. 모니터링 Agent 설치 파일 Upload</h3>
+		<p class="txt_level1">다운로드 받은 HubPop Windows VM C:\ 이하에 Upload 한다</p>
+		<h3>3. 설치 파일 압축 해제</h3>
+		<p class="txt_level1">
+			1) agentInstallerDist.zip 파일 압축을 해제한다.<br>
+			2) agentInstallerDist 디렉토리가 생성 되었음을 확인한다.
+		</p>
+		<div class="imgWrap mgt0">
+			<img alt="" src="images/install_guide/install_guide_monit_agent_07.png" style="width: initial;">
+		</div>
+		<h3>4. 모니터링 Agent 설치</h3>
+		<p class="txt_level1">
+			1) 모니터링 Agent 설정파일을 다운로드 받아 agentInstallerDist\pkgs 폴더 이하에 복사한다.<br>
+			2) 파일들 중 set_windows_agent_conf.bat 를 실행시킨다. 실행이 되면 C:\agent\telegraf 디렉토리가 생성되며 아래와 같은 파일들이 생성되고 Windows Service에 등록된다.
+		</p>
+		<div class="imgWrap mgt0">
+			<img alt="" src="images/install_guide/install_guide_monit_agent_08.png" style="width: initial;">
+		</div>
+		<div class="cnt_msg_box msg-info">서비스명은 [Telegraf Data Collector Service]으로 등록되고 시작된다.</div>
+		<div class="imgWrap mt30">
+			<img alt="" src="images/install_guide/install_guide_monit_agent_09.png">
+		</div>
+		<div class="cnt_msg_box msg-info">Windows는 Metric Data에 대한 모니터링만 지원하며 현재 Log 수집을 하지 않고 있다.</div>
+	</div>
+	<h3>5. 모니터링 화면 확인</h3>
+	<p class="txt_level1">
+		1) Agent가 설치 되어 모니터링 화면에서 시스템 상태를 조회 할 수 있다.<br>
+		2) HubPop 서버가상화 > [서버관리] 메뉴로 이동하여 서버를 선택하여 [상세 페이지]로 이동한다.<br>
+		3) 화면 하단 탭 중 [가상화 모니터링], [시스템로그]를 선택하여 시스템 상태를 확인 할 수 있다. (Agent 설치 후 3~5분 )
+	</p>
+	<div class="imgWrap mt30">
+		<img alt="" src="images/install_guide/install_guide_monit_agent_10.png">
+	</div>
+	<div class="imgWrap mt30">
+		<img alt="" src="images/install_guide/install_guide_monit_agent_11.png">
+	</div>
+	<div class="cnt_msg_box msg-info" ng-show="spop.data.osType == 'windows'">Windows는 Log 정보를 조회하지 않는다</div>
+</div>
+
+<style>
+	.cnt_msg_box.promp {
+		padding: 12px 20px;
+		margin: 0;
+		border: 1px solid #000;
+		border-radius: 0;
+	}
+	.imgWrap img {
+		width: 100%;
+	}
+</style>
