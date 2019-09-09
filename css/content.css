@@ -3297,6 +3297,6 @@ a.ext_link:hover {text-decoration:underline;}
 .tbl.type1 td .stateWrap  {position:relative;}
 .tbl.type1 td .stateWrap .state-txt  {color:#888; font-weight:400; vertical-align:middle;}
 .tbl.type1 td .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
-.tbl.type1 td .server_con_detail {position:absolute; top:5px; right:-100px; z-index:1; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
+.tbl.type1 td .server_con_detail {position:absolute; top:25px; z-index:1; width:100%; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
 .tbl.type1 td .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
 .tbl.type1 .t_tip_bx {text-align:left; margin-top:-1px;}
