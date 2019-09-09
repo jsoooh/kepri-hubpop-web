@@ -25,7 +25,7 @@ angular.module('app')
 		layoutTemplateUrl : {
 			navigation : _LAYOUT_VIEWS_ + '/navigation.html',
 			leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
-			mainTop : _LAYOUT_VIEWS_ + '/mainTop.html',
+			mainTop : _LAYOUT_VIEWS_ + '/mainTop.html'
 		},
 		mainBody: {
 			templateUrl: _LAYOUT_VIEWS_ + '/mainBody.html',
@@ -40,7 +40,7 @@ angular.module('app')
             mysqlDB : "dbwebxpert.kepri-dev.crossent.crossent.com",
             webLog : "weblog.kepri-dev.crossent.com",
             terminal : "terminal.kepri-dev.crossent.com",
-            autoScaler : "autoscaler.ps..kepri-dev.crossent.crossent.com",
+            autoScaler : "autoscaler.ps..kepri-dev.crossent.crossent.com"
         },
         homeUrl: './#/',
         homePath: '/',

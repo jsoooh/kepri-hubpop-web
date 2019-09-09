@@ -337,69 +337,7 @@ angular.module('app')
             {value: '1', name: 'Alarm 발생'}
         ],
         alarmBell: 1000*60*1,
-        timeRangeFormat: 'YYYY-MM-DD HH:mm',
-        tempNoticeData : {
-            "data":[
-                {
-                    "NOTICE_NO":6,
-                    "TITLE":"공지사항111111111",
-                    "POP_YN":"Y",
-                    "START_DT":"2019-05-30",
-                    "END_DT":"2019-08-06",
-                    "CONTENTS":"<p dmcf-pid='NnQZ4VLour' dmcf-ptype='general' style='margin:35px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>(서울=연합뉴스) 이상헌 임형섭 박경준 기자 = 청와대는 24일 러시아 군용기의 독도 영공 침범과 관련해 일본 정부가 자위대 군용기를 긴급 발진하면서 독도를 일본 땅이라는 억지를 부린 데 대해 '일본은 &quot;일본방공식별구역(JADIZ)&quot;에 대한 부분만 갖고 입장을 내면 될 것 같다'는 반박 입장을 밝혔다.</p>\n<p dmcf-pid='N9Zsf0ny0S' dmcf-ptype='general' style='margin:0px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>청와대 관계자는 이날 기자들을 만나 이같이 언급한 뒤 '우리 영공에 대한 문제는 우리가 답할 부분'이라고 말했다.</p><p dmcf-pid='NnQZ4VLour' dmcf-ptype='general' style='margin:35px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>(서울=연합뉴스) 이상헌 임형섭 박경준 기자 = 청와대는 24일 러시아 군용기의 독도 영공 침범과 관련해 일본 정부가 자위대 군용기를 긴급 발진하면서 독도를 일본 땅이라는 억지를 부린 데 대해 '일본은 일본방공식별구역(JADIZ)에 대한 부분만 갖고 입장을 내면 될 것 같다'는 반박 입장을 밝혔다.</p>\n<p dmcf-pid='N9Zsf0ny0S' dmcf-ptype='general' style='margin:0px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>청와대 관계자는 이날 기자들을 만나 이같이 언급한 뒤 '우리 영공에 대한 문제는 우리가 답할 부분'이라고 말했다.</p>",
-                    "ATTACH_FILE":"206|RTU속성2.txt",
-                    "COMMON_CD":"CD0021",
-                    "COMMON_NM":"공통",
-                    "REG_USER_ID":"hubpop",
-                    "REG_USER_NM":"허브팝",
-                    "REG_DT":"2019-05-30",
-                    "UPT_USER_ID":"hubpop",
-                    "UPT_USER_NM":"허브팝",
-                    "UPT_DT":"2019-05-30",
-                    "DELETE_YN":"N"
-                },
-                {
-                    "NOTICE_NO":7,
-                    "TITLE":"공지사항2222222222",
-                    "POP_YN":"Y",
-                    "START_DT":"2019-05-30",
-                    "END_DT":"2019-08-06",
-                    "CONTENTS":"<p dmcf-pid='NnQZ4VLour' dmcf-ptype='general' style='margin:35px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>(서울=연합뉴스) 이상헌 임형섭 박경준 기자 = 청와대는 24일 러시아 군용기의 독도 영공 침범과 관련해 일본 정부가 자위대 군용기를 긴급 발진하면서 독도를 일본 땅이라는 억지를 부린 데 대해 '일본은 &quot;일본방공식별구역(JADIZ)&quot;에 대한 부분만 갖고 입장을 내면 될 것 같다'는 반박 입장을 밝혔다.</p>\n<p dmcf-pid='N9Zsf0ny0S' dmcf-ptype='general' style='margin:0px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>청와대 관계자는 이날 기자들을 만나 이같이 언급한 뒤 '우리 영공에 대한 문제는 우리가 답할 부분'이라고 말했다.</p><p dmcf-pid='NnQZ4VLour' dmcf-ptype='general' style='margin:35px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>(서울=연합뉴스) 이상헌 임형섭 박경준 기자 = 청와대는 24일 러시아 군용기의 독도 영공 침범과 관련해 일본 정부가 자위대 군용기를 긴급 발진하면서 독도를 일본 땅이라는 억지를 부린 데 대해 '일본은 일본방공식별구역(JADIZ)에 대한 부분만 갖고 입장을 내면 될 것 같다'는 반박 입장을 밝혔다.</p>\n<p dmcf-pid='N9Zsf0ny0S' dmcf-ptype='general' style='margin:0px 0px 19px;padding:0px;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;letter-spacing:-0.34px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>청와대 관계자는 이날 기자들을 만나 이같이 언급한 뒤 '우리 영공에 대한 문제는 우리가 답할 부분'이라고 말했다.</p>",
-                    "ATTACH_FILE":"206|RTU속성1111.txt,210|RTU속성22222.txt,212|RTU속성3333.txt",
-                    "COMMON_CD":"CD0021",
-                    "COMMON_NM":"공통",
-                    "REG_USER_ID":"hubpop",
-                    "REG_USER_NM":"허브팝",
-                    "REG_DT":"2019-05-30",
-                    "UPT_USER_ID":"hubpop",
-                    "UPT_USER_NM":"허브팝",
-                    "UPT_DT":"2019-05-30",
-                    "DELETE_YN":"N"
-                },
-                {
-                    "NOTICE_NO":9,
-                    "TITLE":"공지사항333333333",
-                    "POP_YN":"Y",
-                    "START_DT":"2019-05-30",
-                    "END_DT":"2019-08-06",
-                    "CONTENTS":"<p><strong data-translation='' style='display:block;position:relative;padding-left:14px;margin:-4px 0px 29px;font-weight:normal;line-height:1.5;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;letter-spacing:-0.7px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>'군용기 발진' 日 독도영유권 주장에 반박..'우리 영공 문제는 우리가 답해'<br>시간별 靑 조치 상세소개..NSC 미개최 지적엔 '실효조치 중요, 본질 정확히 봐야'<br>러시아 차석무관 '기기 오작동, 침범의도 없었다'..한국에 위치좌표 등 자료요청</strong></p><div data-translation-body='' style='margin:0px;padding:0px 0px 0px 14px;overflow:hidden;line-height:1.625;letter-spacing:-0.02em;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'><section dmcf-sid='NbJ7TC07fN'><figure dmcf-pid='N500st49KD' dmcf-ptype='figure' style='position:relative;margin:0px auto 30px;display:table;padding:0px;clear:left;max-width:100%;'><p style='margin:0px;padding:0px;display:block;position:relative;'><img alt='러시아 군용기, 한국방공식별구역(KADIZ) 침범 (PG) [정연주 제작] 일러스트' dmcf-mid='NnFZAq8SAy' dmcf-mtype='image' height='262' src='https://t1.daumcdn.net/news/201907/24/yonhap/20190724140019985rrea.jpg' width='500' style='border:0px none;display:block;max-width:100%;height:auto;margin:0px auto;'></p><figcaption style='margin:11px auto 0px;font-size:13px;line-height:18px;color:rgb(145, 145, 145);max-width:100%;display:table-caption;caption-side:bottom;word-break:break-word;'>러시아 군용기, 한국방공식별구역(KADIZ) 침범 (PG) [정연주 제작] 일러스트</figcaption></figure></section></div>",
-                    "ATTACH_FILE":"",
-                    "COMMON_CD":"CD0021",
-                    "COMMON_NM":"공통",
-                    "REG_USER_ID":"hubpop",
-                    "REG_USER_NM":"허브팝",
-                    "REG_DT":"2019-05-30",
-                    "UPT_USER_ID":"hubpop",
-                    "UPT_USER_NM":"허브팝",
-                    "UPT_DT":"2019-05-30",
-                    "DELETE_YN":"N"
-                }
-            ],
-            "status":{
-                "code":200,
-                "name":"OK"
-            }
-        }
+        timeRangeFormat: 'YYYY-MM-DD HH:mm'
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},

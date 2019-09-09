@@ -25,7 +25,7 @@ angular.module('app')
 		layoutTemplateUrl : {
 			navigation : _LAYOUT_VIEWS_ + '/navigation.html',
 			leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
-			mainTop : _LAYOUT_VIEWS_ + '/mainTop.html',
+			mainTop : _LAYOUT_VIEWS_ + '/mainTop.html'
 		},
 		mainBody: {
 			templateUrl: _LAYOUT_VIEWS_ + '/mainBody.html',
@@ -37,10 +37,10 @@ angular.module('app')
         popAlertFormUrl: _COMM_VIEWS_ + '/common/popAlertForm.html',
         popAlertFormUrl2: _COMM_VIEWS_ + '/common/popAlertForm2.html',
         xpertHosts : {
-            mysqlDB : "dbwebxpert.kepri-dev.crossent.crossent.com",
-            webLog : "weblog.kepri-dev.crossent.com",
-            terminal : "terminal.kepri-dev.crossent.com",
-            autoScaler : "autoscaler.ps..kepri-dev.crossent.crossent.com",
+            mysqlDB : "dbwebxpert.ps.hubpop.io",
+            webLog : "weblog.ps.hubpop.io",
+            terminal : "terminal.ps.hubpop.io",
+            autoScaler : "autoscaler.ps.hubpop.io"
         },
         homeUrl: '/#/',
         homePath: '/',
@@ -65,6 +65,9 @@ angular.module('app')
         rdpConnect : {
             baseDomain : "wins.hubpop.io",
             port : "20025"
+        },
+        iaasDef : {
+            insMaxDiskSize: 2048
         },
         loadingProgressBar : {
         	top : 80,
@@ -237,6 +240,11 @@ angular.module('app')
             admin: 'ADMIN',
             user: 'USER'
         },
+        ///특정 에러 문구 에러 메시지에 나타나지 않도록 수정. 2019.07.25
+        errorMessageSkip : [
+            "Not Found",
+            "Internal Server Error"
+        ],
         //임시 이메일 주소 체크
         tempEmail : [
             "ax80mail.com",
@@ -315,8 +323,7 @@ angular.module('app')
         resourceKey: {
             CPU: 'cpu',
             MEM: 'memory',
-            DSK: 'disk',
-            PROC: 'proc'
+            DSK: 'disk'
         },
         alarmLevel: [
             {value: 'failed', name: '다운'},
@@ -329,17 +336,15 @@ angular.module('app')
             {value: '2', name: '처리완료'},
             {value: '1', name: 'Alarm 발생'}
         ],
-        alarmBell: 1000*60*5,
+        alarmBell: 1000*60*1,
         timeRangeFormat: 'YYYY-MM-DD HH:mm'
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},
-        {id: 2, nodeid: 'cpu_load_usage', name: 'CPU Load 사용률',      func: 'tenantCpuLoad1mList',            type: 'lineChart', percent: false, axisLabel: 'Count per 1 minute'},
+        {id: 2, nodeid: 'cpu_load_usage', name: 'CPU Load 사용률',      func: 'tenantCpuLoad1mList',            type: 'lineChart', percent: false, axisLabel: '1m, 5m, 15m'},
         {id: 3, nodeid: 'mem_swap', name: 'Swap',                      func: 'tenantMemorySwapList',           type: 'lineChart', percent: true,  axisLabel: '%'},
         {id: 4, nodeid: 'mem_usage', name: '메모리 사용률',             func: 'tenantMemoryUsageList',          type: 'lineChart', percent: true,  axisLabel: '%'},
         {id: 5, nodeid: 'dsk_usage', name: '디스크 사용률',             func: 'tenantDiskUsageList',            type: 'lineChart', percent: true,  axisLabel: '%'},
-        // {id: 6, nodeid: 'dsk_io_read', name: '디스크 IO Read',          func: 'tenantDiskIOReadList',           type: 'lineChart', percent: false, axisLabel: 'KB / Sec'},
-        // {id: 7, nodeid: 'dsk_io_write', name: '디스크 IO Write',        func: 'tenantDiskIOWriteList',          type: 'lineChart', percent: false, axisLabel: 'KB / Sec'}
         {id: 6, nodeid: 'dsk_io', name: '디스크 IO',                    func: 'tenantDiskIOList',            type: 'lineChart', percent: false,  axisLabel: 'KB / Sec'}
     ])
     .constant('tenantNetChartConfig', [
