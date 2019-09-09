@@ -29,7 +29,7 @@
 					</li>
 					<li>
 						<strong class="tit">접속 IP</strong>
-						<div class="txt">{{ contents.loadbalancer.iaasLbInfo.floatingIp }}<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
+						<div class="txt">{{ contents.loadbalancer.iaasLbInfo.floatingIp }}<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.loadbalancer.iaasLbInfo)"><span class="ico_sm ico_copy"></span></button></div>
 					</li>
 					<li>
 						<strong class="tit">내부 IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를<br>사용할 수 있습니다.'"><span class="ico_info"></span></button></strong>
@@ -92,68 +92,20 @@
 						<td>
 							<div class="stateWrap">
 								<span class="stateMark type1"></span> <!--서버 상태 표시 -->
-								<span class="state-txt">server01</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
+								<span class="state-txt" ng-mouseover="server_con_detail=true" ng-mouseleave="server_con_detail=false">{{ iaaslbport.connImageName }}</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
 								<!-- 서버스펙상세 -->
-								<div class="server_con_detail" ng-if="false">
+								<div class="server_con_detail" ng-show="server_con_detail">
 									<ul>
 										<li><strong>- OS 유형 : </strong>Centos</li>
 										<li><strong>- 접속 IP : </strong>192.168.200.63</li>
 										<li><strong>- 내부 IP : </strong>10.2.1.3</li>
-										<li><strong>- 생성일시 : </strong>	2019-08-21 13:48:58</li>
+										<li><strong>- 생성일시 : </strong>2019-08-21 13:48:58</li>
 									</ul>
 								</div>
 								<!-- //서버스펙상세 -->
 							</div>
 						</td>
-						<td>HTTP</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>web service port</td>
-						<td>8080</td>
-						<td>HTTP</td>
-						<td>소스</td>
-						<td>
-							<div class="stateWrap">
-								<span class="stateMark type1"></span> <!--서버 상태 표시 -->
-								<span class="state-txt">server01</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
-								<!-- 서버스펙상세 -->
-								<div class="server_con_detail">
-									<ul>
-										<li><strong>- OS 유형 : </strong>Centos</li>
-										<li><strong>- 접속 IP : </strong>192.168.200.63</li>
-										<li><strong>- 내부 IP : </strong>10.2.1.3</li>
-										<li><strong>- 생성일시 : </strong>	2019-08-21 13:48:58</li>
-									</ul>
-								</div>
-								<!-- //서버스펙상세 -->
-							</div>
-						</td>
-						<td>HTTP</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>web service port</td>
-						<td>8080</td>
-						<td>HTTP</td>
-						<td>소스</td>
-						<td>
-							<div class="stateWrap">
-								<span class="stateMark type1"></span> <!--서버 상태 표시 -->
-								<span class="state-txt">server01</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
-								<!-- 서버스펙상세 -->
-								<div class="server_con_detail" ng-if="false">
-									<ul>
-										<li><strong>- OS 유형 : </strong>Centos</li>
-										<li><strong>- 접속 IP : </strong>192.168.200.63</li>
-										<li><strong>- 내부 IP : </strong>10.2.1.3</li>
-										<li><strong>- 생성일시 : </strong>	2019-08-21 13:48:58</li>
-									</ul>
-								</div>
-								<!-- //서버스펙상세 -->
-							</div>
-						</td>
-						<td>HTTP</td>
+						<td>{{ iaaslbport.healthType }}</td>
 					</tr>
 					<tr class="no-data" ng-if="false">
 						<td colspan="9">데이터가 없습니다.</td>
