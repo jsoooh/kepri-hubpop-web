@@ -3282,6 +3282,7 @@ a.ext_link:hover {text-decoration:underline;}
 .panel.type5 .panel_head .tit_area .txt {font-weight:400;}
 .panel.type5 .panel_head .tit_area .w180 {display:inline-block; width:180px; overflow:hidden; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .panel.type5 .panel_head .stateWrap {position:absolute; top:44px; right:55px;}
+.panel.type5 .panel_head .stateWrap .stateMark {vertical-align:middle;;}
 .tbl_cont .table > thead > tr > th {font-size:14px; border-bottom:1px solid #ddd; text-align:center; padding:10px 8px;}
 .tbl_cont .table > tbody > tr > td {font-size:14px; border-top:0; text-align:center; padding:9px 8px 10px 8px;}
 .tbl_cont .table > tbody > tr:nth-child(odd) > td {background:#f7f7f7;}
