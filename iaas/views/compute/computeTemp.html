@@ -15,12 +15,9 @@
 		<div class="pull-right">
 			<!-- 검색 -->
 			<div class="searchBox type2">
-				<!--<div class="form-group">
-					<input type="text" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText">
-				</div>-->
 				<div class="form-group">
 					<input ng-if="contents.tabIndex == 0" type="text" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText">
-					<input ng-if="contents.tabIndex == 1" type="text" placeholder="부하부산 서버 검색" style="width:300px;" ng-model="contents.schStorageFilterText">
+					<input ng-if="contents.tabIndex == 1" type="text" placeholder="부하분산 서버 검색" style="width:300px;" ng-model="contents.schLbFilterText">
 				</div>
 				<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
 			</div>
@@ -34,7 +31,7 @@
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.serverMainList | filter:{ status : '!deleting'}).length}})</span></a></li>
-			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.lbServiceLists | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.lbServiceLists).length}})</span></a></li>
 		</ul>
 
 		<!-- Tab panes -->
@@ -276,14 +273,14 @@
 				<!-- //버튼영역 -->
 
 				<!-- panel -->
-				<ul ng-if="(contents.lbServiceLists | filter:{ name: contents.schStorageFilterText, taskState : '!deleting' }).length > 0" class="ul-panel">
-					<li ng-repeat="(key, lbserviceList) in contents.lbServiceLists | filter:{ name: contents.schStorageFilterText, taskState : '!deleting' }">
+				<ul ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0" class="ul-panel">
+					<li ng-repeat="(key, lbserviceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
 						<!-- panel -->
 						<div class="panelWrap">
 							<div class="panel type5">
 								<div class="panel_head pdlr30">
 									<div class="tit_area">
-										<p class="tit" ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbserviceList.iaasLbInfo.id)">{{ lbserviceList.iaasLbInfo.name }}<em class="point1">({{ lbserviceList.iaasLbPortMembers.length }})</em></p>
+										<p class="tit" ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbserviceList.iaasLbInfo.id)">{{ lbserviceList.name }}<em class="point1">({{ lbserviceList.iaasLbPorts.length }})</em></p>
 										<p class="txt">부하 분산 서버</p>
 									</div>
 									<span class="stateWrap">
@@ -326,8 +323,8 @@
 													<td>
 														<div class="tbl_cont_state">
 															<ul>
-																<li><span class="s_count active"></span><span class="txt">활성</span></li>
-																<li><span class="s_count inactive"></span><span class="txt">비활성</span></li>
+																<li><span class="s_count active">{{ lbserviceList.iaasLbPortMembers.length }}</span><span class="txt">활성</span></li>
+																<li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
 															</ul>
 														</div>
 													</td>
@@ -343,12 +340,12 @@
 				</ul>
 				<!-- //panel -->
 
-				<div class="proj_list_area" ng-if="!contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
+				<div class="proj_list_area" ng-if="!contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
 					<ul class="ul-panel dash_list no_data">
 						<li><p class="no_data_txt pd0">생성된 부하분산 서버가 없습니다.</p></li>
 					</ul>
 				</div>
-				<div class="proj_list_area" ng-if="contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
+				<div class="proj_list_area" ng-if="contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
 					<ul class="ul-panel dash_list no_data">
 						<li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
 					</ul>
