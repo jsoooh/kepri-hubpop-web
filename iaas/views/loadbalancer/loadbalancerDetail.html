@@ -84,7 +84,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="tbl_selected" ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers"><!-- 선택된 tr -->
+					<tr ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers"><!-- 선택된 tr -->
 						<td>{{ $index + 1}}</td>
 						<td>{{ iaaslbportMember.iaasLbPort.name }}</td>
 						<td>{{ iaaslbportMember.protocolPort }}</td>
@@ -92,18 +92,22 @@
 						<td>{{ iaaslbportMember.iaasLbPort.lbAlgorithm }}</td>
 						<td>
 							<div class="stateWrap">
-								<span class="stateMark type1"></span> <!--서버 상태 표시 -->
-								<span class="state-txt" ng-mouseover="server_con_detail=true" ng-mouseleave="server_con_detail=false">{{ iaaslbportMember.name }}</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
-								<!-- 서버스펙상세 -->
-								<div class="server_con_detail" ng-show="server_con_detail">
-									<ul>
-										<li><strong>- OS 유형 : </strong>Centos(추후 보기로 함)</li>
-										<li><strong>- 접속 IP : </strong>{{ iaaslbportMember.iaasLbPort.iaasLbInfo.floatingIp }}</li>
-										<li><strong>- 내부 IP : </strong>{{ iaaslbportMember.ipAddress}}</li>
-										<li><strong>- 생성일시 : </strong>{{ iaaslbportMember.created | date : 'yyyy-MM-dd HH:mm:ss'}}</li>
-									</ul>
-								</div>
-								<!-- //서버스펙상세 -->
+								<ul>
+									<li>
+											<span class="stateMark type1"></span> <!--서버 상태 표시 -->
+											<span class="state-txt" ng-mouseover="server_con_detail=true" ng-mouseleave="server_con_detail=false">{{ iaaslbportMember.name }}</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
+										<!-- 서버스펙상세 -->
+										<div class="server_con_detail" ng-show="server_con_detail">
+											<ul>
+												<li><strong>- OS 유형 : </strong>Centos(추후 보기로 함)</li>
+												<li><strong>- 접속 IP : </strong>{{ iaaslbportMember.iaasLbPort.iaasLbInfo.floatingIp }}</li>
+												<li><strong>- 내부 IP : </strong>{{ iaaslbportMember.ipAddress}}</li>
+												<li><strong>- 생성일시 : </strong>{{ iaaslbportMember.created | date : 'yyyy-MM-dd HH:mm:ss'}}</li>
+											</ul>
+										</div>
+										<!-- //서버스펙상세 -->
+									</li>
+								</ul>
 							</div>
 						</td>
 						<td>{{ iaaslbportMember.iaasLbPort.healthType }}</td>
