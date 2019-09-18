@@ -176,7 +176,14 @@ angular.module('iaas.services')
             widget.chart = new Dygraph(document.getElementById(nodeid), resources, option);
             widget.chart.updateOptions({
                 zoomCallback : function (minDate, maxDate, yRange) {
-                    computeDetailService.zoomCallback(minDate, maxDate, p);
+                    if (!computeDetailService.zoomCallback(minDate, maxDate, p)) {
+                        var valueRange = [0, 101];
+                        if (!widget.percent) valueRange = null;
+                        widget.chart.updateOptions({
+                            dateWindow: null,
+                            valueRange: valueRange
+                        });
+                    }
                 }
             });
             p.count++
