@@ -18,8 +18,10 @@ angular.module('iaas.controllers')
         ct.actionLogLimit 	= '10';
         ct.pageFirstLoad 	= true;
         ct.loadingServerList 	= false;
+        ct.loadingLbList 	= false;
         ct.showVal			= false;
         ct.schFilterText    = "";
+        ct.schLbFilterText    = "";
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenant.id;
         ct.data.tenantName = $scope.main.userTenant.korName;
@@ -730,6 +732,9 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancers', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.lbServiceLists = data.content;
+                if (ct.lbServiceLists.length != 0) {
+                    ct.loadingLbList = true;
+                }
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);

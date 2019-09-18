@@ -56,7 +56,7 @@ angular.module('app')
                                 templateUrl: _IAAS_VIEWS_+'/loadbalancer/loadbalancerCreateForm.html'
                             },
                             lbDetail: {
-                                name: 'server_main',
+                                name: 'loadbalancer_main',
                                 stateKey: 'iaasLoadbalancerDetail',
                                 url: '/iaas/loadbalancer/detail/:lbInfoId',
                                 controller: 'iaasLoadbalancerDetailCtrl',
