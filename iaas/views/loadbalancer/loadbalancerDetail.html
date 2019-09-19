@@ -62,7 +62,7 @@
 <!-- cBox -->
 <div class="cBox type2 appCnt-vol strgList m40">
 	<div class="cBox-hd">
-		<h4 class="c-tit">부하분산 포트 사용현황 <em class="point1">({{ contents.loadbalancer.iaasLbPortMembers.length }})</em></h4>
+		<h4 class="c-tit">부하분산 포트 사용현황 <em class="point1">({{ contents.loadbalancer.iaasLbPorts.length }})</em></h4>
 		<div class="pull-right">
 			<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.formOpen($event, 'port', contents.loadbalancer);">
 				<span class="ico">추가</span>
@@ -73,48 +73,52 @@
 		<div class="tbl type1">
 			<table class="table">
 				<thead>
-					<tr>
-						<th scope="col" style="width:10%;">NO.</th>
-						<th scope="col" style="width:25%;">이름</th>
-						<th scope="col" style="width:10%;">포트</th>
-						<th scope="col" style="width:10%;">프로토콜</th>
-						<th scope="col" style="width:13%;">로드 밸런스 유형<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 로드밸런스 유형<br/> 1. 라운드로빈: 설명<br/>2. 소스: 설명<br/>3. 리스트커넥션:설명'"><span class="ico_info"></span></button></div></th>
-						<th scope="col" style="width:20%;">연결서버</th>
-						<th scope="col" style="width:12%;">헬스체크유형</th>
-					</tr>
+				<tr>
+					<th scope="col" style="width:10%;">NO.</th>
+					<th scope="col" style="width:25%;">이름</th>
+					<th scope="col" style="width:10%;">포트</th>
+					<th scope="col" style="width:10%;">프로토콜</th>
+					<th scope="col" style="width:13%;">로드 밸런스 유형<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 로드밸런스 유형<br/> 1. 라운드로빈: 설명<br/>2. 소스: 설명<br/>3. 리스트커넥션:설명'"><span class="ico_info"></span></button></div></th>
+					<th scope="col" style="width:20%;">연결서버</th>
+					<th scope="col" style="width:12%;">헬스체크유형</th>
+				</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers"><!-- 선택된 tr -->
-						<td>{{ $index + 1}}</td>
-						<td>{{ iaaslbportMember.iaasLbPort.name }}</td>
-						<td>{{ iaaslbportMember.protocolPort }}</td>
-						<td>{{ iaaslbportMember.iaasLbPort.protocol }}</td>
-						<td>{{ iaaslbportMember.iaasLbPort.lbAlgorithm }}</td>
-						<td>
-							<div class="stateWrap">
-								<ul>
-									<li>
+				<tr ng-repeat="iaasLbPort in contents.loadbalancer.iaasLbPorts"><!-- 선택된 tr -->
+					<td>{{ $index + 1}}</td>
+					<td ng-click="contents.showPortDetail(iaasLbPort)">{{ iaasLbPort.name }}</td>
+					<td>{{ iaasLbPort.protocolPort }}</td>
+					<td>{{ iaasLbPort.protocol }}</td>
+					<td>{{ iaasLbPort.lbAlgorithm }}</td>
+					<td>
+						<div class="stateWrap">
+							<ul>
+								<div ng-if="iaasLbPort.connImageId" class="stateWrap">
+									<ul ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
+										<li>
 											<span class="stateMark type1"></span> <!--서버 상태 표시 -->
 											<span class="state-txt" ng-mouseover="server_con_detail=true" ng-mouseleave="server_con_detail=false">{{ iaaslbportMember.name }}</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
-										<!-- 서버스펙상세 -->
-										<div class="server_con_detail" ng-show="server_con_detail">
-											<ul>
-												<li><strong>- OS 유형 : </strong>Centos(추후 보기로 함)</li>
-												<li><strong>- 접속 IP : </strong>{{ iaaslbportMember.iaasLbPort.iaasLbInfo.floatingIp }}</li>
-												<li><strong>- 내부 IP : </strong>{{ iaaslbportMember.ipAddress}}</li>
-												<li><strong>- 생성일시 : </strong>{{ iaaslbportMember.created | date : 'yyyy-MM-dd HH:mm:ss'}}</li>
-											</ul>
-										</div>
-										<!-- //서버스펙상세 -->
-									</li>
-								</ul>
-							</div>
-						</td>
-						<td>{{ iaaslbportMember.iaasLbPort.healthType }}</td>
-					</tr>
-					<tr class="no-data" ng-if="false">
-						<td colspan="9">데이터가 없습니다.</td>
-					</tr>
+											<!-- 서버스펙상세 -->
+											<div class="server_con_detail" ng-show="server_con_detail">
+												<ul>
+													<li><strong>- OS 유형 : </strong>Centos(추후 보기로 함)</li>
+													<li><strong>- 접속 IP : </strong>{{ iaaslbportMember.iaasLbPort.iaasLbInfo.floatingIp }}</li>
+													<li><strong>- 내부 IP : </strong>{{ iaaslbportMember.ipAddress}}</li>
+													<li><strong>- 생성일시 : </strong>{{ iaaslbportMember.created | date : 'yyyy-MM-dd HH:mm:ss'}}</li>
+												</ul>
+											</div>
+											<!-- //서버스펙상세 -->
+										</li>
+									</ul>
+								</div>
+							</ul>
+						</div>
+					</td>
+					<td>{{ iaasLbPort.healthType }}</td>
+				</tr>
+				<tr class="no-data" ng-if="false">
+					<td colspan="9">데이터가 없습니다.</td>
+				</tr>
 				</tbody>
 			</table>
 		</div>
@@ -122,7 +126,7 @@
 </div>
 <!-- //cBox -->
 <!-- tab wrap -->
-<div class="tabWrap type1 mt30">
+<div ng-if="contents.iaasLbPorts.id" class="tabWrap type1 mt30">
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs" role="tablist">
 		<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">포트관리<span></span></a></li>
@@ -140,8 +144,8 @@
 					<div class="panel_head">
 						<div class="tit pull-left">포트관리</div>
 						<div class="pull-right">
-							<button type="button" name="button" class="btn ico-modi only-ico" title="수정"><span class="ico">수정</span></button>
-							<button type="button" name="button" class="btn ico-del only-ico" title="삭제" ng-click="contents.deleteLbPort(contents.iaasLbPorts[0].iaasLbInfo.portId);">
+							<button type="button" name="button" class="btn ico-modi only-ico" title="수정" ng-click="contents.fn.formOpen($event, 'editport', contents.loadbalancer);"><span class="ico">수정</span></button>
+							<button type="button" name="button" class="btn ico-del only-ico" title="삭제" ng-click="contents.deleteLbPort(contents.iaasLbPorts.id);">
 								<span class="ico">삭제</span>
 							</button>
 						</div>
@@ -153,7 +157,7 @@
 								<div class="msg_bg"></div>
 								<div class="msg_txt"><span>부하 분산 포트의 상세정보를 안내합니다.</span></div>
 							</div>
-							
+
 							<div class="cont_lay_div">
 								<ul>
 									<li class="pr40" style="width:50%;">
@@ -167,18 +171,18 @@
 													<col style="width:auto;">
 												</colgroup>
 												<tbody>
-													<tr>
-														<th>포트이름</th>
-														<td>{{ contents.iaasLbPorts[0].name }}</td>
-													</tr>
-													<tr>
-														<th>프로토콜</th>
-														<td>{{ contents.iaasLbPorts[0].protocol }}</td>
-													</tr>
-													<tr>
-														<th>포트</th>
-														<td>{{ contents.iaasLbPorts[0].protocolPort }}</td>
-													</tr>
+												<tr>
+													<th>포트이름</th>
+													<td>{{ contents.iaasLbPorts.name }}</td>
+												</tr>
+												<tr>
+													<th>프로토콜</th>
+													<td>{{ contents.iaasLbPorts.protocol }}</td>
+												</tr>
+												<tr>
+													<th>포트</th>
+													<td>{{ contents.iaasLbPorts.protocolPort }}</td>
+												</tr>
 												</tbody>
 											</table>
 										</div>
@@ -194,30 +198,30 @@
 													<col style="width:auto;">
 												</colgroup>
 												<tbody>
-													<tr>
-														<th>연결포트</th>
-														<td>{{ contents.iaasLbPorts[0].connectionPort }}</td>
-													</tr>
-													<tr>
-														<th>로드밸런스 유형</th>
-														<td>{{ contents.iaasLbPorts[0].lbAlgorithm }}</td>
-													</tr>
-													<tr>
-														<th>헬스체크 유형</th>
-														<td>{{ contents.iaasLbPorts[0].healthType }}</td>
-													</tr>
-													<tr>
-														<th>최대 연결 개수</th>
-														<td>{{ contents.iaasLbPorts[0].connectionLimit }}</td>
-													</tr>
-													<tr>
-														<th>헬스체크 주기(초)</th>
-														<td>{{ contents.iaasLbPorts[0].healthDelay }}</td>
-													</tr>
-													<tr>
-														<th>헬스체크 URL</th>
-														<td>{{ contents.iaasLbPorts[0].healthUrlPath }}</td>
-													</tr>
+												<tr>
+													<th>연결포트</th>
+													<td>{{ contents.iaasLbPorts.connectionPort }}</td>
+												</tr>
+												<tr>
+													<th>로드밸런스 유형</th>
+													<td>{{ contents.iaasLbPorts.lbAlgorithm }}</td>
+												</tr>
+												<tr>
+													<th>헬스체크 유형</th>
+													<td>{{ contents.iaasLbPorts.healthType }}</td>
+												</tr>
+												<tr>
+													<th>최대 연결 개수</th>
+													<td>{{ contents.iaasLbPorts.connectionLimit }}</td>
+												</tr>
+												<tr>
+													<th>헬스체크 주기(초)</th>
+													<td>{{ contents.iaasLbPorts.healthDelay }}</td>
+												</tr>
+												<tr>
+													<th>헬스체크 URL</th>
+													<td>{{ contents.iaasLbPorts.healthUrlPath }}</td>
+												</tr>
 												</tbody>
 											</table>
 										</div>
@@ -231,7 +235,7 @@
 			<!-- panel -->
 		</div>
 		<!-- //개요 탭 -->
-		
+
 		<!-- 연결서버 탭 -->
 		<div role="tabpanel" class="tab-pane" id="tab2" ng-class="{'active' : contents.tabIndex == 1}">
 			<!-- panel -->
@@ -255,7 +259,7 @@
 							</div>
 
 							<!-- 연결서버유형(서버) -->
-							<div class="cont_lay_div" ng-if="contents.iaasLbPorts[0].connType == 'server'">
+							<div class="cont_lay_div" ng-if="contents.iaasLbPorts.connType == 'server'">
 								<ul>
 									<li class="pr40" style="width:50%;">
 										<div class="cont-titWrap pt10">
@@ -264,13 +268,13 @@
 										<div class="tbw type1">
 											<table class="table">
 												<colgroup>
-													<col style="width:20%;">
+													<col style="width:22%;">
 													<col style="width:auto;">
 												</colgroup>
 												<tbody>
 												<tr>
 													<th>연결서버 유형</th>
-													<td>{{ contents.iaasLbPorts[0].connType }}</td>
+													<td>{{ contents.iaasLbPorts.connType }}</td>
 												</tr>
 												</tbody>
 											</table>
@@ -309,7 +313,7 @@
 							<!-- //연결서버유형(서버) -->
 
 							<!-- 연결서버유형(이미지) -->
-							<div class="cont_lay_div" ng-if="contents.iaasLbPorts[0].connType == 'image'">
+							<div class="cont_lay_div" ng-if="contents.iaasLbPorts.connType == 'image'">
 								<ul>
 									<li class="pr40" style="width:50%;">
 										<div class="cont-titWrap pt10">
@@ -318,22 +322,22 @@
 										<div class="tbw type1">
 											<table class="table">
 												<colgroup>
-													<col style="width:20%;">
+													<col style="width:22%;">
 													<col style="width:auto;">
 												</colgroup>
 												<tbody>
-													<tr>
-														<th>연결서버 유형</th>
-														<td>{{ contents.iaasLbPorts[0].connType }}</td>
-													</tr>
-													<tr>
-														<th>서버 이름</th>
-														<td>{{ contents.loadbalancer.iaasLbInfo.name }}</td>
-													</tr>
-													<tr>
-														<th>서버 수</th>
-														<td>{{ contents.loadbalancer.iaasLbPortMembers.length }}</td>
-													</tr>
+												<tr>
+													<th>연결서버 유형</th>
+													<td>{{ contents.iaasLbPorts.connType }}</td>
+												</tr>
+												<tr>
+													<th>서버 이름</th>
+													<td>{{ contents.loadbalancer.iaasLbInfo.name }}</td>
+												</tr>
+												<tr>
+													<th>서버 수</th>
+													<td>{{ contents.loadbalancer.iaasLbPortMembers.length }}</td>
+												</tr>
 												</tbody>
 											</table>
 										</div>
@@ -350,18 +354,18 @@
 													<col style="width:20%;">
 												</colgroup>
 												<thead>
-													<tr>
-														<th scope="col">서버이름</th>
-														<th scope="col">내부 IP</th>
-														<th scope="col">상태</th>
-													</tr>
+												<tr>
+													<th scope="col">서버이름</th>
+													<th scope="col">내부 IP</th>
+													<th scope="col">상태</th>
+												</tr>
 												</thead>
 												<tbody>
-													<tr ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
-														<td>{{ iaaslbportMember.name }}</td>
-														<td>{{ iaaslbportMember.ipAddress }}</td>
-														<td>정상</td>
-													</tr>
+												<tr ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
+													<td>{{ iaaslbportMember.name }}</td>
+													<td>{{ iaaslbportMember.ipAddress }}</td>
+													<td>정상</td>
+												</tr>
 												</tbody>
 											</table>
 										</div>
@@ -379,5 +383,4 @@
 	</div>
 </div>
 <!-- //tab wrap -->
-						
-	
+
