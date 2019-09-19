@@ -184,7 +184,7 @@ angular.module('portal.services', [])
                     "    <div class='notice_pop'>\n" +
                     "        <div class='modal-content'>\n" +
                     "            <div class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
-                    "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><a href='javascript:void(0);' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></a></button>\n" +
+                    "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><a href='#' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></a></button>\n" +
                     "                <h1 class='modal-title'>공지사항 </h1>\n" +
                     "            </div>\n" +
                     "            <div class='modal-body'>\n" +
