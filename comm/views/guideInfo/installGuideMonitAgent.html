@@ -1,7 +1,7 @@
 <div class="accss_guideWrap">
 	<h2>HubPop 모니터링 Agent({{spop.data.osType}}) 설치</h2>
 	<h3>1. 설치 대상</h3>
-	<p class="txt_level1">본 가이드의 Agent 설치 가이드 대상은 HubPop에서 2019년 9월 이전 생성된 HubPop 가상서버를 대상으로 한다.</p>
+	<p class="txt_level1">본 가이드의 Agent 설치 가이드 대상은 모니터링 Agent가 설치되지 않은 HubPop 가상서버를 대상으로 한다.</p>
 	<div class="tbl type1">
 		<table class="table">
 			<colgroup>
@@ -43,7 +43,32 @@
 	</div>
 	<div ng-show="spop.data.osType == 'centos' || spop.data.osType == 'ubuntu'">
 		<h3>2. 모니터링 Agent 설치 파일 Upload</h3>
-		<p class="txt_level1">다운로드 받은 설치 자동화 파일인 agentInstallerDist.tar를 HubPop 가상서버에 Upload한다.</p>
+		<p class="txt_level1">
+			다운로드 받은 설치 자동화 파일인 agentInstallerDist.tar를 HubPop 가상서버에 Upload한다.<br>
+			HubPop에서 제공하는 SSH Client Tool인 bitvise를 활용하여 agentInstallerDist.tar파일을 upload한다.
+		</p>
+		<h4>2.1 Bitvise SSH Client Login</h4>
+		<p class="txt_level2">
+			사용자 계정, 접속IP 및 Key 를 등록한 후 Login 한다<br>
+			접속계정 <span ng-show="spop.data.osType == 'ubuntu'">ubuntu</span><span ng-show="spop.data.osType == 'centos'">centos</span><br>
+			자세한 접속 정보는 [<span style="color: red">접속 가이드</span>]를 참조한다
+		</p>
+		<div class="imgWrap mgt0">
+			<img src="images/install_guide/install_guide_monit_agent_12.png">
+		</div>
+		<h4>2.2 FileUpload</h4>
+		<p class="txt_level2">
+			1) 화면 좌측 메뉴 중 SFTP Client Windows를 클릭한다.
+		</p>
+		<div class="imgWrap mgt0">
+			<img src="images/install_guide/install_guide_monit_agent_13.png">
+		</div>
+		<p class="txt_level2">
+			2) Sftp 화면이 다운로드 받은 agentInstallerDist.tar 파일을 서버에 Upload 한다.
+		</p>
+		<div class="imgWrap mgt0">
+			<img src="images/install_guide/install_guide_monit_agent_14.png">
+		</div>
 		<h3>3. 설치 파일 압축 해제</h3>
 		<p class="txt_level1">다음과 같이 압축을 해제 한다.</p>
 		<div class="cnt_msg_box promp">$ tar xvf agentInstallerDist.tar</div>
@@ -90,7 +115,7 @@
 	</div>
 	<div ng-show="spop.data.osType == 'windows'">
 		<h3>2. 모니터링 Agent 설치 파일 Upload</h3>
-		<p class="txt_level1">다운로드 받은 HubPop Windows VM C:\ 이하에 Upload 한다</p>
+		<p class="txt_level1">다운로드 받은 HubPop Windows VM C:\ 이하에 Upload 한다<br>자세한 접속 정보는 [<span style="color: red">접속 가이드</span>]를 참조한다</p>
 		<h3>3. 설치 파일 압축 해제</h3>
 		<p class="txt_level1">
 			1) agentInstallerDist.zip 파일 압축을 해제한다.<br>
@@ -136,6 +161,6 @@
 		border-radius: 0;
 	}
 	.imgWrap img {
-		width: 100%;
+		max-width: 100%;
 	}
 </style>

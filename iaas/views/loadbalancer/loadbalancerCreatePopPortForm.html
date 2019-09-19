@@ -7,29 +7,29 @@
 		</colgroup>
 		<tbody>
 			<tr>
-				<th scope="row">포트이름<!--<em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="툴팁이 필요"></em>--></th>
-				<td><input type="text" name="portName" class="form-control" value="{{pop.volume.name}}" placeholder="포트 이름을 입력하세요."></td>
+				<th scope="row">포트이름</th>
+				<td><input type="text" name="portName" class="form-control" ng-model="pop.ports.name" placeholder="포트 이름을 입력하세요."></td>
 			</tr>
 			<tr>
 				<th>프로토콜</th>
 				<td>
 					<div class="radio radio-inline">
-						<input type="radio" name="radio00" id="radio00-1">
-						<label for="radio00-1" class="label">HTTP</label>
+						<input type="radio" name="protocolRadio" id="protocolHTTP" ng-click="pop.ports.protocol = 'HTTP'">
+						<label for="protocolHTTP" class="label">HTTP</label>
 					</div>
 					<div class="radio radio-inline">
-						<input type="radio" name="radio00" id="radio00-2">
-						<label for="radio00-2" class="label">HTTPS</label>
+						<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-click="pop.ports.protocol = 'HTTPS'">
+						<label for="protocolHTTPS" class="label">HTTPS</label>
 					</div>
 					<div class="radio radio-inline">
-						<input type="radio" name="radio00" id="radio00-3">
-						<label for="radio00-3" class="label">TCP</label>
+						<input type="radio" name="protocolRadio" id="protocolTCP" ng-click="pop.ports.protocol = 'TCP'">
+						<label for="protocolTCP" class="label">TCP</label>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">포트</th>
-				<td><input type="text" name="volumeName" class="form-control" value="{{pop.volume.name}}" placeholder="포트(1~65535)를 입력하세요."></td>
+				<td><input type="text" name="protocolPort" class="form-control" ng-model="pop.ports.protocolPort" placeholder="포트(1~65535)를 입력하세요."></td>
 			</tr>
 		</tbody>
 	</table>
