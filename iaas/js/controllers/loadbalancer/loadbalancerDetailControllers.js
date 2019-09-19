@@ -385,10 +385,7 @@ angular.module('iaas.controllers')
         pop.validationService = new ValidationService({controllerAs: pop});
         pop.formName = $scope.dialogOptions.formName;
         pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.sltLoadBalancer = $scope.dialogOptions.selectLoadBalancer;
-        pop.lbInfo = $scope.dialogOptions.selectLoadBalancer.iaasLbInfo;
         pop.port = angular.copy($scope.contents.iaasLbPorts);
-        pop.portMembers = $scope.dialogOptions.selectLoadBalancer.iaasLbPortMembers;
         pop.fn = {};
         pop.data = {};
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
@@ -401,7 +398,6 @@ angular.module('iaas.controllers')
         $scope.actionLoading 			= false;
         pop.btnClickCheck 				= false;
         pop.validDisabled 				= true;
-
 
 
         // Dialog ok 버튼 클릭 시 액션 정의
@@ -420,23 +416,23 @@ angular.module('iaas.controllers')
         pop.fn.editLoadBalancerPort = function() {
             $scope.main.loadingMainBody = true;
             var params = {
-                id: "5091826c-2793-4ad4-8f48-dfad83f40914",
-                name: "web-port0806-8-2",
-                protocol: "HTTPS",
-                protocolPort: 443,
-                connectionPort: 443,
-                lbAlgorithm: "SOURCE",
-                healthType: "HTTPS",
-                connectionLimit: 2100,
-                healthDelay: 5,
-                healthUrlPath: "/index1.html",
+                id: pop.port.id,
+                name: pop.port.name,
+                protocol: pop.port.protocol,
+                protocolPort: pop.port.protocolPort,
+                connectionPort: pop.port.protocolPort,
+                lbAlgorithm: pop.port.lbAlgorithm,
+                healthType: pop.port.healthType,
+                connectionLimit: pop.port.connectionLimit,
+                healthDelay: pop.port.healthDelay,
+                healthUrlPath: pop.port.healthUrlPath,
             };
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port', 'PUT', params);
             returnPromise.success(function (data, status, headers) {
+                $scope.main.replacePage();
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("수정 되었습니다.");
-                common.locationHref('/#/iaas/snapshot?tabIndex=1');
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
