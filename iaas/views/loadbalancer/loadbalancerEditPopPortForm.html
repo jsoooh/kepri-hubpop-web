@@ -1,14 +1,12 @@
 <!-- table -->
+<h4 class="tit_pop">포트 정보</h4>
 <div class="tbw type1">
 	<table class="table">
 		<colgroup>
-			<col style="width: 25%;">
+			<col style="width: 30%;">
 			<col style="width: auto;">
 		</colgroup>
 		<tbody>
-		<div class="cont-titWrap pt10">
-			<h3 class="h-tit4 pd0">포트 정보</h3>
-		</div>
 			<tr>
 				<th scope="row">포트이름</th>
 				<td><input type="text" name="portName" class="form-control" ng-model="pop.port.name" placeholder="포트 이름을 입력하세요."></td>
@@ -37,6 +35,8 @@
 		</tbody>
 	</table>
 </div>
+
+<h4 class="tit_pop pt20">연결 정보</h4>
 <div class="tbw type1">
 	<table class="table">
 		<colgroup>
@@ -44,9 +44,6 @@
 			<col style="width: auto;">
 		</colgroup>
 		<tbody>
-		<div class="cont-titWrap pt10">
-			<h3 class="h-tit4 pd0">연결 정보</h3>
-		</div>
 		<tr>
 			<th scope="row">연결포트</th>
 			<td><input type="text" name="protocolPort" class="form-control" ng-model="pop.port.protocolPort"></td>
