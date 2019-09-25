@@ -49,7 +49,7 @@ angular.module('app')
                                 templateUrl: _IAAS_VIEWS_+'/compute/computeAlarm.html'
                             },
                             lbCreate: {
-                                name: 'server_main',
+                                name: 'loadbalancer_main',
                                 stateKey: 'iaasLoadbalancerCreate',
                                 url: '/iaas/loadbalancer/create',
                                 controller: 'iaasLoadbalancerCreateCtrl',

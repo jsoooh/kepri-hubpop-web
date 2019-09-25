@@ -19,16 +19,17 @@
 									<i class="i_star"></i> <span class="pnb_t_txt">부하 분산 장치 이름</span>
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 								</div>
-								<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required">
+								<input type="text" class="form-control" name="loadBalancerName" ng-model="contents.data.iaasLbInfo.name" maxlength="50" validation="alpha_dash|required">
 							</li>
-							<li class="pn-Toggle">
+							<!--<li class="pn-Toggle">-->
+							<li>
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">설명</span>
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'추가할 디스크에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
-									<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+									<!--<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>-->
 								</div>
 								<div class="s_cont_box">
-									<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
+									<textarea rows="5" cols="" id="volumeDescription" name="loadBalancerDescription" style="height:150px;" ng-model="contents.data.iaasLbInfo.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
 								</div>
 							</li>
 							<li>
@@ -45,28 +46,28 @@
 										<tbody>
 											<tr>
 												<th>포트이름</th>
-												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="포트 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.iaasLbPort.name" maxlength="50" placeholder="포트 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
 											</tr>
 											<tr>
 												<th>프로토콜</th>
 												<td>
 													<div class="radio radio-inline">
-													   <input type="radio" name="radio00" id="radio00-1">
-													   <label for="radio00-1" class="label">HTTP</label>
-												   </div>
+														<input type="radio" name="protocolRadio" id="protocolHTTP" ng-click="contents.data.iaasLbPort.protocol = 'HTTP'">
+														<label for="protocolHTTP" class="label">HTTP</label>
+													</div>
 													<div class="radio radio-inline">
-													   <input type="radio" name="radio00" id="radio00-2">
-													   <label for="radio00-2" class="label">HTTPS</label>
-												   </div>
+														<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-click="contents.data.iaasLbPort.protocol = 'HTTPS'">
+														<label for="protocolHTTPS" class="label">HTTPS</label>
+													</div>
 													<div class="radio radio-inline">
-													   <input type="radio" name="radio00" id="radio00-3">
-													   <label for="radio00-3" class="label">TCP</label>
-												   </div>
+														<input type="radio" name="protocolRadio" id="protocolTCP" ng-click="contents.data.iaasLbPort.protocol = 'TCP'">
+														<label for="protocolTCP" class="label">TCP</label>
+													</div>
 												</td>
 											</tr>
 											<tr>
 												<th>포트</th>
-												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="포트(1-65535)를 입력하세요." validation="alpha_dash|required"></td>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.iaasLbPort.protocolPort" maxlength="50" placeholder="포트(1-65535)를 입력하세요." validation="alpha_dash|required"></td>
 											</tr>
 										</tbody>
 									</table>
@@ -80,17 +81,17 @@
 								<div class="mt20">
 									<span class="pnb_stit">- 연결서버 유형 : </span>
 									<div class="radio radio-inline">
-										<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="contents.appPushData.pushType" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<input type="radio" name="connType" id="app-radio1-1" value="SERVER" ng-click="contents.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
 										<label for="app-radio1-1" class="label">서버</label>
 									</div>
 									<div class="radio radio-inline">
-										<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="contents.appPushData.pushType" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
-										<label for="app-radio1-2" class="label" title="현재는 서비스 하지 않습니다.">이미지</label>
+										<input type="radio" name="connType" id="app-radio1-2" value="IMAGE" ng-click="contents.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+										<label for="app-radio1-2" class="label">이미지</label>
 									</div>
 								</div>
 								
 								<!-- 대상서버선택(서버) -->
-								<div class="tbl type1 mt20">
+								<div class="tbl type1 mt20" ng-if="contents.sltConnType == 'server'">
 									<table class="table">
 										<colgroup>
 											<col style="width:10%;">
@@ -105,55 +106,15 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr class="tbl_selected"><!-- 선택 된 row -->
+											<tr ng-repeat="server in contents.serverMainList"><!-- 선택 된 row -->
 												<td>
-													<div class="radio radio-only" >
-														<input type="radio" name="" id="" value="">
-														<label for=""></label>
+													<div class="checkbox">
+														<input type="checkbox" ng-model="server.checked" id="{{ server.id }}" value="">
+														<label for="{{ server.id }}"></label>
 													</div>
 												</td>
-												<td>server01</td>
-												<td>10.10.10.5</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="radio radio-only" >
-														<input type="radio" name="" id="" value="">
-														<label for=""></label>
-													</div>
-												</td>
-												<td>server01</td>
-												<td>10.10.10.5</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="radio radio-only" >
-														<input type="radio" name="" id="" value="">
-														<label for=""></label>
-													</div>
-												</td>
-												<td>server01</td>
-												<td>10.10.10.5</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="radio radio-only" >
-														<input type="radio" name="" id="" value="">
-														<label for=""></label>
-													</div>
-												</td>
-												<td>server01</td>
-												<td>10.10.10.5</td>
-											</tr>
-											<tr>
-												<td>
-													<div class="radio radio-only" >
-														<input type="radio" name="" id="" value="">
-														<label for=""></label>
-													</div>
-												</td>
-												<td>server01</td>
-												<td>10.10.10.5</td>
+												<td>{{ server.name }}</td>
+												<td>{{ server.fixedIp }}</td>
 											</tr>
 										</tbody>
 									</table>
@@ -161,7 +122,7 @@
 								<!-- //대상서버선택(서버) -->
 								
 								<!-- 대상서버선택(이미지) -->
-								<div class="tbw type1 mt20" ng-if="false">
+								<div class="tbw type1 mt20" ng-if="contents.sltConnType == 'image'">
 									<table class="table">
 										<colgroup>
 											<col style="width:15%;">
@@ -171,20 +132,21 @@
 											<tr>
 												<th>대상 백업 이미지</th>
 												<td>
-													<select name="" class="form-control">
-														<option value="">server01-bk</option>
-														<option value="">server02-bk</option>
-														<option value="">server03-bk</option>
+													<select ng-model="contents.data.iaasLbPort.connImageId" name="" class="form-control">
+														<option value="">선택</option>
+														<option ng-repeat="instanceSnapshot in contents.instanceSnapshots" value="{{ instanceSnapshot.id }}">
+															{{ instanceSnapshot.name }}
+														</option>
 													</select>
 												</td>
 											</tr>
 											<tr>
 												<th>서버 이름</th>
-												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.iaasLbPort.connImageName" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
 											</tr>
 											<tr>
 												<th>서버 수</th>
-												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 수를 입력하세요." validation="alpha_dash|required"></td>
+												<td><input type="text" class="form-control" name="serverCount" ng-model="contents.data.iaasLbPort.connImageCount" maxlength="50" placeholder="서버 수를 입력하세요." validation="alpha_dash|required"></td>
 											</tr>
 										</tbody>
 									</table>
@@ -197,7 +159,7 @@
 					</div>
 					<div class="pn_footer">
 						<div class="btn-btm mgt0">
-							<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createServer();">설정 저장</button>
+							<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createLoadBalancer();">설정 저장</button>
 							<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
 						</div>
 					</div>

@@ -93,7 +93,7 @@
 					<td>
 						<div class="stateWrap">
 							<ul>
-								<div ng-if="iaasLbPort.connImageId" class="stateWrap">
+								<div ng-if="iaasLbPort.connType" class="stateWrap">
 									<ul ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
 										<li>
 											<span class="stateMark type1"></span> <!--서버 상태 표시 -->
@@ -244,7 +244,7 @@
 					<div class="panel_head">
 						<div class="tit pull-left">연결서버</div>
 						<div class="pull-right">
-							<button type="button" name="button" class="btn ico-modi only-ico" title="수정"><span class="ico">수정</span></button>
+							<button type="button" name="button" class="btn ico-modi only-ico" title="수정" ng-click="contents.fn.formOpen($event, 'editserver', contents.loadbalancer);"><span class="ico">수정</span></button>
 							<button type="button" name="button" class="btn ico-del only-ico" title="삭제">
 								<span class="ico">삭제</span>
 							</button>
