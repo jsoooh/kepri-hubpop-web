@@ -1,14 +1,12 @@
 <!-- table -->
+<h4 class="tit_pop">포트 정보</h4>
 <div class="tbw type1">
 	<table class="table">
 		<colgroup>
-			<col style="width: 25%;">
+			<col style="width: 30%;">
 			<col style="width: auto;">
 		</colgroup>
 		<tbody>
-		<div class="cont-titWrap pt10">
-			<h3 class="h-tit4 pd0">포트 정보</h3>
-		</div>
 			<tr>
 				<th scope="row">포트이름</th>
 				<td><input type="text" name="portName" class="form-control" ng-model="pop.port.name" placeholder="포트 이름을 입력하세요."></td>
@@ -17,26 +15,28 @@
 				<th>프로토콜</th>
 				<td>
 					<div class="radio radio-inline">
-						<input type="radio" name="radio00" id="radio00-1">
-						<label for="radio00-1" class="label">HTTP</label>
+						<input type="radio" name="protocolRadio" id="protocolHTTP" ng-click="pop.port.protocol = 'HTTP'" ng-checked="pop.port.protocol == 'HTTP'">
+						<label for="protocolHTTP" class="label">HTTP</label>
 					</div>
 					<div class="radio radio-inline">
-						<input type="radio" name="radio00" id="radio00-2">
-						<label for="radio00-2" class="label">HTTPS</label>
+						<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-click="pop.port.protocol = 'HTTPS'" ng-checked="pop.port.protocol == 'HTTPS'">
+						<label for="protocolHTTPS" class="label">HTTPS</label>
 					</div>
 					<div class="radio radio-inline">
-						<input type="radio" name="radio00" id="radio00-3">
-						<label for="radio00-3" class="label">TCP</label>
+						<input type="radio" name="protocolRadio" id="protocolTCP" ng-click="pop.port.protocol = 'TCP'" ng-checked="pop.port.protocol == 'TCP'">
+						<label for="protocolTCP" class="label">TCP</label>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">포트</th>
-				<td><input type="text" name="volumeName" class="form-control" ng-model="pop.port.protocolPort"></td>
+				<td><input type="text" name="protocolPort" class="form-control" ng-model="pop.port.protocolPort"></td>
 			</tr>
 		</tbody>
 	</table>
 </div>
+
+<h4 class="tit_pop pt20">연결 정보</h4>
 <div class="tbw type1">
 	<table class="table">
 		<colgroup>
@@ -44,23 +44,20 @@
 			<col style="width: auto;">
 		</colgroup>
 		<tbody>
-		<div class="cont-titWrap pt10">
-			<h3 class="h-tit4 pd0">연결 정보</h3>
-		</div>
 		<tr>
 			<th scope="row">연결포트</th>
-			<td><input type="text" name="portName" class="form-control" ng-model="pop.port.connectionPort"></td>
+			<td><input type="text" name="protocolPort" class="form-control" ng-model="pop.port.protocolPort"></td>
 		</tr>
 		<tr>
 			<th>로드 밸런스 유형</th>
 			<td>
 				<div class="radio radio-inline">
-					<input type="radio" name="radio01" id="radio00-4">
-					<label for="radio00-4" class="label">소스</label>
+					<input type="radio" name="loadBalancerRadio" id="SOURCE" ng-click="pop.port.lbAlgorithm = 'SOURCE'" ng-checked="pop.port.lbAlgorithm == 'SOURCE'">
+					<label for="SOURCE" class="label">SOURCE</label>
 				</div>
 				<div class="radio radio-inline">
-					<input type="radio" name="radio01" id="radio00-5">
-					<label for="radio00-5" class="label">Round Robin</label>
+					<input type="radio" name="loadBalancerRadio" id="ROUND_ROBIN" ng-click="pop.port.lbAlgorithm = 'ROUND_ROBIN'" ng-checked="pop.port.lbAlgorithm=='ROUND_ROBIN'">
+					<label for="ROUND_ROBIN" class="label">ROUND_ROBIN</label>
 				</div>
 			</td>
 		</tr>
@@ -68,34 +65,34 @@
 			<th>헬스 체크 유형</th>
 			<td>
 				<div class="radio radio-inline">
-					<input type="radio" name="radio02" id="radio00-6">
-					<label for="radio00-6" class="label">HTTP</label>
+					<input type="radio" name="healthCheck" id="healthCheckHTTP" ng-click="pop.port.healthType = 'HTTP'" ng-checked="pop.port.healthType == 'HTTP'">
+					<label for="healthCheckHTTP" class="label">HTTP</label>
 				</div>
 				<div class="radio radio-inline">
-					<input type="radio" name="radio02" id="radio00-7">
-					<label for="radio00-7" class="label">HTTPS</label>
+					<input type="radio" name="healthCheck" id="healthCheckHTTPS" ng-click="pop.port.healthType = 'HTTPS'" ng-checked="pop.port.healthType == 'HTTPS'">
+					<label for="healthCheckHTTPS" class="label">HTTPS</label>
 				</div>
 				<div class="radio radio-inline">
-					<input type="radio" name="radio02" id="radio00-8">
-					<label for="radio00-8" class="label">TCP</label>
+					<input type="radio" name="healthCheck" id="healthCheckTCP" ng-click="pop.port.healthType = 'TCP'" ng-checked="pop.port.healthType == 'TCP'">
+					<label for="healthCheckTCP" class="label">TCP</label>
 				</div>
 				<div class="radio radio-inline">
-					<input type="radio" name="radio02" id="radio00-9">
-					<label for="radio00-9" class="label">PING</label>
+					<input type="radio" name="healthCheck" id="healthCheckPING" ng-click="pop.port.healthType = 'PING'" ng-checked="pop.port.healthType == 'PING'">
+					<label for="healthCheckPING" class="label">PING</label>
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<th scope="row">최대 연결 개수</th>
-			<td><input type="text" name="volumeName" class="form-control" ng-model="pop.port.connectionLimit"></td>
+			<td><input type="text" name="connectionLimit" class="form-control" ng-model="pop.port.connectionLimit"></td>
 		</tr>
 		<tr>
 			<th scope="row">헬스 체크 주기(초)</th>
-			<td><input type="text" name="volumeName" class="form-control" ng-model="pop.port.healthDelay"></td>
+			<td><input type="text" name="healthDelay" class="form-control" ng-model="pop.port.healthDelay"></td>
 		</tr>
-		<tr>
+		<tr ng-if="pop.port.healthType == 'HTTP' || pop.port.healthType == 'HTTPS'">
 			<th scope="row">헬스 체크 URL</th>
-			<td><input type="text" name="volumeName" class="form-control" value="" ng-model="pop.port.healthUrlPath"></td>
+			<td><input type="text" name="healthUrlPath" class="form-control" ng-model="pop.port.healthUrlPath"></td>
 		</tr>
 		</tbody>
 	</table>

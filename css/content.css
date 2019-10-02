@@ -3240,7 +3240,7 @@ a.ext_link:hover {text-decoration:underline;}
 .proj_dashboard .type_cloud .cloud_stateWrap .state_data {display:table-cell; box-sizing:border-box; width:64%; vertical-align:top;}
 .proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul {display:table; width:100%;}
 .proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul > li {display:table-cell; box-sizing:border-box;}
-.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {display:table-cell; box-sizing:border-box; /* width:46%; */ padding-left:0;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {display:table-cell; box-sizing:border-box; /* width:46%;  padding-left:0;*/}
 .proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data .sm_tit {text-align:left; margin-bottom:0;}
 
 
@@ -3304,3 +3304,7 @@ a.ext_link:hover {text-decoration:underline;}
 
 /*부하분산 리스트 > 타이틀 > 포인트 텍스트 굵기*/
 .panel.type5 .panel_head .tit em {font-weight:700;}
+
+/*팝업 타이틀 정의*/
+.tit_pop {display:block; font-size:18px; font-weight:500; color:#333; margin-bottom:15px;}
+.tit_pop::before {display:inline-block; content:''; width:4px; height:14px; background:#3360c5; margin-right:6px;}

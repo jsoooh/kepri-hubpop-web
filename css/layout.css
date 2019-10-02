@@ -257,7 +257,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 #container .rightCnt .breadcrumb>.active{ color:#333;}
 #container .rightCnt .breadcrumb>.active:before{background-position: -426px -0px;}
 #container .content{position: relative; padding:60px;}
-#container .content{padding:30px 40px; overflow: hidden;}
+#container .content{padding:30px 40px 70px 40px; overflow: hidden;}
 
 .effect #navbar, .effect #content-container, .effect #mainnav-container, .effect #aside-container, .effect #footer, .effect .navbar-brand, .effect .navbar-content, .effect .navbar-header:before, .effect .page-fixedbar-container {transition-property: width, padding, left, right; transition-duration: .35s;}
 

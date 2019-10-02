@@ -142,7 +142,6 @@ angular.module('common.controllers')
             var i = 0;
             angular.forEach(ct.tempNotices, function (noticeItem) {
                 var attachFiles = [];
-                var attachFile = {};
                 if (noticeItem.DELETE_YN == "N" && noticeItem.POP_YN == "Y" && noticeItem.START_DT <= toDay && noticeItem.END_DT >= toDay && $cookies.get('notice_' + noticeItem.NOTICE_NO) != 'valid') {
                     i++;
                     noticeItem["isView"] = true;
@@ -152,6 +151,7 @@ angular.module('common.controllers')
                         var arrFiles = noticeItem.ATTACH_FILE.split(",");   //"ATTACH_FILE":"206|RTU속성2.txt,210|RTU속성33.txt"
                         if (!!arrFiles && arrFiles.length > 0) {
                             angular.forEach(arrFiles, function (file) {
+                                var attachFile = {};
                                 var arrFileInfo = file.split("|");      //206|RTU속성2.txt
                                 attachFile["FILE_NO"] = arrFileInfo[0];      //206
                                 attachFile["FILE_NAME"] = arrFileInfo[1];    //RTU속성2.txt

@@ -34,6 +34,10 @@ angular.module('iaas.controllers')
             {
                 ct.fn.editPopPort($event,data);
             }
+            else if (state == 'editserver')
+            {
+                ct.fn.editPopServer($event,data);
+            }
         };
 
         // 부하분산 포트 사용현황 - 추가 버튼
@@ -68,6 +72,25 @@ angular.module('iaas.controllers')
             ct.getLb();
         };
 
+        // 포트관리 - 수정
+        ct.fn.editPopServer = function($event, lbservice) {
+            var dialogOptions =  {
+                controller       : "iaasEditServerPopFormCtrl" ,
+                formName         : 'iaasEditServerPopForm',
+                selectLoadBalancer    : angular.copy(lbservice),
+                callBackFunction : ct.editPopServerCallBackFunction
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.editPopServerCallBackFunction = function() {
+            ct.getLb();
+        };
+
+        // 부하분산 관리 - 이름/설명 변경
         ct.fn.reNamePopLb = function($event, lbservice) {
             var dialogOptions =  {
                 controller              : "iaasReNamePopLoadBalancerCtrl" ,
@@ -385,10 +408,7 @@ angular.module('iaas.controllers')
         pop.validationService = new ValidationService({controllerAs: pop});
         pop.formName = $scope.dialogOptions.formName;
         pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.sltLoadBalancer = $scope.dialogOptions.selectLoadBalancer;
-        pop.lbInfo = $scope.dialogOptions.selectLoadBalancer.iaasLbInfo;
         pop.port = angular.copy($scope.contents.iaasLbPorts);
-        pop.portMembers = $scope.dialogOptions.selectLoadBalancer.iaasLbPortMembers;
         pop.fn = {};
         pop.data = {};
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
@@ -401,7 +421,6 @@ angular.module('iaas.controllers')
         $scope.actionLoading 			= false;
         pop.btnClickCheck 				= false;
         pop.validDisabled 				= true;
-
 
 
         // Dialog ok 버튼 클릭 시 액션 정의
@@ -420,23 +439,23 @@ angular.module('iaas.controllers')
         pop.fn.editLoadBalancerPort = function() {
             $scope.main.loadingMainBody = true;
             var params = {
-                id: "5091826c-2793-4ad4-8f48-dfad83f40914",
-                name: "web-port0806-8-2",
-                protocol: "HTTPS",
-                protocolPort: 443,
-                connectionPort: 443,
-                lbAlgorithm: "SOURCE",
-                healthType: "HTTPS",
-                connectionLimit: 2100,
-                healthDelay: 5,
-                healthUrlPath: "/index1.html",
+                id: pop.port.id,
+                name: pop.port.name,
+                protocol: pop.port.protocol,
+                protocolPort: pop.port.protocolPort,
+                connectionPort: pop.port.protocolPort,
+                lbAlgorithm: pop.port.lbAlgorithm,
+                healthType: pop.port.healthType,
+                connectionLimit: pop.port.connectionLimit,
+                healthDelay: pop.port.healthDelay,
+                healthUrlPath: pop.port.healthUrlPath,
             };
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port', 'PUT', params);
             returnPromise.success(function (data, status, headers) {
+                $scope.main.replacePage();
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("수정 되었습니다.");
-                common.locationHref('/#/iaas/snapshot?tabIndex=1');
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -447,5 +466,127 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             });
         }
+    })
+
+    // 연결서버 - 수정 버튼 팝업 컨트롤러
+    .controller('iaasEditServerPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("loadbalancerDetailControllers.js : iaasEditServerPopFormCtrl", 1);
+
+        var pop = this;
+        pop.validationService = new ValidationService({controllerAs: pop});
+        pop.formName = $scope.dialogOptions.formName;
+        pop.userTenant = angular.copy($scope.main.userTenant);
+        pop.port = angular.copy($scope.contents.iaasLbPorts);
+        pop.portMembers = angular.copy($scope.contents.loadbalancer.iaasLbPortMembers);
+        pop.fn = {};
+        pop.data = [];
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
+        pop.instanceSnapshots = [];
+
+        $scope.dialogOptions.title 		= "연결 서버 추가/수정";
+        $scope.dialogOptions.okName     	= "추가";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerEditPopServerForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+        pop.validDisabled 				= true;
+
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+
+            if (pop.port.connType == 'server') {
+                pop.fn.editConnectServer();
+            } else {
+                pop.fn.editConnectImage();
+            }
+        };
+
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        // 연결서버 유형: 이미지 선택시 백업 이미지 목록 불러옴
+        pop.fn.getInstanceSnapshotList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : pop.port.iaasLbInfo.tenantId
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                pop.instanceSnapshots = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 연결서버 유형이 server인 경우 연결서버 수정
+        pop.fn.editConnectServer = function() {
+            $scope.main.loadingMainBody = true;
+            var params = [];
+            angular.forEach(pop.portMembers, function(portMember) {
+                if (portMember.checked) {
+                    params.push({
+                        lbPortId: portMember.iaasLbPort.id,
+                        instanceId: portMember.instanceId,
+                        name: portMember.name,
+                        ipAddress: portMember.ipAddress
+                    });
+                }
+            });
+            common.mdDialogHide();
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/members/server', 'POST', params);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.replacePage();
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("수정 되었습니다.");
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 연결서버 유형이 image인 경우 연결서버 수정
+        pop.fn.editConnectImage = function() {
+            $scope.main.loadingMainBody = true;
+            var params = {
+                id: pop.port.id,
+                connImageCount: pop.port.connImageCount
+            };
+            common.mdDialogHide();
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/members/image', 'POST', params);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.replacePage();
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("수정 되었습니다.");
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.getInstanceSnapshotList();
     })
 ;
