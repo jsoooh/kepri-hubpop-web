@@ -179,3 +179,17 @@
     background-color: #eee !important;
     color: #828282 !important;
  }
+ .box-label {
+    text-align: right;
+ }
+ .label-item {
+    display: inline-block;
+    padding: 0 5px;
+ }
+ .label-item-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    position: relative;
+ }

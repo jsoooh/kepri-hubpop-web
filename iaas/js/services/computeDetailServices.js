@@ -186,6 +186,14 @@ angular.module('iaas.services')
                     }
                 }
             });
+
+            widget.chart.labels = [];
+            angular.forEach(option.labels.slice(1, option.labels.length), function (label, idx) {
+                widget.chart.labels.push({
+                    label: label,
+                    color: option.colors[idx]
+                });
+            });
             p.count++
         };
 

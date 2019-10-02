@@ -709,6 +709,12 @@
 															<h4>{{ widget.name }} <span class="">({{widget.axisLabel}})</span></h4>
 														</div>
 														<div class="box-content">
+															<div class="box-label">
+																<div class="label-item" ng-repeat="label in widget.chart.labels">
+																	<div class="label-item-color" style="background-color: {{ label.color }}"></div>
+																	<span>{{ label.label }}</span>
+																</div>
+															</div>
 															<div id="{{widget.nodeid}}" class="dygraphs"></div>
 														</div>
 													</div>
@@ -724,6 +730,12 @@
 															<h4>{{ widget.name }} <span class="">({{widget.axisLabel}})</span></h4>
 														</div>
 														<div class="box-content">
+															<div class="box-label">
+																<div class="label-item" ng-repeat="label in widget.chart.labels">
+																	<div class="label-item-color" style="background-color: {{ label.color }}"></div>
+																	<span>{{ label.label }}</span>
+																</div>
+															</div>
 															<div id="{{interface + '_' + widget.nodeid}}" class="dygraphs"></div>
 														</div>
 													</div>
