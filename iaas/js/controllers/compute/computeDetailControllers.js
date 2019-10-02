@@ -57,7 +57,6 @@ angular.module('iaas.controllers')
 
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function ($event) {
-        
         	 var dialogOptions = {
                      controller : "iaasComputePopEditServerCtrl" ,
                      formName   : 'iaasComputePopEditServerForm',
@@ -556,7 +555,6 @@ angular.module('iaas.controllers')
             });
         };
 
-
         ct.fn.systemTerminalResize = function(cols, rows) {
             //Terminal.applyAddon(fit);
             if (!cols) {
@@ -619,7 +617,6 @@ angular.module('iaas.controllers')
         
         //20181120 sg0730  도메인연결 PopUp 추가
         ct.fn.popConnDomainForm = function($event) {
-        	
         	var dialogOptions = {
                 controller : "iaasPopConnDomainFormCtrl" ,
                 formName : 'iaasPopConnDomainForm',
@@ -633,7 +630,6 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.popModDomainForm = function($event, domainLinkInfo) {
-
             var dialogOptions = {
                 controller : "iaasPopConnDomainFormCtrl" ,
                 formName : 'iaasPopConnDomainForm',
@@ -1081,7 +1077,6 @@ angular.module('iaas.controllers')
             }
         };
 
-
         ct.fn.copyConnectInfoToClipboard = function (instance) {
             if(instance.image.osType == 'ubuntu'){
                 if (instance.floatingIp) {
@@ -1131,7 +1126,6 @@ angular.module('iaas.controllers')
         ct.isPageLoad = true;
 
         ct.fn.initLogsTab = function () {
-
             var tuiLogsStop = $interval(function () {
                 if (angular.element('#startDatetime').attr('id')) {
                     $interval.cancel(tuiLogsStop);
@@ -1207,7 +1201,7 @@ angular.module('iaas.controllers')
             rp.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         // 로그 조회
         ct.fn.specificLogs = function (page) {
@@ -1407,7 +1401,7 @@ angular.module('iaas.controllers')
             common.locationHref(path + '?alarmId=' + alarmId + '&serverId=' + $stateParams.instanceId);
         };
 
-        // 검색
+        // 알람 이벤트 검색
         ct.fn.selectAlarmList = function (page) {
             if (page) $scope.alarmPageOptions.currentPage = page;
             else page = $scope.alarmPageOptions.currentPage;
@@ -1437,8 +1431,7 @@ angular.module('iaas.controllers')
             serverStatsPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
-        // 알람탭 관련 종료
+        };
     })
     .controller('iaasComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeSystemDetailCtrl", 1);
