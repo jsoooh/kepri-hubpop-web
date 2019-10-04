@@ -315,6 +315,27 @@ angular.module('iaas.services')
             );
         };
 
+        //포트포워딩 조회
+        computeDetailService.listPortForwardings = function (instanceId) {
+            var params = {
+                instanceId : instanceId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/portForwarding/service', 'GET', params));
+        };
+
+        //포트포워딩 조회
+        computeDetailService.listPortForwardings = function (instanceId) {
+            var params = {
+                instanceId : instanceId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/portForwarding/service', 'GET', params));
+        };
+
+        //포트포워딩 삭제
+        computeDetailService.deletePortForwardings = function (params) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/portForwarding/service', 'DELETE', params));
+        };
+
         return computeDetailService;
     })
 ;

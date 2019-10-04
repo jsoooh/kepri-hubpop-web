@@ -995,7 +995,7 @@ angular.module('iaas.controllers')
                             $timeout(function () {
                                 ct.fn.systemTerminalResize(170, 15);
                             }, 100);
-                        };
+                        }
                         ct.fn.getInstanceBootLog();
                     } else if (sltInfoTab == 'actEvent') {
                         ct.fn.getInstanceActionLog();
@@ -1072,6 +1072,8 @@ angular.module('iaas.controllers')
                     } else if (sltInfoTab == 'alarmEvent') {
                         ct.changeTimeRange('1month');
                         ct.fn.selectAlarmList();
+                    } else if (sltInfoTab == 'portForwarding') {
+                        ct.fn.listPortForwardings();
                     }
                 }
             }
@@ -1429,6 +1431,79 @@ angular.module('iaas.controllers')
                 //common.showAlert(data.message);
             });
             serverStatsPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //포트포워딩 조회
+        ct.fn.listPortForwardings = function () {
+            ct.instance.instancePortForwardings = [];
+            $scope.main.loadingMainBody = true;
+            var returnPromise = computeDetailService.listPortForwardings(ct.data.instanceId);
+            returnPromise.success(function (data) {
+                ct.instance.instancePortForwardings = data.content;
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //포트포워딩 추가
+        ct.fn.popPortForwardingForm = function($event) {
+            var dialogOptions = {
+                controller : "iaasPopPortForwardingFormCtrl" ,
+                formName : 'iaasPopPortForwardingForm',
+                formMode : "add",
+                instance : angular.copy(ct.instance),
+                callBackFunction : ct.refalshPortForwardingCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        //포트포워딩 수정
+        ct.fn.popModPortForwardingForm = function($event, portForwardingInfo) {
+            var dialogOptions = {
+                controller : "iaasPopPortForwardingFormCtrl" ,
+                formName : 'iaasPopPortForwardingForm',
+                formMode : "mod",
+                instance : angular.copy(ct.instance),
+                portForwardingInfo : angular.copy(portForwardingInfo),
+                callBackFunction : ct.refalshPortForwardingCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.refalshPortForwardingCallBackFunction = function () {
+            ct.fn.listPortForwardings();
+        };
+
+        //포트포워딩 삭제
+        ct.fn.deletePortForwarding = function(forwardingItem) {
+            common.showConfirm('포트포워딩 삭제','※'+forwardingItem.targetPort+' 포트포워딩을 삭제 하시겠습니까?').then(function(){
+                ct.fn.deletePortForwardingAction(forwardingItem);
+            });
+        };
+
+        //포트포워딩 삭제 실제 action
+        ct.fn.deletePortForwardingAction = function(forwardingItem) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                instanceId : ct.data.instanceId,
+                id : forwardingItem.id
+            };
+            var returnPromise = computeDetailService.deletePortForwardings(param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("포트포워딩이 삭제 되었습니다.");
+                ct.instance.instancePortForwardings = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -3649,5 +3724,120 @@ angular.module('iaas.controllers')
 
         pop.fn.getVolumeList();
 
+    })
+    .controller('iaasPopPortForwardingFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
+        _DebugConsoleLog("iaasPopConnDomainFormCtrl.js : iaasPopPortForwardingFormCtrl", 1);
+
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.formMode 					= $scope.dialogOptions.formMode;
+        pop.fn 							= {};
+        pop.originPortForwardingInfo	= {};
+        //pop.orgDomainLinkInfo           = {};
+        pop.portForwarding              = {};
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+        pop.instance 					= $scope.dialogOptions.instance;
+
+        if (pop.formMode == "mod") {
+            $scope.dialogOptions.title = "포트포워딩 수정";
+            $scope.dialogOptions.okName =  "수정";
+            pop.originPortForwardingInfo = angular.copy($scope.dialogOptions.portForwardingInfo);
+            pop.portForwarding.instanceId = pop.originPortForwardingInfo.instanceId;
+            pop.portForwarding.id = pop.originPortForwardingInfo.id;
+            pop.portForwarding.targetPort = pop.originPortForwardingInfo.targetPort;
+        } else {
+            $scope.dialogOptions.title = "포트포워딩 등록";
+            $scope.dialogOptions.okName =  "등록";
+            pop.portForwarding.tenantId = pop.instance.tenantId;
+            pop.portForwarding.instanceId = pop.instance.id;
+            pop.portForwarding.targetIp = pop.instance.floatingIp;
+        }
+
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeCreatePopPortForwardingForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+
+        pop.fn.portForwardingValidationCheck = function(targetPort, id) {
+            if (targetPort && angular.isArray(pop.instance.instancePortForwardings) && pop.instance.instancePortForwardings.length > 0) {
+                if (pop.formMode == "mod") {
+                    if (pop.originPortForwardingInfo.targetPort == pop.portForwarding.targetPort) {
+                        return {isValid: false, message: "변경 내용이 없습니다."};
+                    }
+                    var obj = common.objectsFindCopyByField(pop.instance.instancePortForwardings, "targetPort", targetPort);
+                    if (obj != null && obj.id != id) {
+                        return {isValid: false, message: "이미 사용중인 포트 입니다."};
+                    }
+                } else {
+                    var obj = common.objectsFindCopyByField(pop.instance.instancePortForwardings, "targetPort", targetPort);
+                    if (obj != null) {
+                        return {isValid: false, message: "이미 사용중인 포트 입니다."};
+                    }
+                }
+            }
+            return {isValid : true};
+        };
+
+        pop.fn.systemPortCustomValidationCheck = function(port) {
+            if (port == undefined || port == null || port == "") return;
+            if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
+                return {isValid : true};
+            } else {
+                return {isValid : false, message: "포트범위는 [80, 443, 1024~65535] 입니다."};
+            }
+        };
+
+        $scope.actionBtnHied = false;
+        $scope.popDialogOk = function () {
+            pop.fn.actionPortForwarding();
+        };
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        $scope.actionBtnHied = false;
+        pop.fn.actionPortForwarding = function() {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
+                $scope.actionBtnHied = false;
+                return;
+            }
+
+            var method = "POST";
+            var params = pop.portForwarding;
+            params.targetPort = pop.portForwarding.targetPort;
+            if (pop.formMode == "mod") {
+                method = "PUT";
+            }
+
+            $scope.main.loadingMainBody = true;
+            common.mdDialogHide();
+
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/portForwarding/service', method, params, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (pop.formMode == "mod") {
+                    common.showAlertSuccess("수정 되었습니다.");
+                } else {
+                    common.showAlertSuccess("생성 되었습니다.");
+                }
+                if (angular.isFunction(pop.callBackFunction)) {
+                    pop.callBackFunction();
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+
+        };
     })
 ;
