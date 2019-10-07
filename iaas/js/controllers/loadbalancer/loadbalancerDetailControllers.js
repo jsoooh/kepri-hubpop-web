@@ -15,6 +15,7 @@ angular.module('iaas.controllers')
         ct.data.tenantId        = $scope.main.userTenant.id;
         ct.data.tenantName      = $scope.main.userTenant.korName;
         ct.data.loadbalancerId  = $stateParams.lbInfoId;
+        ct.serverMainList       = [];
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
@@ -37,6 +38,10 @@ angular.module('iaas.controllers')
             else if (state == 'editserver')
             {
                 ct.fn.editPopServer($event,data);
+            }
+            else if (state == 'createserver')
+            {
+                ct.fn.createPopServer($event,data);
             }
         };
 
@@ -72,7 +77,7 @@ angular.module('iaas.controllers')
             ct.getLb();
         };
 
-        // 포트관리 - 수정
+        // 연결서버 - 수정
         ct.fn.editPopServer = function($event, lbservice) {
             var dialogOptions =  {
                 controller       : "iaasEditServerPopFormCtrl" ,
@@ -87,6 +92,24 @@ angular.module('iaas.controllers')
         };
 
         ct.editPopServerCallBackFunction = function() {
+            ct.getLb();
+        };
+
+        // 연결서버 - 추가
+        ct.fn.createPopServer = function($event, lbservice) {
+            var dialogOptions =  {
+                controller       : "iaasCreateServerPopFormCtrl" ,
+                formName         : 'iaasCreateServerPopForm',
+                selectLoadBalancer    : angular.copy(lbservice),
+                callBackFunction : ct.createPopServerCallBackFunction
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.createPopServerCallBackFunction = function() {
             ct.getLb();
         };
 
@@ -109,6 +132,7 @@ angular.module('iaas.controllers')
             ct.data.tenantId = status.id;
             ct.data.tenantName = status.korName;
             ct.fnGetUsedResource();
+            ct.GetServerMainList();
             ct.getLb();
         });
 
@@ -128,9 +152,32 @@ angular.module('iaas.controllers')
             });
         };
 
+        // 연결서버 마우스 오버시 - OS 유형 정보 나타내기 위함.
+        ct.GetServerMainList = function() {
+            $scope.main.loadingMainBody = false;
+            var param = {
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                ct.serverMainList = data.content.instances;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                console.debug("serverMainList: ", ct.serverMainList);
+            });
+        };
+
         // 개별 loadbalancer 조회
         ct.getLb = function() {
-            $scope.main.loadingMainBody = true;
+            $scope.main.loadingMainBody = false;
             var param = {
                 loadBalancerId : ct.data.loadbalancerId,
                 tenantId : ct.data.tenantId
@@ -141,7 +188,7 @@ angular.module('iaas.controllers')
                 ct.loadbalancer.iaasLbPorts = data.content.iaasLbPorts;
                 ct.iaasLbPorts = {};
                 for (var i = 0; i < ct.loadbalancer.iaasLbPorts.length; i++) {
-                    ct.iaasLbPorts[i] = ct.loadbalancer.iaasLbPorts[i]
+                    ct.iaasLbPorts[i] = ct.loadbalancer.iaasLbPorts[i];
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -217,6 +264,7 @@ angular.module('iaas.controllers')
         if (ct.data.tenantId) {
             ct.fnGetUsedResource();
             ct.getLb();
+            ct.GetServerMainList();
         } else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
             showAlert.then(function () {
@@ -481,10 +529,13 @@ angular.module('iaas.controllers')
         pop.fn = {};
         pop.data = [];
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
-        pop.instanceSnapshots = [];
 
-        $scope.dialogOptions.title 		= "연결 서버 추가/수정";
-        $scope.dialogOptions.okName     	= "추가";
+        pop.serverMainList   = [];
+        pop.instanceSnapshots = [];
+        pop.instanceSnapshotName = "";
+
+        $scope.dialogOptions.title 		= "연결 서버 수정";
+        $scope.dialogOptions.okName     	= "수정";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerEditPopServerForm.html" + _VersionTail();
 
@@ -510,6 +561,30 @@ angular.module('iaas.controllers')
             common.mdDialogCancel();
         };
 
+        // 연결서버 유형: 서버 선택시 서버 목록 불러옴
+        pop.fn.GetServerMainList = function() {
+            $scope.main.loadingMainBody = false;
+            var param = {
+                tenantId : pop.port.iaasLbInfo.tenantId,
+                queryType : 'list'
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                pop.serverMainList = data.content.instances;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                console.debug("serverMainList: ", pop.serverMainList);
+            });
+        };
+
         // 연결서버 유형: 이미지 선택시 백업 이미지 목록 불러옴
         pop.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = true;
@@ -520,6 +595,11 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 pop.instanceSnapshots = data.content;
+                for (var i = 0; i < pop.instanceSnapshots.length; i++) {
+                    if (pop.instanceSnapshots[i].id == pop.port.connImageId) {
+                        pop.instanceSnapshotName = pop.instanceSnapshots[i].name
+                    }
+                }
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -536,13 +616,14 @@ angular.module('iaas.controllers')
         pop.fn.editConnectServer = function() {
             $scope.main.loadingMainBody = true;
             var params = [];
-            angular.forEach(pop.portMembers, function(portMember) {
+            angular.forEach(pop.serverMainList, function(portMember) {
                 if (portMember.checked) {
                     params.push({
-                        lbPortId: portMember.iaasLbPort.id,
-                        instanceId: portMember.instanceId,
+                        lbPortId: pop.port.id,
+                        instanceId: portMember.id,
                         name: portMember.name,
-                        ipAddress: portMember.ipAddress
+                        // 문자열에 공백이 있어서 trim() 사용
+                        ipAddress: portMember.fixedIp.trim()
                     });
                 }
             });
@@ -587,6 +668,167 @@ angular.module('iaas.controllers')
             });
         };
 
+        pop.fn.GetServerMainList();
+        pop.fn.getInstanceSnapshotList();
+    })
+
+    // 연결서버 - 추가 버튼 팝업 컨트롤러
+    .controller('iaasCreateServerPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("loadbalancerDetailControllers.js : iaasCreateServerPopFormCtrl", 1);
+
+        var pop = this;
+        pop.validationService = new ValidationService({controllerAs: pop});
+        pop.formName = $scope.dialogOptions.formName;
+        pop.userTenant = angular.copy($scope.main.userTenant);
+        pop.port = angular.copy($scope.contents.iaasLbPorts);
+        // pop.portMembers = angular.copy($scope.contents.loadbalancer.iaasLbPortMembers);
+        pop.fn = {};
+        pop.data = [];
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
+        pop.serverMainList = [];
+        pop.instanceSnapshots = [];
+
+        $scope.dialogOptions.title 		= "연결 서버 추가";
+        $scope.dialogOptions.okName     	= "추가";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerCreatePopServerForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+        pop.validDisabled 				= true;
+
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+
+            if (pop.sltConnType == 'server') {
+                pop.fn.createConnectServer();
+            } else {
+                pop.fn.createConnectImage();
+            }
+        };
+
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        // 연결서버 유형 선택 버튼
+        pop.fn.choiceConnType = function(sltConnType) {
+            pop.sltConnType = sltConnType;
+            pop.data.iaasLbPort.connType = pop.sltConnType;
+            if (pop.data.iaasLbPort.connType == 'server') {
+                pop.fn.GetServerMainList();
+            } else {
+                pop.fn.getInstanceSnapshotList();
+            }
+        };
+
+        // 연결서버 유형: 서버 선택시 서버 목록 불러옴
+        pop.fn.GetServerMainList = function() {
+            $scope.main.loadingMainBody = false;
+            var param = {
+                tenantId : pop.port.iaasLbInfo.tenantId,
+                queryType : 'list'
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                pop.serverMainList = data.content.instances;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                console.debug("serverMainList: ", pop.serverMainList);
+            });
+        };
+
+        // 연결서버 유형: 이미지 선택시 백업 이미지 목록 불러옴
+        pop.fn.getInstanceSnapshotList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : pop.port.iaasLbInfo.tenantId
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                pop.instanceSnapshots = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 연결서버 유형이 server인 경우 연결서버 추가
+        pop.fn.createConnectServer = function() {
+            $scope.main.loadingMainBody = true;
+            var params = [];
+            angular.forEach(pop.serverMainList, function(server) {
+                if (server.checked) {
+                    params.push({
+                        lbPortId: pop.port.id,
+                        instanceId: server.id,
+                        name: server.name,
+                        // 문자열에 공백이 있어서 trim() 사용
+                        ipAddress: server.fixedIp.trim()
+                    });
+                }
+            });
+            common.mdDialogHide();
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/members/server', 'POST', params);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.replacePage();
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("추가 되었습니다.");
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 연결서버 유형이 image인 경우 연결서버 추가
+        pop.fn.createConnectImage = function() {
+            $scope.main.loadingMainBody = true;
+            var params = {
+                id: pop.port.id,
+                connImageCount: pop.port.connImageCount
+            };
+            common.mdDialogHide();
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/members/image', 'POST', params);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.replacePage();
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("추가 되었습니다.");
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.GetServerMainList();
         pop.fn.getInstanceSnapshotList();
     })
 ;

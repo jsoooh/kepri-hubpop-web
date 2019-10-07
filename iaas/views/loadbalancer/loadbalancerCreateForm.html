@@ -29,7 +29,7 @@
 									<!--<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>-->
 								</div>
 								<div class="s_cont_box">
-									<textarea rows="5" cols="" id="volumeDescription" name="loadBalancerDescription" style="height:150px;" ng-model="contents.data.iaasLbInfo.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
+									<input type="text" class="form-control" id="loadBalancerDescription" name="loadBalancerDescription" ng-model="contents.data.iaasLbInfo.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100">
 								</div>
 							</li>
 							<li>

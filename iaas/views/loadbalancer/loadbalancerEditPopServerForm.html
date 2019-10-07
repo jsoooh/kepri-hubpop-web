@@ -26,7 +26,7 @@
 		</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="(key, portMember) in pop.portMembers"><!-- 선택 된 row -->
+			<tr ng-repeat="(key, portMember) in pop.serverMainList"><!-- 선택 된 row -->
 				<td>
 					<div class="checkbox">
 						<input type="checkbox" id={{portMember.id}} ng-model="portMember.checked" value="true">
@@ -34,13 +34,14 @@
 					</div>
 				</td>
 				<td>{{ portMember.name }}</td>
-				<td>{{ portMember.ipAddress }}</td>
+				<td>{{ portMember.fixedIp }}</td>
 			</tr>
 		</tbody>
 	</table>
 </div>
 <!-- 대상서버선택(서버) -->
-<!-- //대상서버선택(이미지) -->
+
+<!-- 대상서버선택(이미지) -->
 <div class="tbw type1 mt20" ng-if="pop.port.connType == 'image'">
 	<table class="table">
 		<colgroup>
@@ -51,17 +52,12 @@
 		<tr>
 			<th>대상 백업 이미지</th>
 			<td>
-				<select ng-model="pop.instanceSnapshots.name" class="form-control">
-					<option value="">선택</option>
-					<option ng-repeat="instanceSnapshot in pop.instanceSnapshots" value="{{ instanceSnapshot.id }}">
-						{{ instanceSnapshot.name }}
-					</option>
-				</select>
+                <input type="text" class="form-control" ng-model="pop.instanceSnapshotName" ng-disabled="pop.instanceSnapshotName">
 			</td>
 		</tr>
 		<tr>
 			<th>서버 이름</th>
-			<td><input type="text" class="form-control" name="serverName" ng-model="pop.port.connImageName" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+			<td><input type="text" class="form-control" name="serverName" ng-model="pop.port.connImageName" ng-disabled="pop.port.connImageName" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
 		</tr>
 		<tr>
 			<th>서버 수</th>

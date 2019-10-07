@@ -26,7 +26,6 @@ angular.module('iaas.controllers')
         $scope.$on('userTenantChanged',function(event,status) {
             ct.data.tenantId = status.id;
             ct.data.tenantName = status.korName;
-            //ct.fn.networkListSearch();
         });
 
         // ct.fn.createLoadBalancer = function() {

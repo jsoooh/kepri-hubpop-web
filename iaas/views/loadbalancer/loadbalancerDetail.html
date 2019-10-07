@@ -95,13 +95,14 @@
 							<ul>
 								<div ng-if="iaasLbPort.connType" class="stateWrap">
 									<ul ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
-										<li>
+										<!-- 포트 상관없이 lb안에 연결서버 리스트가 다 들어가 있기 때문에 프로토콜 포트가 같은 경우에만 해당하는 연결서버 목록이 나오도록-->
+										<li ng-if="iaaslbportMember.protocolPort == iaasLbPort.protocolPort">
 											<span class="stateMark type1"></span> <!--서버 상태 표시 -->
 											<span class="state-txt" ng-mouseover="server_con_detail=true" ng-mouseleave="server_con_detail=false">{{ iaaslbportMember.name }}</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
 											<!-- 서버스펙상세 -->
 											<div class="server_con_detail" ng-show="server_con_detail">
 												<ul>
-													<li><strong>- OS 유형 : </strong>Centos(추후 보기로 함)</li>
+													<li><strong>- OS 유형 : </strong>{{ iaasLbPort.osType }}</li>
 													<li><strong>- 접속 IP : </strong>{{ iaaslbportMember.iaasLbPort.iaasLbInfo.floatingIp }}</li>
 													<li><strong>- 내부 IP : </strong>{{ iaaslbportMember.ipAddress}}</li>
 													<li><strong>- 생성일시 : </strong>{{ iaaslbportMember.created | date : 'yyyy-MM-dd HH:mm:ss'}}</li>
@@ -244,10 +245,8 @@
 					<div class="panel_head">
 						<div class="tit pull-left">연결서버</div>
 						<div class="pull-right">
-							<button type="button" name="button" class="btn ico-modi only-ico" title="수정" ng-click="contents.fn.formOpen($event, 'editserver', contents.loadbalancer);"><span class="ico">수정</span></button>
-							<button type="button" name="button" class="btn ico-del only-ico" title="삭제">
-								<span class="ico">삭제</span>
-							</button>
+							<button type="button" name="button" class="btn ico-modi only-ico" title="수정" ng-if="contents.iaasLbPorts.connType == 'server' || contents.iaasLbPorts.connType == 'image'" ng-click="contents.fn.formOpen($event, 'editserver', contents.loadbalancer);"><span class="ico">수정</span></button>
+							<button type="button" name="button" class="btn ico-modi only-ico" title="추가" ng-if="contents.iaasLbPorts.connType == null" ng-click="contents.fn.formOpen($event, 'createserver', contents.loadbalancer);"><span class="ico">추가</span></button>
 						</div>
 					</div>
 					<div class="panel_body">
@@ -256,6 +255,11 @@
 							<div class="pop_message_area mb30">
 								<div class="msg_bg"></div>
 								<div class="msg_txt"><span>연결서버의 상세정보를 안내합니다.</span></div>
+							</div>
+
+							<div class="pop_message_area mb30" ng-if="contents.iaasLbPorts.connType == null">
+								<div class="msg_bg"></div>
+								<div class="msg_txt"><span>데이터가 없습니다.</span></div>
 							</div>
 
 							<!-- 연결서버유형(서버) -->
