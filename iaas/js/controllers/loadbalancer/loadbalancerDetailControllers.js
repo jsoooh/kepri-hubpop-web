@@ -186,6 +186,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 ct.loadbalancer = data.content;
                 ct.loadbalancer.iaasLbPorts = data.content.iaasLbPorts;
+                ct.loadbalancer.iaasLbPortMembers = data.content.iaasLbPortMembers;
                 ct.iaasLbPorts = {};
                 for (var i = 0; i < ct.loadbalancer.iaasLbPorts.length; i++) {
                     ct.iaasLbPorts[i] = ct.loadbalancer.iaasLbPorts[i];
@@ -718,8 +719,8 @@ angular.module('iaas.controllers')
         // 연결서버 유형 선택 버튼
         pop.fn.choiceConnType = function(sltConnType) {
             pop.sltConnType = sltConnType;
-            pop.data.iaasLbPort.connType = pop.sltConnType;
-            if (pop.data.iaasLbPort.connType == 'server') {
+            pop.port.connType = pop.sltConnType;
+            if (pop.port.connType == 'server') {
                 pop.fn.GetServerMainList();
             } else {
                 pop.fn.getInstanceSnapshotList();
@@ -752,7 +753,7 @@ angular.module('iaas.controllers')
 
         // 연결서버 유형: 이미지 선택시 백업 이미지 목록 불러옴
         pop.fn.getInstanceSnapshotList = function() {
-            $scope.main.loadingMainBody = true;
+            $scope.main.loadingMainBody = false;
             var param = {
                 tenantId : pop.port.iaasLbInfo.tenantId
             };
@@ -809,6 +810,7 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var params = {
                 id: pop.port.id,
+                connImageName : pop.port.connImageName,
                 connImageCount: pop.port.connImageCount
             };
             common.mdDialogHide();
@@ -828,7 +830,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        pop.fn.GetServerMainList();
-        pop.fn.getInstanceSnapshotList();
+        // pop.fn.GetServerMainList();
+        // pop.fn.getInstanceSnapshotList();
     })
 ;

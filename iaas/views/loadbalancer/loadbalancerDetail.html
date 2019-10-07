@@ -96,7 +96,7 @@
 								<div ng-if="iaasLbPort.connType" class="stateWrap">
 									<ul ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
 										<!-- 포트 상관없이 lb안에 연결서버 리스트가 다 들어가 있기 때문에 프로토콜 포트가 같은 경우에만 해당하는 연결서버 목록이 나오도록-->
-										<li ng-if="iaaslbportMember.protocolPort == iaasLbPort.protocolPort">
+										<li ng-if="iaaslbportMember.iaasLbPort.id == iaasLbPort.id">
 											<span class="stateMark type1"></span> <!--서버 상태 표시 -->
 											<span class="state-txt" ng-mouseover="server_con_detail=true" ng-mouseleave="server_con_detail=false">{{ iaaslbportMember.name }}</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
 											<!-- 서버스펙상세 -->
@@ -304,9 +304,9 @@
 												</thead>
 												<tbody>
 												<tr ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
-													<td>{{ iaaslbportMember.name }}</td>
-													<td>{{ iaaslbportMember.ipAddress }}</td>
-													<td>정상</td>
+													<td ng-if="iaaslbportMember.iaasLbPort.id == contents.iaasLbPorts.id">{{ iaaslbportMember.name }}</td>
+													<td ng-if="iaaslbportMember.iaasLbPort.id == contents.iaasLbPorts.id">{{ iaaslbportMember.ipAddress }}</td>
+													<td ng-if="iaaslbportMember.iaasLbPort.id == contents.iaasLbPorts.id">정상</td>
 												</tr>
 												</tbody>
 											</table>
@@ -340,7 +340,7 @@
 												</tr>
 												<tr>
 													<th>서버 수</th>
-													<td>{{ contents.loadbalancer.iaasLbPortMembers.length }}</td>
+													<td>{{ contents.iaasLbPorts.connImageCount }}</td>
 												</tr>
 												</tbody>
 											</table>
@@ -366,9 +366,9 @@
 												</thead>
 												<tbody>
 												<tr ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
-													<td>{{ iaaslbportMember.name }}</td>
-													<td>{{ iaaslbportMember.ipAddress }}</td>
-													<td>정상</td>
+													<td ng-if="iaaslbportMember.iaasLbPort.id == contents.iaasLbPorts.id">{{ iaaslbportMember.name }}</td>
+													<td ng-if="iaaslbportMember.iaasLbPort.id == contents.iaasLbPorts.id">{{ iaaslbportMember.ipAddress }}</td>
+													<td ng-if="iaaslbportMember.iaasLbPort.id == contents.iaasLbPorts.id">정상</td>
 												</tr>
 												</tbody>
 											</table>
