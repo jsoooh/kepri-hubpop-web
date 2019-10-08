@@ -463,7 +463,7 @@ angular.module('iaas.controllers')
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
 
         $scope.dialogOptions.title 		= "부하 분산 서버 포트 수정";
-        $scope.dialogOptions.okName     	= "변경";
+        $scope.dialogOptions.okName     = "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerEditPopPortForm.html" + _VersionTail();
 
