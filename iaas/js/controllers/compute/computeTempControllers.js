@@ -732,6 +732,8 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancers', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.lbServiceLists = data.content;
+                ct.iaasLbPortMembers = [];
+                ct.connectServer = "";
                 if (ct.lbServiceLists.length != 0) {
                     ct.loadingLbList = true;
                 }

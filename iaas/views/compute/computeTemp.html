@@ -50,7 +50,6 @@
 				<!-- //버튼영역 -->
 
 				<!-- panel area-->
-				<!-- <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel thum_style"> -->
 				<ul ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length > 0" class="ul-panel thum_style">
 					<li ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
 						<!-- panel -->
@@ -319,7 +318,7 @@
 											<tbody>
 												<tr ng-repeat="(key, iaasLbPort) in lbserviceList.iaasLbPorts">
 													<td>{{ iaasLbPort.connectionPort }}</td>
-													<td>{{ lbserviceList.iaasLbPortMembers.length }}</td>
+													<td>{{ iaasLbPort.memberCnt }}</td>
 													<td>
 														<div class="tbl_cont_state">
 															<ul>

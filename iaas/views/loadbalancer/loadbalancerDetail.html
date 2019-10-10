@@ -89,15 +89,16 @@
 					<td ng-click="contents.showPortDetail(iaasLbPort)">{{ iaasLbPort.name }}</td>
 					<td>{{ iaasLbPort.protocolPort }}</td>
 					<td>{{ iaasLbPort.protocol }}</td>
-					<td>{{ iaasLbPort.lbAlgorithm }}</td>
+					<td>{{ iaasLbPort.lbAlgorithmName }}</td>
 					<td>
 						<div class="stateWrap">
 							<ul>
 								<div ng-if="iaasLbPort.connType" class="stateWrap">
 									<ul ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
-										<!-- 포트 상관없이 lb안에 연결서버 리스트가 다 들어가 있기 때문에 프로토콜 포트가 같은 경우에만 해당하는 연결서버 목록이 나오도록-->
+										<!-- 포트 상관없이 LB안에 연결서버 리스트가 다 들어가 있기 때문에 LBPort의 id가 같은 경우에만 해당하는 연결서버 목록이 나오도록-->
 										<li ng-if="iaaslbportMember.iaasLbPort.id == iaasLbPort.id">
-											<span class="stateMark type1"></span> <!--서버 상태 표시 -->
+											<!--서버 상태 표시 -->
+											<span class="stateMark type1"></span>
 											<span class="state-txt" ng-mouseover="server_con_detail=true" ng-mouseleave="server_con_detail=false">{{ iaaslbportMember.name }}</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
 											<!-- 서버스펙상세 -->
 											<div class="server_con_detail" ng-show="server_con_detail">

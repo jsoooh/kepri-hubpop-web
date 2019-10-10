@@ -810,8 +810,13 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var params = {
                 id: pop.port.id,
-                connImageName : pop.port.connImageName,
-                connImageCount: pop.port.connImageCount
+                connType: "image",
+                name: "web-port0827-1",
+                protocol: "HTTP",
+                protocolPort: 8271,
+                connImageId: "575f2265-3953-485f-97ab-a45af8077230",
+                connImageName: "lb-server",
+                connImageCount: 3
             };
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/members/image', 'POST', params);
@@ -830,7 +835,5 @@ angular.module('iaas.controllers')
             });
         };
 
-        // pop.fn.GetServerMainList();
-        // pop.fn.getInstanceSnapshotList();
     })
 ;
