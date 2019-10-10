@@ -1,11 +1,11 @@
 <div class="mt20">
 	<span class="pnb_stit">- 연결서버 유형 : </span>
 	<div class="radio radio-inline">
-		<input type="radio" name="connType" id="app-radio1-1" value="SERVER" ng-click="pop.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+		<input type="radio" name="connType" id="app-radio1-1" ng-init="pop.sltConnType='server'" ng-model="pop.sltConnType" value="server" ng-click="pop.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
 		<label for="app-radio1-1" class="label">서버</label>
 	</div>
 	<div class="radio radio-inline">
-		<input type="radio" name="connType" id="app-radio1-2" value="IMAGE" ng-click="pop.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+		<input type="radio" name="connType" id="app-radio1-2" value="image" ng-click="pop.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
 		<label for="app-radio1-2" class="label">이미지</label>
 	</div>
 </div>

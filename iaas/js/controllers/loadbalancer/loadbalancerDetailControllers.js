@@ -718,11 +718,13 @@ angular.module('iaas.controllers')
 
         // 연결서버 유형 선택 버튼
         pop.fn.choiceConnType = function(sltConnType) {
-            pop.sltConnType = sltConnType;
-            pop.port.connType = pop.sltConnType;
-            if (pop.port.connType == 'server') {
+            if (sltConnType == "server") {
+                pop.sltConnType = sltConnType;
+                pop.port.connType = pop.sltConnType;
                 pop.fn.GetServerMainList();
             } else {
+                pop.sltConnType = sltConnType;
+                pop.port.connType = pop.sltConnType;
                 pop.fn.getInstanceSnapshotList();
             }
         };
@@ -834,6 +836,8 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             });
         };
+
+        pop.fn.GetServerMainList();
 
     })
 ;
