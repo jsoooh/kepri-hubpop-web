@@ -14,15 +14,15 @@
 				<th>프로토콜</th>
 				<td>
 					<div class="radio radio-inline">
-						<input type="radio" name="protocolRadio" id="protocolHTTP" ng-click="pop.ports.protocol = 'HTTP'">
+						<input type="radio" ng-init="pop.ports.protocol='HTTP'" ng-model="pop.ports.protocol" name="protocolRadio" id="protocolHTTP" value="HTTP">
 						<label for="protocolHTTP" class="label">HTTP</label>
 					</div>
 					<div class="radio radio-inline">
-						<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-click="pop.ports.protocol = 'HTTPS'">
+						<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-model="pop.ports.protocol" value="HTTPS">
 						<label for="protocolHTTPS" class="label">HTTPS</label>
 					</div>
 					<div class="radio radio-inline">
-						<input type="radio" name="protocolRadio" id="protocolTCP" ng-click="pop.ports.protocol = 'TCP'">
+						<input type="radio" name="protocolRadio" id="protocolTCP" ng-model="pop.ports.protocol" value="TCP">
 						<label for="protocolTCP" class="label">TCP</label>
 					</div>
 				</td>
