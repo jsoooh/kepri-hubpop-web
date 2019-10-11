@@ -258,9 +258,27 @@
 								<div class="msg_txt"><span>연결서버의 상세정보를 안내합니다.</span></div>
 							</div>
 
+							<!-- 연결서버 정보가 없는 경우-->
 							<div class="pop_message_area mb30" ng-if="contents.iaasLbPorts.connType == null">
-								<div class="msg_bg"></div>
-								<div class="msg_txt"><span>데이터가 없습니다.</span></div>
+								<ul>
+									<li class="pr40" style="width:50%;">
+										<div class="cont-titWrap pt10">
+											<h3 class="h-tit4 pd0">연결서버 정보</h3>
+										</div>
+										<div class="tbw type1">
+											<table class="table">
+												<colgroup>
+													<col style="width:auto;">
+												</colgroup>
+												<tbody>
+												<tr>
+													<th>데이터가 없습니다.</th>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</li>
+								</ul>
 							</div>
 
 							<!-- 연결서버유형(서버) -->

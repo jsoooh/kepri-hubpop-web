@@ -682,7 +682,6 @@ angular.module('iaas.controllers')
         pop.formName = $scope.dialogOptions.formName;
         pop.userTenant = angular.copy($scope.main.userTenant);
         pop.port = angular.copy($scope.contents.iaasLbPorts);
-        // pop.portMembers = angular.copy($scope.contents.loadbalancer.iaasLbPortMembers);
         pop.fn = {};
         pop.data = [];
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
@@ -812,13 +811,10 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var params = {
                 id: pop.port.id,
-                connType: "image",
-                name: "web-port0827-1",
-                protocol: "HTTP",
-                protocolPort: 8271,
-                connImageId: "575f2265-3953-485f-97ab-a45af8077230",
-                connImageName: "lb-server",
-                connImageCount: 3
+                connType: pop.port.connType,
+                connImageId: pop.port.connImageId,
+                connImageName: pop.port.connImageName,
+                connImageCount: pop.port.connImageCount
             };
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/members/image', 'POST', params);
