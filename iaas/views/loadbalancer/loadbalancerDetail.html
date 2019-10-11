@@ -64,6 +64,9 @@
 	<div class="cBox-hd">
 		<h4 class="c-tit">부하분산 포트 사용현황 <em class="point1">({{ contents.loadbalancer.iaasLbPorts.length }})</em></h4>
 		<div class="pull-right">
+			<button type="button" name="button" class="btn btn-ico-list only-ico"ng-click="contents.fn.formOpen($event, 'gotolblist');">
+				<span class="ico" ></span>리스트 페이지로
+			</button>
 			<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.formOpen($event, 'port', contents.loadbalancer);">
 				<span class="ico">추가</span>
 			</button>

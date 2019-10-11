@@ -19,9 +19,9 @@ angular.module('iaas.controllers')
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
-            if(state == 'storage')
+            if(state == 'gotolblist')
             {
-                ct.fn.createStorage($event);
+                ct.fn.goToLbList($event);
             }
             else if (state == 'port')
             {
@@ -43,6 +43,11 @@ angular.module('iaas.controllers')
             {
                 ct.fn.createPopServer($event,data);
             }
+        };
+
+        // 부하분산 관리 디테일 페이지 - 리스트 페이지로 이동
+        ct.fn.goToLbList = function($event) {
+            common.locationHref('/#/iaas/compute?tabIndex=1');
         };
 
         // 부하분산 포트 사용현황 - 추가 버튼

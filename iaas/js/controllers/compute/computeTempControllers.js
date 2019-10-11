@@ -30,6 +30,11 @@ angular.module('iaas.controllers')
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
         ct.tabIndex = 0;
 
+        // 부하분산 서버관리 디테일 페이지에서 리스트 페이지로 넘어올때 필요하여 추가
+        if ($location.$$search.tabIndex) {
+            ct.tabIndex = $location.$$search.tabIndex;
+        }
+
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
             if(state == 'storage')
