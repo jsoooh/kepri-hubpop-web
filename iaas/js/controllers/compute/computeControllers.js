@@ -306,9 +306,9 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
                         var instance = data.content.instances[0];
-                        ct.fnSetInstanceUseRate(instance);
-                        ct.fnCheckAlarmStatus(instance);
                         var serverItem = common.objectsFindByField(ct.serverMainList, "id", data.content.instances[0].id);
+                        ct.fnSetInstanceUseRate(serverItem);
+                        ct.fnCheckAlarmStatus(serverItem);
                         if (serverItem && serverItem.id) {
                             var beforUiTask = serverItem.uiTask;
                             var newItem = false;
@@ -353,16 +353,18 @@ angular.module('iaas.controllers')
                             ct.deployServerList.splice(data.content.instances.length, ct.serverMainList.length - data.content.instances.length);
                         }
                         angular.forEach(data.content.instances, function (instance, inKey) {
-                            ct.fnSetInstanceUseRate(instance);
-                            ct.fnCheckAlarmStatus(instance);
                             if (ct.serverMainList[inKey]) {
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
                                 ct.fn.setProcState(ct.serverMainList[inKey]);
                                 ct.fn.setRdpConnectDomain(ct.serverMainList[inKey]);
+                                ct.fnSetInstanceUseRate(instance);
+                                ct.fnCheckAlarmStatus(instance);
                             } else {
                                 ct.fn.setProcState(instance);
                                 ct.fn.setRdpConnectDomain(instance);
                                 ct.serverMainList.push(instance);
+                                ct.fnSetInstanceUseRate(instance);
+                                ct.fnCheckAlarmStatus(instance);
                             }
                         });
                     }
@@ -396,13 +398,14 @@ angular.module('iaas.controllers')
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
                         var instanceStateInfo = data.content.instances[0];
-                        ct.fnSetInstanceUseRate(instanceStateInfo);
                         ct.fn.setProcState(instanceStateInfo);
                         if (instanceStateInfo.procState != 'end') {
                             $scope.main.reloadTimmer['instanceServerState_' + instanceStateInfo.id] = $timeout(function () {
                                 ct.fn.checkServerState(instanceStateInfo.id);
                             }, 1000);
                             var serverItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
+                            ct.fnSetInstanceUseRate(serverItem);
+                            ct.fnCheckAlarmStatus(serverItem);
                             if (instanceStateInfo.taskState == "shelving_image_uploading" || instanceStateInfo.taskState == "shelving_offloading" || instanceStateInfo.taskState == "shelving" || instanceStateInfo.taskState == "shelving_image_pending_upload") {
                                 instanceStateInfo.vmState = "shelved";
                             } else if (instanceStateInfo.taskState == "powering-off") {
@@ -428,8 +431,9 @@ angular.module('iaas.controllers')
                         }
                         var serverMainList = angular.copy(ct.serverMainList);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
-                            ct.fnSetInstanceUseRate(instanceStateInfo);
                             ct.fn.setProcState(instanceStateInfo);
+                            ct.fnSetInstanceUseRate(instanceStateInfo);
+                            ct.fnCheckAlarmStatus(instanceStateInfo);
                             var serverItem = common.objectsFindByField(serverMainList, "id", instanceStateInfo.id);
                             if (serverItem && serverItem.id) {
                                 delete serverItem.taskState;
@@ -782,6 +786,11 @@ angular.module('iaas.controllers')
             return false;
         }
 
+        $interval(function () {
+            angular.forEach(ct.serverMainList, function (server) {
+                ct.fnSetInstanceUseRate(server);
+            });
+        }, 1000 * 60)
     })
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);
