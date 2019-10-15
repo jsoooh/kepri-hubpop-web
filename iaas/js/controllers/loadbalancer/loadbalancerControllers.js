@@ -17,6 +17,7 @@ angular.module('iaas.controllers')
         ct.sltConnType = '';
         ct.serverMainList = [];
         ct.instanceSnapshots = [];
+        ct.data.iaasLbInfo.name = "lb-server-01";
 
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenant.id;
@@ -28,9 +29,13 @@ angular.module('iaas.controllers')
             ct.data.tenantName = status.korName;
         });
 
-        // ct.fn.createLoadBalancer = function() {
-        //     if ()
-        // };
+        ct.fn.createLoadBalancer = function() {
+            if (ct.sltConnType == 'server') {
+                ct.fn.loadBalancerCreateServer();
+            } else {
+                ct.fn.loadBalancerCreateImage();
+            }
+        };
 
         // 연결서버 유형: 서버 선택시 서버 목록 불러옴
         ct.fn.GetServerMainList = function() {
@@ -58,7 +63,7 @@ angular.module('iaas.controllers')
 
         // 연결서버 유형: 이미지 선택시 백업 이미지 목록 불러옴
         ct.fn.getInstanceSnapshotList = function() {
-            $scope.main.loadingMainBody = true;
+            $scope.main.loadingMainBody = false;
             var param = {
                 tenantId : ct.data.tenantId,
             };
@@ -78,13 +83,30 @@ angular.module('iaas.controllers')
             });
         };
 
+        // 부하분산 기본정보 - 연결서버 유형(이미지)선택시 대상 백업 이미지 이름을 동적으로 변화시킴
+        ct.fn.sltInstanceSnapshotChange = function (sltInstanceSnapshotId) {
+            var sltInstanceSnapshot = null;
+            if (sltInstanceSnapshotId) {
+                sltInstanceSnapshot = common.objectsFindCopyByField(ct.instanceSnapshots, "id", sltInstanceSnapshotId);
+            }
+            if (sltInstanceSnapshot && sltInstanceSnapshot.id) {
+                ct.sltInstanceSnapshot = sltInstanceSnapshot;
+                ct.sltInstanceSnapshotId = sltInstanceSnapshotId;
+            } else {
+                ct.sltInstanceSnapshot = {};
+                ct.sltInstanceSnapshotId = "";
+            }
+        };
+
         // 연결서버 유형 선택 버튼
         ct.fn.choiceConnType = function(sltConnType) {
-            ct.sltConnType = sltConnType;
-            ct.data.iaasLbPort.connType = ct.sltConnType;
-            if (ct.data.iaasLbPort.connType == 'server') {
+            if (sltConnType == "server") {
+                ct.sltConnType = sltConnType;
+                ct.data.iaasLbPort.connType = ct.sltConnType;
                 ct.fn.GetServerMainList();
             } else {
+                ct.sltConnType = sltConnType;
+                ct.data.iaasLbPort.connType = ct.sltConnType;
                 ct.fn.getInstanceSnapshotList();
             }
         };
@@ -109,7 +131,7 @@ angular.module('iaas.controllers')
                     param.iaasLbPortMembers.push({
                         instanceId: server.id,
                         name: server.name,
-                        ipAddress: server.fixedIp
+                        ipAddress: server.fixedIp.trim()
                     })
                 }
             });
@@ -119,8 +141,8 @@ angular.module('iaas.controllers')
                 common.showAlertSuccess("생성 되었습니다.");
             });
             returnPromise.error(function (data, status, headers) {
-                common.showAlertError(data.message);
                 $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
             });
         };
 
@@ -137,7 +159,7 @@ angular.module('iaas.controllers')
                     name: ct.data.iaasLbPort.name,
                     protocol: ct.data.iaasLbPort.protocol,
                     protocolPort: ct.data.iaasLbPort.protocolPort,
-                    connImageId: "575f2265-3953-485f-97ab-a45af8077230",
+                    connImageId: ct.data.iaasLbPort.connImageId,
                     connImageName: ct.data.iaasLbPort.connImageName,
                     connImageCount: ct.data.iaasLbPort.connImageCount
                 }
@@ -154,10 +176,6 @@ angular.module('iaas.controllers')
             });
         };
 
-        if (ct.data.tenantId) {
-            //ct.fn.networkListSearch();
-        }
-
+        ct.fn.GetServerMainList();
     })
-
 ;
