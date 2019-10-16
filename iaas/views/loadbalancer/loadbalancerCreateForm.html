@@ -80,17 +80,17 @@
 								<div class="mt20">
 									<span class="pnb_stit">- 연결서버 유형 : </span>
 									<div class="radio radio-inline">
-										<input type="radio" name="connType" id="app-radio1-1" value="server" ng-init="contents.sltConnType='server'" ng-model="contents.sltConnType" ng-click="contents.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<input type="radio" name="connType" id="app-radio1-1" value="server" ng-init="contents.data.iaasLbPort.connType='server'" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
 										<label for="app-radio1-1" class="label">서버</label>
 									</div>
 									<div class="radio radio-inline">
-										<input type="radio" name="connType" id="app-radio1-2" value="image" ng-model="contents.sltConnType" ng-click="contents.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+										<input type="radio" name="connType" id="app-radio1-2" value="image" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
 										<label for="app-radio1-2" class="label">이미지</label>
 									</div>
 								</div>
 								
 								<!-- 대상서버선택(서버) -->
-								<div class="tbl type1 mt20" ng-if="contents.sltConnType == 'server'">
+								<div class="tbl type1 mt20" ng-if="contents.data.iaasLbPort.connType == 'server'">
 									<table class="table">
 										<colgroup>
 											<col style="width:10%;">
@@ -121,7 +121,7 @@
 								<!-- //대상서버선택(서버) -->
 								
 								<!-- 대상서버선택(이미지) -->
-								<div class="tbw type1 mt20" ng-if="contents.sltConnType == 'image'">
+								<div class="tbw type1 mt20" ng-if="contents.data.iaasLbPort.connType == 'image'">
 									<table class="table">
 										<colgroup>
 											<col style="width:17%;">
@@ -209,8 +209,8 @@
 								</li>
 								<li>
 									<span class="s_tit">대상 서버 선택</span>
-									<span class="s_txt" ng-if="contents.sltConnType == 'server'">서버</span>
-									<div class="s_inner_cont" ng-if="contents.sltConnType == 'server'">
+									<span class="s_txt" ng-if="contents.data.iaasLbPort.connType == 'server'">서버</span>
+									<div class="s_inner_cont" ng-if="contents.data.iaasLbPort.connType == 'server'">
 										<div class="innr_tbl">
 											<table>
 												<colgroup>
@@ -232,8 +232,8 @@
 											</table>
 										</div>
 									</div>
-									<span class="s_txt" ng-if="contents.sltConnType == 'image'">이미지</span>
-									<div class="s_inner_cont" ng-if="contents.sltConnType == 'image'">
+									<span class="s_txt" ng-if="contents.data.iaasLbPort.connType == 'image'">이미지</span>
+									<div class="s_inner_cont" ng-if="contents.data.iaasLbPort.connType == 'image'">
 										<div class="innr_tbl">
 											<table>
 												<colgroup>

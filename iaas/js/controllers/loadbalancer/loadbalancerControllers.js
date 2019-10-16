@@ -30,7 +30,7 @@ angular.module('iaas.controllers')
         });
 
         ct.fn.createLoadBalancer = function() {
-            if (ct.sltConnType == 'server') {
+            if (ct.data.iaasLbPort.connType == 'server') {
                 ct.fn.loadBalancerCreateServer();
             } else {
                 ct.fn.loadBalancerCreateImage();
@@ -101,12 +101,10 @@ angular.module('iaas.controllers')
         // 연결서버 유형 선택 버튼
         ct.fn.choiceConnType = function(sltConnType) {
             if (sltConnType == "server") {
-                ct.sltConnType = sltConnType;
-                ct.data.iaasLbPort.connType = ct.sltConnType;
+                ct.data.iaasLbPort.connType = sltConnType;
                 ct.fn.GetServerMainList();
             } else {
-                ct.sltConnType = sltConnType;
-                ct.data.iaasLbPort.connType = ct.sltConnType;
+                ct.data.iaasLbPort.connType = sltConnType;
                 ct.fn.getInstanceSnapshotList();
             }
         };
@@ -135,10 +133,12 @@ angular.module('iaas.controllers')
                     })
                 }
             });
+            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'POST', param, "application/json");
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("생성 되었습니다.");
+                common.showAlertSuccess("설정 되었습니다.");
+                common.locationHref('/#/iaas/compute?tabIndex=1');
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -164,15 +164,16 @@ angular.module('iaas.controllers')
                     connImageCount: ct.data.iaasLbPort.connImageCount
                 }
             };
+            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'POST', param);
             returnPromise.success(function (data, status, headers) {
-                ct.networks = data.content;
-                ct.networks.unshift({id:"",name:'',description:"네트워크 선택"});
-                ct.network = ct.networks[0];
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("설정 되었습니다.");
+                common.locationHref('/#/iaas/compute?tabIndex=1');
             });
             returnPromise.error(function (data, status, headers) {
-                common.showAlertError(data.message);
                 $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
             });
         };
 
