@@ -3153,7 +3153,6 @@ angular.module('iaas.controllers')
         };
 
         pop.fn.getPublicIpList();
-
     })
     //////////////////////////////////////////////////////////////
     /////////20181120 sg0730 서버유형 변경 Pop 추가   ////////////////////
@@ -3331,7 +3330,6 @@ angular.module('iaas.controllers')
             common.mdDialogHide();
             $scope.main.loadingMain = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/resize', 'POST', param );
-            
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMain = false;
                 common.showAlertSuccess("변경 되었습니다.");
@@ -3349,7 +3347,6 @@ angular.module('iaas.controllers')
             });
             returnPromise.finally(function() {
             });
-            
         };
 
         pop.getTenantResource();
@@ -3382,15 +3379,11 @@ angular.module('iaas.controllers')
         
         $scope.popDialogOk = function () {
         	 if ($scope.actionBtnHied) return;
-        	 
              $scope.actionBtnHied = true;
-             
-             if (!pop.validationService.checkFormValidity(pop[pop.formName])) 
-             {
+             if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
                  $scope.actionBtnHied = false;
                  return;
              }
-             
              pop.fn.createSnapshot();
         };
         
@@ -3398,36 +3391,28 @@ angular.module('iaas.controllers')
             $scope.dialogClose = true;
             common.mdDialogCancel();
         };
-        
        
         pop.fn.createSnapshot = function() {
-        	
             $scope.main.loadingMainBody = true;
             pop.data.tenantId 			= pop.userTenant.id;
             pop.data.instanceId 		= pop.instance.id;
-            
             common.mdDialogHide();
-
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'POST', {instanceSnapShot:pop.data});
-            
-            returnPromise.success(function (data, status, headers) 
-            {
+            returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 //생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
                 common.showAlertSuccess("생성 되었습니다.");
                 $scope.main.goToPage('/iaas/snapshot');
             });
-            returnPromise.error(function (data, status, headers) 
-            {
+            returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             	common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers) 
-            {
+            returnPromise.finally(function (data, status, headers) {
                 $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
     })
     ///////////////////////////////////////////////////////////////////////////////
     ///////////////2018.11.21 sg0730 도메인 등록 팝업////////////////////////////////////
