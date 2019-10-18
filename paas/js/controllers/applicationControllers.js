@@ -126,7 +126,7 @@ angular.module('paas.controllers')
                     var appPromise2 = applicationService.listAllAppInstanceStats(option.guid);
                     appPromise2.success(function (data2) {
                         option["instanceStats"] = angular.copy(data2);
-                        ct.isAppsLoad = false
+                        ct.isAppsLoad = false;
                         var instanceStatsUsageCpu = 0;
                         var instanceStatsUsageMemory = 0;
                         var instanceStatsUsageDisk = 0;
@@ -138,12 +138,11 @@ angular.module('paas.controllers')
                                 instanceStatsUsageDisk += (parseInt(option["instanceStats"][i].usage.disk, 10) * 100) / parseInt(option["instanceStats"][i].diskQuota, 10);
                             }
 
-                            if(option["instanceStats"][i].state == "CRASHED"){
+                            if (option["instanceStats"][i].state == "CRASHED") {
                                 ct.appStateCnt++;
-                            }else if(option["instanceStats"][i].state == "STOPPED"){
+                            } else if(option["instanceStats"][i].state == "STOPPED") {
                                 ct.appStateCnt = 0;
                             }
-
                         }
 
                         option["cpuRoundProgressPercentage"] = (instanceStatsUsageCpu / option["instances"]).toFixed(1);
@@ -159,11 +158,9 @@ angular.module('paas.controllers')
                     });
                 });
 
-/*
-                if (ct.pageFirstLoad && (!ct.apps || ct.apps.length == 0)) {
+                /*if (ct.pageFirstLoad && (!ct.apps || ct.apps.length == 0)) {
                     ct.firstAppCreatePop();
-                }
-*/
+                }*/
 
                 ct.pageFirstLoad = false;
                 $scope.main.loadingMainBody = false;
@@ -227,7 +224,6 @@ angular.module('paas.controllers')
                 ct.renameAppList(guid, name, $event);
             }
         };
-
 
         ct.checkStartApp = function () {
             var startApps = [];

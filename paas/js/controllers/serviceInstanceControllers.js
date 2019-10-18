@@ -158,25 +158,23 @@ angular.module('paas.controllers')
            var services = ["mysql", "redis", "postgres", "mongo", "oracle"];
            var result;
 
-
-           for(var i = 0; i < services.length; i++){
+           for (var i = 0; i < services.length; i++) {
                var regExp = new RegExp(services[i].replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), "i");
                result = regExp.test(serviceInstances.serviceLabel);
 
-               if(result == true){
+               if (result == true) {
                    break;
                }
            }
 
-           for(var j = 0; j < serviceItem.serviceBindings.length; j++){
+           for (var j = 0; j < serviceItem.serviceBindings.length; j++) {
                if (serviceItem.serviceBindings[j].appGuid == appGuid) {
                    var binding = serviceItem.serviceBindings[j];
-
-                       if (result) {
-                           $scope.bindingInfos.credential = binding.credentials;
-                           $scope.bindingInfos.serviceLabel = binding.serviceLabel;
-                           result = false;
-                       }
+                   if (result) {
+                       $scope.bindingInfos.credential = binding.credentials;
+                       $scope.bindingInfos.serviceLabel = binding.serviceLabel;
+                       result = false;
+                   }
                }
            }
 
@@ -194,7 +192,7 @@ angular.module('paas.controllers')
         ct.renameInst = function (serviceName) {
             var serviceNameTxt = document.getElementById('renameService-'+serviceName);
             var buttonDiv = document.getElementById('txt-'+serviceName);
-            if(serviceNameTxt.style.display=='none') {
+            if (serviceNameTxt.style.display=='none') {
                 serviceNameTxt.style.display = 'block';
                 buttonDiv.style.display ='none';
             } else {
