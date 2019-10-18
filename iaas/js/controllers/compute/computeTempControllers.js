@@ -37,16 +37,11 @@ angular.module('iaas.controllers')
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
-            if(state == 'storage')
-            {
+            if (state == 'storage') {
                 ct.fn.createStorage($event);
-            }
-            else if (state == 'snapshot')
-            {
+            } else if (state == 'snapshot') {
                 ct.fn.createPopSnapshot($event,data);
-            }
-            else if (state == 'rename')
-            {
+            } else if (state == 'rename') {
                 ct.fn.reNamePopLb($event,data);
             }
         };
