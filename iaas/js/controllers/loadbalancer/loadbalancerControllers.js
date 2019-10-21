@@ -18,6 +18,7 @@ angular.module('iaas.controllers')
         ct.serverMainList = [];
         ct.instanceSnapshots = [];
         ct.data.iaasLbInfo.name = "lb-server-01";
+        ct.serverMainListCnt = 0;   //선택된 서버목록 갯수
 
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenant.id;
@@ -65,7 +66,7 @@ angular.module('iaas.controllers')
         ct.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = false;
             var param = {
-                tenantId : ct.data.tenantId,
+                tenantId : ct.data.tenantId
             };
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList', 'GET', param));
             returnPromise.success(function (data, status, headers) {
@@ -175,6 +176,17 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
+        };
+
+        //연결서버 유형 : 서버인 목록 체크 갯수
+        ct.fn.changeCheckCnt = function() {
+            var cnt = 0;
+            angular.forEach(ct.serverMainList, function(serverItem){
+                if (serverItem.checked) {
+                    cnt ++;
+                }
+            });
+            ct.serverMainListCnt = cnt;   //선택된 서버목록 갯수
         };
 
         ct.fn.GetServerMainList();

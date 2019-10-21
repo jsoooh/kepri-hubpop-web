@@ -108,7 +108,7 @@
 											<tr ng-repeat="server in contents.serverMainList"><!-- 선택 된 row -->
 												<td>
 													<div class="checkbox">
-														<input type="checkbox" ng-model="server.checked" id="{{ server.id }}" value="">
+														<input type="checkbox" ng-model="server.checked" id="{{ server.id }}" value="" ng-change="contents.fn.changeCheckCnt();">
 														<label for="{{ server.id }}"></label>
 													</div>
 												</td>
@@ -227,6 +227,9 @@
 												<tr ng-repeat="server in contents.serverMainList">
 													<td ng-if="server.checked">{{ server.name }}</td>
 													<td ng-if="server.checked">{{ server.fixedIp }}</td>
+												</tr>
+												<tr ng-if="contents.serverMainListCnt == 0">
+													<td colspan="2"> - </td>
 												</tr>
 												</tbody>
 											</table>

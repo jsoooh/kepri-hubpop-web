@@ -7,7 +7,7 @@ angular.module('iaas.controllers')
         $scope.actionBtnEnabled = true;
 
         var ct 				    = this;
-        ct.list 			        = {};
+        ct.list 			    = {};
         ct.fn 				    = {};
         ct.data 			    = {};
         ct.roles 			    = [];
@@ -19,28 +19,17 @@ angular.module('iaas.controllers')
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
-            if(state == 'gotolblist')
-            {
+            if (state == 'gotolblist') {
                 ct.fn.goToLbList($event);
-            }
-            else if (state == 'port')
-            {
+            } else if (state == 'port') {
                 ct.fn.createLoadBalancerPort($event,data);
-            }
-            else if (state == 'rename')
-            {
+            } else if (state == 'rename') {
                 ct.fn.reNamePopLb($event,data);
-            }
-            else if (state == 'editport')
-            {
+            } else if (state == 'editport') {
                 ct.fn.editPopPort($event,data);
-            }
-            else if (state == 'editserver')
-            {
+            } else if (state == 'editserver') {
                 ct.fn.editPopServer($event,data);
-            }
-            else if (state == 'createserver')
-            {
+            } else if (state == 'createserver') {
                 ct.fn.createPopServer($event,data);
             }
         };
@@ -55,7 +44,7 @@ angular.module('iaas.controllers')
             var dialogOptions =  {
                 controller       : "iaasCreateLoadBalancerPortPopFormCtrl" ,
                 formName         : 'iaasCreateLoadBalancerPortPopForm',
-                selectLoadBalancer    : angular.copy(lbservice),
+                selectLoadBalancer    : angular.copy(lbservice)
                 // callBackFunction : ct.reStorageSnapShotCallBackFunction
             };
 
@@ -298,7 +287,6 @@ angular.module('iaas.controllers')
             }
         };
     })
-
     // 이름/설명 변경 팝업 컨트롤러
     .controller('iaasReNamePopLoadBalancerCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasReNamePopLoadBalancerCtrl", 1);
@@ -340,7 +328,7 @@ angular.module('iaas.controllers')
             var params = {
                 tenantId: pop.sltLoadBalancer.tenantId,
                 loadBalancerId: pop.sltLoadBalancer.id,
-                name: pop.newLbNm,
+                name: pop.newLbNm
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/check_name', 'GET', params);
             returnPromise.success(function (data, status, headers) {
@@ -385,7 +373,6 @@ angular.module('iaas.controllers')
             });
         }
     })
-
     // 부하분산 포트 사용현황 - 포트추가 팝업 컨트롤러
     .controller('iaasCreateLoadBalancerPortPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasCreateLoadBalancerPortPopFormCtrl", 1);
@@ -403,7 +390,7 @@ angular.module('iaas.controllers')
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
 
         $scope.dialogOptions.title 		= "부하 분산 서버 포트 만들기";
-        $scope.dialogOptions.okName     	= "생성";
+        $scope.dialogOptions.okName     = "생성";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerCreatePopPortForm.html" + _VersionTail();
 
@@ -453,7 +440,6 @@ angular.module('iaas.controllers')
             });
         }
     })
-
     // 포트관리 - 수정 버튼 팝업 컨트롤러
     .controller('iaasEditPortPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasEditPortPopFormCtrl", 1);
@@ -502,7 +488,7 @@ angular.module('iaas.controllers')
                 healthType: pop.port.healthType,
                 connectionLimit: pop.port.connectionLimit,
                 healthDelay: pop.port.healthDelay,
-                healthUrlPath: pop.port.healthUrlPath,
+                healthUrlPath: pop.port.healthUrlPath
             };
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port', 'PUT', params);
@@ -521,7 +507,6 @@ angular.module('iaas.controllers')
             });
         }
     })
-
     // 연결서버 - 수정 버튼 팝업 컨트롤러
     .controller('iaasEditServerPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasEditServerPopFormCtrl", 1);
@@ -541,7 +526,7 @@ angular.module('iaas.controllers')
         pop.instanceSnapshotName = "";
 
         $scope.dialogOptions.title 		= "연결 서버 수정";
-        $scope.dialogOptions.okName     	= "수정";
+        $scope.dialogOptions.okName     = "수정";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerEditPopServerForm.html" + _VersionTail();
 
@@ -677,7 +662,6 @@ angular.module('iaas.controllers')
         pop.fn.GetServerMainList();
         pop.fn.getInstanceSnapshotList();
     })
-
     // 연결서버 - 추가 버튼 팝업 컨트롤러
     .controller('iaasCreateServerPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasCreateServerPopFormCtrl", 1);
@@ -694,7 +678,7 @@ angular.module('iaas.controllers')
         pop.instanceSnapshots = [];
 
         $scope.dialogOptions.title 		= "연결 서버 추가";
-        $scope.dialogOptions.okName     	= "추가";
+        $scope.dialogOptions.okName    	= "추가";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerCreatePopServerForm.html" + _VersionTail();
 
