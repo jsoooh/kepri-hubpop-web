@@ -106,10 +106,10 @@
 											<!-- 서버스펙상세 -->
 											<div class="server_con_detail" ng-show="server_con_detail">
 												<ul>
-													<li><strong>- OS 유형 : </strong>{{ iaasLbPort.osType }}</li>
-													<li><strong>- 접속 IP : </strong>{{ iaaslbportMember.iaasLbPort.iaasLbInfo.floatingIp }}</li>
-													<li><strong>- 내부 IP : </strong>{{ iaaslbportMember.ipAddress}}</li>
-													<li><strong>- 생성일시 : </strong>{{ iaaslbportMember.created | date : 'yyyy-MM-dd HH:mm:ss'}}</li>
+													<li><strong>- OS 유형 : </strong>{{ iaaslbportMember.instanceOsType }}</li>
+													<li><strong>- 접속 IP : </strong>{{ iaaslbportMember.instanceFloatingIp }}</li>
+													<li><strong>- 내부 IP : </strong>{{ iaaslbportMember.instanceFixedIp}}</li>
+													<li><strong>- 생성일시 : </strong>{{ iaaslbportMember.instanceCreated | date : 'yyyy-MM-dd HH:mm:ss'}}</li>
 												</ul>
 											</div>
 											<!-- //서버스펙상세 -->
