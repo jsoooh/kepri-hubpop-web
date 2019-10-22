@@ -657,13 +657,11 @@ angular.module('iaas.controllers')
             common.showDialog($scope, $event, dialogOptions);
             $scope.actionLoading = true; // action loading
         };
-        
-        
+
         // sg0730 인스턴스 디스크 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
         	 $scope.main.goToPage('/iaas/compute');
         };
-        
 
         // 접속 IP 설정 팝업
         ct.fn.IpConnectPop = function(instance,index) {
@@ -785,7 +783,6 @@ angular.module('iaas.controllers')
 
         // 이름 & 설명 변경 팝업
         ct.fn.reNamePopLb = function($event, lbserviceList) {
-
             var dialogOptions =  {
                 controller       : "iaasReNamePopLoadBalancerCtrl" ,
                 formName         : 'iaasReNamePopLoadBalancerForm',
@@ -802,7 +799,6 @@ angular.module('iaas.controllers')
             ct.fngetLbList();
         };
     })
-
     .controller('iaasReNamePopLoadBalancerCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasReNamePopLoadBalancerCtrl", 1);
 
