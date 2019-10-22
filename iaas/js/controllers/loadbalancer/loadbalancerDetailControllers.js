@@ -164,6 +164,7 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.finally(function (data, status, headers) {
+                setOsType();    //vm osType 세팅
                 $scope.main.loadingMainBody = false;
                 console.debug("serverMainList: ", ct.serverMainList);
             });
@@ -190,6 +191,7 @@ angular.module('iaas.controllers')
                 common.showAlert("message",data.message);
             });
             returnPromise.finally(function (data, status, headers) {
+                setOsType();    //vm osType 세팅
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -274,6 +276,21 @@ angular.module('iaas.controllers')
                 }
             }
         };
+
+        //vm osType 세팅
+        function setOsType() {
+            if (ct.loadbalancer && ct.loadbalancer.iaasLbPortMembers && ct.loadbalancer.iaasLbPortMembers.length >0 && ct.serverMainList.length > 0) {
+                //console.log("ct.loadbalancer.iaasLbPortMembers(1) : ", ct.loadbalancer.iaasLbPortMembers);
+                angular.forEach(ct.loadbalancer.iaasLbPortMembers, function(member) {
+                    var sltServer = common.objectsFindCopyByField(ct.serverMainList, "id", member.instanceId);
+                    member.instanceOsType = sltServer.image.osType;
+                    member.instanceFloatingIp = sltServer.floatingIp;
+                    member.instanceFixedIp = sltServer.fixedIp;
+                    member.instanceCreated = sltServer.created;
+                });
+                //console.log("ct.loadbalancer.iaasLbPortMembers(2) : ", ct.loadbalancer.iaasLbPortMembers);
+            }
+        }
 
         if (ct.data.tenantId) {
             ct.fnGetUsedResource();
