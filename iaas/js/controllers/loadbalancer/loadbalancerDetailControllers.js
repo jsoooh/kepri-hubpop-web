@@ -207,7 +207,7 @@ angular.module('iaas.controllers')
                     if (status == 200 && data) {
                         $scope.main.loadingMainBody = false;
                         common.showAlertSuccess('삭제되었습니다.');
-                        $scope.main.goToPage('/iaas/compute');
+                        $scope.main.goToPage('/iaas/compute?tabIndex=1');
                     } else {
                         $scope.main.loadingMainBody = false;
                         common.showAlertError('오류가 발생하였습니다.');
@@ -256,18 +256,6 @@ angular.module('iaas.controllers')
             }
         };
 
-        if (ct.data.tenantId) {
-            ct.fnGetUsedResource();
-            ct.getLb();
-            ct.GetServerMainList();
-        } else { // 프로젝트 선택
-            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
-            showAlert.then(function () {
-                $scope.main.goToPage("/");
-            });
-            return false;
-        }
-
         // 포트 선택시 포트관리 및 연결 서버 탭
         ct.showPortDetail = function (iaasLbPort) {
             ct.hidePortDetails();
@@ -286,6 +274,18 @@ angular.module('iaas.controllers')
                 }
             }
         };
+
+        if (ct.data.tenantId) {
+            ct.fnGetUsedResource();
+            ct.getLb();
+            ct.GetServerMainList();
+        } else { // 프로젝트 선택
+            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+            showAlert.then(function () {
+                $scope.main.goToPage("/");
+            });
+            return false;
+        }
     })
     // 이름/설명 변경 팝업 컨트롤러
     .controller('iaasReNamePopLoadBalancerCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
