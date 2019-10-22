@@ -1538,7 +1538,13 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         common.goToState = function (stateKey) {
-            return $state.go(stateKey);
+            if ($state.current.url && $state.current.url.indexOf("loadbalancer") > -1) {
+                //$state.go(stateKey, {tabIndex: 1});
+                //common.locationHref('/#/iaas/compute?tabIndex=1');
+                common.locationHref('/#'+ $state.get(stateKey).url + '?tabIndex=1');
+            } else {
+                return $state.go(stateKey);
+            }
         };
 
         common.getJSONParse = function (jsonStr) {
