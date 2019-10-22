@@ -300,7 +300,7 @@
 										</ul>
 									</div>
 								</div>
-								<div class="panel_body">
+								<div ng-if="lbserviceList.iaasLbInfo.checkStatus.indexOf('ing') == -1" class="panel_body">
 									<div class="tbl_cont">
 										<table class="table">
 											<colgroup>
@@ -330,6 +330,37 @@
 												</tr>
 											</tbody>
 										</table>
+									</div>
+								</div>
+								<div ng-if="lbserviceList.iaasLbInfo.checkStatus.indexOf('ing') > -1" class="ul-in">
+									<div class="pnb_progress_wrap">
+										<div class="progress_box">
+											<span class="bar_bg"></span>
+											<ul>
+												<li ng-if="lbserviceList.iaasLbInfo.checkConnType == 'image'" ng-class="{'creating' : (lbserviceList.iaasLbInfo.checkStatus == 'server_creating'), 'complete' : (lbserviceList.iaasLbInfo.checkStatus != 'server_creating')}">
+													<div class="state_box">
+														<span class="state_ico"><span>1</span></span>
+													</div>
+													<div class="state_txt"><span>서버 생성</span></div>
+												</li>
+												<li  ng-class="{'standby' : (lbserviceList.iaasLbInfo.checkStatus == 'server_creating'), 'creating' : (lbserviceList.iaasLbInfo.checkStatus == 'lb_creating'), 'complete' : (lbserviceList.iaasLbInfo.checkStatus != 'lb_creating')}">
+													<div class="state_box">
+														<span class="state_ico"><span>{{ lbserviceList.iaasLbInfo.checkConnType == 'image' ? "2" : "1" }}</span></span>
+													</div>
+													<div class="state_txt"><span>부하분산 생성</span></div>
+												</li>
+												<li ng-class="{'standby' : (lbserviceList.iaasLbInfo.checkStatus == 'server_creating' || lbserviceList.iaasLbInfo.checkStatus == 'lb_creating'), 'creating' : (lbserviceList.iaasLbInfo.checkStatus == 'floatingIp_creating'), 'complete' : (lbserviceList.iaasLbInfo.checkStatus == 'error' || lbserviceList.iaasLbInfo.checkStatus == 'done')}">
+													<div class="state_box">
+														<span class="state_ico"><span>{{ lbserviceList.iaasLbInfo.checkConnType == 'image' ? "3" : "2" }}</span></span>
+													</div>
+													<div class="state_txt"><span>공인IP 연결</span></div>
+												</li>
+											</ul>
+											<div class="progress_txt">
+												<p>{{ lbserviceList.iaasLbInfo.checkStatusName + " 중 입니다." }}</p>
+												<span ng-if="instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping'">{{instance.creatingTimmer}}초</span>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

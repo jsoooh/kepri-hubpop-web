@@ -735,6 +735,32 @@ angular.module('iaas.controllers')
                 if (ct.lbServiceLists.length != 0) {
                     ct.loadingLbList = true;
                 }
+
+                angular.forEach(ct.lbServiceLists, function (lbList) {
+                    if (lbList.iaasLbInfo.checkStatus.indexOf("ing") > -1) {
+                        $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
+                            ct.fn.checkLbState(lbList.iaasLbInfo.id);
+                        }, 1000);
+                        /*if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
+                            $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
+                            $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
+                        }*/
+                    }
+                });
+                /*if (isServerStatusCheck) {
+                    if ($scope.main.reloadTimmer['instanceServerStateList']) {
+                        $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
+                        $scope.main.reloadTimmer['instanceServerStateList'] = null;
+                    }
+                    $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
+                        ct.fn.checkServerState();
+                    }, 1000);
+                    if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
+                        $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
+                        $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
+                    }
+                    $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
+                }*/
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
@@ -743,18 +769,6 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             });
         };
-
-        if (ct.data.tenantId) {
-            ct.fnGetUsedResource();
-            ct.fnGetServerMainList();
-            ct.fngetLbList();
-        } else { // 프로젝트 선택
-            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
-            showAlert.then(function () {
-                $scope.main.goToPage("/");
-            });
-            return false;
-        }
 
         // lb 삭제
         ct.deleteLb = function(id) {
@@ -798,6 +812,56 @@ angular.module('iaas.controllers')
         ct.reNamePopLoadBalancerCallBackFunction = function () {
             ct.fngetLbList();
         };
+
+        // lb 상태 조회
+        ct.fn.checkLbState = function(loadBalancerId) {
+            var param = {loadBalancerId: loadBalancerId};
+            if ($scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId]) {
+                $timeout.cancel($scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId]);
+                $scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId] = null;
+            }
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/check_state', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data && data.content) {
+                    var lbStateInfo = data.content;
+                    //ct.fn.setProcState(instanceStateInfo);
+                    if (lbStateInfo.checkStatus.indexOf("ing") > -1) {
+                        $scope.main.reloadTimmer['loadBalancerState_' + lbStateInfo.id] = $timeout(function () {
+                            ct.fn.checkLbState(lbStateInfo.id);
+                        }, 2000);
+                        /*var serverItem = common.objectsFindByField(ct.lbServiceLists, "iaasLbInfo", loadBalancerId);
+                        if (serverItem && serverItem.id) {
+                            angular.forEach(instanceStateInfo, function(value, key) {
+                                serverItem[key] = value;
+                            });
+                        }*/
+                    } else {
+                        angular.forEach(ct.lbServiceLists, function (lbList) {
+                            if (lbList.iaasLbInfo.id == loadBalancerId) {
+                                lbList.iaasLbInfo.checkStatus = lbStateInfo.checkStatus;
+                                lbList.iaasLbInfo.checkStatusName = lbStateInfo.checkStatusName;
+                            }
+                        });
+                    }
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };
+
+        if (ct.data.tenantId) {
+            ct.fnGetUsedResource();
+            ct.fnGetServerMainList();
+            ct.fngetLbList();
+        } else { // 프로젝트 선택
+            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+            showAlert.then(function () {
+                $scope.main.goToPage("/");
+            });
+            return false;
+        }
     })
     .controller('iaasReNamePopLoadBalancerCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasReNamePopLoadBalancerCtrl", 1);
