@@ -120,7 +120,6 @@ angular.module('iaas.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
             ct.data.tenantId = status.id;
