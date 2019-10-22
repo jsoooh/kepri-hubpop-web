@@ -138,7 +138,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'POST', param, "application/json");
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("설정 되었습니다.");
+                common.showAlertSuccess("부하분산 설정이 시작되었습니다.");
                 common.locationHref('/#/iaas/compute?tabIndex=1');
             });
             returnPromise.error(function (data, status, headers) {
@@ -169,7 +169,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'POST', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("설정 되었습니다.");
+                common.showAlertSuccess("부하분산 설정이 시작되었습니다.");
                 common.locationHref('/#/iaas/compute?tabIndex=1');
             });
             returnPromise.error(function (data, status, headers) {
