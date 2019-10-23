@@ -2,13 +2,13 @@
 <!-- 프로젝트 정보 -->
 	<div class="cBox type0 projt-mana">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 APP <em class="point1">({{contents.apps.length}})</em></h4>
+			<h4 class="c-tit">전체 App <em class="point1">({{contents.apps.length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
 			<div class="searchBox type2">
 				<div class="form-group">
-					<input type="text" placeholder="APP 검색" style="width:300px;" ng-model="contents.schFilterText">
+					<input type="text" placeholder="App 검색" style="width:300px;" ng-model="contents.schFilterText">
 				</div>
 				<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.schFilterText = ''"><span class="ico">검색</span></button>
 			</div>
@@ -20,7 +20,7 @@
 <!-- 버튼영역 -->
 <div class="btnWrap">
 	<button type="button" class="btn_lg" ng-click="main.goToPage('/paas/appsPush')">
-		<span class="ico ico_create_app"></span>APP 만들기
+		<span class="ico ico_create_app"></span>App 만들기
 	</button>
 </div>
 <!-- //버튼영역 -->
@@ -54,13 +54,13 @@
     		                  <span class="ico">실행 설정</span>
     		                </button>
     		                <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-                                <li class="renameApp"><a href="javascript:void(0);" ng-click="contents.renameApp(appItem.name)">APP 이름변경</a></li>
+                                <li class="renameApp"><a href="javascript:void(0);" ng-click="contents.renameApp(appItem.name)">App 이름변경</a></li>
                                 <li ng-if="appItem.state == 'STOPPED'"><a href="javascript:void(0);" ng-click="contents.startAppState(appItem.guid, appItem.name)">시작</a></li>
-                                <li ng-if="appItem.state != 'STOPPED'"><a href="javascript:void(0);" class="disabled" title="APP가‘중지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
+                                <li ng-if="appItem.state != 'STOPPED'"><a href="javascript:void(0);" class="disabled" title="App가‘중지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
                                 <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.stopAppState(appItem.guid, appItem.name)">중지</a></li>
-                                <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '중지'가 가능합니다.">중지</a></li>
+                                <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="App가‘시작’상태인 경우에만 '중지'가 가능합니다.">중지</a></li>
                                 <li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.restartApp(appItem.guid, appItem.name)">재시작</a></li>
-                                <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="APP가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+                                <li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="App가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
                                 <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteApp(appItem.guid, appItem.name)">삭제</a></li>
     		                </ul>
     		              </div>
@@ -141,12 +141,12 @@
 
     <!-- //panel area-->
     <div ng-if="!contents.pageFirstLoad && contents.isAppsLoad && contents.apps.length == 0" class="welcome_layer">
-        <div class="guide_fnt arrw_btm">컨테이너 기반의 신규 APP을 만듭니다.</div>
+        <div class="guide_fnt arrw_btm">컨테이너 기반의 신규 App을 만듭니다.</div>
         <!-- <div class="guide_fnt arrw_top">다른 프로젝트의 백업 이미지로부터 신규 가상서버를 만듭니다.</div> -->
         <div class="guide_cnt">
-            표준APP.개발 서비스에서는 <span class="fnt20">다양한 <span class="color1">애플리케이션 개발언어 별</span>로 <span class="color1">표준화된 실행환경</span>을 자동으로 구성</span>할 수 있습니다.(Ex. Java, Python, Node.js, Go, etc,..)<br>
+            표준App.개발 서비스에서는 <span class="fnt20">다양한 <span class="color1">애플리케이션 개발언어 별</span>로 <span class="color1">표준화된 실행환경</span>을 자동으로 구성</span>할 수 있습니다.(Ex. Java, Python, Node.js, Go, etc,..)<br>
             사용자는 제작한 애플리케이션을 빠르게 <span class="color1">컨테이너 환경에 배포</span>하고 <span class="color1">테스트</span> 해볼 수 있습니다. <br>
-            <span class="fnt20"><spna class="color1">‘APP 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+            <span class="fnt20"><spna class="color1">‘App 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
         </div>
     </div>
 

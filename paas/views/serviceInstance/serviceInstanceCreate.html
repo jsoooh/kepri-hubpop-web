@@ -1,6 +1,6 @@
 <div class="message_area">
 	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>‘서비스 만들기’를 통해 배포된 APP과 연결되어 사용되는 백엔드 서비스를 만들수 있습니다. 백엔드 서비스는 배포된 모든 APP이 공유할 수 있습니다.</span></div>
+	<div class="msg_txt"><span>‘서비스 만들기’를 통해 배포된 App과 연결되어 사용되는 백엔드 서비스를 만들수 있습니다. 백엔드 서비스는 배포된 모든 App이 공유할 수 있습니다.</span></div>
 </div>
 
 <div class="panel_area">
@@ -19,12 +19,12 @@
 								<!-- <button type="button" tooltip-placement="right" uib-tooltip="가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다." tooltip-class="tooltip_type2"><span class="ico_info"></span></button> -->
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 서비스 이름을 입력합니다.</br> 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 							</div>
-							<input type="text" name="serviceInstanceName" class="form-control" maxlength="20"  placeholder="APP 이름을 입력하세요." ng-model="contents.serviceInstanceName"  validation="min_len:3|max_len:20|required">
+							<input type="text" name="serviceInstanceName" class="form-control" maxlength="20"  placeholder="App 이름을 입력하세요." ng-model="contents.serviceInstanceName"  validation="min_len:3|max_len:20|required">
 						</li>
 						<li>
 							<div class="pnb_tit">
 								<i class="i_star"></i> <span class="pnb_t_txt">서비스 S/W</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포된 APP과 연결하여 사용하는 백엔드 서비스(back-end service) S/W를 선택합니다.</br>일반적으로, 백엔드 서비스는 APP의 데이터를 저장하기 위한 데이터베이스 </br>또는 WEB 세션 공유를 위한 인-메모리(in-memory) 저장소 등으로 제공됩니다.'"><span class="ico_info"></span></button></div>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포된 App과 연결하여 사용하는 백엔드 서비스(back-end service) S/W를 선택합니다.</br>일반적으로, 백엔드 서비스는 App의 데이터를 저장하기 위한 데이터베이스 </br>또는 WEB 세션 공유를 위한 인-메모리(in-memory) 저장소 등으로 제공됩니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<div ng-if="contents.servicesLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="services_select_panel">
 								<ul class="ul-list1">
@@ -68,8 +68,8 @@
 						</li>
 						<li class="pn-Toggle">
 							<div class="pnb_tit">
-								<span class="pnb_t_txt">연결대상 APP</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'서비스S/W와 연결되는 APP을 선택합니다.'"><span class="ico_info"></span></button></div>
+								<span class="pnb_t_txt">연결대상 App</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'서비스S/W와 연결되는 App을 선택합니다.'"><span class="ico_info"></span></button></div>
 								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 							</div>
 							<div class="s_cont_box">
@@ -118,7 +118,7 @@
 								<div class="s_inner_cont">
 									<dl>
 										<dt>S/W :</dt>
-										<dd>Maria DB</dd>
+										<dd>p-mysql</dd>
 									</dl>
 									<dl>
 										<dt>버전 :</dt>
@@ -136,7 +136,7 @@
 								<div class="s_inner_cont">
 									<dl>
 										<dt>S/W :</dt>
-										<dd>Redis</dd>
+										<dd>p-redis</dd>
 									</dl>
 									<dl>
 										<dt>버전 :</dt>
@@ -154,7 +154,7 @@
 								<div class="s_inner_cont">
 									<dl>
 										<dt>S/W :</dt>
-										<dd>Oracle</dd>
+										<dd>oracle</dd>
 									</dl>
 									<dl>
 										<dt>버전 :</dt>
@@ -173,7 +173,7 @@
 								<div class="s_inner_cont">
 									<dl>
 										<dt>S/W :</dt>
-										<dd>MongoDB</dd>
+										<dd>Mongo-DB</dd>
 									</dl>
 									<dl>
 										<dt>버전 :</dt>

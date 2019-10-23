@@ -2,11 +2,11 @@
 	"paasMenu": {
 		"menu": {
 			"dashboard": "대시보드",
-			"paas_portal": "표준 APP.개발 서비스",
+			"paas_portal": "표준 App.개발 서비스",
 			"app_and_service": "앱 & 서비스",
-			"applications": "APP 관리",
+			"applications": "App 관리",
 			"application_push": "앱 만들기",
-			"application_details": "APP 상세",
+			"application_details": "App 상세",
 			"service_instances": "서비스 관리",
 			"service_instance_create": "서비스 만들기",
 			"paas_market": "마켓플레이스",
@@ -23,7 +23,7 @@
 			"user_roles": "사용자 권한",
 			"domains": "도메인관리",
 			"routes": "라우트",
-			"application_log": "APP 로깅"
+			"application_log": "App 로깅"
 		},
 		"desc": {
 			"dashboard": {

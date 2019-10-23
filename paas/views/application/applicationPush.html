@@ -1,6 +1,6 @@
 <div class="message_area">
 	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>‘APP 만들기’를 통해 컨테이너 기반의 APP실행환경을 생성하고, 사용자가 제작한 APP을 배포할 수 있습니다.</span></div>
+	<div class="msg_txt"><span>‘App 만들기’를 통해 컨테이너 기반의 App실행환경을 생성하고, 사용자가 제작한 App을 배포할 수 있습니다.</span></div>
 </div>
 
 <div class="panel_area">
@@ -9,26 +9,26 @@
 		<form name="{{contents.formName}}" method="POST" novalidate>
 			<div class="panel_box pn_l">
 				<div class="pn_head">
-					<h4 class="pnh_tit">APP 만들기</h4>
+					<h4 class="pnh_tit">App 만들기</h4>
 				</div>
 				<div class="pn_body">
 					<span class="sm_txt">* 는 필수입력 사항입니다.</span>
 					<ul class="form_list">
 						<li>
 							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">APP 이름</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 APP 이름을 입력합니다. 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								<i class="i_star"></i> <span class="pnb_t_txt">App 이름</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 App 이름을 입력합니다. 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 							</div>
-							<input type="text" class="form-control" maxlength="20" placeholder="APP 이름을 입력하세요." id="appName" name="appName" ng-model="contents.appPushData.appName" ng-change="contents.appPushData.domainFirstName = contents.appPushData.appName" validation="alpha_dash|min_len:3|max_len:20|required|custom:contents.fn.appNameValidationCheck(contents.appPushData.appName)">
+							<input type="text" class="form-control" maxlength="20" placeholder="App 이름을 입력하세요." id="appName" name="appName" ng-model="contents.appPushData.appName" ng-change="contents.appPushData.domainFirstName = contents.appPushData.appName" validation="alpha_dash|min_len:3|max_len:20|required|custom:contents.fn.appNameValidationCheck(contents.appPushData.appName)">
 						</li>
 						<li>
 							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">APP 도메인</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'컨테이너 상에서 실행되는 WEB APP에 대한 접근 도메인을 구성합니다.</br> 고정되어 제공되는 도메인(domain)에 사용자가 입력한 서브 도메인(sub-domain)을 연결하여 </br>전체 접근 도메인을 생성합니다.</br> 서브 도메인(sub-domain)은 전체 허브팝내에서 중복을 허용하지 않습니다.'"><span class="ico_info"></span></button></div>
+								<i class="i_star"></i> <span class="pnb_t_txt">App 도메인</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'컨테이너 상에서 실행되는 WEB App에 대한 접근 도메인을 구성합니다.</br> 고정되어 제공되는 도메인(domain)에 사용자가 입력한 서브 도메인(sub-domain)을 연결하여 </br>전체 접근 도메인을 생성합니다.</br> 서브 도메인(sub-domain)은 전체 허브팝내에서 중복을 허용하지 않습니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<div class="app-form-two">
 								<div class="two_box w60">
-									<input type="text" class="form-control" maxlength="50" id="domainFirstName" name="domainFirstName" ng-model="contents.appPushData.domainFirstName" ng-change="contents.hostDup = false" validation="alpha_dash|min_len:3|max_len:50|required|custom:contents.fn.subDomainValidationCheck(contents.appPushData.domainFirstName)" placeholder="APP 도메인을 입력하세요.">
+									<input type="text" class="form-control" maxlength="50" id="domainFirstName" name="domainFirstName" ng-model="contents.appPushData.domainFirstName" ng-change="contents.hostDup = false" validation="alpha_dash|min_len:3|max_len:50|required|custom:contents.fn.subDomainValidationCheck(contents.appPushData.domainFirstName)" placeholder="App 도메인을 입력하세요.">
 								</div>
 								<div class="two_box">
 									<select name="" title="검색 구분 선택" id="domainName" name="domainName" ng-model="contents.sltDomainName">
@@ -41,8 +41,8 @@
 						</li>
 						<li>
 							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">APP 유형</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'‘빌드팩(Buildpack) 기반’ 선택 시, </br>CF(Cloud Foundry) 플랫폼에서 제공하는 빌드팩(Buildpack)을 기반으로 컨테이너를 생성하고</br> APP을 배포합니다.'"><span class="ico_info"></span></button></div>
+								<i class="i_star"></i> <span class="pnb_t_txt">App 유형</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'‘빌드팩(Buildpack) 기반’ 선택 시, </br>CF(Cloud Foundry) 플랫폼에서 제공하는 빌드팩(Buildpack)을 기반으로 컨테이너를 생성하고</br> App을 배포합니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<div class="mt20">
 								<div class="radio radio-inline">
@@ -58,7 +58,7 @@
 						<li ng-if="contents.appPushData.pushType != 'DOCKER'">
 							<div class="pnb_tit">
 								<i class="i_star"></i> <span class="pnb_t_txt">빌드팩(Buildpack) 선택</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'빌드팩(Buildpack)은 사용자가 제작한 APP이 실행되는 환경을 자동으로 구성하기 위한 S/W 패키지입니다. 일반적으로 APP을 개발한 언어에 맞춰 빌드팩을 지정합니다.'"><span class="ico_info"></span></button></div>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'빌드팩(Buildpack)은 사용자가 제작한 App이 실행되는 환경을 자동으로 구성하기 위한 S/W 패키지입니다. 일반적으로 App을 개발한 언어에 맞춰 빌드팩을 지정합니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<div ng-if="contents.portalBuildpacksLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="buildpack_select_panel">
 								<ul class="ul-list1">
@@ -83,14 +83,14 @@
 						<!-- <li class="pn-Toggle" ng-if="contents.appPushData.pushType != 'DOCKER'"> --> <!-- 2018.12.13 필수값으로 변경되면서 토글 해제. 파일 필수값 validation 추가 필요. sg0730  -->
 						<li ng-if="contents.appPushData.pushType != 'DOCKER'">
 							<div class="pnb_tit" >
-								<i class="i_star"></i> <span class="pnb_t_txt">APP 실행파일 업로드</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'파일찾기를 통해 사용자가 제작한 APP을 업로드하고 컨테이너에 배포할 수 있습니다. </br>업로드 되는 파일은 jar, war, zip 포멧을 지원합니다.'"><span class="ico_info"></span></button></div>
+								<i class="i_star"></i> <span class="pnb_t_txt">App 실행파일 업로드</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'파일찾기를 통해 사용자가 제작한 App을 업로드하고 컨테이너에 배포할 수 있습니다. </br>업로드 되는 파일은 jar, war, zip 포멧을 지원합니다.'"><span class="ico_info"></span></button></div>
 								<!-- <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button> -->
 							</div>
 							<div class="s_cont_box">
 								<div class="fileUploadWrap mt20">
 									<div class="bootstrap-filestyle input-group">
-										<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" ng-model="contents.appFileItem.file.name" validation="required:alt=업로드 해야 할 APP 실행용 파일이 선택되지 않았습니다." readonly>
+										<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" ng-model="contents.appFileItem.file.name" validation="required:alt=업로드 해야 할 App 실행용 파일이 선택되지 않았습니다." readonly>
 										<span class="group-span-filestyle input-group-btn" tabindex="0">
 											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
 											<label class="btn btn-default " ng-click="main.fileSelectBtnClick($event);">
@@ -123,8 +123,8 @@
 					<!-- 사양설정 -->
 					<div class="pnb_box type2 hd_type cToggle">
 						<div class="pnb_bx_hd">
-							<span class="hd_tit">APP 사양설정</span>
-							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'＊ 사용자 APP에 대한 자원사용 사양을 설정합니다. </br>&nbsp;&nbsp;· 인스턴스 수 : 배포되는 APP에 대한 인스턴스 수를 지정, 설정된 수만큼 Scale-Out</br>&nbsp;&nbsp;· 인스턴스 메모리 : 배포되는 APP 인스턴스 별 사용 가능한 최대 메모리 용량을 설정</br>&nbsp;&nbsp;· 인스턴스 디스크 : 배포되는 APP 인스턴스 별 사용 가능한 최대 디스크 용량을 설정'"><span class="ico_info"></span></button></div>
+							<span class="hd_tit">App 사양설정</span>
+							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'＊ 사용자 App에 대한 자원사용 사양을 설정합니다. </br>&nbsp;&nbsp;· 인스턴스 수 : 배포되는 App에 대한 인스턴스 수를 지정, 설정된 수만큼 Scale-Out</br>&nbsp;&nbsp;· 인스턴스 메모리 : 배포되는 App 인스턴스 별 사용 가능한 최대 메모리 용량을 설정</br>&nbsp;&nbsp;· 인스턴스 디스크 : 배포되는 App 인스턴스 별 사용 가능한 최대 디스크 용량을 설정'"><span class="ico_info"></span></button></div>
 							<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.pnbBoxToggleChange($event, true);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 						</div>
 						<div class="pnb_bx_cnt">
@@ -200,14 +200,14 @@
 									</div>
 								</li>
 							</ul>
-							<div class="cnt_msg_box msg-info mt40">인스턴스 메모리와 디스크는 APP 인스턴스 1개가 가질 수 있는 최대 크기를 설정합니다.</div>
+							<div class="cnt_msg_box msg-info mt40">인스턴스 메모리와 디스크는 App 인스턴스 1개가 가질 수 있는 최대 크기를 설정합니다.</div>
 						</div>
 					</div>
 					<!-- //사양설정 -->
 				</div>
 				<div class="pn_footer">
 					<div class="btn-btm mgt0">
-						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.checkDuplRoute();">APP 생성</button>
+						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.checkDuplRoute();">App 생성</button>
 						<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToPage('/paas/apps')">취소</button>
 					</div>
 				</div>
@@ -217,21 +217,21 @@
 		<li>
 			<div class="panel_box pn_r">
 				<div class="pn_head">
-					<h4 class="pnh_tit ico04">APP 기본정보</h4>
+					<h4 class="pnh_tit ico04">App 기본정보</h4>
 				</div>
 				<div class="pn_body">
 					<div class="s_cont_box">
 						<ul>
 							<li>
-								<span class="s_tit">APP 이름</span>
+								<span class="s_tit">App 이름</span>
 								<span class="s_txt">{{contents.appPushData.appName}}</span>
 							</li>
 							<li>
-								<span class="s_tit">APP 도메인</span>
+								<span class="s_tit">App 도메인</span>
 								<span class="s_txt">{{contents.appPushData.domainFirstName}}.{{contents.sltDomainName}}</span>
 							</li>
 							<li>
-								<span class="s_tit">APP 유형</span>
+								<span class="s_tit">App 유형</span>
 								<span class="s_txt" ng-if="contents.appPushData.pushType == 'GENERAL'">빌드팩(Buildpack) 기반</span>
 								<span class="s_txt" ng-if="contents.appPushData.pushType == 'DOCKER'">도커(Docker) 이미지 기반</span>
 							</li>
@@ -336,7 +336,7 @@
 								</div>
 							</li>
 							<li>
-								<span class="s_tit">APP 실행파일 업로드</span>
+								<span class="s_tit">App 실행파일 업로드</span>
 								<div class="s_inner_cont">
 									<p class="txt" ng-if="contents.appFileItem.file.name" >{{ contents.appFileItem.localFullFileName }}<!-- D:/dev/demand.war --></p>
 									<p class="txt" ng-if="!contents.appFileItem.file.name" >선택된 파일이 없습니다.</p>
@@ -346,10 +346,10 @@
 					</div>
 				</div>
 				
-				<!-- 'APP 실행용 파일 업로드' 영역 상위로 이동 -->
+				<!-- 'App 실행용 파일 업로드' 영역 상위로 이동 -->
 				<!-- <div class="pn-Toggle brd0">
 					<div class="pn_head brdt" ng-if="contents.appPushData.pushType == 'GENERAL'">
-						<h4 class="pnh_tit ico06">APP 실행용 파일 업로드</h4>
+						<h4 class="pnh_tit ico06">App 실행용 파일 업로드</h4>
 						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 					</div>
 					<div class="pn_body" ng-if="contents.appPushData.pushType == 'GENERAL'">
@@ -368,7 +368,7 @@
 				
 				<div class="pn-Toggle brd0">
 					<div class="pn_head brdt">
-						<h4 class="pnh_tit ico05">APP 전체 사양</h4>
+						<h4 class="pnh_tit ico05">App 전체 사양</h4>
 						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 					</div>
 					<div class="pn_body">

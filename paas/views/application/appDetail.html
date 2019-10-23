@@ -16,7 +16,7 @@
                 <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
                     <li><a href="" class="renameInst" ng-click="contents.renameInst();">이름 변경</a></li>
                     <li ng-if="contents.app.state == 'STARTED'"><a href="" ng-click="contents.restartApp(contents.appGuid, contents.app.name);">재시작</a></li>
-                    <li ng-if="contents.app.state != 'STARTED'"><a href="" class="disabled" title="APP가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+                    <li ng-if="contents.app.state != 'STARTED'"><a href="" class="disabled" title="App가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
                     <li><a href="" class="delete" ng-click="contents.deleteApp(contents.appGuid, contents.app.name);">삭제</a></li>
                 </ul>
             </div>
@@ -29,7 +29,7 @@
             <div class="col info-txt useChart" style="padding-top: 30px;">
                 <ul>
                     <li>
-                        <strong class="tit">APP 유형</strong>
+                        <strong class="tit">App 유형</strong>
                         <div class="txt" ng-if="contents.app.buildpackName == 'DOCKER'">{{ contents.app.buildpackName }}</div>
                         <div class="txt" ng-if="contents.app.buildpackName != 'DOCKER'">일반 앱</div>
                     </li>
@@ -261,7 +261,7 @@
                         	<div class="pop_message_area mb20">
 								<div class="msg_bg"></div>
 								<div class="msg_txt">
-									<span>배포된 APP과 백엔드서비스 S/W 연결합니다. 연결되지 않은 서비스는 비활성 상태로 표시됩니다.</span>
+									<span>배포된 App과 백엔드서비스 S/W 연결합니다. 연결되지 않은 서비스는 비활성 상태로 표시됩니다.</span>
 								</div>
 							</div>
                             <h3 ng-if="ins.serviceInstances.length == 0">생성된 서비스가 없습니다. 서비스 관리에서 서비스를 생성하세요.</h3>
