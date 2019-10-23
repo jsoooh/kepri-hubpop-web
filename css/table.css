@@ -22,7 +22,7 @@
 .tbl.type1 .table{table-layout: fixed; border-bottom:1px solid #d6d6d6;}
 .tbl.type1 th{font-size:15px; font-weight: 500; color:#fff; line-height: 1; padding:11px 5px; height:47px; vertical-align: middle; text-align: center; border-bottom:0; background: #3e424d;}
 .tbl.type1 th.bd_r{border-right:1px solid #d6d6d6; }
-.tbl.type1 td{font-size:15px; color:#888; padding:10px; height:47px; text-align: center; vertical-align: middle; border-color:#d6d6d6; background: #fff;}
+.tbl.type1 td{font-size:15px; color:#888; padding:10px; height:47px; text-align: center; vertical-align: middle; border-color:#d6d6d6; background: #fff; border-bottom:1px solid #d6d6d6;}
 .tbl.type1 td.tdpd {padding:10px 40px;}/*180702 스타일 추가*/
 .tbl.type1 .noti td{font-weight: 700;font-size:16px; color:#2957cc;}/*180409 스타일 갱신 font-size:16px; color:#2957cc;*/
 .tbl.type1 td .btn.only-ico + .btn.only-ico{margin-left:20px;}/*180411 스타일 갱신 margin-left:6px*/

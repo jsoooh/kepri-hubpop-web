@@ -149,8 +149,8 @@
 					<div class="panel_head">
 						<div class="tit pull-left">포트관리</div>
 						<div class="pull-right">
-							<button type="button" name="button" class="btn ico-modi only-ico" title="수정" ng-click="contents.fn.formOpen($event, 'editport', contents.loadbalancer);"><span class="ico">수정</span></button>
-							<button type="button" name="button" class="btn ico-del only-ico" title="삭제" ng-click="contents.deleteLbPort(contents.iaasLbPorts.id);">
+							<button type="button" name="button" class="btn btn-ico-modi only-ico" title="수정" ng-click="contents.fn.formOpen($event, 'editport', contents.loadbalancer);"><span class="ico">수정</span></button>
+							<button type="button" name="button" class="btn btn-ico-del only-ico" title="삭제" ng-click="contents.deleteLbPort(contents.iaasLbPorts.id);">
 								<span class="ico">삭제</span>
 							</button>
 						</div>
@@ -249,8 +249,8 @@
 					<div class="panel_head">
 						<div class="tit pull-left">연결서버</div>
 						<div class="pull-right">
-							<button type="button" name="button" class="btn ico-modi only-ico" title="수정" ng-if="contents.iaasLbPorts.connType == 'server' || contents.iaasLbPorts.connType == 'image'" ng-click="contents.fn.formOpen($event, 'editserver', contents.loadbalancer);"><span class="ico">수정</span></button>
-							<button type="button" name="button" class="btn ico-modi only-ico" title="추가" ng-if="contents.iaasLbPorts.connType == null" ng-click="contents.fn.formOpen($event, 'createserver', contents.loadbalancer);"><span class="ico">추가</span></button>
+							<button type="button" name="button" class="btn btn-ico-modi only-ico" title="수정" ng-if="contents.iaasLbPorts.connType == 'server' || contents.iaasLbPorts.connType == 'image'" ng-click="contents.fn.formOpen($event, 'editserver', contents.loadbalancer);"><span class="ico">수정</span></button>
+							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-if="contents.iaasLbPorts.connType == null" ng-click="contents.fn.formOpen($event, 'createserver', contents.loadbalancer);"><span class="ico">추가</span></button>
 						</div>
 					</div>
 					<div class="panel_body">
@@ -262,30 +262,54 @@
 							</div>
 
 							<!-- 연결서버 정보가 없는 경우-->
-							<div class="pop_message_area mb30" ng-if="contents.iaasLbPorts.connType == null">
-								<ul>
-									<li class="pr40" style="width:50%;">
-										<div class="cont-titWrap pt10">
-											<h3 class="h-tit4 pd0">연결서버 정보</h3>
-										</div>
-										<div class="tbw type1">
-											<table class="table">
-												<colgroup>
-													<col style="width:auto;">
-												</colgroup>
-												<tbody>
-												<tr>
-													<th>데이터가 없습니다.</th>
-												</tr>
-												</tbody>
-											</table>
-										</div>
-									</li>
-								</ul>
+							<div class="text-center mt50" ng-if="contents.iaasLbPorts.connType == null">
+								<p>데이터가 없습니다.</p>
 							</div>
-
+							<!-- 연결서버 정보가 없는 경우-->
+							
+							<!-- 연결서버 이미지일 때 상태 프로그래스 -->
+							<div class="cont_progress_div">
+								<div class="pnb_progress_wrap">
+									<div class="progress_box">
+										<span class="bar_bg"></span>
+										<ul>
+											<li ng-class="{'creating' : (instance.uiTask == 'creating'), 'complete' : (instance.uiTask != 'creating')}" class="complete" style="">
+												<div class="state_box">
+													<span class="state_ico"><span>1</span></span>
+												</div>
+												<div class="state_txt"><span>서버 생성</span></div>
+											</li>
+											<li ng-class="{'standby' : (instance.uiTask == 'creating'), 'creating' : (instance.uiTask == 'networking'), 'complete' : (instance.uiTask == 'block_device_mapping' || instance.uiTask == 'created_complete')}" class="creating" style="">
+												<div class="state_box">
+													<span class="state_ico"><span>2</span></span>
+												</div>
+												<div class="state_txt"><span>네트워크 연결</span></div>
+											</li>
+											<li ng-class="{'standby' : (instance.uiTask == 'creating'), 'creating' : (instance.uiTask == 'networking'), 'complete' : (instance.uiTask == 'block_device_mapping' || instance.uiTask == 'created_complete')}" class="standby" style="">
+												<div class="state_box">
+													<span class="state_ico"><span>2</span></span>
+												</div>
+												<div class="state_txt"><span>네트워크 연결</span></div>
+											</li>
+											<li ng-class="{'standby' : (instance.uiTask == 'creating'), 'creating' : (instance.uiTask == 'networking'), 'complete' : (instance.uiTask == 'block_device_mapping' || instance.uiTask == 'created_complete')}" class="standby" style="">
+												<div class="state_box">
+													<span class="state_ico"><span>2</span></span>
+												</div>
+												<div class="state_txt"><span>네트워크 연결</span></div>
+											</li>
+											<!-- ngIf: instance.uiTaskType == 'v' -->
+										</ul>
+										<div class="progress_txt">
+											<p class="ng-binding">네트워크 생성 중 입니다.</p>
+											<!-- ngIf: instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping' --><span ng-if="instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping'" class="ng-binding ng-scope">27초</span><!-- end ngIf: instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping' -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- //연결서버 이미지일 때 상태 프로그래스 -->
+							
 							<!-- 연결서버유형(서버) -->
-							<div class="cont_lay_div" ng-if="contents.iaasLbPorts.connType == 'server'">
+							<div class="cont_lay_div" ng-if="contents.iaasLbPorts.connType == 'server'" style="display:none;">
 								<ul>
 									<li class="pr40" style="width:50%;">
 										<div class="cont-titWrap pt10">
