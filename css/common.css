@@ -45,6 +45,12 @@
 .point2{color: #ff0000 !important;}
 .point3{color: #333 !important;}
 
+/*공통색상*/
+.c_start {color:#5acc27 !important;} /*시작(활성)*/
+.c_error {color:#ff1100 !important;} /*오류*/
+.c_stop {color:#363636 !important;} /*중지*/
+.c_wait {color:#f8ac59 !important;} /*대기*/
+
 /* badge */
 .badge{font-size: 15px; line-height: 22px; height: 20px; padding: 0px 6px; vertical-align: middle;}
 .badge.type1{background-color: #2f3b48;}

@@ -2052,6 +2052,7 @@ p.no-txt{
 .proj_dashboard .type_gis .panel_body .txt_box .tit_area {margin-bottom:20px;}
 .proj_dashboard .type_gis .panel_body .txt_box:first-child {border:0;}
 .proj_dashboard .type_gis .panel_body .txt_box span.lg_txt {display:block; font-family:'Montserrat'; font-weight:700; font-size:42px; line-height: 50px; text-align:center; color:#335cc4; margin-top:25px;}
+.proj_dashboard .type_gis .panel_body .txt_box span.lg_txt>span {font-family:'Noto Sans KR'; font-weight:500; font-size:27px; line-height: 50px; text-align:center; letter-spacing:-1px; color:#335cc4; margin-top:25px;}
 
 /*---개발 파이프라인 사용현황---*/
 .proj_dashboard .type_pipeLine {width:1060px; height:255px;}
@@ -2969,6 +2970,126 @@ a.ext_link:hover {text-decoration:underline;}
 .renameWrap {position:relative; width:240px;}
 .renameWrap .sdBtnWrap {position:absolute; top:2px; right:0;}
 
+/*대시보드 100%비율 CSS 재정의(1903px보다 클때)*/
+.proj_dashboard .ul-panel {display:table; width:100%;}
+.proj_dashboard .ul-panel > li {display:table-cell; box-sizing:border-box; width:38.5%; padding-left:20px; margin-left:0;}
+.proj_dashboard .ul-panel > li:first-child {width:23%; padding-left:0;}
+.proj_dashboard .ul-panel > li:nth-child(4) {width:100%; padding-left:0;}
+.proj_dashboard .ul-panel > li:nth-child(5) {width:35%; padding-left:0;}
+.proj_dashboard .ul-panel > li:nth-child(6) {width:65%;}
+.proj_dashboard .ul-panel > li:nth-child(7) {width:35%; padding-left:0;}
+.proj_dashboard .ul-panel > li:nth-child(8) {width:35%;}
+.proj_dashboard .ul-panel > li:nth-child(8) .dataCtlog  {height:255px;}
+.proj_dashboard .ul-panel > li:nth-child(8) .dataCtlog .panel_body .tit_area  {margin-bottom:24px;}
+.proj_dashboard .ul-panel > li:nth-child(8) .dataCtlog .panel_body > div.fl_l  {height:auto; padding-bottom:18px;}
+.proj_dashboard .ul-panel > li:nth-child(9) {width:30%;}
+.proj_dashboard .ul-panel > li:nth-child(10) {width:35%; padding-left:0;}
+.proj_dashboard .ul-panel > li:nth-child(11) {width:35%;}
+.proj_dashboard .ul-panel > li:nth-child(12) {width:30%;}
+
+.proj_dashboard .type_info {width:auto;}
+.proj_dashboard .type_api {width:auto;}
+.proj_dashboard .type_cloud {width:auto;}
+.proj_dashboard .type_gis {width:auto;}
+.proj_dashboard .type_pipeLine {width:auto;}
+
+.proj_dashboard .type_gis .panel_body {display:table; width:100%;}
+.proj_dashboard .type_gis .panel_body .txt_box {width:33.33%;}
+.proj_dashboard .type_api .panel_body {width:100%;}
+
+.proj_dashboard .type_gis.type_kubernetes .panel_body .txt_box {width:25%;}
+
+.proj_dashboard .panel_body .txt_data {width:auto;}
+.proj_dashboard .panel_body .chart_data {width:245px;}
+
+.proj_dashboard .type_cloud .panel_body > div {text-align:center;}
+.proj_dashboard .type_cloud .cloud_stateWrap ul {width:64%;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {}
+.proj_dashboard .type_cloud .cloud_chartWrap > ul {display:table; width:100%;}
+.proj_dashboard .type_cloud .cloud_chartWrap > ul > li {display:table-cell; box-sizing:border-box; width:33.33%;}
+
+.proj_dashboard .type_api .panel_body > div.fl_l {width:75%;}
+.proj_dashboard .type_api .panel_body > div.fl_r {width:25%;}
+
+.proj_dashboard .type_pipeLine .panel_body .donut_chart_data {width:150px;}
+.proj_dashboard .type_pipeLine .panel_body .bar_chart_data {margin:0 auto;}
+
+.proj_dashboard .type_cloud .cloud_stateWrap {display:table; table-layout:fixed; width:100%;}
+.proj_dashboard .type_cloud .cloud_stateWrap > div {/* border:1px solid red; */}
+.proj_dashboard .type_cloud .cloud_stateWrap .state_data {display:table-cell; box-sizing:border-box; width:64%; vertical-align:top;}
+.proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul {display:table; width:100%;}
+.proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul > li {display:table-cell; box-sizing:border-box;}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {display:table-cell; box-sizing:border-box; /* width:46%;  padding-left:0;*/}
+.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data .sm_tit {text-align:left; margin-bottom:0;}
+
+
+/*분할 레이아웃일 때*/
+.cont_lay_div > ul {display:table; table-layout:fixed; width:100%;}
+.cont_lay_div > ul > li {position:relative; display:table-cell; box-sizing:border-box; vertical-align:top;}
+.cont_lay_div > ul > li .cont-titWrap + .dropdown  {position:absolute; top:10px; right:40px; z-index:1;}
+
+.cBoxWrap .cBox.type2.zoom {position: absolute; top: 0; left: 0; z-index: 1000; width: 100%; height: 100%; margin-bottom: 0;border:none;box-shadow:none;transform:none;transition:none;}
+.cBoxWrap .cBox.type2.zoom .cBox-cnt .fixed-table-container {height:95% !important;}
+.cBoxWrap .cBox.type1 .cBox-cnt {height:277px;} 
+
+.cont-titWrap .h-tit4 {color:#333;}
+
+/* table Header 고정 tbody scroll ====================================== */	
+.fixed-table-container {position: relative; padding-top:47px;}
+.fixed-table-header-bg {text-align:center; color:#666; background:#3e424d; font-weight:700;  height:47px; position: absolute;top:0; right:0; left:0;}
+.fixed-table-wrapper {overflow-x: hidden; overflow-y: auto; height: 100%;}
+.fixed-table-wrapper .fixed-table {table-layout:fixed; width:100%; border-collapse:collapse; border-bottom:1px solid #d6d6d6;}
+.fixed-table-wrapper .fixed-table .no-data {font-size:18px; line-height: 30px !important; height:140px !important; }
+.fixed-table-wrapper .fixed-table td {position:relative; font-size:15px; color:#888; padding:10px; height:47px; text-align: center; vertical-align: middle; border-top:1px solid #d6d6d6;}
+.fixed-table-wrapper .fixed-table td .stateWrap .state-txt  {color:#888; font-weight:400;}
+.fixed-table-wrapper .fixed-table td .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
+.fixed-table-wrapper .fixed-table td .server_con_detail {position:absolute; top:5px; right:-100px; z-index:1; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
+.fixed-table-wrapper .fixed-table td .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
+.fixed-table-wrapper .fixed-table tbody tr:first-child td {border-top:0;}
+.fixed-table-wrapper .fixed-table .th-text {position: absolute; top: 0; font-size:15px; font-weight: 500; color:#fff; line-height:1.6; padding:11px 5px; width: inherit; height:47px; vertical-align: middle; text-align: center; border-bottom:0; background: #3e424d;}
+.fixed-table-wrapper .fixed-table .th-text .t_tip_bx {text-align:left; margin-top:2px;}
+/* .fixed-table-wrapper .fixed-table tbody tr:nth-child(even) {background: #e5f0fa;} */
+.fixed-table-wrapper .fixed-table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
+.fixed-table-wrapper .fixed-table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
+.fixed-table-wrapper .fixed-table .tbl_selected td {background:#e5f0fa !important;}
+
+/*부하분산 리스트*/
+.panel.type5 .panel_head.pdlr30 {padding:24px 60px 0 30px;}
+.panel.type5 .panel_head .tit_area {font-size:20px; font-weight:700; line-height:1.4;}
+.panel.type5 .panel_head .tit_area > span {vertical-align:middle;}
+.panel.type5 .panel_head .tit_area .txt {font-weight:400;}
+.panel.type5 .panel_head .tit_area .w180 {display:inline-block; width:180px; overflow:hidden; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.panel.type5 .panel_head .stateWrap {position:absolute; top:44px; right:55px;}
+.panel.type5 .panel_head .stateWrap .stateMark {vertical-align:middle;;}
+.tbl_cont .table > thead > tr > th {font-size:14px; border-bottom:1px solid #ddd; text-align:center; padding:10px 8px;}
+.tbl_cont .table > tbody > tr > td {font-size:14px; border-top:0; text-align:center; padding:9px 8px 10px 8px;}
+.tbl_cont .table > tbody > tr:nth-child(odd) > td {background:#f7f7f7;}
+.tbl_cont .table .tbl_cont_state {line-height:1.3;} 
+.tbl_cont .table .tbl_cont_state ul li {display:inline-block; vertical-align:middle;} 
+.tbl_cont .table .tbl_cont_state ul li:first-child {margin-right:10px;}
+.tbl_cont .table .tbl_cont_state ul li span.s_count {display:inline-block; width:18px; height:18px; font-size:11px; font-weight:700; color:#fff; border-radius:50%; line-height:18px; vertical-align:middle; padding:0 5px; margin-right:5px;}
+.tbl_cont .table .tbl_cont_state ul li span.active {background:#5acc27;}
+.tbl_cont .table .tbl_cont_state ul li span.inactive {background:#c3c3c3;}
+.tbl_cont .table .tbl_cont_state ul li span.txt {display:inline-block; font-size:14px; font-weight:400; vertical-align:middle;}
+
+.tbl.type1 td .stateWrap > ul > li  {position:relative;}
+.tbl.type1 td .stateWrap .state-txt  {color:#888; font-weight:400; vertical-align:middle;}
+.tbl.type1 td .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
+.tbl.type1 td .server_con_detail {position:absolute; top:25px; z-index:1; width:100%; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
+.tbl.type1 td .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
+.tbl.type1 .t_tip_bx {text-align:left; margin-top:-1px;}
+
+/*부하분산 리스트 > 타이틀 > 포인트 텍스트 굵기*/
+.panel.type5 .panel_head .tit em {font-weight:700;}
+
+/*부하분산-상세화면 연결서버 탭(연결서버 이미지일 때 생성중 프로그래스 */
+.cont_progress_div {width:50%; margin:0 auto;}
+
+/*팝업 타이틀 정의*/
+.tit_pop {display:block; font-size:18px; font-weight:500; color:#333; margin-bottom:15px;}
+.tit_pop::before {display:inline-block; content:''; width:4px; height:14px; background:#3360c5; margin-right:6px;}
+
+
 /*알람설정*/
 /* 알람 */
 .newMonitCon{
@@ -3198,116 +3319,3 @@ a.ext_link:hover {text-decoration:underline;}
     display: inline-block;
     width: 49%;
 }
-
-/*대시보드 100%비율 CSS 재정의(1903px보다 클때)*/
-.proj_dashboard .ul-panel {display:table; width:100%;}
-.proj_dashboard .ul-panel > li {display:table-cell; box-sizing:border-box; width:38.5%; padding-left:20px; margin-left:0;}
-.proj_dashboard .ul-panel > li:first-child {width:23%; padding-left:0;}
-.proj_dashboard .ul-panel > li:nth-child(4) {width:100%; padding-left:0;}
-.proj_dashboard .ul-panel > li:nth-child(5) {width:35%; padding-left:0;}
-.proj_dashboard .ul-panel > li:nth-child(6) {width:65%;}
-
-.proj_dashboard .type_info {width:auto;}
-.proj_dashboard .type_api {width:auto;}
-.proj_dashboard .type_cloud {width:auto;}
-.proj_dashboard .type_gis {width:auto;}
-.proj_dashboard .type_pipeLine {width:auto;}
-
-.proj_dashboard .type_gis .panel_body {display:table; width:100%;}
-.proj_dashboard .type_gis .panel_body .txt_box {width:33.33%;}
-.proj_dashboard .type_api .panel_body {width:100%;}
-
-.proj_dashboard .panel_body .txt_data {width:auto;}
-.proj_dashboard .panel_body .chart_data {width:245px;}
-
-.proj_dashboard .type_cloud .panel_body > div {text-align:center;}
-/* .proj_dashboard .type_cloud .cloud_stateWrap {float:unset;} */
-/* .proj_dashboard .type_cloud .cloud_stateWrap {display:table-cell; box-sizing:border-box; width:100%;} */
-.proj_dashboard .type_cloud .cloud_stateWrap ul {width:64%;}
-.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {/* width:auto;  width:260px; height:103px;*/}
-.proj_dashboard .type_cloud .cloud_chartWrap > ul {display:table; width:100%;}
-.proj_dashboard .type_cloud .cloud_chartWrap > ul > li {display:table-cell; box-sizing:border-box; width:33.33%;}
-
-.proj_dashboard .type_api .panel_body > div.fl_l {width:75%;}
-.proj_dashboard .type_api .panel_body > div.fl_r {width:25%;}
-
-.proj_dashboard .type_pipeLine .panel_body .donut_chart_data {width:150px;}
-.proj_dashboard .type_pipeLine .panel_body .bar_chart_data {margin:0 auto;}
-
-
-.proj_dashboard .type_cloud .cloud_stateWrap {display:table; table-layout:fixed; width:100%;}
-.proj_dashboard .type_cloud .cloud_stateWrap > div {/* border:1px solid red; */}
-.proj_dashboard .type_cloud .cloud_stateWrap .state_data {display:table-cell; box-sizing:border-box; width:64%; vertical-align:top;}
-.proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul {display:table; width:100%;}
-.proj_dashboard .type_cloud .cloud_stateWrap .state_data > ul > li {display:table-cell; box-sizing:border-box;}
-.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data {display:table-cell; box-sizing:border-box; /* width:46%;  padding-left:0;*/}
-.proj_dashboard .type_cloud .cloud_stateWrap .line_chart_data .sm_tit {text-align:left; margin-bottom:0;}
-
-
-/*분할 레이아웃일 때*/
-.cont_lay_div > ul {display:table; table-layout:fixed; width:100%;}
-.cont_lay_div > ul > li {position:relative; display:table-cell; box-sizing:border-box; vertical-align:top;}
-.cont_lay_div > ul > li .cont-titWrap + .dropdown  {position:absolute; top:10px; right:40px; z-index:1;}
-
-.cBoxWrap .cBox.type2.zoom {position: absolute; top: 0; left: 0; z-index: 1000; width: 100%; height: 100%; margin-bottom: 0;border:none;box-shadow:none;transform:none;transition:none;}
-.cBoxWrap .cBox.type2.zoom .cBox-cnt .fixed-table-container {height:95% !important;}
-.cBoxWrap .cBox.type1 .cBox-cnt {height:277px;} 
-
-.cont-titWrap .h-tit4 {color:#333;}
-
-/* table Header 고정 tbody scroll ====================================== */	
-.fixed-table-container {position: relative; padding-top:47px;}
-.fixed-table-header-bg {text-align:center; color:#666; background:#3e424d; font-weight:700;  height:47px; position: absolute;top:0; right:0; left:0;}
-.fixed-table-wrapper {overflow-x: hidden; overflow-y: auto; height: 100%;}
-.fixed-table-wrapper .fixed-table {table-layout:fixed; width:100%; border-collapse:collapse; border-bottom:1px solid #d6d6d6;}
-.fixed-table-wrapper .fixed-table .no-data {font-size:18px; line-height: 30px !important; height:140px !important; }
-.fixed-table-wrapper .fixed-table td {position:relative; font-size:15px; color:#888; padding:10px; height:47px; text-align: center; vertical-align: middle; border-top:1px solid #d6d6d6;}
-.fixed-table-wrapper .fixed-table td .stateWrap .state-txt  {color:#888; font-weight:400;}
-.fixed-table-wrapper .fixed-table td .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
-.fixed-table-wrapper .fixed-table td .server_con_detail {position:absolute; top:5px; right:-100px; z-index:1; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
-.fixed-table-wrapper .fixed-table td .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
-.fixed-table-wrapper .fixed-table tbody tr:first-child td {border-top:0;}
-.fixed-table-wrapper .fixed-table .th-text {position: absolute; top: 0; font-size:15px; font-weight: 500; color:#fff; line-height:1.6; padding:11px 5px; width: inherit; height:47px; vertical-align: middle; text-align: center; border-bottom:0; background: #3e424d;}
-.fixed-table-wrapper .fixed-table .th-text .t_tip_bx {text-align:left; margin-top:2px;}
-/* .fixed-table-wrapper .fixed-table tbody tr:nth-child(even) {background: #e5f0fa;} */
-.fixed-table-wrapper .fixed-table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
-.fixed-table-wrapper .fixed-table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
-.fixed-table-wrapper .fixed-table .tbl_selected td {background:#e5f0fa !important;}
-
-
-/*부하분산 리스트*/
-.panel.type5 .panel_head.pdlr30 {padding:24px 60px 0 30px;}
-.panel.type5 .panel_head .tit_area {font-size:20px; font-weight:700; line-height:1.4;}
-.panel.type5 .panel_head .tit_area > span {vertical-align:middle;}
-.panel.type5 .panel_head .tit_area .txt {font-weight:400;}
-.panel.type5 .panel_head .tit_area .w180 {display:inline-block; width:180px; overflow:hidden; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.panel.type5 .panel_head .stateWrap {position:absolute; top:44px; right:55px;}
-.panel.type5 .panel_head .stateWrap .stateMark {vertical-align:middle;;}
-.tbl_cont .table > thead > tr > th {font-size:14px; border-bottom:1px solid #ddd; text-align:center; padding:10px 8px;}
-.tbl_cont .table > tbody > tr > td {font-size:14px; border-top:0; text-align:center; padding:9px 8px 10px 8px;}
-.tbl_cont .table > tbody > tr:nth-child(odd) > td {background:#f7f7f7;}
-.tbl_cont .table .tbl_cont_state {line-height:1.3;} 
-.tbl_cont .table .tbl_cont_state ul li {display:inline-block; vertical-align:middle;} 
-.tbl_cont .table .tbl_cont_state ul li:first-child {margin-right:10px;}
-.tbl_cont .table .tbl_cont_state ul li span.s_count {display:inline-block; width:18px; height:18px; font-size:11px; font-weight:700; color:#fff; border-radius:50%; line-height:18px; vertical-align:middle; padding:0 5px; margin-right:5px;}
-.tbl_cont .table .tbl_cont_state ul li span.active {background:#5acc27;}
-.tbl_cont .table .tbl_cont_state ul li span.inactive {background:#c3c3c3;}
-.tbl_cont .table .tbl_cont_state ul li span.txt {display:inline-block; font-size:14px; font-weight:400; vertical-align:middle;}
-
-
-.tbl.type1 td .stateWrap > ul > li  {position:relative;}
-.tbl.type1 td .stateWrap .state-txt  {color:#888; font-weight:400; vertical-align:middle;}
-.tbl.type1 td .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
-.tbl.type1 td .server_con_detail {position:absolute; top:25px; z-index:1; width:100%; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
-.tbl.type1 td .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
-.tbl.type1 .t_tip_bx {text-align:left; margin-top:-1px;}
-
-/*부하분산 리스트 > 타이틀 > 포인트 텍스트 굵기*/
-.panel.type5 .panel_head .tit em {font-weight:700;}
-
-/*부하분산-상세화면 연결서버 탭(연결서버 이미지일 때 생성중 프로그래스 */
-.cont_progress_div {width:50%; margin:0 auto;}
-
-/*팝업 타이틀 정의*/
-.tit_pop {display:block; font-size:18px; font-weight:500; color:#333; margin-bottom:15px;}
-.tit_pop::before {display:inline-block; content:''; width:4px; height:14px; background:#3360c5; margin-right:6px;}
