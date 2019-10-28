@@ -16,6 +16,7 @@ angular.module('iaas.controllers')
         ct.data.tenantName      = $scope.main.userTenant.korName;
         ct.data.loadbalancerId  = $stateParams.lbInfoId;
         ct.serverMainList       = [];
+        ct.selectPortId         = "";
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
@@ -86,7 +87,9 @@ angular.module('iaas.controllers')
         };
 
         ct.editPopServerCallBackFunction = function() {
-            ct.getLb();
+            $timeout(function () {
+                ct.getLb();
+            }, 4000);
         };
 
         // 연결서버 - 추가
@@ -104,7 +107,9 @@ angular.module('iaas.controllers')
         };
 
         ct.createPopServerCallBackFunction = function() {
-            ct.getLb();
+            $timeout(function () {
+                ct.getLb();
+            }, 4000);
         };
 
         // 부하분산 관리 - 이름/설명 변경
@@ -112,7 +117,7 @@ angular.module('iaas.controllers')
             var dialogOptions =  {
                 controller              : "iaasReNamePopLoadBalancerCtrl" ,
                 formName                : 'iaasReNamePopLoadBalancerForm',
-                selectLoadBalancer      : angular.copy(lbservice),
+                selectLoadBalancer      : angular.copy(lbservice)
             };
 
             $scope.actionBtnHied = false;
@@ -181,9 +186,12 @@ angular.module('iaas.controllers')
                 ct.loadbalancer = data.content;
                 ct.loadbalancer.iaasLbPorts = data.content.iaasLbPorts;
                 ct.loadbalancer.iaasLbPortMembers = data.content.iaasLbPortMembers;
-                ct.iaasLbPorts = {};
-                for (var i = 0; i < ct.loadbalancer.iaasLbPorts.length; i++) {
-                    ct.iaasLbPorts[i] = ct.loadbalancer.iaasLbPorts[i];
+                ct.iaasLbPorts = angular.copy(ct.loadbalancer.iaasLbPorts);
+
+                if (ct.loadbalancer.iaasLbInfo.checkStatus.indexOf("ing") > -1) {
+                    $scope.main.reloadTimmer['loadBalancerState_' + ct.loadbalancer.iaasLbInfo.id] = $timeout(function () {
+                        ct.fn.checkLbState(ct.loadbalancer.iaasLbInfo.id);
+                    }, 1000);
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -192,6 +200,35 @@ angular.module('iaas.controllers')
             returnPromise.finally(function (data, status, headers) {
                 setOsType();    //vm osType 세팅
                 $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // lb 상태 조회
+        ct.fn.checkLbState = function(loadBalancerId) {
+            var param = {loadBalancerId: loadBalancerId};
+            if ($scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId]) {
+                $timeout.cancel($scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId]);
+                $scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId] = null;
+            }
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data && data.content && data.content.iaasLbInfo) {
+                    var lbLists = data.content;
+                    //ct.fn.setProcState(instanceStateInfo);
+                    if (lbLists.iaasLbInfo.checkStatus.indexOf("ing") > -1) {
+                        $scope.main.reloadTimmer['loadBalancerState_' + lbLists.iaasLbInfo.id] = $timeout(function () {
+                            ct.fn.checkLbState(lbLists.iaasLbInfo.id);
+                        }, 2000);
+                    }
+                    ct.loadbalancer = data.content;
+                    ct.loadbalancer.iaasLbPorts = data.content.iaasLbPorts;
+                    ct.loadbalancer.iaasLbPortMembers = data.content.iaasLbPortMembers;
+                    ct.iaasLbPorts = angular.copy(ct.loadbalancer.iaasLbPorts);
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+            returnPromise.finally(function (data, status, headers) {
             });
         };
 
@@ -208,7 +245,7 @@ angular.module('iaas.controllers')
                     if (status == 200 && data) {
                         $scope.main.loadingMainBody = false;
                         common.showAlertSuccess('삭제되었습니다.');
-                        $scope.main.goToPage('/iaas/compute?tabIndex=1');
+                        common.locationHref('/#/iaas/compute?tabIndex=1');
                     } else {
                         $scope.main.loadingMainBody = false;
                         common.showAlertError('오류가 발생하였습니다.');
@@ -261,6 +298,7 @@ angular.module('iaas.controllers')
         ct.showPortDetail = function (iaasLbPort) {
             ct.hidePortDetails();
             $timeout(function () {
+                ct.selectPortId = iaasLbPort.id;
                 iaasLbPort.selected = true;
                 ct.iaasLbPorts = iaasLbPort;
             }, 0);
@@ -282,7 +320,9 @@ angular.module('iaas.controllers')
                 //console.log("ct.loadbalancer.iaasLbPortMembers(1) : ", ct.loadbalancer.iaasLbPortMembers);
                 angular.forEach(ct.loadbalancer.iaasLbPortMembers, function(member) {
                     var sltServer = common.objectsFindCopyByField(ct.serverMainList, "id", member.instanceId);
-                    member.instanceOsType = sltServer.image.osType;
+                    if (sltServer.image && sltServer.image.osType) {
+                        member.instanceOsType = sltServer.image.osType;
+                    }
                     member.instanceFloatingIp = sltServer.floatingIp;
                     member.instanceFixedIp = sltServer.fixedIp;
                     member.instanceCreated = sltServer.created;
@@ -550,7 +590,6 @@ angular.module('iaas.controllers')
         pop.btnClickCheck 				= false;
         pop.validDisabled 				= true;
 
-
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
@@ -579,6 +618,13 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 pop.serverMainList = data.content.instances;
+                angular.forEach(pop.serverMainList, function(member) {
+                    angular.forEach(pop.portMembers, function(selMember) {
+                        if (selMember.instanceId == member.id) {
+                            member.checked = true;
+                        }
+                    });
+                });
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -656,17 +702,19 @@ angular.module('iaas.controllers')
             $scope.main.loadingMainBody = true;
             var params = {
                 id: pop.port.id,
+                connType: pop.port.connType,
+                connImageId: pop.port.connImageId,
+                connImageName: pop.port.connImageName,
                 connImageCount: pop.port.connImageCount
             };
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/members/image', 'POST', params);
             returnPromise.success(function (data, status, headers) {
-                $scope.main.replacePage();
-                $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("수정 되었습니다.");
+                //$scope.main.replacePage();
+                common.showAlertSuccess("수정 중 입니다.");
+                pop.callBackFunction();
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function (data, status, headers) {
@@ -701,7 +749,6 @@ angular.module('iaas.controllers')
         $scope.actionLoading 			= false;
         pop.btnClickCheck 				= false;
         pop.validDisabled 				= true;
-
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
@@ -824,12 +871,11 @@ angular.module('iaas.controllers')
             common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/members/image', 'POST', params);
             returnPromise.success(function (data, status, headers) {
-                $scope.main.replacePage();
-                $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("추가 되었습니다.");
+                //$scope.main.replacePage();
+                common.showAlertSuccess("추가 중 입니다.");
+                pop.callBackFunction();
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function (data, status, headers) {
@@ -840,5 +886,86 @@ angular.module('iaas.controllers')
 
         pop.fn.GetServerMainList();
 
+    })
+    .controller('iaasReNamePopLoadBalancerCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("loadbalancerDetailControllers.js : iaasReNamePopLoadBalancerCtrl", 1);
+
+        var pop = this;
+        pop.validationService = new ValidationService({controllerAs: pop});
+        pop.formName = $scope.dialogOptions.formName;
+        pop.userTenant = angular.copy($scope.main.userTenant);
+        pop.sltLoadBalancer = $scope.dialogOptions.selectLoadBalancer.iaasLbInfo;
+        pop.lbserviceLists = angular.copy($scope.contents.lbServiceLists);
+        pop.fn = {};
+        pop.data = {};
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
+
+        $scope.dialogOptions.title = "이름/설명 변경";
+        $scope.dialogOptions.okName = "변경";
+        $scope.dialogOptions.closeName = "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/reNameLoadBalancerPopForm.html" + _VersionTail();
+
+        $scope.actionLoading = false;
+        pop.btnClickCheck = false;
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+
+            pop.fn.loadBalancerNameValidationCheck();
+        };
+
+        $scope.popCancel = function () {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        pop.fn.loadBalancerNameValidationCheck = function () {
+            var params = {
+                tenantId: pop.sltLoadBalancer.tenantId,
+                loadBalancerId: pop.sltLoadBalancer.id,
+                name: pop.newLbNm
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/check_name', 'GET', params);
+            returnPromise.success(function (data, status, headers) {
+                pop.fn.reNmLb();
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+                common.showAlertError("message", data.message);
+            });
+        };
+
+        pop.fn.reNmLb = function () {
+            $scope.main.loadingMainBody = true;
+
+            var params = {
+                id: pop.sltLoadBalancer.id,
+                tenantId: pop.sltLoadBalancer.tenantId,
+                name: pop.newLbNm,
+                description: pop.sltLoadBalancer.description
+            };
+
+            common.mdDialogHide();
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'PUT', params);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("부하분산 서버 이름/설명이 변경 되었습니다.");
+
+                if (angular.isFunction(pop.callBackFunction)) {
+                    pop.callBackFunction();
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        }
     })
 ;

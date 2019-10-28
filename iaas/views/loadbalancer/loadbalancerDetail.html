@@ -87,9 +87,9 @@
 				</tr>
 				</thead>
 				<tbody>
-				<tr ng-repeat="iaasLbPort in contents.loadbalancer.iaasLbPorts"><!-- 선택된 tr -->
+				<tr ng-repeat="iaasLbPort in contents.loadbalancer.iaasLbPorts" ng-click="contents.showPortDetail(iaasLbPort)" ng-class="{'': !(iaasLbPort.id == contents.selectPortId), 'tbl_selected': (iaasLbPort.id == contents.selectPortId)}">
 					<td>{{ $index + 1}}</td>
-					<td style="text-align: left;" ng-click="contents.showPortDetail(iaasLbPort)">{{ iaasLbPort.name }}</td>
+					<td style="text-align: left;">{{ iaasLbPort.name }}</td>
 					<td>{{ iaasLbPort.protocolPort }}</td>
 					<td>{{ iaasLbPort.protocol }}</td>
 					<td>{{ iaasLbPort.lbAlgorithmName }}</td>
@@ -130,6 +130,41 @@
 	</div>
 </div>
 <!-- //cBox -->
+
+<!-- 연결서버 이미지일 때 상태 프로그래스 -->
+<div class="cont_progress_div" ng-if="contents.loadbalancer.iaasLbInfo.checkStatus.indexOf('ing') > -1">
+	<div class="pnb_progress_wrap">
+		<div class="progress_box">
+			<span class="bar_bg"></span>
+			<ul>
+				<li ng-class="{'creating' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'lb_creating'), 'complete' : (contents.loadbalancer.iaasLbInfo.checkStatus != 'lb_creating')}">
+					<div class="state_box">
+						<span class="state_ico"><span>1</span></span>
+					</div>
+					<div class="state_txt"><span>부하분산 생성</span></div>
+				</li>
+				<li ng-if="contents.loadbalancer.iaasLbInfo.checkConnType == 'image'" ng-class="{'standby' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'lb_creating'), 'creating' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'server_creating'), 'complete' : (contents.loadbalancer.iaasLbInfo.checkStatus != 'lb_creating' && contents.loadbalancer.iaasLbInfo.checkStatus != 'server_creating')}">
+					<div class="state_box">
+						<span class="state_ico"><span>2</span></span>
+					</div>
+					<div class="state_txt"><span>서버 생성</span></div>
+				</li>
+				<li ng-class="{'standby' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'lb_creating' || contents.loadbalancer.iaasLbInfo.checkStatus == 'server_creating'), 'creating' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'server_connecting'), 'complete' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'error' || contents.loadbalancer.iaasLbInfo.checkStatus == 'done')}">
+					<div class="state_box">
+						<span class="state_ico"><span>{{ contents.loadbalancer.iaasLbInfo.checkConnType == 'image' ? "3" : "2" }}</span></span>
+					</div>
+					<div class="state_txt"><span>서버 연결</span></div>
+				</li>
+			</ul>
+			<div class="progress_txt">
+				<p>{{ contents.loadbalancer.iaasLbInfo.checkStatusName + " 중 입니다." }}</p>
+				<span ng-if="instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping'">{{instance.creatingTimmer}}초</span>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- //연결서버 이미지일 때 상태 프로그래스 -->
+
 <!-- tab wrap -->
 <div ng-if="contents.iaasLbPorts.id" class="tabWrap type1 mt30">
 	<!-- Nav tabs -->
@@ -268,7 +303,7 @@
 							<!-- 연결서버 정보가 없는 경우-->
 							
 							<!-- 연결서버 이미지일 때 상태 프로그래스 -->
-							<div class="cont_progress_div">
+							<div class="cont_progress_div" ng-if="contents.loadbalancer.iaasLbInfo.checkStatus.indexOf('ing') > -1 && false">
 								<div class="pnb_progress_wrap">
 									<div class="progress_box">
 										<span class="bar_bg"></span>
@@ -309,7 +344,7 @@
 							<!-- //연결서버 이미지일 때 상태 프로그래스 -->
 							
 							<!-- 연결서버유형(서버) -->
-							<div class="cont_lay_div" ng-if="contents.iaasLbPorts.connType == 'server'" style="display:none;">
+							<div class="cont_lay_div" ng-if="contents.iaasLbPorts.connType == 'server'">
 								<ul>
 									<li class="pr40" style="width:50%;">
 										<div class="cont-titWrap pt10">
@@ -363,6 +398,7 @@
 							<!-- //연결서버유형(서버) -->
 
 							<!-- 연결서버유형(이미지) -->
+							<!--<div class="cont_lay_div" ng-if="contents.iaasLbPorts.connType == 'image' && contents.loadbalancer.iaasLbInfo.checkStatus.indexOf('ing')==-1">-->
 							<div class="cont_lay_div" ng-if="contents.iaasLbPorts.connType == 'image'">
 								<ul>
 									<li class="pr40" style="width:50%;">

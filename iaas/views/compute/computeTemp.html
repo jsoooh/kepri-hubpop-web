@@ -273,13 +273,13 @@
 
 				<!-- panel -->
 				<ul ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0" class="ul-panel">
-					<li ng-repeat="(key, lbserviceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
+					<li ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
 						<!-- panel -->
 						<div class="panelWrap">
 							<div class="panel type5">
 								<div class="panel_head pdlr30">
 									<div class="tit_area">
-										<p class="tit" ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbserviceList.iaasLbInfo.id)">{{ lbserviceList.name }}<em class="point1">({{ lbserviceList.iaasLbPorts.length }})</em></p>
+										<p class="tit" ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}<em class="point1">({{ lbServiceList.iaasLbPorts.length }})</em></p>
 										<p class="txt">부하 분산 서버</p>
 									</div>
 									<span class="stateWrap">
@@ -295,12 +295,12 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', lbserviceList);" title="이름/설명 변경">이름/설명 변경</a></li>
-											<li><a class="delete" href="javascript:void(0);" ng-click="contents.deleteLb(lbserviceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
+											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', lbServiceList);" title="이름/설명 변경">이름/설명 변경</a></li>
+											<li><a class="delete" href="javascript:void(0);" ng-click="contents.deleteLb(lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
 										</ul>
 									</div>
 								</div>
-								<div ng-if="lbserviceList.iaasLbInfo.checkStatus.indexOf('ing') == -1" class="panel_body">
+								<div ng-if="lbServiceList.iaasLbInfo.checkStatus.indexOf('ing') == -1" class="panel_body">
 									<div class="tbl_cont">
 										<table class="table">
 											<colgroup>
@@ -316,7 +316,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr ng-repeat="(key, iaasLbPort) in lbserviceList.iaasLbPorts">
+												<tr ng-repeat="(key, iaasLbPort) in lbServiceList.iaasLbPorts">
 													<td>{{ iaasLbPort.connectionPort }}</td>
 													<td>{{ iaasLbPort.memberCnt }}</td>
 													<td>
@@ -332,32 +332,32 @@
 										</table>
 									</div>
 								</div>
-								<div ng-if="lbserviceList.iaasLbInfo.checkStatus.indexOf('ing') > -1" class="ul-in">
+								<div ng-if="lbServiceList.iaasLbInfo.checkStatus.indexOf('ing') > -1" class="ul-in">
 									<div class="pnb_progress_wrap">
 										<div class="progress_box">
 											<span class="bar_bg"></span>
 											<ul>
-												<li ng-if="lbserviceList.iaasLbInfo.checkConnType == 'image'" ng-class="{'creating' : (lbserviceList.iaasLbInfo.checkStatus == 'server_creating'), 'complete' : (lbserviceList.iaasLbInfo.checkStatus != 'server_creating')}">
+												<li ng-class="{'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus != 'lb_creating')}">
 													<div class="state_box">
 														<span class="state_ico"><span>1</span></span>
 													</div>
-													<div class="state_txt"><span>서버 생성</span></div>
-												</li>
-												<li  ng-class="{'standby' : (lbserviceList.iaasLbInfo.checkStatus == 'server_creating'), 'creating' : (lbserviceList.iaasLbInfo.checkStatus == 'lb_creating'), 'complete' : (lbserviceList.iaasLbInfo.checkStatus != 'lb_creating')}">
-													<div class="state_box">
-														<span class="state_ico"><span>{{ lbserviceList.iaasLbInfo.checkConnType == 'image' ? "2" : "1" }}</span></span>
-													</div>
 													<div class="state_txt"><span>부하분산 생성</span></div>
 												</li>
-												<li ng-class="{'standby' : (lbserviceList.iaasLbInfo.checkStatus == 'server_creating' || lbserviceList.iaasLbInfo.checkStatus == 'lb_creating'), 'creating' : (lbserviceList.iaasLbInfo.checkStatus == 'floatingIp_creating'), 'complete' : (lbserviceList.iaasLbInfo.checkStatus == 'error' || lbserviceList.iaasLbInfo.checkStatus == 'done')}">
+												<li ng-if="lbServiceList.iaasLbInfo.checkConnType == 'image'" ng-class="{'standby' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating'), 'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'server_creating'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus != 'lb_creating' && lbServiceList.iaasLbInfo.checkStatus != 'server_creating')}">
 													<div class="state_box">
-														<span class="state_ico"><span>{{ lbserviceList.iaasLbInfo.checkConnType == 'image' ? "3" : "2" }}</span></span>
+														<span class="state_ico"><span>2</span></span>
 													</div>
-													<div class="state_txt"><span>공인IP 연결</span></div>
+													<div class="state_txt"><span>서버 생성</span></div>
+												</li>
+												<li ng-class="{'standby' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating' || lbServiceList.iaasLbInfo.checkStatus == 'server_creating'), 'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'server_connecting'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus == 'error' || lbServiceList.iaasLbInfo.checkStatus == 'done')}">
+													<div class="state_box">
+														<span class="state_ico"><span>{{ lbServiceList.iaasLbInfo.checkConnType == 'image' ? "3" : "2" }}</span></span>
+													</div>
+													<div class="state_txt"><span>서버 연결</span></div>
 												</li>
 											</ul>
 											<div class="progress_txt">
-												<p>{{ lbserviceList.iaasLbInfo.checkStatusName + " 중 입니다." }}</p>
+												<p>{{ lbServiceList.iaasLbInfo.checkStatusName + " 중 입니다." }}</p>
 												<span ng-if="instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping'">{{instance.creatingTimmer}}초</span>
 											</div>
 										</div>

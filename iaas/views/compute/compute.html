@@ -16,7 +16,8 @@
 			<!-- 검색 -->
 			<div class="searchBox type2">
 				<div class="form-group">
-					<input type="text" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText">
+					<input ng-if="contents.tabIndex == 0" type="text" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText">
+					<input ng-if="contents.tabIndex == 1" type="text" placeholder="부하분산 서버 검색" style="width:300px;" ng-model="contents.schLbFilterText">
 				</div>
 				<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
 			</div>
@@ -24,23 +25,35 @@
 		</div>
 	</div>
 	<!-- //프로젝트 정보 -->
-	
-	<!-- 버튼영역 -->
-	<div class="btnWrap">
-		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/create')">
-			<span class="ico ico_create" ></span>서버 만들기
-		</button>
-		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/copy')">
-			<span class="ico ico_copy"></span>다른서버 복사하기
-		</button>
-		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/create')" ng-if="false">
-			<span class="ico ico_create" ></span>부하 분산 설정
-		</button>
-		<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')" ng-if="false">
-			<span class="ico ico_create" ></span>부하 분산 상세
-		</button>
-	</div>
-	<!-- //버튼영역 -->
+
+	<!-- 탭영역 -->
+	<div role="tabpanel" class="tabWrap type1">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.serverMainList | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.lbServiceLists).length}})</span></a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<!-- tab1 cnt -->
+			<div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 0}">
+                <!-- 버튼영역 -->
+                <div class="btnWrap">
+                    <button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/create')">
+                        <span class="ico ico_create" ></span>서버 만들기
+                    </button>
+                    <button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/copy')">
+                        <span class="ico ico_copy"></span>다른서버 복사하기
+                    </button>
+                    <button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/create')" ng-if="false">
+                        <span class="ico ico_create" ></span>부하 분산 설정
+                    </button>
+                    <button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')" ng-if="false">
+                        <span class="ico ico_create" ></span>부하 분산 상세
+                    </button>
+                </div>
+                <!-- //버튼영역 -->
 
 	<!-- panel area-->
 	<!-- <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel thum_style"> -->
@@ -333,3 +346,133 @@
 			<span class="fnt20"><spna class="color1">‘서버 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
 		</div>
 	</div>
+			</div>
+			<!-- //tab1 cnt -->
+
+			<!-- tab2 cnt -->
+			<div role="tabpanel" class="tab-pane" ng-class="{'active' : contents.tabIndex == 1}">
+				<!-- 버튼영역 -->
+				<div class="btnWrap">
+					<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/create')"><!-- ng-if="false" -->
+						<span class="ico ico_create" ></span>부하 분산 설정
+					</button>
+					<!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')">&lt;!&ndash; ng-if="false" &ndash;&gt;
+						<span class="ico ico_create" ></span>부하 분산 상세
+					</button>-->
+				</div>
+				<!-- //버튼영역 -->
+
+				<!-- panel -->
+				<ul ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0" class="ul-panel">
+					<li ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
+						<!-- panel -->
+						<div class="panelWrap">
+							<div class="panel type5">
+								<div class="panel_head pdlr30">
+									<div class="tit_area">
+										<p class="tit" ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}<em class="point1">({{ lbServiceList.iaasLbPorts.length }})</em></p>
+										<p class="txt">부하 분산 서버</p>
+									</div>
+									<span class="stateWrap">
+										<span class="stateMark type1">활성</span>
+										<!--<span class="stateMark type2">비활성</span>-->
+										<!--<span ng-if="instance.provisioningStatus == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building'" class="stateMark type4">대기</span>-->
+										<!--<span ng-if="instance.provisioningStatus == 'stopped'" class="stateMark type3">중지</span>-->
+										<span class="txt">활성</span>
+										<!--<span class="state-txt">{{ 'iaas.label.instance_' + instance[0].checkStatus | translate }}</span>-->
+									</span>
+									<div class="dropdown btn-option">
+										<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', lbServiceList);" title="이름/설명 변경">이름/설명 변경</a></li>
+											<li><a class="delete" href="javascript:void(0);" ng-click="contents.deleteLb(lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div ng-if="lbServiceList.iaasLbInfo.checkStatus.indexOf('ing') == -1" class="panel_body">
+									<div class="tbl_cont">
+										<table class="table">
+											<colgroup>
+												<col style="width:25%;">
+												<col style="width:25%;">
+												<col style="width:50%;">
+											</colgroup>
+											<thead>
+											<tr>
+												<th>접속포트</th>
+												<th>연결된 서버</th>
+												<th>서버 상태</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat="(key, iaasLbPort) in lbServiceList.iaasLbPorts">
+												<td>{{ iaasLbPort.connectionPort }}</td>
+												<td>{{ iaasLbPort.memberCnt }}</td>
+												<td>
+													<div class="tbl_cont_state">
+														<ul>
+															<li><span class="s_count active">{{ iaasLbPort.memberCnt }}</span><span class="txt">활성</span></li>
+															<li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
+														</ul>
+													</div>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div ng-if="lbServiceList.iaasLbInfo.checkStatus.indexOf('ing') > -1" class="ul-in">
+									<div class="pnb_progress_wrap">
+										<div class="progress_box">
+											<span class="bar_bg"></span>
+											<ul>
+												<li ng-class="{'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus != 'lb_creating')}">
+													<div class="state_box">
+														<span class="state_ico"><span>1</span></span>
+													</div>
+													<div class="state_txt"><span>부하분산 생성</span></div>
+												</li>
+												<li ng-if="lbServiceList.iaasLbInfo.checkConnType == 'image'" ng-class="{'standby' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating'), 'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'server_creating'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus != 'lb_creating' && lbServiceList.iaasLbInfo.checkStatus != 'server_creating')}">
+													<div class="state_box">
+														<span class="state_ico"><span>2</span></span>
+													</div>
+													<div class="state_txt"><span>서버 생성</span></div>
+												</li>
+												<li ng-class="{'standby' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating' || lbServiceList.iaasLbInfo.checkStatus == 'server_creating'), 'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'server_connecting'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus == 'error' || lbServiceList.iaasLbInfo.checkStatus == 'done')}">
+													<div class="state_box">
+														<span class="state_ico"><span>{{ lbServiceList.iaasLbInfo.checkConnType == 'image' ? "3" : "2" }}</span></span>
+													</div>
+													<div class="state_txt"><span>서버 연결</span></div>
+												</li>
+											</ul>
+											<div class="progress_txt">
+												<p>{{ lbServiceList.iaasLbInfo.checkStatusName + " 중 입니다." }}</p>
+												<span ng-if="instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping'">{{instance.creatingTimmer}}초</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- //panel -->
+					</li>
+				</ul>
+				<!-- //panel -->
+
+				<div class="proj_list_area" ng-if="!contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
+					<ul class="ul-panel dash_list no_data">
+						<li><p class="no_data_txt pd0">생성된 부하분산 서버가 없습니다.</p></li>
+					</ul>
+				</div>
+				<div class="proj_list_area" ng-if="contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
+					<ul class="ul-panel dash_list no_data">
+						<li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
+					</ul>
+				</div>
+			</div>
+			<!-- //tab2 cnt -->
+		</div>
+	</div>
+	<!-- 탭영역 -->

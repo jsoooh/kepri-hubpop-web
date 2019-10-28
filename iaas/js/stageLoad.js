@@ -8,7 +8,7 @@ loadJavascript(_IAAS_STAGE_+'/js/services/computeDetailServices.js'+_VERSION_TAI
 
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/dashboard/dashboardControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeControllers.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeTempControllers.js'+_VERSION_TAIL_HEAD_);
+//loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeTempControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/computeDetailControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/deployServerControllers.js'+_VERSION_TAIL_HEAD_);
 //loadJavascript(_IAAS_STAGE_+'/js/controllers/compute/deployServerTabControllers.js'+_VERSION_TAIL_HEAD_);

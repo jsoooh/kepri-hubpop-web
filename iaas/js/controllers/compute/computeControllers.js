@@ -13,12 +13,15 @@ angular.module('iaas.controllers')
         ct.roles 			= [];
         ct.network 			= {};
         ct.serverMainList   = [];
+        ct.lbServiceLists   = [];
         ct.consoleLogLimit 	= '50';
         ct.actionLogLimit 	= '10';
         ct.pageFirstLoad 	= true;
         ct.loadingServerList 	= false;
+        ct.loadingLbList 	= false;
         ct.showVal			= false;
         ct.schFilterText    = "";
+        ct.schLbFilterText    = "";
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenant.id;
         ct.data.tenantName = $scope.main.userTenant.korName;
@@ -26,6 +29,22 @@ angular.module('iaas.controllers')
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
         ct.tabIndex = 0;
+
+        // 부하분산 서버관리 디테일 페이지에서 리스트 페이지로 넘어올때 필요하여 추가
+        if ($location.$$search.tabIndex) {
+            ct.tabIndex = $location.$$search.tabIndex;
+        }
+
+        ct.fn.formOpen = function($event, state, data){
+            ct.formType = state;
+            if (state == 'storage') {
+                ct.fn.createStorage($event);
+            } else if (state == 'snapshot') {
+                ct.fn.createPopSnapshot($event,data);
+            } else if (state == 'rename') {
+                ct.fn.reNamePopLb($event,data);
+            }
+        };
 
         ct.computeEditFormOpen = function (instance, $event){
             var dialogOptions =  {
@@ -75,6 +94,7 @@ angular.module('iaas.controllers')
             ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
             ct.network = ct.networks[0];
             ct.fnGetServerMainList();
+            ct.fnGetUsedResource();
         });
         
         ct.fn.getKeyFile = function(keypair,type) {
@@ -183,6 +203,7 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
             returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 ct.loadingServerList = false;
                 ct.serverMainList = [];
                 var instances = [];
@@ -226,8 +247,11 @@ angular.module('iaas.controllers')
                     }
                     $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                 }
+                ct.pageFirstLoad = false;
             });
             returnPromise.error(function (data, status, headers) {
+                ct.pageFirstLoad = false;
+                $scope.main.loadingMainBody = false;
                 if (status != 307) {
                     common.showAlertError(data.message);
                 }
@@ -679,13 +703,11 @@ angular.module('iaas.controllers')
             common.showDialog($scope, $event, dialogOptions);
             $scope.actionLoading = true; // action loading
         };
-        
-        
+
         // sg0730 인스턴스 디스크 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
         	 $scope.main.goToPage('/iaas/compute');
         };
-        
 
         // 접속 IP 설정 팝업
         ct.fn.IpConnectPop = function(instance,index) {
@@ -752,6 +774,123 @@ angular.module('iaas.controllers')
             }
         };
 
+        // lb 전체 리스트 조회
+        ct.fngetLbList = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancers', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                ct.lbServiceLists = data.content;
+                //console.log("ct.lbServiceLists : ", ct.lbServiceLists);
+                ct.iaasLbPortMembers = [];
+                ct.connectServer = "";
+                if (ct.lbServiceLists.length != 0) {
+                    ct.loadingLbList = true;
+                }
+
+                angular.forEach(ct.lbServiceLists, function (lbList) {
+                    if (lbList.iaasLbInfo.checkStatus.indexOf("ing") > -1) {
+                        $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
+                            ct.fn.checkLbState(lbList.iaasLbInfo.id);
+                        }, 1000);
+                    }
+                });
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // lb 삭제
+        ct.deleteLb = function(id) {
+            common.showConfirm('LB 삭제','선택한 LB를 삭제하시겠습니까?').then(function(){
+                $scope.main.loadingMainBody = true;
+                var param = {
+                    tenantId : ct.data.tenantId,
+                    loadBalancerId : id
+                };
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'DELETE', param);
+                returnPromise.success(function (data, status, headers) {
+                    if (status == 200 && data) {
+                        common.showAlertSuccess('삭제되었습니다.');
+                        ct.fngetLbList();
+                    } else {
+                        $scope.main.loadingMainBody = false;
+                        common.showAlertError('오류가 발생하였습니다.');
+                    }
+                });
+                returnPromise.error(function (data, status, headers) {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertError(data.message);
+                });
+            });
+        };
+
+        // 이름 & 설명 변경 팝업
+        ct.fn.reNamePopLb = function($event, lbserviceList) {
+            var dialogOptions =  {
+                controller       : "iaasReNamePopLoadBalancerCtrl" ,
+                formName         : 'iaasReNamePopLoadBalancerForm',
+                selectLoadBalancer    : angular.copy(lbserviceList),
+                callBackFunction : ct.reNamePopLoadBalancerCallBackFunction
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.reNamePopLoadBalancerCallBackFunction = function () {
+            ct.fngetLbList();
+        };
+
+        // lb 상태 조회
+        ct.fn.checkLbState = function(loadBalancerId) {
+            var param = {loadBalancerId: loadBalancerId};
+            if ($scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId]) {
+                $timeout.cancel($scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId]);
+                $scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId] = null;
+            }
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data && data.content && data.content.iaasLbInfo) {
+                    var lbLists = data.content;
+                    //ct.fn.setProcState(instanceStateInfo);
+                    if (lbLists.iaasLbInfo.checkStatus.indexOf("ing") > -1) {
+                        $scope.main.reloadTimmer['loadBalancerState_' + lbLists.iaasLbInfo.id] = $timeout(function () {
+                            ct.fn.checkLbState(lbLists.iaasLbInfo.id);
+                        }, 2000);
+                    }
+                    angular.forEach(ct.lbServiceLists, function (lbList) {
+                        if (lbList.iaasLbInfo.id == loadBalancerId) {
+                            lbList.iaasLbInfo = lbLists.iaasLbInfo;
+                            angular.forEach(lbLists.iaasLbPorts, function (lbPort) {
+                                var lbPortSearch = common.objectsFindByField(lbList.iaasLbPorts, "id", lbPort.id);
+                                if (lbPortSearch == null) {
+                                    lbList.iaasLbPorts.push(lbPort);
+                                }
+                            });
+                            angular.forEach(lbLists.iaasLbPortMembers, function (lbPortMember) {
+                                var lbPortMemberSearch = common.objectsFindByField(lbList.iaasLbPortMembers, "id", lbPortMember.id);
+                                if (lbPortMemberSearch == null) {
+                                    lbList.iaasLbPortMembers.push(lbPortMember);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+            returnPromise.finally(function (data, status, headers) {
+            });
+        };
+
         // [20190621.HYG] It's a func to bind Instance monitoring data
         // Dev History 
         // 테넌트 전체 서버 모니터링 데이터 호출 API 는 사용안함
@@ -778,6 +917,7 @@ angular.module('iaas.controllers')
 
         if (ct.data.tenantId) {
             ct.fnGetServerMainList();
+            ct.fngetLbList();
         } else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
             showAlert.then(function () {
@@ -1755,7 +1895,7 @@ angular.module('iaas.controllers')
             }
             
             ct.measureTime = result;
-        }
+        };
 
         // 숫자만 입력
         ct.fn.numberCheck = function () {

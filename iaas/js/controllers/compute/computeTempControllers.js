@@ -730,6 +730,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancers', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.lbServiceLists = data.content;
+                //console.log("ct.lbServiceLists : ", ct.lbServiceLists);
                 ct.iaasLbPortMembers = [];
                 ct.connectServer = "";
                 if (ct.lbServiceLists.length != 0) {
@@ -741,26 +742,8 @@ angular.module('iaas.controllers')
                         $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
                             ct.fn.checkLbState(lbList.iaasLbInfo.id);
                         }, 1000);
-                        /*if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
-                            $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
-                            $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
-                        }*/
                     }
                 });
-                /*if (isServerStatusCheck) {
-                    if ($scope.main.reloadTimmer['instanceServerStateList']) {
-                        $timeout.cancel($scope.main.reloadTimmer['instanceServerStateList']);
-                        $scope.main.reloadTimmer['instanceServerStateList'] = null;
-                    }
-                    $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
-                        ct.fn.checkServerState();
-                    }, 1000);
-                    if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
-                        $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
-                        $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
-                    }
-                    $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
-                }*/
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
@@ -820,29 +803,33 @@ angular.module('iaas.controllers')
                 $timeout.cancel($scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId]);
                 $scope.main.reloadTimmer['loadBalancerState_' + loadBalancerId] = null;
             }
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/check_state', 'GET', param);
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                if (status == 200 && data && data.content) {
-                    var lbStateInfo = data.content;
+                if (status == 200 && data && data.content && data.content.iaasLbInfo) {
+                    var lbLists = data.content;
                     //ct.fn.setProcState(instanceStateInfo);
-                    if (lbStateInfo.checkStatus.indexOf("ing") > -1) {
-                        $scope.main.reloadTimmer['loadBalancerState_' + lbStateInfo.id] = $timeout(function () {
-                            ct.fn.checkLbState(lbStateInfo.id);
+                    if (lbLists.iaasLbInfo.checkStatus.indexOf("ing") > -1) {
+                        $scope.main.reloadTimmer['loadBalancerState_' + lbLists.iaasLbInfo.id] = $timeout(function () {
+                            ct.fn.checkLbState(lbLists.iaasLbInfo.id);
                         }, 2000);
-                        /*var serverItem = common.objectsFindByField(ct.lbServiceLists, "iaasLbInfo", loadBalancerId);
-                        if (serverItem && serverItem.id) {
-                            angular.forEach(instanceStateInfo, function(value, key) {
-                                serverItem[key] = value;
-                            });
-                        }*/
-                    } else {
-                        angular.forEach(ct.lbServiceLists, function (lbList) {
-                            if (lbList.iaasLbInfo.id == loadBalancerId) {
-                                lbList.iaasLbInfo.checkStatus = lbStateInfo.checkStatus;
-                                lbList.iaasLbInfo.checkStatusName = lbStateInfo.checkStatusName;
-                            }
-                        });
                     }
+                    angular.forEach(ct.lbServiceLists, function (lbList) {
+                        if (lbList.iaasLbInfo.id == loadBalancerId) {
+                            lbList.iaasLbInfo = lbLists.iaasLbInfo;
+                            angular.forEach(lbLists.iaasLbPorts, function (lbPort) {
+                                var lbPortSearch = common.objectsFindByField(lbList.iaasLbPorts, "id", lbPort.id);
+                                if (lbPortSearch == null) {
+                                    lbList.iaasLbPorts.push(lbPort);
+                                }
+                            });
+                            angular.forEach(lbLists.iaasLbPortMembers, function (lbPortMember) {
+                                var lbPortMemberSearch = common.objectsFindByField(lbList.iaasLbPortMembers, "id", lbPortMember.id);
+                                if (lbPortMemberSearch == null) {
+                                    lbList.iaasLbPortMembers.push(lbPortMember);
+                                }
+                            });
+                        }
+                    });
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -861,87 +848,6 @@ angular.module('iaas.controllers')
                 $scope.main.goToPage("/");
             });
             return false;
-        }
-    })
-    .controller('iaasReNamePopLoadBalancerCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        _DebugConsoleLog("loadbalancerDetailControllers.js : iaasReNamePopLoadBalancerCtrl", 1);
-
-        var pop = this;
-        pop.validationService = new ValidationService({controllerAs: pop});
-        pop.formName = $scope.dialogOptions.formName;
-        pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.sltLoadBalancer = $scope.dialogOptions.selectLoadBalancer.iaasLbInfo;
-        pop.lbserviceLists = angular.copy($scope.contents.lbServiceLists);
-        pop.fn = {};
-        pop.data = {};
-        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
-
-        $scope.dialogOptions.title = "이름/설명 변경";
-        $scope.dialogOptions.okName = "변경";
-        $scope.dialogOptions.closeName = "닫기";
-        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/reNameLoadBalancerPopForm.html" + _VersionTail();
-
-        $scope.actionLoading = false;
-        pop.btnClickCheck = false;
-
-        // Dialog ok 버튼 클릭 시 액션 정의
-        $scope.popDialogOk = function () {
-            if ($scope.actionBtnHied) return;
-            $scope.actionBtnHied = true;
-
-            pop.fn.loadBalancerNameValidationCheck();
-        };
-
-        $scope.popCancel = function () {
-            $scope.dialogClose = true;
-            common.mdDialogCancel();
-        };
-
-        pop.fn.loadBalancerNameValidationCheck = function () {
-            var params = {
-                tenantId: pop.sltLoadBalancer.tenantId,
-                loadBalancerId: pop.sltLoadBalancer.id,
-                name: pop.newLbNm,
-            };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/check_name', 'GET', params);
-            returnPromise.success(function (data, status, headers) {
-                pop.fn.reNmLb();
-            });
-            returnPromise.error(function (data, status, headers) {
-                $scope.actionBtnHied = false;
-                $scope.main.loadingMainBody = false;
-                common.showAlertError("message", data.message);
-            });
-        };
-
-        pop.fn.reNmLb = function () {
-            $scope.main.loadingMainBody = true;
-
-            var params = {
-                id: pop.sltLoadBalancer.id,
-                tenantId: pop.sltLoadBalancer.tenantId,
-                name: pop.newLbNm,
-                description: pop.sltLoadBalancer.description
-            };
-
-            common.mdDialogHide();
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'PUT', params);
-            returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("부하분산 서버 이름/설명이 변경 되었습니다.");
-
-                if (angular.isFunction(pop.callBackFunction)) {
-                    pop.callBackFunction();
-                }
-            });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                common.showAlertError(data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.actionBtnHied = false;
-                $scope.main.loadingMainBody = false;
-            });
         }
     })
 ;
