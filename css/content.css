@@ -1969,6 +1969,7 @@ p.no-txt{
 .proj_dashboard .panel_body .txt_data > ul > li .state_mark.type3 {background:#fe3392;}
 .proj_dashboard .panel_body .txt_data > ul > li .state_mark.type4 {background:#8fcbe4;}
 .proj_dashboard .panel_body .txt_data > ul > li .state_mark.type5 {background:#0f6bba;}
+.proj_dashboard .panel_body .txt_data > ul > li .state_mark.type6 {background:#f8ac59;}
 .proj_dashboard .panel_body .txt_data > ul > li .state_mark {position:absolute; top:9px; display: inline-block; font-size: 0; width:18px; height: 18px; vertical-align: middle; border-radius: 50px; margin-right:8px;}
 .proj_dashboard .panel_body .txt_data > ul > li .state_txt {display: inline-block; padding-left:25px;}
 .proj_dashboard .panel_body .txt_data > ul > li .state_result {display: inline-block; float:right;}
@@ -3083,7 +3084,8 @@ a.ext_link:hover {text-decoration:underline;}
 .panel.type5 .panel_head .tit em {font-weight:700;}
 
 /*부하분산-상세화면 연결서버 탭(연결서버 이미지일 때 생성중 프로그래스 */
-.cont_progress_div {width:50%; margin:0 auto;}
+.cont_progress_div {width:50%; height:200px; margin:60px auto 0;}
+.cont_progress_div ..progress_box {margin-top:0;}
 
 /*팝업 타이틀 정의*/
 .tit_pop {display:block; font-size:18px; font-weight:500; color:#333; margin-bottom:15px;}
