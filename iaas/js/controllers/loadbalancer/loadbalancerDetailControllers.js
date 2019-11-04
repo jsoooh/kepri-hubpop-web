@@ -17,6 +17,8 @@ angular.module('iaas.controllers')
         ct.data.loadbalancerId  = $stateParams.lbInfoId;
         ct.serverMainList       = [];
         ct.selectPortId         = "";
+        ct.sltInfoTab           = 'lbPort';
+        ct.data.instanceId = $stateParams.instanceId;
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
@@ -331,10 +333,134 @@ angular.module('iaas.controllers')
             }
         }
 
+        // 부하분산 포트 사용현황 - 서비스 도메인 - 포트포워딩 선택 탭
+        ct.fn.changeSltInfoTab = function (sltInfoTab) {
+            if (sltInfoTab == 'lbPort') {
+                ct.sltInfoTab = sltInfoTab;
+            } else if (sltInfoTab == 'domain') {
+                ct.sltInfoTab = sltInfoTab;
+            } else if (sltInfoTab == 'portForwarding') {
+                ct.sltInfoTab = sltInfoTab;
+                // ct.fn.listPortForwardings();
+            }
+        };
+
+        //포트포워딩 조회
+        ct.fn.listPortForwardings = function () {
+            ct.instance.instancePortForwardings = [];
+            $scope.main.loadingMainBody = true;
+            var returnPromise = computeDetailService.listPortForwardings(ct.data.instanceId);
+            returnPromise.success(function (data) {
+                ct.instance.instancePortForwardings = data.content;
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //서비스 도메인 조회
+        ct.fn.listDomains = function() {
+            $scope.main.loadingMainBody = true;
+            var returnPromise = computeDetailService.listDomains(ct.data.instanceId);
+            returnPromise.success(function (data) {
+                ct.instance.instanceDomainLinkInfos = data.content;
+                ct.fn.setRdpConnectDomain(ct.instance);
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 서비스 도메인, 포트 포워딩 탭 확대/축소
+        ct.zoomPanel = function(evt, type){
+            var panel = $(evt.currentTarget).closest(".panel");
+            var isZoom = false;
+            if(panel.hasClass("zoom")) {
+                panel.removeClass("zoom").resize();
+                if (type != 'virtualMonit' && type != 'systemLog') panel.find('.panel_body').css("height", "400px");
+                $timeout(function () {
+                    $(window).scrollTop(document.scrollingElement.scrollHeight);
+                }, 100);
+            } else {
+                isZoom = true;
+                panel.addClass("zoom").resize();
+                if (type != 'virtualMonit' && type != 'systemLog') panel.find('.panel_body').css("height", "90%");
+                $timeout(function () {
+                    $(window).scrollTop(0);
+                }, 100);
+            }
+            if(type == 'insMonit') {
+                if (isZoom) {
+                    panel.find('.visualizeItem').css("width", "750px");
+                } else {
+                    panel.find('.visualizeItem').css("width", "465px");
+                }
+                $timeout(function () {
+                    panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
+                }, 100);
+            } else if (type == 'virtualMonit') {
+                if (isZoom) {
+                    panel.css("height", "100%");
+                    panel.find('#chart').css("height", "auto");
+                } else {
+                    panel.css("height", "670px");
+                    panel.find('#chart').css("height", "425px");
+                }
+            } else if (type == 'alarmEvent') {
+                if (isZoom) {
+                    panel.find('.tbl.type1').css("overflow-y", "hidden");
+                    panel.find('.tbl.type1').css("height", "auto");
+                } else {
+                    panel.find('.tbl.type1').css("overflow-y", "auto");
+                    panel.find('.tbl.type1').css("height", "235px");
+                }
+            } else if (type == 'systemLog') {
+                if (isZoom) {
+                    panel.find('.tbl.type1').css("overflow-y", "hidden");
+                    panel.css("height", "auto");
+                    panel.find('.tbl.type1').css("height", "auto");
+                } else {
+                    panel.find('.tbl.type1').css("overflow-y", "auto");
+                    panel.css("height", "670px");
+                    panel.find('.tbl.type1').css("height", "425px");
+                }
+            } else {
+                panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
+                if(type == 'bootLog') {
+                    if (isZoom) {
+                        ct.fn.systemTerminalResize(180, 40);
+                    } else {
+                        ct.fn.systemTerminalResize(170, 15);
+                    }
+                }
+            }
+        };
+
+        // 서비스 도메인 추가 팝업
+        ct.fn.popConnDomainForm = function($event) {
+            var dialogOptions = {
+                controller : "iaasLbPopConnDomainFormCtrl" ,
+                formName : 'iaasLbPopConnDomainForm',
+                formMode : "add",
+                loadbalancer : angular.copy(ct.loadbalancer),
+                callBackFunction : ct.refreshDomainCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.refreshDomainCallBackFunction = function () {
+            ct.fn.listDomains();
+        };
+
         if (ct.data.tenantId) {
             ct.fnGetUsedResource();
             ct.getLb();
             ct.GetServerMainList();
+            ct.fn.changeSltInfoTab();
         } else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
             showAlert.then(function () {
@@ -887,6 +1013,7 @@ angular.module('iaas.controllers')
         pop.fn.GetServerMainList();
 
     })
+    // 부하분산 관리 - 이름/설명 변경 팝업 컨트롤러
     .controller('iaasReNamePopLoadBalancerCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasReNamePopLoadBalancerCtrl", 1);
 
@@ -967,5 +1094,191 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             });
         }
+    })
+    // 서비스 도메인 - 추가 팝업 컨트롤러
+    .controller('iaasLbPopConnDomainFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
+        _DebugConsoleLog("iaasLbPopConnDomainFormCtrl.js : iaasLbPopConnDomainFormCtrl", 1);
+
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.formMode 					= $scope.dialogOptions.formMode;
+        pop.fn 							= {};
+        pop.domain						= {};
+        pop.orgDomain					= {};
+        pop.orgDomainLinkInfo           = {};
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+        pop.loadbalancer 				= $scope.dialogOptions.loadbalancer;
+
+        if (pop.formMode == "mod") {
+            $scope.dialogOptions.title = "도메인 수정";
+            $scope.dialogOptions.okName =  "수정";
+            pop.orgDomainLinkInfo = angular.copy($scope.dialogOptions.domainLinkInfo);
+            pop.domain.tenantId = pop.orgDomainLinkInfo.tenantId;
+            pop.domain.instanceId = pop.orgDomainLinkInfo.instanceId;
+            pop.domain.id = pop.orgDomainLinkInfo.id;
+            pop.domain.domainId = pop.orgDomainLinkInfo.domainInfo.id;
+            pop.domain.floatingIp = pop.instance.floatingIp;
+            pop.domain.domain = pop.orgDomainLinkInfo.domainInfo.domain;
+            pop.domain.sourcePort = pop.orgDomainLinkInfo.sourcePort;
+            pop.domain.protocolType = pop.orgDomainLinkInfo.protocolType;
+            pop.domain.sslUsed = false;
+        } else {
+            $scope.dialogOptions.title = "도메인 등록";
+            $scope.dialogOptions.okName =  "등록";
+            pop.domain.tenantId = pop.instance.tenantId;
+            pop.domain.instanceId = pop.instance.id;
+            pop.domain.floatingIp = pop.instance.floatingIp;
+            pop.domain.sourcePort = 80;
+            pop.domain.protocolType = "http";
+            pop.domain.sslUsed = false;
+        }
+
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerCreatePopDomainForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+
+        pop.fn.getBaseDomainList = function() {
+            pop.baseDomains = [];
+            var param = {};
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/baseDomain/all', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && angular.isArray(data.content) && data.content.length > 0) {
+                    pop.baseDomains = data.content;
+                    if (pop.formMode == "mod") {
+                        angular.forEach(pop.baseDomains, function (baseDomain) {
+                            if (pop.domain.domain.indexOf(baseDomain.domain) > 0) {
+                                pop.domain.baseDomain = baseDomain.domain;
+                                pop.domain.subDomain = pop.domain.domain.substring(0, pop.domain.domain.indexOf(baseDomain.domain)-1);
+                            }
+                        });
+                    } else {
+                        pop.domain.baseDomain = pop.baseDomains[0].domain;
+                    }
+                }
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.getDomainUsingList = function() {
+            pop.usingDomainList = [];
+            pop.usingDomainNames = [];
+            var param = {};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/domain/all', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && angular.isArray(data.content) && data.content.length > 0) {
+                    pop.usingDomainList = data.content;
+                    angular.forEach(pop.usingDomainList, function (domain, key) {
+                        pop.usingDomainNames.push(domain.domain);
+                    });
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+        };
+
+        pop.fn.subDomainCustomValidationCheck = function(subDomain) {
+            if (subDomain && angular.isArray(pop.usingDomainNames) && pop.usingDomainNames.length > 0) {
+                var domainName = subDomain + "." + pop.domain.baseDomain;
+                if (pop.formMode == "mod") {
+                    if (pop.orgDomainLinkInfo.domainInfo.domain != domainName && pop.usingDomainNames.indexOf(domainName) >= 0) {
+                        return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
+                    }
+                } else {
+                    if (pop.usingDomainNames.indexOf(domainName) >= 0) {
+                        return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
+                    }
+                }
+            }
+            return {isValid : true};
+        };
+
+        pop.fn.systemPortCustomValidationCheck = function(port) {
+            if (port == undefined || port == null || port == "") return;
+            if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
+                return {isValid : true};
+            } else {
+                return {isValid : false, message: "포트범위는 [80, 443, 1024~65535] 입니다."};
+            }
+        };
+
+        $scope.actionBtnHied = false;
+        $scope.popDialogOk = function () {
+            pop.fn.actionDomain();
+        };
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        $scope.actionBtnHied = false;
+        pop.fn.actionDomain = function() {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
+                $scope.actionBtnHied = false;
+                return;
+            }
+
+            pop.domain.domain =  pop.domain.subDomain + "." + pop.domain.baseDomain;
+
+            if (pop.formMode == "mod") {
+                if (pop.orgDomainLinkInfo.domainInfo.domain == pop.domain.domain && pop.orgDomainLinkInfo.sourcePort == pop.domain.sourcePort) {
+                    $scope.actionBtnHied = false;
+                    common.showAlertWarning("변경된 정보가 없습니다.");
+                    return;
+                }
+            }
+
+            $scope.main.loadingMainBody = true;
+            var method = "POST";
+            var params = {};
+            params.tenantId 		= pop.domain.tenantId;
+            params.instanceId 		= pop.domain.instanceId;
+            if (pop.formMode == "mod") {
+                method = "PUT";
+                params.id = pop.domain.id;
+                params.domainId = pop.domain.domainId;
+            }
+            params.domain = pop.domain.domain;
+            params.floatingIp = pop.domain.floatingIp;
+            params.sourcePort = pop.domain.sourcePort;
+            params.protocolType = pop.domain.protocolType;
+            params.sslUsed = pop.domain.sslUsed;
+
+            common.mdDialogHide();
+
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain/service', method, params);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                if (pop.formMode == "mod") {
+                    common.showAlertSuccess("수정 되었습니다.");
+                } else {
+                    common.showAlertSuccess("생성 되었습니다.");
+                }
+                if (angular.isFunction(pop.callBackFunction)) {
+                    pop.callBackFunction();
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+
+        };
+
+        pop.fn.getBaseDomainList();
+        pop.fn.getDomainUsingList();
+
     })
 ;
