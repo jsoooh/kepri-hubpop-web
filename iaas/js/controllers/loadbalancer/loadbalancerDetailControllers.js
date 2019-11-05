@@ -339,6 +339,8 @@ angular.module('iaas.controllers')
         ct.fn.changeSltInfoTab = function (sltInfoTab) {
             if (sltInfoTab == 'lbPort') {
                 ct.sltInfoTab = sltInfoTab;
+                ct.selectPortId = "";
+                ct.getLb();
             } else if (sltInfoTab == 'domain') {
                 ct.sltInfoTab = sltInfoTab;
                 ct.fn.listDomains();
