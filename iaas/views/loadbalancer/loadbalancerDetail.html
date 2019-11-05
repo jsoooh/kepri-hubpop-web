@@ -232,7 +232,7 @@
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
 						</div>
 					</div>
-<!--					ng-if="contents.instance.instanceDomainLinkInfos"-->
+					<!-- ng-if="contents.instance.instanceDomainLinkInfos"-->
 					<div class="panel_body">
 						<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_domain_panel" class="in">
 							<!-- 메세지영역 -->
@@ -257,10 +257,10 @@
 									</tr>
 									</thead>
 									<tbody>
-									<tr ng-if="(contents.instance.instanceDomainLinkInfos | filter : {isRdpDomain: false}).length == 0">
+									<tr ng-if="contents.instanceDomainLinkInfos.length == 0"><!-- | filter : {isRdpDomain: false}).length == 0-->
 										<td colspan="4">연결된 도메인이 없습니다.</td>
 									</tr>
-									<tr ng-repeat="item in contents.instance.instanceDomainLinkInfos | filter : {isRdpDomain: false}">
+									<tr ng-repeat="item in contents.instanceDomainLinkInfos"><!-- | filter : {isRdpDomain: false}-->
 										<td>{{ item.domainInfo.domain }}</td>
 										<td>{{ item.protocolType }}</td>
 										<td>{{ item.sourcePort }}</td>
@@ -278,7 +278,6 @@
 			</div>
 			<!-- panel -->
 		</div>
-
 		<div ng-if="contents.sltInfoTab == 'portForwarding'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'portForwarding'}">
 			<!-- panel -->
 			<div class="panelWrap">
@@ -290,7 +289,7 @@
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'portForwarding')"><span class="ico">확대/축소</span></button>
 						</div>
 					</div>
-<!--					ng-if="contents.instance.instancePortForwardings"-->
+					<!-- ng-if="contents.instance.instancePortForwardings"-->
 					<div class="panel_body">
 						<div scroll-pane scroll-config="{ contentWidth: '0px' }" class="in">
 							<!-- 메세지영역 -->

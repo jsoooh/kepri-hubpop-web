@@ -777,7 +777,7 @@ angular.module('iaas.controllers')
 
     })
     .controller('iaasDeployServerDetailCtrl', function ($scope, $location, $state, $sce, $q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
-        _DebugConsoleLog("computeDetailControllers.js : iaasComputeDetailCtrl", 1);
+        _DebugConsoleLog("deployServerControllers.js : iaasDeployServerDetailCtrl", 1);
 
         var ct = this;
 

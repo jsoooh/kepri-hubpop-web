@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('iaas.controllers')
-    .controller('iaasLoadbalancerDetailCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
+    .controller('iaasLoadbalancerDetailCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, common, ValidationService, CONSTANTS, computeDetailService) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasLoadbalancerDetailCtrl", 1);
 
         $scope.actionBtnEnabled = true;
@@ -19,6 +19,8 @@ angular.module('iaas.controllers')
         ct.selectPortId         = "";
         ct.sltInfoTab           = 'lbPort';
         ct.data.instanceId = $stateParams.instanceId;
+        ct.instanceDomainLinkInfos = [];
+        ct.instance             = {};
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
@@ -339,33 +341,20 @@ angular.module('iaas.controllers')
                 ct.sltInfoTab = sltInfoTab;
             } else if (sltInfoTab == 'domain') {
                 ct.sltInfoTab = sltInfoTab;
+                ct.fn.listDomains();
             } else if (sltInfoTab == 'portForwarding') {
                 ct.sltInfoTab = sltInfoTab;
-                // ct.fn.listPortForwardings();
+                ct.fn.listPortForwardings();
             }
-        };
-
-        //포트포워딩 조회
-        ct.fn.listPortForwardings = function () {
-            ct.instance.instancePortForwardings = [];
-            $scope.main.loadingMainBody = true;
-            var returnPromise = computeDetailService.listPortForwardings(ct.data.instanceId);
-            returnPromise.success(function (data) {
-                ct.instance.instancePortForwardings = data.content;
-                $scope.main.loadingMainBody = false;
-            });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-            });
         };
 
         //서비스 도메인 조회
         ct.fn.listDomains = function() {
             $scope.main.loadingMainBody = true;
-            var returnPromise = computeDetailService.listDomains(ct.data.instanceId);
+            var returnPromise = computeDetailService.listDomains(ct.loadbalancer.iaasLbInfo.id);
             returnPromise.success(function (data) {
-                ct.instance.instanceDomainLinkInfos = data.content;
-                ct.fn.setRdpConnectDomain(ct.instance);
+                ct.instanceDomainLinkInfos = data.content;
+                //ct.fn.setRdpConnectDomain(ct.instance);
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -441,10 +430,10 @@ angular.module('iaas.controllers')
         // 서비스 도메인 추가 팝업
         ct.fn.popConnDomainForm = function($event) {
             var dialogOptions = {
-                controller : "iaasLbPopConnDomainFormCtrl" ,
+                controller : "iaasPopConnDomainFormCtrl" ,
                 formName : 'iaasLbPopConnDomainForm',
                 formMode : "add",
-                loadbalancer : angular.copy(ct.loadbalancer),
+                instance : angular.copy(ct.loadbalancer.iaasLbInfo),
                 callBackFunction : ct.refreshDomainCallBackFunction
             };
             $scope.actionBtnHied = false;
@@ -454,6 +443,118 @@ angular.module('iaas.controllers')
 
         ct.refreshDomainCallBackFunction = function () {
             ct.fn.listDomains();
+        };
+
+        ct.fn.popModDomainForm = function($event, domainLinkInfo) {
+            var dialogOptions = {
+                controller : "iaasPopConnDomainFormCtrl" ,
+                formName : 'iaasLbPopConnDomainForm',
+                formMode : "mod",
+                instance : angular.copy(ct.loadbalancer.iaasLbInfo),
+                domainLinkInfo : angular.copy(domainLinkInfo),
+                callBackFunction : ct.refreshDomainCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        // 도메인 반환 버튼
+        ct.fn.deleteDomain = function(domainLink) {
+            common.showConfirm('도메인 삭제','※'+domainLink.domainInfo.domain+' 도메인을 삭제 합니다.').then(function(){
+                ct.fn.deleteDomainAction(domainLink);
+            });
+        };
+
+        // 도메인 삭제 job
+        ct.fn.deleteDomainAction = function(domainLink) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                instanceDomainLinkId : domainLink.id,
+                domainId : domainLink.domainInfo.id
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain/service', 'DELETE', param);
+            returnPromise.success(function (data, status, headers) {
+                ct.fn.listDomains();
+                common.showAlertSuccess("도메인이 삭제 되었습니다.");
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //포트포워딩 조회
+        ct.fn.listPortForwardings = function () {
+            ct.instance.instancePortForwardings = [];
+            $scope.main.loadingMainBody = true;
+            var returnPromise = computeDetailService.listPortForwardings(ct.loadbalancer.iaasLbInfo.id);
+            returnPromise.success(function (data) {
+                ct.instance.instancePortForwardings = data.content;
+                $scope.main.loadingMainBody = false;
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //포트포워딩 추가
+        ct.fn.popPortForwardingForm = function($event) {
+            var dialogOptions = {
+                controller : "iaasPopPortForwardingFormCtrl" ,
+                formName : 'iaasPopPortForwardingForm',
+                formMode : "add",
+                instance : angular.copy(ct.loadbalancer.iaasLbInfo),
+                callBackFunction : ct.refreshPortForwardingCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        //포트포워딩 수정
+        ct.fn.popModPortForwardingForm = function($event, portForwardingInfo) {
+            var dialogOptions = {
+                controller : "iaasPopPortForwardingFormCtrl" ,
+                formName : 'iaasPopPortForwardingForm',
+                formMode : "mod",
+                instance : angular.copy(ct.loadbalancer.iaasLbInfo),
+                portForwardingInfo : angular.copy(portForwardingInfo),
+                callBackFunction : ct.refreshPortForwardingCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.refreshPortForwardingCallBackFunction = function () {
+            ct.fn.listPortForwardings();
+        };
+
+        //포트포워딩 삭제
+        ct.fn.deletePortForwarding = function(forwardingItem) {
+            common.showConfirm('포트포워딩 삭제','※'+forwardingItem.targetPort+' 포트포워딩을 삭제 하시겠습니까?').then(function(){
+                ct.fn.deletePortForwardingAction(forwardingItem);
+            });
+        };
+
+        //포트포워딩 삭제 실제 action
+        ct.fn.deletePortForwardingAction = function(forwardingItem) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                instanceId : ct.loadbalancer.iaasLbInfo.id,
+                id : forwardingItem.id
+            };
+            var returnPromise = computeDetailService.deletePortForwardings(param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("포트포워딩이 삭제 되었습니다.");
+                ct.instance.instancePortForwardings = data.content;
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+                $scope.main.loadingMainBody = false;
+            });
         };
 
         if (ct.data.tenantId) {
@@ -1094,191 +1195,5 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             });
         }
-    })
-    // 서비스 도메인 - 추가 팝업 컨트롤러
-    .controller('iaasLbPopConnDomainFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
-        _DebugConsoleLog("iaasLbPopConnDomainFormCtrl.js : iaasLbPopConnDomainFormCtrl", 1);
-
-        var pop = this;
-        pop.validationService 			= new ValidationService({controllerAs: pop});
-        pop.formName 					= $scope.dialogOptions.formName;
-        pop.formMode 					= $scope.dialogOptions.formMode;
-        pop.fn 							= {};
-        pop.domain						= {};
-        pop.orgDomain					= {};
-        pop.orgDomainLinkInfo           = {};
-        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
-        pop.loadbalancer 				= $scope.dialogOptions.loadbalancer;
-
-        if (pop.formMode == "mod") {
-            $scope.dialogOptions.title = "도메인 수정";
-            $scope.dialogOptions.okName =  "수정";
-            pop.orgDomainLinkInfo = angular.copy($scope.dialogOptions.domainLinkInfo);
-            pop.domain.tenantId = pop.orgDomainLinkInfo.tenantId;
-            pop.domain.instanceId = pop.orgDomainLinkInfo.instanceId;
-            pop.domain.id = pop.orgDomainLinkInfo.id;
-            pop.domain.domainId = pop.orgDomainLinkInfo.domainInfo.id;
-            pop.domain.floatingIp = pop.instance.floatingIp;
-            pop.domain.domain = pop.orgDomainLinkInfo.domainInfo.domain;
-            pop.domain.sourcePort = pop.orgDomainLinkInfo.sourcePort;
-            pop.domain.protocolType = pop.orgDomainLinkInfo.protocolType;
-            pop.domain.sslUsed = false;
-        } else {
-            $scope.dialogOptions.title = "도메인 등록";
-            $scope.dialogOptions.okName =  "등록";
-            pop.domain.tenantId = pop.instance.tenantId;
-            pop.domain.instanceId = pop.instance.id;
-            pop.domain.floatingIp = pop.instance.floatingIp;
-            pop.domain.sourcePort = 80;
-            pop.domain.protocolType = "http";
-            pop.domain.sslUsed = false;
-        }
-
-        $scope.dialogOptions.closeName 	= "닫기";
-        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerCreatePopDomainForm.html" + _VersionTail();
-
-        $scope.actionLoading 			= false;
-        pop.btnClickCheck 				= false;
-
-        pop.fn.getBaseDomainList = function() {
-            pop.baseDomains = [];
-            var param = {};
-            $scope.main.loadingMainBody = true;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/baseDomain/all', 'GET', param);
-            returnPromise.success(function (data, status, headers) {
-                if (data && angular.isArray(data.content) && data.content.length > 0) {
-                    pop.baseDomains = data.content;
-                    if (pop.formMode == "mod") {
-                        angular.forEach(pop.baseDomains, function (baseDomain) {
-                            if (pop.domain.domain.indexOf(baseDomain.domain) > 0) {
-                                pop.domain.baseDomain = baseDomain.domain;
-                                pop.domain.subDomain = pop.domain.domain.substring(0, pop.domain.domain.indexOf(baseDomain.domain)-1);
-                            }
-                        });
-                    } else {
-                        pop.domain.baseDomain = pop.baseDomains[0].domain;
-                    }
-                }
-                $scope.main.loadingMainBody = false;
-            });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-            });
-        };
-
-        pop.fn.getDomainUsingList = function() {
-            pop.usingDomainList = [];
-            pop.usingDomainNames = [];
-            var param = {};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/domain/all', 'GET', param);
-            returnPromise.success(function (data, status, headers) {
-                if (data && angular.isArray(data.content) && data.content.length > 0) {
-                    pop.usingDomainList = data.content;
-                    angular.forEach(pop.usingDomainList, function (domain, key) {
-                        pop.usingDomainNames.push(domain.domain);
-                    });
-                }
-            });
-            returnPromise.error(function (data, status, headers) {
-            });
-        };
-
-        pop.fn.subDomainCustomValidationCheck = function(subDomain) {
-            if (subDomain && angular.isArray(pop.usingDomainNames) && pop.usingDomainNames.length > 0) {
-                var domainName = subDomain + "." + pop.domain.baseDomain;
-                if (pop.formMode == "mod") {
-                    if (pop.orgDomainLinkInfo.domainInfo.domain != domainName && pop.usingDomainNames.indexOf(domainName) >= 0) {
-                        return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
-                    }
-                } else {
-                    if (pop.usingDomainNames.indexOf(domainName) >= 0) {
-                        return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
-                    }
-                }
-            }
-            return {isValid : true};
-        };
-
-        pop.fn.systemPortCustomValidationCheck = function(port) {
-            if (port == undefined || port == null || port == "") return;
-            if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
-                return {isValid : true};
-            } else {
-                return {isValid : false, message: "포트범위는 [80, 443, 1024~65535] 입니다."};
-            }
-        };
-
-        $scope.actionBtnHied = false;
-        $scope.popDialogOk = function () {
-            pop.fn.actionDomain();
-        };
-        $scope.popCancel = function() {
-            $scope.dialogClose = true;
-            common.mdDialogCancel();
-        };
-
-        $scope.actionBtnHied = false;
-        pop.fn.actionDomain = function() {
-            if ($scope.actionBtnHied) return;
-            $scope.actionBtnHied = true;
-            if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
-                $scope.actionBtnHied = false;
-                return;
-            }
-
-            pop.domain.domain =  pop.domain.subDomain + "." + pop.domain.baseDomain;
-
-            if (pop.formMode == "mod") {
-                if (pop.orgDomainLinkInfo.domainInfo.domain == pop.domain.domain && pop.orgDomainLinkInfo.sourcePort == pop.domain.sourcePort) {
-                    $scope.actionBtnHied = false;
-                    common.showAlertWarning("변경된 정보가 없습니다.");
-                    return;
-                }
-            }
-
-            $scope.main.loadingMainBody = true;
-            var method = "POST";
-            var params = {};
-            params.tenantId 		= pop.domain.tenantId;
-            params.instanceId 		= pop.domain.instanceId;
-            if (pop.formMode == "mod") {
-                method = "PUT";
-                params.id = pop.domain.id;
-                params.domainId = pop.domain.domainId;
-            }
-            params.domain = pop.domain.domain;
-            params.floatingIp = pop.domain.floatingIp;
-            params.sourcePort = pop.domain.sourcePort;
-            params.protocolType = pop.domain.protocolType;
-            params.sslUsed = pop.domain.sslUsed;
-
-            common.mdDialogHide();
-
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain/service', method, params);
-            returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                if (pop.formMode == "mod") {
-                    common.showAlertSuccess("수정 되었습니다.");
-                } else {
-                    common.showAlertSuccess("생성 되었습니다.");
-                }
-                if (angular.isFunction(pop.callBackFunction)) {
-                    pop.callBackFunction();
-                }
-            });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                common.showAlertError(data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.actionBtnHied = false;
-                $scope.main.loadingMainBody = false;
-            });
-
-        };
-
-        pop.fn.getBaseDomainList();
-        pop.fn.getDomainUsingList();
-
     })
 ;
