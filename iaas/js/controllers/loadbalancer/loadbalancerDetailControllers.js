@@ -768,7 +768,7 @@ angular.module('iaas.controllers')
                 name: pop.port.name,
                 protocol: pop.port.protocol,
                 protocolPort: pop.port.protocolPort,
-                connectionPort: pop.port.protocolPort,
+                connectionPort: pop.port.connectionPort,
                 lbAlgorithm: pop.port.lbAlgorithm,
                 healthType: pop.port.healthType,
                 connectionLimit: pop.port.connectionLimit,
