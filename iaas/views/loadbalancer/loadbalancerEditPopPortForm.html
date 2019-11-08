@@ -11,19 +11,19 @@
 				<th scope="row">포트이름</th>
 				<td><input type="text" name="portName" class="form-control" ng-model="pop.port.name" placeholder="포트 이름을 입력하세요."></td>
 			</tr>
-			<tr>
+			<tr class="ng-scope tbl_disabled">
 				<th>프로토콜</th>
 				<td>
 					<div class="radio radio-inline">
-						<input type="radio" name="protocolRadio" id="protocolHTTP" ng-click="pop.port.protocol = 'HTTP'" ng-checked="pop.port.protocol == 'HTTP'">
+						<input type="radio" name="protocolRadio" id="protocolHTTP" ng-click="pop.port.protocol = 'HTTP'" ng-checked="pop.port.protocol == 'HTTP'" disabled>
 						<label for="protocolHTTP" class="label">HTTP</label>
 					</div>
 					<div class="radio radio-inline">
-						<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-click="pop.port.protocol = 'HTTPS'" ng-checked="pop.port.protocol == 'HTTPS'">
+						<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-click="pop.port.protocol = 'HTTPS'" ng-checked="pop.port.protocol == 'HTTPS'" disabled>
 						<label for="protocolHTTPS" class="label">HTTPS</label>
 					</div>
 					<div class="radio radio-inline">
-						<input type="radio" name="protocolRadio" id="protocolTCP" ng-click="pop.port.protocol = 'TCP'" ng-checked="pop.port.protocol == 'TCP'">
+						<input type="radio" name="protocolRadio" id="protocolTCP" ng-click="pop.port.protocol = 'TCP'" ng-checked="pop.port.protocol == 'TCP'" disabled>
 						<label for="protocolTCP" class="label">TCP</label>
 					</div>
 				</td>
@@ -65,23 +65,23 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr class="ng-scope tbl_disabled">
 			<th>헬스 체크 유형</th>
 			<td>
 				<div class="radio radio-inline">
-					<input type="radio" name="healthCheck" id="healthCheckHTTP" ng-click="pop.port.healthType = 'HTTP'" ng-checked="pop.port.healthType == 'HTTP'">
+					<input type="radio" name="healthCheck" id="healthCheckHTTP" ng-click="pop.port.healthType = 'HTTP'" ng-checked="pop.port.healthType == 'HTTP'" disabled>
 					<label for="healthCheckHTTP" class="label">HTTP</label>
 				</div>
 				<div class="radio radio-inline">
-					<input type="radio" name="healthCheck" id="healthCheckHTTPS" ng-click="pop.port.healthType = 'HTTPS'" ng-checked="pop.port.healthType == 'HTTPS'">
+					<input type="radio" name="healthCheck" id="healthCheckHTTPS" ng-click="pop.port.healthType = 'HTTPS'" ng-checked="pop.port.healthType == 'HTTPS'" disabled>
 					<label for="healthCheckHTTPS" class="label">HTTPS</label>
 				</div>
 				<div class="radio radio-inline">
-					<input type="radio" name="healthCheck" id="healthCheckTCP" ng-click="pop.port.healthType = 'TCP'" ng-checked="pop.port.healthType == 'TCP'">
+					<input type="radio" name="healthCheck" id="healthCheckTCP" ng-click="pop.port.healthType = 'TCP'" ng-checked="pop.port.healthType == 'TCP'" disabled>
 					<label for="healthCheckTCP" class="label">TCP</label>
 				</div>
 				<div class="radio radio-inline">
-					<input type="radio" name="healthCheck" id="healthCheckPING" ng-click="pop.port.healthType = 'PING'" ng-checked="pop.port.healthType == 'PING'">
+					<input type="radio" name="healthCheck" id="healthCheckPING" ng-click="pop.port.healthType = 'PING'" ng-checked="pop.port.healthType == 'PING'" disabled>
 					<label for="healthCheckPING" class="label">PING</label>
 				</div>
 			</td>
