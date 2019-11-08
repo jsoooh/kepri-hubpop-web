@@ -416,15 +416,14 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .panel.type2.zoom{position: absolute; top: 0; left: 0; z-index: 1000; width: 100%; height: 100%; margin-bottom: 0;border:none;box-shadow:none;transform:none;transition:none;}
 .panel.type2.zoom .panel_body{height:95%;}
 /*.panel.type2:hover {-webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); -webkit-transform: translate(0, -4px); transform: translate(0, -4px);border:1px solid #333;}*/
-.panel.type2 .in{font-size:15px; color:#888; height:100%;}
 .panel.type2 .panel_head{min-height: 80px; padding:20px 30px 0; border-bottom:1px solid #eee;}
 .panel.type2 .panel_head .tit{font-size: 24px; line-height: 1.4; font-weight: 700;}
 .panel.type2 .panel_head .tit .countList{display:inline-block;font-size:14px;color:#888;font-weight:400;padding-left:20px;}/*180411 스타일 추가*/
 .panel.type2 .panel_head .pull-right .btn{margin-top: 6px;}
 .panel.type2 .panel_head .pull-right .btn + .btn{margin-left: 10px;}
 .panel.type2 .panel_body{height: 400px; padding:30px; }
-.panel.type2 .panel_body .in{height: 100%; overflow:hidden;}
 .panel.type2 .panel_body .tbl.type1 td{overflow: hidden; white-space: nowrap;   text-overflow: ellipsis;}
+.panel.type2 .panel_body .tbl.type1.overflow_unset td {overflow: unset; white-space:unset; text-overflow:unset;}
 .panel.type2 .panel_body .tbl.type1 td.over-visible{overflow: visible;}
 .panel.type2 .panel_body .ul-list1 li{line-height: 1.4;}
 .panel.type2 .panel_body .ul-list1 li + li{margin-top: 10px;}
@@ -1240,7 +1239,7 @@ td.tdTit{text-align:center;}
 
 /*180531 회원가입 설명박스 레이어 추가*/
 .layer_info_tooltip {position:absolute; top:-58px; left:0; z-index:999; width:inherit; border:1px solid #0268f4; border-radius:5px; background:#d6f0f9; padding:15px; color:#434344; opacity:0.95; text-align:left;}
-.layer_info_tooltip::before {content:''; position:absolute; bottom:-7px; right:20px; width:12px; height:13px; background:url("../images/info_bg2.png") no-repeat left center;}
+.layer_info_tooltip::before {display:inline-block; content:''; position:absolute; bottom:-7px; right:20px; width:12px; height:13px; background:url("../images/info_bg2.png") no-repeat left center;}
 
 /*180604 서비스플랜(용량)*/
 .plan_capacity {position:relative; margin-top:15px;}
@@ -1899,9 +1898,7 @@ p.no-txt{
 .tb-top.tb-top-type01{
     margin-bottom: 20px;
 }
-.panel.type2 .panel_body .in{
-    overflow-y: auto !important;
-}
+
 .panel.type2.zoom .panel_body{
     height: 857px !important;
 }
@@ -2903,7 +2900,7 @@ a.ext_link:hover {text-decoration:underline;}
 .memWrap .mem-foot .text-right{font-size: 15px;}
 /*테이블 툴팁(레이어)*/
 .layer_info_tooltip_tbl {position:absolute; top:87px; right:287px; z-index:999; width:inherit; border:1px solid #0268f4; border-radius:5px; background:#d6f0f9; padding:15px; color:#434344; opacity:0.95; text-align:left;}
-.layer_info_tooltip_tbl::before {content:''; position:absolute; bottom:-7px; right:50%; width:12px; height:13px; background:url("../images/info_bg2.png") no-repeat left center;}
+.layer_info_tooltip_tbl::before {display:inline-block; content:''; position:absolute; bottom:-7px; right:50%; width:12px; height:13px; background:url("../images/info_bg2.png") no-repeat left center;}
 
 /*툴팁 type2(bootstrap 제공 tooltip 재정의)*/
 .t_tip_bx {position:absolute; z-index:1; display:inline-block; width:70%;}
@@ -3321,3 +3318,11 @@ a.ext_link:hover {text-decoration:underline;}
     display: inline-block;
     width: 49%;
 }
+
+.panel.type2 .panel_body > .in {font-size:15px; color:#888; height:100%; overflow-y:auto !important;}
+
+/*panel 이너 탭 영역*/
+.innerTabWrap {border:1px solid #d9d9d9; border-radius:5px; padding:30px;}
+.innerTabWrap .cont-titWrap:after {display:inline-block; content:''; clear:both;}
+.innerTabWrap .cont-titWrap .btn + .btn  {margin-left:10px;}
+.innerTabWrap .cont_lay_div  {height:260px; overflow-y:auto;}
