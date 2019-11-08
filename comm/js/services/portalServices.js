@@ -342,7 +342,8 @@ angular.module('portal.services', [])
         };
 
         portal.dashboard.getPdaDashBoardInfo = function () {
-            return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/DeePoP/rest/getDataAlgorithmInfo.do', 'GET'));
+            // return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/DeePoP/rest/getDataAlgorithmInfo.do', 'GET'));
+            return common.retrieveResource(common.resourcePromise('/DeePoP/rest/getDataAlgorithmInfo.do', 'GET'));
         };
 
         portal.dashboard.getAppDashBoardInfo = function (u_token, org_guid, vt) {
@@ -351,8 +352,10 @@ angular.module('portal.services', [])
                 org_guid : org_guid,
                 vt : vt
             };
-            return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/aes/core/api/common_svce/get_app_status_list', 'POST', Params, "application/json"));
+            // return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/aes/core/api/common_svce/get_app_status_list', 'POST', Params, "application/json"));
+            return common.retrieveResource(common.resourcePromise('/aes/core/api/common_svce/get_app_status_list', 'POST', Params, "application/json"));
         };
+
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   End  ///////////////////////////////////
 
         portal.portalOrgs = {};
