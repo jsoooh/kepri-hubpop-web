@@ -343,7 +343,7 @@
                                         <div class="tit_area">
                                             <h5 class="tit">레이어 그룹</h5>
                                         </div>
-                                        <span class="lg_txt">{{contents.gisDashBoardInfo.layAllCnt}}</span>
+                                        <span class="lg_txt">{{contents.gisDashBoardInfo.prjcLayGroupCnt}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
@@ -355,7 +355,7 @@
                                         <div class="tit_area">
                                             <h5 class="tit">스타일</h5>
                                         </div>
-                                        <span class="lg_txt">{{contents.gisDashBoardInfo.styAllCnt}}</span>
+                                        <span class="lg_txt">{{contents.gisDashBoardInfo.prjcStyCnt}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -369,7 +369,7 @@
                             <div class="panel type_pipeLine">
                                 <div class="panel_head">
                                     <h4 class="tit">개발 파이프라인 사용 현황</h4>
-                                    <a class="btn_more" href="/dpl/dashboard">개발 파이프라인 사용 현황 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="/dpl/coderepo">개발 파이프라인 사용 현황 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="fl_l">
@@ -441,26 +441,26 @@
                             <div class="panel type_gis">
                                 <div class="panel_head">
                                     <h4 class="tit">프로젝트 데이터 분석현황</h4>
-                                    <a class="btn_more" href="">데이터 분석 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="/DeePoP/dashboard/dashboard.do?menu_id=01">데이터 분석 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">알고리즘</h5>
                                         </div>
-                                        <span class="lg_txt">10</span>
+                                        <span class="lg_txt">{{contents.pdaDashBoardInfo.algorithmCnt}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">데이터</h5>
                                         </div>
-                                        <span class="lg_txt">20</span>
+                                        <span class="lg_txt">{{contents.pdaDashBoardInfo.dataCnt}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">데이터 사용량</h5>
                                         </div>
-                                        <span class="lg_txt">300<span>MB</span></span>
+                                        <span class="lg_txt">{{contents.pdaDashBoardInfo.dataUsage}}<span>MB</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -474,7 +474,7 @@
                             <div class="panel type_api dataCtlog">
                                 <div class="panel_head">
                                     <h4 class="tit">데이터 카탈로그 이용 현황</h4>
-                                    <a class="btn_more" href="">데이터 카탈로그 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="/dbp/dataSubscription/subscriptionStatus/list.do">데이터 카탈로그 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="fl_l">
@@ -487,17 +487,17 @@
                                                     <li>
                                                         <span class="state_mark type6"></span>
                                                         <span class="state_txt">대기</span>
-                                                        <span class="state_result">{{contents.dcpDashboardInfo.dataReqAllNoca}} 건</span>
+                                                        <span class="state_result">{{contents.ctlgDashboardInfo.ctlgWaitCnt}} 건</span>
                                                     </li>
                                                     <li>
                                                         <span class="state_mark type2"></span>
                                                         <span class="state_txt">승인</span>
-                                                        <span class="state_result"> {{contents.dcpDashboardInfo.dataReqAprvNoca}} 건</span>
+                                                        <span class="state_result"> {{contents.ctlgDashboardInfo.ctlgApproveCnt}} 건</span>
                                                     </li>
                                                     <li>
                                                         <span class="state_mark type3"></span>
                                                         <span class="state_txt">반려</span>
-                                                        <span class="state_result"><span class="type1"> {{contents.dcpDashboardInfo.dataReqRejNoca}} </span>건</span>
+                                                        <span class="state_result"><span class="type1"> {{contents.ctlgDashboardInfo.ctlgRejectCnt}} </span>건</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -505,7 +505,7 @@
                                                 <div id="chart-area"></div>
                                                 <div class="cht_val">
                                                     <span>0</span>
-                                                    <span>{{contents.dcpDashboardInfo.totTmpCnt}}</span>
+                                                    <span>{{contents.ctlgDashboardInfo.ctlgTotalCnt}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -529,20 +529,20 @@
                             <div class="panel type_gis">
                                 <div class="panel_head">
                                     <h4 class="tit">마이크로서비스 사용현황</h4>
-                                    <a class="btn_more" href="">마이크로서비스 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="/apim/msApp/list.do">마이크로서비스 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">워크로드 등록</h5>
                                         </div>
-                                        <span class="lg_txt">8</span>
+                                        <span class="lg_txt">{{contents.msDashBoardInfo.msAppFileTotalCnt}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">서비스 발견</h5>
                                         </div>
-                                        <span class="lg_txt">8</span>
+                                        <span class="lg_txt">{{contents.msDashBoardInfo.msAppAddrTotalCnt}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -556,26 +556,26 @@
                             <div class="panel type_gis">
                                 <div class="panel_head">
                                     <h4 class="tit">분석 App. 실행</h4>
-                                    <a class="btn_more" href="">분석 App. 실행 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="/aes/svce_list_grid.html">분석 App. 실행 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">시작</h5>
                                         </div>
-                                        <span class="lg_txt c_start">8</span>
+                                        <span class="lg_txt c_start">{{contents.appDashBoardInfo.START_CNT}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">중지</h5>
                                         </div>
-                                        <span class="lg_txt c_stop">1</span>
+                                        <span class="lg_txt c_stop">{{contents.appDashBoardInfo.STOP_CNT}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">오류</h5>
                                         </div>
-                                        <span class="lg_txt c_error">1</span>
+                                        <span class="lg_txt c_error">{{contents.appDashBoardInfo.FAIL_CNT}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -589,32 +589,32 @@
                             <div class="panel type_gis type_kubernetes">
                                 <div class="panel_head">
                                     <h4 class="tit">쿠버네티스 사용 현황</h4>
-                                    <a class="btn_more" href="">쿠버네티스 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="https://caas.kepco.co.kr:48000/dashBoard.do">쿠버네티스 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">네임스페이스</h5>
                                         </div>
-                                        <span class="lg_txt">2</span>
+                                        <span class="lg_txt">{{contents.kuberDashBoardInfo.nsUseCnt}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">워크로드</h5>
                                         </div>
-                                        <span class="lg_txt">8</span>
+                                        <span class="lg_txt">{{contents.kuberDashBoardInfo.wlUseCnt}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">포드</h5>
                                         </div>
-                                        <span class="lg_txt">10</span>
+                                        <span class="lg_txt">{{contents.kuberDashBoardInfo.podUseCnt}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">볼륨용량</h5>
                                         </div>
-                                        <span class="lg_txt">10<span>GB</span></span>
+                                        <span class="lg_txt">{{contents.kuberDashBoardInfo.volUseSize}}<span>GB</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -628,20 +628,20 @@
                             <div class="panel type_gis">
                                 <div class="panel_head">
                                     <h4 class="tit">DBaas 신청 현황</h4>
-                                    <a class="btn_more" href="">DBaas 신청 바로가기<span class="ico_more"></span></a>
+                                    <a class="btn_more" href="/dss/dbshared/dbSharedList.do">DBaas 신청 바로가기<span class="ico_more"></span></a>
                                 </div>
                                 <div class="panel_body">
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">신청 개수</h5>
                                         </div>
-                                        <span class="lg_txt">2</span>
+                                        <span class="lg_txt">{{contents.dbaasDashBoardInfo.totalCnt}}</span>
                                     </div>
                                     <div class="txt_box">
                                         <div class="tit_area">
                                             <h5 class="tit">신청 용량</h5>
                                         </div>
-                                        <span class="lg_txt">10<span>GB</span></span>
+                                        <span class="lg_txt">{{contents.dbaasDashBoardInfo.totalSize}}<span>GB</span></span>
                                     </div>
                                 </div>
                             </div>

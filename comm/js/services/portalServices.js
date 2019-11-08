@@ -290,6 +290,14 @@ angular.module('portal.services', [])
             return common.retrieveResource(common.resourcePromise('/dcp/api/userConsoleDashboard/'+prjcCd, 'GET'));
         };
 
+        portal.dashboard.getCtlgDashboardInfo = function (prjcCd) {
+            var getParams = {
+                prjcCd : prjcCd
+            };
+            /*return common.retrieveResource(common.resourcePromise('http://168.78.82.189:8086/dbp/com/dashboardUserApi.json', 'GET', getParams));*/
+            return common.retrieveResource(common.resourcePromise('/dbp/com/dashboardUserApi.json'+prjcCd, 'GET'));
+        };
+
         portal.dashboard.getPipelineDashBoardInfo = function (p_proj_id) {
             var getParams = {
                 p_proj_id : p_proj_id
@@ -309,8 +317,45 @@ angular.module('portal.services', [])
                 prjcCd : prjcCd
             };
             /*return common.retrieveResource(common.resourcePromise('http://168.78.82.183:58080/gis/api/projectInfo.do', 'GET', getParams));*/
-            return common.retrieveResource(common.resourcePromise('/gis/api/projectInfo.do', 'GET', getParams));
+            return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/gis/api/projectInfo.do', 'GET', getParams));
         };
+
+        portal.dashboard.getDBaasDashBoardInfo = function (prjcCd) {
+            var getParams = {
+                prjcCd : prjcCd
+            };
+            return common.retrieveResource(common.resourcePromise('/dss/com/dashboardUserApi.json', 'GET', getParams));
+        };
+
+        portal.dashboard.getKuberDashBoardInfo = function (prjcCd) {
+            var getParams = {
+                prjcCd : prjcCd
+            };
+            return common.retrieveResource(common.resourcePromise('http://168.78.82.112:34445/dashboardUserApi.json', 'GET', getParams));
+        };
+
+        portal.dashboard.getMsDashBoardInfo = function (pid) {
+            var getParams = {
+                pid : pid
+            };
+            return common.retrieveResource(common.resourcePromise('/apim/msaGroupCntApi.json', 'GET', getParams));
+        };
+
+        portal.dashboard.getPdaDashBoardInfo = function () {
+            // return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/DeePoP/rest/getDataAlgorithmInfo.do', 'GET'));
+            return common.retrieveResource(common.resourcePromise('/DeePoP/rest/getDataAlgorithmInfo.do', 'GET'));
+        };
+
+        portal.dashboard.getAppDashBoardInfo = function (u_token, org_guid, vt) {
+            var Params = {
+                u_token : u_token,
+                org_guid : org_guid,
+                vt : vt
+            };
+            // return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/aes/core/api/common_svce/get_app_status_list', 'POST', Params, "application/json"));
+            return common.retrieveResource(common.resourcePromise('/aes/core/api/common_svce/get_app_status_list', 'POST', Params, "application/json"));
+        };
+
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   End  ///////////////////////////////////
 
         portal.portalOrgs = {};

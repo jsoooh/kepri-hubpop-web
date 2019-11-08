@@ -227,6 +227,39 @@ angular.module('portal.controllers')
             ct.semiChart (chartArea, serJsonList) ;
         };
 
+        //////////////////////////////// 데이터 카탈로그 이용 현황 Chart  ///////////////////////////////////
+        ct.ctlgChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var ser3 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '200') {
+                ser1.name = "반려";
+                ser1.data = chartData.ctlgRejectCnt;  //반려
+                reqJsonArray.push(ser1);
+
+                ser2.name = "승인";
+                ser2.data = chartData.ctlgApproveCnt;  //승인
+                reqJsonArray.push(ser2);
+
+                ser3.name = "대기";
+                ser3.data = chartData.ctlgWaitCnt;  //대기
+                reqJsonArray.push(ser3);
+
+                serJsonList.series = reqJsonArray;
+            }
+
+            var ctlgTotalCnt = parseInt(chartData.ctlgRejectCnt) + parseInt(chartData.ctlgApproveCnt) + parseInt(chartData.ctlgWaitCnt) ; // 전체
+
+            ct.ctlgDashboardInfo.ctlgTotalCnt = ctlgTotalCnt;
+
+            var chartArea = 'chart-area';
+            ct.semiChart (chartArea, serJsonList) ;
+        };
+
         //////////////////////////////// API서비스 사용현황 Chart  ///////////////////////////////////
         ct.apiChartFunc = function (chartData) {
             var tmpCode = chartData.code ;
@@ -518,6 +551,27 @@ angular.module('portal.controllers')
                     ct.dcpDashboardInfo = data;
                     // Semi Chart
                     ct.dcpChartFunc(ct.dcpDashboardInfo) ;
+                }
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        //////////////////////////////// 데이터 카탈로그 이용현황  ///////////////////////////////////
+        ct.ctlgDashboardInfo = {
+            ctlgTotalCnt : 0,
+            ctlgApproveCnt : 0,
+            ctlgWaitCnt : 0,
+            ctlgRejectCnt : 0
+        };
+
+        ct.getCtlgDashboardInfo = function (projectId) {
+            var promise = portal.dashboard.getCtlgDashboardInfo(projectId);
+            promise.success(function (data, status, headers) {
+                if (data.code == '200' && data.ctlgTotalCnt > 0 ) {
+                    ct.ctlgDashboardInfo = data;
+                    // Semi Chart
+                    ct.ctlgChartFunc(ct.ctlgDashboardInfo) ;
                 }
             });
             promise.error(function (data, status, headers) {
@@ -974,10 +1028,11 @@ angular.module('portal.controllers')
             });
         };
 
+        // GIS 서비스 요약
         ct.gisDashBoardInfo = {
-            layAllCnt: 0,
+            prjcLayGroupCnt: 0,
             prjcLayCnt: 0,
-            styAllCnt: 0
+            prjcStyCnt: 0
         };
 
         ct.getGisDashBoardInfo = function (projectId) {
@@ -989,9 +1044,94 @@ angular.module('portal.controllers')
             });
         };
 
+        // DBaas 신청 현황
+        ct.dbaasDashBoardInfo = {
+            totalCnt : 0,
+            totalSize : 0
+        };
+
+        ct.getDBaasDashBoardInfo = function (projectId) {
+            var promise = portal.dashboard.getDBaasDashBoardInfo(projectId);
+            promise.success(function (data, status, headers) {
+                ct.dbaasDashBoardInfo = data;
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        // 쿠버네티스 사용 현황
+        ct.kuberDashBoardInfo = {
+            nsUseCnt : 0,
+            wlUseCnt : 0,
+            podUseCnt : 0,
+            volUseSize : 0
+        };
+
+        ct.getKuberDashBoardInfo = function (projectId) {
+            var promise = portal.dashboard.getKuberDashBoardInfo(projectId);
+            promise.success(function (data, status, headers) {
+                ct.kuberDashBoardInfo = data;
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        // 마이크로서비스 사용현황
+        ct.msDashBoardInfo = {
+            msAppFileTotalCnt : 0,
+            msAppAddrTotalCnt : 0
+        };
+
+        ct.getMsDashBoardInfo = function (projectId) {
+            var promise = portal.dashboard.getMsDashBoardInfo(projectId);
+            promise.success(function (data, status, headers) {
+                ct.msDashBoardInfo = data;
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        // 프로젝트 데이터 분석현황
+        ct.pdaDashBoardInfo = {
+            algorithmCnt : 0,
+            dataCnt : 0,
+            dataUsage : 0
+        };
+
+        ct.getPdaDashBoardInfo = function (projectId) {
+            var promise = portal.dashboard.getPdaDashBoardInfo(projectId);
+            promise.success(function (data, status, headers) {
+                ct.pdaDashBoardInfo = data;
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        // 분석 App. 실행
+        ct.appDashBoardInfo = {
+            START_CNT : 0,
+            STOP_CNT : 0,
+            FAIL_CNT : 0
+        };
+
+        ct.getAppDashBoardInfo = function (projectId) {
+            var u_token = common.getAccessToken();
+            var d = new Date();
+            var vt = d.getTime();
+            var org_guid = common.getTeamCode();
+            var promise = portal.dashboard.getAppDashBoardInfo(u_token, org_guid, vt);
+            promise.success(function (data, status, headers) {
+                ct.appDashBoardInfo = data;
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
         ct.loadDashBoard = function () {
             // Dcp 정보
             ct.getDcpDashboardInfo(ct.paramId);
+            // 데이터 카탈로그 이용 현황 정보
+            ct.getCtlgDashboardInfo(ct.paramId);
             // Apip 정보
             ct.getApipDashBoardInfo(ct.paramId);
 
@@ -1011,6 +1151,16 @@ angular.module('portal.controllers')
             ct.getPipelineDashBoardInfo(ct.paramId);
             // Gis 정보
             ct.getGisDashBoardInfo(ct.paramId);
+            // DBaas 신청 현황 정보
+            ct.getDBaasDashBoardInfo(ct.paramId);
+            // 쿠버네티스 사용현황 정보
+            ct.getKuberDashBoardInfo(ct.paramId);
+            // 마이크로서비스 사용현황 정보
+            ct.getMsDashBoardInfo(ct.paramId);
+            // 프로젝트 데이터 분석현황 정보
+            ct.getPdaDashBoardInfo(ct.paramId);
+            // 분석 App. 실행 정보
+            ct.getAppDashBoardInfo(ct.paramId);
         };
 
         /**************************************************************************/
