@@ -52,16 +52,16 @@
 			<th>로드 밸런스 유형</th>
 			<td>
 				<div class="radio radio-inline">
-					<input type="radio" name="loadBalancerRadio" id="SOURCE_IP" ng-click="pop.port.lbAlgorithm = 'SOURCE_IP'" ng-checked="pop.port.lbAlgorithm == 'SOURCE_IP'">
-					<label for="SOURCE_IP" class="label">소스</label>
-				</div>
-				<div class="radio radio-inline">
 					<input type="radio" name="loadBalancerRadio" id="ROUND_ROBIN" ng-click="pop.port.lbAlgorithm = 'ROUND_ROBIN'" ng-checked="pop.port.lbAlgorithm=='ROUND_ROBIN'">
 					<label for="ROUND_ROBIN" class="label">라운드로빈</label>
 				</div>
+                <div class="radio radio-inline">
+                    <input type="radio" name="loadBalancerRadio" id="SOURCE_IP" ng-click="pop.port.lbAlgorithm = 'SOURCE_IP'" ng-checked="pop.port.lbAlgorithm == 'SOURCE_IP'">
+                    <label for="SOURCE_IP" class="label">소스</label>
+                </div>
 				<div class="radio radio-inline">
 					<input type="radio" name="loadBalancerRadio" id="LEAST_CONNECTIONS" ng-click="pop.port.lbAlgorithm = 'LEAST_CONNECTIONS'" ng-checked="pop.port.lbAlgorithm=='LEAST_CONNECTIONS'">
-					<label for="LEAST_CONNECTIONS" class="label">최소접속</label>
+					<label for="LEAST_CONNECTIONS" class="label">최소연결</label>
 				</div>
 			</td>
 		</tr>
