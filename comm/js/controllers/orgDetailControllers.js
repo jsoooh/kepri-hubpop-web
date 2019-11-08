@@ -256,7 +256,7 @@ angular.module('portal.controllers')
 
             ct.ctlgDashboardInfo.ctlgTotalCnt = ctlgTotalCnt;
 
-            var chartArea = 'chart-area';
+            var chartArea = 'chart-area12';
             ct.semiChart (chartArea, serJsonList) ;
         };
 
