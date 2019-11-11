@@ -166,33 +166,6 @@ angular.module('iaas.controllers')
         ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'shelved_offloaded', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
-        // 서버 알람 상태 체크 함수
-        ct.fnCheckAlarmStatus = function (server) {
-            var params = {
-                limit: 1000 
-            };
-
-            var rp = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instances', 'GET', params));
-            rp.success(function (data) {
-                var alarmInfo = {};
-                angular.forEach(data.metric, function (instance) {
-                    alarmInfo[instance.instance_id] = instance.alarmStatus;
-                });
-
-                if (server && alarmInfo[server.id]) {
-                    server.alarmStatus = alarmInfo[server.id];
-                } else {
-                    angular.forEach(ct.serverMainList, function (serverMain) {
-                        if (alarmInfo[serverMain.id]) serverMain.alarmStatus = alarmInfo[serverMain.id];
-                    });
-                }
-            });
-            rp.finally(function () {
-                $scope.main.loadingMainBody = false;
-            })
-
-        };
-
         // 서버메인 tenant list 함수
         ct.fnGetServerMainList = function() {
             $scope.main.loadingMainBody = true;
@@ -217,13 +190,12 @@ angular.module('iaas.controllers')
                 }
                 var isServerStatusCheck = false;
                 common.objectOrArrayMergeData(ct.serverMainList, instances);
-                ct.fnCheckAlarmStatus();
+                ct.fnGetInstancesData();
                 var nowDate = new Date();
                 angular.forEach(ct.serverMainList, function (serverMain) {
                     if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
                         isServerStatusCheck = true;
                     }
-                    ct.fnSetInstanceUseRate(serverMain);
                     ct.fn.setProcState(serverMain);
                     ct.fn.setRdpConnectDomain(serverMain);
                     if (angular.isObject(serverMain.elapsed)) {
@@ -331,8 +303,7 @@ angular.module('iaas.controllers')
                     if (instanceId) {
                         var instance = data.content.instances[0];
                         var serverItem = common.objectsFindByField(ct.serverMainList, "id", data.content.instances[0].id);
-                        ct.fnSetInstanceUseRate(serverItem);
-                        ct.fnCheckAlarmStatus(serverItem);
+                        ct.fnGetInstancesData(serverItem);
                         if (serverItem && serverItem.id) {
                             var beforUiTask = serverItem.uiTask;
                             var newItem = false;
@@ -381,14 +352,12 @@ angular.module('iaas.controllers')
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
                                 ct.fn.setProcState(ct.serverMainList[inKey]);
                                 ct.fn.setRdpConnectDomain(ct.serverMainList[inKey]);
-                                ct.fnSetInstanceUseRate(instance);
-                                ct.fnCheckAlarmStatus(instance);
+                                ct.fnGetInstancesData(instance);
                             } else {
                                 ct.fn.setProcState(instance);
                                 ct.fn.setRdpConnectDomain(instance);
                                 ct.serverMainList.push(instance);
-                                ct.fnSetInstanceUseRate(instance);
-                                ct.fnCheckAlarmStatus(instance);
+                                ct.fnGetInstancesData(instance);
                             }
                         });
                     }
@@ -428,8 +397,7 @@ angular.module('iaas.controllers')
                                 ct.fn.checkServerState(instanceStateInfo.id);
                             }, 1000);
                             var serverItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
-                            ct.fnSetInstanceUseRate(serverItem);
-                            ct.fnCheckAlarmStatus(serverItem);
+                            ct.fnGetInstancesData(serverItem);
                             if (instanceStateInfo.taskState == "shelving_image_uploading" || instanceStateInfo.taskState == "shelving_offloading" || instanceStateInfo.taskState == "shelving" || instanceStateInfo.taskState == "shelving_image_pending_upload") {
                                 instanceStateInfo.vmState = "shelved";
                             } else if (instanceStateInfo.taskState == "powering-off") {
@@ -456,8 +424,7 @@ angular.module('iaas.controllers')
                         var serverMainList = angular.copy(ct.serverMainList);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
                             ct.fn.setProcState(instanceStateInfo);
-                            ct.fnSetInstanceUseRate(instanceStateInfo);
-                            ct.fnCheckAlarmStatus(instanceStateInfo);
+                            ct.fnGetInstancesData(instanceStateInfo);
                             var serverItem = common.objectsFindByField(serverMainList, "id", instanceStateInfo.id);
                             if (serverItem && serverItem.id) {
                                 delete serverItem.taskState;
@@ -897,22 +864,63 @@ angular.module('iaas.controllers')
         // - 서버상태변경(정지->시작) 후 API 호출 할 때 서버의 모니터링 데이터가 0 응답함
         // - 서버 시작 후 일정 시간 후에 정상데이터 호출 되는데 그 시점을 핸들링 할 수 없음.
         // - 서버 정보 세팅하는 경우 1개 인스턴스의 모니터링 데이터를 호출하는 방식으로 변경.
-        ct.fnSetInstanceUseRate = function (instance) {
-            if (instance.uiTask && instance.uiTask == 'active') {
-                var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instance/' + instance.id + '/resourceUsage', 'GET');
-                rp.success(function (d) {
-                    instance.cpuUsage = d.cpuUsage;
-                    instance.memoryUsage = d.memUsage;
-                    instance.diskUsage = d.diskUsage;
-                });
-                rp.error(function (d) {
-                    common.showAlertError(d.message);
-                });
+        // fnGetInstancesData 메서드의 응답에 필요 데이터가 존재하므로 조회 된 데이터를 바인드하는 기능으로 변경. 2019.11.11
+        // ct.fnSetInstanceUseRate = function (instance) {
+        //     if (instance.uiTask && instance.uiTask == 'active') {
+        //         var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instance/' + instance.id + '/resourceUsage', 'GET');
+        //         rp.success(function (d) {
+        //             instance.cpuUsage = d.cpuUsage;
+        //             instance.memoryUsage = d.memUsage;
+        //             instance.diskUsage = d.diskUsage;
+        //         });
+        //         rp.error(function (d) {
+        //             common.showAlertError(d.message);
+        //         });
+        //     } else {
+        //         instance.cpuUsage = 0;
+        //         instance.memoryUsage = 0;
+        //         instance.diskUsage = 0;
+        //     }
+        // };
+        ct.fnSetInstanceUseRate = function (src, desc) {
+            if (src.uiTask && src.uiTask == 'active') {
+                src.cpuUsage = desc.cpuUsage;
+                src.memoryUsage = desc.memoryUsage;
+                src.diskUsage = desc.diskUsage;
             } else {
-                instance.cpuUsage = 0;
-                instance.memoryUsage = 0;
-                instance.diskUsage = 0;
+                src.cpuUsage = 0;
+                src.memoryUsage = 0;
+                src.diskUsage = 0;
             }
+        };
+
+        // 서버 알람 상태 체크 함수
+        ct.fnGetInstancesData = function (server) {
+            var params = {
+                limit: 1000 
+            };
+
+            var rp = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instances', 'GET', params));
+            rp.success(function (data) {
+                var alarmInfo = {};
+                angular.forEach(data.metric, function (instance) {
+                    if (server && instance.alarmStatus) {
+                        server.alarmStatus = instance.alarmStatus;
+                        ct.fnSetInstanceUseRate(server, instance)
+
+                    } else {
+                        angular.forEach(ct.serverMainList, function (serverMain) {
+                            if (serverMain && serverMain.id == instance.instance_id) {
+                                serverMain.alarmStatus = instance.alarmStatus;
+                                ct.fnSetInstanceUseRate(serverMain, instance);
+                            }
+                        });
+                    }
+                });
+            });
+            rp.finally(function () {
+                $scope.main.loadingMainBody = false;
+            })
         };
 
         if (ct.data.tenantId) {
@@ -927,9 +935,10 @@ angular.module('iaas.controllers')
         }
 
         $interval(function () {
-            angular.forEach(ct.serverMainList, function (server) {
-                ct.fnSetInstanceUseRate(server);
-            });
+            ct.fnGetInstancesData()
+            // angular.forEach(ct.serverMainList, function (server) {
+            //     ct.fnSetInstanceUseRate(server);
+            // });
         }, 1000 * 60)
     })
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
