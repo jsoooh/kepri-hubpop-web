@@ -411,7 +411,9 @@ angular.module('app')
                 "code": 200,
                 "name": "OK"
             }
-        }
+        },
+        //neutron lbaas.loadbalancer/pool : 10
+        lbaasPortLimit : 10
     })
     .constant('tenantChartConfig', [
         {
