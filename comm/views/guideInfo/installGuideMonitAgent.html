@@ -34,7 +34,8 @@
 				<tr ng-show="spop.data.osType == 'windows'">
 					<td>agentInstallerDist</td>
 					<td class="text-left">
-						가상 서버의 모니터링 Agent 설정파일입니다.
+						가상 서버의 모니터링 Agent 설정파일입니다.<br/>
+						<font color="red">* 설정파일은 다운받는 VM의 정보를 이용하여 작성되므로 반드시 해당 VM에서 다운로드 받으셔야합니다</font>
 					</td>
 					<td><a href="{{spop.data.url}}">telegraf.conf</a></td>
 				</tr>
@@ -115,7 +116,17 @@
 	</div>
 	<div ng-show="spop.data.osType == 'windows'">
 		<h3>2. 모니터링 Agent 설치 파일 Upload</h3>
-		<p class="txt_level1">다운로드 받은 HubPop Windows VM C:\ 이하에 Upload 한다<br>자세한 접속 정보는 [<span style="color: red">접속 가이드</span>]를 참조한다</p>
+		<p class="txt_level1">
+			1) 네트워크 패킷 사이즈 변경<br>
+			&nbsp;- 제어판 > 네트워크 및 인터넷 > 어댑터 옵션 변경 > 네트워크 설정 > 연결에 사용할 장치 `구성` 클릭 > MTU 선택 후 값 변경(<font color="red">8950</font>)
+		</p>
+		<div class="imgWrap mgt0">
+			<img alt="" src="images/install_guide/install_guide_monit_agent_15.png" style="width: initial;">
+		</div>
+		<p class="txt_level1">
+			<font color="red">* 패킷 변경 후 네트워크 환경 변화로 VM 재접속이 필요합니다.</font>
+		</p>
+		<p class="txt_level1">다운로드 받은 설치파일(<font color="red">agentInstallerDist.zip</font>) HubPop Windows VM C:\ 이하에 Upload 한다<br>자세한 접속 정보는 [<span style="color: red">접속 가이드</span>]를 참조한다</p>
 		<h3>3. 설치 파일 압축 해제</h3>
 		<p class="txt_level1">
 			1) agentInstallerDist.zip 파일 압축을 해제한다.<br>
@@ -126,7 +137,7 @@
 		</div>
 		<h3>4. 모니터링 Agent 설치</h3>
 		<p class="txt_level1">
-			1) 모니터링 Agent 설정파일을 다운로드 받아 agentInstallerDist\pkgs 폴더 이하에 복사한다.<br>
+			1) 모니터링 Agent 설정파일(<font color="red">telegraf.conf</font>)을 다운로드 받아 agentInstallerDist\pkgs 폴더 이하에 복사한다.<br>
 			2) 파일들 중 set_windows_agent_conf.bat 를 실행시킨다. 실행이 되면 C:\agent\telegraf 디렉토리가 생성되며 아래와 같은 파일들이 생성되고 Windows Service에 등록된다.
 		</p>
 		<div class="imgWrap mgt0">
