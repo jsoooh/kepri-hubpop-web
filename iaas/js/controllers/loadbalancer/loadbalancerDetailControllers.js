@@ -325,12 +325,14 @@ angular.module('iaas.controllers')
                 //console.log("ct.loadbalancer.iaasLbPortMembers(1) : ", ct.loadbalancer.iaasLbPortMembers);
                 angular.forEach(ct.loadbalancer.iaasLbPortMembers, function(member) {
                     var sltServer = common.objectsFindCopyByField(ct.serverMainList, "id", member.instanceId);
-                    if (sltServer.image && sltServer.image.osType) {
-                        member.instanceOsType = sltServer.image.osType;
+                    if (sltServer) {
+                        if (sltServer.image && sltServer.image.osType) {
+                            member.instanceOsType = sltServer.image.osType;
+                        }
+                        member.instanceFloatingIp = sltServer.floatingIp;
+                        member.instanceFixedIp = sltServer.fixedIp;
+                        member.instanceCreated = sltServer.created;
                     }
-                    member.instanceFloatingIp = sltServer.floatingIp;
-                    member.instanceFixedIp = sltServer.fixedIp;
-                    member.instanceCreated = sltServer.created;
                 });
                 //console.log("ct.loadbalancer.iaasLbPortMembers(2) : ", ct.loadbalancer.iaasLbPortMembers);
             }
