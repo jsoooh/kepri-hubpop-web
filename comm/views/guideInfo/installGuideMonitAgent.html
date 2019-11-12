@@ -35,7 +35,10 @@
 					<td>agentInstallerDist</td>
 					<td class="text-left">
 						가상 서버의 모니터링 Agent 설정파일입니다.<br/>
-						<font color="red">* 설정파일은 다운받는 VM의 정보를 이용하여 작성되므로 반드시 해당 VM에서 다운로드 받으셔야합니다</font>
+						<font color="red">
+							* <strong>telegraf.conf</strong> 설정파일은 다운받는 VM의 정보를 이용하여 생성되므로 반드시 해당 VM에서 다운로드 받으셔야합니다 <br/>
+							<strong>(다른 VM에서는 사용 불가능합니다)</strong>
+						</font>
 					</td>
 					<td><a href="{{spop.data.url}}">telegraf.conf</a></td>
 				</tr>
@@ -117,8 +120,9 @@
 	<div ng-show="spop.data.osType == 'windows'">
 		<h3>2. 모니터링 Agent 설치 파일 Upload</h3>
 		<p class="txt_level1">
-			1) 네트워크 패킷 사이즈 변경<br>
-			&nbsp;- 제어판 > 네트워크 및 인터넷 > 어댑터 옵션 변경 > 네트워크 설정 > 연결에 사용할 장치 `구성` 클릭 > MTU 선택 후 값 변경(<font color="red">8950</font>)
+			1) VM 접속
+			2) 네트워크 패킷 사이즈 변경<br>
+			&nbsp;- 제어판 > 네트워크 및 인터넷 > 어댑터 옵션 변경 > 네트워크 설정 > 연결에 사용할 장치 `구성` 클릭 > MTU 선택 후 값 변경(<font color="red"><strong>8950</strong></font>)
 		</p>
 		<div class="imgWrap mgt0">
 			<img alt="" src="images/install_guide/install_guide_monit_agent_15.png" style="width: initial;">
