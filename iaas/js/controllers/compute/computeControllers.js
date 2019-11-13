@@ -871,7 +871,7 @@ angular.module('iaas.controllers')
             if (ct.lbPortCnt < CONSTANTS.lbaasPortLimit) {
                 $scope.main.goToPage('/iaas/loadbalancer/create');
             } else {
-                common.showAlert("message", "부하분산의 포트는 최대 " + CONSTANTS.lbaasPortLimit + "개로 더 이상 생성 불가합니다.");
+                common.showAlertError("message", "부하분산의 포트는 최대 " + CONSTANTS.lbaasPortLimit + "개로 더 이상 생성 불가합니다.");
             }
         };
 
