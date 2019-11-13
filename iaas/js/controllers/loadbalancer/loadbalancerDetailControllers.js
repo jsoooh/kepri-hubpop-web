@@ -21,6 +21,7 @@ angular.module('iaas.controllers')
         ct.data.instanceId = $stateParams.instanceId;
         ct.instanceDomainLinkInfos = [];
         ct.instance             = {};
+        ct.popServerMode        = "server"; //연결서버 추가 시 유형 : server/image
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
@@ -224,6 +225,8 @@ angular.module('iaas.controllers')
                         $scope.main.reloadTimmer['loadBalancerState_' + lbLists.iaasLbInfo.id] = $timeout(function () {
                             ct.fn.checkLbState(lbLists.iaasLbInfo.id);
                         }, 2000);
+                    } else {
+                        ct.GetServerMainList(); //서버 목록 조회
                     }
                     ct.loadbalancer = data.content;
                     ct.loadbalancer.iaasLbPorts = data.content.iaasLbPorts;
@@ -321,7 +324,7 @@ angular.module('iaas.controllers')
 
         //vm osType 세팅
         function setOsType() {
-            if (ct.loadbalancer && ct.loadbalancer.iaasLbPortMembers && ct.loadbalancer.iaasLbPortMembers.length >0 && ct.serverMainList.length > 0) {
+            if (ct.loadbalancer && ct.loadbalancer.iaasLbPortMembers && ct.loadbalancer.iaasLbPortMembers.length > 0 && ct.serverMainList.length > 0) {
                 //console.log("ct.loadbalancer.iaasLbPortMembers(1) : ", ct.loadbalancer.iaasLbPortMembers);
                 angular.forEach(ct.loadbalancer.iaasLbPortMembers, function(member) {
                     var sltServer = common.objectsFindCopyByField(ct.serverMainList, "id", member.instanceId);
