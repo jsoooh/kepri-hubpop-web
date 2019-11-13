@@ -1098,10 +1098,10 @@ angular.module('portal.controllers')
             dataUsage : 0
         };
 
-        ct.getPdaDashBoardInfo = function (projectId) {
-            var promise = portal.dashboard.getPdaDashBoardInfo(projectId);
+        ct.getPdaDashBoardInfo = function () {
+            var promise = portal.dashboard.getPdaDashBoardInfo();
             promise.success(function (data, status, headers) {
-                ct.pdaDashBoardInfo = data;
+                ct.pdaDashBoardInfo = data.dataList[0];
             });
             promise.error(function (data, status, headers) {
             });
