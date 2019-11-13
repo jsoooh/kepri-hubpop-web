@@ -1114,7 +1114,7 @@ angular.module('portal.controllers')
             FAIL_CNT : 0
         };
 
-        ct.getAppDashBoardInfo = function (projectId) {
+        ct.getAppDashBoardInfo = function () {
             var u_token = common.getAccessToken();
             var d = new Date();
             var vt = d.getTime();
