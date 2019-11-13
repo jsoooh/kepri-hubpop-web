@@ -966,7 +966,7 @@ angular.module('iaas.controllers')
         }
 
         $interval(function () {
-            ct.fnGetInstancesData()
+            ct.fnGetInstancesData();
             // angular.forEach(ct.serverMainList, function (server) {
             //     ct.fnSetInstanceUseRate(server);
             // });
