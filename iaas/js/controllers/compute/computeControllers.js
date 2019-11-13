@@ -29,6 +29,7 @@ angular.module('iaas.controllers')
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
         ct.tabIndex = 0;
+        ct.lbPortCnt = 0;   //테넌트의 전체 lbPort 갯수
 
         // 부하분산 서버관리 디테일 페이지에서 리스트 페이지로 넘어올때 필요하여 추가
         if ($location.$$search.tabIndex) {
@@ -130,7 +131,7 @@ angular.module('iaas.controllers')
         ct.firstInstanceCreatePop = function() {
             var dialogOptions = {
                 controllerAs: "pop",
-                templateUrl : _IAAS_VIEWS_ + "/compute/firstInstanceCreatePop.html" + _VersionTail(),
+                templateUrl : _IAAS_VIEWS_ + "/compute/firstInstanceCreatePop.html" + _VersionTail()
             };
             common.showCustomDialog($scope, null, dialogOptions);
         };
@@ -858,6 +859,22 @@ angular.module('iaas.controllers')
             });
         };
 
+        //lb port limit 확인
+        ct.fn.checkLbPortLimit = function () {
+            ct.lbPortCnt = 0;   //테넌트의 전체 lbPort 갯수
+            //console.log("ct.lbServiceLists : ", ct.lbServiceLists);
+            angular.forEach(ct.lbServiceLists, function (lbItem) {
+                if (lbItem.iaasLbPorts && lbItem.iaasLbPorts.length > 0) {
+                    ct.lbPortCnt += lbItem.iaasLbPorts.length;
+                }
+            });
+            if (ct.lbPortCnt < CONSTANTS.lbaasPortLimit) {
+                $scope.main.goToPage('/iaas/loadbalancer/create');
+            } else {
+                common.showAlert("message", "부하분산의 포트는 최대 " + CONSTANTS.lbaasPortLimit + "개로 더 이상 생성 불가합니다.");
+            }
+        };
+
         // [20190621.HYG] It's a func to bind Instance monitoring data
         // Dev History 
         // 테넌트 전체 서버 모니터링 데이터 호출 API 는 사용안함
@@ -894,7 +911,15 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 서버 알람 상태 체크 함수
+        // 서버 알람 상태 체크
+        ct.fnSetInstanceState = function (server, instance) {
+            server.alarmStatus = instance.alarmStatus;
+            if (server.vmState == 'active' && (instance.alarmStatus == 'minor' || instance.alarmStatus == 'warning' || instance.alarmStatus == 'critical')) {
+                server.vmState = instance.alarmStatus;
+            }
+        };
+
+        // 서버 알람 상태 조회
         ct.fnGetInstancesData = function (server) {
             var params = {
                 limit: 1000 
@@ -905,16 +930,22 @@ angular.module('iaas.controllers')
                 var alarmInfo = {};
                 angular.forEach(data.metric, function (instance) {
                     if (server && instance.alarmStatus) {
-                        server.alarmStatus = instance.alarmStatus;
+                        ct.fnSetInstanceState(server, instance);
                         ct.fnSetInstanceUseRate(server, instance)
 
                     } else {
-                        angular.forEach(ct.serverMainList, function (serverMain) {
-                            if (serverMain && serverMain.id == instance.instance_id) {
-                                serverMain.alarmStatus = instance.alarmStatus;
-                                ct.fnSetInstanceUseRate(serverMain, instance);
-                            }
-                        });
+                        // var stop = $interval(function () {
+                        //     console.log(ct.serverMainList)
+                        //     if (ct.serverMainList) {
+                        //         $interval.cancel(stop);
+                                angular.forEach(ct.serverMainList, function (serverMain) {
+                                    if (serverMain && serverMain.id == instance.instance_id) {
+                                        ct.fnSetInstanceState(serverMain, instance);
+                                        ct.fnSetInstanceUseRate(serverMain, instance);
+                                    }
+                                });
+                        //     }
+                        // }, 500);
                     }
                 });
             });

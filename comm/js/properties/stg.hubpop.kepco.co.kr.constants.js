@@ -337,7 +337,9 @@ angular.module('app')
             {value: '1', name: 'Alarm 발생'}
         ],
         alarmBell: 1000*60*1,
-        timeRangeFormat: 'YYYY-MM-DD HH:mm'
+        timeRangeFormat: 'YYYY-MM-DD HH:mm',
+        //neutron lbaas.loadbalancer/pool : 10
+        lbaasPortLimit : 10
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},

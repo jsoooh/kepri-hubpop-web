@@ -27,7 +27,8 @@ angular.module('iaas.controllers')
             if (state == 'gotolblist') {
                 ct.fn.goToLbList($event);
             } else if (state == 'port') {
-                ct.fn.createLoadBalancerPort($event,data);
+                //ct.fn.createLoadBalancerPort($event,data);
+                ct.fn.checkLbPortLimit($event,data);
             } else if (state == 'rename') {
                 ct.fn.reNamePopLb($event,data);
             } else if (state == 'editport') {
@@ -324,12 +325,14 @@ angular.module('iaas.controllers')
                 //console.log("ct.loadbalancer.iaasLbPortMembers(1) : ", ct.loadbalancer.iaasLbPortMembers);
                 angular.forEach(ct.loadbalancer.iaasLbPortMembers, function(member) {
                     var sltServer = common.objectsFindCopyByField(ct.serverMainList, "id", member.instanceId);
-                    if (sltServer.image && sltServer.image.osType) {
-                        member.instanceOsType = sltServer.image.osType;
+                    if (sltServer) {
+                        if (sltServer.image && sltServer.image.osType) {
+                            member.instanceOsType = sltServer.image.osType;
+                        }
+                        member.instanceFloatingIp = sltServer.floatingIp;
+                        member.instanceFixedIp = sltServer.fixedIp;
+                        member.instanceCreated = sltServer.created;
                     }
-                    member.instanceFloatingIp = sltServer.floatingIp;
-                    member.instanceFixedIp = sltServer.fixedIp;
-                    member.instanceCreated = sltServer.created;
                 });
                 //console.log("ct.loadbalancer.iaasLbPortMembers(2) : ", ct.loadbalancer.iaasLbPortMembers);
             }
@@ -537,6 +540,28 @@ angular.module('iaas.controllers')
         ct.fn.deletePortForwarding = function(forwardingItem) {
             common.showConfirm('포트포워딩 삭제','※'+forwardingItem.targetPort+' 포트포워딩을 삭제 하시겠습니까?').then(function(){
                 ct.fn.deletePortForwardingAction(forwardingItem);
+            });
+        };
+
+        //lb port limit 확인
+        ct.fn.checkLbPortLimit = function($event, lbservice) {
+            ct.lbPortCnt = 0;   //테넌트의 전체 lbPort 갯수
+            var params = {
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port/check', 'GET', params));
+            returnPromise.success(function (data, status, headers) {
+                ct.lbPortCnt = data.content;
+                if (ct.lbPortCnt < CONSTANTS.lbaasPortLimit) {
+                    ct.fn.createLoadBalancerPort($event, lbservice);
+                } else {
+                    common.showAlert("message", "부하분산의 포트는 최대 " + CONSTANTS.lbaasPortLimit + "개로 더 이상 생성 불가합니다.");
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
             });
         };
 

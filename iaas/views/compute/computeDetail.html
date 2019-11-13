@@ -221,16 +221,35 @@
 							<p><img src="images/loading_sm.gif"> {{'iaas.label.instance_' + contents.instance.vmState | translate}} 입니다.</p>
 						</div>
 						<div ng-if="contents.instance.procState == 'end'" class="txt">
-								<span class="stateWrap">
-									<span ng-if="contents.instance.vmState == 'active'" class="stateMark type1"></span>
-									<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2"></span>
-									<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'shelved_offloaded'" class="stateMark type4"></span>
-									<span ng-if="contents.instance.vmState == 'stopped'" class="stateMark type3"></span>
-									<span ng-if="contents.instance.vmState" class="state-txt">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
-								</span>
+							<div ng-if="!contents.instance.alarmStatus" class="txt">
+								<p><img src="images/loading_sm.gif"></p>
+							</div>
+							<span ng-if="contents.instance.alarmStatus" class="stateWrap">
+								<span ng-if="contents.instance.vmState == 'active'" class="stateMark type1"></span>
+								<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2"></span>
+								<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'shelved_offloaded'" class="stateMark type4"></span>
+								<span ng-if="contents.instance.vmState == 'stopped'" class="stateMark type3"></span>
+								<span ng-if="contents.instance.vmState == 'minor'" class="stateMark type5"></span>
+								<span ng-if="contents.instance.vmState == 'warning'" class="stateMark type4"></span>
+								<span ng-if="contents.instance.vmState == 'critical'" class="stateMark type2"></span>
+								<span ng-if="contents.instance.vmState" class="state-txt">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
+							</span>
 						</div>
 					</li>
-					
+					<li>
+						<strong class="tit">모니터링<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'가상 자원 사용현황을<br>모니터링 합니다'"><span class="ico_info"></span></button></strong>
+						<div ng-if="!contents.instance.alarmStatus" class="txt">
+							<p><img src="images/loading_sm.gif"></p>
+						</div>
+						<div ng-if="contents.instance.alarmStatus" class="txt">
+							<span class="stateWrap">
+								<span ng-if="contents.instance.alarmStatus != 'no agent' && contents.instance.alarmStatus != 'failed'" class="stateMark type1"></span>
+								<span ng-if="contents.instance.alarmStatus == 'no agent' || contents.instance.alarmStatus == 'failed'" class="stateMark type3"></span>
+								<span ng-if="contents.instance.alarmStatus != 'no agent' && contents.instance.alarmStatus != 'failed'" class="state-txt">{{ 'iaas.label.instance_active'| translate }}</span>
+								<span ng-if="contents.instance.alarmStatus == 'no agent' || contents.instance.alarmStatus == 'failed'" class="state-txt">{{ 'iaas.label.instance_inactive'| translate }}</span>
+							</span>
+						</div>
+					</li>
 				</ul>
 			</div>
 			<!-- //app 정보 -->
