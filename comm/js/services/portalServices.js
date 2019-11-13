@@ -287,7 +287,7 @@ angular.module('portal.services', [])
                 prjcCd : prjcCd
             };
             /*return common.retrieveResource(common.resourcePromise('http://168.78.82.189:8086/dcp/api/userConsoleDashboard.do', 'GET', getParams));*/
-            return common.retrieveResource(common.resourcePromise('/dcp/api/userConsoleDashboard/', 'GET', getParams));
+            return common.retrieveResource(common.resourcePromise('/dcp/api/userConsoleDashboard/'+prjcCd, 'GET'));
         };
 
         portal.dashboard.getCtlgDashboardInfo = function (prjcCd) {
