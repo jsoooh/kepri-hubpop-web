@@ -911,7 +911,15 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 서버 알람 상태 체크 함수
+        // 서버 알람 상태 체크
+        ct.fnSetInstanceState = function (server, instance) {
+            server.alarmStatus = instance.alarmStatus;
+            if (server.vmState == 'active' && (instance.alarmStatus == 'minor' || instance.alarmStatus == 'warning' || instance.alarmStatus == 'critical')) {
+                server.vmState = instance.alarmStatus;
+            }
+        };
+
+        // 서버 알람 상태 조회
         ct.fnGetInstancesData = function (server) {
             var params = {
                 limit: 1000 
@@ -922,16 +930,22 @@ angular.module('iaas.controllers')
                 var alarmInfo = {};
                 angular.forEach(data.metric, function (instance) {
                     if (server && instance.alarmStatus) {
-                        server.alarmStatus = instance.alarmStatus;
+                        ct.fnSetInstanceState(server, instance);
                         ct.fnSetInstanceUseRate(server, instance)
 
                     } else {
-                        angular.forEach(ct.serverMainList, function (serverMain) {
-                            if (serverMain && serverMain.id == instance.instance_id) {
-                                serverMain.alarmStatus = instance.alarmStatus;
-                                ct.fnSetInstanceUseRate(serverMain, instance);
-                            }
-                        });
+                        // var stop = $interval(function () {
+                        //     console.log(ct.serverMainList)
+                        //     if (ct.serverMainList) {
+                        //         $interval.cancel(stop);
+                                angular.forEach(ct.serverMainList, function (serverMain) {
+                                    if (serverMain && serverMain.id == instance.instance_id) {
+                                        ct.fnSetInstanceState(serverMain, instance);
+                                        ct.fnSetInstanceUseRate(serverMain, instance);
+                                    }
+                                });
+                        //     }
+                        // }, 500);
                     }
                 });
             });
