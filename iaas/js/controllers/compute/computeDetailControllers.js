@@ -459,11 +459,23 @@ angular.module('iaas.controllers')
                         ct.instance.vmDeployType = angular.copy(ct.deployTypes[0]);
                     }
 
-                    var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + param.tenantId + '/instance/' + param.instanceId + '/resourceUsage', 'GET', param, 'application/x-www-form-urlencoded'));
+                    // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + param.tenantId + '/instance/' + param.instanceId + '/resourceUsage', 'GET', param, 'application/x-www-form-urlencoded'));
+                    var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + param.tenantId + '/instances', 'GET', {limit: 1000}, 'application/x-www-form-urlencoded'));
                     returnPromise.success(function (data2, status2, headers2) {
-                        ct.doughnut.data.cpu = [100 - data2.cpuUsage, data2.cpuUsage];
-                        ct.doughnut.data.ram = [100 - data2.memUsage, data2.memUsage];
-                        ct.doughnut.data.disk = [100 - data2.diskUsage, data2.diskUsage];
+                        angular.forEach(data2.metric, function (instance) {
+                            console.log(ct.instance, instance);
+                            if (ct.instance.id == instance.instance_id) {
+                                ct.doughnut.data.cpu = [100 - instance.cpuUsage, instance.cpuUsage];
+                                ct.doughnut.data.ram = [100 - instance.memoryUsage, instance.memoryUsage];
+                                ct.doughnut.data.disk = [100 - instance.diskUsage, instance.diskUsage];
+                                
+                                ct.instance.alarmStatus = instance.alarmStatus;
+                                console.log(instance.alarmStatus);
+                                if (ct.instance.vmState == 'active' && (instance.alarmStatus == 'minor' || instance.alarmStatus == 'warning' || instance.alarmStatus == 'critical')) {
+                                    ct.instance.vmState = instance.alarmStatus;
+                                }
+                            }
+                        });
                     });
                     // ct.fn.getUsedResource();
                     ct.fn.searchInstanceVolumeList();
