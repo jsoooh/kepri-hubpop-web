@@ -833,24 +833,25 @@ angular.module('iaas.controllers')
                         $scope.main.reloadTimmer['loadBalancerState_' + lbLists.iaasLbInfo.id] = $timeout(function () {
                             ct.fn.checkLbState(lbLists.iaasLbInfo.id);
                         }, 2000);
+                    } else {
+                        angular.forEach(ct.lbServiceLists, function (lbList) {
+                            if (lbList.iaasLbInfo.id == loadBalancerId) {
+                                lbList.iaasLbInfo = lbLists.iaasLbInfo;
+                                angular.forEach(lbLists.iaasLbPorts, function (lbPort) {
+                                    var lbPortSearch = common.objectsFindByField(lbList.iaasLbPorts, "id", lbPort.id);
+                                    if (lbPortSearch == null) {
+                                        lbList.iaasLbPorts.push(lbPort);
+                                    }
+                                });
+                                angular.forEach(lbLists.iaasLbPortMembers, function (lbPortMember) {
+                                    var lbPortMemberSearch = common.objectsFindByField(lbList.iaasLbPortMembers, "id", lbPortMember.id);
+                                    if (lbPortMemberSearch == null) {
+                                        lbList.iaasLbPortMembers.push(lbPortMember);
+                                    }
+                                });
+                            }
+                        });
                     }
-                    angular.forEach(ct.lbServiceLists, function (lbList) {
-                        if (lbList.iaasLbInfo.id == loadBalancerId) {
-                            lbList.iaasLbInfo = lbLists.iaasLbInfo;
-                            angular.forEach(lbLists.iaasLbPorts, function (lbPort) {
-                                var lbPortSearch = common.objectsFindByField(lbList.iaasLbPorts, "id", lbPort.id);
-                                if (lbPortSearch == null) {
-                                    lbList.iaasLbPorts.push(lbPort);
-                                }
-                            });
-                            angular.forEach(lbLists.iaasLbPortMembers, function (lbPortMember) {
-                                var lbPortMemberSearch = common.objectsFindByField(lbList.iaasLbPortMembers, "id", lbPortMember.id);
-                                if (lbPortMemberSearch == null) {
-                                    lbList.iaasLbPortMembers.push(lbPortMember);
-                                }
-                            });
-                        }
-                    });
                 }
             });
             returnPromise.error(function (data, status, headers) {
