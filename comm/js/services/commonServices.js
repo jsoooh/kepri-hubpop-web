@@ -3303,6 +3303,8 @@ angular.module('common.services', ['LocalStorageModule'])
             cookies.clearAccessToken();
             //cookies.clearPgsecuid();
             cookies.clearUser();
+            cookies.clearPortalOrgKey();
+            cookies.clearUserTenantId();
         };
 
         var dtFormat = 'YYYY-MM-DD HH:mm';
