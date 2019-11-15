@@ -314,7 +314,10 @@ angular.module('iaas.controllers')
                             ct.fn.mergeServerInfo(serverItem, instance);
                             ct.fn.setProcState(serverItem);
                             ct.fn.setRdpConnectDomain(serverItem);
-                            if (newItem) {
+                            // VM 생성시 1시간 초과하여 미생성시 자동 삭제 처리
+                            if (newItem && serverItem.floatingIp == "") {
+                                common.showAlertInfo('"' + serverItem.name + '" 서버가 생성한지 1시간이 지나 삭제되었습니다.');
+                            } else if (newItem) {
                                 common.showAlertSuccess('"' + serverItem.name + '" 서버가 생성 되었습니다.');
                                 serverItem.newCreated = true;
                                 $timeout(function () {
