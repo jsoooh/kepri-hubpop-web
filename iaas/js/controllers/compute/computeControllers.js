@@ -915,7 +915,7 @@ angular.module('iaas.controllers')
         ct.fnSetInstanceState = function (server, instance) {
             server.alarmStatus = instance.alarmStatus;
             if (server.vmState == 'active' && (instance.alarmStatus == 'minor' || instance.alarmStatus == 'warning' || instance.alarmStatus == 'critical')) {
-                server.vmState = instance.alarmStatus;
+                server.alarmOccur = true;
             }
         };
 

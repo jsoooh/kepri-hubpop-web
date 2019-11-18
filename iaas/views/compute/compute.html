@@ -205,14 +205,15 @@
 							</div>
 							<div ng-if="instance.alarmStatus" class="down">
 								<span class="stateWrap">
-									<span ng-if="instance.vmState == 'active' || instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+									<span ng-if="!instance.alarmOccur && instance.vmState == 'active'" class="stateMark type1">정상배포</span>
 									<span ng-if="instance.vmState == 'error'" class="stateMark type2">오류</span>
 									<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building' || instance.vmState == 'shelved_offloaded'" class="stateMark type4">대기</span>
 									<span ng-if="instance.vmState == 'stopped'" class="stateMark type3">중지</span>
-									<span ng-if="instance.vmState == 'minor'" class="stateMark type5">주의</span>
-									<span ng-if="instance.vmState == 'warning'" class="stateMark type4">경고</span>
-									<span ng-if="instance.vmState == 'critical'" class="stateMark type2">위험</span>
-									<span class="state-txt">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
+									<span ng-if="instance.alarmStatus == 'minor'" class="stateMark type5">주의</span>
+									<span ng-if="instance.alarmStatus == 'warning'" class="stateMark type4">경고</span>
+									<span ng-if="instance.alarmStatus == 'critical'" class="stateMark type2">위험</span>
+									<span class="state-txt" ng-if="!instance.alarmOccur">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
+									<span class="state-txt" ng-if="instance.alarmOccur">{{ 'iaas.label.instance_' + instance.alarmStatus | translate }}</span>
 								</span>
 							</div>
 						</div>
