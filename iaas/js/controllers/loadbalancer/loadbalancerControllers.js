@@ -38,7 +38,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 연결서버 유형: 서버 선택시 서버 목록 불러옴
+        // 연결서버 유형: 서버 선택 시 서버 목록 불러옴
         ct.fn.GetServerMainList = function() {
             $scope.main.loadingMainBody = false;
             var param = {
@@ -187,6 +187,36 @@ angular.module('iaas.controllers')
                 }
             });
             ct.serverMainListCnt = cnt;   //선택된 서버목록 갯수
+        };
+
+        // 이름 체크
+        ct.fn.lbCheckName = function (lbName) {
+            $scope.main.loadingMainBody = false;
+            var param = {
+                tenantId : ct.data.tenantId,
+                loadBalancerId : 'null',
+                name : lbName
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/check_name', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                return {isValid : true};
+            });
+            returnPromise.error(function (data, status, headers) {
+                return {isValid: false, message: "이미 사용중인 이름 입니다."};
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.subDomainCustomValidationCheck = function(subDomain) {
+            if (subDomain && angular.isArray(ct.usingDomainNames) && ct.usingDomainNames.length > 0) {
+                var domainName = subDomain + "." + ct.data.baseDomainName;
+                if ((ct.formMode != "mod" || ct.orgDomain.domain != domainName) && ct.usingDomainNames.indexOf(domainName) >= 0) {
+                    return {isValid: false, message: "이미 사용중인 서브도메인 입니다."};
+                }
+            }
+            return {isValid : true};
         };
 
         ct.fn.GetServerMainList();

@@ -67,6 +67,7 @@ angular.module('common.services', ['LocalStorageModule'])
         common.clearPortalOrgKey = function () {
             cookies.clearPortalOrgKey();
             common.setTeamCode();
+            common.clearUserTenantId();
         };
 
         // TeamCode
@@ -80,6 +81,19 @@ angular.module('common.services', ['LocalStorageModule'])
 
         common.setTemeCode = function () {
             cookies.setTeamCode();
+        };
+
+        // userTenantId
+        common.getUserTenantId = function () {
+            return cookies.getUserTenantId();
+        };
+
+        common.setUserTenantId = function (userTenantId) {
+            cookies.setUserTenantId(userTenantId);
+        };
+
+        common.clearUserTenantId = function () {
+            cookies.clearUserTenantId();
         };
 
         // company
@@ -3260,6 +3274,19 @@ angular.module('common.services', ['LocalStorageModule'])
             $cookies.remove(_PROJECT_CODE_COOKIE_NAME_, cookiesOption);
         };
 
+        // userTenantId
+        cookies.getUserTenantId = function () {
+            return $cookies.get(_USER_TENANT_ID_COOKIE_NAME_);
+        };
+
+        cookies.setUserTenantId = function (userTenantId) {
+            $cookies.put(_USER_TENANT_ID_COOKIE_NAME_, userTenantId, cookiesOption);
+        };
+
+        cookies.clearUserTenantId = function () {
+            $cookies.remove(_USER_TENANT_ID_COOKIE_NAME_, cookiesOption);
+        };
+
         cookies.getLeftMenuShow = function () {
             return $cookies.get(_LEFT_MENU_SHOW_COOKIE_NAME_);
         };
@@ -3276,6 +3303,8 @@ angular.module('common.services', ['LocalStorageModule'])
             cookies.clearAccessToken();
             //cookies.clearPgsecuid();
             cookies.clearUser();
+            cookies.clearPortalOrgKey();
+            cookies.clearUserTenantId();
         };
 
         var dtFormat = 'YYYY-MM-DD HH:mm';

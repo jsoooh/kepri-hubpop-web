@@ -314,7 +314,10 @@ angular.module('iaas.controllers')
                             ct.fn.mergeServerInfo(serverItem, instance);
                             ct.fn.setProcState(serverItem);
                             ct.fn.setRdpConnectDomain(serverItem);
-                            if (newItem) {
+                            // VM 생성시 1시간 초과하여 미생성시 자동 삭제 처리
+                            if (newItem && serverItem.floatingIp == "") {
+                                common.showAlertInfo('"' + serverItem.name + '" 서버가 생성한지 1시간이 지나 삭제되었습니다.');
+                            } else if (newItem) {
                                 common.showAlertSuccess('"' + serverItem.name + '" 서버가 생성 되었습니다.');
                                 serverItem.newCreated = true;
                                 $timeout(function () {
@@ -833,24 +836,25 @@ angular.module('iaas.controllers')
                         $scope.main.reloadTimmer['loadBalancerState_' + lbLists.iaasLbInfo.id] = $timeout(function () {
                             ct.fn.checkLbState(lbLists.iaasLbInfo.id);
                         }, 2000);
+                    } else {
+                        angular.forEach(ct.lbServiceLists, function (lbList) {
+                            if (lbList.iaasLbInfo.id == loadBalancerId) {
+                                lbList.iaasLbInfo = lbLists.iaasLbInfo;
+                                angular.forEach(lbLists.iaasLbPorts, function (lbPort) {
+                                    var lbPortSearch = common.objectsFindByField(lbList.iaasLbPorts, "id", lbPort.id);
+                                    if (lbPortSearch == null) {
+                                        lbList.iaasLbPorts.push(lbPort);
+                                    }
+                                });
+                                angular.forEach(lbLists.iaasLbPortMembers, function (lbPortMember) {
+                                    var lbPortMemberSearch = common.objectsFindByField(lbList.iaasLbPortMembers, "id", lbPortMember.id);
+                                    if (lbPortMemberSearch == null) {
+                                        lbList.iaasLbPortMembers.push(lbPortMember);
+                                    }
+                                });
+                            }
+                        });
                     }
-                    angular.forEach(ct.lbServiceLists, function (lbList) {
-                        if (lbList.iaasLbInfo.id == loadBalancerId) {
-                            lbList.iaasLbInfo = lbLists.iaasLbInfo;
-                            angular.forEach(lbLists.iaasLbPorts, function (lbPort) {
-                                var lbPortSearch = common.objectsFindByField(lbList.iaasLbPorts, "id", lbPort.id);
-                                if (lbPortSearch == null) {
-                                    lbList.iaasLbPorts.push(lbPort);
-                                }
-                            });
-                            angular.forEach(lbLists.iaasLbPortMembers, function (lbPortMember) {
-                                var lbPortMemberSearch = common.objectsFindByField(lbList.iaasLbPortMembers, "id", lbPortMember.id);
-                                if (lbPortMemberSearch == null) {
-                                    lbList.iaasLbPortMembers.push(lbPortMember);
-                                }
-                            });
-                        }
-                    });
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -871,7 +875,7 @@ angular.module('iaas.controllers')
             if (ct.lbPortCnt < CONSTANTS.lbaasPortLimit) {
                 $scope.main.goToPage('/iaas/loadbalancer/create');
             } else {
-                common.showAlert("message", "부하분산의 포트는 최대 " + CONSTANTS.lbaasPortLimit + "개로 더 이상 생성 불가합니다.");
+                common.showAlertError("message", "부하분산의 포트는 최대 " + CONSTANTS.lbaasPortLimit + "개로 더 이상 생성 불가합니다.");
             }
         };
 
@@ -966,7 +970,7 @@ angular.module('iaas.controllers')
         }
 
         $interval(function () {
-            ct.fnGetInstancesData()
+            ct.fnGetInstancesData();
             // angular.forEach(ct.serverMainList, function (server) {
             //     ct.fnSetInstanceUseRate(server);
             // });

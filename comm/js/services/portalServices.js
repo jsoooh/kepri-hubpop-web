@@ -295,7 +295,7 @@ angular.module('portal.services', [])
                 prjcCd : prjcCd
             };
             /*return common.retrieveResource(common.resourcePromise('http://168.78.82.189:8086/dbp/com/dashboardUserApi.json', 'GET', getParams));*/
-            return common.retrieveResource(common.resourcePromise('/dbp/com/dashboardUserApi.json'+prjcCd, 'GET'));
+            return common.retrieveResource(common.resourcePromise('/dbp/com/dashboardUserApi.json', 'GET', getParams));
         };
 
         portal.dashboard.getPipelineDashBoardInfo = function (p_proj_id) {
@@ -316,8 +316,8 @@ angular.module('portal.services', [])
             var getParams = {
                 prjcCd : prjcCd
             };
-            /*return common.retrieveResource(common.resourcePromise('http://168.78.82.183:58080/gis/api/projectInfo.do', 'GET', getParams));*/
-            return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/gis/api/projectInfo.do', 'GET', getParams));
+            // return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/gis/api/projectInfo.do', 'GET', getParams));
+            return common.retrieveResource(common.resourcePromise('/gis/api/projectInfo.do', 'GET', getParams));
         };
 
         portal.dashboard.getDBaasDashBoardInfo = function (prjcCd) {

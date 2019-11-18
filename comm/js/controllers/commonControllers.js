@@ -445,10 +445,12 @@ angular.module('common.controllers', [])
                 mc.userTenant.id = userTenant.tenantId;
                 mc.userTenant.korName = mc.sltPortalOrg.orgName;
                 mc.uaerTenantDisplayName = mc.userTenant.korName;
+                common.setUserTenantId(mc.userTenantId);
             } else {
                 mc.userTenant = {};
                 mc.userTenantId = "";
                 mc.uaerTenantDisplayName = "";
+                common.clearUserTenantId();
             }
         };
 

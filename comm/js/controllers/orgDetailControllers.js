@@ -1098,10 +1098,10 @@ angular.module('portal.controllers')
             dataUsage : 0
         };
 
-        ct.getPdaDashBoardInfo = function (projectId) {
-            var promise = portal.dashboard.getPdaDashBoardInfo(projectId);
+        ct.getPdaDashBoardInfo = function () {
+            var promise = portal.dashboard.getPdaDashBoardInfo();
             promise.success(function (data, status, headers) {
-                ct.pdaDashBoardInfo = data;
+                ct.pdaDashBoardInfo = data.dataList[0];
             });
             promise.error(function (data, status, headers) {
             });
@@ -1114,7 +1114,7 @@ angular.module('portal.controllers')
             FAIL_CNT : 0
         };
 
-        ct.getAppDashBoardInfo = function (projectId) {
+        ct.getAppDashBoardInfo = function () {
             var u_token = common.getAccessToken();
             var d = new Date();
             var vt = d.getTime();
