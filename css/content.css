@@ -2506,7 +2506,7 @@ p.no-txt{
 .panel.type5 .panel_body {position:relative;}
 .panel.type5 .panel_head .btn_txt:hover {background:#4d4d4d;}
 .panel.type5 .panel_head .btn-option.type2 {position:absolute; left:96px; right:0; top:50px; z-index: 5;}
-.panel.type5 .panel_body .tg_box {position:absolute; top:0; left:5%; z-index: 4; float: left; width:90%; height:245px; font-size: 14px; text-align: left; list-style: none; border:1px solid #ddd; background:#f4f4f4; border-radius:7px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175); box-shadow: 0 6px 12px rgba(0, 0, 0, .175); padding:0 25px 25px; margin: 17px 0 0; cursor:default;}
+.panel.type5 .panel_body .tg_box {position:absolute; top:0; left:5%; z-index: 4; float: left; width:90%; height:250px; font-size: 14px; text-align: left; list-style: none; border:1px solid #ddd; background:#f4f4f4; border-radius:7px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175); box-shadow: 0 6px 12px rgba(0, 0, 0, .175); padding:0 25px 25px; margin: 17px 0 0; cursor:default;}
 .panel.type5 .panel_body .tgb_head {position:relative;}
 .panel.type5 .panel_body .tgb_head .tit {font-size:17px; font-weight:500; color:#333; padding:15px 0;}
 .panel_body button.close_sm {position:absolute; top:15px; right:0; display:inline-block; width:25px; height:25px; font-size:0; background:url("../images/btn_pop_close_sm.png") no-repeat left top;}
