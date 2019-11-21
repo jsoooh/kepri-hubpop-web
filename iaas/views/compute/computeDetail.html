@@ -196,7 +196,7 @@
 						<div class="txt">{{ (contents.instance.rdpConnectDomain) ? contents.instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
 					</li>
 					<li ng-if="contents.instance.image.osType == 'windows' && contents.instance.rdpDomain">
-						<strong class="tit">접속 IP</strong>
+						<strong class="tit">접속 주소</strong>
 						<div class="txt">{{ contents.instance.rdpDomain ? contents.instance.rdpDomain : '' }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
 					</li>
                     <li>
