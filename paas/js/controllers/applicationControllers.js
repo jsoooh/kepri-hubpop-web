@@ -2021,6 +2021,7 @@ angular.module('paas.controllers')
 
         pop.checkClick = false;
         pop.updateAppScale = function(guid, name) {
+            pop.checkClick = false;
             if (pop.checkClick) return;
             pop.checkClick = true;
             if (ct.originalInstances == ct.instancesSlider.value && ct.originalMemory == ct.memorySlider.value && ct.originalDisk == ct.diskQuotaSlider.value && !pop.appFileItem) {
@@ -2043,6 +2044,8 @@ angular.module('paas.controllers')
                     pop.updateAppFileAction(guid);
                 } else if (pop.isChangeScale) {
                     pop.updateAppScaleAction(guid, ct.instancesSlider.value, ct.memorySlider.value, ct.diskQuotaSlider.value);
+                } else {
+                    pop.checkClick = false;
                 }
             });
         };
