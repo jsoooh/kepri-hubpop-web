@@ -30,7 +30,7 @@
 	<div role="tabpanel" class="tabWrap type1">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.serverMainList | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</span></a></li>
 			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.lbServiceLists).length}})</span></a></li>
 		</ul>
 
