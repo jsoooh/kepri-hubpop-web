@@ -53,8 +53,12 @@
                                 <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
                             </div>
                         </div>
-                        <p class="txt nolink">S/W : {{serviceItem.serviceLabel}}</p>
-
+                        <p class="txt nolink" style="margin-top: 0;">S/W : {{serviceItem.serviceLabel}}</p>
+                        <div class="guide_link" style="padding: 0;">
+                            <a href="" ng-click="main.showRightSliderContents($event, '백업가이드', '/guideInfo/backupGuideInfo.html', {});">
+                                백업가이드 보기
+                            </a>
+                        </div>
                     </div>
                     <div class="panel_body">
                         <ul class="ul-in">
