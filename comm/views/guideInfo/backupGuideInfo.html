@@ -53,91 +53,91 @@
     </p>
     
     <h4>1) PaaS 서비스 로그인</h4>
-	<p class="txt_level1 pdb0">
+	<p class="txt_level2 pdb0">
         백업 수행을 위해 백업 가상서버에서 사용자의 계정정보를 입력하여 PaaS 서비스로 로그인을 수행합니다.
     </p>
     <div class="cnt_msg_box promp">
         <pre>
-            ~/bin$ cf login --skip-ssl-validation https://api.kepri-dev.crossent.com
-            API endpoint: <span class="blue">https://api.kepri-dev.crossent.com</span>
+~/bin$ cf login --skip-ssl-validation https://api.kepri-dev.crossent.com
+API endpoint: <span class="blue">https://api.kepri-dev.crossent.com</span>
 
-            Email> demouser     사용자 계정
+Email> demouser     사용자 계정
 
-            Password>           사용자 비밀번호
-            Authenticating...
-            OK
+Password>           사용자 비밀번호
+Authenticating...
+OK
 
-            Targeted org <span class="blue">42-312</span>
-            Targeted space <span class="blue">42-312</span>
+Targeted org <span class="blue">42-312</span>
+Targeted space <span class="blue">42-312</span>
 
-            <span class="blue">
-            API endpoint:   https://api.kepri-dev.crossent.com (API version: 2.114.0)
-            User:           demouser
-            Org:            42-312
-            Space:          42-312
-            </span>
+<span class="blue">
+API endpoint:   https://api.kepri-dev.crossent.com (API version: 2.114.0)
+User:           demouser
+Org:            42-312
+Space:          42-312
+</span>
         </pre>
     </div>
     <h4>2) 백업 대상 서비스 확인</h4>
-	<p class="txt_level1 pdb0">
+	<p class="txt_level2 pdb0">
         백업 받을 대상 서비스를 cf services명령어로 확인합니다.
     </p>
     <div class="cnt_msg_box promp">
         <pre>
-            ~/bin$ cf services
-            Getting services in org <span class="blue">42-312</span> / space <span class="blue">42-312</span> as <span class="blue">demouser</span>...
-            
-            name          service   plan    bound apps   last operation
-            service-001   p-mysql   100mb   backman      create succeeded
+~/bin$ cf services
+Getting services in org <span class="blue">42-312</span> / space <span class="blue">42-312</span> as <span class="blue">demouser</span>...
+
+name          service   plan    bound apps   last operation
+service-001   p-mysql   100mb   backman      create succeeded
         </pre>
     </div>
-    <p class="txt_level1 pdb0">
+    <p class="txt_level2 pdb0">
         사용자가 복수의 프로젝트를 갖고 있는 경우 대상 프로젝트로 먼저 이동하기 위해 아래와 같이 프로젝트를 지정한 후 해당 서비스를 확인합니다.
     </p>
     <div class="cnt_msg_box promp">
         <pre>
-            ~/bin$ cf target -o 42-312
-            api endpoint:   https://api.kepri-dev.crossent.com
-            api version:    2.114.0
-            user:           demouser
-            org:            42-312
-            space:          42-312
+~/bin$ cf target -o 42-312
+api endpoint:   https://api.kepri-dev.crossent.com
+api version:    2.114.0
+user:           demouser
+org:            42-312
+space:          42-312
         </pre>
     </div>
 	
 	<h4>3) 백업 실행</h4>
-	<p class="txt_level1 pdb0">
+	<p class="txt_level2 pdb0">
         백업 가상서버가 제공하는 백업 스크립트를 이용하여 백업을 수행합니다. 백업을 위한 터널링 구성용 임시 앱을 배포하고 서비스와 바인딩 후 백업을 수행하며, 임시 앱 배포에 약 1분 소요됩니다.
     </p>
     <div class="cnt_msg_box promp">
         <pre>
-            ~/bin$ cd ~/bin
-            ~/bin$ bash backup_service.sh service-001
-            [1/4] check_args...done
-            [2/4] bind_app...done
-            [3/4] ssh_tunnel...done
-            [4/4] backup...done
-            backup: /tmp/backup/cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-1912220154.sql
+~/bin$ cd ~/bin
+~/bin$ bash backup_service.sh service-001
+[1/4] check_args...done
+[2/4] bind_app...done
+[3/4] ssh_tunnel...done
+[4/4] backup...done
+backup: /tmp/backup/cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-1912220154.sql
         </pre>
     </div>
-	<p class="txt_level1 pdb0">
+	<p class="txt_level2 pdb0">
         백업 파일은 /tmp/backup 폴더 하위에 자동으로 생성됩니다.
     </p>
     <div class="cnt_msg_box promp">
         <pre>
-            ~/bin$ ls /tmp/backup 
-            cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-1912220154.sql
+~/bin$ ls /tmp/backup 
+cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-1912220154.sql
         </pre>
     </div>
 	<h4>4) 백업 배치 실행</h4>
-	<p class="txt_level1 pdb0">
+	<p class="txt_level2 pdb0">
         Crontab 등록하여 주기적인 백업을 수행할 수 있습니다. 다음은 매일 5시 정각에 백업을 수행하는 예시입니다.
     </p>
     <div class="cnt_msg_box promp">
         <pre>
-            ~/bin$ crontab -e
+~/bin$ crontab -e
 
-            0 5 * * *  bash /home/ubuntu/bin/backup_service.sh service-001 >> /tmp/backup/backup.log
+0 5 * * *  bash /home/ubuntu/bin/backup_service.sh service-001 >> /tmp/backup/backup.log
         </pre>
     </div>
     
@@ -146,26 +146,26 @@
         데이터베이스 복구는 데이터베이스를 초기화 한 후 백업 받은 데이터를 복구하는 절차로 진행합니다. 데이터베이스 백업의 “2) 백업 대상 서비스 확인” 단계까지 실행 후 다음의 복구 절차를 진행합니다.
     </p>
 	<h4>1) 데이터베이스 복구 실행</h4>
-	<p class="txt_level1 pdb0">
+	<p class="txt_level2 pdb0">
         백업 가상서버가 제공하는 복구 스크립트를 이용하여 복구를 수행합니다. 복구 스크립트는 복구를 위한 터널링 구성용 임시 앱을 배포하고 서비스와 바인딩 후 복구를 수행하며, 임시 앱 배포에 약 1분 소요됩니다.
     </p>
     <div class="cnt_msg_box promp">
         <pre>
-            ~/bin $ bash recover_service.sh service-001 /tmp/backup/cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-1912220154.sql 
-            [1/4] check_args...done
-            [2/4] bind_app...done
-            [3/4] ssh_tunnel...done
-            [4/4] recover...done
+~/bin $ bash recover_service.sh service-001 /tmp/backup/cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-1912220154.sql 
+[1/4] check_args...done
+[2/4] bind_app...done
+[3/4] ssh_tunnel...done
+[4/4] recover...done
         </pre>
     </div>
-	<p class="txt_level1 pdb0">
+	<p class="txt_level2 pdb0">
         복구 실행 시 기존 데이터베이스를 초기화하기 전에 백업을 한번 더 받습니다.  백업 파일은 /tmp/backup 폴더 하위에 *-recovery-* 명의 파일로 자동으로 생성됩니다.
     </p>
     <div class="cnt_msg_box promp">
         <pre>
-            ~/bin$ ls /tmp/backup 
-            cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-1912220154.sql
-            cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-<span class="blue">recovery</span>-1912220207.sql
+~/bin$ ls /tmp/backup 
+cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-1912220154.sql
+cf_06217f7d_73a6_4af8_8b32_9f3a8f03ee06-<span class="blue">recovery</span>-1912220207.sql
         </pre>
     </div>
 </div>
