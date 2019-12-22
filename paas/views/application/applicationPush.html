@@ -39,7 +39,8 @@
 							<div ng-if="contents.appPushForm01.domainFirstName.$touched && contents.appPushForm01.domainFirstName.$invalid" class="validation validation-domainFirstName text-danger"></div>
 							<!--<div ng-if="contents.hostDup" class="validation text-danger"><span class="validation-icon"></span>이미 사용 중인 도메인입니다.</div>-->
 						</li>
-						<li>
+						<!-- 2019.11.26 고객 요청으로 주석 처리 -->
+						<!--<li>
 							<div class="pnb_tit">
 								<i class="i_star"></i> <span class="pnb_t_txt">App 유형</span>
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'‘빌드팩(Buildpack) 기반’ 선택 시, </br>CF(Cloud Foundry) 플랫폼에서 제공하는 빌드팩(Buildpack)을 기반으로 컨테이너를 생성하고</br> App을 배포합니다.'"><span class="ico_info"></span></button></div>
@@ -49,12 +50,12 @@
 									<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="contents.appPushData.pushType" >
 									<label for="app-radio1-1" class="label">빌드팩(Buildpack) 기반</label>
 								</div>
-								<!--<div class="radio radio-inline">
+								<div class="radio radio-inline">
 									<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="contents.appPushData.pushType"  disabled> &lt;!&ndash; 2018.12.13 disabled 처리  &ndash;&gt;
 									<label for="app-radio1-2" class="label" title="현재는 서비스 하지 않습니다." >도커(Docker) 이미지 기반</label>
-								</div>-->
+								</div>
 							</div>
-						</li>
+						</li>-->
 						<li ng-if="contents.appPushData.pushType != 'DOCKER'">
 							<div class="pnb_tit">
 								<i class="i_star"></i> <span class="pnb_t_txt">빌드팩(Buildpack) 선택</span>
@@ -93,7 +94,7 @@
 										<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" ng-model="contents.appFileItem.file.name" validation="required:alt=업로드 해야 할 App 실행용 파일이 선택되지 않았습니다." readonly>
 										<span class="group-span-filestyle input-group-btn" tabindex="0">
 											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
-											<label class="btn btn-default " ng-click="main.fileSelectBtnClick($event);">
+											<label class="btn btn-default" ng-click="main.fileSelectBtnClick($event);">
 												<span class="btn btn-md btn-color1" >파일찾기</span>
 											</label>
 										</span>
@@ -106,14 +107,27 @@
 							</div>
 							
 							<!-- 샘플 앱 내려받기 -->
+							<!-- 2019.11.26 고객요청 변경 -->
 							<div class="txt_link_box">
-								<span class="txt">※ 실행파일이 없는 경우 샘플앱을 활용하세요.</span>
+								<span class="txt">※ 실행파일이 없는 경우 샘플앱을 내려 받아 활용하세요.</span>
+								<a href="/download/staticfile_sample.zip" class="link_dw" title="staticfile_sample.zip">
+									<span class="app_txt">staticfile</span><span class="ico_dw">다운로드</span>
+								</a>
+								<span class="normal_txt">,</span>
 								<a href="/download/java_spring_music.war" class="link_dw" title="java spring music.war">
-									<span class="app_txt">java 샘플 앱 내려받기</span><span class="ico_dw">다운로드</span>
+									<span class="app_txt">java</span><span class="ico_dw">다운로드</span>
+								</a>
+								<span class="normal_txt">,</span>
+								<a href="/download/nodejs_sample.zip" class="link_dw" title="nodejs_sample.zip">
+									<span class="app_txt">nodejs</span><span class="ico_dw">다운로드</span>
+								</a>
+								<span class="normal_txt">,</span>
+								<a href="/download/go_sample.zip" class="link_dw" title="go_sample.zip">
+									<span class="app_txt">go</span><span class="ico_dw">다운로드</span>
 								</a>
 								<span class="normal_txt">,</span>
 								<a href="/download/python_hello_world.zip" class="link_dw" title="python_hello_world.zip">
-									<span class="app_txt">python 샘플 앱 내려받기</span><span class="ico_dw">다운로드</span>
+									<span class="app_txt">python</span><span class="ico_dw">다운로드</span>
 								</a>
 							</div>
 							<!-- //샘플 앱 내려받기 -->

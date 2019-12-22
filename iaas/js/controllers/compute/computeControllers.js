@@ -1275,14 +1275,15 @@ angular.module('iaas.controllers')
         };
         
         // 디스크 생성 부분 추가 2018.11.13 sg0730
+        // 서버만들기-사양선택 관련 속도개선 api로 변경
         ct.fn.getTenantResource = function()  {
             var params = {
                 tenantId : ct.data.tenantId
             };
-            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', params));
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    ct.tenantResource = data.content[0];
+                if (data && data.content) {
+                    ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
                     ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
                     ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;

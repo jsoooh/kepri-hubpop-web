@@ -1264,6 +1264,7 @@ angular.module('paas.controllers')
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };
 
+        //재배포
         ct.showFormRePush = function ($event) {
 
             ct.instancesSlider.value = ct.app.instances;
@@ -1944,7 +1945,7 @@ angular.module('paas.controllers')
 
         $scope.main.refreshIntervalStart('appStats', function () {
             ct.getAppStats(false);
-        }, 60000);
+        }, 20000);  //60000
 
         ct.getAppStats(true);
         ct.getAppSummary();
@@ -1955,6 +1956,61 @@ angular.module('paas.controllers')
 
         var pop = this;
         var ct = $scope.contents;
+        pop.isChangeScale = false;  //scale 변경
+        pop.isChangeFile = false;   //file 추가
+
+        //파일 관련 추가. 시작
+        var uploadFilters = [];
+        uploadFilters.push({
+            name: 'syncFilter',
+            fn: function (item, options) {
+                pop.uploader.clearQueue();
+                var contentTypes =  item.type.split("/");
+                var fileNames =  item.name.split(".");
+                var ftype = '|' + fileNames[fileNames.length - 1].toLowerCase() + '|';
+                var ctype = '';
+
+                if (contentTypes.length == 2) {
+                    ctype =  '|' + contentTypes[1].toLowerCase() + '|';
+                }
+
+                if ((ctype && '|x-webarchive|x-java-archive|zip|'.indexOf(ctype) !== -1)
+                    || ('|war|jar|zip|'.indexOf(ftype) !== -1)) {
+                    return true;
+                } else {
+                    item.error = "error";
+                    item.message = "mi_only_app_file";
+                    return false;
+                }
+            }
+        });
+
+        pop.uploader = common.setDefaultFileUploader($scope, { filters : uploadFilters });
+
+        pop.uploader.onWhenAddingFileFailed = function (item) {
+            _DebugConsoleInfo('onWhenAddingFileFailed', item);
+
+            if (item.error && item.message) {
+                var errMessage = "{{ 'message." + item.message + "' | translate }}";
+                pop.appFileItem = null;
+                item.error     = null;
+                item.message   = null;
+                pop.appFileErrorMessage = errMessage;
+            }
+        };
+
+        pop.uploader.onAfterAddingFile = function (fileItem) {
+            _DebugConsoleInfo('onAfterAddingFile', fileItem);
+
+            pop.appFileErrorMessage = "";
+            pop.appFileItem = fileItem;
+            var localFullFileName = "";
+            if ($('#appFileInput').length > 0) {
+                localFullFileName = $('#appFileInput').val().substring($('#appFileInput').val().lastIndexOf('\\')+1);
+            }
+            pop.appFileItem.localFullFileName = localFullFileName;
+        };
+        //파일 관련 추가. 끝
 
         pop.formName = $scope.dialogOptions.formName;
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
@@ -1965,23 +2021,62 @@ angular.module('paas.controllers')
 
         pop.checkClick = false;
         pop.updateAppScale = function(guid, name) {
+            pop.checkClick = false;
             if (pop.checkClick) return;
             pop.checkClick = true;
-            if (ct.originalInstances == ct.instancesSlider.value && ct.originalMemory == ct.memorySlider.value && ct.originalDisk == ct.diskQuotaSlider.value) {
+            if (ct.originalInstances == ct.instancesSlider.value && ct.originalMemory == ct.memorySlider.value && ct.originalDisk == ct.diskQuotaSlider.value && !pop.appFileItem) {
                 common.showAlertWarning("변경된 사항이 없습니다.");
                 pop.checkClick = false;
                 return;
+            } else {
+                if (pop.appFileItem) {
+                    pop.isChangeFile = true;    //file 추가
+                }
+                if (ct.originalInstances != ct.instancesSlider.value || ct.originalMemory != ct.memorySlider.value || ct.originalDisk != ct.diskQuotaSlider.value) {
+                    pop.isChangeScale = true;  //scale 변경
+                }
             }
             var message = $translate.instant('message.mi_memory_or_disk_changed_restage_info') + " ";
             var showConfirm = common.showConfirm($translate.instant('label.save') + "(" + name + ")", message + $translate.instant('message.mq_save_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
-                pop.updateAppScaleAction(guid, ct.instancesSlider.value, ct.memorySlider.value, ct.diskQuotaSlider.value);
+                if (pop.isChangeFile) {
+                    pop.updateAppFileAction(guid);
+                } else if (pop.isChangeScale) {
+                    pop.updateAppScaleAction(guid, ct.instancesSlider.value, ct.memorySlider.value, ct.diskQuotaSlider.value);
+                } else {
+                    pop.checkClick = false;
+                }
             });
         };
 
-        pop.updateAppScaleAction = function(guid, instances, memory, diskQuota) {
+        pop.updateAppFileAction = function(guid) {
             $scope.main.loadingMainBody = true;
+            var appBody         = {};
+            appBody.pushType    = "GENERAL";
+            appBody.appGuid     = guid;
+            appBody.file        = pop.appFileItem._file;
+            var appPromise = applicationService.appFileRePush(appBody);
+            appPromise.success(function (data) {
+                $scope.main.startAppGuid = data.guid;
+                if (pop.isChangeScale) {
+                    pop.updateAppScaleAction(guid, ct.instancesSlider.value, ct.memorySlider.value, ct.diskQuotaSlider.value);
+                } else {
+                    if (angular.isFunction(pop.callBackFunction)) {
+                        pop.callBackFunction();
+                    }
+                }
+            });
+            appPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //사양 변경
+        pop.updateAppScaleAction = function(guid, instances, memory, diskQuota) {
+            if (!pop.isChangeFile) {
+                $scope.main.loadingMainBody = true;
+            }
             var appPromise = applicationService.updateAppScale(guid, instances, memory, diskQuota);
             appPromise.success(function (data) {
                 if (angular.isFunction(pop.callBackFunction)) {
