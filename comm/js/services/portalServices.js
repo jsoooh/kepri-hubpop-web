@@ -192,7 +192,7 @@ angular.module('portal.services', [])
                     "                <div class='noti_cont_area'>\n" +
                     "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
                     "                </div>\n";
-                if (noticeItem.ATTACH_FILE != "" && noticeItem.ATTACH_FILES != "" && noticeItem.ATTACH_FILES.length > 0) {
+                if (!!noticeItem.ATTACH_FILE && !!noticeItem.ATTACH_FILES && noticeItem.ATTACH_FILES.length > 0) {
                         noticeHtml += "                <div class='tbw type1'>\n" +
                         "                    <table class='table'>\n" +
                         "                        <colgroup>\n" +
