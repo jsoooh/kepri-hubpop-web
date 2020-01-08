@@ -2638,20 +2638,16 @@ angular.module('common.services', ['LocalStorageModule'])
             var sAuth = "U";
             var userInfo = common.getUser();
             if(userInfo){
-                if (userInfo.uaaAdmin) {
-                    sAuth = "A";
-                } else if (userInfo.companyAdmin) {
-                    sAuth = "B";
-                } else if (userInfo.manager) {
+                if (userInfo.manager) {
                     sAuth = "M";
+                } else if (userInfo.uaaAdmin) {
+                    sAuth = "A";
                 }
-                if(userInfo.scope){
-                    if(userInfo.scope.indexOf("company.admin") > -1){
-                        sAuth = "A";
-                    }else if (userInfo.scope.indexOf("uaaXpert.admin") > -1) {
-                        sAuth = "B";
-                    }else if(userInfo.scope.indexOf("company.manager") > -1){
+                if (userInfo.scope) {
+                    if (userInfo.scope.indexOf("company.manager") > -1) {
                         sAuth = "M";
+                    } else if (userInfo.scope.indexOf("uaaXpert.admin") > -1) {
+                        sAuth = "A";
                     }
                 }
             } else {
