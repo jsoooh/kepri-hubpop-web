@@ -2661,13 +2661,14 @@ a.ext_link:hover {text-decoration:underline;}
 .dropdown-menu > li > a.delete {color:#ff0000;}
 
 /*서비스 시작하기*/
+.welcome_layer {position:relative;}
 .welcome_layer .guide_fnt {display:inline-block; font-family:'NanumPen'; font-size:27px;}
-.welcome_layer .guide_fnt.arrw_btm {position:absolute; top:230px; left:160px;}
-.welcome_layer .guide_fnt.arrw_top {position:absolute; top:175px; left:620px;}
+.welcome_layer .guide_fnt.arrw_btm {position:absolute; top:0; left:160px;}
+.welcome_layer .guide_fnt.arrw_top {position:absolute; top:-77px; left:590px;}
 .welcome_layer .guide_fnt::before {display:inline-block; content:''; width:34px; height:28px; background:url("../images/bg_arrow.png") no-repeat; margin-right:10px;}
 .welcome_layer .guide_fnt.arrw_btm::before {background-position:left top;}
 .welcome_layer .guide_fnt.arrw_top::before {background-position:-48px center;}
-.welcome_layer .guide_cnt {width:100%; font-size:16px; color:#666; line-height:27px; letter-spacing:-1px; text-align:center; background:url("../images/bg_welcome.png") no-repeat center top;  margin-top:160px; padding-top:190px;}
+.welcome_layer .guide_cnt {width:100%; font-size:16px; color:#666; line-height:27px; letter-spacing:-1px; text-align:center; background:url("../images/bg_welcome.png") no-repeat center 100px; padding-top:320px;}
 .welcome_layer .guide_cnt .fnt20 {font-size:20px;}
 .welcome_layer .guide_cnt .color1 {color:#335cc4;}
 
