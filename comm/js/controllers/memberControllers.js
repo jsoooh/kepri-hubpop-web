@@ -193,7 +193,7 @@ angular.module('portal.controllers')
                 // 초기화 및 팝업 닫기
                 $scope.popHide();
 
-                common.showAlertError($translate.instant("label.pwd_change"), $translate.instant("message.mi_change_pwd"));
+                common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_change_pwd"));
 
             });
             changePromise.error(function (data, status, headers) {

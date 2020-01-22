@@ -1333,8 +1333,7 @@ angular.module('portal.controllers')
 
         // 비밀번호 초기화
         ct.resetPassword = function (user) {
-            var pw = user.isSso ? user.email : 'kepco12345';
-            var showConfirm = common.showConfirm('비밀번호 초기화', user.name + '(' + user.email + ') 비밀번호(' + pw + ') 초기화하시겠습니까?');
+            var showConfirm = common.showConfirm('비밀번호 초기화', user.name + '(' + user.email + ') 비밀번호(kepco12345) 초기화하시겠습니까?');
             showConfirm.then(function() {
                 ct.resetPasswordAction(user);
             });
