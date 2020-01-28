@@ -49,7 +49,7 @@ angular.module('portal.controllers')
                         $scope.main.reloadTimmer['getOrgProject_' + ct.paramId] = null;
                     }
                     ct.selOrgProject = data;
-                    if (ct.selOrgProject.myRoleName == 'OWNER') {
+                    if (ct.selOrgProject.myRoleName == 'OWNER' || ct.selOrgProject.myRoleName == 'ADMIN') {
                         ct.isOrgManager = true;
                     }
                     $timeout(function () {
@@ -1666,16 +1666,18 @@ angular.module('portal.controllers')
                     name : orgUser.name,
                     userRole : orgUser.roleName
                 });
-                if(orgUser.roleName == "ADMIN"){
+                /* 2020.01.22 - 관리자 다수 등록 가능 요청으로 인해 수정 */
+                /*if(orgUser.roleName == "ADMIN"){
                     checkAdminCnt++;
-                }
+                }*/
             });
 
-            if (checkAdminCnt >= 2) {
+            /* 2020.01.22 - 관리자 다수 등록 가능 요청으로 인해 수정 */
+            /*if (checkAdminCnt >= 2) {
                 common.showAlertError("사용자 등록시 관리자 역할은 한 명만 지정할 수 있습니다.");
                 pop.btnClickCheck = false;
                 return;
-            }
+            }*/
 
             $scope.main.loadingMain = true;
             common.mdDialogHide();
@@ -1911,16 +1913,18 @@ angular.module('portal.controllers')
                     name : pop.newOrgUsers[i].name,
                     userRole : pop.newOrgUsers[i].roleName
                 });
-                if(pop.newOrgUsers[i].roleName == "ADMIN"){
+                /* 2020.01.28 - 관리자 다수 등록 가능 요청으로 인해 수정 */
+                /*if(pop.newOrgUsers[i].roleName == "ADMIN"){
                     checkAdminCnt++;
-                }
+                }*/
             }
 
-            if (checkAdminCnt >= 2) {
+            /* 2020.01.28 - 관리자 다수 등록 가능 요청으로 인해 수정 */
+            /*if (checkAdminCnt >= 2) {
                 common.showAlertError("사용자 등록시 관리자 역할은 한 명만 지정할 수 있습니다.");
                 pop.btnClickCheck = false;
                 return;
-            }
+            }*/
 
             if (pop.newOrgUsers.length == 0) {
                 common.showAlertWarning($translate.instant('message.mi_dont_exist_checked'));
