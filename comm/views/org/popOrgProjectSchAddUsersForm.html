@@ -126,7 +126,9 @@
 							<td>
 								<select ng-model="orgUser.roleName">
 									<option value="{{ pop.orgRoleNames.user }}">사용자</option>
-									<option ng-if="!pop.isAdmin" value="{{ pop.orgRoleNames.admin }}">관리자</option>
+									<option value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
+									<!-- 관리자 다수 등록 가능 요청으로 인해 수정 -->
+									<!--<option ng-if="!pop.isAdmin" value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>-->
 								</select>
 							</td>
 						</tr>
