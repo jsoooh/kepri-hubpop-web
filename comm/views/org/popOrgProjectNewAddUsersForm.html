@@ -5,7 +5,8 @@
 <div class="pop_cont_area">
 	<!-- table -->
 	<div class="tb-top mb10">
-		<span class="t_txt">* 사용자 등록 시 관리자 역할은 한 명만 지정할 수 있습니다.</span>
+		<!-- 관리자 다수 등록 가능 요청으로 인해 수정 -->
+		<!--<span class="t_txt">* 사용자 등록 시 관리자 역할은 한 명만 지정할 수 있습니다.</span>-->
 	</div>
 	<div class="tbl type1">
 		<table class="table">
@@ -46,7 +47,9 @@
 				<td>
 					<select ng-model="newOrgUser.roleName">
 						<option value="{{ pop.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
-						<option ng-if="!pop.isAdmin" value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
+						<option value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
+						<!-- 관리자 다수 등록 가능 요청으로 인해 수정 -->
+						<!--<option ng-if="!pop.isAdmin" value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>-->
 					</select>
 				</td>
 				<td>

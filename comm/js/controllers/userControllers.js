@@ -11,29 +11,50 @@ angular.module('common.controllers')
 
         $scope.main.loadingMainBody = false;
 
+        var setSsoUser = function (data) {
+            var userInfo = data;
+            $scope.main.ssoUserLogin = true;
+            common.setAccessToken(userInfo.token);
+            common.setUser(userInfo);
+            $scope.main.isLoginPage = true;
+            $scope.main.mainLayoutClass = "main";
+            if (angular.isObject($scope.mainBody)) {
+                $scope.mainBody.mainContentsTemplateUrl = "";
+            }
+            if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
+                $scope.main.setDbMenuList();
+            }
+            ct.listNotices();   //공지 목록 조회
+            $timeout(function () {
+                common.moveCommHomePage();
+            }, 100);
+        };
+
+        // 20.1.22 by hrit, sso 로그인 중 8초 후 계정생성로 전환되는 현상 수정
+        // 로그인 시도 후 계정이 없는 경우 클라이언트에 상태 반환하여 클라이언트에서 계정생성 재호출하도록 변경
         ct.checkSsoPgsecuid = function (pgsecuid) {
             $scope.main.ssoUserLoginChecking = true;
             var promise = user.getCheckSsoPgsecuid(pgsecuid);
             promise.success(function (data, status, headers) {
-                if (data && data.token) {
-                    var userInfo = data;
-                    $scope.main.ssoUserLogin = true;
-                    common.setAccessToken(userInfo.token);
-                    common.setUser(userInfo);
-                    $scope.main.isLoginPage = true;
-                    $scope.main.mainLayoutClass = "main";
-                    if (angular.isObject($scope.mainBody)) {
-                        $scope.mainBody.mainContentsTemplateUrl = "";
+                if (data) {
+                    if (data.tokenInfo && data.tokenInfo.result == 'create') {
+                        ct.ssoUserCreating = true;
+                        var pr = user.getCheckSsoPgsecuid(pgsecuid, false);
+                        pr.success(function (data2, status2) {
+                            if (data2 && data2.token) {
+                                setSsoUser(data2);
+                            }
+                            $scope.main.ssoUserLoginChecking = false;
+                        });
+                        pr.error(function () {
+                            $scope.main.ssoUserLogin = false;
+                            $scope.main.ssoUserLoginChecking = false;
+                        })
+                    } else if (data.token) {
+                        setSsoUser(data);
                     }
-                    if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
-                        $scope.main.setDbMenuList();
-                    }
-                    ct.listNotices();   //공지 목록 조회
-                    $timeout(function () {
-                        common.moveCommHomePage();
-                    }, 100);
+                    $scope.main.ssoUserLoginChecking = false;
                 }
-                $scope.main.ssoUserLoginChecking = false;
             });
             promise.error(function (data, status, headers) {
                 $scope.main.ssoUserLogin = false;
@@ -177,10 +198,13 @@ angular.module('common.controllers')
             }
         }
 
-        if ($scope.main.ssoUserLoginChecking) {
-            $scope.main.reloadTimmer['ssoUserCheck'] = $timeout(function () {
-                ct.ssoUserCreating = true;
-            }, 8000);
-        }
+        // 20.1.22 by hrit, sso 로그인 중 계정 생성으로 변경되는 현상에 대한 조치
+        // 보안 이슈 상 단번 api 호출로 sso 로그인 구현을 위해 15초 후 강제 변경 (김성경 수석, 이명화 수석)
+        // 계정 로그인, 생성 여부 구분하여 API 한번 더 호출 하도록 변경 (이명화 수석)
+        // if ($scope.main.ssoUserLoginChecking) {
+        //     $scope.main.reloadTimmer['ssoUserCheck'] = $timeout(function () {
+        //         ct.ssoUserCreating = true;
+        //     }, 15000);
+        // }
     })
 ;

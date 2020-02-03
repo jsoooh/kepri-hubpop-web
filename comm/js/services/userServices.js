@@ -60,8 +60,10 @@ angular.module('common.services')
         };
 
         // 비동기 방식
-        user.getCheckSsoPgsecuid = function (pgsecuid) {
-            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/pgsecuid/check', 'POST', { "pgsecuid": pgsecuid }));
+        // 20.1.22 by hrit, api 호출 시 계정 로그인, 생성 여부 전달
+        user.getCheckSsoPgsecuid = function (pgsecuid, isUpdate) {
+            if (isUpdate == undefined) isUpdate = true;
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/pgsecuid/check', 'POST', { "pgsecuid": pgsecuid, "update": isUpdate }));
         };
 
         // 동기 방식
