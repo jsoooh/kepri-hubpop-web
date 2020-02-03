@@ -1,6 +1,6 @@
 <div class="message_area">
 	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>‘App 만들기’를 통해 컨테이너 기반의 App실행환경을 생성하고, 사용자가 제작한 App을 배포할 수 있습니다.</span></div>
+	<div class="msg_txt"><span>‘App 배포’를 통해 컨테이너 기반의 App실행환경을 생성하고, 사용자가 제작한 App을 배포할 수 있습니다.</span></div>
 </div>
 
 <div class="panel_area">
@@ -9,7 +9,7 @@
 		<form name="{{contents.formName}}" method="POST" novalidate>
 			<div class="panel_box pn_l">
 				<div class="pn_head">
-					<h4 class="pnh_tit">App 만들기</h4>
+					<h4 class="pnh_tit">App 배포</h4>
 				</div>
 				<div class="pn_body">
 					<span class="sm_txt">* 는 필수입력 사항입니다.</span>
@@ -150,7 +150,7 @@
 										<div class="disk_area color2">
 											<div class="disk_box">
 												<div class="rangeWrap type2">
-													<span class="s_txt">최대 {{contents.insSlider.options.ceil}}개</span>
+													<span class="s_txt" ng-if="false">최대 {{contents.insSlider.options.ceil}}개</span>
 													<div class="range_box">
 														<div class="ico_minus">
 															<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(1);" ><span>감소</span></button>
@@ -176,7 +176,7 @@
 										<div class="disk_area">
 											<div class="disk_box">
 												<div class="rangeWrap type2">
-													<span class="s_txt">최대  {{ (contents.memorySlider.options.ceil < 1024) ?  (contents.memorySlider.options.ceil|number:0)  : (contents.memorySlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
+													<span class="s_txt" ng-if="false">최대  {{ (contents.memorySlider.options.ceil < 1024) ?  (contents.memorySlider.options.ceil|number:0)  : (contents.memorySlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
 													<div class="range_box">
 														<div class="ico_minus">
 															<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(2);" ><span>감소</span></button>
@@ -198,7 +198,7 @@
 										<div class="disk_area color3">
 											<div class="disk_box">
 												<div class="rangeWrap type2">
-													<span class="s_txt">최대 {{ (contents.diskQuotaSlider.options.ceil < 1024) ?  (contents.diskQuotaSlider.options.ceil|number:0)  : (contents.diskQuotaSlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
+													<span class="s_txt" ng-if="false">최대 {{ (contents.diskQuotaSlider.options.ceil < 1024) ?  (contents.diskQuotaSlider.options.ceil|number:0)  : (contents.diskQuotaSlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
 													<div class="range_box">
 														<div class="ico_minus">
 															<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(3);" ><span>감소</span></button>
@@ -244,7 +244,7 @@
 								<span class="s_tit">App 도메인</span>
 								<span class="s_txt">{{contents.appPushData.domainFirstName}}.{{contents.sltDomainName}}</span>
 							</li>
-							<li>
+							<li ng-if="false">
 								<span class="s_tit">App 유형</span>
 								<span class="s_txt" ng-if="contents.appPushData.pushType == 'GENERAL'">빌드팩(Buildpack) 기반</span>
 								<span class="s_txt" ng-if="contents.appPushData.pushType == 'DOCKER'">도커(Docker) 이미지 기반</span>

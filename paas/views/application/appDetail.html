@@ -28,7 +28,7 @@
             <!-- app 정보 -->
             <div class="col info-txt useChart" style="padding-top: 30px;">
                 <ul>
-                    <li>
+                    <li ng-if="false">
                         <strong class="tit">App 유형</strong>
                         <div class="txt" ng-if="contents.app.buildpackName == 'DOCKER'">{{ contents.app.buildpackName }}</div>
                         <div class="txt" ng-if="contents.app.buildpackName != 'DOCKER'">일반 앱</div>
@@ -49,7 +49,8 @@
                     </li>
                     <li>
                         <strong class="tit">최종 배포일자</strong>
-                        <div class="txt">{{contents.app.created | date : 'yyyy-MM-dd HH:mm:ss' }}</div>
+                        <!--<div class="txt">{{contents.app.created | date : 'yyyy-MM-dd HH:mm:ss' }}</div>-->
+                        <div class="txt">{{contents.app.updated | date : 'yyyy-MM-dd HH:mm:ss' }}</div>
                     </li>
                     <li>
                         <strong class="tit">상태</strong>
@@ -234,7 +235,7 @@
 <div class="tabWrap type1 mt30">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs padding40">
-        <li ng-class="{'active':contents.sltInfoTab == 'service'}"><a href="" ng-click="contents.changeSltInfoTab('service');">연결 서비스</a></li>
+        <li ng-if="false" ng-class="{'active':contents.sltInfoTab == 'service'}"><a href="" ng-click="contents.changeSltInfoTab('service');">연결 서비스</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'appLog'}"><a href="" ng-click="contents.changeSltInfoTab('appLog');">앱 로그</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'env'}"><a href="" ng-click="contents.changeSltInfoTab('env');">환경 변수</a></li>
         <li ng-class="{'active':contents.sltInfoTab == 'ssh'}"><a href="" ng-click="contents.changeSltInfoTab('ssh');">SSH</a></li>

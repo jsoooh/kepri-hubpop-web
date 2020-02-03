@@ -196,7 +196,7 @@ angular.module('paas.controllers')
             field: "시작",
             method: "startAppState"
         }, {
-            field: "중지",
+            field: "정지",
             method: "stopAppState"
         },{
             field: "재시작",
@@ -216,7 +216,7 @@ angular.module('paas.controllers')
                 ct.startAppState(guid, name);
             }else if(selected.field == "재시작"){
                 ct.startAppState(guid, name, 'restart');
-            }else if(selected.field == "중지"){
+            }else if(selected.field == "정지"){
                 ct.stopAppState(guid, name);
             }else if(selected.field == "삭제"){
                 ct.deleteApp(guid, name);
@@ -255,7 +255,7 @@ angular.module('paas.controllers')
                 }
             }
             if (stopApps.length > 0) {
-                var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + stopApps.length + ")", $translate.instant('message.mq_stop_app'));
+                var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + stopApps.length + ")", $translate.instant('message.mq_stop_app'));
                 showConfirm.then(function () {
                     common.mdDialogHide();
                     for (var i=0; i<stopApps.length; i++) {
@@ -263,7 +263,7 @@ angular.module('paas.controllers')
                     }
                 });
             } else {
-                common.showAlertWarning($translate.instant('label.stop2'), $translate.instant('message.mi_select_started_apps'));
+                common.showAlertWarning($translate.instant('label.stop'), $translate.instant('message.mi_select_started_apps'));
             }
         };
 
@@ -276,7 +276,7 @@ angular.module('paas.controllers')
         };
 
         ct.stopApp = function(guid, name) {
-            var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
+            var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.stopAppAction(guid);
@@ -350,7 +350,7 @@ angular.module('paas.controllers')
         };
 
         ct.stopAppState = function(guid, name) {
-            var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
+            var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.updateAppStateAction(guid, "STOPPED");
@@ -570,8 +570,8 @@ angular.module('paas.controllers')
         };
 
         ct.appPushData.pushType   		 = "GENERAL";
-        ct.appPushData.appName   		 ='app-01' ; 
-        ct.appPushData.domainFirstName   ='app-01' ; 
+        ct.appPushData.appName   		 ='app-01';
+        ct.appPushData.domainFirstName   ='app-01';
         ct.appPushData.withStart 		 = "true";
         
         //감소버튼 클릭시 이벤트 sg0730
@@ -681,7 +681,7 @@ angular.module('paas.controllers')
 							                maxLimit: 4096,
 							                showSelectionBar: true,
 		        			                translate: function(value) {
-		        			                    return value + 'M';
+		        			                    return value + 'MB';
 		        			                }
 							            }
 					        };
@@ -694,7 +694,7 @@ angular.module('paas.controllers')
 									            minLimit: 128,
 									            showSelectionBar: true,
 			        			                translate: function(value) {
-			        			                    return value + 'M';
+			        			                    return value + 'MB';
 			        			                }
 									         }
 						      };
@@ -936,7 +936,8 @@ angular.module('paas.controllers')
 
             appBody.appName 	= ct.appPushData.appName;
             appBody.hostName 	= ct.appPushData.domainFirstName + "." + ct.sltDomainName;
-            appBody.withStart 	= false;
+            //2020.01.22 수정. 생성 즉시 start로 배포 시간 단축
+            appBody.withStart 	= true;
 
             //배포옵션 기본 하드코딩
             if (ct.sltDeployOption == "B") {
@@ -964,7 +965,8 @@ angular.module('paas.controllers')
 
                     common.showAlertSuccessHtml($translate.instant("label.app") + "(" + data.name + ")", $translate.instant("message.mi_register_success"));
 
-                    $scope.main.startAppGuid = data.guid;
+                    //2020.01.22 수정. 생성 즉시 start로 화면단에서 start 할 필요 없음
+                    //$scope.main.startAppGuid = data.guid;
                     $scope.main.goToPage('/paas/apps/' + data.guid);
                 });
                 appPushPromise.error(function (data) {
@@ -1515,6 +1517,7 @@ angular.module('paas.controllers')
                 }
 
                 ct.app.insState = instaceState;
+                console.log("ct.setRoundProgressData > ct.app : ", ct.app);
 
                 ct.originalInstances = ct.app.instances;
                 ct.originalMemory = ct.app.memory;
@@ -1652,6 +1655,7 @@ angular.module('paas.controllers')
             });
         };
 
+        //앱별 전체 인스턴스 상태조회
         ct.listAllAppInstanceStats = function () {
             if (ct.app.state != "STARTED") {
                 $scope.main.reloadTimmerStop();
@@ -1660,8 +1664,8 @@ angular.module('paas.controllers')
             var appPromise = applicationService.listAllAppInstanceStats(ct.appGuid);
             appPromise.success(function (data) {
                 common.objectOrArrayMergeData(ct.instanceStats, data);
-                ct.setRoundProgressData();
                 ct.reloadAppInstanceStats();
+                ct.setRoundProgressData();
             });
             appPromise.error(function (data) {
                 ct.app = {};
@@ -1671,7 +1675,10 @@ angular.module('paas.controllers')
 
         ct.createReloadTimmer = function () {
             $scope.main.reloadTimmerStart('reloadListAllAppInstanceStats', function () {
-                ct.listAllAppInstanceStats();
+                //조회 함수 변경. 2020.01.22
+                //   인스턴스 목록의 상태 뿐 아니라 app.packageState 상태도 STAGED 상태가 되어야 함.
+                //ct.listAllAppInstanceStats();
+                ct.getAppStats(false);
             }, 5000);
         };
 
@@ -1684,13 +1691,17 @@ angular.module('paas.controllers')
                         break;
                     }
                 }
+                //2020.01.22 추가
+                if (ct.app.packageState != 'STAGED') {
+                    reLoad = true;
+                }
             }
             if (reLoad) {
                 ct.createReloadTimmer();
             }
         };
 
-        // 처음에 로딩하는 경우만 매인 로딩바 표시
+        // 처음에 로딩하는 경우만 메인 로딩바 표시
         ct.getAppStats = function (init) {
             $scope.main.reloadTimmerStop();
             if (init) {
@@ -1721,6 +1732,7 @@ angular.module('paas.controllers')
                         ct.instanceStats = [];
                     }
                     common.objectOrArrayMergeData(ct.instanceStats, ct.app.instanceStats);
+                    console.log("ct.getAppStats > ct.instanceStats ; ", ct.instanceStats);
                 } else {
                     ct.instanceStats = [];
                 }
@@ -1791,7 +1803,7 @@ angular.module('paas.controllers')
         };
 
         ct.stopApp = function(guid, name) {
-            var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
+            var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.stopAppAction(guid);
@@ -1829,7 +1841,7 @@ angular.module('paas.controllers')
         };
 
         ct.stopAppState = function(guid, name) {
-            var showConfirm = common.showConfirm($translate.instant('label.stop2') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
+            var showConfirm = common.showConfirm($translate.instant('label.stop') + "(" + name + ")", $translate.instant('message.mq_stop_app'));
             showConfirm.then(function () {
                 common.mdDialogHide();
                 ct.updateAppStateAction(guid, "STOPPED");
@@ -1943,13 +1955,15 @@ angular.module('paas.controllers')
             ct.sltInfoTab = sltInfoTab;
         };
 
-        $scope.main.refreshIntervalStart('appStats', function () {
+        //이유를 알 수 없음. 막음. 2020.01.22
+        /*$scope.main.refreshIntervalStart('appStats', function () {
             ct.getAppStats(false);
-        }, 20000);  //60000
+        }, 20000);  //60000*/
 
         ct.getAppStats(true);
         ct.getAppSummary();
-        ct.changeSltInfoTab('service'); //20181126 sg0730 kepri 통합 요청으로 인한 Applog 제일 상단 배치
+        //ct.changeSltInfoTab('service'); //20181126 sg0730 kepri 통합 요청으로 인한 Applog 제일 상단 배치
+        ct.changeSltInfoTab('appLog');  //2020.02.03 수정
     })
     .controller('paasApplicationRePushFormCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, common, CONSTANTS) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationRePushFormCtrl", 1);
