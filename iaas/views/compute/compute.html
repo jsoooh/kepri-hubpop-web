@@ -40,7 +40,8 @@
 			<div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 0}">
                 <!-- 버튼영역 -->
                 <div class="btnWrap">
-                    <button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/create')">
+                    <!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/create')">-->
+					<button type="button" class="btn_lg" ng-click="contents.showTempAlert()">
                         <span class="ico ico_create" ></span>서버 만들기
                     </button>
                     <button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/copy')">

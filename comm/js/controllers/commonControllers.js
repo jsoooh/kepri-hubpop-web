@@ -1078,6 +1078,9 @@ angular.module('common.controllers', [])
         };
 
         mc.addOrgProjectFormOpen = function($event) {
+            //임시 알림 설정. 2020.02.03
+            common.showDialogAlert("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 가상머신 생성을 제한하고 있습니다.\n자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다.");
+            return;
             if ($location.path().indexOf("/comm/projects/") > -1) {
                 var orgProject = {};
                  orgProject.managerId    = mc.userInfo.user_id;
