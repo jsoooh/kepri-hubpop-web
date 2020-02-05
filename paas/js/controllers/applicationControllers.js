@@ -80,7 +80,7 @@ angular.module('paas.controllers')
             var appPromise = applicationService.listAllApps(conditions);
             appPromise.success(function (data) {
                 ct.isAppsLoad = true;
-                //$scope.main.loadingMainBody = !ct.isSpacesLoad;
+                $scope.main.loadingMainBody = !ct.isSpacesLoad;
                 var apps = [];
                 if (data && angular.isArray(data)) {
                     apps = data;
