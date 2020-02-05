@@ -80,7 +80,7 @@ angular.module('paas.controllers')
             var appPromise = applicationService.listAllApps(conditions);
             appPromise.success(function (data) {
                 ct.isAppsLoad = true;
-                $scope.main.loadingMainBody = !ct.isSpacesLoad;
+                //$scope.main.loadingMainBody = !ct.isSpacesLoad;
                 var apps = [];
                 if (data && angular.isArray(data)) {
                     apps = data;
@@ -152,9 +152,6 @@ angular.module('paas.controllers')
                     appPromise.error(function (data) {
                         option["instanceStats"] = [];
                         option["cpuRoundProgressPercentage"] = 0;
-
-                        $scope.main.loadingMainBody = false;
-                        $scope.main.loadingMain = false;
                     });
                 });
 
@@ -163,12 +160,12 @@ angular.module('paas.controllers')
                 }*/
 
                 ct.pageFirstLoad = false;
-                $scope.main.loadingMainBody = false;
-                $scope.main.loadingMain = false;
             });
             appPromise.error(function (data) {
                 ct.apps = [];
                 ct.pageFirstLoad = false;
+            });
+            appPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 $scope.main.loadingMain = false;
             });
@@ -1260,7 +1257,7 @@ angular.module('paas.controllers')
 
         ct.showRightFormRePush = function ($event) {
             $scope.main.layerTemplateUrl = _PAAS_VIEWS_ + "/application/appRePush.html" + _VersionTail();
-            console.log($scope.main.layerTemplateUrl);
+            //console.log($scope.main.layerTemplateUrl);
 
             $(".aside").stop().animate({"right":"-360px"}, 400);
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
@@ -1374,7 +1371,7 @@ angular.module('paas.controllers')
         $scope.cancelReName = function () {
             var nameP = $(".sdBtnWrap").parents('.cBox-hd').find('.form-control');
             var name01 = nameP.text();//현재 앱 이름 저장
-            console.log(name01);
+            //console.log(name01);
             var el = "<h4 class='c-tit'></h4>";
             var compiledElement = $compile(el)($scope);
             nameP.contents().unwrap().wrap(compiledElement);
@@ -1517,7 +1514,7 @@ angular.module('paas.controllers')
                 }
 
                 ct.app.insState = instaceState;
-                console.log("ct.setRoundProgressData > ct.app : ", ct.app);
+                //console.log("ct.setRoundProgressData > ct.app : ", ct.app);
 
                 ct.originalInstances = ct.app.instances;
                 ct.originalMemory = ct.app.memory;
@@ -1732,7 +1729,7 @@ angular.module('paas.controllers')
                         ct.instanceStats = [];
                     }
                     common.objectOrArrayMergeData(ct.instanceStats, ct.app.instanceStats);
-                    console.log("ct.getAppStats > ct.instanceStats ; ", ct.instanceStats);
+                    //console.log("ct.getAppStats > ct.instanceStats ; ", ct.instanceStats);
                 } else {
                     ct.instanceStats = [];
                 }
