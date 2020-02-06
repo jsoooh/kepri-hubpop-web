@@ -11,8 +11,8 @@ web_home=`realpath ${web_home}`
 admin_home=${docker_home}/../kepri-admin-web
 admin_home=`realpath ${admin_home}`
 
-container_name=cx-web
-image_name=cx-web
+container_name=kepri-web
+image_name=kepri-web
 image_version=latest
 
 : ${DOCKER_PUSH_SERVER:=crossentcx}
