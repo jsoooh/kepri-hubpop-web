@@ -14,6 +14,9 @@ RUN rm -rf /usr/share/nginx/html
 ADD dist/html.tar.gz /usr/share/nginx/
 RUN chown -R nginx:nginx /usr/share/nginx/html
 
+ADD dist/admin.tar.gz /usr/share/nginx/
+RUN chown -R nginx:nginx /usr/share/nginx/admin
+
 # log
 VOLUME ["/var/log/nginx"]
 

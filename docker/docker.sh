@@ -8,6 +8,9 @@ docker_home=`realpath ${docker_home}`
 web_home=${docker_home}/..
 web_home=`realpath ${web_home}`
 
+admin_home=${docker_home}/../kepri-admin-web
+admin_home=`realpath ${admin_home}`
+
 container_name=cx-web
 image_name=cx-web
 image_version=latest
@@ -91,16 +94,16 @@ function WebPackage() {
         rm -f ${docker_home}/dist/html.tar.gz
     fi
 
-    echo "cp web index.html css fonts images img js views download login"
+    echo "cp web - index.html comm css fonts iaas images img js paas"
     cp ${web_home}/index.html ${docker_home}/dist/html/
+    cp -R ${web_home}/comm ${docker_home}/dist/html/
     cp -R ${web_home}/css ${docker_home}/dist/html/
     cp -R ${web_home}/fonts ${docker_home}/dist/html/
+    cp -R ${web_home}/iaas ${docker_home}/dist/html/
     cp -R ${web_home}/images ${docker_home}/dist/html/
     cp -R ${web_home}/img ${docker_home}/dist/html/
     cp -R ${web_home}/js ${docker_home}/dist/html/
-    cp -R ${web_home}/views ${docker_home}/dist/html/
-    cp -R ${web_home}/download ${docker_home}/dist/download/
-    cp -R ${web_home}/login ${docker_home}/dist/html/
+    cp -R ${web_home}/paas ${docker_home}/dist/html/
 
     pushd ${docker_home}/dist > /dev/null
     echo "tar cfpz  html.tar.gz html"
@@ -110,6 +113,42 @@ function WebPackage() {
 
     echo "rm -fR ${docker_home}/dist/html"
     rm -fR ${docker_home}/dist/html
+
+    if [ ! -d "${docker_home}/dist/admin" ]
+    then
+        echo "mkdir ${docker_home}/dist/admin"
+        mkdir ${docker_home}/dist/admin
+    else
+        rm -fR ${docker_home}/dist/admin/*
+    fi
+
+    if [ -f "${docker_home}/dist/admin.tar.gz" ]
+    then
+        echo "rm -f ${docker_home}/dist/admin.tar.gz"
+        rm -f ${docker_home}/dist/admin.tar.gz
+    fi
+
+    echo "cp admin - index.html comm css fonts iaas images img js paas"
+    cp ${admin_home}/index.html ${docker_home}/dist/admin/
+    cp -R ${admin_home}/comm ${docker_home}/dist/admin/
+    cp -R ${admin_home}/css ${docker_home}/dist/admin/
+    cp -R ${admin_home}/fonts ${docker_home}/dist/admin/
+    cp -R ${admin_home}/iaas ${docker_home}/dist/admin/
+    cp -R ${admin_home}/images ${docker_home}/dist/admin/
+    cp -R ${admin_home}/img ${docker_home}/dist/admin/
+    cp -R ${admin_home}/js ${docker_home}/dist/admin/
+    cp -R ${admin_home}/monit ${docker_home}/dist/admin/
+    cp -R ${admin_home}/paas ${docker_home}/dist/admin/
+    cp -R ${admin_home}/tv-dashboard ${docker_home}/dist/admin/
+
+    pushd ${docker_home}/dist > /dev/null
+    echo "tar cfpz  admin.tar.gz admin"
+    tar cfpz  admin.tar.gz admin
+    popd > /dev/null
+    sleep 1
+
+    echo "rm -fR ${docker_home}/dist/admin"
+    rm -fR ${docker_home}/dist/admin
 }
 
 function RmContainer() {
