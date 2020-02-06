@@ -171,7 +171,8 @@ angular.module('paas.controllers')
             });
         };
 
-        ct.getAppState = function (guid) {
+        //사용하지 않는 듯함. 2020.02.06
+        /*ct.getAppState = function (guid) {
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.getApp(guid, 0);
             appPromise.success(function (data) {
@@ -184,7 +185,7 @@ angular.module('paas.controllers')
             appPromise.error(function (data) {
                 $scope.main.loadingMainBody = false;
             });
-        };
+        };*/
 
         $scope.fieldTable = [{
             field: "선택",
@@ -208,7 +209,8 @@ angular.module('paas.controllers')
 
         $scope.selected = $scope.fieldTable[0];
 
-        ct.controllAppState = function(selected, guid, name, $event){
+        //사용하지 않는 듯함. 2020.02.06
+        /*ct.controllAppState = function(selected, guid, name, $event){
             if(selected.field == "시작"){
                 ct.startAppState(guid, name);
             }else if(selected.field == "재시작"){
@@ -278,7 +280,7 @@ angular.module('paas.controllers')
                 common.mdDialogHide();
                 ct.stopAppAction(guid);
             });
-        };
+        };*/
 
         ct.deleteApp = function(guid, name) {
             var showConfirm = common.showConfirmWarning($translate.instant('label.del') + "(" + name + ")", $translate.instant('message.mq_delete_app'));

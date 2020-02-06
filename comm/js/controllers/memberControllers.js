@@ -95,14 +95,24 @@ angular.module('portal.controllers')
 
         /*회원 탈퇴*/
         $scope.signout = function() {
-            var showConfirm = common.showConfirm($translate.instant('label.signout'), "탈퇴하시면 사용 중인 자원은 삭제됩니다.\n 정말로 탈퇴 하시겠습니까?", "info");
+            var userAuth = $scope.main.userAuth;
+            if (userAuth == "M") {
+                common.showDialogAlert($translate.instant('label.signout'), "프로젝트 책임자는 탈퇴가 불가능합니다.");
+                return;
+            } else if (userAuth == "A") {
+                common.showDialogAlert($translate.instant('label.signout'), "시스템 관리자는 탈퇴가 불가능합니다.");
+                return;
+            }
+
+            var showConfirm = common.showConfirm($translate.instant('label.signout'), "탈퇴하시면 연관 정보는 삭제됩니다.\n 정말로 탈퇴 하시겠습니까?", "info");
             showConfirm.then(function () {
                 $scope.deleteUser();
             });
         };
+
         $scope.deleteUser = function() {
             var param = {
-                  user_id    : $scope.main.userInfo.user_id
+                  user_id : $scope.main.userInfo.user_id
             };
 
             $scope.main.loadingMainBody=true;
