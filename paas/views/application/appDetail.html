@@ -7,7 +7,7 @@
         <div class="pull-right">
             <!--<button type="button" name="button" class="btn btn-sm btn-color1" tooltip-placement="bottom" uib-tooltip="재배포" ng-click="contents.showFormRePush($event);">재배포</button>-->
             <button type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-show="contents.app.state == 'STOPPED'" ng-click="contents.startAppState(contents.appGuid, contents.app.name);"><span class="ico">시작</span></button>
-            <button type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="중지" ng-show="contents.app.state == 'STARTED'" ng-click="contents.stopAppState(contents.appGuid, contents.app.name);"><span class="ico">중지</span></button>
+            <button type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="정지" ng-show="contents.app.state == 'STARTED'" ng-click="contents.stopAppState(contents.appGuid, contents.app.name);"><span class="ico">정지</span></button>
             <!--<button type="button" name="button" class="btn ico-refresh only-ico" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="contents.refreshApp();"><span class="ico">새로고침</span></button>-->
             <div class="dropdown btn-option">
                 <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -70,8 +70,8 @@
                                 <img src="images/loading_sm.gif" />
                             </div>
                             <span class="stateWrap" ng-if="(contents.app.state == 'STOPPED') && (contents.app.packageState != 'FAILED')">
-                                <span class="stateMark type2">중지</span>
-                                <span class="state-txt">중지</span>
+                                <span class="stateMark type2">정지</span>
+                                <span class="state-txt">정지</span>
                             </span>
                             <span class="stateWrap" ng-if="contents.app.packageState == 'FAILED'">
                                 <span class="stateMark type3">실패</span>
