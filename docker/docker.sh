@@ -128,7 +128,7 @@ function WebPackage() {
         rm -f ${docker_home}/dist/admin.tar.gz
     fi
 
-    echo "cp admin - index.html comm css fonts iaas images img js paas"
+    echo "cp admin - index.html dashboard.html comm css fonts iaas images img js monit paas tv-dashboard"
     cp ${admin_home}/index.html ${docker_home}/dist/admin/
     cp ${admin_home}/dashboard.html ${docker_home}/dist/admin/
     cp -R ${admin_home}/comm ${docker_home}/dist/admin/
