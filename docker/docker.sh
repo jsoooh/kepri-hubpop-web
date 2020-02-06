@@ -8,7 +8,7 @@ docker_home=`realpath ${docker_home}`
 web_home=${docker_home}/..
 web_home=`realpath ${web_home}`
 
-admin_home=${docker_home}/../kepri-admin-web
+admin_home=${web_home}/../kepri-admin-web
 admin_home=`realpath ${admin_home}`
 
 container_name=kepri-web
@@ -130,6 +130,7 @@ function WebPackage() {
 
     echo "cp admin - index.html comm css fonts iaas images img js paas"
     cp ${admin_home}/index.html ${docker_home}/dist/admin/
+    cp ${admin_home}/dashboard.html ${docker_home}/dist/admin/
     cp -R ${admin_home}/comm ${docker_home}/dist/admin/
     cp -R ${admin_home}/css ${docker_home}/dist/admin/
     cp -R ${admin_home}/fonts ${docker_home}/dist/admin/
