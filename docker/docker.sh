@@ -94,7 +94,7 @@ function WebPackage() {
         rm -f ${docker_home}/dist/html.tar.gz
     fi
 
-    echo "cp web - index.html comm css fonts iaas images img js paas"
+    echo "cp web - index.html temp_return.json comm css fonts iaas images img js paas"
     cp ${web_home}/index.html ${docker_home}/dist/html/
     cp -R ${web_home}/comm ${docker_home}/dist/html/
     cp -R ${web_home}/css ${docker_home}/dist/html/
