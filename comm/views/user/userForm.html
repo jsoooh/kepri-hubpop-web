@@ -23,7 +23,7 @@
 					</colgroup>
 					<tbody>
 					<tr>
-						<th scope="row">이름</th>
+						<th scope="row"><i class="i_star">필수입력</i> 이름</th>
 						<td>
 							<input type="text" id="user_name" name="user_name" ng-model="contents.memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" required />
 							<p class="has-error" ng-show="requestForm.user_name.$error.required && !requestForm.user_name.$pristine">{{ 'message.mi_type_name' | translate }}</p>
@@ -41,7 +41,7 @@
 						<th scope="row"><label for="signupEmail">{{'label.id' | translate}}</label></th>
 						<td><input type="text" id="signupEmail" name="signupEmail" ng-model="contents.memberInfo.email" disabled /></td>
 					</tr>
-					<tr ng-if="0">
+					<tr ng-if="false">
 						<th scope="row">비밀번호 변경<i class="i_star">필수입력</i></th>
 						<td>
 							<ul>
@@ -52,7 +52,7 @@
 							<p class="help-block type2">영문 대/소문자, 숫자 2종류 이상 혼합 10~20자 이하, 3종류 이상 혼합 8~20자 이하로 설정해 주세요.</p>
 						</td>
 					</tr>
-					<tr>
+					<tr ng-if="false">
 						<th scope="row">회원구분</th>
 						<td>{{ contents.userAuthNm }}</td>
 					</tr>

@@ -364,6 +364,7 @@
         "error_name": "Error Name",
         "etc": "ETC",
         "event": "Events",
+        "event_dt": "Event Date",
         "event_log": "Event Log",
         "ex": "i.e.",
         "execute_state": "State",
