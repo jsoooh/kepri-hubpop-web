@@ -1566,7 +1566,13 @@ angular.module('common.controllers', [])
             }
             $scope.main.setLayout();
             $scope.main.commMenuHide();
-            $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
+            // 20.2.12 by hrit, Undefined 현상 수정
+            var policyStop = $interval(function () {
+                if ($scope.main.getAlarmPolicy) {
+                    policyStop.cancel();
+                    $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
+                }
+            }, 100);
             $scope.main.selectAlarmCount();
             $scope.main.selectAlarmList();
 
