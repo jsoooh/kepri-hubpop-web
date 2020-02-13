@@ -1572,7 +1572,7 @@ angular.module('common.controllers', [])
             // 20.2.12 by hrit, Undefined 현상 수정
             var policyStop = $interval(function () {
                 if ($scope.main.getAlarmPolicy) {
-                    policyStop.cancel();
+                    $interval.cancel(policyStop);
                     $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
                 }
             }, 100);
