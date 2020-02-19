@@ -1383,8 +1383,20 @@ angular.module('paas.controllers')
         // 인스턴스 재시작
         ct.instanceRestart = function (guid, index) {
             $scope.main.loadingMainBody = true;
+            /* 2020.02.19 - 인스턴스 재시작 버튼 오류 관련 추가 */
+            angular.forEach(ct.instanceStats, function(item) {
+                 if(item.id == index) {
+                     item.isRestart = true;
+                 }
+            });
             var appPromise = applicationService.restartAppInstance(guid, index);
             appPromise.success(function (data) {
+                /* 2020.02.19 - 인스턴스 재시작 버튼 오류 관련 추가 : 5초 후 재시작 버튼 활성화 */
+                $timeout(function () {
+                    angular.forEach(ct.instanceStats, function(item) {
+                        item.isRestart = false;
+                    },);
+                }, 5000);
                 $scope.main.loadingMainBody = false;
             });
             appPromise.error(function (data) {
@@ -1731,6 +1743,10 @@ angular.module('paas.controllers')
                         ct.instanceStats = [];
                     }
                     common.objectOrArrayMergeData(ct.instanceStats, ct.app.instanceStats);
+                    /* 2020.02.18 - 인스턴스 재시작 버튼 오류 관련 : isRestart 속성 추가 */
+                    angular.forEach(ct.instanceStats, function(item) {
+                        item.isRestart = false;
+                    });
                     //console.log("ct.getAppStats > ct.instanceStats ; ", ct.instanceStats);
                 } else {
                     ct.instanceStats = [];
