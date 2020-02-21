@@ -55,20 +55,21 @@
                     <li>
                         <strong class="tit">상태</strong>
                         <div class="txt">
-                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED') && (contents.app.insState == 'RUNNING')">
+                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED')">
                                 <span class="stateMark type1">시작</span>
                                 <span class="state-txt">시작</span>
                             </span>
-                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED') && (contents.app.insState != 'RUNNING')">
+                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'PENDING')">
                                 <span class="stateMark type4">시작중</span>
                                 <span class="state-txt">시작중</span>
                                 <img src="images/loading_sm.gif" />
                             </span>
-                            <div class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'PENDING')">
+                            <!-- 2020.02.10 인스턴스 상태 정보 상이 : 시작중 / 배포 진행 중 메시지를 시작중으로 합침 -->
+                           <!-- <div class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'PENDING')">
                                 <span class="stateMark type4">배포 진행 중</span>
                                 <span class="state-txt">배포 진행 중</span>
                                 <img src="images/loading_sm.gif" />
-                            </div>
+                            </div>-->
                             <span class="stateWrap" ng-if="(contents.app.state == 'STOPPED') && (contents.app.packageState != 'FAILED')">
                                 <span class="stateMark type3">정지</span>
                                 <span class="state-txt">정지</span>
@@ -186,7 +187,8 @@
                     <li ng-repeat="(key, statItem) in contents.instanceStats" class="instBox" ng-class="{'color-type1' : (statItem.state != 'RUNNING' && statItem.state != 'STARTING'), 'color-type2': (statItem.state == 'RUNNING'), 'color-type4' : (statItem.state == 'STARTING')}">
                         <div class="in">
                             <p class="c_tit"><em>인스턴스</em><span>{{statItem.id}}</span></p>
-                            <button type="button" name="button" class="btn btn-ico-refresh-s only-ico" title="재시작" ng-click="contents.instanceRestart(contents.app.guid, statItem.id);"><span class="ico">재시작</span></button>
+                            <!-- 2020.02.19 인스턴스 재시작 버튼 오류 수정 : 인스턴스 상태가 시작중이거나 재시작 버튼을 누르면 5초 정도 버튼 누르기 금지 추가 -->
+                            <button type="button" name="button" class="btn btn-ico-refresh-s only-ico" title="재시작" ng-disabled="statItem.isRestart || statItem.state == 'STARTING'" ng-click="contents.instanceRestart(contents.app.guid, statItem.id);"><span class="ico">재시작</span></button>
                             <ul class="instProg">
                                 <li>
                                     <strong class="tit">CPU</strong>
