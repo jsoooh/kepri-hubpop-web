@@ -1,4 +1,3 @@
-#docker pull nginx:1.16.1-alpine
 FROM nginx:1.16.1-alpine
 
 LABEL maintainer="crossent"
