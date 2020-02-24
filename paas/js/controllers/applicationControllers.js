@@ -1395,7 +1395,7 @@ angular.module('paas.controllers')
                 $timeout(function () {
                     angular.forEach(ct.instanceStats, function(item) {
                         item.isRestart = false;
-                    },);
+                    });
                 }, 5000);
                 $scope.main.loadingMainBody = false;
             });
