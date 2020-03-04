@@ -25,7 +25,7 @@
 </div>
 <!-- //버튼영역 -->
 
-    <!-- panel area-->
+    <!-- panel area-->{{contents.isAppsLoad}}|||
 <div ng-if="(contents.apps | filter:{ name: contents.schFilterText }).length > 0">
     <ul class="ul-panel">
         <li ng-repeat="appItem in contents.apps | filter : {name: contents.schFilterText}">
@@ -133,7 +133,7 @@
     </ul>
 </div>
 
-<div class="proj_list_area" ng-if="!contents.isAppsLoad && (contents.apps | filter:{ name:contents.schFilterText }).length == 0">
+<div class="proj_list_area" ng-if="!contents.isAppsLoad && contents.schFilterText.length > 0 && (contents.apps | filter:{ name:contents.schFilterText }).length == 0">
     <ul class="ul-panel dash_list no_data">
         <li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
     </ul>
