@@ -5,20 +5,14 @@ $ git pull
 $ ./docker.sh package build -v 0.1.0
 ```
 
-## 이미지 push (cressent: docker hub 계정)
+## Web run
 ```bash
-$ docker login
-id
-pw
-$ ./docker.sh push -s crossentcx -v 0.1.0
-```
+$ docker run -d -p 80:80 \
+      -v ~/nginx/nginx.conf=/etc/nginx/nginx.conf \
+      -v ~/nginx/conf.d=/etc/nginx/conf.d \
+      -v ~/nginx/html=/usr/share/nginx/html \
+      -v ~/nginx/kepri-download=/usr/share/nginx/kepri-download \
+      -v ~/nginx/admin=/usr/share/nginx/admin \
+      --name kepri-web kepri-web:0.1.0
 
-## 직접 입력 push  (cressent: docker hub 계정)
-```
-$ docker login
-id
-pw
-$ docker image rm crossentcx/cx-web:0.1.0
-$ docker image tag cx-web crossentcx/cx-web:0.1.0
-$ docker push crossentcx/cx-web:0.1.0
 ```
