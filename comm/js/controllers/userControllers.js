@@ -182,8 +182,8 @@ angular.module('common.controllers')
                         }
                     }
                     //CONTENTS 중 ", ' 를 문자 치환
-                    noticeItem.CONTENTS = noticeItem.CONTENTS.replace(/\"/g,"&quot;");
-                    //noticeItem.CONTENTS = noticeItem.CONTENTS.replace(/\'/g,"&#39;");
+                    noticeItem.CONTENTS = noticeItem.CONTENTS.replace(/\"/g,"'");
+                    //noticeItem.CONTENTS = noticeItem.CONTENTS.replace(/\'/g,"&#39;"); //&quot;, &#39;
                     ct.notices.push(noticeItem);
                 }
             });
