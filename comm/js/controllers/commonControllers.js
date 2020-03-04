@@ -1566,9 +1566,12 @@ angular.module('common.controllers', [])
             }
             $scope.main.setLayout();
             $scope.main.commMenuHide();
-            $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
-            $scope.main.selectAlarmCount();
-            $scope.main.selectAlarmList();
+
+            $timeout(function() {
+                $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
+                $scope.main.selectAlarmCount();
+                $scope.main.selectAlarmList();
+            }, 100);
 
             if (_MENU_TYPE_ == 'part') {
                 common.leftMenuShow();
