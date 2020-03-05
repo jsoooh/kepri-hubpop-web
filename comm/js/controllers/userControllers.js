@@ -93,6 +93,9 @@ angular.module('common.controllers')
             param['email']    = $scope.credentials.email.trim();
             param['password'] = $scope.credentials.password.trim();
 
+            var result = user.passwordSecureCheck(param.email, param.password);
+            console.log(result);
+            return false;
             $scope.authenticating = true;
             $scope.main.loadingMainBody = true;
             var authenticationPromise = user.authenticate(param);
