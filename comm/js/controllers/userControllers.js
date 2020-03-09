@@ -67,6 +67,57 @@ angular.module('common.controllers')
             ct.checkSsoPgsecuid(common.getPgsecuid());
         }
 
+        ct.loginCommonOrgUser = function (token) {
+            // 최초 로그인 후 쿠키 값 제거
+            common.clearOrgAuthToken();
+
+            // 프로젝트 공용 사용자 로그인
+            $scope.authenticating = true;
+            $scope.main.loadingMainBody = true;
+            
+            common.clearUserAll();
+            var promise = user.getCheckCommonOrgUser(token);
+            promise.success(function (data, status, headers) {
+                if (data) {
+                    if (data.httpStatus && data.httpStatus == 'UNAUTHORIZED') {
+                        common.showDialogAlertError("로그인 오류", "토큰 인증에 실패하였습니다.");
+                        $scope.authenticating = false;
+                        $scope.main.loadingMainBody = false;
+                    } else {
+                        common.setAccessToken(headers("U-X-TOKEN"));
+                        common.setUser(data);
+                        // 자연스러운 페이지 변환을 위한 로직
+                        $scope.main.isLoginPage = true;
+                        $scope.main.mainLayoutClass = "main";
+                        if (angular.isObject($scope.mainBody)) {
+                            $scope.mainBody.mainContentsTemplateUrl = "";
+                        }
+                        if (!$scope.main.dbMenuList || $scope.main.dbMenuList.length == 0) {
+                            $scope.main.setDbMenuList();
+                        }
+                        ct.listNotices();   //공지 목록 조회
+                        $timeout(function () {
+                            common.moveCommHomePage();
+                        }, 100);
+                    }
+                } else {
+                    common.showDialogAlertError("로그인 오류", $translate.instant('message.mi_wrong_id_or_pwd'));
+                    $scope.authenticating = false;
+                    $scope.main.loadingMainBody = false;
+                }
+            });
+            promise.error(function (data, status, headers) {
+                common.clearUser();
+                $scope.authenticating = false;
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+        // ORG 공용 계정 자동로그인
+        if (common.getOrgAuthToken()) {
+            ct.loginCommonOrgUser(common.getOrgAuthToken());
+        }
+
         //platform 교육 관련 공지사항
         function showNotice(ev) {
             $mdDialog.show({
@@ -93,9 +144,9 @@ angular.module('common.controllers')
             param['email']    = $scope.credentials.email.trim();
             param['password'] = $scope.credentials.password.trim();
 
-            var result = user.passwordSecureCheck(param.email, param.password);
-            console.log(result);
-            return false;
+            // var result = user.passwordSecureCheck(param.email, param.password);
+            // console.log(result);
+            // return false;
             $scope.authenticating = true;
             $scope.main.loadingMainBody = true;
             var authenticationPromise = user.authenticate(param);
