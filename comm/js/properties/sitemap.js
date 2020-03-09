@@ -63,6 +63,14 @@ angular.module('app')
                                 url: '/comm/projects/projectDetail/:orgId',
                                 controller: 'commOrgProjectDetailCtrl',
                                 templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html'
+                            },
+                            projectCreate: {
+                                mainTop: true,
+                                name: 'project_create',
+                                stateKey: 'commProjectCreate',
+                                url: '/comm/project/create',
+                                controller: 'commOrgProjectCreateCtrl',
+                                templateUrl: _COMM_VIEWS_+'/org/orgProjectCreate.html'
                             }
                         }
                     },

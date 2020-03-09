@@ -5,8 +5,12 @@
 			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
 		</div>
 		<div class="top_btn">
-			<a href="" ng-click="main.addOrgProjectFormOpen($event);">
-				<span>프로젝트 생성</span>
+			<!--<a href="" ng-click="main.addOrgProjectFormOpen($event);">-->
+			<a href="" ng-click="main.requestOrgProjectFormOpen($event);">
+				<span>프로젝트 신청</span>
+			</a>
+			<a href="" ng-click="contents.addPersonalOrgProject($event);">
+				<span>개인 프로젝트 생성</span>
 			</a>
 		</div>
 	</div>
@@ -106,7 +110,9 @@
 	<!-- table top -->
 	<div class="tb-top">
 		<div class="pull-right">
-			<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 생성" ng-click="contents.addOrgProjectFormOpen($event);" ng-disabled="main.userAuth != 'M'">프로젝트 생성</button>
+			<!--<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 생성" ng-click="contents.addOrgProjectFormOpen($event);" ng-disabled="main.userAuth != 'M'">프로젝트 생성</button>-->
+			<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 신청" ng-click="main.requestOrgProjectFormOpen($event);" ng-disabled="main.userAuth != 'M'">프로젝트 신청</button>
+			<button type="button" name="button" class="btn btn-color1 btn-md" title="개인 프로젝트 생성" ng-click="contents.addOrgProjectFormOpen($event);" ng-disabled="main.userAuth != 'M'">개인 프로젝트 생성</button>
 		</div>
 	</div>
 	<!-- //table top -->

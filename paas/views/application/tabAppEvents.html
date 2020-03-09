@@ -25,14 +25,15 @@
                 <thead>
                 <tr>
                     <th>{{ 'label.no' | translate }}</th>
-                    <th>{{ 'label.timestamp' | translate }}</th>
-                    <th>{{ 'label.actor' | translate }}</th>
-                    <th>{{ 'label.event' | translate }}</th>
+                    <th class="text-left">{{ 'label.event_dt' | translate }}</th>
+                    <th class="text-left">{{ 'label.user' | translate }}</th>
+                    <th class="text-left">{{ 'label.event' | translate }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="(k, eventItem) in tab.appEvents.content">
-                    <td class="text-center">{{ (k + 1) }}</td>
+                    <!--<td class="text-center">{{ (k + 1) }}</td>-->
+                    <td class="text-center">{{ (tab.appEvents.content.length - 1) - k + 1 }}</td>
                     <td class="text-left">{{ eventItem.created | date:'yyyy-MM-dd HH:mm:ss' }}</td>
                     <td class="text-left">{{ eventItem.actorName }}</td>
                     <td class="text-left">{{ eventItem.type }}</td>

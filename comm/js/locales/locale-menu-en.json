@@ -30,12 +30,12 @@
 			"member_edit" : "개인정보 수정",
 			"project": "Project",
 			"project_mgmt": "Projects",
+			"project_create": "Request Project",
 			"comm_portal": "Home",
 			"project_details": "Project Detail",
 			"service_catalog": "Service Catalog",
 			"cata_list": "Catalog List",
 			"cata_view": "Catalog View",
-			"board_notice": "Notice",
 			"board_create": "등록",
 			"board_update": "수정"
 		},

@@ -36,6 +36,12 @@ angular.module('iaas.controllers')
             ct.tabIndex = $location.$$search.tabIndex;
         }
 
+        //임시 알림 설정 2020.02.03
+        ct.showTempAlert = function() {
+            common.showDialogAlert("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 가상머신 생성을 제한하고 있습니다.\n자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다.");
+            return;
+        };
+
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
             if (state == 'storage') {

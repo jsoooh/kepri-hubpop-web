@@ -70,6 +70,8 @@ angular.module('portal.controllers')
         };
 
         ct.addOrgProjectFormOpen = function($event) {
+            //임시 알림 설정 2020.02.03
+            //common.showDialogAlert("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 가상머신 생성을 제한하고 있습니다.\n자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다."); return;
             var orgProject = {};
             orgProject.managerId    = $scope.main.userInfo.user_id;
             orgProject.managerName  = $scope.main.userInfo.user_name;
@@ -92,7 +94,7 @@ angular.module('portal.controllers')
 
         ct.listOrgProjects();   //조직 목록 조회
     })
-    .controller('commFirstOrgProjectMainCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, orgService, quotaService, common) {
+    .controller('commFirstOrgProjectMainCtrl', function ($scope) {
         _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);
 
         var ct = this;
@@ -228,5 +230,36 @@ angular.module('portal.controllers')
         };
 
         pop.orgProjectDefaultQuota(pop.orgProject.projectId);
+    })
+    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, common, portal) {
+        _DebugConsoleLog("orgControllers.js : commOrgProjectCreateCtrl", 1);
+
+        var ct = this;
+
+        /*Org 목록 조회*/
+        ct.listOrgProjects = function () {
+            ct.orgProjects = [];
+            $scope.main.loadingMainBody = true;
+            var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
+            promise.success(function (data) {
+                if (data && data.items && angular.isArray(data.items)) {
+                    common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
+                    $scope.main.setListAllPortalOrgs(data.items);
+                } else {
+                    $scope.main.setListAllPortalOrgs();
+                }
+                $scope.main.loadingMainBody = false;
+
+                //좌측메뉴 [프로젝트 생성] 클릭으로 넘어온 경우 바로 팝업 띄움. 2019.06.25
+                if ($scope.main.userAuth == 'M' && ct.popup == 'popup') {
+                    ct.addOrgProjectFormOpen();
+                }
+            });
+            promise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        //ct.listOrgProjects();   //조직 목록 조회
     })
 ;

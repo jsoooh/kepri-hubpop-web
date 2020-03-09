@@ -95,14 +95,24 @@ angular.module('portal.controllers')
 
         /*회원 탈퇴*/
         $scope.signout = function() {
-            var showConfirm = common.showConfirm($translate.instant('label.signout'), "탈퇴하시면 사용 중인 자원은 삭제됩니다.\n 정말로 탈퇴 하시겠습니까?", "info");
+            var userAuth = $scope.main.userAuth;
+            if (userAuth == "M") {
+                common.showDialogAlert($translate.instant('label.signout'), "프로젝트 책임자는 탈퇴가 불가능합니다.");
+                return;
+            } else if (userAuth == "A") {
+                common.showDialogAlert($translate.instant('label.signout'), "시스템 관리자는 탈퇴가 불가능합니다.");
+                return;
+            }
+
+            var showConfirm = common.showConfirm($translate.instant('label.signout'), "탈퇴하시면 연관 정보는 삭제됩니다.\n 정말로 탈퇴 하시겠습니까?", "info");
             showConfirm.then(function () {
                 $scope.deleteUser();
             });
         };
+
         $scope.deleteUser = function() {
             var param = {
-                  user_id    : $scope.main.userInfo.user_id
+                  user_id : $scope.main.userInfo.user_id
             };
 
             $scope.main.loadingMainBody=true;
@@ -172,10 +182,15 @@ angular.module('portal.controllers')
                 'email'       : $scope.main.userInfo.email,
                 'old_password': passData.oldPassword,
                 'password'    : passData.password,
-                'token'       : $scope.main.userInfo.token
-                //'version'     : $scope.main.userInfo.version
+                'token'       : $scope.main.userInfo.token,
+                'is_sso'      : $scope.main.userInfo.sso
+                // 'version'     : $scope.main.userInfo.version
             };
 
+            if (passData.oldPassword == passData.password) {
+                common.showAlert($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
+                return;
+            }
             $scope.main.loadingMainBody=true;
             var changePromise = memberService.changePassword(param);
             changePromise.success(function (data, status, headers) {
@@ -198,6 +213,10 @@ angular.module('portal.controllers')
 
                 if(status == 406){      //비밀번호 패턴이 맞지 않습니다.
                     common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 규칙이 맞지 않습니다. 10~20자 영문, 숫자를 포함해 주시기 바랍니다.");
+                } else if (status == 401) {
+                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 기존비밀번호가 잘못되었습니다. 확인 후 다시 시도해 주시기 바랍니다.");
+                } else if (status == 422) {
+                    common.showAlertError($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
                 } else {
                     //$scope.error = $translate.instant("label.error");
                     common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 비밀번호를 다시 수정해 주세요.");
