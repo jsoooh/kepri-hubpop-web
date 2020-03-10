@@ -1473,6 +1473,7 @@
         "mi_egov_fail_common_update": "수정이 실패하였습니다.",
         "mi_egov_fail_common_delete": "삭제가 실패하였습니다.",
         "mi_egov_fail_common_select": "조회에 실패하였습니다.",
-        "mi_type_position": "소속을 입력하세요."
+        "mi_type_position": "소속을 입력하세요.",
+        "mi_unusable_commonorguser_email": "You cannot use 'commonOrgUser' ID."
     }
 }
