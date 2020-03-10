@@ -74,6 +74,7 @@ angular.module('common.controllers')
             // 프로젝트 공용 사용자 로그인
             $scope.authenticating = true;
             $scope.main.loadingMainBody = true;
+            $scope.main.commonOrgUserLogin = true;
             
             common.clearUserAll();
             var promise = user.getCheckCommonOrgUser(token);
@@ -83,6 +84,7 @@ angular.module('common.controllers')
                         common.showDialogAlertError("로그인 오류", "토큰 인증에 실패하였습니다.");
                         $scope.authenticating = false;
                         $scope.main.loadingMainBody = false;
+                        $scope.main.commonOrgUserLogin = false;
                     } else {
                         common.setAccessToken(headers("U-X-TOKEN"));
                         common.setUser(data);
@@ -99,17 +101,20 @@ angular.module('common.controllers')
                         $timeout(function () {
                             common.moveCommHomePage();
                         }, 100);
+                        $scope.main.commonOrgUserLogin = false;
                     }
                 } else {
                     common.showDialogAlertError("로그인 오류", $translate.instant('message.mi_wrong_id_or_pwd'));
                     $scope.authenticating = false;
                     $scope.main.loadingMainBody = false;
+                    $scope.main.commonOrgUserLogin = false;
                 }
             });
             promise.error(function (data, status, headers) {
                 common.clearUser();
                 $scope.authenticating = false;
                 $scope.main.loadingMainBody = false;
+                $scope.main.commonOrgUserLogin = false;
             });
         }
 
