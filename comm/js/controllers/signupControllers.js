@@ -102,6 +102,9 @@ angular.module('common.controllers')
                     }
                 }
 
+                //4. 프로젝트 공용계정(ex:commonOrgUser300) Check
+                $scope.emailCommonOrgError = false;
+                if ($scope.memberInfo.email.toLowerCase().indexOf('commonorguser') > -1) $scope.emailCommonOrgError = true;
             }
         };
 
@@ -110,6 +113,7 @@ angular.module('common.controllers')
             $scope.emailError       = false;     //이메일 dup Check
             $scope.emailTempError   = false;     //임시 이메일 Check
             $scope.emailCommonError = false;     //공용계정(AI분석, ex:commonuser11) Check
+            $scope.emailCommonOrgError = false;  //프로젝트공용계정(AI분석, ex:commonOrgUser300) Check
             $scope.blurSignupEmail  = false;
         };
 
@@ -165,6 +169,11 @@ angular.module('common.controllers')
             //공용계정(AI분석, ex:commonuser11) Check
             if ($scope.emailCommonError) {
                 common.showAlert($translate.instant('label.signup'), "[commonuser]+[숫자] 형식의 아이디는 사용하실 수 없습니다.");
+                return;
+            }
+            //공용계정(AI분석, ex:commonuser11) Check
+            if ($scope.emailCommonOrgError) {
+                common.showAlert($translate.instant('label.signup'), $translate.instant('message.mi_unusable_commonorguser_email'));
                 return;
             }
 

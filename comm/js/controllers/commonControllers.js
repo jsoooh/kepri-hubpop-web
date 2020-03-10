@@ -1575,12 +1575,15 @@ angular.module('common.controllers', [])
             }
             $scope.main.setLayout();
             $scope.main.commMenuHide();
-
-            $timeout(function() {
-                $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
-                $scope.main.selectAlarmCount();
-                $scope.main.selectAlarmList();
+            // 20.2.12 by hrit, Undefined 현상 수정
+            var policyStop = $interval(function () {
+                if ($scope.main.getAlarmPolicy) {
+                    $interval.cancel(policyStop);
+                    $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
+                }
             }, 100);
+            $scope.main.selectAlarmCount();
+            $scope.main.selectAlarmList();
 
             if (_MENU_TYPE_ == 'part') {
                 common.leftMenuShow();
