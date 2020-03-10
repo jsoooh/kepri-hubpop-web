@@ -2,10 +2,20 @@
 
 angular.module('common.controllers', [])
 // 최초 접속 혹은 새로고침 시 as main
-    .controller('mainCtrl', function ($scope, $location, $state, $stateParams, $translate, $window, $timeout, $interval, $cookies, cache, cookies, user, common, portal, userSettingService, CONSTANTS, FileUploader) {
+    .controller('mainCtrl', function ($scope, $location, $state, $stateParams, $translate, $window, $timeout, $interval, $cookies, cache, cookies, user, common, portal, userSettingService, CONSTANTS, FileUploader, memberService) {
         _DebugConsoleLog('commonControllers.js : mainCtrl Start, path : ' + $location.path(), 1);
 
         var mc = this;
+
+        // popup modal에서 사용 할 객체 선언
+        var pop = $scope.pop = {};
+
+        /* 비밀번호 입력 변수 */
+        pop.changePasswordData = {
+            oldPassword : "",
+            password : "",
+            retypePassword : ""
+        };
 
         mc.topLogoIcon = "images/top_logo.png";
 
@@ -64,6 +74,138 @@ angular.module('common.controllers', [])
                 }
             }
         };
+
+        // 20.03.09 - ksw / 사용자 메뉴 추가(회원탈퇴)
+        mc.signout = function () {
+            var userAuth = $scope.main.userAuth;
+            if (userAuth == "M") {
+                common.showDialogAlert($translate.instant('label.signout'), "프로젝트 책임자는 탈퇴가 불가능합니다.");
+                return;
+            } else if (userAuth == "A") {
+                common.showDialogAlert($translate.instant('label.signout'), "시스템 관리자는 탈퇴가 불가능합니다.");
+                return;
+            }
+
+            var showConfirm = common.showConfirm($translate.instant('label.signout'), "탈퇴하시면 연관 정보는 삭제됩니다.\n 정말로 탈퇴 하시겠습니까?", "info");
+            showConfirm.then(function () {
+                $scope.deleteUser();
+            });
+        };
+
+        // 20.03.09 - ksw / 사용자 메뉴 추가(회원탈퇴)
+        $scope.deleteUser = function() {
+            var param = {
+                user_id : $scope.main.userInfo.user_id
+            };
+
+            $scope.main.loadingMainBody=true;
+            var deletePromise = memberService.deleteUser(param);
+            deletePromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody=false;
+                common.logout();
+                common.showAlert($translate.instant('label.user_deregistered'), $translate.instant('message.mi_delete'));
+                common.moveLoginPage();
+            });
+            deletePromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody=false;
+                if(status == 403) {          //기업관리자
+                    common.showAlertError($translate.instant('label.user_deregistered'), "프로젝트 책임자 이므로 탈퇴가 불가능합니다. 관리자에게 문의 바랍니다.");
+                } else if(status == 406) {      //조직관리자
+                    common.showAlertError($translate.instant("label.user_deregistered"), "다음 작업에서 관리자 입니다. 작업의 관리자 변경 후 처리해 주시기 바랍니다. (" + data.resultMsg + ")");
+                } else {
+                    common.showAlertError($translate.instant('label.user_deregistered'), data);
+                }
+            });
+        };
+
+        // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
+        $scope.changePasswordAction = function(passData){
+            $scope.popHide();
+            $scope.main.loadingMainBody = true;
+
+            if (passData.oldPassword == undefined || passData.oldPassword == "") {
+                alert($translate.instant("message.mi_type_current_pwd"));
+                return;
+            }
+            if (passData.password == undefined || passData.password == "") {
+                alert($translate.instant("message.mi_type_new_pwd"));
+                return;
+            }
+            if (passData.password != passData.retypePassword) {
+                alert($translate.instant("message.mi_wrong_pwd_retype"));
+                return;
+            }
+            var param = {
+                'user_id'     : $scope.main.userInfo.user_id,
+                'email'       : $scope.main.userInfo.email,
+                'old_password': passData.oldPassword,
+                'password'    : passData.password,
+                'token'       : $scope.main.userInfo.token,
+                'is_sso'      : $scope.main.userInfo.sso
+                // 'version'     : $scope.main.userInfo.version
+            };
+
+            if (passData.oldPassword == passData.password) {
+                common.showAlert($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
+                return;
+            }
+            $scope.main.loadingMainBody = true;
+            var changePromise = memberService.changePassword(param);
+            changePromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.clearUser();
+                common.setUser(data);
+                common.clearAccessToken();
+                common.setAccessToken(data.token);
+
+                // 초기화 및 팝업 닫기
+                $scope.popHide();
+
+                common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_change_pwd"));
+
+            });
+            changePromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                // 초기화 및 팝업 닫기
+                $scope.popHide();
+
+                if(status == 406) {      //비밀번호 패턴이 맞지 않습니다.
+                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 규칙이 맞지 않습니다. 10~20자 영문, 숫자를 포함해 주시기 바랍니다.");
+                } else if (status == 401) {
+                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 기존비밀번호가 잘못되었습니다. 확인 후 다시 시도해 주시기 바랍니다.");
+                } else if (status == 422) {
+                    common.showAlertError($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
+                } else {
+                    //$scope.error = $translate.instant("label.error");
+                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 비밀번호를 다시 수정해 주세요.");
+                }
+            });
+        };
+
+        // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
+        mc.changePassword = function ($event) {
+            var dialogOptions = {
+                title : $translate.instant("label.pwd_change"),
+                form : {
+                    name: "passwordForm",
+                    options: ""
+                },
+                dialogClassName : "modal-dialog",
+                templateUrl: _COMM_VIEWS_ + "/user/popChangePasswordForm.html" + _VersionTail(),
+                okName : $translate.instant("label.change")
+            };
+            $scope.pop.changePasswordData = {
+                oldPassword : "",
+                password : "",
+                retypePassword : ""
+            };
+            common.showDialog($scope, $event, dialogOptions);
+            // Dialog ok 버튼 클릭 시 액션 정의
+            $scope.popDialogOk = function () {
+                $scope.changePasswordAction($scope.pop.changePasswordData);
+            }
+        };
+
 
         // 로그 아웃
         mc.logout = function () {
