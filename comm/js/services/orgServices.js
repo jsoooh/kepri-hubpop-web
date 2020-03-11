@@ -22,6 +22,11 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs', 'POST', param));
         };
 
+        /*개인 프로젝트 생성*/
+        orgService.createPersonalProject = function () {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs', 'POST', param));
+        };
+
         /*조직 목록 조회 : 로그인 사용자 관련*/
         orgService.getOrgList = function (userId) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/'+userId+'/orgList', 'GET'));
@@ -175,6 +180,11 @@ angular.module('portal.services')
         
         orgService.createOrgIcon = function (ordId, body) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + ordId + '/icon', 'POST', body, "multipart/form-data"));
+        };
+
+        /*사용자가 생성한 개인프로젝트 건수*/
+        orgService.getMyPersonalCnt = function () {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/myPersonal/cnt', 'GET'));
         };
 
 		return orgService;

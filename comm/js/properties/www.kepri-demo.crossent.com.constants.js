@@ -60,7 +60,8 @@ angular.module('app')
             reductAsidesKey: "REDUCT_ASIDES",
             myProjectsKey: "MY_PROJECTS",
             myJobsKey: "MY_JOBS",
-            myQuickMenusKey: "MY_QUICK_MENUS"
+            myQuickMenusKey: "MY_QUICK_MENUS",
+            personalProjectCnt: "personal_project_cnt"
         },
         rdpConnect: {
             baseDomain: "wins.hubpop.io",

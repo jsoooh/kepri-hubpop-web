@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portal.controllers')
-    .controller('commOrgProjectsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, common, portal) {
+    .controller('commOrgProjectsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, userSettingService, common, CONSTANTS) {
         _DebugConsoleLog("orgControllers.js : commOrgProjectsCtrl", 1);
 
         var ct = this;
@@ -10,16 +10,18 @@ angular.module('portal.controllers')
         ct.userAuth = $scope.main.userAuth;
         ct.popup = $stateParams.popup;      //프로젝트 생성 팝업 여부
         ct.schFilterText = "";
+        ct.personalProjectCnt = 0;      //개인프로젝트 생성 갯수
+        ct.myPersonalCnt = 0;           //사용자별 개인프로젝트 생성 갯수
 
         ct.extendItem = function(evt) {
-            console.log('extendItem', evt);
+            //console.log('extendItem', evt);
             if($(evt.target).closest('.NotCloseFirstOrgProjecItem').length == 0) {
                 ct.selectItemKey = 0;
             }
         };
 
         ct.changeItem = function(evt, itemKey) {
-            console.log('changeItem', evt);
+            //console.log('changeItem', evt);
             ct.selectItemKey = itemKey;
         };
 
@@ -69,6 +71,7 @@ angular.module('portal.controllers')
             $location.path('/comm/projects/projectDetail/' + orgItem.id);
         };
 
+        /*프로젝트 생성 팝업창 오픈*/
         ct.addOrgProjectFormOpen = function($event) {
             //임시 알림 설정 2020.02.03
             //common.showDialogAlert("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 가상머신 생성을 제한하고 있습니다.\n자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다."); return;
@@ -92,7 +95,62 @@ angular.module('portal.controllers')
             common.showCustomDialog($scope, $event, dialogOptions);
         };
 
+        /*개인 프로젝트 건수 조회*/
+        ct.getPersonalProjectCount = function () {
+            ct.personalProjectCnt = 0;
+            $scope.main.loadingMainBody = true;
+            var returnPromise = userSettingService.getUserSetting(CONSTANTS.userSettingKeys.personalProjectCnt);
+            returnPromise.success(function (data) {
+                data = userSettingService.userSettingParse(data);
+                if (data && data.contents && data.contents.projectCnt) {
+                    ct.personalProjectCnt = data.contents.projectCnt;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                ct.personalProjectCnt = 0;
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                //사용자가 생성한 개인프로젝트 건수
+                ct.getMyPersonalCnt();
+            });
+        };
+
+        /*사용자가 생성한 개인프로젝트 건수*/
+        ct.getMyPersonalCnt = function () {
+            ct.myPersonalCnt = 0;
+            $scope.main.loadingMainBody = true;
+            var returnPromise = orgService.getMyPersonalCnt();
+            returnPromise.success(function (data) {
+                if (data) {
+                    ct.myPersonalCnt = data;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                ct.myPersonalCnt = 0;
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        /*개인 프로젝트 생성*/
+        ct.createPersonalProject = function () {
+            $scope.main.loadingMainBody = true;
+            var returnPromise = orgService.createPersonalProject();
+            returnPromise.success(function (data) {
+
+            });
+            returnPromise.error(function (data, status, headers) {
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
         ct.listOrgProjects();   //조직 목록 조회
+        //개인 프로젝트 건수 조회
+        ct.getPersonalProjectCount();
     })
     .controller('commFirstOrgProjectMainCtrl', function ($scope) {
         _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);
@@ -105,14 +163,14 @@ angular.module('portal.controllers')
         ct.userAuth  = $scope.main.userAuth;
 
         ct.fn.extendItem = function(evt) {
-            console.log('extendItem', evt);
+            //console.log('extendItem', evt);
             if($(evt.target).closest('.NotCloseFirstOrgProjecItem').length == 0) {
                 ct.selectItemKey = 0;
             }
         };
 
         ct.fn.changeItem = function(evt, itemKey) {
-            console.log('changeItem', evt);
+            //console.log('changeItem', evt);
             ct.selectItemKey = itemKey;
         };
 
