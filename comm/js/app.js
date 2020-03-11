@@ -254,9 +254,13 @@ angular.module('app', [
     /**
      * Run -------------------------------------------------------------------------
      */
-    .run(function (common, $translate, CONSTANTS) {
+    .run(function (common, $location, $translate, CONSTANTS) {
 
         _DebugConsoleLog("app run", 1);
+
+        // 2020.3.5 by hrit, Org 공용계정 로그인용
+        if ($location.search().orgAuthToken) common.setOrgAuthToken($location.search().orgAuthToken);
+        
         /********** default start **********/
         var languageKey = common.getLanguageKey();
         languageKey = 'ko';

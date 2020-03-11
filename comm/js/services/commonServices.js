@@ -2668,6 +2668,18 @@ angular.module('common.services', ['LocalStorageModule'])
             cookies.clearAccessToken();
         };
 
+        common.getOrgAuthToken = function () {
+            return cookies.getOrgAuthToken();
+        };
+
+        common.setOrgAuthToken = function (access_token) {
+            cookies.setOrgAuthToken(access_token);
+        };
+
+        common.clearOrgAuthToken = function () {
+            cookies.clearOrgAuthToken();
+        };
+
         common.isAuthenticated = function () {
             return (cookies.getAccessToken() != null && cookies.getAccessToken() != "");
         };
@@ -2696,14 +2708,21 @@ angular.module('common.services', ['LocalStorageModule'])
 
         common.logout = function () {
             common.clearUserAll();
-            // 부모창이 있으면 부모창 로그아웃하고 내 창 닫기
-            if ($window.opener && $window.opener.document
-                && $window.opener.document.domain
-                && $window.document.domain == $window.opener.document.domain ) {
-                $window.opener.location.href = "/#/login";
-                $window.close();
-            } else {
-                common.moveLoginPage();
+            try {
+                // 부모창이 있으면 부모창 로그아웃하고 내 창 닫기
+                if ($window.opener && $window.opener.document
+                    && $window.opener.document.domain
+                    && $window.document.domain == $window.opener.document.domain ) {
+                    $window.opener.location.href = "/#/login";
+                    $window.close();
+                } else {
+                    common.moveLoginPage();
+                }
+            } catch (e) {
+                // 2020.3.9 by hrit, cross-origin 에러 대비. 관리자 포털에서 사용자 포털를 여는 경우 사용자 로그아웃 시 발생
+                if (e.message.indexOf('cross-origin') > -1) {
+                    common.moveLoginPage();
+                }
             }
         };
 
@@ -3243,6 +3262,18 @@ angular.module('common.services', ['LocalStorageModule'])
 
         cookies.clearAccessToken = function () {
             $cookies.remove(_ACCESS_TOKEN_COOKIE_NAME_, cookiesOption);
+        };
+
+        cookies.getOrgAuthToken = function () {
+            return $cookies.get("ORG_AUTH_TOKEN");
+        };
+
+        cookies.setOrgAuthToken = function (orgAuthToken) {
+            $cookies.put("ORG_AUTH_TOKEN", orgAuthToken, cookiesOption);
+        };
+
+        cookies.clearOrgAuthToken = function () {
+            $cookies.remove("ORG_AUTH_TOKEN", cookiesOption);
         };
 
         cookies.getPortalOrgKey = function () {

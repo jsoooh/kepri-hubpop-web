@@ -38,6 +38,7 @@
 							<p class="has-error" ng-show="emailTempError">{{ 'message.mi_allow_temp_email' | translate }}</p>
 							<p class="has-error" ng-show="blurSignupEmail && requestForm.nsignupEmail.$error.pattern">{{ 'message.mi_invalid_email_address' | translate }}</p>
 							<p class="has-error" ng-show="blurSignupEmail && requestForm.nsignupEmail.$error.required && !requestForm.nsignupEmail.$pristine">{{ 'message.mi_required_item' | translate }}</p>
+							<p class="has-error" ng-show="emailCommonOrgError">{{ 'message.mi_unusable_commonorguser_email' | translate }}</p>
 						</li>
 						<li>
 							<div class="input-group">

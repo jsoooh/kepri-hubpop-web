@@ -5,7 +5,7 @@
             <h1>hubpop</h1>
             <h2>HUB-PoP {{ 'label.login' | translate }}</h2>
         </div>
-        <div ng-show="!(main.ssoUserLogin || main.ssoUserLoginChecking)" class="mem-body">
+        <div ng-show="!(main.ssoUserLogin || main.ssoUserLoginChecking || main.commonOrgUserLogin)" class="mem-body">
             <ul class="ul-join">
                 <li>
                     <div class="input-group">
@@ -25,14 +25,15 @@
                 </li>
             </ul>
         </div>
-        <div ng-if="main.ssoUserLogin || main.ssoUserLoginChecking" class="mem-body">
+        <div ng-if="main.ssoUserLogin || main.ssoUserLoginChecking || main.commonOrgUserLogin" class="mem-body">
             <img ng-if="!contents.ssoUserCreating" src="/images/loading/lg.ripple-radio-preloader.gif">
             <img ng-if="contents.ssoUserCreating" src="/images/loading/lg.dna-spin-spiral-preloader.gif">
             <BR/>
+            <span ng-if="main.commonOrgUserLogin"> 프로젝트 공용 운영자 연동 로그인 중 입니다. </span>
             <span ng-if="!contents.ssoUserCreating"> SSO 연동 로그인 중 입니다. </span>
             <span ng-if="contents.ssoUserCreating"> SSO 연동 사용자 생성중 입니다. 최초 접속 시에는 수분이 걸릴 수 있습니다.</span>
         </div>
-        <div ng-show="!main.ssoUserLogin && !main.ssoUserLoginChecking" class="mem-foot">
+        <div ng-show="!main.ssoUserLogin && !main.ssoUserLoginChecking && !main.commonOrgUserLogin" class="mem-foot">
             <button type="submit" name="button" class="btn btn-color1" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
             <p class="text-right"><a href="/#/signup">계정생성</a></p><!-- | <a href="/">홈</a>  -->
         </div>
