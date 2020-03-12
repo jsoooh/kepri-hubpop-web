@@ -16,10 +16,186 @@
 						<ul class="form_list">
 							<li>
 								<div class="pnb_tit">
-									<i class="i_star"></i> <span class="pnb_t_txt">서버 이름</span>
+									<i class="i_star"></i> <span class="pnb_t_txt">프로젝트 ID</span>
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 								</div>
-								<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required">
+								<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="아이디를 입력하세요." validation="alpha_dash|required">
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">프로젝트명</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="프로젝트명을 입력하세요." validation="alpha_dash|required">
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">프로젝트 유형</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="pl15">
+									<div class="radio radio-inline">
+										<input type="radio" name="" id="app-radio1-1" value="" aria-invalid="">
+										<label for="app-radio1-1" class="label">팀</label>
+									</div>
+									<div class="radio radio-inline">
+										<input type="radio" name="" id="app-radio1-2" value="" aria-invalid="">
+										<label for="app-radio1-2" class="label">개인</label>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">이용기간</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'이용기간 설명'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="datepickerWrap">
+									<div class="date-inpt">
+										<adm-dtp name="'startDate'" ng-model="contents.sch_condition.dateFrom" options="{format:'YYYY-MM-DD'}" maxdate="'{{contents.sch_condition.dateTo}}'" ng-required=true></adm-dtp>
+									</div>
+									<span class="wave">~</span>
+									<div class="date-inpt">
+										<adm-dtp name="'endDate'" ng-model="contents.sch_condition.dateTo" options="{format:'YYYY-MM-DD'}" mindate="'{{contents.sch_condition.dateFrom}}'" ng-required=true></adm-dtp>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<span class="pnb_t_txt">개발비</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="tb_divBox">
+				            		<div class="tb_div_l w90">
+						                <input type="text" class="form-control"  maxlength="50" name="containerName"  placeholder="개발비를 입력해 주세요.">
+				            		</div>
+				            		<div class="tb_div_r w5">
+				            			<span class="txt">백만원</span>
+				            		</div>
+				            	</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<span class="pnb_t_txt">과제계획서 첨부</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="s_cont_box">
+								<div class="fileUploadWrap">
+									<div class="bootstrap-filestyle input-group">
+										<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" ng-model="contents.appFileItem.file.name" validation="required:alt=업로드 해야 할 App 실행용 파일이 선택되지 않았습니다." readonly>
+										<span class="group-span-filestyle input-group-btn" tabindex="0">  
+											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
+											<label class="btn btn-default" ng-click="main.fileSelectBtnClick($event);">
+												<span class="btn btn-md btn-color1" >파일찾기</span>
+											</label>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="mt10">
+								<span class="validation validation-userfile text-danger"></span>
+								<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
+							</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<span class="pnb_t_txt">설명</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'프로젝트 신청에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="s_cont_box">
+									<input type="text" class="form-control" id="" name="" placeholder="설명을 입력해 주세요." />
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<span class="pnb_t_txt">프로젝트 유형 선택</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'프로젝트 신청에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="s_cont_box">
+									<select name="" title="" id="" class="w100">
+										<option>Nano</option>
+									</select>
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<span class="pnb_t_txt">프로젝트 세부 유형 선택</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'프로젝트 신청에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="s_cont_box">
+									<select name="" title="" id="" class="w100">
+										<option>범용 어플리케이션 플랜</option>
+									</select>
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">상세 쿼터 조정</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'프로젝트 신청에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="tbl type1">
+									<table class="table">
+										<colgroup>
+											<col style="width:;">
+											<col style="width:15%;">
+											<col style="width:15%;">
+											<col style="width:15%;">
+											<col style="width:15%;">
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col">항목</th>
+												<th scope="col">값</th>
+												<th scope="col">단위</th>
+												<th scope="col">최소값</th>
+												<th scope="col">최대값</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="tbl_selected">
+												<td>서버 vCore</td>
+												<td><input type="text" class="form-control text-right"/></td>
+												<td>GB</td>
+												<td>1</td>
+												<td>10</td>
+											</tr>
+											<tr>
+												<td>서버 vCore</td>
+												<td><input type="text" class="form-control text-right"/></td>
+												<td>GB</td>
+												<td>1</td>
+												<td>10</td>
+											</tr>
+											<tr>
+												<td>서버 vCore</td>
+												<td><input type="text" class="form-control text-right"/></td>
+												<td>GB</td>
+												<td>1</td>
+												<td>10</td>
+											</tr>
+											<tr>
+												<td>서버 vCore</td>
+												<td><input type="text" class="form-control text-right"/></td>
+												<td>GB</td>
+												<td>1</td>
+												<td>10</td>
+											</tr>
+											<tr>
+												<td>서버 vCore</td>
+												<td><input type="text" class="form-control text-right"/></td>
+												<td>GB</td>
+												<td>1</td>
+												<td>10</td>
+											</tr>
+											<tr>
+												<td>서버 vCore</td>
+												<td><input type="text" class="form-control text-right"/></td>
+												<td>GB</td>
+												<td>1</td>
+												<td>10</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</li>
 						</ul>
 					</div>

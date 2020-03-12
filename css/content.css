@@ -2218,6 +2218,7 @@ p.no-txt{
 .panel_area .pn_r .pn_body {padding:0 30px;}
 .panel_area .pn_body .sm_txt {display:block; font-size:14px; color:#ff0000; text-align:right;}
 .panel_area .pn_body .form_list li {margin-top:35px;}
+.panel_area .pn_body .form_list li .wave {color:#4c515f;}
 /* .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;} */
 .panel_area .pn_body .pnb_tit {position:relative; font-size:18px; font-weight:500; color:#333; margin:0 0 15px 0;}
 /* .panel_area .pn_body .pnb_tit .pnb_t_txt {vertical-align:middle;} */
@@ -2876,6 +2877,7 @@ a.ext_link:hover {text-decoration:underline;}
 .tb_divBox > div {display:table-cell; box-sizing:border-box;}
 .tb_divBox > div.tb_div_l {width:13%;}
 .tb_divBox > div.tb_div_r {width:87%;}
+.tb_divBox .txt {display:inline-block; font-size:15px; font-weight:500; padding:0 0 0 10px;}
 
 
 /*== paas 샘플앱 내려받기 ==*/
@@ -3329,3 +3331,8 @@ a.ext_link:hover {text-decoration:underline;}
 .innerTabWrap .cont-titWrap:after {display:inline-block; content:''; clear:both;}
 .innerTabWrap .cont-titWrap .btn + .btn  {margin-left:10px;}
 .innerTabWrap .cont_lay_div  {height:260px; overflow-y:auto;}
+
+
+.pn_body .datepickerWrap .ADMdtp .ADMdtpInput > input {width:auto;}
+.s_cont_box .fileUploadWrap .input-group .form-control {z-index:0;}
+.pn_body .tbl .table tr:hover td {background:#e5f0fa;}
