@@ -3336,3 +3336,4 @@ a.ext_link:hover {text-decoration:underline;}
 .pn_body .datepickerWrap .ADMdtp .ADMdtpInput > input {width:auto;}
 .s_cont_box .fileUploadWrap .input-group .form-control {z-index:0;}
 .pn_body .tbl .table tr:hover td {background:#e5f0fa;}
+.pn_body .in {overflow-y:auto; height:354px;}
