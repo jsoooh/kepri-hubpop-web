@@ -294,30 +294,22 @@ angular.module('portal.controllers')
 
         var ct = this;
 
-        /*Org 목록 조회*/
-        ct.listOrgProjects = function () {
-            ct.orgProjects = [];
+        /*참조플랜 그룹 목록 조회*/
+        ct.listQuotaPlanGroups = function () {
             $scope.main.loadingMainBody = true;
-            var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
-            promise.success(function (data) {
-                if (data && data.items && angular.isArray(data.items)) {
-                    common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
-                    $scope.main.setListAllPortalOrgs(data.items);
-                } else {
-                    $scope.main.setListAllPortalOrgs();
-                }
-                $scope.main.loadingMainBody = false;
-
-                //좌측메뉴 [프로젝트 생성] 클릭으로 넘어온 경우 바로 팝업 띄움. 2019.06.25
-                if ($scope.main.userAuth == 'M' && ct.popup == 'popup') {
-                    ct.addOrgProjectFormOpen();
-                }
+            var params = {};
+            var returnPromise = quotaService.listQuotaPlanGroups(ct.params);
+            returnPromise.success(function (data) {
+                ct.quotaPlanGroups = data;
             });
-            promise.error(function (data, status, headers) {
+            returnPromise.error(function (data, status, headers) {
+                ct.quotaPlanGroups = [];
+            });
+            returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
 
-        //ct.listOrgProjects();   //조직 목록 조회
+        //ct.listQuotaPlanGroups();   //참조플랜 그룹 목록 조회
     })
 ;
