@@ -297,8 +297,11 @@ angular.module('portal.controllers')
         /*참조플랜 그룹 목록 조회*/
         ct.listQuotaPlanGroups = function () {
             $scope.main.loadingMainBody = true;
-            var params = {};
-            var returnPromise = quotaService.listQuotaPlanGroups(ct.params);
+            var params = {
+                schType : "name",
+                schText : ""
+            };
+            var returnPromise = quotaService.listQuotaPlanGroups(params);
             returnPromise.success(function (data) {
                 ct.quotaPlanGroups = data;
             });
