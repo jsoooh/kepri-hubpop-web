@@ -1489,6 +1489,39 @@ angular.module('portal.controllers')
             ct.listOrgUsers();
         };
 
+        /*책임자 변경 화면 오픈*/
+        ct.changeManagerForm = function ($event) {
+            $scope.dialogOptions = {
+                controller: "commChangeManagerFormCtrl",
+                callBackFunction: null
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, $scope.dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        /*권한 변경 화면 오픈*/
+        ct.changeRoleForm = function ($event) {
+            $scope.dialogOptions = {
+                controller: "commChangeRoleFormCtrl",
+                callBackFunction: null
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, $scope.dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        /*프로젝트 쿼터변경 요청 화면 오픈*/
+        ct.requestQuotaForm = function ($event) {
+            $scope.dialogOptions = {
+                controller: "commRequestQuotaFormCtrl",
+                callBackFunction: null
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, $scope.dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
         ct.pageLoadData();
     })
     .controller('commPopOrgProjectSchAddUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, ValidationService, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
@@ -1977,5 +2010,113 @@ angular.module('portal.controllers')
         pop.addNewOrgUsers();
 
         pop.pageListOrgUsersLoadData();
+    })
+    .controller('commRequestQuotaFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+        _DebugConsoleLog("orgDetailController.js : commRequestQuotaFormCtrl", 1);
+        $scope.actionBtnHied = false;
+
+        var pop = this;
+        $scope.actionLoading = false;
+
+        pop.fn = {};
+        pop.data = {};
+
+        pop.formName = "requestQuotaForm";
+        $scope.dialogOptions.formName = pop.formName;
+        $scope.dialogOptions.validDisabled = true;
+        $scope.dialogOptions.dialogClassName = "modal-lg";
+        $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popRequestQuotaForm.html" + _VersionTail();
+        $scope.dialogOptions.title = "프로젝트 쿼터변경요청";
+        pop.method = "POST";
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
+                $scope.actionBtnHied = false;
+                return;
+            }
+            pop.fn.okFunction();
+        };
+
+        $scope.popCancel = function () {
+            $scope.popHide();
+        };
+
+        pop.fn.okFunction = function() {
+        };
+    })
+    .controller('commChangeRoleFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+        _DebugConsoleLog("orgDetailController.js : commChangeRoleFormCtrl", 1);
+        $scope.actionBtnHied = false;
+
+        var pop = this;
+        $scope.actionLoading = false;
+
+        pop.fn = {};
+        pop.data = {};
+
+        pop.formName = "changeRoleForm";
+        $scope.dialogOptions.formName = pop.formName;
+        $scope.dialogOptions.validDisabled = true;
+        $scope.dialogOptions.dialogClassName = "modal-dialog";
+        $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popChangeRoleForm.html" + _VersionTail();
+        $scope.dialogOptions.title = "권한 변경";
+        pop.method = "POST";
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
+                $scope.actionBtnHied = false;
+                return;
+            }
+            pop.fn.okFunction();
+        };
+
+        $scope.popCancel = function () {
+            $scope.popHide();
+        };
+
+        pop.fn.okFunction = function() {
+        };
+    })
+    .controller('commChangeManagerFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+        _DebugConsoleLog("orgDetailController.js : commChangeManagerFormCtrl", 1);
+        $scope.actionBtnHied = false;
+
+        var pop = this;
+        $scope.actionLoading = false;
+
+        pop.fn = {};
+        pop.data = {};
+
+        pop.formName = "changeManagerForm";
+        $scope.dialogOptions.formName = pop.formName;
+        $scope.dialogOptions.validDisabled = true;
+        $scope.dialogOptions.dialogClassName = "modal-dialog";
+        $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popChangeManagerForm.html" + _VersionTail();
+        $scope.dialogOptions.title = "책임자 변경";
+        pop.method = "POST";
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
+                $scope.actionBtnHied = false;
+                return;
+            }
+            pop.fn.okFunction();
+        };
+
+        $scope.popCancel = function () {
+            $scope.popHide();
+        };
+
+        pop.fn.okFunction = function() {
+        };
     })
 ;
