@@ -3350,3 +3350,8 @@ a.ext_link:hover {text-decoration:underline;}
 .resource_box .panel .panel_body .table th {font-weight:700; text-align:left; border-top:0; padding:8px 8px 8px 25px;}
 .resource_box .panel .panel_body .table th em {font-weight:700; color:#666;}
 .resource_box .panel .panel_body .table td {color:#888; text-align:right; padding:8px 25px 8px 8px;}
+
+/*즐겨찾기 아이콘*/
+.dropdown-menu > li > a.favorit {position:relative; padding-left:18px;}
+.dropdown-menu > li > a.favorit:before {display:inline-block; content:'☆'; font-size:15px; color:#333; margin-right:2px;}
+.dropdown-menu > li > a.favorit.active:before {content:'★'; font-size:15px; color:#00bfff;}

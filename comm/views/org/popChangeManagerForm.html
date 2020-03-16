@@ -1,4 +1,58 @@
-<div class="tableWrap">
-    /comm/views/org/popChangeManagerForm.html
-</div>
-<!--	//MODAL	-->
+<scrollable-table class="tableHeight280"><!-- resizable 는 싸이즈 조절이 필요한 곳 만 적용 -->
+	<table class="table">
+		<thead>
+			<tr>
+				<th style="width:20%;">선택</th>
+				<th style="width:auto;">이름</th>
+				<th style="width:25%;">아이디</th>
+				<th style="width:25%;">역할</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="tbl_selected"><!-- 선택 된 tr의 class="tbl_selected" -->
+				<td>
+					<div class="radio radio-only">
+						<input type="radio" name="" id="radio1-1">
+						<label for="radio1-1"></label>
+					</div>
+				</td>
+				<td>이름01</td>
+				<td>id001</td>
+				<td>사용자</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="radio radio-only">
+						<input type="radio" name="" id="radio1-1">
+						<label for="radio1-1"></label>
+					</div>
+				</td>
+				<td>이름02</td>
+				<td>id002</td>
+				<td>관리자</td>
+			</tr>
+			<tr class="tbl_disabled"><!-- 선택 된 tr의 class="tbl_disabled" -->
+				<td>
+					<div class="radio radio-only">
+						<input type="radio" name="" id="radio1-1">
+						<label for="radio1-1"></label>
+					</div>
+				</td>
+				<td>이름03</td>
+				<td>id003</td>
+				<td>책임자</td>
+			</tr>
+			<!-- 데이터 로딩중일 때 -->
+			<tr>
+				<td colspan="4"><p class="txt"><img src="images/loading_sm.gif"> 데이터 로딩 중 입니다.</p></td>
+			</tr>
+			<!-- //데이터 로딩중일 때 -->
+			
+			<!-- 데이터 없을 때 -->
+			<tr>
+				<td colspan="4">데이터가 없습니다.</td>
+			</tr>
+			<!-- //데이터 없을 때 -->
+		</tbody>
+	</table>
+</scrollable-table>
