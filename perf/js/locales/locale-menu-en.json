@@ -1,0 +1,13 @@
+{
+	"perfMenu": {
+		"menu": {
+			"perf_dashboard": "Dashboard",
+			"perf_anls": "Project charging status",
+			"perf_monthly_metering": "Monthly usage",
+			"perf_items_metering": "Recommended use by item",
+			"perf_ref_amt": "Charging policy"
+		},
+		"desc": {
+		}
+	}
+}

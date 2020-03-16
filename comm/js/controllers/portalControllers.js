@@ -6,3 +6,4 @@ angular.module('iaas.controllers', []);
 angular.module('paas.controllers', []);
 angular.module('market.controllers', []);
 angular.module('monit.controllers', []);
+angular.module('perf.controllers', []);

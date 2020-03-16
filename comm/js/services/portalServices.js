@@ -775,4 +775,5 @@ angular.module('product.services', []);
 angular.module('paas.services', []);
 angular.module('market.services', []);
 angular.module('monit.services', []);
+angular.module('perf.services', []);
 

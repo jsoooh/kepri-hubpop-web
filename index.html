@@ -37,6 +37,7 @@
     var _PAAS_STAGE_			 = "paas";
     var _MARKET_STAGE_			 = "market";
     var _MONIT_STAGE_			 = "monit";
+	var _PERF_STAGE_		     = "perf";
 
     var _VIEWS_                  = "views";
     var _ADMIN_VIEWS_            = "views/admin";
@@ -46,12 +47,7 @@
     var _PAAS_VIEWS_			 = _PAAS_STAGE_ +"/views";
     var _MARKET_VIEWS_			 = _MARKET_STAGE_ +"/views";
     var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
-
-    var _COMM_ADMIN_VIEWS_			= _COMM_VIEWS_+"/admin";
-    var _IAAS_ADMIN_VIEWS_			= _IAAS_VIEWS_+"/admin";
-    var _PAAS_ADMIN_VIEWS_			= _PAAS_VIEWS_+"/admin";
-    var _MARKET_ADMIN_VIEWS_		= _MARKET_VIEWS_+"/admin";
-    var _MONIT_ADMIN_VIEWS_			= _MONIT_VIEWS_+"/admin";
+	var _PERF_VIEWS_			 = _PERF_STAGE_ +"/views";
 
     var _CONNECT_SITE_				= "USER";
     var _LAYOUT_VIEWS_				= _COMM_VIEWS_;
@@ -238,7 +234,10 @@
         // PAAS
         loadJavascript(_PAAS_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
 
-        // MARKET
+		// PERF
+		loadJavascript(_PERF_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
+
+		// MARKET
         //loadJavascript(_MARKET_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
 
         // MONIT

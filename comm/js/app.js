@@ -42,8 +42,8 @@ angular.module('app', [
         , 'ngJScrollPane'
         , 'checklist-model'
     ])
-    .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$translateProvider', 'CONSTANTS', 'SITEMAP', 'IAASSITEMAP', 'PAASSITEMAP'/*, 'MARKETSITEMAP', 'MONITSITEMAP'*/,
-        function ($httpProvider, $stateProvider, $urlRouterProvider, $translateProvider, CONSTANTS, SITEMAP, IAASSITEMAP, PAASSITEMAP/*, MARKETSITEMAP, MONITSITEMAP*/) {
+    .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$translateProvider', 'CONSTANTS', 'SITEMAP', 'IAASSITEMAP', 'PAASSITEMAP', 'PERFSITEMAP'/*, 'MARKETSITEMAP', 'MONITSITEMAP'*/,
+        function ($httpProvider, $stateProvider, $urlRouterProvider, $translateProvider, CONSTANTS, SITEMAP, IAASSITEMAP, PAASSITEMAP, PERFSITEMAP/*, MARKETSITEMAP, MONITSITEMAP*/) {
 
         _DebugConsoleLog('app.js : commonApp', 1);
 
@@ -100,6 +100,11 @@ angular.module('app', [
                 if (!SITEMAP.pages[key])    SITEMAP.pages[key] = option;
             });
         }
+        if (PERFSITEMAP.pages) {
+            angular.forEach(PERFSITEMAP.pages, function(option, key) {
+                if (!SITEMAP.pages[key])    SITEMAP.pages[key] = option;
+            });
+        }
 /*
         if (MARKETSITEMAP.pages) {
             angular.forEach(MARKETSITEMAP.pages, function (option, key) {
@@ -122,6 +127,11 @@ angular.module('app', [
         }
         if (PAASSITEMAP.leftMenus) {
             angular.forEach(PAASSITEMAP.leftMenus, function (option, key) {
+                if (!SITEMAP.leftMenus[key]) SITEMAP.leftMenus[key] = option;
+            });
+        }
+        if (PERFSITEMAP.leftMenus) {
+            angular.forEach(PERFSITEMAP.leftMenus, function (option, key) {
                 if (!SITEMAP.leftMenus[key]) SITEMAP.leftMenus[key] = option;
             });
         }
@@ -176,7 +186,7 @@ angular.module('app', [
             });
         });
 
-        var pageStages = ['comm', 'iaas', 'paas', /*'market', 'monit'*/];
+        var pageStages = ['comm', 'iaas', 'paas', 'perf'/*, 'market', 'monit'*/];
         var translateFiles = [];
 
         translateFiles.push({
