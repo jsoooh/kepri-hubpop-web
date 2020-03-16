@@ -134,23 +134,20 @@ angular.module('portal.controllers')
             });
         };
 
-        /*개인 프로젝트 생성*/
-        ct.createPersonalProject = function () {
-            $scope.main.loadingMainBody = true;
-            var returnPromise = orgService.createPersonalProject();
-            returnPromise.success(function (data) {
-
-            });
-            returnPromise.error(function (data, status, headers) {
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-            });
+        /*프로젝트명 변경 팝업화면 오픈*/
+        ct.changeNameOrgProject = function ($event) {
+            $scope.dialogOptions = {
+                controller: "commChangeNameFormCtrl",
+                callBackFunction: ct.listOrgProjects
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, $scope.dialogOptions);
+            $scope.actionLoading = true; // action loading
         };
 
         ct.listOrgProjects();   //조직 목록 조회
         //개인 프로젝트 건수 조회
-        ct.getPersonalProjectCount();
+        //ct.getPersonalProjectCount();
     })
     .controller('commFirstOrgProjectMainCtrl', function ($scope) {
         _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);
@@ -314,5 +311,41 @@ angular.module('portal.controllers')
         };
 
         //ct.listQuotaPlanGroups();   //참조플랜 그룹 목록 조회
+    })
+    .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+        _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);
+        $scope.actionBtnHied = false;
+
+        var pop = this;
+        $scope.actionLoading = false;
+
+        pop.fn = {};
+        pop.data = {};
+
+        pop.formName = "changeNameForm";
+        $scope.dialogOptions.formName = pop.formName;
+        $scope.dialogOptions.validDisabled = true;
+        $scope.dialogOptions.dialogClassName = "modal-sm";
+        $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectChangeNameForm.html" + _VersionTail();
+        $scope.dialogOptions.title = "프로젝트명 변경";
+        pop.method = "POST";
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
+                $scope.actionBtnHied = false;
+                return;
+            }
+            pop.fn.okFunction();
+        };
+
+        $scope.popCancel = function () {
+            $scope.popHide();
+        };
+
+        pop.fn.okFunction = function() {
+        };
     })
 ;

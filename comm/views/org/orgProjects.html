@@ -9,9 +9,6 @@
 			<a href="" ng-click="main.requestOrgProjectFormOpen($event);">
 				<span>프로젝트 신청</span>
 			</a>
-			<a href="" ng-click="contents.addPersonalOrgProject($event);" ng-if="main.userAuth == 'M'"  ng-disabled="contents.personalProjectCnt==0 || contents.myPersonalCnt==0 || contents.personalProjectCnt<=contents.myPersonalCnt">
-				<span>개인 프로젝트 생성</span>
-			</a>
 		</div>
 	</div>
 	<div class="p_main_cont">
@@ -112,7 +109,7 @@
 		<div class="pull-right">
 			<!--<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 생성" ng-click="contents.addOrgProjectFormOpen($event);" ng-disabled="main.userAuth != 'M'">프로젝트 생성</button>-->
 			<button type="button" name="button" class="btn btn-color1 btn-md" title="프로젝트 신청" ng-click="main.requestOrgProjectFormOpen($event);" ng-disabled="main.userAuth != 'M'">프로젝트 신청</button>
-			<button type="button" name="button" class="btn btn-color1 btn-md" title="개인 프로젝트 생성" ng-click="contents.addOrgProjectFormOpen($event);" ng-if="main.userAuth == 'M'" ng-disabled="contents.personalProjectCnt==0 || contents.myPersonalCnt==0 || contents.personalProjectCnt<=contents.myPersonalCnt">개인 프로젝트 생성</button>
+			<button type="button" name="button" class="btn btn-color1 btn-md" title="명칭변경" ng-click="contents.changeNameOrgProject($event);" ng-disabled="main.userAuth != 'M'">명칭변경(임시)</button>
 		</div>
 	</div>
 	<!-- //table top -->
