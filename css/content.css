@@ -3337,3 +3337,21 @@ a.ext_link:hover {text-decoration:underline;}
 .s_cont_box .fileUploadWrap .input-group .form-control {z-index:0;}
 .pn_body .tbl .table tr:hover td {background:#e5f0fa;}
 .pn_body .in {overflow-y:auto; height:354px;}
+
+/* 프로젝트 자원 > 자원쿼터 신규 UI */
+.resource_box .ul-panel {margin-left:-1.5%;}
+.resource_box .ul-panel > li {width:15%; margin-left:1.6%;}
+.resource_box .panel {height:260px; margin-bottom:25px;}
+.resource_box .panel .panel_head {position:relative; height:63px; border-bottom:1px solid #eee; padding:17px 0 0 25px;}
+.resource_box .panel .panel_head .tit_area {font-size:20px; font-weight:700; line-height:1.4;}
+.resource_box .panel .panel_body .tbl_cont {height:197px; overflow-y:auto;}
+.resource_box .panel .panel_body .table tr:nth-child(odd) th, .resource_box .panel .panel_body .table tr:nth-child(odd) td {background:#f7f7f7; border-bottom:1px solid #eee;}
+.resource_box .panel .panel_body .table th, .resource_box .panel .panel_body .table td {background:#fff;}
+.resource_box .panel .panel_body .table th {font-weight:700; text-align:left; border-top:0; padding:8px 8px 8px 25px;}
+.resource_box .panel .panel_body .table th em {font-weight:700; color:#666;}
+.resource_box .panel .panel_body .table td {color:#888; text-align:right; padding:8px 25px 8px 8px;}
+
+/*즐겨찾기 아이콘*/
+.dropdown-menu > li > a.favorit {position:relative; padding-left:18px;}
+.dropdown-menu > li > a.favorit:before {display:inline-block; content:'☆'; font-size:15px; color:#333; margin-right:2px;}
+.dropdown-menu > li > a.favorit.active:before {content:'★'; font-size:15px; color:#00bfff;}

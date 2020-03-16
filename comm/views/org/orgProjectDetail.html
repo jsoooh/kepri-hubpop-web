@@ -761,9 +761,9 @@
             <!-- table -->
             <div class="tb-top">
                 <div class="pull-right">
-                    <button type="button" name="button" class="btn btn-color1 btn-sm" ng-disabled="!contents.isOrgManager" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
-                    <button type="button" name="button" class="btn btn-color1 btn-sm" ng-disabled="!contents.isOrgManager" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
-					<button type="button" name="button" class="btn btn-color1 btn-sm" ng-disabled="!contents.isOrgManager" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
+                    <button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
+                    <button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
+					<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
                 </div>
             </div>
             <div class="tbl type1">
@@ -823,7 +823,7 @@
         <div ng-if="contents.sltInfoTab == 'resource'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'resource'}">
             <!-- cBox -->
             <div class="cBox type4">
-                <h3 class="h-tit3 pd0">자원쿼터</h3>
+                <h3 class="h-tit3 pb20">자원쿼터</h3>
 
                 <div class="cBox-cnt pd0">
                     <div class="in">
@@ -832,7 +832,245 @@
                                 <h4 class="c-tit ng-binding">- 쿼터 Plan : {{ contents.selOrgProject.quotaId.name }}</h4>
                             </div>
                         </div> -->
-                        <div class="tbl type1">
+                        
+                        <!-- 신규 자원쿼터 UI -->
+						<div class="resource_box">
+							<ul class="ul-panel">
+								<li>
+									<!-- panel -->
+									<div class="panelWrap">
+										<div class="panel">
+											<div class="panel_head">
+												<div class="tit_area">
+													<p class="tit">가상서버</p>
+												</div>
+											</div>
+											<div class="panel_body">
+												<div class="tbl_cont">
+													<table class="table">
+														<colgroup>
+															<col style="width:67%;">
+															<col style="width:;">
+														</colgroup>
+														<tbody>
+															<tr>
+																<th><em>서버</em>vCore</th>
+																<td>32</td>
+															</tr>
+															<tr>
+																<th><em>서버</em>RAM</th>
+																<td>64</td>
+															</tr>
+															<tr>
+																<th><em>서버</em>HDD</th>
+																<td>1500</td>
+															</tr>
+															<tr>
+																<th><em>서버</em>SSD</th>
+																<td>400</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- //panel -->
+								</li>
+								<li>
+									<!-- panel -->
+									<div class="panelWrap">
+										<div class="panel">
+											<div class="panel_head">
+												<div class="tit_area">
+													<p class="tit">GPU</p>
+												</div>
+											</div>
+											<div class="panel_body">
+												<div class="tbl_cont">
+													<table class="table">
+														<colgroup>
+															<col style="width:67%;">
+															<col style="width:;">
+														</colgroup>
+														<tbody>
+															<tr>
+																<th><em>GPU서버</em>vCore</th>
+																<td>32</td>
+															</tr>
+															<tr>
+																<th><em>GPU서버</em>RAM</th>
+																<td>32</td>
+															</tr>
+															<tr>
+																<th><em>GPU서버</em>HDD</th>
+																<td>32</td>
+															</tr>
+															<tr>
+																<th><em>GPU서버</em>SSD</th>
+																<td>32</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- //panel -->
+								</li>
+								<li>
+									<!-- panel -->
+									<div class="panelWrap">
+										<div class="panel">
+											<div class="panel_head">
+												<div class="tit_area">
+													<p class="tit">PaaS</p>
+												</div>
+											</div>
+											<div class="panel_body">
+												<div class="tbl_cont">
+													<table class="table">
+														<colgroup>
+															<col style="width:67%;">
+															<col style="width:;">
+														</colgroup>
+														<tbody>
+															<tr>
+																<th>RAM</th>
+																<td>256</td>
+															</tr>
+															<tr>
+																<th>서비스</th>
+																<td>80</td>
+															</tr>
+															<tr>
+																<th>HDD</th>
+																<td>80</td>
+															</tr>
+															<tr>
+																<th>SSD</th>
+																<td>80</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- //panel -->
+								</li>
+								<li>
+									<!-- panel -->
+									<div class="panelWrap">
+										<div class="panel">
+											<div class="panel_head">
+												<div class="tit_area">
+													<p class="tit">CaaS</p>
+												</div>
+											</div>
+											<div class="panel_body">
+												<div class="tbl_cont">
+													<table class="table">
+														<colgroup>
+															<col style="width:67%;">
+															<col style="width:;">
+														</colgroup>
+														<tbody>
+															<tr>
+																<th>vCPU</th>
+																<td></td>
+															</tr>
+															<tr>
+																<th>RAM</th>
+																<td></td>
+															</tr>
+															<tr>
+																<th>HDD</th>
+																<td></td>
+															</tr>
+															<tr>
+																<th>SSD</th>
+																<td></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- //panel -->
+								</li>
+								<li>
+									<!-- panel -->
+									<div class="panelWrap">
+										<div class="panel">
+											<div class="panel_head">
+												<div class="tit_area">
+													<p class="tit">FaaS</p>
+												</div>
+											</div>
+											<div class="panel_body">
+												<div class="tbl_cont">
+													<table class="table">
+														<colgroup>
+															<col style="width:67%;">
+															<col style="width:;">
+														</colgroup>
+														<tbody>
+															<tr>
+																<th>func 개수</th>
+																<td>2</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- //panel -->
+								</li>
+								<li>
+									<!-- panel -->
+									<div class="panelWrap">
+										<div class="panel">
+											<div class="panel_head">
+												<div class="tit_area">
+													<p class="tit">상용DB서비스</p>
+												</div>
+											</div>
+											<div class="panel_body">
+												<div class="tbl_cont">
+													<table class="table">
+														<colgroup>
+															<col style="width:67%;">
+															<col style="width:;">
+														</colgroup>
+														<tbody>
+															<tr>
+																<th>Exa 용량</th>
+																<td></td>
+															</tr>
+															<tr>
+																<th>SE 용량</th>
+																<td></td>
+															</tr>
+															<tr>
+																<th>MS-SQL</th>
+																<td></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- //panel -->
+								</li>
+							</ul>
+						</div>
+                        <!-- //신규 자원쿼터 UI -->
+                        
+                        <div class="tbl type1" ng-if="false">
 							<table class="table">
 								<colgroup>
 									<col style="" />
