@@ -54,8 +54,9 @@
 
 /* modal table */
 .modal-content .tbl tbody tr:nth-child(2n-1) td{background-color:#fafafa;}/*180404 스타일 추가*/
-.modal-content .tbl th{font-size: 13px;}
-.modal-content .tbl td{font-size: 13px;}
+.modal-content .tbl tbody tr.bg_none td{background-color:#fff;}
+.modal-content .tbl th{font-size: 15px;}
+.modal-content .tbl td{font-size: 15px;}
 
 .modal-content .tbl.type1 th{height: 40px; padding:5px;}
 .modal-content .tbl.type1 td{height: 40px; padding:5px;}
