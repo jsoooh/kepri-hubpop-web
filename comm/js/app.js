@@ -11,6 +11,8 @@ angular.module('app', [
         , 'iaas.services'
         , 'paas.controllers'
         , 'paas.services'
+        , 'perf.controllers'
+        , 'perf.services'
         // , 'market.controllers'
         // , 'market.services'
         //, 'monit.controllers'
