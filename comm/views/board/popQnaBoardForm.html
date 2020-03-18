@@ -1,0 +1,58 @@
+<style>
+	.btn-file {
+		font-size: 16px;
+		font-weight: 500;
+		min-width: 90px;
+		height: 36px;
+		padding: 0 10px;
+	}
+</style>
+<div class="tableWrap">
+	<div class="tableWrap">
+		<table class="table table-bordered inputWidthWrap">
+			<colgroup>
+				<col style="width:140px;" />
+				<col />
+			</colgroup>
+			<tbody>
+            <tr>
+                <th>
+                    <span class="require"></span>
+                    <label for="title">{{ 'label.bulletin_title' | translate }}</label>
+                </th>
+                <td>
+                    <input type="text" id="title" name="title" maxlength="30" ng-model="pop.boardData.title0" placeholder="{{'label.bulletin_title' | translate}}" style="width:95%;ime-mode:active;" validation="required"/>
+                </td>
+            </tr>
+			<tr>
+				<th>
+                    <span class="require"></span>
+					<label for="content">{{ 'label.bulletin_content' | translate }}</label>
+				</th>
+				<td>
+					<!-- <textarea maxlength="4000" type="text" class="success" id="content" name="content" ng-model="pop.boardData.content0" placeholder="{{ 'label.bulletin_content' | translate }}" style="width:95%;height:auto;ime-mode:active;" rows="10" ng-if="!pop.isWiswic" validation="required"/> -->
+					<!-- <div class="ta-container pop-container lighter" ng-if="pop.isWiswic" style="width: 95%;">
+						<div text-angular ng-model="pop.boardData.content0" name="pop-editor" ta-text-editor-class="clearfix border-around pop-container" ta-html-editor-class="border-around"></div>
+					</div> -->
+					<textarea name="pop_editor" id="pop_editor" rows="10" cols="80"></textarea>
+				</td>
+			</tr>
+            <tr>
+                <th>
+					<span class="require none"></span>
+                    <label for="content">{{ 'label.bulletin_attach' | translate }}</label>
+                </th>
+                <td>
+					<input type="file" id="uploadedNoticeFile" file-input="pop.file.uploadedNoticeFile" multiple placeholder="Upload File" style="display: none;"/>
+					<button type="button" class="btn-file btn-color1" ng-click="main.fileSelectBtnClick($event);">
+						{{ 'label.file_search' | translate }}
+					</button>
+					<ul>
+						<li ng-repeat="aFile in pop.file.uploadedNoticeFile">{{ aFile.name }}</li>
+					</ul>
+                </td>
+            </tr>
+			</tbody>
+		</table>
+	</div>
+</div>

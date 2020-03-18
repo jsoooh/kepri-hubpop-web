@@ -158,16 +158,21 @@ angular.module('app')
                                 icon: "paasMarket",
                                 stateKey: 'commBoard_qna',
                                 url: '/comm/boards/qna',
-                                controller: 'commBoardsCtrl',
-                                templateUrl: _COMM_VIEWS_+'/board/boards.html',
+                                controller: 'commQnaBoardsCtrl',
+                                templateUrl: _COMM_VIEWS_+'/board/qnaBoards.html',
+                                // controller: 'commBoardsCtrl',
+                                // templateUrl: _COMM_VIEWS_+'/board/boards.html',
                                 subPages: {
                                     boardDetail: {
                                         menuKey: 'boards',
-                                        name: 'board_details',
+                                        name: 'qna_board_details',
+                                        // name: 'board_details',
                                         stateKey: 'commBoardDetailQna',
-                                        url: '/comm/boards/boardDetail/qna/:id',
-                                        controller: 'commBoardDetailCtrl',
-                                        templateUrl: _COMM_VIEWS_+'/board/boardDetail.html'
+                                        url: '/comm/boards/qna/:id',
+                                        controller: 'commQnaBoardDetailCtrl',
+                                        templateUrl: _COMM_VIEWS_+'/board/qnaBoardDetail.html'
+                                        // controller: 'commBoardDetailCtrl',
+                                        // templateUrl: _COMM_VIEWS_+'/board/boardDetail.html'
                                     }
                                 }
                             },

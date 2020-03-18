@@ -35,7 +35,9 @@
 			"board_notice": "공지사항",
 			"board_create": "공지사항 등록",
 			"board_update": "공지사항 수정",
-			"board_details": "공지사항 상세"
+			"board_details": "공지사항 상세",
+			"board_qna": "문의하기",
+			"qna_board_details": "문의하기 상세"
 		},
 		"desc": {
 			"detail_link": "자세한 사항은 <a href='{{link}}' target='_COMM_USER_GUID'>매뉴얼</a>을 참고하세요.",

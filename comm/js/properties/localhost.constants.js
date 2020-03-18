@@ -402,7 +402,19 @@ angular.module('app')
             }
         },
         //neutron lbaas.loadbalancer/pool : 10
-        lbaasPortLimit : 10
+        lbaasPortLimit : 10,
+        ckeditorConfig: {
+            language: 'ko-kr',
+            toolbar: [
+                ['Source', '-', 'Preview'],
+                ['Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo'],
+                ['Bold', 'Italic', 'Underline'],
+                ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+                ['Styles', 'Format', 'Font', 'FontSize'],
+                ['TextColor', 'BGColor'],
+                ['Table', 'SpecialChar', 'Link', 'Unlink']
+            ]
+        }
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},

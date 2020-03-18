@@ -1,0 +1,79 @@
+			<!-- content -->
+				<!-- table top -->
+				<div class="tb-top">
+					<div class="pull-left">{{ 'label.all' | translate }} : {{ contents.pageOptions.total }} 건</div>
+					<div class="pull-right">
+						<button type="button" name="button" class="btn btn-ico-add only-ico" title="등록" ng-click="contents.boardAdd($event);">
+							<span class="ico">{{ 'label.bulletin_write' | translate }}</span>
+						</button>
+					</div>
+				</div>
+				<!-- //table top -->
+				
+				<!-- table -->
+				<div class="tbl type1">
+					<table class="table">
+						<colgroup>
+						<col style="width:15%;">
+						<col style="width:auto;">
+						<col style="width:20%;">
+						<col style="width:15%;">
+						<col style="width:10%;">
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">No</th>
+								<th scope="col">{{ 'label.title' | translate }}</th>
+								<th scope="col">{{ 'label.registrant' | translate }}</th>
+								<th scope="col">{{ 'label.register_dd' | translate }}</th>
+								<th scope="col">{{ 'label.hits' | translate }}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="boardItem in contents.boards">
+								<td>{{contents.pageOptions.pageSize * (contents.pageOptions.currentPage - 1) + $index + 1}}</td>
+								<td class="text-left">
+									<span class="reply" ng-show="boardItem.level!=1"></span>
+									<a href="#/comm/boards/qna/{{boardItem.id}}">{{boardItem.title}}</a>
+								</td>
+								<td>{{ boardItem.ownerName }}</td>
+								<td>{{ boardItem.createdDate.time | date : "yyyy-MM-dd HH:mm" }}</td>
+								<td>{{ boardItem.hits }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- //table -->
+
+				<!-- page -->
+				<nav class="pagiWrap" ng-show="contents.pageOptions.total">
+					<paging
+						page="contents.pageOptions.currentPage"
+						page-size="contents.pageOptions.pageSize"
+						total="contents.pageOptions.total"
+						pg-href=""
+						show-prev-next="true"
+						show-first-last="true"
+						paging-action="contents.listBoards(page)"
+						text-first-class="firstPage"
+						text-last-class="lastPage"
+						text-next-class="nextPage"
+						text-prev-class="prevPage">
+					</paging>
+				</nav>
+				<!-- //page -->
+
+				<!-- compMsgBox -->
+				<div class="compMsgBox type1" ng-show="!contents.pageOptions.total">
+				  <div class="inMsgTxt">
+					<span class="ico"></span>
+					  <strong ng-if="!contents.schText" class="msg-tit">게시물이 존재하지 않습니다.</strong>
+					  <strong ng-if="contents.schText" class="msg-tit">'<span class="point1">{{contents.schText}}</span>'에 대한 검색 결과가 없습니다.</strong>
+					<div ng-if="contents.schText" class="msg-txt">
+					  다른 검색어를 넣어 다시 검색해주세요.
+					</div>
+				  </div>
+				</div>
+				<!-- //compMsgBox -->
+			<!-- //content -->
+

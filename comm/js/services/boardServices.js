@@ -57,7 +57,25 @@ angular.module('portal.services')
         boardService.nextPreBoardList = function(id, param) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/boards/'+id+'/nextPreBoardList', 'GET', param));
         };
-		
+        
+        boardService.myBoardList = function (size, page, email, boardCode, schType, schText) {
+            var getParams = {
+                "size" : size ? size : 10,
+                "page" : page ? page : 0,
+                /*"sort" : "groupNo,desc",
+                "sort" : "level,asc",
+                "sort" : "parent,asc",*/
+				"boardCode" : boardCode,
+                "schType" : schType ? schType : "all",
+				"schText" : schText ? schText : ""
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/boards/' + email + '/qna', 'GET', getParams));
+        }
+
+        boardService.listReply = function(parentId) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/reply/' + parentId));
+        }
+
 		return boardService;
 	})
 ;

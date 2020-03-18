@@ -1031,6 +1031,23 @@ angular.module('app')
             }
         };
     })
+    // // File Upload 적용
+    .directive('fileInput', ['$parse', function ($parse) {
+        return {
+            restrict: 'EA',
+            //replace: true,
+            //transclude: true,
+            link: function (scope, element, attrs) {
+                var model = $parse(attrs.fileInput);
+                var modelSetter = model.assign;
+                element.bind('change', function () {
+                    scope.$apply(function () {
+                        modelSetter(scope, element[0].files);
+                    });
+                });
+            }
+        };
+    }])
     .directive('ngKeyEnter', function () {
         return function (scope, element, attrs) {
             element.bind("keydown keypress", function (event) {
