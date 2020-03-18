@@ -325,7 +325,7 @@ angular.module('portal.controllers')
         pop.formName = "changeNameForm";
         $scope.dialogOptions.formName = pop.formName;
         $scope.dialogOptions.validDisabled = true;
-        $scope.dialogOptions.dialogClassName = "modal-sm";
+        $scope.dialogOptions.dialogClassName = "modal-md";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectChangeNameForm.html" + _VersionTail();
         $scope.dialogOptions.title = "프로젝트명 변경";
         pop.method = "POST";
