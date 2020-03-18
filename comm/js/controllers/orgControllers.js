@@ -395,10 +395,6 @@ angular.module('portal.controllers')
             return result;
         };
 
-        ct.listQuotaPlanGroups();   //참조플랜 그룹 목록 조회
-        ct.listQuotaPlan();     //참조플랜 그룹 세부목록 조회
-        ct.listQuotaItem();     //상세쿼타조정 조회
-
         /*프로젝트 유형 변경 감지*/
         ct.orgCaseChange = function() {
             var calendarButton = $('.datepickerWrap').find('.dtp-ig');
@@ -446,6 +442,10 @@ angular.module('portal.controllers')
                 common.showAlert("message",data.message);
             });
         };
+
+        ct.listQuotaPlanGroups();   //참조플랜 그룹 목록 조회
+        ct.listQuotaPlan();     //참조플랜 그룹 세부목록 조회
+        ct.listQuotaItem();     //상세쿼타조정 조회
     })
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);
