@@ -3058,6 +3058,17 @@ angular.module('common.services', ['LocalStorageModule'])
             return minuteDiff + 'm';
         };
 
+        common.replaceStrAll = function (source, org, dest) {
+            return source.split(org).join(dest);
+        };
+
+        common.trustAsHtml = function (content) {
+            content = common.replaceStrAll(content, '&lt;', '<', true);
+            content = common.replaceStrAll(content, '&gt;', '>', true);
+            content = common.replaceStrAll(content, '[&]', '&', true);
+            return content;
+        };
+
         return common;
     })
     .factory('cache', function (localStorageService) {
