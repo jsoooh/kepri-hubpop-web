@@ -659,7 +659,7 @@ angular.module('portal.controllers')
                     $timeout(function () {
                         CKEDITOR.replace('detail_editor', CONSTANTS.ckeditorConfig)
                         .on('change', function (evt) {
-                            ct.boardData.content0 = evt.editor.getData();
+                            ct.boardData.content0 = $sce.trustAsHtml(common.trustAsHtml(evt.editor.getData()));
                         });
                     }, 500);
                     ct.isFirstLoad = false;
@@ -885,7 +885,7 @@ angular.module('portal.controllers')
         $timeout(function () {
             CKEDITOR.replace('pop_editor', CONSTANTS.ckeditorConfig)
             .on('change', function (evt) {
-                pop.boardData.content0 = evt.editor.getData();
+                pop.boardData.content0 = $sce.trustAsHtml(common.trustAsHtml(evt.editor.getData()));
             });
         }, 500)
 
