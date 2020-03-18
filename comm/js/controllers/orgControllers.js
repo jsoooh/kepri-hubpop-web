@@ -435,7 +435,7 @@ angular.module('portal.controllers')
                 orgQuotas['value'] = ct.quotaItemValue[i].value;
                 quotasList.push(orgQuotas);
             }
-            params['orgQuotas'] = quotasList;
+            params['orgQuotaValues'] = quotasList;
 
             var returnPromise = orgService.requestOrgCreate(params);
             returnPromise.success(function (data, status, headers) {
