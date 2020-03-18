@@ -61,5 +61,45 @@ angular.module('portal.services')
 		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/quotas/requests/' + params.type + '/' + params.id, 'GET'));
 	};
 
+	/**
+	 *  참조플랜 그룹 조회
+	 */
+	quotaService.listQuotaPlanGroups = function(params) {
+
+		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_plan_groups', 'GET', params));
+	};
+
+	/**
+	 *	참조플랜 조회
+	 */
+	quotaService.listQuotaPlan = function(params) {
+
+		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_plans', 'GET', params));
+	};
+
+	/**
+	 * 	참조플랜 조회 : 개인프로젝트
+	 */
+	quotaService.listQuotaPlanPersonal = function() {
+
+		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_plans/isPersonal', 'GET'));
+	};
+
+	/**
+	 * 	쿼터 항목 조회
+	 */
+	quotaService.listQuotaItem = function(params) {
+
+		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_items', 'GET', params));
+	};
+
+	/**
+	 *	참조플랜값 조회
+	 */
+	quotaService.listQuotaItemValue = function(params) {
+
+		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_plan_values/' + params, 'GET'));
+	};
+
 	return quotaService;
 });
