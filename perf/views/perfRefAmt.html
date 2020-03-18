@@ -3,6 +3,7 @@
     <div class="tab-pane st_none active" aria-hidden="false">
         <!-- 목록 컨텐츠 -->
         <div class="searchWrap" style="height: 68px;">
+            <div class="pull-left ng-binding" style="padding-top: 8px; padding-right: 30px;">과금 서비스</div>
             <div class="searchBox pull-left" style="width: 60%;">
                 <select id="itemGroup" name="itemGroup" ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups"  ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeItemGroup(contents.data.sltItemGroupCode)"></select>
             </div>
@@ -11,7 +12,7 @@
 
         <!-- table top -->
         <div class="tb-top">
-            <div class="pull-left ng-binding">{{ contents.data.sltItemGroup.itemGroupName }}</div>
+            <div class="pull-left ng-binding">※ '{{ contents.data.sltItemGroup.itemGroupName }}'에 대한 과금 기준정보 입니다.</div>
         </div>
 
         <!-- tb top -->
