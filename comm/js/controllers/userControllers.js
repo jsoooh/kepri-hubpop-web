@@ -8,7 +8,8 @@ angular.module('common.controllers')
         ct.notices = [];
         ct.tempNotices = [];
         ct.popNoticeCnt = 0;
-
+        ct.ssoMode;
+        $scope.credentials = {};
         $scope.main.loadingMainBody = false;
 
         var setSsoUser = function (data) {
@@ -30,35 +31,59 @@ angular.module('common.controllers')
             }, 100);
         };
 
+        ct.goLoginForm = function () {
+            $scope.main.ssoUserLogin = false;
+            $scope.main.ssoUserLoginChecking = false;
+        }
+
         // 20.1.22 by hrit, sso 로그인 중 8초 후 계정생성로 전환되는 현상 수정
         // 로그인 시도 후 계정이 없는 경우 클라이언트에 상태 반환하여 클라이언트에서 계정생성 재호출하도록 변경
-        ct.checkSsoPgsecuid = function (pgsecuid) {
+        ct.checkSsoPgsecuid = function (pgsecuid, update) {
             $scope.main.ssoUserLoginChecking = true;
-            var promise = user.getCheckSsoPgsecuid(pgsecuid);
+            var promise = user.getCheckSsoPgsecuid(pgsecuid, update, $scope.credentials.password);
             promise.success(function (data, status, headers) {
                 if (data) {
-                    if (data.tokenInfo && data.tokenInfo.result == 'create') {
-                        ct.ssoUserCreating = true;
-                        var pr = user.getCheckSsoPgsecuid(pgsecuid, false);
-                        pr.success(function (data2, status2) {
-                            if (data2 && data2.token) {
-                                setSsoUser(data2);
-                            }
-                            $scope.main.ssoUserLoginChecking = false;
-                        });
-                        pr.error(function () {
-                            $scope.main.ssoUserLogin = false;
-                            $scope.main.ssoUserLoginChecking = false;
-                        })
+                    if (data.tokenInfo) {
+                        ct.mode = data.tokenInfo.code;
+                        $scope.credentials.email = data.tokenInfo.email;
+                        ct.ssoUserJoin = true;
+                        ct.LoginBtnLabel = '비밀번호 설정';
+                        if (ct.mode == 'create') {
+                            ct.LoginBtnLabel = '회원가입';
+                            ct.ssoMessage = '* HUB-PoP 포털에 가입하여 주시기 바랍니다. 가입 시 ID는 사번입니다';
+                        } else if (ct.mode == 'update') {
+                            ct.ssoMessage = '* HUB-PoP 포털에 접속할 수 있는 비밀번호를 입력하여 주시기 바랍니다. 접속 시 ID는 사번입니다';
+                        } else if (ct.mode == 'update_error') {
+                            ct.ssoMessage = '* HUB-POP 포털 접속 중 비밀번호 에러가 발생하였습니다. 다른 비밀번호를 입력하여 주시기바랍니다.';
+                        }
                     } else if (data.token) {
                         setSsoUser(data);
+                        ct.ssoUserJoin = true;
+                        ct.ssoUserJoindisabled = false;
                     }
+                    $scope.main.ssoUserLogin = false;
                     $scope.main.ssoUserLoginChecking = false;
                 }
             });
             promise.error(function (data, status, headers) {
+                ct.ssoUserJoindisabled = false;
                 $scope.main.ssoUserLogin = false;
                 $scope.main.ssoUserLoginChecking = false;
+            });
+        };
+
+        // 20.3.20 by hrit, sso 연계 시 hubpop db 연계가 정상적이지 않은경우(회원등록, sso패스워드) 등록기능
+        ct.ssoLogin = function () {
+            ct.ssoUserJoinDisabled = true;
+            var update = ct.mode == 'create' || ct.mode == 'create_error' ? false: true;
+            if ($scope.credentials.password != $scope.credentials.password_valid) {
+                common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_wrong_pwd_retype"));
+                return;
+            }
+            user.passwordSecureCheck($scope.credentials.email, $scope.credentials.password, function (result) {
+                if (result == undefined) {
+                    ct.checkSsoPgsecuid(common.getPgsecuid(), update);
+                }
             });
         };
 

@@ -1315,6 +1315,7 @@
         "mi_type_docker_img_path": "Docker 이미지 경로를 입력하세요.",
         "mi_type_domain_format": "도메인 형식에 맞게 입력하세요.",
         "mi_type_email": "이메일을 입력하세요.",
+        "mi_type_eng_number_8to16_pwd": "영문, 숫자, 특수문자를 포함한 8~16자의 비밀번호를 입력하십시오.",
         "mi_type_eng_number_10to20": "영문, 숫자를 포함한 10~20자를 입력하십시오.",
         "mi_type_eng_number_10to20_pwd": "영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오.",
         "mi_type_eng_number_dash": "영문, 숫자, -만 입력할 수 있습니다.",
