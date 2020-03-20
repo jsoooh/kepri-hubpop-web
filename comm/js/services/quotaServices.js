@@ -80,9 +80,9 @@ angular.module('portal.services')
 	/**
 	 * 	참조플랜 조회 : 개인프로젝트
 	 */
-	quotaService.listQuotaPlanPersonal = function() {
+	quotaService.listQuotaPlanPersonal = function(params) {
 
-		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_plans/isPersonal', 'GET'));
+		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_plans/isPersonal', 'GET', params));
 	};
 
 	/**
