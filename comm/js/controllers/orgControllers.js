@@ -12,6 +12,7 @@ angular.module('portal.controllers')
         ct.schFilterText = "";
         ct.personalProjectCnt = 0;      //개인프로젝트 생성 갯수
         ct.myPersonalCnt = 0;           //사용자별 개인프로젝트 생성 갯수
+        ct.listType = "image";          //프로젝트 리스트 타입
 
         ct.extendItem = function(evt) {
             //console.log('extendItem', evt);
