@@ -1,6 +1,57 @@
 'use strict';
 
 angular.module('iaas.controllers')
+    .filter('filterList', function () {
+        var pFolder = {};
+        pFolder.type = "dir";
+
+        return function (items, path) {
+            var out = [];
+            if (angular.isArray(items)) {
+                if (path.length > 0) {
+                    pFolder.name = path + "...";
+                    out.push(pFolder);
+                }
+                items.forEach(function (item) {
+                    var subName = "";
+                    if (path.length > 0) {
+                        if (item.name.indexOf(path) == 0) {
+                            subName = item.name.substring(path.length);
+                        }
+                    }
+                    else {
+                        subName = item.name;
+                    }
+                    if (subName !== undefined && subName.length > 0) {
+                        var count = (subName.match(/\//ig) || []).length;
+                        if ((item.type == "dir" && count == 1) || count == 0) {
+                            out.push(item);
+                        }
+                    }
+                });
+            }
+            else {
+                out = items;
+            }
+            return out;
+        };
+    })
+    .directive('fileInput', ['$parse', function ($parse) {
+        return {
+            restrict: 'EA',
+            //replace: true,
+            //transclude: true,
+            link: function (scope, element, attrs) {
+                var model = $parse(attrs.fileInput);
+                var modelSetter = model.assign;
+                element.bind('change', function () {
+                    scope.$apply(function () {
+                        modelSetter(scope, element[0].files);
+                    });
+                });
+            }
+        };
+    }])
     .controller('iaasObjectStorageCtrl', function ($scope, $location, $state,$translate,$filter, $stateParams, user, $q,paging, common, CONSTANTS) {
         _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageCtrl", 1);
         var ct = this;
@@ -121,10 +172,265 @@ angular.module('iaas.controllers')
             ct.fn.getObjectStorageList();
         };
 
+        // 오브젝트 스토리지 파일 관리
+        ct.fileNavigator = function() {
+            this.fileList = [];
+            this.history = [];
+            this.currentPath = "";
+            this.onRefresh = function() {};
+            // this.data = [];
+        }
+
+        ct.fileNavigator.prototype.getBasePath = function() {
+            var path = (ct.fileManager.basePath || '').replace(/^\//, '');
+            return path.trim() ? path.split('/') : [];
+        }
+
+        ct.fileNavigator.prototype.list = function(data, path) {
+            var self = this;
+            this.currentPath = path;
+
+            self.fileList = (data || []).map(function (file) {
+                // return file, self.currentPath;
+                var fileInfo = file;
+                fileInfo.checked = false;
+                return fileInfo;
+            });
+            self.buildTree(path);
+            self.onRefresh();
+        };
+
+        ct.fileNavigator.prototype.refresh = function () {
+            var self = this;
+            if (!self.currentPath.length) {
+                self.currentPath = this.getBasePath();
+            }
+
+            var path = self.currentPath.join('/');
+            self.requesting = true;
+            self.fileList = [];
+            return self.list().then(function(data) {
+
+            }).finally(function() {
+                self.requesting = false;
+            });
+        }
+
+        ct.fileNavigator.prototype.buildTree = function(path) {
+            var flatNodes = [], selectedNode = {};
+
+            function recursive(parent, item, path) {
+                var absName = path ? (path + '/' + item.name) : item.name;
+                if (parent.name && parent.name.trim() && path.trim().indexOf(parent.name) !== 0) {
+                    parent.nodes = [];
+                }
+                if (parent.name !== path) {
+                    parent.nodes.forEach(function(nd) {
+                        recursive(nd, item, path);
+                    });
+                } else {
+                    for (var e in parent.nodes) {
+                        if (parent.nodes[e].name === absName) {
+                            return;
+                        }
+                    }
+                    parent.nodes.push({item: item, name: absName, nodes: []});
+                }
+                parent.nodes = parent.nodes.sort(function(a, b) {
+                    return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : a.name.toLowerCase() === b.name.toLowerCase() ? 0 : 1;
+                });
+            }
+
+            function flatten(node, array) {
+                array.push(node);
+                for (var n in node.nodes) {
+                    flatten(node.nodes[n], array);
+                }
+            }
+
+            function findNode(data, path) {
+                return data.filter(function (n) {
+                    return n.name === path;
+                })[0];
+            }
+
+            //!this.history.length && this.history.push({name: '', nodes: []});
+            !this.history.length && this.history.push({ name: this.getBasePath()[0] || '', nodes: [] });
+            flatten(this.history[0], flatNodes);
+            selectedNode = findNode(flatNodes, path);
+            selectedNode && (selectedNode.nodes = []);
+
+            for (var o in this.fileList) {
+                var item = this.fileList[o];
+                // item instanceof Item && item.isFolder() && recursive(this.history[0], item, path);
+                if (item.type == "dir") recursive(this.history[0], item, path);
+            }
+        };
+
+        ct.fileManager = {};
+        ct.fileManager.basePath = "/";
+        ct.objectStorageObjectList = new ct.fileNavigator();
+
+        ct.fn.getObjectStorageObject = function (bucketName) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                bucket : bucketName
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/objects', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data.content) {
+                    // ct.objectStorageObjectList = data.content;
+                    ct.objectStorageObjectList.list(data.content, "");
+                    // $scope.path = "";
+                    ct.data.bucketName = bucketName;
+                } else {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertError('오류가 발생하였습니다.');
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+
         if (ct.data.tenantId) {
             ct.fn.getObjectStorageList();
             ct.fn.getSendSecretInfoList();
         }
+
+        ct.fn.onDblclickObjectStorageObject = function(name, type)  {
+            if (type == "dir") {
+                if (name.indexOf("...") != -1) { // parent folder
+                    var path = name.substring(0, name.length-4); // path/... -> path
+                    var index = path.lastIndexOf("/");
+                    if (index == -1) ct.objectStorageObjectList.currentPath = ""; // 최상위
+                    else {
+                        ct.objectStorageObjectList.currentPath = path.substring(0, index+1); //상위
+                    }
+                }
+                else
+                    ct.objectStorageObjectList.currentPath = name;
+            }
+        }
+
+        // 임시 ui
+        ct.uploadFiles = {};
+        ct.fn.uploadFiles = function () {
+            if (ct.uploadFiles.length > 0) {
+
+                $scope.main.loadingMainBody = true;
+                for(var i=0; i<ct.uploadFiles.length; i++){
+                    var param = {
+                        tenantId : ct.data.tenantId,
+                        bucket : ct.data.bucketName,
+                        key : ct.objectStorageObjectList.currentPath + ct.uploadFiles[i].name,
+                        file : ct.uploadFiles[i]
+                    };
+                    var requestFileSystemreturnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
+                    returnPromise.success(function (data, status, headers) {
+
+                    });
+                    returnPromise.error(function (data, status, headers) {
+                        $scope.main.loadingMainBody = false;
+                        common.showAlertError(data.message);
+                        $scope.main.loadingMainBody = true;
+                    });
+                    returnPromise.finally(function (data, status, headers) {
+                        // $scope.main.loadingMainBody = false;
+                    });
+                }
+                $scope.main.loadingMainBody = false;
+            }
+        }
+
+
+        ct.fn.uploadFolder = function () {
+            if (ct.uploadFiles.length > 0) {
+
+            }
+        }
+
+        ct.createFolderName = "";
+        ct.fn.createFolder = function () {
+            if (ct.createFolderName.length > 0) {
+                // 폴더 이름 체크 필요
+                var param = {
+                    tenantId : ct.data.tenantId,
+                    bucket : ct.data.bucketName,
+                    key : ct.objectStorageObjectList.currentPath + ct.createFolderName + "/",
+                    file : null
+                };
+                var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
+                returnPromise.success(function (data, status, headers) {
+                });
+                returnPromise.error(function (data, status, headers) {
+                    common.showAlertError(data.message);
+                });
+                returnPromise.finally(function (data, status, headers) {
+                });
+            }
+        }
+
+        ct.fn.deleteObject = function () {
+            if (ct.objectStorageObjectList.fileList.length > 0) {
+                angular.forEach(ct.objectStorageObjectList.fileList, function (item) {
+                    if (item.checked == true) {
+                        var param = {
+                            tenantId : ct.data.tenantId,
+                            bucket : ct.data.bucketName,
+                            key : item.name
+                        };
+                        var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'DELETE', param);
+                        returnPromise.success(function (data, status, headers) {
+                        });
+                        returnPromise.error(function (data, status, headers) {
+                            common.showAlertError(data.message);
+                        });
+                        returnPromise.finally(function (data, status, headers) {
+                        });
+                    }
+                });
+            }
+        }
+
+        ct.fn.downloadFiles = function () {
+            if (ct.objectStorageObjectList.fileList.length > 0) {
+                angular.forEach(ct.objectStorageObjectList.fileList, function (item) {
+                    if (item.checked == true) {
+                        var param = {
+                            tenantId : ct.data.tenantId,
+                            bucket : ct.data.bucketName,
+                            key : item.name
+                        };
+                        var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'GET', param);
+                        returnPromise.success(function (data, status, headers) {
+                            if (data) {
+
+                                var anchor = angular.element('<a/>');
+                                anchor.attr({
+                                    href: data.content,
+                                    target: '_blank',
+                                    download: item.name
+                                })[0].click();
+                            }
+                        });
+                        returnPromise.error(function (data, status, headers) {
+                            common.showAlertError(data.message);
+                        });
+                        returnPromise.finally(function (data, status, headers) {
+                        });
+                    }
+                });
+            }
+        }
+
+
     })
     //오브젝트스토리지 생성 컨트롤
     .controller('iaasObjectStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
