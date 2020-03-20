@@ -286,7 +286,7 @@ angular.module('portal.controllers')
 
         pop.orgProjectDefaultQuota(pop.orgProject.projectId);
     })
-    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, common, portal) {
+    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, ValidationService, common, portal) {
         _DebugConsoleLog("orgControllers.js : commOrgProjectCreateCtrl", 1);
 
         var ct = this;
@@ -296,6 +296,52 @@ angular.module('portal.controllers')
         ct.orgData.orgQuotas = [];
         ct.quotaItemValue = [];
         ct.orgData.personal = "nomal";
+        ct.formName = "orgCreateForm";
+        ct.orgIdValidationResult = false;
+
+        /*프로젝트 ID 중복체크*/
+        ct.orgIdCustomValidationCheck = function(orgId) {
+            var param = {
+                org_id : orgId.trim()
+            };
+            var returnPromise = orgService.orgIdValidationCheck(param);
+            returnPromise.success(function (data) {
+                if(data) {
+                    ct.orgIdValidationResult = true;
+                }
+                else {
+                    ct.orgIdValidationResult = false;
+                }
+            });
+            returnPromise.error(function (data) {
+                common.showAlert("message",data.message);
+            });
+            if (ct.orgIdValidationResult) {
+                return {isValid : false, message: "이미 사용하고 있는 프로젝트 ID 입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
+        /*프로젝트 이름 유효성 검사*/
+        ct.validationOrgProjectName = function (orgProjectName) {
+            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문,특수문자(.-_)
+            var bInValid = false;
+            var text = orgProjectName;
+            var orgNameErrorString = "";                //문제되는 문자
+            if (!text) return;
+            for (var i=0; i<text.length; i++) {
+                if (text.charAt(i) != " " && regexp.test(text.charAt(i)) == false) {
+                    bInValid = true;
+                    orgNameErrorString += text.charAt(i);
+                }
+            }
+            if (bInValid) {
+                return {isValid : false, message: orgNameErrorString + "는 입력 불가능한 문자입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
 
         /*참조플랜 그룹 목록 조회*/
         ct.listQuotaPlanGroups = function() {
@@ -305,10 +351,11 @@ angular.module('portal.controllers')
                 schText : ""
             };
             var returnPromise = quotaService.listQuotaPlanGroups(params);
-            returnPromise.success(function (data, status, headers) {
+            returnPromise.success(function (data) {
+                ct.quotaPlanGroups = [];
                 ct.quotaPlanGroups = data;
             });
-            returnPromise.error(function (data, status, headers) {
+            returnPromise.error(function (data) {
                 ct.quotaPlanGroups = [];
                 common.showAlert("message",data.message);
             });
@@ -323,12 +370,15 @@ angular.module('portal.controllers')
         ct.listQuotaPlan = function() {
             var returnPromise = "";
             if(ct.orgData.personal == "personal") { //프로젝트 유형 확인
-                returnPromise = quotaService.listQuotaPlanPersonal();
+                var params = {
+                    isPersonal : true
+                };
+                returnPromise = quotaService.listQuotaPlanPersonal(params);
             }
             else {
                 var initSchGroupId = ct.orgData.orgQuotaPlan.id;
-                if(initSchGroupId == null || initSchGroupId == "") {
-                    initSchGroupId = 1;
+                if(!initSchGroupId) {
+                    initSchGroupId = -1;
                 }
                 var params = {
                     schGroupId : initSchGroupId,
@@ -337,10 +387,11 @@ angular.module('portal.controllers')
                 };
                 returnPromise = quotaService.listQuotaPlan(params);
             }
-            returnPromise.success(function (data, status, headers) {
+            returnPromise.success(function (data) {
+                ct.quotaPlan = [];
                 ct.quotaPlan = data;
             });
-            returnPromise.error(function (data, status, header) {
+            returnPromise.error(function (data) {
                 ct.quotaPlan = [];
                 common.showAlert("message",data.message);
             });
@@ -359,9 +410,10 @@ angular.module('portal.controllers')
             };
             var returnPromise = quotaService.listQuotaItem(params);
             returnPromise.success(function (data) {
+                ct.quotaItem = [];
                 ct.quotaItem = data;
             });
-            returnPromise.error(function (data, status, headers) {
+            returnPromise.error(function (data) {
                 ct.quotaItem = [];
                 common.showAlert("message",data.message);
             });
@@ -370,29 +422,28 @@ angular.module('portal.controllers')
         /*상세쿼타조정 값 조회*/
         ct.listQuotaItemValue = function() {
             var planId = ct.orgData.orgQuotas.id;
-            if(planId == null || planId == "") {
+            if(!planId) {
                 planId = 1;
             }
             var returnPromise = quotaService.listQuotaItemValue(planId);
             returnPromise.success(function (data) {
+                ct.quotaItemValue = [];
                 ct.quotaItemValue = data;
+
+                for(var i=0; i<ct.quotaItem.length; i++) { //상세쿼타조정 값 매칭
+                    ct.quotaItem[i].value = "";
+                    for(var j=0; j<ct.quotaItemValue.length; j++) {
+                        if(ct.quotaItem[i].id == ct.quotaItemValue[j].orgQuotaItem.id) {
+                            ct.quotaItem[i].value = ct.quotaItemValue[j].value;
+                            break;
+                        }
+                    }
+                }
             });
-            returnPromise.error(function (data, status, headers) {
+            returnPromise.error(function (data) {
                 ct.quotaItemValue = [];
                 common.showAlert("message",data.message);
             });
-        };
-
-        /*상세쿼타조정 값 매칭*/
-        ct.matchQuotaItemValue = function(quotaPlanGroupId) {
-            var result = '';
-            for(var i=0; i<ct.quotaItemValue.length; i++){
-                if(ct.quotaItemValue[i].orgQuotaItem.id == quotaPlanGroupId) {
-                    result = ct.quotaItemValue[i].value;
-                    break;
-                }
-            }
-            return result;
         };
 
         /*프로젝트 유형 변경 감지*/
@@ -401,16 +452,25 @@ angular.module('portal.controllers')
             if(ct.orgData.personal == "personal") {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
                 ct.orgData.endDate = moment('9999-12-31','YYYY-MM-DD');
-                ct.listQuotaPlan();
                 calendarButton.hide();
             }
             else {
+                ct.orgData.startDate = moment().format('YYYY-MM-DD');
+                ct.orgData.endDate = moment().subtract(1,'days').add(1,'month').format('YYYY-MM-DD');
+                ct.listQuotaPlanGroups();
                 calendarButton.show();
             }
+            ct.listQuotaPlan();
         };
 
         /*프로젝트 신청*/
         ct.createOrg = function () {
+
+            if (!new ValidationService().checkFormValidity($scope[ct.formName]) || !ct.orgData.startDate || !ct.orgData.endDate) { //프로젝트 신청 유효성 검증
+                common.showAlertSuccess("잘못된 값이 있거나 필수사항을 입력해주세요", "잘못된 값이 있거나 필수사항을 입력해주세요");
+                return;
+            }
+
             var params = {};
             params['orgId'] = ct.orgData.orgId;
             params['orgName'] = ct.orgData.orgName;
@@ -423,29 +483,32 @@ angular.module('portal.controllers')
             orgQuotaPlan['id'] = ct.orgData.orgQuotas.id;
             params['orgQuotaPlan'] = orgQuotaPlan;
             var quotasList = [];
-            for(var i=0; i<ct.quotaItemValue.length; i++) {
-                var orgQuotas = {};
-                var quotaItemList = {};
-                quotaItemList['id'] = ct.quotaItemValue[i].orgQuotaItem.id;
-                orgQuotas['orgQuotaItem'] = quotaItemList;
-                orgQuotas['value'] = ct.quotaItemValue[i].value;
-                quotasList.push(orgQuotas);
+            for(var i=0; i<ct.quotaItem.length; i++) {
+                if(ct.quotaItem[i].value) {
+                    var orgQuotas = {};
+                    var quotaItemList = {};
+                    quotaItemList['id'] = ct.quotaItem[i].id;
+                    orgQuotas['orgQuotaItem'] = quotaItemList;
+                    orgQuotas['value'] = ct.quotaItem[i].value;
+                    quotasList.push(orgQuotas);
+                }
             }
             params['orgQuotaValues'] = quotasList;
-
+            console.log('프로젝트 생성 성공');
             var returnPromise = orgService.requestOrgCreate(params);
             returnPromise.success(function (data, status, headers) {
                 $location.path('/comm/projects');
                 common.showAlertSuccess("프로젝트 신청 성공", "프로젝트 신청을 완료했습니다.");
             });
-            returnPromise.error(function (data, status, headers) {
+            returnPromise.error(function (data) {
                 common.showAlert("message",data.message);
             });
         };
 
-        ct.listQuotaPlanGroups();   //참조플랜 그룹 목록 조회
-        ct.listQuotaPlan();     //참조플랜 그룹 세부목록 조회
-        ct.listQuotaItem();     //상세쿼타조정 조회
+        ct.listQuotaPlanGroups();   //참조플랜 그룹 목록 조회 로딩
+        ct.listQuotaPlan();         //참조플랜 그룹 세부목록 조회 로딩
+        ct.listQuotaItem();         //상세쿼타조정 조회 로딩
+        ct.orgCaseChange();         //프로젝트 유형 변경 감지 로딩
     })
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);

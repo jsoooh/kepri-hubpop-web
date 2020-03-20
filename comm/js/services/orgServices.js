@@ -187,6 +187,11 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/myPersonal/cnt', 'GET'));
         };
 
+        /*조직코드로 조직조회*/
+        orgService.orgIdValidationCheck = function (param) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/check/orgId', 'GET', param));
+        };
+
 		return orgService;
 	})
 ;
