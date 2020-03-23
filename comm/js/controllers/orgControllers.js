@@ -267,36 +267,51 @@ angular.module('portal.controllers')
             }, 0);
         };
 
-        /*프로젝트 ID 중복체크*/
+        /*프로젝트 ID 유효성 검사 및 중복체크*/
         ct.orgIdCustomValidationCheck = function(orgId) {
-            var param = {
-                org_id : orgId.trim()
-            };
-            var returnPromise = orgService.orgIdValidationCheck(param);
-            returnPromise.success(function (data) {
-                if (data) {
-                    ct.orgIdValidationResult = true;
+            var regexp = /[0-9a-zA-Z\-_]/;    //숫자,영문,특수문자(-_)
+            var bInValid = false;
+            var text = orgId;
+            var orgNameErrorString = "";      //문제되는 문자
+            if (!text) return;
+            for (var i=0; i<text.length; i++) {
+                if (text.charAt(i) != "" && regexp.test(text.charAt(i)) == false) {
+                    bInValid = true;
+                    orgNameErrorString += text.charAt(i);
                 }
-                else {
-                    ct.orgIdValidationResult = false;
+            }
+            if (bInValid) {
+                return {isValid : false, message: orgNameErrorString + "는 입력 불가능한 문자입니다."};
+            } else {        //프로젝트 ID 중복체크
+                var param = {
+                    org_id : orgId.trim()
+                };
+                var returnPromise = orgService.orgIdValidationCheck(param);
+                returnPromise.success(function (data) {
+                    if (data) {
+                        ct.orgIdValidationResult = true;
+                    }
+                    else {
+                        ct.orgIdValidationResult = false;
+                    }
+                });
+                returnPromise.error(function (data) {
+                    common.showAlert("message",data.message);
+                });
+                if (ct.orgIdValidationResult) {
+                    return {isValid : false, message: "이미 사용하고 있는 프로젝트 ID 입니다."};
+                } else {
+                    return {isValid : true};
                 }
-            });
-            returnPromise.error(function (data) {
-                common.showAlert("message",data.message);
-            });
-            if (ct.orgIdValidationResult) {
-                return {isValid : false, message: "이미 사용하고 있는 프로젝트 ID 입니다."};
-            } else {
-                return {isValid : true};
             }
         };
 
         /*프로젝트 이름 유효성 검사*/
         ct.validationOrgProjectName = function (orgProjectName) {
-            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문,특수문자(.-_)
+            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z]/;    //한글,숫자,영문
             var bInValid = false;
             var text = orgProjectName;
-            var orgNameErrorString = "";                //문제되는 문자
+            var orgNameErrorString = "";             //문제되는 문자
             if (!text) return;
             for (var i=0; i<text.length; i++) {
                 if (text.charAt(i) != " " && regexp.test(text.charAt(i)) == false) {
@@ -437,8 +452,8 @@ angular.module('portal.controllers')
             }
 
             var params = {};
-            params['orgId'] = ct.orgData.orgId;
-            params['orgName'] = ct.orgData.orgName;
+            params['orgId'] = ct.orgData.orgId.trim();
+            params['orgName'] = ct.orgData.orgName.trim();
             params['personal'] = ct.orgData.personal=="personal" ? true : false;
             params['startDate'] = ct.orgData.startDate;
             params['endDate'] = ct.orgData.endDate;
