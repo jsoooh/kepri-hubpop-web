@@ -96,7 +96,7 @@
 	<!-- 프로젝트 정보 -->
 	<div class="cBox type0 projt-mana">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 프로젝트 수 <em class="point1">({{(contents.orgProjects | filter:{ statusCode: '!deleting' }).length}})</em></h4>
+			<h4 class="c-tit">전체 프로젝트 수 <em class="point1">({{(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
