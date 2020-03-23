@@ -10,6 +10,7 @@ angular.module('portal.controllers')
         ct.userAuth = $scope.main.userAuth;
         ct.popup = $stateParams.popup;      //프로젝트 생성 팝업 여부
         ct.schFilterText = "";
+        ct.listType = "image";          //프로젝트 리스트 타입
 
         ct.extendItem = function(evt) {
             //console.log('extendItem', evt);

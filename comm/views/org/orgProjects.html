@@ -88,15 +88,15 @@
 <div class="titWrap">	<h2 class="h2">전체 프로젝트 리스트</h2>
 	<div class="btnArea">
 		<!-- 선택 된 class="on" 추가 -->
-		<button type="button" name="button" class="btn btn-list type1 on" title="이미지형"><span class="ico"></span><a href="">이미지형</a></button>
-		<button type="button" name="button" class="btn btn-list type2" title="리스트형"><span class="ico"></span>리스트</button>
+		<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
+		<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
 	</div>
 </div>
 <div ng-if="(contents.orgProjects | filter:{ statusCode: '!deleting' }).length > 0" class="pdContent">
 	<!-- 프로젝트 정보 -->
 	<div class="cBox type0 projt-mana">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 프로젝트 수 <em class="point1">({{(contents.orgProjects | filter:{ statusCode: '!deleting' }).length}})</em></h4>
+			<h4 class="c-tit">전체 프로젝트 수 <em class="point1">({{(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
@@ -121,7 +121,7 @@
 	<!-- //table top -->
 	
 	<!-- 프로젝트 리스트(테이블형) -->
-	<div class="tbl type1" ng-if="true">
+	<div class="tbl type1" ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0 && contents.listType == 'list'">
 		<table class="table">
 			<colgroup>
 				<col style="width: 5%;">
@@ -150,16 +150,16 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>1</td>
-					<td>182</td>
-					<td>프로젝트182</td>
-					<td>책임자1</td>
-					<td>5</td>
-					<td>2019.10.01~2020.10.31</td>
-					<td>2019-06-07</td>
-					<td>대기</td>
-					<td>활성</td>
+				<tr ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }">
+					<td>{{ $index+1 }}</td>
+					<td>{{ org.id }}</td>
+					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgName }}</a></td>
+					<td>{{ org.managerName }}</td>
+					<td>{{ org.orgUserCount }}</td>
+					<td>{{ org.startEndDate }}</td>
+					<td>{{ org.createdDate.time | date : 'yyyy.MM.dd' }}</td>
+					<td>{{ org.statusNm == '생성' ? '승인' : org.statusNm }}</td>
+					<td>{{ org.isActive ? '활성' : '비활성'}}</td>
 					<td>
 						<div class="dropdown btn-option">
 							<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정">
@@ -183,7 +183,7 @@
 
 				<!-- 프로젝트 리스트(이미지형) -->
 				<div class="proj_list_area"
-					ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0">
+					ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0 && contents.listType == 'image'">
 					<ul class="ul-panel dash_list">
 						<li
 							ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }"
