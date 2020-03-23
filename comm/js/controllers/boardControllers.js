@@ -567,6 +567,11 @@ angular.module('portal.controllers')
         ct.paramBoardCode = 'qna';
         ct.uaaContextUrl = CONSTANTS.uaaContextUrl;
         ct.userAuth      = common.getUserAuth();    //권한조회(A/B/M/O/U : 관리자/마케팅관리자/기업관리자/조직관리자/일반사용자
+        ct.conditions = [
+            {id: 'title', name: '제목'},
+            {id: 'writer', name: '작성자'}
+        ];
+        ct.selCondition = ct.conditions[0];
 
         /*게시판 목록 조회*/
         ct.listBoards = function (currentPage) {
@@ -574,7 +579,7 @@ angular.module('portal.controllers')
             $scope.main.loadingMainBody = true;
             if (!currentPage) currentPage = 1;
             ct.pageOptions.currentPage = currentPage;
-            var promise = boardService.myBoardList(ct.pageOptions.pageSize, currentPage-1, common.getUser().email, ct.paramBoardCode, '', '');
+            var promise = boardService.myBoardList(ct.pageOptions.pageSize, currentPage-1, common.getUser().email, ct.paramBoardCode, ct.selCondition.id, ct.schText);
             promise.success(function (data) {
                 ct.boards = data.items;
                 ct.pageOptions.total = data.counts;
@@ -614,6 +619,13 @@ angular.module('portal.controllers')
             };
 
             common.showDialog($scope, $event, dialogOptions);
+        };
+
+        /*게시판 검색input 엔터 시 조회*/
+        ct.schEnter = function (keyEvent){
+            if(keyEvent.which == 13){
+                ct.listBoards();
+            }
         };
 
         ct.listBoards();
