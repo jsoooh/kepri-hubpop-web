@@ -104,8 +104,6 @@ angular.module('portal.controllers')
         };
 
         ct.listOrgProjects();   //조직 목록 조회
-        //개인 프로젝트 건수 조회
-        //ct.getPersonalProjectCount();
     })
     .controller('commFirstOrgProjectMainCtrl', function ($scope) {
         _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);
@@ -244,7 +242,7 @@ angular.module('portal.controllers')
 
         pop.orgProjectDefaultQuota(pop.orgProject.projectId);
     })
-    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, ValidationService, common) {
+    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, userSettingService, ValidationService, common) {
         _DebugConsoleLog("orgControllers.js : commOrgProjectCreateCtrl", 1);
 
         var ct = this;
@@ -523,6 +521,8 @@ angular.module('portal.controllers')
         ct.listQuotaPlan();         //참조플랜 그룹 세부목록 조회 로딩
         ct.listQuotaItem();         //상세쿼타조정 조회 로딩
         ct.orgCaseChange();         //프로젝트 유형 변경 감지 로딩
+        //개인 프로젝트 건수 조회
+        //ct.getPersonalProjectCount();
     })
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);
