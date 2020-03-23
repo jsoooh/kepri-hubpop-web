@@ -10,8 +10,6 @@ angular.module('portal.controllers')
         ct.userAuth = $scope.main.userAuth;
         ct.popup = $stateParams.popup;      //프로젝트 생성 팝업 여부
         ct.schFilterText = "";
-        ct.personalProjectCnt = 0;      //개인프로젝트 생성 갯수
-        ct.myPersonalCnt = 0;           //사용자별 개인프로젝트 생성 갯수
 
         ct.extendItem = function(evt) {
             //console.log('extendItem', evt);
@@ -40,8 +38,6 @@ angular.module('portal.controllers')
         } else if ($scope.main.userAuth == 'O') { // 조직관리자, 프로젝트 관리자
             ct.isBtnOperationRegistration = true; // 작업 등록 버튼 권한
         }
-
-        ct.orgProjects = [];
 
         /*Org 목록 조회*/
         ct.listOrgProjects = function () {
@@ -93,45 +89,6 @@ angular.module('portal.controllers')
             $scope.actionBtnHied = false;
             $scope.actionLoading = false;
             common.showCustomDialog($scope, $event, dialogOptions);
-        };
-
-        /*개인 프로젝트 건수 조회*/
-        ct.getPersonalProjectCount = function () {
-            ct.personalProjectCnt = 0;
-            $scope.main.loadingMainBody = true;
-            var returnPromise = userSettingService.getUserSetting(CONSTANTS.userSettingKeys.personalProjectCnt);
-            returnPromise.success(function (data) {
-                data = userSettingService.userSettingParse(data);
-                if (data && data.contents && data.contents.projectCnt) {
-                    ct.personalProjectCnt = data.contents.projectCnt;
-                }
-            });
-            returnPromise.error(function (data, status, headers) {
-                ct.personalProjectCnt = 0;
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                //사용자가 생성한 개인프로젝트 건수
-                ct.getMyPersonalCnt();
-            });
-        };
-
-        /*사용자가 생성한 개인프로젝트 건수*/
-        ct.getMyPersonalCnt = function () {
-            ct.myPersonalCnt = 0;
-            $scope.main.loadingMainBody = true;
-            var returnPromise = orgService.getMyPersonalCnt();
-            returnPromise.success(function (data) {
-                if (data) {
-                    ct.myPersonalCnt = data;
-                }
-            });
-            returnPromise.error(function (data, status, headers) {
-                ct.myPersonalCnt = 0;
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-            });
         };
 
         /*프로젝트명 변경 팝업화면 오픈*/
@@ -286,7 +243,7 @@ angular.module('portal.controllers')
 
         pop.orgProjectDefaultQuota(pop.orgProject.projectId);
     })
-    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, ValidationService, common, portal) {
+    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, ValidationService, common) {
         _DebugConsoleLog("orgControllers.js : commOrgProjectCreateCtrl", 1);
 
         var ct = this;
@@ -298,6 +255,18 @@ angular.module('portal.controllers')
         ct.orgData.personal = "nomal";
         ct.formName = "orgCreateForm";
         ct.orgIdValidationResult = false;
+        ct.personalProjectCnt = 0;      //개인프로젝트 생성 갯수
+        ct.myPersonalCnt = 0;           //사용자별 개인프로젝트 생성 갯수
+
+        ct.attachFile = null;         //과제계획서 파일
+        ct.uploader = common.setDefaultFileUploader($scope);
+        ct.uploader.onAfterAddingFile = function(fileItem) {
+            $('#attachFile').val(fileItem._file.name);
+            ct.attachFile = null;
+            $timeout(function () {
+                ct.attachFile = fileItem;
+            }, 0);
+        };
 
         /*프로젝트 ID 중복체크*/
         ct.orgIdCustomValidationCheck = function(orgId) {
@@ -306,7 +275,7 @@ angular.module('portal.controllers')
             };
             var returnPromise = orgService.orgIdValidationCheck(param);
             returnPromise.success(function (data) {
-                if(data) {
+                if (data) {
                     ct.orgIdValidationResult = true;
                 }
                 else {
@@ -369,15 +338,14 @@ angular.module('portal.controllers')
         /*참조플랜 그룹 세부목록 조회*/
         ct.listQuotaPlan = function() {
             var returnPromise = "";
-            if(ct.orgData.personal == "personal") { //프로젝트 유형 확인
+            if (ct.orgData.personal == "personal") { //프로젝트 유형 확인
                 var params = {
                     isPersonal : true
                 };
                 returnPromise = quotaService.listQuotaPlanPersonal(params);
-            }
-            else {
+            } else {
                 var initSchGroupId = ct.orgData.orgQuotaPlan.id;
-                if(!initSchGroupId) {
+                if (!initSchGroupId) {
                     initSchGroupId = -1;
                 }
                 var params = {
@@ -430,10 +398,10 @@ angular.module('portal.controllers')
                 ct.quotaItemValue = [];
                 ct.quotaItemValue = data;
 
-                for(var i=0; i<ct.quotaItem.length; i++) { //상세쿼타조정 값 매칭
+                for (var i=0; i<ct.quotaItem.length; i++) { //상세쿼타조정 값 매칭
                     ct.quotaItem[i].value = "";
-                    for(var j=0; j<ct.quotaItemValue.length; j++) {
-                        if(ct.quotaItem[i].id == ct.quotaItemValue[j].orgQuotaItem.id) {
+                    for (var j=0; j<ct.quotaItemValue.length; j++) {
+                        if (ct.quotaItem[i].id == ct.quotaItemValue[j].orgQuotaItem.id) {
                             ct.quotaItem[i].value = ct.quotaItemValue[j].value;
                             break;
                         }
@@ -453,8 +421,7 @@ angular.module('portal.controllers')
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
                 ct.orgData.endDate = moment('9999-12-31','YYYY-MM-DD');
                 calendarButton.hide();
-            }
-            else {
+            } else {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
                 ct.orgData.endDate = moment().subtract(1,'days').add(1,'month').format('YYYY-MM-DD');
                 ct.listQuotaPlanGroups();
@@ -465,9 +432,8 @@ angular.module('portal.controllers')
 
         /*프로젝트 신청*/
         ct.createOrg = function () {
-
             if (!new ValidationService().checkFormValidity($scope[ct.formName]) || !ct.orgData.startDate || !ct.orgData.endDate) { //프로젝트 신청 유효성 검증
-                common.showAlertSuccess("잘못된 값이 있거나 필수사항을 입력해주세요", "잘못된 값이 있거나 필수사항을 입력해주세요");
+                common.showAlertSuccess("잘못된 값이 있거나 필수사항을 입력해 주세요", "잘못된 값이 있거나 필수사항을 입력해 주세요");
                 return;
             }
 
@@ -480,21 +446,29 @@ angular.module('portal.controllers')
             params['cost'] = ct.orgData.cost;
             params['description'] = ct.orgData.description;
             var orgQuotaPlan = {};
-            orgQuotaPlan['id'] = ct.orgData.orgQuotas.id;
-            params['orgQuotaPlan'] = orgQuotaPlan;
+            //orgQuotaPlan['id'] = ct.orgData.orgQuotas.id;
+            //params['orgQuotaPlan'] = orgQuotaPlan;
+            params['orgQuotaPlanId'] = ct.orgData.orgQuotas.id;
             var quotasList = [];
-            for(var i=0; i<ct.quotaItem.length; i++) {
-                if(ct.quotaItem[i].value) {
-                    var orgQuotas = {};
-                    var quotaItemList = {};
-                    quotaItemList['id'] = ct.quotaItem[i].id;
-                    orgQuotas['orgQuotaItem'] = quotaItemList;
-                    orgQuotas['value'] = ct.quotaItem[i].value;
+            for (var i=0; i<ct.quotaItem.length; i++) {
+                if (ct.quotaItem[i].value) {
+                    /*var orgQuotas = {};
+                    var quotaItem = {};
+                    quotaItem['id'] = ct.quotaItem[i].id;
+                    orgQuotas['orgQuotaItem'] = quotaItem;
+                    orgQuotas['value'] = ct.quotaItem[i].value;*/
+                    var orgQuotas = ct.quotaItem[i].id + "/" + ct.quotaItem[i].value;
                     quotasList.push(orgQuotas);
                 }
             }
             params['orgQuotaValues'] = quotasList;
-            console.log('프로젝트 생성 성공');
+            if (quotasList.length == 0) {
+                common.showAlertSuccess("쿼터 설정은 필수사항입니다.", "쿼터 설정은 필수사항입니다.");
+                return;
+            }
+            if (ct.attachFile != null) {
+                params['attachFile'] = ct.attachFile._file;
+            }
             var returnPromise = orgService.requestOrgCreate(params);
             returnPromise.success(function (data, status, headers) {
                 $location.path('/comm/projects');
@@ -502,6 +476,45 @@ angular.module('portal.controllers')
             });
             returnPromise.error(function (data) {
                 common.showAlert("message",data.message);
+            });
+        };
+
+        /*개인 프로젝트 건수 조회*/
+        ct.getPersonalProjectCount = function () {
+            ct.personalProjectCnt = 0;
+            $scope.main.loadingMainBody = true;
+            var returnPromise = userSettingService.getUserSetting(CONSTANTS.userSettingKeys.personalProjectCnt);
+            returnPromise.success(function (data) {
+                data = userSettingService.userSettingParse(data);
+                if (data && data.contents && data.contents.projectCnt) {
+                    ct.personalProjectCnt = data.contents.projectCnt;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                ct.personalProjectCnt = 0;
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                //사용자가 생성한 개인프로젝트 건수
+                ct.getMyPersonalCnt();
+            });
+        };
+
+        /*사용자가 생성한 개인프로젝트 건수*/
+        ct.getMyPersonalCnt = function () {
+            ct.myPersonalCnt = 0;
+            $scope.main.loadingMainBody = true;
+            var returnPromise = orgService.getMyPersonalCnt();
+            returnPromise.success(function (data) {
+                if (data) {
+                    ct.myPersonalCnt = data;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                ct.myPersonalCnt = 0;
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
             });
         };
 

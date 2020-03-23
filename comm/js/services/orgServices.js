@@ -19,7 +19,7 @@ angular.module('portal.services')
 
         /*조직 추가*/
         orgService.requestOrgCreate = function (param) {
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs', 'POST', param));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs', 'POST', param, "multipart/form-data"));
         };
 
         /*개인 프로젝트 생성*/
