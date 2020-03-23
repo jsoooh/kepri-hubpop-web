@@ -32,6 +32,8 @@ angular.module('common.controllers')
         };
 
         ct.goLoginForm = function () {
+            ct.ssoUserJoin = true;
+            ct.ssoUserJoindisabled = false;
             $scope.main.ssoUserLogin = false;
             $scope.main.ssoUserLoginChecking = false;
         }

@@ -120,7 +120,6 @@ angular.module('common.controllers', [])
 
         // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
         $scope.changePasswordAction = function(passData){
-            $scope.popHide();
             $scope.main.loadingMainBody = true;
 
             if (passData.oldPassword == undefined || passData.oldPassword == "") {
@@ -153,6 +152,8 @@ angular.module('common.controllers', [])
             user.passwordSecureCheck($scope.main.userInfo.email, passData.password, function (result) {
                 $scope.main.loadingMainBody = false;
                 if (result == undefined) {
+                    // 초기화 및 팝업 닫기
+                    $scope.popHide();
                     $scope.main.loadingMainBody = true;
                     var changePromise = memberService.changePassword(param);
                     changePromise.success(function (data, status, headers) {
@@ -161,17 +162,12 @@ angular.module('common.controllers', [])
                         common.setUser(data);
                         common.clearAccessToken();
                         common.setAccessToken(data.token);
-        
-                        // 초기화 및 팝업 닫기
-                        $scope.popHide();
-        
+
                         common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_change_pwd"));
         
                     });
                     changePromise.error(function (data, status, headers) {
                         $scope.main.loadingMainBody = false;
-                        // 초기화 및 팝업 닫기
-                        $scope.popHide();
         
                         if(status == 406) {      //비밀번호 패턴이 맞지 않습니다.
                             common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 규칙이 맞지 않습니다. 8~16자 영문, 숫자를 포함해 주시기 바랍니다.");
@@ -184,6 +180,8 @@ angular.module('common.controllers', [])
                             common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 비밀번호를 다시 수정해 주세요.");
                         }
                     });
+                } else {
+                    return false;
                 }
             });
         };

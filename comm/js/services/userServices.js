@@ -120,17 +120,17 @@ angular.module('common.services')
             // 1차 규칙, 사용금지 패스워드 확인
             if (pw == 'kepco123456/' || pw == 'Kepco123456/' || pw == 'kepco123456!' || pw == 'Kepco123456!') {
                 common.showAlertError("패스워드", "사용금지 패스워드를 사용하셨습니다. 다른 패스워드를 사용하여 주시기 바랍니다.");
-                if (fn) fn();
+                if (fn) fn(1);
                 return;
             }
             
             // 2차 규칙, 비밀번호 8~16자 영문, 숫자 특수문자 조합 확인
             var pattern1 = /[0-9]/;
             var pattern2 = /[a-zA-Z]/;
-            var pattern3 = /[~!@\#$%<>^&*/]/;     // 원하는 특수문자 추가 제거
+            var pattern3 = /[~`!@#$%\^&*()-+=.]/;     // 원하는 특수문자 추가 제거
             if (!pattern1.test(pw) || !pattern2.test(pw) || !pattern3.test(pw) || pw.length < 8 || pw.length > 16){
                 common.showAlertError("패스워드", "8~16자 영문, 숫자, 특수문자 조합으로 구성하여야 합니다.");
-                if (fn) fn();
+                if (fn) fn(1);
                 return;
             } 
 
@@ -139,7 +139,7 @@ angular.module('common.services')
                 if (i + 2 < pw.length) {
                     if (pw.charCodeAt(i) + 1 == pw.charCodeAt(i + 1) && pw.charCodeAt(i + 1) + 1 == pw.charCodeAt(i + 2)) {
                         common.showAlertError("패스워드", "연속된 비밀번호는 3자 이상 사용할 수 없습니다.");
-                        if (fn) fn();
+                        if (fn) fn(1);
                         return;
                     }
                 }
