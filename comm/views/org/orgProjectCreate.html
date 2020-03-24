@@ -30,7 +30,7 @@
 							<li>
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">프로젝트 유형</span>
-									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'일반 프로젝트의 경우 운영자 승인을 통해 이용 가능하고 개인 프로젝트의 경우 간단한 확인용으로 이용 가능합니다.'"><span class="ico_info"></span></button></div>
 								</div>
 								<div class="pl15">
 									<div class="radio radio-inline">
@@ -107,7 +107,7 @@
 									<span class="pnb_t_txt">프로젝트 쿼터 유형 선택</span>
 								</div>
 								<div class="s_cont_box">
-									<select name="orgQuotaPlan" title="쿼타유형 선택" class="w100" ng-model="contents.orgData.orgQuotaPlan" ng-options="quota as quota.name for quota in contents.quotaPlanGroups track by quota.id" ng-change="contents.listQuotaPlan()">
+									<select name="orgQuotaPlan" title="쿼터유형 선택" class="w100" ng-model="contents.orgData.orgQuotaPlan" ng-options="quota as quota.name for quota in contents.quotaPlanGroups track by quota.id" ng-change="contents.listQuotaPlan()">
 									</select>
 									{{ contents.orgData.orgQuotaPlan.description }}
 								</div>
@@ -117,14 +117,59 @@
 									<span class="pnb_t_txt">프로젝트 쿼터 세부 유형 선택</span>
 								</div>
 								<div class="s_cont_box">
-									<select name="orgQuotas" title="쿼타 세부 유형 선택" class="w100" ng-model="contents.orgData.orgQuotas" ng-options="quota as quota.code for quota in contents.quotaPlan track by quota.id" ng-change="contents.listQuotaItemValue()">
+									<select name="orgQuotas" title="쿼터 세부 유형 선택" class="w100" ng-model="contents.orgData.orgQuotas" ng-options="quota as quota.code for quota in contents.quotaPlan track by quota.id" ng-change="contents.changePlan();">
 									</select>
 								</div>
 							</li>
 							<li>
 								<div class="pnb_tit">
+									<span class="pnb_t_txt">paas 용량</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'paas 쿼터에 대한 조정이 가능합니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="tb-top">
+									<div class="pull-right">
+										<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.orgData.paasQuotaGuid = null" tooltip-placement="bottom" uib-tooltip="{{ 'label.select_unset' | translate }}">{{ 'label.select_unset' | translate }}</button>
+									</div>
+								</div>
+								<div class="tbl type1">
+									<table class="table">
+										<colgroup>
+											<col style="width:15%;" />
+											<col style="width:*;" />
+											<col style="width:20%;" />
+											<col style="width:20%;" />
+											<col style="width:20%;" />
+										</colgroup>
+										<thead>
+										<tr>
+											<th>{{ 'label.select' | translate }}</th>
+											<th>{{ 'label.name2' | translate }}</th>
+											<th>{{ 'label.service' | translate }}</th>
+											<th>{{ 'label.route' | translate }}</th>
+											<th>{{ 'label.memory' | translate }}</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-repeat="(key, paasQuota) in contents.paasQuotas">
+											<td>
+												<p class="inputWrap">
+													<input type="radio" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid">
+													<label for="{{paasQuota.$$hashKey}}"></label>
+												</p>
+											</td>
+											<td>{{ paasQuota.name }}</td>
+											<td>{{ paasQuota.totalServices }}</td>
+											<td>{{ paasQuota.totalRoutes }}</td>
+											<td>{{ paasQuota.memoryLimit|displayVolume:'MB' }}</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">상세 쿼터 조정</span>
-									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'프로젝트 신청에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'각 서비스의 쿼터를 상세 조정 가능합니다.'"><span class="ico_info"></span></button></div>
 								</div>
 								<div class="tbl type1">
 									<table class="table">
@@ -154,22 +199,6 @@
 												<td>{{ itemValue.min }}</td>
 												<td>{{ itemValue.max }}</td>
 											</tr>
-											<!--<tr class="tbl_selected">
-												<td>IaaS</td>
-												<td class="text-left">서버 vCore</td>
-												<td><input type="text" class="form-control text-right"/></td>
-												<td>GB</td>
-												<td>1</td>
-												<td>10</td>
-											</tr>
-											<tr>
-												<td>IaaS</td>
-												<td class="text-left">서버 vCore</td>
-												<td><input type="text" class="form-control text-right"/></td>
-												<td>GB</td>
-												<td>1</td>
-												<td>10</td>
-											</tr> -->
 										</tbody>
 									</table>
 								</div>

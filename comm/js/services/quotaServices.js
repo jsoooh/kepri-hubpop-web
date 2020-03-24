@@ -101,5 +101,22 @@ angular.module('portal.services')
 		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_plan_values/' + params, 'GET'));
 	};
 
+    /**
+     * paas 프로젝트 쿼터 조회
+     */
+    quotaService.listPaasQuotas = function (size, page, conditions) {
+        var condition = "";
+        if (conditions && conditions.length > 0) {
+            condition = conditions.join(";");
+        }
+        var getParams = {
+            "size" : size ? size : 10,
+            "page" : page ? page : 1,
+            "condition" : condition ? condition : "",
+            "depth" : 1
+        };
+        return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/quotas', 'GET', getParams));
+    };
+
 	return quotaService;
 });
