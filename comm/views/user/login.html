@@ -25,7 +25,7 @@
                 </li>
             </ul>
         </div>
-        <div ng-show="contents.ssoUserJoin" class="mem-body">
+        <div ng-show="!main.ssoUserLoginChecking && contents.ssoUserJoin" class="mem-body">
             <ul class="ul-join">
                 <li>
                     <span style="color: red;font-size: 1.1em;">{{contents.ssoMessage}}</span>
