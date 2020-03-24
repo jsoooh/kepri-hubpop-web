@@ -92,7 +92,7 @@ angular.module('common.controllers')
             });
         };
 
-        ct.checkSsoPgsecuid('common');
+        //ct.checkSsoPgsecuid('common');
         // TODO : SSO 연계 추가 작성
         if (common.getPgsecuid()) {
             ct.checkSsoPgsecuid(common.getPgsecuid());
