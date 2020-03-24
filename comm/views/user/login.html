@@ -67,7 +67,7 @@
             <button type="button" name="button" class="btn btn-color1" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
             <p class="text-right"><a href="/#/signup">계정생성</a></p><!-- | <a href="/">홈</a>  -->
         </div>
-        <div ng-show="contents.ssoUserJoin" class="mem-foot">
+        <div ng-show="!main.ssoUserLoginChecking && contents.ssoUserJoin" class="mem-foot">
             <button type="button" name="sso_button" class="btn btn-color1" ng-click="contents.ssoLogin(true)" ng-disabled="contents.ssoUserJoinDisabled">{{contents.LoginBtnLabel}}</button>
             <p class="text-right" ng-click="contents.goLoginForm();">이전 화면으로 돌아가기</p>
         </div>
