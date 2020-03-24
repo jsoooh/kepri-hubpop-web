@@ -308,7 +308,7 @@ angular.module('portal.controllers')
 
         /*프로젝트 이름 유효성 검사*/
         ct.validationOrgProjectName = function (orgProjectName) {
-            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z]/;    //한글,숫자,영문
+            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문
             var bInValid = false;
             var text = orgProjectName;
             var orgNameErrorString = "";             //문제되는 문자
