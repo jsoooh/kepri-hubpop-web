@@ -191,7 +191,6 @@ angular.module('iaas.controllers')
             this.currentPath = path;
 
             self.fileList = (data || []).map(function (file) {
-                // return file, self.currentPath;
                 var fileInfo = file;
                 fileInfo.checked = false;
                 return fileInfo;
@@ -271,7 +270,7 @@ angular.module('iaas.controllers')
         ct.fileManager.basePath = "/";
         ct.objectStorageObjectList = new ct.fileNavigator();
 
-        ct.fn.getObjectStorageObject = function (bucketName) {
+        ct.fn.getObjectStorageObject = function (bucketName, path) {
             $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
@@ -281,7 +280,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 if (data.content) {
                     // ct.objectStorageObjectList = data.content;
-                    ct.objectStorageObjectList.list(data.content, "");
+                    ct.objectStorageObjectList.list(data.content, path);
                     // $scope.path = "";
                     ct.data.bucketName = bucketName;
                 } else {
@@ -319,20 +318,17 @@ angular.module('iaas.controllers')
             }
         }
 
-        // 임시 ui
-        ct.uploadFiles = {};
-        ct.fn.uploadFiles = function () {
-            if (ct.uploadFiles.length > 0) {
-
+        ct.fn.uploadFiles = function (uploadFiles) {
+            if (uploadFiles && uploadFiles.files.length > 0) {
                 $scope.main.loadingMainBody = true;
-                for(var i=0; i<ct.uploadFiles.length; i++){
+                for (var i=0; i< uploadFiles.files.length; i++) {
                     var param = {
                         tenantId : ct.data.tenantId,
                         bucket : ct.data.bucketName,
-                        key : ct.objectStorageObjectList.currentPath + ct.uploadFiles[i].name,
-                        file : ct.uploadFiles[i]
+                        key : ct.objectStorageObjectList.currentPath + uploadFiles.files[i].name,
+                        file : uploadFiles.files[i]
                     };
-                    var requestFileSystemreturnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
+                    var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
                     returnPromise.success(function (data, status, headers) {
 
                     });
@@ -356,6 +352,7 @@ angular.module('iaas.controllers')
             }
         }
 
+        /*
         ct.createFolderName = "";
         ct.fn.createFolder = function () {
             if (ct.createFolderName.length > 0) {
@@ -376,6 +373,26 @@ angular.module('iaas.controllers')
                 });
             }
         }
+        */
+
+        ct.fn.createFolder = function($event) {
+            var dialogOptions =  {
+                controller       : "iaasObjectStorageCreateFolderCtrl" ,
+                bucketName       : ct.data.bucketName,
+                path             : ct.objectStorageObjectList.currentPath,
+                callBackFunction : ct.objectStorageCallBackFunction2
+            };
+
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.objectStorageCallBackFunction2 = function () {
+            // ct.fn.getObjectStorageList();
+        };
+
+
 
         ct.fn.deleteObject = function () {
             if (ct.objectStorageObjectList.fileList.length > 0) {
@@ -430,8 +447,12 @@ angular.module('iaas.controllers')
             }
         }
 
+        ct.fn.refreshObjectStorage = function() {
+            ct.fn.getObjectStorageObject(ct.data.bucketName, ct.objectStorageObjectList.currentPath);
+        }
 
     })
+
     //오브젝트스토리지 생성 컨트롤
     .controller('iaasObjectStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageFormCtrl", 1);
@@ -496,6 +517,73 @@ angular.module('iaas.controllers')
                 $mdDialog.hide();
             });
             returnPromise.error(function (data, status, headers) {
+                $state.reload();
+                common.showAlertError(data.message);
+            });
+        };
+    })
+
+    //오브젝트스토리지 생성 컨트롤
+    .controller('iaasObjectStorageCreateFolderCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageCreateFolderCtrl", 1);
+        $scope.contents = common.getMainContentsCtrlScope().contents;
+        $scope.dialogOptions = common.getMainContentsCtrlScope().dialogOptions;
+        var ct  = this;
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
+        pop.fn 							= {};
+        pop.data						= {};
+        pop.data.bucketName             = $scope.dialogOptions.bucketName;
+        pop.data.currentPath            = $scope.dialogOptions.path;
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+
+        $scope.dialogOptions.title      = "폴더 만들기";
+        $scope.dialogOptions.okName 	= "만들기";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/popObjectStorageCreateFolder.html" + _VersionTail();
+        ct.data.sltPortalOrgId = $scope.main.sltPortalOrgId;
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+        pop.validDisabled 				= true;
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            pop.fn.createObjectStorageCreateFolder();
+        };
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+        $scope.schEnter = function (keyEvent){
+            if (keyEvent.which == 13){
+                $scope.popDialogOk();
+            }
+        };
+
+        pop.fn.createObjectStorageCreateFolder = function() {
+            $scope.main.loadingMainBody = true;
+            pop.data.tenantId = pop.userTenant.tenantId;
+            var params = {
+                tenantId : pop.data.tenantId,
+                bucket : pop.data.bucketName,
+                key : pop.data.currentPath + pop.data.folderName + "/",
+                file : null
+            };
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', params, "multipart/form-data"));
+            returnPromise.success(function (data, status, headers) {
+                $scope.dialogOptions.callBackFunction();
+                $scope.actionLoading = false;
+                $scope.actionBtnHied = false;
+                common.showAlertSuccess("폴더가 생성되었습니다.");
+                $scope.main.loadingMainBody = false;
+                $mdDialog.hide();
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 $state.reload();
                 common.showAlertError(data.message);
             });
