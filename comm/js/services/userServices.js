@@ -61,9 +61,9 @@ angular.module('common.services')
 
         // 비동기 방식
         // 20.1.22 by hrit, api 호출 시 계정 로그인, 생성 여부 전달
-        user.getCheckSsoPgsecuid = function (pgsecuid, isUpdate, ssoPassword) {
+        user.getCheckSsoPgsecuid = function (pgsecuid, isUpdate, ssoPassword, ssoEmail) {
             if (isUpdate == undefined) isUpdate = true;
-            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/pgsecuid/check', 'POST', { "pgsecuid": pgsecuid, "update": isUpdate, "pgsecupw": ssoPassword }));
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/pgsecuid/check', 'POST', { "pgsecuid": pgsecuid, "update": isUpdate, "pgsecupw": ssoPassword, "email": ssoEmail }));
         };
 
         // 동기 방식
