@@ -69,7 +69,7 @@ angular.module('common.services')
         // 20.3.6 by hrit, 프로젝트 공용사용자 로그인
         user.getCheckCommonOrgUser = function (orgAuthToken) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgUser/login', 'POST', {"token": orgAuthToken}))
-        }
+        };
 
         // 동기 방식
         user.checkPgsecuid = function (pgsecuid) {

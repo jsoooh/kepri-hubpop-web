@@ -428,6 +428,12 @@ angular.module('portal.controllers')
             });
         };
 
+        /*프로젝트 쿼터 세부 유형 선택*/
+        ct.changePlan = function () {
+            ct.orgData.paasQuotaGuid = ct.orgData.orgQuotas.paasQuotaGuid;
+            ct.listQuotaItemValue();
+        };
+
         /*프로젝트 유형 변경 감지*/
         ct.orgCaseChange = function() {
             var calendarButton = $('.datepickerWrap').find('.dtp-ig');
@@ -459,18 +465,11 @@ angular.module('portal.controllers')
             params['endDate'] = ct.orgData.endDate;
             params['cost'] = ct.orgData.cost;
             params['description'] = ct.orgData.description;
-            var orgQuotaPlan = {};
-            //orgQuotaPlan['id'] = ct.orgData.orgQuotas.id;
-            //params['orgQuotaPlan'] = orgQuotaPlan;
             params['orgQuotaPlanId'] = ct.orgData.orgQuotas.id;
+            params['paasQuotaGuid'] = ct.orgData.paasQuotaGuid;
             var quotasList = [];
             for (var i=0; i<ct.quotaItem.length; i++) {
                 if (ct.quotaItem[i].value) {
-                    /*var orgQuotas = {};
-                    var quotaItem = {};
-                    quotaItem['id'] = ct.quotaItem[i].id;
-                    orgQuotas['orgQuotaItem'] = quotaItem;
-                    orgQuotas['value'] = ct.quotaItem[i].value;*/
                     var orgQuotas = ct.quotaItem[i].id + "/" + ct.quotaItem[i].value;
                     quotasList.push(orgQuotas);
                 }
@@ -532,10 +531,29 @@ angular.module('portal.controllers')
             });
         };
 
+        /*paas 프로젝트 쿼터 조회*/
+        ct.listPaasQuotas = function (currentPage) {
+            $scope.main.loadingMainBody = true;
+            if (!currentPage) {
+                currentPage = 1;
+            }
+            var returnPromise = quotaService.listPaasQuotas(10, currentPage, null);
+            returnPromise.success(function (data) {
+                ct.paasQuotas = data.content;
+            });
+            returnPromise.error(function (data) {
+                ct.paasQuotas = [];
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
         ct.listQuotaPlanGroups();   //참조플랜 그룹 목록 조회 로딩
         ct.listQuotaPlan();         //참조플랜 그룹 세부목록 조회 로딩
         ct.listQuotaItem();         //상세쿼타조정 조회 로딩
         ct.orgCaseChange();         //프로젝트 유형 변경 감지 로딩
+        ct.listPaasQuotas();        //paas 프로젝트 쿼터 조회
         //개인 프로젝트 건수 조회
         //ct.getPersonalProjectCount();
     })
