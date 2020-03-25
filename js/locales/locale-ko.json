@@ -1394,7 +1394,7 @@
 	    "mq_change_space_role": "'{{user}}'의 영역({{space}})에 대한 권한을 수정 하시겠습니까?",
         "mq_delete": "을(를) 삭제 하시겠습니까?",
         "mq_delete_app": "애플리케이션을 삭제 하시겠습니까?",
-        "mq_delete_account": "탈퇴하시겠습니까?",
+        "mq_delete_account": "을(를) 탈퇴하시겠습니까?",
         "mq_delete_board_count": "선택하신 게시판을 삭제하시겠습니까?",
         "mq_delete_buildpack": "빌드팩을 삭제하시겠습니까?",
         "mq_delete_buildpack_count": "개의 빌드팩을 삭제하시겠습니까?",
@@ -1480,10 +1480,12 @@
         "mi_egov_success_common_insert": "정상적으로 등록되었습니다.",
         "mi_egov_success_common_update": "정상적으로 수정되었습니다.",
         "mi_egov_success_common_delete": "정상적으로 삭제되었습니다.",
+        "mi_egov_success_common_delete_account": "정상적으로 탈퇴되었습니다.",
         "mi_egov_fail_common_insert": "생성이 실패하였습니다.",
         "mi_egov_fail_common_update": "수정이 실패하였습니다.",
         "mi_egov_fail_common_delete": "삭제가 실패하였습니다.",
         "mi_egov_fail_common_select": "조회에 실패하였습니다.",
+        "mi_egov_fail_common_delete_account": "탈퇴에 실패하였습니다.",
         "mi_type_position": "소속을 입력하세요.",
         "mi_unusable_commonorguser_email": "'commonOrgUser' 아이디는 사용하실 수 없습니다."
     }
