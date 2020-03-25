@@ -153,7 +153,6 @@ angular.module('common.controllers', [])
                 $scope.main.loadingMainBody = false;
                 if (result == undefined) {
                     // 초기화 및 팝업 닫기
-                    $scope.popHide();
                     $scope.main.loadingMainBody = true;
                     var changePromise = memberService.changePassword(param);
                     changePromise.success(function (data, status, headers) {
@@ -163,6 +162,7 @@ angular.module('common.controllers', [])
                         common.clearAccessToken();
                         common.setAccessToken(data.token);
 
+                        $scope.popHide();
                         common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_change_pwd"));
         
                     });
@@ -186,10 +186,16 @@ angular.module('common.controllers', [])
             });
         };
 
+        $scope.changePasswordEnter = function (keyEvent) {
+            if (keyEvent.which == 13) {
+                $scope.changePasswordAction($scope.pop.changePasswordData);
+            }
+        };
+
         // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
         mc.changePassword = function ($event) {
             var dialogOptions = {
-                title : $translate.instant("label.pwd_change"),
+                title : $translate.instant("label.pwd_set"),
                 form : {
                     name: "passwordForm",
                     options: ""

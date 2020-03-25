@@ -32,8 +32,9 @@ angular.module('common.controllers')
         };
 
         ct.goLoginForm = function () {
-            ct.ssoUserJoin = true;
-            ct.ssoUserJoindisabled = false;
+            ct.ssoUser = {};
+            ct.ssoUserJoin = false;
+            ct.ssoUserJoinDisabled = false;
             $scope.main.ssoUserLogin = false;
             $scope.main.ssoUserLoginChecking = false;
         }
@@ -64,14 +65,14 @@ angular.module('common.controllers')
                     } else if (data.token) {
                         setSsoUser(data);
                         ct.ssoUserJoin = true;
-                        ct.ssoUserJoindisabled = false;
+                        ct.ssoUserJoinDisabled = false;
                     }
                     $scope.main.ssoUserLogin = false;
                     $scope.main.ssoUserLoginChecking = false;
                 }
             });
             promise.error(function (data, status, headers) {
-                ct.ssoUserJoindisabled = false;
+                ct.ssoUserJoinDisabled = false;
                 $scope.main.ssoUserLogin = false;
                 $scope.main.ssoUserLoginChecking = false;
             });
@@ -81,18 +82,17 @@ angular.module('common.controllers')
         ct.ssoLogin = function () {
             var update = ct.mode == 'create' || ct.mode == 'create_error' ? false: true;
             if (ct.ssoUser.password != ct.ssoUser.password_valid) {
-                common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_wrong_pwd_retype"));
+                common.showAlert($translate.instant("label.pwd_set"), $translate.instant("message.mi_wrong_pwd_retype"));
                 return;
             }
             user.passwordSecureCheck(ct.ssoUser.email, ct.ssoUser.password, function (result) {
                 if (result == undefined) {
                     ct.ssoUserJoinDisabled = true;
-                    ct.checkSsoPgsecuid(common.getPgsecuid(), update);
+                    ct.checkSsoPgsecuid(ct.manualPgsecuid, update);
                 }
             });
         };
 
-        //ct.checkSsoPgsecuid('common');
         // TODO : SSO 연계 추가 작성
         if (common.getPgsecuid()) {
             ct.checkSsoPgsecuid(common.getPgsecuid());
@@ -157,6 +157,7 @@ angular.module('common.controllers')
                         }
                     } else if (data.sso_msg == 'sso_no_pw') {
                         ct.setSsoLoginForm({code: 'update', email: $scope.credentials.email.trim()});
+                        ct.manualPgsecuid = data.pgsecuid;
                         $scope.authenticating = false;
                         $scope.main.loadingMainBody = false;
                     } else {
@@ -238,6 +239,12 @@ angular.module('common.controllers')
         ct.loginEnter = function (keyEvent){
             if (keyEvent.which == 13) {
                 $scope.login();
+            }
+        }
+
+        ct.ssoLoginEnter = function (keyEvent){
+            if (keyEvent.which == 13) {
+                ct.ssoLogin();
             }
         }
         // 20.1.22 by hrit, sso 로그인 중 계정 생성으로 변경되는 현상에 대한 조치

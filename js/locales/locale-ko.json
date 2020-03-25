@@ -650,6 +650,7 @@
         "pwd_confirm": "비밀번호 확인",
         "pwd_edit": "비밀번호 수정",
         "pwd_help": "비밀번호 도움말",
+        "pwd_set": "비밀번호 설정",
         "pwd_reset": "비밀번호 재설정",
         "qna": "문의하기",
         "quota": "용량계획",

@@ -51,7 +51,7 @@
                         <div class="input-group-addon">
                             <span class="ico type2"></span>
                         </div>
-                        <input type="password" name="password_valid" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="contents.ssoUser.password_valid" required class="form-control" ng-disabled="contents.ssoUserJoinDisabled"/>
+                        <input type="password" name="password_valid" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="contents.ssoUser.password_valid" required class="form-control" ng-keypress="contents.ssoLoginEnter($event);" ng-disabled="contents.ssoUserJoinDisabled"/>
                     </div>
                 </li>
             </ul>
