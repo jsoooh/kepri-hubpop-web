@@ -103,6 +103,32 @@ angular.module('portal.controllers')
             $scope.actionLoading = true; // action loading
         };
 
+        /* 2020.03.24 - 사용자 탈퇴 추가 by ksw */
+        ct.withdrawOrgProjectUser = function (org) {
+            var showConfirm = common.showConfirm($translate.instant('label.del'), org.orgName + ' ' + $translate.instant('message.mq_delete_account'));
+            showConfirm.then(function() {
+                ct.withdrawOrgProjectUserAction(org);
+            });
+        };
+
+
+        /* 2020.03.24 - 사용자 탈퇴 액션 추가 by ksw */
+        ct.withdrawOrgProjectUserAction = function (org) {
+            $scope.main.loadingMain = true;
+            var user = {};
+            user.email = $scope.main.userInfo.email;
+            var promise = orgService.deleteOrgUser(org.id, user.email);
+            promise.success(function (data) {
+                $scope.main.loadingMain = false;
+                ct.listOrgProjects();
+                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_delete_account'));
+            });
+            promise.error(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertError($translate.instant('message.mi_egov_fail_common_delete_account'));
+            });
+        };
+
         ct.listOrgProjects();   //조직 목록 조회
     })
     .controller('commFirstOrgProjectMainCtrl', function ($scope) {
@@ -308,7 +334,7 @@ angular.module('portal.controllers')
 
         /*프로젝트 이름 유효성 검사*/
         ct.validationOrgProjectName = function (orgProjectName) {
-            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z]/;    //한글,숫자,영문
+            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문
             var bInValid = false;
             var text = orgProjectName;
             var orgNameErrorString = "";             //문제되는 문자

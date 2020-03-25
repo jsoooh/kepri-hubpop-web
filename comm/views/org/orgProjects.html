@@ -174,7 +174,8 @@
 								<li><a href="" title="사용자변경">사용자변경</a></li>
 								<!-- 선택 된 class="active" 추가 -->
 								<li><a href="" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
-								<li><a href="" title="탈퇴">탈퇴</a></li>
+								<!-- 2020.03.24 - 사용자 탈퇴 기능 추가 by ksw -->
+								<li><a href="" ng-click="contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
 								<li><a href=""  title="삭제" class="delete">{{ 'label.del' | translate }}</a></li>
 							</ul>
 						</div>
