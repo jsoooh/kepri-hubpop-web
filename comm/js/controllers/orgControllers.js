@@ -242,7 +242,7 @@ angular.module('portal.controllers')
 
         pop.orgProjectDefaultQuota(pop.orgProject.projectId);
     })
-    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, userSettingService, ValidationService, common) {
+    .controller('commOrgProjectCreateCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, orgService, quotaService, userSettingService, ValidationService, common, CONSTANTS) {
         _DebugConsoleLog("orgControllers.js : commOrgProjectCreateCtrl", 1);
 
         var ct = this;
@@ -492,7 +492,7 @@ angular.module('portal.controllers')
             });
         };
 
-        /*개인 프로젝트 건수 조회*/
+        /*개인 프로젝트 설정 건수 조회*/
         ct.getPersonalProjectCount = function () {
             ct.personalProjectCnt = 0;
             $scope.main.loadingMainBody = true;
@@ -507,7 +507,7 @@ angular.module('portal.controllers')
                 ct.personalProjectCnt = 0;
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                //$scope.main.loadingMainBody = false;
                 //사용자가 생성한 개인프로젝트 건수
                 ct.getMyPersonalCnt();
             });
@@ -516,7 +516,7 @@ angular.module('portal.controllers')
         /*사용자가 생성한 개인프로젝트 건수*/
         ct.getMyPersonalCnt = function () {
             ct.myPersonalCnt = 0;
-            $scope.main.loadingMainBody = true;
+            //$scope.main.loadingMainBody = true;
             var returnPromise = orgService.getMyPersonalCnt();
             returnPromise.success(function (data) {
                 if (data) {
@@ -527,7 +527,7 @@ angular.module('portal.controllers')
                 ct.myPersonalCnt = 0;
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                //$scope.main.loadingMainBody = false;
             });
         };
 
@@ -554,8 +554,8 @@ angular.module('portal.controllers')
         ct.listQuotaItem();         //상세쿼타조정 조회 로딩
         ct.orgCaseChange();         //프로젝트 유형 변경 감지 로딩
         ct.listPaasQuotas();        //paas 프로젝트 쿼터 조회
-        //개인 프로젝트 건수 조회
-        //ct.getPersonalProjectCount();
+        //개인 프로젝트 설정 건수 조회
+        ct.getPersonalProjectCount();
     })
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);

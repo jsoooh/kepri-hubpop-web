@@ -38,8 +38,8 @@
 										<label for="app-radio1-1" class="label">일반</label>
 									</div>
 									<div class="radio radio-inline">
-										<input type="radio" name="personal" id="app-radio1-2" value="personal" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()">
-										<label for="app-radio1-2" class="label">개인</label>
+										<input type="radio" name="personal" id="app-radio1-2" value="personal" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()" ng-disabled="contents.myPersonalCnt >= contents.personalProjectCnt">
+										<label for="app-radio1-2" class="label">개인<!-- : {{ contents.myPersonalCnt }} / {{ contents.personalProjectCnt }}--></label>
 									</div>
 								</div>
 							</li>
@@ -152,10 +152,10 @@
 										<tbody>
 										<tr ng-repeat="(key, paasQuota) in contents.paasQuotas">
 											<td>
-												<p class="inputWrap">
-													<input type="radio" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid">
-													<label for="{{paasQuota.$$hashKey}}"></label>
-												</p>
+												<div class="radio radio-inline">
+													<input type="radio" name="personal" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid">
+													<label for="{{paasQuota.$$hashKey}}" class="label"></label>
+												</div>
 											</td>
 											<td>{{ paasQuota.name }}</td>
 											<td>{{ paasQuota.totalServices }}</td>

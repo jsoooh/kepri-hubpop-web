@@ -130,6 +130,7 @@
 				<col style="width: ;">
 				<col style="width: 10%;">
 				<col style="width: 5%;">
+				<col style="width: 5%;">
 				<col style="width: 12%;">
 				<col style="width: 10%;">
 				<col style="width: 5%;">
@@ -143,6 +144,7 @@
 					<th scope="col">프로젝트명</th>
 					<th scope="col">책임자명</th>
 					<th scope="col">참여자수</th>
+					<th scope="col">유형</th>
 					<th scope="col">이용기간</th>
 					<th scope="col">생성일자</th>
 					<th scope="col">승인현황</th>
@@ -157,6 +159,7 @@
 					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgName }}</a></td>
 					<td>{{ org.managerName }}</td>
 					<td>{{ org.orgUserCount }}</td>
+					<td>{{ org.isPersonal ? '개인' : '일반' }}</td>
 					<td>{{ org.startEndDate }}</td>
 					<td>{{ org.createdDate.time | date : 'yyyy.MM.dd' }}</td>
 					<td>{{ org.statusNm == '생성' ? '승인' : org.statusNm }}</td>
