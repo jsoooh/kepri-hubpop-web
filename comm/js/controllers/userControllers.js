@@ -61,6 +61,7 @@ angular.module('common.controllers')
             promise.success(function (data, status, headers) {
                 if (data) {
                     if (data.tokenInfo) {
+                        ct.manualPgsecuid = common.getPgsecuid();
                         ct.setSsoLoginForm(data.tokenInfo);
                     } else if (data.token) {
                         setSsoUser(data);
