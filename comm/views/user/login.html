@@ -3,7 +3,7 @@
     <form name="loginForm" method="POST">
         <div class="mem-hd">
             <h1>hubpop</h1>
-            <h2>HUB-PoP {{ 'label.login' | translate }}</h2>
+            <h2>HUB-PoP <span ng-show="!contents.ssoUserJoin">{{ 'label.login' | translate }}</span><span ng-show="contents.ssoUserJoin">{{ 'label.pwd_set' | translate }}</span></h2>
         </div>
         <div ng-show="!(main.ssoUserLogin || main.ssoUserLoginChecking) && !contents.ssoUserJoin" class="mem-body">
             <ul class="ul-join">
@@ -51,7 +51,7 @@
                         <div class="input-group-addon">
                             <span class="ico type2"></span>
                         </div>
-                        <input type="password" name="password_valid" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="contents.ssoUser.password_valid" required class="form-control" ng-keypress="contents.ssoLoginEnter($event);" ng-disabled="contents.ssoUserJoinDisabled"/>
+                        <input type="password" name="password_valid" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd_again' | translate }}" ng-model="contents.ssoUser.password_valid" required class="form-control" ng-keypress="contents.ssoLoginEnter($event);" ng-disabled="contents.ssoUserJoinDisabled"/>
                     </div>
                 </li>
             </ul>
