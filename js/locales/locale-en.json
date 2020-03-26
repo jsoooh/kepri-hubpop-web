@@ -1313,6 +1313,7 @@
         "mi_type_docker_img_path": "Please enter a docker image path.",
         "mi_type_domain_format": "Please enter a valid domain name.",
         "mi_type_email": "Please enter your email address.",
+        "mi_type_eng_number_8to16_pwd": "The password must contain alphabetic letters and numbers and special characters. It’s length must be from 8 to 16 characters. ",
         "mi_type_eng_number_10to20": "The password must contain alphabetic letters and numbers. It’s length must be from 10 to 20 characters. ",
         "mi_type_eng_number_10to20_pwd": "The password must contain alphabetic letters and numbers. It’s length must be from 10 to 20 characters. ",
         "mi_type_eng_number_dash": "Valid Characters: A-Z a-z 0-9 -",

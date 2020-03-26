@@ -1594,6 +1594,18 @@ angular.module('portal.controllers')
                         } else {
                             pop.orgNotUsers.push(angular.copy(user));
                         }
+                        /* 2020.03.23 - 사용자 조회등록시 등록된 사용자도 목록에 나오게끔 로직 수정 by ksw */
+                    } else {
+                        /* 검색어가 있는 경우 */
+                        if (pop.schText) {
+                            /* user의 email이나 name값이 검색어와 일치하는 경우 */
+                            if (user.email.toLowerCase().indexOf(pop.schText.toLowerCase()) > -1 || user.name.toLowerCase().indexOf(pop.schText.toLowerCase()) > -1) {
+                                /* 조회 목록 화면 배열에 push */
+                                pop.orgNotUsers.push(angular.copy(user));
+                            }
+                        } else {
+                            pop.orgNotUsers.push(angular.copy(user));
+                        }
                     }
                 });
             }
@@ -1616,7 +1628,11 @@ angular.module('portal.controllers')
         pop.sltUserMove = function () {
             if (pop.orgNotUsers && pop.orgNotUsers.length > 0) {
                 angular.forEach(pop.orgNotUsers, function (user, key) {
-                    if (user.checked) {
+                    /* 2020.03.23 - 등록된 사용자 추가시 팝업 추가 by ksw */
+                    if (user.checked && (pop.orgUserEmails.indexOf(user.email)) > -1) {
+                        common.showAlertError('이미 등록된 사용자 (' + user.email + ')입니다.');
+                        pop.schAddOrgUsers = [];
+                    } else if (user.checked) {
                         var addOrgUser = angular.copy(user);
                         addOrgUser.roleName = pop.orgRoleNames.user;
                         addOrgUser.checked = false;

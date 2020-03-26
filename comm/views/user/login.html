@@ -3,9 +3,9 @@
     <form name="loginForm" method="POST">
         <div class="mem-hd">
             <h1>hubpop</h1>
-            <h2>HUB-PoP {{ 'label.login' | translate }}</h2>
+            <h2>HUB-PoP <span ng-show="!contents.ssoUserJoin">{{ 'label.login' | translate }}</span><span ng-show="contents.ssoUserJoin">{{ 'label.pwd_set' | translate }}</span></h2>
         </div>
-        <div ng-show="!(main.ssoUserLogin || main.ssoUserLoginChecking)" class="mem-body">
+        <div ng-show="!(main.ssoUserLogin || main.ssoUserLoginChecking) && !contents.ssoUserJoin" class="mem-body">
             <ul class="ul-join">
                 <li>
                     <div class="input-group">
@@ -20,21 +20,56 @@
                         <div class="input-group-addon">
                             <span class="ico type2"></span>
                         </div>
-                        <input type="password" name="password" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="credentials.password" ng-keypress="checkCapsLock($event);" required class="form-control"/>
+                        <input type="password" name="password" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="credentials.password" ng-keypress="contents.loginEnter($event);" required class="form-control"/>
                     </div>
                 </li>
             </ul>
         </div>
-        <div ng-if="main.ssoUserLogin || main.ssoUserLoginChecking" class="mem-body">
+        <div ng-show="!main.ssoUserLoginChecking && contents.ssoUserJoin" class="mem-body">
+            <ul class="ul-join">
+                <li>
+                    <span style="color: red;font-size: 1.1em;">{{contents.ssoMessage}}</span>
+                </li>
+                <li>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="ico type1"></span>
+                        </div>
+                        <input type="text" id="sso_email" name="sso_email" maxlength="30" placeholder="{{ 'message.mi_type_id_email' | translate }}" ng-model="contents.ssoUser.email" disabled="disabled" required ng-blur="blurEmail=true;" class="form-control"/>
+                    </div>
+                </li>
+                <li>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="ico type2"></span>
+                        </div>
+                        <input type="password" id="sso_password" name="sso_password" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="contents.ssoUser.password" required class="form-control" ng-disabled="contents.ssoUserJoinDisabled"/>
+                    </div>
+                </li>
+                <li>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="ico type2"></span>
+                        </div>
+                        <input type="password" name="password_valid" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd_again' | translate }}" ng-model="contents.ssoUser.password_valid" required class="form-control" ng-keypress="contents.ssoLoginEnter($event);" ng-disabled="contents.ssoUserJoinDisabled"/>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div ng-if="main.ssoUserLogin || main.ssoUserLoginChecking" class="mem-body" style="width: 400px; display: inline-block;">
             <img ng-if="!contents.ssoUserCreating" src="/images/loading/lg.ripple-radio-preloader.gif">
             <img ng-if="contents.ssoUserCreating" src="/images/loading/lg.dna-spin-spiral-preloader.gif">
             <BR/>
-            <span ng-if="!contents.ssoUserCreating"> SSO 연동 로그인 중 입니다. </span>
-            <span ng-if="contents.ssoUserCreating"> SSO 연동 사용자 생성중 입니다. 최초 접속 시에는 수분이 걸릴 수 있습니다.</span>
+            <span ng-if="!contents.ssoUserCreating && !contents.ssoUserJoin"> SSO 연동 로그인 중 입니다. </span>
+            <span ng-if="contents.ssoUserCreating && !contents.ssoUserJoin"> SSO 연동 사용자 생성중 입니다. 최초 접속 시에는 수분이 걸릴 수 있습니다. </span>
         </div>
-        <div ng-show="!main.ssoUserLogin && !main.ssoUserLoginChecking" class="mem-foot">
-            <button type="submit" name="button" class="btn btn-color1" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
+        <div ng-show="!main.ssoUserLogin && !main.ssoUserLoginChecking && !contents.ssoUserJoin" class="mem-foot">
+            <button type="button" name="button" class="btn btn-color1" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
             <p class="text-right"><a href="/#/signup">계정생성</a></p><!-- | <a href="/">홈</a>  -->
+        </div>
+        <div ng-show="!main.ssoUserLoginChecking && contents.ssoUserJoin" class="mem-foot">
+            <button type="button" name="sso_button" class="btn btn-color1" ng-click="contents.ssoLogin(true)" ng-disabled="contents.ssoUserJoinDisabled">{{contents.LoginBtnLabel}}</button>
+            <p class="text-right" ng-click="contents.goLoginForm();">이전 화면으로 돌아가기</p>
         </div>
     </form>
     <!-- //login-->
