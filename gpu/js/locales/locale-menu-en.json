@@ -1,7 +1,7 @@
 {
 	"gpuMenu": {
 		"menu": {
-			"gpu_portal": "GPU Service",
+			"gpu_portal": "GPU Virtualization Service",
 			"dashboard" : "Dashboard",
 			"server": "Server",
 			"storage": "Storage",
@@ -12,6 +12,11 @@
 			"server_snapshot": "Instance Snapshot",
 			"server_details": "Instance Detail",
 			"server_create" : "Instance Create",
+			"vm_catalog" : "VM 서비스 카탈로그",
+			"vm_catalog_list" : "카탈로그 목록",
+			"vm_catalog_deploy" : "카탈로그 배포",
+			"vm_catalog_deploy_list" : "카탈로그 배포 목록",
+			"vm_catalog_deploy_view" : "카탈로그 배포 상세",
 			"server_snapshot_create" : "백업 이미지로 부터 신규 서버 만들기",
 			"server_init_script": "Init Script",
 			"server_security_policy": "Security Policy",
