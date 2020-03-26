@@ -1,7 +1,7 @@
 {
 	"gpuMenu": {
 		"menu": {
-			"gpu_portal": "GPU Service",
+			"gpu_portal": "GPU Virtualization Service",
 			"dashboard" : "Dashboard",
 			"server": "Server",
 			"storage": "Storage",

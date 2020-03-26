@@ -1,7 +1,7 @@
 {
 	"gpuMenu": {
 		"menu": {
-			"gpu_portal" : "GPU 서비스",
+			"gpu_portal" : "GPU 가상화 서비스",
 			"dashboard" : "대시보드",
 			"server" : "가상서버",
 			"storage" : "스토리지",
