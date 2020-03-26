@@ -550,3 +550,8 @@ input::-ms-clear {display:none;}
 	background:url("../img/ico_reply.png") 0% 100% no-repeat;
 	margin-right:10px;
 }
+
+/*CKEditor css*/
+.cke_bottom {
+	display: none !important;
+}
