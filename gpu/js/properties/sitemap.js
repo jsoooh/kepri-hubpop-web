@@ -16,7 +16,7 @@ angular.module('app')
                         name: "vm_catalog",
                         icon: "vmCatalog",
                         stateKey: 'gpuVmCatalog',
-                        subMemus: {
+                        subMenus: {
                             vmCatalog: {
                                 name: "vm_catalog_list",
                                 icon: "vmCatalog",
