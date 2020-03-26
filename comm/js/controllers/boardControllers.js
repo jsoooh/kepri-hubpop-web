@@ -566,7 +566,7 @@ angular.module('portal.controllers')
         ct.boardData = {};
         ct.paramBoardCode = 'qna';
         ct.uaaContextUrl = CONSTANTS.uaaContextUrl;
-        ct.userAuth      = common.getUserAuth();    //권한조회(A/B/M/O/U : 관리자/마케팅관리자/기업관리자/조직관리자/일반사용자
+        ct.userAuth = common.getUserAuth();    //권한조회(A/B/M/O/U : 관리자/마케팅관리자/기업관리자/조직관리자/일반사용자
         ct.conditions = [
             {id: 'title', name: '제목'},
             {id: 'writer', name: '작성자'}
@@ -581,16 +581,18 @@ angular.module('portal.controllers')
             ct.pageOptions.currentPage = currentPage;
             var promise = boardService.myBoardList(ct.pageOptions.pageSize, currentPage-1, common.getUser().email, ct.paramBoardCode, ct.selCondition.id, ct.schText);
             promise.success(function (data) {
-                ct.boards = data.items;
-                ct.pageOptions.total = data.counts;
+                ct.orgBoards = data.items;
+                ct.orgBoardsTotal = data.counts;
 
-                for(var i = 0; i < ct.boards.length; i++){
-                    ct.boards[i].boardName = $translate.instant('label.board_'+data.items[i].boardCode);
+                for(var i = 0; i < ct.orgBoards.length; i++){
+                    ct.orgBoards[i].boardName = $translate.instant('label.board_'+data.items[i].boardCode);
                 }
+
+                ct.checkMe();
                 $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
-                ct.boards = [];
+                ct.orgBoards = [];
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -619,6 +621,29 @@ angular.module('portal.controllers')
             };
 
             common.showDialog($scope, $event, dialogOptions);
+        };
+
+        ct.checkMe = function () {
+            if (ct.checkedOnlyMyBoards) {
+                ct.boards = [];
+                var total = 0;
+                var parentId = 0;
+                for (var i = 0; i < ct.orgBoards.length; i++) {
+                    if (ct.orgBoards[i].parentId == undefined && ct.orgBoards[i].level == 1 && ct.orgBoards[i].ownerEmail == common.getUser().email) {
+                        parentId = ct.orgBoards[i].id;
+                        ct.boards.push(ct.orgBoards[i]);
+                        total++;
+                    }
+                    if (ct.orgBoards[i].level > 1 && ct.orgBoards[i].parentId && ct.orgBoards[i].parentId == parentId) {
+                        ct.boards.push(ct.orgBoards[i]);
+                        total++;
+                    }
+                }
+                ct.pageOptions.total = total;
+            } else {
+                ct.boards = angular.copy(ct.orgBoards);
+                ct.pageOptions.total = ct.orgBoardsTotal;
+            }
         };
 
         /*게시판 검색input 엔터 시 조회*/
