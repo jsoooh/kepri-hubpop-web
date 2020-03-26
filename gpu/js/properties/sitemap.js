@@ -12,44 +12,51 @@ angular.module('app')
                 notEdPAuth: "UV",
                 mainTop: true,
                 menus: {
-                    vmServiceCatalog: {
-                        name: "vm_service_catalog",
-                        icon: "vmServiceCatalog",
-                        stateKey: 'gpuVmServiceCatalog',
-                        url: '/gpu/vmServiceCatalog/list',
-                        controller: 'gpuVmServiceCatalogListCtrl',
-                        templateUrl: _GPU_VIEWS_+'/vmServiceCatalog/vmServiceCatalogList.html',
-                        subPages: {
-                            vmServiceCatalogView: {
-                                name: 'vm_service_catalog_view',
-                                stateKey: 'gpuVmServiceCatalogView',
-                                url: '/gpu/vmServiceCatalog/view/:id',
-                                controller: 'gpuVmServiceCatalogViewCtrl',
-                                templateUrl: _GPU_VIEWS_+'/vmServiceCatalog/vmServiceCatalogView.html'
+                    vmCatalog: {
+                        name: "vm_catalog",
+                        icon: "vmCatalog",
+                        stateKey: 'gpuVmCatalog',
+                        subMemus: {
+                            vmCatalog: {
+                                name: "vm_catalog_list",
+                                icon: "vmCatalog",
+                                stateKey: 'gpuVmCatalogList',
+                                url: '/gpu/vmCatalog/list',
+                                controller: 'gpuVmCatalogListCtrl',
+                                templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogList.html',
+                                subPages: {
+                                    vmCatalogView: {
+                                        name: 'vm_catalog_view',
+                                        stateKey: 'gpuVmCatalogView',
+                                        url: '/gpu/vmCatalog/view/:id',
+                                        controller: 'gpuVmCatalogViewCtrl',
+                                        templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogView.html'
+                                    },
+                                    vmCatalogDeploy: {
+                                        name: 'vm_catalog_deploy',
+                                        stateKey: 'gpuVmCatalogDeploy',
+                                        url: '/gpu/vmCatalog/deploy/:id',
+                                        controller: 'gpuVmCatalogDeployCtrl',
+                                        templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeploy.html'
+                                    }
+                                }
                             },
-                            vmServiceCatalogDeploy: {
-                                name: 'vm_service_catalog_deploy',
-                                stateKey: 'gpuVmServiceCatalogDeploy',
-                                url: '/gpu/vmServiceCatalog/deploy/:id',
-                                controller: 'gpuVmServiceCatalogDeployCtrl',
-                                templateUrl: _GPU_VIEWS_+'/vmServiceCatalog/vmServiceCatalogDeploy.html'
-                            }
-                        }
-                    },
-                    vmServiceCatalogDeploy: {
-                        name: "vm_service_catalog_deploy_list",
-                        icon: "vmServiceCatalogDeploy",
-                        stateKey: 'gpuVmServiceCatalogDeployList',
-                        url: '/gpu/vmServiceCatalogDeploy/list',
-                        controller: 'gpuVmServiceCatalogDeployListCtrl',
-                        templateUrl: _GPU_VIEWS_+'/vmServiceCatalog/vmServiceCatalogDeployList.html',
-                        subPages: {
-                            serverDetail: {
-                                name: 'vm_service_catalog_deploy_view',
-                                stateKey: 'gpuVmServiceCatalogDeployView',
-                                url: '/gpu/vmServiceCatalogDeploy/view/:id',
-                                controller: 'gpuVmServiceCatalogDeployViewCtrl',
-                                templateUrl: _GPU_VIEWS_+'/vmServiceCatalog/vmServiceCatalogDeployView.html'
+                            vmCatalogDeploy: {
+                                name: "vm_catalog_deploy_list",
+                                icon: "vmCatalogDeploy",
+                                stateKey: 'gpuVmCatalogDeployList',
+                                url: '/gpu/vmCatalogDeploy/list',
+                                controller: 'gpuVmCatalogDeployListCtrl',
+                                templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeployList.html',
+                                subPages: {
+                                    serverDetail: {
+                                        name: 'vm_catalog_deploy_view',
+                                        stateKey: 'gpuVmCatalogDeployView',
+                                        url: '/gpu/vmCatalogDeploy/view/:id',
+                                        controller: 'gpuVmCatalogDeployViewCtrl',
+                                        templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeployView.html'
+                                    }
+                                }
                             }
                         }
                     }
