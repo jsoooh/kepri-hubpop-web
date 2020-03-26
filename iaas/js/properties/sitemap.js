@@ -100,7 +100,7 @@ angular.module('app')
                             instanceSnashotCreate: {
                                 name: 'server_snapshot_create',
                                 stateKey: 'iaasServerSnapshotCreate',
-                                url: '/iaas/snapshot/serverCreate/:snapshotId',
+                                url: '/iaas/snapshot/serverCreate/:snapshotId/:tenantId',
                                 controller: 'iaasServerSnapshotCreateCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/compute/serverSnapshotCreate.html'
                             },
