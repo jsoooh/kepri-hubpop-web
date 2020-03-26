@@ -2,16 +2,26 @@
 
 angular.module('common.controllers', [])
 // 최초 접속 혹은 새로고침 시 as main
-    .controller('mainCtrl', function ($scope, $location, $state, $stateParams, $translate, $window, $timeout, $interval, $cookies, cache, cookies, user, common, portal, userSettingService, CONSTANTS, FileUploader) {
+    .controller('mainCtrl', function ($scope, $location, $state, $stateParams, $translate, $window, $timeout, $interval, $cookies, cache, cookies, user, common, portal, userSettingService, CONSTANTS, FileUploader, memberService) {
         _DebugConsoleLog('commonControllers.js : mainCtrl Start, path : ' + $location.path(), 1);
 
         var mc = this;
+
+        // popup modal에서 사용 할 객체 선언
+        var pop = $scope.pop = {};
+
+        /* 비밀번호 입력 변수 */
+        pop.changePasswordData = {
+            oldPassword : "",
+            password : "",
+            retypePassword : ""
+        };
 
         mc.topLogoIcon = "images/top_logo.png";
 
         mc.projectType = _PROJECT_TYPE_;
 
-		mc.pageLoadCount = 0;
+        mc.pageLoadCount = 0;
         // 기본 셋팅
         if (common.getLanguageKey() != "en") {
             common.setLanguageKey("ko");
@@ -65,6 +75,138 @@ angular.module('common.controllers', [])
             }
         };
 
+        // 20.03.09 - ksw / 사용자 메뉴 추가(회원탈퇴)
+        mc.signout = function () {
+            var userAuth = $scope.main.userAuth;
+            if (userAuth == "M") {
+                common.showDialogAlert($translate.instant('label.signout'), "프로젝트 책임자는 탈퇴가 불가능합니다.");
+                return;
+            } else if (userAuth == "A") {
+                common.showDialogAlert($translate.instant('label.signout'), "시스템 관리자는 탈퇴가 불가능합니다.");
+                return;
+            }
+
+            var showConfirm = common.showConfirm($translate.instant('label.signout'), "탈퇴하시면 연관 정보는 삭제됩니다.\n 정말로 탈퇴 하시겠습니까?", "info");
+            showConfirm.then(function () {
+                $scope.deleteUser();
+            });
+        };
+
+        // 20.03.09 - ksw / 사용자 메뉴 추가(회원탈퇴)
+        $scope.deleteUser = function() {
+            var param = {
+                user_id : $scope.main.userInfo.user_id
+            };
+
+            $scope.main.loadingMainBody=true;
+            var deletePromise = memberService.deleteUser(param);
+            deletePromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody=false;
+                common.logout();
+                common.showAlert($translate.instant('label.user_deregistered'), $translate.instant('message.mi_delete'));
+                common.moveLoginPage();
+            });
+            deletePromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody=false;
+                if(status == 403) {          //기업관리자
+                    common.showAlertError($translate.instant('label.user_deregistered'), "프로젝트 책임자 이므로 탈퇴가 불가능합니다. 관리자에게 문의 바랍니다.");
+                } else if(status == 406) {      //조직관리자
+                    common.showAlertError($translate.instant("label.user_deregistered"), "다음 작업에서 관리자 입니다. 작업의 관리자 변경 후 처리해 주시기 바랍니다. (" + data.resultMsg + ")");
+                } else {
+                    common.showAlertError($translate.instant('label.user_deregistered'), data);
+                }
+            });
+        };
+
+        // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
+        $scope.changePasswordAction = function(passData){
+            $scope.popHide();
+            $scope.main.loadingMainBody = true;
+
+            if (passData.oldPassword == undefined || passData.oldPassword == "") {
+                alert($translate.instant("message.mi_type_current_pwd"));
+                return;
+            }
+            if (passData.password == undefined || passData.password == "") {
+                alert($translate.instant("message.mi_type_new_pwd"));
+                return;
+            }
+            if (passData.password != passData.retypePassword) {
+                alert($translate.instant("message.mi_wrong_pwd_retype"));
+                return;
+            }
+            var param = {
+                'user_id'     : $scope.main.userInfo.user_id,
+                'email'       : $scope.main.userInfo.email,
+                'old_password': passData.oldPassword,
+                'password'    : passData.password,
+                'token'       : $scope.main.userInfo.token,
+                'is_sso'      : $scope.main.userInfo.sso
+                // 'version'     : $scope.main.userInfo.version
+            };
+
+            if (passData.oldPassword == passData.password) {
+                common.showAlert($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
+                return;
+            }
+            $scope.main.loadingMainBody = true;
+            var changePromise = memberService.changePassword(param);
+            changePromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.clearUser();
+                common.setUser(data);
+                common.clearAccessToken();
+                common.setAccessToken(data.token);
+
+                // 초기화 및 팝업 닫기
+                $scope.popHide();
+
+                common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_change_pwd"));
+
+            });
+            changePromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                // 초기화 및 팝업 닫기
+                $scope.popHide();
+
+                if(status == 406) {      //비밀번호 패턴이 맞지 않습니다.
+                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 규칙이 맞지 않습니다. 10~20자 영문, 숫자를 포함해 주시기 바랍니다.");
+                } else if (status == 401) {
+                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 기존비밀번호가 잘못되었습니다. 확인 후 다시 시도해 주시기 바랍니다.");
+                } else if (status == 422) {
+                    common.showAlertError($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
+                } else {
+                    //$scope.error = $translate.instant("label.error");
+                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 비밀번호를 다시 수정해 주세요.");
+                }
+            });
+        };
+
+        // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
+        mc.changePassword = function ($event) {
+            var dialogOptions = {
+                title : $translate.instant("label.pwd_change"),
+                form : {
+                    name: "passwordForm",
+                    options: ""
+                },
+                dialogClassName : "modal-dialog",
+                templateUrl: _COMM_VIEWS_ + "/user/popChangePasswordForm.html" + _VersionTail(),
+                okName : $translate.instant("label.change")
+            };
+            $scope.pop.changePasswordData = {
+                oldPassword : "",
+                password : "",
+                retypePassword : ""
+            };
+            common.showDialog($scope, $event, dialogOptions);
+            // Dialog ok 버튼 클릭 시 액션 정의
+            $scope.popDialogOk = function () {
+                $scope.changePasswordAction($scope.pop.changePasswordData);
+            }
+        };
+
+
         // 로그 아웃
         mc.logout = function () {
             user.logoutAction();
@@ -75,7 +217,7 @@ angular.module('common.controllers', [])
         // 페이지 이동
         mc.goToPage = function (path) {
             common.locationPath(path);
-		};
+        };
 
         // 페이지 이동 (state)
         mc.goToState = function (stateKey) {
@@ -588,19 +730,19 @@ angular.module('common.controllers', [])
 
         // Organization 한글명 매핑
         mc.sinkPotalOrgName = function (organization) {
-			if (angular.isObject(organization)) {
-	            for (var i=0;i<mc.portalOrgs.length; i++) {
-	                if (organization.name == mc.portalOrgs[i].orgId) {
-	                    organization.orgName = mc.portalOrgs[i].orgName;
-	                    organization.projectId = mc.portalOrgs[i].projectId;
-	                    break;
-	                }
-	            }
-	            if (!organization.orgName) {
-	                organization.orgName = organization.name;
-	                organization.projectId = organization.name;
-	            }
-			}
+            if (angular.isObject(organization)) {
+                for (var i=0;i<mc.portalOrgs.length; i++) {
+                    if (organization.name == mc.portalOrgs[i].orgId) {
+                        organization.orgName = mc.portalOrgs[i].orgName;
+                        organization.projectId = mc.portalOrgs[i].projectId;
+                        break;
+                    }
+                }
+                if (!organization.orgName) {
+                    organization.orgName = organization.name;
+                    organization.projectId = organization.name;
+                }
+            }
             return organization;
         };
 
@@ -1077,38 +1219,32 @@ angular.module('common.controllers', [])
             }
         };
 
-        //프로젝트 생성 팝업
         mc.addOrgProjectFormOpen = function($event) {
             //임시 알림 설정. 2020.02.03
             //common.showDialogAlert("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 가상머신 생성을 제한하고 있습니다.\n자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다.");
             //return;
             if ($location.path().indexOf("/comm/projects/") > -1) {
                 var orgProject = {};
-                 orgProject.managerId    = mc.userInfo.user_id;
-                 orgProject.managerName  = mc.userInfo.user_name;
-                 orgProject.managerEmail = mc.userInfo.email;
+                orgProject.managerId    = mc.userInfo.user_id;
+                orgProject.managerName  = mc.userInfo.user_name;
+                orgProject.managerEmail = mc.userInfo.email;
 
-                 orgProject.projectId = mc.sltProjectId;
+                orgProject.projectId = mc.sltProjectId;
 
-                 var dialogOptions = {
-                 controller : "commAddOrgProjecFormCtrl",
-                 controllerAs: "pop",
-                 templateUrl : _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail(),
-                 formName : "popOrgProjectForm",
-                 orgProject : orgProject,
-                 callBackFunction : mc.addOrgProjectCallBackFun
-                 };
-                 $scope.actionBtnHied = false;
-                 $scope.actionLoading = false;
-                 common.showCustomDialog($scope, $event, dialogOptions);
+                var dialogOptions = {
+                    controller : "commAddOrgProjecFormCtrl",
+                    controllerAs: "pop",
+                    templateUrl : _COMM_VIEWS_ + "/org/popOrgProjectForm.html" + _VersionTail(),
+                    formName : "popOrgProjectForm",
+                    orgProject : orgProject,
+                    callBackFunction : mc.addOrgProjectCallBackFun
+                };
+                $scope.actionBtnHied = false;
+                $scope.actionLoading = false;
+                common.showCustomDialog($scope, $event, dialogOptions);
             } else {
                 $location.path('/comm/projects/popup');
             }
-        };
-
-        //프로젝트 신청 화면전환
-        mc.requestOrgProjectFormOpen = function($event) {
-            $location.path('/comm/project/create');
         };
 
         mc.ssoUserLogin = false;
@@ -1128,7 +1264,7 @@ angular.module('common.controllers', [])
                 _this.removeClass("cToggle-open").find(".cBox-cnt").slideUp();
             }
         };
-        
+
         mc.pnbBoxToggleChange = function (evt, isReSlider) {
             var _this = $(evt.currentTarget).closest(".pnb_box.cToggle");
             if (!_this.hasClass("cToggle-open")) {
@@ -1162,13 +1298,13 @@ angular.module('common.controllers', [])
         };
 
 
-      //2018.11.22 sg0730 RzSlider Refresh Func Add
+        //2018.11.22 sg0730 RzSlider Refresh Func Add
         mc.refreshSlider = function () {
             $timeout(function () {
                 $scope.$broadcast('rzSliderForceRender');
             });
         };
-    
+
 
         mc.contentsViewType = "thum";
         // IaaS 추가 2018.04.11 S
@@ -1302,10 +1438,10 @@ angular.module('common.controllers', [])
             if (result === LABEL_CONSTANTS) result = '-';
             return result;
         };
-        
+
         // 알람정책 세팅
         mc.getAlarmPolicy = function (nodeKey, summary, projectId) {
-            
+
             var params = {
                 projectId: projectId
             };
@@ -1323,7 +1459,7 @@ angular.module('common.controllers', [])
             });
         };
 
-        
+
         // 검색
         mc.selectAlarmList = function () {
 
@@ -1334,7 +1470,7 @@ angular.module('common.controllers', [])
                 projectId: mc.userTenantId,
                 baremetalYn: 'N'
             };
-            
+
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', params);
             serverStatsPromise.success(function (data, status, headers) {
                 mc.alarmList = data.data;
@@ -1342,7 +1478,7 @@ angular.module('common.controllers', [])
         };
 
         mc.alarmCnt = 0;
-        
+
         // 알람 카운트 조회
         mc.selectAlarmCount = function () {
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/count/N', 'GET', {projectId: mc.userTenantId});
@@ -1375,7 +1511,7 @@ angular.module('common.controllers', [])
             mc.selectAlarmCount();
             mc.selectAlarmList();
         }, CONSTANTS.alarmBell);
-        
+
         //팝업 공지사항 보여주기
         mc.desplayNoticeList = function(notices) {
             mc.noticeList = notices;
@@ -1632,9 +1768,9 @@ angular.module('common.controllers', [])
             }
         }
 
-		/*if (!$scope.main.contentsLayoutResizeEvent) {
-			$scope.main.contentsLayoutResizeEvent	= true;
-		}*/
+        /*if (!$scope.main.contentsLayoutResizeEvent) {
+            $scope.main.contentsLayoutResizeEvent	= true;
+        }*/
 
         $scope.main.asideClose();
         $scope.main.isLoadPageBody = true;

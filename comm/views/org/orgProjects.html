@@ -85,7 +85,8 @@
 		</div>
 	</div>
 </div>
-<div class="titWrap">	<h2 class="h2">전체 프로젝트 리스트</h2>
+<div class="titWrap">
+	<h2 class="h2">전체 프로젝트 리스트</h2>
 	<div class="btnArea">
 		<!-- 선택 된 class="on" 추가 -->
 		<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
@@ -125,9 +126,10 @@
 		<table class="table">
 			<colgroup>
 				<col style="width: 5%;">
-				<col style="width: 8%;">
+				<col style="width: 12%;">
 				<col style="width: ;">
 				<col style="width: 10%;">
+				<col style="width: 5%;">
 				<col style="width: 5%;">
 				<col style="width: 12%;">
 				<col style="width: 10%;">
@@ -142,6 +144,7 @@
 					<th scope="col">프로젝트명</th>
 					<th scope="col">책임자명</th>
 					<th scope="col">참여자수</th>
+					<th scope="col">유형</th>
 					<th scope="col">이용기간</th>
 					<th scope="col">생성일자</th>
 					<th scope="col">승인현황</th>
@@ -152,10 +155,11 @@
 			<tbody>
 				<tr ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }">
 					<td>{{ $index+1 }}</td>
-					<td>{{ org.id }}</td>
+					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgId }}</a></td>
 					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgName }}</a></td>
 					<td>{{ org.managerName }}</td>
 					<td>{{ org.orgUserCount }}</td>
+					<td>{{ org.isPersonal ? '개인' : '일반' }}</td>
 					<td>{{ org.startEndDate }}</td>
 					<td>{{ org.createdDate.time | date : 'yyyy.MM.dd' }}</td>
 					<td>{{ org.statusNm == '생성' ? '승인' : org.statusNm }}</td>
@@ -170,7 +174,8 @@
 								<li><a href="" title="사용자변경">사용자변경</a></li>
 								<!-- 선택 된 class="active" 추가 -->
 								<li><a href="" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
-								<li><a href="" title="탈퇴">탈퇴</a></li>
+								<!-- 2020.03.24 - 사용자 탈퇴 기능 추가 by ksw -->
+								<li><a href="" ng-click="contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
 								<li><a href=""  title="삭제" class="delete">{{ 'label.del' | translate }}</a></li>
 							</ul>
 						</div>
@@ -181,85 +186,85 @@
 	</div>
 	<!-- //프로젝트 리스트(테이블형) -->
 
-				<!-- 프로젝트 리스트(이미지형) -->
-				<div class="proj_list_area"
-					ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0 && contents.listType == 'image'">
-					<ul class="ul-panel dash_list">
-						<li
-							ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }"
-							ng-if="org.statusCode != 'deleting'"><a
-							ng-click="main.goToPortalOrgPage(org);">
-								<div class="thum">
-									<span ng-if="org.iconImage && org.iconImage.image"
-										class="thum_in img_line"> <img
-										ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.image }}"
-										class="logo" alt="">
-									</span> <span class="thum_in"
-										ng-if="!org.iconImage || !org.iconImage.image"> <span
-										class="txt">{{org.orgName.substr(0, 1)}}</span>
-									</span>
-								</div>
-								<div class="list_in">
-									<dl>
-										<dt>
-											<strong>{{org.orgName}}</strong>
-										</dt>
-										<dd ng-if="org.description">{{org.description}}</dd>
-									</dl>
-								</div>
-								<div class="pj_info_box">
-									<ul class="user_info">
-										<li>관리자 : {{org.managerName}}</li>
-										<li>참여자 수 : {{org.orgUserCount}}</li>
-										<li>Project ID : {{org.id}}</li>
-									</ul>
-									<div class="date">
-										<span>생성일 : {{org.createdDate.time | date :
-											'yyyy.MM.dd'}}</span> <span ng-if="org.updatedDate">최근활동일 :
-											{{org.updatedDate.time | date : 'yyyy.MM.dd'}}</span> <span
-											ng-if="!org.updatedDate">최근활동일 :
-											{{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
-									</div>
-								</div>
-						</a></li>
-					</ul>
-				</div>
-				<!-- //프로젝트 리스트(이미지형) -->
-				<!-- 프로젝트 리스트(검색결과가 없을때) -->
-				<div class="proj_list_area"
-					ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length == 0">
-					<ul class="ul-panel dash_list no_data">
-						<li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
-					</ul>
-				</div>
-				<!-- //프로젝트 리스트(검색결과가 없을때) -->
+	<!-- 프로젝트 리스트(이미지형) -->
+	<div class="proj_list_area"
+		ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0 && contents.listType == 'image'">
+		<ul class="ul-panel dash_list">
+			<li
+				ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }"
+				ng-if="org.statusCode != 'deleting'"><a
+				ng-click="main.goToPortalOrgPage(org);">
+					<div class="thum">
+						<span ng-if="org.iconImage && org.iconImage.image"
+							class="thum_in img_line"> <img
+							ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.image }}"
+							class="logo" alt="">
+						</span> <span class="thum_in"
+							ng-if="!org.iconImage || !org.iconImage.image"> <span
+							class="txt">{{org.orgName.substr(0, 1)}}</span>
+						</span>
+					</div>
+					<div class="list_in">
+						<dl>
+							<dt>
+								<strong>{{org.orgName}}</strong>
+							</dt>
+							<dd ng-if="org.description">{{org.description}}</dd>
+						</dl>
+					</div>
+					<div class="pj_info_box">
+						<ul class="user_info">
+							<li>관리자 : {{org.managerName}}</li>
+							<li>참여자 수 : {{org.orgUserCount}}</li>
+							<li>Project ID : {{org.orgId}}</li>
+						</ul>
+						<div class="date">
+							<span>생성일 : {{org.createdDate.time | date :
+								'yyyy.MM.dd'}}</span> <span ng-if="org.updatedDate">최근활동일 :
+								{{org.updatedDate.time | date : 'yyyy.MM.dd'}}</span> <span
+								ng-if="!org.updatedDate">최근활동일 :
+								{{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
+						</div>
+					</div>
+			</a></li>
+		</ul>
+	</div>
+	<!-- //프로젝트 리스트(이미지형) -->
+	<!-- 프로젝트 리스트(검색결과가 없을때) -->
+	<div class="proj_list_area"
+		ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length == 0">
+		<ul class="ul-panel dash_list no_data">
+			<li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
+		</ul>
+	</div>
+	<!-- //프로젝트 리스트(검색결과가 없을때) -->
 
-				<!-- 프로젝트 리스트(데이터가 없을때) -->
-				<div class="proj_list_area"
-					ng-if="contents.projects.length == 0 && !contents.schText">
-					<ul class="ul-panel dash_list no_data">
-						<li>
-							<p class="no_data_txt">현재 참여중인 프로젝트가 없습니다. HUB-PoP을 사용하시려면 먼저
-								프로젝트를 생성해 주세요.</p>
-							<div class="txt_box">
-								<p>프로젝트는 HUB-PoP에서 관리하는 작업공간의 단위입니다. 작업공간은 다음의 용도로 활용될 수
-									있습니다.</p>
-								<ul>
-									<li>- SW 개발 : 클라우드와 표준화된 개발환경을 활용하여 빠르게 SW를 개발할 수 있습니다.</li>
-									<li>- 데이터 분석 : 전력 데이터를 활용하여 통계, 기계학습, GPU를 활용한 딥러닝을 수행할 수
-										있습니다.</li>
-								</ul>
-								<p>프로젝트 생성 버튼을 눌러서 프로젝트를 만들어 보세요.</p>
-								<div class="txt_box_btn">
-									<button type="button" name="button" class="btn btn-proj-add"
-										ng-click="contents.addOrgProjectFormOpen($event);"
-										ng-disabled="main.userAuth != 'M'">
-										<span class="ico"></span><span class="txt">프로젝트 생성</span>
-									</button>
-								</div>
-							</div>
-						</li>
+	<!-- 프로젝트 리스트(데이터가 없을때) -->
+	<div class="proj_list_area"
+		ng-if="contents.projects.length == 0 && !contents.schText">
+		<ul class="ul-panel dash_list no_data">
+			<li>
+				<p class="no_data_txt">현재 참여중인 프로젝트가 없습니다. HUB-PoP을 사용하시려면 먼저
+					프로젝트를 생성해 주세요.</p>
+				<div class="txt_box">
+					<p>프로젝트는 HUB-PoP에서 관리하는 작업공간의 단위입니다. 작업공간은 다음의 용도로 활용될 수
+						있습니다.</p>
+					<ul>
+						<li>- SW 개발 : 클라우드와 표준화된 개발환경을 활용하여 빠르게 SW를 개발할 수 있습니다.</li>
+						<li>- 데이터 분석 : 전력 데이터를 활용하여 통계, 기계학습, GPU를 활용한 딥러닝을 수행할 수
+							있습니다.</li>
 					</ul>
+					<p>프로젝트 생성 버튼을 눌러서 프로젝트를 만들어 보세요.</p>
+					<div class="txt_box_btn">
+						<button type="button" name="button" class="btn btn-proj-add"
+							ng-click="contents.addOrgProjectFormOpen($event);"
+							ng-disabled="main.userAuth != 'M'">
+							<span class="ico"></span><span class="txt">프로젝트 생성</span>
+						</button>
+					</div>
 				</div>
-				<!-- //프로젝트 리스트(데이터가 없을때) -->
+			</li>
+		</ul>
+	</div>
+	<!-- //프로젝트 리스트(데이터가 없을때) -->
 	</div>

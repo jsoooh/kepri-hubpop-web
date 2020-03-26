@@ -5,10 +5,12 @@ angular.module('app', [
         , 'common.services'
         , 'portal.controllers'
         , 'portal.services'
-        , 'product.controllers'
-        , 'product.services'
+//        , 'product.controllers'
+//        , 'product.services'
         , 'iaas.controllers'
         , 'iaas.services'
+        , 'gpu.controllers'
+        , 'gpu.services'
         , 'paas.controllers'
         , 'paas.services'
         , 'perf.controllers'
@@ -44,8 +46,8 @@ angular.module('app', [
         , 'ngJScrollPane'
         , 'checklist-model'
     ])
-    .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$translateProvider', 'CONSTANTS', 'SITEMAP', 'IAASSITEMAP', 'PAASSITEMAP', 'PERFSITEMAP'/*, 'MARKETSITEMAP', 'MONITSITEMAP'*/,
-        function ($httpProvider, $stateProvider, $urlRouterProvider, $translateProvider, CONSTANTS, SITEMAP, IAASSITEMAP, PAASSITEMAP, PERFSITEMAP/*, MARKETSITEMAP, MONITSITEMAP*/) {
+    .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$translateProvider', 'CONSTANTS', 'SITEMAP', 'IAASSITEMAP', 'GPUSITEMAP', 'PAASSITEMAP', 'PERFSITEMAP'/*, 'MARKETSITEMAP', 'MONITSITEMAP'*/,
+        function ($httpProvider, $stateProvider, $urlRouterProvider, $translateProvider, CONSTANTS, SITEMAP, IAASSITEMAP, GPUSITEMAP, PAASSITEMAP, PERFSITEMAP/*, MARKETSITEMAP, MONITSITEMAP*/) {
 
         _DebugConsoleLog('app.js : commonApp', 1);
 
@@ -97,6 +99,11 @@ angular.module('app', [
                 if (!SITEMAP.pages[key])    SITEMAP.pages[key] = option;
             });
         }
+        if (GPUSITEMAP.pages) {
+            angular.forEach(GPUSITEMAP.pages, function(option, key) {
+                if (!SITEMAP.pages[key])    SITEMAP.pages[key] = option;
+            });
+        }
         if (PAASSITEMAP.pages) {
             angular.forEach(PAASSITEMAP.pages, function(option, key) {
                 if (!SITEMAP.pages[key])    SITEMAP.pages[key] = option;
@@ -124,6 +131,11 @@ angular.module('app', [
 
         if (IAASSITEMAP.leftMenus) {
             angular.forEach(IAASSITEMAP.leftMenus, function (option, key) {
+                if (!SITEMAP.leftMenus[key]) SITEMAP.leftMenus[key] = option;
+            });
+        }
+        if (GPUSITEMAP.leftMenus) {
+            angular.forEach(GPUSITEMAP.leftMenus, function (option, key) {
                 if (!SITEMAP.leftMenus[key]) SITEMAP.leftMenus[key] = option;
             });
         }
@@ -188,7 +200,7 @@ angular.module('app', [
             });
         });
 
-        var pageStages = ['comm', 'iaas', 'paas', 'perf'/*, 'market', 'monit'*/];
+        var pageStages = ['comm', 'iaas', 'gpu', 'paas', 'perf'/*, 'market', 'monit'*/];
         var translateFiles = [];
 
         translateFiles.push({

@@ -6,18 +6,6 @@ angular.module('portal.services', [])
 
         portal.sso = {};
 
-        portal.sso.decode = function(params) {
-            var pathUrl = '/sso/decode';
-            var method = 'GET';
-
-            var promise = common.resourcePromise(pathUrl, method, params);
-            var finallyFn = function() {
-                //_DebugConsoleLog('finallyFn', 3);
-            };
-
-            return common.retrieveResource(promise, finallyFn);
-        };
-
         portal.sso.createProjectResponsiblePersonSso = function(params) {
             var pathUrl = CONSTANTS.uaaContextUrl + '/users2/projectResponsiblePersonSso';
             var method = 'POST';
@@ -771,9 +759,10 @@ angular.module('portal.services', [])
 ;
 
 angular.module('iaas.services', []);
-angular.module('product.services', []);
+angular.module('gpu.services', []);
+//angular.module('product.services', []);
 angular.module('paas.services', []);
-angular.module('market.services', []);
-angular.module('monit.services', []);
+//angular.module('market.services', []);
+//angular.module('monit.services', []);
 angular.module('perf.services', []);
 
