@@ -35,6 +35,14 @@
 									</td>
 								</tr>
 								<tr>
+									<th scope="row">{{ 'label.registrant' | translate }}</th>
+									<td>{{contents.boardData.ownerName}}</td>
+									<th scope="row">{{ 'label.register_dd' | translate }}</th>
+									<td>{{ contents.boardData.createdDate.time | date : "yyyy-MM-dd" }}</td>
+									<th scope="row">{{ 'label.hits' | translate }}</th>
+									<td>{{contents.boardData.hits}}</td>
+								</tr>
+								<tr>
 									<td colspan="6" class="td-cont" style="height:400px;">
 										<span ng-show="contents.mode=='V'" ng-bind-html="contents.boardData.content0"></span>
 										<!-- <div class="ta-container detail-container lighter" ng-show="contents.mode=='U'" style="width:100%;ime-mode:active;">
@@ -68,14 +76,6 @@
 											</li>
 										</ul>
 									</td>
-								</tr>
-								<tr>
-									<th scope="row">{{ 'label.registrant' | translate }}</th>
-									<td>{{contents.boardData.ownerName}}</td>
-									<th scope="row">{{ 'label.register_dd' | translate }}</th>
-									<td>{{ contents.boardData.createdDate.time | date : "yyyy-MM-dd" }}</td>
-									<th scope="row">{{ 'label.hits' | translate }}</th>
-									<td>{{contents.boardData.hits}}</td>
 								</tr>
 							</tbody>
 						</table>

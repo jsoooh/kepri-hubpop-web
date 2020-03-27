@@ -34,16 +34,17 @@
 
     var _COMM_STAGE_			 = "comm";
     var _IAAS_STAGE_			 = "iaas";
+	var _GPU_STAGE_			 	 = "gpu";
     var _PAAS_STAGE_			 = "paas";
     var _MARKET_STAGE_			 = "market";
     var _MONIT_STAGE_			 = "monit";
 	var _PERF_STAGE_		     = "perf";
 
     var _VIEWS_                  = "views";
-    var _ADMIN_VIEWS_            = "views/admin";
 
     var _COMM_VIEWS_			 = _COMM_STAGE_ +"/views";
     var _IAAS_VIEWS_			 = _IAAS_STAGE_ +"/views";
+	var _GPU_VIEWS_			     = _GPU_STAGE_ +"/views";
     var _PAAS_VIEWS_			 = _PAAS_STAGE_ +"/views";
     var _MARKET_VIEWS_			 = _MARKET_STAGE_ +"/views";
     var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
@@ -231,6 +232,9 @@
 
         // IAAS
         loadJavascript(_IAAS_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
+
+		// GPU
+		loadJavascript(_GPU_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
 
         // PAAS
         loadJavascript(_PAAS_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);

@@ -6,6 +6,19 @@
 		height: 36px;
 		padding: 0 10px;
 	}
+	.table.inputWidthWrap th {
+		text-align: center;
+		vertical-align: middle;
+		background: #e7e8e9;
+		color: #333;
+	}
+	.require::before {
+		display: inline-block;
+		content: '*';
+		color: red;
+		font-size: 15px;
+		font-weight: 700;
+	}
 </style>
 <div class="tableWrap">
 	<div class="tableWrap">
@@ -39,7 +52,6 @@
 			</tr>
             <tr>
                 <th>
-					<span class="require none"></span>
                     <label for="content">{{ 'label.bulletin_attach' | translate }}</label>
                 </th>
                 <td>

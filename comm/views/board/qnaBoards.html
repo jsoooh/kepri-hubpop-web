@@ -1,4 +1,20 @@
 			<!-- content -->
+				<!-- search -->
+				<div class="searchWrap">
+					<div class="searchBox">
+						<div class="form-group">
+							<div class="checkbox checkbox-only" style="margin-left: 10px;">
+								<input type="checkbox" value="1" ng-model="contents.checkedOnlyMyBoards" id="checkme" ng-change="contents.checkMe()">
+								<label for="checkme" style="padding-left: 5px;">내글보기</label>
+							</div>
+							<select id="schType" name="schType" style="margin-left: 10px;" ng-options="( condition.name | translate ) for condition in contents.conditions" ng-model="contents.selCondition" style="width:100px;">
+							</select>
+		                    <input type="text" style="width:400px;ime-mode:active;" maxlength="30" placeholder="{{ 'message.mi_type_search_word' | translate }}" ng-model="contents.schText" id="searchText" ng-keypress="contents.schEnter($event);">
+		                </div>
+						<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.listBoards();"><span class="ico">{{ 'label.search' | translate }}</span></button>
+					</div>
+				</div>
+				<!-- search -->
 				<!-- table top -->
 				<div class="tb-top">
 					<div class="pull-left">{{ 'label.all' | translate }} : {{ contents.pageOptions.total }} 건</div>

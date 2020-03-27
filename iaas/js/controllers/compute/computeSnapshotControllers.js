@@ -232,11 +232,13 @@ angular.module('iaas.controllers')
         ct.data.subDomainName = "";
 
         ct.snapshotId = $stateParams.snapshotId;
+        ct.paramTenantId = !!$stateParams.tenantId ? $stateParams.tenantId : ct.data.tenantId;
 
         ct.fn.getSnapshotInfo = function(snapshotId) {
             $scope.main.loadingMainBody = true;
             var params = {
-                tenantId : ct.data.tenantId,
+                //tenantId : ct.data.tenantId,
+                tenantId : ct.paramTenantId,
                 snapShotId : snapshotId
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'GET', params);

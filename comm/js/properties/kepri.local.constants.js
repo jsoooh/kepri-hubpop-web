@@ -20,6 +20,7 @@ angular.module('app')
         iaasApiContextUrl: '/iaas-api/api/iaas/v1.0',
         iaasApiCfContextUrl : '/iaas-api/api/iaas/v1.0',
         iaasApiMarketContextUrl : '/iaas-api/api/iaas/v1.0/market',
+        gpuApiContextUrl: '/gpu-api/api/iaas/v1.0',
         monitApiContextUrl: '/monit-api/api/monit/v1.0',
         monitNewApiContextUrl: '/monit-api/v2',
 		layoutTemplateUrl : {
