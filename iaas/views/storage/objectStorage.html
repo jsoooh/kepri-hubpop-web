@@ -23,8 +23,10 @@
 <div class="btnWrap">
 	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>저장소 만들기</button>
 	<button type="button" class="btn_lg" ng-click="contents.fn.refreshObjectStorage()"><span class="ico ico_bk_add"></span>새로 고침</button>
-	<button type="button" class="btn_lg" ng-click=""><span class="ico ico_bk_add"></span>접속 정보</button>
+	<button type="button" class="btn_lg" ng-click="contents.fn.showObjectStorageInformation()"><span class="ico ico_bk_add"></span>접속 정보</button>
+	<!--
 	<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false"><span class="ico ico_usage_view"></span>사용법 안내</button>
+	-->
 </div>
 <!-- //버튼영역 -->
 
@@ -74,14 +76,6 @@
 		<a href="" ng-click="contents.fn.getObjectStorageObject(item.containerName, '')" class="animated fast fadeInDown">
 			<i class="glyphicon glyphicon-folder-open mr2" ng-show="item.containerName"></i>
 			{{ item.containerName }}
-			<!--
-            <span class="point">
-                <i class="glyphicon glyphicon-chevron-down" ng-show="isInThisPath(item.name)"></i>
-                <i class="glyphicon glyphicon-chevron-right" ng-show="!isInThisPath(item.name)"></i>
-            </span>
-            <i class="glyphicon glyphicon-folder-open mr2" ng-show="isInThisPath(item.name)"></i>
-            <i class="glyphicon glyphicon-folder-close mr2" ng-show="!isInThisPath(item.name)"></i>
-            -->
 		</a>
 	</script>
 
@@ -166,7 +160,13 @@
 
 	<div ng-if="contents.data.bucketName != null" style="display:inline-block; padding: 0 30px; height:700px; background: #FFFFFF; border:1px solid #e9ecef;">
 		<label style="display: block;">파일 및 폴더</label>
-		<label style="display: block;">Path: </label>
+		<label style="display: inline-block; font-size:16px;">Path: </label>
+		<ul class="nav nav-sidebar file-tree-root" style="display:inline-block; list-style: none; margin: 0; padding: 0; font-size:20px; ">
+			<li ng-repeat="item in contents.objectStorageObjectList.currentPathList" ng-click="contents.fn.onClickObjectStoragePathList($index)" style="cursor: pointer; display:inline-block; margin-left: 3px; padding: 0; border: 0; folat:left; font-size:20px;">
+				{{item}}
+			</li>
+		</ul>
+		<br/>
 
 		<input type="file" id="uploaded" onchange="angular.element(this).scope().contents.fn.uploadFiles(this)" multiple placeholder="Upload File" style="display: none;"/>
 		<button type="button" class="btn btn-file" style="border: 1px solid; margin-right: 5px;" ng-click="main.fileSelectBtnClick($event);">
@@ -181,11 +181,12 @@
 				<p class="name">작업</p>
 				<span class="ico arr"></span>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-right" role="btn-my" aria-labelledby="btn-my">
-				<li><a href="">선택 항목 이름 변경</a></li>
-				<li><a href="">선택 항목 자르기</a></li>
-				<li><a href="">선택 항목 붙여 넣기</a></li>
-				<li><a href="">선택 항목 삭제</a></li>
+			<ul class="dropdown-menu dropdown-menu-right" role="btn-my" aria-labelledby="btn-my" style="list-style: none; margin: 0; padding: 0;">
+				<li><a href="" ng-click="contents.fn.renameObject()">선택 항목 이름 변경</a></li>
+				<li><a href="" ng-click="contents.fn.cutObject()">선택 항목 자르기</a></li>
+				<li><a href="" ng-click="contents.fn.pasteObject()">선택 항목 붙여 넣기</a></li>
+				<li><a href="" ng-click="contents.fn.deleteObject()">선택 항목 삭제</a></li>
+				<li><a href="" ng-click="contents.fn.copyDownloadUrl()">내려받기 경로 복사</a></li>
 			</ul>
 		</div>
 
@@ -252,7 +253,10 @@
 					<input type="checkbox" ng-model="item.checked"/>
 				</td>
 				<td>
+					<!--
 					<a href="" title="{{item.type}} ({{item.size}})">
+					-->
+					<a href="" title="{{item.type}}">
 						<a ng-if="item.type === 'dir'">폴더</a>
 						<a ng-if="item.type === 'file'">파일</a>
 						<!--
@@ -262,7 +266,7 @@
 					</a>
 				</td>
 				<td>
-					<a href="" title="{{item.name}} ({{item.size}})">
+					<a href="" title="{{item.name}}">
 						<!--
 						<i class="glyphicon glyphicon-folder-close" ng-show="item.type === 'dir'"></i>
 						<i class="glyphicon glyphicon-file" ng-show="item.type === 'file'"></i>
@@ -296,23 +300,3 @@
 
     -->
 </div>
-
-<!-- 버튼영역
-<div class="btnWrap">
-	<input type="file" file-input="contents.uploadFiles" style="margin-right: 5px"/>
-	<button type="button" class="btn_lg" ng-click="contents.fn.uploadFiles()">파일 올리기</button> <br><br>
-
-	<input type="file" file-input="contents.uploadFolder" webkitdirectory directory style="margin-right: 5px"/>
-	<button type="button" class="btn_lg" ng-click="contents.fn.uploadFolder()">폴더 올리기</button> <br><br>
-
-	<input type="text" ng-model="contents.createFolderName" style="margin-right: 5px"/>
-	<button type="button" class="btn_lg" ng-click="contents.fn.createFolder()">폴더 만들기</button> <br><br>
-
-	<button type="button" class="btn_lg" ng-click="contents.fn.deleteObject()">선택 항목 삭제</button> <br><br>
-
-	<button type="button" class="btn_lg" ng-click="contents.fn.downloadFiles()">선택 항목 내려 받기</button> <br><br>
-
-
-	<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});"><span class="ico ico_usage_view"></span>사용법 안내</button>
-</div>
--->
