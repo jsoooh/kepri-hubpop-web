@@ -2,43 +2,26 @@ heat_template_version: '2016-10-14'
 
 description: galera mariadb template
 
-parameter_groups:
-- parameters:
-  - image
-  - flavor
-  - availability_zone
-  - key_name
-  - private_net
-  - floating_net
-  - root_password
-
 parameters:
   image:
-    label: "이미지"
     type: string
     default:  CentOS-7-x86_64-Heat-1907.qcow2
   availability_zone:
-    label: "가용구역"
     type: string
     default: zone1
   flavor:
-    label: "사양"
     type: string
     default: m1.small
   key_name:
-    label: "보안키"
     type: string
     default: 42-318_default
   private_net:
-    label: "내부 내트워크"
     type: string
     default: kepri2_42_42-318_net_prinet_001
   floating_net:
-    label: "외부 내트워크"
     type: string
     default: INT_PUB_NET
   root_password:
-    label: "root 비밀번호"
     type: string
     default: crossent12
 
