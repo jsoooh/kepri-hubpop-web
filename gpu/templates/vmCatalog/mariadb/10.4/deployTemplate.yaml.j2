@@ -1,0 +1,374 @@
+heat_template_version: '2016-10-14'
+
+description: galera mariadb template
+
+parameter_groups:
+- parameters:
+  - image
+  - flavor
+  - availability_zone
+  - key_name
+  - private_net
+  - floating_net
+  - root_password
+
+parameters:
+  image:
+    label: "이미지"
+    type: string
+    default:  CentOS-7-x86_64-Heat-1907.qcow2
+  availability_zone:
+    label: "가용구역"
+    type: string
+    default: zone1
+  flavor:
+    label: "사양"
+    type: string
+    default: m1.small
+  key_name:
+    label: "보안키"
+    type: string
+    default: 42-318_default
+  private_net:
+    label: "내부 내트워크"
+    type: string
+    default: kepri2_42_42-318_net_prinet_001
+  floating_net:
+    label: "외부 내트워크"
+    type: string
+    default: INT_PUB_NET
+  root_password:
+    label: "root 비밀번호"
+    type: string
+    default: crossent12
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: private_net }
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: private_net }
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: private_net }
+
+  floating_ip1:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: floating_net }
+
+  floating_ip2:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: floating_net }
+
+  floating_ip3:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: floating_net }
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $root_password: { get_param: root_password }
+            $node_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server_addresses:
+              list_join:
+                - ','
+                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "mariadb install start"
+            setenforce 0
+            sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+            sleep 1
+            cat <<EOF> /etc/yum.repos.d/MariaDB.repo
+            [mariadb]
+            name = MariaDB
+            baseurl = http://yum.mariadb.org/10.4/centos7-amd64
+            gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+            gpgcheck=1
+            EOF
+            yum -y install nc
+            yum -y install MariaDB-server MariaDB-client galera-4
+            sleep 1
+            touch /var/log/mysqld.log
+            chown mysql:mysql /var/log/mysqld.log
+            systemctl start mariadb.service
+            /usr/bin/mysqladmin -u root password '$root_password'
+            systemctl stop mariadb.service
+            sleep 1
+            cat <<EOF> /etc/my.cnf.d/server.cnf
+            [server]
+
+            [mysqld]
+            datadir=/var/lib/mysql
+            log-error=/var/log/mysqld.log
+
+            [galera]
+            wsrep_on=ON
+            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
+            wsrep_cluster_address="gcomm://$server_addresses"
+            wsrep_cluster_name="galeracluster"
+            wsrep_node_address="$node_address"
+            wsrep_node_name="galera1"
+            wsrep_sst_method=rsync
+            binlog_format=row
+            default_storage_engine=InnoDB
+            innodb_autoinc_lock_mode=2
+            bind-address=0.0.0.0
+
+            [embedded]
+
+            [mariadb]
+
+            [mariadb-10.4]
+
+            EOF
+            galera_new_cluster
+            systemctl enable mariadb.service
+            echo "mariadb install end"
+
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $root_password: { get_param: root_password }
+            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $node_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server_addresses:
+              list_join:
+                - ','
+                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "mariadb install start"
+            setenforce 0
+            sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+            sleep 1
+            cat <<EOF> /etc/yum.repos.d/MariaDB.repo
+            [mariadb]
+            name = MariaDB
+            baseurl = http://yum.mariadb.org/10.4/centos7-amd64
+            gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+            gpgcheck=1
+            EOF
+            yum -y install nc
+            yum -y install MariaDB-server MariaDB-client galera-4
+            sleep 1
+            touch /var/log/mysqld.log
+            chown mysql:mysql /var/log/mysqld.log
+            sleep 1
+            cat <<EOF> /etc/my.cnf.d/server.cnf
+            [server]
+
+            [mysqld]
+            datadir=/var/lib/mysql
+            log-error=/var/log/mysqld.log
+
+            [galera]
+            wsrep_on=ON
+            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
+            wsrep_cluster_address="gcomm://$server_addresses"
+            wsrep_cluster_name="galeracluster"
+            wsrep_node_address="$node_address"
+            wsrep_node_name="galera2"
+            wsrep_sst_method=rsync
+            binlog_format=row
+            default_storage_engine=InnoDB
+            innodb_autoinc_lock_mode=2
+            bind-address=0.0.0.0
+
+            [embedded]
+
+            [mariadb]
+
+            [mariadb-10.4]
+
+            EOF
+            sleep 10
+            masterRun=1
+            while [[ masterRun -eq 1 ]]
+            do
+              echo "nc -z $master_address 4567"
+              nc -z $master_address 4567
+              masterRun=$?
+              sleep 5
+            done
+            sleep 10
+            systemctl start mariadb.service
+            systemctl enable mariadb
+            echo "mariadb install end"
+
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $root_password: { get_param: root_password }
+            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $node_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server_addresses:
+              list_join:
+                - ','
+                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "mariadb install start"
+            setenforce 0
+            sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+            sleep 1
+            cat <<EOF> /etc/yum.repos.d/MariaDB.repo
+            [mariadb]
+            name = MariaDB
+            baseurl = http://yum.mariadb.org/10.4/centos7-amd64
+            gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+            gpgcheck=1
+            EOF
+            yum -y install nc
+            yum -y install MariaDB-server MariaDB-client galera-4
+            sleep 1
+            touch /var/log/mysqld.log
+            chown mysql:mysql /var/log/mysqld.log
+            cat <<EOF> /etc/my.cnf.d/server.cnf
+            [server]
+
+            [mysqld]
+            datadir=/var/lib/mysql
+            log-error=/var/log/mysqld.log
+
+            [galera]
+            wsrep_on=ON
+            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
+            wsrep_cluster_address="gcomm://$server_addresses"
+            wsrep_cluster_name="galeracluster"
+            wsrep_node_address="$node_address"
+            wsrep_node_name="galera3"
+            wsrep_sst_method=rsync
+            binlog_format=row
+            default_storage_engine=InnoDB
+            innodb_autoinc_lock_mode=2
+            bind-address=0.0.0.0
+
+            [embedded]
+
+            [mariadb]
+
+            [mariadb-10.4]
+
+            EOF
+            sleep 10
+            masterRun=1
+            while [[ masterRun -eq 1 ]]
+            do
+              echo "nc -z $master_address 4567"
+              nc -z $master_address 4567
+              masterRun=$?
+              sleep 5
+            done
+            sleep 10
+            systemctl start mariadb.service
+            systemctl enable mariadb
+            echo "mariadb install end"
+
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name}
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name}
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name}
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
+
+  server1_floating_ip_assoc:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: {get_resource: floating_ip1}
+      port_id: { get_resource: server1_port }
+
+  server2_floating_ip_assoc:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: {get_resource: floating_ip2}
+      port_id: { get_resource: server2_port }
+
+  server3_floating_ip_assoc:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: {get_resource: floating_ip3}
+      port_id: { get_resource: server3_port }
+
+outputs:
+  server_ip1:
+    value:
+        get_attr: [server1, first_address]
+  server_ip2:
+    value:
+        get_attr: [server2, first_address]
+  server_ip3:
+    value:
+        get_attr: [server3, first_address]
+  server_floating_ip1:
+    value:
+      get_attr: [ floating_ip1, floating_ip_address ]
+  server_floating_ip2:
+    value:
+      get_attr: [ floating_ip2, floating_ip_address ]
+  server_floating_ip3:
+    value:
+      get_attr: [ floating_ip3, floating_ip_address ]

@@ -1,0 +1,104 @@
+<div class="panelWrap">
+	<div class="panel type2">
+		<div class="panel_head">
+			<div class="pull-left">
+				<h4 class="tit">과금서비스 <em>('{{ contents.data.sltItemGroup.itemGroupName }}'에 대한 과금 기준정보 입니다.)</em></h4>
+			</div>
+			<div class="pull-right">
+				<select id="itemGroup" name="itemGroup" ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups"  ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeItemGroup(contents.data.sltItemGroupCode)"></select>
+			</div>
+		</div>
+		<div class="panel_body h_auto">
+			<h4 class="h-tit4">항목별 과금 기준</h4>
+			<div class="tbl type3 mt30">
+				<table class="table">
+					<colgroup>
+						<col style="width: 20%" />
+						<col style="width: 10%" />
+						<col style="width: 10%" />
+						<col style="width: 10%" />
+						<col />
+					</colgroup>
+					<thead>
+						<tr>
+							<th>항목</th>
+							<th>기준용량</th>
+							<th>기준시간</th>
+							<th>과금금액</th>
+							<th>부가설명</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="itemPerfRefAmt in contents.itemPerfRefAmts | filter:{ itemGroupCode: contents.data.sltItemGroupCode }">
+							<td>{{ itemPerfRefAmt.itemName }}</td>
+							<td>1 시간</td>
+							<td>{{ itemPerfRefAmt.refValue }} {{ itemPerfRefAmt.itemUnit }}</td>
+							<td>{{ itemPerfRefAmt.refAmt }} 원</td>
+							<td class="text-left">내용 없음</td>
+						</tr>
+						<tr ng-if="contents.itemPerfRefAmts.length == 0 || !contents.itemPerfRefAmts" class="ng-scope">
+							<td colspan="5" class="center ng-binding">목록이 존재하지 않습니다.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 기존에 있던 소스 주석처리함. 추후 삭제 필요 -->
+<div class="tabWrap type1 newMonitCon" ng-if="false">
+    <!-- 목록 panel -->
+    <div class="tab-pane st_none active" aria-hidden="false">
+        <!-- 목록 컨텐츠 -->
+        <div class="searchWrap" style="height: 68px;">
+            <div class="pull-left ng-binding" style="padding-top: 8px; padding-right: 30px;">과금 서비스</div>
+            <div class="searchBox pull-left" style="width: 60%;">
+                <select id="itemGroup" name="itemGroup" ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups"  ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeItemGroup(contents.data.sltItemGroupCode)"></select>
+            </div>
+        </div>
+        <!-- search -->
+
+        <!-- table top -->
+        <div class="tb-top">
+            <div class="pull-left ng-binding">※ '{{ contents.data.sltItemGroup.itemGroupName }}'에 대한 과금 기준정보 입니다.</div>
+        </div>
+
+        <!-- tb top -->
+        <div class="tbl type1">
+            <table class="table">
+                <colgroup>
+                    <col style="width:20%" />
+                    <col style="width:10%" />
+                    <col style="width:10%" />
+                    <col style="width:10%" />
+                    <col/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>항목</th>
+                    <th>기준용량</th>
+                    <th>기준시간</th>
+                    <th>과금금액</th>
+                    <th>부가설명</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="itemPerfRefAmt in contents.itemPerfRefAmts | filter:{ itemGroupCode: contents.data.sltItemGroupCode }">
+                    <td>{{ itemPerfRefAmt.itemName }}</td>
+                    <td>1 시간</td>
+                    <td>{{ itemPerfRefAmt.refValue }} {{ itemPerfRefAmt.itemUnit }}</td>
+                    <td>{{ itemPerfRefAmt.refAmt }} 원</td>
+                    <td class="text-left">내용 없음</td>
+                </tr>
+                <tr ng-if="contents.itemPerfRefAmts.length == 0 || !contents.itemPerfRefAmts" class="ng-scope">
+                    <td colspan="5" class="center ng-binding">목록이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- //목록 컨텐츠 -->
+    </div>
+    <!-- //목록 panel -->
+</div>
+<!-- //기존에 있던 소스 주석처리함. 추후 삭제 필요 -->

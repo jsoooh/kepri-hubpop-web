@@ -1,89 +1,4 @@
 <!DOCTYPE html>
-<script type="text/javascript">
-	var _DOMAIN_ = document.domain;
-    var _VERSION_ = "0.2.M.0.2";
-    var _MODE_ = "DEBUG"; // RUN, DEV, DEBUG
-    var _DEBUG_LEVEL_ = 3; // 1, 2, 3
-    var _TOME_ = new Date().getTime();
-    var _VERSION_TAIL_HEAD_ = "?version=" + _VERSION_;
-    var _VERSION_TAIL_ = _VERSION_TAIL_HEAD_ + ((_MODE_ == "DEBUG" && _DEBUG_LEVEL_ > 1) ? "." + _TOME_ : "");
-
-    // upload 진행 바 표현 최소 파일 사이즈 - 작은 사이즈의 경우 표현이 의미 없음
-    var _UPLOADING_VIEW_MIN_SIZE_ = 10240; // 10MB
-
-    function _VersionTail() {
-        if (_MODE_ == "DEBUG" && _DEBUG_LEVEL_ >= 3) {
-            return 	_VersionTimeTail();
-        } else {
-            return _VERSION_TAIL_;
-        }
-    }
-
-    function _VersionTimeTail() {
-		return 	_VERSION_TAIL_HEAD_ + "." + new Date().getTime();
-    }
-
-    function _DebugConsoleLog(message, level) {
-        if (_MODE_ == "DEBUG" && (level == undefined || level == null || level <= _DEBUG_LEVEL_)) {
-            console.log(message);
-        }
-    }
-
-    var _MENU_TYPE_			 	= "db"; // part, all, db
-    var _PROJECT_TYPE_			= "org"; // pjt, org
-
-    var _COMM_STAGE_			 = "comm";
-    var _IAAS_STAGE_			 = "iaas";
-	var _GPU_STAGE_			 	 = "gpu";
-    var _PAAS_STAGE_			 = "paas";
-    var _MARKET_STAGE_			 = "market";
-    var _MONIT_STAGE_			 = "monit";
-	var _PERF_STAGE_		     = "perf";
-
-    var _VIEWS_                  = "views";
-
-    var _COMM_VIEWS_			 = _COMM_STAGE_ +"/views";
-    var _IAAS_VIEWS_			 = _IAAS_STAGE_ +"/views";
-	var _GPU_VIEWS_			     = _GPU_STAGE_ +"/views";
-    var _PAAS_VIEWS_			 = _PAAS_STAGE_ +"/views";
-    var _MARKET_VIEWS_			 = _MARKET_STAGE_ +"/views";
-    var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
-	var _PERF_VIEWS_			 = _PERF_STAGE_ +"/views";
-
-    var _CONNECT_SITE_				= "USER";
-    var _LAYOUT_VIEWS_				= _COMM_VIEWS_;
-
-    var _CSRF_TOKEN_HEADER_NAME_	= "X-CSRF-TOKEN";
-    var _TOKEN_HEADER_NAME_			= "X-HEADER-TOKEN";
-    var _REGION_HEADER_NAME_		= "X-HEADER-REGION";
-
-    var _COOKIES_PATH_	             = "/";
-    var _CSRF_TOKEN_COOKIE_NAME_     = "XSRF-TOKEN";
-    var _ACCESS_TOKEN_COOKIE_NAME_   = "U-TOKEN";
-    var _LANGUAGE_KEY_COOKIE_NAME_   = "LANGUAGE-KEY";
-    var _REGION_KEY_COOKIE_NAME_     = "REGION-KEY";
-    var _USER_INFO_COOKIE_NAME_      = "USER-INFO";
-    var _LEFT_MENU_SHOW_COOKIE_NAME_ = "LEFT-MENU-SHOW";
-    var _PROJECT_ID_COOKIE_NAME_     = "PROJECT-ID";
-    var _PROJECT_CODE_COOKIE_NAME_   = "PROJECT-CODE";
-    var _USER_TENANT_ID_COOKIE_NAME_ = "USER-TENANT-ID";
-
-    var _ACCESS_TOKEN_CASHE_NAME_    = "cmm.accessToken";
-    var _LANGUAGE_KEY_CASHE_NAME_    = "cmm.languageKey";
-    var _REGION_KEY_CASHE_NAME_      = "cmm.regionKey";
-    var _USER_INFO_CASHE_NAME_       = "cmm.user";
-    var _LEFT_MENU_SHOW_CASHE_NAME_  = "cmm.leftMenuShow";
-    var _COMPANY_LOGO_CASHE_NAME_    = "cmm.companyLogo";
-
-    var _DEFAULT_TIMERANGE_          = "defaultTimeRange";
-    var _TIMERANGE_FROM_             = "timeRangeFrom";
-    var _TIMERANGE_TO_               = "timeRangeTo";
-    var _GROUPBY_                    = "groupBy";
-    var _REFRESH_TIME_               = "refreshTime";
-    var _DEFAULT_TIMERANGE_FROM_     = "defaultTimeRangeFrom";
-    var _DEFAULT_TIMERANGE_TO_       = "defaultTimeRangeTo";
-
-</script>
 <html ng-app="app">
 <head>
 	<meta charset="UTF-8">
@@ -91,6 +6,93 @@
 	<title>HUB-POP</title>
 	<link rel="icon" type="image/png" href="images/favicon.ico" />
 	<script type="text/javascript">
+		var _DOMAIN_ = document.domain;
+		var _PROTOCOL_ = location.protocol ? location.protocol : "http:";
+		var _PORT_ = location.port ? location.port : "80";
+		var _VERSION_ = "0.2.M.0.2";
+		var _MODE_ = "DEBUG"; // RUN, DEV, DEBUG
+		var _DEBUG_LEVEL_ = 3; // 1, 2, 3
+		var _TOME_ = new Date().getTime();
+		var _VERSION_TAIL_HEAD_ = "?version=" + _VERSION_;
+		var _VERSION_TAIL_ = _VERSION_TAIL_HEAD_ + ((_MODE_ == "DEBUG" && _DEBUG_LEVEL_ > 1) ? "." + _TOME_ : "");
+
+		var _TEMP_PRIFIX_ = document.port == "4080" ? "/temp" : "";
+
+		// upload 진행 바 표현 최소 파일 사이즈 - 작은 사이즈의 경우 표현이 의미 없음
+		var _UPLOADING_VIEW_MIN_SIZE_ = 10240; // 10MB
+
+		function _VersionTail() {
+			if (_MODE_ == "DEBUG" && _DEBUG_LEVEL_ >= 3) {
+				return 	_VersionTimeTail();
+			} else {
+				return _VERSION_TAIL_;
+			}
+		}
+
+		function _VersionTimeTail() {
+			return 	_VERSION_TAIL_HEAD_ + "." + new Date().getTime();
+		}
+
+		function _DebugConsoleLog(message, level) {
+			if (_MODE_ == "DEBUG" && (level == undefined || level == null || level <= _DEBUG_LEVEL_)) {
+				console.log(message);
+			}
+		}
+
+		var _MENU_TYPE_			 	= "db"; // part, all, db
+		var _PROJECT_TYPE_			= "org"; // pjt, org
+
+		var _COMM_STAGE_			 = "comm";
+		var _IAAS_STAGE_			 = "iaas";
+		var _GPU_STAGE_			 	 = "gpu";
+		var _PAAS_STAGE_			 = "paas";
+		var _MARKET_STAGE_			 = "market";
+		var _MONIT_STAGE_			 = "monit";
+		var _PERF_STAGE_		     = "perf";
+
+		var _VIEWS_                  = "views";
+
+		var _COMM_VIEWS_			 = _COMM_STAGE_ +"/views";
+		var _IAAS_VIEWS_			 = _IAAS_STAGE_ +"/views";
+		var _GPU_VIEWS_			     = _GPU_STAGE_ +"/views";
+		var _PAAS_VIEWS_			 = _PAAS_STAGE_ +"/views";
+		var _MARKET_VIEWS_			 = _MARKET_STAGE_ +"/views";
+		var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
+		var _PERF_VIEWS_			 = _PERF_STAGE_ +"/views";
+		_PERF_VIEWS_ 				 = _PORT_ == "4080" ? _PERF_VIEWS_+ "/temp" : _PERF_VIEWS_;
+
+		var _CONNECT_SITE_				= "USER";
+		var _LAYOUT_VIEWS_				= _COMM_VIEWS_;
+
+		var _CSRF_TOKEN_HEADER_NAME_	= "X-CSRF-TOKEN";
+		var _TOKEN_HEADER_NAME_			= "X-HEADER-TOKEN";
+		var _REGION_HEADER_NAME_		= "X-HEADER-REGION";
+
+		var _COOKIES_PATH_	             = "/";
+		var _CSRF_TOKEN_COOKIE_NAME_     = "XSRF-TOKEN";
+		var _ACCESS_TOKEN_COOKIE_NAME_   = "U-TOKEN";
+		var _LANGUAGE_KEY_COOKIE_NAME_   = "LANGUAGE-KEY";
+		var _REGION_KEY_COOKIE_NAME_     = "REGION-KEY";
+		var _USER_INFO_COOKIE_NAME_      = "USER-INFO";
+		var _LEFT_MENU_SHOW_COOKIE_NAME_ = "LEFT-MENU-SHOW";
+		var _PROJECT_ID_COOKIE_NAME_     = "PROJECT-ID";
+		var _PROJECT_CODE_COOKIE_NAME_   = "PROJECT-CODE";
+		var _USER_TENANT_ID_COOKIE_NAME_ = "USER-TENANT-ID";
+
+		var _ACCESS_TOKEN_CASHE_NAME_    = "cmm.accessToken";
+		var _LANGUAGE_KEY_CASHE_NAME_    = "cmm.languageKey";
+		var _REGION_KEY_CASHE_NAME_      = "cmm.regionKey";
+		var _USER_INFO_CASHE_NAME_       = "cmm.user";
+		var _LEFT_MENU_SHOW_CASHE_NAME_  = "cmm.leftMenuShow";
+		var _COMPANY_LOGO_CASHE_NAME_    = "cmm.companyLogo";
+
+		var _DEFAULT_TIMERANGE_          = "defaultTimeRange";
+		var _TIMERANGE_FROM_             = "timeRangeFrom";
+		var _TIMERANGE_TO_               = "timeRangeTo";
+		var _GROUPBY_                    = "groupBy";
+		var _REFRESH_TIME_               = "refreshTime";
+		var _DEFAULT_TIMERANGE_FROM_     = "defaultTimeRangeFrom";
+		var _DEFAULT_TIMERANGE_TO_       = "defaultTimeRangeTo";
 
         function loadCssLink(file) {
             document.writeln('<link rel="stylesheet" href="'+file+'" type="text/css"/>');
