@@ -16,14 +16,88 @@
 </div>
 <! -- //검색영역 -->
 
-
+<!-- 용량정보 및 접속정보 -->
+<div class="storage_infoWrap mb30" style="display: inline-block;">
+	<ul>
+		<!-- 사용량 -->
+		<li>
+			<div class="infoBox">
+				<div class="info_head">
+					<h5 class="tit_volume">사용량</h5>
+					<span class="t_sm">{{contents.toDay}} 기준</span>
+				</div>
+				<div class="info_body">
+					<!-- 내부컨텐츠 -->
+					<div class="data_area">
+						<div class="txt_l">
+							<span class="t_lg" ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</span>
+							<span class="t_md">GB</span>
+							<span class="t_sm" ng-init="contents.objecteStorageQuator.teamQuator ='0'">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
+						</div>
+						<div class="txt_r">
+							<span class="t_lg" ng-init="contents.objecteStorageQuator.teamQuator ='0'" ng-if="contents.objecteStorageQuator.teamQuator == '0'">0<span class="t_md">%</span></span>
+							<span class="t_lg" ng-if="contents.objecteStorageQuator.teamQuator !== '0'">{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}<span class="t_md">%</span></span>
+						</div>
+						<!-- 프로그래스 박스 -->
+						<div class="info_progBox">
+							<div class="progressWrap type2">
+								<div class="progress">
+									<div percent-progress-bar-animate bar-type="width" percent= "{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}" class="progress">
+										<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="15%"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- //프로그래스 박스 -->
+					</div>
+					<!-- //내부컨텐츠 -->
+				</div>
+			</div>
+		</li>
+		<!-- //사용량 -->
+		<!-- 접속정보 -->
+		<li>
+			<div class="infoBox">
+				<div class="info_head">
+					<h5 class="tit_access">접속 정보</h5>
+				</div>
+				<div class="info_body pd0">
+					<!-- 내부컨텐츠 -->
+					<div class="access_info_area">
+						<ul>
+							<li>
+								<dl>
+									<dt class="tit_address">오브젝트 스토리지 접속 주소</dt>
+									<dd>{{contents.sendSecretInfoList.s3RadosEndPoint}}</dd>
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt class="tit_access_key">Access Key ID</dt>
+									<dd>{{contents.sendSecretInfoList.s3AccessKey}}</dd>
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt class="tit_secret">Secret Access Key</dt>
+									<dd>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</dd>
+								</dl>
+							</li>
+						</ul>
+					</div>
+					<!-- //내부컨텐츠 -->
+				</div>
+			</div>
+		</li>
+		<!-- //접속정보 -->
+	</ul>
+</div>
+<!-- //용량정보 및 접속정보 -->
 
 
 <!-- 버튼영역 -->
 <div class="btnWrap">
-	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>저장소 만들기</button>
-	<button type="button" class="btn_lg" ng-click="contents.fn.refreshObjectStorage()"><span class="ico ico_bk_add"></span>새로 고침</button>
-	<button type="button" class="btn_lg" ng-click="contents.fn.showObjectStorageInformation()"><span class="ico ico_bk_add"></span>접속 정보</button>
+	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>버킷 만들기</button>
 	<!--
 	<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false"><span class="ico ico_usage_view"></span>사용법 안내</button>
 	-->
@@ -79,86 +153,8 @@
 		</a>
 	</script>
 
-	<!-- 용량정보 및 접속정보 -->
-	<div ng-if="contents.data.bucketName == null" class="storage_infoWrap mb30" style="display: inline-block;">
-		<ul>
-			<!-- 사용량 -->
-			<li>
-				<div class="infoBox">
-					<div class="info_head">
-						<h5 class="tit_volume">사용량</h5>
-						<span class="t_sm">{{contents.toDay}} 기준</span>
-					</div>
-					<div class="info_body">
-						<!-- 내부컨텐츠 -->
-						<div class="data_area">
-							<div class="txt_l">
-								<span class="t_lg" ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</span>
-								<span class="t_md">GB</span>
-								<span class="t_sm" ng-init="contents.objecteStorageQuator.teamQuator ='0'">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
-							</div>
-							<div class="txt_r">
-								<span class="t_lg" ng-init="contents.objecteStorageQuator.teamQuator ='0'" ng-if="contents.objecteStorageQuator.teamQuator == '0'">0<span class="t_md">%</span></span>
-								<span class="t_lg" ng-if="contents.objecteStorageQuator.teamQuator !== '0'">{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}<span class="t_md">%</span></span>
-							</div>
-							<!-- 프로그래스 박스 -->
-							<div class="info_progBox">
-								<div class="progressWrap type2">
-									<div class="progress">
-										<div percent-progress-bar-animate bar-type="width" percent= "{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}" class="progress">
-											<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="15%"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- //프로그래스 박스 -->
-						</div>
-						<!-- //내부컨텐츠 -->
-					</div>
-				</div>
-			</li>
-			<!-- //사용량 -->
-			<!-- 접속정보 -->
-			<li>
-				<div class="infoBox">
-					<div class="info_head">
-						<h5 class="tit_access">접속 정보</h5>
-					</div>
-					<div class="info_body pd0">
-						<!-- 내부컨텐츠 -->
-						<div class="access_info_area">
-							<ul>
-								<li>
-									<dl>
-										<dt class="tit_address">오브젝트 스토리지 접속 주소</dt>
-										<dd>{{contents.sendSecretInfoList.s3RadosEndPoint}}</dd>
-									</dl>
-								</li>
-								<li>
-									<dl>
-										<dt class="tit_access_key">Access Key ID</dt>
-										<dd>{{contents.sendSecretInfoList.s3AccessKey}}</dd>
-									</dl>
-								</li>
-								<li>
-									<dl>
-										<dt class="tit_secret">Secret Access Key</dt>
-										<dd>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</dd>
-									</dl>
-								</li>
-							</ul>
-						</div>
-						<!-- //내부컨텐츠 -->
-					</div>
-				</div>
-			</li>
-			<!-- //접속정보 -->
-		</ul>
-	</div>
-	<!-- //용량정보 및 접속정보 -->
 
-
-	<div ng-if="contents.data.bucketName != null" style="display:inline-block; padding: 0 30px; height:700px; background: #FFFFFF; border:1px solid #e9ecef;">
+	<div style="display:inline-block; padding: 0 30px; height:700px; background: #FFFFFF; border:1px solid #e9ecef;">
 		<label style="display: block;">파일 및 폴더</label>
 		<label style="display: inline-block; font-size:16px;">Path: </label>
 		<ul class="nav nav-sidebar file-tree-root" style="display:inline-block; list-style: none; margin: 0; padding: 0; font-size:20px; ">
