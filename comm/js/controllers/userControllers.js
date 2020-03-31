@@ -48,7 +48,8 @@ angular.module('common.controllers')
                 ct.LoginBtnLabel = '회원가입';
                 ct.ssoMessage = '* HUB-PoP 포털에 가입하여 주시기 바랍니다. 가입 시 ID는 사번입니다';
             } else if (ct.mode == 'update') {
-                ct.ssoMessage = '* HUB-PoP 포털에 접속할 수 있는 비밀번호를 입력하여 주시기 바랍니다. 접속 시 ID는 사번입니다';
+                //ct.ssoMessage = '* HUB-PoP 포털에 접속할 수 있는 비밀번호를 입력하여 주시기 바랍니다. <br>접속 시 ID는 사번입니다';
+                ct.ssoMessage = '* 기존 SSO 접근 방식 외에도 ID/비밀번호 방식을 통한 HUB-PoP 접속을 지원하고 있습니다. 이를 위하여 초기 비밀번호 설정을 해주십시오. 이후 접속부터는 SSO 자동 로그인되며, 사번/비밀번호를 통해서도 HUB-PoP 접속이 가능합니다.';
             } else if (ct.mode == 'update_error') {
                 ct.ssoMessage = '* HUB-POP 포털 접속 중 비밀번호 에러가 발생하였습니다. 다른 비밀번호를 입력하여 주시기바랍니다.';
             }
