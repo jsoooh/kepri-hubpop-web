@@ -37,7 +37,7 @@ angular.module('common.controllers')
             ct.ssoUserJoinDisabled = false;
             $scope.main.ssoUserLogin = false;
             $scope.main.ssoUserLoginChecking = false;
-        }
+        };
 
         ct.setSsoLoginForm = function (tokenInfo) {
             ct.mode = tokenInfo.code;
@@ -53,7 +53,7 @@ angular.module('common.controllers')
             } else if (ct.mode == 'update_error') {
                 ct.ssoMessage = '* HUB-POP 포털 접속 중 비밀번호 에러가 발생하였습니다. 다른 비밀번호를 입력하여 주시기바랍니다.';
             }
-        }
+        };
         // 20.1.22 by hrit, sso 로그인 중 8초 후 계정생성로 전환되는 현상 수정
         // 로그인 시도 후 계정이 없는 경우 클라이언트에 상태 반환하여 클라이언트에서 계정생성 재호출하도록 변경
         ct.checkSsoPgsecuid = function (pgsecuid, update) {
@@ -82,7 +82,7 @@ angular.module('common.controllers')
 
         // 20.3.20 by hrit, sso 연계 시 hubpop db 연계가 정상적이지 않은경우(회원등록, sso패스워드) 등록기능
         ct.ssoLogin = function () {
-            var update = ct.mode == 'create' || ct.mode == 'create_error' ? false: true;
+            var update = (ct.mode == 'create' || ct.mode == 'create_error') ? false: true;
             if (ct.ssoUser.password != ct.ssoUser.password_valid) {
                 common.showAlert($translate.instant("label.pwd_set"), $translate.instant("message.mi_wrong_pwd_retype"));
                 return;
@@ -242,13 +242,13 @@ angular.module('common.controllers')
             if (keyEvent.which == 13) {
                 $scope.login();
             }
-        }
+        };
 
         ct.ssoLoginEnter = function (keyEvent){
             if (keyEvent.which == 13) {
                 ct.ssoLogin();
             }
-        }
+        };
         // 20.1.22 by hrit, sso 로그인 중 계정 생성으로 변경되는 현상에 대한 조치
         // 보안 이슈 상 단번 api 호출로 sso 로그인 구현을 위해 15초 후 강제 변경 (김성경 수석, 이명화 수석)
         // 계정 로그인, 생성 여부 구분하여 API 한번 더 호출 하도록 변경 (이명화 수석)
