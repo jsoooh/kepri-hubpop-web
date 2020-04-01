@@ -17,7 +17,7 @@
 <! -- //검색영역 -->
 
 <!-- 용량정보 및 접속정보 -->
-<div class="storage_infoWrap mb30" style="display: inline-block;">
+<div class="storage_infoWrap mb50">
 	<ul>
 		<!-- 사용량 -->
 		<li>
@@ -28,7 +28,7 @@
 				</div>
 				<div class="info_body">
 					<!-- 내부컨텐츠 -->
-					<div class="data_area">
+					<div class="data_area pt60">
 						<div class="txt_l">
 							<span class="t_lg" ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</span>
 							<span class="t_md">GB</span>
@@ -39,7 +39,7 @@
 							<span class="t_lg" ng-if="contents.objecteStorageQuator.teamQuator !== '0'">{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}<span class="t_md">%</span></span>
 						</div>
 						<!-- 프로그래스 박스 -->
-						<div class="info_progBox">
+						<div class="info_progBox pt20">
 							<div class="progressWrap type2">
 								<div class="progress">
 									<div percent-progress-bar-animate bar-type="width" percent= "{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}" class="progress">
@@ -83,6 +83,12 @@
 									<dd>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</dd>
 								</dl>
 							</li>
+							<li>
+								<dl>
+									<dt class="tit_api">API Key</dt>
+									<dd>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</dd>
+								</dl>
+							</li>
 						</ul>
 					</div>
 					<!-- //내부컨텐츠 -->
@@ -94,16 +100,156 @@
 </div>
 <!-- //용량정보 및 접속정보 -->
 
-
 <!-- 버튼영역 -->
 <div class="btnWrap">
 	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>버킷 만들기</button>
-	<!--
-	<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false"><span class="ico ico_usage_view"></span>사용법 안내</button>
-	-->
+	<!--<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false"><span class="ico ico_usage_view"></span>사용법 안내</button>-->
 </div>
 <!-- //버튼영역 -->
 
+<!-- 버킷목록 -->
+<div class="storage_bucketWrap">
+	<ul>
+		<li>
+			<div class="infoBox">
+				<div class="info_head">
+					<h5>버킷목록<em class="point1">(3)</em></h5>
+				</div>
+				<div class="info_body">
+					<ul class="bucket_list">
+						<li ng-repeat="item in contents.objectStorageList">
+							<a href="" id="folder-branch-item" ng-click="contents.fn.getObjectStorageObject(item.containerName, '')" class="animated fast fadeInDown active"><!-- 선택 된 버킷에 class="active" -->
+								<span>{{ item.containerName }}</span>
+								<!-- 선택되었을 때(닫기버튼) -->
+								<button type="button" class="close"><span aria-hidden="true">×</span></button>
+								<!-- //선택되었을 때(닫기버튼) -->
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="infoBox">
+				<div class="info_head">
+					<h5>파일 및 폴더<em class="point1">(5)</em></h5>
+				</div>
+				<div class="info_body">
+					<div class="bucket_file">
+						<div class="bk_path">
+							<dl>
+								<dt>Path:</dt>
+								<dd ng-repeat="item in contents.objectStorageObjectList.currentPathList" ng-click="contents.fn.onClickObjectStoragePathList($index)" >{{item}}</dd>
+							</dl>
+						</div>
+						
+						<div class="tb-top pt20">
+							<div class="pull-right">
+								<ul class="tb-top-inline">
+									<li>
+										<input type="file" id="uploaded" class="form-control" onchange="angular.element(this).scope().contents.fn.uploadFiles(this)" multiple placeholder="Upload File" style="display: none;">
+										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="main.fileSelectBtnClick($event);">올리기</button>
+									</li>
+									<li>
+										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="contents.fn.downloadFiles()">내려받기</button>
+									</li>
+									<li>
+										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="contents.fn.createFolder()">폴더만들기</button>
+									</li>
+									<li>
+										<div class="dropdown btn-option">
+											<button type="button" name="button" id="btn-option" class="btn btn-color1 btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">작업</button>
+											<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+												<li><a href="" ng-click="contents.fn.renameObject()">선택 항목 이름 변경</a></li>
+												<li><a href="" ng-click="contents.fn.cutObject()">선택 항목 자르기</a></li>
+												<li><a href="" ng-click="contents.fn.pasteObject()">선택 항목 붙여 넣기</a></li>
+												<li><a href="" class="delete" ng-click="contents.fn.deleteObject()">선택 항목 삭제</a></li>
+												<li><a href="" ng-click="contents.fn.copyDownloadUrl()">내려받기 경로 복사</a></li>
+											</ul>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						
+						<div class="tbl type1">
+							<table class="table">
+								<colgroup>
+									<col style="width: 5%;">
+									<col style="width: 10%;">
+									<col style="width: 20%;">
+									<col>
+									<col style="width: 15%;">
+									<col style="width: 15%;">
+								</colgroup>
+								<thead>
+									<tr>
+										<th scope="col">
+											<div class="checkbox checkbox-only">
+												<input type="checkbox" value="option1">
+												<label></label>
+											</div>
+										</th>
+										<th scope="col"><a href="" ng-click="order('item.type')">{{"종류" | translate}}<span class="sortorder" ng-show="predicate[1] === 'item.type'" ng-class="{reverse:reverse}"></span></a></th>
+										<th scope="col"><a href="" ng-click="order('item.size')"> {{"이름" | translate}} <span class="sortorder" ng-show="predicate[1] === 'model.size'" ng-class="{reverse:reverse}"></span></a></th>
+										<th scope="col"><a href="" ng-click="order('item.url')"> {{"URL" | translate}} <span class="sortorder" ng-show="predicate[1] === 'model.date'" ng-class="{reverse:reverse}"></span></a></th>
+										<th scope="col"><a href="" ng-click="order('model.permissions')"> {{"마지막 수정" | translate}} <span class="sortorder" ng-show="predicate[1] === 'model.permissions'" ng-class="{reverse:reverse}"></span></a></th>
+										<th scope="col"><a href="" ng-click="order('model.permissions')"> {{"크기" | translate}} <span class="sortorder" ng-show="predicate[1] === 'model.permissions'" ng-class="{reverse:reverse}"></span></a></th>
+									</tr>
+								</thead>
+								<tbody class="file-item">
+									<tr class="item-list" ng-repeat="item in contents.objectStorageObjectList.fileList | filterList:contents.objectStorageObjectList.currentPath" ng-show="contents.objectStorageObjectList.fileList" ng-dblclick="contents.fn.onDblclickObjectStorageObject(item.name, item.type)">
+										<td>
+											<div class="checkbox checkbox-only">
+												<input type="checkbox" value="option1" ng-model="item.checked">
+												<label></label>
+											</div>
+										</td>
+										<td>
+											<div href="" title="{{item.type}}">
+												<span class="ico ico-folder" ng-if="item.type === 'dir'" title="폴더"></span>
+												<span class="ico ico-file" ng-if="item.type === 'file'" title="파일"></span>
+											</div>
+										</td>
+										<td>
+											<a href="" title="{{item.name}}"> {{item.name.substring(contents.objectStorageObjectList.currentPath.length)}} </a>
+										</td>
+										<td>
+											<a href="" title="{{item.name}} ({{item.size}})"> {{item.url}} </a>
+										</td>
+										<td class="hidden-sm hidden-xs"> {{item.modifiedDate}} </td>
+										<td class="hidden-xs">
+											<span ng-show="item.type !== 'dir'">  {{item.size}} </span>
+										</td>
+									</tr>
+									<tr ng-show="!contents.objectStorageObjectList.fileList &amp;&amp; contents.objectStorageObjectList.fileList.length < 1">
+										<td colspan="6">
+											{{"no_files_in_folder" | translate}}...
+										</td>
+									</tr>
+									<tr ng-show="!contents.objectStorageObjectList">
+										<td colspan="6">---</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+<!-- //버킷목록 -->
+
+
+
+
+
+
+
+
+
+<!-- 기존 소스 사용확인 후 삭제필요.200401 -->
 <!-- 패널리스트 영역 -->
 <!--
 <ul class="ul-panel thum_style">
@@ -134,8 +280,10 @@
 </ul>
 -->
 <!-- //패널리스트 영역 -->
+<!--// 기존 소스 사용확인 후 삭제필요.200401 -->
 
-<div>
+<!-- 기존 소스 주석처리함. 삭제필요.200401 -->
+<div ng-if="false">
 	<div style="display:inline-block; min-width:200px; width:200px; height:700px; background: #FFFFFF; border:1px solid #e9ecef;">
 		<label style="display: block;">버킷</label>
 		<ul class="nav nav-sidebar file-tree-root">
@@ -148,7 +296,7 @@
 	<script type="text/ng-template" id="folder-branch-item">
 
 		<a href="" ng-click="contents.fn.getObjectStorageObject(item.containerName, '')" class="animated fast fadeInDown">
-			<i class="glyphicon glyphicon-folder-open mr2" ng-show="item.containerName"></i>
+			<!--<i class="glyphicon glyphicon-folder-open mr2" ng-show="item.containerName"></i>-->
 			{{ item.containerName }}
 		</a>
 	</script>
@@ -163,7 +311,6 @@
 			</li>
 		</ul>
 		<br/>
-
 		<input type="file" id="uploaded" onchange="angular.element(this).scope().contents.fn.uploadFiles(this)" multiple placeholder="Upload File" style="display: none;"/>
 		<button type="button" class="btn btn-file" style="border: 1px solid; margin-right: 5px;" ng-click="main.fileSelectBtnClick($event);">
 			{{ "파일 올리기" | translate }}
@@ -296,3 +443,4 @@
 
     -->
 </div>
+<!-- //기존 소스 주석처리함. 삭제필요.200401 -->

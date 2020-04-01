@@ -555,3 +555,9 @@ input::-ms-clear {display:none;}
 .cke_bottom {
 	display: none !important;
 }
+
+/*폴더아이콘 추가*/
+.ico-folder {width:20px; height:15px; background-position:-112px -356px;}
+
+/*파일아이콘 추가*/
+.ico-file {width:15px; height:20px; background-position:-140px -356px;}

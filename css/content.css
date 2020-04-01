@@ -2830,18 +2830,18 @@ a.ext_link:hover {text-decoration:underline;}
 
 /*사용량, 접속정보 영역*/
 .storage_infoWrap ul {display:table; width:100%;} 
-.storage_infoWrap > ul > li {display:table-cell; width:50%; padding-left:20px;} 
-.storage_infoWrap > ul > li:first-child {padding-left:0;} 
+.storage_infoWrap > ul > li {display:table-cell; /* width:50%; */ padding-left:20px;} 
+.storage_infoWrap > ul > li:first-child {width:30%; padding-left:0;} 
 .storage_infoWrap .infoBox {border-radius:5px; background:#fff; border:1px solid #e9ecef;} 
-.storage_infoWrap .info_head {position:relative; padding:15px 25px; border-bottom:1px solid #e6e6e6;} 
-.storage_infoWrap .info_head h5 {display:inline-block; font-size:17px; font-weight:700; color:#333; line-height:20px; background:url("../images/ico_info_box.png") no-repeat; padding-left:25px;} 
+.storage_infoWrap .info_head {position:relative; padding:20px 25px; border-bottom:1px solid #e6e6e6;} 
+.storage_infoWrap .info_head h5 {display:inline-block; font-size:20px; font-weight:700; color:#333; line-height:20px; background:url("../images/ico_info_box.png") no-repeat; padding-left:25px;} 
 .storage_infoWrap .info_head h5.tit_volume {background-position:left top;} 
 .storage_infoWrap .info_head h5.tit_access {background-position:left bottom;} 
 .storage_infoWrap .info_head .t_sm {font-size:12px; font-weight:500; color:#888; float:right;} 
 
 /*사용량*/
-.storage_infoWrap .info_body {padding:15px 25px;}
-.storage_infoWrap .data_area {position:relative; height:107px; line-height:30px; padding:20px 0;}
+.storage_infoWrap .info_body {height:183px; padding:15px 25px;}
+.storage_infoWrap .data_area {position:relative; /* height:107px; line-height:30px; padding:20px 0;*/}
 .storage_infoWrap .data_area .txt_l {display:inline-block; float:left;}
 .storage_infoWrap .data_area .txt_r {display:inline-block; float:right;}
 .storage_infoWrap .data_area > span {display:inline-block;}
@@ -2852,7 +2852,7 @@ a.ext_link:hover {text-decoration:underline;}
 .storage_infoWrap .data_area .t_sm {font-size:13px; font-weight:500; color:#888;}
 
 /*사용량- 프로그래스*/
-.storage_infoWrap  .info_progBox {clear:both;}
+.storage_infoWrap .info_progBox {clear:both;}
 .info_progBox .progressWrap .progress, .progress_layout_two .progressWrap .progress-bar{box-shadow: none;}
 .info_progBox .progressWrap.type2 {display:inline-block; position: relative; width:100%; height:15px; margin:0; padding:7px 0px; vertical-align:middle;}
 .info_progBox .progressWrap.type2 .progress-bar {position: absolute; left:0; bottom:0; z-index: 2; height:8px; border-radius: 10px; background: #0a4ed8; box-shadow: none;}
@@ -2865,12 +2865,33 @@ a.ext_link:hover {text-decoration:underline;}
 .storage_infoWrap .access_info_area dl {display:table; width:100%; padding:0 20px;}
 .storage_infoWrap .access_info_area dl dt, .storage_infoWrap .access_info_area dl dd  {display:table-cell; font-size:14px; box-sizing:border-box; height:45px; line-height:45px;}
 .storage_infoWrap .access_info_area dl dt {width:250px; font-weight:500; color:#333;}
-.storage_infoWrap .access_info_area dl dt.tit_address:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 0; vertical-align:text-top; margin-right:8px;}
-.storage_infoWrap .access_info_area dl dt.tit_access_key:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 -30px; vertical-align:text-top; margin-right:8px;}
-.storage_infoWrap .access_info_area dl dt.tit_secret:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat 0 -60px; vertical-align:text-top; margin-right:8px;}
+.storage_infoWrap .access_info_area dl dt:before {display:inline-block; content:''; width:20px; height:20px; background:url("../images/ico_info_box2.png") no-repeat; vertical-align:text-top; margin-right:8px;}
+.storage_infoWrap .access_info_area dl dt.tit_address:before {background-position:0 0;}
+.storage_infoWrap .access_info_area dl dt.tit_access_key:before {background-position:0 -30px;}
+.storage_infoWrap .access_info_area dl dt.tit_secret:before  {background-position:0 -60px;}
+.storage_infoWrap .access_info_area dl dt.tit_api:before  {background-position:0 -90px;}
 .storage_infoWrap .access_info_area dl dd {font-weight:400; color:#9ca2ab;}
 
+/*버킷목록 및 파일폴더*/
+.storage_bucketWrap {border-radius:5px; background:#fff; border:1px solid #e9ecef;} 
+.storage_bucketWrap > ul {display:table; width:100%;} 
+.storage_bucketWrap > ul > li {display:table-cell;} 
+.storage_bucketWrap > ul > li:first-child {width:30%; padding-left:0; border-right:1px solid #e6e6e6;} 
+.storage_bucketWrap .info_head {position:relative; padding:20px 25px; border-bottom:1px solid #e6e6e6;} 
+.storage_bucketWrap .info_head h5 {display:inline-block; font-size:20px; font-weight:700; color:#333; line-height:20px;} 
+.storage_bucketWrap .info_head h5 em {font-weight:700;} 
+.storage_bucketWrap .bucket_list li {line-height:88px; border-bottom: 1px dashed #e3e3e3;} 
+.storage_bucketWrap .bucket_list li a {position:relative; display:block; padding:0 25px;}
+.storage_bucketWrap .bucket_list li a > span {display:inline-block; font-size:17px; font-weight:700; padding-left:40px;}
+.storage_bucketWrap .bucket_list li a:hover > span {text-decoration:underline;}
+.storage_bucketWrap .bucket_list li a:hover, .storage_bucketWrap .info_body .bucket_list li a.active {background:#e5f0fa;} 
+.storage_bucketWrap .bucket_list li a:before {position:absolute; top:25px; left:25px; display:inline-block; content:''; width:34px; height:31px; background:url("../images/ico_bucket.png") no-repeat;} 
+.storage_bucketWrap .close {font-size:40px; font-weight:400; padding-top:25px;}
 
+.storage_bucketWrap .bucket_file {padding:20px 25px;}
+/* .storage_bucketWrap .bucket_file .bk_path {padding:20px 25px;} */
+.storage_bucketWrap .info_body .bucket_file dt, .storage_bucketWrap .info_body .bucket_file dd {display:inline-block; font-size:15px;}
+.storage_bucketWrap .info_body .bucket_file dd {color:#666;}
 
 /*== 190729 테이블 이너 정렬 박스(display:table ==)*/
 .tb_divBox {display:table; width:100%;}
