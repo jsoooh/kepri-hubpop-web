@@ -47,6 +47,14 @@ angular.module('portal.controllers')
             var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
             promise.success(function (data) {
                 if (data && data.items && angular.isArray(data.items)) {
+                    /* 2020.03.27 - 즐겨찾기 기능 관련 : isFavorite 속성 추가 by ksw */
+                    angular.forEach(data.items, function(item) {
+                        if(item.isFavorite == true) {
+                            return;
+                        } else {
+                            item.isFavorite = false;
+                        }
+                    });
                     common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
                     $scope.main.setListAllPortalOrgs(data.items);
                 } else {
@@ -111,7 +119,6 @@ angular.module('portal.controllers')
             });
         };
 
-
         /* 2020.03.24 - 사용자 탈퇴 액션 추가 by ksw */
         ct.withdrawOrgProjectUserAction = function (org) {
             $scope.main.loadingMain = true;
@@ -127,6 +134,42 @@ angular.module('portal.controllers')
                 $scope.main.loadingMain = false;
                 common.showAlertError($translate.instant('message.mi_egov_fail_common_delete_account'));
             });
+        };
+
+        /* 2020.03.27 - 즐겨찾기 추가 by ksw */
+        ct.orgBookmarkAdd = function (org) {
+            var showConfirm = common.showConfirm($translate.instant('label.add'), org.orgName + '' + $translate.instant('message.mq_bookmark'));
+            showConfirm.then(function () {
+                $scope.main.loadingMain = true;
+                var promise = orgService.orgBookmarkAdd(org.id);
+                promise.success(function (data) {
+                    org.isFavorite = true;
+                    $scope.main.loadingMain = false;
+                    common.showAlertSuccess($translate.instant('message.mi_egov_success_org_bookmark'));
+                });
+                promise.error(function (data) {
+                    $scope.main.loadingMain = false;
+                    common.showAlertError($translate.instant('message.mi_egov_fail_org_bookmark'));
+                });
+            })
+        };
+
+        /* 2020.03.31 - 즐겨찾기 삭제 by ksw */
+        ct.orgBookmarkDelete = function (org) {
+            var showConfirm = common.showConfirm($translate.instant('label.del'), org.orgName + '' + $translate.instant('message.mq_unbookmark'));
+            showConfirm.then(function () {
+                $scope.main.loadingMain = true;
+                var promise = orgService.orgBookmarkDelete(org.id);
+                promise.success(function (data) {
+                    org.isFavorite = false;
+                    $scope.main.loadingMain = false;
+                    common.showAlertSuccess($translate.instant('message.mi_egov_success_org_unbookmark'));
+                });
+                promise.error(function (data) {
+                    $scope.main.loadingMain = false;
+                    common.showAlertError($translate.instant('message.mi_egov_fail_org_unbookmark'));
+                });
+            })
         };
 
         ct.listOrgProjects();   //조직 목록 조회

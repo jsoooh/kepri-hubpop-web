@@ -192,6 +192,21 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/check/orgId', 'GET', param));
         };
 
+        /* 즐겨찾기 추가 */
+        orgService.orgBookmarkAdd = function (id) {
+            var param = {
+                urlParams : {
+                    "orgId" : id
+                }
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_bookmark', 'POST', param));
+        };
+
+        /* 즐겨찾기 삭제 */
+        orgService.orgBookmarkDelete = function (id) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_bookmark/' + id, 'DELETE'));
+        };
+
 		return orgService;
 	})
 ;

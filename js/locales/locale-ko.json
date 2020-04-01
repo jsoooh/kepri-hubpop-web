@@ -1388,6 +1388,8 @@
         "mq_buy_app": "애플리케이션을 구매 하시겠습니까?",
         "mq_blue_green_deploy_app": "애플리케이션을 무중단 배포하시겠습니까?",
         "mq_blue_green_deploy_app_unset": "애플리케이션을 무중단 배포 해제하시겠습니까?",
+        "mq_bookmark": "을(를) 즐겨찾기 하시겠습니까?",
+        "mq_unbookmark": "의 즐겨찾기를 해제하시겠습니까?",
         "mq_change_owner": "조직의 소유자를 변경하시겠습니까?",
         "mq_change_quota": "용량계획을 변경하시겠습니까?",
         "mq_change_space": "영역명을 변경 하시겠습니까?",
@@ -1486,6 +1488,10 @@
         "mi_egov_fail_common_delete": "삭제가 실패하였습니다.",
         "mi_egov_fail_common_select": "조회에 실패하였습니다.",
         "mi_egov_fail_common_delete_account": "탈퇴에 실패하였습니다.",
+        "mi_egov_success_org_bookmark": "즐겨찾기가 완료되었습니다.",
+        "mi_egov_fail_org_bookmark": "즐겨찾기가 실패하였습니다.",
+        "mi_egov_success_org_unbookmark": "즐겨찾기 해제가 완료되었습니다.",
+        "mi_egov_fail_org_unbookmark": "즐겨찾기 해제가 실패하였습니다.",
         "mi_type_position": "소속을 입력하세요.",
         "mi_unusable_commonorguser_email": "'commonOrgUser' 아이디는 사용하실 수 없습니다."
     }
