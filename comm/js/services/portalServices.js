@@ -187,8 +187,8 @@ angular.module('portal.services', [])
                             "                            <col style='width:23%;'>\n" +
                             "                            <col style='width:77%;'>\n" +
                             "                        </colgroup>\n" +
-                            "                        <tbody>\n"; +
-                            "                           <tr>\n"; +
+                            "                        <tbody>\n" +
+                            "                           <tr>\n" +
                             "                             <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
                             "                             <td>\n";
                     for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
