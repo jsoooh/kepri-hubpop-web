@@ -101,10 +101,11 @@ angular.module('portal.controllers')
         };
 
         /*프로젝트명 변경 팝업화면 오픈*/
-        ct.changeNameOrgProject = function ($event) {
+        ct.changeNameOrgProject = function ($event, org) {
             $scope.dialogOptions = {
                 controller: "commChangeNameFormCtrl",
-                callBackFunction: ct.listOrgProjects
+                callBackFunction: ct.listOrgProjects,
+                org : org
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -626,7 +627,8 @@ angular.module('portal.controllers')
         //개인 프로젝트 설정 건수 조회
         ct.getPersonalProjectCount();
     })
-    .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+
+    .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);
         $scope.actionBtnHied = false;
 
@@ -634,7 +636,7 @@ angular.module('portal.controllers')
         $scope.actionLoading = false;
 
         pop.fn = {};
-        pop.data = {};
+        pop.data = angular.copy($scope.dialogOptions.org);
 
         pop.formName = "changeNameForm";
         $scope.dialogOptions.formName = pop.formName;
@@ -642,24 +644,36 @@ angular.module('portal.controllers')
         $scope.dialogOptions.dialogClassName = "modal-md";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectChangeNameForm.html" + _VersionTail();
         $scope.dialogOptions.title = "프로젝트명 변경";
-        pop.method = "POST";
+        pop.method = "PUT";
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-            if ($scope.actionBtnHied) return;
-            $scope.actionBtnHied = true;
-            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
-                $scope.actionBtnHied = false;
-                return;
-            }
-            pop.fn.okFunction();
+            pop.fn.createOrgProjectNameAction();
         };
 
         $scope.popCancel = function () {
             $scope.popHide();
         };
 
-        pop.fn.okFunction = function() {
+        /* 20.04.01 - 프로젝트명 변경 액션 by ksw */
+        pop.fn.createOrgProjectNameAction = function () {
+            var params = {
+                orgName: pop.data.orgName
+            };
+
+            $scope.main.loadingMain = true;
+            var promise = orgService.updateOrgName(pop.data.id, params);
+            promise.success(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_update'));
+                common.mdDialogHide();
+                /* 성공후 리스트에 바로 적용 */
+                $scope.dialogOptions.org.orgName = params.orgName;
+            });
+            promise.error(function (data) {
+                $scope.main.loadingMain = false;
+                common.showAlertError($translate.instant('message.mi_egov_fail_common_update'));
+            });
         };
     })
 ;

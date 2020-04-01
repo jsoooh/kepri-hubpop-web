@@ -72,6 +72,11 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/description', 'PUT', param));
         };
 
+        /*조직 이름 수정*/
+        orgService.updateOrgName = function (id, param) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/orgName', 'PUT', param));
+        };
+
         /*
         * 연계 재실행
         *   -조직 재생성

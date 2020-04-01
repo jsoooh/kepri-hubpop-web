@@ -170,7 +170,7 @@
 								<span class="ico">실행 설정</span>
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
-								<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
+								<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
 								<li><a href="" title="사용자변경">사용자변경</a></li>
 								<!-- 선택 된 class="active" 추가 -->
 								<li ng-if="org.isFavorite == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
