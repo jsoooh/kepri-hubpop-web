@@ -120,9 +120,9 @@
 						<li ng-repeat="item in contents.objectStorageList">
 							<a href="" id="folder-branch-item" ng-click="contents.fn.getObjectStorageObject(item.containerName, '')" class="animated fast fadeInDown active"><!-- 선택 된 버킷에 class="active" -->
 								<span>{{ item.containerName }}</span>
-								<!-- 선택되었을 때(닫기버튼) -->
+								<!-- 선택되었을 때(삭제버튼) -->
 								<button type="button" class="close"><span aria-hidden="true">×</span></button>
-								<!-- //선택되었을 때(닫기버튼) -->
+								<!-- //선택되었을 때(삭제버튼) -->
 							</a>
 						</li>
 					</ul>
