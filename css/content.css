@@ -3377,6 +3377,24 @@ a.ext_link:hover {text-decoration:underline;}
 .dropdown-menu > li > a.favorit:before {display:inline-block; content:'☆'; font-size:15px; color:#333; margin-right:2px;}
 .dropdown-menu > li > a.favorit.active:before {content:'★'; font-size:15px; color:#00bfff;}
 
+/* 프로젝트 신청 > '상세쿼터조정' > 'paas 용량' */
+.pj_paas_volume {clear:both;}
+.pj_paas_volume .radio1 label {display:block; width:180px; height:180px; }
+.pj_paas_volume .radio1 label {display:block; width:180px; height:180px; }
+.form_list .s_inner_cont .pj_paas_volume > ul > li {padding-bottom:0;}
+.form_list .s_inner_cont .pj_paas_volume > ul > li p {font-size:15px; width:100%; }
+.form_list .pj_paas_volume .volume_cont {background:url("../images/thum/im_thum_db_bg.png") no-repeat center 17px; padding:75px 15px 12px 15px;}
+.form_list .pj_paas_volume .volume_cont > ul > li {display:table; width:100%; line-height:2.3em; border-bottom:1px solid #d7d7d7; padding:0; margin-top:0;}
+.form_list .pj_paas_volume .volume_cont > ul > li:last-child {border-bottom:0;}
+.form_list .pj_paas_volume .volume_cont > ul > li span {display:table-cell; width:50%; box-sizing:border-box;}
+.form_list .pj_paas_volume .volume_cont > ul > li span:first-child {text-align:left;}
+.form_list .pj_paas_volume .volume_cont > ul > li span:last-child {font-weight:400; text-align:right;}
+
+/* form_list > s_inner_cont 유형 */
+.panel_area .pn_body .form_list .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
+.panel_area .pn_body .form_list .s_inner_cont .pnb_tit {font-size:17px;}
+.panel_area .pn_body .form_list .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
+
 /*------------------------------------ [ 성과분석 ] - 대시보드 -------------------------------------*/
 .amount_usedWrap > div {border-left:1px solid #ddd; padding:0 30px;}
 .amount_usedWrap > div:first-child {border-left:0; padding-left:0;}
@@ -3405,4 +3423,5 @@ a.ext_link:hover {text-decoration:underline;}
 
 /* .cBox.type2 .cBox-hd em {font-size:15px; color:#888; margin-left:10px;} */
 .panel.type2 em {color:#888 !important; font-size:15px; font-weight:400; } 
+
 
