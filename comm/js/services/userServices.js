@@ -127,7 +127,7 @@ angular.module('common.services')
             // 2차 규칙, 비밀번호 8~16자 영문, 숫자 특수문자 조합 확인
             var pattern1 = /[0-9]/;
             var pattern2 = /[a-zA-Z]/;
-            var pattern3 = /[~`!@#$%\^&*()-+=.]/;     // 원하는 특수문자 추가 제거
+            var pattern3 = /[~`!@#$%\^&*()\-_+=\\|\{\}\[\]\;':,./<>?]/;     // 원하는 특수문자 추가 제거
             if (!pattern1.test(pw) || !pattern2.test(pw) || !pattern3.test(pw) || pw.length < 8 || pw.length > 16){
                 common.showAlertError("패스워드", "8~16자 영문, 숫자, 특수문자 조합으로 구성하여야 합니다.");
                 if (fn) fn(1);
@@ -159,6 +159,10 @@ angular.module('common.services')
                 if (fn) fn(true);
             });
         }
+
+        user.loginIaasLink = function (params) {
+            var rp = common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/login/iaasLink', 'POST', params));
+        };
 
         return user;
 
