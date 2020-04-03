@@ -1,45 +1,22 @@
-<style>
-	.btn-file {
-		font-size: 16px;
-		font-weight: 500;
-		min-width: 90px;
-		height: 36px;
-		padding: 0 10px;
-	}
-	.table.inputWidthWrap th {
-		text-align: center;
-		vertical-align: middle;
-		background: #e7e8e9;
-		color: #333;
-	}
-	.require::before {
-		display: inline-block;
-		content: '*';
-		color: red;
-		font-size: 15px;
-		font-weight: 700;
-	}
-</style>
-<div class="tableWrap">
-	<div class="tableWrap">
-		<table class="table table-bordered inputWidthWrap">
-			<colgroup>
-				<col style="width:140px;" />
-				<col />
-			</colgroup>
-			<tbody>
-            <tr>
-                <th>
-                    <span class="require"></span>
-                    <label for="title">{{ 'label.bulletin_title' | translate }}</label>
-                </th>
-                <td>
-                    <input type="text" id="title" name="title" maxlength="30" ng-model="pop.boardData.title0" placeholder="{{'label.bulletin_title' | translate}}" style="width:95%;ime-mode:active;" validation="required"/>
-                </td>
-            </tr>
+<div class="tbw type1">
+	<table class="table">
+		<colgroup>
+			<col style="width:30%;" />
+			<col />
+		</colgroup>
+		<tbody>
 			<tr>
 				<th>
-                    <span class="require"></span>
+					<i class="i_star"></i>
+					<label for="title">{{ 'label.bulletin_title' | translate }}</label>
+				</th>
+				<td>
+					<input type="text" id="title" name="title" maxlength="30" ng-model="pop.boardData.title0" placeholder="{{'label.bulletin_title' | translate}}" style="width:95%;ime-mode:active;" validation="required"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<i class="i_star"></i>
 					<label for="content">{{ 'label.bulletin_content' | translate }}</label>
 				</th>
 				<td>
@@ -50,21 +27,18 @@
 					<textarea name="pop_editor" id="pop_editor" rows="10" cols="80"></textarea>
 				</td>
 			</tr>
-            <tr>
-                <th>
-                    <label for="content">{{ 'label.bulletin_attach' | translate }}</label>
-                </th>
-                <td>
+			<tr>
+				<th>
+					<label for="content">{{ 'label.bulletin_attach' | translate }}</label>
+				</th>
+				<td>
 					<input type="file" id="uploadedNoticeFile" file-input="pop.file.uploadedNoticeFile" multiple placeholder="Upload File" style="display: none;"/>
-					<button type="button" class="btn-file btn-color1" ng-click="main.fileSelectBtnClick($event);">
-						{{ 'label.file_search' | translate }}
-					</button>
+					<button type="button" class="btn btn-color1 btn-md btn-file" ng-click="main.fileSelectBtnClick($event);"> {{ 'label.file_search' | translate }} </button>
 					<ul>
 						<li ng-repeat="aFile in pop.file.uploadedNoticeFile">{{ aFile.name }}</li>
 					</ul>
-                </td>
-            </tr>
-			</tbody>
-		</table>
-	</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
