@@ -1247,6 +1247,11 @@ angular.module('common.controllers', [])
             }
         };
 
+        //프로젝트 신청 화면전환
+        mc.requestOrgProjectFormOpen = function($event) {
+            $location.path('/comm/project/create');
+        };
+
         mc.ssoUserLogin = false;
         mc.ssoUserLoginChecking = false;
 

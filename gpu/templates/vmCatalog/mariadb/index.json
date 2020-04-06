@@ -7,6 +7,7 @@
   "templateHtmlFile": "mariadb104Deploy.html",
   "deployTemplate": "deployTemplate.yaml.j2",
   "parameters": {
-    "image": "CentOS-7-x86_64-Heat-1907.qcow2"
+    "image": "CentOS-7-x86_64-Heat-1907.qcow2",
+    "cluster_image": "CentOS-7-x86_64-Heat-1907.qcow2"
   }
 }
