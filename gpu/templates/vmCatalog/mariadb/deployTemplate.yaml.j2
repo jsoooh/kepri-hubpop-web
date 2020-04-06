@@ -2,36 +2,13 @@ heat_template_version: '2016-10-14'
 
 description: galera mariadb template
 
-parameters:
-  image:
-    type: string
-    default:  CentOS-7-x86_64-Heat-1907.qcow2
-  availability_zone:
-    type: string
-    default: zone1
-  flavor:
-    type: string
-    default: m1.small
-  key_name:
-    type: string
-    default: 42-318_default
-  private_net:
-    type: string
-    default: kepri2_42_42-318_net_prinet_001
-  floating_net:
-    type: string
-    default: INT_PUB_NET
-  root_password:
-    type: string
-    default: crossent12
-
 resources:
 
   server1_port:
     type: OS::Neutron::Port
     properties:
       network: { get_param: private_net }
-
+{% if cluster %}
   server2_port:
     type: OS::Neutron::Port
     properties:
@@ -41,12 +18,12 @@ resources:
     type: OS::Neutron::Port
     properties:
       network: { get_param: private_net }
-
+{% endif %}
   floating_ip1:
     type: OS::Neutron::FloatingIP
     properties:
       floating_network: { get_param: floating_net }
-
+{% if cluster %}
   floating_ip2:
     type: OS::Neutron::FloatingIP
     properties:
@@ -56,7 +33,8 @@ resources:
     type: OS::Neutron::FloatingIP
     properties:
       floating_network: { get_param: floating_net }
-
+{% endif %}
+{% if cluster %}
   init_config1:
     type: OS::Heat::SoftwareConfig
     properties:
@@ -124,7 +102,6 @@ resources:
             galera_new_cluster
             systemctl enable mariadb.service
             echo "mariadb install end"
-
 
   init_config2:
     type: OS::Heat::SoftwareConfig
@@ -202,7 +179,6 @@ resources:
             systemctl enable mariadb
             echo "mariadb install end"
 
-
   init_config3:
     type: OS::Heat::SoftwareConfig
     properties:
@@ -277,8 +253,38 @@ resources:
             systemctl start mariadb.service
             systemctl enable mariadb
             echo "mariadb install end"
+{% else %}
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $root_password: { get_param: root_password }
+          template: |
+            #!/bin/sh
+            echo "mariadb install start"
+            setenforce 0
+            sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+            sleep 1
+            #!/bin/sh
+            set -eu
+            echo "mariadb install start"
+            cat <<EOF> /etc/yum.repos.d/MariaDB.repo
+            [mariadb]
+            name = MariaDB
+            baseurl = http://yum.mariadb.org/10.4/centos7-amd64
+            gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+            gpgcheck=1
+            EOF
+            yum install -y MariaDB
+            systemctl start mariadb
+            /usr/bin/mysqladmin -u root password '$root_password'
+            systemctl enable mariadb
+            echo "mariadb install end"
 
-
+{% endif %}
   server1:
     type: OS::Nova::Server
     properties:
@@ -291,7 +297,7 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config1
-
+{% if cluster %}
   server2:
     type: OS::Nova::Server
     properties:
@@ -317,13 +323,13 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config3
-
+{% endif %}
   server1_floating_ip_assoc:
     type: OS::Neutron::FloatingIPAssociation
     properties:
       floatingip_id: {get_resource: floating_ip1}
       port_id: { get_resource: server1_port }
-
+{% if cluster %}
   server2_floating_ip_assoc:
     type: OS::Neutron::FloatingIPAssociation
     properties:
@@ -335,23 +341,28 @@ resources:
     properties:
       floatingip_id: {get_resource: floating_ip3}
       port_id: { get_resource: server3_port }
+{% endif %}
 
 outputs:
   server_ip1:
     value:
         get_attr: [server1, first_address]
+{% if cluster %}
   server_ip2:
     value:
         get_attr: [server2, first_address]
   server_ip3:
     value:
         get_attr: [server3, first_address]
+{% endif %}
   server_floating_ip1:
     value:
       get_attr: [ floating_ip1, floating_ip_address ]
+{% if cluster %}
   server_floating_ip2:
     value:
       get_attr: [ floating_ip2, floating_ip_address ]
   server_floating_ip3:
     value:
       get_attr: [ floating_ip3, floating_ip_address ]
+{% endif %}
