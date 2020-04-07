@@ -1723,8 +1723,11 @@ angular.module('common.controllers', [])
                     $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
                 }
             }, 100);
-            $scope.main.selectAlarmCount();
-            $scope.main.selectAlarmList();
+
+            $timeout(function () {
+                $scope.main.selectAlarmCount();
+                $scope.main.selectAlarmList();
+            }, 100);
 
             if (_MENU_TYPE_ == 'part') {
                 common.leftMenuShow();
