@@ -1987,6 +1987,12 @@ angular.module('paas.controllers')
         var ct = $scope.contents;
         pop.isChangeScale = false;  //scale 변경
         pop.isChangeFile = false;   //file 추가
+        
+        // 20.3.31 by hrit, 슬라이드 로딩 이상현상 수정
+        pop.pageLoad = false;
+        $timeout(function () {
+            pop.pageLoad = true;
+        }, 300)
 
         //파일 관련 추가. 시작
         var uploadFilters = [];
