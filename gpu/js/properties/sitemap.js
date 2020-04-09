@@ -77,13 +77,6 @@ angular.module('app')
                                 controller: 'gpuVmCatalogListCtrl',
                                 templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogList.html',
                                 subPages: {
-                                    vmCatalogView: {
-                                        name: 'vm_catalog_view',
-                                        stateKey: 'gpuVmCatalogView',
-                                        url: '/gpu/vmCatalog/view/:id',
-                                        controller: 'gpuVmCatalogViewCtrl',
-                                        templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogView.html'
-                                    },
                                     vmCatalogDeploy: {
                                         name: 'vm_catalog_deploy',
                                         stateKey: 'gpuVmCatalogDeploy',
