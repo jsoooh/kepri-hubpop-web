@@ -252,100 +252,17 @@
 							<li ng-if="contents.appPushData.pushType == 'GENERAL'">
 								<span class="s_tit">빌드팩 정보</span>
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'빌드팩에 대한 상세정보를 제공합니다.</br> Cloud Foundry 플랫폼에서 공식적으로 </br>제공하는 공개된 정보를 표시합니다.'"><span class="ico_info"></span></button></div>
-								
-								<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'java'">
+								<!-- 운영자 사이트에서 지정한 데이터 사용.-->
+								<div class="s_inner_cont">
 									<dl>
-									<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
 										<dt>종류 :</dt>
 										<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
 										<dt>버전 :</dt>
-										<!-- <dd>{{contents.sltBuildpackVersion.versionName}}</dd> -->
-										<dd> v4.12 release</dd>
-										<dt>주요구성 S/W</dt>
-										<dd class="dd_row">OpenJDK JRE v1.8.0</dd>
-										<dd class="dd_row">Spring Boot v1.5.13</dd>
-										<dd class="dd_row">Tomcat v8.5.31</dd>
-										<dd class="dd_row">MariaDB JDBC Driver v2.2.3</dd>
-										<dd class="dd_row">PostgreSQL JDBC Driver v9.4.1212</dd>
-										<dd class="dd_row">Redis Session Store v1.3.6</dd>
+										<dd> {{contents.sltPortalBuildpack.versions[0].versionName}} release</dd>
+										<dt ng-if="contents.sltPortalBuildpack.versions[0].description">주요구성 S/W</dt>
+										<dd ng-if="contents.sltPortalBuildpack.versions[0].description"><pre style="font-size: 13px; color: #777;">{{contents.sltPortalBuildpack.versions[0].description}}</pre></dd>
 										<dt>Official Release Site</dt>
-										<dd class="dd_row">https://github.com/cloudfoundry/java-buildpack/releases</dd>
-									</dl>
-									<!-- <pre>
-										{{contents.sltBuildpackVersion.description}}
-									</pre> -->
-								</div>
-								
-								
-								<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'nginx'">
-									<dl>
-									<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
-										<dt>종류 :</dt>
-										<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
-										<dt>버전 :</dt>
-										<!-- <dd>{{contents.sltBuildpackVersion.versionName}}</dd> -->
-										<dd>v1.4.28 release</dd>
-										<dt>주요구성 S/W</dt>
-										<dd class="dd_row">nginx v1.15.0</dd>
-										<dt>Official Release Site</dt>
-										<dd class="dd_row">https://github.com/cloudfoundry/staticfile-buildpack/releases</dd>
-									</dl>
-								</div>
-								
-								<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'python'">
-									<dl>
-									<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
-										<dt>종류 :</dt>
-										<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
-										<dt>버전 :</dt>								
-										<dd>v1.6.17 release</dd>
-										<dt>주요구성 S/W</dt>
-										<dd class="dd_row">python v3.6.5</dd>
-										<dt>Official Release Site</dt>
-										<dd class="dd_row">https://github.com/cloudfoundry/python-buildpack/releases</dd>
-									</dl>
-								</div>
-								<!-- <div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'ruby'">
-									<dl>
-									빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요. 
-										<dt>종류 :</dt>
-										<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
-										<dt>버전 :</dt>								
-										<dd>v1.6.17 release</dd>
-										<dt>주요구성 S/W</dt>
-										<dd class="dd_row">python v3.6.5</dd>
-										<dt>Official Release Site</dt>
-										<dd class="dd_row">https://github.com/cloudfoundry/python-buildpack/releases</dd>
-									</dl>
-								</div> -->
-								
-								<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'nodejs'">
-									<dl>
-									<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
-										<dt>종류 :</dt>
-										<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
-										<dt>버전 :</dt>								
-										<dd>v1.6.25 release</dd>
-										<dt>주요구성 S/W</dt>
-										<dd class="dd_row">node v10.3.0</dd>
-										<dd class="dd_row">yarn v1.7.0</dd>
-										<dt>Official Release Site</dt>
-										<dd class="dd_row">https://github.com/cloudfoundry/nodejs-buildpack/releases</dd>
-									</dl>
-								</div>
-								
-								
-								<div class="s_inner_cont" ng-if="contents.sltPortalBuildpack.name == 'go'">
-									<dl>
-									<!-- 빌드팩 선택에 따른 desc 하드코딩으로 할지 협의 필요.  -->
-										<dt>종류 :</dt>
-										<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
-										<dt>버전 :</dt>								
-										<dd>v1.8.23 release</dd>
-										<dt>주요구성 S/W</dt>
-										<dd class="dd_row">go v1.10.2</dd>
-										<dt>Official Release Site</dt>
-										<dd class="dd_row">https://github.com/cloudfoundry/go-buildpack/releases</dd>
+										<dd class="dd_row">{{contents.sltPortalBuildpack.versions[0].url}}</dd>
 									</dl>
 								</div>
 							</li>

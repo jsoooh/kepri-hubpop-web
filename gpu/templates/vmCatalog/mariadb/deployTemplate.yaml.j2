@@ -2,6 +2,22 @@ heat_template_version: '2016-10-14'
 
 description: galera mariadb template
 
+parameters:
+  image:
+    type: string
+  availability_zone:
+    type: string
+  flavor:
+    type: string
+  key_name:
+    type: string
+  private_net:
+    type: string
+  floating_net:
+    type: string
+  root_password:
+    type: string
+
 resources:
 
   server1_port:

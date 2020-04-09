@@ -127,11 +127,11 @@
 			<colgroup>
 				<col style="width: 5%;">
 				<col style="width: 12%;">
-				<col style="width: ;">
-				<col style="width: 10%;">
+				<col style="width: 5%;">
+				<col style="width: 20%;">
 				<col style="width: 5%;">
 				<col style="width: 5%;">
-				<col style="width: 12%;">
+				<col style="width: 15%;">
 				<col style="width: 10%;">
 				<col style="width: 5%;">
 				<col style="width: 5%;">
@@ -141,6 +141,8 @@
 				<tr>
 					<th scope="col">번호</th>
 					<th scope="col">프로젝트ID</th>
+					<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
+					<th scope="col">즐겨찾기</th>
 					<th scope="col">프로젝트명</th>
 					<th scope="col">책임자명</th>
 					<th scope="col">참여자수</th>
@@ -156,6 +158,9 @@
 				<tr ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }">
 					<td>{{ $index+1 }}</td>
 					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgId }}</a></td>
+					<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
+					<td class="text-center" ng-if="org.isBookmark == false" style="font-size:15px; color:#333;">☆</td>
+					<td class="text-center" ng-if="org.isBookmark == true" style="font-size:15px; color:#00bfff;">★</td>
 					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgName }}</a></td>
 					<td>{{ org.managerName }}</td>
 					<td>{{ org.orgUserCount }}</td>
@@ -173,8 +178,9 @@
 								<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
 								<li><a href="" title="사용자변경">사용자변경</a></li>
 								<!-- 선택 된 class="active" 추가 -->
-								<li ng-if="org.isFavorite == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
-								<li ng-if="org.isFavorite == true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
+								<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
+								<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
+								<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
 								<!-- 2020.03.24 - 사용자 탈퇴 기능 추가 by ksw -->
 								<li><a href="" ng-click="contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
 								<li><a href=""  title="삭제" class="delete">{{ 'label.del' | translate }}</a></li>
@@ -216,6 +222,9 @@
 					<div class="pj_info_box">
 						<ul class="user_info">
 							<li>관리자 : {{org.managerName}}</li>
+							<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
+							<li ng-if="org.isBookmark == false">즐겨찾기 : <span style="font-size:15px; color:#333;">☆</span></li>
+							<li ng-if="org.isBookmark == true">즐겨찾기 : <span style="font-size:15px; color:#00bfff;">★</span></li>
 							<li>참여자 수 : {{org.orgUserCount}}</li>
 							<li>Project ID : {{org.orgId}}</li>
 						</ul>

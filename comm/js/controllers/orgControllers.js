@@ -47,14 +47,6 @@ angular.module('portal.controllers')
             var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
             promise.success(function (data) {
                 if (data && data.items && angular.isArray(data.items)) {
-                    /* 2020.03.27 - 즐겨찾기 기능 관련 : isFavorite 속성 추가 by ksw */
-                    angular.forEach(data.items, function(item) {
-                        if(item.isFavorite == true) {
-                            return;
-                        } else {
-                            item.isFavorite = false;
-                        }
-                    });
                     common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
                     $scope.main.setListAllPortalOrgs(data.items);
                 } else {
@@ -144,9 +136,10 @@ angular.module('portal.controllers')
                 $scope.main.loadingMain = true;
                 var promise = orgService.orgBookmarkAdd(org.id);
                 promise.success(function (data) {
-                    org.isFavorite = true;
                     $scope.main.loadingMain = false;
+                    ct.listOrgProjects();
                     common.showAlertSuccess($translate.instant('message.mi_egov_success_org_bookmark'));
+
                 });
                 promise.error(function (data) {
                     $scope.main.loadingMain = false;
@@ -162,8 +155,8 @@ angular.module('portal.controllers')
                 $scope.main.loadingMain = true;
                 var promise = orgService.orgBookmarkDelete(org.id);
                 promise.success(function (data) {
-                    org.isFavorite = false;
                     $scope.main.loadingMain = false;
+                    ct.listOrgProjects();
                     common.showAlertSuccess($translate.instant('message.mi_egov_success_org_unbookmark'));
                 });
                 promise.error(function (data) {
