@@ -75,14 +75,14 @@ angular.module('app')
                                 stateKey: 'gpuVmCatalogList',
                                 url: '/gpu/vmCatalog/list',
                                 controller: 'gpuVmCatalogListCtrl',
-                                templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogList.html',
+                                templateUrl: _GPU_VIEWS_+_VIEW_TEMP_+'/vmCatalog/vmCatalogList.html',
                                 subPages: {
                                     vmCatalogDeploy: {
                                         name: 'vm_catalog_deploy',
                                         stateKey: 'gpuVmCatalogDeploy',
                                         url: '/gpu/vmCatalog/deploy/:id',
                                         controller: 'gpuVmCatalogDeployCtrl',
-                                        templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeploy.html'
+                                        templateUrl: _GPU_VIEWS_+_VIEW_TEMP_+'/vmCatalog/vmCatalogDeploy.html'
                                     }
                                 }
                             },
@@ -92,14 +92,14 @@ angular.module('app')
                                 stateKey: 'gpuVmCatalogDeployList',
                                 url: '/gpu/vmCatalogDeploy/list',
                                 controller: 'gpuVmCatalogDeployListCtrl',
-                                templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeployList.html',
+                                templateUrl: _GPU_VIEWS_+_VIEW_TEMP_+'/vmCatalog/vmCatalogDeployList.html',
                                 subPages: {
                                     serverDetail: {
                                         name: 'vm_catalog_deploy_view',
                                         stateKey: 'gpuVmCatalogDeployView',
                                         url: '/gpu/vmCatalogDeploy/view/:id',
                                         controller: 'gpuVmCatalogDeployViewCtrl',
-                                        templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeployView.html'
+                                        templateUrl: _GPU_VIEWS_+_VIEW_TEMP_+'/vmCatalog/vmCatalogDeployView.html'
                                     }
                                 }
                             }
