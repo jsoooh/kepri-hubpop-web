@@ -52,14 +52,14 @@ angular.module('portal.controllers')
                 } else {
                     $scope.main.setListAllPortalOrgs();
                 }
-                $scope.main.loadingMainBody = false;
-
                 //좌측메뉴 [프로젝트 생성] 클릭으로 넘어온 경우 바로 팝업 띄움. 2019.06.25
                 if ($scope.main.userAuth == 'M' && ct.popup == 'popup') {
                     ct.addOrgProjectFormOpen();
                 }
             });
             promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -353,8 +353,7 @@ angular.module('portal.controllers')
                 returnPromise.success(function (data) {
                     if (data) {
                         ct.orgIdValidationResult = true;
-                    }
-                    else {
+                    } else {
                         ct.orgIdValidationResult = false;
                     }
                 });
