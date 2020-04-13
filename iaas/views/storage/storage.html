@@ -1,5 +1,13 @@
+<!-- 목록 이미지형/리스트형 선택 버튼 -->
+<div class="btnArea text-right">
+	<!-- 선택 된 class="on" 추가 -->
+	<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
+	<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
+</div>
+<!-- //목록 이미지형/리스트형 선택 버튼 -->
+
 <!-- 프로젝트 정보 -->
-<div class="cBox type0 projt-mana">
+<div class="cBox type0 projt-mana mt30">
 	<div class="pull-left">
 		<h4 class="c-tit">전체 디스크 <em class="point1">({{(contents.storageMainList | filter:{ status: '!deleting' }).length}})</em></h4>
 	</div>
@@ -26,7 +34,76 @@
 <!-- button area end-->
 
 <!-- panel area-->
-<div ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length > 0">
+
+<!-- 프로젝트 리스트(테이블형) -->
+<div class="tbl type1" ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length > 0 && contents.listType == 'list'">
+	<table class="table">
+		<colgroup>
+			<col style="width:20%;">
+			<col style="width:10%;">
+			<col style="width:">
+			<col style="width: 10%;">
+			<col style="width: 8%;">
+			<col style="width: 10%;">
+			<col style="width: 15%;">
+			<col style="width: 8%;">
+		</colgroup>
+		<thead>
+			<tr>
+				<th scope="col">디스크명</th>
+				<th scope="col">크기(GB)</th>
+				<th scope="col">설명</th>
+				<th scope="col">연결서버</th>
+				<th scope="col">백업이미지개수</th>
+				<th scope="col">상태</th>
+				<th scope="col">생성일</th>
+				<th scope="col">관리</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="volume in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }">
+				<td>{{volume.name}}</td>
+				<td>{{volume.size}}</td>
+				<td>{{volume.description | enterByNbr}}</td>
+				<td>
+					<span ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></span>
+					<span ng-if="volume.status != 'in-use'">연결 정보 없음</span>
+				</td>
+				<td>{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</td>
+				<td>
+					<span ng-switch="volume.status" class="stateWrap">
+						<span ng-switch-when="in-use" class="stateMark type1"></span>
+						<span ng-switch-when="available" class="stateMark type3" ng-if="volume.status == 'available'"></span>
+						<span ng-switch-when="error" class="stateMark type2" ng-if="volume.status == 'error'"></span>
+						<span ng-switch-default class="stateMark type4"></span>
+						<span class="state-txt">{{ 'iaas.label.volume_' + volume.status | translate }}</span>
+					</span>
+				</td>
+				<td>2019-11-13 09:24:07</td>
+				<td>
+					<div class="dropdown btn-option">
+						<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+							<span class="ico">실행 설정</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="연결된 서버가 ‘정지’상태인 경우 이미지 생성이 가능합니다.">백업 이미지 생성</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="디스크 이름 변경">디스크 이름 변경</a></li>
+							<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="디스크 크기 변경">디스크 크기 변경</a></li>
+							<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
+							<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
+							<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 삭제">디스크 삭제</a></li>
+							<li ng-if="volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="디스크에 백업이미지가 존재하여 삭제할수 없습니다.">디스크 삭제</a></li>
+							<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!-- 프로젝트 리스트(테이블형) -->
+
+<div ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length > 0 && contents.listType == 'image'">
 	<ul class="ul-panel">
 		<li ng-repeat="volume in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }">
 			<!-- panel -->
