@@ -537,8 +537,8 @@ angular.module('portal.controllers')
                 }
             }
             params['orgQuotaValues'] = quotasList;
-            if (quotasList.length == 0) {
-                common.showAlertSuccess("쿼터 설정은 필수사항입니다.", "쿼터 설정은 필수사항입니다.");
+            if (!ct.orgData.paasQuotaGuid && quotasList.length == 0) {
+                common.showAlertSuccess("상세 쿼터 설정은 필수사항입니다.", "상세 쿼터 설정은 필수사항입니다.");
                 return;
             }
             if (ct.attachFile != null) {
