@@ -3424,4 +3424,10 @@ a.ext_link:hover {text-decoration:underline;}
 /* .cBox.type2 .cBox-hd em {font-size:15px; color:#888; margin-left:10px;} */
 .panel.type2 em {color:#888 !important; font-size:15px; font-weight:400; } 
 
-
+/*paas > app 관리 > 리스트형 이름바꾸기*/
+.tbl.type1 td .renameWrap .btn.only-ico + .btn.only-ico {margin-left:0;}
+.tbl.type1 td .renameWrap {margin:0 auto;}
+.tbl.type1 td .renameWrap {position:relative; width:240px;}
+.tbl.type1 td .renameWrap .sdBtnWrap {position:absolute; top:1px; right:0;}
+.tbl.type1 td .renameWrap .btn-ico-saveName-s {padding:7px 8px;}
+.tbl.type1 td .renameWrap .btn-ico-delName-s {padding:9px 10px;}

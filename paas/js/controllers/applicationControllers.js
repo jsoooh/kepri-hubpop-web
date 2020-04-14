@@ -23,6 +23,7 @@ angular.module('paas.controllers')
         ct.appStateCnt = 0;
 
         ct.schFilterText = "";
+        ct.listType = "image";          //리스트 타입
 
         // main changeOrganization 와 연결
         $scope.$on('organizationChanged', function(event, orgItem) {
