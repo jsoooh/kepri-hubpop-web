@@ -127,6 +127,14 @@ angular.module('paas.controllers')
                     var appPromise2 = applicationService.listAllAppInstanceStats(option.guid);
                     appPromise2.success(function (data2) {
                         option["instanceStats"] = angular.copy(data2);
+                        /* 20.04.14 by ksw - 인스턴스 상태가 하나라도 시작이면 앱 상태도 시작일수 있게 변경 */
+                        option["instanceGroupStats"] = false;
+                        angular.forEach(option.instanceStats, function(item) {
+                            if (item.state == 'RUNNING') {
+                                option["instanceGroupStats"] = true;
+                                return false;
+                            }
+                        });
                         ct.isAppsLoad = false;
                         var instanceStatsUsageCpu = 0;
                         var instanceStatsUsageMemory = 0;
@@ -1725,6 +1733,15 @@ angular.module('paas.controllers')
                 common.objectOrArrayMergeData(ct.app, data);
                 ct.sltOrganizationGuid = ct.app.organizationGuid;
                 ct.sltSpaceGuid = ct.app.spaceGuid;
+                /* 20.04.14 by ksw - 인스턴스 상태가 하나라도 시작이면 앱 상태도 시작일수 있게 변경 */
+                ct.instanceGroupStats = false;
+                angular.forEach(ct.app.instanceStats, function(item) {
+                    if (item.state == 'RUNNING') {
+                        ct.instanceGroupStats = true;
+                        return false;
+                    }
+                });
+
 
                 ct.app.createdTime = new Date(ct.app.created).getTime();
 

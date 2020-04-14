@@ -153,11 +153,13 @@
 	                                    <p class="txt"><strong>인스턴스</strong><span>{{ appItem.instances | number:0 }}</span></p>
 	                                </div>
 	                                <div class="down">
-	                                    <div class="stateWrap" ng-if="(appItem.state == 'STARTED') && (appItem.packageState == 'STAGED')">
+										<!-- 20.04.14 by ksw - 인스턴스 상태가 하나라도 시작이면 앱 상태도 시작일수 있게 변경 -->
+										<div class="stateWrap" ng-if="(appItem.state == 'STARTED' && appItem.packageState == 'STAGED' && appItem.instanceGroupStats)">
 	                                        <span class="stateMark type1">시작</span>
 	                                        <span class="state-txt">시작</span>
 	                                    </div>
-	                                    <div class="stateWrap" ng-if="(appItem.state == 'STARTED') && (appItem.packageState == 'PENDING')">
+										<!-- 20.04.14 by ksw - 인스턴스 상태가 하나라도 시작이면 앱 상태도 시작일수 있게 변경 -->
+										<div class="stateWrap" ng-if="(appItem.state == 'STARTED' && appItem.packageState == 'PENDING') || (appItem.state == 'STARTED' && appItem.packageState == 'STAGED' && !appItem.instanceGroupStats)">
 	                                        <span class="stateMark type4">시작중</span>
 	                                        <span class="state-txt">시작중</span>
 	                                    </div>

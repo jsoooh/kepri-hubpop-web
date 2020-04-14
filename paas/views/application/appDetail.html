@@ -55,11 +55,13 @@
                     <li>
                         <strong class="tit">상태</strong>
                         <div class="txt">
-                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'STAGED')">
+                            <!-- 20.04.14 by ksw - 인스턴스 상태가 하나라도 시작이면 앱 상태도 시작일수 있게 변경 -->
+                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED' && contents.app.packageState == 'STAGED' && contents.instanceGroupStats)">
                                 <span class="stateMark type1">시작</span>
                                 <span class="state-txt">시작</span>
                             </span>
-                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED') && (contents.app.packageState == 'PENDING')">
+                            <!-- 20.04.14 by ksw - 인스턴스 상태가 하나라도 시작이면 앱 상태도 시작일수 있게 변경 -->
+                            <span class="stateWrap" ng-if="(contents.app.state == 'STARTED' && contents.app.packageState == 'PENDING') || (contents.app.state == 'STARTED' && contents.app.packageState == 'STAGED' && !contents.instanceGroupStats)">
                                 <span class="stateMark type4">시작중</span>
                                 <span class="state-txt">시작중</span>
                                 <img src="images/loading_sm.gif" />
