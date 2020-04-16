@@ -85,7 +85,7 @@ resources:
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
             systemctl start mariadb.service
-            /usr/bin/mysqladmin -u root password '$root_password'
+            /usr/bin/mysqladmin -u root password "$root_password"
             systemctl stop mariadb.service
             sleep 1
             cat <<EOF> /etc/my.cnf.d/server.cnf

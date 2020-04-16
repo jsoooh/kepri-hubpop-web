@@ -7,6 +7,7 @@ angular.module('paas.controllers')
         var ct = this;
         var serviceInstance = $scope.serviceInstance = {};
         ct.serviceInstanceData  = {};
+        ct.listType = "image";          //리스트 타입
 
         ct.serviceInstances = [];
 

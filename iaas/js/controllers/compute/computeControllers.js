@@ -22,6 +22,7 @@ angular.module('iaas.controllers')
         ct.showVal			= false;
         ct.schFilterText    = "";
         ct.schLbFilterText    = "";
+        ct.listType = "image";          //리스트 타입
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenant.id;
         ct.data.tenantName = $scope.main.userTenant.korName;
