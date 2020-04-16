@@ -81,8 +81,8 @@ angular.module('app')
                                         name: 'vm_catalog_deploy',
                                         stateKey: 'gpuVmCatalogDeploy',
                                         url: '/gpu/vmCatalog/deploy/:id',
-                                        controller: 'gpuVmCatalogDeployCtrl',
-                                        templateUrl: _GPU_VIEWS_+'/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeploy.html'
+                                        controller: 'gpuVmCatalogDeployFormCtrl',
+                                        templateUrl: _GPU_VIEWS_+'/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeployForm.html'
                                     }
                                 }
                             },
