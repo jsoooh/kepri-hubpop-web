@@ -47,6 +47,7 @@
 							<col style="width:">
 							<col style="width: 10%;">
 							<col style="width: 15%;">
+							<col style="width: 8%;">
 						</colgroup>
 						<thead>
 							<tr>
@@ -56,6 +57,7 @@
 								<th scope="col">설명</th>
 								<th scope="col">상태</th>
 								<th scope="col">생성일</th>
+								<th scope="col">관리</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -74,6 +76,18 @@
 									</span>
 								</td>
 								<td>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+								<td>
+									<div class="dropdown btn-option">
+										<button type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>
+											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
+										</ul>
+									</div>
+								</td>
 							</tr>
 						</tbody>
 					</table>
