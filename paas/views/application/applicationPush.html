@@ -74,7 +74,21 @@
 										<p class="label-txt">{{ buildpackItem.name }}</p>
 									</li>
 								</ul>
-							</div>	
+							</div>
+							<div class="pnb_tit" ng-if="contents.sltPortalBuildpack">
+								<i class="i_star"></i> <span class="pnb_t_txt">빌드팩 버전(Buildpack Version) 선택</span>
+							</div>
+							<div ng-if="contents.sltPortalBuildpack" class="buildpack-version">
+								<ul class="ul-list1" ng-if="contents.sltPortalBuildpack.versions">
+									<li ng-repeat="version in contents.sltPortalBuildpack.versions">
+										<!-- <span>{{ version.versionName }}</span> -->
+										<div class="radio1 radio-inline">
+											<input type="radio" id="version_{{ version.id }}" name="version" value="{{ version.id }}" ng-model="contents.sltBuildpackVersionId" ng-change="contents.changePortalBuildpackVersion();" />
+											<label for="version_{{ version.id }}" class="label" style="line-height: 35px; height: 40px;">{{ version.versionName }}</label>
+										 </div>
+									</li>
+								</ul>
+							</div>
 						</li>
 						<li ng-if="contents.appPushData.pushType == 'DOCKER'">
 							<div class="pnb_tit" ><i class="i_star"></i> <span class="pnb_t_txt">도커(Docker) 이미지 정보 입력</span></div>
@@ -258,11 +272,11 @@
 										<dt>종류 :</dt>
 										<dd>{{contents.sltPortalBuildpack.name}} 빌드팩</dd>
 										<dt>버전 :</dt>
-										<dd> {{contents.sltPortalBuildpack.versions[0].versionName}} release</dd>
-										<dt ng-if="contents.sltPortalBuildpack.versions[0].description">주요구성 S/W</dt>
-										<dd ng-if="contents.sltPortalBuildpack.versions[0].description"><pre style="font-size: 13px; color: #777;">{{contents.sltPortalBuildpack.versions[0].description}}</pre></dd>
+										<dd> {{contents.sltBuildpackVersion.versionName}} release</dd>
+										<dt ng-if="contents.sltBuildpackVersion.description">주요구성 S/W</dt>
+										<dd ng-if="contents.sltBuildpackVersion.description"><pre style="font-size: 13px; color: #777;">{{contents.sltBuildpackVersion.description}}</pre></dd>
 										<dt>Official Release Site</dt>
-										<dd class="dd_row">{{contents.sltPortalBuildpack.versions[0].url}}</dd>
+										<dd class="dd_row">{{contents.sltBuildpackVersion.url}}</dd>
 									</dl>
 								</div>
 							</li>
