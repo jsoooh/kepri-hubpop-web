@@ -72,7 +72,13 @@ angular.module('perf.controllers')
                 ct.data.sltOrgId = data.orgId;
                 /* orgId(orgCode) 이용하여 월별 사용량 조회 */
                 console.log(ct.sltOrgId +", " +data.orgId);
-                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(ct.data.sltYear, ct.data.sltOrgId);
+                var params = {
+                    "urlPaths": {
+                        "orgCode":ct.data.sltOrgId
+                    },
+                    "year": ct.data.sltYear
+                }
+                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
                 promise.success(function (data) {
                     if(angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
@@ -92,10 +98,10 @@ angular.module('perf.controllers')
                             }
 
                             /* 월별 ng-repeat을 위한 객체 생성 */
-                            ct.orgMeteringValues = [data.items[i].m01, data.items[i].m02, data.items[i].m03
-                                               , data.items[i].m04, data.items[i].m05, data.items[i].m06
-                                               , data.items[i].m07, data.items[i].m08, data.items[i].m09
-                                               , data.items[i].m10, data.items[i].m11, data.items[i].m12];
+                            ct.orgMeteringValues = [data.items[i].jan1, data.items[i].feb2, data.items[i].mar3
+                                                  , data.items[i].apr4, data.items[i].may5, data.items[i].jun6
+                                                  , data.items[i].jul7, data.items[i].aug8, data.items[i].sept9
+                                                  , data.items[i].oct10, data.items[i].nov11, data.items[i].dec12];
                             for(var j=0; j<ct.orgMeteringValues.length; j++) {
                                 ct.orgMeteringMonthlyValueLists.push({
                                     itemCode: data.items[i].itemCode,
@@ -127,7 +133,13 @@ angular.module('perf.controllers')
             $scope.main.loadingMainBody = true;
             if(angular.isDefined(sltYear)) {
                 ct.data.sltYear = sltYear;
-                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(ct.data.sltYear, ct.data.sltOrgId);
+                var params = {
+                    "urlPaths": {
+                        "orgCode":ct.data.sltOrgId
+                    },
+                    "year": ct.data.sltYear
+                }
+                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
                 promise.success(function (data) {
                     if(angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
@@ -135,10 +147,10 @@ angular.module('perf.controllers')
                         /* 월별 ng-repeat을 위한 객체 생성 */
                         ct.orgMeteringMonthlyValueLists = [];
                         for(var i=0; i<data.itemCount; i++){
-                            ct.orgMeteringValues = [data.items[i].m01, data.items[i].m02, data.items[i].m03
-                                                  , data.items[i].m04, data.items[i].m05, data.items[i].m06
-                                                  , data.items[i].m07, data.items[i].m08, data.items[i].m09
-                                                  , data.items[i].m10, data.items[i].m11, data.items[i].m12];
+                            ct.orgMeteringValues = [data.items[i].jan1, data.items[i].feb2, data.items[i].mar3
+                                                  , data.items[i].apr4, data.items[i].may5, data.items[i].jun6
+                                                  , data.items[i].jul7, data.items[i].aug8, data.items[i].sept9
+                                                  , data.items[i].oct10, data.items[i].nov11, data.items[i].dec12];
                             for(var j=0; j<ct.orgMeteringValues.length; j++) {
                                 ct.orgMeteringMonthlyValueLists.push({
                                     itemCode: data.items[i].itemCode,

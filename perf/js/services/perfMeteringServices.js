@@ -29,11 +29,8 @@ angular.module('perf.services')
         };
 
         /* 월별 미터링 리스트 BY ORG_ORGCODE */
-        perfMeteringService.listPerfMonthlyMeteringByOrgCode = function (year, orgCode) {
-            var param = {
-                "year" : year ? year : ""
-            };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/perf/metering/org/' + orgCode + '/monthly/total', 'GET', param));
+        perfMeteringService.listPerfMonthlyMeteringByOrgCode = function (params) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/perf/metering/org/{orgCode}/monthly/total', 'GET', params));
         };
 
         return perfMeteringService;
