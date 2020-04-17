@@ -45,7 +45,7 @@ angular.module('gpu.controllers')
     $scope.dialogOptions.title = "서비스 이름 수정";
     $scope.dialogOptions.okName 	= "수정";
     $scope.dialogOptions.closeName 	= "닫기";
-    $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + '/vmCatalog/temp/vmCatalogDeployRenamePopForm.html' + _VersionTail();
+    $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + '/vmCatalog/vmCatalogDeployRenamePopForm.html' + _VersionTail();
 
     // Dialog ok 버튼 클릭 시 액션 정의
     $scope.popDialogOk = function () {
