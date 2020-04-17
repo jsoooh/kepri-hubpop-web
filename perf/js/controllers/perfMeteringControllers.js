@@ -72,7 +72,13 @@ angular.module('perf.controllers')
                 ct.data.sltOrgId = data.orgId;
                 /* orgId(orgCode) 이용하여 월별 사용량 조회 */
                 console.log(ct.sltOrgId +", " +data.orgId);
-                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(ct.data.sltYear, ct.data.sltOrgId);
+                var params = {
+                    "urlPaths": {
+                        "orgCode":ct.data.sltOrgId
+                    },
+                    "year": ct.data.sltYear
+                }
+                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
                 promise.success(function (data) {
                     if(angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
