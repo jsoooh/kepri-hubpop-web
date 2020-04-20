@@ -952,10 +952,14 @@
                                     <td>{{ contents.quotaHistories.length - $index }}</td>
                                     <td class="text-left">{{ item.requestReason }}</td>
                                     <td class="text-left">
-                                        <li ng-repeat="detail in item.oldValueDetails | orderBy: 'orgQuotaItemCode'">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+                                        <ul>
+                                            <li ng-repeat="detail in item.oldValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+                                        </ul>
                                     </td>
                                     <td class="text-left">
-                                        <li ng-repeat="detail in item.changeValueDetails | orderBy: 'orgQuotaItemCode'">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+                                        <ul>
+                                            <li ng-repeat="detail in item.changeValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+                                        </ul>
                                     </td>
                                     <td>{{ item.createdId }}</td>
                                     <td>{{ item.createdDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>

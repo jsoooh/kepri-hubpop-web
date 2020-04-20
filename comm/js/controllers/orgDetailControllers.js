@@ -19,8 +19,9 @@ angular.module('portal.controllers')
             ct.sltInfoTab = sltInfoTab;
 
             if (sltInfoTab == 'resource') {
-                ct.listQuotaHistories();
-                ct.listOrgQuotaValues();
+                ct.listPaasQuotas();
+                //ct.listQuotaHistories();
+                //ct.listOrgQuotaValues();
             }
         };
 
@@ -1391,6 +1392,8 @@ angular.module('portal.controllers')
                 });
                 //이전값/변경값에 paas 항목 추가
                 setQuotaHistoriesPaaS();
+                //이전값/변경값에 같은 항목 체크
+                setQuotaHistoriesSameValueDetails();
             });
             promise.error(function (data) {
             });
@@ -1435,88 +1438,26 @@ angular.module('portal.controllers')
             });
         }
 
-        // 용량 조회 : 사용안함
-        /*ct.listOrgQuotas = function () {
-            var params = {
-                orgId : ct.selOrgProject.id
-            };
-
-            var promise = quotaService.listOrgProjectQuotas(params);
-            promise.success(function (data) {
-                ct.orgQuotas = data.items;
-
-                // 현재 사용하고 있는 용량 표시
-                for (var i = 0; i < ct.orgQuotas.length; i++) {
-                    if (ct.orgQuotas[i].name == ct.selOrgProject.quotaId.name) {
-                        ct.quotaHistory.quotaReq = ct.orgQuotas[i];
-                        break;
-                    }
-                }
+        //이전값/변경값에 같은 항목 체크
+        function setQuotaHistoriesSameValueDetails() {
+            angular.forEach(ct.quotaHistories, function(item) {
+                angular.forEach(item.oldValueDetails, function(detail) {
+                    detail.isSame = false;
+                });
+                angular.forEach(item.changeValueDetails, function(detail) {
+                    detail.isSame = false;
+                });
+                angular.forEach(item.oldValueDetails, function(detail) {
+                    angular.forEach(item.changeValueDetails, function(detail2) {
+                        if (detail.orgQuotaItemId == detail2.orgQuotaItemId && detail.value == detail2.value) {
+                            detail.isSame = true;
+                            detail2.isSame = true;
+                        }
+                    });
+                });
             });
-            promise.error(function (data) {
-                ct.orgQuotas = {};
-            });
-        };*/
-
-        // 용량 변경 : 사용안함
-        /*ct.updateQuota = function($event) {
-            var dialogOptions = {
-                title : '용량 변경 요청',
-                formName : 'projectDetailAsideQuotaReqForm',
-                dialogClassName : 'modal-dialog-projectDetailAsideQuotaReq',
-                templateUrl : _COMM_VIEWS_ + '/org/popOrgQuota.html' + _VersionTail()
-            };
-            common.showDialog($scope, $event, dialogOptions);
-
-            $scope.popDialogOk = function() {
-                ct.updateQuotaAction();
-            };
-
-            $scope.popCancel = function() {
-                $scope.dialogClose = true;
-                common.mdDialogCancel();
-            };
-
-            //ct.listOrgQuotas();
-        };*/
-
-        // 용량 변경 액션
-        /*ct.updateQuotaAction = function () {
-            if (ct.quotaHistory.quotaReq == undefined) {
-                common.showAlert('용량 변경 요청', '1. 변경 요청할 용량을 선택해주세요.');
-                return;
-            }
-            if (ct.quotaHistory.quotaReq.name == ct.selOrgProject.quotaId.name) {
-                common.showAlert('용량 변경 요청', ct.quotaHistory.quotaReq.name + ' 현재 사용하고 있는 용량과 동일합니다.');
-                return;
-            }
-            if (ct.quotaHistory.messageReq == null) {
-                common.showAlert('용량 변경 요청', '2. 변경 요청 사유를 입력해 주세요.');
-                return;
-            }
-
-            var params = {};
-            params.type = 'ORG';
-            params.org = {};
-            params.org.id = ct.selOrgProject.id;
-            params.quotaReq = {};
-            params.quotaReq.id = ct.quotaHistory.quotaReq.id;
-            params.messageReq = ct.quotaHistory.messageReq;
-
-            $scope.main.loadingMain = true;
-            var promise = quotaService.requestQuota(params);
-            promise.success(function (data) {
-                $scope.main.loadingMain = false;
-                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
-                common.mdDialogHide();
-                ct.listQuotaHistories();
-                ct.listOrgQuotas();
-            });
-            promise.error(function (data) {
-                $scope.main.loadingMain = false;
-                common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
-            });
-        };*/
+            //console.log("ct.quotaHistories : ", ct.quotaHistories);
+        }
 
         /*책임자 변경 화면 오픈*/
         ct.changeManagerForm = function ($event) {
@@ -1545,7 +1486,8 @@ angular.module('portal.controllers')
             $scope.dialogOptions = {
                 controller: "commRequestQuotaFormCtrl",
                 callBackFunction: ct.listQuotaHistories,
-                selOrgProject : ct.selOrgProject
+                selOrgProject : ct.selOrgProject,
+                paasQuotas : ct.paasQuotas
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -1670,7 +1612,9 @@ angular.module('portal.controllers')
                 ct.paasQuotas = [];
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                //$scope.main.loadingMainBody = false;
+                ct.listQuotaHistories();
+                ct.listOrgQuotaValues();
             });
         };
 
@@ -1700,7 +1644,6 @@ angular.module('portal.controllers')
         ct.pageLoadData = function () {
             ct.getOrgProject();
             ct.listOrgUsers();
-            ct.listPaasQuotas();
         };
 
         ct.pageLoadData();
@@ -2219,6 +2162,7 @@ angular.module('portal.controllers')
         pop.data = {};
         pop.formName = "requestQuotaForm";
         pop.selOrgProject = angular.copy($scope.dialogOptions.selOrgProject);
+        pop.paasQuotas = angular.copy($scope.dialogOptions.paasQuotas);
         $scope.dialogOptions.formName = pop.formName;
         $scope.dialogOptions.validDisabled = true;
         $scope.dialogOptions.dialogClassName = "modal-lg";
@@ -2304,24 +2248,6 @@ angular.module('portal.controllers')
             });
         };
 
-        /*paas 프로젝트 쿼터 조회*/
-        pop.fn.listPaasQuotas = function (currentPage) {
-            $scope.main.loadingMainBody = true;
-            if (!currentPage) {
-                currentPage = 1;
-            }
-            var returnPromise = quotaService.listPaasQuotas(10, currentPage, null);
-            returnPromise.success(function (data) {
-                pop.paasQuotas = data.content;
-            });
-            returnPromise.error(function (data) {
-                pop.paasQuotas = [];
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-            });
-        };
-
         /*상세쿼타조정 조회*/
         pop.fn.listQuotaItems = function() {
             var params = {
@@ -2337,6 +2263,9 @@ angular.module('portal.controllers')
             returnPromise.error(function (data) {
                 pop.quotaItems = [];
                 common.showAlert("message", data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                pop.fn.listQuotaValues();
             });
         };
 
@@ -2364,9 +2293,8 @@ angular.module('portal.controllers')
             });
         };
 
-        pop.fn.listPaasQuotas();
         pop.fn.listQuotaItems();
-        pop.fn.listQuotaValues();
+        //pop.fn.listQuotaValues();
 
     })
     .controller('commChangeRoleFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
