@@ -2198,19 +2198,19 @@ angular.module('portal.controllers')
             });
             params.orgQuotaValues = orgQuotaValues;
             if (!params.requestReason) {
-                common.showAlertSuccess("변경요청사유는 필수사항입니다.");
+                common.showAlertWarning("변경요청사유는 필수사항입니다.");
                 $scope.actionBtnHied = false;
                 return;
             }
             if (!params.paasQuotaGuid && params.orgQuotaValues.length == 0) {
-                common.showAlertSuccess("상세 쿼터 설정은 필수사항입니다.");
+                common.showAlertWarning("상세 쿼터 설정은 필수사항입니다.");
                 $scope.actionBtnHied = false;
                 return;
             }
             //변경사항이 없는지 확인
             if (pop.selOrgProject.paasQuotaGuid == params.paasQuotaGuid) {
-                if (!checkChangeQuota(params.paasQuotaGuid)) {
-                    common.showAlertSuccess("쿼터 변경사항이 없습니다.");
+                if (!checkChangeQuota()) {
+                    common.showAlertWarning("쿼터 변경사항이 없습니다.");
                     $scope.actionBtnHied = false;
                     return;
                 }
@@ -2236,7 +2236,7 @@ angular.module('portal.controllers')
         };
 
         pop.fn.okFunction = function(params) {
-            console.log("pop.fn.okFunction params : ", params);
+            //console.log("pop.fn.okFunction params : ", params);
             var returnPromise = quotaService.quotaHistoryCreate(params);
             returnPromise.success(function (data, status, headers) {
                 common.showAlertSuccess("프로젝트 쿼터변경요청", "프로젝트 쿼터변경요청을 완료했습니다.");
