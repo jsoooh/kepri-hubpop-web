@@ -48,12 +48,11 @@
 						<span ng-switch-when="CNT">({{ orgMeteringMonthlyList.itemUnit }})</span>
 						<span ng-switch-when="NUM">({{ orgMeteringMonthlyList.itemUnit }})</span>
 					</td>
-					<td ng-repeat="(key, orgMeteringMonthlyValueList) in contents.orgMeteringMonthlyValueLists | filter:{ itemCode: orgMeteringMonthlyList.itemCode }"
-						ng-switch="orgMeteringMonthlyValueList.itemUnit">
-						<span ng-hide="orgMeteringMonthlyValueList.meteringValue == 0" ng-switch-when="MB">{{ orgMeteringMonthlyValueList.meteringValue | displayVolume:'MB'}}</span>
-						<span ng-hide="orgMeteringMonthlyValueList.meteringValue == 0" ng-switch-when="GB">{{ orgMeteringMonthlyValueList.meteringValue | displayVolume:'GB'}}</span>
-						<span ng-hide="orgMeteringMonthlyValueList.meteringValue == 0" ng-switch-default="">{{ orgMeteringMonthlyValueList.meteringValue | number }}</span>
-						<span ng-show="orgMeteringMonthlyValueList.meteringValue == 0">-</span>
+					<td ng-repeat="meteringMonth in contents.meteringMonths" ng-switch="orgMeteringMonthlyList.itemUnit">
+						<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="MB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'MB'}}</span>
+						<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="GB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'GB'}}</span>
+						<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-default="">{{ orgMeteringMonthlyList['mv' + meteringMonth] | number }}</span>
+						<span ng-show="orgMeteringMonthlyList['mv' + meteringMonth] == 0">-</span>
 					</td>
 					<td ng-switch="orgMeteringMonthlyList.itemUnit">
 						<span ng-switch-when="MB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'MB'}}</span>

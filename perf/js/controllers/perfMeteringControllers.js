@@ -18,8 +18,7 @@ angular.module('perf.controllers')
         ct.meteringYears = [];
         ct.orgMeteringMonthlyLists = [];
 
-        ct.orgMeteringValues = [];
-        ct.orgMeteringMonthlyValueLists = [];
+        ct.meteringMonths = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
         /* 미터링 서비스 그룹 리스트 */
         ct.fn.listAllMeteringGroupItems = function () {
@@ -96,19 +95,6 @@ angular.module('perf.controllers')
                             } else {
                                 itemCnt++;
                             }
-
-                            /* 월별 ng-repeat을 위한 객체 생성 */
-                            ct.orgMeteringValues = [data.items[i].jan1, data.items[i].feb2, data.items[i].mar3
-                                                  , data.items[i].apr4, data.items[i].may5, data.items[i].jun6
-                                                  , data.items[i].jul7, data.items[i].aug8, data.items[i].sept9
-                                                  , data.items[i].oct10, data.items[i].nov11, data.items[i].dec12];
-                            for(var j=0; j<ct.orgMeteringValues.length; j++) {
-                                ct.orgMeteringMonthlyValueLists.push({
-                                    itemCode: data.items[i].itemCode,
-                                    itemUnit: data.items[i].itemUnit,
-                                    meteringValue: ct.orgMeteringValues[j]
-                                });
-                            }
                         }
                         $scope.main.loadingMainBody = false;
                     } else {
@@ -143,22 +129,6 @@ angular.module('perf.controllers')
                 promise.success(function (data) {
                     if(angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
-
-                        /* 월별 ng-repeat을 위한 객체 생성 */
-                        ct.orgMeteringMonthlyValueLists = [];
-                        for(var i=0; i<data.itemCount; i++){
-                            ct.orgMeteringValues = [data.items[i].jan1, data.items[i].feb2, data.items[i].mar3
-                                                  , data.items[i].apr4, data.items[i].may5, data.items[i].jun6
-                                                  , data.items[i].jul7, data.items[i].aug8, data.items[i].sept9
-                                                  , data.items[i].oct10, data.items[i].nov11, data.items[i].dec12];
-                            for(var j=0; j<ct.orgMeteringValues.length; j++) {
-                                ct.orgMeteringMonthlyValueLists.push({
-                                    itemCode: data.items[i].itemCode,
-                                    itemUnit: data.items[i].itemUnit,
-                                    meteringValue: ct.orgMeteringValues[j]
-                                });
-                            }
-                        }
                     } else {
                         ct.orgMeteringMonthlyLists = [];
                     }

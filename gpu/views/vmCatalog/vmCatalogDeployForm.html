@@ -1,4 +1,344 @@
-<p>서비스 만들기 페이지</p>
-<br>
-<br>
-<p><a href="#/gpu/vmCatalog/list"> << 카탈로그 목록으로 이동 </a></p>
+<div class="message_area">
+	<div class="msg_bg"></div>
+	<div class="msg_txt"><span>카탈로그의 ‘만들기’를 통해 VM 서비스 카탈로그에 있는 서비스를 만들고 사용할 수 있습니다.</span></div>
+</div>
+
+<div class="panel_area">
+	<ul class="pn_list_style">
+		<li>
+			<div class="panel_box pn_l">
+				<div class="pn_head">
+					<h4 class="pnh_tit">MariaDB 서비스 만들기</h4>
+				</div>
+				<div class="pn_body">
+					<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+					<ul class="form_list">
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">서비스 이름</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+							</div>
+							<input type="text" class="form-control" maxlength="50" placeholder="서비스 이름을 입력하세요." >
+						</li>
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">포트</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+							</div>
+							<input type="text" class="form-control" maxlength="50" placeholder="서비스 이름을 입력하세요." >
+						</li>
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">root 비밀번호</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+							</div>
+							<input type="password" class="form-control" maxlength="50" placeholder="비밀번호를 입력하세요." >
+						</li>
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">root 비밀번호 확인</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+							</div>
+							<input type="password" class="form-control" maxlength="50" placeholder="비밀번호를 확인하세요." >
+						</li>
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">사용자 계정 및 DB 생성</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 대상 서버 선택 (연결서버 유형)<br></button> 1. 서버: 만들어져 있는 서버에 부하분산 설정<br/>2. 이미지: 사용자가 생성한 백업이미지로 1) 서버를 생성하고 2) 부하분산 설정'"><span class="ico_info"></span></button></div>
+							</div>
+							<div class="pl10 mt10">
+								<span class="pnb_stit">- 생성여부 선택  : </span>
+								<div class="radio radio-inline">
+									<input type="radio" name="connType" id="app-radio1-1" value="server" ng-init="contents.data.iaasLbPort.connType='server'" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+									<label for="app-radio1-1" class="label">예</label>
+								</div>
+								<div class="radio radio-inline">
+									<input type="radio" name="connType" id="app-radio1-2" value="image" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+									<label for="app-radio1-2" class="label">아니오</label>
+								</div>
+							</div>
+							<div class="tbw type1 mt20">
+								<table class="table">
+									<colgroup>
+										<col style="width:20%;">
+										<col style="width:">
+										<col style="width:20%;">
+										<col style="width:;">
+									</colgroup>
+									<tbody>
+										<tr>
+											<th><i class="i_star"></i> 계정명</th>
+											<td><input type="text" class="form-control" maxlength="50" placeholder="계정명" ></td>
+											<th><i class="i_star"></i> DB명</th>
+											<td><input type="text" class="form-control" maxlength="50" placeholder="DB명" ></td>
+										</tr>
+										<tr>
+											<th><i class="i_star"></i> 계정 비밀번호</th>
+											<td><input type="password" class="form-control" maxlength="50" placeholder="비밀번호를 입력하세요." ></td>
+											<th><i class="i_star"></i> 계정 비밀번호 확인</th>
+											<td><input type="password" class="form-control" maxlength="50" placeholder="비밀번호를 확인하세요." ></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</li>
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">클러스터 배포</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 대상 서버 선택 (연결서버 유형)<br></button> 1. 서버: 만들어져 있는 서버에 부하분산 설정<br/>2. 이미지: 사용자가 생성한 백업이미지로 1) 서버를 생성하고 2) 부하분산 설정'"><span class="ico_info"></span></button></div>
+							</div>
+							<div class="pl10 mt10">
+								<span class="pnb_stit">- 배포 여부 선택  : </span>
+								<div class="radio radio-inline">
+									<input type="radio" name="connType" id="app-radio1-1" value="server" ng-init="contents.data.iaasLbPort.connType='server'" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+									<label for="app-radio1-1" class="label">예</label>
+								</div>
+								<div class="radio radio-inline">
+									<input type="radio" name="connType" id="app-radio1-2" value="image" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+									<label for="app-radio1-2" class="label">아니오</label>
+								</div>
+							</div>
+							<div class="tbw type1 mt20">
+								<table class="table">
+									<colgroup>
+										<col style="width:20%;">
+										<col style="width:">
+										<col style="width:20%;">
+										<col style="width:;">
+									</colgroup>
+									<tbody>
+										<tr>
+											<th><i class="i_star"></i> 서버 수</th>
+											<td><input type="text" class="form-control" maxlength="50" placeholder="3" disabled="disabled"></td>
+											<th><i class="i_star"></i> 접속포트(LB)</th>
+											<td><input type="text" class="form-control" maxlength="50" placeholder="3306" ></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</li>
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
+							</div>
+							
+							<div class="tbl type1">
+								<table class="table">
+									<colgroup>
+										<col style="width:10%;">
+										<col style="width:15%;">
+										<col style="width:20%;">
+										<col style="width:20%;">
+										<col style="width:20%;">
+									</colgroup>
+									<thead>
+										<tr>
+											<th scope="col"></th>
+											<th scope="col">종류</th>
+											<th scope="col">vCPU</th>
+											<th scope="col">메모리</th>
+											<th scope="col">OS디스크</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<div class="radio radio-only" >
+													<input type="radio"  name="spec_radio"  ng-model="contents.specUuid"  id="spec_radio_{{key}}"  value="{{spec.uuid}}" ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)"><label for="spec_radio_{{key}}"></label>
+												</div>
+											</td>
+											<td>m1.small</td>
+											<td>1 Core</td>
+											<td>2GB</td>
+											<td>10GB</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div ng-if="contents.isMinSpecDisabled && !contents.isMaxSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
+							<div class="cnt_msg_box msg-warnning">프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
+							<div ng-if="contents.isMinSpecDisabled && contents.isMaxSpecDisabled" class="cnt_msg_box msg-warnning">선택한 이미지 보다 큰 사양만 선택 가능하고, 프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
+						</li>
+						<li>
+							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">데이터 디스크 사용</span>
+								<div class="t_tip_bx">
+									<button type="button" tooltip-placement="top" uib-tooltip-html="'추가하는 디스크의 크기(Size)를 설정할 수 있습니다. 프로젝트에 할당된 디스크 쿼터(최대 크기) 내에서 자유롭게 설정이 가능합니다.'"><span class="ico_info"></span></button>
+									<img ng-if="!contents.isTenantResourceLoad" src="images/loading_sm.gif">
+								</div>
+							</div>
+							<div class="pl10 mt10">
+								<span class="pnb_stit">- 사용 여부 선택  : </span>
+								<div class="radio radio-inline">
+									<input type="radio" name="connType" id="app-radio1-1" value="server" ng-init="contents.data.iaasLbPort.connType='server'" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+									<label for="app-radio1-1" class="label">예</label>
+								</div>
+								<div class="radio radio-inline">
+									<input type="radio" name="connType" id="app-radio1-2" value="image" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+									<label for="app-radio1-2" class="label">아니오</label>
+								</div>
+							</div>
+							<div class="disk_area mt20">
+								<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil | displayVolume:'GB'}}</div>
+								<p>마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
+								<div class="disk_box">
+									<div class="rangeWrap type2">
+										<div class="range_box rb_l">
+											<rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
+										</div>
+										<div class="range_box rb_r">
+											<div class="range-text">
+												<input type="text" class="form-control" ng-model="contents.volumeSize" name="volumeSize" maxlength="4" only-digits style="width:60px; display: inline-block;">
+												<span class="app-tit">GB</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="cnt_msg_box msg-info">디스크 크기는 최대 2TB까지 설정이 가능합니다.</div>
+						</li>
+					</ul>
+				</div>
+				<div class="pn_footer">
+					<div class="btn-btm mgt0">
+						<button type="button" name="button" class="btn btn-color1 btn-md">서비스 만들기</button>
+						<button type="button" name="button" class="btn btn-color2 btn-md"><a href="#/gpu/vmCatalog/list">목록</a></button><!-- :::: 링크 ng-click으로 변경 시 a태그 삭제필요 :::: -->
+					</div>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="panel_box pn_r">
+				<div class="pn_head">
+					<h4 class="pnh_tit ico01">서비스 기본정보</h4>
+				</div>
+				<div class="pn_body">
+					<div class="s_cont_box">
+						<ul>
+							<li>
+								<span class="s_tit">서비스 이름</span>
+								<span class="s_txt">MyDB01</span>
+							</li>
+							<li>
+								<span class="s_tit">카탈로그 이름</span>
+								<span class="s_txt">MariaDB</span>
+							</li>
+							<li>
+								<span class="s_tit">버전</span>
+								<span class="s_txt">10.1.13</span>
+							</li>
+							<li>
+								<span class="s_tit">서버 수</span>
+								<span class="s_txt">3</span>
+							</li>
+							<li>
+								<span class="s_tit">서버 OS</span>
+								<span class="s_txt">kepri-mariadb-10.1.raw</span>
+							</li>
+							<li>
+								<span class="s_tit">서버 사양</span>
+								<span class="s_txt" >m1.small</span>
+								<div class="s_inner_cont">
+									<div class="innr_tbl">
+										<table>
+											<colgroup>
+												<col width="30" />
+												<col width="30" />
+												<col width="30" />
+											</colgroup>
+											<thead>
+												<tr>
+													<th>vCPU</th>
+													<th>메모리</th>
+													<th>디스크</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>3 X 1Core</td>
+													<td>3 X 2GB</td>
+													<td>3 X 20GB</td>
+												</tr>
+											</tbody>
+										</table>
+										<span class="info_txt">*  ‘디스크’ 크기는 OS 설치에 필요한 디스크 공간을 포함한 수치입니다.</span>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="pn-Toggle brd0">
+					<div class="pn_head brdt">
+						<h4 class="pnh_tit ico02">추가 서비스</h4>
+						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+					</div>
+					<div class="pn_body">
+						<div class="s_cont_box">
+							<ul>
+								<li>
+									<span class="s_tit">크기</span>
+									<span class="s_txt">3 X 20GB</span>
+								</li>
+								<li>
+									<span class="s_tit">카탈로그 이름</span>
+									<span class="s_txt">MariaDB</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="pn-Toggle">
+					<div class="pn_head brdt">
+						<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
+						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+					</div>
+					<div class="pn_body">
+						<div class="s_cont_box">
+							<div class="s_progress_box wd_tit">
+								<ul>
+									<li>
+										<span class="tit_txt">vcpu</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">({{(contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)}} 개 / {{contents.tenantResource.maxResource.cores}} 개)</span>
+									</li>
+									<li>
+										<span class="tit_txt">메모리</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">({{(contents.tenantResource.usedResource.ramSize + contents.data.spec.ram) | displayVolume:'MB'}} / {{contents.tenantResource.maxResource.ramSize | displayVolume:'MB'}})</span>
+									</li>
+									<li>
+										<span class="tit_txt">디스크</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+											  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">({{(contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB'}})</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
