@@ -619,7 +619,6 @@ angular.module('portal.controllers')
         //개인 프로젝트 설정 건수 조회
         ct.getPersonalProjectCount();
     })
-
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);
         $scope.actionBtnHied = false;
