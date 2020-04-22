@@ -522,13 +522,13 @@ angular.module('portal.controllers')
             var params = {};
             params['orgId'] = ct.orgData.orgId.trim();
             params['orgName'] = ct.orgData.orgName.trim();
-            params['personal'] = ct.orgData.personal=="personal" ? true : false;
+            params['personal'] = ct.orgData.personal == "personal" ? true : false;
             params['startDate'] = ct.orgData.startDate;
             params['endDate'] = ct.orgData.endDate;
-            params['cost'] = ct.orgData.cost;
-            params['description'] = ct.orgData.description;
+            params['cost'] = !ct.orgData.cost ? 0 : ct.orgData.cost;
+            params['description'] = !ct.orgData.description ? "" : ct.orgData.description;
             params['orgQuotaPlanId'] = ct.orgData.orgQuotas.id;
-            params['paasQuotaGuid'] = ct.orgData.paasQuotaGuid;
+            params['paasQuotaGuid'] = !ct.orgData.paasQuotaGuid ? "" : ct.orgData.paasQuotaGuid;
             var quotasList = [];
             for (var i=0; i<ct.quotaItem.length; i++) {
                 if (ct.quotaItem[i].value) {
