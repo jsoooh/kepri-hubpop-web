@@ -5,7 +5,6 @@ angular.module('gpu.services')
 
         var vmCatalogService = {};
 
-        vmCatalogService = {};
         vmCatalogService.listAllVmCatalog = function(param) {
             return common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/vmCatalog/all', 'GET', param, 'application/x-www-form-urlencoded');
         };
