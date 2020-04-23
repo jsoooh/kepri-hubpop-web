@@ -39,27 +39,34 @@
 						<th ng-repeat="idx in [].constructor(12) track by $index">{{ $index + 1 }}월</th>
 					</tr>
 				</thead>
-				<tbody class="tbody_group" ng-repeat="meteringItemGroup in contents.meteringItemGroups">
-				<tr>
-					<th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
-				</tr>
-				<tr ng-repeat="orgMeteringMonthlyList in contents.orgMeteringMonthlyLists | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }">
-					<td ng-switch="orgMeteringMonthlyList.itemUnit">{{ orgMeteringMonthlyList.itemName }}
-						<span ng-switch-when="CNT">({{ orgMeteringMonthlyList.itemUnit }})</span>
-						<span ng-switch-when="NUM">({{ orgMeteringMonthlyList.itemUnit }})</span>
-					</td>
-					<td ng-repeat="meteringMonth in contents.meteringMonths" ng-switch="orgMeteringMonthlyList.itemUnit">
-						<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="MB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'MB'}}</span>
-						<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="GB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'GB'}}</span>
-						<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-default="">{{ orgMeteringMonthlyList['mv' + meteringMonth] | number }}</span>
-						<span ng-show="orgMeteringMonthlyList['mv' + meteringMonth] == 0">-</span>
-					</td>
-					<td ng-switch="orgMeteringMonthlyList.itemUnit">
-						<span ng-switch-when="MB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'MB'}}</span>
-						<span ng-switch-when="GB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'GB'}}</span>
-						<span ng-switch-default="">{{ orgMeteringMonthlyList.totalMeteringValue | number }}</span>
-					</td>
-				</tr>
+				<tbody class="tbody_group"
+					   ng-if="!(contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists)" class="ng-scope"
+					   ng-repeat="meteringItemGroup in contents.meteringItemGroups">
+					<tr>
+						<th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
+					</tr>
+					<tr ng-repeat="orgMeteringMonthlyList in contents.orgMeteringMonthlyLists | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }">
+						<td ng-switch="orgMeteringMonthlyList.itemUnit">{{ orgMeteringMonthlyList.itemName }}
+							<span ng-switch-when="CNT">({{ orgMeteringMonthlyList.itemUnit }})</span>
+							<span ng-switch-when="NUM">({{ orgMeteringMonthlyList.itemUnit }})</span>
+						</td>
+						<td ng-repeat="meteringMonth in contents.meteringMonths" ng-switch="orgMeteringMonthlyList.itemUnit">
+							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="MB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'MB'}}</span>
+							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="GB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'GB'}}</span>
+							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-default="">{{ orgMeteringMonthlyList['mv' + meteringMonth] | number }}</span>
+							<span ng-show="orgMeteringMonthlyList['mv' + meteringMonth] == 0">-</span>
+						</td>
+						<td ng-switch="orgMeteringMonthlyList.itemUnit">
+							<span ng-switch-when="MB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'MB'}}</span>
+							<span ng-switch-when="GB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'GB'}}</span>
+							<span ng-switch-default="">{{ orgMeteringMonthlyList.totalMeteringValue | number }}</span>
+						</td>
+					</tr>
+				</tbody>
+				<tbody ng-if="contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists" class="ng-scope">
+					<tr>
+						<td colspan="15" class="center ng-binding">목록이 존재하지 않습니다.</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
