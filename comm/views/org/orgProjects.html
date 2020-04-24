@@ -180,7 +180,7 @@
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
 								<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
-								<li><a href="" title="사용자변경">사용자변경</a></li>
+								<li><a href="" title="사용자변경" ng-click="contents.changeOrgUser($event, org);">사용자변경</a></li>
 								<!-- 선택 된 class="active" 추가 -->
 								<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
 								<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
@@ -243,7 +243,7 @@
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
 							<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
-							<li><a href="" title="사용자변경">사용자변경</a></li>
+							<li><a href="" title="사용자변경" ng-click="contents.changeOrgUser(org);">사용자변경</a></li>
 							<!-- 선택 된 class="active" 추가 -->
 							<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
 							<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
