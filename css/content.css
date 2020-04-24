@@ -3478,3 +3478,50 @@ a.ext_link:hover {text-decoration:underline;}
 .tbl.type1 td .renameWrap .sdBtnWrap {position:absolute; top:1px; right:0;}
 .tbl.type1 td .renameWrap .btn-ico-saveName-s {padding:7px 8px;}
 .tbl.type1 td .renameWrap .btn-ico-delName-s {padding:9px 10px;}
+
+
+/*--- GPU가상화 > vm서비스 카탈로그 > 서비스 목록 > 서비스 상세 ---*/
+/* 카탈로그용 헤더*/
+.cBox.ctlog-info .cBox-hd {height:auto;}
+.cBox.ctlog-info .cBox-hd .dropdown {position:absolute; top:35px; right:35px;}
+.cBox.ctlog-info  h4.c-tit {line-height:24px}
+.cBox.ctlog-info .cBox-hd .c-tit {padding:50px 0 50px 160px;}
+.cBox.ctlog-info .cBox-hd .c-tit .logoBox {position:absolute; top:35px; left:0; z-index:1; display:inline-block; width:140px; height:140px; border-radius:50%; background:#f7f7f7; border:0; padding:15px;}
+.cBox.ctlog-info .cBox-hd .c-tit .logoBox img {max-width:100%; width:auto; height:auto; vertical-align:middle;}
+.cBox.ctlog-info .cBox-hd .c-tit .txt_tit {font-size:30px; font-weight:700; line-height:30px;}
+.cBox.ctlog-info .cBox-hd .c-tit .txt_s {font-size:16px; line-height:16px; padding:30px 0 0 0;}
+.cBox.ctlog-info .cBox-hd .c-tit .txt_s span {display:inline-block; font-weight:400; color:#888; margin-left:8px;}
+.cBox.ctlog-info .cBox-hd .c-tit .txt_s strong:before {display:inline-block; content:'ㆍ' ;}
+.cBox.ctlog-info .cBox-hd .c-tit .txt_description {display:inline-block; font-size:18px; font-weight:400; color:#333; line-height:23px; white-space:normal; word-break:break-all; padding:15px 35px 0 0;}
+.cBox.ctlog-info .cBox-hd .c-tit .txt_description:before {display:inline-block; content:'ㆍ' ;}
+
+/*접속정보 */
+.cBox .ctlog_cntWrap {display:table; table-layout:fixed; width:100%; padding:40px 50px;}
+.cBox .ctlog_cntWrap .ctlog-cnt {display:table-cell; box-sizing:border-box; width:50%;}
+.cBox .ctlog_cntWrap .ctlog-cnt h5 {position:relative; display:block; font-size:20px; font-weight:700; line-height:20px; padding:13px 0 0 0;}
+.cBox .ctlog_cntWrap .ctlog-cnt h5:before {position:absolute; top:0; left:0; display:inline-block; content:''; width:30px; height:2px; background:#1657da;}
+.cBox .ctlog_cntWrap .ctlog-cnt > ul > li .tit {display:inline-block; font-size:18px; font-weight:500;}
+.cBox .ctlog_cntWrap .ctlog-cnt > ul > li .txt {display:inline-block; font-size:18px; color:#888;}
+.cBox .ctlog_cntWrap .ctlog-cnt > ul > li .tit:before {display:inline-block; content:'ㆍ' ;}
+.cBox .ctlog_cntWrap .ctlog-cnt > ul > li .txt .point_txt {display:inline-block; color:#fff; border-radius:2px; background:#44a3bd; padding:5px 10px;}
+.cBox .ctlog_cntWrap .ctlog-cnt > ul > li .tit {width:140px;}
+.cBox .ctlog_cntWrap .ctlog-cnt:last-child > ul > li .tit {width:180px;}
+.cBox.ctlog-info .ctlog_cntWrap .ctlog-cnt > ul {padding-top:20px;}
+.cBox.ctlog-info .ctlog_cntWrap .ctlog-cnt:first-child > ul {float:left; width:50%;}
+.cBox.ctlog-info .ctlog_cntWrap .ctlog-cnt:first-child > ul > li .tit {width:140px;}
+.cBox.ctlog-info .ctlog_cntWrap .ctlog-cnt:last-child > ul > li .tit {width:auto;}
+
+/*생성된 서버*/
+.ul-panel.ctlog-panel > li {width:30.8%; margin-left:2.5%;} 
+.ul-panel.ctlog-panel > li .panel.type5 .panel_head {min-height:80px;} 
+.ul-panel.ctlog-panel > li .panel.type5 .panel_body {height:auto;} 
+.ul-panel.ctlog-panel > li .panel.type5 {height:270px;} 
+.ul-panel.ctlog-panel .ctlog_cntWrap {display:table; table-layout:fixed; width:100%; padding:30px;}
+.ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt {display:table-cell; box-sizing:border-box; vertical-align:top;}
+.ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt:first-child {width:140px;}
+.ul-panel.ctlog-panel .ctlog_cntWrap .logoBox {width:120px;}
+.ul-panel.ctlog-panel .ctlog_cntWrap .logoBox img {max-width:100%; height:auto; vertical-align:middle;}
+.ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt > ul > li {height:28px; padding:10px 0;}
+.ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt > ul > li .tit {display:inline-block; width:140px; font-size:16px; font-weight:500;}
+.ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt > ul > li .txt {display:inline-block; font-size:16px; color:#888;}
+.ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt > ul > li .tit:before {display:inline-block; content:'ㆍ' ;}
