@@ -104,6 +104,13 @@ angular.module('portal.controllers')
             $scope.actionLoading = true; // action loading
         };
 
+        /* 20.04.24 - 프로젝트 목록 : 우측 메뉴 기능 by ksw */
+        ct.changeOrgUser = function (org) {
+            /* 사용자 변경을 선택해서 Detail로 넘어가는 경우에 true로 변경 */
+            orgService.changeUser = true;
+            $location.path('/comm/projects/projectDetail/' + org.id);
+        };
+
         /* 2020.03.24 - 사용자 탈퇴 추가 by ksw */
         ct.withdrawOrgProjectUser = function (org) {
             var showConfirm = common.showConfirm($translate.instant('label.del'), org.orgName + ' ' + $translate.instant('message.mq_delete_account'));
