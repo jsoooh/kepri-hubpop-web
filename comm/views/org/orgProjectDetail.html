@@ -843,15 +843,13 @@
 												<div class="tbl_cont">
 													<table class="table">
 														<colgroup>
-															<col style="width:65%;">
-															<col style="width:*;">
-                                                            <col style="width:15px;">
+															<col style="width:;">
+															<col style="width:;">
 														</colgroup>
 														<tbody>
 															<tr ng-repeat="quotaValue in contents.orgQuotaValues | filter:{ orgQuotaItemGroupCode: itemGroup.code }">
-																<th><em>{{ quotaValue.orgQuotaItem.name }}</em></th>
-																<td>{{ quotaValue.value }}</td>
-                                                                <td>{{ quotaValue.orgQuotaItem.unit }}</td>
+																<th>{{ quotaValue.orgQuotaItem.name }}</th>
+																<td>{{ quotaValue.value }} {{ quotaValue.orgQuotaItem.unit }}</td>
 															</tr>
 														</tbody>
 													</table>
