@@ -1,20 +1,28 @@
+<!-- 목록 이미지형/리스트형 선택 버튼 -->
+<div class="btnArea text-right">
+	<!-- 선택 된 class="on" 추가 -->
+	<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
+	<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
+</div>
+<!-- //목록 이미지형/리스트형 선택 버튼 -->
+
 <!-- 프로젝트 정보 -->
-	<div class="cBox type0 projt-mana">
-		<div class="pull-left">
-			<h4 class="c-tit">전체 서비스 <em class="point1">({{contents.serviceInstances.length}})</em></h4>
-		</div>
-		<div class="pull-right">
-			<!-- 검색 -->
-			<div class="searchBox type2">
-				<div class="form-group">
-					<input type="text" placeholder="서비스 검색" style="width:300px;" ng-model="contents.schFilterText">
-				</div>
-				<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.schFilterText = ''"><span class="ico">검색</span></button>
-			</div>
-			<!-- //검색 -->
-		</div>
+<div class="cBox type0 projt-mana mt30">
+	<div class="pull-left">
+		<h4 class="c-tit">전체 서비스 <em class="point1">({{contents.serviceInstances.length}})</em></h4>
 	</div>
-	<!-- //프로젝트 정보 -->
+	<div class="pull-right">
+		<!-- 검색 -->
+		<div class="searchBox type2">
+			<div class="form-group">
+				<input type="text" placeholder="서비스 검색" style="width:300px;" ng-model="contents.schFilterText">
+			</div>
+			<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.schFilterText = ''"><span class="ico">검색</span></button>
+		</div>
+		<!-- //검색 -->
+	</div>
+</div>
+<!-- //프로젝트 정보 -->
 
 <!-- 버튼영역 -->
 <div class="btnWrap">
@@ -23,8 +31,61 @@
     </button>
 </div>
 <!-- //버튼영역 -->
+
+<!-- 프로젝트 리스트(테이블형) -->
+<div class="tbl type1" ng-if="(contents.serviceInstances | filter:{ name: contents.schFilterText }).length > 0 && contents.listType == 'list'">
+	<table class="table">
+		<colgroup>
+			<col style="width: 30%;">
+			<col style="width: 10%;">
+			<col style="width: 10%;">
+			<col style="width: 10%;">
+			<col style="width: 8%;">
+		</colgroup>
+		<thead>
+			<tr>
+				<th scope="col">서비스 이름</th>
+				<th scope="col">서비스 S/W</th>
+				<th scope="col">연결앱수</th>
+				<th scope="col">서비스플랜</th>
+				<th scope="col">관리</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="(key, serviceItem) in contents.serviceInstances | filter:{name : contents.schFilterText}">
+				<td>
+					<a href=""  id="txt-{{serviceItem.name}}">{{ serviceItem.name }}</a>
+					<div id="renameService-{{serviceItem.name}}" class="renameWrap" style="display:none;">
+						<input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
+						<div class="sdBtnWrap">
+							<button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
+							<button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
+						</div>
+					</div>
+				</td>
+				<td>{{serviceItem.serviceLabel}}</td>
+				<td>{{ serviceItem.serviceBindings.length }}</td>
+				<td>{{ serviceItem.servicePlan.name }}</td>
+				<td>
+					<div class="dropdown btn-option">
+						<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+							<span class="ico">실행 설정</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+							<li><a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a></li>
+							<li class="renameApp2_{{serviceItem.name}}"><a href="javascript:void(0);" ng-click="contents.renameInst(serviceItem.name)">서비스 이름변경</a></li>
+							<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteServiceInstance(serviceItem.guid, serviceItem.name);">서비스 삭제</a></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!-- 프로젝트 리스트(테이블형) -->
+	
 <!-- panel area-->
-<div ng-if="(contents.serviceInstances | filter:{ name: contents.schFilterText }).length > 0">
+<div ng-if="(contents.serviceInstances | filter:{ name: contents.schFilterText }).length > 0 && contents.listType == 'image'">
     <ul class="ul-panel">
         <li ng-repeat="(key, serviceItem) in contents.serviceInstances | filter:{name : contents.schFilterText}">
             <!-- panel -->

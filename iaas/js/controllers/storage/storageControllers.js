@@ -10,6 +10,7 @@ angular.module('iaas.controllers')
         ct.roles = [];
         ct.storageMainList = [];
         ct.typeState = true;
+        ct.listType = "image";          //리스트 타입
 
         ct.fn.formOpen = function($event, state, data){
         	ct.formType = state;

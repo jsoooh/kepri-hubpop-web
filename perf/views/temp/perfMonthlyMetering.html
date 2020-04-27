@@ -1,22 +1,9 @@
 <div class="cBox type2">
 	<div class="cBox-hd">
-		<h4 class="c-tit">프로젝트1</h4>
+		<h4 class="c-tit">{{ contents.data.sltOrgName }}</h4>
 		<div class="pull-right">
-			<select>
-				<option value="">2020년</option>
-				<option value="">2019년</option>
-			</select>
-			<select>
-				<option value="">10월</option>
-				<option value="">9월</option>
-				<option value="">8월</option>
-				<option value="">7월</option>
-				<option value="">6월</option>
-				<option value="">5월</option>
-				<option value="">4월</option>
-				<option value="">3월</option>
-				<option value="">2월</option>
-				<option value="">1월</option>
+			<select ng-model="contents.data.sltYear" ng-options="year + '년' for year in contents.meteringYears"
+					ng-change="contents.fn.selectMeteringYear(contents.data.sltYear)">
 			</select>
 		</div>
 	</div>
@@ -25,8 +12,8 @@
 		<div class="tbl type3">
 			<table class="table">
 				<colgroup>
-					<col style="width:8%;" /><!-- 서비스 -->
-					<col style="width:20%;" /><!-- 항목 -->
+					<col style="width:12%;" /><!-- 서비스 -->
+					<col style="width:15%;" /><!-- 항목 -->
 					<col style="width:;" /><!-- 1월 -->
 					<col style="width:;" /><!-- 2월 -->
 					<col style="width:;" /><!-- 3월 -->
@@ -39,7 +26,7 @@
 					<col style="width:;" /><!-- 10월 -->
 					<col style="width:;" /><!-- 11월 -->
 					<col style="width:;" /><!-- 12월 -->
-					<col style="width:10%;" /><!-- 합계 -->
+					<col style="width:7%;" /><!-- 합계 -->
 				</colgroup>
 				<thead>
 					<tr>
@@ -49,312 +36,38 @@
 						<th rowspan="2">합계</th>
 					</tr>
 					<tr>
-						<th>1월</th>
-						<th>2월</th>
-						<th>3월</th>
-						<th>4월</th>
-						<th>5월</th>
-						<th>6월</th>
-						<th>7월</th>
-						<th>8월</th>
-						<th>9월</th>
-						<th>10월</th>
-						<th>11월</th>
-						<th>12월</th>
+						<th ng-repeat="idx in [].constructor(12) track by $index">{{ $index + 1 }}월</th>
 					</tr>
 				</thead>
-				<!-- 가상서버 -->
-				<tbody class="tbody_group">
+				<tbody class="tbody_group"
+					   ng-if="!(contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists)" class="ng-scope"
+					   ng-repeat="meteringItemGroup in contents.meteringItemGroups">
 					<tr>
-						<th rowspan="4">가상서버</th>
-						<td>가상서버 vCore</td>
-						<td>256</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>256</td>
+						<th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
 					</tr>
-					<tr>
-						<td>가상서버 RAM</td>
-						<td>256GB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>256GB</td>
-					</tr>
-					<tr>
-						<td>가상서버 HDD</td>
-						<td>4.7TB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>4.7TB</td>
-					</tr>
-					<tr>
-						<td>가상서버 SSD</td>
-						<td>2.4TB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>2.4TB</td>
-					</tr>
-					</tdoby>
-					<!-- //가상서버 -->
-					<!-- GPU -->
-					<tbody class="tbody_group">
-					<tr>
-						<th rowspan="5">GPU</th>
-						<td>GPU서버 vCore</td>
-						<td>256</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>256</td>
-					</tr>
-					<tr>
-						<td>GPU서버 RAM</td>
-						<td>256GB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>256GB</td>
-					</tr>
-					<tr>
-						<td>GPU서버 V100</td>
-						<td>24</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>24</td>
-					</tr>
-					<tr>
-						<td>P100(12GB) 개수</td>
-						<td>22</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>22</td>
-					</tr>
-					<tr>
-						<td>T4(16GB) 개수</td>
-						<td>27</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>27</td>
-					</tr>
-					</tbody>
-					<!-- //GPU -->
-					<!-- PaaS -->
-					<tbody class="tbody_group">
-					<tr>
-						<th rowspan="3">PaaS</th>
-						<td>인스턴스 개수</td>
-						<td>25</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>25</td>
-					</tr>
-					<tr>
-						<td>메모리</td>
-						<td>123GB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>256GB</td>
-					</tr>
-					<tr>
-						<td>볼륨</td>
-						<td>4.7TB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>4.7TB</td>
-					</tr>
-					</tbody>
-					<!-- //PaaS -->
-					<!-- CaaS -->
-					<tbody class="tbody_group">
-					<tr>
-						<th rowspan="5">CaaS</th>
-						<td>CaaS 볼륨</td>
-						<td>1.4TB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>1.4TB</td>
-					</tr>
-					<tr>
-						<td>CaaS서버 vCore</td>
-						<td>12</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>12</td>
-					</tr>
-					<tr>
-						<td>CaaS서버 RAM</td>
-						<td>256GB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>256GB</td>
-					</tr>
-					<tr>
-						<td>CaaS서버 HDD</td>
-						<td>2.4TB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>2.4TB</td>
-					</tr>
-					<tr>
-						<td>CaaS서버 SSD</td>
-						<td>1.1TB</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>1.1TB</td>
+					<tr ng-repeat="orgMeteringMonthlyList in contents.orgMeteringMonthlyLists | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }">
+						<td ng-switch="orgMeteringMonthlyList.itemUnit">{{ orgMeteringMonthlyList.itemName }}
+							<span ng-switch-when="CNT">({{ orgMeteringMonthlyList.itemUnit }})</span>
+							<span ng-switch-when="NUM">({{ orgMeteringMonthlyList.itemUnit }})</span>
+						</td>
+						<td ng-repeat="meteringMonth in contents.meteringMonths" ng-switch="orgMeteringMonthlyList.itemUnit">
+							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="MB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'MB'}}</span>
+							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="GB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'GB'}}</span>
+							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-default="">{{ orgMeteringMonthlyList['mv' + meteringMonth] | number }}</span>
+							<span ng-show="orgMeteringMonthlyList['mv' + meteringMonth] == 0">-</span>
+						</td>
+						<td ng-switch="orgMeteringMonthlyList.itemUnit">
+							<span ng-switch-when="MB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'MB'}}</span>
+							<span ng-switch-when="GB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'GB'}}</span>
+							<span ng-switch-default="">{{ orgMeteringMonthlyList.totalMeteringValue | number }}</span>
+						</td>
 					</tr>
 				</tbody>
-				<!-- //CaaS -->
+				<tbody ng-if="contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists" class="ng-scope">
+					<tr>
+						<td colspan="15" class="center ng-binding">목록이 존재하지 않습니다.</td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
 	</div>

@@ -47,27 +47,19 @@ angular.module('portal.controllers')
             var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
             promise.success(function (data) {
                 if (data && data.items && angular.isArray(data.items)) {
-                    /* 2020.03.27 - 즐겨찾기 기능 관련 : isFavorite 속성 추가 by ksw */
-                    angular.forEach(data.items, function(item) {
-                        if(item.isFavorite == true) {
-                            return;
-                        } else {
-                            item.isFavorite = false;
-                        }
-                    });
                     common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
                     $scope.main.setListAllPortalOrgs(data.items);
                 } else {
                     $scope.main.setListAllPortalOrgs();
                 }
-                $scope.main.loadingMainBody = false;
-
                 //좌측메뉴 [프로젝트 생성] 클릭으로 넘어온 경우 바로 팝업 띄움. 2019.06.25
                 if ($scope.main.userAuth == 'M' && ct.popup == 'popup') {
                     ct.addOrgProjectFormOpen();
                 }
             });
             promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -112,6 +104,13 @@ angular.module('portal.controllers')
             $scope.actionLoading = true; // action loading
         };
 
+        /* 20.04.24 - 프로젝트 목록 : 우측 메뉴 기능 by ksw */
+        ct.changeOrgUser = function (org) {
+            /* 사용자 변경을 선택해서 Detail로 넘어가는 경우에 true로 변경 */
+            orgService.changeUser = true;
+            $location.path('/comm/projects/projectDetail/' + org.id);
+        };
+
         /* 2020.03.24 - 사용자 탈퇴 추가 by ksw */
         ct.withdrawOrgProjectUser = function (org) {
             var showConfirm = common.showConfirm($translate.instant('label.del'), org.orgName + ' ' + $translate.instant('message.mq_delete_account'));
@@ -144,9 +143,10 @@ angular.module('portal.controllers')
                 $scope.main.loadingMain = true;
                 var promise = orgService.orgBookmarkAdd(org.id);
                 promise.success(function (data) {
-                    org.isFavorite = true;
                     $scope.main.loadingMain = false;
+                    ct.listOrgProjects();
                     common.showAlertSuccess($translate.instant('message.mi_egov_success_org_bookmark'));
+
                 });
                 promise.error(function (data) {
                     $scope.main.loadingMain = false;
@@ -162,8 +162,8 @@ angular.module('portal.controllers')
                 $scope.main.loadingMain = true;
                 var promise = orgService.orgBookmarkDelete(org.id);
                 promise.success(function (data) {
-                    org.isFavorite = false;
                     $scope.main.loadingMain = false;
+                    ct.listOrgProjects();
                     common.showAlertSuccess($translate.instant('message.mi_egov_success_org_unbookmark'));
                 });
                 promise.error(function (data) {
@@ -360,8 +360,7 @@ angular.module('portal.controllers')
                 returnPromise.success(function (data) {
                     if (data) {
                         ct.orgIdValidationResult = true;
-                    }
-                    else {
+                    } else {
                         ct.orgIdValidationResult = false;
                     }
                 });
@@ -530,13 +529,13 @@ angular.module('portal.controllers')
             var params = {};
             params['orgId'] = ct.orgData.orgId.trim();
             params['orgName'] = ct.orgData.orgName.trim();
-            params['personal'] = ct.orgData.personal=="personal" ? true : false;
+            params['personal'] = ct.orgData.personal == "personal" ? true : false;
             params['startDate'] = ct.orgData.startDate;
             params['endDate'] = ct.orgData.endDate;
-            params['cost'] = ct.orgData.cost;
-            params['description'] = ct.orgData.description;
+            params['cost'] = !ct.orgData.cost ? 0 : ct.orgData.cost;
+            params['description'] = !ct.orgData.description ? "" : ct.orgData.description;
             params['orgQuotaPlanId'] = ct.orgData.orgQuotas.id;
-            params['paasQuotaGuid'] = ct.orgData.paasQuotaGuid;
+            params['paasQuotaGuid'] = !ct.orgData.paasQuotaGuid ? "" : ct.orgData.paasQuotaGuid;
             var quotasList = [];
             for (var i=0; i<ct.quotaItem.length; i++) {
                 if (ct.quotaItem[i].value) {
@@ -545,8 +544,8 @@ angular.module('portal.controllers')
                 }
             }
             params['orgQuotaValues'] = quotasList;
-            if (quotasList.length == 0) {
-                common.showAlertSuccess("쿼터 설정은 필수사항입니다.", "쿼터 설정은 필수사항입니다.");
+            if (!ct.orgData.paasQuotaGuid && quotasList.length == 0) {
+                common.showAlertSuccess("상세 쿼터 설정은 필수사항입니다.", "상세 쿼터 설정은 필수사항입니다.");
                 return;
             }
             if (ct.attachFile != null) {
@@ -627,7 +626,6 @@ angular.module('portal.controllers')
         //개인 프로젝트 설정 건수 조회
         ct.getPersonalProjectCount();
     })
-
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);
         $scope.actionBtnHied = false;

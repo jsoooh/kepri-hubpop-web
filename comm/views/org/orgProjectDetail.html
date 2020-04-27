@@ -827,236 +827,29 @@
 
                 <div class="cBox-cnt pd0">
                     <div class="in">
-                        <!-- <div class="tb-top">
-                            <div class="pull-left c-tit_st">
-                                <h4 class="c-tit ng-binding">- 쿼터 Plan : {{ contents.selOrgProject.quotaId.name }}</h4>
-                            </div>
-                        </div> -->
-                        
                         <!-- 신규 자원쿼터 UI -->
 						<div class="resource_box">
 							<ul class="ul-panel">
-								<li>
+								<li ng-repeat="itemGroup in contents.orgQuotaItemGroups | orderBy: 'code'">
 									<!-- panel -->
 									<div class="panelWrap">
 										<div class="panel">
 											<div class="panel_head">
 												<div class="tit_area">
-													<p class="tit">가상서버</p>
+													<p class="tit">{{ itemGroup.name }}</p>
 												</div>
 											</div>
 											<div class="panel_body">
 												<div class="tbl_cont">
 													<table class="table">
 														<colgroup>
-															<col style="width:67%;">
+															<col style="width:;">
 															<col style="width:;">
 														</colgroup>
 														<tbody>
-															<tr>
-																<th><em>서버</em>vCore</th>
-																<td>32</td>
-															</tr>
-															<tr>
-																<th><em>서버</em>RAM</th>
-																<td>64</td>
-															</tr>
-															<tr>
-																<th><em>서버</em>HDD</th>
-																<td>1500</td>
-															</tr>
-															<tr>
-																<th><em>서버</em>SSD</th>
-																<td>400</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- //panel -->
-								</li>
-								<li>
-									<!-- panel -->
-									<div class="panelWrap">
-										<div class="panel">
-											<div class="panel_head">
-												<div class="tit_area">
-													<p class="tit">GPU</p>
-												</div>
-											</div>
-											<div class="panel_body">
-												<div class="tbl_cont">
-													<table class="table">
-														<colgroup>
-															<col style="width:67%;">
-															<col style="width:;">
-														</colgroup>
-														<tbody>
-															<tr>
-																<th><em>GPU서버</em>vCore</th>
-																<td>32</td>
-															</tr>
-															<tr>
-																<th><em>GPU서버</em>RAM</th>
-																<td>32</td>
-															</tr>
-															<tr>
-																<th><em>GPU서버</em>HDD</th>
-																<td>32</td>
-															</tr>
-															<tr>
-																<th><em>GPU서버</em>SSD</th>
-																<td>32</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- //panel -->
-								</li>
-								<li>
-									<!-- panel -->
-									<div class="panelWrap">
-										<div class="panel">
-											<div class="panel_head">
-												<div class="tit_area">
-													<p class="tit">PaaS</p>
-												</div>
-											</div>
-											<div class="panel_body">
-												<div class="tbl_cont">
-													<table class="table">
-														<colgroup>
-															<col style="width:67%;">
-															<col style="width:;">
-														</colgroup>
-														<tbody>
-															<tr>
-																<th>RAM</th>
-																<td>256</td>
-															</tr>
-															<tr>
-																<th>서비스</th>
-																<td>80</td>
-															</tr>
-															<tr>
-																<th>HDD</th>
-																<td>80</td>
-															</tr>
-															<tr>
-																<th>SSD</th>
-																<td>80</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- //panel -->
-								</li>
-								<li>
-									<!-- panel -->
-									<div class="panelWrap">
-										<div class="panel">
-											<div class="panel_head">
-												<div class="tit_area">
-													<p class="tit">CaaS</p>
-												</div>
-											</div>
-											<div class="panel_body">
-												<div class="tbl_cont">
-													<table class="table">
-														<colgroup>
-															<col style="width:67%;">
-															<col style="width:;">
-														</colgroup>
-														<tbody>
-															<tr>
-																<th>vCPU</th>
-																<td></td>
-															</tr>
-															<tr>
-																<th>RAM</th>
-																<td></td>
-															</tr>
-															<tr>
-																<th>HDD</th>
-																<td></td>
-															</tr>
-															<tr>
-																<th>SSD</th>
-																<td></td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- //panel -->
-								</li>
-								<li>
-									<!-- panel -->
-									<div class="panelWrap">
-										<div class="panel">
-											<div class="panel_head">
-												<div class="tit_area">
-													<p class="tit">FaaS</p>
-												</div>
-											</div>
-											<div class="panel_body">
-												<div class="tbl_cont">
-													<table class="table">
-														<colgroup>
-															<col style="width:67%;">
-															<col style="width:;">
-														</colgroup>
-														<tbody>
-															<tr>
-																<th>func 개수</th>
-																<td>2</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- //panel -->
-								</li>
-								<li>
-									<!-- panel -->
-									<div class="panelWrap">
-										<div class="panel">
-											<div class="panel_head">
-												<div class="tit_area">
-													<p class="tit">상용DB서비스</p>
-												</div>
-											</div>
-											<div class="panel_body">
-												<div class="tbl_cont">
-													<table class="table">
-														<colgroup>
-															<col style="width:67%;">
-															<col style="width:;">
-														</colgroup>
-														<tbody>
-															<tr>
-																<th>Exa 용량</th>
-																<td></td>
-															</tr>
-															<tr>
-																<th>SE 용량</th>
-																<td></td>
-															</tr>
-															<tr>
-																<th>MS-SQL</th>
-																<td></td>
+															<tr ng-repeat="quotaValue in contents.orgQuotaValues | filter:{ orgQuotaItemGroupCode: itemGroup.code }">
+																<th>{{ quotaValue.orgQuotaItem.name }}</th>
+																<td>{{ quotaValue.value }} {{ quotaValue.orgQuotaItem.unit }}</td>
 															</tr>
 														</tbody>
 													</table>
@@ -1117,10 +910,10 @@
                                 <h4 class="c-tit ng-binding" style="line-height: 80px; font-weight: 700; font-size: 24px;">쿼터변경요청</h4>
                             </div>
                             <div class="pull-right">
-                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
+                                <!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
                                     <span class="ico">추가(기존)</span>
-                                </button>
-                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.requestQuotaForm($event);">
+                                </button>-->
+                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">
                                     <span class="ico">추가2</span>
                                 </button>
                             </div>
@@ -1129,37 +922,57 @@
                         <div class="tbl type1">
                             <table class="table">
                                 <colgroup>
-                                    <col style="width:10%;">
+                                    <col style="width:5%;">
+                                    <col style="width:15%;">
                                     <col style="width:auto;">
+                                    <col style="width:20%;">
+                                    <col style="width:8%;">
                                     <col style="width:10%;">
                                     <col style="width:10%;">
-                                    <col style="width:15%;">
-                                    <col style="width:15%;">
-                                    <col style="width:15%;">
-                                    <!--<col style="width:10%;">-->
+                                    <col style="width:5%;">
+                                    <col style="width:5%;">
                                 </colgroup>
                                 <thead>
                                 <tr>
                                     <th scope="col">번호</th>
-                                    <th scope="col">신청</th>
-                                    <th scope="col">용량</th>
+                                    <th scope="col">신청사유</th>
+                                    <th scope="col">이전값</th>
+                                    <th scope="col">변경값</th>
                                     <th scope="col">요청자</th>
                                     <th scope="col">요청일</th>
                                     <th scope="col">처리일</th>
                                     <th scope="col">상태</th>
-                                    <!--<th scope="col">처리</th>-->
+                                    <th scope="col">관리</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="item in contents.quotaHistory.items">
-                                    <td>{{ $index + 1 }}</td>
-                                    <td class="text-left">{{ item.messageReq }}</td>
-                                    <td>{{ item.quotaReq.name }}</td>
+                                <tr ng-repeat="item in contents.quotaHistories">
+                                    <td>{{ contents.quotaHistories.length - $index }}</td>
+                                    <td class="text-left">{{ item.requestReason }}</td>
+                                    <td class="text-left">
+                                        <ul>
+                                            <li ng-repeat="detail in item.oldValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+                                        </ul>
+                                    </td>
+                                    <td class="text-left">
+                                        <ul>
+                                            <li ng-repeat="detail in item.changeValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+                                        </ul>
+                                    </td>
                                     <td>{{ item.createdId }}</td>
-                                    <td>{{ item.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
-                                    <td>{{ item.updatedDate.time | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
-                                    <td>{{ item.status | commQuotaHistoryStatusName }}</td>
-                                    <!--<td></td>-->
+                                    <td>{{ item.createdDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+                                    <td>{{ item.treatDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+                                    <td>{{ item.treatCodeNm }}</td>
+                                    <td>
+                                        <div class="dropdown btn-option">
+                                            <button id="btn-option2" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정">
+                                                <span class="ico">실행 설정</span>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-right" role="btn-option2" aria-labelledby="btn-option2">
+                                                <li title="삭제"><a href="" ng-class="($index == 0 && item.treatCodeNm == '요청') ? 'delete' : 'disabled'" ng-click="contents.deleteQuotaHistory(item);">{{ 'label.del' | translate }}</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

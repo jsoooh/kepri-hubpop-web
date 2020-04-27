@@ -1,6 +1,22 @@
-heat_template_version: '2016-10-14'
+heat_template_version: '2018-08-31'
 
 description: galera mariadb template
+
+parameters:
+  image:
+    type: string
+  availability_zone:
+    type: string
+  flavor:
+    type: string
+  key_name:
+    type: string
+  private_net:
+    type: string
+  floating_net:
+    type: string
+  root_password:
+    type: string
 
 resources:
 
@@ -69,7 +85,7 @@ resources:
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
             systemctl start mariadb.service
-            /usr/bin/mysqladmin -u root password '$root_password'
+            /usr/bin/mysqladmin -u root password "$root_password"
             systemctl stop mariadb.service
             sleep 1
             cat <<EOF> /etc/my.cnf.d/server.cnf

@@ -125,17 +125,17 @@
 	<div class="tbl type1" ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0 && contents.listType == 'list'">
 		<table class="table">
 			<colgroup>
+				<col style="width: 4%;">
+				<col style="width: 15%;">
+				<col style="width: *;">
+				<col style="width: 7%;">
 				<col style="width: 5%;">
-				<col style="width: 12%;">
-				<col style="width: ;">
+				<col style="width: 5%;">
+				<col style="width: 15%;">
 				<col style="width: 10%;">
 				<col style="width: 5%;">
 				<col style="width: 5%;">
-				<col style="width: 12%;">
-				<col style="width: 10%;">
-				<col style="width: 5%;">
-				<col style="width: 5%;">
-				<col style="width: 5%;">
+				<col style="width: 4%;">
 			</colgroup>
 			<thead>
 				<tr>
@@ -156,7 +156,16 @@
 				<tr ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }">
 					<td>{{ $index+1 }}</td>
 					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgId }}</a></td>
-					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgName }}</a></td>
+					<td class="text-left">
+						<a href="" ng-click="main.goToPortalOrgPage(org);">
+							<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
+							<div class="bookmark">
+								<span class="ico_bookmark" ng-if="org.isBookmark == false">☆</span>
+								<span class="ico_bookmark on" ng-if="org.isBookmark == true">★</span>
+							</div>
+							{{ org.orgName }}
+						</a>
+					</td>
 					<td>{{ org.managerName }}</td>
 					<td>{{ org.orgUserCount }}</td>
 					<td>{{ org.isPersonal ? '개인' : '일반' }}</td>
@@ -171,10 +180,11 @@
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
 								<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
-								<li><a href="" title="사용자변경">사용자변경</a></li>
+								<li><a href="" title="사용자변경" ng-click="contents.changeOrgUser($event, org);">사용자변경</a></li>
 								<!-- 선택 된 class="active" 추가 -->
-								<li ng-if="org.isFavorite == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
-								<li ng-if="org.isFavorite == true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
+								<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
+								<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
+								<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
 								<!-- 2020.03.24 - 사용자 탈퇴 기능 추가 by ksw -->
 								<li><a href="" ng-click="contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
 								<li><a href=""  title="삭제" class="delete">{{ 'label.del' | translate }}</a></li>
@@ -188,21 +198,16 @@
 	<!-- //프로젝트 리스트(테이블형) -->
 
 	<!-- 프로젝트 리스트(이미지형) -->
-	<div class="proj_list_area"
-		ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0 && contents.listType == 'image'">
+	<div class="proj_list_area" ng-if="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0 && contents.listType == 'image'">
 		<ul class="ul-panel dash_list">
-			<li
-				ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }"
-				ng-if="org.statusCode != 'deleting'"><a
-				ng-click="main.goToPortalOrgPage(org);">
+			<li ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }" ng-if="org.statusCode != 'deleting'">
+				<a ng-click="main.goToPortalOrgPage(org);">
 					<div class="thum">
-						<span ng-if="org.iconImage && org.iconImage.image"
-							class="thum_in img_line"> <img
-							ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.image }}"
-							class="logo" alt="">
-						</span> <span class="thum_in"
-							ng-if="!org.iconImage || !org.iconImage.image"> <span
-							class="txt">{{org.orgName.substr(0, 1)}}</span>
+						<span ng-if="org.iconImage && org.iconImage.image" class="thum_in img_line"> 
+							<img ng-src="data:{{ org.iconImage.contentType }}; base64, {{ org.iconImage.image }}" class="logo" alt="">
+						</span> 
+						<span class="thum_in" ng-if="!org.iconImage || !org.iconImage.image">
+							<span class="txt">{{org.orgName.substr(0, 1)}}</span>
 						</span>
 					</div>
 					<div class="list_in">
@@ -220,14 +225,36 @@
 							<li>Project ID : {{org.orgId}}</li>
 						</ul>
 						<div class="date">
-							<span>생성일 : {{org.createdDate.time | date :
-								'yyyy.MM.dd'}}</span> <span ng-if="org.updatedDate">최근활동일 :
-								{{org.updatedDate.time | date : 'yyyy.MM.dd'}}</span> <span
-								ng-if="!org.updatedDate">최근활동일 :
-								{{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
+							<span>생성일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span> 
+							<span ng-if="org.updatedDate">최근활동일 : {{org.updatedDate.time | date : 'yyyy.MM.dd'}}</span> 
+							<span ng-if="!org.updatedDate">최근활동일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
 						</div>
 					</div>
-			</a></li>
+				</a>
+				<div class="pj_etc_box">
+					<div class="bookmark">
+						<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
+						<span class="ico_bookmark" ng-if="org.isBookmark == false">☆</span>
+						<span class="ico_bookmark on" ng-if="org.isBookmark == true">★</span>
+					</div>
+					<div class="dropdown btn-option">
+						<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정">
+							<span class="ico">실행 설정</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
+							<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
+							<li><a href="" title="사용자변경" ng-click="contents.changeOrgUser(org);">사용자변경</a></li>
+							<!-- 선택 된 class="active" 추가 -->
+							<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
+							<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
+							<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
+							<!-- 2020.03.24 - 사용자 탈퇴 기능 추가 by ksw -->
+							<li><a href="" ng-click="contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
+							<li><a href=""  title="삭제" class="delete">{{ 'label.del' | translate }}</a></li>
+						</ul>
+					</div>
+				</div>
+			</li>
 		</ul>
 	</div>
 	<!-- //프로젝트 리스트(이미지형) -->

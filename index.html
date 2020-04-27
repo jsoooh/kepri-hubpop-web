@@ -59,7 +59,10 @@
 		var _MARKET_VIEWS_			 = _MARKET_STAGE_ +"/views";
 		var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
 		var _PERF_VIEWS_			 = _PERF_STAGE_ +"/views";
-		_PERF_VIEWS_ 				 = _PORT_ == "4080" ? _PERF_VIEWS_+ "/temp" : _PERF_VIEWS_;
+
+		// 임시 추후 삭제
+		var _VIEW_TEMP_ 				 = _PORT_ == "4080" ? "/temp" : "";
+		_PERF_VIEWS_ 				 = _PERF_VIEWS_ + _VIEW_TEMP_;
 
 		var _CONNECT_SITE_				= "USER";
 		var _LAYOUT_VIEWS_				= _COMM_VIEWS_;

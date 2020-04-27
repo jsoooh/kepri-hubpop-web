@@ -7,6 +7,7 @@ angular.module('iaas.controllers')
         var ct = this;
         ct.data = {};
         ct.fn = {};
+        ct.listType = "image";          //리스트 타입
 
         ct.tabIndex = 0;
 

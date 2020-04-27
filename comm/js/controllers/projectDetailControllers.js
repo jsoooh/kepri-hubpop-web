@@ -582,8 +582,8 @@ angular.module('portal.controllers')
                 });
             };
 
-            /*용량변경 요청 [+] 클릭 이벤트*/
-            contents.asideQuotaReqNgClick = function () {
+            /*용량변경 요청 [+] 클릭 이벤트 : 사용안함*/
+            /*contents.asideQuotaReqNgClick = function () {
                 contents.quotaHistory = {};
 
                 listProjectQuotas();
@@ -599,10 +599,10 @@ angular.module('portal.controllers')
                     '</div>'
                 };
                 common.showRightDialog($scope, dialogOptions);
-            };
+            };*/
 
-            /*용량변경 요청 [저장]*/
-            contents.asideQuotaReqRequestQuotaNgClick = function () {
+            /*용량변경 요청 [저장] : 사용안함*/
+            /*contents.asideQuotaReqRequestQuotaNgClick = function () {
                 var contents = ct;
 
                 if (! $scope.projectQuotaReqPop.validationService.checkFormValidity($scope.projectQuotaReqPop.projectDetailAsideQuotaReqForm)) {
@@ -640,7 +640,7 @@ angular.module('portal.controllers')
                 promise.error(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
                 });
-            };
+            };*/
 
             /*용량변경 요청 삭제 이벤트*/
             contents.deleteRequestQuota = function(quotaHistory){

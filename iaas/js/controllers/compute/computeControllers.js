@@ -22,6 +22,7 @@ angular.module('iaas.controllers')
         ct.showVal			= false;
         ct.schFilterText    = "";
         ct.schLbFilterText    = "";
+        ct.listType = "image";          //리스트 타입
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenant.id;
         ct.data.tenantName = $scope.main.userTenant.korName;
@@ -66,9 +67,9 @@ angular.module('iaas.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-        // ct.reNamePopServerCallBackFunction1 = function () {
-        //     ct.fnGetServerMainList();
-        // };
+        /*ct.reNamePopServerCallBackFunction1 = function () {
+            ct.fnGetServerMainList();
+        };*/
 
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function (instance, $event, $index) {
@@ -484,22 +485,22 @@ angular.module('iaas.controllers')
             });
         };
 
-        //추가 S
-        // [20190621.HYG] 사용안하므로 주석처리
-        // ct.fnGetUsedResource = function() {
-        //     var params = {
-        //         tenantId : ct.data.tenantId
-        //     };
-        //     var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
-        //     returnPromise.success(function (data, status, headers) {
-        //         ct.tenantResource = data.content[0];
-        //     });
-        //     returnPromise.error(function (data, status, headers) {
-        //         if (status != 307) {
-        //             common.showAlertError(data.message);
-        //         }
-        //     });
-        // };
+        /*추가 S
+        [20190621.HYG] 사용안하므로 주석처리
+        ct.fnGetUsedResource = function() {
+            var params = {
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params));
+            returnPromise.success(function (data, status, headers) {
+                ct.tenantResource = data.content[0];
+            });
+            returnPromise.error(function (data, status, headers) {
+                if (status != 307) {
+                    common.showAlertError(data.message);
+                }
+            });
+        };*/
 
         //추가 E
         // 서버삭제
@@ -885,30 +886,31 @@ angular.module('iaas.controllers')
             }
         };
 
-        // [20190621.HYG] It's a func to bind Instance monitoring data
-        // Dev History 
-        // 테넌트 전체 서버 모니터링 데이터 호출 API 는 사용안함
-        // - 서버상태변경(정지->시작) 후 API 호출 할 때 서버의 모니터링 데이터가 0 응답함
-        // - 서버 시작 후 일정 시간 후에 정상데이터 호출 되는데 그 시점을 핸들링 할 수 없음.
-        // - 서버 정보 세팅하는 경우 1개 인스턴스의 모니터링 데이터를 호출하는 방식으로 변경.
-        // fnGetInstancesData 메서드의 응답에 필요 데이터가 존재하므로 조회 된 데이터를 바인드하는 기능으로 변경. 2019.11.11
-        // ct.fnSetInstanceUseRate = function (instance) {
-        //     if (instance.uiTask && instance.uiTask == 'active') {
-        //         var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instance/' + instance.id + '/resourceUsage', 'GET');
-        //         rp.success(function (d) {
-        //             instance.cpuUsage = d.cpuUsage;
-        //             instance.memoryUsage = d.memUsage;
-        //             instance.diskUsage = d.diskUsage;
-        //         });
-        //         rp.error(function (d) {
-        //             common.showAlertError(d.message);
-        //         });
-        //     } else {
-        //         instance.cpuUsage = 0;
-        //         instance.memoryUsage = 0;
-        //         instance.diskUsage = 0;
-        //     }
-        // };
+        /*[20190621.HYG] It's a func to bind Instance monitoring data
+        Dev History
+        테넌트 전체 서버 모니터링 데이터 호출 API 는 사용안함
+        - 서버상태변경(정지->시작) 후 API 호출 할 때 서버의 모니터링 데이터가 0 응답함
+        - 서버 시작 후 일정 시간 후에 정상데이터 호출 되는데 그 시점을 핸들링 할 수 없음.
+        - 서버 정보 세팅하는 경우 1개 인스턴스의 모니터링 데이터를 호출하는 방식으로 변경.
+        fnGetInstancesData 메서드의 응답에 필요 데이터가 존재하므로 조회 된 데이터를 바인드하는 기능으로 변경. 2019.11.11
+        ct.fnSetInstanceUseRate = function (instance) {
+            if (instance.uiTask && instance.uiTask == 'active') {
+                var rp = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instance/' + instance.id + '/resourceUsage', 'GET');
+                rp.success(function (d) {
+                    instance.cpuUsage = d.cpuUsage;
+                    instance.memoryUsage = d.memUsage;
+                    instance.diskUsage = d.diskUsage;
+                });
+                rp.error(function (d) {
+                    common.showAlertError(d.message);
+                });
+            } else {
+                instance.cpuUsage = 0;
+                instance.memoryUsage = 0;
+                instance.diskUsage = 0;
+            }
+        };*/
+
         ct.fnSetInstanceUseRate = function (src, desc) {
             if (src.uiTask && src.uiTask == 'active') {
                 src.cpuUsage = desc.cpuUsage;
@@ -977,9 +979,9 @@ angular.module('iaas.controllers')
 
         $interval(function () {
             ct.fnGetInstancesData();
-            // angular.forEach(ct.serverMainList, function (server) {
-            //     ct.fnSetInstanceUseRate(server);
-            // });
+            /*angular.forEach(ct.serverMainList, function (server) {
+                ct.fnSetInstanceUseRate(server);
+            });*/
         }, 1000 * 60)
     })
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
@@ -1435,20 +1437,17 @@ angular.module('iaas.controllers')
         ct.fn.createServer = function()  {
             if(clickCheck) return;
             clickCheck = true;
-
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
                 clickCheck = false;
                 return;
             }
-
             var params = {};
-
-            params.instance              = {};
-            params.instance.name             = ct.data.name;
-            params.instance.tenantId         = ct.data.tenantId;
-            params.instance.networks         = [{ id: (ct.data.networks && angular.isArray(ct.data.networks) && ct.data.networks[0] && ct.data.networks[0].id)?ct.data.networks[0].id:0 }];
-            params.instance.image            = {id: ct.data.image.id};
-            params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
+            params.instance = {};
+            params.instance.name = ct.data.name;
+            params.instance.tenantId = ct.data.tenantId;
+            params.instance.networks = [{ id: (ct.data.networks && angular.isArray(ct.data.networks) && ct.data.networks[0] && ct.data.networks[0].id)?ct.data.networks[0].id:0 }];
+            params.instance.image = {id: ct.data.image.id};
+            params.instance.keypair = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
             params.instance.spec = ct.data.spec;
 
@@ -1473,6 +1472,7 @@ angular.module('iaas.controllers')
                 return;
             }
             $scope.main.loadingMainBody = true;
+            //console.log("ct.fn.createServer params : ", params); return;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers)  {
                 // 서버생성후 -> 디스크 생성 후 sucess 처리.
@@ -2083,7 +2083,7 @@ angular.module('iaas.controllers')
                 element.on('compositionstart', function(e) {
                     e.stopImmediatePropagation();
                 });
-            },
+            }
         };
     }])
 ;

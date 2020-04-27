@@ -1,21 +1,62 @@
 <div class="pop_cont_area mg0">
 	<div class="pop_cont_box">
 		<h4 class="tit">변경요청사유</h4>
-		<textarea type="text" name="" class="form-control volTxt"></textarea>	
+		<textarea type="text" class="form-control volTxt" name="requestReason" ng-model="pop.data.requestReason" validation="max_len:120|required"></textarea>
+
+		<div class="s_inner_cont">
+			<div class="pnb_tit">
+				<div class="pull-left">
+					<span class="pnb_t_txt">PaaS 용량</span>
+					<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'paas 쿼터에 대한 조정이 가능합니다.'"><span class="ico_info"></span></button></div>
+				</div>
+				<div class="pull-right">
+					<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="pop.data.paasQuotaGuid = null" tooltip-placement="bottom" uib-tooltip="{{ 'label.select_unset' | translate }}">{{ 'label.select_unset' | translate }}</button>
+				</div>
+			</div>
+			<div class="pj_paas_volume">
+				<ul class="ul-list1">
+					<li ng-repeat="(key, paasQuota) in pop.paasQuotas">
+						<div class="radio1 radio-inline">
+							<input type="radio" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="pop.data.paasQuotaGuid = paasQuota.guid;" ng-checked="pop.data.paasQuotaGuid == paasQuota.guid">
+							<label for="{{paasQuota.$$hashKey}}" class="label">
+								<div class="volume_cont">
+									<ul>
+										<li>
+											<span>{{ 'label.service' | translate }}</span>
+											<span>{{ paasQuota.totalServices }}</span>
+										</li>
+										<li>
+											<span>{{ 'label.route' | translate }}</span>
+											<span>{{ paasQuota.totalRoutes }}</span>
+										</li>
+										<li>
+											<span>{{ 'label.memory' | translate }}</span>
+											<span>{{ paasQuota.memoryLimit|displayVolume:'MB' }}</span>
+										</li>
+									</ul>
+								</div>
+							</label>
+						</div>
+						<p class="label-txt" >{{ paasQuota.name }}</p>
+					</li>
+				</ul>
+			</div>
+		</div>
 		
 		<h4 class="tit mt30">쿼터값 변경</h4>
 		<div class="tbl type1">
 			<table class="table">
 				<colgroup>
+					<col style="width:15%;">
 					<col style="width:;">
 					<col style="width:15%;">
-					<col style="width:15%;">
-					<col style="width:15%;">
-					<col style="width:15%;">
+					<col style="width:10%;">
+					<col style="width:10%;">
+					<col style="width:10%;">
 				</colgroup>
 				<thead>
 					<tr>
-						<th scope="col">항목</th>
+						<th scope="col" colspan="2">항목</th>
 						<th scope="col">값</th>
 						<th scope="col">단위</th>
 						<th scope="col">최소값</th>
@@ -23,47 +64,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>서버 vCore</td>
-						<td><input type="text" class="form-control text-right"></td>
-						<td>GB</td>
-						<td>1</td> 
-						<td>10</td>
-					</tr>
-					<tr>
-						<td>서버 vCore</td>
-						<td><input type="text" class="form-control text-right"></td>
-						<td>GB</td>
-						<td>1</td>
-						<td>10</td>
-					</tr>
-					<tr>
-						<td>서버 vCore</td>
-						<td><input type="text" class="form-control text-right"></td>
-						<td>GB</td>
-						<td>1</td>
-						<td>10</td>
-					</tr>
-					<tr>
-						<td>서버 vCore</td>
-						<td><input type="text" class="form-control text-right"></td>
-						<td>GB</td>
-						<td>1</td>
-						<td>10</td>
-					</tr>
-					<tr>
-						<td>서버 vCore</td>
-						<td><input type="text" class="form-control text-right"></td>
-						<td>GB</td>
-						<td>1</td>
-						<td>10</td>
-					</tr>
-					<tr>
-						<td>서버 vCore</td>
-						<td><input type="text" class="form-control text-right"></td>
-						<td>GB</td>
-						<td>1</td>
-						<td>10</td>
+					<tr ng-repeat="item in pop.quotaItems">
+						<td>{{ item.orgQuotaItemGroup.name }}</td>
+						<td class="text-left">{{ item.name }}</td>
+						<td><input type="text" class="form-control text-right" ng-model="item.value"></td>
+						<td>{{ item.unit }}</td>
+						<td>{{ item.min }}</td>
+						<td>{{ item.max }}</td>
 					</tr>
 				</tbody>
 			</table>

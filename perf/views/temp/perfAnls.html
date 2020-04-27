@@ -1,22 +1,13 @@
 <div class="cBox type2">
 	<div class="cBox-hd">
-		<h4 class="c-tit">프로젝트1 <em>2020년 10월 25일 합계 : 2,342,000원</em></h4>
+		<h4 class="c-tit">{{contents.data.sltOrg.name}}<em><!--2020년 10월 25일-->&nbsp;&nbsp;날짜: {{contents.data.today}} &nbsp;&nbsp;합계 : {{contents.data.totalPerfAnls | number}}원</em></h4>
 		<div class="pull-right">
-			<select>
-				<option value="">2020년</option>
-				<option value="">2019년</option>
+			<select ng-model="contents.data.sltYear" ng-options="year + '년' for year in contents.perfYears"
+				ng-change ="contents.fn.changeSltYear(contents.data.sltYear)">
 			</select>
-			<select>
-				<option value="">10월</option>
-				<option value="">9월</option>
-				<option value="">8월</option>
-				<option value="">7월</option>
-				<option value="">6월</option>
-				<option value="">5월</option>
-				<option value="">4월</option>
-				<option value="">3월</option>
-				<option value="">2월</option>
-				<option value="">1월</option>
+
+			<select ng-model="contents.data.sltMonth" ng-options="month + '월' for month in contents.perfMonths"
+					ng-change="contents.fn.changeSltMonth(contents.data.sltMonth)"-->
 			</select>
 		</div>
 	</div>
@@ -48,160 +39,47 @@
 						<th>과금정책</th>
 					</tr>
 				</thead>
-				<!-- 가상서버 -->
-				<tbody class="tbody_group">
-					<tr>
-						<th rowspan="4">가상서버</th>
-						<td>가상서버 vCore</td>
-						<td>16</td>
-						<td>16</td>
-						<td class="text-right">25,000원</td>
-						<td class="text-right">25,000원</td>
-						<td rowspan="4" class="text-right">191,000원</td>
-						<td rowspan="4" class="text-right">199,000원</td>
-						<td rowspan="4"><a href="">상세보기</a></td>
-					</tr>
-					<tr>
-						<td>가상서버 RAM</td>
-						<td>24GB</td>
-						<td>24GB</td>
-						<td class="text-right">65,000원</td>
-						<td class="text-right">65,000원</td>
-					</tr>
-					<tr>
-						<td>가상서버 HDD</td>
-						<td>300GB</td>
-						<td>400GB</td>
-						<td class="text-right">11,000원</td>
-						<td class="text-right">15,000원</td>
-					</tr>
-					<tr>
-						<td>가상서버 SSD</td>
-						<td>150GB</td>
-						<td>200GB</td>
-						<td class="text-right">8,000원</td>
-						<td class="text-right">11,000원</td>
-					</tr>
-					</tdoby>
-					<!-- //가상서버 -->
-					
-					<!-- GPU -->
-					<tbody class="tbody_group">
-					<tr>
-						<th rowspan="5">GPU</th>
-						<td>GPU서버 vCore</td>
-						<td>8</td>
-						<td>8</td>
-						<td class="text-right">34,000원</td>
-						<td class="text-right">34,000원</td>
-						<td rowspan="5" class="text-right">191,000원</td>
-						<td rowspan="5" class="text-right">199,000원</td>
-						<td rowspan="5"><a href="">상세보기</a></td>
-					</tr>
-					<tr>
-						<td>GPU서버 RAM</td>
-						<td>24GB</td>
-						<td>26GB</td>
-						<td class="text-right">11,000원</td>
-						<td class="text-right">12,000원</td>
-					</tr>
-					<tr>
-						<td>GPU서버 V100</td>
-						<td>3</td>
-						<td>3</td>
-						<td class="text-right">15,000원</td>
-						<td class="text-right">15,000원</td>
-					</tr>
-					<tr>
-						<td>P100(12GB) 개수</td>
-						<td>2</td>
-						<td>2</td>
-						<td class="text-right">10,000원</td>
-						<td class="text-right">10,000원</td>
-					</tr>
-					<tr>
-						<td>T4(16GB) 개수</td>
-						<td>2</td>
-						<td>2</td>
-						<td class="text-right">12,000원</td>
-						<td class="text-right">12,000원</td>
-					</tr>
-					</tbody>
-					<!-- //GPU -->
-					
-					<!-- PaaS -->
-					<tbody class="tbody_group">
-					<tr>
-						<th rowspan="3">PaaS</th>
-						<td>인스턴스 개수</td>
-						<td>2</td>
-						<td>2</td>
-						<td class="text-right">2,000원</td>
-						<td class="text-right">2,000원</td>
-						<td rowspan="3" class="text-right">7,000원</td>
-						<td rowspan="3" class="text-right">8,000원</td>
-						<td rowspan="3"><a href="">상세보기</a></td>
-					</tr>
-					<tr>
-						<td>메모리</td>
-						<td>200MB</td>
-						<td>200MB</td>
-						<td class="text-right">2,000원</td>
-						<td class="text-right">2,000원</td>
-					</tr>
-					<tr>
-						<td>볼륨</td>
-						<td>30GB</td>
-						<td>40GB</td>
-						<td class="text-right">3,000원</td>
-						<td class="text-right">4,000원</td>
-					</tr>
-					</tbody>
-					<!-- //PaaS -->
+				<tbody class="tbody_group"
+					   ng-if="!(contents.data.totalPerfAnlsByOrgCodeAndPerfDate.length == 0 || !contents.data.totalPerfAnlsByOrgCodeAndPerfDate)"
+					   ng-repeat="meteringItemGroup in contents.meteringItemGroups">
+				<tr>
+					<th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
+				</tr>
+				<tr ng-repeat="anlsMonthlyDetailList in contents.data.totalPerfAnlsByOrgCodeAndPerfDate | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }"
+					ng-switch="anlsMonthlyDetailList.itemUnit">
+					<td>{{ anlsMonthlyDetailList.itemName }}</td>
+					<td>    <!-- 전월 사용량 -->
+						<span ng-if="anlsMonthlyDetailList.lastMetering" ng-switch-when="MB">{{ anlsMonthlyDetailList.lastMetering | displayVolume:'MB'}}</span>
+						<span ng-if="anlsMonthlyDetailList.lastMetering" ng-switch-when="GB">{{ anlsMonthlyDetailList.lastMetering | displayVolume:'GB'}}</span>
+						<span ng-if="anlsMonthlyDetailList.lastMetering" ng-switch-default="">{{ anlsMonthlyDetailList.lastMetering | number }}</span>
+						<span ng-if="!anlsMonthlyDetailList.lastMetering">-</span>
+					</td>
+					<td>    <!-- 당월 사용량 -->
+						<span ng-if="anlsMonthlyDetailList.sltMetering" ng-switch-when="MB">{{ anlsMonthlyDetailList.sltMetering | displayVolume:'MB'}}</span>
+						<span ng-if="anlsMonthlyDetailList.sltMetering" ng-switch-when="GB">{{ anlsMonthlyDetailList.sltMetering | displayVolume:'GB'}}</span>
+						<span ng-if="anlsMonthlyDetailList.sltMetering" ng-switch-default="">{{ anlsMonthlyDetailList.sltMetering | number }}</span>
+						<span ng-if="!anlsMonthlyDetailList.sltMetering">-</span>
+					</td>
+					<td class="text-right">{{ anlsMonthlyDetailList.lastAnls | number }} 원</td>    <!-- 전월 금액-->
+					<td class="text-right">{{ anlsMonthlyDetailList.sltAnls | number }} 원</td>    <!-- 당월 금액 -->
+					<td ng-if="anlsMonthlyDetailList.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">{{
+						anlsMonthlyDetailList.lastAnlsSumByItemGroup | number }} 원
+					</td>    <!-- 전월 합계 -->
+					<td ng-if="anlsMonthlyDetailList.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">{{
+						anlsMonthlyDetailList.sltAnlsSumByItemGroup | number }} 원
+					</td>    <!-- 당월 합계 -->
 
-					<!-- CaaS -->
-					<tbody class="tbody_group">
-					<tr>
-						<th rowspan="5">CaaS</th>
-						<td>CaaS 볼륨</td>
-						<td>20GB</td>
-						<td>20GB</td>
-						<td class="text-right">12,000원</td>
-						<td class="text-right">12,000원</td>
-						<td rowspan="5" class="text-right">41,000원</td>
-						<td rowspan="5" class="text-right">48,000원</td>
-						<td rowspan="5"><a href="">상세보기</a></td>
-					</tr>
-					<tr>
-						<td>CaaS서버 vCore</td>
-						<td>4</td>
-						<td>4</td>
-						<td class="text-right">15,000원</td>
-						<td class="text-right">15,000원</td>
-					</tr>
-					<tr>
-						<td>CaaS서버 RAM</td>
-						<td>400MB</td>
-						<td>800MB</td>
-						<td class="text-right">3,000원</td>
-						<td class="text-right">6,000원</td>
-					</tr>
-					<tr>
-						<td>CaaS서버 HDD</td>
-						<td>60GB</td>
-						<td>80GB</td>
-						<td class="text-right">6,000원</td>
-						<td class="text-right">10,000원</td>
-					</tr>
-					<tr>
-						<td>CaaS서버 SSD</td>
-						<td>20GB</td>
-						<td>20GB</td>
-						<td class="text-right">5,000원</td>
-						<td class="text-right">5,000원</td>
-					</tr>
-					<!-- //CaaS -->
+					<td ng-if="anlsMonthlyDetailList.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">
+						<a ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a></td>
+				</tr>
 				</tbody>
+				<tbody ng-if="contents.data.totalPerfAnlsByOrgCodeAndPerfDate.length == 0 || !contents.data.totalPerfAnlsByOrgCodeAndPerfDate"
+					   class="ng-scope">
+				<tr>
+					<td colspan="9" class="center ng-binding">목록이 존재하지 않습니다.</td>
+				</tr>
+				</tbody>
+
 			</table>
 		</div>
 	</div>

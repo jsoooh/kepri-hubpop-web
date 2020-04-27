@@ -120,7 +120,6 @@ angular.module('common.controllers', [])
 
         // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
         $scope.changePasswordAction = function(passData){
-            $scope.popHide();
             $scope.main.loadingMainBody = true;
 
             if (passData.oldPassword == undefined || passData.oldPassword == "") {
@@ -149,43 +148,54 @@ angular.module('common.controllers', [])
                 common.showAlert($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
                 return;
             }
-            $scope.main.loadingMainBody = true;
-            var changePromise = memberService.changePassword(param);
-            changePromise.success(function (data, status, headers) {
+            // 20.3.20 by hrit, 비밀번호 보안 규칙 적용
+            user.passwordSecureCheck($scope.main.userInfo.email, passData.password, function (result) {
                 $scope.main.loadingMainBody = false;
-                common.clearUser();
-                common.setUser(data);
-                common.clearAccessToken();
-                common.setAccessToken(data.token);
+                if (result == undefined) {
+                    // 초기화 및 팝업 닫기
+                    $scope.main.loadingMainBody = true;
+                    var changePromise = memberService.changePassword(param);
+                    changePromise.success(function (data, status, headers) {
+                        $scope.main.loadingMainBody = false;
+                        common.clearUser();
+                        common.setUser(data);
+                        common.clearAccessToken();
+                        common.setAccessToken(data.token);
 
-                // 초기화 및 팝업 닫기
-                $scope.popHide();
-
-                common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_change_pwd"));
-
-            });
-            changePromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                // 초기화 및 팝업 닫기
-                $scope.popHide();
-
-                if(status == 406) {      //비밀번호 패턴이 맞지 않습니다.
-                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 규칙이 맞지 않습니다. 10~20자 영문, 숫자를 포함해 주시기 바랍니다.");
-                } else if (status == 401) {
-                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 기존비밀번호가 잘못되었습니다. 확인 후 다시 시도해 주시기 바랍니다.");
-                } else if (status == 422) {
-                    common.showAlertError($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
+                        $scope.popHide();
+                        common.showAlert($translate.instant("label.pwd_change"), $translate.instant("message.mi_change_pwd"));
+        
+                    });
+                    changePromise.error(function (data, status, headers) {
+                        $scope.main.loadingMainBody = false;
+        
+                        if(status == 406) {      //비밀번호 패턴이 맞지 않습니다.
+                            common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 규칙이 맞지 않습니다. 8~16자 영문, 숫자를 포함해 주시기 바랍니다.");
+                        } else if (status == 401) {
+                            common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 기존비밀번호가 잘못되었습니다. 확인 후 다시 시도해 주시기 바랍니다.");
+                        } else if (status == 422) {
+                            common.showAlertError($translate.instant("label.pwd_change"), "동일한 비밀번호로의 변경은 불가능합니다.");
+                        } else {
+                            //$scope.error = $translate.instant("label.error");
+                            common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 비밀번호를 다시 수정해 주세요.");
+                        }
+                    });
                 } else {
-                    //$scope.error = $translate.instant("label.error");
-                    common.showAlertError($translate.instant("label.pwd_change"), "비밀번호 수정 실패!!! 비밀번호를 다시 수정해 주세요.");
+                    return false;
                 }
             });
+        };
+
+        $scope.changePasswordEnter = function (keyEvent) {
+            if (keyEvent.which == 13) {
+                $scope.changePasswordAction($scope.pop.changePasswordData);
+            }
         };
 
         // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
         mc.changePassword = function ($event) {
             var dialogOptions = {
-                title : $translate.instant("label.pwd_change"),
+                title : $translate.instant("label.pwd_set"),
                 form : {
                     name: "passwordForm",
                     options: ""
@@ -1723,8 +1733,11 @@ angular.module('common.controllers', [])
                     $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
                 }
             }, 100);
-            $scope.main.selectAlarmCount();
-            $scope.main.selectAlarmList();
+
+            $timeout(function () {
+                $scope.main.selectAlarmCount();
+                $scope.main.selectAlarmList();
+            }, 100);
 
             if (_MENU_TYPE_ == 'part') {
                 common.leftMenuShow();
