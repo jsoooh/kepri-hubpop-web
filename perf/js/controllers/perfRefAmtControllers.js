@@ -20,7 +20,13 @@ angular.module('perf.controllers')
                     if (ct.meteringItemGroups.length > 0) {
                         if (ct.meteringItemGroups.length > 0 && angular.isUndefined(ct.data.sltItemGroupCode) || ct.data.sltItemGroupCode == "") {
                             ct.data.sltItemGroup = angular.copy(ct.meteringItemGroups[0]);
-                            ct.data.sltItemGroupCode = ct.data.sltItemGroup.itemGroupCode;
+                            /* 과금현황 상세 -> 과금정책 상세보기 */
+                            var paramItemGroupCode = $location.search().itemGroupCode;
+                            if(angular.isUndefined(paramItemGroupCode)) {
+                                ct.data.sltItemGroupCode = ct.data.sltItemGroup.itemGroupCode;
+                            } else {
+                                ct.data.sltItemGroupCode = paramItemGroupCode;
+                            }
                         }
                     } else {
                         ct.data.sltItemGroupCode = "";

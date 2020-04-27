@@ -209,7 +209,6 @@ angular.module('iaas.controllers')
                 return fileInfo;
             });
             self.buildTree(path);
-            // self.onRefresh();
         };
 
         ct.fileNavigator.prototype.refresh = function () {
@@ -374,8 +373,9 @@ angular.module('iaas.controllers')
                 });
                 returnPromise.error(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
+                    $state.reload();
                     common.showAlertError(data.message);
-                    $scope.main.loadingMainBody = true;
+
                 });
                 returnPromise.finally(function (data, status, headers) {
                     // $scope.main.loadingMainBody = false;
@@ -405,10 +405,11 @@ angular.module('iaas.controllers')
         ct.fn.renameObject = function($event) {
             var items = ct.fn.getCheckedFileItems();
             if (items != null && items.length == 1) { // 1개만 가능
+                var subName = items[0].name.indexOf(ct.objectStorageObjectList.currentPath) == 0 ? items[0].name.substring(ct.objectStorageObjectList.currentPath.length) : items[0].name;
                 var dialogOptions = {
                     controller: "iaasObjectStorageRenameCtrl",
                     bucketName: ct.data.bucketName,
-                    key: items[0].name,
+                    key: subName,
                     path: ct.objectStorageObjectList.currentPath,
                     callBackFunction: ct.objectStorageCallBackFunction2
                 };
@@ -432,8 +433,8 @@ angular.module('iaas.controllers')
         ct.fn.cutObject = function () {
             var items = ct.fn.getCheckedFileItems();
             if (items != null && items.length == 1) { // 1개만 가능
-                ct.data.cutObjectPath = ct.data.cutObjectPath;
-                ct.data.cutObjectName = items[0].name;
+                ct.data.cutObjectPath = ct.objectStorageObjectList.currentPath;
+                ct.data.cutObjectName = items[0].name.indexOf(ct.objectStorageObjectList.currentPath) == 0 ? items[0].name.substring(ct.objectStorageObjectList.currentPath.length) : items[0].name;
             }
         };
 
@@ -558,6 +559,23 @@ angular.module('iaas.controllers')
             return items;
          }
 
+         ct.fn.getCheckedDownloadItems = function() {
+             var checked = false;
+
+             if (ct.objectStorageObjectList.fileList.length > 0) {
+                 for (var i=0; i< ct.objectStorageObjectList.fileList.length; i++) {
+                     var item = ct.objectStorageObjectList.fileList[i];
+                     if (item.checked == true) {
+                         if (item.type == 'dir') { // 폴더는 다운로드가 안 됨
+                             return false;
+                         }
+                         checked = true;
+                     }
+                 }
+             }
+             return checked;
+         }
+
          ct.fn.updatePathList = function (currentPath) {
              ct.objectStorageObjectList.currentPathList = [];
              ct.objectStorageObjectList.currentPathList.push("/");
@@ -676,6 +694,14 @@ angular.module('iaas.controllers')
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+
+            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+            {
+                $scope.actionBtnHied = false;
+                return;
+            }
             pop.fn.createObjectStorageCreateFolder();
         };
         $scope.popCancel = function() {
@@ -708,11 +734,11 @@ angular.module('iaas.controllers')
                 $mdDialog.hide();
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                $state.reload();
-                common.showAlertError(data.message);
-            });
-        };
+            $scope.main.loadingMainBody = false;
+            $state.reload();
+            common.showAlertError(data.message);
+        });
+    };
     })
 
     //오브젝트스토리지 생성 컨트롤
@@ -733,7 +759,7 @@ angular.module('iaas.controllers')
         pop.data.currentPath            = $scope.dialogOptions.path;
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title      = "파일 이름 변경";
+        $scope.dialogOptions.title      = "항목 이름 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/popObjectStorageRenameForm.html" + _VersionTail();
@@ -745,6 +771,14 @@ angular.module('iaas.controllers')
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+
+            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+            {
+                $scope.actionBtnHied = false;
+                return;
+            }
             pop.fn.createObjectStorageCreateFolder();
         };
         $scope.popCancel = function() {
