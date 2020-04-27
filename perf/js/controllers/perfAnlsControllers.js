@@ -90,6 +90,7 @@ angular.module('perf.controllers')
 
         /* page Data 초기화 함수 */
         ct.fn.pageDataInit = function () {
+            $scope.main.loadingMainBody = true;
             var promise = orgService.getOrg(common.getPortalOrgKey());
             promise.success(function (data) {
                 console.log("Success getOrgData")
@@ -257,6 +258,7 @@ angular.module('perf.controllers')
         /* 데이터 요청 */
         ct.fn.changeSltMonth = function (sltMonth) {
             $scope.main.loadingMainBody = true;
+
             var paramsSlt = {
                 urlPaths: {
                     "orgCode": ct.data.sltOrg.code

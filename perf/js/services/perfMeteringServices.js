@@ -33,6 +33,15 @@ angular.module('perf.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/perf/metering/org/{orgCode}/monthly/total', 'GET', params));
         };
 
+        /* 성과관리 아이템-월별 사용량량 Total */
+        perfMeteringService.listPerfMeteringMonthlyTotalByItemCode = function(params) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/perf/metering/org/{orgCode}/item/{itemCode}/monthly/total', 'GET', params))
+        };
+        /* 성과관리 아이템-일별 사용량량 Total*/
+        perfMeteringService.listPerfMeteringDailyTotalByItemCode = function(params) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/perf/metering/org/{orgCode}/item/{itemCode}/daily/total', 'GET', params) )
+        };
+
         return perfMeteringService;
     })
 ;
