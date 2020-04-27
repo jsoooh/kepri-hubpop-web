@@ -11,8 +11,7 @@ angular.module('iaas.controllers')
         ct.ui = {};
         ct.roles = [];
         ct.formName = "storageSnapshotForm";
-        
-        
+
         ct.fn.formOpen = function($event, snapshot){
     		ct.fn.createStorage($event, snapshot);
     	}
