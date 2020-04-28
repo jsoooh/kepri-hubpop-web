@@ -460,3 +460,9 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 
 #container .rightCnt .titWrap {height:67px; padding:23px 40px;}
 #container .rightCnt .titWrap .btnArea {right:0; bottom:20px; /* width:125px; */ text-align:right; padding:0 30px;}
+
+.leftCnt .gnbMenu {padding-bottom:30px;}
+#container .content {overflow:visible;}
+
+/* 관리메뉴(...) absolute 값 관련 좌측메뉴 bg height 끊어지는 문제로 background-image 처리 */
+html {background:url("../images/bg_all.jpg") repeat-y #f3f3f3;}
