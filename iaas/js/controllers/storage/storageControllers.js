@@ -10,7 +10,7 @@ angular.module('iaas.controllers')
         ct.roles = [];
         ct.storageMainList = [];
         ct.typeState = true;
-        ct.listType = "image";          //리스트 타입
+        ct.listType = "image";
 
         ct.fn.formOpen = function($event, state, data){
         	ct.formType = state;
@@ -1273,8 +1273,11 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("디스크 설명이 변경 되었습니다.");
 
-                if ( angular.isFunction(pop.callBackFunction) ) {
+                /* 20.04.29 - 리스트형 추가로 이미지형일때와 리스트형일때 callbackFunction 분기 by ksw*/
+                if ($scope.contents.listType == 'image') {
                     pop.callBackFunction();
+                } else {
+                    $scope.contents.fn.getStorageList();
                 }
             });
             returnPromise.error(function (data, status, headers) {

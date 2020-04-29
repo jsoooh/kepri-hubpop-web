@@ -96,7 +96,7 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
-								<td>
+								<td style="text-align: left">
 									<span class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span>
 									<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
 								</td>
@@ -497,7 +497,7 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
-								<td>
+								<td style="text-align: left">
 									<a ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}</a>
 								</td>
 								<td>{{ lbServiceList.iaasLbPorts.length }}</td>

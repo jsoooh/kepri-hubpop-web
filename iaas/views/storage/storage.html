@@ -45,7 +45,7 @@
 			<col style="width: 10%;">
 			<col style="width: 8%;">
 			<col style="width: 10%;">
-			<col style="width: 15%;">
+			<!--<col style="width: 15%;">-->
 			<col style="width: 8%;">
 		</colgroup>
 		<thead>
@@ -56,13 +56,14 @@
 				<th scope="col">연결서버</th>
 				<th scope="col">백업이미지개수</th>
 				<th scope="col">상태</th>
-				<th scope="col">생성일</th>
+				<!-- 20.04.29 - 추후 요청 들어올시 진행 by ksw -->
+				<!--<th scope="col">생성일</th>-->
 				<th scope="col">관리</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="volume in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }">
-				<td>{{volume.name}}</td>
+				<td style="text-align: left">{{volume.name}}</td>
 				<td>{{volume.size}}</td>
 				<td>{{volume.description | enterByNbr}}</td>
 				<td>
@@ -79,7 +80,8 @@
 						<span class="state-txt">{{ 'iaas.label.volume_' + volume.status | translate }}</span>
 					</span>
 				</td>
-				<td>2019-11-13 09:24:07</td>
+				<!-- 20.04.29 - 추후 요청 들어올시 진행 by ksw -->
+				<!--<td>2019-11-13 09:24:07</td>-->
 				<td>
 					<div class="dropdown btn-option">
 						<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -88,6 +90,7 @@
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="연결된 서버가 ‘정지’상태인 경우 이미지 생성이 가능합니다.">백업 이미지 생성</a></li>
 							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="디스크 이름 변경">디스크 이름 변경</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'description', volume);" title="디스크 설명 변경">디스크 설명 변경</a></li>
 							<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="디스크 크기 변경">디스크 크기 변경</a></li>
 							<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
 							<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
