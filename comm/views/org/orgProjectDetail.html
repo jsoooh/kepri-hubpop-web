@@ -862,49 +862,6 @@
 							</ul>
 						</div>
                         <!-- //신규 자원쿼터 UI -->
-                        
-                        <div class="tbl type1" ng-if="false">
-							<table class="table">
-								<colgroup>
-									<col style="" />
-									<col style="" />
-									<col style="" />
-									<col style="" />
-									<col style="" />
-									<col style="" />
-									<col style="" />
-									<col style="" />
-								</colgroup>
-								<thead>
-									<tr>
-										<th rowspan="2" class="bd_r">번호</th>
-										<th rowspan="2" class="bd_r">이름</th>
-										<th colspan="3" class="bd_r">IaaS</th>
-										<th colspan="3" class="bd_r">PaaS</th>
-									</tr>
-									<tr>
-										<th>vCPU</th>
-										<th>메모리(GB)</th>
-										<th>디스크(GB)</th>
-										<th>메모리(GB)</th>
-										<th>서비스</th>
-										<th class="bd_r">앱 인스턴스</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>{{ $index + 1 }}</td>
-										<td>{{ contents.selOrgProject.quotaId.name }}</td>
-										<td>{{ contents.selOrgProject.quotaId.quotaIaas.computingVcpus }}</td>
-										<td>{{ contents.selOrgProject.quotaId.quotaIaas.computingRam }}</td>
-										<td>{{ contents.selOrgProject.quotaId.quotaIaas.computingHdd }}</td>
-										<td>{{ contents.selOrgProject.quotaId.quotaPaas.totalMemory }}</td>
-										<td>{{ contents.selOrgProject.quotaId.quotaPaas.serviceInstances }}</td>
-										<td>{{ contents.selOrgProject.quotaId.quotaPaas.appInstances }}</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
                         <div class="tb-top">
                             <div class="pull-left">
                                 <h4 class="c-tit ng-binding" style="line-height: 80px; font-weight: 700; font-size: 24px;">쿼터변경요청</h4>
@@ -913,7 +870,7 @@
                                 <!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
                                     <span class="ico">추가(기존)</span>
                                 </button>-->
-                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">
+                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-disabled="!contents.isOrgManager || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">
                                     <span class="ico">추가2</span>
                                 </button>
                             </div>
@@ -969,7 +926,7 @@
                                                 <span class="ico">실행 설정</span>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-right" role="btn-option2" aria-labelledby="btn-option2">
-                                                <li title="삭제"><a href="" ng-class="($index == 0 && item.treatCodeNm == '요청') ? 'delete' : 'disabled'" ng-click="contents.deleteQuotaHistory(item);">{{ 'label.del' | translate }}</a></li>
+                                                <li title="삭제"><a href="" ng-class="($index == 0 && item.treatCodeNm == '요청') ? 'delete' : 'disabled'" ng-click="$index == 0 && item.treatCodeNm == '요청' && contents.deleteQuotaHistory(item);">{{ 'label.del' | translate }}</a></li>
                                             </ul>
                                         </div>
                                     </td>
