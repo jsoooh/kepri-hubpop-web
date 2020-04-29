@@ -2595,11 +2595,11 @@ a.ext_link:hover {text-decoration:underline;}
 .cnt_wrap .cnt_imgBox .color1 {color:#333;}
 .cnt_wrap .cnt_imgBox .color2 {color:#777;}
 .cnt_wrap .cnt_infoBox {width:160px; padding-left:15px;}
-.cnt_wrap .cnt_infoBox dl dt {display:inline-block; font-size:15px; font-weight:500; color:#333; vertical-align:middle;}
+.cnt_wrap .cnt_infoBox dl dt {display:inline-block; font-size:15px; font-weight:500; color:#333; vertical-align:middle; margin-top:10px;}
 .cnt_wrap .cnt_infoBox dl dt:first-child {margin-top:0px;}
 .cnt_wrap .cnt_infoBox dl dt::before {display:inline-block; content:''; width:4px; height:4px; border-radius:100%; background:#555; vertical-align:middle; margin-right:4px;}
 .cnt_wrap .cnt_infoBox dl dt > span {font-size:14px; color:#777;}
-.cnt_wrap .cnt_infoBox dl dd {display:inline-block; font-size:14px; color:#777; padding-left:10px; vertical-align:middle; line-height:30px; }
+.cnt_wrap .cnt_infoBox dl dd {display:inline-block; font-size:14px; color:#777; padding-left:10px; vertical-align:middle; line-height:25px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-word; }
 .cnt_wrap .cnt_infoBox dl dd a.txt_long {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all; vertical-align:middle;}
 /* .cnt_wrap .cnt_infoBox dl dd a {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all;} */
 .cnt_wrap .cnt_infoBox dl dd a:hover {text-decoration:underline; color:#2957cc;}
