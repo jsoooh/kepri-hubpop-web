@@ -501,9 +501,9 @@
 									<a ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}</a>
 								</td>
 								<td>{{ lbServiceList.iaasLbPorts.length }}</td>
-								<td>101.55.126.209:30035(192.168.200.99)</td>
-								<td>-</td>
-								<td>2019-11-13 09:24:07</td>
+								<td>{{ lbServiceList.iaasLbInfo.floatingIp }}<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectLbInfoToClipboard(lbServiceList.iaasLbInfo)"><span class="ico_sm ico_copy"></span></button></td>
+								<td>{{ lbServiceList.iaasLbInfo.description }}</td>
+								<td>{{ lbServiceList.iaasLbInfo.created | date: 'yyyy.MM.dd HH:mm:ss'}}</td>
 								<td>
 									<div class="dropdown btn-option">
 										<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">

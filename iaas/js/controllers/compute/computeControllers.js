@@ -784,6 +784,16 @@ angular.module('iaas.controllers')
             });
         };
 
+        // 부하분산 관리 - 접속 IP 복사
+        ct.fn.copyConnectLbInfoToClipboard = function (loadbalancer) {
+            if (loadbalancer.floatingIp) {
+                common.copyToClipboard(loadbalancer.floatingIp);
+                $scope.main.copyToClipboard(loadbalancer.floatingIp, '"' + loadbalancer.floatingIp + '"가 클립보드에 복사 되었습니다.');
+            } else {
+                common.showAlertWarning("접속 IP가 존재하지 않습니다.");
+            }
+        };
+
         // lb 삭제
         ct.deleteLb = function(id) {
             common.showConfirm('LB 삭제','선택한 LB를 삭제하시겠습니까?').then(function(){
