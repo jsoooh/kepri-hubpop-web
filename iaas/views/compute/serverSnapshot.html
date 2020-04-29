@@ -84,6 +84,7 @@
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 											<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>
 											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
+											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">이미지 설명 변경</a></li>
 											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
 										</ul>
 									</div>
@@ -207,6 +208,7 @@
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
 											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">디스크 생성</a></li>
+											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">이미지 설명 변경</a></li>
 											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
 										</ul>
 									</div>
@@ -254,7 +256,7 @@
 													<dd>디스크스토리지</dd>
 												</dl>
 												<!--<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'">설명<span class="ico_tip"></span></button>-->
-												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot,'storage');"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
+												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
 											</div>
 										</div>
 										<div class="down">

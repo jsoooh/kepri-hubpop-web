@@ -944,8 +944,13 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
 
+                /* 20.04.29 - 리스트형 추가로 이미지형일때와 리스트형일때 callbackFunction 분기 by ksw*/
                 if ( angular.isFunction(pop.callBackFunction) ) {
-                    pop.callBackFunction();
+                    if ($scope.contents.listType == 'image') {
+                        pop.callBackFunction();
+                    } else {
+                        $scope.contents.fn.getInstanceSnapshotList();
+                    }
                 }
 
             });
@@ -1021,8 +1026,13 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
 
+                /* 20.04.29 - 리스트형 추가로 이미지형일때와 리스트형일때 callbackFunction 분기 by ksw*/
                 if ( angular.isFunction(pop.callBackFunction) ) {
-                    pop.callBackFunction();
+                    if ($scope.contents.listType == 'image') {
+                        pop.callBackFunction();
+                    } else {
+                        $scope.contents.fn.getStorageSnapshotList();
+                    }
                 }
             });
             returnPromise.error(function (data, status, headers){
