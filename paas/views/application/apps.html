@@ -1,7 +1,7 @@
 	<!-- 목록 이미지형/리스트형 선택 버튼 -->
 	<div class="btnArea text-right">
 		<!-- 선택 된 class="on" 추가 -->
-		<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
+		<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span>이미지형</button>
 		<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
 	</div>
 	<!-- //목록 이미지형/리스트형 선택 버튼 -->
@@ -57,7 +57,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="appItem in contents.apps | filter : {name: contents.schFilterText}">
-					<td>
+					<td style="text-align: left">
 						<a id="txt-renameApp-{{appItem.name}}" ng-click="contents.moveToApplicationPage(appItem);">{{ appItem.name }}</a>
 						<div id="renameAppButton-{{appItem.name}}" class="renameWrap" style="display:none;">
 							<input id="inputAppName-{{appItem.name}}" type="text" data-guid="{{appItem.guid}}" name="{{appItem.name}}" class="form-control" ng-model="appItem.name" maxlength="20" validation="min_len:3|max_len:20|required">
@@ -67,8 +67,8 @@
 							</div>
 						</div>
 					</td>
-					<td>PYTHON</td>
-					<td>v1.6-20</td>
+					<td>{{ appItem.buildpackName }}</td>
+					<td>{{ appItem.buildpackVersion }}</td>
 					<td><a class="txt" ng-if="0 < appItem.uris.length" ng-href="http://{{ appItem.uris[0] }}" target="_blank" title="{{ appItem.uris[0] }}">http://{{ appItem.uris[0] }}</a></td>
 					<td>
 						<div class="stateWrap" ng-if="(appItem.state == 'STARTED') && (appItem.packageState == 'STAGED')">
@@ -84,7 +84,7 @@
 							<span class="stateMark type3">실패</span> <span class="state-txt">실패</span>
 						</div>
 					</td>
-					<td>2020-02-20 13:44:35</td>
+					<td>{{ appItem.updated | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
 					<td>
 						<div class="dropdown btn-option">
 							<button id="btn-option-{{appItem.name}}" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정"> <span class="ico">실행 설정</span> </button>

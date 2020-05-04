@@ -25,6 +25,7 @@ angular.module('paas.controllers')
         ct.schFilterText = "";
         ct.listType = "image";          //리스트 타입
 
+
         // main changeOrganization 와 연결
         $scope.$on('organizationChanged', function(event, orgItem) {
             ct.pageLoadData();
@@ -65,7 +66,7 @@ angular.module('paas.controllers')
             common.showCustomDialog($scope, null, dialogOptions);
         };
 
-        ct.listAllApps = function () {
+         ct.listAllApps = function () {
             $scope.main.loadingMainBody = true;
             var conditions = [];
             if(ct.sltOrganizationGuid) {
@@ -456,7 +457,6 @@ angular.module('paas.controllers')
             appPromise.success(function (data) {
                 ct.listAllApps();
                 $state.go($state.current, {}, {reload: true});
-                $scope.main.loadSltOrganization();
                 $scope.main.loadingMainBody = false;
             });
             appPromise.error(function (data) {
