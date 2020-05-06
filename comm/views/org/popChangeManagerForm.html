@@ -9,48 +9,20 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="tbl_selected"><!-- 선택 된 tr의 class="tbl_selected" -->
+			<tr ng-repeat="orgUser in pop.orgUsers" ng-class="{'tbl_disabled': orgUser.roleName == 'OWNER'}"><!-- 선택 된 tr의 class="tbl_selected" -->
 				<td>
-					<div class="radio radio-only">
-						<input type="radio" name="" id="radio1-1">
-						<label for="radio1-1"></label>
-					</div>
+					<p class="inputWrap">	<!-- 170829 input radio 추가	-->
+						<input type="radio" id="{{orgUser.$$hashKey}}" name="orgUserId" ng-click="pop.data.orgUser = orgUser;" ng-disabled="orgUser.roleName == 'OWNER'"><label for="{{orgUser.$$hashKey}}"></label>
+					</p>
 				</td>
-				<td>이름01</td>
-				<td>id001</td>
-				<td>사용자</td>
+				<td>{{ orgUser.usersInfo.name }}</td>
+				<td>{{ orgUser.usersInfo.email }}</td>
+				<td>{{ orgUser.roleName | roleName2 }}</td>
 			</tr>
-			<tr>
-				<td>
-					<div class="radio radio-only">
-						<input type="radio" name="" id="radio1-1">
-						<label for="radio1-1"></label>
-					</div>
-				</td>
-				<td>이름02</td>
-				<td>id002</td>
-				<td>관리자</td>
-			</tr>
-			<tr class="tbl_disabled"><!-- 선택 된 tr의 class="tbl_disabled" -->
-				<td>
-					<div class="radio radio-only">
-						<input type="radio" name="" id="radio1-1">
-						<label for="radio1-1"></label>
-					</div>
-				</td>
-				<td>이름03</td>
-				<td>id003</td>
-				<td>책임자</td>
-			</tr>
-			<!-- 데이터 로딩중일 때 -->
-			<tr>
-				<td colspan="4"><p class="txt"><img src="images/loading_sm.gif"> 데이터 로딩 중 입니다.</p></td>
-			</tr>
-			<!-- //데이터 로딩중일 때 -->
-			
+
 			<!-- 데이터 없을 때 -->
-			<tr>
-				<td colspan="4">데이터가 없습니다.</td>
+			<tr ng-if="!pop.orgUsers || pop.orgUsers.length == 0">
+				<td colspan="4" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
 			</tr>
 			<!-- //데이터 없을 때 -->
 		</tbody>

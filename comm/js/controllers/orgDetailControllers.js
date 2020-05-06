@@ -1470,7 +1470,7 @@ angular.module('portal.controllers')
         ct.changeManagerForm = function ($event) {
             $scope.dialogOptions = {
                 controller: "commChangeManagerFormCtrl",
-                callBackFunction: null
+                callBackFunction: ct.replaceCallBackFunction
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -2340,7 +2340,7 @@ angular.module('portal.controllers')
         pop.fn.okFunction = function() {
         };
     })
-    .controller('commChangeManagerFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+    .controller('commChangeManagerFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, $filter, user,paging, common, CONSTANTS) {
         _DebugConsoleLog("orgDetailController.js : commChangeManagerFormCtrl", 1);
         $scope.actionBtnHied = false;
 
@@ -2349,6 +2349,8 @@ angular.module('portal.controllers')
 
         pop.fn = {};
         pop.data = {};
+        pop.roles = [];
+        pop.isOrgManager = false;
 
         pop.formName = "changeManagerForm";
         $scope.dialogOptions.formName = pop.formName;
@@ -2356,24 +2358,82 @@ angular.module('portal.controllers')
         $scope.dialogOptions.dialogClassName = "modal-dialog";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popChangeManagerForm.html" + _VersionTail();
         $scope.dialogOptions.title = "책임자 변경";
-        pop.method = "POST";
+        $scope.dialogOptions.okName = "변경";
 
-        // Dialog ok 버튼 클릭 시 액션 정의
+        // 책임자 변경 팝업에서 변경 버튼 클릭시 액션
         $scope.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
-            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
-                $scope.actionBtnHied = false;
+            if(pop.data.orgUser == undefined ) {
+                $scope.popCancel();
                 return;
             }
-            pop.fn.okFunction();
+            pop.fn.userPush();
         };
 
         $scope.popCancel = function () {
             $scope.popHide();
         };
 
-        pop.fn.okFunction = function() {
+        pop.fn.checkOne = function($event,image) {
+            console.log(pop.roles);
+            if($event.currentTarget.checked) {
+                console.log("roles len : " + pop.roles.length);
+                if(pop.roles.length == $("#mainList tbody").find("input[type='checkbox']").length) {
+                    $($("#mainList").find("input[type='checkbox']")[0]).prop("checked",true);
+                }
+            } else {
+                $($("#mainList").find("input[type='checkbox']")[0]).prop("checked",false);
+
+            }
         };
+
+        // 팝업창에서 조직 구성원들 조회
+        pop.fn.listAllOrgMembers = function(currentPage) {
+            var param = {};
+            if(currentPage != undefined) {
+                param.number = currentPage
+            }
+            var orgPromise = orgService.listOrgUsers($scope.contents.paramId);
+            orgPromise.success(function (data) {
+                pop.pageOptions = paging.makePagingOptions(data);
+                pop.orgUsers = data.items;
+                if (pop.orgUsers.roleName == 'OWNER') {
+                    pop.isOrgManager = true;
+                }
+            });
+            orgPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            orgPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.userPush = function() {
+            $scope.main.loadingMainBody = true;
+            var id = pop.data.orgUser.org.id;
+            var param = {
+                orgId : pop.data.orgUser.org.orgId,
+                orgManager : {
+                    email : pop.data.orgUser.usersInfo.email
+                }
+            };
+            var orgPromise = orgService.changeOrgManager(id, param);
+            orgPromise.success(function (data, status, headers) {
+                $scope.contents.listOrgUsers();
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess('책임자 변경 성공','책임자가 변경되었습니다.');
+                $scope.popCancel();
+            });
+            orgPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            orgPromise.finally(function() {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.listAllOrgMembers();
     })
 ;

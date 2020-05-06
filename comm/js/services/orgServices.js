@@ -120,7 +120,7 @@ angular.module('portal.services')
         };
         /*조직 관리자 수정*/
         orgService.changeOrgManager = function (id, param) {
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/changeManager', 'PUT', param));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/changeOwner', 'PUT', param));
         };
 
         /*요청 : 상태가 작성중 일 때 요청으로 상태 변경*/
