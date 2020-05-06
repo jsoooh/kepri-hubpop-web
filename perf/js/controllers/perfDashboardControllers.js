@@ -40,6 +40,15 @@ angular.module('perf.controllers')
         ct.data.lastSumPerfAmt = "";
         ct.data.nextSumPerfAmt = "";
 
+        ct.theme = {
+            series: {
+                label: {
+                    color: '#ffffff',
+                    fontFamily: 'Verdana'
+                }
+            }
+        };
+
         /* 미터링 서비스 그룹 리스트 */
         ct.fn.listAllMeteringGroupItems = function (defer) {
             var promise = perfMeteringService.listAllMeteringGroupItems();
@@ -96,12 +105,14 @@ angular.module('perf.controllers')
         };
         // 전년도, 전월 설정
         ct.fn.setLastYearMonth = function(sltYear, sltMonth) {
-            if(sltMonth == 1) {
-                ct.data.lastYear = String(sltYear - 1);
-                ct.data.lastMonth = "12";
-            } else {
-                ct.data.lastYear = String(sltYear);
-                ct.data.lastMonth = String(sltMonth - 1);
+            if(sltYear == ct.data.today.getFullYear() && sltMonth == ct.data.today.getMonth() + 1) {
+                if(sltMonth == 1) {
+                    ct.data.lastYear = String(sltYear - 1);
+                    ct.data.lastMonth = "12";
+                } else {
+                    ct.data.lastYear = String(sltYear);
+                    ct.data.lastMonth = String(sltMonth - 1);
+                }
             }
 
             var paramValues = {
@@ -114,67 +125,23 @@ angular.module('perf.controllers')
             return paramValues
         };
 
-        // variables for itemGroup Chart
-        ct.itemGroupChart = {
-            switch: false,
-            container: document.getElementById('itemGroup-anls-chart'),
-            data: {},
-            option: {
-                chart: {
-                    width: 450,
-                    height: 450,
-                    format: '1,000'
-                },
-                series: {
-                    radiusRange: ['40%', '100%'],
-                    showLabel: true
-                },
-                tooltip: {
-                    suffix: '원'
-                },
-                legend: {
-                    showCheckbox: false
-                }
-            },
-            instance: null
-        };
-
-        // variables for itemByItemGroup Chart
-        ct.itemChart = {
-            switch: false,
-            container: document.getElementById('item-anls-chart'),
-            data: {},
-            option: {
-                chart: {
-                    width: 450,
-                    height: 450,
-                    format: '1,000'
-                },
-                series: {
-                    radiusRange: ['40%', '100%'],
-                    showLabel: true
-                },
-                tooltip: {
-                    suffix: '원'
-                },
-                legend: {
-                    showCheckbox: false
-                }
-            },
-            instance: null
-        };
-
         ct.fn.initDrawChart = function(defer) {
-            /*// By ItemGroup
+            // By ItemGroup
             ct.itemGroupChart = {
                 container: document.getElementById('itemGroup-anls-chart'),
                 data: {
-                    series: null
+                    categories: "ByItemGroup",
+                    series: [
+                        {
+                            name: " ",
+                            data: 0
+                        }
+                    ]
                 },
                 option: {
                     chart: {
                         width: 450,
-                        height: 450,
+                        height: 400,
                         format: '1,000'
                     },
                     series: {
@@ -195,12 +162,18 @@ angular.module('perf.controllers')
             ct.itemChart = {
                 container: document.getElementById('item-anls-chart'),
                 data: {
-                    series: null
+                    categories: "ByItem",
+                    series: [
+                        {
+                            name: " ",
+                            data: 0
+                        }
+                    ]
                 },
                 option: {
                     chart: {
                         width: 450,
-                        height: 450,
+                        height: 400,
                         format: '1,000'
                     },
                     series: {
@@ -215,7 +188,8 @@ angular.module('perf.controllers')
                     }
                 },
                 instance: null
-            };*/
+            };
+
             // Daily
             ct.dailyChart = {
                 container: document.getElementById('daily-anls-chart'),
@@ -227,17 +201,18 @@ angular.module('perf.controllers')
                     chart: {
                         width: 1450,
                         height: 500,
-                        format: '1,000'
+                        format: '1,000',
+                        title: 'Daily Performance',
                     },
                     yAxis: {
                         title: '원',
                         min: 1
                     },
                     xAxis: {
-                        title: 'Day'
+                        title: 'Day',
+                        suffix: '일'
                     },
                     legend: {
-                        align: 'top',
                         visible: false
                     }
                 },
@@ -255,27 +230,32 @@ angular.module('perf.controllers')
                     chart: {
                         width: 1450,
                         height: 500,
-                        format: '1,000'
+                        format: '1,000',
+                        title: 'Monthly Performance',
                     },
                     yAxis: {
                         title: '원',
                         min: 1
                     },
                     xAxis: {
-                        title: 'Month'
+                        title: 'Month',
+                        suffix: '월'
                     },
                     legend: {
-                        align: 'top',
                         visible: false
                     }
                 },
                 instance: null
             };
 
+            ct.itemGroupChart.option.theme = 'myTheme';
+            ct.itemChart.option.theme = 'myTheme';
+            tui.chart.registerTheme('myTheme', ct.theme);
+
             ct.dailyChart.instance = tui.chart.columnChart(ct.dailyChart.container, ct.dailyChart.data, ct.dailyChart.option);
             ct.monthlyChart.instance = tui.chart.columnChart(ct.monthlyChart.container, ct.monthlyChart.data, ct.monthlyChart.option);
-            // ct.itemGroupChart.instance = tui.chart.pieChart(ct.itemGroupChart.container, ct.itemGroupChart.data, ct.itemGroupChart.option);
-            // ct.itemChart.instance = tui.chart.pieChart(ct.itemChart.container, ct.itemChart.data, ct.itemChart.option);
+            ct.itemGroupChart.instance = tui.chart.pieChart(ct.itemGroupChart.container, ct.itemGroupChart.data, ct.itemGroupChart.option);
+            ct.itemChart.instance = tui.chart.pieChart(ct.itemChart.container, ct.itemChart.data, ct.itemChart.option);
             defer.resolve();
         }
 
@@ -302,7 +282,15 @@ angular.module('perf.controllers')
                         } else {
                             key = "mv" + i;
                         }
-                        monthlySummaryValues[i-1] = ct.anlsMonthlySummaryLists[key];
+                        if(ct.anlsMonthlySummaryLists.hasOwnProperty(key)) {
+                            if(ct.data.today.getFullYear() == ct.data.sltYear) {
+                                if(i > ct.data.today.getMonth() + 1) {
+                                    monthlySummaryValues[i-1] = "";
+                                    continue;
+                                }
+                            }
+                            monthlySummaryValues[i-1] = ct.anlsMonthlySummaryLists[key];
+                        }
                     }
                 }
 
@@ -337,9 +325,11 @@ angular.module('perf.controllers')
 
                 var sltDay = ct.data.today.getDate();
                 var lastDay = new Date(ct.data.sltYear, ct.data.sltMonth, 0).getDate();
-                if(angular.isUndefined(ct.data.sltSumPerfAmt) || ct.data.sltSumPerfAmt == "") {
-                    ct.data.sltSumPerfAmt = ct.anlsDailySummaryLists.sumPerfAmt;
-                    ct.data.nextSumPerfAmt = ct.data.sltSumPerfAmt + (ct.data.sltSumPerfAmt / sltDay) * (lastDay - sltDay);
+                if(ct.data.today.getFullYear() == ct.data.sltYear && ct.data.today.getMonth() + 1 == ct.data.sltMonth) {
+                    if (angular.isUndefined(ct.data.sltSumPerfAmt) || ct.data.sltSumPerfAmt == "") {
+                        ct.data.sltSumPerfAmt = ct.anlsDailySummaryLists.sumPerfAmt;
+                        ct.data.nextSumPerfAmt = ct.data.sltSumPerfAmt + (ct.data.sltSumPerfAmt / sltDay) * (lastDay - sltDay);
+                    }
                 }
 
                 var dailySummaryValues = [];
@@ -432,12 +422,7 @@ angular.module('perf.controllers')
                     console.log("itemGroupChartData");
                     console.log(ct.itemGroupChart.data);
 
-                    if(!ct.itemGroupChart.switch) {
-                        ct.itemGroupChart.switch = true;
-                        ct.itemGroupChart.instance = tui.chart.pieChart(ct.itemGroupChart.container, ct.itemGroupChart.data, ct.itemGroupChart.option);
-                    } else {
-                        ct.fn.redrawChart(ct.itemGroupChart);
-                    }
+                    ct.fn.redrawChart(ct.itemGroupChart);
                 }
 
                 $scope.main.loadingMainBody = false;
@@ -484,12 +469,7 @@ angular.module('perf.controllers')
                     console.log("itemChartData");
                     console.log(ct.itemChart.data);
 
-                    if(!ct.itemChart.switch) {
-                        ct.itemChart.switch = true;
-                        ct.itemChart.instance = tui.chart.pieChart(ct.itemChart.container, ct.itemChart.data, ct.itemChart.option);
-                    } else {
-                        ct.fn.redrawChart(ct.itemChart);
-                    }
+                    ct.fn.redrawChart(ct.itemChart);
                 }
 
                 $scope.main.loadingMainBody = false;
@@ -548,12 +528,7 @@ angular.module('perf.controllers')
                 console.log("changedItemChartData");
                 console.log(ct.itemChart.data);
 
-                if(!ct.itemChart.switch) {
-                    ct.itemChart.switch = true;
-                    ct.itemChart.instance = tui.chart.pieChart(ct.itemChart.container, ct.itemChart.data, ct.itemChart.option);
-                } else {
-                    ct.fn.redrawChart(ct.itemChart);
-                }
+                ct.fn.redrawChart(ct.itemChart);
             }
         }
         /* 연도 변경 - 사용 금액 현황 월별 */
@@ -562,12 +537,9 @@ angular.module('perf.controllers')
             ct.data.sltMonth = "";
             var paramValues = ct.fn.setLastYearMonth(ct.data.sltYear, ct.data.sltMonth);
             ct.fn.listAnlsMonthlySummaryByOrg(paramValues);
-            console.log("changeMeteringYear, " + sltYear);
         };
         /* 월 변경 - 서비스별, 서비스 항목별, 사용 금액 현황 일별 */
         ct.fn.changeMeteringMonth = function(sltMonth) {
-            console.log("changeMeteringMonth, " + sltMonth);
-
             ct.data.sltMonth = String(sltMonth);
             ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
             ct.data.sltColumnOption = "daily";
@@ -579,7 +551,6 @@ angular.module('perf.controllers')
         };
         /* 일별, 월별 조건 변경 - 사용 금액 현황 */
         ct.fn.changeColumnOption = function(sltColumnOption) {
-            console.log("changeColumnOption, " + sltColumnOption);
             if(sltColumnOption == "daily") {
                 ct.fn.redrawChart(ct.dailyChart);
             } else if(sltColumnOption == "monthly") {
