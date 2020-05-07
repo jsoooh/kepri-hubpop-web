@@ -9,12 +9,12 @@
 		</thead>
 		<tbody>
 			<tr class="bg_none">
-				<td>이름01</td>
-				<td>id001</td>
+				<td>{{ pop.orgUser.usersInfo.name }}</td>
+				<td>{{ pop.orgUser.usersInfo.email }}</td>
 				<td>
-					<select>
-						<option value="USER" title="프로젝트 사용자">사용자</option>
-						<option value="ADMIN" title="프로젝트 관리자">관리자</option>
+					<select ng-model="pop.orgUser.roleName">
+						<option value="{{ pop.orgRoleNames.user }}" title="프로젝트 사용자">프로젝트 사용자</option>
+						<option value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">프로젝트 관리자</option>
 					</select>
 				</td>
 			</tr>

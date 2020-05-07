@@ -1481,7 +1481,8 @@ angular.module('portal.controllers')
         ct.changeRoleForm = function ($event) {
             $scope.dialogOptions = {
                 controller: "commChangeRoleFormCtrl",
-                callBackFunction: null
+                test1 : $event,
+                callBackFunction: ct.replaceCallBackFunction
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -2304,7 +2305,8 @@ angular.module('portal.controllers')
         //pop.fn.listQuotaValues();
 
     })
-    .controller('commChangeRoleFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+    /* 20.05.07 - 프로젝트 관리 > 프로젝트 구성원 > 권한 변경 컨트롤러 by ksw */
+    .controller('commChangeRoleFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common, CONSTANTS) {
         _DebugConsoleLog("orgDetailController.js : commChangeRoleFormCtrl", 1);
         $scope.actionBtnHied = false;
 
@@ -2315,22 +2317,39 @@ angular.module('portal.controllers')
         pop.data = {};
 
         pop.formName = "changeRoleForm";
+        pop.test = $scope.dialogOptions.test1;
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
         $scope.dialogOptions.formName = pop.formName;
         $scope.dialogOptions.validDisabled = true;
         $scope.dialogOptions.dialogClassName = "modal-dialog";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popChangeRoleForm.html" + _VersionTail();
         $scope.dialogOptions.title = "권한 변경";
-        pop.method = "POST";
+
+        pop.orgRoleNames = CONSTANTS.roleName;
+        pop.paramId = $stateParams.orgId;
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-            if ($scope.actionBtnHied) return;
-            $scope.actionBtnHied = true;
-            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
-                $scope.actionBtnHied = false;
-                return;
-            }
             pop.fn.okFunction();
+        };
+
+        pop.listOrgUser = function () {
+            pop.isAdmin = false;
+            var promise = orgService.listOrgUsers(pop.paramId);
+            promise.success(function (data) {
+                var orgUsers = data.items;
+                angular.forEach(orgUsers, function (orgUser, key) {
+                    if (orgUser.usersInfo.email == pop.test.email) {
+                        pop.orgUser = orgUser;
+                        if (orgUser.isAdmin) {
+                            pop.isAdmin = true;
+                        }
+                        return false;
+                    }
+                });
+            });
+            promise.error(function (data) {
+            });
         };
 
         $scope.popCancel = function () {
@@ -2338,7 +2357,29 @@ angular.module('portal.controllers')
         };
 
         pop.fn.okFunction = function() {
+            var orgUserRequest = {
+                email: pop.orgUser.usersInfo.email,
+                userRole: pop.orgUser.roleName
+            };
+            $scope.main.loadingMain = true;
+            common.mdDialogHide();
+            var promise = orgService.changeOrgAdmin(pop.paramId, orgUserRequest);
+            promise.success(function (data) {
+                pop.btnClickCheck = false;
+                $scope.main.loadingMain = false;
+                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
+            });
+            promise.error(function (data) {
+                pop.btnClickCheck = false;
+                $scope.main.loadingMain = false;
+                common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
+            });
         };
+
+        pop.listOrgUser();
     })
     .controller('commChangeManagerFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, $filter, user,paging, common, CONSTANTS) {
         _DebugConsoleLog("orgDetailController.js : commChangeManagerFormCtrl", 1);
@@ -2424,6 +2465,7 @@ angular.module('portal.controllers')
                 $scope.contents.listOrgUsers();
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess('책임자 변경 성공','책임자가 변경되었습니다.');
+                $scope.main.replacePage();
                 $scope.popCancel();
             });
             orgPromise.error(function (data, status, headers) {

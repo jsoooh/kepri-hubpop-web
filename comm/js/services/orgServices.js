@@ -118,9 +118,21 @@ angular.module('portal.services')
         orgService.deleteOrgstatusCall = function (id) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/deleteStatusCall', 'PUT'));
         };
-        /*조직 관리자 수정*/
+
+        /*조직 책임자 수정*/
         orgService.changeOrgManager = function (id, param) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/changeOwner', 'PUT', param));
+        };
+
+        /* 20.05.07 - 조직 관리자 수정 추가 by ksw */
+        orgService.changeOrgAdmin = function (id, params) {
+            var param = {
+                urlParams: {
+                    "email": params.email,
+                    "roleName": params.userRole
+                }
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/changeAdmin', 'PUT', param));
         };
 
         /*요청 : 상태가 작성중 일 때 요청으로 상태 변경*/
