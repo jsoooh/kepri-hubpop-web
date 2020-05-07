@@ -18,7 +18,7 @@ $.fn.preload = function() {
     this.each(function(){
         $('<img/>')[0].src = this;
     });
-}
+};
 
 /*
  $(['images/menu_icon/ic_board_hover.png']).preload();
@@ -39,8 +39,8 @@ Map.prototype = {
         return key in this.map;
     },
     containsValue : function(value){
-        for(var prop in this.map){
-            if(this.map[prop] == value) return true;
+        for (var prop in this.map) {
+            if (this.map[prop] == value) return true;
         }
         return false;
     },
@@ -48,7 +48,7 @@ Map.prototype = {
         return (this.size() == 0);
     },
     clear : function(){
-        for(var prop in this.map){
+        for (var prop in this.map) {
             delete this.map[prop];
         }
     },
@@ -57,14 +57,14 @@ Map.prototype = {
     },
     keys : function(){
         var keys = new Array();
-        for(var prop in this.map){
+        for (var prop in this.map) {
             keys.push(prop);
         }
         return keys;
     },
     values : function(){
         var values = new Array();
-        for(var prop in this.map){
+        for (var prop in this.map) {
             values.push(this.map[prop]);
         }
         return values;
@@ -82,7 +82,7 @@ $.fn.preload = function() {
     this.each(function(){
         $('<img/>')[0].src = this;
     });
-}
+};
 
 /*
  $(['images/menu_icon/ic_board_hover.png']).preload();
@@ -174,27 +174,27 @@ function nowHrefFunction (depth){
     var menuHrefArray = [];
     $("#leftMenu").find('a').each(function(){
         var thisHref = $(this).attr("href");
-        if(nowHref[1].match(thisHref)){
+        if (nowHref[1].match(thisHref)) {
             menuHrefArray.push($(this));
         }
     });
 
-    if(menuHrefArray.length > 1){
+    if (menuHrefArray.length > 1) {
         // PaaS 2dept class on을 위한 분기 처리
         var appsCheck = nowHref[1].match("/apps");
         var appLogCheck = nowHref[1].match("/appLog");
-        if(nowHref[1].match("/paas")){
-            for(var i = 0; i < menuHrefArray.length; i++){
-                if(menuHrefArray[i].attr("href").match("/apps") && menuHrefArray[i].attr("href").match("/appLog") && appsCheck && appLogCheck){
+        if (nowHref[1].match("/paas")) {
+            for (var i = 0; i < menuHrefArray.length; i++) {
+                if (menuHrefArray[i].attr("href").match("/apps") && menuHrefArray[i].attr("href").match("/appLog") && appsCheck && appLogCheck) {
                     $(menuHrefArray[i]).closest('li.'+depth).find('a.'+depth).addClass("on");
-                }else if(menuHrefArray[i].attr("href").match("/apps") && !menuHrefArray[i].attr("href").match("/appLog") && appsCheck && !appLogCheck){
+                } else if (menuHrefArray[i].attr("href").match("/apps") && !menuHrefArray[i].attr("href").match("/appLog") && appsCheck && !appLogCheck) {
                     $(menuHrefArray[i]).closest('li.'+depth).find('a.'+depth).addClass("on");
                 }
             }
-        }else{
+        } else {
             $(menuHrefArray[1]).closest('li.'+depth).find('a.'+depth).addClass("on");
         }
-    }else{
+    } else {
         $(menuHrefArray[0]).closest('li.'+depth).find('a.'+depth).addClass("on");
     }
 
@@ -229,8 +229,13 @@ function depth1Click (evt) {
     var mainCtrlScope = angular.element(document.getElementById('mainCtrl')).scope();
 
     //프로젝트 선택 여부 확인
-    if(!mainCtrlScope.main.sltPortalOrgId){
-        mainCtrlScope.main.showDialogAlert('알림','프로젝트를 선택해주세요.');
+    if (!mainCtrlScope.main.sltPortalOrgId) {
+        mainCtrlScope.main.showDialogAlert('알림', '프로젝트를 선택해 주세요.');
+        return false;
+    }
+    //프로젝트 활성화 여부 확인
+    if (!mainCtrlScope.main.sltPortalOrgIsActive) {
+        mainCtrlScope.main.showDialogAlert('알림', '현재 프로젝트는 비활성화 상태입니다.');
         return false;
     }
 
@@ -265,17 +270,17 @@ function depth2Click (evt) {
 function depth2Hover (evt,depth) {
     var target = $(evt.currentTarget);
 
-    if(target.hasClass("open")){
+    if (target.hasClass("open")) {
         $("#leftMenu").find('ul.dept3').hide();
         $(target).parent().find("ul.dept3").show();
-    }else{
+    } else {
         $("#leftMenu").find('a.dept2').removeClass("open on");
         $("#leftMenu").find('ul.dept3').hide();
         $(target).parent().find("ul.dept3").show();
 
         nowHrefFunction("dept2");
 
-        if(depth != 'no'){
+        if (depth != 'no') {
             target.addClass("open on");
         }
     }
@@ -284,17 +289,17 @@ function depth2Hover (evt,depth) {
 function depth2LiHover(evt,depth){
     var target = $(evt.currentTarget).find("a.dept2");
 
-    if(target.hasClass("open")){
+    if (target.hasClass("open")) {
         $("#leftMenu").find('ul.dept3').hide();
         $(target).parent().find("ul.dept3").show();
-    }else{
+    } else {
         $("#leftMenu").find('a.dept2').removeClass("open on");
         $("#leftMenu").find('ul.dept3').hide();
         $(target).parent().find("ul.dept3").show();
 
         nowHrefFunction("dept2");
 
-        if(depth != 'no'){
+        if (depth != 'no') {
             target.addClass("open on");
         }
     }
