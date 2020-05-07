@@ -283,6 +283,10 @@ angular.module('perf.controllers')
                 console.log(ct.monthlyChart.data);
                 ct.fn.redrawChart(ct.monthlyChart);
             });
+            promise.error(function (data) {
+                ct.anlsMonthlySummaryLists = [];
+                ct.anlsMonthlySummaryListsToChartData = [];
+            });
         };
 
         /* 사용 금액 일별 추이 */
@@ -331,6 +335,8 @@ angular.module('perf.controllers')
                                 ct.data.lastSumPerfAmt = data.items[0].sumPerfAmt;
                             }
                         });
+                        promise.error(function (data) {
+                        });
                     }
                 }
 
@@ -369,6 +375,10 @@ angular.module('perf.controllers')
                 console.log("dailyChartData");
                 console.log(ct.dailyChart.data);
                 ct.fn.redrawChart(ct.dailyChart);
+            });
+            promise.error(function (data) {
+                ct.anlsDailySummaryLists = [];
+                ct.anlsDailySummaryListsToChartData = [];
             });
         };
 
