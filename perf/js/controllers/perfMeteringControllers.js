@@ -41,9 +41,7 @@ angular.module('perf.controllers')
             promise.success(function (data) {
                 console.log("Success listAllMeteringYears");
                 ct.data.sltYear = data.items[0];
-                for (var i=0; i<data.items.length; i++) {
-                    ct.meteringYears.push(data.items[i]);
-                }
+                ct.meteringYears = angular.copy(data.items);
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail listAllMeteringYears");
