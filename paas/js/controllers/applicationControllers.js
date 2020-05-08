@@ -23,7 +23,14 @@ angular.module('paas.controllers')
         ct.appStateCnt = 0;
 
         ct.schFilterText = "";
-        ct.listType = "image";          //리스트 타입
+        /* 20.05.08 - 리스트 타입에서 이름변경시 리스트 타입 화면으로 재조회.
+         * 기본은 이미지 타입 by ksw */
+        if (applicationService.listType != 'list') {
+            ct.listType = "image";          //이미지 타입
+        } else {
+            ct.listType = "list";          //리스트 타입
+        }
+
 
 
         // main changeOrganization 와 연결
@@ -455,6 +462,13 @@ angular.module('paas.controllers')
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.updateAppNameAction(guid, newName);
             appPromise.success(function (data) {
+                /* 20.05.08 - 리스트 타입에서 이름변경시 리스트 타입 화면으로 재조회.
+                * 기본은 이미지 타입 by ksw */
+                if (ct.listType == 'list') {
+                    applicationService.listType = 'list'
+                } else {
+                    applicationService.listType = 'image'
+                }
                 ct.listAllApps();
                 $state.go($state.current, {}, {reload: true});
                 $scope.main.loadingMainBody = false;
