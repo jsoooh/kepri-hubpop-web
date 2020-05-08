@@ -35,6 +35,7 @@ angular.module('paas.controllers')
         };
 
         ct.listAllServiceInstances = function () {
+            ct.listType = "image";
             $scope.main.loadingMainBody = true;
             ct.loadingServiceInstances = false;
             var serviceInstancePromise = serviceInstanceService.listAllServiceInstances($scope.main.sltOrganizationGuid, '');
