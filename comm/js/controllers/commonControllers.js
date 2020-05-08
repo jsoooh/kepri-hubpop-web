@@ -576,6 +576,17 @@ angular.module('common.controllers', [])
             }
         };
 
+        /*
+        mc.syncGetGpuTenantByName = function (orgCode, teamCode) {
+            var response = portal.portalOrgs.syncGetGpuTenantByName(orgCode, teamCode);
+            if (response && response.status == 200 && angular.isObject(response.data.content)) {
+                return response.data.content;
+            } else {
+                return null;
+            }
+        };
+        */
+
         mc.loadUserTenant = function () {
             if (angular.isObject(mc.sltProject) && mc.sltProjectId && angular.isObject(mc.sltPortalOrg) && mc.sltPortalOrg.orgId) {
                 var userTenant = mc.syncGetTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
@@ -584,6 +595,14 @@ angular.module('common.controllers', [])
                     userTenant.teamCode = userTenant.pk.teamCode;
                 }
                 mc.setUserTenant(userTenant);
+                /*
+                var gpuUserTenant = mc.syncGetGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                if (gpuUserTenant) {
+                    gpuUserTenant.orgCode = gpuUserTenant.pk.orgCode;
+                    gpuUserTenant.teamCode = gpuUserTenant.pk.teamCode;
+                }
+                mc.setGpuUserTenant(gpuUserTenant);
+                */
             } else {
                 mc.setUserTenant(null);
             }
@@ -605,6 +624,24 @@ angular.module('common.controllers', [])
                 common.clearUserTenantId();
             }
         };
+
+        /*
+        mc.setGpuUserTenant = function(gpuUserTenant) {
+            if (angular.isObject(gpuUserTenant) && gpuUserTenant.tenantId) {
+                mc.gpuUserTenant = gpuUserTenant;
+                mc.gpuUserTenantId = gpuUserTenant.tenantId;
+                mc.gpuUserTenant.id = gpuUserTenant.tenantId;
+                mc.gpuUserTenant.korName = mc.sltPortalOrg.orgName;
+                mc.gpuUserTenantDisplayName = mc.gpuUserTenant.korName;
+                common.setGpuUserTenantId(mc.gpuUserTenant)
+            } else {
+                mc.gpuUserTenant = {};
+                mc.gpuUserTenantId = "";
+                mc.gpuUserTenantDisplayName = "";
+                common.clearGpuUserTenantId();
+            }
+        }
+        */
 
         mc.syncGetOrganizationByName = function (name) {
             var response = portal.portalOrgs.syncGetOrganizationByName(name, 2);

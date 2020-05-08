@@ -401,6 +401,15 @@ angular.module('portal.services', [])
             return common.syncHttpResponse(CONSTANTS.iaasApiContextUrl + '/tenant/org/all', 'GET', getParams, 'application/x-www-form-urlencoded');
         };
 
+        /*
+        portal.portalOrgs.syncGpuListTenantByName = function (orgCode) {
+            var getParams = {
+                "orgCode" : orgCode
+            };
+            return common.syncHttpResponse(CONSTANTS.gpuApiContextUrl + '/tenant/org/all', 'GET', getParams, 'application/x-www-form-urlencoded');
+        };
+        */
+
         portal.portalOrgs.syncGetTenantByName = function (orgCode, teamCode) {
             var getParams = {
 				"orgCode" : orgCode,
@@ -408,6 +417,16 @@ angular.module('portal.services', [])
             };
             return common.syncHttpResponse(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams, 'application/x-www-form-urlencoded');
         };
+
+        /*
+        portal.portalOrgs.syncGetGpuTenantByName = function (orgCode, teamCode) {
+            var getParams = {
+                "orgCode" : orgCode,
+                "teamCode" : teamCode
+            };
+            return common.syncHttpResponse(CONSTANTS.gpuApiContextUrl + '/tenant/org/one', 'GET', getParams, 'application/x-www-form-urlencoded');
+        };
+        */
 
         portal.portalOrgs.getNotices = function () {
             return common.retrieveResource(common.resourcePromise('/hsvc/api/noti/info/v1.0', 'GET'));
