@@ -62,13 +62,13 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }">
-								<td>{{instanceSnapshot.name}}</td>
-								<td>
+								<td style="text-align: left">{{instanceSnapshot.name}}</td>
+								<td style="text-align: left">
 									<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>
 									<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="!instanceSnapshot.beInstance" ng-click="contents.fn.showErrorAlert()">{{instanceSnapshot.instanceName}}</a>
 								</td>
-								<td>{{ instanceSnapshot.imageName }}</td>
-								<td>{{instanceSnapshot.description | enterByNbr}}</td>
+								<td style="text-align: left">{{ instanceSnapshot.imageName }}</td>
+								<td style="text-align: left">{{instanceSnapshot.description | enterByNbr}}</td>
 								<td>
 									<span class="stateWrap">
 										<span class="stateMark" ng-class="{'type3' : (instanceSnapshot.status == 'active'), 'type2': (instanceSnapshot.status == 'error'), 'type4' : (instanceSnapshot.status != 'active' && instanceSnapshot.status != 'error')}"></span>
