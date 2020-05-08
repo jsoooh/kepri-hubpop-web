@@ -1,7 +1,7 @@
 <!-- 목록 이미지형/리스트형 선택 버튼 -->
 <div class="btnArea text-right">
 	<!-- 선택 된 class="on" 추가 -->
-	<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
+	<button type="button" name="button" class="btn btn-list type1" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
 	<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
 </div>
 <!-- //목록 이미지형/리스트형 선택 버튼 -->
@@ -53,7 +53,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="(key, serviceItem) in contents.serviceInstances | filter:{name : contents.schFilterText}">
-				<td>
+				<td style="text-align: left">
 					<a href=""  id="txt-{{serviceItem.name}}">{{ serviceItem.name }}</a>
 					<div id="renameService-{{serviceItem.name}}" class="renameWrap" style="display:none;">
 						<input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
@@ -108,7 +108,7 @@
                         </div>
                         <p id="txt-{{serviceItem.name}}" class="tit"><a href="">{{ serviceItem.name }}</a></p>
                         <div id="renameService-{{serviceItem.name}}" class="renameWrap" style="display:none;">
-                            <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" placeholder="{{serviceItem.name}}">
+                            <input type="text" data-guid="{{serviceItem.guid}}" data-plan-guid="{{serviceItem.servicePlanGuid}}" name="renameService-{{serviceItem.name}}" value="{{serviceItem.name}}" class="form-control" ng-model="serviceItem.name" placeholder="{{serviceItem.name}}">
                             <div class="sdBtnWrap">
                                 <button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="updateName(serviceItem.name)" ><span class="ico">이름저장</span></button>
                                 <button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameInst(serviceItem.name)"><span class="ico">변경취소</span></button>
