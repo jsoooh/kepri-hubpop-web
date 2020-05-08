@@ -42,6 +42,8 @@ angular.module('portal.controllers')
 
         /*Org 목록 조회*/
         ct.listOrgProjects = function () {
+            /* 20.05.08 - 프로젝트 목록으로 돌아갈 경우 다시 대시보드부터 볼수 있도록 false 변경 by ksw */
+            orgService.changeUser = false;
             ct.orgProjects = [];
             $scope.main.loadingMainBody = true;
             var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");

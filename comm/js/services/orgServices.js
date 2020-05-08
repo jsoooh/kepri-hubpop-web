@@ -7,7 +7,6 @@ angular.module('portal.services')
 		/* 20.04.24 - 프로젝트 목록 : 우측 메뉴 기능 by ksw */
         /* 사용자 변경을 누르면 true로 변경 */
 		orgService.changeUser = false;
-		orgService.sltInfoTab = 'member';
 
 		/*org 목록조회*/
         orgService.listOrgs = function (size, page, email, schText) {
