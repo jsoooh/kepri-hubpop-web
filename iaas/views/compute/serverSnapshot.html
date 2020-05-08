@@ -189,10 +189,10 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }">
-								<td>{{storageSnapshot.snapshotName}}</td>
-								<td>{{storageSnapshot.volumeName}}</td>
+								<td style="text-align: left">{{storageSnapshot.snapshotName}}</td>
+								<td style="text-align: left">{{storageSnapshot.volumeName}}</td>
 								<td>{{storageSnapshot.size | displayVolume:'GB'}}</td>
-								<td>{{storageSnapshot.description | enterByNbr}}</td>
+								<td style="text-align: left">{{storageSnapshot.description | enterByNbr}}</td>
 								<td>
 									<span class="stateWrap">
 										<span class="stateMark" ng-class="{'type3' : (storageSnapshot.status == 'available'), 'type2': (storageSnapshot.status == 'error'), 'type4' : (storageSnapshot.status != 'available' && storageSnapshot.status != 'error')}"></span>
