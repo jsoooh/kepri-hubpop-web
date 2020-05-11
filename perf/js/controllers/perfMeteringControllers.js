@@ -12,7 +12,7 @@ angular.module('perf.controllers')
         ct.data.sltOrgName = "";
 
         ct.meteringItemGroups = [];
-        ct.data.maxRow = {};
+        ct.data.maxRow = "";
         ct.data.sltYear = "";
         ct.meteringYears = [];
         ct.orgMeteringMonthlyLists = [];
@@ -46,6 +46,8 @@ angular.module('perf.controllers')
                     var date = new Date();
                     ct.data.sltYear = date.getFullYear();
                 }
+
+                ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail listAllMeteringYears");
@@ -54,7 +56,7 @@ angular.module('perf.controllers')
         };
 
         /* 월별 사용량 리스트 BY ORG_ORGCODE */
-        ct.fn.orgListMeteringMonthlyTotal = function() {
+        ct.fn.orgListMeteringMonthlyTotal = function(sltYear) {
             $scope.main.loadingMainBody = true;
 
             /* Org 정보 조회 BY ORG_ID */
@@ -63,7 +65,7 @@ angular.module('perf.controllers')
                 ct.data.sltOrgName = data.orgName;
                 ct.data.sltOrgCode = data.orgId;
 
-                ct.fn.selectMeteringYear(ct.data.sltYear);
+                ct.fn.selectMeteringYear(sltYear);
             });
             orgPromise.error(function (data, status, headers) {
                 ct.sltOrgCode = {};
@@ -121,7 +123,6 @@ angular.module('perf.controllers')
 
         ct.fn.listAllMeteringYears();
         ct.fn.listAllMeteringGroupItems();
-        ct.fn.orgListMeteringMonthlyTotal();
 
     })
     .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $interval, $filter, common, perfMeteringService, CONSTANTS, orgService) {
