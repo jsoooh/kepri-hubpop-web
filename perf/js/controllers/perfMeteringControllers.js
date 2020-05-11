@@ -36,6 +36,8 @@ angular.module('perf.controllers')
 
         /* 년도 리스트 */
         ct.fn.listAllMeteringYears = function () {
+            $scope.main.loadingMainBody = true;
+
             var promise = perfMeteringService.listAllMeteringYears();
             promise.success(function (data) {
                 console.log("Success listAllMeteringYears");
@@ -50,6 +52,7 @@ angular.module('perf.controllers')
                 ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
             });
             promise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 console.log("Fail listAllMeteringYears");
                 ct.meteringYears = [];
             });
@@ -68,6 +71,7 @@ angular.module('perf.controllers')
                 ct.fn.selectMeteringYear(sltYear);
             });
             orgPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 ct.sltOrgCode = {};
                 ct.sltOrgName = {};
             });
