@@ -132,6 +132,7 @@ angular.module('perf.controllers')
             allProcessForCombineData.then(function (datas) {
                 ct.data.totalPerfAnlsByOrgCodeAndPerfDate = [];
                 console.log("Start Combine");
+                ct.data.totalPerfAnls = 0;
                 var sltData = datas[0];
                 var lastData = datas[1];
                 if (sltData != undefined && lastData != undefined) {
