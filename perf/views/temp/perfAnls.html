@@ -1,13 +1,13 @@
 <div class="cBox type2">
 	<div class="cBox-hd">
-		<h4 class="c-tit">{{contents.data.sltOrg.name}}<em><!--2020년 10월 25일-->&nbsp;&nbsp;날짜: {{contents.data.today}} &nbsp;&nbsp;합계 : {{contents.data.totalPerfAnls | number}}원</em></h4>
+		<h4 class="c-tit">{{contents.sltOrg.name}}<em><!--2020년 10월 25일-->&nbsp;&nbsp;날짜: {{contents.today | date: 'yyyy년 MM월 dd일'}} &nbsp;&nbsp;합계 : {{contents.data.totalPerfAnls | number}}원</em></h4>
 		<div class="pull-right">
 			<select ng-model="contents.data.sltYear" ng-options="year + '년' for year in contents.perfYears"
 				ng-change ="contents.fn.changeSltYear(contents.data.sltYear)">
 			</select>
 
 			<select ng-model="contents.data.sltMonth" ng-options="month + '월' for month in contents.perfMonths"
-					ng-change="contents.fn.changeSltMonth(contents.data.sltMonth)"-->
+					ng-change="contents.fn.selectMonth(contents.data.sltMonth)"-->
 			</select>
 		</div>
 	</div>
@@ -40,12 +40,12 @@
 					</tr>
 				</thead>
 				<tbody class="tbody_group"
-					   ng-if="!(contents.data.totalPerfAnlsByOrgCodeAndPerfDate.length == 0 || !contents.data.totalPerfAnlsByOrgCodeAndPerfDate)"
+					   ng-if="!(contents.totalPerfAnlsByOrgCodeAndPerfDate.length == 0 || !contents.totalPerfAnlsByOrgCodeAndPerfDate)"
 					   ng-repeat="meteringItemGroup in contents.meteringItemGroups">
 				<tr>
 					<th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
 				</tr>
-				<tr ng-repeat="anlsMonthlyDetailList in contents.data.totalPerfAnlsByOrgCodeAndPerfDate | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }"
+				<tr ng-repeat="anlsMonthlyDetailList in contents.totalPerfAnlsByOrgCodeAndPerfDate | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }"
 					ng-switch="anlsMonthlyDetailList.itemUnit">
 					<td>{{ anlsMonthlyDetailList.itemName }}</td>
 					<td>    <!-- 전월 사용량 -->
@@ -73,7 +73,7 @@
 						<a ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a></td>
 				</tr>
 				</tbody>
-				<tbody ng-if="contents.data.totalPerfAnlsByOrgCodeAndPerfDate.length == 0 || !contents.data.totalPerfAnlsByOrgCodeAndPerfDate"
+				<tbody ng-if="contents.totalPerfAnlsByOrgCodeAndPerfDate.length == 0 || !contents.totalPerfAnlsByOrgCodeAndPerfDate"
 					   class="ng-scope">
 				<tr>
 					<td colspan="9" class="center ng-binding">목록이 존재하지 않습니다.</td>
