@@ -1561,16 +1561,6 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup = {};
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.code = "000";
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
-            ct.orgQuotaValue.orgQuotaItem.name = "RAM";
-            ct.orgQuotaValue.orgQuotaItem.unit = "GB";
-            ct.orgQuotaValue.value = ct.paasQuota.instanceMemoryLimit/1024;
-            ct.orgQuotaValues.push(ct.orgQuotaValue);
-
-            ct.orgQuotaValue = {};
-            ct.orgQuotaValue.orgQuotaItem = {};
-            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup = {};
-            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.code = "000";
-            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
             ct.orgQuotaValue.orgQuotaItem.name = "서비스";
             ct.orgQuotaValue.orgQuotaItem.unit = "";
             ct.orgQuotaValue.value = ct.paasQuota.totalServices;
@@ -1584,6 +1574,16 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.name = "라우트";
             ct.orgQuotaValue.orgQuotaItem.unit = "";
             ct.orgQuotaValue.value = ct.paasQuota.totalRoutes;
+            ct.orgQuotaValues.push(ct.orgQuotaValue);
+
+            ct.orgQuotaValue = {};
+            ct.orgQuotaValue.orgQuotaItem = {};
+            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup = {};
+            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.code = "000";
+            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
+            ct.orgQuotaValue.orgQuotaItem.name = "메모리";
+            ct.orgQuotaValue.orgQuotaItem.unit = "GB";
+            ct.orgQuotaValue.value = ct.paasQuota.instanceMemoryLimit/1024;
             ct.orgQuotaValues.push(ct.orgQuotaValue);
 
             ct.orgQuotaValue = {};

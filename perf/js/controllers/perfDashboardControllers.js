@@ -61,6 +61,7 @@ angular.module('perf.controllers')
 
         /* 년도 리스트 */
         ct.fn.listAllMeteringYears = function () {
+            $scope.main.loadingMainBody = true;
             var promise = perfMeteringService.listAllMeteringYears();
             promise.success(function (data) {
                 console.log("Success listAllMeteringYears");
@@ -71,11 +72,13 @@ angular.module('perf.controllers')
                 }
             });
             promise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 console.log("Fail listAllMeteringYears");
                 ct.dashYears = [];
             });
         };
         ct.fn.initYearMonth = function() {
+            $scope.main.loadingMainBody = true;
             var today = new Date();
             ct.data.sltYear = String(today.getFullYear());
             ct.data.sltMonth = String(today.getMonth() + 1);
@@ -515,7 +518,6 @@ angular.module('perf.controllers')
             ct.data.sltMonth = String(sltMonth);
             ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
             ct.data.sltColumnOption = "daily";
-
 
             ct.fn.listAnlsDailySummaryByOrg(ct.data.sltYear, ct.data.sltMonth);
             ct.fn.listAnlsByItemGroup(ct.data.sltYear, ct.data.sltMonth);
