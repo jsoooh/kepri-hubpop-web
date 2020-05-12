@@ -155,4 +155,13 @@ angular.module('app')
             }
         };
     })
+    .filter('numberUnit', function() {
+        return function(number, param) {
+            if (!isNaN(number) && !isNaN(param)) {
+                return parseInt(number/param);
+            } else {
+                return number;
+            }
+        }
+    })
 ;
