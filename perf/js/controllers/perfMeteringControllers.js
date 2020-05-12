@@ -125,6 +125,22 @@ angular.module('perf.controllers')
             }
         };
 
+        // 과거 확인
+        ct.fn.isPast = function (sltYear, sltMonth, sltDay) {
+            var date = new Date();
+            if (!sltDay == true) {
+                sltDay = 1;
+            }
+            date.setFullYear(sltYear, sltMonth, sltDay);
+
+            var today = new Date();
+            if (today.getTime() > date.getTime()) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
         ct.fn.listAllMeteringYears();
         ct.fn.listAllMeteringGroupItems();
 
