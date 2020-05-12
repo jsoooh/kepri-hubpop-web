@@ -4,7 +4,7 @@
 	</div>
 	<div class="pull-right pt20">
 		<select ng-options=" year + '년' for year in contents.meteringYears" ng-model="contents.data.sltYear"
-				ng-change="contents.fn.changeMeteringYear(contents.data.sltYear)">
+				ng-change="contents.fn.selectMeteringYear(contents.data.sltYear)">
 		</select>
 
 		<select ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups"
@@ -29,7 +29,7 @@
 				<div id="monthly-metering-chart"></div>
 				<!--img alt="차트 테스트 이미지" src="images/chart_test_img03.png"-->
 			</div>
-			<h4 class="mt30">현황<span class="point-txt2">(단위: {{contents.data.sltItem.itemUnit}})</span></h4>
+			<h4 class="mt30">현황<span class="point-txt2">(단위: {{contents.sltItem.itemUnit}})</span></h4>
 			<div class="tbl type3 mt30">
 				<table class="table">
 					<colgroup>
@@ -75,7 +75,7 @@
 	<div class="panel type2">
 		<div class="panel_head">
 			<div class="pull-left">
-				<h4 class="tit">일별 사용 추이<em>(단위: {{contents.data.sltItem.itemUnit}})</em></h4>
+				<h4 class="tit">일별 사용 추이<em>(단위: {{contents.sltItem.itemUnit}})</em></h4>
 			</div>
 			<div class="pull-right">
 				<select ng-options="month + '월' for month in contents.meteringMonths" ng-model = "contents.data.sltMonth" ng-change="contents.fn.changeMeteringMonth(contents.data.sltMonth)"></select>
@@ -87,7 +87,7 @@
 				<div id="daily-metering-chart"></div>
 				<!--img alt="차트 테스트 이미지" src="images/chart_test_img04.png"-->
 			</div>
-			<h4 class="h-tit4 mt40">현황<em>(단위: {{contents.data.sltItem.itemUnit}})</em></h4>
+			<h4 class="h-tit4 mt40">현황<em>(단위: {{contents.sltItem.itemUnit}})</em></h4>
 			<div class="tbl type3 double-th mt30">
 				<table class="table">
 					<colgroup>
@@ -130,6 +130,7 @@
 					<tr><!-- 16-31 month = {0~11}, day = {1-31} {{ object | limitTo : limit(갯수) : begin(시작 index) }}-->
 						<td ng-if="perfMeteringDailyTotal !== ''" ng-repeat="perfMeteringDailyTotal in contents.perfMeteringDailyTotals | limitTo : 16 : 15 track by $index"> {{perfMeteringDailyTotal | numberUnit : contents.data.numUnit | number}}</td>
 						<td ng-if="perfMeteringDailyTotal === ''" ng-repeat="perfMeteringDailyTotal in contents.perfMeteringDailyTotals | limitTo : 16 : 15 track by $index"> </td>
+						<td ng-if="contents.perfMeteringDailyTotals.length > 0" ng-repeat="blank in [].constructor(31 - contents.perfMeteringDailyTotals.length) track by $index"> </td>
 					</tr>
 					<tr ng-if="(contents.perfMeteringDailyTotals.length == 0 || !contents.perfMeteringDailyTotals) && (contents.perfMeteringDailyTotalSum < 1 || !contents.perfMeteringDailyTotalSum)" class="ng-scope">
 						<td colspan="16" class="center ng-binding">목록이 존재하지 않습니다.</td>
