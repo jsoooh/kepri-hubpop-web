@@ -405,10 +405,10 @@ angular.module('perf.controllers')
             console.log("reconstruct ------")
             if (ct.sltItem.itemCode != false) {
                 if (ct.data.sltYear != false) {
-                    ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.data.sltItemCode, ct.data.sltYear, ct.data.sltOrg.code);
+                    ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear);
                     if (ct.data.sltMonth != false) {
                         ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
-                        ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth, ct.data.sltOrg.code)
+                        ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth)
                     }
                 }
             }
@@ -420,7 +420,7 @@ angular.module('perf.controllers')
             if (ct.sltItem.itemCode != false && ct.data.sltYear != false) {
                 if (ct.data.sltMonth != false) {
                     ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
-                    ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth, ct.data.sltOrg.code);
+                    ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth);
                 }
             }
         };
@@ -432,7 +432,7 @@ angular.module('perf.controllers')
         };
 
         // GET Monthly Data - redraw chart
-        ct.fn.listPerfMeteringMonthlyTotalByItemCode = function (itemCode, sltYear, orgCode) {
+        ct.fn.listPerfMeteringMonthlyTotalByItemCode = function (orgCode, itemCode, sltYear) {
             $scope.main.loadingMainBody = true;
             var params = {
                 urlPaths: {
@@ -495,7 +495,7 @@ angular.module('perf.controllers')
         };
 
         // GET Daily Chart - redraw chart
-        ct.fn.listPerfMeteringDailyTotalByItemCode = function (itemCode, sltYear, sltMonth, orgCode) {
+        ct.fn.listPerfMeteringDailyTotalByItemCode = function (orgCode, itemCode, sltYear, sltMonth) {
             $scope.main.loadingMainBody = true;
             var params = {
                 urlPaths: {
@@ -571,10 +571,9 @@ angular.module('perf.controllers')
 
             var allProcessForInit = $q.all([orgDefer.promise, listItemGroupsDefer.promise, listItemsDefer.promise]);
             allProcessForInit.then(function (datas) {
-                console.log("wow");
                 console.log(ct.data.sltOrg.code);
-                ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltOrg.code);
-                ct.fn.listPerfMeteringDailyTotalByItemCode(ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltMonth, ct.data.sltOrg.code);
+                ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.data.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear);
+                ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltMonth);
             });
             ct.fn.getOrg(orgDefer);
             ct.fn.initDraw();
