@@ -115,6 +115,11 @@ angular.module('portal.controllers')
 
         /* 2020.03.24 - 사용자 탈퇴 추가 by ksw */
         ct.withdrawOrgProjectUser = function (org) {
+            //해당 프로젝트 책임자는 탈퇴 불가
+            if (org.managerId == $scope.main.userInfo.email) {
+                common.showAlertWarning("해당 프로젝트 책임자는 탈퇴 불가합니다.");
+                return;
+            }
             var showConfirm = common.showConfirm($translate.instant('label.del'), org.orgName + ' ' + $translate.instant('message.mq_delete_account'));
             showConfirm.then(function() {
                 ct.withdrawOrgProjectUserAction(org);

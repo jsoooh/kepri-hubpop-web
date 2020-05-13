@@ -158,10 +158,9 @@
 					<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgId }}</a></td>
 					<td class="text-left">
 						<a href="" ng-click="main.goToPortalOrgPage(org);">
-							<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
 							<div class="bookmark">
-								<span class="ico_bookmark" ng-if="org.isBookmark == false">☆</span>
-								<span class="ico_bookmark on" ng-if="org.isBookmark == true">★</span>
+								<span class="ico_bookmark" ng-if="!org.isBookmark">☆</span>
+								<span class="ico_bookmark on" ng-if="org.isBookmark">★</span>
 							</div>
 							{{ org.orgName }}
 						</a>
@@ -185,9 +184,8 @@
 								<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
 								<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
 								<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
-								<!-- 2020.03.24 - 사용자 탈퇴 기능 추가 by ksw -->
-								<li><a href="" ng-click="contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
-								<li><a href=""  title="삭제" class="delete">{{ 'label.del' | translate }}</a></li>
+								<li><a href="" ng-class="org.managerId == main.userInfo.email ? 'disabled' : ''" ng-click="org.managerId != main.userInfo.email && contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
+								<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'">{{ 'label.del' | translate }}</a></li>
 							</ul>
 						</div>
 					</td>
@@ -233,12 +231,11 @@
 				</a>
 				<div class="pj_etc_box">
 					<div class="bookmark">
-						<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
-						<span class="ico_bookmark" ng-if="org.isBookmark == false">☆</span>
-						<span class="ico_bookmark on" ng-if="org.isBookmark == true">★</span>
+						<span class="ico_bookmark" ng-if="!org.isBookmark">☆</span>
+						<span class="ico_bookmark on" ng-if="org.isBookmark">★</span>
 					</div>
 					<div class="dropdown btn-option">
-						<button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정">
+						<button id="btn-option2" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정">
 							<span class="ico">실행 설정</span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
@@ -249,8 +246,8 @@
 							<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
 							<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
 							<!-- 2020.03.24 - 사용자 탈퇴 기능 추가 by ksw -->
-							<li><a href="" ng-click="contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
-							<li><a href=""  title="삭제" class="delete">{{ 'label.del' | translate }}</a></li>
+							<li><a href="" ng-class="org.managerId == main.userInfo.email ? 'disabled' : ''" ng-click="org.managerId != main.userInfo.email && contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
+							<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'">{{ 'label.del' | translate }}</a></li>
 						</ul>
 					</div>
 				</div>
