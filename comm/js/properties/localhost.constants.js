@@ -415,7 +415,8 @@ angular.module('app')
                 ['TextColor', 'BGColor'],
                 ['Table', 'SpecialChar', 'Link', 'Unlink']
             ]
-        }
+        },
+        startYear: 2019
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},
