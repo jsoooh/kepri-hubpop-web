@@ -71,6 +71,11 @@ angular.module('perf.controllers')
         };
 
         // 데이터 호출 Using $q
+        /**
+         * HUBPOP_INT_PER_ANS_02 - 월별 과금 현황
+         * @param params
+         * @param defer
+         */
         ct.fn.totalAnlsByOrgCodeAndPerfYm = function (params, defer) {
             var promise = perfAnlsService.totalAnlsByOrgCodeAndPerfYm(params)
             promise.success(function (data) {

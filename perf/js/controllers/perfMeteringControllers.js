@@ -69,6 +69,10 @@ angular.module('perf.controllers')
         };
 
         /* 년도 변경 */
+        /**
+         * HUBPOP_INT_PER_ANS_03 - 월별 사용 현황
+         * @param sltYear
+         */
         ct.fn.selectMeteringYear = function (sltYear) {
             $scope.main.loadingMainBody = true;
             if(angular.isDefined(sltYear)) {
@@ -423,6 +427,13 @@ angular.module('perf.controllers')
         };
 
         // GET Monthly Data - redraw chart
+        /**
+         * HUBPOP_INT_PER_ANS_04 - 월별 사용 추이
+         * @param orgCode
+         * @param itemCode
+         * @param sltYear
+         * @param sltMonth
+         */
         ct.fn.listPerfMeteringMonthlyTotalByItemCode = function (orgCode, itemCode, sltYear) {
             $scope.main.loadingMainBody = true;
             var params = {
@@ -486,6 +497,13 @@ angular.module('perf.controllers')
         };
 
         // GET Daily Chart - redraw chart
+        /**
+         * HUBPOP_INT_PER_ANS_04 - 일별 사용 추이
+         * @param orgCode
+         * @param itemCode
+         * @param sltYear
+         * @param sltMonth
+         */
         ct.fn.listPerfMeteringDailyTotalByItemCode = function (orgCode, itemCode, sltYear, sltMonth) {
             $scope.main.loadingMainBody = true;
             var params = {
