@@ -41,22 +41,12 @@ angular.module('perf.controllers')
         ct.fn.listAllMeteringYears = function () {
             $scope.main.loadingMainBody = true;
 
-            var promise = perfMeteringService.listAllMeteringYears();
-            promise.success(function (data) {
-                console.log("Success listAllMeteringYears");
+            for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
+                ct.meteringYears.push(String(i));
+            }
+            ct.data.sltYear = String(ct.today.getFullYear());
 
-                for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
-                    ct.meteringYears.push(String(i));
-                }
-                ct.data.sltYear = String(ct.today.getFullYear());
-
-                ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
-            });
-            promise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                console.log("Fail listAllMeteringYears");
-                ct.meteringYears = [];
-            });
+            ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
         };
 
         /* 월별 사용량 리스트 BY ORG_ORGCODE */
