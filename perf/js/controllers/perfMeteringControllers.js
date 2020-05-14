@@ -5,6 +5,8 @@ angular.module('perf.controllers')
         _DebugConsoleLog("perfMeteringControllers.js : perfMonthlyMeteringCtrl", 1);
 
         var ct = this;
+        ct.scope = $scope;
+        ct.scope.CONSTANTS = CONSTANTS;
         ct.fn = {};
         ct.data = {};
 
@@ -13,6 +15,7 @@ angular.module('perf.controllers')
 
         ct.meteringItemGroups = [];
         ct.data.maxRow = "";
+        ct.today = new Date();
         ct.data.sltYear = "";
         ct.meteringYears = [];
         ct.orgMeteringMonthlyLists = [];
@@ -41,13 +44,11 @@ angular.module('perf.controllers')
             var promise = perfMeteringService.listAllMeteringYears();
             promise.success(function (data) {
                 console.log("Success listAllMeteringYears");
-                ct.data.sltYear = data.items[0];
-                ct.meteringYears = angular.copy(data.items);
 
-                if(angular.isUndefined(ct.data.sltYear) || ct.data.sltYear == "") {
-                    var date = new Date();
-                    ct.data.sltYear = date.getFullYear();
+                for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
+                    ct.meteringYears.push(String(i));
                 }
+                ct.data.sltYear = String(ct.today.getFullYear());
 
                 ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
             });
