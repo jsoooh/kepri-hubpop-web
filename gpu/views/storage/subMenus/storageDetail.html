@@ -1,0 +1,87 @@
+<!-- cBox -->
+<div class="cBox type1 workCnt-info">
+	<div class="cBox-hd">
+		<h4 class="c-tit">{{contents.volume.name}}</h4>
+		<div class="pull-right">
+			<div class="dropdown btn-option">
+				<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+					<span class="ico">실행 설정</span>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+					<li ng-click="contents.fn.formOpen($event, 'snapshot', contents.volume);"><a href="javascript:void(0);">백업 이미지 생성</a></li>
+					<li ng-click=""><a href="javascript:void(0);">디스크 크기 변경</a></li>
+					<li ng-class="{'on_disablec' : contents.volume.status == 'in-use'}" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" >서버 연결 해제</a></li>
+					<li ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a href="javascript:void(0);">삭제</a></li>
+					<!--<li ng-click=""><a href="javascript:void(0);">디스크 이름 변경</a></li>-->
+					<!--<li ng-click="contents.fn.formOpen($event, 'storageEdit', contents.volume);"><a href="javascript:void(0);">수정</a></li>-->
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="cBox-cnt">
+		<div class="in">
+			<div class="col info-txt type1">
+				<ul>
+					<li>
+						<strong class="tit">상태</strong>
+						<div class="txt">
+							<span class="stateWrap">
+								<span class="stateMark type1" ng-if="contents.volume.status == 'in-use'">정상배포</span>
+								<span class="stateMark type2" ng-if="contents.status == 'error'">오류</span>
+								<span class="stateMark type3" ng-if="contents.volume.status == 'available' || contents.volume.status == 'deleted'">중지</span>
+								<span class="stateMark type4" ng-if="contents.volume.status == 'creating' || contents.volume.status == 'deleting'">대기</span>
+								<span class="state-txt">{{contents.volume.status}}</span>
+							</span>
+						</div>
+					</li>
+					<li>
+						<strong class="tit">연결서버</strong>
+						<div class="txt">{{contents.instance.name?contents.instance.name:"연결 서버가 없습니다."}}</div>
+					</li>
+					<li>
+						<strong class="tit">크기</strong>
+						<div class="txt">{{contents.volume.size}}GB</div>
+					</li>
+				</ul>
+			</div>
+			
+			<div class="col info-txt type1">
+				<ul>
+					<li>
+						<strong class="tit">디스크 타입</strong>
+						<div class="txt">{{contents.volume.type}}</div>
+					</li>
+					<li>
+						<strong class="tit">장치정보</strong>
+						<div class="txt"><span>{{contents.volume.volumeAttachment.device}}</span><span>(부팅여부:{{contents.volume.volumeAttachment.bootAble?"Y":"N"}})</span></div>
+					</li>
+					<li>
+						<strong class="tit">설명</strong>
+						<div class="txt">{{contents.volume.description}}</div>
+					</li>
+				</ul>
+			</div>
+			
+			<div class="col info-txt type2 appCnt-vol">
+				<ul class="ul-volume volStrgView">
+					<li>
+						<div class="in volStrgListView">
+							<div class="progressWrap">
+								<p class="progress-txt">
+									<b><span count-to="{{contents.volume.size | number : 0}}" duration="1" count-from="0" filter="number"></span>GB</b>
+								</p>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- //cBox -->
+</div>
+<!-- btm buttom -->
+<div class="btn-btm">
+	<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage(main.moveParentUrl);">목록</button>
+</div>
+<!-- //btm buttom -->

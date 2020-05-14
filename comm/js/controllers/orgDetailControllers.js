@@ -16,7 +16,8 @@ angular.module('portal.controllers')
         if (orgService.changeUser == true) {
             ct.sltInfoTab = orgService.sltInfoTab;
         } else {
-            ct.sltInfoTab = 'dashboard';
+            // ct.sltInfoTab = 'dashboard';
+            ct.sltInfoTab = 'actEvent';
         }
 
         ct.isQuotaChange = true;    //쿼터변경요청 가능 여부, 첫건이 '요청'상태일 때 요청불가

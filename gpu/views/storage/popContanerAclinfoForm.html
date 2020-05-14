@@ -1,0 +1,90 @@
+<div class="tbw type1">
+    <table class="table">
+        <colgroup>
+            <col style="width:25%;">
+            <col style="width:auto;">
+        </colgroup>
+        <tbody>
+        <tr>
+            <th scope="row">컨테이너명</th>
+            <td>crossent-default-org</td>
+        </tr>
+        <tr>
+            <th scope="row">특정 사용자</th>
+            <td>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="auth_full" ng-model="pop.data.autheAcl.fullControl">
+                    <label class="label-txt" for="auth_full">FULL</label>
+                </div>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="auth_read" ng-model="pop.data.autheAcl.read">
+                    <label class="label-txt" for="auth_read">READ</label>
+                </div>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="auth_write" ng-model="pop.data.autheAcl.write">
+                    <label class="label-txt" for="auth_read">WRITE</label>
+                </div>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="auth_read_acp" ng-model="pop.data.autheAcl.readAcp">
+                    <label class="label-txt" for="auth_read">READ-ACP</label>
+                </div>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="auth_write_acp" ng-model="pop.data.autheAcl.writeAcp">
+                    <label class="label-txt" for="auth_read">WRITE-ACP</label>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">모든 사용자</th>
+            <td>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="noauth_full" ng-model="pop.data.noAuthAcl.fullControl">
+                    <label class="label-txt" for="noauth_full">FULL</label>
+                </div>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="noauth_read" ng-model="pop.data.noAuthAcl.read">
+                    <label class="label-txt" for="noauth_read">READ</label>
+                </div>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="noauth_write" ng-model="pop.data.noAuthAcl.write">
+                    <label class="label-txt" for="noauth_write">WRITE</label>
+                </div>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="noauth_read_acp" ng-model="pop.data.noAuthAcl.readAcp">
+                    <label class="label-txt" for="noauth_read_acp">READ-ACP</label>
+                </div>
+                <div class="checkbox checkbox-inline">
+                    <input type="checkbox" id="noauth_write_acp" ng-model="pop.data.noAuthAcl.writeAcp">
+                    <label class="label-txt" for="noauth_write_acp">WRITE-ACP</label>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">설명</th>
+            <td class="text-left">
+                <p class="inputWrap">
+                    KPAASTA 사용자:KPAASTA의 팀별 오브젝트 스토리지 접근정보를 (Access Key,Secret Access Key) 소유한 사용자
+                </p>
+                <p class="inputWrap">
+                    모든 사용자:인터넷에 접속할 수 있는 모든 사용자
+                </p>
+                <p class="inputWrap">
+                    FULL:컨테이너의 모든(read,write) 권한
+                </p>
+                <p class="inputWrap">
+                    READ:컨테이너 정보(생성일,버전,오브젝트 목록)조회만 가능
+                </p>
+                <p class="inputWrap">
+                    WRITE:컨테이너에 대해 오브젝트 등록,컨테이너 삭제,컨테이너 수정(OVER WRITE)가 가능함
+                </p>
+                <p class="inputWrap">
+                    READ-ACP:컨테이너에 대해 접근 권한 조회가 가능함
+                </p>
+                <p class="inputWrap">
+                    WRITE-ACP:컨테이너에 대해 접근 권한 변경이 가능함
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

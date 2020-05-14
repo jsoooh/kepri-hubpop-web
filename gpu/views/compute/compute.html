@@ -1,0 +1,660 @@
+<!-- 작업 추가 및 선택 -->
+<div ng-if="main.projectType == 'pjt'" class="projt-selWarp">
+    <div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+    <div class="pull-right">
+        <button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+    </div>
+</div>
+<!-- //작업 추가 및 선택 -->
+
+<!-- 목록 이미지형/리스트형 선택 버튼 -->
+<div class="btnArea text-right">
+    <!-- 선택 된 class="on" 추가 -->
+    <button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
+    <button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
+</div>
+<!-- //목록 이미지형/리스트형 선택 버튼 -->
+
+<!-- 프로젝트 정보 -->
+<div class="cBox type0 projt-mana mt30">
+    <div class="pull-left">
+        <h4 class="c-tit">전체 서버 <em class="point1">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</em></h4>
+    </div>
+    <div class="pull-right">
+        <!-- 검색 -->
+        <div class="searchBox type2">
+            <div class="form-group">
+                <input ng-if="contents.tabIndex == 0" type="text" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText">
+                <input ng-if="contents.tabIndex == 1" type="text" placeholder="부하분산 서버 검색" style="width:300px;" ng-model="contents.schLbFilterText">
+            </div>
+            <button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
+        </div>
+        <!-- //검색 -->
+    </div>
+</div>
+<!-- //프로젝트 정보 -->
+
+<!-- 탭영역 -->
+<div role="tabpanel" class="tabWrap type1">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</span></a></li>
+        <li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 서버 관리<span>({{(contents.lbServiceLists).length}})</span></a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- tab1 cnt -->
+        <div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 0}">
+            <!-- 버튼영역 -->
+            <div class="btnWrap">
+                <!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/create')">-->
+                <button type="button" class="btn_lg" ng-click="main.goToPage('/gpu/compute/create')">
+                    <!--<button type="button" class="btn_lg" ng-click="contents.showTempAlert()">-->
+                    <span class="ico ico_create" ></span>서버 만들기
+                </button>
+                <!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/compute/copy')">-->
+                <button type="button" class="btn_lg" ng-click="main.goToPage('/gpu/compute/copy')">
+                    <span class="ico ico_copy"></span>다른서버 복사하기
+                </button>
+                <!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/create')" ng-if="false">-->
+                <button type="button" class="btn_lg" ng-click="main.goToPage('/gpu/loadbalancer/create')" ng-if="false">
+                    <span class="ico ico_create" ></span>부하 분산 설정
+                </button>
+                <!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')" ng-if="false">-->
+                <button type="button" class="btn_lg" ng-click="main.goToPage('/gpu/loadbalancer/detail/:lbInfoId')" ng-if="false">
+                    <span class="ico ico_create" ></span>부하 분산 상세
+                </button>
+            </div>
+            <!-- //버튼영역 -->
+
+            <!-- panel area-->
+            <!-- 프로젝트 리스트(테이블형) -->
+            <div class="tbl type1" ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length > 0 && contents.listType == 'list'">
+                <table class="table">
+                    <colgroup>
+                        <col style="width:15%;">
+                        <col style="width:10%;">
+                        <col style="width:">
+                        <col style="width: 8%;">
+                        <col style="width: 8%;">
+                        <col style="width: 8%;">
+                        <col style="width: 8%;">
+                        <col style="width: 8%;">
+                        <col style="width: 15%;">
+                        <col style="width: 8%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th scope="col">서버명</th>
+                        <th scope="col">OS유형</th>
+                        <th scope="col">접속주소(IP)</th>
+                        <th scope="col">CPU</th>
+                        <th scope="col">메모리(GB)</th>
+                        <th scope="col">디스크(GB)</th>
+                        <th scope="col">키페어</th>
+                        <th scope="col">상태</th>
+                        <th scope="col">생성일</th>
+                        <th scope="col">관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
+                        <td style="text-align: left">
+                            <span class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span>
+                            <!--<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>-->
+                            <span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
+                        </td>
+                        <td>{{ instance.image.osType }}</td>
+                        <td ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></td>
+                        <td ng-if="instance.image.osType == 'windows'">{{ instance.rdpDomain }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button></td>
+                        <td>{{ instance.spec.vcpus }} 개</td>
+                        <td>{{ (instance.spec.ram / 1024 | number:1).replace('.0', '') }}</td>
+                        <td>{{ instance.spec.disk }}</td>
+                        <td ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></td>
+                        <td ng-if="instance.image.osType == 'windows'">-</td>
+                        <td>
+                            <div ng-if="instance.alarmStatus">
+										<span class="stateWrap">
+											<span ng-if="!instance.alarmOccur && instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+											<span ng-if="instance.vmState == 'error'" class="stateMark type2">오류</span>
+											<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building' || instance.vmState == 'shelved_offloaded'" class="stateMark type4">대기</span>
+											<span ng-if="instance.vmState == 'stopped'" class="stateMark type3">중지</span>
+											<span ng-if="instance.alarmStatus == 'minor'" class="stateMark type5">주의</span>
+											<span ng-if="instance.alarmStatus == 'warning'" class="stateMark type4">경고</span>
+											<span ng-if="instance.alarmStatus == 'critical'" class="stateMark type2">위험</span>
+											<span class="state-txt" ng-if="!instance.alarmOccur">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
+											<span class="state-txt" ng-if="instance.alarmOccur">{{ 'iaas.label.instance_' + instance.alarmStatus | translate }}</span>
+										</span>
+                            </div>
+                        </td>
+                        <td>{{instance.created | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>
+                            <div ng-if="instance.procState == 'end'" class="dropdown btn-option">
+                                <button type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                                    <span class="ico">실행 설정</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                                    <li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen(instance, $event);">이름 변경</a></li>
+                                    <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);" title="시작">시작</a></li>
+                                    <li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
+                                    <li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);" title="재시작">재시작</a></li>
+                                    <li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+                                    <li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);" title="정지">정지</a></li>
+                                    <li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" class="disabled" title="서버가 ‘활성’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
+                                    <!--<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SHELVE',instance,$index);" title="비활성화">비활성화</a></li>
+                                    <li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘비활성화 해제’상태인 경우에만 '비활성화'가 가능합니다.">비활성화</a></li>
+                                    <li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNSHELVE',instance,$index);" title="비활성화 해제">비활성화 해제</a></li>
+                                    <li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘shelved’상태인 경우에만 '비활성화 해제'가 가능합니다.">비활성화 해제</a></li>-->
+                                    <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm(instance,$event);" title="서버 사양 변경">서버 사양 변경</a></li>
+                                    <li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
+                                    <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="백업 이미지 생성">백업 이미지 생성</a></li>
+                                    <li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
+                                    <li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="디스크 연결">디스크 연결</a></li>
+                                    <li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
+                                    <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="서버 삭제">서버 삭제</a></li>
+                                    <!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
+                                    <!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
+                                    <!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업 이미지</a></li> -->
+                                    <!--<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>-->
+                                    <!--<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>-->
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 프로젝트 리스트(테이블형) -->
+
+            <!-- <ul ng-if="main.contentsViewType == 'thum'" class="ul-panel thum_style"> -->
+            <ul ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length > 0 && contents.listType == 'image'" class="ul-panel thum_style">
+                <li ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
+                    <!-- panel -->
+                    <div class="panelWrap">
+                        <div class="panel type5" ng-class="{'new-create' : instance.newCreated}">
+                            <div class="panel_head">
+                                <div class="logo" ng-if="instance.procState != 'end'" >
+                                    <img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" >
+                                    <img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" >
+                                </div>
+                                <div class="logo" ng-if="instance.procState == 'end'" >
+                                    <!--<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >-->
+                                    <img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" >
+                                    <!--<img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="" alt="" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >-->
+                                    <img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="" alt="" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" >
+                                </div>
+                                <p class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</p>
+                                <!--<p class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</p>-->
+                                <p class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</p>
+                                <!-- <p class="txt" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.image.serviceName}}</p> -->
+                                <!-- 접속정보 -->
+                                <div ng-if="instance.procState == 'end'" class="tg_box_area btn-option type2">
+                                    <button type="button" class="btn_txt" ng-click="contents.showInfo(instance);">접속정보</button>
+                                </div>
+                                <!-- //접속정보 -->
+                                <div ng-if="instance.procState == 'end'" class="dropdown btn-option">
+                                    <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                                        <span class="ico">실행 설정</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                                        <li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen(instance, $event);">이름 변경</a></li>
+                                        <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('START',instance,$index);" title="시작">시작</a></li>
+                                        <li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '시작'이 가능합니다.">시작</a></li>
+                                        <li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('REBOOT',instance,$index);" title="재시작">재시작</a></li>
+                                        <li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+                                        <li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);" title="정지">정지</a></li>
+                                        <li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" class="disabled" title="서버가 ‘활성’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
+                                        <!--<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SHELVE',instance,$index);" title="비활성화">비활성화</a></li>
+                                        <li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘비활성화 해제’상태인 경우에만 '비활성화'가 가능합니다.">비활성화</a></li>
+                                        <li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNSHELVE',instance,$index);" title="비활성화 해제">비활성화 해제</a></li>
+                                        <li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘shelved’상태인 경우에만 '비활성화 해제'가 가능합니다.">비활성화 해제</a></li>-->
+                                        <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm(instance,$event);" title="서버 사양 변경">서버 사양 변경</a></li>
+                                        <li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
+                                        <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="백업 이미지 생성">백업 이미지 생성</a></li>
+                                        <li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
+                                        <li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="디스크 연결">디스크 연결</a></li>
+                                        <li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
+                                        <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="서버 삭제">서버 삭제</a></li>
+                                        <!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
+                                        <!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
+                                        <!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업 이미지</a></li> -->
+                                        <!--<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>-->
+                                        <!--<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>-->
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="panel_body">
+                                <!-- 접속정보 -->
+                                <div class="tg_box" ng-show="instance.showVal">
+                                    <div class="tgb_head">
+                                        <p class="tit">접속 정보</p>
+                                        <button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+                                    </div>
+                                    <!-- ubuntu  -->
+                                    <div ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'" class="tgb_body">
+                                        <ul>
+                                            <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
+                                            <!--<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>--><!-- vnc 사용할 경우 a태그에 class="ext_link" 지정하여 링크스타일 적용. <a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)"></a>-->
+                                            <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+                                            <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
+                                            <li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></li>
+                                        </ul>
+                                        <div class="guide_link">
+                                            <a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">접속방법 가이드</a>
+                                        </div>
+                                        <div class="guide_link">
+                                            <a href="" ng-click="main.showRightSliderContents($event, 'AGENT 설치 가이드', '/guideInfo/installGuideMonitAgent.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">AGENT 설치 가이드</a>
+                                        </div>
+                                    </div>
+                                    <!-- windows  -->
+                                    <div ng-if="instance.image.osType == 'windows'" class="tgb_body">
+                                        <ul>
+                                            <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">RDP</span></li>
+                                            <li ng-if="!instance.rdpDomain">
+                                                <strong><span class="tb_tit">접속 도메인</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
+                                                <!-- vnc 사용할 경우 a태그에 class="ext_link pd_l14px" 지정하여 링크스타일 적용. <a href="" class="ext_link pd_l14px" ng-click="contents.fn.openWebConsole(instance)"></a> -->
+                                                <a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
+                                            </li>
+                                            <li ng-if="instance.rdpDomain">
+                                                <strong><span class="tb_tit">접속 IP</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
+                                                <!-- vnc 사용할 경우 a태그에 class="ext_link pd_l14px" 지정하여 링크스타일 적용. <a href="" class="ext_link pd_l14px" ng-click="contents.fn.openWebConsole(instance)"></a> -->
+                                                <a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ instance.rdpDomain ? instance.rdpDomain : '' }}'">{{ instance.rdpDomain ? instance.rdpDomain : '' }}</a>
+                                            </li>
+                                            <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
+                                            <li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li>
+                                        </ul>
+                                        <div class="guide_link">
+                                            <a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : instance.rdpDomain, osType: instance.image.osType, rdpConnectDomain: instance.rdpConnectDomain, rdpDomain: instance.rdpDomain});">접속방법 가이드</a>
+                                        </div>
+                                        <div class="guide_link">
+                                            <a href="" ng-click="main.showRightSliderContents($event, 'AGENT 설치 가이드', '/guideInfo/installGuideMonitAgent.html', {floatingIp : instance.floatingIp, osType: instance.image.osType, url: contents.fn.getWindowAgentConfFile(instance)});">AGENT 설치 가이드</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- //접속정보 -->
+                                <!--<div ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id);" class="ul-in">-->
+                                <div ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id);" class="ul-in">
+                                    <div class="up">
+                                        <ul class="ul-prog">
+                                            <li>
+                                                <div class="progressWrap type1">
+                                                    <div class="progress">
+                                                        <div percent-progress-bar-animate bar-type="height" percent="{{ instance.cpuUsage | number }}" class="progress">
+                                                            <div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{ instance.cpuUsage | number }}%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="percent_txt">{{ instance.cpuUsage | number }}<span>%</span></span>
+                                                <strong class="tit mt10">CPU</strong>
+                                                <span class="flavor_info">{{instance.spec.vcpus}} 개</span>
+                                            </li>
+                                            <li>
+                                                <div class="progressWrap type1">
+                                                    <div class="progress">
+                                                        <div percent-progress-bar-animate bar-type="height" percent="{{ instance.memoryUsage | number }}" class="progress">
+                                                            <div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{ instance.memoryUsage | number }}%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="percent_txt">{{ instance.memoryUsage | number }}<span>%</span></span>
+                                                <strong class="tit mt10">Memory</strong>
+                                                <span class="flavor_info">{{(instance.spec.ram/1024|number:1).replace('.0', '')}} GB</span>
+                                            </li>
+                                            <li>
+                                                <div class="progressWrap type1">
+                                                    <div class="progress">
+                                                        <div percent-progress-bar-animate bar-type="height" percent="{{ instance.diskUsage | number }}" class="progress">
+                                                            <div class="progress-bar" role="progressbar" tooltip-placement="top" uib-tooltip="{{ instance.diskUsage | number }}%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="percent_txt">{{ instance.diskUsage | number }}<span>%</span></span>
+                                                <strong class="tit mt10">Disk</strong>
+                                                <span class="flavor_info">{{instance.spec.disk}} GB</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!--
+                                    <div ng-if="!instance.alarmStatus" class="down">
+                                        <p><img src="images/loading_sm.gif"></p>
+                                    </div>
+                                    <div ng-if="instance.alarmStatus" class="down">
+											<span class="stateWrap">
+												<span ng-if="!instance.alarmOccur && instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+												<span ng-if="instance.vmState == 'error'" class="stateMark type2">오류</span>
+												<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building' || instance.vmState == 'shelved_offloaded'" class="stateMark type4">대기</span>
+												<span ng-if="instance.vmState == 'stopped'" class="stateMark type3">중지</span>
+												<span ng-if="instance.alarmStatus == 'minor'" class="stateMark type5">주의</span>
+												<span ng-if="instance.alarmStatus == 'warning'" class="stateMark type4">경고</span>
+												<span ng-if="instance.alarmStatus == 'critical'" class="stateMark type2">위험</span>
+												<span class="state-txt" ng-if="!instance.alarmOccur">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
+												<span class="state-txt" ng-if="instance.alarmOccur">{{ 'iaas.label.instance_' + instance.alarmStatus | translate }}</span>
+											</span>
+                                    </div>
+                                    -->
+                                    <div class="down">
+											<span class="stateWrap">
+												<span ng-if="instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+												<span ng-if="instance.vmState == 'error'" class="stateMark type2">오류</span>
+												<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building' || instance.vmState == 'shelved_offloaded'" class="stateMark type4">대기</span>
+												<span ng-if="instance.vmState == 'stopped'" class="stateMark type3">중지</span>
+												<span class="state-txt">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
+											</span>
+                                    </div>
+
+                                </div>
+                                <div ng-if="instance.procState == 'creating'" class="ul-in">
+                                    <div class="pnb_progress_wrap">
+                                        <div class="progress_box">
+                                            <span class="bar_bg"></span>
+                                            <ul>
+                                                <li ng-class="{'creating' : (instance.uiTask == 'creating'), 'complete' : (instance.uiTask != 'creating')}">
+                                                    <div class="state_box">
+                                                        <span class="state_ico"><span>1</span></span>
+                                                    </div>
+                                                    <div class="state_txt"><span>서버 생성</span></div>
+                                                </li>
+                                                <li ng-class="{'standby' : (instance.uiTask == 'creating'), 'creating' : (instance.uiTask == 'networking'), 'complete' : (instance.uiTask == 'block_device_mapping' || instance.uiTask == 'created_complete')}">
+                                                    <div class="state_box">
+                                                        <span class="state_ico"><span>2</span></span>
+                                                    </div>
+                                                    <div class="state_txt"><span>네트워크 연결</span></div>
+                                                </li>
+                                                <li ng-if="instance.uiTaskType == 'v'" ng-class="{'standby' : (instance.uiTask == 'creating' || instance.uiTask == 'networking'), 'creating' : (instance.uiTask == 'block_device_mapping'), 'complete' : (instance.uiTask == 'created_complete') }">
+                                                    <div class="state_box">
+                                                        <span class="state_ico"><span>3</span></span>
+                                                    </div>
+                                                    <div class="state_txt"><span>디스크 구성</span></div>
+                                                </li>
+                                            </ul>
+                                            <div class="progress_txt">
+                                                <p>{{'iaas.label.instance_ui_' + instance.uiTask | translate}}</p>
+                                                <span ng-if="instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping'">{{instance.creatingTimmer}}초</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-if="instance.procState == 'ing'" class="ul-in2 spinner_area">
+                                    <div class="info-chart">
+                                        <img src="images/loading/loading_cloud.gif" width="140" height="90">
+
+                                        <!--<div class="chartWrap">
+                                            <ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
+                                                <svg viewBox="0 0 64 64">
+                                                    <g stroke-width="7" stroke-linecap="round">
+                                                        <line x1="10" x2="10" y2="48" y1="16">
+                                                            <animate attributeName="y1" dur="750ms" values="16;18;28;18;16;16" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="y2" dur="750ms" values="48;46;36;44;48;48" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;.4;.5;.8;1;1" repeatCount="indefinite"></animate>
+                                                        </line>
+                                                        <line x1="24" x2="24" y2="45.2501" y1="17.3749">
+                                                            <animate attributeName="y1" dur="750ms" values="16;16;18;28;18;16" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="y2" dur="750ms" values="48;48;46;36;44;48" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;1;.4;.5;.8;1" repeatCount="indefinite"></animate>
+                                                        </line>
+                                                        <line x1="38" x2="38" y2="38.5002" y1="24.8747">
+                                                            <animate attributeName="y1" dur="750ms" values="18;16;16;18;28;18" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="y2" dur="750ms" values="44;48;48;46;36;44" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".8;1;1;.4;.5;.8" repeatCount="indefinite"></animate>
+                                                        </line>
+                                                        <line x1="52" x2="52" y2="42.8747" y1="21.1253">
+                                                            <animate attributeName="y1" dur="750ms" values="28;18;16;16;18;28" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="y2" dur="750ms" values="36;44;48;48;46;36" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".5;.8;1;1;.4;.5" repeatCount="indefinite"></animate>
+                                                        </line>
+                                                    </g>
+                                                </svg>
+                                            </ion-spinner>
+                                        </div>-->
+
+                                    </div>
+                                    <div class="info-txt">
+                                        <p class="txt"><span class="ico ico-timer"></span>{{'iaas.label.instance_' + instance.vmState | translate}} 입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<div class="panel_body" ng-if="instance.vmState == 'building'">
+                                <div class="ul-in2 spinner_area">
+                                    <div class="info-chart">
+                                        <div class="chartWrap">
+                                            <ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
+                                                <svg viewBox="0 0 64 64">
+                                                    <g stroke-width="7" stroke-linecap="round">
+                                                        <line x1="10" x2="10" y2="48" y1="16">
+                                                            <animate attributeName="y1" dur="750ms" values="16;18;28;18;16;16" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="y2" dur="750ms" values="48;46;36;44;48;48" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;.4;.5;.8;1;1" repeatCount="indefinite"></animate>
+                                                        </line>
+                                                        <line x1="24" x2="24" y2="45.2501" y1="17.3749">
+                                                            <animate attributeName="y1" dur="750ms" values="16;16;18;28;18;16" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="y2" dur="750ms" values="48;48;46;36;44;48" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;1;.4;.5;.8;1" repeatCount="indefinite"></animate>
+                                                        </line>
+                                                        <line x1="38" x2="38" y2="38.5002" y1="24.8747">
+                                                            <animate attributeName="y1" dur="750ms" values="18;16;16;18;28;18" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="y2" dur="750ms" values="44;48;48;46;36;44" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".8;1;1;.4;.5;.8" repeatCount="indefinite"></animate>
+                                                        </line>
+                                                        <line x1="52" x2="52" y2="42.8747" y1="21.1253">
+                                                            <animate attributeName="y1" dur="750ms" values="28;18;16;16;18;28" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="y2" dur="750ms" values="36;44;48;48;46;36" repeatCount="indefinite"></animate>
+                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".5;.8;1;1;.4;.5" repeatCount="indefinite"></animate>
+                                                        </line>
+                                                    </g>
+                                                </svg>
+                                            </ion-spinner>
+                                        </div>
+                                    </div>
+                                    <div class="info-txt">
+                                        <div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>
+                                        <p class="txt"><span class="ico ico-timer"></span>생성중입니다.</p>
+                                    </div>
+                                </div>
+                            </div>-->
+
+                        </div>
+                    </div>
+                    <!-- //panel -->
+                </li>
+                <!-- <li>
+                    <button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" style="height:390px;" ng-click="contents.formOpen()"><span class="ico"></span><span class="txt">인스턴스 추가</span></button>
+                </li> -->
+            </ul>
+            <!-- //panel area-->
+
+            <div class="proj_list_area" ng-if="contents.loadingServerList && (contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length == 0">
+                <ul class="ul-panel dash_list no_data">
+                    <li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
+                </ul>
+            </div>
+
+            <div ng-if="!contents.pageFirstLoad && !contents.loadingServerList && (contents.serverMainList | filter:{ taskState : '!deleting' }).length == 0" class="welcome_layer">
+                <div class="guide_fnt arrw_btm">신규 가상서버를 만듭니다.</div>
+                <div class="guide_fnt arrw_top">다른 프로젝트의 백업 이미지로부터 신규 가상서버를 만듭니다.</div>
+                <div class="guide_cnt">
+                    서버가상화 서비스에서는 <span class="fnt20"><span class="color1">리눅스(Linux)</span> 또는 <span class="color1">윈도우(Windows)</span>를 실행하는 <span class="color1">가상 서버</span></span>를 만듭니다. <br>
+                    사용자 스스로가 쉽고 빠르게 필요한 서버를 만들고 활용할 수 있습니다. <br>
+                    <span class="fnt20"><spna class="color1">‘서버 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+                </div>
+            </div>
+        </div>
+        <!-- //tab1 cnt -->
+
+        <!-- tab2 cnt -->
+        <div role="tabpanel" class="tab-pane" ng-class="{'active' : contents.tabIndex == 1}">
+            <!-- 버튼영역 -->
+            <div class="btnWrap">
+                <button type="button" class="btn_lg" ng-click="contents.fn.checkLbPortLimit();"><!-- ng-if="false" -->
+                    <span class="ico ico_create" ></span>부하 분산 설정
+                </button>
+                <!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')">&lt;!&ndash; ng-if="false" &ndash;&gt;
+                    <span class="ico ico_create" ></span>부하 분산 상세
+                </button>-->
+            </div>
+            <!-- //버튼영역 -->
+
+            <!-- 프로젝트 리스트(테이블형) -->
+            <div class="tbl type1" ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0 && contents.listType == 'list'">
+                <table class="table">
+                    <colgroup>
+                        <col style="width:15%;">
+                        <col style="width:10%;">
+                        <col style="width:15%">
+                        <col style="width: ">
+                        <col style="width: 15%;">
+                        <col style="width: 8%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th scope="col">명칭</th>
+                        <th scope="col">포트수</th>
+                        <th scope="col">접속주소(IP)</th>
+                        <th scope="col">설명</th>
+                        <th scope="col">생성일</th>
+                        <th scope="col">관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
+                        <td style="text-align: left">
+                            <!--<a ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}</a>-->
+                            <a ng-click="main.goToPage('/gpu/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}</a>
+                        </td>
+                        <td>{{ lbServiceList.iaasLbPorts.length }}</td>
+                        <td>{{ lbServiceList.iaasLbInfo.floatingIp }}<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectLbInfoToClipboard(lbServiceList.iaasLbInfo)"><span class="ico_sm ico_copy"></span></button></td>
+                        <td>{{ lbServiceList.iaasLbInfo.description }}</td>
+                        <td>{{ lbServiceList.iaasLbInfo.created | date: 'yyyy.MM.dd HH:mm:ss'}}</td>
+                        <td>
+                            <div class="dropdown btn-option">
+                                <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                                    <span class="ico">실행 설정</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                                    <li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', lbServiceList);" title="이름/설명 변경">이름/설명 변경</a></li>
+                                    <li><a class="delete" href="javascript:void(0);" ng-click="contents.deleteLb(lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 프로젝트 리스트(테이블형) -->
+
+            <!-- panel -->
+            <ul ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0 && contents.listType == 'image'" class="ul-panel">
+                <li ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
+                    <!-- panel -->
+                    <div class="panelWrap">
+                        <div class="panel type5">
+                            <div class="panel_head pdlr30">
+                                <div class="tit_area">
+                                    <!--<p class="tit" ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}<em class="point1">({{ lbServiceList.iaasLbPorts.length }})</em></p>-->
+                                    <p class="tit" ng-click="main.goToPage('/gpu/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}<em class="point1">({{ lbServiceList.iaasLbPorts.length }})</em></p>
+                                    <p class="txt">부하 분산 서버</p>
+                                </div>
+                                <span class="stateWrap">
+										<span class="stateMark type1">활성</span>
+                                    <!--<span class="stateMark type2">비활성</span>-->
+                                    <!--<span ng-if="instance.provisioningStatus == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building'" class="stateMark type4">대기</span>-->
+                                    <!--<span ng-if="instance.provisioningStatus == 'stopped'" class="stateMark type3">중지</span>-->
+										<span class="txt">활성</span>
+                                    <!--<span class="state-txt">{{ 'iaas.label.instance_' + instance[0].checkStatus | translate }}</span>-->
+									</span>
+                                <div class="dropdown btn-option">
+                                    <button id="btn-option" type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                                        <span class="ico">실행 설정</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                                        <li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', lbServiceList);" title="이름/설명 변경">이름/설명 변경</a></li>
+                                        <li><a class="delete" href="javascript:void(0);" ng-click="contents.deleteLb(lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div ng-if="lbServiceList.iaasLbInfo.checkStatus.indexOf('ing') == -1" class="panel_body">
+                                <div class="tbl_cont">
+                                    <table class="table">
+                                        <colgroup>
+                                            <col style="width:25%;">
+                                            <col style="width:25%;">
+                                            <col style="width:50%;">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th>접속포트</th>
+                                            <th>연결된 서버</th>
+                                            <th>서버 상태</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="(key, iaasLbPort) in lbServiceList.iaasLbPorts">
+                                            <td>{{ iaasLbPort.connectionPort }}</td>
+                                            <td>{{ iaasLbPort.memberCnt }}</td>
+                                            <td>
+                                                <div class="tbl_cont_state">
+                                                    <ul>
+                                                        <li><span class="s_count active">{{ iaasLbPort.memberCnt }}</span><span class="txt">활성</span></li>
+                                                        <li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div ng-if="lbServiceList.iaasLbInfo.checkStatus.indexOf('ing') > -1" class="ul-in">
+                                <div class="pnb_progress_wrap">
+                                    <div class="progress_box">
+                                        <span class="bar_bg"></span>
+                                        <ul>
+                                            <li ng-class="{'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus != 'lb_creating')}">
+                                                <div class="state_box">
+                                                    <span class="state_ico"><span>1</span></span>
+                                                </div>
+                                                <div class="state_txt"><span>부하분산 생성</span></div>
+                                            </li>
+                                            <li ng-if="lbServiceList.iaasLbInfo.checkConnType == 'image'" ng-class="{'standby' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating'), 'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'server_creating'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus != 'lb_creating' && lbServiceList.iaasLbInfo.checkStatus != 'server_creating')}">
+                                                <div class="state_box">
+                                                    <span class="state_ico"><span>2</span></span>
+                                                </div>
+                                                <div class="state_txt"><span>서버 생성</span></div>
+                                            </li>
+                                            <li ng-class="{'standby' : (lbServiceList.iaasLbInfo.checkStatus == 'lb_creating' || lbServiceList.iaasLbInfo.checkStatus == 'server_creating'), 'creating' : (lbServiceList.iaasLbInfo.checkStatus == 'server_connecting'), 'complete' : (lbServiceList.iaasLbInfo.checkStatus == 'error' || lbServiceList.iaasLbInfo.checkStatus == 'done')}">
+                                                <div class="state_box">
+                                                    <span class="state_ico"><span>{{ lbServiceList.iaasLbInfo.checkConnType == 'image' ? "3" : "2" }}</span></span>
+                                                </div>
+                                                <div class="state_txt"><span>서버 연결</span></div>
+                                            </li>
+                                        </ul>
+                                        <div class="progress_txt">
+                                            <p>{{ lbServiceList.iaasLbInfo.checkStatusName + " 중 입니다." }}</p>
+                                            <span ng-if="instance.uiTask == 'creating' || instance.uiTask == 'networking' || instance.uiTask == 'block_device_mapping'">{{instance.creatingTimmer}}초</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //panel -->
+                </li>
+            </ul>
+            <!-- //panel -->
+
+            <div class="proj_list_area" ng-if="!contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
+                <ul class="ul-panel dash_list no_data">
+                    <li><p class="no_data_txt pd0">생성된 부하분산 서버가 없습니다.</p></li>
+                </ul>
+            </div>
+            <div class="proj_list_area" ng-if="contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
+                <ul class="ul-panel dash_list no_data">
+                    <li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
+                </ul>
+            </div>
+        </div>
+        <!-- //tab2 cnt -->
+    </div>
+</div>
+<!-- 탭영역 -->
