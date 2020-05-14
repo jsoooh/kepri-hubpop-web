@@ -11,23 +11,26 @@ angular.module('perf.controllers')
         ct.conditions = {};
         ct.data = {};
 
-        ct.data.maxRow = {};
+        ct.data.maxRow = 0;
 
-        ct.data.sltOrg = {
+        ct.sltOrg = {
             code: "",
             name: ""
         };
 
+        ct.today = new Date();
+        ct.data.startYear = 2019;
+
         ct.meteringItemGroups = [];
 
         ct.perfYears = [];
-        ct.perfMonths = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+        ct.perfMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         ct.data.sltYear = "";
         ct.data.sltMonth = "";
-        ct.data.totalPerfAnlsByOrgCodeAndPerfDate = [];
+        ct.totalPerfAnlsByOrgCodeAndPerfDate = [];
         ct.data.totalPerfAnls = 0;
 
-        /* 미터링 서비스 그룹 리스트 */
+        // 미터링 서비스 그룹 리스트
         ct.fn.listAllMeteringGroupItems = function () {
             var promise = perfMeteringService.listAllMeteringGroupItems();
             promise.success(function (data) {
@@ -42,76 +45,36 @@ angular.module('perf.controllers')
             });
         };
 
-        /* 연도 리스트 */
-        ct.fn.listAllMeteringYears = function () {
-            var promise = perfMeteringService.listAllMeteringYears();
-            promise.success(function (data) {
-                console.log("Success listAllMeteringYears");
-                var today = new Date();
-                ct.data.sltYear = String(today.getFullYear());
-                // Date() month = {0~11}
-                ct.data.sltMonth = String(today.getMonth() + 1);
-
-                ct.data.today = moment(today).format('YYYY-MM-DD');
-                for (var i = 0; i < data.items.length; i++) {
-                    ct.perfYears.push(data.items[i]);
-                }
-                ct.fn.changeSltMonth(ct.data.sltMonth);
-            });
-            promise.error(function (data, status, headers) {
-                console.log("Fail listAllMeteringYears");
-                ct.perfYears = [];
-            });
-        };
-
-        /* 과금 정책 페이지로 이동 */
+        // 과금 정책 페이지로 이동
         ct.fn.showPerfRefAmt = function (itemGroupCode) {
             $location.path('/perf/perfRefAmt').search('itemGroupCode=' + itemGroupCode);
         };
 
-        /* rowspan 최대값 */
+        // rowspan 최대값
         ct.fn.findMaxRow = function (data) {
             var itemGroupCode = "";
             var itemCnt = 1;
-            ct.data.maxRow = 0;
+            var maxRow = 0;
 
             for (var i = 0; i < data.itemCount; i++) {
                 if (data.items[i].itemGroupCode != itemGroupCode) {
-                    itemGroupCode = angular.copy(data.items[i].itemGroupCode);
-                    if (ct.data.maxRow < itemCnt) {
-                        ct.data.maxRow = itemCnt;
+                    itemGroupCode = data.items[i].itemGroupCode;
+                    if (maxRow < itemCnt) {
+                        maxRow = itemCnt;
                         itemCnt = 1;
                     }
                 } else {
                     itemCnt++;
                 }
             }
+            return maxRow;
         };
 
-        /* page Data 초기화 함수 */
-        ct.fn.pageDataInit = function () {
-            $scope.main.loadingMainBody = true;
-            var promise = orgService.getOrg(common.getPortalOrgKey());
-            promise.success(function (data) {
-                console.log("Success getOrgData")
-                console.log(data.orgId + ", " + data.orgName);
-                ct.data.sltOrg.code = data.orgId;
-                ct.data.sltOrg.name = data.orgName;
-                ct.fn.listAllMeteringYears();
-                ct.fn.listAllMeteringGroupItems();
-            });
-            promise.error(function (data, status, headers) {
-                console.log("Fail getOrgData");
-            });
-        };
-
-
-        /* 데이터 호출 Using $q */
+        // 데이터 호출 Using $q
         ct.fn.totalAnlsByOrgCodeAndPerfYm = function (params, defer) {
             var promise = perfAnlsService.totalAnlsByOrgCodeAndPerfYm(params)
             promise.success(function (data) {
                 console.log("Success get" + params.year + "_" + params.month + "perfAnls");
-                ct.fn.findMaxRow(data);
                 if (defer) {
                     defer.resolve(data);
                 }
@@ -122,7 +85,7 @@ angular.module('perf.controllers')
             });
         };
 
-        /* 당월 전월 데이터를 통합 */
+        // 당월 전월 데이터를 통합
         ct.fn.combinePerfAnlsByMonthly = function (paramsSlt, paramsLast) {
             var sltDataDefer = $q.defer();
             var lastDataDefer = $q.defer();
@@ -130,10 +93,19 @@ angular.module('perf.controllers')
             var allProcessForCombineData = $q.all([sltDataDefer.promise, lastDataDefer.promise]);
 
             allProcessForCombineData.then(function (datas) {
-                ct.data.totalPerfAnlsByOrgCodeAndPerfDate = [];
+                ct.totalPerfAnlsByOrgCodeAndPerfDate = [];
                 console.log("Start Combine");
+                ct.data.totalPerfAnls = 0;
                 var sltData = datas[0];
                 var lastData = datas[1];
+                var sltDataMaxRow = ct.fn.findMaxRow(sltData);
+                var lastDatamaxRow = ct.fn.findMaxRow(lastData);
+                if (sltDataMaxRow > lastDatamaxRow) {
+                    ct.data.maxRow = sltDataMaxRow;
+                } else {
+                    ct.data.maxRow = lastDatamaxRow;
+                }
+
                 if (sltData != undefined && lastData != undefined) {
                     var sltDataList = sltData.items;
                     var lastDataList = lastData.items;
@@ -167,11 +139,11 @@ angular.module('perf.controllers')
                                 perfAnlsByOrgCodeAndPerfDate.lastAnlsSumByItemGroup = lastDataList[i].perfAmt;
                                 perfAnlsByOrgCodeAndPerfDate.sltAnlsSumByItemGroup = "0";
                             } else {
-                                ct.data.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
-                                //ct.data.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += 0;
+                                ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
+                                //ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += 0;
                             }
                             ct.data.totalPerfAnls = "0";
-                            ct.data.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
+                            ct.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
 
                         } else if (!lastDataList[i]) {
                             var perfAnlsByOrgCodeAndPerfDate = {
@@ -193,11 +165,11 @@ angular.module('perf.controllers')
                                 perfAnlsByOrgCodeAndPerfDate.lastAnlsSumByItemGroup = "0";
                                 perfAnlsByOrgCodeAndPerfDate.sltAnlsSumByItemGroup = sltDataList[i].perfAmt;
                             } else {
-                                //ct.data.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += 0;
-                                ct.data.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
+                                //ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += 0;
+                                ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
                             }
                             ct.data.totalPerfAnls += sltDataList[i].perfAmt;
-                            ct.data.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
+                            ct.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
                         } else {
                             var perfAnlsByOrgCodeAndPerfDate = {
                                 orgName: sltDataList[i].orgName,
@@ -218,15 +190,15 @@ angular.module('perf.controllers')
                                 perfAnlsByOrgCodeAndPerfDate.lastAnlsSumByItemGroup = lastDataList[i].perfAmt;
                                 perfAnlsByOrgCodeAndPerfDate.sltAnlsSumByItemGroup = sltDataList[i].perfAmt;
                             } else {
-                                ct.data.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
-                                ct.data.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
+                                ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
+                                ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
                             }
                             ct.data.totalPerfAnls += sltDataList[i].perfAmt;
-                            ct.data.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
+                            ct.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
                         }
                     }
                 }
-                console.log(ct.data.totalPerfAnlsByOrgCodeAndPerfDate);
+                console.log(ct.totalPerfAnlsByOrgCodeAndPerfDate);
                 $scope.main.loadingMainBody = false;
             });
 
@@ -234,50 +206,61 @@ angular.module('perf.controllers')
             ct.fn.totalAnlsByOrgCodeAndPerfYm(paramsLast, lastDataDefer);
         };
 
-        /* 년도 변경 */
+        // 년도 변경
         ct.fn.changeSltYear = function (sltYear) {
+            ct.data.sltYear = sltYear;
             ct.data.sltMonth = "";
             console.log("year: " + ct.data.sltYear + " month: " + ct.data.sltMonth);
         };
 
-        /* 전년 set */
-        ct.fn.calcLastMonth = function (sltYear, sltMonth) {
-            var last = {
-                year: sltYear,
-                month: ""
-            };
-            if (sltMonth == 1) {
-                last.year = sltYear - 1;
-                last.month = 12;
-            } else {
-                last.month = sltMonth - 1;
-            }
-            return last;
-        };
-
-        /* 데이터 요청 */
-        ct.fn.changeSltMonth = function (sltMonth) {
+        // 데이터 요청
+        ct.fn.selectMonth = function (sltMonth) {
             $scope.main.loadingMainBody = true;
+            ct.data.sltMonth = sltMonth;
+            var firstDayOfMonth = new Date(ct.data.sltYear, ct.data.sltMonth - 1, 1);
+            ct.lastDayOfLastMonth = new Date(firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 1));
 
+            console.log(ct.lastDayOfLastMonth.getFullYear() + ":" + (ct.lastDayOfLastMonth.getMonth() + 1));
+            console.log(ct.data.sltYear + ":" + ct.data.sltMonth);
             var paramsSlt = {
                 urlPaths: {
-                    "orgCode": ct.data.sltOrg.code
+                    "orgCode": ct.sltOrg.code
                 },
                 "year": ct.data.sltYear,
                 "month": ct.data.sltMonth
             };
-
-            var lastPerfYm = ct.fn.calcLastMonth(ct.data.sltYear, sltMonth);
             var paramsLast = {
                 urlPaths: {
-                    "orgCode": ct.data.sltOrg.code
+                    "orgCode": ct.sltOrg.code
                 },
-                "year": lastPerfYm.year,
-                "month": lastPerfYm.month
+                "year": ct.lastDayOfLastMonth.getFullYear(),
+                "month": ct.lastDayOfLastMonth.getMonth() + 1
             };
-
-
             ct.fn.combinePerfAnlsByMonthly(paramsSlt, paramsLast);
+        };
+
+        // page Data 초기화 함수
+        ct.fn.pageDataInit = function () {
+            $scope.main.loadingMainBody = true;
+            var promise = orgService.getOrg(common.getPortalOrgKey());
+            promise.success(function (data) {
+                console.log("Success getOrgData")
+
+                ct.sltOrg.code = data.orgId;
+                ct.sltOrg.name = data.orgName;
+                // 연 list 만들기
+                for (var i = ct.data.startYear; i < ct.today.getFullYear() + 1; i++) {
+                    ct.perfYears.push(i);
+                }
+
+                ct.fn.listAllMeteringGroupItems();
+                ct.data.sltYear = ct.today.getFullYear();
+                ct.data.sltMonth = ct.today.getMonth() + 1;
+                ct.fn.selectMonth(ct.data.sltMonth);
+            });
+            promise.error(function (data, status, headers) {
+                console.log("Fail getOrgData");
+            });
         };
 
         ct.fn.pageDataInit();

@@ -4,6 +4,8 @@ angular.module('paas.services')
 	.factory('applicationService', function (common, cloudFoundry, CONSTANTS) {
 
 		var applicationService = {};
+        /* 20.05.08 - 리스트 타입에서 이름변경시 리스트 타입 화면으로 재조회를 위해 변수 선언 by ksw */
+        applicationService.listType = '';
 
         applicationService.listAllSpaces = function (organizationGuid, condition) {
             if (organizationGuid) {

@@ -7,7 +7,6 @@ angular.module('portal.services')
 		/* 20.04.24 - 프로젝트 목록 : 우측 메뉴 기능 by ksw */
         /* 사용자 변경을 누르면 true로 변경 */
 		orgService.changeUser = false;
-		orgService.sltInfoTab = 'member';
 
 		/*org 목록조회*/
         orgService.listOrgs = function (size, page, email, schText) {
@@ -118,9 +117,21 @@ angular.module('portal.services')
         orgService.deleteOrgstatusCall = function (id) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/deleteStatusCall', 'PUT'));
         };
-        /*조직 관리자 수정*/
+
+        /*조직 책임자 수정*/
         orgService.changeOrgManager = function (id, param) {
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/changeManager', 'PUT', param));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/changeOwner', 'PUT', param));
+        };
+
+        /* 20.05.07 - 조직 관리자 수정 추가 by ksw */
+        orgService.changeOrgAdmin = function (id, params) {
+            var param = {
+                urlParams: {
+                    "email": params.email,
+                    "roleName": params.userRole
+                }
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/changeAdmin', 'PUT', param));
         };
 
         /*요청 : 상태가 작성중 일 때 요청으로 상태 변경*/

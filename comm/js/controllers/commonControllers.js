@@ -548,6 +548,7 @@ angular.module('common.controllers', [])
                 common.setPortalOrgKey(portalOrg.id);
                 mc.sltPortalOrg = portalOrg;
                 mc.sltPortalOrgId = portalOrg.id;
+                mc.sltPortalOrgIsActive = portalOrg.isActive;
                 mc.sltPortalOrgDisplayName = portalOrg.orgName;
                 mc.loadUserTenant();
                 mc.loadSltOrganization();
@@ -560,6 +561,7 @@ angular.module('common.controllers', [])
                     common.clearPortalOrgKey();
                     mc.sltPortalOrg = {};
                     mc.sltPortalOrgId = "";
+                    mc.sltPortalOrgIsActive = false;
                     mc.sltPortalOrgDisplayName = "";
                     mc.setUserTenant(null);
                     mc.setOrganization(null);
@@ -912,6 +914,7 @@ angular.module('common.controllers', [])
 
             mc.sltPortalOrg = {};
             mc.sltPortalOrgId = "";
+            mc.sltPortalOrgIsActive = false;
             mc.sltPortalOrgDisplayName = "";
 
             mc.sltOrganization = {};

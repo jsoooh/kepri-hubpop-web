@@ -14,7 +14,7 @@ angular.module('portal.controllers')
         /* 20.04.24 - 프로젝트 목록 : 우측 메뉴 기능 by ksw */
         /* 사용자 변경을 통해 DetailController로 넘어올 경우 구성원 탭 선택(기본은 대시보드) */
         if (orgService.changeUser == true) {
-            ct.sltInfoTab = orgService.sltInfoTab;
+            ct.sltInfoTab = 'member';
         } else {
             // ct.sltInfoTab = 'dashboard';
             ct.sltInfoTab = 'actEvent';
@@ -1471,7 +1471,7 @@ angular.module('portal.controllers')
         ct.changeManagerForm = function ($event) {
             $scope.dialogOptions = {
                 controller: "commChangeManagerFormCtrl",
-                callBackFunction: null
+                callBackFunction: ct.replaceCallBackFunction
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -1482,7 +1482,8 @@ angular.module('portal.controllers')
         ct.changeRoleForm = function ($event) {
             $scope.dialogOptions = {
                 controller: "commChangeRoleFormCtrl",
-                callBackFunction: null
+                test1 : $event,
+                callBackFunction: ct.replaceCallBackFunction
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -1561,16 +1562,6 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup = {};
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.code = "000";
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
-            ct.orgQuotaValue.orgQuotaItem.name = "RAM";
-            ct.orgQuotaValue.orgQuotaItem.unit = "GB";
-            ct.orgQuotaValue.value = ct.paasQuota.instanceMemoryLimit/1024;
-            ct.orgQuotaValues.push(ct.orgQuotaValue);
-
-            ct.orgQuotaValue = {};
-            ct.orgQuotaValue.orgQuotaItem = {};
-            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup = {};
-            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.code = "000";
-            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
             ct.orgQuotaValue.orgQuotaItem.name = "서비스";
             ct.orgQuotaValue.orgQuotaItem.unit = "";
             ct.orgQuotaValue.value = ct.paasQuota.totalServices;
@@ -1584,6 +1575,16 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.name = "라우트";
             ct.orgQuotaValue.orgQuotaItem.unit = "";
             ct.orgQuotaValue.value = ct.paasQuota.totalRoutes;
+            ct.orgQuotaValues.push(ct.orgQuotaValue);
+
+            ct.orgQuotaValue = {};
+            ct.orgQuotaValue.orgQuotaItem = {};
+            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup = {};
+            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.code = "000";
+            ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
+            ct.orgQuotaValue.orgQuotaItem.name = "메모리";
+            ct.orgQuotaValue.orgQuotaItem.unit = "GB";
+            ct.orgQuotaValue.value = ct.paasQuota.instanceMemoryLimit/1024;
             ct.orgQuotaValues.push(ct.orgQuotaValue);
 
             ct.orgQuotaValue = {};
@@ -2305,7 +2306,8 @@ angular.module('portal.controllers')
         //pop.fn.listQuotaValues();
 
     })
-    .controller('commChangeRoleFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+    /* 20.05.07 - 프로젝트 관리 > 프로젝트 구성원 > 권한 변경 컨트롤러 by ksw */
+    .controller('commChangeRoleFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common, CONSTANTS) {
         _DebugConsoleLog("orgDetailController.js : commChangeRoleFormCtrl", 1);
         $scope.actionBtnHied = false;
 
@@ -2316,22 +2318,39 @@ angular.module('portal.controllers')
         pop.data = {};
 
         pop.formName = "changeRoleForm";
+        pop.test = $scope.dialogOptions.test1;
+        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
         $scope.dialogOptions.formName = pop.formName;
         $scope.dialogOptions.validDisabled = true;
         $scope.dialogOptions.dialogClassName = "modal-dialog";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popChangeRoleForm.html" + _VersionTail();
         $scope.dialogOptions.title = "권한 변경";
-        pop.method = "POST";
+
+        pop.orgRoleNames = CONSTANTS.roleName;
+        pop.paramId = $stateParams.orgId;
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-            if ($scope.actionBtnHied) return;
-            $scope.actionBtnHied = true;
-            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
-                $scope.actionBtnHied = false;
-                return;
-            }
             pop.fn.okFunction();
+        };
+
+        pop.listOrgUser = function () {
+            pop.isAdmin = false;
+            var promise = orgService.listOrgUsers(pop.paramId);
+            promise.success(function (data) {
+                var orgUsers = data.items;
+                angular.forEach(orgUsers, function (orgUser, key) {
+                    if (orgUser.usersInfo.email == pop.test.email) {
+                        pop.orgUser = orgUser;
+                        if (orgUser.isAdmin) {
+                            pop.isAdmin = true;
+                        }
+                        return false;
+                    }
+                });
+            });
+            promise.error(function (data) {
+            });
         };
 
         $scope.popCancel = function () {
@@ -2339,9 +2358,31 @@ angular.module('portal.controllers')
         };
 
         pop.fn.okFunction = function() {
+            var orgUserRequest = {
+                email: pop.orgUser.usersInfo.email,
+                userRole: pop.orgUser.roleName
+            };
+            $scope.main.loadingMain = true;
+            common.mdDialogHide();
+            var promise = orgService.changeOrgAdmin(pop.paramId, orgUserRequest);
+            promise.success(function (data) {
+                pop.btnClickCheck = false;
+                $scope.main.loadingMain = false;
+                common.showAlertSuccess($translate.instant('message.mi_egov_success_common_insert'));
+                if ( angular.isFunction(pop.callBackFunction) ) {
+                    pop.callBackFunction();
+                }
+            });
+            promise.error(function (data) {
+                pop.btnClickCheck = false;
+                $scope.main.loadingMain = false;
+                common.showAlertError($translate.instant('message.mi_egov_fail_common_insert'));
+            });
         };
+
+        pop.listOrgUser();
     })
-    .controller('commChangeManagerFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService) {
+    .controller('commChangeManagerFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, $filter, user,paging, common, CONSTANTS) {
         _DebugConsoleLog("orgDetailController.js : commChangeManagerFormCtrl", 1);
         $scope.actionBtnHied = false;
 
@@ -2350,6 +2391,8 @@ angular.module('portal.controllers')
 
         pop.fn = {};
         pop.data = {};
+        pop.roles = [];
+        pop.isOrgManager = false;
 
         pop.formName = "changeManagerForm";
         $scope.dialogOptions.formName = pop.formName;
@@ -2357,24 +2400,83 @@ angular.module('portal.controllers')
         $scope.dialogOptions.dialogClassName = "modal-dialog";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popChangeManagerForm.html" + _VersionTail();
         $scope.dialogOptions.title = "책임자 변경";
-        pop.method = "POST";
+        $scope.dialogOptions.okName = "변경";
 
-        // Dialog ok 버튼 클릭 시 액션 정의
+        // 책임자 변경 팝업에서 변경 버튼 클릭시 액션
         $scope.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
-            if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
-                $scope.actionBtnHied = false;
+            if(pop.data.orgUser == undefined ) {
+                $scope.popCancel();
                 return;
             }
-            pop.fn.okFunction();
+            pop.fn.userPush();
         };
 
         $scope.popCancel = function () {
             $scope.popHide();
         };
 
-        pop.fn.okFunction = function() {
+        pop.fn.checkOne = function($event,image) {
+            console.log(pop.roles);
+            if($event.currentTarget.checked) {
+                console.log("roles len : " + pop.roles.length);
+                if(pop.roles.length == $("#mainList tbody").find("input[type='checkbox']").length) {
+                    $($("#mainList").find("input[type='checkbox']")[0]).prop("checked",true);
+                }
+            } else {
+                $($("#mainList").find("input[type='checkbox']")[0]).prop("checked",false);
+
+            }
         };
+
+        // 팝업창에서 조직 구성원들 조회
+        pop.fn.listAllOrgMembers = function(currentPage) {
+            var param = {};
+            if(currentPage != undefined) {
+                param.number = currentPage
+            }
+            var orgPromise = orgService.listOrgUsers($scope.contents.paramId);
+            orgPromise.success(function (data) {
+                pop.pageOptions = paging.makePagingOptions(data);
+                pop.orgUsers = data.items;
+                if (pop.orgUsers.roleName == 'OWNER') {
+                    pop.isOrgManager = true;
+                }
+            });
+            orgPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            orgPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.userPush = function() {
+            $scope.main.loadingMainBody = true;
+            var id = pop.data.orgUser.org.id;
+            var param = {
+                orgId : pop.data.orgUser.org.orgId,
+                orgManager : {
+                    email : pop.data.orgUser.usersInfo.email
+                }
+            };
+            var orgPromise = orgService.changeOrgManager(id, param);
+            orgPromise.success(function (data, status, headers) {
+                $scope.contents.listOrgUsers();
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess('책임자 변경 성공','책임자가 변경되었습니다.');
+                $scope.main.replacePage();
+                $scope.popCancel();
+            });
+            orgPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            orgPromise.finally(function() {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        pop.fn.listAllOrgMembers();
     })
 ;

@@ -7,7 +7,13 @@ angular.module('paas.controllers')
         var ct = this;
         var serviceInstance = $scope.serviceInstance = {};
         ct.serviceInstanceData  = {};
-        ct.listType = "image";          //리스트 타입
+        /* 20.05.08 - 리스트 타입에서 이름변경시 리스트 타입 화면으로 재조회.
+         * 기본은 이미지 타입 by ksw */
+        if (serviceInstanceService.listType != 'list') {
+            ct.listType = "image";          //이미지 타입
+        } else {
+            ct.listType = "list";          //리스트 타입
+        }
 
         ct.serviceInstances = [];
 
@@ -29,6 +35,7 @@ angular.module('paas.controllers')
         };
 
         ct.listAllServiceInstances = function () {
+            ct.listType = "image";
             $scope.main.loadingMainBody = true;
             ct.loadingServiceInstances = false;
             var serviceInstancePromise = serviceInstanceService.listAllServiceInstances($scope.main.sltOrganizationGuid, '');
@@ -221,10 +228,18 @@ angular.module('paas.controllers')
 
             var serviceInstancePromise = serviceInstanceService.updateServiceInstance(serviceGuid, serviceInstanceBody);
             serviceInstancePromise.success(function (data) {
-                $scope.main.loadingMainBody = false;
+                /* 20.05.08 - 리스트 타입에서 이름변경시 리스트 타입 화면으로 재조회.
+                * 기본은 이미지 타입 by ksw */
+                if (ct.listType == 'list') {
+                    serviceInstanceService.listType = 'list'
+                } else {
+                    serviceInstanceService.listType = 'image'
+                }
                 $scope.actionBtnHied = false;
                 common.showAlert("", $translate.instant("message.mi_update_service_instance"));
                 ct.listAllServiceInstances();
+                $state.go($state.current, {}, {reload: true});
+                $scope.main.loadingMainBody = false;
             });
             serviceInstancePromise.error(function (data) {
                 $scope.main.loadingMainBody = false;

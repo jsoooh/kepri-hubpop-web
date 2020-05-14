@@ -502,7 +502,7 @@
 								</td>
 								<td>{{ lbServiceList.iaasLbPorts.length }}</td>
 								<td>{{ lbServiceList.iaasLbInfo.floatingIp }}<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectLbInfoToClipboard(lbServiceList.iaasLbInfo)"><span class="ico_sm ico_copy"></span></button></td>
-								<td>{{ lbServiceList.iaasLbInfo.description }}</td>
+								<td style="text-align: left">{{ lbServiceList.iaasLbInfo.description }}</td>
 								<td>{{ lbServiceList.iaasLbInfo.created | date: 'yyyy.MM.dd HH:mm:ss'}}</td>
 								<td>
 									<div class="dropdown btn-option">

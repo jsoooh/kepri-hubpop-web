@@ -4,6 +4,8 @@ angular.module('paas.services')
 	.factory('serviceInstanceService', function (common, cloudFoundry, CONSTANTS) {
 
 		var serviceInstanceService = {};
+        serviceInstanceService.listType = '';
+
         serviceInstanceService.getConditionByOrgAndSpace = function (organizationGuid, spaceGuid) {
             var condition = "";
             if (organizationGuid) {

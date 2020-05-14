@@ -1,7 +1,7 @@
 	<!-- 목록 이미지형/리스트형 선택 버튼 -->
 	<div class="btnArea text-right">
 		<!-- 선택 된 class="on" 추가 -->
-		<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span>이미지형</button>
+		<button type="button" name="button" class="btn btn-list type1" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span>이미지형</button>
 		<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
 	</div>
 	<!-- //목록 이미지형/리스트형 선택 버튼 -->
@@ -69,7 +69,7 @@
 					</td>
 					<td>{{ appItem.buildpackName }}</td>
 					<td>{{ appItem.buildpackVersion }}</td>
-					<td><a class="txt" ng-if="0 < appItem.uris.length" ng-href="http://{{ appItem.uris[0] }}" target="_blank" title="{{ appItem.uris[0] }}">http://{{ appItem.uris[0] }}</a></td>
+					<td style="text-align: left"><a class="txt" ng-if="0 < appItem.uris.length" ng-href="http://{{ appItem.uris[0] }}" target="_blank" title="{{ appItem.uris[0] }}">http://{{ appItem.uris[0] }}</a></td>
 					<td>
 						<div class="stateWrap" ng-if="(appItem.state == 'STARTED') && (appItem.packageState == 'STAGED')">
 							<span class="stateMark type1">시작</span> <span class="state-txt">시작</span>

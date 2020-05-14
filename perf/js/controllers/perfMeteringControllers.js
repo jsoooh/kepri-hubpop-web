@@ -8,12 +8,11 @@ angular.module('perf.controllers')
         ct.fn = {};
         ct.data = {};
 
-        ct.data.sltId = common.getPortalOrgKey();  // 선택된 Org의 id (!= orgId)
-        ct.data.sltOrgId = "";
+        ct.data.sltOrgCode = "";
         ct.data.sltOrgName = "";
 
         ct.meteringItemGroups = [];
-        ct.data.maxRow = {};
+        ct.data.maxRow = "";
         ct.data.sltYear = "";
         ct.meteringYears = [];
         ct.orgMeteringMonthlyLists = [];
@@ -37,78 +36,42 @@ angular.module('perf.controllers')
 
         /* 년도 리스트 */
         ct.fn.listAllMeteringYears = function () {
+            $scope.main.loadingMainBody = true;
+
             var promise = perfMeteringService.listAllMeteringYears();
             promise.success(function (data) {
                 console.log("Success listAllMeteringYears");
                 ct.data.sltYear = data.items[0];
-                for (var i=0; i<data.items.length; i++) {
-                    ct.meteringYears.push(data.items[i]);
+                ct.meteringYears = angular.copy(data.items);
+
+                if(angular.isUndefined(ct.data.sltYear) || ct.data.sltYear == "") {
+                    var date = new Date();
+                    ct.data.sltYear = date.getFullYear();
                 }
+
+                ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
             });
             promise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
                 console.log("Fail listAllMeteringYears");
                 ct.meteringYears = [];
             });
         };
 
         /* 월별 사용량 리스트 BY ORG_ORGCODE */
-        ct.fn.orgListMeteringMonthlyTotal = function() {
-            ct.fn.listAllMeteringYears();
-
-            console.log("orgListMeteringMonthlyTotal");
-
-            if(angular.isUndefined(ct.data.sltYear) || ct.data.sltYear == "") {
-                var date = new Date();
-                ct.data.sltYear = date.getFullYear();
-            }
-
+        ct.fn.orgListMeteringMonthlyTotal = function(sltYear) {
             $scope.main.loadingMainBody = true;
 
             /* Org 정보 조회 BY ORG_ID */
-            var orgPromise = orgService.getOrg(ct.data.sltId);
+            var orgPromise = orgService.getOrg(common.getPortalOrgKey());
             orgPromise.success(function (data) {
                 ct.data.sltOrgName = data.orgName;
-                ct.data.sltOrgId = data.orgId;
-                /* orgId(orgCode) 이용하여 월별 사용량 조회 */
-                console.log(ct.sltOrgId +", " +data.orgId);
-                var params = {
-                    "urlPaths": {
-                        "orgCode":ct.data.sltOrgId
-                    },
-                    "year": ct.data.sltYear
-                }
-                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
-                promise.success(function (data) {
-                    if(angular.isArray(data.items)) {
-                        ct.orgMeteringMonthlyLists = data.items;
-                        /* rowspan 최대값 */
-                        var itemGroupName = "";
-                        var itemCnt = 1;
-                        ct.data.maxRow = 0;
-                        for(var i=0; i<data.itemCount; i++) {
-                            if (data.items[i].itemGroupName != itemGroupName) {
-                                itemGroupName = angular.copy(data.items[i].itemGroupName);
-                                if (ct.data.maxRow < itemCnt) {
-                                    ct.data.maxRow = itemCnt;
-                                }
-                                itemCnt = 1;
-                            } else {
-                                itemCnt++;
-                            }
-                        }
-                        $scope.main.loadingMainBody = false;
-                    } else {
-                        ct.orgMeteringMonthlyLists = [];
-                        $scope.main.loadingMainBody = false;
-                    }
-                });
-                promise.error(function (data, status, headers) {
-                    ct.orgMeteringMonthlyLists = [];
-                    $scope.main.loadingMainBody = false;
-                });
+                ct.data.sltOrgCode = data.orgId;
+
+                ct.fn.selectMeteringYear(sltYear);
             });
             orgPromise.error(function (data, status, headers) {
-                ct.orgMeteringMonthlyLists = [];
+                $scope.main.loadingMainBody = false;
                 ct.sltOrgCode = {};
                 ct.sltOrgName = {};
             });
@@ -121,7 +84,7 @@ angular.module('perf.controllers')
                 ct.data.sltYear = sltYear;
                 var params = {
                     "urlPaths": {
-                        "orgCode":ct.data.sltOrgId
+                        "orgCode":ct.data.sltOrgCode
                     },
                     "year": ct.data.sltYear
                 }
@@ -129,6 +92,9 @@ angular.module('perf.controllers')
                 promise.success(function (data) {
                     if(angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
+                        if(angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
+                            ct.fn.findMaxRow(data);
+                        }
                     } else {
                         ct.orgMeteringMonthlyLists = [];
                     }
@@ -141,11 +107,45 @@ angular.module('perf.controllers')
             }
         };
 
+        ct.fn.findMaxRow = function (data) {
+            var itemGroupCode = "";
+            var itemCnt = 1;
+            ct.data.maxRow = 0;
+
+            for (var i = 0; i < data.itemCount; i++) {
+                if (data.items[i].itemGroupCode != itemGroupCode) {
+                    itemGroupCode = angular.copy(data.items[i].itemGroupCode);
+                    if (ct.data.maxRow < itemCnt) {
+                        ct.data.maxRow = itemCnt;
+                        itemCnt = 1;
+                    }
+                } else {
+                    itemCnt++;
+                }
+            }
+        };
+
+        // 과거 확인
+        ct.fn.isPast = function (sltYear, sltMonth, sltDay) {
+            var date = new Date();
+            if (!sltDay == true) {
+                sltDay = 1;
+            }
+            date.setFullYear(sltYear, sltMonth, sltDay);
+
+            var today = new Date();
+            if (today.getTime() > date.getTime()) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        ct.fn.listAllMeteringYears();
         ct.fn.listAllMeteringGroupItems();
-        ct.fn.orgListMeteringMonthlyTotal();
 
     })
-    .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $interval, $filter, common, perfMeteringService, CONSTANTS, orgService) {
+    .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS, orgService) {
             _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 1);
 
         var ct = this;
@@ -161,28 +161,29 @@ angular.module('perf.controllers')
         };
 
         // ItemGroup
-        ct.data.sltItemGroup = {};
+        ct.sltItemGroup = {};
         ct.data.sltItemGroupCode = "";
         ct.meteringItemGroups = [];
 
         // Total Item List
         ct.meteringItems = [];
         // Item
-        ct.data.sltItem = {};
+        ct.sltItem = {};
         ct.data.sltItemCode = "";
         ct.meteringItemsBySltItemGroup = [];
 
         // year list
         ct.meteringYears = [];
-        ct.data.sltYear = "";
         // month list
-        ct.meteringMonths = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-        ct.data.sltMonth = "";
+        ct.meteringMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
         // day
         ct.today = new Date();
+        ct.data.sltYear = ct.today.getFullYear();
+        ct.data.sltMonth = ct.today.getMonth() + 1;
+
         // day list
-        ct.meteringDays = [];
+        ct.meteringDays = [""];
         //for (var month = 1; month < ( new Date( 년도입력, 월입력, 0) ).getDate(); month++)
 
         // month total param year
@@ -196,88 +197,117 @@ angular.module('perf.controllers')
         // 숫자 필터 처리를 위한 작업
         ct.data.numUnit = 1;
 
-        // variables for monthly Chart
-        ct.monthlyChart = {
-            switch: false,
-            container: document.getElementById('monthly-metering-chart'),
-            data: {},
-            option: {
-                chart: {
-                    width: 1450,
-                    height: 500,
-                    title: '추이 (' + ct.data.sltItem.itemUnit + ')',
-                    format: '1,000'
-                },
-                yAxis: {
-                    title: 'Amount',
-                    min: 1
-                },
-                xAxis: {
-                    title: 'Month'
-                },
-                legend: {
-                    align: 'top'
-                }
-            },
-            column: null
-        };
+        ct.data.chartWidth = 1450;
+        ct.data.chartHeight = 500;
 
-        // variables for daily Chart
-        ct.dailyChart = {
-            switch: false,
-            container: document.getElementById('daily-metering-chart'),
-            data: {},
-            option: {
-                chart: {
-                    width: 1450,
-                    height: 500,
-                    title: 'Daily Performance',
-                    format: '1,000'
+        // chart
+        ct.monthlyChart = {};
+        ct.dailyChart = {};
+
+        // First Draw
+        ct.fn.initDraw = function () {
+            // Monthly Chart
+            // variables for monthly Chart
+            ct.monthlyChart = {
+                container: document.getElementById('monthly-metering-chart'),
+                data: {
+                    categories: ct.meteringMonths,
+                    series: null
                 },
-                yAxis: {
-                    title: 'Amount',
-                    min: 1
+                option: {
+                    chart: {
+                        width: ct.data.chartWidth,
+                        height: ct.data.chartHeight,
+                        title: 'Monthly Performance',
+                        format: '1,000'
+                    },
+                    yAxis: {
+                        title: 'Amount',
+                        min: 1
+                    },
+                    xAxis: {
+                        title: 'Month'
+                    },
+                    legend: {
+                        align: 'top',
+                        visible: false
+                    }
                 },
-                xAxis: {
-                    title: 'Day'
+                instance: null
+            };
+
+            // variables for daily Chart
+            ct.dailyChart = {
+                container: document.getElementById('daily-metering-chart'),
+                data: {
+                    categories: ct.meteringDays,
+                    series: null
                 },
-                legend: {
-                    align: 'top'
-                }
-            },
-            column: null
-        };
+                option: {
+                    chart: {
+                        width: ct.data.chartWidth,
+                        height: ct.data.chartHeight,
+                        title: 'Daily Performance',
+                        format: '1,000'
+                    },
+                    yAxis: {
+                        title: 'Amount',
+                        min: 1
+                    },
+                    xAxis: {
+                        title: 'Day'
+                    },
+                    legend: {
+                        align: 'top',
+                        visible: false
+                    }
+                },
+                instance: null
+            };
+
+            ct.dailyChart.instance = tui.chart.columnChart(ct.dailyChart.container, ct.dailyChart.data, ct.dailyChart.option);
+            ct.monthlyChart.instance = tui.chart.columnChart(ct.monthlyChart.container, ct.monthlyChart.data, ct.monthlyChart.option);
+        }
 
         /*
             Initial Setting
          */
-        ct.fn.getOrg = function() {
+        ct.fn.getOrg = function(defer) {
             var promise = orgService.getOrg(common.getPortalOrgKey());
             promise.success(function (data) {
                 console.log("Success getOrgData")
                 console.log(data.orgId + ", " + data.orgName);
                 ct.data.sltOrg.code = data.orgId;
                 ct.data.sltOrg.name = data.orgName;
+                if(defer) {
+                    defer.resolve();
+                }
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail getOrgData");
             });
         }
 
-        // API로부터 metering 그룹 get
-        ct.fn.listAllMeteringItemGroups = function () {
+        // GET meteringItemGroup
+        ct.fn.listAllMeteringItemGroups = function (defer) {
             var promise = perfMeteringService.listAllMeteringGroupItems();
             promise.success(function (data) {
                 console.log("Success listAllMeteringGroupItems");
                 ct.meteringItemGroups = data.items;
                 if (ct.meteringItemGroups.length > 0 && angular.isUndefined(ct.data.sltItemGroupCode) || ct.data.sltItemGroupCode == "") {
-                    ct.data.sltItemGroup = angular.copy(ct.meteringItemGroups[0]);
-                    ct.data.sltItemGroupCode = ct.data.sltItemGroup.itemGroupCode;
+                    ct.sltItemGroup = angular.copy(ct.meteringItemGroups[0]);
+                    ct.data.sltItemGroupCode = ct.sltItemGroup.itemGroupCode;
+                }
+                if (defer) {
+                    defer.resolve();
                 }
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail listAllMeteringGroupItems");
                 ct.meteringItemGroups = []
+                if (defer) {
+                    defer.reject();
+                }
             });
         };
 
@@ -298,8 +328,8 @@ angular.module('perf.controllers')
             }
         };
 
-        // API로부터 meteringItem get
-        ct.fn.listAllMeteringItems = function () {
+        // GET meteringItem
+        ct.fn.listAllMeteringItems = function (defer) {
             $scope.main.loadingMainBody = true;
             var promise = perfMeteringService.listAllMeteringItems();
             promise.success(function (data) {
@@ -307,49 +337,25 @@ angular.module('perf.controllers')
                 ct.meteringItems = data.items;
                 ct.fn.changeMeteringItemsByItemGroupCode(ct.data.sltItemGroupCode);
                 if (ct.meteringItemsBySltItemGroup.length > 0 && angular.isUndefined(ct.data.sltItemCode) || ct.data.sltItemCode == "") {
-                    ct.data.sltItem = angular.copy(ct.meteringItemsBySltItemGroup[0]);
-                    ct.data.sltItemCode = ct.data.sltItem.itemCode;
+                    ct.sltItem = angular.copy(ct.meteringItemsBySltItemGroup[0]);
+                    console.log(ct.sltItem);
+                    ct.data.sltItemCode = ct.sltItem.itemCode;
                 }
-                ct.fn.listAllMeteringYears();
+                if (defer) {
+                    defer.resolve();
+                }
+
                 $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail listAllMeteringItems");
-                ct.meteringItems = []
+                ct.meteringItems = [];
+                if (defer) {
+                    defer.reject();
+                }
                 $scope.main.loadingMainBody = false;
             });
         };
-
-        // API로부터 metering Year get
-        ct.fn.listAllMeteringYears = function () {
-            var promise = perfMeteringService.listAllMeteringYears();
-            promise.success(function (data) {
-                console.log("Success listAllMeteringYears");
-                console.log(data);
-                ct.meteringYears = angular.copy(data.items);
-
-                // year, month 초기값 설정
-                ct.fn.changeMeteringYear();
-                ct.fn.changeMeteringMonth();
-            });
-            promise.error(function (data, status, headers) {
-                console.log("Fail listAllMeteringYears");
-                ct.meteringYears = [];
-            });
-        };
-
-        // html에서 값에 따라 정렬 방식 선택
-        /*
-        ct.fn.setClassForViewAlign = function (value) {
-            if (value == '-') {
-                return "text-center";
-            } else if (!isNaN(value)) {
-                return "text-right";
-            } else {
-                return "";
-            }
-        };
-        */
 
         // 년월에 따른 day 배열 생성
         ct.fn.configDayArray = function (year, month) {
@@ -360,11 +366,46 @@ angular.module('perf.controllers')
             }
         };
 
-        // year나 itemCdoe를 바꿀때 모든 데이터 재구성
+        /*
+           View Control Functions
+           */
+        // itemGroup 변경시
+        ct.fn.changeMeteringItemsByItemGroupCode = function (sltItemGroupCode) {
+            var itemGroup = common.objectsFindCopyByField(ct.meteringItemGroups, "itemGroupCode", sltItemGroupCode);
+            if (angular.isObject(itemGroup) && angular.isDefined(itemGroup.itemGroupCode)) {
+                ct.sltItemGroup = itemGroup;
+                ct.data.sltItemGroupCode = sltItemGroupCode;
+                ct.meteringItemsBySltItemGroup = [];
+                for (var i = 0; i < ct.meteringItems.length; i++) {
+                    var item = ct.meteringItems[i];
+
+                    if (item.itemCode.startsWith(sltItemGroupCode)) {
+                        ct.meteringItemsBySltItemGroup.push(item)
+                    }
+                }
+            }
+        };
+
+
+        // item 변경시
+        ct.fn.changeMeteringItem = function (sltItemCode) {
+            ct.data.sltItemCode = sltItemCode;
+            var item = common.objectsFindCopyByField(ct.meteringItemsBySltItemGroup, "itemCode", sltItemCode);
+            if (angular.isObject(item) && angular.isDefined(item.itemCode)) {
+                ct.fn.reconstructData()
+            }
+        };
+        // year 변경시
+        ct.fn.selectMeteringYear = function (sltYear) {
+            ct.data.sltYear = sltYear;
+            ct.fn.reconstructData();
+        };
+        // year, itemCdoe 변경시 GET Monthly Data, Daily Data
         ct.fn.reconstructData = function () {
-            if (ct.data.sltItem.itemCode != false) {
+            console.log("reconstruct ------")
+            if (ct.sltItem.itemCode != false) {
                 if (ct.data.sltYear != false) {
-                    ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.data.sltOrg.code ,ct.data.sltItem.itemCode, ct.data.sltYear);
+                    ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear);
                     if (ct.data.sltMonth != false) {
                         ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
                         ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth)
@@ -373,54 +414,10 @@ angular.module('perf.controllers')
             }
         };
 
-        /*
-         View Control Functions
-         */
-        // itemGroup을 변경했을 때
-        ct.fn.changeMeteringItemsByItemGroupCode = function (sltItemGroupCode) {
-            ct.meteringItemsBySltItemGroup = [];
-            for (var i = 0; i < ct.meteringItems.length; i++) {
-                var item = ct.meteringItems[i];
-
-                if (item.itemCode.startsWith(sltItemGroupCode)) {
-                    ct.meteringItemsBySltItemGroup.push(item)
-                }
-            }
-        };
-
-        // item을 변경했을 때
-        ct.fn.changeMeteringItem = function (sltItemCode) {
-            for (var i = 0; i < ct.meteringItemsBySltItemGroup.length; i++) {
-                var item = ct.meteringItemsBySltItemGroup[i];
-                if (item.itemCode == sltItemCode) {
-                    ct.data.sltItem = item;
-                    break;
-                } else {
-                    ct.data.sltItem = null;
-                }
-            }
-            ct.fn.reconstructData();
-        };
-
-        // year을 변경했을 때
-        ct.fn.changeMeteringYear = function (sltYear) {
-            ct.data.sltYear = sltYear;
-            if (ct.meteringYears.length > 0 && angular.isUndefined(ct.data.sltYear) || ct.data.sltYear == "") {
-                var today = ct.today;
-                ct.data.sltYear = String(today.getFullYear());
-            }
-            ct.fn.reconstructData();
-        };
-
-        // month를 변경했을 떄
+        // month 변경시 - GET Daily Data
         ct.fn.changeMeteringMonth = function (sltMonth) {
             ct.data.sltMonth = sltMonth;
-            if (ct.meteringMonths.length > 0 && angular.isUndefined(ct.data.sltMonth) || ct.data.sltMonth == "") {
-                var today = ct.today;
-                ct.data.sltMonth = String(today.getMonth() + 1);
-                ct.data.today = String(today.getDate());
-            }
-            if (ct.data.sltItem.itemCode != false && ct.data.sltYear != false) {
+            if (ct.sltItem.itemCode != false && ct.data.sltYear != false) {
                 if (ct.data.sltMonth != false) {
                     ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
                     ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth);
@@ -428,20 +425,13 @@ angular.module('perf.controllers')
             }
         };
 
-        // Draw Chart
-        ct.fn.drawColumnChart = function (chart) {
-            if (chart.switch) {
-                chart.column.setData(chart.data);
-                chart.column.rerender();
-            } else {
-                chart.column = tui.chart.columnChart(chart.container, chart.data, chart.option);
-                chart.switch = !chart.switch;
-            }
+        // Data 변경시 Chart rerender
+        ct.fn.redrawChart = function (chart) {
+            chart.instance.setData(chart.data);
+            chart.instance.rerender();
         };
 
-        /*
-        Get data from API
-         */
+        // GET Monthly Data - redraw chart
         ct.fn.listPerfMeteringMonthlyTotalByItemCode = function (orgCode, itemCode, sltYear) {
             $scope.main.loadingMainBody = true;
             var params = {
@@ -453,6 +443,7 @@ angular.module('perf.controllers')
             };
             var promise = perfMeteringService.listPerfMeteringMonthlyTotalByItemCode(params);
             promise.success(function (data) {
+                console.log(data);
                 console.log("Success listPerfMeteringMonthlyTotalByItemCode");
                 if (data.items.length > 0) {
                     ct.perfMeteringMonthlyTotals = [];
@@ -469,7 +460,7 @@ angular.module('perf.controllers')
 
                         if (data.items[0].hasOwnProperty(key)) {
                             if (ct.today.getFullYear() == ct.data.sltYear) {
-                                if (i + 1 > (ct.data.sltMonth)) {
+                                if (i + 1 > (ct.today.getMonth() + 1)) {
                                     ct.perfMeteringMonthlyTotals[i] = "";
                                     continue;
                                 }
@@ -481,28 +472,18 @@ angular.module('perf.controllers')
                     ct.perfMeteringDailyTotalSum = 0;
                     ct.perfMeteringDailyTotals = [];
                 }
-                /*
-                ct.monthlyChart.options = {
-                    chart: {
-                        title: '추이 (단위: ' + ct.data.sltItem.itemUnit + ')'
-                    },
-                    yAxis: {
-                        min: 0
-                    }
-                };
-                */
-                ct.monthlyChart.option.chart.title = '추이 (단위: ' + ct.data.sltItem.itemUnit + ')';
+
+                ct.monthlyChart.option.chart.title = '추이 (단위: ' + ct.sltItem.itemUnit + ')';
                 ct.monthlyChart.data = {
                     categories: ct.meteringMonths,
                     series: [
                         {
-                            name: ct.data.sltItem.itemName,
+                            name: ct.sltItem.itemName,
                             data: ct.perfMeteringMonthlyTotals
                         }
                     ]
                 };
-
-                ct.fn.drawColumnChart(ct.monthlyChart);
+                ct.fn.redrawChart(ct.monthlyChart);
                 $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
@@ -513,6 +494,7 @@ angular.module('perf.controllers')
             });
         };
 
+        // GET Daily Chart - redraw chart
         ct.fn.listPerfMeteringDailyTotalByItemCode = function (orgCode, itemCode, sltYear, sltMonth) {
             $scope.main.loadingMainBody = true;
             var params = {
@@ -523,8 +505,10 @@ angular.module('perf.controllers')
                 "year": sltYear,
                 "month": sltMonth
             };
+            console.log(params);
             var promise = perfMeteringService.listPerfMeteringDailyTotalByItemCode(params);
             promise.success(function (data) {
+                console.log(data);
                 console.log("Success listPerfMeteringDailyTotalByItemCode");
                 if (data.items.length > 0) {
                     ct.perfMeteringDailyTotals = [];
@@ -556,18 +540,18 @@ angular.module('perf.controllers')
                 }
 
                 // chart
-                ct.dailyChart.option.chart.title = '추이 (단위: ' + ct.data.sltItem.itemUnit + ')';
+                ct.dailyChart.option.chart.title = '추이 (단위: ' + ct.sltItem.itemUnit + ')';
                 ct.dailyChart.data = {
                     categories: ct.meteringDays,
                     series: [
                         {
-                            name: ct.data.sltItem.itemName,
+                            name: ct.sltItem.itemName,
                             data: ct.perfMeteringDailyTotals
                         }
                     ]
                 };
 
-                ct.fn.drawColumnChart(ct.dailyChart);
+                ct.fn.redrawChart(ct.dailyChart);
                 $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
@@ -578,17 +562,34 @@ angular.module('perf.controllers')
             });
         };
 
-        ct.fn.getOrg();
-        ct.fn.listAllMeteringItemGroups();
-        ct.fn.listAllMeteringItems();
-    })
-    .filter('numberUnit', function() {
-        return function(number, param) {
-            if (!isNaN(number) && !isNaN(param)) {
-                return parseInt(number/param);
-            } else {
-                return number;
+        // page Processs setting
+        ct.fn.initPage = function () {
+            $scope.main.loadingMainBody = true;
+            var orgDefer = $q.defer();
+            var listItemGroupsDefer = $q.defer();
+            var listItemsDefer = $q.defer();
+
+            var allProcessForInit = $q.all([orgDefer.promise, listItemGroupsDefer.promise, listItemsDefer.promise]);
+            allProcessForInit.then(function (datas) {
+                console.log(ct.data.sltOrg.code);
+                ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.data.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear);
+                ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltMonth);
+            });
+            ct.fn.getOrg(orgDefer);
+            ct.fn.initDraw();
+            ct.fn.listAllMeteringItemGroups(listItemGroupsDefer);
+            ct.fn.listAllMeteringItems(listItemsDefer);
+
+            // 연도 리스트 구성
+            ct.data.startYear = 2019;
+            ct.today = new Date();
+            for (var i = ct.data.startYear; i < ct.today.getFullYear() + 1; i++) {
+                ct.meteringYears.push(i);
             }
-        }
+
+            ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
+        };
+
+        ct.fn.initPage();
     })
 ;

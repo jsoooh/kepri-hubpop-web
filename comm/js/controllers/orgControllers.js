@@ -42,6 +42,8 @@ angular.module('portal.controllers')
 
         /*Org 목록 조회*/
         ct.listOrgProjects = function () {
+            /* 20.05.08 - 프로젝트 목록으로 돌아갈 경우 다시 대시보드부터 볼수 있도록 false 변경 by ksw */
+            orgService.changeUser = false;
             ct.orgProjects = [];
             $scope.main.loadingMainBody = true;
             var promise = orgService.getMyProjectOrgList($scope.main.sltProjectId, "", "");
@@ -113,6 +115,11 @@ angular.module('portal.controllers')
 
         /* 2020.03.24 - 사용자 탈퇴 추가 by ksw */
         ct.withdrawOrgProjectUser = function (org) {
+            //해당 프로젝트 책임자는 탈퇴 불가
+            if (org.managerId == $scope.main.userInfo.email) {
+                common.showAlertWarning("해당 프로젝트 책임자는 탈퇴 불가합니다.");
+                return;
+            }
             var showConfirm = common.showConfirm($translate.instant('label.del'), org.orgName + ' ' + $translate.instant('message.mq_delete_account'));
             showConfirm.then(function() {
                 ct.withdrawOrgProjectUserAction(org);
