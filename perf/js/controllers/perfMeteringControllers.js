@@ -10,7 +10,8 @@ angular.module('perf.controllers')
         ct.fn = {};
         ct.data = {};
 
-        ct.data.sltOrgCode = "";
+        // ct.data.sltOrgCode = "";
+        ct.data.sltOrgCode = common.getTeamCode();
         ct.data.sltOrgName = "";
 
         ct.meteringItemGroups = [];
@@ -46,14 +47,15 @@ angular.module('perf.controllers')
             }
             ct.data.sltYear = String(ct.today.getFullYear());
 
-            ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
+            // ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
+            ct.fn.selectMeteringYear(ct.data.sltYear);
         };
 
         /* 월별 사용량 리스트 BY ORG_ORGCODE */
-        ct.fn.orgListMeteringMonthlyTotal = function(sltYear) {
+        /*ct.fn.orgListMeteringMonthlyTotal = function(sltYear) {
             $scope.main.loadingMainBody = true;
 
-            /* Org 정보 조회 BY ORG_ID */
+            /!* Org 정보 조회 BY ORG_ID *!/
             var orgPromise = orgService.getOrg(common.getPortalOrgKey());
             orgPromise.success(function (data) {
                 ct.data.sltOrgName = data.orgName;
@@ -66,7 +68,7 @@ angular.module('perf.controllers')
                 ct.sltOrgCode = {};
                 ct.sltOrgName = {};
             });
-        };
+        };*/
 
         /* 년도 변경 */
         /**
@@ -87,6 +89,7 @@ angular.module('perf.controllers')
                 promise.success(function (data) {
                     if(angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
+                        ct.data.sltOrgName = ct.orgMeteringMonthlyLists[0].orgName;
                         if(angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
                             ct.fn.findMaxRow(data);
                         }
