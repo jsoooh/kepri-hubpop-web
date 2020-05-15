@@ -5,14 +5,18 @@ angular.module('perf.controllers')
         _DebugConsoleLog("perfMeteringControllers.js : perfMonthlyMeteringCtrl", 1);
 
         var ct = this;
+        ct.scope = $scope;
+        ct.scope.CONSTANTS = CONSTANTS;
         ct.fn = {};
         ct.data = {};
 
-        ct.data.sltOrgCode = "";
+        // ct.data.sltOrgCode = "";
+        ct.data.sltOrgCode = common.getTeamCode();
         ct.data.sltOrgName = "";
 
         ct.meteringItemGroups = [];
         ct.data.maxRow = "";
+        ct.today = new Date();
         ct.data.sltYear = "";
         ct.meteringYears = [];
         ct.orgMeteringMonthlyLists = [];
@@ -38,31 +42,20 @@ angular.module('perf.controllers')
         ct.fn.listAllMeteringYears = function () {
             $scope.main.loadingMainBody = true;
 
-            var promise = perfMeteringService.listAllMeteringYears();
-            promise.success(function (data) {
-                console.log("Success listAllMeteringYears");
-                ct.data.sltYear = data.items[0];
-                ct.meteringYears = angular.copy(data.items);
+            for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
+                ct.meteringYears.push(String(i));
+            }
+            ct.data.sltYear = String(ct.today.getFullYear());
 
-                if(angular.isUndefined(ct.data.sltYear) || ct.data.sltYear == "") {
-                    var date = new Date();
-                    ct.data.sltYear = date.getFullYear();
-                }
-
-                ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
-            });
-            promise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                console.log("Fail listAllMeteringYears");
-                ct.meteringYears = [];
-            });
+            // ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
+            ct.fn.selectMeteringYear(ct.data.sltYear);
         };
 
         /* 월별 사용량 리스트 BY ORG_ORGCODE */
-        ct.fn.orgListMeteringMonthlyTotal = function(sltYear) {
+        /*ct.fn.orgListMeteringMonthlyTotal = function(sltYear) {
             $scope.main.loadingMainBody = true;
 
-            /* Org 정보 조회 BY ORG_ID */
+            /!* Org 정보 조회 BY ORG_ID *!/
             var orgPromise = orgService.getOrg(common.getPortalOrgKey());
             orgPromise.success(function (data) {
                 ct.data.sltOrgName = data.orgName;
@@ -75,9 +68,13 @@ angular.module('perf.controllers')
                 ct.sltOrgCode = {};
                 ct.sltOrgName = {};
             });
-        };
+        };*/
 
         /* 년도 변경 */
+        /**
+         * HUBPOP_INT_PER_ANS_03 - 월별 사용 현황
+         * @param sltYear
+         */
         ct.fn.selectMeteringYear = function (sltYear) {
             $scope.main.loadingMainBody = true;
             if(angular.isDefined(sltYear)) {
@@ -92,6 +89,7 @@ angular.module('perf.controllers')
                 promise.success(function (data) {
                     if(angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
+                        ct.data.sltOrgName = ct.orgMeteringMonthlyLists[0].orgName;
                         if(angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
                             ct.fn.findMaxRow(data);
                         }
@@ -432,6 +430,13 @@ angular.module('perf.controllers')
         };
 
         // GET Monthly Data - redraw chart
+        /**
+         * HUBPOP_INT_PER_ANS_04 - 월별 사용 추이
+         * @param orgCode
+         * @param itemCode
+         * @param sltYear
+         * @param sltMonth
+         */
         ct.fn.listPerfMeteringMonthlyTotalByItemCode = function (orgCode, itemCode, sltYear) {
             $scope.main.loadingMainBody = true;
             var params = {
@@ -495,6 +500,13 @@ angular.module('perf.controllers')
         };
 
         // GET Daily Chart - redraw chart
+        /**
+         * HUBPOP_INT_PER_ANS_04 - 일별 사용 추이
+         * @param orgCode
+         * @param itemCode
+         * @param sltYear
+         * @param sltMonth
+         */
         ct.fn.listPerfMeteringDailyTotalByItemCode = function (orgCode, itemCode, sltYear, sltMonth) {
             $scope.main.loadingMainBody = true;
             var params = {
