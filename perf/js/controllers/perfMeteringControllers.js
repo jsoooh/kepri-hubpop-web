@@ -77,20 +77,20 @@ angular.module('perf.controllers')
          */
         ct.fn.selectMeteringYear = function (sltYear) {
             $scope.main.loadingMainBody = true;
-            if(angular.isDefined(sltYear)) {
+            if (angular.isDefined(sltYear)) {
                 ct.data.sltYear = sltYear;
                 var params = {
                     "urlPaths": {
-                        "orgCode":ct.data.sltOrgCode
+                        "orgCode": ct.data.sltOrgCode
                     },
                     "year": ct.data.sltYear
                 }
                 var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
                 promise.success(function (data) {
-                    if(angular.isArray(data.items)) {
+                    if (angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
                         ct.data.sltOrgName = ct.orgMeteringMonthlyLists[0].orgName;
-                        if(angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
+                        if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
                             ct.fn.findMaxRow(data);
                         }
                     } else {
@@ -144,7 +144,7 @@ angular.module('perf.controllers')
 
     })
     .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS, orgService) {
-            _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 1);
+        _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 1);
 
         var ct = this;
         ct.scope = $scope;
@@ -270,14 +270,14 @@ angular.module('perf.controllers')
         /*
             Initial Setting
          */
-        ct.fn.getOrg = function(defer) {
+        ct.fn.getOrg = function (defer) {
             var promise = orgService.getOrg(common.getPortalOrgKey());
             promise.success(function (data) {
                 console.log("Success getOrgData")
                 console.log(data.orgId + ", " + data.orgName);
                 ct.data.sltOrg.code = data.orgId;
                 ct.data.sltOrg.name = data.orgName;
-                if(defer) {
+                if (defer) {
                     defer.resolve();
                 }
             });
@@ -519,35 +519,28 @@ angular.module('perf.controllers')
             console.log(params);
             var promise = perfMeteringService.listPerfMeteringDailyTotalByItemCode(params);
             promise.success(function (data) {
-                console.log(data);
                 console.log("Success listPerfMeteringDailyTotalByItemCode");
-                if (data.items.length > 0) {
-                    ct.perfMeteringDailyTotals = [];
-                    ct.perfMeteringDailyTotalSum = data.items[0].totalMeteringValue;
+                var lastDay = (new Date(sltYear, sltMonth, 0)).getDate();
 
-                    var key = "";
-                    for (var i = 0; i < ct.meteringDays.length; i++) {
-                        if (i < 9) {
-                            key = "dv0" + (i + 1)
+                ct.perfMeteringDailyTotals = [];
+                ct.perfMeteringDailyTotalSum = 0;
+                var dataIndex = 0;
+                for (var day = 1; day <= lastDay; day++) {
+                    if (dataIndex < data.itemCount) {
+                        var perfDay = Number(data.items[dataIndex].perfYmd.slice(6, 8));
+                    }
+                    if (perfDay == day) {
+                        var meteringValue = data.items[dataIndex].meteringValue;
+                        ct.perfMeteringDailyTotals.push(meteringValue);
+                        ct.perfMeteringDailyTotalSum += meteringValue;
+                        dataIndex++;
+                    } else {
+                        if (ct.fn.isPast(sltYear, sltMonth, perfDay)) {
+                            ct.perfMeteringDailyTotals.push(0);
                         } else {
-                            key = "dv" + (i + 1)
-                        }
-
-                        if (data.items[0].hasOwnProperty(key)) {
-                            if (ct.today.getFullYear() == ct.data.sltYear) {
-                                if (ct.today.getMonth() + 1 == ct.data.sltMonth) {
-                                    if (i + 1 > ct.today.getDate()) {
-                                        ct.perfMeteringDailyTotals[i] = "";
-                                        continue;
-                                    }
-                                }
-                            }
-                            ct.perfMeteringDailyTotals[i] = data.items[0][key];
+                            ct.perfMeteringDailyTotals.push('');
                         }
                     }
-                } else {
-                    ct.perfMeteringDailyTotalSum = 0;
-                    ct.perfMeteringDailyTotals = [];
                 }
 
                 // chart
