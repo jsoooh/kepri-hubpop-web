@@ -334,11 +334,6 @@ angular.module('perf.controllers')
                 console.log("Success listAllMeteringItems");
                 ct.meteringItems = data.items;
                 ct.fn.changeMeteringItemsByItemGroupCode(ct.data.sltItemGroupCode);
-                if (ct.meteringItemsBySltItemGroup.length > 0 && angular.isUndefined(ct.data.sltItemCode) || ct.data.sltItemCode == "") {
-                    ct.sltItem = angular.copy(ct.meteringItemsBySltItemGroup[0]);
-                    console.log(ct.sltItem);
-                    ct.data.sltItemCode = ct.sltItem.itemCode;
-                }
                 if (defer) {
                     defer.resolve();
                 }
@@ -380,6 +375,10 @@ angular.module('perf.controllers')
                     if (item.itemCode.startsWith(sltItemGroupCode)) {
                         ct.meteringItemsBySltItemGroup.push(item)
                     }
+                }
+                if (ct.meteringItemsBySltItemGroup.length > 0 && angular.isUndefined(ct.data.sltItemCode) || ct.data.sltItemCode == "") {
+                    ct.sltItem = angular.copy(ct.meteringItemsBySltItemGroup[0]);
+                    ct.data.sltItemCode = ct.sltItem.itemCode;
                 }
             }
         };
