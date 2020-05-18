@@ -323,7 +323,7 @@ angular.module('common.controllers', [])
         // left 메뉴 클릭 이벤트 처리
         mc.commPartLeftMenuClick = function (evt, menuItem) {
             if ((menuItem.pageStage == 'iaas' || menuItem.pageStage == 'paas' || menuItem.pageStage == 'monit') && (!mc.sltProject || !mc.sltProject.orgs || mc.sltProject.orgs.length == 0 || !mc.userTenantId || !mc.sltOrganizationGuid)) {
-                common.showAlertWarning("작업 정복가 존재하지 않습니다. 작업을 선택 하십시오.");
+                common.showAlertWarning("작업 정보가 존재하지 않습니다. 작업을 선택 하십시오.");
             }
             var target = $(evt.currentTarget);
             var il_items = target.parent().parent().find("> li");
@@ -342,7 +342,7 @@ angular.module('common.controllers', [])
         // left 메뉴 클릭 이벤트 처리
         mc.commLeftMenuClick = function (evt, menuItem) {
             if (menuItem.key == 'platform_service' && (!mc.sltProject || !mc.sltProject.orgs || mc.sltProject.orgs.length == 0 || !mc.userTenantId || !mc.sltOrganizationGuid)) {
-                common.showAlertWarning("작업 정복가 존재하지 않습니다. 작업을 선택 하십시오.");
+                common.showAlertWarning("작업 정보가 존재하지 않습니다. 작업을 선택 하십시오.");
             }
             if ($(evt.currentTarget).parent().find("ul").length > 0) {
                 var target = $(evt.currentTarget).find("a");
