@@ -5,7 +5,7 @@ angular.module('gpu.controllers')
         _DebugConsoleLog("vmCatalogControllers.js : gpuVmCatalogListCtrl", 1);
 
         var ct               = this;
-        ct.tenantId          = $scope.main.userTenantId;
+        ct.tenantId          = $scope.main.userTenantGpuId;
         ct.fn                = {};
 
         ct.pageOptions = {
@@ -19,7 +19,7 @@ angular.module('gpu.controllers')
        _DebugConsoleLog("vmCatalogControllers.js : gpuVmCatalogDeployFormCtrl", 1);
 
        var ct               = this;
-       ct.tenantId          = $scope.main.userTenantId;
+       ct.tenantId          = $scope.main.userTenantGpuId;
        ct.fn                = {};
 
    })

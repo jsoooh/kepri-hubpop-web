@@ -70,7 +70,7 @@
 					</td>    <!-- 당월 합계 -->
 
 					<td ng-if="anlsMonthlyDetailList.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">
-						<a ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a></td>
+						<a style="text-decoration: underline" ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a></td>
 				</tr>
 				</tbody>
 				<tbody ng-if="contents.totalPerfAnlsByOrgCodeAndPerfDate.length == 0 || !contents.totalPerfAnlsByOrgCodeAndPerfDate"

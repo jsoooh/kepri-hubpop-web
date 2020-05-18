@@ -409,6 +409,15 @@ angular.module('portal.services', [])
             return common.syncHttpResponse(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams, 'application/x-www-form-urlencoded');
         };
 
+        /* 20.05.18 - gpu 객체 정보 불러오기 by ksw */
+        portal.portalOrgs.syncGetGpuTenantByName = function (orgCode, teamCode) {
+            var getParams = {
+                "orgCode" : orgCode,
+                "teamCode" : teamCode
+            };
+            return common.syncHttpResponse(CONSTANTS.gpuApiContextUrl + '/tenant/org/one', 'GET', getParams, 'application/x-www-form-urlencoded');
+        };
+
         portal.portalOrgs.getNotices = function () {
             return common.retrieveResource(common.resourcePromise('/hsvc/api/noti/info/v1.0', 'GET'));
         };

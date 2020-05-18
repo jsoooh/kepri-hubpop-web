@@ -19,7 +19,7 @@ angular.module('perf.controllers')
         ct.data.sltItemGroup = "";
         ct.data.sltItemGroupCode = "";
 
-        ct.data.today = new Date();
+        ct.today = new Date();
         ct.data.sltYear = "";
         ct.data.sltMonth = "";
         ct.dashYears = [];
@@ -59,32 +59,18 @@ angular.module('perf.controllers')
             });
         };
 
-        /* 년도 리스트 */
-        ct.fn.listAllMeteringYears = function () {
-            $scope.main.loadingMainBody = true;
-            var promise = perfMeteringService.listAllMeteringYears();
-            promise.success(function (data) {
-                console.log("Success listAllMeteringYears");
-                ct.dashYears = angular.copy(data.items);
-
-                if(angular.isUndefined(ct.data.sltYear) || ct.data.sltYear == "") {
-                    ct.fn.initYearMonth();
-                }
-            });
-            promise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                console.log("Fail listAllMeteringYears");
-                ct.dashYears = [];
-            });
-        };
         ct.fn.initYearMonth = function() {
             $scope.main.loadingMainBody = true;
-            var today = new Date();
-            ct.data.sltYear = String(today.getFullYear());
-            ct.data.sltMonth = String(today.getMonth() + 1);
+
+            // 연도 리스트 구성
+            for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
+                ct.dashYears.push(String(i));
+            }
+            ct.data.sltYear = String(ct.today.getFullYear());
+            ct.data.sltMonth = String(ct.today.getMonth() + 1);
 
             /* 전년, 전월 계산 */
-            var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            var firstDayOfMonth = new Date(ct.today.getFullYear(), ct.today.getMonth(), 1);
             var lastMonth = new Date(firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 1));
             ct.data.lastYear = String(lastMonth.getFullYear());
             ct.data.lastMonth = String(lastMonth.getMonth() + 1);
@@ -226,36 +212,35 @@ angular.module('perf.controllers')
         }
 
         /* 사용 금액 월별 추이 */
+        /**
+         * HUBPOP_INT_PER_ANS_01 - 사용 금액 월별 추이
+         * @param sltYear
+         */
         ct.fn.listAnlsMonthlySummaryByOrg = function(sltYear) {
+            ct.data.sltYear = sltYear;
             var params = {
                 "urlPaths": {
                     "orgCode": ct.data.sltOrgCode
                 },
-                "year": sltYear
+                "year": ct.data.sltYear
             };
             var promise = perfAnlsService.listAnlsMonthlySummaryByOrg(params);
             promise.success(function (data) {
-                ct.anlsMonthlySummaryLists = data.items[0];
-
+                ct.anlsMonthlySummaryLists = data.items;
                 var monthlySummaryValues = [];
                 ct.anlsMonthlySummaryListsToChartData = [];
-                if(data.itemCount > 0) {
-                    var key = "";
-                    for(var i=1; i<=12; i++) {
-                        if (i < 10) {
-                            key = "mv0" + i;
-                        } else {
-                            key = "mv" + i;
-                        }
-                        if(ct.anlsMonthlySummaryLists.hasOwnProperty(key)) {
-                            if(ct.data.today.getFullYear() == ct.data.sltYear) {
-                                if(i > ct.data.today.getMonth() + 1) {
-                                    monthlySummaryValues[i-1] = "";
-                                    continue;
-                                }
-                            }
-                            monthlySummaryValues[i-1] = ct.anlsMonthlySummaryLists[key];
-                        }
+
+                var dataIndex = 0;
+                for (var month = 1; month <= 12; month++) {
+                    if(dataIndex < data.itemCount) {
+                        var perfMonth = Number(data.items[dataIndex].perfYm.slice(4, 6));
+                    }
+                    if (perfMonth == month) {
+                        var perfAmt = data.items[dataIndex].perfAmt;
+                        monthlySummaryValues[month-1] = perfAmt;
+                        dataIndex++;
+                    } else {
+                        monthlySummaryValues[month-1] = "";
                     }
                 }
 
@@ -280,6 +265,11 @@ angular.module('perf.controllers')
         };
 
         /* 사용 금액 일별 추이 */
+        /**
+         * HUBPOP_INT_PER_ANS_01 - 사용 금액 일별 추이
+         * @param sltYear
+         * @param sltMonth
+         */
         ct.fn.listAnlsDailySummaryByOrg = function(sltYear, sltMonth) {
             var sltParams = {
                 "urlPaths": {
@@ -290,36 +280,34 @@ angular.module('perf.controllers')
             };
             var promise = perfAnlsService.listAnlsDailySummaryByOrg(sltParams);
             promise.success(function (data) {
-                ct.anlsDailySummaryLists = data.items[0];
-
-                var sltDay = ct.data.today.getDate();
-                var lastDay = new Date(ct.data.sltYear, ct.data.sltMonth, 0).getDate();
-                if(sltYear == ct.data.today.getFullYear() && sltMonth == ct.data.today.getMonth() + 1) {
-                    if (angular.isUndefined(ct.data.sltSumPerfAmt) || ct.data.sltSumPerfAmt == "") {
-                        ct.data.sltSumPerfAmt = ct.anlsDailySummaryLists.sumPerfAmt;
-                        ct.data.nextSumPerfAmt = ct.data.sltSumPerfAmt + (ct.data.sltSumPerfAmt / sltDay) * (lastDay - sltDay);
-                    }
-                }
+                ct.anlsDailySummaryLists = data.items;
 
                 var dailySummaryValues = [];
                 ct.anlsDailySummaryListsToChartData = [];
-                if(data.itemCount > 0) {
-                    var key = "";
-                    for(var i=1; i<=lastDay; i++) {
-                        if (i < 10) {
-                            key = "dv0" + i;
-                        } else {
-                            key = "dv" + i;
-                        }
-                        if(ct.anlsDailySummaryLists.hasOwnProperty(key)) {
-                            if(ct.data.today.getFullYear() == sltYear && ct.data.today.getMonth() + 1 == sltMonth) {
-                                if(i > ct.data.today.getDate()) {
-                                    dailySummaryValues[i-1] = "";
-                                    continue;
-                                }
-                            }
-                            dailySummaryValues[i-1] = ct.anlsDailySummaryLists[key];
-                        }
+
+                var sltDay = ct.today.getDate();
+                var lastDay = new Date(ct.data.sltYear, ct.data.sltMonth, 0).getDate();
+
+                var dataIndex = 0;
+                var sumPerfAmt = 0;
+                for (var day = 1; day <= lastDay; day++) {
+                    if(dataIndex < data.itemCount) {
+                        var perfDay = Number(data.items[dataIndex].perfYmd.slice(6, 8));
+                    }
+                    if (perfDay == day) {
+                        var perfAmt = data.items[dataIndex].perfAmt;
+                        dailySummaryValues[day-1] = perfAmt;
+                        sumPerfAmt += perfAmt;
+                        dataIndex++;
+                    } else {
+                        dailySummaryValues[day-1] = "";
+                    }
+                }
+
+                if(sltYear == ct.today.getFullYear() && sltMonth == ct.today.getMonth() + 1) {
+                    if (angular.isUndefined(ct.data.sltSumPerfAmt) || ct.data.sltSumPerfAmt == "") {
+                        ct.data.sltSumPerfAmt = sumPerfAmt;
+                        ct.data.nextSumPerfAmt = ct.data.sltSumPerfAmt + (ct.data.sltSumPerfAmt / sltDay) * (lastDay - sltDay);
                     }
                 }
 
@@ -354,14 +342,24 @@ angular.module('perf.controllers')
             var promise = perfAnlsService.listAnlsDailySummaryByOrg(lastParams);
             promise.success(function (data) {
                 if(angular.isArray(data.items)) {
-                    ct.data.lastSumPerfAmt = data.items[0].sumPerfAmt;
+                    var sumPerfAmt = 0;
+                    for(var i=0; i<data.itemCount; i++) {
+                        sumPerfAmt += data.items[i].perfAmt;
+                    }
+                    ct.data.lastSumPerfAmt = sumPerfAmt;
                 }
             });
             promise.error(function (data) {
+                ct.data.lastSumPerfAmt = {};
             });
         };
 
         /* 서비스별 사용 금액 */
+        /**
+         * HUBPOP_INT_PER_ANS_01 - 아이템그룹별 사용 금액
+         * @param sltYear
+         * @param sltMonth
+         */
         ct.fn.listAnlsByItemGroup = function (sltYear, sltMonth) {
             $scope.main.loadingMainBody = true;
 
@@ -411,9 +409,12 @@ angular.module('perf.controllers')
         };
 
         /* 서비스 항목별 사용 금액 */
+        /**
+         * HUBPOP_INT_PER_ANS_01 - 아이템별 사용 금액
+         * @param sltYear
+         * @param sltMonth
+         */
         ct.fn.listAnlsByItem = function (sltYear, sltMonth) {
-            $scope.main.loadingMainBody = true;
-
             var params = {
                 "urlPaths": {
                     "orgCode": ct.data.sltOrgCode
@@ -427,15 +428,9 @@ angular.module('perf.controllers')
                 console.log(data);
                 if(angular.isArray(data.items)) {
                     ct.anlsByItemLists = data.items;
-                    ct.anlsByItemListsToChartData = [];
-                    for(var i=0; i<data.itemCount; i++) {
-                        if(ct.anlsByItemLists[i].itemGroupCode == ct.data.sltItemGroupCode) {
-                            ct.anlsByItemListsToChartData.push({
-                                name: ct.anlsByItemLists[i].itemName,
-                                data: ct.anlsByItemLists[i].perfAmt
-                            });
-                        }
-                    }
+
+                    ct.anlsByItemListsToChartData = ct.fn.makeItemChartData(ct.anlsByItemLists);
+
                     ct.itemChart.data = {
                         series: angular.copy(ct.anlsByItemListsToChartData)
                     };
@@ -445,17 +440,50 @@ angular.module('perf.controllers')
 
                     ct.fn.redrawChart(ct.itemChart);
                 }
-
-                $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, header) {
                 console.log("Fail listAnlsTotalByOrgAndItem");
                 ct.anlsByItemLists = [];
                 ct.anlsByItemListsToChartData = [];
-
-                $scope.main.loadingMainBody = false;
             });
         };
+        /* itemChartData 구성 */
+        ct.fn.makeItemChartData = function(data) {
+            var anlsByItemListsToChartData = [];
+            var dataCnt = 0;
+            var nonEtcDataCnt = 0;
+            var sumEtcData = 0;
+            var limit = 10;
+            var endIdx = 0;
+            for(var i=0; i<data.length; i++) {
+                if(data[i].itemGroupCode == ct.data.sltItemGroupCode) {
+                    dataCnt++;
+                    if(dataCnt < limit) {
+                        anlsByItemListsToChartData.push({
+                            name: data[i].itemName,
+                            data: data[i].perfAmt
+                        });
+                        nonEtcDataCnt++;
+                    } else {
+                        sumEtcData += data[i].perfAmt;
+                    }
+                    endIdx = i;
+                }
+            }
+            if(sumEtcData > 0 && nonEtcDataCnt + 1 == dataCnt) {
+                anlsByItemListsToChartData.push({
+                    name: data[endIdx].itemName,
+                    data: data[endIdx].perfAmt
+                });
+            } else if(sumEtcData > 0) {
+                anlsByItemListsToChartData.push({
+                    name: 'etc.',
+                    data: sumEtcData
+                });
+            }
+
+            return anlsByItemListsToChartData;
+        }
 
         // 년월에 따른 day 배열 생성
         ct.fn.configDayArray = function (year, month) {
@@ -488,14 +516,9 @@ angular.module('perf.controllers')
             ct.data.sltItemGroupCode = sltItemGroupCode;
             if(ct.anlsByItemLists.length > 0) {
                 ct.anlsByItemListsToChartData = [];
-                for(var i=0; i<ct.anlsByItemLists.length; i++) {
-                    if(ct.anlsByItemLists[i].itemGroupCode == ct.data.sltItemGroupCode) {
-                        ct.anlsByItemListsToChartData.push({
-                            name: ct.anlsByItemLists[i].itemName,
-                            data: ct.anlsByItemLists[i].perfAmt
-                        });
-                    }
-                }
+
+                ct.anlsByItemListsToChartData = ct.fn.makeItemChartData(ct.anlsByItemLists);
+
                 ct.itemChart.data = {
                     series: angular.copy(ct.anlsByItemListsToChartData)
                 };
@@ -541,6 +564,6 @@ angular.module('perf.controllers')
         ct.fn.initDrawChart();
         ct.fn.setColumnOption();
         ct.fn.listAllMeteringGroupItems();
-        ct.fn.listAllMeteringYears();
+        ct.fn.initYearMonth();
     })
 ;

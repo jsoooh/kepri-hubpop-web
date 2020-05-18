@@ -5,7 +5,7 @@ angular.module('gpu.controllers')
     _DebugConsoleLog("vmCatalogDeployControllers.js : gpuVmCatalogDeployListCtrl", 1);
 
     var ct               = this;
-    ct.tenantId          = $scope.main.userTenantId;
+    ct.tenantId          = $scope.main.userTenantGpuId;
     ct.fn                = {};
 
     ct.pageOptions = {
@@ -28,7 +28,7 @@ angular.module('gpu.controllers')
     _DebugConsoleLog("vmCatalogDeployControllers.js : gpuVmCatalogDeployRenameCtrl", 1);
 
     var pop               = this;
-    pop.tenantId          = $scope.main.userTenantId;
+    pop.tenantId          = $scope.main.userTenantGpuId;
     pop.fn                = {};
 
     $scope.actionLoading = false;
@@ -63,7 +63,7 @@ angular.module('gpu.controllers')
     _DebugConsoleLog("vmCatalogDeployControllers.js : gpuVmCatalogDeployViewCtrl", 1);
 
     var ct               = this;
-    ct.tenantId          = $scope.main.userTenantId;
+    ct.tenantId          = $scope.main.userTenantGpuId;
     ct.fn                = {};
 
 })

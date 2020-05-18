@@ -578,25 +578,41 @@ angular.module('common.controllers', [])
             }
         };
 
+        /* 20.05.18 - gpu 객체 정보 불러오기 by ksw */
+        mc.syncGetGpuTenantByName = function (orgCode, teamCode) {
+            var response = portal.portalOrgs.syncGetGpuTenantByName(orgCode, teamCode);
+            if (response && response.status == 200 && angular.isObject(response.data.content)) {
+                return response.data.content;
+            } else {
+                return null;
+            }
+        };
+
         mc.loadUserTenant = function () {
             if (angular.isObject(mc.sltProject) && mc.sltProjectId && angular.isObject(mc.sltPortalOrg) && mc.sltPortalOrg.orgId) {
                 var userTenant = mc.syncGetTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                /* 20.05.18 - gpu 객체 정보 불러오기 by ksw */
+                var userTenant2 = mc.syncGetGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
                 if (userTenant) {
                     userTenant.orgCode = userTenant.pk.orgCode;
                     userTenant.teamCode = userTenant.pk.teamCode;
                 }
-                mc.setUserTenant(userTenant);
+                mc.setUserTenant(userTenant, userTenant2);
             } else {
                 mc.setUserTenant(null);
             }
         };
 
         // UserTenant 값 셋팅
-        mc.setUserTenant = function(userTenant) {
+        mc.setUserTenant = function(userTenant, userTenant2) {
             if (angular.isObject(userTenant) && userTenant.tenantId) {
                 mc.userTenant = userTenant;
+                mc.userTenantGpu = userTenant2;
                 mc.userTenantId = userTenant.tenantId;
                 mc.userTenant.id = userTenant.tenantId;
+                /* 20.05.18 - gpu 객체 담기 by ksw */
+                mc.userTenantGpuId = userTenant2.tenantId;
+                mc.userTenantGpu.id = userTenant2.tenantId;
                 mc.userTenant.korName = mc.sltPortalOrg.orgName;
                 mc.uaerTenantDisplayName = mc.userTenant.korName;
                 common.setUserTenantId(mc.userTenantId);
