@@ -1,0 +1,250 @@
+	<!-- 작업 추가 및 선택 -->
+	<div ng-if="main.projectType == 'pjt'" class="projt-selWarp">
+		<div class="pull-left" ng-include="main.portalOrgDropdownTempeUrl"></div>
+		<div class="pull-right">
+			<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+		</div>
+	</div>
+	<!-- //작업 추가 및 선택 -->
+
+	<!-- panel area-->
+	<ul ng-if="main.contentsViewType == 'thum'" class="ul-panel">
+		<li ng-repeat="(diployIndex, deployServer) in contents.deployServerList" ng-if="(deployServer.viewType == 'instance' && deployServer.name != contents.cxAgengName) || (deployServer.viewType == 'deploy' && deployServer.status != 'deleted') ">
+			<!-- panel -->
+			<div class="panelWrap" style="height: 440px; width: 365px; overflow: visible;">
+				<div class="panel type5" style="height: 400px; width: 365px; position: relative;">
+					<div class="panel_head">
+						<img ng-if="deployServer.viewType == 'deploy'" ng-src="images/thum/{{deployServer.vmDeployType.iconFileName}}.png" class="logo" alt="" ng-click="contents.moveToDetailPage(deployServer)" >
+						<p ng-if="deployServer.viewType == 'deploy'" class="tit" ng-click="contents.moveToDetailPage(deployServer)" title="{{ deployServer.name + '[' + deployServer.instanceCount + ']' }}">{{deployServer.name}} <span>[{{ deployServer.instanceCount }}]</span></p>
+						<p ng-if="deployServer.viewType == 'deploy'" class="txt" ng-click="contents.moveToDetailPage(deployServer)" >{{deployServer.vmImage.imageServiceName}}</p>
+						<img ng-if="deployServer.viewType == 'instance'" ng-src="data:{{ deployServer.image.contentType }}; base64, {{ deployServer.image.icon }}" class="logo" alt="" ng-click="contents.moveToDetailPage(deployServer)" >
+						<p ng-if="deployServer.viewType == 'instance'" class="tit" ng-click="contents.moveToDetailPage(deployServer)" title="{{ deployServer.name }}">{{deployServer.name}}</p>
+						<p ng-if="deployServer.viewType == 'instance'" class="txt" ng-click="contents.moveToDetailPage(deployServer)" >{{deployServer.image.serviceName}}</p>
+						<div ng-if="deployServer.deployStatus != 'ing'" class="dropdown btn-option">
+							<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+								<span class="ico">실행 설정</span>
+							</button>
+							<ul ng-if="deployServer.viewType == 'instance'" class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+								<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState != 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('START',deployServer,diployIndex);">시작</a></li>
+								<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState != 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('STOP',deployServer,diployIndex);">중지</a></li>
+								<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',deployServer,diployIndex);">재시작</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('DELETE',deployServer,diployIndex);">삭제</a></li>
+								<li ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('SNAPSHOT', deployServer, diployIndex);">이미지 백업 이미지</a></li>
+								<li ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('IPCONNECT', deployServer, diployIndex);">접속IP할당</a></li>
+								<li ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT', deployServer, diployIndex);">접속IP해제</a></li>
+							</ul>
+							<ul ng-if="deployServer.viewType == 'deploy'" class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+								<li ng-if="deployServer.deployStatus == 'done'"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('START', deployServer, diployIndex);">시작</a></li>
+								<li ng-if="deployServer.deployStatus == 'done'"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('STOP', deployServer, diployIndex);">중지</a></li>
+								<li ng-if="deployServer.deployStatus == 'done'"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('RESTART', deployServer, diployIndex);">재시작</a></li>
+								<!--<li ng-if="deployServer.deployStatus == 'done' && (deployServer.deployType == 'WEB' || deployServer.deployType == 'WAS')"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('SCALE', deployServer, diployIndex);">인스턴스 증감</a></li>-->
+								<li ng-if="deployServer.deployStatus == 'fail'"><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('INSTALL', deployServer, diployIndex);">재배포</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.deployServerActionConfirm('DELETE', deployServer, diployIndex);">삭제</a></li>
+							</ul>
+						</div>
+						<div ng-if="deployServer.deployStatus == 'ing'" class="btn-option" style="top: 25px;">
+							<img src="/images/loading/lg.gooey-ball-lodaer.gif" style="height: 50px; width: 50px;">
+						</div>
+					</div>
+					<div class="panel_body">
+						<div ng-class="deployServer.deployStatus == 'ing' ? 'ul-in2' : 'ul-in'">
+							<div ng-if="deployServer.deployStatus == 'ing' && deployServer.viewType == 'instance'" class="info-chart">
+								<div class="chartWrap" style="height:180px;">
+									<img src="/images/loading/lg.triple-gears-loading-icon.gif" style="height: 180px; width: 180px;">
+								</div>
+							</div>
+							<div ng-if="deployServer.deployStatus == 'ing' && deployServer.viewType == 'deploy'" class="info-chart" style="padding-left: 40px; padding-right: 40px; padding-bottom: 10px;">
+								<ul class="step_bar">
+									<li ng-class="deployServer.statusIndex == 0 ? 'active' : 'done'" class="done">초기화</li>
+									<li ng-class="deployServer.statusIndex == 1 ? 'active' : (deployServer.statusIndex > 1 ? 'done' : '')">VM생성</li>
+									<li ng-class="deployServer.statusIndex == 2 ? 'active' : (deployServer.statusIndex > 2 ? 'done' : '')">설치준비</li>
+									<li ng-class="deployServer.statusIndex == 3 ? 'active' : (deployServer.statusIndex > 3 ? 'done' : '')">설치</li>
+									<li ng-class="deployServer.statusIndex == 4 ? 'active' : (deployServer.statusIndex > 4 ? 'done' : '')">설정</li>
+								</ul>
+								<div class="chartWrap" style="padding-top: 20px;">
+									<img src="/images/loading/lg.triple-gears-loading-icon.gif" style="height: 120px; width: 120px;">
+								</div>
+							</div>
+							<div ng-if="deployServer.deployStatus != 'ing'" class="up" style="padding-top: 10px;">
+								<div ng-if="deployServer.viewType == 'deploy'" class="deploy-box">
+									<div scroll-pane scroll-config="{ contentHeight: '0px' }" id="deploy_instance_scroll_panel_{{diployIndex}}">
+										<ul class="ul-list1" style="padding-top: 5px;">
+											<li ng-repeat="(instanceIdx, instance) in deployServer.instances">
+												<div class="stateWrap">
+													<span ng-if="instance.vmState == 'active'" class="stateMark type1"></span>
+													<span ng-if="instance.vmState == 'error'" class="stateMark type2"></span>
+													<span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building'" class="stateMark type4"></span>
+													<span ng-if="instance.vmState == 'stopped'" class="stateMark type3"></span>
+													<span class="state-txt">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
+												</div>
+												<label class="label">
+													<img ng-src="{{deployServer.softwareIconUrl}}" class="small_logo" alt="" ng-click="contents.moveToDetailPage(instance)" >
+												</label>
+												<p class="label-txt" title="{{ instance.name }}">{{instance.name}}</p>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<ul class="ul-prog" style="padding-top: 10px;" ng-class="{'deploy-progress' : (deployServer.viewType == 'deploy') }">
+									<li>
+										<div class="progressWrap type1">
+											<div class="progress">
+												<div percent-progress-bar-animate bar-type="height" percent="{{deployServer.cpu.used | number: 0}}" class="progress">
+													<div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{deployServer.cpu.used | number: 0}}%"></div>
+												</div>
+											</div>
+										</div>
+										<strong class="tit">CPU<br />({{deployServer.spec.vcpus}} Core)</strong>
+									</li>
+									<li>
+										<div class="progressWrap type1">
+											<div class="progress">
+												<div percent-progress-bar-animate bar-type="height" percent="{{deployServer.mem.parsentUsed | number: 0}}" class="progress">
+													<div class="progress-bar color-type2" role='progressbar' tooltip-placement="top" uib-tooltip="{{deployServer.mem.parsentUsed | number: 0}}%"></div>
+												</div>
+											</div>
+										</div>
+										<strong class="tit">Memory<br />({{deployServer.spec.ram | displayVolume:'MB'}})</strong>
+									</li>
+									<li>
+										<div class="progressWrap type1">
+											<div class="progress">
+												<div percent-progress-bar-animate bar-type="height" percent="{{deployServer.disk.parsentUsed | number : 0}}" class="progress">
+													<div class="progress-bar" role="progressbar" tooltip-placement="top" uib-tooltip="{{deployServer.disk.parsentUsed | number : 0}}%"></div>
+												</div>
+											</div>
+										</div>
+										<strong class="tit">Disk<br />({{(deployServer.spec.disk > 0) ? (deployServer.spec.disk) + ' GB' : (deployServer.disk.total | displayVolume:'MB') }})</strong>
+									</li>
+								</ul>
+							</div>
+							<div class="down">
+								<div ng-if="deployServer.viewType == 'instance'" class="stateWrap">
+									<span ng-if="deployServer.vmState == 'active'" class="stateMark type1"></span>
+									<span ng-if="deployServer.vmState == 'error'" class="stateMark type2"></span>
+									<span ng-if="deployServer.vmState == 'paused' || deployServer.vmState == 'resized' || deployServer.vmState == 'building'" class="stateMark type4"></span>
+									<span ng-if="deployServer.vmState == 'stopped'" class="stateMark type3"></span>
+									<span class="state-txt">{{ 'iaas.label.instance_' + deployServer.vmState | translate }}</span>
+								</div>
+								<div ng-if="deployServer.viewType == 'deploy'" class="stateWrap">
+									<span ng-if="deployServer.uiStatus == 'active'" class="stateMark type1"></span>
+									<span ng-if="deployServer.uiStatus == 'error'" class="stateMark type2"></span>
+									<span ng-if="deployServer.uiStatus == 'initializing' || deployServer.uiStatus == 'creating' || deployServer.uiStatus == 'preparing' || deployServer.uiStatus == 'installing' || deployServer.uiStatus == 'configuring' || deployServer.uiStatus == 'restarting' || deployServer.uiStatus == 'stopping' || deployServer.uiStatus == 'starting'" class="stateMark type4">{{ 'iaas.label.deploy_' + deployServer.uiStatus | translate }}</span>
+									<span class="state-txt">{{ 'iaas.label.deploy_' + deployServer.uiStatus | translate }}</span>
+									<span ng-if="deployServer.deployStatus == 'ing'" class="state-txt">[{{deployServer.message}}]</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-repeat="(idx, instance) in deployServer.instances" class="panel type5" style="position: relative; height: 400px; width: 365px; " ng-style="{ 'z-index' : -1*(idx+1),  'left': (5*(idx+1)) + 'px', top: (-450*(idx+1) + (5*(idx+1))) + 'px' }"></div>
+			</div>
+			<!-- //panel -->
+		</li>
+		<li>
+			<button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" style="height:390px; width: 365px;" ng-click="contents.formOpen()"><span class="ico"></span><span class="txt">서비스 추가</span></button>
+		</li>
+	</ul>
+	<!-- //panel area-->
+
+	<div ng-if="main.contentsViewType == 'tbl'">
+		<!-- tb top -->
+		<div class="tb-top">
+			<div class="pull-left">
+				<div class="tbTop-state">
+					<span class="stateWrap"><span class="state-tit">정상배포 :</span><span class="stateMark type1">정상배포</span></span>
+					<span class="stateWrap"><span class="state-tit">오류 :</span><span class="stateMark type2">오류</span></span>
+					<span class="stateWrap"><span class="state-tit">대기 :</span><span class="stateMark type4">대기</span></span>
+					<span class="stateWrap"><span class="state-tit">중지 :</span><span class="stateMark type3">중지</span></span>
+				</div>
+			</div>
+			<div class="pull-right">
+				<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-add" title="추가" ng-click="contents.formOpen()"><span class="ico">추가</span></button>
+			</div>
+		</div>
+		<!-- tb top -->
+	
+		<!-- table -->
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width:10%;">
+					<col style="width:15%;">
+					<col style="width:10%;">
+					<col style="width:auto;">
+					<col style="width:20%;">
+					<col style="width:10%;">
+					<col style="width:15%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">상태</th>
+						<th scope="col">서비스 명</th>
+						<th scope="col">IP</th>
+						<th scope="col">이미지</th>
+						<th scope="col">키페어</th>
+						<th scope="col">스펙</th>
+						<th scope="col">관리</th>
+					</tr>
+				</thead>
+				<tbody>
+ 					<tr ng-repeat="(diployIndex, deployServer) in contents.deployServerList" ng-if="(deployServer.viewType == 'instance' && deployServer.name != contents.cxAgengName) || (deployServer.viewType == 'deploy' && deployServer.status != 'deleted') ">
+						<td>
+							<span ng-if="deployServer.viewType == 'instance'" tooltip-placement="bottom" uib-tooltip="{{deployServer.vmState}}">
+								<span ng-if="deployServer.vmState == 'active'" class="stateMark type1">정상배포</span>
+								<span ng-if="deployServer.vmState == 'error'" class="stateMark type2">오류</span>
+								<span ng-if="deployServer.vmState == 'paused' || deployServer.vmState == 'resized' || deployServer.vmState == 'building' || deployServer.vmState == 'starting' || deployServer.vmState == 'stopping' || deployServer.vmState == 'pausing' || deployServer.vmState == 'unpausing' || deployServer.vmState == 'rebooting'" class="stateMark type4">대기</span>
+								<span ng-if="deployServer.vmState == 'stopped'" class="stateMark type3">중지</span>
+							</span>
+							<span ng-if="deployServer.viewType == 'deploy'" tooltip-placement="bottom" uib-tooltip="{{deployServer.status}}">
+								<span ng-if="deployServer.uiStatus == 'active'" class="stateMark type1">정상배포</span>
+								<span ng-if="deployServer.uiStatus == 'error'" class="stateMark type2">오류</span>
+								<span ng-if="deployServer.uiStatus == 'initializing' || deployServer.uiStatus == 'creating' || deployServer.uiStatus == 'preparing' || deployServer.uiStatus == 'installing' || deployServer.uiStatus == 'configuring' || deployServer.uiStatus == 'restarting' || deployServer.uiStatus == 'stopping' || deployServer.uiStatus == 'starting'" class="stateMark type4">대기</span>
+							</span>
+						</td>
+						<td style="text-decoration: underline;">
+							<a href="" ng-click="contents.moveToDetailPage(deployServer)" tooltip-placement="bottom" uib-tooltip="{{deployServer.name}}">
+								{{deployServer.name}}
+							</a>
+							<span ng-if="deployServer.viewType == 'deploy'">[{{ deployServer.instances.length }}]</span>
+						</td>
+						<td>
+							<div ng-repeat="fixedIp in deployServer.fixedIps">
+								{{fixedIp}}
+							</div>
+						</td>
+						<td>{{deployServer.image.serviceName}}</td>
+						<td>{{deployServer.keypair.name}}</td>
+						<td>
+							<span tooltip-placement="bottom" uib-tooltip="vCPU {{deployServer.spec.vcpus}}개 , MEM {{deployServer.spec.ram/1024|number:0}} GB, DISK {{deployServer.spec.disk}} GB">{{deployServer.spec.name}}</span>
+						</td>
+						<td>
+							<select ng-if="deployServer.viewType == 'instance'" ng-model="contents.selectedValues[diployIndex]" ng-change="contents.fn.serverActionConfirm(contents.selectedValues[diployIndex],deployServer,diployIndex);" >
+								<option value="">선택</option>
+								<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState != 'active'" value="START">시작</option>
+								<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState != 'stopped'" value="STOP">중지</option>
+								<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'active'" value="REBOOT">재시작</option>
+								<option value="DELETE">삭제</option>
+								<option ng-if="deployServer.deployStatus == 'done' && deployServer.vmState == 'stopped'" value="SNAPSHOT">이미지 백업 이미지</option>
+								<option ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp == ''" value="IPCONNECT">접속IP할당</option>
+								<option ng-if="deployServer.deployStatus == 'done' && deployServer.floatingIp != ''" value="IPDISCONNECT">접속IP해제</option>
+							</select>
+							<select ng-if="deployServer.viewType == 'deploy'" ng-model="contents.selectedValues[diployIndex]" ng-change="contents.fn.deployServerActionConfirm(contents.selectedValues[diployIndex],deployServer,diployIndex);" >
+								<option value="">선택</option>
+								<option ng-if="deployServer.deployStatus == 'done'" value="START">시작</option>
+								<option ng-if="deployServer.deployStatus == 'done'" value="STOP">중지</option>
+								<option ng-if="deployServer.deployStatus == 'done'" value="RESTART">재시작</option>
+								<!--<option ng-if="deployServer.deployStatus == 'done' && (deployServer.deployType == 'WEB' || deployServer.deployType == 'WAS')" value="SCALE">인스턴스 증감</option>-->
+								<option ng-if="deployServer.deployStatus == 'fail'" value="INSTALL">재배포</option>
+								<option value="DELETE">삭제</option>
+							</select>
+						</td>
+					</tr>
+					<tr ng-if="contents.serverMainList.length == 0">
+						<td colspan="7" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- //table -->
+	</div>

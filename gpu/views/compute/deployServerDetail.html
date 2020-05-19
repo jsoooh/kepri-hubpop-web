@@ -1,0 +1,216 @@
+	<!--deploy alarm box-->
+	<div class="arlam-box" ng-if="contents.deployServer.deployStatus == 'ing' && contents.deployServer.status != 'deleting'">
+		<div class="deploy-pro-info">
+			<table class="table-type-a">
+				<colgroup>
+					<col width="8%">
+					<col width="50%">
+					<col>
+				</colgroup>
+				<tbody>
+				<tr>
+					<td class="alarm-img"><img src="images/alert_info.png" alt=""></td>
+					<td class="deploy-con-txt">
+						<ul>
+							<li>
+								<strong class="tit">진행메세지</strong>
+								<div class="txt ng-binding">배포 진행 중입니다. 배포 완료 후 사용 가능합니다. (배포 시작 후 {{ contents.deployServerMinute || '' }} {{ contents.deployServerSecond || '0' }}초 지남)</div>
+							</li>
+							<li>
+								<strong class="tit">상세메세지</strong>
+								<div class="txt ng-binding">{{ contents.deployHistories[0].message }}</div>
+							</li>
+						</ul>
+					</td>
+					<td class="deploy-pro-bar">
+						<div class="progress-5">
+							<div>
+								<ul>
+									<li ng-class="{ active:deployStatus.status == 'completed', running:deployStatus.status == 'running' }" ng-repeat="deployStatus in contents.deployStatusList">
+										<dl>
+											<dd class="proNum">0{{ $index + 1}}</dd>
+											<dd class="proTxt ng-binding">{{ deployStatus.step }}</dd>
+										</dl>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!--//deploy alarm box-->
+
+	<!-- cBox -->
+	<div class="cBox type1 appCnt-info">
+		<div class="cBox-hd">
+			<h4 class="c-tit"><img src="images/thum/{{contents.deployServer.vmDeployType.iconFileName}}.png" class="logo" alt="">{{contents.deployServer.deployName}}</h4>
+			<div class="pull-right">
+				<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+				<div class="dropdown btn-option">
+					<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+						<span class="ico">실행 설정</span>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+						<li ng-if="contents.deployServer.deployStatus == 'done'"><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('START');">시작</a></li>
+						<li ng-if="contents.deployServer.deployStatus == 'done'"><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('STOP');">정지</a></li>
+						<li ng-if="contents.deployServer.deployStatus == 'done'"><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('RESTART');">재시작</a></li>
+						<li ng-if="contents.deployServer.deployStatus == 'done' && (contents.deployServer.deployType == 'WEB' || contents.deployServer.deployType == 'WAS')"><a href="javascript:void(0);" ng-click="contents.fn.deployServerDetailActionConfirm('SCALE');">인스턴스 증감</a></li>
+						<li ng-if="contents.deployServer.deployStatus == 'fail'"><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('INSTALL');">재배포</a></li>
+						<li><a href="" ng-click="contents.fn.deployServerDetailActionConfirm('DELETE', contents.deployServer);">삭제</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="cBox-cnt">
+			<div class="in">
+				<!-- app 정보 -->
+				<div class="col info-txt useChart" style="padding-top: 30px;">
+					<ul>
+						<li>
+							<strong class="tit">설치소프트웨어</strong>
+							<div class="txt">{{contents.deployServer.software}}</div>
+						</li>
+						<li>
+							<strong class="tit">가상서버</strong>
+							<div class="txt">
+								<ui>
+									<!--<il ng-repeat="item in contents.deployServer.deployInstances" style="padding-right: 20px;"><a href="" ng-click="main.goToPage('/iaas/deploy_server/compute/detail/'+item.instanceId)">{{item.instanceName}}</a></il>-->
+									<il ng-repeat="item in contents.deployServer.deployInstances" style="padding-right: 20px;"><a href="" ng-click="main.goToPage('/gpu/deploy_server/compute/detail/'+item.instanceId)">{{item.instanceName}}</a></il>
+								</ui>
+							</div>
+						</li>
+						<li ng-if="contents.deployServer.vip">
+							<strong class="tit">가상서버 VIP</strong>
+							<div class="txt">{{contents.deployServer.vip}}</div>
+						</li>
+						<li>
+							<strong class="tit">가상서버 IP</strong>
+							<div class="txt">{{contents.deployServer.fixedIps | join:', '}}</div>
+						</li>
+						<li ng-if="contents.deployServer.domains && contents.deployServer.domains.length > 0">
+							<strong class="tit">웹 접속 URL</strong>
+							<div class="txt">
+								<ui>
+									<il ng-repeat="domain in contents.deployServer.domains" style="padding-right: 20px;"><a href="http://{{domain}}" target="_blank">{{domain}}</a></il>
+								</ui>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="col info-txt useChart" style="padding-top: 30px;">
+					<ul>
+						<li>
+							<strong class="tit">생성일</strong>
+							<div class="txt">{{contents.deployServer.created | date : 'yyyy-MM-dd HH:mm:ss'}}</div>
+						</li>
+						<li>
+							<strong class="tit">서비스 상태</strong>
+							<div class="txt">
+								<span class="stateWrap">
+									<span ng-if="contents.deployServer.uiStatus == 'active'" class="stateMark type1"></span>
+									<span ng-if="contents.deployServer.uiStatus == 'error'" class="stateMark type2"></span>
+									<span ng-if="contents.deployServer.uiStatus == 'initializing' || contents.deployServer.uiStatus == 'creating'    || contents.deployServer.uiStatus == 'preparing'  ||
+									             contents.deployServer.uiStatus == 'installing'   || contents.deployServer.uiStatus == 'configuring' || contents.deployServer.uiStatus == 'restarting' ||
+                                                 contents.deployServer.uiStatus == 'stopping'     || contents.deployServer.uiStatus == 'starting'    || contents.deployServer.uiStatus == 'deleting'   " class="stateMark type4"></span>
+									<span class="state-txt">{{'iaas.label.deploy_' + contents.deployServer.uiStatus | translate}}</span>
+								</span>
+							</div>
+						</li>
+						<li ng-if="contents.deployServer.floatingIp">
+							<strong class="tit">서비스 IP</strong>
+							<div class="txt">{{contents.deployServer.floatingIp}}</div>
+						</li>
+					</ul>
+				</div>
+				<!-- //app 정보 -->
+			</div>
+		</div>
+	</div>
+	<!-- //cBox -->
+
+	<!-- title -->
+	<div class="cont-titWrap">
+		<h3 class="h-tit3">시스템 SW정보</h3>
+	</div>
+	<!-- //title -->
+
+	<div class="tabWrap type1 mt30">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs padding40">
+			<li ng-if="contents.deployType == 'LB'" ng-class="{'active':contents.sltInfoTab == 'configSetting'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('configSetting');">LB 포트 관리</a></li>
+			<li ng-if="contents.deployType == 'WEB'" ng-class="{'active':contents.sltInfoTab == 'configSetting'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('configSetting');">WEB 서비스 관리</a></li>
+			<li ng-if="contents.deployType == 'WAS'" ng-class="{'active':contents.sltInfoTab == 'configSetting'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('configSetting');">WAS 서비스 관리</a></li>
+			<li ng-if="contents.deployType == 'DB'" ng-class="{'active':contents.sltInfoTab == 'configSetting'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('configSetting');">DB 설정</a></li>
+			<li ng-if="contents.deployType == 'WEB'" ng-class="{'active':contents.sltInfoTab == 'pathSetting'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('pathSetting');">WEB 리소스 관리</a></li>
+			<li ng-class="{'active':contents.sltInfoTab == 'deployMonit'}"><a href="" ng-click="contents.fn.changeSltInfoTab('deployMonit');">S/S 모니터링</a></li>
+			<li ng-class="{'active':contents.sltInfoTab == 'deployHistory'}"><a href="" ng-click="contents.fn.changeSltInfoTab('deployHistory');">배포 이력</a></li>
+		</ul>
+		<!-- //Nav tabs -->
+
+		<!-- Tab panes -->
+		<div class="tab-content inst" style="height: 642px;">
+			<div class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'configSetting'}"
+				 ng-include="contents.tabConfigSettingTemplateUrl">
+			</div>
+			<div ng-if="contents.deployType == 'WEB'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'pathSetting'}"
+				 ng-include="contents.tabPathSettingTemplateUrl">
+			</div>
+			<div ng-if="contents.deployType" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'deployMonit'}"
+				 ng-include="contents.tabDeployMonitTemplateUrl">
+			</div>
+			<div class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'deployHistory'}">
+				<!-- panel -->
+				<div class="panelWrap" style="min-height: 200px;">
+					<div class="panel type2" style="cursor: unset;">
+						<div class="panel_head">
+							<div class="tit pull-left">배포 이력</div>
+							<div class="pull-right">
+								<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'deployHistory')"><span class="ico">확대/축소</span></button>
+							</div>
+						</div>
+						<div class="panel_body" style="min-height: 500px;">
+							<scrollable-table watch="contents.actionLogs" class="tableHeight420">
+								<table class="table">
+									<thead>
+									<tr>
+										<th sortable-header col="message" style="width:14%;">시작시간</th>
+										<th sortable-header col="message" style="width:14%;">변경시간</th>
+										<th sortable-header col="created" style="width:14%;">사용자ID</th>
+										<th sortable-header col="status" style="width:14%;">액션</th>
+										<th sortable-header col="message" style="width:14%;">상태</th>
+										<th sortable-header col="message" style="width:30%;">메세지</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="item in contents.actionLogs">
+										<td>{{item.created | date : "yyyy-MM-dd HH:mm:ss"}}</td>
+										<td>{{item.updated | date : "yyyy-MM-dd HH:mm:ss"}}</td>
+										<td>{{item.userId}}</td>
+										<td>{{item.action}}</td>
+										<td>{{'iaas.label.deploy_' + item.status | translate}}</td>
+										<td class="text-left">{{item.message}}</td>
+									</tr>
+									<tr ng-if="!contents.actionLogs || contents.actionLogs.length == 0">
+										<td colspan="6" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+									</tr>
+									</tbody>
+								</table>
+							</scrollable-table>
+						</div>
+					</div>
+				</div>
+				<!-- panel -->
+			</div>
+		</div>
+		<!-- //Tab panes -->
+	</div>
+
+	<!-- tb btm -->
+	<div class="btn-btm" style="margin-top: 0px;">
+		<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage(main.moveParentUrl);">목록</button>
+	</div>
+	<!-- //tb btm -->

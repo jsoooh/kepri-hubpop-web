@@ -1,0 +1,62 @@
+<!-- table -->
+<scrollable-table watch="pop.volumeList" class="tableHeight280"><!-- resizable 는 싸이즈 조절이 필요한 곳 만 적용 -->
+	<table class="table">
+		<thead>
+		<tr>
+			<th style="width:15%;">선택</th>
+			<th style="width:auto;">디스크명</th>
+			<th style="width:20%;">vCPU</th>
+			<th style="width:20%;">메모리</th>
+			<th style="width:20%;">OS디스크</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="spec in pop.specList" row-id="{{ item.uuid }}" ng-if="pop.specDisabledAllSetting" ng-class="{'tbl_disabled': (!pop.specDisabledAllSetting || spec.disabled), 'tbl_selected': spec.uuid == pop.sltSpecUuid}" ng-click="pop.setInstanceSpec(spec)">
+			<td>
+				<div class="radio radio-only">
+					<input type="radio" name="specRadio" ng-model="pop.sltSpecUuid" ng-disabled="(!pop.specDisabledAllSetting || spec.disabled)" value="{{spec.uuid}}" id="spec-{{spec.uuid}}" ng-click="pop.setInstanceSpec(spec)">
+					<label for="spec-{{spec.uuid}}"></label>
+				</div>
+			</td>
+			<td>{{spec.name}}</td>
+			<td>{{spec.vcpus}} 개</td>
+			<td>{{spec.ram | displayVolume:'MB'}}</td>
+			<td>{{spec.disk | displayVolume:'GB'}}</td>
+		</tr>
+		<tr ng-if="!pop.isSpecLoad || !pop.specDisabledAllSetting">
+			<td colspan="5"><p class="txt"><img src="images/loading_sm.gif"> 데이터 로딩 중 입니다.</p></td>
+		</tr>
+		<tr ng-if="pop.isSpecLoad && pop.specDisabledAllSetting && pop.specList == 0">
+			<td colspan="5">{{ 'message.mi_dont_exist_list' | translate }}</td>
+		</tr>
+		</tbody>
+	</table>
+</scrollable-table>
+
+<!-- table -->
+<!--
+<div class="tbw type1">
+	<table class="table">
+		<colgroup>
+			<col style="width: 25%;">
+			<col style="width: auto;">
+		</colgroup>
+		<tbody>
+			<tr>
+				<th scope="row">제목<em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="툴팁이 나와요"></em></th>
+				<td><input type="text" name="" value="" class="form-control" 	placeholder="{{pop.instanceNm }}" disabled></td>
+			</tr>
+			<tr>
+				<th scope="row">제목</th>
+				<td>
+					<select class="w100" name="pop.specValue" ng-model="pop.specValue" ng-change="pop.selectSpec();" validation="required">
+						<option value="">선택</option>
+						<option ng-repeat="(key, spec) in pop.specList | filter:{name:'m'}" ng-disabled="(spec.uuid <= pop.uuid)" value="{{spec}}">[{{spec.name}}] vCPU {{spec.vcpus}}개 / MEM {{spec.ram/1024|number}} GB / DISK(HDD) {{spec.disk}} GB</option>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+-->
+<!-- //table -->

@@ -1,0 +1,296 @@
+	<!-- 목록 이미지형/리스트형 선택 버튼 -->
+	<div class="btnArea text-right">
+		<!-- 선택 된 class="on" 추가 -->
+		<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
+		<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
+	</div>
+	<!-- //목록 이미지형/리스트형 선택 버튼 -->
+
+	<!-- 프로젝트 정보 -->
+	<div class="cBox type0 projt-mana mt30">
+		<div class="pull-left">
+			<h4 class="c-tit">전체 백업 이미지 <em class="point1">({{(contents.instanceSnapshotList | filter:{ status : '!deleting'}).length + (contents.storageSnapshotList | filter:{ status : '!deleting'}).length}})</em></h4>
+		</div>
+		<div class="pull-right">
+			<!-- 검색 -->
+			<div class="searchBox type2">
+				<div class="form-group">
+					<input ng-if="contents.tabIndex == 0" type="text" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schInstanceFilterText">
+					<input ng-if="contents.tabIndex == 1" type="text" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schStorageFilterText">
+				</div>
+				<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schInstanceFilterText = ''; contents.schStorageFilterText = ''"><span class="ico">지우기</span></button>
+			</div>
+			<!-- //검색 -->
+		</div>
+	</div>
+	<!-- //프로젝트 정보 -->
+	
+	<!-- 탭영역 -->
+	<div role="tabpanel" class="tabWrap type1">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 백업 이미지<span>({{(contents.instanceSnapshotList | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">디스크 백업 이미지<span>({{(contents.storageSnapshotList | filter:{ status : '!deleting'}).length}})</span></a></li>
+		</ul>
+	
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<!-- tab1 cnt -->
+			<div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 0}">
+				<!-- 프로젝트 리스트(테이블형) -->
+				<div class="tbl type1" ng-if="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length > 0 && contents.listType == 'list'">
+					<table class="table">
+						<colgroup>
+							<col style="width:">
+							<col style="width: 20%;">
+							<col style="width: 15%;">
+							<col style="width:">
+							<col style="width: 10%;">
+							<col style="width: 15%;">
+							<col style="width: 8%;">
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">이름</th>
+								<th scope="col">원본서버</th>
+								<th scope="col">OS이미지</th>
+								<th scope="col">설명</th>
+								<th scope="col">상태</th>
+								<th scope="col">생성일</th>
+								<th scope="col">관리</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }">
+								<td>{{instanceSnapshot.name}}</td>
+								<td>
+									<!--<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>-->
+									<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/gpu/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>
+									<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="!instanceSnapshot.beInstance" ng-click="contents.fn.showErrorAlert()">{{instanceSnapshot.instanceName}}</a>
+								</td>
+								<td>{{ instanceSnapshot.imageName }}</td>
+								<td>{{instanceSnapshot.description | enterByNbr}}</td>
+								<td>
+									<span class="stateWrap">
+										<span class="stateMark" ng-class="{'type3' : (instanceSnapshot.status == 'active'), 'type2': (instanceSnapshot.status == 'error'), 'type4' : (instanceSnapshot.status != 'active' && instanceSnapshot.status != 'error')}"></span>
+										<span class="state-txt">{{'iaas.label.instance_snapshot_' +instanceSnapshot.status | translate}}</span>
+									</span>
+								</td>
+								<td>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+								<td>
+									<div class="dropdown btn-option">
+										<button type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<!--<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>-->
+											<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/gpu/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>
+											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
+											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">이미지 설명 변경</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- 프로젝트 리스트(테이블형) -->
+				
+				<!-- panel -->
+				<ul ng-if="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length > 0 && contents.listType == 'image'" class="ul-panel">
+					<li ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }">
+						<div class="panelWrap">
+							<div class="panel type6 h_auto">
+								<div class="panel_head pdlr30">
+									<!--<img class="logo" alt="" src="images/thum/ico_thum_svr.png"/>-->
+									<p class="tit" title="{{instanceSnapshot.name}}">{{instanceSnapshot.name}}</p>
+									<p>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss'}}</p>
+									<!--<button class="btn_txt" ng-click="main.goToPage('/iaas/compute/detail/'+snapshot.instanceId)">{{instanceSnapshot.instanceName}}</button>-->
+									<div class="dropdown btn-option">
+										<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<!--<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>-->
+											<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/gpu/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>
+											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel_body" style="height:225px;">
+									<div class="ul-in">
+										<div class="cnt_wrap">
+											<div class="cnt_imgBox">
+												<span class="cnt_img ico02"></span>
+												<div class="cnt_txt"><span class="txt_name">{{instanceSnapshot.disk | displayVolume:'GB'}}</span></div>
+											</div>
+											<div class="cnt_infoBox">
+												<dl>
+													<dt>원본 서버1231</dt>
+													<dd class="d_block">
+														<!--<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>-->
+														<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/gpu/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>
+														<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="!instanceSnapshot.beInstance" ng-click="contents.fn.showErrorAlert()">{{instanceSnapshot.instanceName}}</a>
+													</dd>
+													<dt>OS 이미지</dt>
+													<dd class="d_block">{{ instanceSnapshot.imageName }}</dd>
+												</dl>
+												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
+											</div>
+										</div>
+										<div class="down">
+											<span class="stateWrap">
+												<span class="stateMark" ng-class="{'type3' : (instanceSnapshot.status == 'active'), 'type2': (instanceSnapshot.status == 'error'), 'type4' : (instanceSnapshot.status != 'active' && instanceSnapshot.status != 'error')}"></span>
+												<span class="state-txt">{{'iaas.label.instance_snapshot_' +instanceSnapshot.status | translate}}</span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<!-- //panel -->
+				<div class="proj_list_area" ng-if="!contents.loadingInstanceSnapshotList && (contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length == 0">
+					<ul class="ul-panel dash_list no_data">
+						<li><p class="no_data_txt pd0">생성된 서버 백업 이미지가 없습니다.</p></li>
+					</ul>
+				</div>
+				<div class="proj_list_area" ng-if="contents.loadingInstanceSnapshotList && (contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length == 0">
+					<ul class="ul-panel dash_list no_data">
+						<li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
+					</ul>
+				</div>
+			</div>
+			<!-- //tab1 cnt -->
+	
+			<!-- tab2 cnt -->
+			<div role="tabpanel" class="tab-pane" ng-class="{'active' : contents.tabIndex == 1}">
+				<!-- 프로젝트 리스트(테이블형) -->
+				<div class="tbl type1" ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length > 0 && contents.listType == 'list'">
+					<table class="table">
+						<colgroup>
+							<col style="width:">
+							<col style="width: 10%;">
+							<col style="width: 10%;">
+							<col style="width:">
+							<col style="width: 10%;">
+							<col style="width: 15%;">
+							<col style="width: 8%;">
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">이름</th>
+								<th scope="col">원본디스크</th>
+								<th scope="col">크기(GB)</th>
+								<th scope="col">설명</th>
+								<th scope="col">상태</th>
+								<th scope="col">생성일</th>
+								<th scope="col">관리</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }">
+								<td>{{storageSnapshot.snapshotName}}</td>
+								<td>{{storageSnapshot.volumeName}}</td>
+								<td>{{storageSnapshot.size | displayVolume:'GB'}}</td>
+								<td>{{storageSnapshot.description | enterByNbr}}</td>
+								<td>
+									<span class="stateWrap">
+										<span class="stateMark" ng-class="{'type3' : (storageSnapshot.status == 'available'), 'type2': (storageSnapshot.status == 'error'), 'type4' : (storageSnapshot.status != 'available' && storageSnapshot.status != 'error')}"></span>
+										<span class="state-txt">{{'iaas.label.volume_snapshot_' +storageSnapshot.status | translate}}</span>
+									</span>
+								</td>
+								<td>{{ storageSnapshot.createDate }}</td>
+								<td>
+									<div class="dropdown btn-option">
+										<button type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<!--<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>-->
+											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
+											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">디스크 생성</a></li>
+											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">이미지 설명 변경</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- 프로젝트 리스트(테이블형) -->
+				<!-- panel -->
+				<ul ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length  > 0 && contents.listType == 'image'" class="ul-panel">
+					<li ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }">
+						<div class="panelWrap">
+							<div class="panel type6 h_auto">
+								<div class="panel_head pdlr30">
+									<!--<img class="logo" alt="" src="images/thum/ico_thum_disk.png"/>-->
+									<p class="tit" title="{{storageSnapshot.snapshotName}}">{{storageSnapshot.snapshotName}}</p>
+									<p>{{ storageSnapshot.createDate }}</p>
+									<!--<button class="btn_txt" ng-click="main.goToPage('/iaas/storage/detail/'+storageSnapshot.volumeId)">{{storageSnapshot.volumeName}}</button>-->
+									<div class="dropdown btn-option">
+										<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<span class="ico">실행 설정</span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+											<!--<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>-->
+											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
+											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">디스크 생성</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel_body" style="height:225px;">
+									<div class="ul-in">
+										<div class="cnt_wrap">
+											<div class="cnt_imgBox">
+												<span class="cnt_img ico02"></span>
+												<div class="cnt_txt"><span class="txt_name">{{storageSnapshot.size | displayVolume:'GB'}}</span></div>
+											</div>
+											<div class="cnt_infoBox">
+												<dl>
+													<dt>원본 디스크</dt>
+													<!-- <dd><a href="" ng-click="main.goToPage('/iaas/storage/detail/'+storageSnapshot.volumeId)">{{storageSnapshot.volumeName}}</a></dd> -->
+													<dd><a class="none_click txt_long" href="" title="{{storageSnapshot.volumeName}}" >{{storageSnapshot.volumeName}}</a></dd>
+													<!-- <dd>{{storageSnapshot.volumeName}}</dd> -->
+													<dt>디스크 유형</dt>
+													<dd>디스크스토리지</dd>
+												</dl>
+												<!--<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'">설명<span class="ico_tip"></span></button>-->
+												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
+											</div>
+										</div>
+										<div class="down">
+											<span class="stateWrap">
+												<span class="stateMark" ng-class="{'type3' : (storageSnapshot.status == 'available'), 'type2': (storageSnapshot.status == 'error'), 'type4' : (storageSnapshot.status != 'available' && storageSnapshot.status != 'error')}"></span>
+												<span class="state-txt">{{'iaas.label.volume_snapshot_' +storageSnapshot.status | translate}}</span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<!-- //panel -->
+				<div class="proj_list_area" ng-if="!contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
+					<ul class="ul-panel dash_list no_data">
+						<li><p class="no_data_txt pd0">생성된 디스크 백업 이미지가 없습니다.</p></li>
+					</ul>
+				</div>
+				<div class="proj_list_area" ng-if="contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
+					<ul class="ul-panel dash_list no_data">
+						<li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
+					</ul>
+				</div>
+			</div>
+			<!-- //tab2 cnt -->
+		</div>
+	</div>
+	<!-- 탭영역 -->
+	

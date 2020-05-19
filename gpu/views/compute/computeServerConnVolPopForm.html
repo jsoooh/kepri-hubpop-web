@@ -1,0 +1,66 @@
+<!-- table -->
+<scrollable-table watch="pop.volumeList" class="tableHeight280"><!-- resizable 는 싸이즈 조절이 필요한 곳 만 적용 -->
+	<table class="table">
+		<thead>
+		<tr>
+			<th style="width:20%;">선택</th>
+			<th style="width:auto;">디스크명</th>
+			<th style="width:25%;">디스크 크기</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="volume in pop.volumeList" row-id="{{ item.volumeId }}" ng-class="{'tbl_selected': volume.volumeId == pop.sltVolumeId}"  ng-click="pop.fn.setInstanceVolume(volume)">
+			<td>
+				<div class="radio radio-only">
+					<input type="radio" name="volumeRadio" ng-model="pop.sltVolumeId" value="{{volume.volumeId}}" id="volume-{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)">
+					<label for="volume-{{volume.volumeId}}"></label>
+				</div>
+			</td>
+			<td>{{volume.name}}</td>
+			<!--<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>-->
+			<td>{{volume.size | displayVolume:'GB'}}</td>
+		</tr>
+		<tr ng-if="!pop.isVolumeListLoad">
+			<td colspan="3"><p class="txt"><img src="images/loading_sm.gif"> 데이터 로딩 중 입니다.</p></td>
+		</tr>
+		<tr ng-if="pop.isVolumeListLoad && pop.volumeList == 0">
+			<td colspan="3">{{ 'message.mi_dont_exist_list' | translate }}</td>
+		</tr>
+		</tbody>
+	</table>
+</scrollable-table>
+<!--
+<div class="tbl type1">
+	<table class="table">
+		<colgroup>
+			<col style="width:20%" />
+			<col style="width:auto" />
+			<col style="width:20%" />
+			<col style="width:25%" />
+		</colgroup>
+		<thead>
+			<th>선택</th>
+			<th>디스크명</th>
+			<th>부팅디스크</th>
+			<th>SIZE</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="volume in pop.volumeList">
+				<td>
+					<div class="radio radio-only">
+						<input type="radio" name="volumeRadio" id="{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)">
+						<label for="{{volume.volumeId}}"></label>
+					</div>
+				</td>
+				<td>{{volume.name}}</td>
+				<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>
+				<td>{{volume.size}}GB</td>
+			</tr>
+			<tr ng-if="pop.volumeList == 0">
+				<td colspan="4">{{ 'message.mi_dont_exist_list' | translate }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+-->
+<!-- //table -->

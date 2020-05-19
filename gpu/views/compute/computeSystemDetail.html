@@ -1,0 +1,648 @@
+	<!-- cBox -->
+	<div class="cBox type1 appCnt-info">
+		<div class="cBox-hd">
+			<h4 class="c-tit"><img src="data:{{ contents.instance.image.contentType }}; base64, {{ contents.instance.image.icon }}" class="logo" alt="">{{contents.instance.name}}</h4>
+			<div class="pull-right">
+				<button type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-if="contents.instance.vmState == 'stopped'" ng-click="contents.fn.serverActionConfirm('START',contents.instance);"><span class="ico">시작</span></button>
+				<button type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="중지" ng-if="contents.instance.vmState == 'active'" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);"><span class="ico">중지</span></button>
+				<button type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>
+				<div class="dropdown btn-option">
+					<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+						<span class="ico">실행 설정</span>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+						<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);">재시작</a></li>
+						<li ng-if="deployServer.deployStatus != 'fail' && contents.instance.vmState == 'active'"><a href="" ng-click="contents.fn.serverActionConfirm('PAUSE',contents.instance)">일시정지</a></li>
+						<li ng-if="deployServer.deployStatus != 'fail' && contents.instance.vmState == 'paused'"><a href="" ng-click="contents.fn.serverActionConfirm('UNPAUSE',contents.instance)">정지해제</a></li>
+						<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li>
+						<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createSnapshot($event,contents.instance);">이미지 백업 이미지</a></li>
+						<li ng-if="deployServer.deployStatus != 'fail'"><a href="" ng-click="contents.fn.createInstanceVolumePop(contents.instance);">디스크연결</a></li>
+						<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>
+						<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="cBox-cnt">
+			<div class="in">
+				<!-- app 정보 -->
+				<div class="col info-txt useChart" style="padding-top: 30px;">
+					<ul>
+						<li>
+							<strong class="tit">인스턴스 이름</strong>
+							<div class="txt">{{contents.instance.name}}</div>
+						</li>
+						<li>
+							<strong class="tit">OS 이미지</strong>
+							<div class="txt">{{contents.instance.image.serviceName}}</div>
+						</li>
+						<li>
+							<strong class="tit">IP 주소</strong>
+							<div class="txt">{{contents.instance.fixedIp}}</div>
+						</li>
+						<li>
+							<strong class="tit">키페어</strong>
+							<div class="txt">{{contents.instance.keypair.name}}</div>
+						</li>
+						<li>
+							<strong class="tit">보안그룹</strong>
+							<div class="txt">{{contents.instance.securityPolicies | join:' ,':'name'}}</div>
+						</li>
+						<li>
+							<strong class="tit">접속 IP 주소</strong>
+							<div class="txt">{{contents.instance.floatingIp}}</div>
+						</li>
+						<li>
+							<strong class="tit">접속 URL</strong>
+							<div class="txt">
+								<p ng-repeat="item in contents.instance.instanceDomainLinkInfos">
+									<a ng-if="item.protocolType == 'http' && !item.sslUsed && item.sourcePort == '8080'" ng-href="http://{{ item.domainInfo.domain }}" target="_blank">http://{{ item.domainInfo.domain }}</a>
+									<a ng-if="item.protocolType == 'http' && !item.sslUsed && item.sourcePort != '8080'" ng-href="http://{{ item.domainInfo.domain }}:{{ item.sourcePort }}" target="_blank">http://{{ item.domainInfo.domain }}:{{ item.sourcePort }}</a>
+									<a ng-if="item.protocolType == 'http' && item.sslUsed" ng-href="https://{{ item.domainInfo.domain }}:{{ item.sslSourcePort }}" target="_blank">https://{{ item.domainInfo.domain }}:{{ item.sslSourcePort }}</a>
+								</p>
+							</div>
+						</li>
+						<li>
+							<strong class="tit">생성일</strong>
+							<div class="txt">{{contents.instance.created | date : 'yyyy-MM-dd HH:mm:ss'}}</div>
+						</li>
+						<li>
+							<strong class="tit">상태</strong>
+							<div class="txt">
+								<span class="stateWrap">
+									<span ng-if="contents.instance.vmState == 'active'" class="stateMark type1"></span>
+									<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2"></span>
+									<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized'" class="stateMark type4"></span>
+									<span ng-if="contents.instance.vmState == 'stopped'" class="stateMark type3"></span>
+									<span class="state-txt">{{contents.instance.vmState}}</span>
+								</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!-- //app 정보 -->
+				
+				<!-- app 챠트 정보 -->
+				<div class="col info-chart type3">
+					<div ng-if="!contents.doughnut.cpuDataLoad" class="chartWrap" style="height:270px;width:180px;">
+						<p class="chrt-tit">vCPU</p>
+						<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">({{contents.instance.spec.vcpus}} 개)</p>
+						<img src="/images/loading/lg.circle-slack-loading-icon.gif" style="height: 180px; width: 180px;">
+					</div>
+					<div ng-if="contents.doughnut.cpuDataLoad" class="chartWrap" style="height:270px;width:180px;">
+						<p class="chrt-tit">vCPU</p>
+						<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">({{contents.instance.spec.vcpus}} 개)</p>
+						<canvas id="doughnutCpu" class="chart chart-doughnut chart-xs" height="180" width="180"
+							chart-data="contents.doughnut.data.cpu"
+							chart-labels="contents.doughnut.labels"
+							chart-colors="contents.doughnut.colors.cpu"
+							chart-options="contents.doughnut.options"></canvas>
+						<div class="doughnut-label-box">
+							<ul>
+								<li><span>{{ (contents.doughnut.data.cpuUsed == 0 || contents.doughnut.data.cpuUsed >= 1) ? (contents.doughnut.data.cpuUsed | number: 0) : (contents.doughnut.data.cpuUsed | number: 1) }}</span><span>%</span></li>
+								<li><span>{{'label.usage' | translate}}</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- //app 챠트 정보 -->
+
+				<!-- app 챠트 정보 -->
+				<div class="col info-chart type1">
+					<div ng-if="!contents.doughnut.ramDataLoad" class="chartWrap" style="height:270px;width:180px;">
+						<p class="chrt-tit">vCPU</p>
+						<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">({{contents.instance.spec.vcpus}} 개)</p>
+						<img src="/images/loading/lg.circle-slack-loading-icon.gif" style="height: 180px; width: 180px;">
+					</div>
+					<div ng-if="contents.doughnut.ramDataLoad" class="chartWrap" style="height:270px;width:180px;">
+						<p class="chrt-tit">메모리</p>
+						<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">({{ contents.instance.spec.ram | displayVolume:'MB' }})</p>
+						<canvas id="doughnutMemory" class="chart chart-doughnut chart-xs" height="180" width="180"
+							chart-data="contents.doughnut.data.ram"
+							chart-labels="contents.doughnut.labels"
+							chart-colors="contents.doughnut.colors.ram"
+							chart-options="contents.doughnut.options"></canvas>
+						<div class="doughnut-label-box">
+							<ul>
+								<li><span>{{ (contents.doughnut.data.ramParsentUsed == 0 || contents.doughnut.data.ramParsentUsed >= 1) ? (contents.doughnut.data.ramParsentUsed | number: 0) : (contents.doughnut.data.ramParsentUsed | number: 1) }}</span><span>%</span></li>
+								<li><span>{{'label.usage' | translate}}</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- //app 챠트 정보 -->
+
+				<!-- app 챠트 정보 -->
+				<div class="col info-chart type2">
+					<div ng-if="!contents.doughnut.diskDataLoad" class="chartWrap" style="height:270px;width:180px;">
+						<p class="chrt-tit">vCPU</p>
+						<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">({{contents.instance.spec.vcpus}} 개)</p>
+						<img src="/images/loading/lg.circle-slack-loading-icon.gif" style="height: 180px; width: 180px;">
+					</div>
+					<div ng-if="contents.doughnut.diskDataLoad" class="chartWrap" style="height:270px;width:180px;">
+						<p class="chrt-tit">디스크</p>
+						<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">({{(contents.instance.spec.disk > 0) ? (contents.instance.spec.disk + ' GB') : (contents.doughnut.data.diskTotal | displayVolume: 'MB') }})</p>
+						<canvas id="doughnutDisk" class="chart chart-doughnut chart-xs" height="180" width="180"
+							chart-data="contents.doughnut.data.disk"
+							chart-labels="contents.doughnut.labels"
+							chart-colors="contents.doughnut.colors.disk"
+							chart-options="contents.doughnut.options"></canvas>
+						<div class="doughnut-label-box">
+							<ul>
+								<li><span>{{ (contents.doughnut.data.diskParsentUsed == 0 || contents.doughnut.data.diskParsentUsed >= 1) ? (contents.doughnut.data.diskParsentUsed | number: 0) : (contents.doughnut.data.diskParsentUsed | number: 1) }}</span><span>%</span></li>
+								<li><span>{{'label.usage' | translate}}</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- //app 챠트 정보 -->
+			</div>
+		</div>
+	</div>
+	<!-- //cBox -->
+
+	<!-- cBox -->
+	<div class="cBox type2 appCnt-vol strgList">
+		<div class="cBox-hd">
+			<h4 class="c-tit">디스크 연결 정보 <em class="point1">({{contents.instanceVolList.length}})</em></h4>
+		</div>
+
+		<div class="cBox-cnt">
+			<div class="in scroll-pane">
+				<ul class="ul-volume">
+					<li ng-repeat="volume in contents.instanceVolList">
+						<div style=" margin-left:90px;">
+							{{volume.volumeName}}
+						</div>
+						<div class="in">
+							<div class="progressWrap">
+								<strong class="progress-txt">{{volume.type}}</strong>
+								<p class="progress-txt">
+									<b><span count-to="{{volume.size | number : 0}}" duration="1" count-from="0" filter="number"></span>GB</b>
+								</p>
+							</div>
+							<div class="dropdown">
+								<button type="button" class="txt2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="연결해제">
+									<span class="ico">연결해제</span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-right" role="btn-volum" aria-labelledby="btn-volum">
+									<li><a href="javascript:void(0);" ng-click="contents.fn.restorationConfirm(volume);">연결해제</a></li>
+								</ul>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- //cBox -->
+
+	<!-- title -->
+	<div class="cont-titWrap">
+		<h3 class="h-tit3">가상머신 정보</h3>
+	</div>
+	<!-- //title -->
+
+	<div class="tabWrap type1 mt30">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs padding40">
+			<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">액션 이벤트</a></li>
+			<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">도메인</a></li>
+			<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">부트 로그</a></li>
+			<li ng-class="{'active':contents.sltInfoTab == 'sysEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('sysEvent');">시스템 이벤트</a></li>
+			<li ng-class="{'active':contents.sltInfoTab == 'sysLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('sysLog');">시스템 로그</a></li>
+			<li ng-class="{'active':contents.sltInfoTab == 'insMonit'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('insMonit');">가상머신 모니터링</a></li>
+		</ul>
+		<!-- //Nav tabs -->
+
+		<!-- Tab panes -->
+		<div class="tab-content inst">
+			<div ng-if="contents.sltInfoTab == 'actEvent'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'actEvent'}">
+				<!-- panel -->
+				<div class="panelWrap">
+					<div class="panel type2" style="cursor: unset;">
+						<div class="panel_head">
+							<div class="tit pull-left">이벤트</div>
+							<div class="pull-right">
+								<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'actEvent')"><span class="ico">확대/축소</span></button>
+							</div>
+						</div>
+						<div ng-if="contents.instance.actionLogs" class="panel_body" style="height: 400px;">
+							<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_event_panel" class="in">
+								<div class="tbl type1">
+									<table class="table">
+										<colgroup>
+											<col style="width:30%;">
+											<col style="width:30%;">
+											<col style="width:40%;">
+										</colgroup>
+										<thead>
+										<tr>
+											<th scope="col">사용자</th>
+											<th scope="col">동작</th>
+											<th scope="col">시간</th>
+										</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="actionLog in contents.instance.actionLogs">
+												<td>{{actionLog.userName}}</td>
+												<td>{{actionLog.action}}</td>
+												<td>{{actionLog.time | date : "yyyy-MM-dd HH:mm:ss"}}</td>
+											</tr>
+											<tr ng-if="contents.instance.actionLogs == null">
+												<td colspan="3" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- panel -->
+			</div>
+
+			<div ng-if="contents.sltInfoTab == 'domain'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'domain'}">
+				<!-- panel -->
+				<div class="panelWrap">
+					<div class="panel type2" style="cursor: unset;">
+						<div class="panel_head">
+							<div class="tit pull-left">도메인</div>
+							<div class="pull-right">
+								<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><span class="ico">추가</span></button>
+								<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
+							</div>
+						</div>
+						<div ng-if="contents.instance.actionLogs" class="panel_body" style="height: 400px;">
+							<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_domain_panel" class="in">
+								<div class="tbl type1">
+									<table class="table">
+										<colgroup>
+											<col style="width:30%;">
+											<col style="width:25%;">
+											<col style="width:25%;">
+											<col style="width:20%;">
+										</colgroup>
+										<thead>
+										<tr>
+											<th scope="col">도메인</th>
+											<th scope="col">프로토콜 타입</th>
+											<th scope="col">포트</th>
+											<th scope="col">삭제</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-if="contents.instance.instanceDomainLinkInfos.length == 0">
+											<td colspan="4">연결된 도메인이 없습니다.</td>
+										</tr>
+										<tr ng-repeat="item in contents.instance.instanceDomainLinkInfos">
+											<td>{{ item.domainInfo.domain }}</td>
+											<td>{{ item.protocolType }}</td>
+											<td>{{ item.sourcePort }}</td>
+											<td><button type="button" name="button" class="btn btn-ico-del-s only-ico ng-scope" ng-click="contents.fn.publicIpReturn(item);" tooltip-placement="bottom" uib-tooltip="반납"><span class="ico">반납</span></button></td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- panel -->
+			</div>
+
+			<div ng-if="contents.sltInfoTab == 'bootLog'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'bootLog'}">
+				<!-- panel -->
+				<div class="panelWrap">
+					<div class="panel type2" style="cursor: unset;">
+						<div class="panel_head">
+							<div class="tit pull-left">부트 로그</div>
+							<div class="pull-right">
+								<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'bootLog')"><span class="ico">확대/축소</span></button>
+							</div>
+						</div>
+						<div class="panel_body" style="height: 400px;">
+							<div id="boot_log_terminal_panel" class="in">
+								<div id="boot_log_terminal" style="height: 100%;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //panel -->
+			</div>
+
+			<div ng-if="contents.sltInfoTab == 'sysEvent'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'sysEvent'}">
+				<!-- panel -->
+				<div class="panelWrap">
+					<div class="panel type2" style="cursor: unset;">
+						<div class="panel_head">
+							<div class="tit pull-left">시스템 이벤트</div>
+							<div class="pull-right">
+								<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'sysEvent')"><span class="ico">확대/축소</span></button>
+							</div>
+						</div>
+						<div class="panel_body" style="height: 400px;">
+							<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="system_event_history_panel" class="in">
+								<!-- tb top -->
+<!--
+								<div class="tb-top">
+									<div class="pull-left">
+										<div class="searchBox">
+											<select name="">
+												<option>영역</option>
+												<option>선택1</option>
+												<option>선택2</option>
+											</select>
+											<div class="form-group">
+												<input type="text" style="width:250px;">
+											</div>
+											<button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+										</div>
+									</div>
+									<div class="pull-right">
+										<button type="button" name="button" class="btn btn-md btn-color1" title="조회주기">조회주기</button>
+									</div>
+								</div>
+-->
+								<!-- //tb top -->
+
+								<!-- table -->
+								<div class="tbl type1">
+									<table class="table">
+										<colgroup>
+											<col style="width:20%;">
+											<col style="width:10%;">
+											<col style="width:10%;">
+											<col style="width:auto;">
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col">시간</th>
+												<th scope="col">상태</th>
+												<th scope="col">타입</th>
+												<th scope="col">내용</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-if="contents.data.eventHistories.length > 0" ng-repeat="item in contents.data.eventHistories">
+												<td class="text-center">{{ item.updateDttm | date:"yyyy-MM-dd HH:mm:ss.sss" }}</td>
+												<td class="text-center">{{ item.stateCode.state }}</td>
+												<td class="text-center">{{ item.resourceTypeCode.type }}</td>
+												<td class="text-left">{{ item.contents }}</td>
+											</tr>
+											<tr ng-if="contents.data.eventHistories.length == 0">
+												<td colspan="4">{{ 'message.mi_dont_exist_list' | translate }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- //table -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- panel -->
+			</div>
+
+			<div ng-if="contents.sltInfoTab == 'sysLog'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'sysLog'}">
+				<!-- panel -->
+				<div class="panelWrap">
+					<div class="panel type2" style="cursor: unset;">
+						<div class="panel_head">
+							<div class="tit pull-left">시스템 로그</div>
+							<div class="pull-right">
+								<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'sysLog')"><span class="ico">확대/축소</span></button>
+							</div>
+						</div>
+						<div class="panel_body" style="height: 400px;">
+							<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="system_log_panel" class="in">
+								<!-- tb top -->
+<!--
+								<div class="tb-top">
+									<div class="pull-left">
+										<div class="searchBox">
+											<select name="">
+												<option>프로그램명</option>
+												<option>선택1</option>
+												<option>선택2</option>
+											</select>
+											<div class="form-group">
+												<input type="text" style="width:250px;">
+											</div>
+											<button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+										</div>
+									</div>
+									<div class="pull-right">
+										<button type="button" name="button" class="btn btn-md btn-color1" title="조회주기">조회주기</button>
+									</div>
+								</div>
+-->
+								<!-- tb top -->
+								<!-- table -->
+								<div class="tbl type1">
+									<table class="table">
+										<colgroup>
+											<col style="width:20%;">
+											<col style="width:20%;">
+											<col style="width:auto;">
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col">시간</th>
+												<th scope="col">프로그램명</th>
+												<th scope="col">내용</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-if="contents.data.systemLogs.length > 0" ng-repeat="item in contents.data.systemLogs">
+												<td class="text-center">{{ item.time }}</td>
+												<td class="text-center">{{ item.program }}</td>
+												<td class="text-left">{{ item.message }}</td>
+											</tr>
+											<tr ng-if="contents.data.systemLogs.length == 0">
+												<td colspan="3">{{ 'message.mi_dont_exist_list' | translate }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- //table -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- panel -->
+			</div>
+
+			<div ng-if="contents.sltInfoTab == 'insMonit'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'insMonit'}">
+				<!-- panel -->
+				<div class="panelWrap">
+					<div class="panel type2" style="cursor: unset;">
+						<div class="panel_head">
+							<div ng-if="contents.loadingComputeMonitoring">
+								<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+							</div>
+							<div class="tit pull-left">가상머신 모니터링</div>
+							<div class="pull-right">
+								<button>시간 범위:</button>
+								<select id="timeRange" name="timeRange" ng-model="contents.selTimeRange" style="margin: 0px 7px 0px 7px;">
+									<option ng-repeat="timeRange in contents.timeRanges" value="{{ timeRange }}">{{ timeRange }}시간</option>
+								</select>
+								<button>주기:</button>
+								<select id="period" name="period" ng-model="contents.selPeriod" style="margin: 0px 7px 0px 7px;">
+									<option ng-repeat="period in contents.periods" value="{{ period }}">{{ period }}분</option>
+								</select>
+								<button type="button" name="button" class="btn-sm btn-color4" style="height: 38px;" title="조회" ng-click="contents.changeTimestamp();">조회</button>
+								<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'insMonit')"><span class="ico">확대/축소</span></button>
+							</div>
+						</div>
+						<div class="panel_body" style="height: 400px;">
+							<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="instance_monitoring_panel" class="in">
+								<!-- 탭 내용 -->
+								<ul class="visualizeList">
+									<li class="visualizeItem">
+										<div class="monitChratUsage">
+											<ul class="legendWrap">
+												<li><span>CPU(%)</span></li>
+												<li ng-repeat="(key, label) in contents.lineChartCpu.series"><em style="background:{{ contents.lineChartCpu.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+											</ul>
+										</div>
+										<!-- chartWrap -->
+										<div class="chartWrap">
+											<canvas id="lineCpu" class="chart chart-line chart-xl"
+													chart-options="contents.lineChartCpu.options"
+													chart-series="contents.lineChartCpu.series"
+													chart-colors="contents.lineChartCpu.colors"
+													chart-labels="contents.lineChartCpu.labels"
+													chart-data="contents.lineChartCpu.data"></canvas>
+										</div>
+										<!-- //chartWrap -->
+									</li>
+									<li class="visualizeItem">
+										<div class="monitChratUsage">
+											<ul class="legendWrap">
+												<li><span>Memory(%)</span></li>
+												<li ng-repeat="(key, label) in contents.lineChartMem.series"><em style="background:{{ contents.lineChartMem.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+											</ul>
+										</div>
+										<!-- chartWrap -->
+										<div class="chartWrap">
+											<canvas id="lineMem" class="chart chart-line chart-xl"
+													chart-options="contents.lineChartMem.options"
+													chart-series="contents.lineChartMem.series"
+													chart-colors="contents.lineChartMem.colors"
+													chart-labels="contents.lineChartMem.labels"
+													chart-data="contents.lineChartMem.data"></canvas>
+										</div>
+										<!-- //chartWrap -->
+									</li>
+									<li class="visualizeItem">
+										<div class="monitChratUsage">
+											<ul class="legendWrap">
+												<li><span>Disk(%)</span></li>
+												<li ng-repeat="(key, label) in contents.lineChartDisk.series"><em style="background:{{ contents.lineChartDisk.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+											</ul>
+										</div>
+										<!-- chartWrap -->
+										<div class="chartWrap">
+											<canvas id="lineDisk" class="chart chart-line chart-xl"
+													chart-options="contents.lineChartDisk.options"
+													chart-series="contents.lineChartDisk.series"
+													chart-colors="contents.lineChartDisk.colors"
+													chart-labels="contents.lineChartDisk.labels"
+													chart-data="contents.lineChartDisk.data"></canvas>
+										</div>
+										<!-- //chartWrap -->
+									</li>
+									<li class="visualizeItem">
+										<div class="monitChratUsage">
+											<ul class="legendWrap">
+												<li><span>수신(bytes)</span></li>
+												<li ng-repeat="(key, label) in contents.lineChartNetBytesRecv.series"><em style="background:{{ contents.lineChartNet.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+											</ul>
+										</div>
+										<!-- chartWrap -->
+										<div class="chartWrap">
+											<canvas id="lineBytesRecv" class="chart chart-line chart-xl"
+													chart-options="contents.lineChartNetBytesRecv.options"
+													chart-series="contents.lineChartNetBytesRecv.series"
+													chart-colors="contents.lineChartNetBytesRecv.colors"
+													chart-labels="contents.lineChartNetBytesRecv.labels"
+													chart-data="contents.lineChartNetBytesRecv.data"></canvas>
+										</div>
+										<!-- //chartWrap -->
+									</li>
+									<li class="visualizeItem">
+										<div class="monitChratUsage">
+											<ul class="legendWrap">
+												<li><span>송신(bytes)</span></li>
+												<li ng-repeat="(key, label) in contents.lineChartNetBytesSent.series"><em style="background:{{ contents.lineChartNet.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+											</ul>
+										</div>
+										<!-- chartWrap -->
+										<div class="chartWrap">
+											<canvas id="lineBytesSent" class="chart chart-line chart-xl"
+													chart-options="contents.lineChartNetBytesSent.options"
+													chart-series="contents.lineChartNetBytesSent.series"
+													chart-colors="contents.lineChartNetBytesSent.colors"
+													chart-labels="contents.lineChartNetBytesSent.labels"
+													chart-data="contents.lineChartNetBytesSent.data"></canvas>
+										</div>
+										<!-- //chartWrap -->
+									</li>
+									<li class="visualizeItem">
+										<div class="monitChratUsage">
+											<ul class="legendWrap">
+												<li><span>수신(packets)</span></li>
+												<li ng-repeat="(key, label) in contents.lineChartNetPacketsRecv.series"><em style="background:{{ contents.lineChartNet.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+											</ul>
+										</div>
+										<!-- chartWrap -->
+										<div class="chartWrap">
+											<canvas id="linePacketsRecv" class="chart chart-line chart-xl"
+													chart-options="contents.lineChartNetPacketsRecv.options"
+													chart-series="contents.lineChartNetPacketsRecv.series"
+													chart-colors="contents.lineChartNetPacketsRecv.colors"
+													chart-labels="contents.lineChartNetPacketsRecv.labels"
+													chart-data="contents.lineChartNetPacketsRecv.data"></canvas>
+										</div>
+										<!-- //chartWrap -->
+									</li>
+									<li class="visualizeItem">
+										<div class="monitChratUsage">
+											<ul class="legendWrap">
+												<li><span>송신(packets)</span></li>
+												<li ng-repeat="(key, label) in contents.lineChartNetPacketsSent.series"><em style="background:{{ contents.lineChartNet.colors[key].borderColor}}"></em><span>{{label}}</span></li>
+											</ul>
+										</div>
+										<!-- chartWrap -->
+										<div class="chartWrap">
+											<canvas id="linePacketsSent" class="chart chart-line chart-xl"
+													chart-options="contents.lineChartNetPacketsSent.options"
+													chart-series="contents.lineChartNetPacketsSent.series"
+													chart-colors="contents.lineChartNetPacketsSent.colors"
+													chart-labels="contents.lineChartNetPacketsSent.labels"
+													chart-data="contents.lineChartNetPacketsSent.data"></canvas>
+										</div>
+										<!-- //chartWrap -->
+									</li>
+								</ul>
+								<!-- //탭 내용 -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //panel -->
+			</div>
+
+		</div>
+		<!-- //Tab panes -->
+	</div>
+
+	<!-- tb btm -->
+	<div class="btn-btm" style="margin-top: 0px;">
+		<button ng-if="contents.viewType == 'instance'" type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage(main.moveParentUrl);">목록</button>
+		<!--<button ng-if="contents.viewType == 'deploy'" type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage('/iaas/deploy_server/detail/'+contents.instance.deployId);">서비스 상세</button>-->
+		<button ng-if="contents.viewType == 'deploy'" type="button" name="button" class="btn btn-color1 btn-md" ng-click="main.goToPage('/gpu/deploy_server/detail/'+contents.instance.deployId);">서비스 상세</button>
+	</div>
+	<!-- //tb btm -->
