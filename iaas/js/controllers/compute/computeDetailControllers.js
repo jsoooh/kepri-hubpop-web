@@ -3663,7 +3663,7 @@ angular.module('iaas.controllers')
 
         //인스턴스 디스크 셋팅
         pop.fn.setInstanceVolume = function(volume) {
-            if (volume && volume.volumeId && !volume.volumeAttachment.instanceId) {
+            if (volume && volume.volumeId && !volume.volumeAttachment) {
                 pop.sltVolume = angular.copy(volume);
                 pop.sltVolumeId = volume.volumeId;
                 $scope.dialogOptions.authenticate = false;
