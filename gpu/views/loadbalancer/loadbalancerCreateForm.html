@@ -1,0 +1,272 @@
+	<div class="message_area">
+		<div class="msg_bg"></div>
+		<div class="msg_txt"><span>'부하 분산 설정하기'를 통해 부하 분산 장치를 설정할 수 있습니다.</span></div>
+	</div>
+	<!--ng-click="main.goToPage('/iaas/compute/detail sg0730 차후 iaas 대쉬보드 붙여야함  -->
+	<div class="panel_area">
+		<ul class="pn_list_style">
+			<li>
+				<form name="{{contents.formName}}" novalidate>
+				<div class="panel_box pn_l">
+					<div class="pn_head">
+						<h4 class="pnh_tit">부하 분산 설정하기</h4>
+					</div>
+					<div class="pn_body">
+						<span class="sm_txt">* 는 필수입력 사항입니다.</span>
+						<ul class="form_list">
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">부하 분산 장치 이름</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<input type="text" class="form-control" name="loadBalancerName" ng-model="contents.data.iaasLbInfo.name" maxlength="50" validation="alpha_dash|required|custom:contents.fn.lbCheckName(contents.data.iaasLbInfo.name)">
+							</li>
+							<!--<li class="pn-Toggle">-->
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">설명</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'설정할 부하 분산 장치에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="s_cont_box">
+									<input type="text" class="form-control" id="loadBalancerDescription" name="loadBalancerDescription" ng-model="contents.data.iaasLbInfo.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100">
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">포트 관리</span>
+									<!--<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>-->
+								</div>
+								<div class="tbw type1">
+									<table class="table">
+										<colgroup>
+											<col style="width:15%;">
+											<col style="width:auto;">
+										</colgroup>
+										<tbody>
+											<tr>
+												<th>포트이름</th>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.iaasLbPort.name" maxlength="50" placeholder="포트 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+											</tr>
+											<tr>
+												<th>프로토콜</th>
+												<td>
+													<div class="radio radio-inline">
+														<input type="radio" ng-init="contents.data.iaasLbPort.protocol='HTTP'" ng-model="contents.data.iaasLbPort.protocol" name="protocolRadio" id="protocolHTTP" value="HTTP">
+														<label for="protocolHTTP" class="label">HTTP</label>
+													</div>
+													<div class="radio radio-inline">
+														<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-model="contents.data.iaasLbPort.protocol" value="HTTPS">
+														<label for="protocolHTTPS" class="label">HTTPS</label>
+													</div>
+													<div class="radio radio-inline">
+														<input type="radio" name="protocolRadio" id="protocolTCP" ng-model="contents.data.iaasLbPort.protocol" value="TCP">
+														<label for="protocolTCP" class="label">TCP</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<th>포트</th>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.iaasLbPort.protocolPort" maxlength="50" placeholder="포트(1-65535)를 입력하세요." validation="alpha_dash|required"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">대상 서버 선택</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 대상 서버 선택 (연결서버 유형)<br/> 1. 서버: 만들어져 있는 서버에 부하분산 설정<br/>2. 이미지: 사용자가 생성한 백업이미지로 1) 서버를 생성하고 2) 부하분산 설정'"><span class="ico_info"></span></button></div>
+								</div>
+								<div class="mt20">
+									<span class="pnb_stit">- 연결서버 유형 : </span>
+									<div class="radio radio-inline">
+										<input type="radio" name="connType" id="app-radio1-1" value="server" ng-init="contents.data.iaasLbPort.connType='server'" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="app-radio1-1" class="label">서버</label>
+									</div>
+									<div class="radio radio-inline">
+										<input type="radio" name="connType" id="app-radio1-2" value="image" ng-model="contents.data.iaasLbPort.connType" ng-click="contents.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+										<label for="app-radio1-2" class="label">이미지</label>
+									</div>
+								</div>
+								
+								<!-- 대상서버선택(서버) -->
+								<div class="tbl type1 mt20" ng-if="contents.data.iaasLbPort.connType == 'server'">
+									<table class="table">
+										<colgroup>
+											<col style="width:10%;">
+											<col style="width:45%;">
+											<col style="width:45%;">
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col">선택</th>
+												<th scope="col">서버이름</th>
+												<th scope="col">내부 IP</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="server in contents.serverMainList"><!-- 선택 된 row -->
+												<td>
+													<div class="checkbox">
+														<input type="checkbox" ng-model="server.checked" id="{{ server.id }}" value="" ng-change="contents.fn.changeCheckCnt();">
+														<label for="{{ server.id }}"></label>
+													</div>
+												</td>
+												<td>{{ server.name }}</td>
+												<td>{{ server.fixedIp }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- //대상서버선택(서버) -->
+								
+								<!-- 대상서버선택(이미지) -->
+								<div class="tbw type1 mt20" ng-if="contents.data.iaasLbPort.connType == 'image'">
+									<table class="table">
+										<colgroup>
+											<col style="width:17%;">
+											<col style="width:auto;">
+										</colgroup>
+										<tbody>
+											<tr>
+												<th>대상 백업 이미지</th>
+												<td>
+													<select ng-model="contents.data.iaasLbPort.connImageId" ng-change="contents.fn.sltInstanceSnapshotChange(contents.data.iaasLbPort.connImageId);" class="form-control">
+														<option value="">선택</option>
+														<option ng-repeat="instanceSnapshot in contents.instanceSnapshots" value="{{ instanceSnapshot.id }}">
+															{{ instanceSnapshot.name }}
+														</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<th>서버 이름</th>
+												<td><input type="text" class="form-control" name="serverName" ng-model="contents.data.iaasLbPort.connImageName" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+											</tr>
+											<tr>
+												<th>서버 수</th>
+												<td><input type="text" class="form-control" name="serverCount" ng-model="contents.data.iaasLbPort.connImageCount" maxlength="50" placeholder="서버 수를 입력하세요." validation="alpha_dash|required"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- //대상서버선택(이미지) -->
+							</li>
+						</ul>
+					</div>
+					<div class="pn_footer">
+						<div class="btn-btm mgt0">
+							<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createLoadBalancer();">설정 저장</button>
+							<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
+						</div>
+					</div>
+				</div>
+				</form>
+			</li>
+			<li>
+				<div class="panel_box pn_r">
+					<div class="pn_head">
+						<h4 class="pnh_tit ico01">부하분산 기본정보</h4>
+					</div>
+					<div class="pn_body">
+						<div class="s_cont_box">
+							<ul>
+								<li>
+									<span class="s_tit">부하분산 장치 이름</span>
+									<span class="s_txt">{{ contents.data.iaasLbInfo.name }}</span>
+								</li>
+								<li>
+									<span class="s_tit">설명</span>
+									<span class="s_txt">{{ contents.data.iaasLbInfo.description }}</span>
+								</li>
+								<li>
+									<span class="s_tit">포트 관리</span>
+									<div class="s_inner_cont">
+										<div class="innr_tbl">
+											<table>
+												<colgroup>
+													<col width="30" />
+													<col width="30" />
+													<col width="30" />
+												</colgroup>
+												<thead>
+													<tr>
+														<th>포트이름</th>
+														<th>프로토콜</th>
+														<th>포트</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{{ contents.data.iaasLbPort.name }}</td>
+														<td>{{ contents.data.iaasLbPort.protocol }}</td>
+														<td>{{ contents.data.iaasLbPort.protocolPort }}</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</li>
+								<li>
+									<span class="s_tit">대상 서버 선택</span>
+									<span class="s_txt" ng-if="contents.data.iaasLbPort.connType == 'server'">서버</span>
+									<div class="s_inner_cont" ng-if="contents.data.iaasLbPort.connType == 'server'">
+										<div class="innr_tbl">
+											<table>
+												<colgroup>
+													<col width="30" />
+													<col width="30" />
+												</colgroup>
+												<thead>
+												<tr>
+													<th>서버 이름</th>
+													<th>내부 IP</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr ng-repeat="server in contents.serverMainList">
+													<td ng-if="server.checked">{{ server.name }}</td>
+													<td ng-if="server.checked">{{ server.fixedIp }}</td>
+												</tr>
+												<tr ng-if="contents.serverMainListCnt == 0">
+													<td colspan="2"> - </td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<span class="s_txt" ng-if="contents.data.iaasLbPort.connType == 'image'">이미지</span>
+									<div class="s_inner_cont" ng-if="contents.data.iaasLbPort.connType == 'image'">
+										<div class="innr_tbl">
+											<table>
+												<colgroup>
+													<col width="30" />
+													<col width="30" />
+													<col width="30" />
+												</colgroup>
+												<thead>
+												<tr>
+													<th>대상 백업 이미지</th>
+													<th>서버 이름</th>
+													<th>서버 수</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr>
+													<td>{{ contents.sltInstanceSnapshot.name }}</td>
+													<td>{{ contents.data.iaasLbPort.connImageName }}</td>
+													<td>{{ contents.data.iaasLbPort.connImageCount }}</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

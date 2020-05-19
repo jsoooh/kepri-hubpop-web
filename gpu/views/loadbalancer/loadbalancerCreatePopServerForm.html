@@ -1,0 +1,74 @@
+<div class="pop_tit">
+	<span class="p_stit">- 연결서버 유형 : </span>
+	<div class="radio radio-inline">
+		<input type="radio" name="connType" id="app-radio1-1" ng-init="pop.sltConnType='server'" ng-model="pop.sltConnType" value="server" ng-click="pop.fn.choiceConnType('server')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+		<label for="app-radio1-1" class="label">서버</label>
+	</div>
+	<div class="radio radio-inline">
+		<input type="radio" name="connType" id="app-radio1-2" value="image" ng-model="pop.sltConnType" ng-click="pop.fn.choiceConnType('image')" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+		<label for="app-radio1-2" class="label">이미지</label>
+	</div>
+</div>
+
+<!-- 대상서버선택(서버) -->
+<div class="tbl type1 mt20" ng-if="pop.sltConnType == 'server'">
+	<table class="table">
+		<colgroup>
+			<col style="width:10%;">
+			<col style="width:45%;">
+			<col style="width:45%;">
+		</colgroup>
+		<thead>
+		<tr>
+			<th scope="col">선택</th>
+			<th scope="col">서버이름</th>
+			<th scope="col">내부 IP</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="server in pop.serverMainList"><!-- 선택 된 row -->
+			<td>
+				<div class="checkbox">
+					<input type="checkbox" ng-model="server.checked" id="{{ server.id }}" value="">
+					<label for="{{ server.id }}"></label>
+				</div>
+			</td>
+			<td>{{ server.name }}</td>
+			<td>{{ server.fixedIp }}</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+<!-- //대상서버선택(서버) -->
+
+<!-- 대상서버선택(이미지) -->
+<div class="tbw type1 mt20" ng-if="pop.sltConnType == 'image'">
+	<table class="table">
+		<colgroup>
+			<col style="width:25%;">
+			<col style="width:auto;">
+		</colgroup>
+		<tbody>
+		<tr>
+			<th>대상 백업 이미지</th>
+			<td>
+				<select ng-model="pop.port.connImageId" ng-options="instanceSnapshot.id as instanceSnapshot.name for instanceSnapshot in pop.instanceSnapshots" name="connImageId" class="form-control">
+					<option value="">선택</option>
+					<!--<option ng-repeat="instanceSnapshot in pop.instanceSnapshots" value="{{ instanceSnapshot.id }}">
+						{{ instanceSnapshot.name }}
+					</option>-->
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>서버 이름</th>
+			<td><input type="text" class="form-control" name="connImageName" ng-model="pop.port.connImageName" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+		</tr>
+		<tr>
+			<th>서버 수</th>
+			<td><input type="text" class="form-control" name="connImageCount" ng-model="pop.port.connImageCount" maxlength="50" placeholder="서버 수를 입력하세요." validation="alpha_dash|required"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+<!-- //대상서버선택(이미지) -->
