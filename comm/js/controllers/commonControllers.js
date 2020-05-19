@@ -611,8 +611,10 @@ angular.module('common.controllers', [])
                 mc.userTenantId = userTenant.tenantId;
                 mc.userTenant.id = userTenant.tenantId;
                 /* 20.05.18 - gpu 객체 담기 by ksw */
-                mc.userTenantGpuId = userTenant2.tenantId;
-                mc.userTenantGpu.id = userTenant2.tenantId;
+                if (userTenant2) {
+                    mc.userTenantGpuId = userTenant2.tenantId;
+                    mc.userTenantGpu.id = userTenant2.tenantId;
+                }
                 mc.userTenant.korName = mc.sltPortalOrg.orgName;
                 mc.uaerTenantDisplayName = mc.userTenant.korName;
                 common.setUserTenantId(mc.userTenantId);
