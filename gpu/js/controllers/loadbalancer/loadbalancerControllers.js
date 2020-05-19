@@ -26,8 +26,8 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenant.id;
         // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantId = $scope.main.gpuUserTenant.id;
-        ct.data.tenantName = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId = $scope.main.userTenantGpu.id;
+        ct.data.tenantName = $scope.main.userTenantGpu.korName;
 
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수

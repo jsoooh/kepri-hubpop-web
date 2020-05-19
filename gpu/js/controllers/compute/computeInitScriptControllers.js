@@ -17,7 +17,7 @@ angular.module('gpu.controllers')
 
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = common.getMainCtrlScope().main.userTenant.id;
-        ct.data.tenantId = common.getMainCtrlScope().main.gpuUserTenant.id;
+        ct.data.tenantId = common.getMainCtrlScope().main.userTenantGpu.id;
         // ct.data.tenantName = common.getMainCtrlScope().main.userTenant.korName;
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
@@ -122,7 +122,7 @@ angular.module('gpu.controllers')
         pop.data = {};
         pop.data.scriptId = $scope.contents.scriptId;
         // pop.data.tenantId = common.getMainCtrlScope().main.userTenant.id;
-        pop.data.tenantId = common.getMainCtrlScope().main.gpuUserTenant.id;
+        pop.data.tenantId = common.getMainCtrlScope().main.userTenantGpu.id;
 
         pop.formName = "initScriptForm";
         if(pop.data.scriptId) {

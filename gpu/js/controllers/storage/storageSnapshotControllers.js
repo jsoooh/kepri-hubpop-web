@@ -21,7 +21,7 @@ angular.module('gpu.controllers')
 
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
-        ct.data.tenantId = $scope.main.gpuUserTenantId;
+        ct.data.tenantId = $scope.main.userTenantGpuId;
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
@@ -109,8 +109,8 @@ angular.module('gpu.controllers')
         ct.data              = {};
         // ct.data.tenantId     = $scope.main.userTenantId;
         // ct.data.tenantName   = $scope.main.userTenant.korName;
-        ct.data.tenantId     = $scope.main.gpuUserTenantId;
-        ct.data.tenantName   = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId     = $scope.main.userTenantGpuId;
+        ct.data.tenantName   = $scope.main.userTenantGpu.korName;
         ct.fn                = {};
         ct.volume            = {};
         ct.instances         = [];
@@ -313,7 +313,7 @@ angular.module('gpu.controllers')
         $scope.actionLoading = false;
 
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
 
         pop.fn = {};
         pop.data = {};

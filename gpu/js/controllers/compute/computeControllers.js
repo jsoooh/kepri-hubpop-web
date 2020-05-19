@@ -29,9 +29,9 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenant.id;
         // ct.data.tenantId = "f0a2f4e409254aea82dd748bd2ff458a";
-        ct.data.tenantId = $scope.main.gpuUserTenant.id;
+        ct.data.tenantId = $scope.main.userTenantGpu.id;
         //ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantName = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantName = $scope.main.userTenantGpu.korName;
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
@@ -1053,9 +1053,9 @@ angular.module('gpu.controllers')
         ct.volume            = {};
         ct.ipFlag            = true;
         // ct.data.tenantId     = $scope.main.userTenant.id;
-        ct.data.tenantId     = $scope.main.gpuUserTenant.id;
+        ct.data.tenantId     = $scope.main.userTenantGpu.id;
         // ct.data.tenantName   = $scope.main.userTenant.korName;
-        ct.data.tenantName   = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantName   = $scope.main.userTenantGpu.korName;
         ct.formName          = "computeCreateForm";
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
@@ -1570,7 +1570,7 @@ angular.module('gpu.controllers')
         ct.projectId         = $scope.main.sltProjectId;
         ct.sltPortalOrgId    = $scope.main.sltPortalOrgId;
         // ct.tenantId          = $scope.main.userTenantId;
-        ct.tenantId          = $scope.main.gpuUserTenantId;
+        ct.tenantId          = $scope.main.userTenantGpuId;
         ct.fn                = {};
         ct.formName          = "computeCopyForm";
 
@@ -1781,7 +1781,7 @@ angular.module('gpu.controllers')
             ct.sch_condition.pageIndex = page;
             ct.sch_condition.baremetalYn = 'N';
             // ct.sch_condition.projectId = $scope.main.userTenantId;
-            ct.sch_condition.projectId = $scope.main.gpuUserTenantId;
+            ct.sch_condition.projectId = $scope.main.userTenantGpuId;
 
             // 테넌트 알람, 인스턴스 알람을 구분
             if (ct.serverId) ct.sch_condition.instanceId = ct.serverId;
@@ -1989,7 +1989,7 @@ angular.module('gpu.controllers')
                 ct.data.alarmEmail = ct.policys.mailAddress.split('@')[0];
                 ct.data.alarmEmailHost = ct.policys.mailAddress.split('@')[1];
             // }, $scope.main.userTenantId);
-            }, $scope.main.gpuUserTenantId);
+            }, $scope.main.userTenantGpuId);
         };
 
         ct.fn.minimumCheck = function () {
@@ -2107,7 +2107,7 @@ angular.module('gpu.controllers')
                 "id": ct.policys.id,
                 "policyType": ct.selServiceType,
                 // "projectId": $scope.main.userTenantId,
-                "projectId": $scope.main.gpuUserTenantId,
+                "projectId": $scope.main.userTenantGpuId,
                 "measureTime": ct.measuretimeSlider.value,
                 "mailAddress": ct.policys.mailAddress,
                 "mailReceiveYn": ct.policys.mailReceiveYn,

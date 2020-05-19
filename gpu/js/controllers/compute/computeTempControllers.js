@@ -28,8 +28,8 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenant.id;
         // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantId = $scope.main.gpuUserTenantId;
-        ct.data.tenantName = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId = $scope.main.userTenantGpuId;
+        ct.data.tenantName = $scope.main.userTenantGpu.korName;
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;

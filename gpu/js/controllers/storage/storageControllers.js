@@ -33,8 +33,8 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantId = $scope.main.gpuUserTenantId;
-        ct.data.tenantName = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId = $scope.main.userTenantGpuId;
+        ct.data.tenantName = $scope.main.userTenantGpu.korName;
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
@@ -343,8 +343,8 @@ angular.module('gpu.controllers')
         ct.sltInstance       = {};
         // ct.data.tenantId     = $scope.main.userTenantId;
         // ct.data.tenantName   = $scope.main.userTenant.korName;
-        ct.data.tenantId     = $scope.main.gpuUserTenantId;
-        ct.data.tenantName   = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId     = $scope.main.userTenantGpuId;
+        ct.data.tenantName   = $scope.main.userTenantGpu.korName;
         ct.formName          = "storageForm";
         ct.validDisabled = true;
         ct.isTenantResourceLoad = false;
@@ -568,7 +568,7 @@ angular.module('gpu.controllers')
         ct.volume = {};
         ct.data.volumeId = $stateParams.volumeid;
         // ct.data.tenantId = $scope.main.userTenantId;
-        ct.data.tenantId = $scope.main.gpuUserTenantId;
+        ct.data.tenantId = $scope.main.userTenantGpuId;
         ct.expandVolumeSize = 10;
 
         ct.fn.formOpen = function($event, state, data){
@@ -782,7 +782,7 @@ angular.module('gpu.controllers')
         $scope.actionLoading = false;
 
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.volume = angular.copy($scope.dialogOptions.volume);
         pop.fn = {};
         pop.formName = "snapshotEditForm";
@@ -930,7 +930,7 @@ angular.module('gpu.controllers')
         $scope.actionLoading = false;
 
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.volume = angular.copy($scope.dialogOptions.volume);
         pop.fn = {};
         pop.formName = "createSnapshotForm";
@@ -994,7 +994,7 @@ angular.module('gpu.controllers')
         pop.validationService 			= new ValidationService({controllerAs: pop});
         pop.formName 					= $scope.dialogOptions.formName;
         // pop.userTenant 					= angular.copy($scope.main.userTenant);
-        pop.userTenant 					= angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
         pop.volume 						= $scope.dialogOptions.selectStorage;
         pop.fn 							= {};
         pop.data						= {};
@@ -1062,7 +1062,7 @@ angular.module('gpu.controllers')
     	pop.validationService 			= new ValidationService({controllerAs: pop});
     	pop.formName 					= $scope.dialogOptions.formName;
     	// pop.userTenant 					= angular.copy($scope.main.userTenant);
-        pop.userTenant 					= angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
     	pop.volume 						= $scope.dialogOptions.selectStorage;
     	pop.volumes                     = angular.copy($scope.contents.storageMainList);
     	pop.fn 							= {};
@@ -1151,7 +1151,7 @@ angular.module('gpu.controllers')
     	pop.validationService 			= new ValidationService({controllerAs: pop});
     	pop.formName 					= $scope.dialogOptions.formName;
     	// pop.userTenant 					= angular.copy($scope.main.userTenant);
-        pop.userTenant 					= angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
     	pop.volume 						= $scope.dialogOptions.selectStorage;
     	pop.fn 							= {};
     	pop.data						= {};
@@ -1303,7 +1303,7 @@ angular.module('gpu.controllers')
         pop.validationService 			= new ValidationService({controllerAs: pop});
         pop.formName 					= $scope.dialogOptions.formName;
         // pop.userTenant 					= angular.copy($scope.main.userTenant);
-        pop.userTenant 					= angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
         pop.volume 						= $scope.dialogOptions.selectStorage;
         pop.fn 							= {};
         pop.data						= {};

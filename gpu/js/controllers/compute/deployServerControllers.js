@@ -36,8 +36,8 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantId = $scope.main.gpuUserTenantId;
-        ct.data.tenantName = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId = $scope.main.userTenantGpuId;
+        ct.data.tenantName = $scope.main.userTenantGpu.korName;
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
@@ -809,8 +809,8 @@ angular.module('gpu.controllers')
 
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantId = $scope.main.gpuUserTenantId;
-        ct.data.tenantName = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId = $scope.main.userTenantGpuId;
+        ct.data.tenantName = $scope.main.userTenantGpu.korName;
         ct.data.deployId = $stateParams.deployId;
 
         ct.sltInfoTab = 'configSetting';
@@ -1598,7 +1598,7 @@ angular.module('gpu.controllers')
         pop.validationService = new ValidationService({controllerAs : pop});
 
         // pop.userTenantId = $scope.main.userTenantId;
-        pop.userTenantId = $scope.main.gpuUserTenantId;
+        pop.userTenantId = $scope.main.userTenantGpuId;
         var scope = common.getMainContentsCtrlScope();
         if (scope && scope.contents) {
             pop.contents = scope.contents;

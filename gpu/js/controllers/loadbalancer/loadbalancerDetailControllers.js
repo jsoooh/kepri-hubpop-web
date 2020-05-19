@@ -17,8 +17,8 @@ angular.module('gpu.controllers')
         ct.loadbalancer         = {};
         // ct.data.tenantId        = $scope.main.userTenant.id;
         // ct.data.tenantName      = $scope.main.userTenant.korName;
-        ct.data.tenantId        = $scope.main.gpuUserTenant.id;
-        ct.data.tenantName      = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId        = $scope.main.userTenantGpu.id;
+        ct.data.tenantName      = $scope.main.userTenantGpu.korName;
 
         ct.data.loadbalancerId  = $stateParams.lbInfoId;
         ct.serverMainList       = [];
@@ -644,7 +644,7 @@ angular.module('gpu.controllers')
         pop.validationService = new ValidationService({controllerAs: pop});
         pop.formName = $scope.dialogOptions.formName;
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.sltLoadBalancer = $scope.dialogOptions.selectLoadBalancer.iaasLbInfo;
         pop.lbserviceLists = angular.copy($scope.contents.lbServiceLists);
         pop.fn = {};
@@ -736,7 +736,7 @@ angular.module('gpu.controllers')
         pop.validationService = new ValidationService({controllerAs: pop});
         pop.formName = $scope.dialogOptions.formName;
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.sltLoadBalancer = $scope.dialogOptions.selectLoadBalancer;
         pop.lbInfo = $scope.dialogOptions.selectLoadBalancer.iaasLbInfo;
         pop.ports = $scope.dialogOptions.selectLoadBalancer.iaasLbPorts;
@@ -808,7 +808,7 @@ angular.module('gpu.controllers')
         pop.validationService = new ValidationService({controllerAs: pop});
         pop.formName = $scope.dialogOptions.formName;
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.port = angular.copy($scope.contents.iaasLbPorts);
         pop.fn = {};
         pop.data = {};
@@ -880,7 +880,7 @@ angular.module('gpu.controllers')
         pop.validationService = new ValidationService({controllerAs: pop});
         pop.formName = $scope.dialogOptions.formName;
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.port = angular.copy($scope.contents.iaasLbPorts);
         pop.portMembers = angular.copy($scope.contents.loadbalancer.iaasLbPortMembers);
         pop.fn = {};
@@ -1050,7 +1050,7 @@ angular.module('gpu.controllers')
         pop.validationService = new ValidationService({controllerAs: pop});
         pop.formName = $scope.dialogOptions.formName;
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.port = angular.copy($scope.contents.iaasLbPorts);
         pop.fn = {};
         pop.data = [];
@@ -1219,7 +1219,7 @@ angular.module('gpu.controllers')
         pop.validationService = new ValidationService({controllerAs: pop});
         pop.formName = $scope.dialogOptions.formName;
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.sltLoadBalancer = $scope.dialogOptions.selectLoadBalancer.iaasLbInfo;
         pop.lbserviceLists = angular.copy($scope.contents.lbServiceLists);
         pop.fn = {};

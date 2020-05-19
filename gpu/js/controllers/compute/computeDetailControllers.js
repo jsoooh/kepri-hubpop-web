@@ -26,8 +26,8 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantId = $scope.main.gpuUserTenantId;
-        ct.data.tenantName = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId = $scope.main.userTenantGpuId;
+        ct.data.tenantName = $scope.main.userTenantGpu.korName;
         ct.data.instanceId = $stateParams.instanceId;
         ct.viewType = 'instance';
         // if ($scope.main.stateKey == "iaasDeployServerComputeDetail") {
@@ -1463,7 +1463,7 @@ angular.module('gpu.controllers')
             ct.sch_condition.pageIndex = page;
             ct.sch_condition.baremetalYn = 'N';
             // ct.sch_condition.projectId = $scope.main.userTenantId;
-            ct.sch_condition.projectId = $scope.main.gpuUserTenantId;
+            ct.sch_condition.projectId = $scope.main.userTenantGpuId;
             ct.sch_condition.instanceId = ct.data.instanceId;
             
             $scope.main.loadingMainBody = true;
@@ -1583,8 +1583,8 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantId = $scope.main.gpuUserTenantId;
-        ct.data.tenantName = $scope.main.gpuUserTenant.korName;
+        ct.data.tenantId = $scope.main.userTenantGpuId;
+        ct.data.tenantName = $scope.main.userTenantGpu.korName;
         ct.data.instanceId = $stateParams.instanceId;
         ct.viewType = 'instance';
         // if ($scope.main.stateKey == "iaasDeployServerComputeDetail") {
@@ -2800,7 +2800,7 @@ angular.module('gpu.controllers')
         var pop = this;
 
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.serverMainLists = angular.copy($scope.contents.serverMainList);
         pop.fn = {};
         pop.formName = $scope.dialogOptions.formName;
@@ -2888,7 +2888,7 @@ angular.module('gpu.controllers')
 
         $scope.actionLoading = false;
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
 
         pop.data = {};
         pop.data.protocolType = "http";
@@ -2987,7 +2987,7 @@ angular.module('gpu.controllers')
         $scope.actionLoading = false;
 
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.instance = angular.copy($scope.contents.selectInstance);
         
         pop.fn = {};
@@ -3052,7 +3052,7 @@ angular.module('gpu.controllers')
         $scope.actionLoading = false;
 
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
         
         pop.fn = {};
         pop.formName = "computeVolumeForm";
@@ -3130,7 +3130,7 @@ angular.module('gpu.controllers')
 
         $scope.actionLoading = false;
         // pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.userTenant = angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant = angular.copy($scope.main.userTenantGpu);
 
         pop.fn = {};
         pop.data = {};
@@ -3271,7 +3271,7 @@ angular.module('gpu.controllers')
 
         if (!pop.tenantId) {
             // pop.tenantId = $scope.main.userTenantId;
-            pop.tenantId = $scope.main.gpuUserTenantId;
+            pop.tenantId = $scope.main.userTenantGpuId;
         }
 
         $scope.dialogOptions.title 		= "서버 사양 변경";
@@ -3468,7 +3468,7 @@ angular.module('gpu.controllers')
         pop.validationService 			= new ValidationService({controllerAs: pop});
         pop.formName 					= $scope.dialogOptions.formName;
         // pop.userTenant 					= angular.copy($scope.main.userTenant);
-        pop.userTenant 					= angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
         pop.instance 					= $scope.dialogOptions.selectInstance;
         pop.fn 							= {};
         pop.data						= {};
@@ -3728,7 +3728,7 @@ angular.module('gpu.controllers')
     	pop.formName 					= $scope.dialogOptions.formName;
         pop.fn 							= {};
         // pop.userTenant 					= angular.copy($scope.main.userTenant);
-        pop.userTenant 					= angular.copy($scope.main.gpuUserTenant);
+        pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
         pop.instance 					= $scope.dialogOptions.selectInstance;
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         //pop.formName 		= "computeVolumeForm";
