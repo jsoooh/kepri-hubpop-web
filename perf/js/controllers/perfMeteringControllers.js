@@ -449,32 +449,26 @@ angular.module('perf.controllers')
             promise.success(function (data) {
                 console.log(data);
                 console.log("Success listPerfMeteringMonthlyTotalByItemCode");
-                if (data.items.length > 0) {
-                    ct.perfMeteringMonthlyTotals = [];
 
-                    ct.perfMeteringMonthlyTotalSum = data.items[0].totalMeteringValue;
-
-                    var key = "";
-                    for (var i = 0; i < 12; i++) {
-                        if (i < 9) {
-                            key = "mv0" + (i + 1)
+                ct.perfMeteringMonthlyTotals = [];
+                ct.perfMeteringMonthlyTotalSum = 0;
+                var dataIndex = 0;
+                for (var month = 1; month <= 12; month++) {
+                    if (dataIndex < data.itemCount) {
+                        var perfMonth = Number(data.items[dataIndex].perfYm.slice(4, 6));
+                    }
+                    if (perfMonth == month) {
+                        var meteringValue = data.items[dataIndex].meteringValue;
+                        ct.perfMeteringMonthlyTotals.push(meteringValue);
+                        ct.perfMeteringMonthlyTotalSum += meteringValue;
+                        dataIndex++;
+                    } else {
+                        if (ct.fn.isPast(sltYear, perfMonth)) {
+                            ct.perfMeteringMonthlyTotals.push(0);
                         } else {
-                            key = "mv" + (i + 1)
-                        }
-
-                        if (data.items[0].hasOwnProperty(key)) {
-                            if (ct.today.getFullYear() == ct.data.sltYear) {
-                                if (i + 1 > (ct.today.getMonth() + 1)) {
-                                    ct.perfMeteringMonthlyTotals[i] = "";
-                                    continue;
-                                }
-                            }
-                            ct.perfMeteringMonthlyTotals[i] = data.items[0][key];
+                            ct.perfMeteringMonthlyTotals.push('');
                         }
                     }
-                } else {
-                    ct.perfMeteringDailyTotalSum = 0;
-                    ct.perfMeteringDailyTotals = [];
                 }
 
                 ct.monthlyChart.option.chart.title = '추이 (단위: ' + ct.sltItem.itemUnit + ')';

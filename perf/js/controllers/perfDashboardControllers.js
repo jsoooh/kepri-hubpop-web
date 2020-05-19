@@ -454,6 +454,7 @@ angular.module('perf.controllers')
             var nonEtcDataCnt = 0;
             var sumEtcData = 0;
             var limit = 10;
+            var endIdx = 0;
             for(var i=0; i<data.length; i++) {
                 if(data[i].itemGroupCode == ct.data.sltItemGroupCode) {
                     dataCnt++;
@@ -466,21 +467,21 @@ angular.module('perf.controllers')
                     } else {
                         sumEtcData += data[i].perfAmt;
                     }
-                }
-                if(i == data.length-1 && sumEtcData > 0) {
-                    if(nonEtcDataCnt + 1 == dataCnt) {
-                        anlsByItemListsToChartData.push({
-                            name: data[i].itemName,
-                            data: data[i].perfAmt
-                        });
-                    } else {
-                        anlsByItemListsToChartData.push({
-                            name: 'etc.',
-                            data: sumEtcData
-                        });
-                    }
+                    endIdx = i;
                 }
             }
+            if(sumEtcData > 0 && nonEtcDataCnt + 1 == dataCnt) {
+                anlsByItemListsToChartData.push({
+                    name: data[endIdx].itemName,
+                    data: data[endIdx].perfAmt
+                });
+            } else if(sumEtcData > 0) {
+                anlsByItemListsToChartData.push({
+                    name: 'etc.',
+                    data: sumEtcData
+                });
+            }
+
             return anlsByItemListsToChartData;
         }
 

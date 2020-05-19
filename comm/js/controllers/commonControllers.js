@@ -323,7 +323,7 @@ angular.module('common.controllers', [])
         // left 메뉴 클릭 이벤트 처리
         mc.commPartLeftMenuClick = function (evt, menuItem) {
             if ((menuItem.pageStage == 'iaas' || menuItem.pageStage == 'paas' || menuItem.pageStage == 'monit') && (!mc.sltProject || !mc.sltProject.orgs || mc.sltProject.orgs.length == 0 || !mc.userTenantId || !mc.sltOrganizationGuid)) {
-                common.showAlertWarning("작업 정복가 존재하지 않습니다. 작업을 선택 하십시오.");
+                common.showAlertWarning("작업 정보가 존재하지 않습니다. 작업을 선택 하십시오.");
             }
             var target = $(evt.currentTarget);
             var il_items = target.parent().parent().find("> li");
@@ -342,7 +342,7 @@ angular.module('common.controllers', [])
         // left 메뉴 클릭 이벤트 처리
         mc.commLeftMenuClick = function (evt, menuItem) {
             if (menuItem.key == 'platform_service' && (!mc.sltProject || !mc.sltProject.orgs || mc.sltProject.orgs.length == 0 || !mc.userTenantId || !mc.sltOrganizationGuid)) {
-                common.showAlertWarning("작업 정복가 존재하지 않습니다. 작업을 선택 하십시오.");
+                common.showAlertWarning("작업 정보가 존재하지 않습니다. 작업을 선택 하십시오.");
             }
             if ($(evt.currentTarget).parent().find("ul").length > 0) {
                 var target = $(evt.currentTarget).find("a");
@@ -578,7 +578,7 @@ angular.module('common.controllers', [])
             }
         };
 
-        /*
+        /* 20.05.18 - gpu 객체 정보 불러오기 by ksw */
         mc.syncGetGpuTenantByName = function (orgCode, teamCode) {
             var response = portal.portalOrgs.syncGetGpuTenantByName(orgCode, teamCode);
             if (response && response.status == 200 && angular.isObject(response.data.content)) {
@@ -587,35 +587,34 @@ angular.module('common.controllers', [])
                 return null;
             }
         };
-        */
 
         mc.loadUserTenant = function () {
             if (angular.isObject(mc.sltProject) && mc.sltProjectId && angular.isObject(mc.sltPortalOrg) && mc.sltPortalOrg.orgId) {
                 var userTenant = mc.syncGetTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                /* 20.05.18 - gpu 객체 정보 불러오기 by ksw */
+                var userTenant2 = mc.syncGetGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
                 if (userTenant) {
                     userTenant.orgCode = userTenant.pk.orgCode;
                     userTenant.teamCode = userTenant.pk.teamCode;
                 }
-                mc.setUserTenant(userTenant);
-                /*
-                var gpuUserTenant = mc.syncGetGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
-                if (gpuUserTenant) {
-                    gpuUserTenant.orgCode = gpuUserTenant.pk.orgCode;
-                    gpuUserTenant.teamCode = gpuUserTenant.pk.teamCode;
-                }
-                mc.setGpuUserTenant(gpuUserTenant);
-                */
+                mc.setUserTenant(userTenant, userTenant2);
             } else {
                 mc.setUserTenant(null);
             }
         };
 
         // UserTenant 값 셋팅
-        mc.setUserTenant = function(userTenant) {
+        mc.setUserTenant = function(userTenant, userTenant2) {
             if (angular.isObject(userTenant) && userTenant.tenantId) {
                 mc.userTenant = userTenant;
+                mc.userTenantGpu = userTenant2;
                 mc.userTenantId = userTenant.tenantId;
                 mc.userTenant.id = userTenant.tenantId;
+                /* 20.05.18 - gpu 객체 담기 by ksw */
+                if (userTenant2) {
+                    mc.userTenantGpuId = userTenant2.tenantId;
+                    mc.userTenantGpu.id = userTenant2.tenantId;
+                }
                 mc.userTenant.korName = mc.sltPortalOrg.orgName;
                 mc.uaerTenantDisplayName = mc.userTenant.korName;
                 common.setUserTenantId(mc.userTenantId);
@@ -626,24 +625,6 @@ angular.module('common.controllers', [])
                 common.clearUserTenantId();
             }
         };
-
-        /*
-        mc.setGpuUserTenant = function(gpuUserTenant) {
-            if (angular.isObject(gpuUserTenant) && gpuUserTenant.tenantId) {
-                mc.gpuUserTenant = gpuUserTenant;
-                mc.gpuUserTenantId = gpuUserTenant.tenantId;
-                mc.gpuUserTenant.id = gpuUserTenant.tenantId;
-                mc.gpuUserTenant.korName = mc.sltPortalOrg.orgName;
-                mc.gpuUserTenantDisplayName = mc.gpuUserTenant.korName;
-                common.setGpuUserTenantId(mc.gpuUserTenant)
-            } else {
-                mc.gpuUserTenant = {};
-                mc.gpuUserTenantId = "";
-                mc.gpuUserTenantDisplayName = "";
-                common.clearGpuUserTenantId();
-            }
-        }
-        */
 
         mc.syncGetOrganizationByName = function (name) {
             var response = portal.portalOrgs.syncGetOrganizationByName(name, 2);
