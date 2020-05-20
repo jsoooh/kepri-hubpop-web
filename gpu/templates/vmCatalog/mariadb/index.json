@@ -1,10 +1,9 @@
 {
   "version": "10.4",
-  "controllerFile": "mariadb104DeployControllers.js",
-  "controllerName": "mariadb104DeployCtrl",
-  "serviceFile": "mariadb104DeployServices.js",
-  "serviceName": "mariadb104DeployService",
-  "templateHtmlFile": "mariadb104Deploy.html",
+  "controllerFile": "deployControllers.js",
+  "controllerName": "mariadbDeployCtrl",
+  "deployHtmlFile": "deploy.html",
+  "viewHtmlFile": "deployView.html",
   "deployTemplate": "deployTemplate.yaml.j2",
   "parameters": {
     "image": "CentOS-7-x86_64-Heat-1907.qcow2",

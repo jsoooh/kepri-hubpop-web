@@ -8,12 +8,6 @@ angular.module('gpu.controllers')
         ct.tenantId          = $scope.main.userTenantGpuId;
         ct.fn                = {};
 
-        ct.pageOptions = {
-            currentPage : 1,
-            pageSize : 10,
-            total : 0
-        };
-
     })
    .controller('gpuVmCatalogDeployFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, common, ValidationService, vmCatalogService, CONSTANTS) {
        _DebugConsoleLog("vmCatalogControllers.js : gpuVmCatalogDeployFormCtrl", 1);

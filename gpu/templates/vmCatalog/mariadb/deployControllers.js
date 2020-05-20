@@ -1,12 +1,19 @@
 'use strict';
 
 angular.module('gpu.controllers')
-    .controller('mariadb104DeployCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, vmCatalogService, CONSTANTS) {
-        _DebugConsoleLog("mariadb/deployControllers.js : mariadb104DeployCtrl", 1);
+    .controller('mariadbDeployCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, vmCatalogService, CONSTANTS) {
+        _DebugConsoleLog("mariadb deployControllers.js : mariadbDeployCtrl", 1);
+        var deploy = this;
+        deploy.tenantId          = $scope.main.userTenantGpuId;
+        deploy.fn                = {};
 
     })
-   .controller('mariadb104ViewCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, vmCatalogService, CONSTANTS) {
-        _DebugConsoleLog("mariadb/deployControllers.js : mariadb104ViewCtrl", 1);
+   .controller('mariadbViewCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, vmCatalogService, CONSTANTS) {
+        _DebugConsoleLog("mariadb deployControllers.js : mariadbViewCtrl", 1);
+
+       var viewer = this;
+       viewer.tenantId          = $scope.main.userTenantGpuId;
+       viewer.fn                = {};
 
     })
 ;
