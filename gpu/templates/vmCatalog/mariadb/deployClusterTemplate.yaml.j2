@@ -131,10 +131,22 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
+{% if volume %}
+            mkfs.xfs $volume_mountpoint
+            mkdir -p $volume_mount_path
+            mount $volume_mountpoint $volume_mount_path
+            sleep 1
+            mkdir $volume_mount_path/mysql
+            chown -R mysql.mysql $volume_mount_path/mysql
+            if [ -d "/var/lib/mysql" ]; then
+              rm -fR /var/lib/mysql
+            fi
+            ln -s $volume_mount_path/mysql /var/lib/mysql
+            chmod mysql.mysql /var/lib/mysql
+            sleep 1
+{% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
-            cp /etc/my.cnf /etc/my.cnf.backup
-            sed -i 's/^port            = 3306/port            = $service_port/' /etc/my.cnf
             systemctl start mariadb.service
             /usr/bin/mysqladmin -u root password '$root_password'
 
@@ -145,11 +157,12 @@ resources:
 
             systemctl stop mariadb.service
             sleep 1
-            cp /etc/my.cnf.d/server.cnf /etc/server.cnf.backup
+            cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
             cat <<EOF> /etc/my.cnf.d/server.cnf
             [server]
 
             [mysqld]
+            port=$service_port
             datadir=/var/lib/mysql
             log-error=/var/log/mysqld.log
 
@@ -212,16 +225,29 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
+{% if volume %}
+            mkfs.xfs $volume_mountpoint
+            mkdir -p $volume_mount_path
+            mount $volume_mountpoint $volume_mount_path
+            sleep 1
+            mkdir $volume_mount_path/mysql
+            chown -R mysql.mysql $volume_mount_path/mysql
+            if [ -d "/var/lib/mysql" ]; then
+              rm -fR /var/lib/mysql
+            fi
+            ln -s $volume_mount_path/mysql /var/lib/mysql
+            chmod mysql.mysql /var/lib/mysql
+            sleep 1
+{% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
             sleep 1
-            cp /etc/my.cnf /etc/my.cnf.backup
-            sed -i 's/^port            = 3306$/port            = $service_port/' /etc/my.cnf
-            cp /etc/my.cnf.d/server.cnf /etc/server.cnf.backup
+            cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
             cat <<EOF> /etc/my.cnf.d/server.cnf
             [server]
 
             [mysqld]
+            port=$service_port
             datadir=/var/lib/mysql
             log-error=/var/log/mysqld.log
 
@@ -294,15 +320,28 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb install start"
+{% if volume %}
+            mkfs.xfs $volume_mountpoint
+            mkdir -p $volume_mount_path
+            mount $volume_mountpoint $volume_mount_path
+            sleep 1
+            mkdir $volume_mount_path/mysql
+            chown -R mysql.mysql $volume_mount_path/mysql
+            if [ -d "/var/lib/mysql" ]; then
+              rm -fR /var/lib/mysql
+            fi
+            ln -s $volume_mount_path/mysql /var/lib/mysql
+            chmod mysql.mysql /var/lib/mysql
+            sleep 1
+{% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
-            cp /etc/my.cnf /etc/my.cnf.backup
-            sed -i 's/^port            = 3306$/port            = $service_port/' /etc/my.cnf
-            cp /etc/my.cnf.d/server.cnf /etc/server.cnf.backup
+            cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
             cat <<EOF> /etc/my.cnf.d/server.cnf
             [server]
 
             [mysqld]
+            port=$service_port
             datadir=/var/lib/mysql
             log-error=/var/log/mysqld.log
 
