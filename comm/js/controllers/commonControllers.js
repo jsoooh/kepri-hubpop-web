@@ -1609,7 +1609,7 @@ angular.module('common.controllers', [])
                 }
                 if ($scope.main.selectSiteMap.contentsView.templateUrl) {
                     common.getTemplateHtml($scope.main.selectSiteMap.contentsView.templateUrl + _VersionTail(), function (templateHtml) {
-                        var contentsTemplateHtml = '<div class="memWrap" id="mainContents"' + controllerHtml + '>\n' + templateHtml + '\n</div>';
+                        contentsTemplateHtml = '<div class="memWrap" id="mainContents"' + controllerHtml + '>\n' + templateHtml + '\n</div>';
                         $templateCache.put(contentsTemplateUrl, contentsTemplateHtml);
                         mb.mainContentsTemplateUrl = contentsTemplateUrl;
                     }, function (res) {
