@@ -20,6 +20,7 @@ angular.module('app', [
         //, 'monit.controllers'
         //, 'monit.services'
         , 'ngRoute'
+        , 'oc.lazyLoad'
         , 'ui.router'
         , 'ui.bootstrap'
         , 'ngCookies'
@@ -46,8 +47,8 @@ angular.module('app', [
         , 'ngJScrollPane'
         , 'checklist-model'
     ])
-    .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$translateProvider', 'CONSTANTS', 'SITEMAP', 'IAASSITEMAP', 'GPUSITEMAP', 'PAASSITEMAP', 'PERFSITEMAP'/*, 'MARKETSITEMAP', 'MONITSITEMAP'*/,
-        function ($httpProvider, $stateProvider, $urlRouterProvider, $translateProvider, CONSTANTS, SITEMAP, IAASSITEMAP, GPUSITEMAP, PAASSITEMAP, PERFSITEMAP/*, MARKETSITEMAP, MONITSITEMAP*/) {
+    .config(['$httpProvider', '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', '$translateProvider', 'CONSTANTS', 'LOADFILES', 'SITEMAP', 'IAASSITEMAP', 'GPUSITEMAP', 'PAASSITEMAP', 'PERFSITEMAP'/*, 'MARKETSITEMAP', 'MONITSITEMAP'*/,
+        function ($httpProvider, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $translateProvider, CONSTANTS, LOADFILES, SITEMAP, IAASSITEMAP, GPUSITEMAP, PAASSITEMAP, PERFSITEMAP/*, MARKETSITEMAP, MONITSITEMAP*/) {
 
         _DebugConsoleLog('app.js : commonApp', 1);
 
@@ -70,12 +71,53 @@ angular.module('app', [
 
         $urlRouterProvider.otherwise('/comm/projects/');
 
+        var loadModuleNames = [];
+        var modules = angular.copy(LOADFILES.modules);
+
+        if (angular.isArray(LOADFILES.scriptFiles) && LOADFILES.scriptFiles.length > 0) {
+            angular.forEach(LOADFILES.scriptFiles, function (scriptFile, key) {
+                if (angular.isArray(scriptFile.files) && scriptFile.files.length > 0) {
+                    angular.forEach(scriptFile.files, function (file, k) {
+                        scriptFile.files[k] = file + _VERSION_TAIL_HEAD_;
+                        scriptFile.cache = (_MODE_ == 'DEBUG') ? false : true;
+                    });
+                }
+            });
+        }
+
+        if (angular.isArray(LOADFILES.customModules) && LOADFILES.customModules.length > 0) {
+            angular.forEach(LOADFILES.customModules, function (customModule, key) {
+                if (angular.isArray(customModule.files) && customModule.files.length > 0) {
+                    angular.forEach(customModule.files, function (file, k) {
+                        customModule.files[k] = file + _VERSION_TAIL_HEAD_;
+                        customModule.cache = (_MODE_ == 'DEBUG') ? false : true;
+                    });
+                }
+                modules.push(customModule);
+            });
+        }
+
+        if (angular.isArray(modules) && modules.length > 0) {
+            angular.forEach(modules, function (loadModule, key) {
+                loadModuleNames.push(loadModule.name);
+            });
+        }
+
+
+        $ocLazyLoadProvider.config({
+            debug: (_MODE_ == "DEBUG") ? true : false,
+            events: true,
+            // 로드 할 모듈 정의
+            modules: modules
+        });
+
         function setState(option) {
             var mainContents	= {};
             if (option.controller) {
                 mainContents.controller	    = option.controller;
                 mainContents.controllerAs	= (option.controllerAs) ? option.controllerAs : "contents";
             }
+
             if (option.templateUrl) {
                 mainContents.templateUrl	= option.templateUrl;
             }
@@ -85,13 +127,126 @@ angular.module('app', [
                 templateUrl: CONSTANTS.mainBody.templateUrl + _VersionTail(),
                 controller: CONSTANTS.mainBody.controller,
                 controllerAs: CONSTANTS.mainBody.controllerAs,
-                resolve: { pageStage: function () { return pageStage } }
+                resolve: {
+                    pageStage: function () {
+                        return pageStage
+                    }
+                }
             };
+
+            if (angular.isObject(option.loadMyFile)) {
+                if (angular.isArray(option.loadMyFile.loadMyScripts)) {
+                    var loadMyFiles = [];
+                    angular.forEach(option.loadMyFile.loadMyScripts, function (name, key) {
+                        if (angular.isArray(LOADFILES.scriptFiles[name])) {
+                            loadMyFiles.push(LOADFILES.scriptFiles[name]);
+                        } else {
+                            loadMyFiles.push(name);
+                        }
+                    });
+                    mainBody.resolve.loadMyFile = ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({files: loadMyFiles, cache: ((_DEBUG_LEVEL_ >= 3) ? false : true)});
+                    }];
+                }
+                var pageStateName = "common";
+                if (pageStage == "iaas" || pageStage == "paas" || pageStage == "gpu" || pageStage == "perf") {
+                    pageStateName = pageStage;
+                } else if (pageStage == "comm") {
+                    pageStateName = "portal";
+                }
+
+                if (angular.isArray(option.loadMyFile.loadMyServices)) {
+                    mainBody.resolve.loadMyService = ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({name: pageStateName + '.services', files: option.loadMyFile.loadMyServices, cache: ((_DEBUG_LEVEL_ >= 3) ? false : true)});
+                    }]
+                }
+
+                if (angular.isArray(option.loadMyFile.loadMyControllers)) {
+                    mainBody.resolve.loadMyCtrl = ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({name: pageStateName + '.controllers', files: option.loadMyFile.loadMyControllers, cache: ((_DEBUG_LEVEL_ >= 3) ? false : true)});
+                    }]
+                }
+
+                if (angular.isArray(option.loadMyFile.loadMyDirectives)) {
+                    mainBody.resolve.loadMyDirective = ['$ocLazyLoad', function($ocLazyLoad) {
+                        var providerFiles = [];
+                        angular.forEach(option.loadMyFile.loadMyDirectives, function (name, key) {
+                            var moduleConfig = null;
+                            if (angular.isString(name)) {
+                                moduleConfig = $ocLazyLoad.getModuleConfig(name);
+                                if (!moduleConfig || !moduleConfig.name) {
+                                    moduleConfig = $ocLazyLoad.getModuleConfig('app');
+                                    if (!moduleConfig || !moduleConfig.name) {
+                                        moduleConfig = {name: 'app', files: [name]}
+                                    } else {
+                                        if (moduleConfig.files.indexOf(name) == -1) {
+                                            moduleConfig.files.push(name);
+                                        }
+                                    }
+                                    $ocLazyLoad.setModuleConfig(moduleConfig);
+                                    option.loadMyFile.loadMyDirectives[key] = moduleConfig.name
+                                }
+                            } else if (angular.isObject(name)) {
+                                moduleConfig = angular.copy(name);
+                                if (!$ocLazyLoad.getModuleConfig(moduleConfig.name)) {
+                                    $ocLazyLoad.setModuleConfig(moduleConfig);
+                                    option.loadMyFile.loadMyDirectives[key] = moduleConfig.name
+                                }
+                            }
+                            if (moduleConfig && moduleConfig.provider) {
+                                providerFiles.push(moduleConfig.provider);
+                            }
+                        });
+                        return $ocLazyLoad.load(option.loadMyFile.loadMyDirectives)
+                        .then(function() {
+                            if (providerFiles.length > 0) {
+                                $ocLazyLoad.load({name: 'app', files: providerFiles}).then(function() {
+                                });
+                            }
+                        });
+                    }]
+                }
+            }
+
             if (option.mainBodyTemplateUrl) {
                 mainBody.templateUrl = option.mainBodyTemplateUrl;
             }
-            $stateProvider.state(option.stateKey, { url: option.url, views: { "mainBody" : mainBody } });
+
+            var views = { "mainBody" : mainBody };
+
+            $stateProvider.state(option.stateKey, { url: option.url, views: views } );
             return mainContents;
+        };
+
+        function setParentMergeMyFiles (parentFiles, childrenFiles) {
+            if (angular.isArray(parentFiles)) {
+                var loadMyFiles = angular.copy(parentFiles);
+                if (angular.isArray(childrenFiles)) {
+                    angular.forEach(childrenFiles, function(loadFile, key) {
+                        if (angular.isString(loadFile)) {
+                            if (loadModuleNames.indexOf(loadFile) == -1) {
+                                loadMyFiles.push(loadFile + _VERSION_TAIL_HEAD_);
+                            } else {
+                                loadMyFiles.push(loadFile);
+                            }
+                        } else if (angular.isObject(loadFile) && angular.isArray(loadFile.files)) {
+                            if (loadFile.files.length > 0) {
+                                angular.forEach(loadFile.files, function (file, k) {
+                                    loadFile.files[k] = file + _VERSION_TAIL_HEAD_;
+                                });
+                            }
+                            loadMyFiles.push(loadFile);
+                        }
+                    });
+                }
+                return loadMyFiles;
+            } else {
+                if (angular.isArray(childrenFiles)) {
+                    return childrenFiles
+                } else {
+                    return [];
+                }
+            }
         }
 
         if (IAASSITEMAP.pages) {
