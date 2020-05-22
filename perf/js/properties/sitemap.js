@@ -19,6 +19,12 @@ angular.module('app')
                         url: '/perf/dashboard',
                         controller: 'perfDashboardCtrl',
                         templateUrl: _PERF_VIEWS_ + '/perfDashboard.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_PERF_JS_+'/services/perfAnlsServices.js', _PERF_JS_+'/services/perfMeteringServices.js'],
+                            loadMyControllers: [_PERF_JS_+'/controllers/perfDashboardControllers.js'],
+                            loadMyDirectives: [],
+                        },
                     },
                     perfAnls: {
                         name: 'perf_anls',
@@ -26,6 +32,12 @@ angular.module('app')
                         url: '/perf/perfAnls',
                         controller: 'perfAnlsCtrl',
                         templateUrl: _PERF_VIEWS_ + '/perfAnls.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_PERF_JS_+'/services/perfAnlsServices.js', _PERF_JS_+'/services/perfMeteringServices.js'],
+                            loadMyControllers: [_PERF_JS_+'/controllers/perfAnlsControllers.js'],
+                            loadMyDirectives: [],
+                        },
                     },
                     perfMonthlyMetering: {
                         name: 'perf_monthly_metering',
@@ -33,6 +45,12 @@ angular.module('app')
                         url: '/perf/perfMonthlyMetering',
                         controller: 'perfMonthlyMeteringCtrl',
                         templateUrl: _PERF_VIEWS_ + '/perfMonthlyMetering.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_PERF_JS_+'/services/perfMeteringServices.js'],
+                            loadMyControllers: [_PERF_JS_+'/controllers/perfMeteringControllers.js'],
+                            loadMyDirectives: [],
+                        },
                     },
                     perfItemsMetering: {
                         name: 'perf_items_metering',
@@ -40,6 +58,12 @@ angular.module('app')
                         url: '/perf/perfItemsMetering',
                         controller: 'perfItemsMeteringCtrl',
                         templateUrl: _PERF_VIEWS_ + '/perfItemsMetering.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_PERF_JS_+'/services/perfMeteringServices.js'],
+                            loadMyControllers: [_PERF_JS_+'/controllers/perfMeteringControllers.js'],
+                            loadMyDirectives: [],
+                        },
                     },
                     perfRefAmt: {
                         name: 'perf_ref_amt',
@@ -47,6 +71,12 @@ angular.module('app')
                         url: '/perf/perfRefAmt',
                         controller: 'perfRefAmtCtrl',
                         templateUrl: _PERF_VIEWS_ + '/perfRefAmt.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_PERF_JS_+'/services/perfMeteringServices.js', _PERF_JS_+'/services/perfRefAmtServices.js'],
+                            loadMyControllers: [_PERF_JS_+'/controllers/perfRefAmtControllers.js'],
+                            loadMyDirectives: [],
+                        },
                     }
                 }
             }
