@@ -3520,7 +3520,7 @@ a.ext_link:hover {text-decoration:underline;}
 .cBox.ctlog-info .cBox-hd .dropdown {position:absolute; top:35px; right:35px;}
 .cBox.ctlog-info  h4.c-tit {line-height:24px}
 .cBox.ctlog-info .cBox-hd .c-tit {padding:50px 0 50px 160px;}
-.cBox.ctlog-info .cBox-hd .c-tit .logoBox {position:absolute; top:35px; left:0; z-index:1; display:inline-block; width:140px; height:140px; border-radius:50%; background:#f7f7f7; border:0; padding:15px;}
+.cBox.ctlog-info .cBox-hd .c-tit .logoBox {position:absolute; top:35px; left:0; z-index:1; display:inline-block; width:140px; height:140px; line-height:100px; text-align:center; border-radius:50%; background:#f7f7f7; border:0; padding:15px;}
 .cBox.ctlog-info .cBox-hd .c-tit .logoBox img {max-width:100%; width:auto; height:auto; vertical-align:middle;}
 .cBox.ctlog-info .cBox-hd .c-tit .txt_tit {font-size:30px; font-weight:700; line-height:30px;}
 .cBox.ctlog-info .cBox-hd .c-tit .txt_s {font-size:16px; line-height:16px; padding:30px 0 0 0;}
