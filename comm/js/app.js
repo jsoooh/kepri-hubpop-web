@@ -329,24 +329,51 @@ angular.module('app', [
 
         angular.forEach(SITEMAP.leftMenus, function(mainOption, mainKey) {
             mainOption.pageStage = (mainOption.pageStage) ? mainOption.pageStage : "comm";
+            if(!angular.isObject(mainOption.loadMyFile)) mainOption.loadMyFile = {};
+            mainOption.loadMyFile.loadMyFiles = setParentMergeMyFiles([], mainOption.loadMyFile.loadMyFiles);
+            mainOption.loadMyFile.loadMyServices = setParentMergeMyFiles([], mainOption.loadMyFile.loadMyServices);
+            mainOption.loadMyFile.loadMyControllers = setParentMergeMyFiles([], mainOption.loadMyFile.loadMyControllers);
+            mainOption.loadMyFile.loadMyDirectives = setParentMergeMyFiles([], mainOption.loadMyFile.loadMyDirectives);
             angular.forEach(mainOption.menus, function(option, key) {
                 option.pageStage = (option.pageStage) ? option.pageStage : mainOption.pageStage;
+                if(!angular.isObject(option.loadMyFile)) option.loadMyFile = {};
+                option.loadMyFile.loadMyFiles = setParentMergeMyFiles(mainOption.loadMyFile.loadMyFiles, option.loadMyFile.loadMyFiles);
+                option.loadMyFile.loadMyServices = setParentMergeMyFiles(mainOption.loadMyFile.loadMyServices, option.loadMyFile.loadMyServices);
+                option.loadMyFile.loadMyControllers = setParentMergeMyFiles(mainOption.loadMyFile.loadMyControllers, option.loadMyFile.loadMyControllers);
+                option.loadMyFile.loadMyDirectives = setParentMergeMyFiles(mainOption.loadMyFile.loadMyDirectives, option.loadMyFile.loadMyDirectives);
                 if (option.url && option.stateKey) {
                     SITEMAP.leftMenus[mainKey].menus[key].contentsView = setState(option);
                 }
                 angular.forEach(option.subPages, function(subPageOption, subPageKey) {
                     subPageOption.pageStage = (subPageOption.pageStage) ? subPageOption.pageStage : option.pageStage;
+                    if(!angular.isObject(option.loadMyFile)) option.loadMyFile = {};
+                    if(!angular.isObject(subPageOption.loadMyFile)) subPageOption.loadMyFile = {};
+                    subPageOption.loadMyFile.loadMyFiles = setParentMergeMyFiles(option.loadMyFile.loadMyFiles, subPageOption.loadMyFile.loadMyFiles);
+                    subPageOption.loadMyFile.loadMyServices = setParentMergeMyFiles(option.loadMyFile.loadMyServices, subPageOption.loadMyFile.loadMyServices);
+                    subPageOption.loadMyFile.loadMyControllers = setParentMergeMyFiles(option.loadMyFile.loadMyControllers, subPageOption.loadMyFile.loadMyControllers);
+                    subPageOption.loadMyFile.loadMyDirectives = setParentMergeMyFiles(option.loadMyFile.loadMyDirectives, subPageOption.loadMyFile.loadMyDirectives);
                     if (subPageOption.url && subPageOption.stateKey) {
                         SITEMAP.leftMenus[mainKey].menus[key].subPages[subPageKey].contentsView = setState(subPageOption);
                     }
                 });
                 angular.forEach(option.subMenus, function(subMenuOption, subMenuKey) {
                     subMenuOption.pageStage = (subMenuOption.pageStage) ? subMenuOption.pageStage : option.pageStage;
+                    if(!angular.isObject(option.loadMyFile)) option.loadMyFile = {};
+                    if(!angular.isObject(subMenuOption.loadMyFile)) subMenuOption.loadMyFile = {};
+                    subMenuOption.loadMyFile.loadMyFiles = setParentMergeMyFiles(option.loadMyFile.loadMyFiles, subMenuOption.loadMyFile.loadMyFiles);
+                    subMenuOption.loadMyFile.loadMyServices = setParentMergeMyFiles(option.loadMyFile.loadMyServices, subMenuOption.loadMyFile.loadMyServices);
+                    subMenuOption.loadMyFile.loadMyControllers = setParentMergeMyFiles(option.loadMyFile.loadMyControllers, subMenuOption.loadMyFile.loadMyControllers);
+                    subMenuOption.loadMyFile.loadMyDirectives = setParentMergeMyFiles(option.loadMyFile.loadMyDirectives, subMenuOption.loadMyFile.loadMyDirectives);
                     if (subMenuOption.url && subMenuOption.stateKey) {
                         SITEMAP.leftMenus[mainKey].menus[key].subMenus[subMenuKey].contentsView = setState(subMenuOption);
                     }
                     angular.forEach(subMenuOption.subPages, function(subPageOption, subPageKey) {
                         subPageOption.pageStage = (subPageOption.pageStage) ? subPageOption.pageStage : subMenuOption.pageStage;
+                        if(!angular.isObject(subPageOption.loadMyFile)) subPageOption.loadMyFile = {};
+                        subPageOption.loadMyFile.loadMyFiles = setParentMergeMyFiles(subMenuOption.loadMyFile.loadMyFiles, subPageOption.loadMyFile.loadMyFiles);
+                        subPageOption.loadMyFile.loadMyServices = setParentMergeMyFiles(subMenuOption.loadMyFile.loadMyServices, subPageOption.loadMyFile.loadMyServices);
+                        subPageOption.loadMyFile.loadMyControllers = setParentMergeMyFiles(subMenuOption.loadMyFile.loadMyControllers, subPageOption.loadMyFile.loadMyControllers);
+                        subPageOption.loadMyFile.loadMyDirectives = setParentMergeMyFiles(subMenuOption.loadMyFile.loadMyDirectives, subPageOption.loadMyFile.loadMyDirectives);
                         if (subPageOption.url && subPageOption.stateKey) {
                             SITEMAP.leftMenus[mainKey].menus[key].subMenus[subMenuKey].subPages[subPageKey].contentsView = setState(subPageOption);
                         }
