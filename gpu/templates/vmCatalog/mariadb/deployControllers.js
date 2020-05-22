@@ -8,12 +8,4 @@ angular.module('gpu.controllers')
         deploy.fn                = {};
 
     })
-   .controller('mariadbViewCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, vmCatalogService, CONSTANTS) {
-        _DebugConsoleLog("mariadb deployControllers.js : mariadbViewCtrl", 1);
-
-       var viewer = this;
-       viewer.tenantId          = $scope.main.userTenantGpuId;
-       viewer.fn                = {};
-
-    })
 ;

@@ -1,0 +1,15 @@
+{
+  "version": "",
+  "deployControllerFile": "deployControllers.js",
+  "deployControllerName": "kongDeployCtrl",
+  "deployHtmlFile": "deploy.html",
+  "deployViewControllerFile": "deployVewControllers.js",
+  "deployViewControllerName": "kongDeployViewCtrl",
+  "deployViewHtmlFile": "deployView.html",
+  "deployTemplates": {
+    "single": "deployTemplate.yaml.j2"
+  },
+  "images": {
+    "single": "CentOS-7-x86_64-Heat-1907-Kong_Konga.qcow2"
+  }
+}

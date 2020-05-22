@@ -60,6 +60,8 @@
 		var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
 		var _PERF_VIEWS_			 = _PERF_STAGE_ +"/views";
 
+		var _GPU_VM_CATALOG_TEMPLATE_= _GPU_STAGE_ +"/templates/vmCatalog";
+
 		// 임시 추후 삭제
 		var _VIEW_TEMP_ 				 = _PORT_ == "4080" ? "/temp" : "";
 		_PERF_VIEWS_ 				 = _PERF_VIEWS_ + _VIEW_TEMP_;
@@ -156,7 +158,8 @@
         loadJavascript('js/components/ui-bootstrap-tpls' + _MIN_ + '.js');
         loadJavascript('js/components/moment' + _MIN_ + '.js');
         loadJavascript('js/components/moment-range' + _MIN_ + '.js');
-        loadJavascript('js/components/Chart' + _MIN_ + '.js');
+		loadJavascript('js/components/ocLazyLoad' + _MIN_ + '.js');
+		loadJavascript('js/components/Chart' + _MIN_ + '.js');
         loadJavascript('js/components/bootstrap-datetimepicker' + _MIN_ + '.js');
         loadJavascript('js/components/bootstrap-slider.js');
         loadJavascript('js/components/d3.js');
@@ -206,6 +209,7 @@
 
         loadJavascript(_COMM_STAGE_+'/js/cmmFunction.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/app.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/properties/loadFiles.js'+_VERSION_TAIL_HEAD_);
 
         loadJavascript(_COMM_STAGE_+'/js/filters/commonFilters.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/directives/commonDirectives.js'+_VERSION_TAIL_HEAD_);

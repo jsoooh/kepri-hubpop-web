@@ -1,0 +1,17 @@
+{
+  "version": "",
+  "deployControllerFile": "deployControllers.js",
+  "deployControllerName": "postgresqlDeployCtrl",
+  "deployHtmlFile": "deploy.html",
+  "deployViewControllerFile": "deployVewControllers.js",
+  "deployViewControllerName": "postgresqlDeployViewCtrl",
+  "deployViewHtmlFile": "deployView.html",
+  "deployTemplates": {
+    "single": "deployTemplate.yaml.j2",
+    "replica": "deployClusterTemplate.yaml.j2"
+  },
+  "images": {
+    "single": "CentOS-7-x86_64-Heat-1907-Mysql.qcow2",
+    "replica": "CentOS-7-x86_64-Heat-1907-Galera-Mysql.qcow2"
+  }
+}
