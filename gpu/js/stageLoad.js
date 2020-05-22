@@ -16,9 +16,5 @@ loadJavascript(_GPU_STAGE_+'/js/controllers/storage/storageSnapshotControllers.j
 loadJavascript(_GPU_STAGE_+'/js/controllers/storage/storageControllers.js' +_VERSION_TAIL_HEAD_);
 loadJavascript(_GPU_STAGE_+'/js/controllers/storage/objectStorageControllers.js' +_VERSION_TAIL_HEAD_);
 
-loadJavascript(_GPU_STAGE_+'/js/services/vmCatalogServices.js'+_VERSION_TAIL_HEAD_);
-
-loadJavascript(_GPU_STAGE_+'/js/controllers/vmCatalog'+_VIEW_TEMP_+'/vmCatalogControllers.js'+_VERSION_TAIL_HEAD_);
-loadJavascript(_GPU_STAGE_+'/js/controllers/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeployControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_GPU_STAGE_+'/js/controllers/loadbalancer/loadbalancerControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_GPU_STAGE_+'/js/controllers/loadbalancer/loadbalancerDetailControllers.js'+_VERSION_TAIL_HEAD_);
