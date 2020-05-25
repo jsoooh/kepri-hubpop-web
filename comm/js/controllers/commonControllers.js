@@ -1477,11 +1477,9 @@ angular.module('common.controllers', [])
 
         // 알람정책 세팅
         mc.getAlarmPolicy = function (nodeKey, summary, projectId) {
-
             var params = {
                 projectId: projectId
             };
-
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/alarm/policy/' + nodeKey, 'GET', params);
             serverStatsPromise.success(function (data, status, headers) {
                 if (data) mc.alarmPolicys[nodeKey] = data;
@@ -1495,10 +1493,8 @@ angular.module('common.controllers', [])
             });
         };
 
-
         // 검색
         mc.selectAlarmList = function () {
-
             var params = {
                 pageItems: 100,
                 pageIndex: 1,
@@ -1506,10 +1502,11 @@ angular.module('common.controllers', [])
                 projectId: mc.userTenantId,
                 baremetalYn: 'N'
             };
-
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', params);
             serverStatsPromise.success(function (data, status, headers) {
                 mc.alarmList = data.data;
+            });
+            serverStatsPromise.error(function (data, status, headers) {
             });
         };
 
@@ -1520,6 +1517,8 @@ angular.module('common.controllers', [])
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/count/N', 'GET', {projectId: mc.userTenantId});
             serverStatsPromise.success(function (data, status, headers) {
                 mc.alarmCnt = data.alarmCnt;
+            });
+            serverStatsPromise.error(function (data, status, headers) {
             });
         };
 
@@ -1747,9 +1746,8 @@ angular.module('common.controllers', [])
             }
             $scope.main.setLayout();
             $scope.main.commMenuHide();
-            // 20.2.12 by hrit, Undefined 현상 수정
             var policyStop = $interval(function () {
-                if ($scope.main.getAlarmPolicy) {
+                if (angular.isFunction($scope.main.getAlarmPolicy)) {
                     $interval.cancel(policyStop);
                     $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
                 }
