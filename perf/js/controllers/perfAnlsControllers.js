@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('perf.controllers')
-    .controller('perfAnlsCtrl', function ($scope, $location, $state, $q, $stateParams, $translate, $timeout, $interval, $filter, common, perfAnlsService, CONSTANTS, perfMeteringService, orgService) {
+    .controller('perfAnlsCtrl', function ($scope, $location, $state, $q, $stateParams, $translate, $timeout, $interval, $filter, common, perfAnlsService, perfMeteringService, CONSTANTS) {
         _DebugConsoleLog("perfAnlsControllers.js : perfAnlsCtrl", 1);
 
         var ct = this;
@@ -13,10 +13,9 @@ angular.module('perf.controllers')
 
         ct.data.maxRow = 0;
 
-        ct.sltOrg = {
-            code: "",
-            name: ""
-        };
+        ct.sltOrg = {};
+        ct.sltOrg.code = $scope.main.sltPortalOrg.orgId;
+        ct.sltOrg.name = $scope.main.sltPortalOrg.orgName;
 
         ct.today = new Date();
         ct.data.startYear = 2019;
@@ -247,25 +246,15 @@ angular.module('perf.controllers')
         // page Data 초기화 함수
         ct.fn.pageDataInit = function () {
             $scope.main.loadingMainBody = true;
-            var promise = orgService.getOrg(common.getPortalOrgKey());
-            promise.success(function (data) {
-                console.log("Success getOrgData")
+            // 연 list 만들기
+            for (var i = ct.data.startYear; i < ct.today.getFullYear() + 1; i++) {
+                ct.perfYears.push(i);
+            }
 
-                ct.sltOrg.code = data.orgId;
-                ct.sltOrg.name = data.orgName;
-                // 연 list 만들기
-                for (var i = ct.data.startYear; i < ct.today.getFullYear() + 1; i++) {
-                    ct.perfYears.push(i);
-                }
-
-                ct.fn.listAllMeteringGroupItems();
-                ct.data.sltYear = ct.today.getFullYear();
-                ct.data.sltMonth = ct.today.getMonth() + 1;
-                ct.fn.selectMonth(ct.data.sltMonth);
-            });
-            promise.error(function (data, status, headers) {
-                console.log("Fail getOrgData");
-            });
+            ct.fn.listAllMeteringGroupItems();
+            ct.data.sltYear = ct.today.getFullYear();
+            ct.data.sltMonth = ct.today.getMonth() + 1;
+            ct.fn.selectMonth(ct.data.sltMonth);
         };
 
         ct.fn.pageDataInit();

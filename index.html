@@ -60,6 +60,13 @@
 		var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
 		var _PERF_VIEWS_			 = _PERF_STAGE_ +"/views";
 
+		var _COMM_JS_				= _COMM_STAGE_ + "/js";
+		var _IAAS_JS_				= _IAAS_STAGE_ + "/js";
+		var _GPU_JS_				= _GPU_STAGE_ + "/js";
+		var _PAAS_JS_				= _PAAS_STAGE_ + "/js";
+		var _MONIT_JS_				= _MONIT_STAGE_ + "/js";
+		var _PERF_JS_				= _PERF_STAGE_ + "/js";
+
 		var _GPU_VM_CATALOG_TEMPLATE_= _GPU_STAGE_ +"/templates/vmCatalog";
 
 		// 임시 추후 삭제
@@ -250,10 +257,7 @@
         loadJavascript(_PAAS_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
 
 		// PERF
-		loadJavascript(_PERF_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
-
-		// MARKET
-        //loadJavascript(_MARKET_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
+		loadJavascript(_PERF_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
 
         // MONIT
         //loadJavascript(_MONIT_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);

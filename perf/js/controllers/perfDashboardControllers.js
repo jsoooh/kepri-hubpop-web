@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('perf.controllers')
-    .controller('perfDashboardCtrl', function ($scope, $location, $state, $stateParams, $translate, $q, $timeout, $interval, $filter, common, perfMeteringService, perfAnlsService, orgService, CONSTANTS) {
+    .controller('perfDashboardCtrl', function ($scope, $location, $state, $stateParams, $translate, $q, $timeout, $interval, $filter, common, perfMeteringService, perfAnlsService, CONSTANTS) {
         _DebugConsoleLog("perfDashboardControllers.js : perfDashboardCtrl", 1);
 
         var ct = this;
@@ -11,7 +11,7 @@ angular.module('perf.controllers')
         ct.conditions = {};
         ct.data = {};
 
-        ct.data.sltOrgCode = common.getTeamCode();
+        ct.data.sltOrgCode = $scope.main.sltPortalOrg.orgId;
         console.log("orgCode: "+ct.data.sltOrgCode);
 
         ct.meteringItemGroups = [];
