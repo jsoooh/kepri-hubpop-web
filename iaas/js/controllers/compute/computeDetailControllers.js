@@ -266,7 +266,7 @@ angular.module('iaas.controllers')
             ct.fn.setProcState(ct.instance);
             $timeout(function () {
                 //ct.fn.checkServerState(instance.id);
-                ct.fn.checkServerState();
+                ct.fn.checkServerState(instance.id);
             }, 10000);
         };
 
