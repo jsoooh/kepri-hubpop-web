@@ -4,6 +4,7 @@
 .scroll-no{overflow: hidden !important;}
 .blind {overflow:hidden;  position:absolute; top:-9999em; left:-9999em; padding:0 !important; height:0; width:0; border:none !important; background:none !important; line-height:0 !important; text-indent:-9999px;}
 .d_block {display:block !important;}
+.ovflw_visible {overflow:visible !important;}
 
 /* title */
 .h-tit1{font-size:40px; line-height: 1.2; font-weight: 700; margin: 0;}
