@@ -1,13 +1,17 @@
 {
   "version": "10.4",
-  "controllerFile": "mariadb104DeployControllers.js",
-  "controllerName": "mariadb104DeployCtrl",
-  "serviceFile": "mariadb104DeployServices.js",
-  "serviceName": "mariadb104DeployService",
-  "templateHtmlFile": "mariadb104Deploy.html",
-  "deployTemplate": "deployTemplate.yaml.j2",
-  "parameters": {
-    "image": "CentOS-7-x86_64-Heat-1907.qcow2",
-    "cluster_image": "CentOS-7-x86_64-Heat-1907.qcow2"
+  "deployControllerFile": "deployControllers.js",
+  "deployControllerName": "mariadbDeployCtrl",
+  "deployHtmlFile": "deploy.html",
+  "deployViewControllerFile": "deployVewControllers.js",
+  "deployViewControllerName": "mariadbDeployViewCtrl",
+  "deployViewHtmlFile": "deployView.html",
+  "deployTemplates": {
+    "single": "deployTemplate.yaml.j2",
+    "cluster": "deployClusterTemplate.yaml.j2"
+  },
+  "images": {
+    "single": "CentOS-7-x86_64-Heat-1907-Mariadb.qcow2",
+    "cluster": "CentOS-7-x86_64-Heat-1907-Galera-Maridb.qcow2"
   }
 }

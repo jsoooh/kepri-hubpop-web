@@ -68,6 +68,12 @@ angular.module('app')
                         name: "vm_catalog",
                         icon: "vmCatalog",
                         stateKey: 'gpuVmCatalog',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_GPU_JS_+'/services/vmCatalogServices.js'],
+                            loadMyControllers: [],
+                            loadMyDirectives: [],
+                        },
                         subMenus: {
                             vmCatalog: {
                                 name: "vm_catalog_list",
@@ -76,6 +82,12 @@ angular.module('app')
                                 url: '/gpu/vmCatalog/list',
                                 controller: 'gpuVmCatalogListCtrl',
                                 templateUrl: _GPU_VIEWS_+'/vmCatalog'+_VIEW_TEMP_+'/vmCatalogList.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [],
+                                    loadMyControllers: [_GPU_JS_+'/controllers/vmCatalog'+_VIEW_TEMP_+'/vmCatalogControllers.js'],
+                                    loadMyDirectives: [],
+                                },
                                 subPages: {
                                     vmCatalogDeploy: {
                                         name: 'vm_catalog_deploy',
@@ -93,6 +105,12 @@ angular.module('app')
                                 url: '/gpu/vmCatalogDeploy/list',
                                 controller: 'gpuVmCatalogDeployListCtrl',
                                 templateUrl: _GPU_VIEWS_+'/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeployList.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [],
+                                    loadMyControllers: [_GPU_JS_+'/controllers/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeployControllers.js'],
+                                    loadMyDirectives: [],
+                                },
                                 subPages: {
                                     serverDetail: {
                                         name: 'vm_catalog_deploy_view',

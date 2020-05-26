@@ -1134,10 +1134,18 @@ angular.module('iaas.controllers')
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                pop.volume 							  = data.content.volumes[0];
-                pop.inputVolumeSize 				  = pop.volume.size;
-                pop.volumeSize 						  = pop.volume.size;
-                pop.reSizeSliderOptions.minLimit       = pop.volume.size ;
+                var volumeList = data.content.volumes;
+                if (volumeList && $scope.dialogOptions && $scope.dialogOptions.selectStorage) {
+                    for (var i = 0; i < volumeList.length; i++) {
+                        if (volumeList[i].volumeId == $scope.dialogOptions.selectStorage.volumeId) {
+                            pop.volume 							  = volumeList[i];
+                            pop.inputVolumeSize 				  = pop.volume.size;
+                            pop.volumeSize 						  = pop.volume.size;
+                            pop.reSizeSliderOptions.minLimit       = pop.volume.size;
+                            break;
+                        }
+                    }
+                }
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);

@@ -1,384 +1,138 @@
 heat_template_version: '2018-08-31'
 
-description: galera mariadb template
+description: single mariadb template
 
 parameters:
   image:
     type: string
-  availability_zone:
+    default: CentOS-7-x86_64-Heat-1907-Mariadb.qcow2
+  service_port:
     type: string
+    default: 3306
   flavor:
+    type: string
+  availability_zone:
     type: string
   key_name:
     type: string
-  private_net:
+  security_group:
     type: string
-  floating_net:
+  provider_net:
+    type: string
+  provider_subnet:
     type: string
   root_password:
     type: string
+  create_usre_id:
+    type: string
+  create_user_password:
+    type: string
+  create_db_name:
+    type: string
+{% if volume %}
+  volume_type:
+    type: string
+    default: "RBD"
+  volume_size:
+    type: string
+    default: 10
+  volume_mountpoint:
+    type: string
+    default: "/dev/vdb"
+  volume_mount_path:
+    type: string
+    default: "/mnt/data"
+{% endif %}
 
 resources:
 
-  server1_port:
+  server_port:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: private_net }
-{% if cluster %}
-  server2_port:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: private_net }
+      fixed_ips: [{ subnet_id: get_param: provider_subnet }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
 
-  server3_port:
-    type: OS::Neutron::Port
+{% if volume %}
+  cinder_volume:
+    type: OS::Cinder::Volume
     properties:
-      network: { get_param: private_net }
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
 {% endif %}
-  floating_ip1:
-    type: OS::Neutron::FloatingIP
-    properties:
-      floating_network: { get_param: floating_net }
-{% if cluster %}
-  floating_ip2:
-    type: OS::Neutron::FloatingIP
-    properties:
-      floating_network: { get_param: floating_net }
 
-  floating_ip3:
-    type: OS::Neutron::FloatingIP
+  init_config:
+    type: OS::Heat::SoftwareConfig
     properties:
-      floating_network: { get_param: floating_net }
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+{% if volume %}
+            $volume_mountpoint: { get_param: volume_mountpoint }
+            $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
-{% if cluster %}
-  init_config1:
-    type: OS::Heat::SoftwareConfig
-    properties:
-      group: ungrouped
-      config:
-        str_replace:
-          params:
-            $root_password: { get_param: root_password }
-            $node_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-            $server_addresses:
-              list_join:
-                - ','
-                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-          template: |
-            #!/bin/sh
-            echo "mariadb install start"
-            setenforce 0
-            sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-            sleep 1
-            cat <<EOF> /etc/yum.repos.d/MariaDB.repo
-            [mariadb]
-            name = MariaDB
-            baseurl = http://yum.mariadb.org/10.4/centos7-amd64
-            gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-            gpgcheck=1
-            EOF
-            yum -y install nc
-            yum -y install MariaDB-server MariaDB-client galera-4
-            sleep 1
-            touch /var/log/mysqld.log
-            chown mysql:mysql /var/log/mysqld.log
-            systemctl start mariadb.service
-            /usr/bin/mysqladmin -u root password "$root_password"
-            systemctl stop mariadb.service
-            sleep 1
-            cat <<EOF> /etc/my.cnf.d/server.cnf
-            [server]
-
-            [mysqld]
-            datadir=/var/lib/mysql
-            log-error=/var/log/mysqld.log
-
-            [galera]
-            wsrep_on=ON
-            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
-            wsrep_cluster_address="gcomm://$server_addresses"
-            wsrep_cluster_name="galeracluster"
-            wsrep_node_address="$node_address"
-            wsrep_node_name="galera1"
-            wsrep_sst_method=rsync
-            binlog_format=row
-            default_storage_engine=InnoDB
-            innodb_autoinc_lock_mode=2
-            bind-address=0.0.0.0
-
-            [embedded]
-
-            [mariadb]
-
-            [mariadb-10.4]
-
-            EOF
-            galera_new_cluster
-            systemctl enable mariadb.service
-            echo "mariadb install end"
-
-  init_config2:
-    type: OS::Heat::SoftwareConfig
-    properties:
-      group: ungrouped
-      config:
-        str_replace:
-          params:
-            $root_password: { get_param: root_password }
-            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-            $node_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-            $server_addresses:
-              list_join:
-                - ','
-                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-          template: |
-            #!/bin/sh
-            echo "mariadb install start"
-            setenforce 0
-            sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-            sleep 1
-            cat <<EOF> /etc/yum.repos.d/MariaDB.repo
-            [mariadb]
-            name = MariaDB
-            baseurl = http://yum.mariadb.org/10.4/centos7-amd64
-            gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-            gpgcheck=1
-            EOF
-            yum -y install nc
-            yum -y install MariaDB-server MariaDB-client galera-4
-            sleep 1
-            touch /var/log/mysqld.log
-            chown mysql:mysql /var/log/mysqld.log
-            sleep 1
-            cat <<EOF> /etc/my.cnf.d/server.cnf
-            [server]
-
-            [mysqld]
-            datadir=/var/lib/mysql
-            log-error=/var/log/mysqld.log
-
-            [galera]
-            wsrep_on=ON
-            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
-            wsrep_cluster_address="gcomm://$server_addresses"
-            wsrep_cluster_name="galeracluster"
-            wsrep_node_address="$node_address"
-            wsrep_node_name="galera2"
-            wsrep_sst_method=rsync
-            binlog_format=row
-            default_storage_engine=InnoDB
-            innodb_autoinc_lock_mode=2
-            bind-address=0.0.0.0
-
-            [embedded]
-
-            [mariadb]
-
-            [mariadb-10.4]
-
-            EOF
-            sleep 10
-            masterRun=1
-            while [[ masterRun -eq 1 ]]
-            do
-              echo "nc -z $master_address 4567"
-              nc -z $master_address 4567
-              masterRun=$?
-              sleep 5
-            done
-            sleep 10
-            systemctl start mariadb.service
-            systemctl enable mariadb
-            echo "mariadb install end"
-
-  init_config3:
-    type: OS::Heat::SoftwareConfig
-    properties:
-      group: ungrouped
-      config:
-        str_replace:
-          params:
-            $root_password: { get_param: root_password }
-            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-            $node_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-            $server_addresses:
-              list_join:
-                - ','
-                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-          template: |
-            #!/bin/sh
-            echo "mariadb install start"
-            setenforce 0
-            sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-            sleep 1
-            cat <<EOF> /etc/yum.repos.d/MariaDB.repo
-            [mariadb]
-            name = MariaDB
-            baseurl = http://yum.mariadb.org/10.4/centos7-amd64
-            gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-            gpgcheck=1
-            EOF
-            yum -y install nc
-            yum -y install MariaDB-server MariaDB-client galera-4
-            sleep 1
-            touch /var/log/mysqld.log
-            chown mysql:mysql /var/log/mysqld.log
-            cat <<EOF> /etc/my.cnf.d/server.cnf
-            [server]
-
-            [mysqld]
-            datadir=/var/lib/mysql
-            log-error=/var/log/mysqld.log
-
-            [galera]
-            wsrep_on=ON
-            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
-            wsrep_cluster_address="gcomm://$server_addresses"
-            wsrep_cluster_name="galeracluster"
-            wsrep_node_address="$node_address"
-            wsrep_node_name="galera3"
-            wsrep_sst_method=rsync
-            binlog_format=row
-            default_storage_engine=InnoDB
-            innodb_autoinc_lock_mode=2
-            bind-address=0.0.0.0
-
-            [embedded]
-
-            [mariadb]
-
-            [mariadb-10.4]
-
-            EOF
-            sleep 10
-            masterRun=1
-            while [[ masterRun -eq 1 ]]
-            do
-              echo "nc -z $master_address 4567"
-              nc -z $master_address 4567
-              masterRun=$?
-              sleep 5
-            done
-            sleep 10
-            systemctl start mariadb.service
-            systemctl enable mariadb
-            echo "mariadb install end"
-{% else %}
-  init_config1:
-    type: OS::Heat::SoftwareConfig
-    properties:
-      group: ungrouped
-      config:
-        str_replace:
-          params:
+            $create_usre_id: { get_param: create_usre_id }
+            $create_user_password: { get_param: create_user_password }
+            $create_db_name: { get_param: create_db_name }
+            $service_port: { get_param: service_port }
             $root_password: { get_param: root_password }
           template: |
             #!/bin/sh
-            echo "mariadb install start"
-            setenforce 0
-            sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+            echo "mariadb setting start"
+{% if volume %}
+            mkfs.xfs $volume_mountpoint
+            mkdir -p $volume_mount_path
+            mount $volume_mountpoint $volume_mount_path
             sleep 1
-            #!/bin/sh
-            set -eu
-            echo "mariadb install start"
-            cat <<EOF> /etc/yum.repos.d/MariaDB.repo
-            [mariadb]
-            name = MariaDB
-            baseurl = http://yum.mariadb.org/10.4/centos7-amd64
-            gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-            gpgcheck=1
-            EOF
-            yum install -y MariaDB
+            mkdir $volume_mount_path/mysql
+            chown -R mysql.mysql $volume_mount_path/mysql
+            if [ -d "/var/lib/mysql" ]; then
+              rm -fR /var/lib/mysql
+            fi
+            ln -s $volume_mount_path/mysql /var/lib/mysql
+            chmod mysql.mysql /var/lib/mysql
+            sleep 1
+{% endif %}
+            cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
+            sed -i 's/\[mysqld\]/[mysqld]\nport=$service_port/' /etc/my.cnf.d/server.cnf
+            sleep 1
             systemctl start mariadb
             /usr/bin/mysqladmin -u root password '$root_password'
+
+            mysql -u root -p$root_password <<EOF
+            create database $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+            GRANT ALL PRIVILEGES ON $create_db_name.* To '$create_usre_id'@'%' IDENTIFIED BY '$create_user_password';
+            EOF
+
             systemctl enable mariadb
-            echo "mariadb install end"
+            echo "mariadb setting end"
 
-{% endif %}
-  server1:
+  server:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
-        - port: { get_resource: server1_port }
-      key_name: { get_param: key_name}
+        - port: { get_resource: server_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
       user_data_format: RAW
       user_data:
-        get_resource: init_config1
-{% if cluster %}
-  server2:
-    type: OS::Nova::Server
-    properties:
-      flavor: { get_param: flavor }
-      image: { get_param: image }
-      availability_zone: { get_param: availability_zone }
-      networks:
-        - port: { get_resource: server2_port }
-      key_name: { get_param: key_name}
-      user_data_format: RAW
-      user_data:
-        get_resource: init_config2
+        get_resource: init_config
 
-  server3:
-    type: OS::Nova::Server
+{% if volume %}
+  cinder_volume_attachment:
+    type: OS::Cinder::VolumeAttachment
     properties:
-      flavor: { get_param: flavor }
-      image: { get_param: image }
-      availability_zone: { get_param: availability_zone }
-      networks:
-        - port: { get_resource: server3_port }
-      key_name: { get_param: key_name}
-      user_data_format: RAW
-      user_data:
-        get_resource: init_config3
-{% endif %}
-  server1_floating_ip_assoc:
-    type: OS::Neutron::FloatingIPAssociation
-    properties:
-      floatingip_id: {get_resource: floating_ip1}
-      port_id: { get_resource: server1_port }
-{% if cluster %}
-  server2_floating_ip_assoc:
-    type: OS::Neutron::FloatingIPAssociation
-    properties:
-      floatingip_id: {get_resource: floating_ip2}
-      port_id: { get_resource: server2_port }
-
-  server3_floating_ip_assoc:
-    type: OS::Neutron::FloatingIPAssociation
-    properties:
-      floatingip_id: {get_resource: floating_ip3}
-      port_id: { get_resource: server3_port }
+      instance_uuid: { get_resource: server }
+      volume_id: { get_resource: cinder_volume }
+      mountpoint: { get_param: volume_mountpoint }
 {% endif %}
 
 outputs:
-  server_ip1:
-    value:
-        get_attr: [server1, first_address]
-{% if cluster %}
-  server_ip2:
-    value:
-        get_attr: [server2, first_address]
-  server_ip3:
-    value:
-        get_attr: [server3, first_address]
-{% endif %}
-  server_floating_ip1:
-    value:
-      get_attr: [ floating_ip1, floating_ip_address ]
-{% if cluster %}
-  server_floating_ip2:
-    value:
-      get_attr: [ floating_ip2, floating_ip_address ]
-  server_floating_ip3:
-    value:
-      get_attr: [ floating_ip3, floating_ip_address ]
-{% endif %}
+  server_ip:
+    value: { get_attr: [ server_port, fixed_ips, 0, ip_address] }
+  volume_id:
+    value: { get_resource: cinder_volume }

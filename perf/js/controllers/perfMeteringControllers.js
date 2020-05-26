@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('perf.controllers')
-    .controller('perfMonthlyMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $interval, $filter, common, orgService, perfMeteringService, CONSTANTS) {
+    .controller('perfMonthlyMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $interval, $filter, common, perfMeteringService, CONSTANTS) {
         _DebugConsoleLog("perfMeteringControllers.js : perfMonthlyMeteringCtrl", 1);
 
         var ct = this;
@@ -10,9 +10,9 @@ angular.module('perf.controllers')
         ct.fn = {};
         ct.data = {};
 
-        // ct.data.sltOrgCode = "";
-        ct.data.sltOrgCode = common.getTeamCode();
-        ct.data.sltOrgName = "";
+        // ct.sltOrgCode = "";
+        ct.data.sltOrgCode = $scope.main.sltPortalOrg.orgId;
+        ct.data.sltOrgName = $scope.main.sltPortalOrg.orgName;
 
         ct.meteringItemGroups = [];
         ct.data.maxRow = "";
@@ -51,25 +51,6 @@ angular.module('perf.controllers')
             ct.fn.selectMeteringYear(ct.data.sltYear);
         };
 
-        /* 월별 사용량 리스트 BY ORG_ORGCODE */
-        /*ct.fn.orgListMeteringMonthlyTotal = function(sltYear) {
-            $scope.main.loadingMainBody = true;
-
-            /!* Org 정보 조회 BY ORG_ID *!/
-            var orgPromise = orgService.getOrg(common.getPortalOrgKey());
-            orgPromise.success(function (data) {
-                ct.data.sltOrgName = data.orgName;
-                ct.data.sltOrgCode = data.orgId;
-
-                ct.fn.selectMeteringYear(sltYear);
-            });
-            orgPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                ct.sltOrgCode = {};
-                ct.sltOrgName = {};
-            });
-        };*/
-
         /* 년도 변경 */
         /**
          * HUBPOP_INT_PER_ANS_03 - 월별 사용 현황
@@ -89,7 +70,6 @@ angular.module('perf.controllers')
                 promise.success(function (data) {
                     if (angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
-                        ct.data.sltOrgName = ct.orgMeteringMonthlyLists[0].orgName;
                         if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
                             ct.fn.findMaxRow(data);
                         }
@@ -143,7 +123,7 @@ angular.module('perf.controllers')
         ct.fn.listAllMeteringGroupItems();
 
     })
-    .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS, orgService) {
+    .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS) {
         _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 1);
 
         var ct = this;
@@ -153,10 +133,9 @@ angular.module('perf.controllers')
         ct.conditions = {};
         ct.data = {};
 
-        ct.data.sltOrg = {
-            code: "",
-            name: ""
-        };
+        ct.sltOrg = {};
+        ct.sltOrg.code = $scope.main.sltPortalOrg.orgId;
+        ct.sltOrg.name = $scope.main.sltPortalOrg.orgName;
 
         // ItemGroup
         ct.sltItemGroup = {};
@@ -265,25 +244,6 @@ angular.module('perf.controllers')
 
             ct.dailyChart.instance = tui.chart.columnChart(ct.dailyChart.container, ct.dailyChart.data, ct.dailyChart.option);
             ct.monthlyChart.instance = tui.chart.columnChart(ct.monthlyChart.container, ct.monthlyChart.data, ct.monthlyChart.option);
-        }
-
-        /*
-            Initial Setting
-         */
-        ct.fn.getOrg = function (defer) {
-            var promise = orgService.getOrg(common.getPortalOrgKey());
-            promise.success(function (data) {
-                console.log("Success getOrgData")
-                console.log(data.orgId + ", " + data.orgName);
-                ct.data.sltOrg.code = data.orgId;
-                ct.data.sltOrg.name = data.orgName;
-                if (defer) {
-                    defer.resolve();
-                }
-            });
-            promise.error(function (data, status, headers) {
-                console.log("Fail getOrgData");
-            });
         }
 
         // GET meteringItemGroup
@@ -402,10 +362,10 @@ angular.module('perf.controllers')
             console.log("reconstruct ------")
             if (ct.sltItem.itemCode != false) {
                 if (ct.data.sltYear != false) {
-                    ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear);
+                    ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear);
                     if (ct.data.sltMonth != false) {
                         ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
-                        ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth)
+                        ct.fn.listPerfMeteringDailyTotalByItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth)
                     }
                 }
             }
@@ -417,7 +377,7 @@ angular.module('perf.controllers')
             if (ct.sltItem.itemCode != false && ct.data.sltYear != false) {
                 if (ct.data.sltMonth != false) {
                     ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
-                    ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth);
+                    ct.fn.listPerfMeteringDailyTotalByItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth);
                 }
             }
         };
@@ -563,17 +523,15 @@ angular.module('perf.controllers')
         // page Processs setting
         ct.fn.initPage = function () {
             $scope.main.loadingMainBody = true;
-            var orgDefer = $q.defer();
             var listItemGroupsDefer = $q.defer();
             var listItemsDefer = $q.defer();
 
-            var allProcessForInit = $q.all([orgDefer.promise, listItemGroupsDefer.promise, listItemsDefer.promise]);
+            var allProcessForInit = $q.all([listItemGroupsDefer.promise, listItemsDefer.promise]);
             allProcessForInit.then(function (datas) {
-                console.log(ct.data.sltOrg.code);
-                ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.data.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear);
-                ct.fn.listPerfMeteringDailyTotalByItemCode(ct.data.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltMonth);
+                console.log(ct.sltOrg.code);
+                ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear);
+                ct.fn.listPerfMeteringDailyTotalByItemCode(ct.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltMonth);
             });
-            ct.fn.getOrg(orgDefer);
             ct.fn.initDraw();
             ct.fn.listAllMeteringItemGroups(listItemGroupsDefer);
             ct.fn.listAllMeteringItems(listItemsDefer);
