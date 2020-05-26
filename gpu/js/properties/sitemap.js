@@ -141,7 +141,7 @@ angular.module('app')
                             instanceSnashotCreate: {
                                 name: 'server_snapshot_create',
                                 stateKey: 'gpuServerSnapshotCreate',
-                                url: '/gpu/snapshot/serverCreate/:snapshotId',
+                                url: '/gpu/snapshot/serverCreate/:snapshotId/:tenantId',
                                 controller: 'gpuServerSnapshotCreateCtrl',
                                 templateUrl: _GPU_VIEWS_+'/compute/serverSnapshotCreate.html'
                             },
