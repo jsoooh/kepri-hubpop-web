@@ -972,8 +972,7 @@ angular.module('iaas.controllers')
                 });
             });
             rp.finally(function () {
-                $scope.main.loadingMainBody = false;
-            })
+            });
         };
 
         if (ct.data.tenantId) {
