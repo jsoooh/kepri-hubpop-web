@@ -1486,7 +1486,7 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         common.ocLazyLoad = function(moduleName, files) {
-            return $ocLazyLoad.load({name: moduleName, files: files, cache: ((_DEBUG_LEVEL_ >= 3) ? false : true)});
+            return $ocLazyLoad.load({name: moduleName, files: files, cache: true});
         };
 
         common.getElementById = function (id) {

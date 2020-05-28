@@ -12,6 +12,6 @@
   },
   "images": {
     "single": "CentOS-7-x86_64-Heat-1907-Mariadb.qcow2",
-    "cluster": "CentOS-7-x86_64-Heat-1907-Galera-Maridb.qcow2"
+    "cluster": "CentOS-7-x86_64-Heat-1907-Galera-Mariadb.qcow2"
   }
 }

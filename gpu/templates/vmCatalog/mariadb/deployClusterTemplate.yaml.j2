@@ -5,7 +5,7 @@ description: galera mariadb template
 parameters:
   image:
     type: string
-    default: CentOS-7-x86_64-Heat-1907-Galera-Maridb.qcow2
+    default: CentOS-7-x86_64-Heat-1907-Galera-Mariadb.qcow2
   service_port:
     type: string
     default: 3306
@@ -26,7 +26,7 @@ parameters:
     type: string
   root_password:
     type: string
-  create_usre_id:
+  create_user_id:
     type: string
   create_user_password:
     type: string
@@ -106,7 +106,7 @@ resources:
             $volume_mountpoint: { get_param: volume_mountpoint }
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
-            $create_usre_id: { get_param: create_usre_id }
+            $create_user_id: { get_param: create_user_id }
             $create_user_password: { get_param: create_user_password }
             $create_db_name: { get_param: create_db_name }
             $service_port: { get_param: service_port }
@@ -152,7 +152,7 @@ resources:
 
             mysql -u root -p$root_password <<EOF
             create database $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-            GRANT ALL PRIVILEGES ON $create_db_name.* To '$create_usre_id'@'%' IDENTIFIED BY '$create_user_password';
+            GRANT ALL PRIVILEGES ON $create_db_name.* To '$create_user_id'@'%' IDENTIFIED BY '$create_user_password';
             EOF
 
             systemctl stop mariadb.service
