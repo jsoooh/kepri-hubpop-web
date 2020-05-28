@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('common.services', ['LocalStorageModule'])
-    .factory('common', function ($http, $location, $route, $state, $window, $timeout, $q, $templateCache, $translate, cache, cookies, CONSTANTS, SITEMAP, $mdDialog, growl) {
+    .factory('common', function ($http, $location, $route, $state, $window, $timeout, $q, $templateCache, $translate, $ocLazyLoad, cache, cookies, CONSTANTS, SITEMAP, $mdDialog, growl) {
         _DebugConsoleLog("common.services common", 1);
 
         var common = {};
@@ -1483,6 +1483,10 @@ angular.module('common.services', ['LocalStorageModule'])
             }
             $.ajax(config);
             return rtnData;
+        };
+
+        common.ocLazyLoad = function(moduleName, files) {
+            return $ocLazyLoad.load({name: moduleName, files: files, cache: ((_DEBUG_LEVEL_ >= 3) ? false : true)});
         };
 
         common.getElementById = function (id) {
