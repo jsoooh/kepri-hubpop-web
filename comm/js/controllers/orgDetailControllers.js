@@ -16,8 +16,9 @@ angular.module('portal.controllers')
         if (orgService.changeUser == true) {
             ct.sltInfoTab = 'member';
         } else {
-            // ct.sltInfoTab = 'dashboard';
-            ct.sltInfoTab = 'actEvent';
+            ct.sltInfoTab = 'dashboard';
+            /* 20.05.28 - 이영민 수석님 요청으로 block 처리 by ksw */
+            // ct.sltInfoTab = 'actEvent';
         }
 
         ct.isQuotaChange = true;    //쿼터변경요청 가능 여부, 첫건이 '요청'상태일 때 요청불가
