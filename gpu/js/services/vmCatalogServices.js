@@ -27,12 +27,12 @@ angular.module('gpu.services')
 
         // VM 카탈로그 템플릿 컨트롤 로드
         vmCatalogService.loadVmCatalogDeployController = function(controllerFilePath) {
-            return common.ocLazyLoad("gpu.controllers", [_GPU_VM_CATALOG_TEMPLATE_ + controllerFilePath]);
+            return common.ocLazyLoad("gpu.controllers", [_GPU_VM_CATALOG_TEMPLATE_ + controllerFilePath + _VERSION_TAIL_]);
         };
 
         // VM 카탈로그 템플릿 HTML 가져오기
         vmCatalogService.getVmCatalogDeployTemplateHtml = function(templateHtmlPath) {
-            return common.retrieveResource(common.resourcePromiseJson(_GPU_VM_CATALOG_TEMPLATE_ + templateHtmlPath, 'GET'));
+            return common.retrieveResource(common.resourcePromiseJson(_GPU_VM_CATALOG_TEMPLATE_ + templateHtmlPath + _VERSION_TAIL_, 'GET'));
         };
 
         // VM 카탈로그 배포 하기
@@ -99,6 +99,14 @@ angular.module('gpu.services')
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/{id}', 'DELETE', params));
         };
 
+        // 테넌트 리소스 조회
+        vmCatalogService.getTenantResource = function(tenantId)  {
+            var params = {
+                tenantId : tenantId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params));
+        };
+
         // 네트워크 목록 조회
         vmCatalogService.listAllNetwork = function(tenantId) {
             var params = {
@@ -106,6 +114,22 @@ angular.module('gpu.services')
                 isExternal : true
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/networks', 'GET', params));
+        };
+
+        // keypair 목록 조회
+        vmCatalogService.getKeypairList = function(tenantId) {
+            var params = {
+                tenantId : tenantId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/keypair', 'GET', params));
+        };
+
+        // default keypair 등록
+        vmCatalogService.addDefaultKeypair = function(createKeypair) {
+            var params = {
+                keypair : createKeypair
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/keypair', 'POST', params));
         };
 
         // 보안정책 목록 조회
@@ -116,28 +140,12 @@ angular.module('gpu.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/securityPolicy', 'GET', params));
         };
 
-        //키페어 목록 조회
-        vmCatalogService.listAllSecurityPolicy = function(tenantId) {
-            var params = {
-                tenantId : tenantId
-            };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/keypair', 'GET', params));
-        };
-
         // 스펙 리스트 조회
         vmCatalogService.listAllSpec = function(specGroupName) {
             var params = {
                 specGroupName : specGroupName
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET', params));
-        };
-
-        // 테넌트 리소스 조회
-        vmCatalogService.getTenantResource = function(tenantId)  {
-            var params = {
-                tenantId : tenantId
-            };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params));
         };
 
         return vmCatalogService;
