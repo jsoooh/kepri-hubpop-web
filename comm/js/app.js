@@ -157,13 +157,13 @@ angular.module('app', [
 
                 if (angular.isArray(option.loadMyFile.loadMyServices)) {
                     mainBody.resolve.loadMyService = ['$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load({name: pageStateName + '.services', files: option.loadMyFile.loadMyServices, cache: true});
+                        return $ocLazyLoad.load({name: pageStateName + '.services', files: option.loadMyFile.loadMyServices, cache: ((_DEBUG_LEVEL_ >= 3) ? false : true)});
                     }]
                 }
 
                 if (angular.isArray(option.loadMyFile.loadMyControllers)) {
                     mainBody.resolve.loadMyCtrl = ['$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load({name: pageStateName + '.controllers', files: option.loadMyFile.loadMyControllers, cache: true});
+                        return $ocLazyLoad.load({name: pageStateName + '.controllers', files: option.loadMyFile.loadMyControllers, cache: ((_DEBUG_LEVEL_ >= 3) ? false : true)});
                     }]
                 }
 
