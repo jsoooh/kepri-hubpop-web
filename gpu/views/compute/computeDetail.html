@@ -156,7 +156,7 @@
 			<!-- <button type="button" name="button" class="btn only-ico ico-ssh" tooltip-placement="bottom" uib-tooltip="웹콘솔" ng-click="contents.fn.openWebConsole(contents.instance)"><span class="ico">웹콘솔</span></button> -->
 			<button ng-if="contents.instance.vmState == 'stopped'" type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-click="contents.fn.serverActionConfirm('START',contents.instance);"><span class="ico">시작</span></button>
 			<button ng-if="contents.instance.vmState == 'active'" type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="정지" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);"><span class="ico">정지</span></button>
-			<button type="button" name="button" class="btn only-ico ico-ssh" title="SSH"><span class="ico">SSH</span></button>
+			<button type="button" name="button" class="btn only-ico ico-ssh" uib-tooltip="웹콘솔" ng-click="contents.fn.openWebConsole(contents.instance)" title="SSH"><span class="ico">SSH</span></button>
 			<!--<button ng-if="main.projectType == 'pjt'" type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>-->
 			<div class="dropdown btn-option">
 				<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -390,7 +390,8 @@
 		-->
 		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">서버 이벤트</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">서버 부트 로그</a></li>
-		<!--<li ng-class="{'active':contents.sltInfoTab == 'systemLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('systemLog');">시스템 로그</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'systemLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('systemLog');">시스템 로그</a></li>
+		<!--
 		<li ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('virtualMonit');">가상머신 모니터링</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'alarmEvent'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('alarmEvent');">알람 이벤트</a></li>-->
 	</ul>
@@ -592,9 +593,8 @@
 			<!-- //panel -->
 		</div>
 
-		<!--
 		<div ng-if="contents.sltInfoTab == 'systemLog'" class="tab-pane height-high" ng-class="{'active':contents.sltInfoTab == 'systemLog'}">
-			<!-- panel -- >
+			<!-- panel -->
 			<div class="panelWrap">
 				<div class="panel type2" style="cursor: unset; height: 670px;">
 					<div class="panel_head">
@@ -696,7 +696,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- //panel -- >
+			<!-- //panel -->
 		</div>
 
 		<!-- virtualMonit -->
