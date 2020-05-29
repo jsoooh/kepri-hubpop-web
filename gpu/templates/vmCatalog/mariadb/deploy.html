@@ -37,7 +37,7 @@
                     </li>
                     <li ng-include="contents.htmlUrls.userDbUse"></li>
                     <li ng-include="contents.htmlUrls.deployTypeRadio"></li>
-                    <li ng-show="subPage.data.deployType == 'cluster'" ng-include="contents.htmlUrls.octaviaLbUse"></li>
+                    <li ng-show="contents.data.deployType == 'cluster'" ng-include="contents.htmlUrls.octaviaLbUse"></li>
                     <li ng-include="contents.htmlUrls.spaceSelect"></li>
                     <li ng-include="contents.htmlUrls.volumeSelect"></li>
                 </ul>

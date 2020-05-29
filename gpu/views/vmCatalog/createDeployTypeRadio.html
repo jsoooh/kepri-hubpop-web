@@ -5,19 +5,19 @@
 <div class="pl10 mt10">
     <span class="pnb_stit">- 배포 유형  : </span>
     <div class="radio radio-inline">
-        <input type="radio" name="deploy_type" id="deploy-type-single" value="server" ng-init="subPage.data.deployType = 'single'" ng-model="subPage.data.deployType" ng-value="'single'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="deploy_type" id="deploy-type-single" value="server" ng-init="contents.data.deployType = 'single'" ng-model="contents.data.deployType" ng-value="'single'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="deploy-type-single" class="label">단일 구성</label>
     </div>
-    <div ng-show="subPage.deployTypeReplicaSuport" class="radio radio-inline">
-        <input type="radio" name="deploy_type" id="deploy-type-replica" value="image" ng-model="subPage.data.deployType" ng-value="'replica'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+    <div ng-show="contents.deployTypeReplicaSuport" class="radio radio-inline">
+        <input type="radio" name="deploy_type" id="deploy-type-replica" value="image" ng-model="contents.data.deployType" ng-value="'replica'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="deploy-type-replica" class="label">레플리카 구성</label>
     </div>
-    <div ng-show="subPage.deployTypeClusterSuport" class="radio radio-inline">
-        <input type="radio" name="deploy_type" id="deploy-type-cluster" value="image" ng-model="subPage.data.deployType" ng-value="'cluster'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+    <div ng-show="contents.deployTypeClusterSuport" class="radio radio-inline">
+        <input type="radio" name="deploy_type" id="deploy-type-cluster" value="image" ng-model="contents.data.deployType" ng-value="'cluster'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="deploy-type-cluster" class="label">클러스터 구성</label>
     </div>
 </div>
-<div ng-show="subPage.data.deployType == 'replica'" class="tbw type1 mt20">
+<div ng-show="contents.data.deployType == 'replica'" class="tbw type1 mt20">
     <table class="table">
         <colgroup>
             <col style="width:20%;">

@@ -5,15 +5,15 @@
 <div class="pl10 mt10">
     <span class="pnb_stit">- 생성여부 선택  : </span>
     <div class="radio radio-inline">
-        <input type="radio" name="create_user_and_db" id="create-user-and-db-true" ng-init="subPage.data.cerateUserAndDb = true" ng-model="subPage.data.cerateUserAndDb" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="create_user_and_db" id="create-user-and-db-true" ng-init="contents.data.cerateUserAndDb = true" ng-model="subPage.data.cerateUserAndDb" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="create-user-and-db-true" class="label">예</label>
     </div>
     <div class="radio radio-inline">
-        <input type="radio" name="create_user_and_db" id="create-user-and-db-false" ng-model="subPage.data.cerateUserAndDb" ng-value=false class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
+        <input type="radio" name="create_user_and_db" id="create-user-and-db-false" ng-model="contents.data.cerateUserAndDb" ng-value=false class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
         <label for="create-user-and-db-false" class="label">아니오</label>
     </div>
 </div>
-<div ng-show="subPage.cerateUserAndDb" class="tbw type1 mt20">
+<div ng-show="contents.cerateUserAndDb" class="tbw type1 mt20">
     <table class="table">
         <colgroup>
             <col style="width:20%;">
