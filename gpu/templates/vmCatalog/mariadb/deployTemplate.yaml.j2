@@ -6,9 +6,6 @@ parameters:
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Mariadb.qcow2
-  service_port:
-    type: string
-    default: 3306
   flavor:
     type: string
   availability_zone:
@@ -21,27 +18,32 @@ parameters:
     type: string
   provider_subnet:
     type: string
+  service_port:
+    type: string
+    default: 3306
   root_password:
     type: string
+{% if createUser %}
   create_user_id:
     type: string
   create_user_password:
     type: string
   create_db_name:
     type: string
+{% endif %}
 {% if volume %}
   volume_type:
     type: string
-    default: "RBD"
+    default: RBD
   volume_size:
     type: string
     default: 10
   volume_mountpoint:
     type: string
-    default: "/dev/vdb"
+    default: /dev/vdb
   volume_mount_path:
     type: string
-    default: "/mnt/data"
+    default: /mnt/data
 {% endif %}
 
 resources:
@@ -49,7 +51,7 @@ resources:
   server_port:
     type: OS::Neutron::Port
     properties:
-      fixed_ips: [{ subnet_id: get_param: provider_subnet }]
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
 
@@ -72,39 +74,62 @@ resources:
             $volume_mountpoint: { get_param: volume_mountpoint }
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
+{% if createUser %}
             $create_user_id: { get_param: create_user_id }
             $create_user_password: { get_param: create_user_password }
             $create_db_name: { get_param: create_db_name }
+{% endif %}
             $service_port: { get_param: service_port }
             $root_password: { get_param: root_password }
           template: |
             #!/bin/sh
             echo "mariadb setting start"
 {% if volume %}
-            mkfs.xfs $volume_mountpoint
+            mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
-            mount $volume_mountpoint $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
             sleep 1
-            mkdir $volume_mount_path/mysql
-            chown -R mysql.mysql $volume_mount_path/mysql
-            if [ -d "/var/lib/mysql" ]; then
-              rm -fR /var/lib/mysql
-            fi
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
             ln -s $volume_mount_path/mysql /var/lib/mysql
-            chmod mysql.mysql /var/lib/mysql
             sleep 1
 {% endif %}
-            cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
-            sed -i 's/\[mysqld\]/[mysqld]\nport=$service_port/' /etc/my.cnf.d/server.cnf
-            sleep 1
-            systemctl start mariadb
-            /usr/bin/mysqladmin -u root password '$root_password'
 
+            cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
+            cat <<EOF> /etc/my.cnf.d/server.cnf
+            [mysqld]
+            port            = $service_port
+            basedir         = /usr
+            datadir         = /var/lib/mysql
+            tmpdir          = /tmp
+
+            [client]
+            default-character-set = utf8
+
+            sleep 1
+
+            EOF
+
+            systemctl start mariadb
+            sleep 1
+
+            /usr/bin/mysqladmin -u root password '$root_password'
+            sleep 1
+{% if createUser %}
             mysql -u root -p$root_password <<EOF
             create database $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
             GRANT ALL PRIVILEGES ON $create_db_name.* To '$create_user_id'@'%' IDENTIFIED BY '$create_user_password';
             EOF
-
+{% endif %}
             systemctl enable mariadb
             echo "mariadb setting end"
 
