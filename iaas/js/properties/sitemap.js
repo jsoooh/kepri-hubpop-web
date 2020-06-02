@@ -22,7 +22,9 @@ angular.module('app')
                         loadMyFile: {
                             loadMyScripts: [],
                             loadMyServices: [],
-                            loadMyControllers: [_IAAS_JS_+'/controllers/compute/computeControllers.js'],
+                            loadMyControllers: [_IAAS_JS_+'/controllers/compute/computeControllers.js',
+                                                _IAAS_JS_+'/controllers/compute/computeDetailControllers.js',
+                                                _IAAS_JS_+'/controllers/loadbalancer/loadbalancerDetailControllers.js'],
                             loadMyDirectives: []
                         },
                         subPages: {	// 메뉴에서는 상세 페이지로 표현
@@ -35,9 +37,9 @@ angular.module('app')
                                 loadMyFile: {
                                     loadMyScripts: [],
                                     loadMyServices: [_IAAS_JS_+'/services/computeDetailServices.js'],
-                                    loadMyControllers: [_IAAS_JS_+'/controllers/compute/computeDetailControllers.js'],
+                                    loadMyControllers: [],
                                     loadMyDirectives: []
-                                }
+                                },
                             },
                             serverCreate: {
                                 name: 'server_main',
