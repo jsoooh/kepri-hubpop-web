@@ -18,16 +18,26 @@
 						<h4>사용금액</h4><span class="amount_used_date">{{ contents.data.today | date: 'yyyy년 MM월 dd일' }}</span>
 						<div class="this_month">
 							<p>이달 사용 금액</p>
-							<div class="amountTxt"><span class="amount">{{ contents.data.sltSumPerfAmt | number }}</span> <span class="won">원</span></div>
+							<div class="amountTxt">
+								<span class="amount">{{ contents.data.sltSumPerfAmt | number }}</span>
+								<img ng-if="!contents.data.sltSumPerfAmt" src="images/loading_sm.gif">
+								<span class="won"> 원</span>
+							</div>
 						</div>
 						<ul class="amountBox">
 							<li class="last_month">
 								<p>지난달 사용 금액</p>
-								<div class="amountTxt"><span class="amount">{{ contents.data.lastSumPerfAmt | number }}</span> <span class="won">원</span></div>
+								<div class="amountTxt">
+									<span class="amount">{{ contents.data.lastSumPerfAmt | number }}</span>
+									<img ng-if="!contents.data.lastSumPerfAmt" src="images/loading_sm.gif">
+									<span class="won"> 원</span></div>
 							</li>
 							<li class="next_month">
 								<p>이달 사용 예상 금액</p>
-								<div class="amountTxt"><span class="amount">{{ contents.data.nextSumPerfAmt | number : 0 }}</span> <span class="won">원</span></div>
+								<div class="amountTxt">
+									<span class="amount">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
+									<img ng-if="!contents.data.nextSumPerfAmt" src="images/loading_sm.gif">
+									<span class="won">원</span></div>
 							</li>
 						</ul>
 					</div>
@@ -35,6 +45,7 @@
 						<h4>서비스별 사용 금액</h4>
 						<div class="chart_wrap pt20" style="overflow:hidden;">
 							<div id="itemGroup-anls-chart"></div>
+							<div class="loader-container" ng-if="contents.anlsByItemGroupListsToChartData.length < 1"></div>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -48,13 +59,14 @@
 						</div>
 						<div class="chart_wrap pt20" style="overflow:hidden;">
 							<div id="item-anls-chart"></div>
+							<div class="loader-container" ng-if="contents.anlsByItemListsToChartData.length < 1"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="panel type2">
 		<div class="panel_head">
 			<div class="tit pull-left">사용 금액 현황</div>
@@ -69,6 +81,7 @@
 				<div class="chart_wrap" style="overflow:hidden;">
 					<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
 					<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
+					<div class="loader-container" ng-if="contents.anlsDailySummaryListsToChartData.length < 1"></div>
 				</div>
 			</div>
 		</div>

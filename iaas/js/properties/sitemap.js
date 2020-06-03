@@ -39,7 +39,7 @@ angular.module('app')
                                     loadMyServices: [_IAAS_JS_+'/services/computeDetailServices.js'],
                                     loadMyControllers: [],
                                     loadMyDirectives: []
-                                },
+                                }
                             },
                             serverCreate: {
                                 name: 'server_main',
@@ -169,7 +169,7 @@ angular.module('app')
                                     loadMyServices: [],
                                     loadMyControllers: [_IAAS_JS_+'/controllers/storage/storageSnapshotControllers.js'],
                                     loadMyDirectives: []
-                                },
+                                }
                             }
                         }
                     }

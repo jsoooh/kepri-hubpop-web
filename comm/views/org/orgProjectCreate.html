@@ -81,7 +81,7 @@
 									<div class="bootstrap-filestyle input-group">
 										<input type="text" id="attachFile" class="form-control" name="attachFile" style="width:909px;" ng-model="contents.appFileItem.file.name" readonly><!--validation="required:alt=업로드 해야 할 App 실행용 파일이 선택되지 않았습니다."-->
 										<span class="group-span-filestyle input-group-btn" tabindex="0">  
-											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
+											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;">
 											<label class="btn btn-default" ng-click="main.fileSelectBtnClick($event);">
 												<span class="btn btn-md btn-color1" >파일찾기</span>
 											</label>
