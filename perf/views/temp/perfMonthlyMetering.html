@@ -54,7 +54,7 @@
 							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="MB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'MB'}}</span>
 							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="GB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'GB'}}</span>
 							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-default="">{{ orgMeteringMonthlyList['mv' + meteringMonth] | number }}</span>
-							<span ng-show="orgMeteringMonthlyList['mv' + meteringMonth] == 0 && contents.fn.isPast(contents.data.sltYear, idx) == true"">-</span>
+							<span ng-show="orgMeteringMonthlyList['mv' + meteringMonth] == 0 && contents.fn.isPast(contents.data.sltYear, idx) == true">-</span>
 						</td>
 						<td ng-switch="orgMeteringMonthlyList.itemUnit">
 							<span ng-switch-when="MB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'MB'}}</span>

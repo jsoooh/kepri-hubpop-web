@@ -10,7 +10,6 @@ angular.module('perf.controllers')
         ct.fn = {};
         ct.data = {};
 
-        // ct.sltOrgCode = "";
         ct.data.sltOrgCode = $scope.main.sltPortalOrg.orgId;
         ct.data.sltOrgName = $scope.main.sltPortalOrg.orgName;
 
@@ -42,12 +41,12 @@ angular.module('perf.controllers')
         ct.fn.listAllMeteringYears = function () {
             $scope.main.loadingMainBody = true;
 
-            for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
+            var sltYear = ct.today.getFullYear();
+            for (var i = ct.scope.CONSTANTS.startYear; i < sltYear + 1; i++) {
                 ct.meteringYears.push(String(i));
             }
-            ct.data.sltYear = String(ct.today.getFullYear());
+            ct.data.sltYear = String(sltYear);
 
-            // ct.fn.orgListMeteringMonthlyTotal(ct.data.sltYear);
             ct.fn.selectMeteringYear(ct.data.sltYear);
         };
 
@@ -70,6 +69,7 @@ angular.module('perf.controllers')
                 promise.success(function (data) {
                     if (angular.isArray(data.items)) {
                         ct.orgMeteringMonthlyLists = data.items;
+
                         if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
                             ct.fn.findMaxRow(data);
                         }
@@ -104,12 +104,9 @@ angular.module('perf.controllers')
         };
 
         // 과거 확인
-        ct.fn.isPast = function (sltYear, sltMonth, sltDay) {
+        ct.fn.isPast = function (sltYear, sltMonth) {
             var date = new Date();
-            if (!sltDay == true) {
-                sltDay = 1;
-            }
-            date.setFullYear(sltYear, sltMonth, sltDay);
+            date.setFullYear(sltYear, sltMonth, 1);
 
             var today = new Date();
             if (today.getTime() > date.getTime()) {
