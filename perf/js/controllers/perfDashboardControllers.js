@@ -267,6 +267,8 @@ angular.module('perf.controllers')
          * @param sltMonth
          */
         ct.fn.listAnlsDailySummaryByOrg = function(sltYear, sltMonth) {
+            ct.dailyChartLoading = true;
+
             var sltParams = {
                 "urlPaths": {
                     "orgCode": ct.data.sltOrgCode
@@ -320,10 +322,14 @@ angular.module('perf.controllers')
                 console.log("dailyChartData");
                 console.log(ct.dailyChart.data);
                 ct.fn.redrawChart(ct.dailyChart);
+
+                ct.dailyChartLoading = false;
             });
             promise.error(function (data) {
                 ct.anlsDailySummaryLists = [];
                 ct.anlsDailySummaryListsToChartData = [];
+
+                ct.dailyChartLoading = false;
             });
         };
         /* 지난달 사용 금액 */
@@ -357,7 +363,7 @@ angular.module('perf.controllers')
          * @param sltMonth
          */
         ct.fn.listAnlsByItemGroup = function (sltYear, sltMonth) {
-            // $scope.main.loadingMainBody = true;
+            ct.itemGroupChartLoading = true;
 
             var params = {
                 "urlPaths": {
@@ -393,14 +399,14 @@ angular.module('perf.controllers')
                     ct.fn.redrawChart(ct.itemGroupChart);
                 }
 
-                $scope.main.loadingMainBody = false;
+                ct.itemGroupChartLoading = false;
             });
             promise.error(function (data, status, header) {
                 console.log("Fail listAnlsTotalByOrgAndItemGroup");
                 ct.anlsByItemGroupLists = [];
                 ct.anlsByItemGroupListsToChartData = [];
 
-                $scope.main.loadingMainBody = false;
+                ct.itemGroupChartLoading = false;
             });
         };
 
@@ -411,6 +417,8 @@ angular.module('perf.controllers')
          * @param sltMonth
          */
         ct.fn.listAnlsByItem = function (sltYear, sltMonth) {
+            ct.itemChartLoading = true;
+
             var params = {
                 "urlPaths": {
                     "orgCode": ct.data.sltOrgCode
@@ -436,11 +444,15 @@ angular.module('perf.controllers')
 
                     ct.fn.redrawChart(ct.itemChart);
                 }
+
+                ct.itemChartLoading = false;
             });
             promise.error(function (data, status, header) {
                 console.log("Fail listAnlsTotalByOrgAndItem");
                 ct.anlsByItemLists = [];
                 ct.anlsByItemListsToChartData = [];
+
+                ct.itemChartLoading = false;
             });
         };
         /* itemChartData 구성 */
