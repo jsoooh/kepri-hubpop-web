@@ -44,8 +44,8 @@
 					<div class="col-md-4">
 						<h4>서비스별 사용 금액</h4>
 						<div class="chart_wrap pt20" style="overflow:hidden;">
-							<div id="itemGroup-anls-chart"></div>
-							<div class="loader-container" ng-if="contents.anlsByItemGroupListsToChartData.length < 1"></div>
+							<div ng-hide="contents.itemGroupChartLoading" id="itemGroup-anls-chart"></div>
+							<div class="" ng-if="contents.itemChartLoading"><img src="images/loading/loading.gif"></div>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -58,8 +58,8 @@
 							</select>
 						</div>
 						<div class="chart_wrap pt20" style="overflow:hidden;">
-							<div id="item-anls-chart"></div>
-							<div class="loader-container" ng-if="contents.anlsByItemListsToChartData.length < 1"></div>
+							<div ng-hide="contents.itemGroupChartLoading" id="item-anls-chart"></div>
+							<div class="" ng-if="contents.itemGroupChartLoading"><img src="images/loading/loading.gif"></div>
 						</div>
 					</div>
 				</div>
@@ -79,9 +79,9 @@
 		<div class="panel_body h_auto">
 			<div class="in">
 				<div class="chart_wrap" style="overflow:hidden;">
-					<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
-					<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
-					<div class="loader-container" ng-if="contents.anlsDailySummaryListsToChartData.length < 1"></div>
+					<div ng-show="!contents.dailyChartLoading && contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
+					<div ng-show="!contents.dailyChartLoading && contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
+					<div class="" ng-if="contents.dailyChartLoading"><img src="images/loading/loading.gif"></div>
 				</div>
 			</div>
 		</div>
