@@ -70,7 +70,7 @@ angular.module('gpu.controllers')
         // 페이지 로드
         var controllerTag = ' ng-controller="' + controllerName + ' as sub"';
         var deployViewHtmlFilePath = templatePath + "/" + deployViewHtmlFile;
-        var promise = vmCatalogService.getVmCatalogDeployTemplateHtml(deployViewHtmlFilePath);
+        var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployViewHtmlFilePath);
         promise.success(function (data) {
             $templateCache.put("deployFormTemplate", "<div id=\"vmCatalogDeployView\"" + controllerTag + ">\n" + data + "\n</div>");
             ct.vmCatalogTemplateUrl = "deployViewTemplate";

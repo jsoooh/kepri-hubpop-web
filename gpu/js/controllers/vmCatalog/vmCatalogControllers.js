@@ -61,9 +61,12 @@ angular.module('gpu.controllers')
     ct.data.clusterCnt = 3;
     ct.data.serverCnt = 1;
 
+    ct.data.availabilityZone = "nova";
+    ct.data.securityGroup = "default";
+    ct.data.volumeSize = 10;
+
     //디스크생성 변수
-    ct.volumeSize = 0;
-    ct.inputVolumeSize = ct.volumeSize;
+    ct.inputVolumeSize = ct.data.volumeSize;
     ct.volumeSliderOptions = {
         showSelectionBar : true,
         minLimit : 0,
@@ -71,32 +74,44 @@ angular.module('gpu.controllers')
         ceil: 100,
         step: 1,
         onChange : function () {
-            ct.inputVolumeSize = ct.volumeSize;
+            ct.inputVolumeSize = ct.data.volumeSize;
         }
     };
 
     ct.fn.inputVolumeSizeChange = function () {
         var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
         if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
-            ct.volumeSize = ct.inputVolumeSize;
+            ct.data.volumeSize = ct.inputVolumeSize;
         }
     };
 
     ct.fn.inputVolumeSizeBlur = function () {
         var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
         if (volumeSize < ct.volumeSliderOptions.minLimit || volumeSize > ct.volumeSliderOptions.ceil) {
-            ct.inputVolumeSize = ct.volumeSize;
+            ct.inputVolumeSize = ct.data.volumeSize;
         } else {
             ct.inputVolumeSize = volumeSize;
-            ct.volumeSize = volumeSize;
+            ct.data.volumeSize = volumeSize;
         }
+    };
+
+    ct.fn.loadVmCatalogDeployTemplateAndAction = function (templatePath, deployTemplateFile, actionFunction) {
+        // 페이지 로드
+        var deployTemplateFilePath = templatePath + "/" + deployTemplateFile + _VERSION_TAIL_;
+        var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployTemplateFilePath);
+        promise.success(function (data) {
+            actionFunction(data);
+        });
+        promise.error(function (data, status, headers) {
+            $scope.main.loadingMainBody = false;
+        });
     };
 
     ct.fn.loadVmCatalogDeployForm = function (templatePath, controllerName, deployHtmlFile) {
         // 페이지 로드
         var controllerTag = ' ng-controller="' + controllerName + ' as subPage"';
         var deployHtmlFilePath = templatePath + "/" + deployHtmlFile + _VERSION_TAIL_;
-        var promise = vmCatalogService.getVmCatalogDeployTemplateHtml(deployHtmlFilePath);
+        var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployHtmlFilePath);
         promise.success(function (data) {
             $templateCache.put("deployFormTemplate", "<div class=\"panel_area\" id=\"vmCatalogDeploy\"" + controllerTag + ">\n" + data + "\n</div>");
             ct.vmCatalogTemplateUrl = "deployFormTemplate";
@@ -184,20 +199,36 @@ angular.module('gpu.controllers')
         });
     };
 
+    // 상용존 셀렉트박스 조회
+    ct.fn.availabilityZoneList = function() {
+        var returnPromise = vmCatalogService.listAllAvailabilityZones();
+        returnPromise.success(function (data, status, headers) {
+            ct.availabilityZones = data.content;
+            //ct.availabilityZones.unshift({id:"",name:'',description:"가용존 선택"});
+            ct.availabilityZone = ct.availabilityZones[0];
+            //ct.data.availabilityZone = ct.availabilityZone.availabilityZone;
+            ct.data.providerNet = ct.availabilityZone.publicNetworkSubnet.networkId;
+            ct.data.providerSubnet = ct.availabilityZone.publicNetworkSubnet.subnetId;
+        });
+        returnPromise.error(function (data, status, headers) {
+        });
+    };
 
     // 네트워크 셀렉트박스 조회
     ct.fn.networkList = function(tenantId) {
         var returnPromise = vmCatalogService.listAllNetwork(tenantId);
         returnPromise.success(function (data, status, headers) {
             ct.networks = data.content;
-            ct.networks.unshift({id:"",name:'',description:"네트워크 선택"});
+            //ct.networks.unshift({id:"",name:'',description:"네트워크 선택"});
             ct.network = ct.networks[0];
+            ct.data.network = ct.network.name;
         });
         returnPromise.error(function (data, status, headers) {
         });
     };
 
     //보안정책 조회
+/*
     ct.fn.getSecurityPolicy = function(tenantId) {
         var returnPromise = vmCatalogService.listAllSecurityPolicy(tenantId);
         returnPromise.success(function (data, status, headers) {
@@ -213,6 +244,7 @@ angular.module('gpu.controllers')
         returnPromise.error(function (data, status, headers) {
         });
     };
+*/
 
     //키페어 조회
     ct.fn.addDefaultKeypair = function(tenantId) {
@@ -247,6 +279,7 @@ angular.module('gpu.controllers')
                 if (!ct.data.keypair) {
                     ct.data.keypair = ct.keypairList[0];
                 }
+                ct.data.keyName = ct.data.keypair.keypairName;
                 $scope.main.loadingMainBody = false;
             }
         });
@@ -351,10 +384,12 @@ angular.module('gpu.controllers')
         if (!ct.specDisabledAllSetting || sltSpec.disabled) return;
         if (sltSpec && sltSpec.uuid) {
             ct.data.spec = angular.copy(sltSpec);
+            ct.data.flavor = ct.data.spec.name;
             ct.data.specUuid = ct.data.spec.uuid;
         } else {
             ct.data.spec = {};
-            ct.specUuid = "";
+            ct.data.flavor = "";
+            ct.data.specUuid = "";
         }
     };
 
@@ -370,8 +405,9 @@ angular.module('gpu.controllers')
 
     ct.fn.getVmCatalogInfo(ct.catalogId);
     ct.fn.getTenantResource(ct.tenantId);
+    ct.fn.availabilityZoneList();
     ct.fn.networkList(ct.tenantId);
-    ct.fn.getSecurityPolicy(ct.tenantId);
+    //ct.fn.getSecurityPolicy(ct.tenantId);
     ct.fn.getKeypairList(ct.tenantId);
     ct.fn.getSpecList();
 

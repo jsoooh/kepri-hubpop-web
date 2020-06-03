@@ -5,7 +5,7 @@
 <div class="pl10 mt10">
     <span class="pnb_stit">- 배포 유형  : </span>
     <div class="radio radio-inline">
-        <input type="radio" name="deploy_type" id="deploy-type-single" value="server" ng-init="contents.data.deployType = 'single'" ng-model="contents.data.deployType" ng-value="'single'" ng-change="contents.fn.changeDeployType()" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="deploy_type" id="deploy-type-single" value="server" ng-model="contents.data.deployType" ng-value="'single'" ng-change="contents.fn.changeDeployType()" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="deploy-type-single" class="label">단일 구성</label>
     </div>
     <div ng-show="contents.deployTypeReplicaSuport" class="radio radio-inline">

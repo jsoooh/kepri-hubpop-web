@@ -5,7 +5,7 @@
 <div class="pl10 mt10">
     <span class="pnb_stit">- 배포 여부 선택  : </span>
     <div class="radio radio-inline">
-        <input type="radio" name="octavia_lb_use" id="octavia-lb-use-true" ng-init="contents.data.octaviaLbUse = true" ng-model="contents.data.octaviaLbUse" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="octavia_lb_use" id="octavia-lb-use-true" ng-model="contents.data.octaviaLbUse" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="octavia-lb-use-true" class="label">예</label>
     </div>
     <div class="radio radio-inline">
@@ -24,9 +24,9 @@
         <tbody>
         <tr>
             <th><i class="i_star"></i> 알고리즘</th>
-            <td><input type="text" class="form-control" maxlength="50" placeholder="ROUND_ROBIN" disabled="disabled"></td>
+            <td><input type="text" name="lbAlgorithm" class="form-control" maxlength="50" ng-model="ct.data.lbAlgorithm" disabled="disabled"></td>
             <th><i class="i_star"></i> 접속포트(LB)</th>
-            <td><input type="text" class="form-control" maxlength="50" placeholder="3306" ></td>
+            <td><input type="text" name="lbSvcPort" class="form-control" maxlength="50" ng-model="contents.data.lbSvcPort"></td>
         </tr>
         </tbody>
     </table>

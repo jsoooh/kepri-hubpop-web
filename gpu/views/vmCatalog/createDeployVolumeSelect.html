@@ -8,29 +8,29 @@
 <div class="pl10 mt10">
     <span class="pnb_stit">- 사용 여부 선택  : </span>
     <div class="radio radio-inline">
-        <input type="radio" name="volume_use" id="volume-use-true" value="server" ng-init="contents.volumeUse = true" ng-model="contents.volumeUse" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="volume_use" id="volume-use-true" value="server" ng-model="contents.data.volumeUse" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="volume-use-true" class="label">예</label>
     </div>
     <div class="radio radio-inline">
-        <input type="radio" name="volume_use" id="volume-use-false" value="image" ng-model="contents.volumeUse" ng-value=false class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="volume_use" id="volume-use-false" value="image" ng-model="contents.data.volumeUse" ng-value=false class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="volume-use-false" class="label">아니오</label>
     </div>
 </div>
-<div ng-show="contents.volumeUse" class="disk_area mt20">
+<div ng-show="contents.data.volumeUse" class="disk_area mt20">
     <div class="disk_info">최대 {{ contents.volumeSliderOptions.ceil | displayVolume:'GB' }}</div>
     <p>마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
     <div class="disk_box">
         <div class="rangeWrap type2">
             <div class="range_box rb_l">
-                <rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
+                <rzslider rz-slider-model="contents.data.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
             </div>
             <div class="range_box rb_r">
                 <div class="range-text">
-                    <input type="text" class="form-control" ng-model="contents.volumeSize" name="volumeSize" maxlength="4" only-digits style="width:60px; display: inline-block;">
+                    <input type="text" class="form-control" ng-model="contents.data.volumeSize" name="volumeSize" maxlength="4" only-digits style="width:60px; display: inline-block;">
                     <span class="app-tit">GB</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div ng-show="contents.volumeUse" class="cnt_msg_box msg-info">디스크 크기는 최대 2TB까지 설정이 가능합니다.</div>
+<div ng-show="contents.data.volumeUse" class="cnt_msg_box msg-info">디스크 크기는 최대 2TB까지 설정이 가능합니다.</div>

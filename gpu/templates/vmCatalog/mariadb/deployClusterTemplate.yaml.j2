@@ -22,6 +22,9 @@ parameters:
   lb_svc_port:
     type: string
     default: 3306
+  lb_algorithm:
+    type: string
+    default: ROUND_ROBIN
 {% endif %}
   service_port:
     type: string
@@ -481,7 +484,7 @@ resources:
     type: OS::Octavia::Pool
     properties:
       listener: { get_resource: octavia_lb_svc_listener }
-      lb_algorithm: ROUND_ROBIN
+      lb_algorithm: { get_param: lb_algorithm }
       protocol: TCP
       session_persistence:
         type: SOURCE_IP
