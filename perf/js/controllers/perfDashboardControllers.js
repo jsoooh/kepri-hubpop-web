@@ -36,10 +36,6 @@ angular.module('perf.controllers')
         ct.anlsDailySummaryLists = [];
         ct.anlsDailySummaryListsToChartData = [];
 
-        ct.data.sltSumPerfAmt = "";
-        ct.data.lastSumPerfAmt = "";
-        ct.data.nextSumPerfAmt = "";
-
         /* 미터링 서비스 그룹 리스트 */
         ct.fn.listAllMeteringGroupItems = function () {
             var promise = perfMeteringService.listAllMeteringGroupItems();
@@ -60,7 +56,7 @@ angular.module('perf.controllers')
         };
 
         ct.fn.initYearMonth = function() {
-            $scope.main.loadingMainBody = true;
+            // $scope.main.loadingMainBody = true;
 
             // 연도 리스트 구성
             for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
@@ -75,7 +71,7 @@ angular.module('perf.controllers')
             ct.data.lastYear = String(lastMonth.getFullYear());
             ct.data.lastMonth = String(lastMonth.getMonth() + 1);
 
-            if(angular.isUndefined(ct.data.lastSumPerfAmt) || ct.data.lastSumPerfAmt == "") {
+            if(angular.isUndefined(ct.data.lastSumPerfAmt)) {
                 ct.fn.lastSumPerfAmtByOrg(ct.data.lastYear, ct.data.lastMonth);
             }
             ct.fn.listAnlsMonthlySummaryByOrg(ct.data.sltYear);
@@ -305,7 +301,7 @@ angular.module('perf.controllers')
                 }
 
                 if(sltYear == ct.today.getFullYear() && sltMonth == ct.today.getMonth() + 1) {
-                    if (angular.isUndefined(ct.data.sltSumPerfAmt) || ct.data.sltSumPerfAmt == "") {
+                    if (angular.isUndefined(ct.data.sltSumPerfAmt)) {
                         ct.data.sltSumPerfAmt = sumPerfAmt;
                         ct.data.nextSumPerfAmt = ct.data.sltSumPerfAmt + (ct.data.sltSumPerfAmt / sltDay) * (lastDay - sltDay);
                     }
@@ -361,7 +357,7 @@ angular.module('perf.controllers')
          * @param sltMonth
          */
         ct.fn.listAnlsByItemGroup = function (sltYear, sltMonth) {
-            $scope.main.loadingMainBody = true;
+            // $scope.main.loadingMainBody = true;
 
             var params = {
                 "urlPaths": {
