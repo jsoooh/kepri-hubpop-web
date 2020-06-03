@@ -46,8 +46,8 @@
 								<span class="ico">실행 설정</span>
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', lbServiceList);" title="이름/설명 변경">이름/설명 변경</a></li>
-								<li><a class="delete" href="javascript:void(0);" ng-click="contents.deleteLb(lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
+                                <li><a href="javascript:void(0);" ng-click="tab.repAppRoute(routeItem.host);" title="대표 도메인 설정">대표 도메인 설정</a></li>
+                                <li><a class="delete" href="javascript:void(0);" ng-click="tab.deleteAppRoute(routeItem.guid, routeItem.host);" title="삭제">삭제</a></li>
 							</ul>
 						</div>
                     </td>

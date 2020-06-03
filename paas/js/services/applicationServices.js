@@ -6,6 +6,8 @@ angular.module('paas.services')
 		var applicationService = {};
         /* 20.05.08 - 리스트 타입에서 이름변경시 리스트 타입 화면으로 재조회를 위해 변수 선언 by ksw */
         applicationService.listType = '';
+        /* 20.06.03 - 대표 도메인 설정 후 화면 변동 없게끔 변수 선언 by ksw */
+        applicationService.sltInfoTab = '';
 
         applicationService.listAllSpaces = function (organizationGuid, condition) {
             if (organizationGuid) {
@@ -148,6 +150,10 @@ angular.module('paas.services')
 
         applicationService.deleteRoute = function (guid) {
             return cloudFoundry.routes.deleteRoute(guid);
+        };
+
+        applicationService.representativeAppRoute = function (guid, host) {
+            return cloudFoundry.apps.representativeAppRoute(guid, host);
         };
 
         applicationService.associateAppRoute = function (guid, routeGuid) {

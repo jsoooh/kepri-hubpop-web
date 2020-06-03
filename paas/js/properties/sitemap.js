@@ -19,6 +19,12 @@ angular.module('app')
                         url: '/paas/apps',
                         controller: 'paasApplicationsCtrl',
                         templateUrl: _PAAS_VIEWS_ + '/application/apps.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_PAAS_JS_+'/services/applicationServices.js'],
+                            loadMyControllers: [],
+                            loadMyDirectives: [],
+                        },
                         subPages: {
                             applicationPush: {
                                 name: 'applications',
