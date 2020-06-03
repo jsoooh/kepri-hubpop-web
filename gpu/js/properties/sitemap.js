@@ -81,11 +81,11 @@ angular.module('app')
                                 stateKey: 'gpuVmCatalogList',
                                 url: '/gpu/vmCatalog/list',
                                 controller: 'gpuVmCatalogListCtrl',
-                                templateUrl: _GPU_VIEWS_+'/vmCatalog'+_VIEW_TEMP_+'/vmCatalogList.html',
+                                templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogList.html',
                                 loadMyFile: {
                                     loadMyScripts: [],
                                     loadMyServices: [],
-                                    loadMyControllers: [_GPU_JS_+'/controllers/vmCatalog'+_VIEW_TEMP_+'/vmCatalogControllers.js'],
+                                    loadMyControllers: [_GPU_JS_+'/controllers/vmCatalog/vmCatalogControllers.js'],
                                     loadMyDirectives: [],
                                 },
                                 subPages: {
@@ -94,7 +94,7 @@ angular.module('app')
                                         stateKey: 'gpuVmCatalogDeploy',
                                         url: '/gpu/vmCatalog/deploy/:id',
                                         controller: 'gpuVmCatalogDeployFormCtrl',
-                                        templateUrl: _GPU_VIEWS_+'/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeployForm.html'
+                                        templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeployForm.html'
                                     }
                                 }
                             },
@@ -104,11 +104,11 @@ angular.module('app')
                                 stateKey: 'gpuVmCatalogDeployList',
                                 url: '/gpu/vmCatalogDeploy/list',
                                 controller: 'gpuVmCatalogDeployListCtrl',
-                                templateUrl: _GPU_VIEWS_+'/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeployList.html',
+                                templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeployList.html',
                                 loadMyFile: {
                                     loadMyScripts: [],
                                     loadMyServices: [],
-                                    loadMyControllers: [_GPU_JS_+'/controllers/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeployControllers.js'],
+                                    loadMyControllers: [_GPU_JS_+'/controllers/vmCatalog/vmCatalogDeployControllers.js'],
                                     loadMyDirectives: [],
                                 },
                                 subPages: {
@@ -117,7 +117,7 @@ angular.module('app')
                                         stateKey: 'gpuVmCatalogDeployView',
                                         url: '/gpu/vmCatalogDeploy/view/:id',
                                         controller: 'gpuVmCatalogDeployViewCtrl',
-                                        templateUrl: _GPU_VIEWS_+'/vmCatalog'+_VIEW_TEMP_+'/vmCatalogDeployView.html'
+                                        templateUrl: _GPU_VIEWS_+'/vmCatalog/vmCatalogDeployView.html'
                                     }
                                 }
                             }

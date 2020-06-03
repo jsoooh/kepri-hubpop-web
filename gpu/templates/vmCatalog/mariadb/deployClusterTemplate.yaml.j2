@@ -1,17 +1,11 @@
 heat_template_version: '2018-08-31'
 
-description: galera mariadb template
+description: mairadb cluster volume template
 
 parameters:
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Galera-Mariadb.qcow2
-  service_port:
-    type: string
-    default: 3306
-  galera_port:
-    type: string
-    default: 4567
   flavor:
     type: string
   availability_zone:
@@ -24,32 +18,41 @@ parameters:
     type: string
   provider_subnet:
     type: string
+{% if octaviaLbUse %}
+  lb_svc_port:
+    type: string
+    default: 3306
+{% endif %}
+  service_port:
+    type: string
+    default: 3306
+  galera_port:
+    type: string
+    default: 4567
   root_password:
     type: string
+{% if createUser %}
   create_user_id:
     type: string
   create_user_password:
     type: string
   create_db_name:
     type: string
-{% if volume %}
+{% endif %}
+{% if volumeUse %}
   volume_type:
     type: string
-    default: "RBD"
   volume_size:
     type: string
-    default: 10
-  volume_mountpoint:
+  volume_mount_point:
     type: string
-    default: "/dev/vdb"
+    default: /dev/vdb
+  volume_format_type:
+    type: string
+    default: xfs
   volume_mount_path:
     type: string
-    default: "/mnt/data"
-{% endif %}
-{% if octavia_lb %}
-  lb_svc_port:
-    type: string
-    default: 3306
+    default: /mnt/data
 {% endif %}
 
 resources:
@@ -57,25 +60,25 @@ resources:
   server1_port:
     type: OS::Neutron::Port
     properties:
-      fixed_ips: [{ subnet_id: get_param: provider_subnet }]
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
 
   server2_port:
     type: OS::Neutron::Port
     properties:
-      fixed_ips: [{ subnet_id: get_param: provider_subnet }]
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
 
   server3_port:
     type: OS::Neutron::Port
     properties:
-      fixed_ips: [{ subnet_id: get_param: provider_subnet }]
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
 
-{% if volume %}
+{% if volumeUse %}
   cinder_volume1:
     type: OS::Cinder::Volume
     properties:
@@ -102,13 +105,16 @@ resources:
       config:
         str_replace:
           params:
-{% if volume %}
-            $volume_mountpoint: { get_param: volume_mountpoint }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
+{% if createUser %}
             $create_user_id: { get_param: create_user_id }
             $create_user_password: { get_param: create_user_password }
             $create_db_name: { get_param: create_db_name }
+{% endif %}
             $service_port: { get_param: service_port }
             $galera_port: { get_param: galera_port }
             $root_password: { get_param: root_password }
@@ -131,38 +137,43 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-{% if volume %}
-            mkfs.xfs $volume_mountpoint
+{% if volumeUse %}
+            mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
-            mount $volume_mountpoint $volume_mount_path
+            mount $volume_mount_point $volume_mount_path
             sleep 1
-            mkdir $volume_mount_path/mysql
-            chown -R mysql.mysql $volume_mount_path/mysql
-            if [ -d "/var/lib/mysql" ]; then
-              rm -fR /var/lib/mysql
-            fi
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
             ln -s $volume_mount_path/mysql /var/lib/mysql
-            chmod mysql.mysql /var/lib/mysql
             sleep 1
 {% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
+            sed -i 's/^port            = 3306/port            = $service_port/' /etc/my.cnf
             systemctl start mariadb.service
             /usr/bin/mysqladmin -u root password '$root_password'
-
+            sleep 1
+{% if createUser %}
             mysql -u root -p$root_password <<EOF
             create database $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+            GRANT ALL PRIVILEGES ON $create_db_name.* TO '$create_user_id'@'localhost' IDENTIFIED BY '$create_user_password';
             GRANT ALL PRIVILEGES ON $create_db_name.* To '$create_user_id'@'%' IDENTIFIED BY '$create_user_password';
             EOF
-
+{% endif %}
             systemctl stop mariadb.service
             sleep 1
-            cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
             cat <<EOF> /etc/my.cnf.d/server.cnf
             [server]
 
             [mysqld]
-            port=$service_port
             datadir=/var/lib/mysql
             log-error=/var/log/mysqld.log
 
@@ -198,8 +209,9 @@ resources:
       config:
         str_replace:
           params:
-{% if volume %}
-            $volume_mountpoint: { get_param: volume_mountpoint }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type }
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
             $service_port: { get_param: service_port }
@@ -225,20 +237,24 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-{% if volume %}
-            mkfs.xfs $volume_mountpoint
+{% if volumeUse %}
+            mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
-            mount $volume_mountpoint $volume_mount_path
+            mount $volume_mount_point $volume_mount_path
             sleep 1
-            mkdir $volume_mount_path/mysql
-            chown -R mysql.mysql $volume_mount_path/mysql
-            if [ -d "/var/lib/mysql" ]; then
-              rm -fR /var/lib/mysql
-            fi
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
             ln -s $volume_mount_path/mysql /var/lib/mysql
-            chmod mysql.mysql /var/lib/mysql
             sleep 1
-{% endif %}
+{% enfif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
             sleep 1
@@ -293,8 +309,9 @@ resources:
       config:
         str_replace:
           params:
-{% if volume %}
-            $volume_mountpoint: { get_param: volume_mountpoint }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type }
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
             $service_port: { get_param: service_port }
@@ -319,19 +336,23 @@ resources:
                       - - { get_param: galera_port }
           template: |
             #!/bin/sh
-            echo "mariadb install start"
-{% if volume %}
-            mkfs.xfs $volume_mountpoint
+            echo "mariadb setting start"
+{% if volumeUse %}
+            mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
-            mount $volume_mountpoint $volume_mount_path
+            mount $volume_mount_point $volume_mount_path
             sleep 1
-            mkdir $volume_mount_path/mysql
-            chown -R mysql.mysql $volume_mount_path/mysql
-            if [ -d "/var/lib/mysql" ]; then
-              rm -fR /var/lib/mysql
-            fi
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
             ln -s $volume_mount_path/mysql /var/lib/mysql
-            chmod mysql.mysql /var/lib/mysql
             sleep 1
 {% endif %}
             touch /var/log/mysqld.log
@@ -377,7 +398,7 @@ resources:
             sleep 10
             systemctl start mariadb.service
             systemctl enable mariadb
-            echo "mariadb install end"
+            echo "mariadb setting end"
 
 
   server1:
@@ -422,30 +443,28 @@ resources:
       user_data:
         get_resource: init_config3
 
-{% if volume %}
   cinder_volume1_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
       instance_uuid: { get_resource: server1 }
       volume_id: { get_resource: cinder_volume1 }
-      mountpoint: { get_param: volume_mountpoint }
+      mountpoint: { get_param: volume_mount_point }
 
   cinder_volume2_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
       instance_uuid: { get_resource: server2 }
       volume_id: { get_resource: cinder_volume2 }
-      mountpoint: { get_param: volume_mountpoint }
+      mountpoint: { get_param: volume_mount_point }
 
   cinder_volume3_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
       instance_uuid: { get_resource: server3 }
       volume_id: { get_resource: cinder_volume3 }
-      mountpoint: { get_param: volume_mountpoint }
-{% endif %}
+      mountpoint: { get_param: volume_mount_point }
 
-{% if octavia_lb %}
+{% if octaviaLbUse %}
   octavia_lb:
     type: OS::Octavia::LoadBalancer
     properties:
@@ -511,14 +530,22 @@ outputs:
   service_port:
     value:
       get_param: service_port
-{% if octavia_lb %}
+{% if octaviaLbUse %}
   octavia_lb_ip:
     value:
       get_attr: [octavia_lb, vip_address]
-  lb_pg_port:
-    value:
-      get_param: lb_pg_port
   lb_svc_port:
     value:
       get_param: lb_svc_port
+{% endif %}
+{% if volumeUse %}
+  volume1_id:
+    value:
+      get_resource: cinder_volume1
+  volume2_id:
+    value:
+      get_resource: cinder_volume2
+  volume3_id:
+    value:
+      get_resource: cinder_volume3
 {% endif %}

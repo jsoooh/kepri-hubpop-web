@@ -31,7 +31,7 @@
                     <div class="txt_info_wrap">
                         <p class="t_info text-left">{{ vmCatalog.description }}</p>
                         <div class="btnArea">
-                            <button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/{{ vmCatalog.id }}">만들기</a></button>
+                            <button type="button" name="button" class="btn btn-md btn-color3" ng-click="main.goToPage('/gpu/vmCatalog/deploy/' + vmCatalog.id)">만들기</button>
                         </div>
                     </div>
                 </div>

@@ -1,17 +1,11 @@
 heat_template_version: '2018-08-31'
 
-description: galera mariadb template
+description: mariadb replica volume template
 
 parameters:
   image:
     type: string
-    default: CentOS-7-x86_64-Heat-1907-Galera-Mariadb.qcow2
-  service_port:
-    type: string
-    default: 3306
-  galera_port:
-    type: string
-    default: 4567
+    default: CentOS-7-x86_64-Heat-1907-Mariadb.qcow2
   flavor:
     type: string
   availability_zone:
@@ -24,32 +18,41 @@ parameters:
     type: string
   provider_subnet:
     type: string
+  service_port:
+    type: string
+    default: 3306
+  check_port:
+    type: string
+    default: 9898
   root_password:
     type: string
+  repl_password:
+    type: string
+{% if createUser %}
   create_user_id:
     type: string
   create_user_password:
     type: string
   create_db_name:
     type: string
-{% if volume %}
+{% endif %}
   volume_type:
     type: string
-    default: "RBD"
+    default: RBD
+{% if volumeUse %}
+  volume_type:
+    type: string
   volume_size:
     type: string
-    default: 10
-  volume_mountpoint:
+  volume_mount_point:
     type: string
-    default: "/dev/vdb"
+    default: /dev/vdb
+  volume_format_type:
+    type: string
+    default: xfs
   volume_mount_path:
     type: string
-    default: "/mnt/data"
-{% endif %}
-{% if octavia_lb %}
-  lb_svc_port:
-    type: string
-    default: 3306
+    default: /mnt/data
 {% endif %}
 
 resources:
@@ -57,25 +60,18 @@ resources:
   server1_port:
     type: OS::Neutron::Port
     properties:
-      fixed_ips: [{ subnet_id: get_param: provider_subnet }]
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
 
   server2_port:
     type: OS::Neutron::Port
     properties:
-      fixed_ips: [{ subnet_id: get_param: provider_subnet }]
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
 
-  server3_port:
-    type: OS::Neutron::Port
-    properties:
-      fixed_ips: [{ subnet_id: get_param: provider_subnet }]
-      network: { get_param: provider_net }
-      security_groups: [{ get_param: security_group }]
-
-{% if volume %}
+{% if volumeUse %}
   cinder_volume1:
     type: OS::Cinder::Volume
     properties:
@@ -83,12 +79,6 @@ resources:
       volume_type: { get_param: volume_type }
 
   cinder_volume2:
-    type: OS::Cinder::Volume
-    properties:
-      size: { get_param: volume_size }
-      volume_type: { get_param: volume_type }
-
-  cinder_volume3:
     type: OS::Cinder::Volume
     properties:
       size: { get_param: volume_size }
@@ -102,60 +92,46 @@ resources:
       config:
         str_replace:
           params:
-{% if volume %}
-            $volume_mountpoint: { get_param: volume_mountpoint }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
+{% if createUser %}
             $create_user_id: { get_param: create_user_id }
             $create_user_password: { get_param: create_user_password }
             $create_db_name: { get_param: create_db_name }
+{% endif %}
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $repl_password: { get_param: repl_password }
             $service_port: { get_param: service_port }
-            $galera_port: { get_param: galera_port }
+            $check_port: { get_param: check_port }
             $root_password: { get_param: root_password }
-            $node_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-            $server_addresses_and_ports:
-              list_join:
-                - ','
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
           template: |
             #!/bin/sh
-            echo "mariadb setting start"
-{% if volume %}
-            mkfs.xfs $volume_mountpoint
+            echo "master mariadb setting start"
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
-            mount $volume_mountpoint $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
             sleep 1
-            mkdir $volume_mount_path/mysql
-            chown -R mysql.mysql $volume_mount_path/mysql
-            if [ -d "/var/lib/mysql" ]; then
-              rm -fR /var/lib/mysql
-            fi
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+
+            sleep 1
+            mv /var/lib/mysql $volume_mount_path/
             ln -s $volume_mount_path/mysql /var/lib/mysql
-            chmod mysql.mysql /var/lib/mysql
             sleep 1
 {% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
-            systemctl start mariadb.service
-            /usr/bin/mysqladmin -u root password '$root_password'
 
-            mysql -u root -p$root_password <<EOF
-            create database $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-            GRANT ALL PRIVILEGES ON $create_db_name.* To '$create_user_id'@'%' IDENTIFIED BY '$create_user_password';
-            EOF
-
-            systemctl stop mariadb.service
             sleep 1
             cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
             cat <<EOF> /etc/my.cnf.d/server.cnf
@@ -163,21 +139,13 @@ resources:
 
             [mysqld]
             port=$service_port
+            log_bin=mysql-bin
+            server_id=1
             datadir=/var/lib/mysql
             log-error=/var/log/mysqld.log
+            log-basename=master1
 
             [galera]
-            wsrep_on=ON
-            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
-            wsrep_cluster_address="gcomm://$server_addresses_and_ports"
-            wsrep_cluster_name="galeracluster"
-            wsrep_node_address="$node_address"
-            wsrep_node_name="galera1"
-            wsrep_sst_method=rsync
-            binlog_format=row
-            default_storage_engine=InnoDB
-            innodb_autoinc_lock_mode=2
-            bind-address=0.0.0.0
 
             [embedded]
 
@@ -186,10 +154,47 @@ resources:
             [mariadb-10.4]
 
             EOF
-            galera_new_cluster
-            systemctl enable mariadb.service
-            echo "mariadb setting end"
 
+            systemctl start mariadb.service
+            echo "/usr/bin/mysqladmin -u root password '$root_password'"
+            /usr/bin/mysqladmin -u root password '$root_password'
+
+            mysql -u root -p$root_password <<EOF
+            GRANT ALL PRIVILEGES ON *.* TO 'repl'@'$server2_ip_address' IDENTIFIED BY '$repl_password';
+            GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'repl'@'$server2_ip_address' IDENTIFIED BY '$repl_password';
+
+            FLUSH PRIVILEGES;
+            EOF
+
+            sleep 1
+            nohup nc -kl $check_port 2>&1 &
+            nc_pid=$!
+
+            slaveRun=1
+            while [ $slaveRun -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $service_port"
+              nc -z $server2_ip_address $service_port
+              slaveRun=$?
+              echo "nc -z $server2_ip_address $service_port > $slaveRun"
+              sleep 3
+            done
+
+            kill -9 $nc_pid
+            sleep 3
+{% if createUser %}
+            mysql -u root -p$root_password <<EOF
+            CREATE DATABASE $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+            GRANT ALL PRIVILEGES ON $create_db_name.* TO '$create_user_id'@'localhost' IDENTIFIED BY '$create_user_password';
+            GRANT ALL PRIVILEGES ON $create_db_name.* TO '$create_user_id'@'%' IDENTIFIED BY '$create_user_password';
+
+            FLUSH PRIVILEGES;
+            EOF
+{% endif %}
+            sleep 5
+
+            systemctl enable mariadb.service
+            echo "master mariadb setting end"
 
   init_config2:
     type: OS::Heat::SoftwareConfig
@@ -198,47 +203,49 @@ resources:
       config:
         str_replace:
           params:
-{% if volume %}
-            $volume_mountpoint: { get_param: volume_mountpoint }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type }
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $repl_password: { get_param: repl_password }
             $service_port: { get_param: service_port }
-            $galera_port: { get_param: galera_port }
+            $check_port: { get_param: check_port }
             $root_password: { get_param: root_password }
-            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-            $node_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-            $server_addresses_and_ports:
-              list_join:
-                - ','
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
           template: |
             #!/bin/sh
-            echo "mariadb setting start"
-{% if volume %}
-            mkfs.xfs $volume_mountpoint
+            echo "slave mariadb setting start"
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
-            mount $volume_mountpoint $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
             sleep 1
-            mkdir $volume_mount_path/mysql
-            chown -R mysql.mysql $volume_mount_path/mysql
-            if [ -d "/var/lib/mysql" ]; then
-              rm -fR /var/lib/mysql
-            fi
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+
+            sleep 1
+            mv /var/lib/mysql $volume_mount_path/
             ln -s $volume_mount_path/mysql /var/lib/mysql
-            chmod mysql.mysql /var/lib/mysql
             sleep 1
 {% endif %}
+            masterRun=1
+            while [ $masterRun -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $check_port"
+              nc -z $server1_ip_address $check_port
+              masterRun=$?
+              echo "nc -z $server1_ip_address $check_port > $masterRun"
+              sleep 3
+            done
+            sleep 3
+
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
             sleep 1
@@ -248,21 +255,13 @@ resources:
 
             [mysqld]
             port=$service_port
+            server_id=2
             datadir=/var/lib/mysql
             log-error=/var/log/mysqld.log
+            log-basename=master1
+            read-only=1
 
             [galera]
-            wsrep_on=ON
-            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
-            wsrep_cluster_address="gcomm://$server_addresses_and_ports"
-            wsrep_cluster_name="galeracluster"
-            wsrep_node_address="$node_address"
-            wsrep_node_name="galera2"
-            wsrep_sst_method=rsync
-            binlog_format=row
-            default_storage_engine=InnoDB
-            innodb_autoinc_lock_mode=2
-            bind-address=0.0.0.0
 
             [embedded]
 
@@ -271,114 +270,25 @@ resources:
             [mariadb-10.4]
 
             EOF
-            sleep 10
-            masterRun=1
-            while [ $masterRun -ne 0 ]
-            do
-              echo "nc -z $master_address $galera_port"
-              nc -z $master_address $galera_port
-              masterRun=$?
-              sleep 5
-            done
-            sleep 10
+
             systemctl start mariadb.service
-            systemctl enable mariadb
-            echo "mariadb setting end"
+            echo "/usr/bin/mysqladmin -u root password '$root_password'"
+            /usr/bin/mysqladmin -u root password '$root_password'
 
-
-  init_config3:
-    type: OS::Heat::SoftwareConfig
-    properties:
-      group: ungrouped
-      config:
-        str_replace:
-          params:
-{% if volume %}
-            $volume_mountpoint: { get_param: volume_mountpoint }
-            $volume_mount_path: { get_param: volume_mount_path }
-{% endif %}
-            $service_port: { get_param: service_port }
-            $galera_port: { get_param: galera_port }
-            $root_password: { get_param: root_password }
-            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-            $node_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-            $server_addresses_and_ports:
-              list_join:
-                - ','
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
-                - - list_join:
-                      - ':'
-                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-                      - - { get_param: galera_port }
-          template: |
-            #!/bin/sh
-            echo "mariadb install start"
-{% if volume %}
-            mkfs.xfs $volume_mountpoint
-            mkdir -p $volume_mount_path
-            mount $volume_mountpoint $volume_mount_path
             sleep 1
-            mkdir $volume_mount_path/mysql
-            chown -R mysql.mysql $volume_mount_path/mysql
-            if [ -d "/var/lib/mysql" ]; then
-              rm -fR /var/lib/mysql
-            fi
-            ln -s $volume_mount_path/mysql /var/lib/mysql
-            chmod mysql.mysql /var/lib/mysql
+            FileName=`mysql -h $server1_ip_address -u repl -p$repl_password --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $1}'`
+            POS=`mysql -h $server1_ip_address -u repl -p$repl_password --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $2}'`
+
             sleep 1
-{% endif %}
-            touch /var/log/mysqld.log
-            chown mysql:mysql /var/log/mysqld.log
-            cp /etc/my.cnf.d/server.cnf /etc/my.cnf.d/server.cnf.backup
-            cat <<EOF> /etc/my.cnf.d/server.cnf
-            [server]
-
-            [mysqld]
-            port=$service_port
-            datadir=/var/lib/mysql
-            log-error=/var/log/mysqld.log
-
-            [galera]
-            wsrep_on=ON
-            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
-            wsrep_cluster_address="gcomm://$server_addresses_and_ports"
-            wsrep_cluster_name="galeracluster"
-            wsrep_node_address="$node_address"
-            wsrep_node_name="galera3"
-            wsrep_sst_method=rsync
-            binlog_format=row
-            default_storage_engine=InnoDB
-            innodb_autoinc_lock_mode=2
-            bind-address=0.0.0.0
-
-            [embedded]
-
-            [mariadb]
-
-            [mariadb-10.4]
-
+            echo "CHANGE MASTER TO MASTER_HOST='$server1_ip_address', MASTER_USER='repl', MASTER_PASSWORD='$repl_password', MASTER_PORT=3306, MASTER_LOG_FILE='$FileName', MASTER_LOG_POS=$POS, MASTER_CONNECT_RETRY=10;"
+            mysql -u root -p$root_password <<EOF
+            CHANGE MASTER TO MASTER_HOST='$server1_ip_address', MASTER_USER='repl', MASTER_PASSWORD='$repl_password', MASTER_PORT=3306, MASTER_LOG_FILE='$FileName', MASTER_LOG_POS=$POS, MASTER_CONNECT_RETRY=10;
+            START SLAVE;
             EOF
-            sleep 10
-            masterRun=1
-            while [ $masterRun -ne 0 ]
-            do
-              echo "nc -z $master_address $galera_port"
-              nc -z $master_address $galera_port
-              masterRun=$?
-              sleep 5
-            done
-            sleep 10
-            systemctl start mariadb.service
-            systemctl enable mariadb
-            echo "mariadb install end"
 
+            sleep 10
+            systemctl enable mariadb.service
+            echo "slave mariadb setting end"
 
   server1:
     type: OS::Nova::Server
@@ -408,95 +318,19 @@ resources:
       user_data:
         get_resource: init_config2
 
-  server3:
-    type: OS::Nova::Server
-    properties:
-      flavor: { get_param: flavor }
-      image: { get_param: image }
-      availability_zone: { get_param: availability_zone }
-      networks:
-        - port: { get_resource: server3_port }
-      key_name: { get_param: key_name }
-      user_data_update_policy: IGNORE
-      user_data_format: RAW
-      user_data:
-        get_resource: init_config3
-
-{% if volume %}
   cinder_volume1_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
       instance_uuid: { get_resource: server1 }
       volume_id: { get_resource: cinder_volume1 }
-      mountpoint: { get_param: volume_mountpoint }
+      mountpoint: { get_param: volume_mount_point }
 
   cinder_volume2_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
       instance_uuid: { get_resource: server2 }
       volume_id: { get_resource: cinder_volume2 }
-      mountpoint: { get_param: volume_mountpoint }
-
-  cinder_volume3_attachment:
-    type: OS::Cinder::VolumeAttachment
-    properties:
-      instance_uuid: { get_resource: server3 }
-      volume_id: { get_resource: cinder_volume3 }
-      mountpoint: { get_param: volume_mountpoint }
-{% endif %}
-
-{% if octavia_lb %}
-  octavia_lb:
-    type: OS::Octavia::LoadBalancer
-    properties:
-      vip_subnet: { get_param: provider_subnet }
-
-  octavia_lb_svc_listener:
-    type: OS::Octavia::Listener
-    properties:
-      loadbalancer: { get_resource: octavia_lb }
-      protocol: TCP
-      protocol_port: { get_param: lb_svc_port }
-
-  octavia_lb_svc_pool:
-    type: OS::Octavia::Pool
-    properties:
-      listener: { get_resource: octavia_lb_svc_listener }
-      lb_algorithm: ROUND_ROBIN
-      protocol: TCP
-      session_persistence:
-        type: SOURCE_IP
-
-  octavia_lb_svc_monitor:
-    type: OS::Octavia::HealthMonitor
-    properties:
-      pool: { get_resource: octavia_lb_svc_pool }
-      type: TCP
-      delay: 5
-      max_retries: 5
-      timeout: 5
-
-  lb_svc_pool_member1:
-    type: OS::Octavia::PoolMember
-    properties:
-      pool: { get_resource: octavia_lb_svc_pool }
-      address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-      protocol_port: { get_param: service_port }
-
-  lb_svc_pool_member2:
-    type: OS::Octavia::PoolMember
-    properties:
-      pool: { get_resource: octavia_lb_svc_pool }
-      address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-      protocol_port: { get_param: service_port }
-
-  lb_svc_pool_member3:
-    type: OS::Octavia::PoolMember
-    properties:
-      pool: { get_resource: octavia_lb_svc_pool }
-      address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-      protocol_port: { get_param: service_port }
-{% endif %}
+      mountpoint: { get_param: volume_mount_point }
 
 outputs:
   server_ip1:
@@ -505,20 +339,14 @@ outputs:
   server_ip2:
     value:
       get_attr: [server2_port, fixed_ips, 0, ip_address]
-  server_ip3:
-    value:
-      get_attr: [server3_port, fixed_ips, 0, ip_address]
   service_port:
     value:
       get_param: service_port
-{% if octavia_lb %}
-  octavia_lb_ip:
+{% if volumeUse %}
+  volume1_id:
     value:
-      get_attr: [octavia_lb, vip_address]
-  lb_pg_port:
+      get_resource: cinder_volume1
+  volume2_id:
     value:
-      get_param: lb_pg_port
-  lb_svc_port:
-    value:
-      get_param: lb_svc_port
+      get_resource: cinder_volume2
 {% endif %}

@@ -16,8 +16,6 @@
 		var _VERSION_TAIL_HEAD_ = "?version=" + _VERSION_;
 		var _VERSION_TAIL_ = _VERSION_TAIL_HEAD_ + ((_MODE_ == "DEBUG" && _DEBUG_LEVEL_ > 1) ? "." + _TOME_ : "");
 
-		var _TEMP_PRIFIX_ = document.port == "4080" ? "/temp" : "";
-
 		// upload 진행 바 표현 최소 파일 사이즈 - 작은 사이즈의 경우 표현이 의미 없음
 		var _UPLOADING_VIEW_MIN_SIZE_ = 10240; // 10MB
 
@@ -68,10 +66,6 @@
 		var _PERF_JS_				= _PERF_STAGE_ + "/js";
 
 		var _GPU_VM_CATALOG_TEMPLATE_= _GPU_STAGE_ +"/templates/vmCatalog";
-
-		// 임시 추후 삭제
-		var _VIEW_TEMP_ 				 = _PORT_ == "4080" ? "/temp" : "";
-		_PERF_VIEWS_ 				 = _PERF_VIEWS_ + _VIEW_TEMP_;
 
 		var _CONNECT_SITE_				= "USER";
 		var _LAYOUT_VIEWS_				= _COMM_VIEWS_;

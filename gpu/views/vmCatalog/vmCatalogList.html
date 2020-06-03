@@ -1,216 +1,41 @@
 <!-- 프로젝트 정보 -->
 <div class="cBox type0 projt-mana mt30">
-	<div class="pull-left">
-		<h4 class="c-tit">전체 서버 <em class="point1">(8)</em></h4>
-	</div>
-	<div class="pull-right">
-		<!-- 검색 -->
-		<div class="searchBox type2">
-			<div class="form-group">
-				<input ng-if="contents.tabIndex == 0" type="text" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText">
-				<input ng-if="contents.tabIndex == 1" type="text" placeholder="부하분산 서버 검색" style="width:300px;" ng-model="contents.schLbFilterText">
-			</div>
-			<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
-		</div>
-		<!-- //검색 -->
-	</div>
+    <div class="pull-left">
+        <h4 class="c-tit">전체 서버 <em class="point1">({{ (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length }})</em></h4>
+    </div>
+    <div class="pull-right">
+        <!-- 검색 -->
+        <div class="searchBox type2">
+            <div class="form-group">
+                <input type="text" placeholder="검색" style="width:300px;" ng-model="contents.schFilterText">
+            </div>
+            <button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
+        </div>
+        <!-- //검색 -->
+    </div>
 </div>
 <!-- //프로젝트 정보 -->
 
 <ul class="ul-panel thum_style">
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_lb_large.png" >
-					</div>
-					<p class="tit" title="Haproxy">Haproxy</p>
-					<p class="txt">Version : 2.1.1 </p>
-				</div>
-				<div class="panel_body">
-					<div class="txt_info_wrap">
-						<p class="t_info">L4, L7 과 같은 하드웨어 로드밸런서를 대체하기 위한 오픈소스 소프트웨어로 이름처럼 Reverse Proxy 를 기반으로 로드밸런싱을 하기에 매우 강력하고 또 가벼운 어플리케이션</p>
-						<div class="btnArea">
-							<button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/1">만들기</a></button><!-- :::: 링크 ng-click으로 변경 시 a태그 삭제필요 :::: -->
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_logo_nginx.png" >
-					</div>
-					<p class="tit" title="Nginx">Nginx</p>
-					<p class="txt">Version : 1.14.0</p>
-				</div>
-				<div class="panel_body">
-					<div class="txt_info_wrap">
-						<p class="t_info">Nginx는 웹 서버 소프트웨어로, 가벼움과 높은 성능을 목표로 한다. 웹 서버, 리버스 프록시 및 메일 프록시 기능을 가짐</p>
-						<div class="btnArea">
-							<button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/1">만들기</a></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_tomcat_100.png" >
-					</div>
-					<p class="tit" title="Tomcat">Tomcat</p>
-					<p class="txt">Version : 8.0</p>
-				</div>
-				<div class="panel_body">
-					<div class="txt_info_wrap">
-						<p class="t_info">톰캣은 웹 서버와 연동하여 실행할 수 있는 자바 환경을 제공하여 자바서버 페이지와 자바 서블릿이 실행할 수 있는 환경을 제공</p>
-						<div class="btnArea">
-							<button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/1">만들기</a></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_mariadb.png" >
-					</div>
-					<p class="tit" title="MariaDB">MariaDB</p>
-					<p class="txt">Version : 10.1.13</p>
-				</div>
-				<div class="panel_body">
-					<div class="txt_info_wrap">
-						<p class="t_info">MariaDB는 오픈 소스의 관계형 데이터베이스 관리 시스템이다. MySQL과 동일한 소스 코드를 기반으로 하며, GPL v2 라이선스를 따름</p>
-						<div class="btnArea">
-							<button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/1">만들기</a></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_mysql_100.png" >
-					</div>
-					<p class="tit" title="Mysql">Mysql</p>
-					<p class="txt">Version : 5.0</p>
-				</div>
-				<div class="panel_body">
-					<div class="txt_info_wrap">
-						<p class="t_info">빠르고 안정적이며 확장 가능하며 사용하기 쉬운 오픈 소스 관계형 데이터베이스 시스템</p>
-						<div class="btnArea">
-							<button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/1">만들기</a></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_logo_postgre.png" >
-					</div>
-					<p class="tit" title="Postgresql">Postgresql</p>
-					<p class="txt">Version : 8.3.4</p>
-				</div>
-				<div class="panel_body">
-					<div class="txt_info_wrap">
-						<p class="t_info">확장 가능성 및 표준 준수를 강조하는 객체-관계형 데이터베이스 관리 시스템의 하나로 BSD 허가권으로 배포되며 오픈소스 개발자 및 관련 회사들이 개발에 참여하고 있음</p>
-						<div class="btnArea">
-							<button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/1">만들기</a></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_logo_redis.png" >
-					</div>
-					<p class="tit" title="Redis">Redis</p>
-					<p class="txt">Version : 5.5</p>
-				</div>
-				<div class="panel_body">
-					<div class="txt_info_wrap">
-						<p class="t_info">Remote Dictionary Server의 약자로서, "키-값" 구조의 비정형 데이터를 저장하고 관리하기 위한 오픈 소스 기반의 비관계형 데이터베이스 관리 시스템</p>
-						<div class="btnArea">
-							<button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/1">만들기</a></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_logo_rabbitmq.png" >
-					</div>
-					<p class="tit" title="Rabbitmq">Rabbitmq</p>
-					<p class="txt">Version : 3.8.3</p>
-				</div>
-				<div class="panel_body">
-					<div class="txt_info_wrap">
-						<p class="t_info">오픈 소스 메시지 브로커 소프트웨어로서, AMQP를 구현하였으며 그 이후로 STOMP, MQTT 등의 프로토콜을 지원하기 위해 플러그인 구조와 함께 확장되고 있음</p>
-						<div class="btnArea">
-							<button type="button" name="button" class="btn btn-md btn-color3"><a href="#/gpu/vmCatalog/deploy/1">만들기</a></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
+    <li ng-repeat="(key, vmCatalog) in contents.vmCatalogs | filter: { catalogName : contents.searchText }">
+        <div class="panelWrap">
+            <div class="panel type6">
+                <div class="panel_head">
+                    <div class="logo radius0">
+                        <img src="/gpu/templates/vmCatalog{{ vmCatalog.templatePath }}/logo.png" >
+                    </div>
+                    <p class="tit" title="{{ vmCatalog.catalogName }}">{{ vmCatalog.catalogName }}</p>
+                    <p class="txt">Version : {{ vmCatalog.version }} </p>
+                </div>
+                <div class="panel_body">
+                    <div class="txt_info_wrap">
+                        <p class="t_info text-left">{{ vmCatalog.description }}</p>
+                        <div class="btnArea">
+                            <button type="button" name="button" class="btn btn-md btn-color3" ng-click="main.goToPage('/gpu/vmCatalog/deploy/' + vmCatalog.id)">만들기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
 </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

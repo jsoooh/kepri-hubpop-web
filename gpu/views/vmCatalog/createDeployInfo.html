@@ -6,27 +6,27 @@
         <ul>
             <li>
                 <span class="s_tit">서비스 이름</span>
-                <span class="s_txt">MyDB01</span>
+                <span class="s_txt">{{ contents.data.deployName }}</span>
             </li>
             <li>
                 <span class="s_tit">카탈로그 이름</span>
-                <span class="s_txt">MariaDB</span>
+                <span class="s_txt">{{ contents.vmCatalogInfo.catalogName }}</span>
             </li>
             <li>
                 <span class="s_tit">버전</span>
-                <span class="s_txt">10.1.13</span>
+                <span class="s_txt">{{ contents.vmCatalogInfo.version }}</span>
             </li>
             <li>
                 <span class="s_tit">서버 수</span>
-                <span class="s_txt">3</span>
+                <span class="s_txt">{{ contents.data.serverCnt }}</span>
             </li>
             <li>
                 <span class="s_tit">서버 OS</span>
-                <span class="s_txt">kepri-mariadb-10.1.raw</span>
+                <span class="s_txt">CentOS 7</span>
             </li>
             <li>
                 <span class="s_tit">서버 사양</span>
-                <span class="s_txt" >m1.small</span>
+                <span class="s_txt" >{{ contents.data.spec.name }}</span>
                 <div class="s_inner_cont">
                     <div class="innr_tbl">
                         <table>
@@ -43,10 +43,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>3 X 1Core</td>
-                                <td>3 X 2GB</td>
-                                <td>3 X 20GB</td>
+                            <tr ng-show="contents.data.serverCnt == 1">
+                                <td>{{contents.data.spec.vcpus}} Core</td>
+                                <td>{{contents.data.spec.ram | displayVolume : 'MB'}}</td>
+                                <td>{{contents.data.spec.disk | displayVolume : 'GB'}}</td>
+                            </tr>
+                            <tr ng-show="contents.data.serverCnt > 1">
+                                <td>{{ contents.data.serverCnt }} X {{contents.data.spec.vcpus}} Core</td>
+                                <td>{{ contents.data.serverCnt }} X {{contents.data.spec.ram | displayVolume : 'MB'}}</td>
+                                <td>{{ contents.data.serverCnt }} X {{contents.data.spec.disk | displayVolume : 'GB'}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -68,11 +73,12 @@
             <ul>
                 <li>
                     <span class="s_tit">크기</span>
-                    <span class="s_txt">3 X 20GB</span>
+                    <span ng-show="contents.data.serverCnt == 1" class="s_txt">{{ contents.volumeSize | displayVolume : 'GB' }}</span>
+                    <span ng-show="contents.data.serverCnt > 1" class="s_txt">{{ contents.data.serverCnt }} X {{ contents.volumeSize | displayVolume : 'GB' }}</span>
                 </li>
                 <li>
                     <span class="s_tit">유형</span>
-                    <span class="s_txt">MariaDB</span>
+                    <span class="s_txt">Volume Storage</span>
                 </li>
             </ul>
         </div>

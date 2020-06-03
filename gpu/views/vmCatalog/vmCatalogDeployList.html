@@ -1,284 +1,284 @@
 <!-- 프로젝트 정보 -->
 <div class="cBox type0 projt-mana mt30">
-	<div class="pull-left">
-		<h4 class="c-tit">전체 서버 <em class="point1">(8)</em></h4>
-	</div>
-	<div class="pull-right">
-		<!-- 검색 -->
-		<div class="searchBox type2">
-			<div class="form-group">
-				<input ng-if="contents.tabIndex == 0" type="text" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText">
-				<input ng-if="contents.tabIndex == 1" type="text" placeholder="부하분산 서버 검색" style="width:300px;" ng-model="contents.schLbFilterText">
-			</div>
-			<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
-		</div>
-		<!-- //검색 -->
-	</div>
+    <div class="pull-left">
+        <h4 class="c-tit">전체 서버 <em class="point1">(8)</em></h4>
+    </div>
+    <div class="pull-right">
+        <!-- 검색 -->
+        <div class="searchBox type2">
+            <div class="form-group">
+                <input ng-if="contents.tabIndex == 0" type="text" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText">
+                <input ng-if="contents.tabIndex == 1" type="text" placeholder="부하분산 서버 검색" style="width:300px;" ng-model="contents.schLbFilterText">
+            </div>
+            <button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
+        </div>
+        <!-- //검색 -->
+    </div>
 </div>
 <!-- //프로젝트 정보 -->
 
 <ul class="ul-panel thum_style">
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6 serv_list">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_lb_large.png" >
-					</div>
-					<p class="tit" title="Haproxy"><a href="#/gpu/vmCatalogDeploy/view/1">Haproxy</a></p>
-					<p class="txt mb40">Version : 2.1.1 </p>
-					<div class="tg_box_area btn-option type2">
-						<button type="button" class="btn_txt">접속정보</button>
-					</div>
-					<div class="dropdown btn-option">
-						<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-							<span class="ico">실행 설정</span>
-						</button>
-						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li><a href="">이름 변경</a></li>
-							<li><a href="" class="delete">서비스 제거</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="panel_body">
-					<!-- 접속정보 -->
-					<div class="tg_box" style="display:none;">
-						<div class="tgb_head">
-							<p class="tit">접속 정보</p>
-							<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
-						</div>
-						<!-- ubuntu  -->
-						<div class="tgb_body">
-							<ul>
-								<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
-								<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
-								<li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
-								<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
-								<li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
-							</ul>
-						</div>
-					</div>
-					<!-- //접속정보 -->
-					<div class="img_info_wrap">
-						<!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
-						<ul class="img_count imgType1">
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6 serv_list">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_lb_large.png" >
-					</div>
-					<p class="tit" title="Haproxy">Haproxy</p>
-					<p class="txt mb40">Version : 2.1.1 </p>
-					<div class="tg_box_area btn-option type2">
-						<button type="button" class="btn_txt">접속정보</button>
-					</div>
-					<div class="dropdown btn-option">
-						<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-							<span class="ico">실행 설정</span>
-						</button>
-						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li><a href="">이름 변경</a></li>
-							<li><a href="" class="delete">서비스 제거</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="panel_body">
-					<!-- 접속정보 -->
-					<div class="tg_box" style="display:none;">
-						<div class="tgb_head">
-							<p class="tit">접속 정보</p>
-							<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
-						</div>
-						<!-- ubuntu  -->
-						<div class="tgb_body">
-							<ul>
-								<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
-								<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
-								<li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
-								<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
-								<li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
-							</ul>
-						</div>
-					</div>
-					<!-- //접속정보 -->
-					<div class="img_info_wrap">
-						<!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
-						<ul class="img_count imgType2">
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6 serv_list">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_lb_large.png" >
-					</div>
-					<p class="tit" title="Haproxy">Haproxy</p>
-					<p class="txt mb40">Version : 2.1.1 </p>
-					<div class="tg_box_area btn-option type2">
-						<button type="button" class="btn_txt">접속정보</button>
-					</div>
-					<div class="dropdown btn-option">
-						<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-							<span class="ico">실행 설정</span>
-						</button>
-						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li><a href="">이름 변경</a></li>
-							<li><a href="" class="delete">서비스 제거</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="panel_body">
-					<!-- 접속정보 -->
-					<div class="tg_box" style="display:none;">
-						<div class="tgb_head">
-							<p class="tit">접속 정보</p>
-							<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
-						</div>
-						<!-- ubuntu  -->
-						<div class="tgb_body">
-							<ul>
-								<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
-								<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
-								<li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
-								<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
-								<li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
-							</ul>
-						</div>
-					</div>
-					<!-- //접속정보 -->
-					<div class="img_info_wrap">
-						<!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
-						<ul class="img_count imgType3">
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6 serv_list">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_lb_large.png" >
-					</div>
-					<p class="tit" title="Haproxy">Haproxy</p>
-					<p class="txt mb40">Version : 2.1.1 </p>
-					<div class="tg_box_area btn-option type2">
-						<button type="button" class="btn_txt">접속정보</button>
-					</div>
-					<div class="dropdown btn-option">
-						<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-							<span class="ico">실행 설정</span>
-						</button>
-						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li><a href="">이름 변경</a></li>
-							<li><a href="" class="delete">서비스 제거</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="panel_body">
-					<!-- 접속정보 -->
-					<div class="tg_box" style="display:none;">
-						<div class="tgb_head">
-							<p class="tit">접속 정보</p>
-							<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
-						</div>
-						<!-- ubuntu  -->
-						<div class="tgb_body">
-							<ul>
-								<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
-								<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
-								<li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
-								<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
-								<li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
-							</ul>
-						</div>
-					</div>
-					<!-- //접속정보 -->
-					<div class="img_info_wrap">
-						<!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
-						<ul class="img_count">
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panelWrap">
-			<div class="panel type6 serv_list">
-				<div class="panel_head">
-					<div class="logo radius0">
-						<img src="images/thum/im_thum_lb_large.png" >
-					</div>
-					<p class="tit" title="Haproxy">Haproxy</p>
-					<p class="txt mb40">Version : 2.1.1 </p>
-					<div class="tg_box_area btn-option type2">
-						<button type="button" class="btn_txt">접속정보</button>
-					</div>
-					<div class="dropdown btn-option">
-						<button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-							<span class="ico">실행 설정</span>
-						</button>
-						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li><a href="">이름 변경</a></li>
-							<li><a href="" class="delete">서비스 제거</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="panel_body">
-					<!-- 접속정보 -->
-					<div class="tg_box">
-						<div class="tgb_head">
-							<p class="tit">접속 정보</p>
-							<button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
-						</div>
-						<!-- ubuntu  -->
-						<div class="tgb_body">
-							<ul>
-								<li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
-								<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
-								<li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
-								<li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
-								<li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
-							</ul>
-						</div>
-					</div>
-					<!-- //접속정보 -->
-					<div class="img_info_wrap">
-						<!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
-						<ul class="img_count imgType1">
-							<li><img src="images/thum/im_thum_centos_300.png" ></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
+    <li>
+        <div class="panelWrap">
+            <div class="panel type6 serv_list">
+                <div class="panel_head">
+                    <div class="logo radius0">
+                        <img src="images/thum/im_thum_lb_large.png" >
+                    </div>
+                    <p class="tit" title="Haproxy"><a href="#/gpu/vmCatalogDeploy/view/1">Haproxy</a></p>
+                    <p class="txt mb40">Version : 2.1.1 </p>
+                    <div class="tg_box_area btn-option type2">
+                        <button type="button" class="btn_txt">접속정보</button>
+                    </div>
+                    <div class="dropdown btn-option">
+                        <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                            <span class="ico">실행 설정</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                            <li><a href="">이름 변경</a></li>
+                            <li><a href="" class="delete">서비스 제거</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel_body">
+                    <!-- 접속정보 -->
+                    <div class="tg_box" style="display:none;">
+                        <div class="tgb_head">
+                            <p class="tit">접속 정보</p>
+                            <button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+                        </div>
+                        <!-- ubuntu  -->
+                        <div class="tgb_body">
+                            <ul>
+                                <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
+                                <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+                                <li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
+                                <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
+                                <li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- //접속정보 -->
+                    <div class="img_info_wrap">
+                        <!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
+                        <ul class="img_count imgType1">
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="panelWrap">
+            <div class="panel type6 serv_list">
+                <div class="panel_head">
+                    <div class="logo radius0">
+                        <img src="images/thum/im_thum_lb_large.png" >
+                    </div>
+                    <p class="tit" title="Haproxy">Haproxy</p>
+                    <p class="txt mb40">Version : 2.1.1 </p>
+                    <div class="tg_box_area btn-option type2">
+                        <button type="button" class="btn_txt">접속정보</button>
+                    </div>
+                    <div class="dropdown btn-option">
+                        <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                            <span class="ico">실행 설정</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                            <li><a href="">이름 변경</a></li>
+                            <li><a href="" class="delete">서비스 제거</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel_body">
+                    <!-- 접속정보 -->
+                    <div class="tg_box" style="display:none;">
+                        <div class="tgb_head">
+                            <p class="tit">접속 정보</p>
+                            <button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+                        </div>
+                        <!-- ubuntu  -->
+                        <div class="tgb_body">
+                            <ul>
+                                <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
+                                <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+                                <li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
+                                <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
+                                <li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- //접속정보 -->
+                    <div class="img_info_wrap">
+                        <!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
+                        <ul class="img_count imgType2">
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="panelWrap">
+            <div class="panel type6 serv_list">
+                <div class="panel_head">
+                    <div class="logo radius0">
+                        <img src="images/thum/im_thum_lb_large.png" >
+                    </div>
+                    <p class="tit" title="Haproxy">Haproxy</p>
+                    <p class="txt mb40">Version : 2.1.1 </p>
+                    <div class="tg_box_area btn-option type2">
+                        <button type="button" class="btn_txt">접속정보</button>
+                    </div>
+                    <div class="dropdown btn-option">
+                        <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                            <span class="ico">실행 설정</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                            <li><a href="">이름 변경</a></li>
+                            <li><a href="" class="delete">서비스 제거</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel_body">
+                    <!-- 접속정보 -->
+                    <div class="tg_box" style="display:none;">
+                        <div class="tgb_head">
+                            <p class="tit">접속 정보</p>
+                            <button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+                        </div>
+                        <!-- ubuntu  -->
+                        <div class="tgb_body">
+                            <ul>
+                                <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
+                                <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+                                <li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
+                                <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
+                                <li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- //접속정보 -->
+                    <div class="img_info_wrap">
+                        <!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
+                        <ul class="img_count imgType3">
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="panelWrap">
+            <div class="panel type6 serv_list">
+                <div class="panel_head">
+                    <div class="logo radius0">
+                        <img src="images/thum/im_thum_lb_large.png" >
+                    </div>
+                    <p class="tit" title="Haproxy">Haproxy</p>
+                    <p class="txt mb40">Version : 2.1.1 </p>
+                    <div class="tg_box_area btn-option type2">
+                        <button type="button" class="btn_txt">접속정보</button>
+                    </div>
+                    <div class="dropdown btn-option">
+                        <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                            <span class="ico">실행 설정</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                            <li><a href="">이름 변경</a></li>
+                            <li><a href="" class="delete">서비스 제거</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel_body">
+                    <!-- 접속정보 -->
+                    <div class="tg_box" style="display:none;">
+                        <div class="tgb_head">
+                            <p class="tit">접속 정보</p>
+                            <button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+                        </div>
+                        <!-- ubuntu  -->
+                        <div class="tgb_body">
+                            <ul>
+                                <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
+                                <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+                                <li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
+                                <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
+                                <li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- //접속정보 -->
+                    <div class="img_info_wrap">
+                        <!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
+                        <ul class="img_count">
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="panelWrap">
+            <div class="panel type6 serv_list">
+                <div class="panel_head">
+                    <div class="logo radius0">
+                        <img src="images/thum/im_thum_lb_large.png" >
+                    </div>
+                    <p class="tit" title="Haproxy">Haproxy</p>
+                    <p class="txt mb40">Version : 2.1.1 </p>
+                    <div class="tg_box_area btn-option type2">
+                        <button type="button" class="btn_txt">접속정보</button>
+                    </div>
+                    <div class="dropdown btn-option">
+                        <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+                            <span class="ico">실행 설정</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+                            <li><a href="">이름 변경</a></li>
+                            <li><a href="" class="delete">서비스 제거</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel_body">
+                    <!-- 접속정보 -->
+                    <div class="tg_box">
+                        <div class="tgb_head">
+                            <p class="tit">접속 정보</p>
+                            <button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+                        </div>
+                        <!-- ubuntu  -->
+                        <div class="tgb_body">
+                            <ul>
+                                <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">tcp</span></li>
+                                <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">100.216.222.152</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+                                <li><strong><span class="tb_tit">접속 Port :</span></strong><span class="tb_txt">3306</span></li>
+                                <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">root</span></li>
+                                <li><strong><span class="tb_tit">초기 PW :</span></strong><span class="tb_txt">4124es</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- //접속정보 -->
+                    <div class="img_info_wrap">
+                        <!-- *OS이미지 기본: img_count / *OS이미지 1개일 경우: imgType1 / *OS이미지 2개일 경우: imgType2 / *OS이미지 3개일 경우: imgType3 -->
+                        <ul class="img_count imgType1">
+                            <li><img src="images/thum/im_thum_centos_300.png" ></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
 </ul>
