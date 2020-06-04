@@ -1,3 +1,33 @@
+<style type="text/css">
+	.mainLoading {
+		background:url("../../img/loading.gif") 50% 50% no-repeat;
+		content:"";
+		display:block;
+		width:150px;
+		height:150px;
+		position:absolute;
+		top:50%;
+		left:50%;
+		margin-left:-75px;
+		margin-top: -55px;
+	}
+	.chart_wrap {
+		position: relative;
+		clear:both;
+	}
+	.warning:after {
+		background:url("../../img/alert_warning.png") 50% 50% no-repeat;
+		content:"";
+		display:block;
+		width:150px;
+		height:150px;
+		position:absolute;
+		top:50%;
+		left:50%;
+		margin-left:-75px;
+		margin-top: -55px;
+	}
+</style>
 <div class="panelWrap">
 	<div class="panel type2">
 		<div class="panel_head">
@@ -43,9 +73,11 @@
 					</div>
 					<div class="col-md-4">
 						<h4>서비스별 사용 금액</h4>
+
 						<div class="chart_wrap pt20" style="overflow:hidden;">
-							<div ng-hide="contents.itemGroupChartLoading" id="itemGroup-anls-chart"></div>
-							<div class="" ng-if="contents.itemChartLoading"><img src="images/loading/loading.gif"></div>
+							<div id="itemGroup-anls-chart"></div>
+							<div class="mainLoading" ng-if="contents.itemGroupChart.loading"></div>
+							<div class="warning" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1"></div>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -57,9 +89,11 @@
 									ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeMeteringItemsByItemGroupCode(contents.data.sltItemGroupCode)">
 							</select>
 						</div>
+
 						<div class="chart_wrap pt20" style="overflow:hidden;">
-							<div ng-hide="contents.itemGroupChartLoading" id="item-anls-chart"></div>
-							<div class="" ng-if="contents.itemGroupChartLoading"><img src="images/loading/loading.gif"></div>
+							<div id="item-anls-chart"></div>
+							<div class="mainLoading" ng-if="contents.itemChart.loading"></div>
+							<div class="warning" ng-if="!contents.itemChart.loading && contents.itemChart.data.series.length < 1"></div>
 						</div>
 					</div>
 				</div>
@@ -79,9 +113,9 @@
 		<div class="panel_body h_auto">
 			<div class="in">
 				<div class="chart_wrap" style="overflow:hidden;">
-					<div ng-show="!contents.dailyChartLoading && contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
-					<div ng-show="!contents.dailyChartLoading && contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
-					<div class="" ng-if="contents.dailyChartLoading"><img src="images/loading/loading.gif"></div>
+					<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
+					<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
+					<div class="mainLoading" ng-if="contents.dailyChart.loading"></div>
 				</div>
 			</div>
 		</div>
