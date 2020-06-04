@@ -18,6 +18,7 @@ angular.module('common.controllers', [])
         };
 
         mc.topLogoIcon = "images/top_logo.png";
+        mc.gpuVmCatalogTemplatePath = _GPU_VM_CATALOG_TEMPLATE_;
 
         mc.projectType = _PROJECT_TYPE_;
 
