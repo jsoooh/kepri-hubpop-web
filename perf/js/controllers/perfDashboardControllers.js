@@ -213,6 +213,8 @@ angular.module('perf.controllers')
          * @param sltYear
          */
         ct.fn.listAnlsMonthlySummaryByOrg = function(sltYear) {
+            ct.dailyChart.loading = true;
+
             ct.data.sltYear = sltYear;
             var params = {
                 "urlPaths": {
@@ -253,10 +255,14 @@ angular.module('perf.controllers')
                 console.log("monthlyChartData");
                 console.log(ct.monthlyChart.data);
                 ct.fn.redrawChart(ct.monthlyChart);
+
+                ct.dailyChart.loading = false;
             });
             promise.error(function (data) {
                 ct.anlsMonthlySummaryLists = [];
                 ct.anlsMonthlySummaryListsToChartData = [];
+
+                ct.dailyChart.loading = false;
             });
         };
 
@@ -267,7 +273,7 @@ angular.module('perf.controllers')
          * @param sltMonth
          */
         ct.fn.listAnlsDailySummaryByOrg = function(sltYear, sltMonth) {
-            ct.dailyChartLoading = true;
+            ct.dailyChart.loading = true;
 
             var sltParams = {
                 "urlPaths": {
@@ -323,13 +329,13 @@ angular.module('perf.controllers')
                 console.log(ct.dailyChart.data);
                 ct.fn.redrawChart(ct.dailyChart);
 
-                ct.dailyChartLoading = false;
+                ct.dailyChart.loading = false;
             });
             promise.error(function (data) {
                 ct.anlsDailySummaryLists = [];
                 ct.anlsDailySummaryListsToChartData = [];
 
-                ct.dailyChartLoading = false;
+                ct.dailyChart.loading = false;
             });
         };
         /* 지난달 사용 금액 */
@@ -363,7 +369,7 @@ angular.module('perf.controllers')
          * @param sltMonth
          */
         ct.fn.listAnlsByItemGroup = function (sltYear, sltMonth) {
-            ct.itemGroupChartLoading = true;
+            ct.itemGroupChart.loading = true;
 
             var params = {
                 "urlPaths": {
@@ -399,14 +405,14 @@ angular.module('perf.controllers')
                     ct.fn.redrawChart(ct.itemGroupChart);
                 }
 
-                ct.itemGroupChartLoading = false;
+                ct.itemGroupChart.loading = false;
             });
             promise.error(function (data, status, header) {
                 console.log("Fail listAnlsTotalByOrgAndItemGroup");
                 ct.anlsByItemGroupLists = [];
                 ct.anlsByItemGroupListsToChartData = [];
 
-                ct.itemGroupChartLoading = false;
+                ct.itemGroupChart.loading = false;
             });
         };
 
@@ -417,7 +423,7 @@ angular.module('perf.controllers')
          * @param sltMonth
          */
         ct.fn.listAnlsByItem = function (sltYear, sltMonth) {
-            ct.itemChartLoading = true;
+            ct.itemChart.loading = true;
 
             var params = {
                 "urlPaths": {
@@ -443,16 +449,16 @@ angular.module('perf.controllers')
                     console.log(ct.itemChart.data);
 
                     ct.fn.redrawChart(ct.itemChart);
-                }
 
-                ct.itemChartLoading = false;
+                    ct.itemChart.loading = false;
+                }
             });
             promise.error(function (data, status, header) {
                 console.log("Fail listAnlsTotalByOrgAndItem");
                 ct.anlsByItemLists = [];
                 ct.anlsByItemListsToChartData = [];
 
-                ct.itemChartLoading = false;
+                ct.itemChart.loading = false;
             });
         };
         /* itemChartData 구성 */
