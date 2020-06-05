@@ -56,8 +56,8 @@
 							<p ng-if="contents.isToday">이달 사용 금액</p>
 							<p ng-if="!contents.isToday">{{ contents.data.sltMonth }}월 사용 금액</p>
 							<div class="amountTxt">
-								<span class="amount">{{ contents.data.sltSumPerfAmt | number }}</span>
-								<img class="amount_loading" ng-if="contents.data.sltSumPerfAmt==null" src="images/loading/lg.equalizer-bars-loader.gif">
+								<span class="amount" ng-if="!contents.dailyChart.loading">{{ contents.data.sltSumPerfAmt | number }}</span>
+								<img class="amount_loading" ng-if="contents.dailyChart.loading" src="images/loading/lg.equalizer-bars-loader.gif">
 								<span class="won"> 원</span>
 							</div>
 						</div>
@@ -66,8 +66,8 @@
 								<p ng-if="contents.isToday">지난달 사용 금액</p>
 								<p ng-if="!contents.isToday">{{ contents.data.lastMonth }}월 사용 금액</p>
 								<div class="amountTxt">
-									<span class="amount">{{ contents.data.lastSumPerfAmt | number }}</span>
-									<img class="amount_loading" ng-if="contents.data.lastSumPerfAmt==null" src="images/loading/lg.equalizer-bars-loader.gif">
+									<span class="amount" ng-if="!contents.lastSumLoading">{{ contents.data.lastSumPerfAmt | number }}</span>
+									<img class="amount_loading" ng-if="contents.lastSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
 									<span class="won"> 원</span>
 								</div>
 							</li>
@@ -75,8 +75,8 @@
 								<p ng-if="contents.isToday">이달 사용 예상 금액</p>
 								<p ng-if="!contents.isToday">{{ contents.data.nextMonth }}월 사용 금액</p>
 								<div class="amountTxt">
-									<span class="amount">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
-									<img class="amount_loading" ng-if="contents.data.nextSumPerfAmt==null" src="images/loading/lg.equalizer-bars-loader.gif">
+									<span class="amount" ng-if="!contents.nextSumLoading">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
+									<img class="amount_loading" ng-if="contents.nextSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
 									<span class="won">원</span>
 								</div>
 							</li>
