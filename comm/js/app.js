@@ -79,7 +79,7 @@ angular.module('app', [
                 if (angular.isArray(scriptFile.files) && scriptFile.files.length > 0) {
                     angular.forEach(scriptFile.files, function (file, k) {
                         scriptFile.files[k] = file + _VERSION_TAIL_HEAD_;
-                        scriptFile.cache = (_MODE_ == 'DEBUG') ? false : true;
+                        scriptFile.cache = true;
                     });
                 }
             });
@@ -90,7 +90,7 @@ angular.module('app', [
                 if (angular.isArray(customModule.files) && customModule.files.length > 0) {
                     angular.forEach(customModule.files, function (file, k) {
                         customModule.files[k] = file + _VERSION_TAIL_HEAD_;
-                        customModule.cache = (_MODE_ == 'DEBUG') ? false : true;
+                        customModule.cache = true;
                     });
                 }
                 modules.push(customModule);
@@ -219,34 +219,29 @@ angular.module('app', [
         };
 
         function setParentMergeMyFiles (parentFiles, childrenFiles) {
-            if (angular.isArray(parentFiles) && parentFiles.length > 0) {
-                var loadMyFiles = angular.copy(parentFiles);
-                if (angular.isArray(childrenFiles)) {
-                    angular.forEach(childrenFiles, function(loadFile, key) {
-                        if (angular.isString(loadFile)) {
-                            if (loadModuleNames.indexOf(loadFile) == -1) {
-                                loadMyFiles.push(loadFile + _VERSION_TAIL_HEAD_);
-                            } else {
-                                loadMyFiles.push(loadFile);
-                            }
-                        } else if (angular.isObject(loadFile) && angular.isArray(loadFile.files)) {
-                            if (loadFile.files.length > 0) {
-                                angular.forEach(loadFile.files, function (file, k) {
-                                    loadFile.files[k] = file + _VERSION_TAIL_HEAD_;
-                                });
-                            }
+            var loadMyFiles = [];
+            if (angular.isArray(parentFiles)) {
+                loadMyFiles = angular.copy(parentFiles);
+            }
+            if (angular.isArray(childrenFiles)) {
+                angular.forEach(childrenFiles, function(loadFile, key) {
+                    if (angular.isString(loadFile)) {
+                        if (loadModuleNames.indexOf(loadFile) == -1) {
+                            loadMyFiles.push(loadFile + _VERSION_TAIL_);
+                        } else {
                             loadMyFiles.push(loadFile);
                         }
-                    });
-                }
-                return loadMyFiles;
-            } else {
-                if (angular.isArray(childrenFiles)) {
-                    return angular.copy(childrenFiles);
-                } else {
-                    return [];
-                }
+                    } else if (angular.isObject(loadFile) && angular.isArray(loadFile.files)) {
+                        if (loadFile.files.length > 0) {
+                            angular.forEach(loadFile.files, function (file, k) {
+                                loadFile.files[k] = file + _VERSION_TAIL_;
+                            });
+                        }
+                        loadMyFiles.push(loadFile);
+                    }
+                });
             }
+            return loadMyFiles;
         }
 
         if (IAASSITEMAP.pages) {
