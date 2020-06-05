@@ -9,38 +9,16 @@
             <div class="pn_body">
                 <span class="sm_txt">* 는 필수입력 사항입니다.</span>
                 <ul class="form_list">
-                    <li>
-                        <div class="pnb_tit">
-                            <i class="i_star"></i> <span class="pnb_t_txt">서비스 이름</span>
-                            <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
-                        </div>
-                        <input type="text" name="deployName" class="form-control" maxlength="50" ng-model="contents.data.deployName" validation="alpha_dash|required" placeholder="서비스 이름을 입력하세요." >
-                    </li>
-                    <li>
-                        <div class="pnb_tit">
-                            <i class="i_star"></i> <span class="pnb_t_txt">포트</span>
-                            <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
-                        </div>
-                        <input type="number" name="servicePort" class="form-control" maxlength="50" ng-model="contents.data.servicePort" validation="number|required" placeholder="서비스 이름을 입력하세요." >
-                    </li>
-                    <li>
-                        <div class="pnb_tit">
-                            <i class="i_star"></i> <span class="pnb_t_txt">root 비밀번호</span>
-                            <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
-                        </div>
-                        <input type="password" name="rootPassword" class="form-control" maxlength="50" ng-model="contents.data.rootPassword" validation="required" placeholder="비밀번호를 입력하세요." >
-                    </li>
-                    <li>
-                        <div class="pnb_tit">
-                            <i class="i_star"></i> <span class="pnb_t_txt">root 비밀번호 확인</span>
-                            <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
-                        </div>
-                        <input type="password" name="rootConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.rootConfirmPassword" validation="required" placeholder="비밀번호를 확인하세요." >
-                    </li>
+                    <li ng-include="contents.htmlUrls.deployName"></li>
+                    <li ng-include="contents.htmlUrls.stackName"></li>
+                    <li ng-include="contents.htmlUrls.servicePort"></li>
+                    <li ng-include="contents.htmlUrls.rootPassword"></li>
+                    <li ng-include="contents.htmlUrls.rootConfirmPassword"></li>
                     <li ng-include="contents.htmlUrls.userDbUse"></li>
                     <li ng-include="contents.htmlUrls.deployTypeRadio"></li>
                     <li ng-show="contents.data.deployType == 'cluster'" ng-include="contents.htmlUrls.octaviaLbUse"></li>
-                    <li ng-include="contents.htmlUrls.spaceSelect"></li>
+                    <li ng-include="contents.htmlUrls.zoneSelect"></li>
+                    <li ng-include="contents.htmlUrls.spacSelect"></li>
                     <li ng-include="contents.htmlUrls.volumeSelect"></li>
                 </ul>
             </div>

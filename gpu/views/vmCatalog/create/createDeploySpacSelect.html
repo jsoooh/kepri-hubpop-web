@@ -22,12 +22,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m', type:'general'} | orderBy:['vcpus', 'ram', 'disk']" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.specUuid)}" ng-click="contents.fn.selectSpec(spec);">
+        <tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.specUuid)}" ng-click="contents.fn.selectSpec(spec);">
             <td>
                 <div class="radio radio-only" >
                     <input type="radio"
                            name="spec_radio"
-                           ng-model="contents.data.specUuid"
+                           ng-model="contents.sltSpacUuid"
                            id="spec_radio_{{key}}"
                            value="{{spec.uuid}}" ng-disabled="spec.disabled">
                     <label for="spec_radio_{{key}}"></label>

@@ -53,7 +53,7 @@ angular.module('gpu.services')
                     "tenantId" : tenantId
                 }
             };
-            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy', 'GET'));
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy', 'GET', params));
         };
 
         // VM 카탈로그 배포 정보 목록 조회(stack 포함)
@@ -63,7 +63,7 @@ angular.module('gpu.services')
                     "tenantId" : tenantId
                 }
             };
-            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/stacks', 'GET'));
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/stacks', 'GET', params));
         };
 
         // VM 카탈로그 배포 정보 조회
@@ -86,6 +86,18 @@ angular.module('gpu.services')
                 }
             };
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/stacks/{id}', 'GET', params));
+        };
+
+        // VM 카탈로그 배포 삭제
+        vmCatalogService.renameVmCatalogDeploy = function(tenantId, deployId, deployName) {
+            var params = {
+                urlPaths : {
+                    "tenantId" : tenantId,
+                    "id" : deployId
+                },
+                deployName: deployName
+            };
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/{id}/rename', 'PUT', params));
         };
 
         // VM 카탈로그 배포 삭제

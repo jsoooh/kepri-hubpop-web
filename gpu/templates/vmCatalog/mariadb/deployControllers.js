@@ -3,6 +3,7 @@
 angular.module('gpu.controllers')
     .controller('mariadbDeployCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, vmCatalogService, CONSTANTS) {
         _DebugConsoleLog("mariadb deployControllers.js : mariadbDeployCtrl", 1);
+        var subPage = this;
         var ct = $scope.$parent.$parent.contents;
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
@@ -25,7 +26,7 @@ angular.module('gpu.controllers')
         ct.fn.createVmCatalogDeploy = function () {
             if (ct.checkClickBtn) return;
             ct.checkClickBtn = true;
-            if (!ct.vs.checkFormValidity($scope['subPage'])) {
+            if (!ct.vs.checkFormValidity(subPage)) {
                 ct.checkClickBtn = false;
                 return;
             }
@@ -38,18 +39,28 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.version = ct.vmCatalogInfo.version;
                 vmCatalogDeploy.deployName = ct.data.deployName;
                 vmCatalogDeploy.deployType = ct.data.deployType;
+                vmCatalogDeploy.deployServerCount = 1;
+                if (ct.data.deployType == "cluster") {
+                    vmCatalogDeploy.deployServerCount = ct.data.clusterCnt;
+                } else if (ct.data.deployType == "replica") {
+                    vmCatalogDeploy.deployServerCount = ct.data.replicaCnt;
+                }
                 vmCatalogDeploy.deployTemplate = deployTemplate;
                 vmCatalogDeploy.context = {};
                 vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
                 vmCatalogDeploy.context.createUser = ct.data.createUser;
+                vmCatalogDeploy.context.octaviaLbUse = false;
+                if (ct.data.deployType == "cluster") {
+                    vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
+                }
                 vmCatalogDeploy.parameters = {};
                 vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
-                vmCatalogDeploy.parameters.availability_zone = ct.data.availabilityZone;
                 vmCatalogDeploy.parameters.flavor = ct.data.flavor;
                 vmCatalogDeploy.parameters.key_name = ct.data.keyName;
                 vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
-                vmCatalogDeploy.parameters.provider_net = ct.data.providerNet;
-                vmCatalogDeploy.parameters.provider_subnet = ct.data.providerSubnet;
+                vmCatalogDeploy.parameters.availability_zone = ct.sltAvailabilityZone.availabilityZone;
+                vmCatalogDeploy.parameters.provider_net = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
+                vmCatalogDeploy.parameters.provider_subnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
                 vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
                 vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
                 if (ct.data.cerateUser) {

@@ -1,13 +1,13 @@
 <!-- 프로젝트 정보 -->
 <div class="cBox type0 projt-mana mt30">
     <div class="pull-left">
-        <h4 class="c-tit">전체 서버 <em class="point1">({{ (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length }})</em></h4>
+        <h4 class="c-tit">전체 카탈로그 <em class="point1">({{ (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length }})</em></h4>
     </div>
     <div class="pull-right">
         <!-- 검색 -->
         <div class="searchBox type2">
             <div class="form-group">
-                <input type="text" placeholder="검색" style="width:300px;" ng-model="contents.schFilterText">
+                <input type="text" placeholder="카탈로그명 검색" style="width:300px;" ng-model="contents.schFilterText">
             </div>
             <button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
         </div>
@@ -22,7 +22,7 @@
             <div class="panel type6">
                 <div class="panel_head">
                     <div class="logo radius0">
-                        <img src="/gpu/templates/vmCatalog{{ vmCatalog.templatePath }}/logo.png" >
+                        <img src="{{ main.gpuVmCatalogTemplatePath + vmCatalog.templatePath }}/logo.png" >
                     </div>
                     <p class="tit" title="{{ vmCatalog.catalogName }}">{{ vmCatalog.catalogName }}</p>
                     <p class="txt">Version : {{ vmCatalog.version }} </p>

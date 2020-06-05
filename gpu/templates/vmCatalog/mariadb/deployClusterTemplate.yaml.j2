@@ -257,7 +257,7 @@ resources:
             mv /var/lib/mysql $volume_mount_path/
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
-{% enfif %}
+{% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
             sleep 1
@@ -445,7 +445,7 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config3
-
+{% if volumeUse %}
   cinder_volume1_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
@@ -466,7 +466,7 @@ resources:
       instance_uuid: { get_resource: server3 }
       volume_id: { get_resource: cinder_volume3 }
       mountpoint: { get_param: volume_mount_point }
-
+{% endif %}
 {% if octaviaLbUse %}
   octavia_lb:
     type: OS::Octavia::LoadBalancer

@@ -7,6 +7,7 @@ angular.module('gpu.controllers')
     var ct               = this;
     ct.tenantId          = $scope.main.userTenantGpuId;
     ct.fn                = {};
+    ct.gpu_vm_catalog_template = _GPU_VM_CATALOG_TEMPLATE_;
 
     ct.vmCatalogs = [];
     ct.schFilterText = "";
@@ -39,14 +40,20 @@ angular.module('gpu.controllers')
     ct.fn                       = {};
     ct.data                     = {};
 
-    ct.htmlUrls                 = {};
-    ct.htmlUrls.userDbUse  = _GPU_VIEWS_ + "/vmCatalog/createDeployUserDbUse.html" + _VERSION_TAIL_;
-    ct.htmlUrls.deployTypeRadio = _GPU_VIEWS_ + "/vmCatalog/createDeployTypeRadio.html" + _VERSION_TAIL_;
-    ct.htmlUrls.octaviaLbUse      = _GPU_VIEWS_ + "/vmCatalog/createDeployOctaviaLbUse.html" + _VERSION_TAIL_;
-    ct.htmlUrls.spaceSelect      = _GPU_VIEWS_ + "/vmCatalog/createDeploySpaceSelect.html" + _VERSION_TAIL_;
-    ct.htmlUrls.volumeSelect     = _GPU_VIEWS_ + "/vmCatalog/createDeployVolumeSelect.html" + _VERSION_TAIL_;
-    ct.htmlUrls.createDeployBtn  = _GPU_VIEWS_ + "/vmCatalog/createDeployBtn.html" + _VERSION_TAIL_;
-    ct.htmlUrls.createDeployInfo = _GPU_VIEWS_ + "/vmCatalog/createDeployInfo.html" + _VERSION_TAIL_;
+    ct.htmlUrls                         = {};
+    ct.htmlUrls.deployName              = _GPU_VIEWS_ + "/vmCatalog/create/createDeployDeployName.html" + _VERSION_TAIL_;
+    ct.htmlUrls.stackName               = _GPU_VIEWS_ + "/vmCatalog/create/createDeployStackName.html" + _VERSION_TAIL_;
+    ct.htmlUrls.servicePort             = _GPU_VIEWS_ + "/vmCatalog/create/createDeployServicePort.html" + _VERSION_TAIL_;
+    ct.htmlUrls.rootPassword            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployRootPassword.html" + _VERSION_TAIL_;
+    ct.htmlUrls.rootConfirmPassword     = _GPU_VIEWS_ + "/vmCatalog/create/createDeployRootConfirmPassword.html" + _VERSION_TAIL_;
+    ct.htmlUrls.userDbUse               = _GPU_VIEWS_ + "/vmCatalog/create/createDeployUserDbUse.html" + _VERSION_TAIL_;
+    ct.htmlUrls.deployTypeRadio         = _GPU_VIEWS_ + "/vmCatalog/create/createDeployTypeRadio.html" + _VERSION_TAIL_;
+    ct.htmlUrls.octaviaLbUse            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployOctaviaLbUse.html" + _VERSION_TAIL_;
+    ct.htmlUrls.zoneSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeployZoneSelect.html" + _VERSION_TAIL_;
+    ct.htmlUrls.spacSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeploySpacSelect.html" + _VERSION_TAIL_;
+    ct.htmlUrls.volumeSelect            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployVolumeSelect.html" + _VERSION_TAIL_;
+    ct.htmlUrls.createDeployBtn         = _GPU_VIEWS_ + "/vmCatalog/create/createDeployBtn.html" + _VERSION_TAIL_;
+    ct.htmlUrls.createDeployInfo        = _GPU_VIEWS_ + "/vmCatalog/create/createDeployInfo.html" + _VERSION_TAIL_;
 
     ct.roles                    = [];
     ct.catalogId                = $stateParams.id;
@@ -56,14 +63,15 @@ angular.module('gpu.controllers')
     ct.isSpecLoad = false;
     ct.isTenantResourceLoad = false;
     ct.specList = [];
-    ct.data.spec = {};
+    ct.availabilityZones = [];
+    ct.sltAvailabilityZone = null;
+    ct.sltSpac = {};
     ct.data.replicaCnt = 3;
     ct.data.clusterCnt = 3;
     ct.data.serverCnt = 1;
 
-    ct.data.availabilityZone = "nova";
     ct.data.securityGroup = "default";
-    ct.data.volumeSize = 10;
+    ct.data.volumeSize = 0;
 
     //디스크생성 변수
     ct.inputVolumeSize = ct.data.volumeSize;
@@ -204,47 +212,14 @@ angular.module('gpu.controllers')
         var returnPromise = vmCatalogService.listAllAvailabilityZones();
         returnPromise.success(function (data, status, headers) {
             ct.availabilityZones = data.content;
-            //ct.availabilityZones.unshift({id:"",name:'',description:"가용존 선택"});
-            ct.availabilityZone = ct.availabilityZones[0];
-            //ct.data.availabilityZone = ct.availabilityZone.availabilityZone;
-            ct.data.providerNet = ct.availabilityZone.publicNetworkSubnet.networkId;
-            ct.data.providerSubnet = ct.availabilityZone.publicNetworkSubnet.subnetId;
+            ct.sltAvailabilityZone = ct.availabilityZones[0];
+            ct.data.availabilityZone = ct.sltAvailabilityZone.availabilityZone;
+            ct.data.providerNet = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
+            ct.data.providerSubnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
         });
         returnPromise.error(function (data, status, headers) {
         });
     };
-
-    // 네트워크 셀렉트박스 조회
-    ct.fn.networkList = function(tenantId) {
-        var returnPromise = vmCatalogService.listAllNetwork(tenantId);
-        returnPromise.success(function (data, status, headers) {
-            ct.networks = data.content;
-            //ct.networks.unshift({id:"",name:'',description:"네트워크 선택"});
-            ct.network = ct.networks[0];
-            ct.data.network = ct.network.name;
-        });
-        returnPromise.error(function (data, status, headers) {
-        });
-    };
-
-    //보안정책 조회
-/*
-    ct.fn.getSecurityPolicy = function(tenantId) {
-        var returnPromise = vmCatalogService.listAllSecurityPolicy(tenantId);
-        returnPromise.success(function (data, status, headers) {
-            ct.securityPolicyList = data.content;
-            for (var i = 0; i < ct.securityPolicyList.length; i++) {
-                if (ct.securityPolicyList[i].name == "default") {
-                    ct.roles.push(ct.securityPolicyList[i]);
-                    ct.data.securityPolicys = ct.roles;
-                    break;
-                }
-            }
-        });
-        returnPromise.error(function (data, status, headers) {
-        });
-    };
-*/
 
     //키페어 조회
     ct.fn.addDefaultKeypair = function(tenantId) {
@@ -325,8 +300,8 @@ angular.module('gpu.controllers')
                 }
             });
             ct.specMinDisabledSetting = true;
-            if (ct.data.spec && ct.data.spec.uuid) {
-                if (ct.data.spec.disk < 4 || ct.data.spec.ram < 512) {
+            if (ct.sltSpac && ct.sltSpac.uuid) {
+                if (ct.sltSpac.disk < 4 || ct.sltSpac.ram < 512) {
                     ct.fn.defaultSelectSpec();
                 }
             } else {
@@ -383,13 +358,13 @@ angular.module('gpu.controllers')
     ct.fn.selectSpec = function(sltSpec) {
         if (!ct.specDisabledAllSetting || sltSpec.disabled) return;
         if (sltSpec && sltSpec.uuid) {
-            ct.data.spec = angular.copy(sltSpec);
-            ct.data.flavor = ct.data.spec.name;
-            ct.data.specUuid = ct.data.spec.uuid;
+            ct.sltSpac = angular.copy(sltSpec);
+            ct.data.flavor = ct.sltSpac.name;
+            ct.sltSpacUuid = ct.sltSpac.uuid;
         } else {
-            ct.data.spec = {};
+            ct.sltSpac = {};
             ct.data.flavor = "";
-            ct.data.specUuid = "";
+            ct.sltSpacUuid = "";
         }
     };
 
@@ -406,8 +381,6 @@ angular.module('gpu.controllers')
     ct.fn.getVmCatalogInfo(ct.catalogId);
     ct.fn.getTenantResource(ct.tenantId);
     ct.fn.availabilityZoneList();
-    ct.fn.networkList(ct.tenantId);
-    //ct.fn.getSecurityPolicy(ct.tenantId);
     ct.fn.getKeypairList(ct.tenantId);
     ct.fn.getSpecList();
 
