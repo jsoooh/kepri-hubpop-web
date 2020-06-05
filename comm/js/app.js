@@ -219,7 +219,7 @@ angular.module('app', [
         };
 
         function setParentMergeMyFiles (parentFiles, childrenFiles) {
-            if (angular.isArray(parentFiles)) {
+            if (angular.isArray(parentFiles) && parentFiles.length > 0) {
                 var loadMyFiles = angular.copy(parentFiles);
                 if (angular.isArray(childrenFiles)) {
                     angular.forEach(childrenFiles, function(loadFile, key) {
@@ -242,7 +242,7 @@ angular.module('app', [
                 return loadMyFiles;
             } else {
                 if (angular.isArray(childrenFiles)) {
-                    return childrenFiles
+                    return angular.copy(childrenFiles);
                 } else {
                     return [];
                 }
