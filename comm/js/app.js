@@ -145,7 +145,7 @@ angular.module('app', [
                         }
                     });
                     mainBody.resolve.loadMyFile = ['$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load({files: loadMyFiles, cache: ((_DEBUG_LEVEL_ >= 3) ? false : true)});
+                        return $ocLazyLoad.load({files: loadMyFiles, cache: true});
                     }];
                 }
                 var pageStateName = "common";

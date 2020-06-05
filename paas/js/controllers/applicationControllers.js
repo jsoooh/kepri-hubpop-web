@@ -31,6 +31,9 @@ angular.module('paas.controllers')
             ct.listType = "list";          //리스트 타입
         }
 
+        /* 20.06.03 - 대표 도메인 설정 후 리스트 화면 변경시 라우트 탭 선택되어 있는 상태를 초기화 by ksw */
+        applicationService.sltInfoTab = '';
+
 
 
         // main changeOrganization 와 연결
@@ -1095,7 +1098,13 @@ angular.module('paas.controllers')
         ct.appGuid = $stateParams.guid;
         ct.app = {};
         ct.appStateCnt = 0;
-        ct.sltInfoTab = 'service';
+
+        /* 20.06.03 - 기본은 appLog, 대표 도메인 설정시 route로 설정 by ksw */
+        if (applicationService.sltInfoTab == 'route') {
+            ct.sltInfoTab = 'route';
+        } else {
+            ct.sltInfoTab = 'appLog';
+        }
 
         ct.cpuRoundProgress = {
             label : "{percentage}%",
@@ -2010,7 +2019,7 @@ angular.module('paas.controllers')
         ct.getAppStats(true);
         ct.getAppSummary();
         //ct.changeSltInfoTab('service'); //20181126 sg0730 kepri 통합 요청으로 인한 Applog 제일 상단 배치
-        ct.changeSltInfoTab('appLog');  //2020.02.03 수정
+        //ct.changeSltInfoTab('appLog');  //2020.02.03 수정 - 2020.06.03 app
     })
     .controller('paasApplicationRePushFormCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, common, CONSTANTS) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationRePushFormCtrl", 1);
@@ -2626,6 +2635,30 @@ angular.module('paas.controllers')
             routesPromise.error(function (data) {
                 $scope.actionLoading = false;
                 $scope.actionBtnHied = false;
+            });
+        };
+
+        /* 20.06.02 - 앱 대표 도메인 설정 api 생성 by ksw */
+        tab.repAppRoute = function (host) {
+            var showConfirm = common.showConfirmWarning($translate.instant('label.set') + "(" + host + ")", $translate.instant('message.mq_representative_domain'));
+            showConfirm.then(function () {
+                common.mdDialogHide();
+                tab.repAppRouteAction(tab.appGuid, host);
+            });
+        };
+
+        tab.repAppRouteAction = function (guid, host) {
+            $scope.main.loadingMainBody = true;
+            var appRoutePromise = applicationService.representativeAppRoute(guid, host);
+            appRoutePromise.success(function () {
+                /* 20.06.03 - 대표 도메인 설정 후 화면 변동 없게끔 탭 값을 route로 설정 by ksw */
+                applicationService.sltInfoTab = 'route';
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess('설정 되었습니다.');
+                $scope.main.replacePage();
+            });
+            appRoutePromise.error(function () {
+                $scope.main.loadingMainBody = false;
             });
         };
 

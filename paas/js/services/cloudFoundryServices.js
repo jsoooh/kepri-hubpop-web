@@ -748,6 +748,16 @@ angular.module('paas.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/apps/{guid}/routes/all', 'GET', getParams));
         };
 
+        cloudFoundry.apps.representativeAppRoute = function (guid, host) {
+            var getParams = {
+                urlPaths : {
+                    "guid" : guid,
+                    "host" : host
+                }
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/apps/{guid}/routes/{host}/representative', 'PUT', getParams));
+        };
+
         cloudFoundry.apps.associateAppRoute = function (guid, routeGuid) {
             var getParams = {
                 urlPaths : {
