@@ -3,7 +3,7 @@
   "deployControllerFile": "deployControllers.js",
   "deployControllerName": "tomcatDeployCtrl",
   "deployHtmlFile": "deploy.html",
-  "deployViewControllerFile": "deployVewControllers.js",
+  "deployViewControllerFile": "deployViewControllers.js",
   "deployViewControllerName": "tomcatDeployViewCtrl",
   "deployViewHtmlFile": "deployView.html",
   "deployTemplates": {

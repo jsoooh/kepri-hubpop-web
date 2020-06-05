@@ -32,21 +32,21 @@ angular.module('gpu.controllers')
         $scope.dialogOptions = {
             controller: "gpuVmCatalogDeployRenameCtrl",
             vmCatalogDeploy: vmCatalogDeploy,
-            callBackFunction: ct.fn.pageReplace
+            callBackFunction: ct.fn.loadPage
         };
         $scope.actionBtnHied = false;
         common.showDialog($scope, $event, $scope.dialogOptions);
         $scope.actionLoading = true; // action loading
     };
 
-    ct.fn.deleteVmCatalogDeploy = function (tenantId, vmCatalogDeploy) {
-        common.showConfirm("서비스 삭제", "선택한 '" + vmCatalogDeploy.deployName + "'서비스를 삭제하시겠습니까?").then(function(){
+    ct.fn.deleteVmCatalogDeploy = function (vmCatalogDeploy) {
+        common.showConfirm("서비스 삭제", "'" + vmCatalogDeploy.deployName + "'서비스를 삭제하시겠습니까?").then(function(){
             $scope.main.loadingMainBody = true;
-            var promise = vmCatalogService.deleteVmCatalogDeploy(tenantId, vmCatalogDeploy.id);
+            var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
-                common.showAlertSuccess("삭제되었습니다.");
-                ct.fn.pageReplace();
                 $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("삭제되었습니다.");
+                ct.fn.loadPage();
             });
             promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -54,18 +54,139 @@ angular.module('gpu.controllers')
         });
     };
 
-    ct.fn.pageReplace = function () {
+    ct.fn.loadPage = function () {
         ct.fn.listAllVmCatalogDeploy(ct.tenantId);
     }
 
-    ct.fn.pageReplace();
+    ct.fn.loadPage();
+
+})
+.controller('gpuVmCatalogDeployViewCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, $templateCache, common, vmCatalogService, CONSTANTS) {
+    _DebugConsoleLog("vmCatalogDeployControllers.js : gpuVmCatalogDeployViewCtrl", 1);
+
+    var ct               = this;
+    ct.tenantId          = $scope.main.userTenantGpuId;
+    ct.fn                = {};
+    ct.deployId          = $stateParams.id;
+
+    ct.htmlUrls                         = {};
+    ct.htmlUrls.deployTitle              = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployTitle.html" + _VERSION_TAIL_;
+    ct.htmlUrls.deployOctaviaLb               = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployOctaviaLb.html" + _VERSION_TAIL_;
+    ct.htmlUrls.deployServerList             = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployServerList.html" + _VERSION_TAIL_;
+
+    ct.vmCatalogInfo = {};
+    ct.vmCatalogDeployInfo = {};
+    ct.vmCatalogTemplateUrl = "";
+
+
+    ct.fn.loadVmCatalogDeployView = function (templatePath, controllerName, deployViewHtmlFile) {
+        // 페이지 로드
+        var controllerTag = ' ng-controller="' + controllerName + ' as subPage"';
+        var deployViewHtmlFilePath = templatePath + "/" + deployViewHtmlFile;
+        var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployViewHtmlFilePath);
+        promise.success(function (data) {
+            $templateCache.put("deployViewTemplate", "<div id=\"vmCatalogDeployView\"" + controllerTag + ">\n" + data + "\n</div>");
+            ct.vmCatalogTemplateUrl = "deployViewTemplate";
+            $scope.main.loadingMainBody = false;
+        });
+        promise.error(function (data, status, headers) {
+            $templateCache.put("deployViewTemplate", "<div id=\"vmCatalogDeployView\"" + controllerTag + ">\nNot Found: " + deployViewHtmlFilePath + "\n</div>");
+            ct.vmCatalogTemplateUrl = "deployViewTemplateFail";
+            $scope.main.loadingMainBody = false;
+        });
+    };
+
+    ct.fn.loadVmCatalogDeployController = function (templatePath, vmCatalogTemplateInfo) {
+        var loadPromise = vmCatalogService.loadVmCatalogDeployController(templatePath + "/" + vmCatalogTemplateInfo.deployViewControllerFile);
+        loadPromise.then(function (loadData) {
+            ct.fn.loadVmCatalogDeployView(templatePath, vmCatalogTemplateInfo.deployViewControllerName, vmCatalogTemplateInfo.deployViewHtmlFile);
+        });
+        loadPromise.catch(function () {
+            $scope.main.loadingMainBody = false;
+        });
+    };
+
+    ct.fn.loadVmCatalogDeployViewTemplate = function (templatePath) {
+        var promise = vmCatalogService.getVmCatalogDeployTemplateInfo(templatePath);
+        promise.success(function (data) {
+            if (angular.isObject(data)) {
+                ct.vmCatalogTemplateInfo = data;
+                ct.fn.loadVmCatalogDeployController(templatePath, ct.vmCatalogTemplateInfo);
+            } else {
+                ct.vmCatalogTemplateInfo = {};
+                $scope.main.loadingMainBody = false;
+            }
+        });
+        promise.error(function (data, status, headers) {
+            ct.vmCatalogTemplateInfo = {};
+            $scope.main.loadingMainBody = false;
+        });
+    };
+
+    ct.fn.getVmCatalogDeployAndLoadTemplate = function (tenantId, deployId) {
+        $scope.main.loadingMainBody = true;
+        var promise = vmCatalogService.getVmCatalogDeploy(tenantId, deployId);
+        promise.success(function (data) {
+            if (angular.isObject(data.content)) {
+                ct.vmCatalogDeployInfo = data.content;
+                ct.vmCatalogInfo = angular.copy(ct.vmCatalogDeployInfo.vmCatalogInfo);
+                ct.fn.loadVmCatalogDeployViewTemplate(ct.vmCatalogInfo.templatePath);
+            } else {
+                ct.vmCatalogDeployInfo = {};
+                $scope.main.loadingMainBody = false;
+            }
+        });
+        promise.error(function (data, status, headers) {
+            ct.vmCatalogDeployInfo = {};
+            $scope.main.loadingMainBody = false;
+        });
+    };
+
+    ct.fn.openVmCatalogDeployRenameForm = function ($event, vmCatalogDeploy) {
+        $scope.dialogOptions = {
+            controller: "gpuVmCatalogDeployRenameCtrl",
+            vmCatalogDeploy: vmCatalogDeploy,
+            callBackFunction: ct.fn.loadPage
+        };
+        $scope.actionBtnHied = false;
+        common.showDialog($scope, $event, $scope.dialogOptions);
+        $scope.actionLoading = true; // action loading
+    };
+
+    ct.fn.deleteVmCatalogDeploy = function (vmCatalogDeploy) {
+        common.showConfirm("서비스 삭제", "'" + vmCatalogDeploy.deployName + "'서비스를 삭제하시겠습니까?").then(function(){
+            $scope.main.loadingMainBody = true;
+            var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
+            promise.success(function (data) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccess("삭제되었습니다.");
+                ct.fn.loadPage();
+            });
+            promise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        });
+    };
+
+    ct.fn.copyConnectInfoToClipboard = function (ipAddress) {
+        $scope.main.copyToClipboard(ipAddress, '"' + ipAddress + '"가 클립보드에 복사 되었습니다.');
+    };
+
+    ct.fn.getKeyFile = function(keypair, type) {
+        document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
+    };
+
+    ct.fn.loadPage = function () {
+        ct.fn.getVmCatalogDeployAndLoadTemplate(ct.tenantId, ct.deployId);
+    }
+
+    ct.fn.loadPage();
 
 })
 .controller('gpuVmCatalogDeployRenameCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, common, ValidationService, vmCatalogService, CONSTANTS) {
     _DebugConsoleLog("vmCatalogDeployControllers.js : gpuVmCatalogDeployRenameCtrl", 1);
 
     var pop               = this;
-    pop.tenantId          = $scope.main.userTenantGpuId;
     pop.fn                = {};
 
     $scope.actionLoading = false;
@@ -109,81 +230,11 @@ angular.module('gpu.controllers')
     $scope.popDialogOk = function () {
         if ($scope.actionBtnHied) return;
         $scope.actionBtnHied = true;
-        pop.fn.renameVmCatalogDeploy(pop.tenantId, pop.vmCatalogDeploy.id, pop.data.deployName);
+        pop.fn.renameVmCatalogDeploy(pop.vmCatalogDeploy.tenantId, pop.vmCatalogDeploy.id, pop.data.deployName);
     };
 
     $scope.popCancel = function () {
         $scope.popHide();
-    };
-
-})
-.controller('gpuVmCatalogDeployViewCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, $templateCache, common, vmCatalogService, CONSTANTS) {
-    _DebugConsoleLog("vmCatalogDeployControllers.js : gpuVmCatalogDeployViewCtrl", 1);
-
-    var ct               = this;
-    ct.tenantId          = $scope.main.userTenantGpuId;
-    ct.fn                = {};
-
-    ct.fn.loadVmCatalogDeployView = function (templatePath, controllerName, deployViewHtmlFile) {
-        // 페이지 로드
-        var controllerTag = ' ng-controller="' + controllerName + ' as sub"';
-        var deployViewHtmlFilePath = templatePath + "/" + deployViewHtmlFile;
-        var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployViewHtmlFilePath);
-        promise.success(function (data) {
-            $templateCache.put("deployFormTemplate", "<div id=\"vmCatalogDeployView\"" + controllerTag + ">\n" + data + "\n</div>");
-            ct.vmCatalogTemplateUrl = "deployViewTemplate";
-            $scope.main.loadingMainBody = false;
-        });
-        promise.error(function (data, status, headers) {
-            $templateCache.put("deployFormTemplateFail", "<div id=\"vmCatalogDeployView\"" + controllerTag + ">\nNot Found: " + deployViewHtmlFilePath + "\n</div>");
-            ct.vmCatalogTemplateUrl = "deployViewTemplateFail";
-            $scope.main.loadingMainBody = false;
-        });
-    };
-
-    ct.fn.loadVmCatalogDeployController = function (templatePath, vmCatalogTemplateInfo) {
-        var loadPromise = vmCatalogService.loadVmCatalogDeployController(templatePath + "/" + vmCatalogTemplateInfo.deployViewControllerFile);
-        loadPromise.then(function (loadData) {
-            ct.fn.loadVmCatalogDeployForm(templatePath, vmCatalogTemplateInfo.deployViewControllerName, vmCatalogTemplateInfo.deployViewHtmlFile);
-        });
-        loadPromise.catch(function () {
-            $scope.main.loadingMainBody = false;
-        });
-    };
-
-    ct.fn.loadVmCatalogDeployViewTemplate = function (templatePath) {
-        var promise = vmCatalogService.getVmCatalogDeployTemplateInfo(templatePath);
-        promise.success(function (data) {
-            if (angular.isObject(data)) {
-                ct.vmCatalogTemplateInfo = data;
-                ct.fn.loadVmCatalogDeployController(templatePath, ct.vmCatalogTemplateInfo);
-            } else {
-                ct.vmCatalogTemplateInfo = {};
-                $scope.main.loadingMainBody = false;
-            }
-        });
-        promise.error(function (data, status, headers) {
-            ct.vmCatalogTemplateInfo = {};
-            $scope.main.loadingMainBody = false;
-        });
-    };
-
-    ct.fn.getVmCatalogInfo = function (catalogId) {
-        $scope.main.loadingMainBody = true;
-        var promise = vmCatalogService.getVmCatalogInfo(catalogId);
-        promise.success(function (data) {
-            if (angular.isObject(data.content)) {
-                ct.vmCatalogInfo = data.content;
-                ct.fn.loadVmCatalogDeployViewTemplate(ct.vmCatalogInfo.templatePath);
-            } else {
-                ct.vmCatalogInfo = {};
-                $scope.main.loadingMainBody = false;
-            }
-        });
-        promise.error(function (data, status, headers) {
-            ct.vmCatalogInfo = {};
-            $scope.main.loadingMainBody = false;
-        });
     };
 
 })

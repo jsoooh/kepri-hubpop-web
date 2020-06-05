@@ -3,7 +3,7 @@
   "deployControllerFile": "deployControllers.js",
   "deployControllerName": "mysqlDeployCtrl",
   "deployHtmlFile": "deploy.html",
-  "deployViewControllerFile": "deployVewControllers.js",
+  "deployViewControllerFile": "deployViewControllers.js",
   "deployViewControllerName": "mysqlDeployViewCtrl",
   "deployViewHtmlFile": "deployView.html",
   "deployTemplates": {

@@ -4,6 +4,8 @@ angular.module('gpu.controllers')
     .controller('mariadbDeployCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, vmCatalogService, CONSTANTS) {
         _DebugConsoleLog("mariadb deployControllers.js : mariadbDeployCtrl", 1);
         var subPage = this;
+        subPage.fn = {};
+
         var ct = $scope.$parent.$parent.contents;
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
@@ -23,73 +25,26 @@ angular.module('gpu.controllers')
         ct.data.volumeMountPath = "/mnt/data";
 
         ct.checkClickBtn = false;
-        ct.fn.createVmCatalogDeploy = function () {
-            if (ct.checkClickBtn) return;
-            ct.checkClickBtn = true;
-            if (!ct.vs.checkFormValidity(subPage)) {
-                ct.checkClickBtn = false;
-                return;
+
+        // 추가 셋팅
+        subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
+            vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
+            vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
+            if (ct.data.cerateUser) {
+                vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
+                vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
+                vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
             }
+        }
 
-            ct.fn.loadVmCatalogDeployTemplateAndAction(ct.vmCatalogInfo.templatePath, ct.vmCatalogTemplateInfo.deployTemplates[ct.data.deployType], function (deployTemplate) {
+        subPage.fn.setTocDeployAction = function (deployTemplate) {
+            ct.fn.createVmCatalogDeployAction(deployTemplate, subPage.fn.appendSetVmCatalogDeploy);
+        }
 
-                var vmCatalogDeploy = {};
+        ct.fn.createVmCatalogDeploy = function () {
+            if (!ct.fn.commCheckFormValidity(subPage)) return;
 
-                vmCatalogDeploy.vmCatalogInfoId = ct.vmCatalogInfo.id;
-                vmCatalogDeploy.version = ct.vmCatalogInfo.version;
-                vmCatalogDeploy.deployName = ct.data.deployName;
-                vmCatalogDeploy.deployType = ct.data.deployType;
-                vmCatalogDeploy.deployServerCount = 1;
-                if (ct.data.deployType == "cluster") {
-                    vmCatalogDeploy.deployServerCount = ct.data.clusterCnt;
-                } else if (ct.data.deployType == "replica") {
-                    vmCatalogDeploy.deployServerCount = ct.data.replicaCnt;
-                }
-                vmCatalogDeploy.deployTemplate = deployTemplate;
-                vmCatalogDeploy.context = {};
-                vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
-                vmCatalogDeploy.context.createUser = ct.data.createUser;
-                vmCatalogDeploy.context.octaviaLbUse = false;
-                if (ct.data.deployType == "cluster") {
-                    vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
-                }
-                vmCatalogDeploy.parameters = {};
-                vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
-                vmCatalogDeploy.parameters.flavor = ct.data.flavor;
-                vmCatalogDeploy.parameters.key_name = ct.data.keyName;
-                vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
-                vmCatalogDeploy.parameters.availability_zone = ct.sltAvailabilityZone.availabilityZone;
-                vmCatalogDeploy.parameters.provider_net = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
-                vmCatalogDeploy.parameters.provider_subnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
-                vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
-                vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
-                if (ct.data.cerateUser) {
-                    vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
-                    vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
-                    vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
-                }
-                if (ct.data.volumeUse) {
-                    vmCatalogDeploy.parameters.volume_type = ct.data.volumeType;
-                    vmCatalogDeploy.parameters.volume_size = ct.data.volumeSize;
-                    vmCatalogDeploy.parameters.volume_mount_point = ct.data.volumeMountPoint;
-                    vmCatalogDeploy.parameters.volume_mount_path = ct.data.volumeMountPath;
-                }
-
-                $scope.main.loadingMainBody = true;
-                var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
-                promise.success(function (data) {
-                    if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
-                        $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
-                    } else {
-                        $scope.main.loadingMainBody = false;
-                    }
-                    ct.checkClickBtn = false;
-                });
-                promise.error(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                    ct.checkClickBtn = false;
-                });
-            });
+            ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
 
     })

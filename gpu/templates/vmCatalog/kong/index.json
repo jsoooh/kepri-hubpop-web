@@ -3,7 +3,7 @@
   "deployControllerFile": "deployControllers.js",
   "deployControllerName": "kongDeployCtrl",
   "deployHtmlFile": "deploy.html",
-  "deployViewControllerFile": "deployVewControllers.js",
+  "deployViewControllerFile": "deployViewControllers.js",
   "deployViewControllerName": "kongDeployViewCtrl",
   "deployViewHtmlFile": "deployView.html",
   "deployTemplates": {

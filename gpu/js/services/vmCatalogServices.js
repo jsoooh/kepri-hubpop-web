@@ -11,7 +11,7 @@ angular.module('gpu.services')
         };
 
         // VM 카탈로그 조회
-        vmCatalogService.getVmCatalogInfo = function(catalogId) {
+        vmCatalogService.getVmCatalog = function(catalogId) {
             var params = {
                 urlPaths : {
                     "id" : catalogId

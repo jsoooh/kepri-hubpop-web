@@ -1,0 +1,17 @@
+<h4 class="c-tit">
+    <div class="logoBox">
+        <img ng-src="{{ main.gpuVmCatalogTemplatePath + contents.vmCatalogInfo.templatePath + '/logo.png' }}">
+    </div>
+    <p class="txt_tit">{{ contents.vmCatalogDeployInfo.deployName }}</p>
+    <p class="txt_s"><strong>{{ contents.vmCatalogInfo.catalogName }}</strong><span>{{ contents.vmCatalogInfo.version }}</span></p>
+    <p class="txt_description">{{ contents.vmCatalogInfo.description }}</p>
+</h4>
+<div class="dropdown btn-option">
+    <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+        <span class="ico">실행 설정</span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+        <li><a href="" ng-click="contents.fn.openVmCatalogDeployRenameForm($event, contents.vmCatalogDeployInfo)">이름 변경</a></li>
+        <li><a href="" ng-click="contents.fn.deleteVmCatalogDeploy(contents.vmCatalogDeployInfo)" class="delete">서비스 제거</a></li>
+    </ul>
+</div>

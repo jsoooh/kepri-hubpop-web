@@ -21,17 +21,17 @@
             <div class="panel type6 serv_list">
                 <div class="panel_head">
                     <div class="logo radius0">
-                        <img src="{{ main.gpuVmCatalogTemplatePath + vmCatalogDeploy.vmCatalogInfo.templatePath }}/logo.png" >
+                        <img ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalogDeploy.vmCatalogInfo.templatePath + '/logo.png' }}" >
                     </div>
                     <p class="tit" title="{{ vmCatalogDeploy.deployName }}"><a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a></p>
-                    <p class="txt mb60">{{ vmCatalogDeploy.vmCatalogInfo.catalogName }} : {{ vmCatalogDeploy.vmCatalogInfo.version }} </p>
+                    <p class="txt mb10">{{ vmCatalogDeploy.vmCatalogInfo.catalogName }} ( version {{ vmCatalogDeploy.vmCatalogInfo.version }} ) </p>
                     <div class="dropdown btn-option">
                         <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
                             <span class="ico">실행 설정</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
                             <li><a href="" ng-click="contents.fn.openVmCatalogDeployRenameForm($event, vmCatalogDeploy)">이름 변경</a></li>
-                            <li><a href="" ng-click="contents.fn.deleteVmCatalogDeploy(contents.tenantId, vmCatalogDeploy)" class="delete">서비스 제거</a></li>
+                            <li><a href="" ng-click="contents.fn.deleteVmCatalogDeploy(vmCatalogDeploy)" class="delete">서비스 제거</a></li>
                         </ul>
                     </div>
                 </div>

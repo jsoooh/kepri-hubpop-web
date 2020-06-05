@@ -29,7 +29,11 @@ angular.module('gpu.controllers')
         });
     };
 
-    ct.fn.listAllVmCatalogs();
+    ct.fn.loadPage = function () {
+        ct.fn.listAllVmCatalogs();
+    }
+
+    ct.fn.loadPage();
 
 })
 .controller('gpuVmCatalogDeployFormCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, $templateCache, common, ValidationService, vmCatalogService, CONSTANTS) {
@@ -71,16 +75,16 @@ angular.module('gpu.controllers')
     ct.data.serverCnt = 1;
 
     ct.data.securityGroup = "default";
-    ct.data.volumeSize = 0;
+    ct.data.volumeSize = 10;
 
     //디스크생성 변수
     ct.inputVolumeSize = ct.data.volumeSize;
     ct.volumeSliderOptions = {
         showSelectionBar : true,
-        minLimit : 0,
+        minLimit : 1,
         floor: 0,
         ceil: 100,
-        step: 1,
+        step: 10,
         onChange : function () {
             ct.inputVolumeSize = ct.data.volumeSize;
         }
@@ -103,12 +107,41 @@ angular.module('gpu.controllers')
         }
     };
 
-    ct.fn.loadVmCatalogDeployTemplateAndAction = function (templatePath, deployTemplateFile, actionFunction) {
+    ct.fn.commCheckFormValidity  = function (subPage) {
+        if (ct.checkClickBtn) return;
+        ct.checkClickBtn = true;
+        if (!ct.vs.checkFormValidity(subPage)) {
+            try {
+                var deployForm = $('form[name="subPage.deployForm"]');
+                for (var i=0; i<subPage.$validationSummary.length; i++) {
+                    var validationTarget = deployForm.find('[name="' + subPage.$validationSummary[0].field + '"]');
+                    if (validationTarget.length == 0) continue;
+                    if (validationTarget.attr('type') == 'hidden') {
+                        var targetId = validationTarget.attr('targetId');
+                        if (targetId && deployForm.find('#'+targetId).length == 1) {
+                            deployForm.find('#'+targetId)[0].focus();
+                            break;
+                        }
+                    } else {
+                        validationTarget[0].focus();
+                        break;
+                    }
+                }
+            } catch (e) {}
+            ct.checkClickBtn = false;
+            return false;
+        }
+        return true;
+    }
+
+    ct.fn.loadTemplateAndCallAction = function (deployType, callBackFuncion) {
         // 페이지 로드
-        var deployTemplateFilePath = templatePath + "/" + deployTemplateFile + _VERSION_TAIL_;
+        var templatePath = ct.vmCatalogInfo.templatePath;
+        var deployTemplateUrl = ct.vmCatalogTemplateInfo.deployTemplates[deployType];
+        var deployTemplateFilePath = templatePath + "/" + deployTemplateUrl + _VERSION_TAIL_;
         var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployTemplateFilePath);
         promise.success(function (data) {
-            actionFunction(data);
+            callBackFuncion(data);
         });
         promise.error(function (data, status, headers) {
             $scope.main.loadingMainBody = false;
@@ -159,9 +192,9 @@ angular.module('gpu.controllers')
         });
     };
 
-    ct.fn.getVmCatalogInfo = function (catalogId) {
+    ct.fn.getVmCatalogAndLoadTamplate = function (catalogId) {
         $scope.main.loadingMainBody = true;
-        var promise = vmCatalogService.getVmCatalogInfo(catalogId);
+        var promise = vmCatalogService.getVmCatalog(catalogId);
         promise.success(function (data) {
             if (angular.isObject(data.content)) {
                 ct.vmCatalogInfo = data.content;
@@ -192,9 +225,11 @@ angular.module('gpu.controllers')
                 ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                 ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                 ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-                ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
+
+                if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.tenantResource.available.volumeGigabytes > CONSTANTS.iaasDef.insMaxDiskSize)) {
                     ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                } else {
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                 }
                 ct.fn.setSpecMaxDisabled();
             }
@@ -363,26 +398,98 @@ angular.module('gpu.controllers')
             ct.sltSpacUuid = ct.sltSpac.uuid;
         } else {
             ct.sltSpac = {};
-            ct.data.flavor = "";
+            ct.data.flavor = {};
             ct.sltSpacUuid = "";
         }
     };
 
     ct.fn.changeDeployType = function () {
-       if (ct.data.deployType == 'replica') {
+        if (ct.data.deployType == 'replica') {
            ct.data.serverCnt = ct.data.replicaCnt;
-       } else if (ct.data.deployType == 'cluster') {
+        } else if (ct.data.deployType == 'cluster') {
            ct.data.serverCnt = ct.data.clusterCnt;
-       } else {
+        } else {
            ct.data.serverCnt = 1;
-       }
+        }
+        var volumeMaxCeil = ct.tenantResource.available.volumeGigabytes/ct.data.serverCnt;
+        if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (volumeMaxCeil > CONSTANTS.iaasDef.insMaxDiskSize)) {
+            ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize;
+        } else {
+            ct.volumeSliderOptions.ceil = volumeMaxCeil;
+        }
     };
 
-    ct.fn.getVmCatalogInfo(ct.catalogId);
-    ct.fn.getTenantResource(ct.tenantId);
-    ct.fn.availabilityZoneList();
-    ct.fn.getKeypairList(ct.tenantId);
-    ct.fn.getSpecList();
+    ct.checkClickBtn = false;
 
+    ct.fn.createVmCatalogDeployAction = function (deployTemplate, appendSetVmCatalogDeploy) {
+        var vmCatalogDeploy = {};
+        vmCatalogDeploy.context = {};
+        vmCatalogDeploy.parameters = {};
+
+        vmCatalogDeploy.vmCatalogInfoId = ct.vmCatalogInfo.id;
+        vmCatalogDeploy.version = ct.vmCatalogInfo.version;
+        vmCatalogDeploy.deployName = ct.data.deployName;
+        vmCatalogDeploy.deployType = ct.data.deployType;
+        vmCatalogDeploy.deployServerCount = 1;
+        if (ct.data.deployType == "cluster") {
+            vmCatalogDeploy.deployServerCount = ct.data.clusterCnt;
+        } else if (ct.data.deployType == "replica") {
+            vmCatalogDeploy.deployServerCount = ct.data.replicaCnt;
+        }
+        vmCatalogDeploy.deployTemplate = deployTemplate;
+        vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
+        vmCatalogDeploy.context.createUser = ct.data.createUser;
+        vmCatalogDeploy.context.octaviaLbUse = false;
+        if (ct.data.deployType == "cluster") {
+            vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
+        }
+        vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
+        vmCatalogDeploy.parameters.flavor = ct.data.flavor;
+        vmCatalogDeploy.parameters.key_name = ct.data.keyName;
+        vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
+        vmCatalogDeploy.parameters.availability_zone = ct.sltAvailabilityZone.availabilityZone;
+        vmCatalogDeploy.parameters.provider_net = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
+        vmCatalogDeploy.parameters.provider_subnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
+        vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
+        vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
+        if (ct.data.cerateUser) {
+            vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
+            vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
+            vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
+        }
+        if (ct.data.volumeUse) {
+            vmCatalogDeploy.parameters.volume_type = ct.data.volumeType;
+            vmCatalogDeploy.parameters.volume_size = ct.data.volumeSize;
+            vmCatalogDeploy.parameters.volume_mount_point = ct.data.volumeMountPoint;
+            vmCatalogDeploy.parameters.volume_mount_path = ct.data.volumeMountPath;
+        }
+
+        vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);
+
+        $scope.main.loadingMainBody = true;
+        var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
+        promise.success(function (data) {
+            if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
+                $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
+            } else {
+                $scope.main.loadingMainBody = false;
+            }
+            ct.checkClickBtn = false;
+        });
+        promise.error(function (data, status, headers) {
+            $scope.main.loadingMainBody = false;
+            ct.checkClickBtn = false;
+        });
+    }
+
+    ct.fn.loadPage = function () {
+        ct.fn.getVmCatalogAndLoadTamplate(ct.catalogId);
+        ct.fn.getTenantResource(ct.tenantId);
+        ct.fn.availabilityZoneList();
+        ct.fn.getKeypairList(ct.tenantId);
+        ct.fn.getSpecList();
+    }
+
+    ct.fn.loadPage();
 })
 ;
