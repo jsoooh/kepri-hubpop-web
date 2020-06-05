@@ -51,10 +51,10 @@ angular.module('perf.controllers')
         ct.fn.initYearMonth = function() {
             // 연도 리스트 구성
             for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
-                ct.dashYears.push(String(i));
+                ct.dashYears.push(i);
             }
-            ct.data.sltYear = String(ct.today.getFullYear());
-            ct.data.sltMonth = String(ct.today.getMonth() + 1);
+            ct.data.sltYear = ct.today.getFullYear();
+            ct.data.sltMonth = ct.today.getMonth() + 1;
 
             // 월별 추이
             ct.fn.listAnlsMonthlySummaryByOrg(ct.data.sltYear);
@@ -207,8 +207,8 @@ angular.module('perf.controllers')
 
             var firstDayOfMonth = new Date(sltYear, sltMonth-1, 1);
             var lastMonth = new Date(firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 1));
-            ct.data.lastYear = String(lastMonth.getFullYear());
-            ct.data.lastMonth = String(lastMonth.getMonth() + 1);
+            ct.data.lastYear = lastMonth.getFullYear();
+            ct.data.lastMonth = lastMonth.getMonth() + 1;
 
             var params = {
                 "urlPaths": {
@@ -244,8 +244,8 @@ angular.module('perf.controllers')
 
             var lastDayOfMonth = (new Date(sltYear, sltMonth, 0));
             var nextMonth = new Date(lastDayOfMonth.setDate(lastDayOfMonth.getDate() + 1));
-            ct.data.nextYear = String(nextMonth.getFullYear());
-            ct.data.nextMonth = String(nextMonth.getMonth() + 1);
+            ct.data.nextYear = nextMonth.getFullYear();
+            ct.data.nextMonth = nextMonth.getMonth() + 1;
 
             var params = {
                 "urlPaths": {
@@ -312,7 +312,7 @@ angular.module('perf.controllers')
                 }
 
                 anlsMonthlySummaryListsToChartData.push({
-                    name: sltYear,
+                    name: String(sltYear),
                     data: monthlySummaryValues
                 });
 
@@ -383,7 +383,7 @@ angular.module('perf.controllers')
                 }
 
                 anlsDailySummaryListsToChartData.push({
-                    name: sltMonth,
+                    name: String(sltMonth),
                     data: dailySummaryValues
                 });
 
@@ -586,13 +586,13 @@ angular.module('perf.controllers')
         };
         /* 연도 변경 - 사용 금액 현황 월별 */
         ct.fn.changeMeteringYear = function(sltYear) {
-            ct.data.sltYear = String(sltYear);
+            ct.data.sltYear = sltYear;
             ct.dashMonths = perfCommService.listPerfMonth(ct.data.sltYear);
 
             if(sltYear == ct.today.getFullYear()) {
-                ct.data.sltMonth = "1";
+                ct.data.sltMonth = 1;
             } else {
-                ct.data.sltMonth = "12";
+                ct.data.sltMonth = 12;
             }
 
             perfCommService.chartLoadingOn(ct.monthlyChart);
@@ -602,7 +602,7 @@ angular.module('perf.controllers')
         };
         /* 월 변경 - 전체 사용 금액, 서비스별, 서비스 항목별, 사용 금액 현황 일별 */
         ct.fn.changeMeteringMonth = function(sltMonth) {
-            ct.data.sltMonth = String(sltMonth);
+            ct.data.sltMonth = sltMonth;
 
             perfCommService.chartLoadingOn(ct.itemChart);
             perfCommService.chartLoadingOn(ct.itemGroupChart);

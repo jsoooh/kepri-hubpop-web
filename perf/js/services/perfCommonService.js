@@ -21,14 +21,14 @@ angular.module('perf.services')
             var thisYear = today.getFullYear();
             var listPerfMonth = [];
             if (sltYear == 2019 || sltYear == "2019") {
-                listPerfMonth.push("12");
+                listPerfMonth.push(12);
             } else if (sltYear == thisYear) {
                 var thisMonth = today.getMonth() + 1;
                 for (var m = 1; m < (thisMonth + 1); m++) {
-                    listPerfMonth.push(String(m));
+                    listPerfMonth.push(m);
                 }
             } else {
-                listPerfMonth = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+                listPerfMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
             }
             return listPerfMonth;
         };
