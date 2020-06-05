@@ -1,4 +1,8 @@
 <style type="text/css">
+	.amount_loading {
+		width: 100px;
+		height: 40px;
+	}
 	.mainLoading {
 		background:url("../../img/loading.gif") 50% 50% no-repeat;
 		content:"";
@@ -45,29 +49,36 @@
 			<div class="in">
 				<div class="amount_usedWrap">
 					<div class="col-md-4">
-						<h4>사용금액</h4><span class="amount_used_date">{{ contents.data.today | date: 'yyyy년 MM월 dd일' }}</span>
+						<h4>전체 사용 금액</h4>
+						<span ng-if="contents.isToday" class="amount_used_date">{{ contents.today | date: 'yyyy년 MM월 dd일' }}</span>
+						<span ng-if="!contents.isToday" class="amount_used_date">{{ contents.data.sltYear }}년 {{ contents.data.sltMonth }}월 </span>
 						<div class="this_month">
-							<p>이달 사용 금액</p>
+							<p ng-if="contents.isToday">이달 사용 금액</p>
+							<p ng-if="!contents.isToday">{{ contents.data.sltMonth }}월 사용 금액</p>
 							<div class="amountTxt">
-								<span class="amount">{{ contents.data.sltSumPerfAmt | number }}</span>
-								<img ng-if="!contents.data.sltSumPerfAmt" src="images/loading_sm.gif">
+								<span class="amount" ng-if="!contents.dailyChart.loading">{{ contents.data.sltSumPerfAmt | number }}</span>
+								<img class="amount_loading" ng-if="contents.dailyChart.loading" src="images/loading/lg.equalizer-bars-loader.gif">
 								<span class="won"> 원</span>
 							</div>
 						</div>
 						<ul class="amountBox">
 							<li class="last_month">
-								<p>지난달 사용 금액</p>
+								<p ng-if="contents.isToday">지난달 사용 금액</p>
+								<p ng-if="!contents.isToday">{{ contents.data.lastMonth }}월 사용 금액</p>
 								<div class="amountTxt">
-									<span class="amount">{{ contents.data.lastSumPerfAmt | number }}</span>
-									<img ng-if="!contents.data.lastSumPerfAmt" src="images/loading_sm.gif">
-									<span class="won"> 원</span></div>
+									<span class="amount" ng-if="!contents.lastSumLoading">{{ contents.data.lastSumPerfAmt | number }}</span>
+									<img class="amount_loading" ng-if="contents.lastSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
+									<span class="won"> 원</span>
+								</div>
 							</li>
 							<li class="next_month">
-								<p>이달 사용 예상 금액</p>
+								<p ng-if="contents.isToday">이달 사용 예상 금액</p>
+								<p ng-if="!contents.isToday">{{ contents.data.nextMonth }}월 사용 금액</p>
 								<div class="amountTxt">
-									<span class="amount">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
-									<img ng-if="!contents.data.nextSumPerfAmt" src="images/loading_sm.gif">
-									<span class="won">원</span></div>
+									<span class="amount" ng-if="!contents.nextSumLoading">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
+									<img class="amount_loading" ng-if="contents.nextSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
+									<span class="won">원</span>
+								</div>
 							</li>
 						</ul>
 					</div>
@@ -103,7 +114,7 @@
 
 	<div class="panel type2">
 		<div class="panel_head">
-			<div class="tit pull-left">사용 금액 현황</div>
+			<div class="tit pull-left">사용 금액 추이</div>
 			<div class="pull-right">
 				<select ng-options="columnOption.value as columnOption.label for columnOption in contents.columnOptions"
 						ng-model="contents.data.sltColumnOption" ng-change="contents.fn.changeColumnOption(contents.data.sltColumnOption)">
