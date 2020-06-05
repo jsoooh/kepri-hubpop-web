@@ -12,6 +12,12 @@ angular.module('app')
                 notEdPAuth : "UV",
                 mainTop : true,
                 orgNameView: true,
+                loadMyFile: {
+                    loadMyScripts: [],
+                    loadMyServices: [_PERF_JS_+'/services/perfCommonService.js'],
+                    loadMyControllers: [],
+                    loadMyDirectives: [],
+                },
                 menus : {
                     perfDashboard: {
                         name: 'perf_dashboard',
