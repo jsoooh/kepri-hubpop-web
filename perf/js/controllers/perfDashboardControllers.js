@@ -298,6 +298,7 @@ angular.module('perf.controllers')
                 var anlsMonthlySummaryListsToChartData = [];
 
                 var dataIndex = 0;
+                var monthlySumPerf = 0;
                 for (var month = 1; month <= 12; month++) {
                     if(dataIndex < data.itemCount) {
                         var perfMonth = Number(data.items[dataIndex].perfYm.slice(4, 6));
@@ -306,10 +307,12 @@ angular.module('perf.controllers')
                         var perfAmt = data.items[dataIndex].perfAmt;
                         monthlySummaryValues[month-1] = perfAmt;
                         dataIndex++;
+                        monthlySumPerf += perfAmt;
                     } else {
                         monthlySummaryValues[month-1] = "";
                     }
                 }
+                ct.data.sltMonthlySumPerfAmt = monthlySumPerf;
 
                 anlsMonthlySummaryListsToChartData.push({
                     name: String(sltYear),
