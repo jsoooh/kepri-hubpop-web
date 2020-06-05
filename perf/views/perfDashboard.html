@@ -127,6 +127,8 @@
 					<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
 					<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
 					<div class="mainLoading" ng-if="contents.dailyChart.loading"></div>
+					<div class="warning" ng-if="contents.data.sltColumnOption == 'daily' && !contents.dailyChart.loading && contents.data.sltSumPerfAmt == 0"></div>
+					<div class="warning"  ng-if="contents.data.sltColumnOption == 'monthly' && !contents.dailyChart.loading && contents.data.sltMonthlySumPerfAmt == 0"></div>
 				</div>
 			</div>
 		</div>
