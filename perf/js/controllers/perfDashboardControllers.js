@@ -55,6 +55,7 @@ angular.module('perf.controllers')
             }
             ct.data.sltYear = ct.today.getFullYear();
             ct.data.sltMonth = ct.today.getMonth() + 1;
+            ct.data.prevSltYear = ct.data.sltYear;
 
             // 월별 추이
             ct.fn.listAnlsMonthlySummaryByOrg(ct.data.sltYear);
@@ -591,14 +592,11 @@ angular.module('perf.controllers')
         ct.fn.changeMeteringYear = function(sltYear) {
             ct.data.sltYear = sltYear;
             ct.dashMonths = perfCommService.listPerfMonth(ct.data.sltYear);
-
-            if(sltYear == ct.today.getFullYear()) {
-                ct.data.sltMonth = 1;
-            } else {
-                ct.data.sltMonth = 12;
-            }
+            ct.data.sltMonth = perfCommService.monthWhenChangeYear(ct.data.prevSltYear, ct.data.sltYear);
 
             perfCommService.chartLoadingOn(ct.monthlyChart);
+
+            ct.data.prevSltYear = ct.data.sltYear;
 
             ct.fn.listAnlsMonthlySummaryByOrg(ct.data.sltYear);
             ct.fn.changeMeteringMonth(ct.data.sltMonth);
