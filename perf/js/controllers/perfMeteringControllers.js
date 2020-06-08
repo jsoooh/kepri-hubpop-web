@@ -20,6 +20,7 @@ angular.module('perf.controllers')
         ct.meteringYears = [];
         ct.orgMeteringMonthlyLists = [];
 
+        // ng-repeat
         ct.meteringMonths = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
         /* 미터링 서비스 그룹 리스트 */
@@ -42,10 +43,10 @@ angular.module('perf.controllers')
             $scope.main.loadingMainBody = true;
 
             var sltYear = ct.today.getFullYear();
-            for (var i = ct.scope.CONSTANTS.startYear; i < sltYear + 1; i++) {
-                ct.meteringYears.push(String(i));
+            for (var i = CONSTANTS.startYear; i < sltYear + 1; i++) {
+                ct.meteringYears.push(i);
             }
-            ct.data.sltYear = String(sltYear);
+            ct.data.sltYear = sltYear;
 
             ct.fn.selectMeteringYear(ct.data.sltYear);
         };
@@ -57,32 +58,31 @@ angular.module('perf.controllers')
          */
         ct.fn.selectMeteringYear = function (sltYear) {
             $scope.main.loadingMainBody = true;
-            if (angular.isDefined(sltYear)) {
-                ct.data.sltYear = sltYear;
-                var params = {
-                    "urlPaths": {
-                        "orgCode": ct.data.sltOrgCode
-                    },
-                    "year": ct.data.sltYear
-                }
-                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
-                promise.success(function (data) {
-                    if (angular.isArray(data.items)) {
-                        ct.orgMeteringMonthlyLists = data.items;
 
-                        if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
-                            ct.fn.findMaxRow(data);
-                        }
-                    } else {
-                        ct.orgMeteringMonthlyLists = [];
+            ct.data.sltYear = sltYear;
+            var params = {
+                "urlPaths": {
+                    "orgCode": ct.data.sltOrgCode
+                },
+                "year": ct.data.sltYear
+            };
+            var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
+            promise.success(function (data) {
+                if (angular.isArray(data.items)) {
+                    ct.orgMeteringMonthlyLists = data.items;
+
+                    if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
+                        ct.fn.findMaxRow(data);
                     }
-                    $scope.main.loadingMainBody = false;
-                });
-                promise.error(function (data, status, headers) {
+                } else {
                     ct.orgMeteringMonthlyLists = [];
-                    $scope.main.loadingMainBody = false;
-                });
-            }
+                }
+                $scope.main.loadingMainBody = false;
+            });
+            promise.error(function (data, status, headers) {
+                ct.orgMeteringMonthlyLists = [];
+                $scope.main.loadingMainBody = false;
+            });
         };
 
         ct.fn.findMaxRow = function (data) {

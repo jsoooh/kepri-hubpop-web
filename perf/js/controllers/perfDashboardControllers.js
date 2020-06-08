@@ -23,6 +23,7 @@ angular.module('perf.controllers')
         ct.data.sltMonth = "";
         ct.dashYears = [];
         ct.dashMonths = perfCommService.listPerfMonth(ct.today.getFullYear());
+        ct.dashMonthsForChart = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         ct.dashDays = [""];
 
         ct.anlsByItemGroupLists = [];
@@ -50,7 +51,7 @@ angular.module('perf.controllers')
 
         ct.fn.initYearMonth = function() {
             // 연도 리스트 구성
-            for (var i = ct.scope.CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
+            for (var i = CONSTANTS.startYear; i < ct.today.getFullYear() + 1; i++) {
                 ct.dashYears.push(i);
             }
             ct.data.sltYear = ct.today.getFullYear();
@@ -141,7 +142,7 @@ angular.module('perf.controllers')
                         width: 1450,
                         height: 500,
                         format: '1,000',
-                        title: 'Daily Performance',
+                        title: 'Daily Performance'
                     },
                     yAxis: {
                         title: '원',
@@ -170,7 +171,7 @@ angular.module('perf.controllers')
                         width: 1450,
                         height: 500,
                         format: '1,000',
-                        title: 'Monthly Performance',
+                        title: 'Monthly Performance'
                     },
                     yAxis: {
                         title: '원',
@@ -321,7 +322,7 @@ angular.module('perf.controllers')
                 });
 
                 ct.monthlyChart.data = {
-                    categories: ct.dashMonths,
+                    categories: ct.dashMonthsForChart,
                     series: anlsMonthlySummaryListsToChartData
                 };
 
@@ -574,9 +575,7 @@ angular.module('perf.controllers')
         ct.fn.changeMeteringItemsByItemGroupCode = function(sltItemGroupCode) {
             ct.data.sltItemGroupCode = sltItemGroupCode;
             if(ct.anlsByItemLists.length > 0) {
-                var anlsByItemListsToChartData = [];
-
-                anlsByItemListsToChartData = ct.fn.makeItemChartData(ct.anlsByItemLists);
+                var anlsByItemListsToChartData = ct.fn.makeItemChartData(ct.anlsByItemLists);
 
                 ct.itemChart.data = {
                     series: anlsByItemListsToChartData
