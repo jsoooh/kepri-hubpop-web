@@ -1257,10 +1257,11 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.imageLicenseCheck = function(image) {
-            if (image.osType.toUpperCase() == "REDHAT")
-                return ct.tenantResource.available.LicenseRedhat <= 0 ? false : true;
-            else if (image.osType.toUpperCase() == "WINDOWS")
-                return ct.tenantResource.available.LicenseWindows <= 0 ? false : true;
+            var osType = image.osType.toUpperCase();
+            if (osType == "REDHAT")
+                return ct.tenantResource.available.licenseRedhat <= 0 ? true : false;
+            else if (osType == "WINDOWS")
+                return ct.tenantResource.available.licenseWindows <= 0 ? true : false;
         };
         
         // 네트워크 리스트 조회
@@ -1316,8 +1317,8 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-                    ct.tenantResource.available.LicenseRedhat = ct.tenantResource.maxResource.LicenseRedhat - ct.tenantResource.usedResource.LicenseRedhat;
-                    ct.tenantResource.available.LicenseWindows = ct.tenantResource.maxResource.LicenseWindows - ct.tenantResource.usedResource.LicenseWindows;
+                    ct.tenantResource.available.licenseRedhat = ct.tenantResource.maxResource.licenseRedhat - ct.tenantResource.usedResource.licenseRedhat;
+                    ct.tenantResource.available.licenseWindows = ct.tenantResource.maxResource.licenseWindows - ct.tenantResource.usedResource.licenseWindows;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
                         ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
