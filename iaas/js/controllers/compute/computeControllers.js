@@ -1257,10 +1257,9 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.imageLicenseCheck = function(image) {
-            var osType = image.osType.toUpperCase();
-            if (osType == "REDHAT")
+            if (image.osType.toUpperCase() == "REDHAT")
                 return ct.tenantResource.available.LicenseRedhat <= 0 ? false : true;
-            else if (osType == "WINDOWS")
+            else if (image.osType.toUpperCase() == "WINDOWS")
                 return ct.tenantResource.available.LicenseWindows <= 0 ? false : true;
         };
         
