@@ -30,7 +30,7 @@
 									<ul class="ul-list1">
 										<li ng-repeat="image in contents.imageList">
 											<div class="radio1 radio-inline">
-												<input type="radio" id="os_image_{{image.id}}" name="osImage" value="{{image.id}}" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);" >
+												<input type="radio" id="os_image_{{image.id}}" name="osImage" value="{{image.id}}" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);" ng-disabled="contents.fn.imageLicenseCheck(image)">
 												<label for="os_image_{{image.id}}" class="label">
 													<img ng-if="image.icon" class="im"  ng-src="data:{{ image.contentType }}; base64, {{ image.icon }}"/>
 													<img ng-if="!image.icon" class="im"  ng-src="images/thum/{{image.iconFileName}}.png"/>

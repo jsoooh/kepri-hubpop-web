@@ -1233,7 +1233,7 @@ angular.module('iaas.controllers')
                         image.minDisk = (image.minDisk > sizeGb) ? image.minDisk : sizeGb;
                         image.minRam = (image.minRam > 0) ? image.minRam/(1024) : 0;
                     });
-                    ct.fn.imageChange(ct.imageList[0].id);
+                    // ct.fn.imageChange(ct.imageList[0].id);
                 }
                 ct.imageListLoad = true;
             });
@@ -1254,6 +1254,14 @@ angular.module('iaas.controllers')
             ct.fn.setSpecAllEnabled();
             ct.fn.setSpecMinDisabled();
             ct.fn.setSpecMaxDisabled();
+        };
+
+        ct.fn.imageLicenseCheck = function(image) {
+            var osType = image.osType.toUpperCase();
+            if (osType == "REDHAT")
+                return ct.tenantResource.available.licenseRedhat <= 0 ? true : false;
+            else if (osType == "WINDOWS")
+                return ct.tenantResource.available.licenseWindows <= 0 ? true : false;
         };
         
         // 네트워크 리스트 조회
@@ -1309,6 +1317,8 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
+                    ct.tenantResource.available.licenseRedhat = ct.tenantResource.maxResource.licenseRedhat - ct.tenantResource.usedResource.licenseRedhat;
+                    ct.tenantResource.available.licenseWindows = ct.tenantResource.maxResource.licenseWindows - ct.tenantResource.usedResource.licenseWindows;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
                         ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize

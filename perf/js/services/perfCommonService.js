@@ -19,16 +19,15 @@ angular.module('perf.services')
         perfCommonService.listPerfMonth = function(sltYear) {
             var today = new Date();
             var thisYear = today.getFullYear();
+            var thisMonth = today.getMonth() + 1;
             var listPerfMonth = [];
-            if (sltYear == 2019 || sltYear == "2019") {
-                listPerfMonth.push(12);
-            } else if (sltYear == thisYear) {
-                var thisMonth = today.getMonth() + 1;
-                for (var m = 1; m < (thisMonth + 1); m++) {
-                    listPerfMonth.push(m);
-                }
-            } else {
-                listPerfMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+            var startYm = CONSTANTS.startYear + '' + CONSTANTS.startMonth;
+            var endYm = '' + thisYear + ((thisMonth+'').length == 1 ? '0'+thisMonth : thisMonth);
+            for (var m = 1; m <= 12; m++) {
+                var checkYm = '' + sltYear + ((m+'').length == 1 ? '0'+m : m);
+                if (checkYm <  startYm) continue;
+                if (checkYm >  endYm) break;
+                listPerfMonth.push(m);
             }
             return listPerfMonth;
         };

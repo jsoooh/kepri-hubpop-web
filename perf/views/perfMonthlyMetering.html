@@ -1,6 +1,6 @@
 <div class="cBox type2">
 	<div class="cBox-hd">
-		<h4 class="c-tit">{{ contents.data.sltOrgName }}</h4>
+		<h4 class="c-tit">※ 시간 당 사용량의 합산입니다.</h4>
 		<div class="pull-right">
 			<select ng-model="contents.data.sltYear" ng-options="year + '년' for year in contents.meteringYears"
 					ng-change="contents.fn.selectMeteringYear(contents.data.sltYear)">
@@ -39,8 +39,7 @@
 						<th ng-repeat="idx in [].constructor(12) track by $index">{{ $index + 1 }}월</th>
 					</tr>
 				</thead>
-				<tbody class="tbody_group"
-					   ng-if="!(contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists)" class="ng-scope"
+				<tbody class="tbody_group" ng-if="!(contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists)" class="ng-scope"
 					   ng-repeat="meteringItemGroup in contents.meteringItemGroups">
 					<tr>
 						<th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>

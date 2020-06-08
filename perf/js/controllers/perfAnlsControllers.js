@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('perf.controllers')
-    .controller('perfAnlsCtrl', function ($scope, $location, $state, $q, $stateParams, $translate, $timeout, $interval, $filter, common, perfAnlsService, perfMeteringService, CONSTANTS) {
+    .controller('perfAnlsCtrl', function ($scope, $location, $state, $q, $stateParams, $translate, $timeout, $interval, $filter, common, perfAnlsService, perfMeteringService, CONSTANTS, perfCommService) {
         _DebugConsoleLog("perfAnlsControllers.js : perfAnlsCtrl", 1);
 
         var ct = this;
@@ -18,14 +18,15 @@ angular.module('perf.controllers')
         ct.sltOrg.name = $scope.main.sltPortalOrg.orgName;
 
         ct.today = new Date();
-        ct.data.startYear = 2019;
+        ct.data.startYear = ct.scope.CONSTANTS.startYear;
 
         ct.meteringItemGroups = [];
 
         ct.perfYears = [];
-        ct.perfMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        //ct.perfMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         ct.data.sltYear = "";
         ct.data.sltMonth = "";
+
         ct.totalPerfAnlsByOrgCodeAndPerfDate = [];
         ct.data.totalPerfAnls = 0;
 
@@ -213,7 +214,14 @@ angular.module('perf.controllers')
         // 년도 변경
         ct.fn.changeSltYear = function (sltYear) {
             ct.data.sltYear = sltYear;
-            ct.data.sltMonth = "";
+
+            ct.perfMonths = perfCommService.listPerfMonth(ct.data.sltYear);
+            ct.data.sltMonth = perfCommService.monthWhenChangeYear(ct.data.prevSltYear, ct.data.sltYear);
+
+            ct.data.prevSltYear = ct.data.sltYear;
+
+            ct.fn.selectMonth(ct.data.sltMonth);
+
             console.log("year: " + ct.data.sltYear + " month: " + ct.data.sltMonth);
         };
 
@@ -254,6 +262,10 @@ angular.module('perf.controllers')
             ct.fn.listAllMeteringGroupItems();
             ct.data.sltYear = ct.today.getFullYear();
             ct.data.sltMonth = ct.today.getMonth() + 1;
+            ct.data.prevSltYear = ct.data.sltYear;
+            
+            ct.perfMonths = perfCommService.listPerfMonth(ct.data.sltYear);
+
             ct.fn.selectMonth(ct.data.sltMonth);
         };
 
