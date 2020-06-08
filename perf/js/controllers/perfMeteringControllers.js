@@ -296,7 +296,6 @@ angular.module('perf.controllers')
                 if (defer) {
                     defer.resolve();
                 }
-
                 $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
@@ -395,6 +394,7 @@ angular.module('perf.controllers')
         ct.fn.redrawChart = function (chart) {
             chart.instance.setData(chart.data);
             chart.instance.rerender();
+            $scope.main.loadingMainBody = false;
         };
 
         // GET Monthly Data - redraw chart
@@ -451,7 +451,6 @@ angular.module('perf.controllers')
                     ]
                 };
                 ct.fn.redrawChart(ct.monthlyChart);
-                $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail listPerfMeteringMonthlyTotalByItemCode");
@@ -519,7 +518,6 @@ angular.module('perf.controllers')
                 };
 
                 ct.fn.redrawChart(ct.dailyChart);
-                $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail listPerfMeteringDailyTotalByItemCode");

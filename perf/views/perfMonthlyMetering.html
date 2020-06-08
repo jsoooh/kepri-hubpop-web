@@ -1,6 +1,14 @@
+<style type="text/css">
+	h4 {
+		float: left;
+		font-size:22px;
+		color:#333;
+		line-height: 80px;
+	}
+</style>
 <div class="cBox type2">
 	<div class="cBox-hd">
-		<h4 class="c-tit">※ 시간 당 사용량의 합산입니다.</h4>
+		<h4>※ 시간 당 사용량의 합산입니다.</h4>
 		<div class="pull-right">
 			<select ng-model="contents.data.sltYear" ng-options="year + '년' for year in contents.meteringYears"
 					ng-change="contents.fn.selectMeteringYear(contents.data.sltYear)">
