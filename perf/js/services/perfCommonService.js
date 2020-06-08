@@ -21,7 +21,7 @@ angular.module('perf.services')
             var thisYear = today.getFullYear();
             var thisMonth = today.getMonth() + 1;
             var listPerfMonth = [];
-            var startYm = "201912";
+            var startYm = CONSTANTS.startYear + '' + CONSTANTS.startMonth;
             var endYm = '' + thisYear + ((thisMonth+'').length == 1 ? '0'+thisMonth : thisMonth);
             for (var m = 1; m <= 12; m++) {
                 var checkYm = '' + sltYear + ((m+'').length == 1 ? '0'+m : m);
