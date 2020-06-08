@@ -5,15 +5,15 @@
 <div class="pl10 mt10">
     <span class="pnb_stit">- 생성여부 선택  : </span>
     <div class="radio radio-inline">
-        <input type="radio" name="create_user_and_db" id="create-user-and-db-true" ng-model="contents.data.cerateUser" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="create_user_and_db" id="create-user-and-db-true" ng-model="contents.data.createUser" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="create-user-and-db-true" class="label">예</label>
     </div>
     <div class="radio radio-inline">
-        <input type="radio" name="create_user_and_db" id="create-user-and-db-false" ng-model="contents.data.cerateUser" ng-value=false class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="create_user_and_db" id="create-user-and-db-false" ng-model="contents.data.createUser" ng-value=false class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="create-user-and-db-false" class="label">아니오</label>
     </div>
 </div>
-<div ng-show="contents.data.cerateUser" class="tbw type1 mt20">
+<div ng-show="contents.data.createUser" class="tbw type1 mt20">
     <table class="table">
         <colgroup>
             <col style="width:20%;">
@@ -30,9 +30,9 @@
         </tr>
         <tr>
             <th><i class="i_star"></i> 계정 비밀번호</th>
-            <td><input type="password" name="createUserPassword" class="form-control" maxlength="50" ng-model="contents.data.createUserPassword" placeholder="비밀번호를 입력하세요." ></td>
+            <td><input type="password" name="createUserPassword" class="form-control" maxlength="50" ng-model="contents.data.createUserPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
             <th><i class="i_star"></i> 계정 비밀번호 확인</th>
-            <td><input type="password" name="createUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.createUserConfirmPassword" placeholder="비밀번호를 확인하세요." ></td>
+            <td><input type="password" name="createUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.createUserConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.createUserPassword, contents.data.createUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
         </tr>
         </tbody>
     </table>

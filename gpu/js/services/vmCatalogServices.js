@@ -46,6 +46,17 @@ angular.module('gpu.services')
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy', 'POST', params));
         };
 
+        // VM 카탈로그 배포 하기
+        vmCatalogService.templateVmCatalogDeploy = function(tenantId, vmCatalogDeploy) {
+            var params = {
+                urlPaths : {
+                    "tenantId" : tenantId
+                },
+                body: vmCatalogDeploy
+            };
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/template', 'POST', params));
+        };
+
         // VM 카탈로그 배포 정보 목록 조회
         vmCatalogService.listAllVmCatalogDeploy = function(tenantId) {
             var params = {
@@ -54,6 +65,16 @@ angular.module('gpu.services')
                 }
             };
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy', 'GET', params));
+        };
+
+        // VM 카탈로그 배포 정보 목록 조회
+        vmCatalogService.listAllVmCatalogDeployNames = function(tenantId) {
+            var params = {
+                urlPaths : {
+                    "tenantId" : tenantId
+                }
+            };
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/names', 'GET', params));
         };
 
         // VM 카탈로그 배포 정보 목록 조회(stack 포함)

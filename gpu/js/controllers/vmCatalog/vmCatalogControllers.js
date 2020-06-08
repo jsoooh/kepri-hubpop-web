@@ -47,19 +47,25 @@ angular.module('gpu.controllers')
     ct.htmlUrls                         = {};
     ct.htmlUrls.deployName              = _GPU_VIEWS_ + "/vmCatalog/create/createDeployDeployName.html" + _VERSION_TAIL_;
     ct.htmlUrls.stackName               = _GPU_VIEWS_ + "/vmCatalog/create/createDeployStackName.html" + _VERSION_TAIL_;
+    ct.htmlUrls.deployTypeRadio         = _GPU_VIEWS_ + "/vmCatalog/create/createDeployTypeRadio.html" + _VERSION_TAIL_;
+    ct.htmlUrls.octaviaLbUse            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployOctaviaLbUse.html" + _VERSION_TAIL_;
     ct.htmlUrls.servicePort             = _GPU_VIEWS_ + "/vmCatalog/create/createDeployServicePort.html" + _VERSION_TAIL_;
     ct.htmlUrls.rootPassword            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployRootPassword.html" + _VERSION_TAIL_;
     ct.htmlUrls.rootConfirmPassword     = _GPU_VIEWS_ + "/vmCatalog/create/createDeployRootConfirmPassword.html" + _VERSION_TAIL_;
+    ct.htmlUrls.adminPassword           = _GPU_VIEWS_ + "/vmCatalog/create/createDeployAdminPassword.html" + _VERSION_TAIL_;
+    ct.htmlUrls.adminConfirmPassword    = _GPU_VIEWS_ + "/vmCatalog/create/createDeployAdminConfirmPassword.html" + _VERSION_TAIL_;
     ct.htmlUrls.userDbUse               = _GPU_VIEWS_ + "/vmCatalog/create/createDeployUserDbUse.html" + _VERSION_TAIL_;
-    ct.htmlUrls.deployTypeRadio         = _GPU_VIEWS_ + "/vmCatalog/create/createDeployTypeRadio.html" + _VERSION_TAIL_;
-    ct.htmlUrls.octaviaLbUse            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployOctaviaLbUse.html" + _VERSION_TAIL_;
     ct.htmlUrls.zoneSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeployZoneSelect.html" + _VERSION_TAIL_;
     ct.htmlUrls.spacSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeploySpacSelect.html" + _VERSION_TAIL_;
     ct.htmlUrls.volumeSelect            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployVolumeSelect.html" + _VERSION_TAIL_;
     ct.htmlUrls.createDeployBtn         = _GPU_VIEWS_ + "/vmCatalog/create/createDeployBtn.html" + _VERSION_TAIL_;
     ct.htmlUrls.createDeployInfo        = _GPU_VIEWS_ + "/vmCatalog/create/createDeployInfo.html" + _VERSION_TAIL_;
 
-    ct.roles                    = [];
+    ct.stackNames               = [];
+    ct.usingPorts               = {};
+    ct.usingPorts.single        = [];
+    ct.usingPorts.replica       = [];
+    ct.usingPorts.cluster       = [];
     ct.catalogId                = $stateParams.id;
     ct.vmCatalogInfo            = {};
     ct.vmCatalogTemplateInfo    = {};
@@ -73,9 +79,17 @@ angular.module('gpu.controllers')
     ct.data.replicaCnt = 3;
     ct.data.clusterCnt = 3;
     ct.data.serverCnt = 1;
-
     ct.data.securityGroup = "default";
-    ct.data.volumeSize = 10;
+    ct.data.volumeType = "RBD";
+    ct.data.lbAlgorithm = "ROUND_ROBIN";
+    ct.data.volumeMountPoint = "/dev/vdb";
+    ct.data.volumeMountPath = "/mnt/data";
+
+    ct.data.volumeSize = 40;
+    ct.data.deployType = 'single';
+    ct.data.createUser = false;
+    ct.data.octaviaLbUse = false;
+    ct.data.volumeUse = false;
 
     //디스크생성 변수
     ct.inputVolumeSize = ct.data.volumeSize;
@@ -403,6 +417,22 @@ angular.module('gpu.controllers')
         }
     };
 
+    //스펙그룹의 스펙 리스트 조회
+    ct.fn.getStackNames = function(tenantId) {
+        var returnPromise = vmCatalogService.listAllVmCatalogDeployNames(tenantId);
+        returnPromise.success(function (data, status, headers) {
+            var stackNames = [];
+            if (data && angular.isArray(data.content) && data.content.length > 0) {
+                angular.forEach(data.content, function(val, key) {
+                    stackNames.push(val.stackName);
+                });
+            }
+            ct.stackNames = stackNames;
+        });
+        returnPromise.error(function (data, status, headers) {
+        });
+    };
+
     ct.fn.changeDeployType = function () {
         if (ct.data.deployType == 'replica') {
            ct.data.serverCnt = ct.data.replicaCnt;
@@ -419,9 +449,72 @@ angular.module('gpu.controllers')
         }
     };
 
+    ct.fn.validationDeployName = function (deployName) {
+        var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    // 한글,숫자,영문,특수문자(.-_)
+        var bInValid = false;
+        var orgNameErrorString = "";                // 문제되는 문자
+        if (!deployName) return;
+        for (var i=0; i<deployName.length; i++) {
+            if (deployName.charAt(i) != " " && regexp.test(deployName.charAt(i)) == false) {
+                bInValid = true;
+                orgNameErrorString += deployName.charAt(i);
+            }
+        }
+        if (bInValid) {
+            return {isValid : false, message: orgNameErrorString + "는 입력 불가능한 문자입니다."};
+        } else {
+            return {isValid : true};
+        }
+    };
+
+    ct.fn.validationStackName = function (stackName) {
+        if (!stackName) return;
+        if (ct.stackNames.indexOf(stackName) >= 0) {
+            return {isValid : false, message: "'" + stackName + "'은 이미 사용 중인 이름 입니다."};
+        }
+        return {isValid : true};
+    };
+
+    ct.fn.systemPortCustomValidationCheck = function(deployType, port) {
+        if (port == undefined || port == null || port == "") return;
+        if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
+            if (ct.usingPorts[deployType].indexOf(port) >= 0) {
+                return {isValid : false, message: "사용이 예약된 포트 입니다."};
+            } else {
+                return {isValid: true};
+            }
+        } else {
+            return {isValid : false, message: "사용이 가능한 포트 범위는 [80, 443, 1024~65535] 입니다."};
+        }
+    };
+
+    ct.fn.systemLbPortCustomValidationCheck = function(port) {
+        if (port == undefined || port == null || port == "") return;
+        if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
+            return {isValid: true};
+        } else {
+            return {isValid : false, message: "사용이 가능한 포트 범위는 [80, 443, 1024~65535] 입니다."};
+        }
+    };
+
+    ct.fn.checkPasswordValidation = function(password) {
+        var regExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/;
+        if(!regExp.test(password)) {
+            return {isValid: false, message: "비밀번호는 숫자, 영소문자, 영대문자, 특수문자 혼합 및 8자리 이상 20자 이하 입니다."};
+        }
+        return {isValid: true};
+    };
+
+    ct.fn.checkConfirmPasswordValidation = function(password, confirmPassword) {
+        if (password !== confirmPassword) {
+            return {isValid: false, message: "비밀번호와 비밀번호 확인이 동일하지 않습니다."};
+        }
+        return {isValid: true};
+    };
+
     ct.checkClickBtn = false;
 
-    ct.fn.createVmCatalogDeployAction = function (deployTemplate, appendSetVmCatalogDeploy) {
+    ct.fn.createVmCatalogDeployAction = function (deployTemplate, appendSetVmCatalogDeploy, templatePrint) {
         var vmCatalogDeploy = {};
         vmCatalogDeploy.context = {};
         vmCatalogDeploy.parameters = {};
@@ -429,6 +522,7 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.vmCatalogInfoId = ct.vmCatalogInfo.id;
         vmCatalogDeploy.version = ct.vmCatalogInfo.version;
         vmCatalogDeploy.deployName = ct.data.deployName;
+        vmCatalogDeploy.stackName = ct.data.stackName;
         vmCatalogDeploy.deployType = ct.data.deployType;
         vmCatalogDeploy.deployServerCount = 1;
         if (ct.data.deployType == "cluster") {
@@ -437,10 +531,12 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.deployServerCount = ct.data.replicaCnt;
         }
         vmCatalogDeploy.deployTemplate = deployTemplate;
+        vmCatalogDeploy.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.createUser = ct.data.createUser;
         vmCatalogDeploy.context.octaviaLbUse = false;
         if (ct.data.deployType == "cluster") {
+            vmCatalogDeploy.octaviaLbUse = ct.data.octaviaLbUse;
             vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
         }
         vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
@@ -450,23 +546,16 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.parameters.availability_zone = ct.sltAvailabilityZone.availabilityZone;
         vmCatalogDeploy.parameters.provider_net = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
         vmCatalogDeploy.parameters.provider_subnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
-        vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
-        vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
-        if (ct.data.cerateUser) {
-            vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
-            vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
-            vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
-        }
         if (ct.data.volumeUse) {
             vmCatalogDeploy.parameters.volume_type = ct.data.volumeType;
             vmCatalogDeploy.parameters.volume_size = ct.data.volumeSize;
             vmCatalogDeploy.parameters.volume_mount_point = ct.data.volumeMountPoint;
             vmCatalogDeploy.parameters.volume_mount_path = ct.data.volumeMountPath;
         }
-
         vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);
 
         $scope.main.loadingMainBody = true;
+
         var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
         promise.success(function (data) {
             if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
@@ -480,6 +569,16 @@ angular.module('gpu.controllers')
             $scope.main.loadingMainBody = false;
             ct.checkClickBtn = false;
         });
+        if (templatePrint) {
+            var printPromise = vmCatalogService.templateVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
+            printPromise.success(function (data) {
+                if (angular.isString(data.content)) {
+                    console.log(data.content);
+                }
+            });
+            printPromise.error(function (data, status, headers) {
+            });
+        }
     }
 
     ct.fn.loadPage = function () {
@@ -488,6 +587,7 @@ angular.module('gpu.controllers')
         ct.fn.availabilityZoneList();
         ct.fn.getKeypairList(ct.tenantId);
         ct.fn.getSpecList();
+        ct.fn.getStackNames(ct.tenantId);
     }
 
     ct.fn.loadPage();

@@ -2,4 +2,4 @@
     <i class="i_star"></i> <span class="pnb_t_txt">포트</span>
     <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 </div>
-<input type="number" name="servicePort" class="form-control" maxlength="50" ng-model="contents.data.servicePort" validation="number|required" placeholder="서비스 이름을 입력하세요." >
+<input type="text" name="servicePort" class="form-control" maxlength="50" ng-model="contents.data.servicePort" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck(contents.data.deployType, contents.data.servicePort)" placeholder="서비스 포트를 입력하세요." >
