@@ -1193,6 +1193,9 @@ angular.module('iaas.controllers')
                 }
                 if (sltSpec) {
                     ct.fn.selectSpec(sltSpec);
+                } else {
+                    ct.specUuid = "";
+                    ct.data.spec = "";
                 }
             }
         };
@@ -1485,7 +1488,7 @@ angular.module('iaas.controllers')
                 params.volume.tenantId = ct.data.tenantId;
             }
 
-            if (!ct.data.spec.uuid) {
+            if (!ct.data.spec || !ct.data.spec.uuid) {
                 common.showAlertError("사양이 선택되지 않았습니다.");
                 clickCheck = false;
                 return;
