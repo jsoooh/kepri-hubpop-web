@@ -1236,7 +1236,13 @@ angular.module('iaas.controllers')
                         image.minDisk = (image.minDisk > sizeGb) ? image.minDisk : sizeGb;
                         image.minRam = (image.minRam > 0) ? image.minRam/(1024) : 0;
                     });
-                    // ct.fn.imageChange(ct.imageList[0].id);
+                    // 라이센스 없을시 다음 이미지 기본설정
+                    for (var i=0; i <ct.imageList.length; i++) {
+                        if (!ct.fn.imageLicenseCheck(ct.imageList[i])) {
+                            ct.fn.imageChange(ct.imageList[i].id);
+                            break;
+                        }
+                    }
                 }
                 ct.imageListLoad = true;
             });
@@ -1261,6 +1267,8 @@ angular.module('iaas.controllers')
 
         ct.fn.imageLicenseCheck = function(image) {
             var osType = image.osType.toUpperCase();
+            if (!ct.tenantResource || !ct.tenantResource.available)
+                return false;
             if (osType == "REDHAT")
                 return ct.tenantResource.available.licenseRedhat <= 0 ? true : false;
             else if (osType == "WINDOWS")
