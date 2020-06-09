@@ -3,6 +3,9 @@
 angular.module('gpu.controllers')
     .controller('mariadbDeployCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, vmCatalogService, CONSTANTS) {
         _DebugConsoleLog("mariadb deployControllers.js : mariadbDeployCtrl", 1);
+        var subPage = this;
+        subPage.fn = {};
+
         var ct = $scope.$parent.$parent.contents;
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
@@ -11,74 +14,62 @@ angular.module('gpu.controllers')
         ct.deployTypeClusterSuport = true;
         ct.data.replicaCnt = 2;
         ct.data.servicePort = 3306;
-        ct.data.deployType = 'single';
-        ct.data.cerateUser = true;
+        ct.data.lbSvcPort = 3306;
+        ct.data.galeraPort = 4567;
+        ct.data.checkPort = 9898;
+
+
+        ct.data.deployName = "마리아디비";
+        ct.data.stackName = "Mariadb-Cluster";
+        ct.data.deployType = "cluster";
         ct.data.octaviaLbUse = true;
         ct.data.volumeUse = true;
-        ct.data.lbSvcPort = 3306;
-        ct.data.lbAlgorithm = "ROUND_ROBIN";
-        ct.data.volumeType = "RBD";
-        ct.data.volumeMountPoint = "/dev/vdb";
-        ct.data.volumeMountPath = "/mnt/data";
+
+        ct.data.rootPassword = "Crossent!234";
+        ct.data.rootConfirmPassword = "Crossent!234";
+        ct.data.createUser = true;
+        ct.data.createUserId = "kepri";
+        ct.data.createDbName = "kepri";
+        ct.data.createUserPassword = "Kepri!234";
+        ct.data.createUserConfirmPassword = "Kepri!234";
+
+
 
         ct.checkClickBtn = false;
-        ct.fn.createVmCatalogDeploy = function () {
-            if (ct.checkClickBtn) return;
-            ct.checkClickBtn = true;
-            if (!ct.vs.checkFormValidity($scope['subPage'])) {
-                ct.checkClickBtn = false;
-                return;
+
+        // 추가 셋팅
+        subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
+            vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
+            if (ct.data.deployType == "cluster") {
+                if (ct.data.servicePort == ct.data.galeraPort) {
+                    ct.data.galeraPort++;
+                }
+                vmCatalogDeploy.parameters.galera_port = ct.data.galeraPort;
+            } else if (ct.data.deployType == "replica") {
+                if (ct.data.servicePort == ct.data.checkPort) {
+                    ct.data.checkPort++;
+                }
+                vmCatalogDeploy.parameters.check_port = ct.data.checkPort;
             }
+            vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
+            vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
+            vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
+            if (ct.data.createUser) {
+                vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
+                vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
+                vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
+            }
+            return vmCatalogDeploy;
+        }
 
-            ct.fn.loadVmCatalogDeployTemplateAndAction(ct.vmCatalogInfo.templatePath, ct.vmCatalogTemplateInfo.deployTemplates[ct.data.deployType], function (deployTemplate) {
+        subPage.fn.setTocDeployAction = function (deployTemplate) {
+            ct.fn.createVmCatalogDeployAction(deployTemplate, subPage.fn.appendSetVmCatalogDeploy, false);
+        }
 
-                var vmCatalogDeploy = {};
+        ct.fn.createVmCatalogDeploy = function () {
+            if (!ct.fn.commCheckFormValidity(subPage)) return;
 
-                vmCatalogDeploy.vmCatalogInfoId = ct.vmCatalogInfo.id;
-                vmCatalogDeploy.version = ct.vmCatalogInfo.version;
-                vmCatalogDeploy.deployName = ct.data.deployName;
-                vmCatalogDeploy.deployType = ct.data.deployType;
-                vmCatalogDeploy.deployTemplate = deployTemplate;
-                vmCatalogDeploy.context = {};
-                vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
-                vmCatalogDeploy.context.createUser = ct.data.createUser;
-                vmCatalogDeploy.parameters = {};
-                vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
-                vmCatalogDeploy.parameters.availability_zone = ct.data.availabilityZone;
-                vmCatalogDeploy.parameters.flavor = ct.data.flavor;
-                vmCatalogDeploy.parameters.key_name = ct.data.keyName;
-                vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
-                vmCatalogDeploy.parameters.provider_net = ct.data.providerNet;
-                vmCatalogDeploy.parameters.provider_subnet = ct.data.providerSubnet;
-                vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
-                vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
-                if (ct.data.cerateUser) {
-                    vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
-                    vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
-                    vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
-                }
-                if (ct.data.volumeUse) {
-                    vmCatalogDeploy.parameters.volume_type = ct.data.volumeType;
-                    vmCatalogDeploy.parameters.volume_size = ct.data.volumeSize;
-                    vmCatalogDeploy.parameters.volume_mount_point = ct.data.volumeMountPoint;
-                    vmCatalogDeploy.parameters.volume_mount_path = ct.data.volumeMountPath;
-                }
-
-                $scope.main.loadingMainBody = true;
-                var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
-                promise.success(function (data) {
-                    if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
-                        $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
-                    } else {
-                        $scope.main.loadingMainBody = false;
-                    }
-                    ct.checkClickBtn = false;
-                });
-                promise.error(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                    ct.checkClickBtn = false;
-                });
-            });
+            ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
 
     })

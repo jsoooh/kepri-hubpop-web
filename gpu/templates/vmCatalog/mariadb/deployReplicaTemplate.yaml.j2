@@ -330,20 +330,29 @@ resources:
       mountpoint: { get_param: volume_mount_point }
 
 outputs:
-  server_ip1:
+  instancePort_1:
     value:
-      get_attr: [server1_port, fixed_ips, 0, ip_address]
-  server_ip2:
+      get_attr: [ server1_port, show ]
+  instancePort_2:
     value:
-      get_attr: [server2_port, fixed_ips, 0, ip_address]
-  service_port:
+      get_attr: [ server2_port, show ]
+  instance_1:
     value:
-      get_param: service_port
+      get_attr: [ server1, show ]
+  instance_2:
+    value:
+      get_attr: [ server2, show ]
+  instanceInitConfig_1:
+    value:
+      get_attr: [ init_config1, config ]
+  instanceInitConfig_2:
+    value:
+      get_attr: [ init_config2, config ]
 {% if volumeUse %}
-  volume1_id:
+  volume_1:
     value:
-      get_resource: cinder_volume1
-  volume2_id:
+      get_attr: [ cinder_volume1, show ]
+  volume_2:
     value:
-      get_resource: cinder_volume2
+      get_attr: [ cinder_volume2, show ]
 {% endif %}

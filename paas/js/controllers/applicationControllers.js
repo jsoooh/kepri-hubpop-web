@@ -2019,7 +2019,7 @@ angular.module('paas.controllers')
         ct.getAppStats(true);
         ct.getAppSummary();
         //ct.changeSltInfoTab('service'); //20181126 sg0730 kepri 통합 요청으로 인한 Applog 제일 상단 배치
-        //ct.changeSltInfoTab('appLog');  //2020.02.03 수정 - 2020.06.03 app
+        //ct.changeSltInfoTab('appLog');  //2020.02.03 수정 - 2020.06.03 대표도메인 설정 버튼 추가에 따라 block 처리
     })
     .controller('paasApplicationRePushFormCtrl', function ($scope, $location, $state, $stateParams, $timeout, $translate, user, applicationService, common, CONSTANTS) {
         _DebugConsoleLog("applicationControllers.js : paasApplicationRePushFormCtrl", 1);

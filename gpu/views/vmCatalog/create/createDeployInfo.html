@@ -44,14 +44,14 @@
                             </thead>
                             <tbody>
                             <tr ng-show="contents.data.serverCnt == 1">
-                                <td>{{contents.data.spec.vcpus}} Core</td>
-                                <td>{{contents.data.spec.ram | displayVolume : 'MB'}}</td>
-                                <td>{{contents.data.spec.disk | displayVolume : 'GB'}}</td>
+                                <td>{{ contents.sltSpac.vcpus }} Core</td>
+                                <td>{{ contents.sltSpac.ram | displayVolume : 'MB' }}</td>
+                                <td>{{ contents.sltSpac.disk | displayVolume : 'GB' }}</td>
                             </tr>
                             <tr ng-show="contents.data.serverCnt > 1">
-                                <td>{{ contents.data.serverCnt }} X {{contents.data.spec.vcpus}} Core</td>
-                                <td>{{ contents.data.serverCnt }} X {{contents.data.spec.ram | displayVolume : 'MB'}}</td>
-                                <td>{{ contents.data.serverCnt }} X {{contents.data.spec.disk | displayVolume : 'GB'}}</td>
+                                <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.vcpus }} Core</td>
+                                <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.ram | displayVolume : 'MB' }}</td>
+                                <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.disk | displayVolume : 'GB' }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -73,8 +73,8 @@
             <ul>
                 <li>
                     <span class="s_tit">크기</span>
-                    <span ng-show="contents.data.serverCnt == 1" class="s_txt">{{ contents.volumeSize | displayVolume : 'GB' }}</span>
-                    <span ng-show="contents.data.serverCnt > 1" class="s_txt">{{ contents.data.serverCnt }} X {{ contents.volumeSize | displayVolume : 'GB' }}</span>
+                    <span ng-show="contents.data.serverCnt == 1" class="s_txt">{{ contents.data.volumeSize | displayVolume : 'GB' }}</span>
+                    <span ng-show="contents.data.serverCnt > 1" class="s_txt">{{ contents.data.serverCnt }} X {{ contents.data.volumeSize | displayVolume : 'GB' }}</span>
                 </li>
                 <li>
                     <span class="s_tit">유형</span>
@@ -98,34 +98,34 @@
                         <span class="tit_txt">vcpu</span>
                         <div class="progressWrap type2">
                             <div class="progress">
-                                <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}" class="progress">
-                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}%"></div>
+                                <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}" class="progress">
+                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}%"></div>
                                 </div>
                             </div>
                         </div>
-                        <span class="txt_count">({{(contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)}} 개 / {{contents.tenantResource.maxResource.cores}} 개)</span>
+                        <span class="txt_count">({{ (contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt) }} 개 / {{ contents.tenantResource.maxResource.cores }} 개)</span>
                     </li>
                     <li>
                         <span class="tit_txt">메모리</span>
                         <div class="progressWrap type2">
                             <div class="progress">
-                                <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}" class="progress">
-                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}%"></div>
+                                <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}" class="progress">
+                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}%"></div>
                                 </div>
                             </div>
                         </div>
-                        <span class="txt_count">({{(contents.tenantResource.usedResource.ramSize + contents.data.spec.ram) | displayVolume:'MB'}} / {{contents.tenantResource.maxResource.ramSize | displayVolume:'MB'}})</span>
+                        <span class="txt_count">({{ (contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt) | displayVolume:'MB' }} / {{ contents.tenantResource.maxResource.ramSize | displayVolume:'MB' }})</span>
                     </li>
                     <li>
                         <span class="tit_txt">디스크</span>
                         <div class="progressWrap type2">
                             <div class="progress">
-                                <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}" class="progress">
-                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}%"></div>
+                                <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}" class="progress">
+                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}%"></div>
                                 </div>
                             </div>
                         </div>
-                        <span class="txt_count">({{(contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB'}})</span>
+                        <span class="txt_count">({{ (contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt) | displayVolume:'GB' }} / {{ contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB' }})</span>
                     </li>
                 </ul>
             </div>

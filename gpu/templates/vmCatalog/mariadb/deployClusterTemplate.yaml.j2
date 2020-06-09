@@ -257,7 +257,7 @@ resources:
             mv /var/lib/mysql $volume_mount_path/
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
-{% enfif %}
+{% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
             sleep 1
@@ -445,7 +445,7 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config3
-
+{% if volumeUse %}
   cinder_volume1_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
@@ -466,7 +466,7 @@ resources:
       instance_uuid: { get_resource: server3 }
       volume_id: { get_resource: cinder_volume3 }
       mountpoint: { get_param: volume_mount_point }
-
+{% endif %}
 {% if octaviaLbUse %}
   octavia_lb:
     type: OS::Octavia::LoadBalancer
@@ -521,34 +521,64 @@ resources:
 {% endif %}
 
 outputs:
-  server_ip1:
+  instancePort_1:
     value:
-      get_attr: [server1_port, fixed_ips, 0, ip_address]
-  server_ip2:
+      get_attr: [ server1_port, show ]
+  instancePort_2:
     value:
-      get_attr: [server2_port, fixed_ips, 0, ip_address]
-  server_ip3:
+      get_attr: [ server2_port, show ]
+  instancePort_3:
     value:
-      get_attr: [server3_port, fixed_ips, 0, ip_address]
-  service_port:
+      get_attr: [ server3_port, show ]
+  instance_1:
     value:
-      get_param: service_port
-{% if octaviaLbUse %}
-  octavia_lb_ip:
+      get_attr: [ server1, show ]
+  instance_2:
     value:
-      get_attr: [octavia_lb, vip_address]
-  lb_svc_port:
+      get_attr: [ server2, show ]
+  instance_3:
     value:
-      get_param: lb_svc_port
-{% endif %}
+      get_attr: [ server3, show ]
+  instanceInitConfig_1:
+    value:
+      get_attr: [ init_config1, config ]
+  instanceInitConfig_2:
+    value:
+      get_attr: [ init_config2, config ]
+  instanceInitConfig_3:
+    value:
+      get_attr: [ init_config3, config ]
 {% if volumeUse %}
-  volume1_id:
+  volume_1:
     value:
-      get_resource: cinder_volume1
-  volume2_id:
+      get_attr: [ cinder_volume1, show ]
+  volume_2:
     value:
-      get_resource: cinder_volume2
-  volume3_id:
+      get_attr: [ cinder_volume2, show ]
+  volume_3:
     value:
-      get_resource: cinder_volume3
+      get_attr: [ cinder_volume3, show ]
+{% endif %}
+{% if octaviaLbUse %}
+  octaviaLb:
+    value:
+      get_attr: [octavia_lb, show]
+  octaviaLbListener:
+    value:
+      get_attr: [octavia_lb_svc_listener, show]
+  octaviaLbPool:
+    value:
+      get_attr: [octavia_lb_svc_pool, show]
+  octaviaLbMonitor:
+    value:
+      get_attr: [octavia_lb_svc_monitor, show]
+  octaviaLbPoolMember_1:
+    value:
+      get_attr: [lb_svc_pool_member1, show]
+  octaviaLbPoolMember_2:
+    value:
+      get_attr: [lb_svc_pool_member2, show]
+  octaviaLbPoolMember_3:
+    value:
+      get_attr: [lb_svc_pool_member3, show]
 {% endif %}

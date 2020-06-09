@@ -3,7 +3,7 @@
   "deployControllerFile": "deployControllers.js",
   "deployControllerName": "kafkaDeployCtrl",
   "deployHtmlFile": "deploy.html",
-  "deployViewControllerFile": "deployVewControllers.js",
+  "deployViewControllerFile": "deployViewControllers.js",
   "deployViewControllerName": "kafkaDeployViewCtrl",
   "deployViewHtmlFile": "deployView.html",
   "deployTemplates": {

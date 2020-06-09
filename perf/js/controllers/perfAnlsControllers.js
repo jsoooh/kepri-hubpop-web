@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('perf.controllers')
-    .controller('perfAnlsCtrl', function ($scope, $location, $state, $q, $stateParams, $translate, $timeout, $interval, $filter, common, perfAnlsService, perfMeteringService, CONSTANTS) {
+    .controller('perfAnlsCtrl', function ($scope, $location, $state, $q, $stateParams, $translate, $timeout, $interval, $filter, common, perfAnlsService, perfMeteringService, CONSTANTS, perfCommService) {
         _DebugConsoleLog("perfAnlsControllers.js : perfAnlsCtrl", 1);
 
         var ct = this;
@@ -18,14 +18,15 @@ angular.module('perf.controllers')
         ct.sltOrg.name = $scope.main.sltPortalOrg.orgName;
 
         ct.today = new Date();
-        ct.data.startYear = 2019;
+        ct.data.startYear = ct.scope.CONSTANTS.startYear;
 
         ct.meteringItemGroups = [];
 
         ct.perfYears = [];
-        ct.perfMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        //ct.perfMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         ct.data.sltYear = "";
         ct.data.sltMonth = "";
+
         ct.totalPerfAnlsByOrgCodeAndPerfDate = [];
         ct.data.totalPerfAnls = 0;
 
@@ -100,27 +101,19 @@ angular.module('perf.controllers')
                 ct.totalPerfAnlsByOrgCodeAndPerfDate = [];
                 console.log("Start Combine");
                 ct.data.totalPerfAnls = 0;
+                ct.data.lastTotalPerfAnls = 0;
                 var sltData = datas[0];
                 var lastData = datas[1];
                 var sltDataMaxRow = ct.fn.findMaxRow(sltData);
                 var lastDatamaxRow = ct.fn.findMaxRow(lastData);
-                if (sltDataMaxRow > lastDatamaxRow) {
-                    ct.data.maxRow = sltDataMaxRow;
-                } else {
-                    ct.data.maxRow = lastDatamaxRow;
-                }
+                ct.data.maxRow = Math.max(sltDataMaxRow, lastDatamaxRow);
 
                 if (sltData != undefined && lastData != undefined) {
                     var sltDataList = sltData.items;
                     var lastDataList = lastData.items;
                     var itemGroupCode = "";
                     var startItemGroup = 0;
-                    var itemCount = 0;
-                    if (sltData.itemCount > lastData.itemCount) {
-                        itemCount = sltData.itemCount
-                    } else {
-                        itemCount = lastData.itemCount;
-                    }
+                    var itemCount = Math.max(sltData.itemCount, lastData.itemCount);
 
                     for (var i = 0; i < itemCount; i++) {
                         if (!sltDataList[i]) {
@@ -133,9 +126,9 @@ angular.module('perf.controllers')
                                 itemCode: lastDataList[i].itemCode,
                                 itemUnit: lastDataList[i].itemUnit,
                                 lastMetering: lastDataList[i].meteringValue,
-                                sltMetering: null,
+                                sltMetering: 0,
                                 lastAnls: lastDataList[i].perfAmt,
-                                sltAnls: null
+                                sltAnls: 0
                             };
                             if (lastDataList[i].itemGroupCode != itemGroupCode) {
                                 itemGroupCode = angular.copy(lastDataList[i].itemGroupCode);
@@ -158,9 +151,9 @@ angular.module('perf.controllers')
                                 itemName: sltDataList[i].itemName,
                                 itemCode: sltDataList[i].itemCode,
                                 itemUnit: sltDataList[i].itemUnit,
-                                lastMetering: null,
+                                lastMetering: 0,
                                 sltMetering: sltDataList[i].meteringValue,
-                                lastAnls: null,
+                                lastAnls: 0,
                                 sltAnls: sltDataList[i].perfAmt
                             };
                             if (sltDataList[i].itemGroupCode != itemGroupCode) {
@@ -198,11 +191,11 @@ angular.module('perf.controllers')
                                 ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
                             }
                             ct.data.totalPerfAnls += sltDataList[i].perfAmt;
+                            ct.data.lastTotalPerfAnls += lastDataList[i].perfAmt;
                             ct.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
                         }
                     }
                 }
-                console.log(ct.totalPerfAnlsByOrgCodeAndPerfDate);
                 $scope.main.loadingMainBody = false;
             });
 
@@ -213,7 +206,14 @@ angular.module('perf.controllers')
         // 년도 변경
         ct.fn.changeSltYear = function (sltYear) {
             ct.data.sltYear = sltYear;
-            ct.data.sltMonth = "";
+
+            ct.perfMonths = perfCommService.listPerfMonth(ct.data.sltYear);
+            ct.data.sltMonth = perfCommService.monthWhenChangeYear(ct.data.prevSltYear, ct.data.sltYear);
+
+            ct.data.prevSltYear = ct.data.sltYear;
+
+            ct.fn.selectMonth(ct.data.sltMonth);
+
             console.log("year: " + ct.data.sltYear + " month: " + ct.data.sltMonth);
         };
 
@@ -254,6 +254,10 @@ angular.module('perf.controllers')
             ct.fn.listAllMeteringGroupItems();
             ct.data.sltYear = ct.today.getFullYear();
             ct.data.sltMonth = ct.today.getMonth() + 1;
+            ct.data.prevSltYear = ct.data.sltYear;
+            
+            ct.perfMonths = perfCommService.listPerfMonth(ct.data.sltYear);
+
             ct.fn.selectMonth(ct.data.sltMonth);
         };
 

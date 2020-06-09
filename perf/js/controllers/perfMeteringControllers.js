@@ -20,6 +20,7 @@ angular.module('perf.controllers')
         ct.meteringYears = [];
         ct.orgMeteringMonthlyLists = [];
 
+        // ng-repeat
         ct.meteringMonths = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
         /* 미터링 서비스 그룹 리스트 */
@@ -42,10 +43,10 @@ angular.module('perf.controllers')
             $scope.main.loadingMainBody = true;
 
             var sltYear = ct.today.getFullYear();
-            for (var i = ct.scope.CONSTANTS.startYear; i < sltYear + 1; i++) {
-                ct.meteringYears.push(String(i));
+            for (var i = CONSTANTS.startYear; i < sltYear + 1; i++) {
+                ct.meteringYears.push(i);
             }
-            ct.data.sltYear = String(sltYear);
+            ct.data.sltYear = sltYear;
 
             ct.fn.selectMeteringYear(ct.data.sltYear);
         };
@@ -57,32 +58,31 @@ angular.module('perf.controllers')
          */
         ct.fn.selectMeteringYear = function (sltYear) {
             $scope.main.loadingMainBody = true;
-            if (angular.isDefined(sltYear)) {
-                ct.data.sltYear = sltYear;
-                var params = {
-                    "urlPaths": {
-                        "orgCode": ct.data.sltOrgCode
-                    },
-                    "year": ct.data.sltYear
-                }
-                var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
-                promise.success(function (data) {
-                    if (angular.isArray(data.items)) {
-                        ct.orgMeteringMonthlyLists = data.items;
 
-                        if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
-                            ct.fn.findMaxRow(data);
-                        }
-                    } else {
-                        ct.orgMeteringMonthlyLists = [];
+            ct.data.sltYear = sltYear;
+            var params = {
+                "urlPaths": {
+                    "orgCode": ct.data.sltOrgCode
+                },
+                "year": ct.data.sltYear
+            };
+            var promise = perfMeteringService.listPerfMonthlyMeteringByOrgCode(params);
+            promise.success(function (data) {
+                if (angular.isArray(data.items)) {
+                    ct.orgMeteringMonthlyLists = data.items;
+
+                    if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
+                        ct.fn.findMaxRow(data);
                     }
-                    $scope.main.loadingMainBody = false;
-                });
-                promise.error(function (data, status, headers) {
+                } else {
                     ct.orgMeteringMonthlyLists = [];
-                    $scope.main.loadingMainBody = false;
-                });
-            }
+                }
+                $scope.main.loadingMainBody = false;
+            });
+            promise.error(function (data, status, headers) {
+                ct.orgMeteringMonthlyLists = [];
+                $scope.main.loadingMainBody = false;
+            });
         };
 
         ct.fn.findMaxRow = function (data) {
@@ -120,7 +120,7 @@ angular.module('perf.controllers')
         ct.fn.listAllMeteringGroupItems();
 
     })
-    .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS) {
+    .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS, perfCommService) {
         _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 1);
 
         var ct = this;
@@ -148,13 +148,15 @@ angular.module('perf.controllers')
 
         // year list
         ct.meteringYears = [];
-        // month list
-        ct.meteringMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
         // day
         ct.today = new Date();
         ct.data.sltYear = ct.today.getFullYear();
+        ct.data.prevSltYear = ct.data.sltYear;
         ct.data.sltMonth = ct.today.getMonth() + 1;
+        // month list
+        ct.meteringMonths = perfCommService.listPerfMonth(ct.data.sltYear);
+        ct.meteringMonthsForChart = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
         // day list
         ct.meteringDays = [""];
@@ -185,7 +187,7 @@ angular.module('perf.controllers')
             ct.monthlyChart = {
                 container: document.getElementById('monthly-metering-chart'),
                 data: {
-                    categories: ct.meteringMonths,
+                    categories: ct.meteringMonthsForChart,
                     series: null
                 },
                 option: {
@@ -294,7 +296,6 @@ angular.module('perf.controllers')
                 if (defer) {
                     defer.resolve();
                 }
-
                 $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
@@ -352,6 +353,16 @@ angular.module('perf.controllers')
         // year 변경시
         ct.fn.selectMeteringYear = function (sltYear) {
             ct.data.sltYear = sltYear;
+
+            ct.meteringMonths = perfCommService.listPerfMonth(ct.data.sltYear);
+            ct.data.sltMonth = perfCommService.monthWhenChangeYear(ct.data.prevSltYear, ct.data.sltYear);
+            // error, return -1
+            if (ct.data.sltMonth < 1) {
+                console.log("error");
+                return
+            }
+
+            ct.data.prevSltYear = ct.data.sltYear;
             ct.fn.reconstructData();
         };
         // year, itemCdoe 변경시 GET Monthly Data, Daily Data
@@ -383,6 +394,7 @@ angular.module('perf.controllers')
         ct.fn.redrawChart = function (chart) {
             chart.instance.setData(chart.data);
             chart.instance.rerender();
+            $scope.main.loadingMainBody = false;
         };
 
         // GET Monthly Data - redraw chart
@@ -430,7 +442,7 @@ angular.module('perf.controllers')
 
                 ct.monthlyChart.option.chart.title = '추이 (단위: ' + ct.sltItem.itemUnit + ')';
                 ct.monthlyChart.data = {
-                    categories: ct.meteringMonths,
+                    categories: ct.meteringMonthsForChart,
                     series: [
                         {
                             name: ct.sltItem.itemName,
@@ -439,7 +451,6 @@ angular.module('perf.controllers')
                     ]
                 };
                 ct.fn.redrawChart(ct.monthlyChart);
-                $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail listPerfMeteringMonthlyTotalByItemCode");
@@ -507,7 +518,6 @@ angular.module('perf.controllers')
                 };
 
                 ct.fn.redrawChart(ct.dailyChart);
-                $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
                 console.log("Fail listPerfMeteringDailyTotalByItemCode");
@@ -534,7 +544,7 @@ angular.module('perf.controllers')
             ct.fn.listAllMeteringItems(listItemsDefer);
 
             // 연도 리스트 구성
-            ct.data.startYear = 2019;
+            ct.data.startYear = ct.scope.CONSTANTS.startYear;
             ct.today = new Date();
             for (var i = ct.data.startYear; i < ct.today.getFullYear() + 1; i++) {
                 ct.meteringYears.push(i);

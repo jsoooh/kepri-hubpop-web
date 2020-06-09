@@ -157,7 +157,17 @@ resources:
 {% endif %}
 
 outputs:
-  server_ip:
-    value: { get_attr: [ server_port, fixed_ips, 0, ip_address] }
-  volume_id:
-    value: { get_resource: cinder_volume }
+  instancePort:
+    value:
+      get_attr: [ server_port, show ]
+  instance:
+    value:
+      get_attr: [ server, show ]
+  instanceInitConfig:
+    value:
+      get_attr: [ init_config, config ]
+{% if volumeUse %}
+  volume:
+    value:
+      get_attr: [ cinder_volume, show ]
+{% endif %}
