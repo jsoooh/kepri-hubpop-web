@@ -66,12 +66,12 @@
 					</thead>
 					<tbody>
 					<tr>
-						<td ng-if="perfMeteringMonthlyTotal !== ''" ng-repeat="perfMeteringMonthlyTotal in contents.perfMeteringMonthlyTotals track by $index"> {{perfMeteringMonthlyTotal | numberUnit : contents.data.numUnit | number}}</td>
-						<td ng-if="perfMeteringMonthlyTotal === ''" ng-repeat="perfMeteringMonthlyTotal in contents.perfMeteringMonthlyTotals track by $index"> {{perfMeteringMonthlyTotal}}</td>
-						<td class="text-right" ng-if="contents.perfMeteringMonthlyTotalSum > 0">{{contents.perfMeteringMonthlyTotalSum | numberUnit : contents.data.numUnit | number}}</td>
+						<td ng-if="perfMeteringMonthlyByOrgAndItem !== ''" ng-repeat="perfMeteringMonthlyByOrgAndItem in contents.perfMeteringMonthlyByOrgAndItems track by $index"> {{perfMeteringMonthlyByOrgAndItem | numberUnit : contents.data.numUnit | number}}</td>
+						<td ng-if="perfMeteringMonthlyByOrgAndItem === ''" ng-repeat="perfMeteringMonthlyByOrgAndItem in contents.perfMeteringMonthlyByOrgAndItems track by $index"> {{perfMeteringMonthlyByOrgAndItem}}</td>
+						<td class="text-right" ng-if="contents.perfMeteringMonthlyByOrgAndItemSum > 0">{{contents.perfMeteringMonthlyByOrgAndItemSum | numberUnit : contents.data.numUnit | number}}</td>
 					</tr>
 
-					<tr ng-if="(contents.perfMeteringMonthlyTotals.length == 0 || !contents.perfMeteringMonthlyTotals) && (contents.perfMeteringMonthlyTotalSum < 1 || !contents.perfMeteringMonthlyTotalSum)" class="ng-scope">
+					<tr ng-if="(contents.perfMeteringMonthlyByOrgAndItems.length == 0 || !contents.perfMeteringMonthlyByOrgAndItems) && (contents.perfMeteringMonthlyByOrgAndItemSum < 1 || !contents.perfMeteringMonthlyByOrgAndItemSum)" class="ng-scope">
 						<td colspan="13" class="center ng-binding">목록이 존재하지 않습니다.</td>
 					</tr>
 					</tbody>
@@ -124,10 +124,10 @@
 						<th>합계</th>
 					</tr>
 					<tr><!-- 1-15 {{ object | limitTo : limit(갯수) : begin(시작 index) }} -->
-						<td ng-if="perfMeteringDailyTotal !== ''" ng-repeat="perfMeteringDailyTotal in contents.perfMeteringDailyTotals | limitTo : 15 track by $index "> {{perfMeteringDailyTotal | numberUnit : contents.data.numUnit | number}}</td>
-						<td ng-if="perfMeteringDailyTotal === ''" ng-repeat="perfMeteringDailyTotal in contents.perfMeteringDailyTotals | limitTo : 15 track by $index"> </td>
-						<!--td ng-repeat="perfMeteringDailyTotal in contents.perfMeteringDailyTotals | limitTo : 15 track by $index "> - </td-->
-						<td class="text-right" ng-if="contents.perfMeteringDailyTotalSum > 0">{{contents.perfMeteringDailyTotalSum | numberUnit : contents.data.numUnit | number}}</td>
+						<td ng-if="perfMeteringDailyByOrgAndItem !== ''" ng-repeat="perfMeteringDailyByOrgAndItem in contents.perfMeteringDailyByOrgAndItems | limitTo : 15 track by $index "> {{perfMeteringDailyByOrgAndItem | numberUnit : contents.data.numUnit | number}}</td>
+						<td ng-if="perfMeteringDailyByOrgAndItem === ''" ng-repeat="perfMeteringDailyByOrgAndItem in contents.perfMeteringDailyByOrgAndItems | limitTo : 15 track by $index"> </td>
+						<!--td ng-repeat="perfMeteringDailyByOrgAndItem in contents.perfMeteringDailyByOrgAndItems | limitTo : 15 track by $index "> - </td-->
+						<td class="text-right" ng-if="contents.perfMeteringDailyByOrgAndItemSum > 0">{{contents.perfMeteringDailyByOrgAndItemSum | numberUnit : contents.data.numUnit | number}}</td>
 					</tr>
 					<tr>
 						<!-- limitTo : 갯수: 시작 index-->
@@ -136,11 +136,11 @@
 						<!--th ng-repeat="blank in [].constructor(16) track by $index">{{contents.meteringDays[$index+15]}} 일</th-->
 					</tr>
 					<tr><!-- 16-31 month = {0~11}, day = {1-31} {{ object | limitTo : limit(갯수) : begin(시작 index) }}-->
-						<td ng-if="perfMeteringDailyTotal !== ''" ng-repeat="perfMeteringDailyTotal in contents.perfMeteringDailyTotals | limitTo : 16 : 15 track by $index"> {{perfMeteringDailyTotal | numberUnit : contents.data.numUnit | number}}</td>
-						<td ng-if="perfMeteringDailyTotal === ''" ng-repeat="perfMeteringDailyTotal in contents.perfMeteringDailyTotals | limitTo : 16 : 15 track by $index"> </td>
-						<td ng-if="contents.perfMeteringDailyTotals.length > 0" ng-repeat="blank in [].constructor(31 - contents.perfMeteringDailyTotals.length) track by $index"> </td>
+						<td ng-if="perfMeteringDailyByOrgAndItem !== ''" ng-repeat="perfMeteringDailyByOrgAndItem in contents.perfMeteringDailyByOrgAndItems | limitTo : 16 : 15 track by $index"> {{perfMeteringDailyByOrgAndItem | numberUnit : contents.data.numUnit | number}}</td>
+						<td ng-if="perfMeteringDailyByOrgAndItem === ''" ng-repeat="perfMeteringDailyByOrgAndItem in contents.perfMeteringDailyByOrgAndItems | limitTo : 16 : 15 track by $index"> </td>
+						<td ng-if="contents.perfMeteringDailyByOrgAndItems.length > 0" ng-repeat="blank in [].constructor(31 - contents.perfMeteringDailyByOrgAndItems.length) track by $index"> </td>
 					</tr>
-					<tr ng-if="(contents.perfMeteringDailyTotals.length == 0 || !contents.perfMeteringDailyTotals) && (contents.perfMeteringDailyTotalSum < 1 || !contents.perfMeteringDailyTotalSum)" class="ng-scope">
+					<tr ng-if="(contents.perfMeteringDailyByOrgAndItems.length == 0 || !contents.perfMeteringDailyByOrgAndItems) && (contents.perfMeteringDailyByOrgAndItemSum < 1 || !contents.perfMeteringDailyByOrgAndItemSum)" class="ng-scope">
 						<td colspan="16" class="center ng-binding">목록이 존재하지 않습니다.</td>
 					</tr>
 					</tbody>

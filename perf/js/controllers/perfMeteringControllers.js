@@ -162,13 +162,13 @@ angular.module('perf.controllers')
         ct.meteringDays = [""];
         //for (var month = 1; month < ( new Date( 년도입력, 월입력, 0) ).getDate(); month++)
 
-        // month total param year
-        ct.perfMeteringMonthlyTotals = [];
-        ct.perfMeteringMonthlyTotalSum = 0;
+        // monthlyMetering by org, item
+        ct.perfMeteringMonthlyByOrgAndItems = [];
+        ct.perfMeteringMonthlyByOrgAndItemSum = 0;
 
-        // day total param year
-        ct.perfMeteringDailyTotals = [];
-        ct.perfMeteringDailyTotalSum = 0;
+        // dailyMetering by org, item
+        ct.perfMeteringDailyByOrgAndItems = [];
+        ct.perfMeteringDailyByOrgAndItemSum = 0;
 
         // 숫자 필터 처리를 위한 작업
         ct.data.numUnit = 1;
@@ -370,10 +370,10 @@ angular.module('perf.controllers')
             console.log("reconstruct ------")
             if (ct.sltItem.itemCode != false) {
                 if (ct.data.sltYear != false) {
-                    ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear);
+                    ct.fn.listPerfMeteringMonthlyByOrgAndItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear);
                     if (ct.data.sltMonth != false) {
                         ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
-                        ct.fn.listPerfMeteringDailyTotalByItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth)
+                        ct.fn.listPerfMeteringDailyByOrgAndItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth)
                     }
                 }
             }
@@ -385,7 +385,7 @@ angular.module('perf.controllers')
             if (ct.sltItem.itemCode != false && ct.data.sltYear != false) {
                 if (ct.data.sltMonth != false) {
                     ct.fn.configDayArray(ct.data.sltYear, ct.data.sltMonth);
-                    ct.fn.listPerfMeteringDailyTotalByItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth);
+                    ct.fn.listPerfMeteringDailyByOrgAndItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear, ct.data.sltMonth);
                 }
             }
         };
@@ -405,7 +405,7 @@ angular.module('perf.controllers')
          * @param sltYear
          * @param sltMonth
          */
-        ct.fn.listPerfMeteringMonthlyTotalByItemCode = function (orgCode, itemCode, sltYear) {
+        ct.fn.listPerfMeteringMonthlyByOrgAndItemCode = function (orgCode, itemCode, sltYear) {
             $scope.main.loadingMainBody = true;
             var params = {
                 urlPaths: {
@@ -414,13 +414,13 @@ angular.module('perf.controllers')
                 },
                 "year": sltYear
             };
-            var promise = perfMeteringService.listPerfMeteringMonthlyTotalByItemCode(params);
+            var promise = perfMeteringService.listPerfMeteringMonthlyByOrgAndItemCode(params);
             promise.success(function (data) {
                 console.log(data);
-                console.log("Success listPerfMeteringMonthlyTotalByItemCode");
+                console.log("Success listPerfMeteringMonthlyByOrgAndItemCode");
 
-                ct.perfMeteringMonthlyTotals = [];
-                ct.perfMeteringMonthlyTotalSum = 0;
+                ct.perfMeteringMonthlyByOrgAndItems = [];
+                ct.perfMeteringMonthlyByOrgAndItemSum = 0;
                 var dataIndex = 0;
                 for (var month = 1; month <= 12; month++) {
                     if (dataIndex < data.itemCount) {
@@ -428,14 +428,14 @@ angular.module('perf.controllers')
                     }
                     if (perfMonth == month) {
                         var meteringValue = data.items[dataIndex].meteringValue;
-                        ct.perfMeteringMonthlyTotals.push(meteringValue);
-                        ct.perfMeteringMonthlyTotalSum += meteringValue;
+                        ct.perfMeteringMonthlyByOrgAndItems.push(meteringValue);
+                        ct.perfMeteringMonthlyByOrgAndItemSum += meteringValue;
                         dataIndex++;
                     } else {
                         if (ct.fn.isPast(sltYear, perfMonth)) {
-                            ct.perfMeteringMonthlyTotals.push(0);
+                            ct.perfMeteringMonthlyByOrgAndItems.push(0);
                         } else {
-                            ct.perfMeteringMonthlyTotals.push('');
+                            ct.perfMeteringMonthlyByOrgAndItems.push('');
                         }
                     }
                 }
@@ -446,16 +446,16 @@ angular.module('perf.controllers')
                     series: [
                         {
                             name: ct.sltItem.itemName,
-                            data: ct.perfMeteringMonthlyTotals
+                            data: ct.perfMeteringMonthlyByOrgAndItems
                         }
                     ]
                 };
                 ct.fn.redrawChart(ct.monthlyChart);
             });
             promise.error(function (data, status, headers) {
-                console.log("Fail listPerfMeteringMonthlyTotalByItemCode");
-                ct.perfMeteringMonthlyTotals = [];
-                ct.perfMeteringMonthlyTotalSum = 0;
+                console.log("Fail listPerfMeteringMonthlyByOrgAndItemCode");
+                ct.perfMeteringMonthlyByOrgAndItems = [];
+                ct.perfMeteringMonthlyByOrgAndItemSum = 0;
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -468,7 +468,7 @@ angular.module('perf.controllers')
          * @param sltYear
          * @param sltMonth
          */
-        ct.fn.listPerfMeteringDailyTotalByItemCode = function (orgCode, itemCode, sltYear, sltMonth) {
+        ct.fn.listPerfMeteringDailyByOrgAndItemCode = function (orgCode, itemCode, sltYear, sltMonth) {
             $scope.main.loadingMainBody = true;
             var params = {
                 urlPaths: {
@@ -479,13 +479,13 @@ angular.module('perf.controllers')
                 "month": sltMonth
             };
             console.log(params);
-            var promise = perfMeteringService.listPerfMeteringDailyTotalByItemCode(params);
+            var promise = perfMeteringService.listPerfMeteringDailyByOrgAndItemCode(params);
             promise.success(function (data) {
-                console.log("Success listPerfMeteringDailyTotalByItemCode");
+                console.log("Success listPerfMeteringDailyByOrgAndItemCode");
                 var lastDay = (new Date(sltYear, sltMonth, 0)).getDate();
 
-                ct.perfMeteringDailyTotals = [];
-                ct.perfMeteringDailyTotalSum = 0;
+                ct.perfMeteringDailyByOrgAndItems = [];
+                ct.perfMeteringDailyByOrgAndItemSum = 0;
                 var dataIndex = 0;
                 for (var day = 1; day <= lastDay; day++) {
                     if (dataIndex < data.itemCount) {
@@ -493,14 +493,14 @@ angular.module('perf.controllers')
                     }
                     if (perfDay == day) {
                         var meteringValue = data.items[dataIndex].meteringValue;
-                        ct.perfMeteringDailyTotals.push(meteringValue);
-                        ct.perfMeteringDailyTotalSum += meteringValue;
+                        ct.perfMeteringDailyByOrgAndItems.push(meteringValue);
+                        ct.perfMeteringDailyByOrgAndItemSum += meteringValue;
                         dataIndex++;
                     } else {
                         if (ct.fn.isPast(sltYear, sltMonth, perfDay)) {
-                            ct.perfMeteringDailyTotals.push(0);
+                            ct.perfMeteringDailyByOrgAndItems.push(0);
                         } else {
-                            ct.perfMeteringDailyTotals.push('');
+                            ct.perfMeteringDailyByOrgAndItems.push('');
                         }
                     }
                 }
@@ -512,7 +512,7 @@ angular.module('perf.controllers')
                     series: [
                         {
                             name: ct.sltItem.itemName,
-                            data: ct.perfMeteringDailyTotals
+                            data: ct.perfMeteringDailyByOrgAndItems
                         }
                     ]
                 };
@@ -520,9 +520,9 @@ angular.module('perf.controllers')
                 ct.fn.redrawChart(ct.dailyChart);
             });
             promise.error(function (data, status, headers) {
-                console.log("Fail listPerfMeteringDailyTotalByItemCode");
-                ct.perfMeteringDailyTotals = [];
-                ct.perfMeteringDailyTotalSum = 0;
+                console.log("Fail listPerfMeteringDailyByOrgAndItemCode");
+                ct.perfMeteringDailyByOrgAndItems = [];
+                ct.perfMeteringDailyByOrgAndItemSum = 0;
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -536,8 +536,8 @@ angular.module('perf.controllers')
             var allProcessForInit = $q.all([listItemGroupsDefer.promise, listItemsDefer.promise]);
             allProcessForInit.then(function (datas) {
                 console.log(ct.sltOrg.code);
-                ct.fn.listPerfMeteringMonthlyTotalByItemCode(ct.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear);
-                ct.fn.listPerfMeteringDailyTotalByItemCode(ct.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltMonth);
+                ct.fn.listPerfMeteringMonthlyByOrgAndItemCode(ct.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear);
+                ct.fn.listPerfMeteringDailyByOrgAndItemCode(ct.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltMonth);
             });
             ct.fn.initDraw();
             ct.fn.listAllMeteringItemGroups(listItemGroupsDefer);
