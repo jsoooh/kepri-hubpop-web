@@ -27,7 +27,7 @@ angular.module('perf.controllers')
         ct.data.sltYear = "";
         ct.data.sltMonth = "";
 
-        ct.totalPerfAnlsByOrgCodeAndPerfDate = [];
+        // ct.combinedAnlList = [];
         ct.data.totalPerfAnls = 0;
 
         // 미터링 서비스 그룹 리스트
@@ -98,7 +98,7 @@ angular.module('perf.controllers')
             var allProcessForCombineData = $q.all([sltDataDefer.promise, lastDataDefer.promise]);
 
             allProcessForCombineData.then(function (datas) {
-                ct.totalPerfAnlsByOrgCodeAndPerfDate = [];
+                ct.combinedAnlList = [];
                 console.log("Start Combine");
                 ct.data.totalPerfAnls = 0;
                 ct.data.lastTotalPerfAnls = 0;
@@ -117,7 +117,7 @@ angular.module('perf.controllers')
 
                     for (var i = 0; i < itemCount; i++) {
                         if (!sltDataList[i]) {
-                            var perfAnlsByOrgCodeAndPerfDate = {
+                            var combinedAnl = {
                                 orgName: lastDataList[i].orgName,
                                 orgCode: lastDataList[i].orgCode,
                                 itemGroupName: lastDataList[i].itemGroupName,
@@ -133,17 +133,17 @@ angular.module('perf.controllers')
                             if (lastDataList[i].itemGroupCode != itemGroupCode) {
                                 itemGroupCode = angular.copy(lastDataList[i].itemGroupCode);
                                 startItemGroup = i;
-                                perfAnlsByOrgCodeAndPerfDate.lastAnlsSumByItemGroup = lastDataList[i].perfAmt;
-                                perfAnlsByOrgCodeAndPerfDate.sltAnlsSumByItemGroup = "0";
+                                combinedAnl.lastAnlsSumByItemGroup = lastDataList[i].perfAmt;
+                                combinedAnl.sltAnlsSumByItemGroup = "0";
                             } else {
-                                ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
-                                //ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += 0;
+                                ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
+                                //ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += 0;
                             }
                             ct.data.totalPerfAnls = "0";
-                            ct.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
+                            ct.combinedAnlList.push(combinedAnl);
 
                         } else if (!lastDataList[i]) {
-                            var perfAnlsByOrgCodeAndPerfDate = {
+                            var combinedAnl = {
                                 orgName: sltDataList[i].orgName,
                                 orgCode: sltDataList[i].orgCode,
                                 itemGroupName: sltDataList[i].itemGroupName,
@@ -159,16 +159,16 @@ angular.module('perf.controllers')
                             if (sltDataList[i].itemGroupCode != itemGroupCode) {
                                 itemGroupCode = angular.copy(sltDataList[i].itemGroupCode);
                                 startItemGroup = i;
-                                perfAnlsByOrgCodeAndPerfDate.lastAnlsSumByItemGroup = "0";
-                                perfAnlsByOrgCodeAndPerfDate.sltAnlsSumByItemGroup = sltDataList[i].perfAmt;
+                                combinedAnl.lastAnlsSumByItemGroup = "0";
+                                combinedAnl.sltAnlsSumByItemGroup = sltDataList[i].perfAmt;
                             } else {
-                                //ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += 0;
-                                ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
+                                //ct.totalcombinedAnl[startItemGroup].lastAnlsSumByItemGroup += 0;
+                                ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
                             }
                             ct.data.totalPerfAnls += sltDataList[i].perfAmt;
-                            ct.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
+                            ct.combinedAnlList.push(combinedAnl);
                         } else {
-                            var perfAnlsByOrgCodeAndPerfDate = {
+                            var combinedAnl = {
                                 orgName: sltDataList[i].orgName,
                                 orgCode: sltDataList[i].orgCode,
                                 itemGroupName: sltDataList[i].itemGroupName,
@@ -184,15 +184,15 @@ angular.module('perf.controllers')
                             if (sltDataList[i].itemGroupCode != itemGroupCode) {
                                 itemGroupCode = angular.copy(sltDataList[i].itemGroupCode);
                                 startItemGroup = i;
-                                perfAnlsByOrgCodeAndPerfDate.lastAnlsSumByItemGroup = lastDataList[i].perfAmt;
-                                perfAnlsByOrgCodeAndPerfDate.sltAnlsSumByItemGroup = sltDataList[i].perfAmt;
+                                combinedAnl.lastAnlsSumByItemGroup = lastDataList[i].perfAmt;
+                                combinedAnl.sltAnlsSumByItemGroup = sltDataList[i].perfAmt;
                             } else {
-                                ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
-                                ct.totalPerfAnlsByOrgCodeAndPerfDate[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
+                                ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
+                                ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += sltDataList[i].perfAmt;
                             }
                             ct.data.totalPerfAnls += sltDataList[i].perfAmt;
                             ct.data.lastTotalPerfAnls += lastDataList[i].perfAmt;
-                            ct.totalPerfAnlsByOrgCodeAndPerfDate.push(perfAnlsByOrgCodeAndPerfDate);
+                            ct.combinedAnlList.push(combinedAnl);
                         }
                     }
                 }
