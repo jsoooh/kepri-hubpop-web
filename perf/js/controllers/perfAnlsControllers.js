@@ -109,40 +109,14 @@ angular.module('perf.controllers')
                 ct.data.maxRow = Math.max(sltDataMaxRow, lastDatamaxRow);
 
                 if (sltData != undefined && lastData != undefined) {
+                    var itemCount = Math.max(sltData.itemCount, lastData.itemCount);
                     var sltDataList = sltData.items;
                     var lastDataList = lastData.items;
                     var itemGroupCode = "";
                     var startItemGroup = 0;
-                    var itemCount = Math.max(sltData.itemCount, lastData.itemCount);
 
-                    for (var i = 0; i < itemCount; i++) {
-                        if (!sltDataList[i]) {
-                            var combinedAnl = {
-                                orgName: lastDataList[i].orgName,
-                                orgCode: lastDataList[i].orgCode,
-                                itemGroupName: lastDataList[i].itemGroupName,
-                                itemGroupCode: lastDataList[i].itemGroupCode,
-                                itemName: lastDataList[i].itemName,
-                                itemCode: lastDataList[i].itemCode,
-                                itemUnit: lastDataList[i].itemUnit,
-                                lastMetering: lastDataList[i].meteringValue,
-                                sltMetering: 0,
-                                lastAnls: lastDataList[i].perfAmt,
-                                sltAnls: 0
-                            };
-                            if (lastDataList[i].itemGroupCode != itemGroupCode) {
-                                itemGroupCode = angular.copy(lastDataList[i].itemGroupCode);
-                                startItemGroup = i;
-                                combinedAnl.lastAnlsSumByItemGroup = lastDataList[i].perfAmt;
-                                combinedAnl.sltAnlsSumByItemGroup = "0";
-                            } else {
-                                ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
-                                //ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += 0;
-                            }
-                            ct.data.totalPerfAnls = "0";
-                            ct.combinedAnlList.push(combinedAnl);
-
-                        } else if (!lastDataList[i]) {
+                    if (!lastDataList || lastDataList.length == 0) {
+                        for (var i = 0; i < itemCount; i++) {
                             var combinedAnl = {
                                 orgName: sltDataList[i].orgName,
                                 orgCode: sltDataList[i].orgCode,
@@ -167,7 +141,36 @@ angular.module('perf.controllers')
                             }
                             ct.data.totalPerfAnls += sltDataList[i].perfAmt;
                             ct.combinedAnlList.push(combinedAnl);
-                        } else {
+                        }
+                    } else if (!sltDataList || sltDataList.length == 0) {
+                        for (var i = 0; i < itemCount; i++) {
+                            var combinedAnl = {
+                                orgName: lastDataList[i].orgName,
+                                orgCode: lastDataList[i].orgCode,
+                                itemGroupName: lastDataList[i].itemGroupName,
+                                itemGroupCode: lastDataList[i].itemGroupCode,
+                                itemName: lastDataList[i].itemName,
+                                itemCode: lastDataList[i].itemCode,
+                                itemUnit: lastDataList[i].itemUnit,
+                                lastMetering: lastDataList[i].meteringValue,
+                                sltMetering: 0,
+                                lastAnls: lastDataList[i].perfAmt,
+                                sltAnls: 0
+                            };
+                            if (lastDataList[i].itemGroupCode != itemGroupCode) {
+                                itemGroupCode = angular.copy(lastDataList[i].itemGroupCode);
+                                startItemGroup = i;
+                                combinedAnl.lastAnlsSumByItemGroup = lastDataList[i].perfAmt;
+                                combinedAnl.sltAnlsSumByItemGroup = "0";
+                            } else {
+                                ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup += lastDataList[i].perfAmt;
+                                //ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += 0;
+                            }
+                            ct.data.totalPerfAnls = "0";
+                            ct.combinedAnlList.push(combinedAnl);
+                        }
+                    } else {
+                        for (var i = 0; i < itemCount; i++) {
                             var combinedAnl = {
                                 orgName: sltDataList[i].orgName,
                                 orgCode: sltDataList[i].orgCode,
