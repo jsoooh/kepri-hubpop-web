@@ -570,7 +570,7 @@ angular.module('gpu.controllers')
             ct.checkClickBtn = false;
         });
         if (templatePrint) {
-            var printPromise = vmCatalogService.templateVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
+            var printPromise = vmCatalogService.templateVmCatalogDeploy(vmCatalogDeploy);
             printPromise.success(function (data) {
                 if (angular.isString(data.content)) {
                     console.log(data.content);
