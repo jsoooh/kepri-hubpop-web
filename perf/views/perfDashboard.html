@@ -1,23 +1,47 @@
+<style type="text/css">
+	.amount_loading {
+		width: 100px;
+		height: 40px;
+	}
+	.mainLoading {
+		background:url("../../img/loading.gif") 50% 50% no-repeat;
+		content:"";
+		display:block;
+		width:150px;
+		height:150px;
+		position:absolute;
+		top:50%;
+		left:50%;
+		margin-left:-75px;
+		margin-top: -55px;
+	}
+	.chart_wrap {
+		position: relative;
+		clear:both;
+	}
+	.warning:after {
+		background:url("../../img/alert_warning.png") 50% 50% no-repeat;
+		content:"";
+		display:block;
+		width:150px;
+		height:150px;
+		position:absolute;
+		top:50%;
+		left:50%;
+		margin-left:-75px;
+		margin-top: -55px;
+	}
+</style>
 <div class="panelWrap">
 	<div class="panel type2">
 		<div class="panel_head">
-			<div class="tit pull-left">사용 금액 현황</div>
+			<div class="tit pull-left">사용 금액</div>
 			<div class="pull-right">
-				<select>
-					<option value="">2020년</option>
-					<option value="">2019년</option>
+				<select ng-model = "contents.data.sltYear" ng-options=" year + '년' for year in contents.dashYears"
+						ng-change="contents.fn.changeMeteringYear(contents.data.sltYear)">
 				</select>
-				<select>
-					<option value="">10월</option>
-					<option value="">9월</option>
-					<option value="">8월</option>
-					<option value="">7월</option>
-					<option value="">6월</option>
-					<option value="">5월</option>
-					<option value="">4월</option>
-					<option value="">3월</option>
-					<option value="">2월</option>
-					<option value="">1월</option>
+				<select ng-model="contents.data.sltMonth" ng-options="month + '월' for month in contents.dashMonths"
+						ng-change="contents.fn.changeMeteringMonth(contents.data.sltMonth)">
 				</select>
 			</div>
 		</div>
@@ -25,26 +49,46 @@
 			<div class="in">
 				<div class="amount_usedWrap">
 					<div class="col-md-4">
-						<h4>사용금액</h4><span class="amount_used_date">2020년 10월 25일</span>
+						<h4>전체 사용 금액</h4>
+						<span ng-if="contents.isToday" class="amount_used_date">{{ contents.today | date: 'yyyy년 MM월 dd일' }}</span>
+						<span ng-if="!contents.isToday" class="amount_used_date">{{ contents.data.sltYear }}년 {{ contents.data.sltMonth }}월 </span>
 						<div class="this_month">
-							<p>이달 사용 금액</p>
-							<div class="amountTxt"><span class="amount">3,720,000</span><span class="won">원</span></div>
+							<p ng-if="contents.isToday">이달 사용 금액</p>
+							<p ng-if="!contents.isToday">{{ contents.data.sltMonth }}월 사용 금액</p>
+							<div class="amountTxt">
+								<span class="amount" ng-if="!contents.dailyChart.loading">{{ contents.data.sltSumPerfAmt | number }}</span>
+								<img class="amount_loading" ng-if="contents.dailyChart.loading" src="images/loading/lg.equalizer-bars-loader.gif">
+								<span class="won"> 원</span>
+							</div>
 						</div>
 						<ul class="amountBox">
 							<li class="last_month">
-								<p>지난달 사용 금액</p>
-								<div class="amountTxt"><span class="amount">3,720,000</span><span class="won">원</span></div>
+								<p ng-if="contents.isToday">지난달 사용 금액</p>
+								<p ng-if="!contents.isToday">{{ contents.data.lastMonth }}월 사용 금액</p>
+								<div class="amountTxt">
+									<span class="amount" ng-if="!contents.lastSumLoading">{{ contents.data.lastSumPerfAmt | number }}</span>
+									<img class="amount_loading" ng-if="contents.lastSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
+									<span class="won"> 원</span>
+								</div>
 							</li>
 							<li class="next_month">
-								<p>이달 사용 예상 금액</p>
-								<div class="amountTxt"><span class="amount">3,720,000</span><span class="won">원</span></div>
+								<p ng-if="contents.isToday">이달 사용 예상 금액</p>
+								<p ng-if="!contents.isToday">{{ contents.data.nextMonth }}월 사용 금액</p>
+								<div class="amountTxt">
+									<span class="amount" ng-if="!contents.nextSumLoading">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
+									<img class="amount_loading" ng-if="contents.nextSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
+									<span class="won">원</span>
+								</div>
 							</li>
 						</ul>
 					</div>
 					<div class="col-md-4">
 						<h4>서비스별 사용 금액</h4>
-						<div class="chart_wrap pt20">
-							<img alt="차트 테스트 이미지" src="images/chart_test_img01.png">
+
+						<div class="chart_wrap pt20" style="overflow:hidden;">
+							<div id="itemGroup-anls-chart"></div>
+							<div class="mainLoading" ng-if="contents.itemGroupChart.loading"></div>
+							<div class="warning" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1"></div>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -52,39 +96,39 @@
 							<h4>서비스 항목별 사용 금액</h4>
 						</div>
 						<div class="pull-right">
-							<select>
-								<option value="">가상서버</option>
-								<option value="">GPU</option>
-								<option value="">PaaS</option>
-								<option value="">CaaS</option>
-								<option value="">FaaS</option>
-								<option value="">상용/클러스터 DB</option>
-								<option value="">데이터 브로커</option>
+							<select ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups"
+									ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeMeteringItemsByItemGroupCode(contents.data.sltItemGroupCode)">
 							</select>
 						</div>
-						<div class="chart_wrap pt20">
-							<img alt="차트 테스트 이미지" src="images/chart_test_img02.png">
+
+						<div class="chart_wrap pt20" style="overflow:hidden;">
+							<div id="item-anls-chart"></div>
+							<div class="mainLoading" ng-if="contents.itemChart.loading"></div>
+							<div class="warning" ng-if="!contents.itemChart.loading && contents.itemChart.data.series.length < 1"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="panel type2">
 		<div class="panel_head">
-			<div class="tit pull-left">사용 금액 현황</div>
+			<div class="tit pull-left">사용 금액 추이<em>(단위:원)</em></div>
 			<div class="pull-right">
-				<select>
-					<option value="">일별추이</option>
-					<option value="">월별추이</option>
+				<select ng-options="columnOption.value as columnOption.label for columnOption in contents.columnOptions"
+						ng-model="contents.data.sltColumnOption" ng-change="contents.fn.changeColumnOption(contents.data.sltColumnOption)">
 				</select>
 			</div>
 		</div>
 		<div class="panel_body h_auto">
 			<div class="in">
-				<div class="chart_wrap">
-					<img alt="차트 테스트 이미지" src="images/chart_test_img04.png">
+				<div class="chart_wrap" style="overflow:hidden;">
+					<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
+					<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
+					<div class="mainLoading" ng-if="contents.dailyChart.loading"></div>
+					<div class="warning" ng-if="contents.data.sltColumnOption == 'daily' && !contents.dailyChart.loading && contents.data.sltSumPerfAmt == 0"></div>
+					<div class="warning"  ng-if="contents.data.sltColumnOption == 'monthly' && !contents.dailyChart.loading && contents.data.sltMonthlySumPerfAmt == 0"></div>
 				</div>
 			</div>
 		</div>

@@ -1193,6 +1193,9 @@ angular.module('iaas.controllers')
                 }
                 if (sltSpec) {
                     ct.fn.selectSpec(sltSpec);
+                } else {
+                    ct.specUuid = "";
+                    ct.data.spec = "";
                 }
             }
         };
@@ -1233,7 +1236,13 @@ angular.module('iaas.controllers')
                         image.minDisk = (image.minDisk > sizeGb) ? image.minDisk : sizeGb;
                         image.minRam = (image.minRam > 0) ? image.minRam/(1024) : 0;
                     });
-                    ct.fn.imageChange(ct.imageList[0].id);
+                    // 라이센스 없을시 다음 이미지 기본설정
+                    for (var i=0; i <ct.imageList.length; i++) {
+                        if (!ct.fn.imageLicenseCheck(ct.imageList[i])) {
+                            ct.fn.imageChange(ct.imageList[i].id);
+                            break;
+                        }
+                    }
                 }
                 ct.imageListLoad = true;
             });
@@ -1254,6 +1263,16 @@ angular.module('iaas.controllers')
             ct.fn.setSpecAllEnabled();
             ct.fn.setSpecMinDisabled();
             ct.fn.setSpecMaxDisabled();
+        };
+
+        ct.fn.imageLicenseCheck = function(image) {
+            var osType = image.osType.toUpperCase();
+            if (!ct.tenantResource || !ct.tenantResource.available)
+                return false;
+            if (osType == "REDHAT")
+                return ct.tenantResource.available.licenseRedhat <= 0 ? true : false;
+            else if (osType == "WINDOWS")
+                return ct.tenantResource.available.licenseWindows <= 0 ? true : false;
         };
         
         // 네트워크 리스트 조회
@@ -1309,6 +1328,8 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
+                    ct.tenantResource.available.licenseRedhat = ct.tenantResource.maxResource.licenseRedhat - ct.tenantResource.usedResource.licenseRedhat;
+                    ct.tenantResource.available.licenseWindows = ct.tenantResource.maxResource.licenseWindows - ct.tenantResource.usedResource.licenseWindows;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
                         ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
@@ -1475,7 +1496,7 @@ angular.module('iaas.controllers')
                 params.volume.tenantId = ct.data.tenantId;
             }
 
-            if (!ct.data.spec.uuid) {
+            if (!ct.data.spec || !ct.data.spec.uuid) {
                 common.showAlertError("사양이 선택되지 않았습니다.");
                 clickCheck = false;
                 return;

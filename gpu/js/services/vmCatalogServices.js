@@ -11,7 +11,7 @@ angular.module('gpu.services')
         };
 
         // VM 카탈로그 조회
-        vmCatalogService.getVmCatalogInfo = function(catalogId) {
+        vmCatalogService.getVmCatalog = function(catalogId) {
             var params = {
                 urlPaths : {
                     "id" : catalogId
@@ -31,7 +31,7 @@ angular.module('gpu.services')
         };
 
         // VM 카탈로그 템플릿 HTML 가져오기
-        vmCatalogService.getVmCatalogDeployTemplateHtml = function(templateHtmlPath) {
+        vmCatalogService.getVmCatalogDeployTemplateFile = function(templateHtmlPath) {
             return common.retrieveResource(common.resourcePromiseJson(_GPU_VM_CATALOG_TEMPLATE_ + templateHtmlPath + _VERSION_TAIL_, 'GET'));
         };
 
@@ -43,7 +43,12 @@ angular.module('gpu.services')
                 },
                 body: vmCatalogDeploy
             };
-            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/{tenantId}/deploy', 'POST', params));
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy', 'POST', params));
+        };
+
+        // VM 카탈로그 배포 하기
+        vmCatalogService.templateVmCatalogDeploy = function(tenantId, vmCatalogDeploy) {
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/deploy/template', 'POST', vmCatalogDeploy));
         };
 
         // VM 카탈로그 배포 정보 목록 조회
@@ -53,7 +58,17 @@ angular.module('gpu.services')
                     "tenantId" : tenantId
                 }
             };
-            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog//{tenantId}/deploy', 'GET'));
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy', 'GET', params));
+        };
+
+        // VM 카탈로그 배포 정보 목록 조회
+        vmCatalogService.listAllVmCatalogDeployNames = function(tenantId) {
+            var params = {
+                urlPaths : {
+                    "tenantId" : tenantId
+                }
+            };
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/names', 'GET', params));
         };
 
         // VM 카탈로그 배포 정보 목록 조회(stack 포함)
@@ -63,7 +78,7 @@ angular.module('gpu.services')
                     "tenantId" : tenantId
                 }
             };
-            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/stacks', 'GET'));
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/stacks', 'GET', params));
         };
 
         // VM 카탈로그 배포 정보 조회
@@ -89,6 +104,18 @@ angular.module('gpu.services')
         };
 
         // VM 카탈로그 배포 삭제
+        vmCatalogService.renameVmCatalogDeploy = function(tenantId, deployId, deployName) {
+            var params = {
+                urlPaths : {
+                    "tenantId" : tenantId,
+                    "id" : deployId
+                },
+                deployName: deployName
+            };
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/{id}/rename', 'PUT', params));
+        };
+
+        // VM 카탈로그 배포 삭제
         vmCatalogService.deleteVmCatalogDeploy = function(tenantId, deployId) {
             var params = {
                 urlPaths : {
@@ -105,6 +132,11 @@ angular.module('gpu.services')
                 tenantId : tenantId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params));
+        };
+
+        // 가용존 목록 조회
+        vmCatalogService.listAllAvailabilityZones = function() {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET'));
         };
 
         // 네트워크 목록 조회

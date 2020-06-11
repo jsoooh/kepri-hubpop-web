@@ -899,7 +899,7 @@ angular.module('common.services', ['LocalStorageModule'])
         // csrf token
         common.xsrfToken = null;
 
-        common.resourcePromise = function (pathUrl, method, params, contentType, accept, authorization) {
+        common.resourcePromise = function (pathUrl, method, paramsData, contentType, accept, authorization) {
             if (angular.isUndefined(method)) {
                 method = "GET";
             }
@@ -910,7 +910,9 @@ angular.module('common.services', ['LocalStorageModule'])
                     common.syncHttpResponse(CONSTANTS.paasApiCoreContextUrl + "/ping", "GET");
                 }
             }
-            if (params) {
+            var params = {};
+            if (paramsData) {
+                params = angular.copy(paramsData);
                 if (params.urlPaths) {
                     for (var key in params.urlPaths) {
                         pathUrl = common.replaceAll(pathUrl, "{" + key + "}", params.urlPaths[key]);

@@ -1,0 +1,134 @@
+<div class="pn_head">
+    <h4 class="pnh_tit ico01">서비스 기본정보</h4>
+</div>
+<div class="pn_body">
+    <div class="s_cont_box">
+        <ul>
+            <li>
+                <span class="s_tit">서비스 이름</span>
+                <span class="s_txt">{{ contents.data.deployName }}</span>
+            </li>
+            <li>
+                <span class="s_tit">카탈로그 이름</span>
+                <span class="s_txt">{{ contents.vmCatalogInfo.catalogName }}</span>
+            </li>
+            <li>
+                <span class="s_tit">버전</span>
+                <span class="s_txt">{{ contents.vmCatalogInfo.version }}</span>
+            </li>
+            <li>
+                <span class="s_tit">서버 수</span>
+                <span class="s_txt">{{ contents.data.serverCnt }}</span>
+            </li>
+            <li>
+                <span class="s_tit">서버 OS</span>
+                <span class="s_txt">CentOS 7</span>
+            </li>
+            <li>
+                <span class="s_tit">서버 사양</span>
+                <span class="s_txt" >{{ contents.data.spec.name }}</span>
+                <div class="s_inner_cont">
+                    <div class="innr_tbl">
+                        <table>
+                            <colgroup>
+                                <col width="30" />
+                                <col width="30" />
+                                <col width="30" />
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>vCPU</th>
+                                <th>메모리</th>
+                                <th>디스크</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-show="contents.data.serverCnt == 1">
+                                <td>{{ contents.sltSpac.vcpus }} Core</td>
+                                <td>{{ contents.sltSpac.ram | displayVolume : 'MB' }}</td>
+                                <td>{{ contents.sltSpac.disk | displayVolume : 'GB' }}</td>
+                            </tr>
+                            <tr ng-show="contents.data.serverCnt > 1">
+                                <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.vcpus }} Core</td>
+                                <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.ram | displayVolume : 'MB' }}</td>
+                                <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.disk | displayVolume : 'GB' }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <span class="info_txt">*  ‘디스크’ 크기는 OS 설치에 필요한 디스크 공간을 포함한 수치입니다.</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="pn-Toggle brd0">
+    <div class="pn_head brdt">
+        <h4 class="pnh_tit ico02">추가 디스크</h4>
+        <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+    </div>
+    <div class="pn_body">
+        <div class="s_cont_box">
+            <ul>
+                <li>
+                    <span class="s_tit">크기</span>
+                    <span ng-show="contents.data.serverCnt == 1" class="s_txt">{{ contents.data.volumeSize | displayVolume : 'GB' }}</span>
+                    <span ng-show="contents.data.serverCnt > 1" class="s_txt">{{ contents.data.serverCnt }} X {{ contents.data.volumeSize | displayVolume : 'GB' }}</span>
+                </li>
+                <li>
+                    <span class="s_tit">유형</span>
+                    <span class="s_txt">Volume Storage</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="pn-Toggle">
+    <div class="pn_head brdt">
+        <h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
+        <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+    </div>
+    <div class="pn_body">
+        <div class="s_cont_box">
+            <div class="s_progress_box wd_tit">
+                <ul>
+                    <li>
+                        <span class="tit_txt">vcpu</span>
+                        <div class="progressWrap type2">
+                            <div class="progress">
+                                <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}" class="progress">
+                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="txt_count">({{ (contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt) }} 개 / {{ contents.tenantResource.maxResource.cores }} 개)</span>
+                    </li>
+                    <li>
+                        <span class="tit_txt">메모리</span>
+                        <div class="progressWrap type2">
+                            <div class="progress">
+                                <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}" class="progress">
+                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="txt_count">({{ (contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt) | displayVolume:'MB' }} / {{ contents.tenantResource.maxResource.ramSize | displayVolume:'MB' }})</span>
+                    </li>
+                    <li>
+                        <span class="tit_txt">디스크</span>
+                        <div class="progressWrap type2">
+                            <div class="progress">
+                                <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}" class="progress">
+                                    <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="txt_count">({{ (contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt) | displayVolume:'GB' }} / {{ contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB' }})</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

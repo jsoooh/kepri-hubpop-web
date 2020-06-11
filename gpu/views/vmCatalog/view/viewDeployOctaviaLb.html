@@ -1,0 +1,59 @@
+<div class="cont-titWrap mt50">
+    <h3 class="h-tit3">부하분산 서버정보</h3>
+</div>
+<div class="cBox type1 appCnt-info">
+    <div class="cBox-hd">
+        <div class="pull-left">
+            <h4 class="c-tit">
+                <a href="" ng-click="main.goToPage('/gpu/compute/detail/' + instance.id)">{{ contents.octaviaLb.name }}</a>
+                <img src="images/thum/im_logo_compute.png" class="logo" alt="">
+            </h4>
+        </div>
+<!--
+        <div class="pull-right">
+            <div class="stateWrap pt10">
+                <span class="stateMark type1">시작</span> <span class="state-txt">활성</span>
+            </div>
+        </div>
+-->
+    </div>
+    <div class="cBox-cnt">
+        <div class="in">
+            <div class="ctlog_cntWrap">
+                <div class="ctlog-cnt">
+                    <ul>
+                        <li>
+                            <strong class="tit">접속 IP</strong>
+                            <span class="txt">{{ contents.octaviaLb.vip_address }}</span>
+                        </li>
+                        <li>
+                            <strong class="tit">연결포트</strong>
+                            <span class="txt">{{ contents.octaviaLbPool.lb_algorithm }}</span>
+                        </li>
+                        <li>
+                            <strong class="tit">프로토콜</strong>
+                            <span class="txt">{{ contents.octaviaLbPool.protocol }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="ctlog-cnt">
+                    <ul>
+                        <li>
+                            <strong class="tit">접속 포트</strong>
+                            <span class="txt">{{ contents.octaviaLbListener.protocol_port }}</span>
+                        </li>
+                        <li>
+                            <strong class="tit">로드 밸런스 유형</strong>
+                            <span class="txt">{{ contents.octaviaLbPool.lb_algorithm }}</span>
+                        </li>
+                        <li>
+                            <strong class="tit">헬스 체크 주기(초)</strong>
+                            <span class="txt">{{ contents.octaviaLbMonitor.timeout }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //부하분산 서버정보 -->

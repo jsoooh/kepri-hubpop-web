@@ -1,0 +1,37 @@
+<div class="pnb_tit">
+    <i class="i_star"></i> <span class="pnb_t_txt">배포 유형 선택</span>
+    <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 대상 서버 선택 (연결서버 유형)<br></button> 1. 서버: 만들어져 있는 서버에 부하분산 설정<br/>2. 이미지: 사용자가 생성한 백업이미지로 1) 서버를 생성하고 2) 부하분산 설정'"><span class="ico_info"></span></button></div>
+</div>
+<div class="pl10 mt10">
+    <span class="pnb_stit">- 배포 유형  : </span>
+    <div class="radio radio-inline">
+        <input type="radio" name="deploy_type" id="deploy-type-single" value="server" ng-model="contents.data.deployType" ng-value="'single'" ng-change="contents.fn.changeDeployType()" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <label for="deploy-type-single" class="label">단일 구성</label>
+    </div>
+    <div ng-show="contents.deployTypeReplicaSuport" class="radio radio-inline">
+        <input type="radio" name="deploy_type" id="deploy-type-replica" value="image" ng-model="contents.data.deployType" ng-value="'replica'" ng-change="contents.fn.changeDeployType()" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <label for="deploy-type-replica" class="label">레플리카 구성 ( 서버: {{ contents.data.replicaCnt }} )</label>
+    </div>
+    <div ng-show="contents.deployTypeClusterSuport" class="radio radio-inline">
+        <input type="radio" name="deploy_type" id="deploy-type-cluster" value="image" ng-model="contents.data.deployType" ng-value="'cluster'" ng-change="contents.fn.changeDeployType()" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <label for="deploy-type-cluster" class="label">클러스터 구성 ( 서버: {{ contents.data.clusterCnt }} )</label>
+    </div>
+</div>
+<!--
+<div ng-show="contents.data.deployType == 'replica' || contents.data.deployType == 'cluster'" class="tbw type1 mt20">
+    <table class="table">
+        <colgroup>
+            <col style="width:20%;">
+            <col style="width:">
+        </colgroup>
+        <tbody>
+        <tr>
+            <th><i class="i_star"></i> 서버 수</th>
+            <td ng-show="contents.data.deployType == 'replica'"><input type="text" class="form-control" maxlength="50" ng-model="contents.data.replicaCnt" disabled="disabled"></td>
+            <td ng-show="contents.data.deployType == 'cluster'"><input type="text" class="form-control" maxlength="50" ng-model="contents.data.clusterCnt" disabled="disabled"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+-->
+

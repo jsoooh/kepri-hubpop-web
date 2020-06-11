@@ -34,11 +34,11 @@ angular.module('perf.services')
         };
 
         /* 월별/아이템별 사용량 추이 BY ORGCODE - 화면 ID: HUBPOP_INT_PER_ANS_04 */
-        perfMeteringService.listPerfMeteringMonthlyTotalByItemCode = function(params) {
+        perfMeteringService.listPerfMeteringMonthlyByOrgAndItemCode = function(params) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/perf/metering/org/{orgCode}/item/{itemCode}/monthly/total', 'GET', params))
         };
         /* 일별/아이템별 사용량 추이 BY ORGCODE - 화면 ID: HUBPOP_INT_PER_ANS_04 */
-        perfMeteringService.listPerfMeteringDailyTotalByItemCode = function(params) {
+        perfMeteringService.listPerfMeteringDailyByOrgAndItemCode = function(params) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/perf/metering/org/{orgCode}/item/{itemCode}/daily/total', 'GET', params) )
         };
 
