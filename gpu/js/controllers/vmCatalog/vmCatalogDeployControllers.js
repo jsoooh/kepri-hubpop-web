@@ -186,7 +186,7 @@ angular.module('gpu.controllers')
                 });
             }
         }
-    }
+    };
 
     ct.fn.getVmCatalogDeployAndLoadTemplate = function (tenantId, deployId) {
         $scope.main.loadingMainBody = true;
@@ -242,11 +242,7 @@ angular.module('gpu.controllers')
         document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
     };
 
-    ct.fn.loadPage = function () {
-        ct.fn.getVmCatalogDeployAndLoadTemplate(ct.tenantId, ct.deployId);
-    }
-
-    ct.fn.loadPage();
+    ct.fn.getVmCatalogDeployAndLoadTemplate(ct.tenantId, ct.deployId);
 
 })
 .controller('gpuVmCatalogDeployRenameCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, common, ValidationService, vmCatalogService, CONSTANTS) {

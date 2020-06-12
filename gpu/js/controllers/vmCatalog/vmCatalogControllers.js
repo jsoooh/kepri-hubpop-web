@@ -212,6 +212,8 @@ angular.module('gpu.controllers')
         promise.success(function (data) {
             if (angular.isObject(data.content)) {
                 ct.vmCatalogInfo = data.content;
+                ct.deployTypeReplicaSuport = ct.vmCatalogInfo.replicaSuport;
+                ct.deployTypeClusterSuport = ct.vmCatalogInfo.clusterSuport;
                 ct.fn.loadVmCatalogDeployTemplate(ct.vmCatalogInfo.templatePath);
             } else {
                 ct.vmCatalogInfo = {};
@@ -579,17 +581,16 @@ angular.module('gpu.controllers')
             printPromise.error(function (data, status, headers) {
             });
         }
-    }
+    };
 
     ct.fn.loadPage = function () {
-        ct.fn.getVmCatalogAndLoadTamplate(ct.catalogId);
         ct.fn.getTenantResource(ct.tenantId);
         ct.fn.availabilityZoneList();
         ct.fn.getKeypairList(ct.tenantId);
         ct.fn.getSpecList();
         ct.fn.getStackNames(ct.tenantId);
-    }
+    };
 
-    ct.fn.loadPage();
+    ct.fn.getVmCatalogAndLoadTamplate(ct.catalogId);
 })
 ;

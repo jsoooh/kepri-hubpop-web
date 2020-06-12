@@ -11,5 +11,7 @@ angular.module('gpu.controllers')
         ct.deployTypeReplicaSuport = false;
         ct.deployTypeClusterSuport = true;
 
+        ct.fn.loadPage();
+
     })
 ;
