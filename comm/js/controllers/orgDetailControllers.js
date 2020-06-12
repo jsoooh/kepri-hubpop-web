@@ -1549,6 +1549,7 @@ angular.module('portal.controllers')
         function getPaasQuota(guid) {
             ct.paasQuota = {};
             ct.paasQuota = common.objectsFindByField(ct.paasQuotas, 'guid', guid);
+            //if (!ct.paasQuota) return;
 
             /*console.log("ct.paasQuota : ", ct.paasQuota);
             console.log("ct.orgQuotaValues : ", ct.orgQuotaValues);
@@ -1565,7 +1566,7 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
             ct.orgQuotaValue.orgQuotaItem.name = "서비스";
             ct.orgQuotaValue.orgQuotaItem.unit = "";
-            ct.orgQuotaValue.value = ct.paasQuota.totalServices;
+            ct.orgQuotaValue.value = (ct.paasQuota && ct.paasQuota.totalServices) ? ct.paasQuota.totalServices : 0;
             ct.orgQuotaValues.push(ct.orgQuotaValue);
 
             ct.orgQuotaValue = {};
@@ -1575,7 +1576,7 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
             ct.orgQuotaValue.orgQuotaItem.name = "라우트";
             ct.orgQuotaValue.orgQuotaItem.unit = "";
-            ct.orgQuotaValue.value = ct.paasQuota.totalRoutes;
+            ct.orgQuotaValue.value = (ct.paasQuota && ct.paasQuota.totalRoutes) ? ct.paasQuota.totalRoutes : 0;
             ct.orgQuotaValues.push(ct.orgQuotaValue);
 
             ct.orgQuotaValue = {};
@@ -1585,7 +1586,7 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
             ct.orgQuotaValue.orgQuotaItem.name = "메모리";
             ct.orgQuotaValue.orgQuotaItem.unit = "GB";
-            ct.orgQuotaValue.value = ct.paasQuota.instanceMemoryLimit/1024;
+            ct.orgQuotaValue.value = (ct.paasQuota && ct.paasQuota.instanceMemoryLimit) ? ct.paasQuota.instanceMemoryLimit/1024 : 0;
             ct.orgQuotaValues.push(ct.orgQuotaValue);
 
             ct.orgQuotaValue = {};
@@ -1595,7 +1596,7 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.name = "PaaS";
             ct.orgQuotaValue.orgQuotaItem.name = "앱인스턴스수";
             ct.orgQuotaValue.orgQuotaItem.unit = "";
-            ct.orgQuotaValue.value = ct.paasQuota.appInstanceLimit;
+            ct.orgQuotaValue.value = (ct.paasQuota && ct.paasQuota.appInstanceLimit) ? ct.paasQuota.appInstanceLimit : 0;
             ct.orgQuotaValues.push(ct.orgQuotaValue);
             setOrgQuotaValues(ct.orgQuotaValues);
             //console.log("ct.orgQuotaValues222 : ", ct.orgQuotaValues);

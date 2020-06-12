@@ -48,13 +48,7 @@ angular.module('gpu.services')
 
         // VM 카탈로그 배포 하기
         vmCatalogService.templateVmCatalogDeploy = function(tenantId, vmCatalogDeploy) {
-            var params = {
-                urlPaths : {
-                    "tenantId" : tenantId
-                },
-                body: vmCatalogDeploy
-            };
-            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/template', 'POST', params));
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/deploy/template', 'POST', vmCatalogDeploy));
         };
 
         // VM 카탈로그 배포 정보 목록 조회

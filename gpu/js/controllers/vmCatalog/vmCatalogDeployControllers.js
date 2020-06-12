@@ -70,14 +70,22 @@ angular.module('gpu.controllers')
     ct.deployId          = $stateParams.id;
 
     ct.htmlUrls                         = {};
-    ct.htmlUrls.deployTitle              = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployTitle.html" + _VERSION_TAIL_;
-    ct.htmlUrls.deployOctaviaLb               = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployOctaviaLb.html" + _VERSION_TAIL_;
-    ct.htmlUrls.deployServerList             = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployServerList.html" + _VERSION_TAIL_;
+    ct.htmlUrls.deployTitle             = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployTitle.html" + _VERSION_TAIL_;
+    ct.htmlUrls.deployOctaviaLb         = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployOctaviaLb.html" + _VERSION_TAIL_;
+    ct.htmlUrls.deployServerList        = _GPU_VIEWS_ + "/vmCatalog/view/viewDeployServerList.html" + _VERSION_TAIL_;
 
     ct.vmCatalogInfo = {};
     ct.vmCatalogDeployInfo = {};
     ct.vmCatalogTemplateUrl = "";
-
+    ct.octaviaLbUse = false;
+    ct.octaviaLb = {};
+    ct.octaviaLbListener = {};
+    ct.octaviaLbPool = {};
+    ct.octaviaLbMonitor = {};
+    ct.octaviaLbPoolMembers = [];
+    ct.instances = [];
+    ct.instancePorts = [];
+    ct.volumes = [];
 
     ct.fn.loadVmCatalogDeployView = function (templatePath, controllerName, deployViewHtmlFile) {
         // 페이지 로드
@@ -123,6 +131,63 @@ angular.module('gpu.controllers')
         });
     };
 
+    ct.fn.mappingOuputsData = function (outputs) {
+        if (angular.isArray(outputs)) {
+            angular.forEach(outputs, function(output) {
+                if (output.output_key == "octaviaLb") {
+                    ct.octaviaLb = angular.copy(output.output_value);
+                    ct.octaviaLbUse = true;
+                } else if (output.output_key == "octaviaLbListener") {
+                    ct.octaviaLbListener = angular.copy(output.output_value);
+                    ct.octaviaLbUse = true;
+                } else if (output.output_key == "octaviaLbPool") {
+                    ct.octaviaLbPool = angular.copy(output.output_value);
+                    ct.octaviaLbUse = true;
+                } else if (output.output_key == "octaviaLbMonitor") {
+                    ct.octaviaLbMonitor = angular.copy(output.output_value);
+                    ct.octaviaLbUse = true;
+                } else if (output.output_key.indexOf("octaviaLbPoolMember") == 0) {
+                    var idx = 0;
+                    if (output.output_key != "octaviaLbPoolMember") {
+                        idx = parseInt(output.output_key.substring("octaviaLbPoolMember_".length), 10) - 1;
+                    }
+                    ct.octaviaLbPoolMembers[idx] = angular.copy(output.output_value);
+                    ct.octaviaLbUse = true;
+                } else if (output.output_key.indexOf("instance") == 0) {
+                    if (output.output_key.indexOf("instancePort") == 0) {
+                        var idx = 0;
+                        if (output.output_key != "instancePort") {
+                            idx = parseInt(output.output_key.substring("instancePort_".length), 10) - 1;
+                        }
+                        ct.instancePorts[idx] = angular.copy(output.output_value);
+                    } else {
+                        var idx = 0;
+                        if (output.output_key != "instance") {
+                            idx = parseInt(output.output_key.substring("instance_".length), 10) - 1;
+                        }
+                        ct.instances[idx] = angular.copy(output.output_value);
+                    }
+                } else if (output.output_key.indexOf("volume") == 0) {
+                    var idx = 0;
+                    if (output.output_key != "volume") {
+                        idx = parseInt(output.output_key.substring("volume_".length), 10) - 1;
+                    }
+                    ct.volumes[idx] = angular.copy(output.output_value);
+                }
+            });
+            if (angular.isArray(ct.instances)) {
+                angular.forEach(ct.instances, function(instance, k) {
+                    if (angular.isObject(ct.instancePorts[k])) {
+                        instance.instancePort = angular.copy(ct.instancePorts[k]);
+                    }
+                    if (angular.isObject(ct.volumes[k])) {
+                        instance.volume = angular.copy(ct.volumes[k]);
+                    }
+                });
+            }
+        }
+    }
+
     ct.fn.getVmCatalogDeployAndLoadTemplate = function (tenantId, deployId) {
         $scope.main.loadingMainBody = true;
         var promise = vmCatalogService.getVmCatalogDeploy(tenantId, deployId);
@@ -130,6 +195,7 @@ angular.module('gpu.controllers')
             if (angular.isObject(data.content)) {
                 ct.vmCatalogDeployInfo = data.content;
                 ct.vmCatalogInfo = angular.copy(ct.vmCatalogDeployInfo.vmCatalogInfo);
+                ct.fn.mappingOuputsData(data.content.outputs);
                 ct.fn.loadVmCatalogDeployViewTemplate(ct.vmCatalogInfo.templatePath);
             } else {
                 ct.vmCatalogDeployInfo = {};
