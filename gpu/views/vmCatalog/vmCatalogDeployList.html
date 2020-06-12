@@ -15,7 +15,7 @@
     </div>
 </div>
 <!-- //프로젝트 정보 -->
-<ul class="ul-panel thum_style">
+<ul ng-show="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0" class="ul-panel thum_style">
     <li ng-repeat="(key, vmCatalogDeploy) in contents.vmCatalogDeployList | filter: { deployName : contents.searchText }">
         <div class="panelWrap">
             <div class="panel type6 serv_list">
@@ -45,4 +45,10 @@
             </div>
         </div>
     </li>
+    <!-- //panel -->
 </ul>
+<div ng-show="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length == 0" class="proj_list_area">
+    <ul class="ul-panel dash_list no_data">
+        <li><p class="no_data_txt pd0">생성된 서비스가 없습니다.</p></li>
+    </ul>
+</div>
