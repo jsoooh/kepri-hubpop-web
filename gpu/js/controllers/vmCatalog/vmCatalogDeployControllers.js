@@ -78,10 +78,11 @@ angular.module('gpu.controllers')
     ct.vmCatalogDeployInfo = {};
     ct.vmCatalogTemplateUrl = "";
     ct.octaviaLbUse = false;
+
     ct.octaviaLb = {};
-    ct.octaviaLbListener = {};
-    ct.octaviaLbPool = {};
-    ct.octaviaLbMonitor = {};
+    ct.octaviaLbListeners = [];
+    ct.octaviaLbPools = [];
+    ct.octaviaLbMonitors = [];
     ct.octaviaLbPoolMembers = [];
     ct.instances = [];
     ct.instancePorts = [];
@@ -134,44 +135,27 @@ angular.module('gpu.controllers')
     ct.fn.mappingOuputsData = function (outputs) {
         if (angular.isArray(outputs)) {
             angular.forEach(outputs, function(output) {
-                if (output.output_key == "octaviaLb") {
+                var outputKeys = output.output_key.split("_");
+                var idx = 0;
+                if (outputKeys.length == 2) {
+                    idx = parseInt(outputKeys[1], 10) - 1;
+                }
+                if (outputKeys[0] == "octaviaLb") {
                     ct.octaviaLb = angular.copy(output.output_value);
                     ct.octaviaLbUse = true;
-                } else if (output.output_key == "octaviaLbListener") {
-                    ct.octaviaLbListener = angular.copy(output.output_value);
-                    ct.octaviaLbUse = true;
-                } else if (output.output_key == "octaviaLbPool") {
-                    ct.octaviaLbPool = angular.copy(output.output_value);
-                    ct.octaviaLbUse = true;
-                } else if (output.output_key == "octaviaLbMonitor") {
-                    ct.octaviaLbMonitor = angular.copy(output.output_value);
-                    ct.octaviaLbUse = true;
-                } else if (output.output_key.indexOf("octaviaLbPoolMember") == 0) {
-                    var idx = 0;
-                    if (output.output_key != "octaviaLbPoolMember") {
-                        idx = parseInt(output.output_key.substring("octaviaLbPoolMember_".length), 10) - 1;
-                    }
+                } else if (outputKeys[0] == "octaviaLbListener") {
+                    ct.octaviaLbListeners[idx] = angular.copy(output.output_value);
+                } else if (outputKeys[0] == "octaviaLbPool") {
+                    ct.octaviaLbPools[idx] = angular.copy(output.output_value);
+                } else if (outputKeys[0] == "octaviaLbMonitor") {
+                    ct.octaviaLbMonitors[idx] = angular.copy(output.output_value);
+                } else if (outputKeys[0] == "octaviaLbPoolMember") {
                     ct.octaviaLbPoolMembers[idx] = angular.copy(output.output_value);
-                    ct.octaviaLbUse = true;
-                } else if (output.output_key.indexOf("instance") == 0) {
-                    if (output.output_key.indexOf("instancePort") == 0) {
-                        var idx = 0;
-                        if (output.output_key != "instancePort") {
-                            idx = parseInt(output.output_key.substring("instancePort_".length), 10) - 1;
-                        }
-                        ct.instancePorts[idx] = angular.copy(output.output_value);
-                    } else {
-                        var idx = 0;
-                        if (output.output_key != "instance") {
-                            idx = parseInt(output.output_key.substring("instance_".length), 10) - 1;
-                        }
-                        ct.instances[idx] = angular.copy(output.output_value);
-                    }
-                } else if (output.output_key.indexOf("volume") == 0) {
-                    var idx = 0;
-                    if (output.output_key != "volume") {
-                        idx = parseInt(output.output_key.substring("volume_".length), 10) - 1;
-                    }
+                } else if (outputKeys[0] == "instancePort") {
+                    ct.instancePorts[idx] = angular.copy(output.output_value);
+                } else if (outputKeys[0] == "instance") {
+                    ct.instances[idx] = angular.copy(output.output_value);
+                } else if (outputKeys[0] == "volume") {
                     ct.volumes[idx] = angular.copy(output.output_value);
                 }
             });

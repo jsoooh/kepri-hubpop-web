@@ -5,7 +5,7 @@
     <div class="cBox-hd">
         <div class="pull-left">
             <h4 class="c-tit">
-                <a href="" ng-click="main.goToPage('/gpu/compute/detail/' + instance.id)">{{ contents.octaviaLb.name }}</a>
+                <a href="" ng-click="main.goToPage('/gpu/loadbalancer/detail/' + contents.outputs.octaviaLb.lbInfoId)">{{ contents.octaviaLb.name }}</a>
                 <img src="images/thum/im_logo_compute.png" class="logo" alt="">
             </h4>
         </div>
@@ -28,11 +28,11 @@
                         </li>
                         <li>
                             <strong class="tit">연결포트</strong>
-                            <span class="txt">{{ contents.octaviaLbPool.lb_algorithm }}</span>
+                            <span class="txt">{{ contents.octaviaLbPools[0].lb_algorithm }}</span>
                         </li>
                         <li>
                             <strong class="tit">프로토콜</strong>
-                            <span class="txt">{{ contents.octaviaLbPool.protocol }}</span>
+                            <span class="txt">{{ contents.octaviaLbPools[0].protocol }}</span>
                         </li>
                     </ul>
                 </div>
@@ -40,15 +40,15 @@
                     <ul>
                         <li>
                             <strong class="tit">접속 포트</strong>
-                            <span class="txt">{{ contents.octaviaLbListener.protocol_port }}</span>
+                            <span class="txt">{{ contents.octaviaLbListeners[0].protocol_port }}</span>
                         </li>
                         <li>
                             <strong class="tit">로드 밸런스 유형</strong>
-                            <span class="txt">{{ contents.octaviaLbPool.lb_algorithm }}</span>
+                            <span class="txt">{{ contents.octaviaLbPools[0].lb_algorithm }}</span>
                         </li>
                         <li>
                             <strong class="tit">헬스 체크 주기(초)</strong>
-                            <span class="txt">{{ contents.octaviaLbMonitor.timeout }}</span>
+                            <span class="txt">{{ contents.octaviaLbMonitors[0].timeout }}</span>
                         </li>
                     </ul>
                 </div>
