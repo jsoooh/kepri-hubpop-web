@@ -10,6 +10,7 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
+        ct.data.replicaCnt = 2;
         ct.data.servicePort = 3306;
         ct.data.lbSvcPort = 3306;
         ct.data.galeraPort = 4567;
@@ -17,7 +18,7 @@ angular.module('gpu.controllers')
 
         // 테스트 입력값
         ct.data.deployName = "마이에스큐엘";
-        ct.data.stackName = "Mysql-Single";
+        ct.data.stackName = "Mysql-Cluster";
 
         ct.data.rootPassword = "Crossent!234";
         ct.data.rootConfirmPassword = "Crossent!234";
