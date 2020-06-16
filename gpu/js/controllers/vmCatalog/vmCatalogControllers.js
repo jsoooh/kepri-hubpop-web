@@ -536,6 +536,7 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.createUser = ct.data.createUser;
+        vmCatalogDeploy.octaviaLbUse = false;
         vmCatalogDeploy.context.octaviaLbUse = false;
         if (ct.data.deployType == "cluster") {
             vmCatalogDeploy.octaviaLbUse = ct.data.octaviaLbUse;

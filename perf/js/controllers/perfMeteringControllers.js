@@ -347,6 +347,7 @@ angular.module('perf.controllers')
             ct.data.sltItemCode = sltItemCode;
             var item = common.objectsFindCopyByField(ct.meteringItemsBySltItemGroup, "itemCode", sltItemCode);
             if (angular.isObject(item) && angular.isDefined(item.itemCode)) {
+                ct.sltItem = angular.copy(item);
                 ct.fn.reconstructData()
             }
         };
@@ -422,17 +423,18 @@ angular.module('perf.controllers')
                 ct.perfMeteringMonthlyByOrgAndItems = [];
                 ct.perfMeteringMonthlyByOrgAndItemSum = 0;
                 var dataIndex = 0;
+                var perfMonth = 0;
                 for (var month = 1; month <= 12; month++) {
                     if (dataIndex < data.itemCount) {
-                        var perfMonth = Number(data.items[dataIndex].perfYm.slice(4, 6));
+                        perfMonth = Number(data.items[dataIndex].perfYm.slice(4, 6));
                     }
-                    if (perfMonth == month) {
+                    if (month == perfMonth) {
                         var meteringValue = data.items[dataIndex].meteringValue;
                         ct.perfMeteringMonthlyByOrgAndItems.push(meteringValue);
                         ct.perfMeteringMonthlyByOrgAndItemSum += meteringValue;
                         dataIndex++;
                     } else {
-                        if (ct.fn.isPast(sltYear, perfMonth)) {
+                        if (ct.fn.isPast(sltYear, month)) {
                             ct.perfMeteringMonthlyByOrgAndItems.push(0);
                         } else {
                             ct.perfMeteringMonthlyByOrgAndItems.push('');

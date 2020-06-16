@@ -377,7 +377,7 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config2
-
+{% if volumeUse %}
   cinder_volume1_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
@@ -391,7 +391,7 @@ resources:
       instance_uuid: { get_resource: server2 }
       volume_id: { get_resource: cinder_volume2 }
       mountpoint: { get_param: volume_mount_point }
-
+{% endif %}
 outputs:
   instancePort_1:
     value:
