@@ -238,10 +238,6 @@ resources:
 {% endif %}
             $repl_user_id: { get_param: repl_user_id }
             $repl_user_password: { get_param: repl_user_password }
-{% if createUser %}
-            $create_user_id: { get_param: create_user_id }
-            $create_user_password: { get_param: create_user_password }
-{% endif %}
             $root_password: { get_param: root_password }
             $check_port: { get_param: check_port }
             $service_port: { get_param: service_port }
@@ -392,6 +388,7 @@ resources:
       volume_id: { get_resource: cinder_volume2 }
       mountpoint: { get_param: volume_mount_point }
 {% endif %}
+
 outputs:
   instancePort_1:
     value:
