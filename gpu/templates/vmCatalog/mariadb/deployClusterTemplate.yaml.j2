@@ -22,9 +22,27 @@ parameters:
   lb_svc_port:
     type: string
     default: 3306
+  lb_svc_protocol:
+    type: string
+    default: TCP
   lb_algorithm:
     type: string
     default: ROUND_ROBIN
+  lb_svc_connection_limit:
+    type: string
+    default: 2000
+  lb_svc_monitor_type:
+    type: string
+    default: TCP
+  lb_svc_monitor_delay:
+    type: string
+    default: 3
+  lb_svc_monitor_max_retries:
+    type: string
+    default: 5
+  lb_svc_monitor_timeout:
+    type: string
+    default: 5
 {% endif %}
   service_port:
     type: string
@@ -477,7 +495,8 @@ resources:
     type: OS::Octavia::Listener
     properties:
       loadbalancer: { get_resource: octavia_lb }
-      protocol: TCP
+      connection_limit: { get_param: lb_svc_connection_limit }
+      protocol: { get_param: lb_svc_protocol }
       protocol_port: { get_param: lb_svc_port }
 
   octavia_lb_svc_pool:
@@ -485,18 +504,16 @@ resources:
     properties:
       listener: { get_resource: octavia_lb_svc_listener }
       lb_algorithm: { get_param: lb_algorithm }
-      protocol: TCP
-      session_persistence:
-        type: SOURCE_IP
+      protocol: { get_param: lb_svc_protocol }
 
   octavia_lb_svc_monitor:
     type: OS::Octavia::HealthMonitor
     properties:
       pool: { get_resource: octavia_lb_svc_pool }
-      type: TCP
-      delay: 5
-      max_retries: 5
-      timeout: 5
+      type: { get_param: lb_svc_monitor_type }
+      delay: { get_param: lb_svc_monitor_delay }
+      max_retries: { get_param: lb_svc_monitor_max_retries }
+      timeout: { get_param: lb_svc_monitor_timeout }
 
   lb_svc_pool_member1:
     type: OS::Octavia::PoolMember
