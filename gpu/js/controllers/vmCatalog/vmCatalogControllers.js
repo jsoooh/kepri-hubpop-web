@@ -235,7 +235,7 @@ angular.module('gpu.controllers')
         }
     }
 
-    ct.fn.getTenantResource = function(tenantId, tenantResourceDefer)  {
+    ct.fn.getTenantResource = function(tenantId, resourceDefer)  {
         var returnPromise = vmCatalogService.getTenantResource(tenantId);
         returnPromise.success(function (data, status, headers) {
             if (data && data.content) {
@@ -249,14 +249,10 @@ angular.module('gpu.controllers')
                 ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                 ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
             }
-            if (tenantResourceDefer) {
-                tenantResourceDefer.resolve(data);
-            }
+            if (resourceDefer) resourceDefer.resolve(data);
         });
         returnPromise.error(function (data, status, headers) {
-            if (tenantResourceDefer) {
-                tenantResourceDefer.reject(data);
-            }
+            if (resourceDefer) resourceDefer.reject(data);
         });
         returnPromise.finally(function (data, status, headers) {
             $scope.main.loadingMainBody = false;
@@ -336,15 +332,11 @@ angular.module('gpu.controllers')
             }
             ct.isSpecLoad = true;
             ct.fn.setSpecMinDisabled();
-            if (specListDefer) {
-                specListDefer.resolve(data);
-            }
+            if (specListDefer) specListDefer.resolve(data);
         });
         returnPromise.error(function (data, status, headers) {
             ct.isSpecLoad = true;
-            if (specListDefer) {
-                specListDefer.reject(data);
-            }
+            if (specListDefer) specListDefer.reject(data);
         });
     };
 
@@ -592,15 +584,15 @@ angular.module('gpu.controllers')
     };
 
     ct.fn.loadPage = function () {
-        var tenantResourceDefer = $q.defer();
+        var resourceDefer = $q.defer();
         var specListDefer = $q.defer();
-        ct.fn.getTenantResource(ct.tenantId, tenantResourceDefer);
+        ct.fn.getTenantResource(ct.tenantId, resourceDefer);
         ct.fn.getSpecList(specListDefer);
         ct.fn.availabilityZoneList();
         ct.fn.getKeypairList(ct.tenantId);
         ct.fn.getStackNames(ct.tenantId);
 
-        var allResourceMax = $q.all([tenantResourceDefer.promise, specListDefer.promise]);
+        var allResourceMax = $q.all([resourceDefer.promise, specListDefer.promise]);
         allResourceMax.then(function (datas) {
             ct.fn.changeDeployType(ct.data.deployType);
         });
