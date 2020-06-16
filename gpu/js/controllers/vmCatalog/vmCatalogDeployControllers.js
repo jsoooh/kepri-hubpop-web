@@ -45,7 +45,6 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("삭제되었습니다.");
                 ct.fn.loadPage();
             });
             promise.error(function (data, status, headers) {
@@ -192,6 +191,38 @@ angular.module('gpu.controllers')
         });
     };
 
+    ct.fn.getVmCatalogDeployStatus = function (tenantId, deployId, type) {
+        var promise = vmCatalogService.getVmCatalogDeploy(tenantId, deployId);
+        promise.success(function (data) {
+            if (angular.isObject(data.content) && data.content.id) {
+                ct.vmCatalogDeployInfo = data.content;
+                if (type == "create") {
+                    if (ct.vmCatalogDeployInfo.deployStatus != "DEPLOY_COMPLETE" &&
+                        ct.vmCatalogDeployInfo.deployStatus.indexOf("FAILED") == -1) {
+                        $timeout(function () {
+                            ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type)
+                        }, 5000);
+                    }
+                } else {
+                    if (ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
+                        $timeout(function () {
+                            ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type)
+                        }, 5000);
+                    }
+                }
+            } else {
+                if (type == "delete") {
+                    common.showAlertSuccess("삭제 되었습니다.");
+                } else {
+                    common.showAlertError("존재하지 않는 서비스입니다.");
+                }
+                $scope.main.goToPage("/gpu/vmCatalogDeploy/list");
+            }
+        });
+        promise.error(function (data, status, headers) {
+        });
+    }
+
     ct.fn.openVmCatalogDeployRenameForm = function ($event, vmCatalogDeploy) {
         $scope.dialogOptions = {
             controller: "gpuVmCatalogDeployRenameCtrl",
@@ -209,8 +240,7 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("삭제되었습니다.");
-                ct.fn.loadPage();
+                ct.fn.getVmCatalogDeployStatus(tenantId, deployId, "delete");
             });
             promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

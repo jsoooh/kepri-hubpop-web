@@ -43,6 +43,9 @@ parameters:
   lb_svc_monitor_timeout:
     type: string
     default: 5
+  lb_svc_monitor_url_path:
+    type: string
+    default: /
 {% endif %}
   service_port:
     type: string
@@ -514,6 +517,7 @@ resources:
       delay: { get_param: lb_svc_monitor_delay }
       max_retries: { get_param: lb_svc_monitor_max_retries }
       timeout: { get_param: lb_svc_monitor_timeout }
+      url_path: { get_param: lb_svc_monitor_url_path }
 
   lb_svc_pool_member1:
     type: OS::Octavia::PoolMember

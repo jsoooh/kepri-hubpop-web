@@ -312,7 +312,6 @@ angular.module('gpu.controllers')
             }
         });
         returnPromise.error(function (data, status, headers) {
-            common.showAlertError(data.message);
             $scope.main.loadingMainBody = false;
         });
     };
