@@ -1,0 +1,415 @@
+heat_template_version: '2018-08-31'
+
+description: mysql replica volume template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Mysql.qcow2
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  service_port:
+    type: string
+    default: 3306
+  root_password:
+    type: string
+  repl_user_id:
+    type: string
+    default: repl
+  repl_user_password:
+    type: string
+    default: replPass
+{% if volumeUse %}
+  volume_type:
+    type: string
+    default: RBD
+  volume_size:
+    type: string
+  volume_mount_point:
+    type: string
+    default: /dev/vdb
+  volume_format_type:
+    type: string
+    default: xfs
+  volume_mount_path:
+    type: string
+    default: /mnt/data
+{% endif %}
+  check_port:
+    type: string
+    default: 9898
+{% if createUser %}
+  create_user_id:
+    type: string
+  create_user_password:
+    type: string
+  create_db_name:
+    type: string
+{% endif %}
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+{% if volumeUse %}
+  cinder_volume1:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume2:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+{% endif %}
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $repl_user_id: { get_param: repl_user_id }
+            $repl_user_password: { get_param: repl_user_password }
+{% if createUser %}
+            $create_user_id: { get_param: create_user_id }
+            $create_user_password: { get_param: create_user_password }
+            $create_db_name: { get_param: create_db_name }
+{% endif %}
+            $service_port: { get_param: service_port }
+            $check_port: { get_param: check_port }
+            $root_password: { get_param: root_password }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server_addresses_and_ports:
+              list_join:
+                - ','
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "Master mysql setting start"
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
+            ln -s $volume_mount_path/mysql /var/lib/mysql
+            sleep 1
+{% endif %}
+            echo "Create master server mysql log - config file"
+            touch /var/log/mysqld.log
+            chown mysql:mysql /var/log/mysqld.log
+            sleep 1
+
+            cp /etc/my.cnf /etc/my.cnf.backup
+            cat <<EOF> /etc/my.cnf
+            [mysqld]
+            port=$service_port
+            log-bin=mysql-bin
+            server-id=1
+
+            datadir=/var/lib/mysql
+            socket=/var/lib/mysql/mysql.sock
+
+            symbolic-links=0
+
+            log-error=/var/log/mysqld.log
+            pid-file=/var/run/mysqld/mysqld.pid
+
+            EOF
+            sleep 1
+
+            echo "Change mysql root temp password"
+            systemctl restart mysqld
+            sleep 1
+
+            temp_password=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f11)
+            if [ "${temp_password}" == "" ]; then
+              /usr/bin/mysqladmin -u root password 'P@ssw0rd'
+            else
+              /usr/bin/mysqladmin -u root -p${temp_password} password 'P@ssw0rd'
+            fi
+
+            echo "Chnage to easy password, Create User for Replication"
+            mysql -u root -pP@ssw0rd <<EOF
+                UNINSTALL PLUGIN validate_password;
+                ALTER USER 'root'@'localhost' IDENTIFIED BY '$root_password';
+                FLUSH PRIVILEGES;
+            EOF
+            sleep 1
+
+            echo "grant select for set replication"
+            mysql -u root -p"$root_password" <<EOF
+                GRANT REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO '$repl_user_id'@'$server1_ip_address' IDENTIFIED BY '$repl_user_password';
+                GRANT REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO '$repl_user_id'@'$server2_ip_address' IDENTIFIED BY '$repl_user_password';
+                FLUSH PRIVILEGES;
+                FLUSH TABLES WITH READ LOCK;
+            EOF
+            sleep 1
+            systemctl restart mysqld
+
+            echo "Open Port FOR USER CHECK"
+            nohup nc -kl $check_port 2>&1 &
+            nc_pid=$!
+
+            echo "Wait - Check Slave Setting"
+            slaveRun=1
+            while [ $slaveRun -ne 0 ]
+            do
+              nc -z $server2_ip_address $service_port
+              slaveRun=$?
+              echo "nc -z $server2_ip_address $service_port > $slaveRun"
+              sleep 5
+            done
+
+            kill -9 $nc_pid
+            sleep 5
+
+{% if createUser %}
+            echo "create test user, DB"
+            mysql -u root -p$root_password <<EOF
+                UNLOCK TABLES;
+
+                CREATE DATABASE $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+                CREATE USER '$create_user_id'@'%' IDENTIFIED BY '$create_user_password';
+                GRANT ALL PRIVILEGES ON $create_db_name.* TO '$create_user_id'@'%';
+                FLUSH PRIVILEGES;
+            EOF
+{% endif %}
+            systemctl enable mysqld
+            echo "Master mysql setting end"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $repl_user_id: { get_param: repl_user_id }
+            $repl_user_password: { get_param: repl_user_password }
+{% if createUser %}
+            $create_user_id: { get_param: create_user_id }
+            $create_user_password: { get_param: create_user_password }
+{% endif %}
+            $root_password: { get_param: root_password }
+            $check_port: { get_param: check_port }
+            $service_port: { get_param: service_port }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server_addresses_and_ports:
+              list_join:
+                - ','
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "mysql setting start"
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
+            ln -s $volume_mount_path/mysql /var/lib/mysql
+            sleep 1
+{% endif %}
+            echo "Wait - Check Master Setting"
+            masterRun=1
+            while [ $masterRun -ne 0 ]
+            do
+              nc -z $server1_ip_address $check_port
+              masterRun=$?
+              echo "nc -z $server1_ip_address $check_port > $masterRun"
+              sleep 3
+            done
+            sleep 3
+
+            echo "Create slave setting mysql log - config file"
+            touch /var/log/mysqld.log
+            chown mysql:mysql /var/log/mysqld.log
+            sleep 1
+
+            cp /etc/my.cnf /etc/my.cnf.backup
+            cat <<EOF> /etc/my.cnf
+            [mysqld]
+            port=$service_port
+            #log-bin=mysql-bin
+            server-id=2
+
+            datadir=/var/lib/mysql
+            socket=/var/lib/mysql/mysql.sock
+
+            symbolic-links=0
+
+            log-error=/var/log/mysqld.log
+            pid-file=/var/run/mysqld/mysqld.pid
+
+            EOF
+            sleep 1
+
+            echo "Change mysql root temp password"
+            systemctl restart mysqld
+            sleep 1
+            temp_password=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f11)
+            if [ "${temp_password}" == "" ]; then
+              /usr/bin/mysqladmin -u root password 'P@ssw0rd'
+            else
+              /usr/bin/mysqladmin -u root -p${temp_password} password 'P@ssw0rd'
+            fi
+
+            echo "Chnage to easy password, Create User for Replication"
+            mysql -u root -pP@ssw0rd <<EOF
+                UNINSTALL PLUGIN validate_password;
+                ALTER USER 'root'@'localhost' IDENTIFIED BY '$root_password';
+            EOF
+
+
+            echo "Get Master Status"
+            # POS=`mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" -e"SHOW MASTER STATUS \G" |grep "Position" |cut -d ":" -f2`
+            FileName=$(mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $1}')
+            POS=$(mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $2}')
+
+
+            echo "SET SLAVE"
+            mysql -u root -p$root_password <<EOF
+                CHANGE MASTER TO MASTER_HOST='$server1_ip_address', MASTER_USER='$repl_user_id', MASTER_PASSWORD='$repl_user_password', MASTER_LOG_FILE='$FileName', MASTER_LOG_POS=$POS;
+                START SLAVE;
+                SET GLOBAL read_only = ON;
+                SET GLOBAL super_read_only = ON;
+                FLUSH PRIVILEGES;
+            EOF
+
+            cat <<EOF>> /etc/my.cnf
+            read_only=1
+            super_read_only=1
+            EOF
+
+            systemctl enable mysqld
+            echo "mysql setting end"
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  cinder_volume1_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server1 }
+      volume_id: { get_resource: cinder_volume1 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume2_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server2 }
+      volume_id: { get_resource: cinder_volume2 }
+      mountpoint: { get_param: volume_mount_point }
+
+outputs:
+  server_ip1:
+    value:
+      get_attr: [server1_port, fixed_ips, 0, ip_address]
+  server_ip2:
+    value:
+      get_attr: [server2_port, fixed_ips, 0, ip_address]
+  check_port:
+    value:
+      get_param: check_port
+  service_port:
+    value:
+      get_param: service_port
+{% if volumeUse %}
+  volume1_id:
+    value:
+      get_resource: cinder_volume1
+  volume2_id:
+    value:
+      get_resource: cinder_volume2
+{% endif %}
