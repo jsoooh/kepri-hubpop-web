@@ -173,11 +173,8 @@ angular.module('gpu.services')
         };
 
         // 스펙 리스트 조회
-        vmCatalogService.listAllSpec = function(specGroupName) {
-            var params = {
-                specGroupName : specGroupName
-            };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET', params));
+        vmCatalogService.listAllSpec = function() {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET'));
         };
 
         return vmCatalogService;
