@@ -516,43 +516,52 @@ resources:
 {% endif %}
 
 outputs:
-  server_ip1:
+  instancePort_1:
     value:
-      get_attr: [server1_port, fixed_ips, 0, ip_address]
-  server_ip2:
+      get_attr: [ server1_port, show ]
+  instancePort_2:
     value:
-      get_attr: [server2_port, fixed_ips, 0, ip_address]
-  server_ip3:
+      get_attr: [ server2_port, show ]
+  instancePort_3:
     value:
-      get_attr: [server3_port, fixed_ips, 0, ip_address]
-  pgpool_port:
+      get_attr: [ server3_port, show ]
+  instance_1:
     value:
-      get_param: pgpool_port
-  check_port:
+      get_attr: [ server1, show ]
+  instance_2:
     value:
-      get_param: check_port
-  service_port:
+      get_attr: [ server2, show ]
+  instance_3:
     value:
-      get_param: service_port
+      get_attr: [ server3, show ]
+  instanceInitConfig_1:
+    value:
+      get_attr: [ init_config1, config ]
+  instanceInitConfig_2:
+    value:
+      get_attr: [ init_config2, config ]
+  instanceInitConfig_3:
+    value:
+      get_attr: [ init_config3, config ]
 {% if octaviaLbUse %}
-  octavia_lb_ip:
+  octaviaLb:
     value:
-      get_attr: [octavia_lb, vip_address]
-  lb_pg_port:
+      get_attr: [octavia_lb, show]
+  OctaviaLbPg:
     value:
-      get_param: lb_pg_port
-  lb_svc_port:
+      get_attr: [ lb_pg_port, show ]
+  octaviaLbPool:
     value:
-      get_param: lb_svc_port
+      get_attr: [octavia_lb_svc_pool, show]
 {% endif %}
 {% if volumeUse %}
-  volume1_id:
+  volume_1:
     value:
-      get_resource: cinder_volume1
-  volume2_id:
+      get_attr: [ cinder_volume1, show ]
+  volume_2:
     value:
-      get_resource: cinder_volume2
-  volume3_id:
+      get_attr: [ cinder_volume2, show ]
+  volume_3:
     value:
-      get_resource: cinder_volume3
+      get_attr: [ cinder_volume3, show ]
 {% endif %}
