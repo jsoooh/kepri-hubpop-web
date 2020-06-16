@@ -8,8 +8,8 @@ angular.module('gpu.controllers')
 
         var ct = $scope.$parent.$parent.contents;
 
-        ct.deployTypeReplicaSuport = false;
-        ct.deployTypeClusterSuport = true;
+        ct.deployTypeReplicaSupport = false;
+        ct.deployTypeClusterSupport = true;
 
         ct.fn.loadPage();
 

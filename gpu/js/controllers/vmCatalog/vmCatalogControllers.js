@@ -212,8 +212,8 @@ angular.module('gpu.controllers')
         promise.success(function (data) {
             if (angular.isObject(data.content)) {
                 ct.vmCatalogInfo = data.content;
-                ct.deployTypeReplicaSuport = ct.vmCatalogInfo.replicaSuport;
-                ct.deployTypeClusterSuport = ct.vmCatalogInfo.clusterSuport;
+                ct.deployTypeReplicaSupport = ct.vmCatalogInfo.replicaSupport;
+                ct.deployTypeClusterSupport = ct.vmCatalogInfo.clusterSupport;
                 ct.fn.loadVmCatalogDeployTemplate(ct.vmCatalogInfo.templatePath);
             } else {
                 ct.vmCatalogInfo = {};
