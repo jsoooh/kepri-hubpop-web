@@ -1,5 +1,5 @@
 <style type="text/css">
-	.amount_loading {
+	.barLoadingImg {
 		width: 100px;
 		height: 40px;
 	}
@@ -15,11 +15,11 @@
 		margin-left:-75px;
 		margin-top: -55px;
 	}
-	.chart_wrap {
+	.dashboard_chart_wrap {
 		position: relative;
 		clear:both;
 	}
-	.warning:after {
+	.chartWarningImg:after {
 		background:url("../../img/alert_warning.png") 50% 50% no-repeat;
 		content:"";
 		display:block;
@@ -57,7 +57,7 @@
 							<p ng-if="!contents.isToday">{{ contents.data.sltMonth }}월 사용 금액</p>
 							<div class="amountTxt">
 								<span class="amount" ng-if="!contents.dailyChart.loading">{{ contents.data.sltSumPerfAmt | number }}</span>
-								<img class="amount_loading" ng-if="contents.dailyChart.loading" src="images/loading/lg.equalizer-bars-loader.gif">
+								<img class="barLoadingImg" ng-if="contents.dailyChart.loading" src="images/loading/lg.equalizer-bars-loader.gif">
 								<span class="won"> 원</span>
 							</div>
 						</div>
@@ -67,7 +67,7 @@
 								<p ng-if="!contents.isToday">{{ contents.data.lastMonth }}월 사용 금액</p>
 								<div class="amountTxt">
 									<span class="amount" ng-if="!contents.lastSumLoading">{{ contents.data.lastSumPerfAmt | number }}</span>
-									<img class="amount_loading" ng-if="contents.lastSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
+									<img class="barLoadingImg" ng-if="contents.lastSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
 									<span class="won"> 원</span>
 								</div>
 							</li>
@@ -76,7 +76,7 @@
 								<p ng-if="!contents.isToday">{{ contents.data.nextMonth }}월 사용 금액</p>
 								<div class="amountTxt">
 									<span class="amount" ng-if="!contents.nextSumLoading">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
-									<img class="amount_loading" ng-if="contents.nextSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
+									<img class="barLoadingImg" ng-if="contents.nextSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
 									<span class="won">원</span>
 								</div>
 							</li>
@@ -85,10 +85,10 @@
 					<div class="col-md-4">
 						<h4>서비스별 사용 금액</h4>
 
-						<div class="chart_wrap pt20" style="overflow:hidden;">
+						<div class="dashboard_chart_wrap pt20" style="overflow:hidden;">
 							<div id="itemGroup-anls-chart"></div>
 							<div class="mainLoading" ng-if="contents.itemGroupChart.loading"></div>
-							<div class="warning" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1"></div>
+							<div class="chartWarningImg" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1"></div>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -101,10 +101,10 @@
 							</select>
 						</div>
 
-						<div class="chart_wrap pt20" style="overflow:hidden;">
+						<div class="dashboard_chart_wrap pt20" style="overflow:hidden;">
 							<div id="item-anls-chart"></div>
 							<div class="mainLoading" ng-if="contents.itemChart.loading"></div>
-							<div class="warning" ng-if="!contents.itemChart.loading && contents.itemChart.data.series.length < 1"></div>
+							<div class="chartWarningImg" ng-if="!contents.itemChart.loading && contents.itemChart.data.series.length < 1"></div>
 						</div>
 					</div>
 				</div>
@@ -123,12 +123,12 @@
 		</div>
 		<div class="panel_body h_auto">
 			<div class="in">
-				<div class="chart_wrap" style="overflow:hidden;">
+				<div class="dashboard_chart_wrap" style="overflow:hidden;">
 					<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
 					<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
 					<div class="mainLoading" ng-if="contents.dailyChart.loading"></div>
-					<div class="warning" ng-if="contents.data.sltColumnOption == 'daily' && !contents.dailyChart.loading && contents.data.sltSumPerfAmt == 0"></div>
-					<div class="warning"  ng-if="contents.data.sltColumnOption == 'monthly' && !contents.dailyChart.loading && contents.data.sltMonthlySumPerfAmt == 0"></div>
+					<div class="chartWarningImg" ng-if="contents.data.sltColumnOption == 'daily' && !contents.dailyChart.loading && contents.data.sltSumPerfAmt == 0"></div>
+					<div class="chartWarningImg"  ng-if="contents.data.sltColumnOption == 'monthly' && !contents.dailyChart.loading && contents.data.sltMonthlySumPerfAmt == 0"></div>
 				</div>
 			</div>
 		</div>

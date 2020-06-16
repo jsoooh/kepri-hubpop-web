@@ -3561,3 +3561,46 @@ a.ext_link:hover {text-decoration:underline;}
 .ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt > ul > li .tit {display:inline-block; width:140px; font-size:16px; font-weight:500;}
 .ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt > ul > li .txt {display:inline-block; font-size:16px; color:#888;}
 .ul-panel.ctlog-panel .ctlog_cntWrap .ctlog-cnt > ul > li .tit:before {display:inline-block; content:'ㆍ' ;}
+
+/* 20200616 css 추가
+*//* perfDashBoard.html *//*
+    .barLoadingImg {
+		width: 100px;
+		height: 40px;
+	}
+	.mainLoading {
+		background:url("../../img/loading.gif") 50% 50% no-repeat;
+		content:"";
+		display:block;
+		width:150px;
+		height:150px;
+		position:absolute;
+		top:50%;
+		left:50%;
+		margin-left:-75px;
+		margin-top: -55px;
+	}
+	.dashboard_chart_wrap {
+		position: relative;
+		clear:both;
+	}
+	.chartWarningImg:after {
+		background:url("../../img/alert_warning.png") 50% 50% no-repeat;
+		content:"";
+		display:block;
+		width:150px;
+		height:150px;
+		position:absolute;
+		top:50%;
+		left:50%;
+		margin-left:-75px;
+		margin-top: -55px;
+	}
+ *//* perfAnls.html, perfItemsMetering.html, perfMonthlyMetering.html *//*
+ 	h4.note {
+		float: left;
+		font-size:22px;
+		color:#333;
+		line-height: 80px;
+	}
+ */

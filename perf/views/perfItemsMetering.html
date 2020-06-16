@@ -1,5 +1,5 @@
 <style type="text/css">
-	h4 {
+	h4.note {
 		float: left;
 		font-size:22px;
 		color:#333;
@@ -8,7 +8,7 @@
 </style>
 <div class="cBox type0 projt-mana">
 	<div class="pull-left">
-		<h4>※ 각 항목의 사용량은 시간당 사용량의 합산입니다.</h4>
+		<h4 class="note">※ 각 항목의 사용량은 시간당 사용량의 합산입니다.</h4>
 	</div>
 	<div class="pull-right pt20">
 		<select ng-options=" year + '년' for year in contents.meteringYears" ng-model="contents.data.sltYear"
