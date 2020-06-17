@@ -25,7 +25,7 @@ angular.module('gpu.controllers')
                             $timeout.cancel(ct.vmCatalogDeployStatusTimeout);
                             ct.vmCatalogDeployStatusTimeout = null;
                         }
-                        ct.vmCatalogDeployStatusTimeout = $timeout(function ()  { ct.fn.loadPage() }, 5000);
+                        ct.vmCatalogDeployStatusTimeout = $timeout(function ()  { ct.fn.loadPage() }, 10000);
                     }
                 });
             } else {
@@ -185,7 +185,7 @@ angular.module('gpu.controllers')
                         }
                         ct.vmCatalogDeployStatusTimeout = $timeout(function () {
                             ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type)
-                        }, 5000);
+                        }, 10000);
                     }
                 } else {
                     if (ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
@@ -195,7 +195,7 @@ angular.module('gpu.controllers')
                         }
                         ct.vmCatalogDeployStatusTimeout = $timeout(function () {
                             ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type)
-                        }, 5000);
+                        }, 10000);
                     }
                 }
             } else {
