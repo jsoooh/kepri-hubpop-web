@@ -390,29 +390,20 @@ resources:
 {% endif %}
 
 outputs:
-  instancePort_1:
+  servers:
     value:
-      get_attr: [ server1_port, show ]
-  instancePort_2:
-    value:
-      get_attr: [ server2_port, show ]
-  instance_1:
-    value:
-      get_attr: [ server1, show ]
-  instance_2:
-    value:
-      get_attr: [ server2, show ]
-  instanceInitConfig_1:
-    value:
-      get_attr: [ init_config1, config ]
-  instanceInitConfig_2:
-    value:
-      get_attr: [ init_config2, config ]
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
 {% if volumeUse %}
-  volume_1:
-    value:
-      get_attr: [ cinder_volume1, show ]
-  volume_2:
-    value:
-      get_attr: [ cinder_volume2, show ]
+        volume: { get_attr: [ cinder_volume1, show ] }
+{% endif %}
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume2, show ] }
+{% endif %}
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume3, show ] }
 {% endif %}
