@@ -160,6 +160,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/${{ tenant_id }}/deploy/$stackId/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -222,6 +223,7 @@ resources:
             EOF
             galera_new_cluster
             systemctl enable mariadb.service
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/${{ tenant_id }}/deploy/$stackId/status
             echo "mariadb setting end"
 
 
@@ -260,6 +262,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/${{ tenant_id }}/deploy/$stackId/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -360,6 +363,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/${{ tenant_id }}/deploy/$stackId/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -422,7 +426,6 @@ resources:
             systemctl start mariadb.service
             systemctl enable mariadb
             echo "mariadb setting end"
-
 
   server1:
     type: OS::Nova::Server
