@@ -219,7 +219,6 @@ resources:
             /usr/bin/mysqld_bootstrap
             sleep 1
 
-{% if createUser %}
             TEMP_PASSWORD=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f11)
             if [ "${TEMP_PASSWORD}" == "" ]; then
               /usr/bin/mysqladmin -u root password 'P@ssw0rd'
@@ -231,12 +230,13 @@ resources:
             mysql -u root -pP@ssw0rd <<EOF
               UNINSTALL PLUGIN validate_password;
               ALTER USER 'root'@'localhost' IDENTIFIED BY '$root_password';
+{% if createUser %}
               CREATE DATABASE $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
               CREATE USER '$create_user_id'@'%' IDENTIFIED BY '$create_user_password';
               GRANT ALL ON $create_db_name.* TO '$create_user_id'@'%';
               FLUSH PRIVILEGES;
-            EOF
 {% endif %}
+            EOF
             sleep 1
             systemctl enable mysqld
             echo "mysql setting end"
