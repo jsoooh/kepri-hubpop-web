@@ -3,6 +3,8 @@
 // GPU
 loadJavascript(_GPU_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
 
+loadJavascript(_GPU_STAGE_+'/js/services/computeDetailServices.js'+_VERSION_TAIL_HEAD_);
+
 loadJavascript(_GPU_STAGE_+'/js/controllers/compute/computeControllers.js' +_VERSION_TAIL_HEAD_);
 loadJavascript(_GPU_STAGE_+'/js/controllers/compute/computeDetailControllers.js' +_VERSION_TAIL_HEAD_);
 loadJavascript(_GPU_STAGE_+'/js/controllers/compute/computeInitScriptControllers.js' +_VERSION_TAIL_HEAD_);

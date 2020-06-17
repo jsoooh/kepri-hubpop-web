@@ -211,8 +211,11 @@
 					</li>
 					-->
 					<li>
-						<strong class="tit">설명<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'다른 프로젝트에서 생성된 가상서버와 통신할 때 사용하는 IP'"><span class="ico_info"></span></button></strong>
+						<strong class="tit">설명</strong>
+						<div class="txt">{{contents.instance.description}}</div>
+						<!--
 						<div class="txt">{{contents.instance.floatingIp}}<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
+						-->
 					</li>
 					<li>
 						<strong class="tit">IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를 사용할 수 있습니다.'"><span class="ico_info"></span></button></strong>
@@ -230,13 +233,24 @@
 						<strong class="tit">생성일시</strong>
 						<div class="txt">{{contents.instance.created | date : 'yyyy-MM-dd HH:mm:ss'}}</div>
 					</li>
-					<!-- yminlee : gpu에선 삭제
+
 					<li>
 						<strong class="tit">상태</strong>
 						<div ng-if="contents.instance.procState != 'end' && contents.instance.vmState" class="txt">
 							<p><img src="images/loading_sm.gif"> {{'iaas.label.instance_' + contents.instance.vmState | translate}} 입니다.</p>
 						</div>
 						<div ng-if="contents.instance.procState == 'end'" class="txt">
+							<div class="down">
+								<span class="stateWrap">
+									<span ng-if="contents.instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+									<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2">오류</span>
+									<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'building' || contents.instance.vmState == 'shelved_offloaded'" class="stateMark type4">대기</span>
+									<span ng-if="contents.instance.vmState == 'stopped'" class="stateMark type3">중지</span>
+									<span class="state-txt">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
+								</span>
+							</div>
+
+							<!--
 							<div ng-if="!contents.instance.alarmStatus" class="txt">
 								<p><img src="images/loading_sm.gif"></p>
 							</div>
@@ -251,8 +265,10 @@
 								<span class="state-txt" ng-if="!contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
 								<span class="state-txt" ng-if="contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.alarmStatus | translate }}</span>
 							</span>
+							-->
 						</div>
 					</li>
+					<!-- yminlee : gpu에선 삭제
 					<li>
 						<strong class="tit">모니터링<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'가상 자원 사용현황을<br>모니터링 합니다'"><span class="ico_info"></span></button></strong>
 						<div ng-if="!contents.instance.alarmStatus" class="txt">

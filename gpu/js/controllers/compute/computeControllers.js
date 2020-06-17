@@ -1020,6 +1020,26 @@ angular.module('gpu.controllers')
             return false;
         }
 
+        // 인스턴스 설명 팝업
+        ct.fn.descriptionFormOpen = function($event, instance, state) {
+            //if (state == 'server') {
+            //    ct.fn.modifyServerSnapShotDesc($event, instance);
+            //}
+            var dialogOptions =  {
+                controller       : "gpuServerInstanceDescriptionCtrl" ,
+                formName         : 'gpuServerInstanceDescriptionForm',
+                selectInstance    : angular.copy(instance),
+                callBackFunction : ct.modifyServerDescCallBackFunction
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
+        ct.modifyServerDescCallBackFunction = function () {
+            $scope.main.replacePage();
+        };
+
         $interval(function () {
             // ct.fnGetInstancesData(); // yminlee: gpu는 alarm 제외
 
@@ -1028,6 +1048,81 @@ angular.module('gpu.controllers')
                 ct.fnSetInstanceUseRate(server);
             });*/
         }, 1000 * 60)
+    })
+    .controller('gpuServerInstanceDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("computeControllers.js : gpuServerInstanceDescriptionCtrl", 1);
+
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
+        pop.instance 					= $scope.dialogOptions.selectInstance;
+        pop.fn 							= {};
+        pop.data						= {};
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+
+        $scope.dialogOptions.title 		= "인스턴스 설명 변경";
+        $scope.dialogOptions.okName 	= "변경";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/compute/computeDescriptionPopForm.html" + _VersionTail();
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+
+            if ($scope.actionBtnHied) return;
+
+            $scope.actionBtnHied = true;
+
+            var checkByte = $bytes.lengthInUtf8Bytes(pop.newInstanceDesc);
+            if (checkByte > 255) {
+                common.showAlertWarning("인스턴스 설명이 255Byte를 초과하였습니다.");
+                $scope.actionBtnHied = false;
+                return;
+            }
+            pop.fn.modifyDesc();
+        };
+
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+
+        pop.fn.modifyDesc = function() {
+            $scope.main.loadingMainBody = true;
+
+            pop.instance.tenantId = $scope.main.userTenantGpu.id;
+            var params = {
+                urlPaths: { id: pop.instance.id },
+                body: pop.instance
+            };
+
+            /*
+            var param = {
+                urlPaths: { subnetId: pop.data.unregPublicNetworkList[0].subnetId },
+                body : pop.data.unregPublicNetworkList[0]
+            };
+            */
+
+        //@RequestMapping(value ="/instance/{id}/description",method = RequestMethod.PUT)
+
+            common.mdDialogHide();
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/{id}/description', 'PUT', params);
+            returnPromise.success(function (data, status, headers) {
+                common.showAlertSuccess("인스턴스 설명이 변경 되었습니다.");
+                pop.callBackFunction();
+            });
+            returnPromise.error(function (data, status, headers){
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers){
+                $scope.actionBtnHied = false;
+                $scope.main.loadingMainBody = false;
+            });
+        }
     })
     // .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
     .controller('gpuComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
@@ -1065,6 +1160,27 @@ angular.module('gpu.controllers')
         ct.data.subDomainName = "";
 
         ct.data.name = 'server-01';
+
+
+        ct.imageList  = [];
+
+        ct.selectedImageType = {};
+        ct.selectedImageType.osType = "";
+        ct.selectedImageType.version = "";
+
+        ct.selectedImageTypeIndex = 0;
+        ct.selectedImageName = "";
+
+        ct.selectedOsImageType = "";
+        ct.selectedOsImageVersion = "";
+
+        ct.selectedSpecType = "";
+
+        ct.gpuCardList  = [];
+        ct.selectedGpuCardId = "";
+
+        ct.selectedAvailabilityZone = "";
+        ct.availabilityZoneList = [];
 
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
@@ -1254,6 +1370,35 @@ angular.module('gpu.controllers')
             }
         };
 
+        ct.fn.imageTypeListSearch = function() {
+            $scope.main.loadingMainBody = true;
+
+            ct.imageTypeList  = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/image/osType', 'GET');
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.imageTypeList = data.content;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.onchangeImageType = function(selectedImageType) {
+            if (selectedImageType) {
+                ct.selectedOsImageType = selectedImageType.osType;
+                ct.selectedOsImageVersion = selectedImageType.imageVersion;
+            }
+            else {
+                ct.selectedOsImageType = "";
+                ct.selectedOsImageVersion = "";
+            }
+        };
+
         ct.imageListLoad = false;
         //이미지 리스트 조회
         ct.fn.imageListSearch = function() {
@@ -1279,9 +1424,10 @@ angular.module('gpu.controllers')
                         image.minDisk = (image.minDisk > sizeGb) ? image.minDisk : sizeGb;
                         image.minRam = (image.minRam > 0) ? image.minRam/(1024) : 0;
                     });
-                    ct.fn.imageChange(ct.imageList[0].id);
+                    // ct.fn.imageChange(ct.imageList[0].id);
                 }
                 ct.imageListLoad = true;
+                $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -1301,6 +1447,69 @@ angular.module('gpu.controllers')
             ct.fn.setSpecMinDisabled();
             ct.fn.setSpecMaxDisabled();
         };
+
+        ct.fn.getSpecTypeList = function() {
+            $scope.main.loadingMainBody = true;
+
+            ct.specTypeList  = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec/type', 'GET');
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.specTypeList = data.content;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+        ct.fn.getGpuCardList = function() {
+            $scope.main.loadingMainBody = true;
+
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/gpu/card', 'GET');
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.gpuCardList = data.content;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
+        ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
+            if (selectedGpuCardId) {
+                ct.fn.getAvailabilityZoneList(selectedGpuCardId);
+            }
+            else
+                // ct.availableZoneList  = [];
+                ct.fn.getAvailabilityZoneList();
+        }
+
+        ct.fn.getAvailabilityZoneList = function(id) {
+            var param = {
+                gpuCardId : id
+            };
+            ct.availabilityZoneList  = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.availabilityZoneList = data.content;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
 
         // 네트워크 리스트 조회
         ct.fn.networkListSearch = function() {
@@ -1509,6 +1718,7 @@ angular.module('gpu.controllers')
             params.instance.keypair = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
             params.instance.spec = ct.data.spec;
+            params.instance.zone = ct.selectedAvailabilityZone;
 
             //windows RDP 관련 수정. domain 저장하지 않음. 2019.07.16
             /*if (ct.data.image.osType == 'windows') {
@@ -1554,7 +1764,14 @@ angular.module('gpu.controllers')
             ct.fn.getTenantResource();
             //ct.fn.getDomainUsingList();     //windows rdp 포트포워딩으로 도메인 사용하지 않음
             ct.fn.getSpecList();
+
+            ct.fn.imageTypeListSearch();
             ct.fn.imageListSearch();
+
+            ct.fn.getSpecTypeList();
+            ct.fn.getGpuCardList();
+            ct.fn.getAvailabilityZoneList();
+
             ct.fn.getSecurityPolicy();
             ct.fn.networkListSearch();
             ct.fn.getKeypairList();
