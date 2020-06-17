@@ -17,6 +17,12 @@ angular.module('gpu.controllers')
         promise.success(function (data) {
             if (angular.isArray(data.content)) {
                 ct.vmCatalogDeployList = data.content;
+                var isreLoad = false;
+                angular.forEach(ct.vmCatalogDeployList, function (vmCatalogDeploy, kdy) {
+                    if (vmCatalogDeploy.deployStatus.indexOf("PROGRESS") >= 0) {
+                        $timeout(function ()  { ct.fn.loadPage() }, 5000);
+                    }
+                });
             } else {
                 ct.vmCatalogDeployList = [];
             }
@@ -79,13 +85,7 @@ angular.module('gpu.controllers')
     ct.octaviaLbUse = false;
 
     ct.octaviaLb = {};
-    ct.octaviaLbListeners = [];
-    ct.octaviaLbPools = [];
-    ct.octaviaLbMonitors = [];
-    ct.octaviaLbPoolMembers = [];
     ct.instances = [];
-    ct.instancePorts = [];
-    ct.volumes = [];
 
     ct.fn.loadVmCatalogDeployView = function (templatePath, controllerName, deployViewHtmlFile) {
         // 페이지 로드
@@ -134,40 +134,13 @@ angular.module('gpu.controllers')
     ct.fn.mappingOuputsData = function (outputs) {
         if (angular.isArray(outputs)) {
             angular.forEach(outputs, function(output) {
-                var outputKeys = output.output_key.split("_");
-                var idx = 0;
-                if (outputKeys.length == 2) {
-                    idx = parseInt(outputKeys[1], 10) - 1;
-                }
-                if (outputKeys[0] == "octaviaLb") {
+                if (output.output_key == "instances") {
+                    ct.instances = angular.copy(output.output_value);
+                } else if (output.output_key == "octaviaLb") {
                     ct.octaviaLb = angular.copy(output.output_value);
                     ct.octaviaLbUse = true;
-                } else if (outputKeys[0] == "octaviaLbListener") {
-                    ct.octaviaLbListeners[idx] = angular.copy(output.output_value);
-                } else if (outputKeys[0] == "octaviaLbPool") {
-                    ct.octaviaLbPools[idx] = angular.copy(output.output_value);
-                } else if (outputKeys[0] == "octaviaLbMonitor") {
-                    ct.octaviaLbMonitors[idx] = angular.copy(output.output_value);
-                } else if (outputKeys[0] == "octaviaLbPoolMember") {
-                    ct.octaviaLbPoolMembers[idx] = angular.copy(output.output_value);
-                } else if (outputKeys[0] == "instancePort") {
-                    ct.instancePorts[idx] = angular.copy(output.output_value);
-                } else if (outputKeys[0] == "instance") {
-                    ct.instances[idx] = angular.copy(output.output_value);
-                } else if (outputKeys[0] == "volume") {
-                    ct.volumes[idx] = angular.copy(output.output_value);
                 }
             });
-            if (angular.isArray(ct.instances)) {
-                angular.forEach(ct.instances, function(instance, k) {
-                    if (angular.isObject(ct.instancePorts[k])) {
-                        instance.instancePort = angular.copy(ct.instancePorts[k]);
-                    }
-                    if (angular.isObject(ct.volumes[k])) {
-                        instance.volume = angular.copy(ct.volumes[k]);
-                    }
-                });
-            }
         }
     };
 
@@ -240,7 +213,7 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                ct.fn.getVmCatalogDeployStatus(tenantId, deployId, "delete");
+                ct.fn.getVmCatalogDeployStatus(vmCatalogDeploy.tenantId, vmCatalogDeploy.id, "delete");
             });
             promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;

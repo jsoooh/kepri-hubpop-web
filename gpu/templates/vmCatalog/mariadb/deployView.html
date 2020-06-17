@@ -8,15 +8,15 @@
                     <ul>
                         <li ng-if="contents.octaviaLbUse">
                             <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.outputs.octaviaLb.vip_address }}</span>
+                            <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
                         </li>
                         <li ng-if="!contents.octaviaLbUse">
                             <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.outputs.instancePorts[0].fixed_ips[0].ip_address }}</span>
+                            <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
                         </li>
                         <li ng-if="contents.octaviaLbUse">
                             <strong class="tit">접속포트</strong>
-                            <span class="txt">{{ contents.outputs.octaviaLbListener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
+                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
                         </li>
                         <li ng-if="!contents.octaviaLbUse">
                             <strong class="tit">접속포트</strong>
