@@ -10,7 +10,19 @@ angular.module('gpu.controllers')
 
     ct.vmCatalogDeployList = [];
     ct.schFilterText = "";
-    ct.vmCatalogDeployStatusTimeout = null;
+
+    ct.fn.mappingOuputsData = function (vmCatalogDeploy) {
+        if (angular.isArray(vmCatalogDeploy.outputs)) {
+            angular.forEach(vmCatalogDeploy.outputs, function(output) {
+                if (output.output_key == "servers") {
+                    vmCatalogDeploy.servers = angular.copy(output.output_value);
+                } else if (output.output_key == "octaviaLb") {
+                    vmCatalogDeploy.octaviaLb = angular.copy(output.output_value);
+                    vmCatalogDeploy.octaviaLbUse = true;
+                }
+            });
+        }
+    };
 
     ct.fn.listAllVmCatalogDeploy = function (tenantId) {
         $scope.main.loadingMainBody = true;
@@ -20,12 +32,9 @@ angular.module('gpu.controllers')
                 ct.vmCatalogDeployList = data.content;
                 var isreLoad = false;
                 angular.forEach(ct.vmCatalogDeployList, function (vmCatalogDeploy, kdy) {
+                    ct.fn.mappingOuputsData(vmCatalogDeploy);
                     if (vmCatalogDeploy.deployStatus.indexOf("PROGRESS") >= 0) {
-                        if (ct.vmCatalogDeployStatusTimeout) {
-                            $timeout.cancel(ct.vmCatalogDeployStatusTimeout);
-                            ct.vmCatalogDeployStatusTimeout = null;
-                        }
-                        ct.vmCatalogDeployStatusTimeout = $timeout(function ()  { ct.fn.loadPage() }, 10000);
+                        $scope.main.reloadTimmerStart("listAllVmCatalogDeploy", ct.fn.loadPage, 10000);
                     }
                 });
             } else {
@@ -179,23 +188,11 @@ angular.module('gpu.controllers')
                 if (type == "create") {
                     if (ct.vmCatalogDeployInfo.deployStatus != "DEPLOY_COMPLETE" &&
                         ct.vmCatalogDeployInfo.deployStatus.indexOf("FAILED") == -1) {
-                        if (ct.vmCatalogDeployStatusTimeout) {
-                            $timeout.cancel(ct.vmCatalogDeployStatusTimeout);
-                            ct.vmCatalogDeployStatusTimeout = null;
-                        }
-                        ct.vmCatalogDeployStatusTimeout = $timeout(function () {
-                            ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type)
-                        }, 10000);
+                        $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type); }, 10000);
                     }
                 } else {
                     if (ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
-                        if (ct.vmCatalogDeployStatusTimeout) {
-                            $timeout.cancel(ct.vmCatalogDeployStatusTimeout);
-                            ct.vmCatalogDeployStatusTimeout = ct.vmCatalogDeployStatusTimeout = null;
-                        }
-                        ct.vmCatalogDeployStatusTimeout = $timeout(function () {
-                            ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type)
-                        }, 10000);
+                        $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type); }, 10000);
                     }
                 }
             } else {
