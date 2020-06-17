@@ -58,19 +58,19 @@
                     ng-switch="combinedAnl.itemUnit">
                     <td>{{ combinedAnl.itemName }}</td>
                     <td>    <!-- 전월 사용량 -->
-                        <span ng-if="combinedAnl.lastMetering" ng-switch-when="MB">{{ combinedAnl.lastMetering | displayVolume:'MB'}}</span>
-                        <span ng-if="combinedAnl.lastMetering" ng-switch-when="GB">{{ combinedAnl.lastMetering | displayVolume:'GB'}}</span>
-                        <span ng-if="combinedAnl.lastMetering" ng-switch-default="">{{ combinedAnl.lastMetering | number }}</span>
-                        <span ng-if="!combinedAnl.lastMetering">-</span>
+                        <span ng-if="combinedAnl.lastMeteringValue" ng-switch-when="MB">{{ combinedAnl.lastMeteringValue | displayVolume:'MB'}}</span>
+                        <span ng-if="combinedAnl.lastMeteringValue" ng-switch-when="GB">{{ combinedAnl.lastMeteringValue | displayVolume:'GB'}}</span>
+                        <span ng-if="combinedAnl.lastMeteringValue" ng-switch-default="">{{ combinedAnl.lastMeteringValue | number }}</span>
+                        <span ng-if="!combinedAnl.lastMeteringValue">-</span>
                     </td>
                     <td>    <!-- 당월 사용량 -->
-                        <span ng-if="combinedAnl.sltMetering" ng-switch-when="MB">{{ combinedAnl.sltMetering | displayVolume:'MB'}}</span>
-                        <span ng-if="combinedAnl.sltMetering" ng-switch-when="GB">{{ combinedAnl.sltMetering | displayVolume:'GB'}}</span>
-                        <span ng-if="combinedAnl.sltMetering" ng-switch-default="">{{ combinedAnl.sltMetering | number }}</span>
-                        <span ng-if="!combinedAnl.sltMetering">-</span>
+                        <span ng-if="combinedAnl.currentMeteringValue" ng-switch-when="MB">{{ combinedAnl.currentMeteringValue | displayVolume:'MB'}}</span>
+                        <span ng-if="combinedAnl.currentMeteringValue" ng-switch-when="GB">{{ combinedAnl.currentMeteringValue | displayVolume:'GB'}}</span>
+                        <span ng-if="combinedAnl.currentMeteringValue" ng-switch-default="">{{ combinedAnl.currentMeteringValue | number }}</span>
+                        <span ng-if="!combinedAnl.currentMeteringValue">-</span>
                     </td>
-                    <td class="text-right">{{ combinedAnl.lastAnls | number }} 원</td>    <!-- 전월 금액-->
-                    <td class="text-right">{{ combinedAnl.sltAnls | number }} 원</td>    <!-- 당월 금액 -->
+                    <td class="text-right">{{ combinedAnl.lastPerfAmt | number }} 원</td>    <!-- 전월 금액-->
+                    <td class="text-right">{{ combinedAnl.currentPerfAmt | number }} 원</td>    <!-- 당월 금액 -->
                     <td ng-if="combinedAnl.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">{{
                         combinedAnl.lastAnlsSumByItemGroup | number }} 원
                     </td>    <!-- 전월 합계 -->
