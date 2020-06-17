@@ -26,8 +26,10 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantId = $scope.main.userTenantGpuId;
+
+        ct.data.tenantId = $scope.main.userTenantGpu.id;
         ct.data.tenantName = $scope.main.userTenantGpu.korName;
+
         ct.data.instanceId = $stateParams.instanceId;
         ct.viewType = 'instance';
         // if ($scope.main.stateKey == "iaasDeployServerComputeDetail") {

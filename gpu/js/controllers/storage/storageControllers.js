@@ -256,7 +256,7 @@ angular.module('gpu.controllers')
             ct.fn.getStorageList();
         };
         
-        ct.fn.reNamePopStorage = function($event,volume) {
+        ct.fn.reNamePopStorage = function($event, volume) {
         	var dialogOptions =  {
                 // controller       : "iaasReNamePopStorageCtrl" ,
                 // formName         : 'iaasReNamePopStorageForm',

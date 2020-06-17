@@ -28,11 +28,11 @@
                         </li>
                         <li>
                             <strong class="tit">연결포트</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].pool.lb_algorithm }}</span>
+                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
                         </li>
                         <li>
                             <strong class="tit">프로토콜</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].pool.protocol }}</span>
+                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol }}</span>
                         </li>
                     </ul>
                 </div>

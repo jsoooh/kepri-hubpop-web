@@ -31,6 +31,18 @@
 									<input type="text" class="form-control" id="loadBalancerDescription" name="loadBalancerDescription" ng-model="contents.data.iaasLbInfo.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100">
 								</div>
 							</li>
+
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">존 선택</span>
+								</div>
+								<select class="form-control">
+									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
+									<option ng-repeat="zone in contents.availabilityZoneList" >{{zone.availabilityZone}} [ {{zone.publicNetworkSubnet.cidr}} ] 생성 가능한 인스턴스: {{zone.publicNetworkSubnet.available}}개</option>
+								</select>
+							</li>
+
+
 							<li>
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">포트 관리</span>

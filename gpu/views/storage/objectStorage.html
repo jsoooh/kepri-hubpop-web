@@ -159,7 +159,7 @@
 										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="main.fileSelectBtnClick($event);">올리기</button>
 									</li>
 									<li>
-										<button type="button" name="button" class="btn btn-color1 btn-sm"  ng-class="{'disabled' : contents.fn.getCheckedDownloadItems()==false}" ng-click="contents.fn.downloadFiles()">내려받기</button>
+										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-disabled="contents.fn.getCheckedDownloadItems()" ng-class="{'disabled' : contents.fn.getCheckedDownloadItems()==false}" ng-click="contents.fn.downloadFiles()">내려받기</button>
 									</li>
 									<li>
 										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="contents.fn.createFolder()">폴더만들기</button>

@@ -3,7 +3,7 @@
     <h3 class="h-tit3">생성된 서버</h3>
 </div>
 <ul class="ul-panel ctlog-panel">
-    <li ng-repeat="(key, server) in ( contents.servers | filter: { id : !null } )">
+    <li ng-repeat="(key, server) in ( contents.servers | filter: { instance : '!null' } )">
         <!-- panel -->
         <div class="panelWrap">
             <div class="panel type5">
