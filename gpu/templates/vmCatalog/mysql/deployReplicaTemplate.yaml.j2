@@ -238,10 +238,6 @@ resources:
 {% endif %}
             $repl_user_id: { get_param: repl_user_id }
             $repl_user_password: { get_param: repl_user_password }
-{% if createUser %}
-            $create_user_id: { get_param: create_user_id }
-            $create_user_password: { get_param: create_user_password }
-{% endif %}
             $root_password: { get_param: root_password }
             $check_port: { get_param: check_port }
             $service_port: { get_param: service_port }
@@ -377,7 +373,7 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config2
-
+{% if volumeUse %}
   cinder_volume1_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
@@ -391,25 +387,32 @@ resources:
       instance_uuid: { get_resource: server2 }
       volume_id: { get_resource: cinder_volume2 }
       mountpoint: { get_param: volume_mount_point }
+{% endif %}
 
 outputs:
-  server_ip1:
+  instancePort_1:
     value:
-      get_attr: [server1_port, fixed_ips, 0, ip_address]
-  server_ip2:
+      get_attr: [ server1_port, show ]
+  instancePort_2:
     value:
-      get_attr: [server2_port, fixed_ips, 0, ip_address]
-  check_port:
+      get_attr: [ server2_port, show ]
+  instance_1:
     value:
-      get_param: check_port
-  service_port:
+      get_attr: [ server1, show ]
+  instance_2:
     value:
-      get_param: service_port
+      get_attr: [ server2, show ]
+  instanceInitConfig_1:
+    value:
+      get_attr: [ init_config1, config ]
+  instanceInitConfig_2:
+    value:
+      get_attr: [ init_config2, config ]
 {% if volumeUse %}
-  volume1_id:
+  volume_1:
     value:
-      get_resource: cinder_volume1
-  volume2_id:
+      get_attr: [ cinder_volume1, show ]
+  volume_2:
     value:
-      get_resource: cinder_volume2
+      get_attr: [ cinder_volume2, show ]
 {% endif %}

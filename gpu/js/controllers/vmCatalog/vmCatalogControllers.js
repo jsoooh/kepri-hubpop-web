@@ -226,9 +226,16 @@ angular.module('gpu.controllers')
         });
     };
 
-    // 디스크 생성 부분 추가 2018.11.13 sg0730
-    // 서버만들기-사양선택 관련 속도개선 api로 변경
-    ct.fn.getTenantResource = function(tenantId)  {
+    ct.fn.changeSetResourceMax = function() {
+        var volumeMaxCeil = ct.tenantResource.available.volumeGigabytes / ct.data.serverCnt;
+        if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (volumeMaxCeil > CONSTANTS.iaasDef.insMaxDiskSize)) {
+            ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize;
+        } else {
+            ct.volumeSliderOptions.ceil = volumeMaxCeil;
+        }
+    }
+
+    ct.fn.getTenantResource = function(tenantId, resourceDefer)  {
         var returnPromise = vmCatalogService.getTenantResource(tenantId);
         returnPromise.success(function (data, status, headers) {
             if (data && data.content) {
@@ -241,16 +248,11 @@ angular.module('gpu.controllers')
                 ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                 ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                 ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-
-                if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.tenantResource.available.volumeGigabytes > CONSTANTS.iaasDef.insMaxDiskSize)) {
-                    ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
-                } else {
-                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                }
-                ct.fn.setSpecMaxDisabled();
             }
+            if (resourceDefer) resourceDefer.resolve(data);
         });
         returnPromise.error(function (data, status, headers) {
+            if (resourceDefer) resourceDefer.reject(data);
         });
         returnPromise.finally(function (data, status, headers) {
             $scope.main.loadingMainBody = false;
@@ -316,8 +318,8 @@ angular.module('gpu.controllers')
     };
 
     //스펙그룹의 스펙 리스트 조회
-    ct.fn.getSpecList = function(specGroup) {
-        var returnPromise = vmCatalogService.listAllSpec(specGroup);
+    ct.fn.getSpecList = function(specListDefer) {
+        var returnPromise = vmCatalogService.listAllSpec();
         returnPromise.success(function (data, status, headers) {
             if (data && data.content && data.content.specs && data.content.specs.length > 0) {
                 var specList = [];
@@ -330,10 +332,11 @@ angular.module('gpu.controllers')
             }
             ct.isSpecLoad = true;
             ct.fn.setSpecMinDisabled();
-            ct.fn.setSpecMaxDisabled();
+            if (specListDefer) specListDefer.resolve(data);
         });
         returnPromise.error(function (data, status, headers) {
             ct.isSpecLoad = true;
+            if (specListDefer) specListDefer.reject(data);
         });
     };
 
@@ -435,20 +438,17 @@ angular.module('gpu.controllers')
         });
     };
 
-    ct.fn.changeDeployType = function () {
-        if (ct.data.deployType == 'replica') {
+    ct.fn.changeDeployType = function (deployType) {
+        if (deployType == 'replica') {
            ct.data.serverCnt = ct.data.replicaCnt;
-        } else if (ct.data.deployType == 'cluster') {
+        } else if (deployType == 'cluster') {
            ct.data.serverCnt = ct.data.clusterCnt;
         } else {
            ct.data.serverCnt = 1;
         }
-        var volumeMaxCeil = ct.tenantResource.available.volumeGigabytes/ct.data.serverCnt;
-        if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (volumeMaxCeil > CONSTANTS.iaasDef.insMaxDiskSize)) {
-            ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize;
-        } else {
-            ct.volumeSliderOptions.ceil = volumeMaxCeil;
-        }
+        ct.data.deployType = deployType;
+        ct.fn.changeSetResourceMax();
+        ct.fn.setSpecMaxDisabled();
     };
 
     ct.fn.validationDeployName = function (deployName) {
@@ -536,6 +536,7 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.createUser = ct.data.createUser;
+        vmCatalogDeploy.octaviaLbUse = false;
         vmCatalogDeploy.context.octaviaLbUse = false;
         if (ct.data.deployType == "cluster") {
             vmCatalogDeploy.octaviaLbUse = ct.data.octaviaLbUse;
@@ -584,11 +585,18 @@ angular.module('gpu.controllers')
     };
 
     ct.fn.loadPage = function () {
-        ct.fn.getTenantResource(ct.tenantId);
+        var resourceDefer = $q.defer();
+        var specListDefer = $q.defer();
+        ct.fn.getTenantResource(ct.tenantId, resourceDefer);
+        ct.fn.getSpecList(specListDefer);
         ct.fn.availabilityZoneList();
         ct.fn.getKeypairList(ct.tenantId);
-        ct.fn.getSpecList();
         ct.fn.getStackNames(ct.tenantId);
+
+        var allResourceMax = $q.all([resourceDefer.promise, specListDefer.promise]);
+        allResourceMax.then(function (datas) {
+            ct.fn.changeDeployType(ct.data.deployType);
+        });
     };
 
     ct.fn.getVmCatalogAndLoadTamplate(ct.catalogId);

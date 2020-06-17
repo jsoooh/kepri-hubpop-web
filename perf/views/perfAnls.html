@@ -1,5 +1,5 @@
 <style type="text/css">
-	h4 {
+	h4.note {
 		float: left;
 		font-size:22px;
 		color:#333;
@@ -9,7 +9,7 @@
 <div class="cBox type2">
     <div class="cBox-hd">
         <!--h4 class="c-tit">{{contents.sltOrg.name}}<em>&nbsp;&nbsp;날짜: {{contents.today | date: 'yyyy년 MM월 dd일'}} &nbsp;&nbsp;합계 : {{contents.data.totalPerfAnls | number}}원</em></h4-->
-        <h4>※ 각 항목의 사용량은 시간당 사용량의 합산입니다.</h4>
+        <h4 class="note">※ 각 항목의 사용량은 시간당 사용량의 합산입니다.</h4>
         <div class="pull-right">
             <select ng-model="contents.data.sltYear" ng-options="year + '년' for year in contents.perfYears"
                     ng-change="contents.fn.changeSltYear(contents.data.sltYear)">
