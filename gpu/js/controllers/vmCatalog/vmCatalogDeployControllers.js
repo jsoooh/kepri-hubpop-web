@@ -85,7 +85,7 @@ angular.module('gpu.controllers')
     ct.octaviaLbUse = false;
 
     ct.octaviaLb = {};
-    ct.instances = [];
+    ct.servers = [];
 
     ct.fn.loadVmCatalogDeployView = function (templatePath, controllerName, deployViewHtmlFile) {
         // 페이지 로드
@@ -134,8 +134,8 @@ angular.module('gpu.controllers')
     ct.fn.mappingOuputsData = function (outputs) {
         if (angular.isArray(outputs)) {
             angular.forEach(outputs, function(output) {
-                if (output.output_key == "instances") {
-                    ct.instances = angular.copy(output.output_value);
+                if (output.output_key == "servers") {
+                    ct.servers = angular.copy(output.output_value);
                 } else if (output.output_key == "octaviaLb") {
                     ct.octaviaLb = angular.copy(output.output_value);
                     ct.octaviaLbUse = true;
@@ -230,6 +230,9 @@ angular.module('gpu.controllers')
     };
 
     ct.fn.getVmCatalogDeployAndLoadTemplate(ct.tenantId, ct.deployId);
+
+    ct.fn.loadPage = function () {
+    };
 
 })
 .controller('gpuVmCatalogDeployRenameCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, common, ValidationService, vmCatalogService, CONSTANTS) {

@@ -28,11 +28,11 @@
                         </li>
                         <li>
                             <strong class="tit">연결포트</strong>
-                            <span class="txt">{{ contents.listeners[0].pool.lb_algorithm }}</span>
+                            <span class="txt">{{ contents.octaviaLb.listeners[0].pool.lb_algorithm }}</span>
                         </li>
                         <li>
                             <strong class="tit">프로토콜</strong>
-                            <span class="txt">{{ contents.listeners[0].pool.protocol }}</span>
+                            <span class="txt">{{ contents.octaviaLb.listeners[0].pool.protocol }}</span>
                         </li>
                     </ul>
                 </div>
@@ -40,15 +40,15 @@
                     <ul>
                         <li>
                             <strong class="tit">접속 포트</strong>
-                            <span class="txt">{{ contents.listeners[0].listener.protocol_port }}</span>
+                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
                         </li>
                         <li>
                             <strong class="tit">로드 밸런스 유형</strong>
-                            <span class="txt">{{ contents.listeners[0].pool.lb_algorithm }}</span>
+                            <span class="txt">{{ contents.octaviaLb.listeners[0].pool.lb_algorithm }}</span>
                         </li>
                         <li>
                             <strong class="tit">헬스 체크 주기(초)</strong>
-                            <span class="txt">{{ contents.listeners[0].monitor.timeout }}</span>
+                            <span class="txt">{{ contents.octaviaLb.listeners[0].monitor.timeout }}</span>
                         </li>
                     </ul>
                 </div>
