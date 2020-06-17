@@ -3,13 +3,13 @@
     <h3 class="h-tit3">생성된 서버</h3>
 </div>
 <ul class="ul-panel ctlog-panel">
-    <li  ng-repeat="(key, instance) in contents.instances">
+    <li ng-repeat="(key, server) in ( contents.servers | filter: { instance : '!null' } )">
         <!-- panel -->
         <div class="panelWrap">
             <div class="panel type5">
                 <div class="panel_head pdlr30">
                     <div class="tit_area">
-                        <p class="tit"><a href="" ng-click="main.goToPage('/gpu/compute/detail/' + instance.id)">{{ instance.name }}</a></p>
+                        <p class="tit"><a href="" ng-click="main.goToPage('/gpu/compute/detail/' + server.instance.id)">{{ server.instance.name }}</a></p>
                     </div>
                 </div>
                 <div class="panel_body">
@@ -27,8 +27,8 @@
                                 </li>
                                 <li>
                                     <strong class="tit">접속 IP</strong>
-                                    <span class="txt"><a href="">{{ instance.instancePort.fixed_ips[0].ip_address }}</a></span>
-                                    <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance.instanctPort.fixed_ips[0].ip_address)"><span class="ico_sm ico_copy"></span></button>
+                                    <span class="txt"><a href="">{{ server.instancePort.fixed_ips[0].ip_address }}</a></span>
+                                    <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(server.instanctPort.fixed_ips[0].ip_address)"><span class="ico_sm ico_copy"></span></button>
                                 </li>
                                 <li>
                                     <strong class="tit">접속 인증 키</strong>
@@ -37,7 +37,7 @@
                                 </li>
                                 <li ng-if="contents.vmCatalogDeployInfo.volumeUse">
                                     <strong class="tit">데이터 디스크</strong>
-                                    <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.volume_size | displayVolume : 'GB' }} <button type="button" tooltip-placement="top" uib-tooltip-html="'디스크 이름: {{ instance.volume.name }}'"><span class="ico_info"></span></button></span>
+                                    <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.volume_size | displayVolume : 'GB' }} <button type="button" tooltip-placement="top" uib-tooltip-html="'디스크 이름: {{ server.volume.name }}'"><span class="ico_info"></span></button></span>
                                 </li>
                             </ul>
                         </div>

@@ -5,15 +5,15 @@
 <div class="pl10 mt10">
     <span class="pnb_stit">- 배포 유형  : </span>
     <div class="radio radio-inline">
-        <input type="radio" name="deploy_type" id="deploy-type-single" value="server" ng-model="contents.data.deployType" ng-value="'single'" ng-change="contents.fn.changeDeployType()" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+        <input type="radio" name="deploy_type" id="deploy-type-single" value="server" ng-model="contents.data.deployType" ng-value="'single'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="deploy-type-single" class="label">단일 구성</label>
     </div>
-    <div ng-show="contents.deployTypeReplicaSuport" class="radio radio-inline">
-        <input type="radio" name="deploy_type" id="deploy-type-replica" value="image" ng-model="contents.data.deployType" ng-value="'replica'" ng-change="contents.fn.changeDeployType()" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+    <div ng-show="contents.deployTypeReplicaSupport" class="radio radio-inline">
+        <input type="radio" name="deploy_type" id="deploy-type-replica" value="image" ng-model="contents.data.deployType" ng-value="'replica'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="deploy-type-replica" class="label">레플리카 구성 ( 서버: {{ contents.data.replicaCnt }} )</label>
     </div>
-    <div ng-show="contents.deployTypeClusterSuport" class="radio radio-inline">
-        <input type="radio" name="deploy_type" id="deploy-type-cluster" value="image" ng-model="contents.data.deployType" ng-value="'cluster'" ng-change="contents.fn.changeDeployType()" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+    <div ng-show="contents.deployTypeClusterSupport" class="radio radio-inline">
+        <input type="radio" name="deploy_type" id="deploy-type-cluster" value="image" ng-model="contents.data.deployType" ng-value="'cluster'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
         <label for="deploy-type-cluster" class="label">클러스터 구성 ( 서버: {{ contents.data.clusterCnt }} )</label>
     </div>
 </div>

@@ -157,17 +157,10 @@ resources:
 {% endif %}
 
 outputs:
-  instancePort:
+  instances:
     value:
-      get_attr: [ server_port, show ]
-  instance:
-    value:
-      get_attr: [ server, show ]
-  instanceInitConfig:
-    value:
-      get_attr: [ init_config, config ]
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
 {% if volumeUse %}
-  volume:
-    value:
-      get_attr: [ cinder_volume, show ]
+        volume: { get_attr: [ cinder_volume1, show ] }
 {% endif %}

@@ -1,5 +1,5 @@
 <style type="text/css">
-	h4 {
+	h4.note {
 		float: left;
 		font-size:22px;
 		color:#333;
@@ -8,7 +8,7 @@
 </style>
 <div class="cBox type0 projt-mana">
 	<div class="pull-left">
-		<h4>※ 각 항목의 사용량은 시간당 사용량의 합산입니다.</h4>
+		<h4 class="note">※ 각 항목의 사용량은 시간당 사용량의 합산입니다.</h4>
 	</div>
 	<div class="pull-right pt20">
 		<select ng-options=" year + '년' for year in contents.meteringYears" ng-model="contents.data.sltYear"
@@ -29,15 +29,15 @@
 <div class="panelWrap">
 	<div class="panel type2">
 		<div class="panel_head">
-			<h4 class="tit">월별 사용 추이<em>(단위: vCore)</em></h4>
+			<h4 class="tit">월별 사용 추이<em>(단위: {{contents.sltItem.itemUnit}})</em></h4>
 		</div>
 		<div class="panel_body h_auto">
-			<h4 class="h-tit4">추이<em>(단위: vCore)</em></h4>
+			<!--h4 class="h-tit4">추이<em>(단위: vCore)</em></h4-->
 			<div class="chart_wrap mt30">
 				<div id="monthly-metering-chart"></div>
 				<!--img alt="차트 테스트 이미지" src="images/chart_test_img03.png"-->
 			</div>
-			<h4 class="mt30">현황<span class="point-txt2">(단위: {{contents.sltItem.itemUnit}})</span></h4>
+			<h4 class="mt30">현황<em>(단위: {{contents.sltItem.itemUnit}})</em></h4>
 			<div class="tbl type3 mt30">
 				<table class="table">
 					<colgroup>
@@ -69,6 +69,7 @@
 						<td ng-if="perfMeteringMonthlyByOrgAndItem !== ''" ng-repeat="perfMeteringMonthlyByOrgAndItem in contents.perfMeteringMonthlyByOrgAndItems track by $index"> {{perfMeteringMonthlyByOrgAndItem | numberUnit : contents.data.numUnit | number}}</td>
 						<td ng-if="perfMeteringMonthlyByOrgAndItem === ''" ng-repeat="perfMeteringMonthlyByOrgAndItem in contents.perfMeteringMonthlyByOrgAndItems track by $index"> {{perfMeteringMonthlyByOrgAndItem}}</td>
 						<td class="text-right" ng-if="contents.perfMeteringMonthlyByOrgAndItemSum > 0">{{contents.perfMeteringMonthlyByOrgAndItemSum | numberUnit : contents.data.numUnit | number}}</td>
+						<td class="text-right" ng-if="!contents.perfMeteringMonthlyByOrgAndItemSum"> 0 </td>
 					</tr>
 
 					<tr ng-if="(contents.perfMeteringMonthlyByOrgAndItems.length == 0 || !contents.perfMeteringMonthlyByOrgAndItems) && (contents.perfMeteringMonthlyByOrgAndItemSum < 1 || !contents.perfMeteringMonthlyByOrgAndItemSum)" class="ng-scope">
@@ -90,7 +91,7 @@
 			</div>
 		</div>
 		<div class="panel_body h_auto">
-			<h4 class="h-tit4">추이<em>(단위: vCore)</em></h4>
+			<!--h4 class="h-tit4">추이<em>(단위: vCore)</em></h4-->
 			<div class="chart_wrap mt30">
 				<div id="daily-metering-chart"></div>
 				<!--img alt="차트 테스트 이미지" src="images/chart_test_img04.png"-->
@@ -128,6 +129,7 @@
 						<td ng-if="perfMeteringDailyByOrgAndItem === ''" ng-repeat="perfMeteringDailyByOrgAndItem in contents.perfMeteringDailyByOrgAndItems | limitTo : 15 track by $index"> </td>
 						<!--td ng-repeat="perfMeteringDailyByOrgAndItem in contents.perfMeteringDailyByOrgAndItems | limitTo : 15 track by $index "> - </td-->
 						<td class="text-right" ng-if="contents.perfMeteringDailyByOrgAndItemSum > 0">{{contents.perfMeteringDailyByOrgAndItemSum | numberUnit : contents.data.numUnit | number}}</td>
+						<td class="text-center" ng-if="!contents.perfMeteringDailyByOrgAndItemSum"> 0 </td>
 					</tr>
 					<tr>
 						<!-- limitTo : 갯수: 시작 index-->

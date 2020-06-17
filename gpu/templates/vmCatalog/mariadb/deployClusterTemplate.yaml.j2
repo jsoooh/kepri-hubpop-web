@@ -21,10 +21,30 @@ parameters:
 {% if octaviaLbUse %}
   lb_svc_port:
     type: string
-    default: 3306
+  lb_svc_protocol:
+    type: string
+    default: TCP
   lb_algorithm:
     type: string
     default: ROUND_ROBIN
+  lb_svc_connection_limit:
+    type: string
+    default: 2000
+  lb_svc_monitor_type:
+    type: string
+    default: TCP
+  lb_svc_monitor_delay:
+    type: string
+    default: 3
+  lb_svc_monitor_max_retries:
+    type: string
+    default: 5
+  lb_svc_monitor_timeout:
+    type: string
+    default: 5
+  lb_svc_monitor_url_path:
+    type: string
+    default: /
 {% endif %}
   service_port:
     type: string
@@ -477,7 +497,8 @@ resources:
     type: OS::Octavia::Listener
     properties:
       loadbalancer: { get_resource: octavia_lb }
-      protocol: TCP
+      connection_limit: { get_param: lb_svc_connection_limit }
+      protocol: { get_param: lb_svc_protocol }
       protocol_port: { get_param: lb_svc_port }
 
   octavia_lb_svc_pool:
@@ -485,18 +506,19 @@ resources:
     properties:
       listener: { get_resource: octavia_lb_svc_listener }
       lb_algorithm: { get_param: lb_algorithm }
-      protocol: TCP
-      session_persistence:
-        type: SOURCE_IP
+      protocol: { get_param: lb_svc_protocol }
 
   octavia_lb_svc_monitor:
     type: OS::Octavia::HealthMonitor
     properties:
       pool: { get_resource: octavia_lb_svc_pool }
-      type: TCP
-      delay: 5
-      max_retries: 5
-      timeout: 5
+      type: { get_param: lb_svc_monitor_type }
+      delay: { get_param: lb_svc_monitor_delay }
+      max_retries: { get_param: lb_svc_monitor_max_retries }
+      timeout: { get_param: lb_svc_monitor_timeout }
+{% if monitorUrlPathUse %}
+      url_path: { get_param: lb_svc_monitor_url_path }
+{% endif %}
 
   lb_svc_pool_member1:
     type: OS::Octavia::PoolMember
@@ -521,64 +543,33 @@ resources:
 {% endif %}
 
 outputs:
-  instancePort_1:
+  servers:
     value:
-      get_attr: [ server1_port, show ]
-  instancePort_2:
-    value:
-      get_attr: [ server2_port, show ]
-  instancePort_3:
-    value:
-      get_attr: [ server3_port, show ]
-  instance_1:
-    value:
-      get_attr: [ server1, show ]
-  instance_2:
-    value:
-      get_attr: [ server2, show ]
-  instance_3:
-    value:
-      get_attr: [ server3, show ]
-  instanceInitConfig_1:
-    value:
-      get_attr: [ init_config1, config ]
-  instanceInitConfig_2:
-    value:
-      get_attr: [ init_config2, config ]
-  instanceInitConfig_3:
-    value:
-      get_attr: [ init_config3, config ]
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
 {% if volumeUse %}
-  volume_1:
-    value:
-      get_attr: [ cinder_volume1, show ]
-  volume_2:
-    value:
-      get_attr: [ cinder_volume2, show ]
-  volume_3:
-    value:
-      get_attr: [ cinder_volume3, show ]
+        volume: { get_attr: [ cinder_volume1, show ] }
+{% endif %}
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume2, show ] }
+{% endif %}
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume3, show ] }
 {% endif %}
 {% if octaviaLbUse %}
   octaviaLb:
     value:
-      get_attr: [octavia_lb, show]
-  octaviaLbListener:
-    value:
-      get_attr: [octavia_lb_svc_listener, show]
-  octaviaLbPool:
-    value:
-      get_attr: [octavia_lb_svc_pool, show]
-  octaviaLbMonitor:
-    value:
-      get_attr: [octavia_lb_svc_monitor, show]
-  octaviaLbPoolMember_1:
-    value:
-      get_attr: [lb_svc_pool_member1, show]
-  octaviaLbPoolMember_2:
-    value:
-      get_attr: [lb_svc_pool_member2, show]
-  octaviaLbPoolMember_3:
-    value:
-      get_attr: [lb_svc_pool_member3, show]
+      loadBalancer: { get_attr: [ octavia_lb, show ] }
+      listeners:
+        - listener: { get_attr: [ octavia_lb_svc_listener, show ] }
+          pool: { get_attr: [ octavia_lb_svc_pool, show ] }
+          monitor: { get_attr: [ octavia_lb_svc_monitor, show ] }
+          poolMembers:
+            - { get_attr: [ lb_svc_pool_member1, show ] }
+            - { get_attr: [ lb_svc_pool_member2, show ] }
+            - { get_attr: [ lb_svc_pool_member3, show ] }
 {% endif %}
