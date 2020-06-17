@@ -229,8 +229,8 @@ angular.module('gpu.controllers')
         $scope.main.copyToClipboard(ipAddress, '"' + ipAddress + '"가 클립보드에 복사 되었습니다.');
     };
 
-    ct.fn.getKeyFile = function(keypair, type) {
-        document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
+    ct.fn.getKeyFile = function(keypairName, type) {
+        document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.tenantId+"&name="+keypairName;
     };
 
     ct.fn.getVmCatalogDeployAndLoadTemplate(ct.tenantId, ct.deployId);

@@ -33,7 +33,7 @@
                                 <li>
                                     <strong class="tit">접속 인증 키</strong>
                                     <span class="txt">default</span>
-                                    <button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(contents.vmCatalogDeployInfo.parameters.key_name, 'privateKey')"><span class="ico_sm ico_file_dw"></span></button>
+                                    <button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile('default', 'privateKey')"><span class="ico_sm ico_file_dw"></span></button>
                                 </li>
                                 <li ng-if="contents.vmCatalogDeployInfo.volumeUse">
                                     <strong class="tit">데이터 디스크</strong>
