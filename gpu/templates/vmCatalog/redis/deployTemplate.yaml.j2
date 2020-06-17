@@ -1,0 +1,78 @@
+heat_template_version: '2018-08-31'
+
+description: single redis template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Redis.qcow2
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_default_group:
+    type: string
+    default: default
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  service_port:
+    type: string
+    default: 6379
+  redis_password:
+    type: string
+
+resources:
+
+  server_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  init_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $service_port: { get_param: service_port }
+            $redis_password: { get_param: redis_password }
+          template: |
+            #!/bin/sh
+            echo "redis setting start"
+            sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis.conf
+            sed -i "s/^port 6379/port $service_port/" /etc/redis.conf
+            sed -i 's/^pidfile \/var\/run\/redis_6379.pid\/pidfile \/var\/run\/redis_$service_port.pid/' /etc/redis.conf
+            sed -i 's/^# requirepass foobared/requirepass $redis_password/' /etc/redis.conf
+            sleep 1
+            systemctl start redis
+            systemctl enable redis
+            echo "redis setting end"
+
+  server:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server, show ] }
+        instancePort: { get_attr: [ server_port, show ]}

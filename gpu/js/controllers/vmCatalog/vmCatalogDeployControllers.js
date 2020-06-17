@@ -30,11 +30,10 @@ angular.module('gpu.controllers')
         promise.success(function (data) {
             if (angular.isArray(data.content)) {
                 ct.vmCatalogDeployList = data.content;
-                var isreLoad = false;
                 angular.forEach(ct.vmCatalogDeployList, function (vmCatalogDeploy, kdy) {
                     ct.fn.mappingOuputsData(vmCatalogDeploy);
-                    if (vmCatalogDeploy.deployStatus.indexOf("PROGRESS") >= 0) {
-                        $scope.main.reloadTimmerStart("listAllVmCatalogDeploy", ct.fn.loadPage, 10000);
+                    if (vmCatalogDeploy.stackStatus.indexOf("PROGRESS") >= 0) {
+                        $scope.main.reloadTimmerStart("listAllVmCatalogDeploy", function () { ct.fn.listAllVmCatalogDeploy(tenantId); }, 10000);
                     }
                 });
             } else {
@@ -171,7 +170,7 @@ angular.module('gpu.controllers')
                     $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
                 }
             } else {
-                ct.vmCatalogDeployInfo = {};
+                $scope.main.goToPage("/gpu/vmCatalogDeploy/list");
                 $scope.main.loadingMainBody = false;
             }
         });
@@ -188,6 +187,7 @@ angular.module('gpu.controllers')
         promise.success(function (data) {
             if (angular.isObject(data.content) && data.content.id) {
                 ct.vmCatalogDeployInfo = data.content;
+                ct.fn.mappingOuputsData(data.content.outputs);
                 if (ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
                     $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
                 }
@@ -229,8 +229,8 @@ angular.module('gpu.controllers')
         $scope.main.copyToClipboard(ipAddress, '"' + ipAddress + '"가 클립보드에 복사 되었습니다.');
     };
 
-    ct.fn.getKeyFile = function(keypair, type) {
-        document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
+    ct.fn.getKeyFile = function(keypairName, type) {
+        document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.tenantId+"&name="+keypairName;
     };
 
     ct.fn.getVmCatalogDeployAndLoadTemplate(ct.tenantId, ct.deployId);

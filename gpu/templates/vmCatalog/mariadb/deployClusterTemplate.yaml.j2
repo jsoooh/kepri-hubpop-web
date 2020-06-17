@@ -19,6 +19,9 @@ parameters:
   provider_subnet:
     type: string
 {% if octaviaLbUse %}
+  lb_description:
+    type: string
+    default: "vmCatalog Mairadb cluster lb"
   lb_svc_port:
     type: string
   lb_svc_protocol:
@@ -128,6 +131,8 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
 {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
@@ -160,7 +165,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/${{ tenant_id }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -223,7 +228,7 @@ resources:
             EOF
             galera_new_cluster
             systemctl enable mariadb.service
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/${{ tenant_id }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
             echo "mariadb setting end"
 
 
@@ -234,6 +239,8 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
 {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type }
@@ -262,7 +269,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/${{ tenant_id }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -335,6 +342,8 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
 {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type }
@@ -363,7 +372,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/${{ tenant_id }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -495,6 +504,7 @@ resources:
     type: OS::Octavia::LoadBalancer
     properties:
       vip_subnet: { get_param: provider_subnet }
+      description: { get_param: lb_description }
 
   octavia_lb_svc_listener:
     type: OS::Octavia::Listener
