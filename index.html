@@ -280,6 +280,8 @@
     document.writeln('			<div ui-view="mainBody"></div>');
     document.writeln('		</div>');
     document.writeln('	</div>');
+	document.writeln('	<div id="slider-contents-container" class="md-dialog-container backdrop_type" tabindex="-1"></div>'); // 가이드
+	document.writeln('	<div class="aside" id="slider-contents"></div>');
 	document.writeln('</div>');
     document.writeln('<div growl></div>');
     document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
