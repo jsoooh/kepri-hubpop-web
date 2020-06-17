@@ -88,3 +88,7 @@
 /*
 .gnb-menu .gm.active::before{display: inline-block; position: absolute; left:0; top:0; z-index: 1; content: ''; width:4px; height:100%; background-color: #00bfff; }
 */
+
+
+/*신규 UI 작업 관련 CSS 재정의 내용(2020.06.17~)*/
+#container {padding-top:0;}
