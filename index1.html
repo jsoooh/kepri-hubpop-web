@@ -282,31 +282,23 @@
 	</script>
 
 </head>
-<!--<body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">-->
-<body id="mainCtrl" class="ko" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">
+<body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">
 <script type="text/javascript">
-	document.writeln('<div style="display: none;" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'block\' : \'none\' }" id="wrap" ng-class="main.mainLayoutClass">');
-	document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="main.navigationTemplateUrl"></header>');
-	document.writeln('	<div id="container" ng-class="main.containerLayoutClass">');
-	//if (_MENU_TYPE_ == 'db') {
-	document.writeln('		<div ng-if="main.isLoginPage" class="leftCnt on">');
-	document.writeln('			<div class="gnbMenu">');
-	document.writeln('				<div class="gnb-in" ng-include="main.portalOrgSelectTemplateUrl"></div>');
-	document.writeln('				<div class="gnb-in" id="leftMenu"></div>');
-	document.writeln('			</div>');
-	document.writeln('		</div>');
-	// } else {
-	//     document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
-	// }
-	document.writeln('		<div class="rightCnt" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }" id="{{main.rightCntId}}">');
-	document.writeln('			<div ng-if="main.isLoginPage" class="titWrap" id="mainTop" ng-include="main.topTemplateUrl"></div>');
-	document.writeln('			<div ui-view="mainBody"></div>');
-	document.writeln('		</div>');
-	document.writeln('	</div>');
-	document.writeln('</div>');
+	document.writeln('<div id="pageWrap">                                         ');
+	document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuFirst.html'+_VERSION_TAIL_+'\'"></header>     ');
+	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" class="" ng-include="\''+_COMM_VIEWS_+ '/menu/sitemapMenu.html'+_VERSION_TAIL_+'\'"></div>   ');
+	document.writeln('	<aside ng-if="main.isLoginPage" id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP
+	document.writeln('	<div id="container">                                      ');	//container
+	document.writeln('		<main id="contentWrap">                               ');
+	document.writeln('			<div ng-if="main.isLoginPage" class="page-title" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitle.html'+_VERSION_TAIL_+'\'"></div> ');
+	document.writeln('			<div class="page-content" ui-view="mainBody"></div> ');		//콘텐츠 영역
+	document.writeln('		</main>                                               ');
+	document.writeln('	</div>                                                    ');	// #container
+	document.writeln('</div>                                                      ');	// #pageWrap
+
 	document.writeln('<div growl></div>');
 	document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
-	document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'none\' : \'block\' }">'); //로딩바 영역
+	document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.loadingMain || main.loadingMainBody) ? \'block\' : \'none\' }">'); //로딩바 영역
 	document.writeln('	<div class="loadWrap_spn"  ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
 	document.writeln('		<div class="loadBox_spn">');
 	document.writeln('			<div class="lds-css ng-scope">');
@@ -329,20 +321,6 @@
 	document.writeln('	</div>');
 	document.writeln('</div>');
 	document.writeln('<div id="noticeDiv"><div>');
-
-	// document.writeln('<div id="pageWrap" ng-if="!main.isLoginPage">                                         ');
-	// document.writeln('	<header id="header" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuFirst.html'+_VERSION_TAIL_+'\'"></header>     ');
-	// document.writeln('	<div id="allMenu" class="" ng-include="\''+_COMM_VIEWS_+ '/menu/sitemapMenu.html'+_VERSION_TAIL_+'\'"></div>   ');
-	// document.writeln('	<aside id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP
-	// document.writeln('	<div id="container">                                      ');	//container
-	// document.writeln('		<main id="contentWrap">                               ');
-	// document.writeln('			<div class="page-title" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitle.html'+_VERSION_TAIL_+'\'"></div> ');
-	// document.writeln('			<div class="page-content">                        ');
-	// document.writeln('                                                            ');	//콘텐츠 영역
-	// document.writeln('			</div>                                            ');	// inner
-	// document.writeln('		</main>                                               ');
-	// document.writeln('	</div>                                                    ');	// #container
-	// document.writeln('</div>                                                      ');	// #pageWrap
 </script>
 </body>
 </html>
