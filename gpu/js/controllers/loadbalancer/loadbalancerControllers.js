@@ -23,6 +23,8 @@ angular.module('gpu.controllers')
         ct.data.iaasLbInfo.name = "lb-server-01";
         ct.serverMainListCnt = 0;   //선택된 서버목록 갯수
 
+        ct.availabilityZoneList = [];
+
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenant.id;
         // ct.data.tenantName = $scope.main.userTenant.korName;
@@ -43,6 +45,27 @@ angular.module('gpu.controllers')
                 ct.fn.loadBalancerCreateImage();
             }
         };
+
+        ct.fn.getAvailabilityZoneList = function(id) {
+            var param = {
+                gpuCardId : id
+            };
+            ct.availabilityZoneList  = [];
+            // var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET', param);
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET');
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.availabilityZoneList = data.content;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        }
+
 
         // 연결서버 유형: 서버 선택 시 서버 목록 불러옴
         ct.fn.GetServerMainList = function() {
@@ -233,5 +256,6 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.GetServerMainList();
+        ct.fn.getAvailabilityZoneList();
     })
 ;

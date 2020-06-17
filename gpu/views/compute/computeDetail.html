@@ -156,7 +156,7 @@
 			<!-- <button type="button" name="button" class="btn only-ico ico-ssh" tooltip-placement="bottom" uib-tooltip="웹콘솔" ng-click="contents.fn.openWebConsole(contents.instance)"><span class="ico">웹콘솔</span></button> -->
 			<button ng-if="contents.instance.vmState == 'stopped'" type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-click="contents.fn.serverActionConfirm('START',contents.instance);"><span class="ico">시작</span></button>
 			<button ng-if="contents.instance.vmState == 'active'" type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="정지" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);"><span class="ico">정지</span></button>
-			<button type="button" name="button" class="btn only-ico ico-ssh" title="SSH"><span class="ico">SSH</span></button>
+			<button type="button" name="button" class="btn only-ico ico-ssh" uib-tooltip="웹콘솔" ng-click="contents.fn.openWebConsole(contents.instance)" title="SSH"><span class="ico">SSH</span></button>
 			<!--<button ng-if="main.projectType == 'pjt'" type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>-->
 			<div class="dropdown btn-option">
 				<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -211,8 +211,11 @@
 					</li>
 					-->
 					<li>
-						<strong class="tit">설명<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'다른 프로젝트에서 생성된 가상서버와 통신할 때 사용하는 IP'"><span class="ico_info"></span></button></strong>
+						<strong class="tit">설명</strong>
+						<div class="txt">{{contents.instance.description}}</div>
+						<!--
 						<div class="txt">{{contents.instance.floatingIp}}<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
+						-->
 					</li>
 					<li>
 						<strong class="tit">IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를 사용할 수 있습니다.'"><span class="ico_info"></span></button></strong>
@@ -230,13 +233,24 @@
 						<strong class="tit">생성일시</strong>
 						<div class="txt">{{contents.instance.created | date : 'yyyy-MM-dd HH:mm:ss'}}</div>
 					</li>
-					<!-- yminlee : gpu에선 삭제
+
 					<li>
 						<strong class="tit">상태</strong>
 						<div ng-if="contents.instance.procState != 'end' && contents.instance.vmState" class="txt">
 							<p><img src="images/loading_sm.gif"> {{'iaas.label.instance_' + contents.instance.vmState | translate}} 입니다.</p>
 						</div>
 						<div ng-if="contents.instance.procState == 'end'" class="txt">
+							<div class="down">
+								<span class="stateWrap">
+									<span ng-if="contents.instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+									<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2">오류</span>
+									<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'building' || contents.instance.vmState == 'shelved_offloaded'" class="stateMark type4">대기</span>
+									<span ng-if="contents.instance.vmState == 'stopped'" class="stateMark type3">중지</span>
+									<span class="state-txt">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
+								</span>
+							</div>
+
+							<!--
 							<div ng-if="!contents.instance.alarmStatus" class="txt">
 								<p><img src="images/loading_sm.gif"></p>
 							</div>
@@ -251,8 +265,10 @@
 								<span class="state-txt" ng-if="!contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
 								<span class="state-txt" ng-if="contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.alarmStatus | translate }}</span>
 							</span>
+							-->
 						</div>
 					</li>
+					<!-- yminlee : gpu에선 삭제
 					<li>
 						<strong class="tit">모니터링<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'가상 자원 사용현황을<br>모니터링 합니다'"><span class="ico_info"></span></button></strong>
 						<div ng-if="!contents.instance.alarmStatus" class="txt">
@@ -390,7 +406,8 @@
 		-->
 		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">서버 이벤트</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">서버 부트 로그</a></li>
-		<!--<li ng-class="{'active':contents.sltInfoTab == 'systemLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('systemLog');">시스템 로그</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'systemLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('systemLog');">시스템 로그</a></li>
+		<!--
 		<li ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('virtualMonit');">가상머신 모니터링</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'alarmEvent'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('alarmEvent');">알람 이벤트</a></li>-->
 	</ul>
@@ -592,9 +609,8 @@
 			<!-- //panel -->
 		</div>
 
-		<!--
 		<div ng-if="contents.sltInfoTab == 'systemLog'" class="tab-pane height-high" ng-class="{'active':contents.sltInfoTab == 'systemLog'}">
-			<!-- panel -- >
+			<!-- panel -->
 			<div class="panelWrap">
 				<div class="panel type2" style="cursor: unset; height: 670px;">
 					<div class="panel_head">
@@ -696,7 +712,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- //panel -- >
+			<!-- //panel -->
 		</div>
 
 		<!-- virtualMonit -->
