@@ -114,6 +114,11 @@ resources:
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
+{% if createUser %}
+            $create_user_id: { get_param: create_user_id }
+            $create_user_password: { get_param: create_user_password }
+            $create_db_name: { get_param: create_db_name }
+{% endif %}
             $service_port: { get_param: service_port }
             $galera_port: { get_param: galera_port }
             $root_password: { get_param: root_password }
@@ -156,6 +161,8 @@ resources:
 {% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
+            sleep 1
+
             cp /etc/my.cnf /etc/my.cnf.backup
             cat <<EOF> /etc/my.cnf
             [mysqld]
@@ -184,16 +191,18 @@ resources:
 
             EOF
             sleep 1
+
             /usr/bin/mysqld_bootstrap
             sleep 1
+
             TEMP_PASSWORD=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f11)
             if [ "${TEMP_PASSWORD}" == "" ]; then
               /usr/bin/mysqladmin -u root password '$root_password'
             else
               /usr/bin/mysqladmin -u root -p${TEMP_PASSWORD} password '$root_password'
             fi
-
             sleep 1
+
 {% if createUser %}
             # Create DB, User Using Changed Password, TIP: [-p'$root_password'] causes [ERROR 1045 (28000): Access denied]
             mysql -u root -pP@ssw0rd <<EOF
@@ -264,6 +273,7 @@ resources:
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
             sleep 1
+
             cp /etc/my.cnf /etc/my.cnf.backup
             cat <<EOF> /etc/my.cnf
             [mysqld]
@@ -291,6 +301,7 @@ resources:
 
             EOF
             sleep 10
+
             masterRun=1
             while [ $masterRun -ne 0 ]
             do
@@ -300,6 +311,7 @@ resources:
               sleep 5
             done
             sleep 10
+
             systemctl start mysqld
             systemctl enable mysqld
             echo "mysql setting end"
@@ -357,6 +369,8 @@ resources:
 {% endif %}
             touch /var/log/mysqld.log
             chown mysql:mysql /var/log/mysqld.log
+            sleep 1
+
             cp /etc/my.cnf /etc/my.cnf.backup
             cat <<EOF> /etc/my.cnf
             [mysqld]
@@ -384,6 +398,7 @@ resources:
 
             EOF
             sleep 10
+
             masterRun=1
             while [ $masterRun -ne 0 ]
             do
@@ -393,6 +408,7 @@ resources:
               sleep 5
             done
             sleep 10
+
             systemctl start mysqld
             systemctl enable mysqld
             echo "mysql setting end"
@@ -547,12 +563,21 @@ outputs:
   octaviaLb:
     value:
       get_attr: [octavia_lb, show]
-  OctaviaLbPg:
-    value:
-      get_attr: [ lb_pg_port, show ]
   octaviaLbPool:
     value:
       get_attr: [octavia_lb_svc_pool, show]
+  octaviaLbMonitor:
+    value:
+      get_attr: [octavia_lb_svc_monitor, show]
+  octaviaLbPoolMember_1:
+    value:
+      get_attr: [lb_svc_pool_member1, show]
+  octaviaLbPoolMember_2:
+    value:
+      get_attr: [lb_svc_pool_member2, show]
+  octaviaLbPoolMember_3:
+    value:
+      get_attr: [lb_svc_pool_member3, show]
 {% endif %}
 {% if volumeUse %}
   volume_1:

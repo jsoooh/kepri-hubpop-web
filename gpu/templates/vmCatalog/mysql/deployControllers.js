@@ -18,7 +18,7 @@ angular.module('gpu.controllers')
 
         // 테스트 입력값
         ct.data.deployName = "마이에스큐엘";
-        ct.data.stackName = "Mysql-Cluster";
+        ct.data.stackName = "Mysql-Single";
 
         ct.data.rootPassword = "Crossent!234";
         ct.data.rootConfirmPassword = "Crossent!234";
