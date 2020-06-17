@@ -38,7 +38,7 @@
                 <div class="panel_body">
                     <div class="img_info_wrap">
                         <ul class="img_count" ng-class="{ 'imgType1': vmCatalogDeploy.deployServerCount == 1,  'imgType2': vmCatalogDeploy.deployServerCount == 2,  'imgType3': vmCatalogDeploy.deployServerCount == 3 }">
-                            <li ng-repeat="n in [] | range:vmCatalogDeploy.deployServerCount"><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li ng-repeat="(key, server) in ( contents.servers | filter: { id : !null } )"><img src="images/thum/im_thum_centos_300.png" ></li>
                         </ul>
                     </div>
                 </div>
