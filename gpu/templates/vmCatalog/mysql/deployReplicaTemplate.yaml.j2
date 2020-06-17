@@ -402,8 +402,3 @@ outputs:
 {% if volumeUse %}
         volume: { get_attr: [ cinder_volume2, show ] }
 {% endif %}
-      - instance: { get_attr: [ server3, show ] }
-        instancePort: { get_attr: [ server3_port, show ] }
-{% if volumeUse %}
-        volume: { get_attr: [ cinder_volume3, show ] }
-{% endif %}
