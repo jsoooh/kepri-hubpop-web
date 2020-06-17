@@ -567,9 +567,9 @@ outputs:
       loadBalancer: { get_attr: [ octavia_lb, show ] }
       listeners:
         - listener: { get_attr: [ octavia_lb_svc_listener, show ] }
-        - pool: { get_attr: [ octavia_lb_svc_pool, show ] }
-        - monitor: { get_attr: [ octavia_lb_svc_monitor, show ] }
-        - poolMembers:
+          pool: { get_attr: [ octavia_lb_svc_pool, show ] }
+          monitor: { get_attr: [ octavia_lb_svc_monitor, show ] }
+          poolMembers:
             - { get_attr: [ lb_svc_pool_member1, show ] }
             - { get_attr: [ lb_svc_pool_member2, show ] }
             - { get_attr: [ lb_svc_pool_member3, show ] }
