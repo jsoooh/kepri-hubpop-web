@@ -333,7 +333,7 @@ resources:
       mountpoint: { get_param: volume_mount_point }
 
 outputs:
-  instances:
+  servers:
     value:
       - instance: { get_attr: [ server1, show ] }
         instancePort: { get_attr: [ server1_port, show ] }

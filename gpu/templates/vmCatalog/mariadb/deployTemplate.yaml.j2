@@ -159,7 +159,7 @@ resources:
 {% endif %}
 
 outputs:
-  instances:
+  servers:
     value:
       - instance: { get_attr: [ server, show ] }
         instancePort: { get_attr: [ server_port, show ] }
