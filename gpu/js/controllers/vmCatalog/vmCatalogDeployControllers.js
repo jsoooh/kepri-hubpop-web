@@ -10,6 +10,7 @@ angular.module('gpu.controllers')
 
     ct.vmCatalogDeployList = [];
     ct.schFilterText = "";
+    ct.vmCatalogDeployStatusTimeout = null;
 
     ct.fn.listAllVmCatalogDeploy = function (tenantId) {
         $scope.main.loadingMainBody = true;
@@ -20,7 +21,11 @@ angular.module('gpu.controllers')
                 var isreLoad = false;
                 angular.forEach(ct.vmCatalogDeployList, function (vmCatalogDeploy, kdy) {
                     if (vmCatalogDeploy.deployStatus.indexOf("PROGRESS") >= 0) {
-                        $timeout(function ()  { ct.fn.loadPage() }, 5000);
+                        if (ct.vmCatalogDeployStatusTimeout) {
+                            $timeout.cancel(ct.vmCatalogDeployStatusTimeout);
+                            ct.vmCatalogDeployStatusTimeout = null;
+                        }
+                        ct.vmCatalogDeployStatusTimeout = $timeout(function ()  { ct.fn.loadPage() }, 5000);
                     }
                 });
             } else {
@@ -164,6 +169,8 @@ angular.module('gpu.controllers')
         });
     };
 
+    ct.vmCatalogDeployStatusTimeout = null
+
     ct.fn.getVmCatalogDeployStatus = function (tenantId, deployId, type) {
         var promise = vmCatalogService.getVmCatalogDeploy(tenantId, deployId);
         promise.success(function (data) {
@@ -172,13 +179,21 @@ angular.module('gpu.controllers')
                 if (type == "create") {
                     if (ct.vmCatalogDeployInfo.deployStatus != "DEPLOY_COMPLETE" &&
                         ct.vmCatalogDeployInfo.deployStatus.indexOf("FAILED") == -1) {
-                        $timeout(function () {
+                        if (ct.vmCatalogDeployStatusTimeout) {
+                            $timeout.cancel(ct.vmCatalogDeployStatusTimeout);
+                            ct.vmCatalogDeployStatusTimeout = null;
+                        }
+                        ct.vmCatalogDeployStatusTimeout = $timeout(function () {
                             ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type)
                         }, 5000);
                     }
                 } else {
                     if (ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
-                        $timeout(function () {
+                        if (ct.vmCatalogDeployStatusTimeout) {
+                            $timeout.cancel(ct.vmCatalogDeployStatusTimeout);
+                            ct.vmCatalogDeployStatusTimeout = ct.vmCatalogDeployStatusTimeout = null;
+                        }
+                        ct.vmCatalogDeployStatusTimeout = $timeout(function () {
                             ct.fn.getVmCatalogDeployStatus(tenantId, deployId, type)
                         }, 5000);
                     }
