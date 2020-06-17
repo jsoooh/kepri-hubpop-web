@@ -195,15 +195,18 @@ resources:
             /usr/bin/mysqld_bootstrap
             sleep 1
 
-            TEMP_PASSWORD=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f11)
-            if [ "${TEMP_PASSWORD}" == "" ]; then
-              /usr/bin/mysqladmin -u root password '$root_password'
-            else
-              /usr/bin/mysqladmin -u root -p${TEMP_PASSWORD} password '$root_password'
-            fi
+            # Change Mysql Root Password
+            /usr/bin/mysqld_bootstrap
             sleep 1
 
 {% if createUser %}
+            TEMP_PASSWORD=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f11)
+            if [ "${TEMP_PASSWORD}" == "" ]; then
+              /usr/bin/mysqladmin -u root password 'P@ssw0rd'
+            else
+              /usr/bin/mysqladmin -u root -p${TEMP_PASSWORD} password 'P@ssw0rd'
+            fi
+
             # Create DB, User Using Changed Password, TIP: [-p'$root_password'] causes [ERROR 1045 (28000): Access denied]
             mysql -u root -pP@ssw0rd <<EOF
               UNINSTALL PLUGIN validate_password;
@@ -563,6 +566,9 @@ outputs:
   octaviaLb:
     value:
       get_attr: [octavia_lb, show]
+  octaviaLbListener:
+    value:
+      get_attr: [octavia_lb_svc_listener, show]
   octaviaLbPool:
     value:
       get_attr: [octavia_lb_svc_pool, show]
