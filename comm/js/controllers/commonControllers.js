@@ -571,6 +571,7 @@ angular.module('common.controllers', [])
         };
 
         mc.syncGetTenantByName = function (orgCode, teamCode) {
+            mc.listNotification();
             var response = portal.portalOrgs.syncGetTenantByName(orgCode, teamCode);
             if (response && response.status == 200 && angular.isObject(response.data.content)) {
                 return response.data.content;
@@ -1511,6 +1512,17 @@ angular.module('common.controllers', [])
             });
         };
 
+        mc.notificationCount = 0;
+        mc.listNotification = function () {
+            var promise = common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/notification', 'GET'));
+            promise.success(function (data) {
+                if (data.resultCode == 0) {
+                    mc.notifications = data.items;
+                    mc.notificationCount = data.itemCount;
+                };
+            });
+        };
+
         mc.alarmCnt = 0;
 
         // 알람 카운트 조회
@@ -1544,8 +1556,7 @@ angular.module('common.controllers', [])
         };
 
         $interval(function () {
-            mc.selectAlarmCount();
-            mc.selectAlarmList();
+            mc.listNotification();
         }, CONSTANTS.alarmBell);
 
         //팝업 공지사항 보여주기
@@ -1755,8 +1766,7 @@ angular.module('common.controllers', [])
             }, 100);
 
             $timeout(function () {
-                $scope.main.selectAlarmCount();
-                $scope.main.selectAlarmList();
+                $scope.main.listNotification();
             }, 100);
 
             if (_MENU_TYPE_ == 'part') {

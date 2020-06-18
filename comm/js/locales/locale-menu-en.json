@@ -38,7 +38,8 @@
 			"cata_view": "Catalog View",
 			"board_create": "등록",
 			"board_update": "수정",
-			"qna_board_details": "QnA Detail"
+			"qna_board_details": "QnA Detail",
+			"notification": "Notification"
 		},
 		"desc": {
 		}

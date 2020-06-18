@@ -19,6 +19,9 @@ parameters:
   provider_subnet:
     type: string
 {% if octaviaLbUse %}
+  lb_description:
+    type: string
+    default: "vmCatalog Mysql cluster lb"
   lb_svc_port:
     type: string
   lb_svc_protocol:
@@ -129,6 +132,8 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
 {% if volume %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
@@ -248,6 +253,8 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
 {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
@@ -346,6 +353,8 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
 {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
@@ -506,6 +515,7 @@ resources:
     type: OS::Octavia::LoadBalancer
     properties:
       vip_subnet: { get_param: provider_subnet }
+      description: { get_param: lb_description }
 
   octavia_lb_svc_listener:
     type: OS::Octavia::Listener
