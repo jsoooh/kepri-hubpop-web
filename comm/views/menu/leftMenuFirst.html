@@ -10,48 +10,48 @@
                 <div class="header-mid">
                     <div class="inner">
                         <ul id="quick">
-                            <li class="lnb-depth1-item all">
-                                <a href="">
+                            <li class="lnb-depth1-item all" ng-class="{'active' : main.allMenuOpen }">
+                                <a href="" ng-click="main.setAllMenuOpen();">
                                     <p class="sr-only">all menu</p>
                                 </a>
                             </li>
                             <li class="lnb-depth1-item home" ng-class="{'active' : main.stateKey == 'commProjectDetail'}">
-                                <a href="#/comm/projects/projectDetail/{{ main.sltPortalOrgId }}">
+                                <a href="" ng-click="main.sltPortalOrgId && main.goToPortalOrgPage(main.sltPortalOrg);">
                                     <p class="sr-only">dashboard</p>
                                 </a>
                             </li>
                         </ul>
                         <ul id="gnb">
-                            <li class="lnb-depth1-item item1 active">
-                                <a href="#" class="button" data-toggle="tooltip" data-placement="right" title="Compute">
-                                    <p class="sr-only">Compute</p>
+                            <li ng-repeat="menuItem in (main.dbMenuList | filter : { level: 1 })" class="lnb-depth1-item {{ menuItem.iconId }}" ng-class="{ 'active' : main.sltGroupMenuIconId == menuItem.iconId }" ng-click="main.setGroupMenu(menuItem)">
+                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Compute">
+                                    <p class="sr-only">{{ menuItem.depth1 }}}</p>
                                 </a>
                             </li>
-                            <li class="lnb-depth1-item item2">
-                                <a href="#" class="button" data-toggle="tooltip" data-placement="right" title="Analytics">
+                            <!--<li class="lnb-depth1-item item2" ng-class="{ 'active' : main.sltGroupIconId == 'item2' }" ng-click="main.setGroup('item2')">
+                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Analytics">
                                     <p class="sr-only">Analytics</p>
                                 </a>
                             </li>
-                            <li class="lnb-depth1-item item3">
-                                <a href="#" class="button" data-toggle="tooltip" data-placement="right" title="Dev Tools">
+                            <li class="lnb-depth1-item item3" ng-class="{ 'active' : main.sltGroupIconId == 'item3' }" ng-click="main.setGroup('item3')">
+                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Dev Tools">
                                     <p class="sr-only">Dev Tools</p>
                                 </a>
                             </li>
-                            <li class="lnb-depth1-item item4">
-                                <a href="#" class="button" data-toggle="tooltip" data-placement="right" title="Visualization Tools">
+                            <li class="lnb-depth1-item item4" ng-class="{ 'active' : main.sltGroupIconId == 'item4' }" ng-click="main.setGroup('item4')">
+                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Visualization Tools">
                                     <p class="sr-only">Visualization Tools</p>
                                 </a>
                             </li>
-                            <li class="lnb-depth1-item item5">
-                                <a href="#" class="button" data-toggle="tooltip" data-placement="right" title="Storage">
+                            <li class="lnb-depth1-item item5" ng-class="{ 'active' : main.sltGroupIconId == 'item5' }" ng-click="main.setGroup('item5')">
+                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Storage">
                                     <p class="sr-only">Storage</p>
                                 </a>
                             </li>
-                            <li class="lnb-depth1-item item6">
-                                <a href="#" class="button" data-toggle="tooltip" data-placement="right" data-original-title="Service">
+                            <li class="lnb-depth1-item item6" ng-class="{ 'active' : main.sltGroupIconId == 'item6' }" ng-click="main.setGroup('item6')">
+                                <a href="" class="button" data-toggle="tooltip" data-placement="right" data-original-title="Service">
                                     <p class="sr-only">Service</p>
                                 </a>
-                            </li>
+                            </li>-->
                         </ul>
                     </div>
                 </div>
@@ -61,29 +61,29 @@
                             <a href="" class="notification-btn">
                                 <span class="sr-only">알림</span>
                                 <i class="xi-bell"></i>
-                                <em class="new"></em>
+                                <em class="new" ng-if="main.notificationCount > 0"></em>
                             </a>
-                            <div class="notification-wrap">
+                            <div class="notification-wrap" ng-if="main.notificationCount > 0">
                                 <div class="notification-title">
-                                    3 New Notifications
+                                    {{ main.notificationCount }} New Notifications
                                 </div>
                                 <ul class="notification-content">
-                                    <li class="notification-type1">
-                                        <a href="">
+                                    <li class="notification-type{{ key + 1 }}" ng-repeat="(key, notiItem) in main.notifications | limitTo:5">
+                                        <a href="{{ notiItem.url }}" target="_blank">
                                             <div class="round">
                                                 <i class="far fa-comment-alt"></i>
                                             </div>
                                             <div class="text">
                                                 <strong class="title">
-                                                    New Message
+                                                    {{ notiItem.message }}
                                                 </strong>
                                                 <span>
-                                                    Are Your goning to meet me
+                                                    {{ notiItem.time.time | date : "yyyy-MM-dd HH:mm" }}
                                                 </span>
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="notification-type2">
+                                    <!--<li class="notification-type2">
                                         <a href="">
                                             <div class="round">
                                                 <i class="far fa-envelope"></i>
@@ -127,10 +127,10 @@
                                                 </span>
                                             </div>
                                         </a>
-                                    </li>
+                                    </li>-->
                                 </ul>
                                 <div class="notification-show">
-                                    <a href="">
+                                    <a href="#/comm/notification">
                                         Show all notifications
                                     </a>
                                 </div>

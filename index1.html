@@ -284,7 +284,7 @@
 </head>
 <body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">
 <script type="text/javascript">
-	document.writeln('<div id="pageWrap">                                         ');
+	document.writeln('<div id="pageWrap" ng-class="{\'all-menu-open\' : main.allMenuOpen, \'dashboard-full\' : (main.isLoginPage && main.stateKey == \'commProjectDetail\') }">                                         ');
 	document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuFirst.html'+_VERSION_TAIL_+'\'"></header>     ');
 	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" class="" ng-include="\''+_COMM_VIEWS_+ '/menu/sitemapMenu.html'+_VERSION_TAIL_+'\'"></div>   ');
 	document.writeln('	<aside ng-if="main.isLoginPage" id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP

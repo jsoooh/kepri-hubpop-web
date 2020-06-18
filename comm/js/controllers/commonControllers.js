@@ -41,6 +41,25 @@ angular.module('common.controllers', [])
         mc.languages = [];
         mc.sltLanguage = {};
         mc.sltRegion = {};
+        mc.sltGroupMenu = {};               //좌측 대메뉴 선택
+        mc.sltGroupMenuIconId = "item1";    //좌측 대메뉴 선택
+        mc.allMenuOpen = false;             //전체 메뉴 오픈 여부
+
+        //좌측 대메뉴 선택
+        mc.setGroupMenu = function (menuItem) {
+            mc.sltGroupMenu = menuItem;
+            mc.sltGroupMenuIconId = menuItem.iconId;
+            console.log("mc.sltGroupMenu : ", mc.sltGroupMenu);
+        };
+
+        //전체 메뉴 오픈 여부
+        mc.setAllMenuOpen = function () {
+            if (mc.allMenuOpen) {
+                mc.allMenuOpen = false;
+            } else {
+                mc.allMenuOpen = true;
+            }
+        };
 
         mc.regions = [];
         mc.commLeftFav = { setMode: false, dataLoad: false  };
@@ -216,7 +235,6 @@ angular.module('common.controllers', [])
                 $scope.changePasswordAction($scope.pop.changePasswordData);
             }
         };
-
 
         // 로그 아웃
         mc.logout = function () {
@@ -501,6 +519,8 @@ angular.module('common.controllers', [])
             var response = portal.menu.getMenuList();
             if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
                 mc.dbMenuList = response.data.items;
+                mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
+                console.log("mc.dbMenuList : ", mc.dbMenuList);
             }
         };
 
@@ -964,6 +984,7 @@ angular.module('common.controllers', [])
         // left 메뉴 객체 셋팅
         mc.setSelectSiteMap = function (stateKey) {
             mc.selectSiteMap = common.getStateKeyBySelectSietMap(stateKey);
+            console.log("mc.selectSiteMap : ", mc.selectSiteMap);
         };
 
         mc.setLeftAllMunuParams = function () {
@@ -1519,7 +1540,7 @@ angular.module('common.controllers', [])
                 if (data.resultCode == 0) {
                     mc.notifications = data.items;
                     mc.notificationCount = data.itemCount;
-                };
+                }
             });
         };
 

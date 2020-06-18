@@ -44,31 +44,31 @@
                     <!-- depth2Wrap -->
                     <div id="depth2Wrap">
                         <ul class="depth2-list">
-                            <li class="active">
+                            <li ng-repeat="menuItem1 in (main.dbMenuList | filter : { level: 1 } )" ng-class="{ 'active' : main.sltGroupMenu.id == menuItem1.id }">
                                 <div class="sub-title">
-                                    <span>Compute</span>
+                                    <span>{{ main.sltGroupMenu.depth1 }}</span>
                                     <a href="" class="btn-dropdown active"></a>
                                 </div>
-                                <ul class="lnb-depth2 active">
+                                <ul class="lnb-depth2 active" ng-if="menuItem1.childCnt > 0">
                                     <!-- 페이지가 활성화 되면 class="on" 추가  -->
-                                    <li class="all-depth2-item menu1 active on">
+                                    <li ng-repeat="menuItem2 in (main.dbMenuList | filter : { level: 2 } | filter : { parentId: menuItem1.id })" class="all-depth2-item menu1 active on">
                                         <div class="depth2">
-                                            <a href="" class="link">
+                                            <a href="{{ menuItem2.urlPath }}" class="link">
                                                 <div class="depth-icon-img">
                                                     <img src="../assets/img/user/ico_server.png" alt="">
                                                 </div>
-                                                <span>서버 가상화</span>
+                                                <span>{{ menuItem2.depth2 }}</span>
                                             </a>
-                                            <a href="" class="btn-dropdown-depth"></a>
+                                            <a href="" ng-class="{'btn-dropdown-depth' : menuItem2.childCnt > 0}"></a>
                                         </div>
-                                        <ul class="lnb-depth3">
+                                        <ul class="lnb-depth3" ng-if="menuItem2.childCnt > 0">
                                             <!-- 페이지가 활성화 되면 class="on" 추가  -->
-                                            <li class="all-depth3-item on">
-                                                <a href="">
-                                                    <span>서버 관리</span>
+                                            <li class="all-depth3-item on" ng-repeat="menuItem3 in (main.dbMenuList | filter : { level: 3 } | filter : { parentId: menuItem2.id })">
+                                                <a href="{{ menuItem3.urlPath }}">
+                                                    <span>{{ menuItem3.depth3 }}</span>
                                                 </a>
                                             </li>
-                                            <li class="all-depth3-item">
+                                            <!--<li class="all-depth3-item">
                                                 <a href="">
                                                     <span>디스크 관리</span>
                                                 </a>
@@ -77,11 +77,10 @@
                                                 <a href="">
                                                     <span>백업 이미지 관리</span>
                                                 </a>
-                                            </li>
+                                            </li>-->
                                         </ul>
                                     </li>
-
-                                    <li class="all-depth2-item menu2 active">
+                                    <!--<li class="all-depth2-item menu2 active">
                                         <div class="depth2">
                                             <a href="" class="link">
                                                 <div class="depth-icon-img">
@@ -114,7 +113,6 @@
                                             </li>
                                         </ul>
                                     </li>
-
                                     <li class="all-depth2-item menu3">
                                         <div class="depth2">
                                             <a href="" class="link">
@@ -125,7 +123,6 @@
                                             </a>
                                         </div>
                                     </li>
-
                                     <li class="all-depth2-item menu4">
                                         <div class="depth2">
                                             <a href="" class="link">
@@ -136,7 +133,6 @@
                                             </a>
                                         </div>
                                     </li>
-
                                     <li class="all-depth2-item menu5">
                                         <div class="depth2">
                                             <a href="" class="link">
@@ -146,11 +142,10 @@
                                                 <span>Function 서비스</span>
                                             </a>
                                         </div>
-                                    </li>
-
+                                    </li>-->
                                 </ul>
                             </li>
-                            <li>
+                            <!--<li ng-class="{ 'active' : main.sltGroupIconId == 'item2' }">
                                 <div class="sub-title">
                                     <span>Analytics</span>
                                     <a href="" class="btn-dropdown active"></a>
@@ -224,7 +219,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li ng-class="{ 'active' : main.sltGroupIconId == 'item3' }">
                                 <div class="sub-title">
                                     <span>Dev Tools</span>
                                     <a href="" class="btn-dropdown active"></a>
@@ -327,7 +322,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li ng-class="{ 'active' : main.sltGroupIconId == 'item4' }">
                                 <div class="sub-title">
                                     <span>Visualization Tools</span>
                                     <a href="" class="btn-dropdown active"></a>
@@ -416,7 +411,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li ng-class="{ 'active' : main.sltGroupIconId == 'item5' }">
                                 <div class="sub-title">
                                     <span>Storage</span>
                                     <a href="" class="btn-dropdown active"></a>
@@ -490,7 +485,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li ng-class="{ 'active' : main.sltGroupIconId == 'item6' }">
                                 <div class="sub-title">
                                     <span>Service</span>
                                     <a href="" class="btn-dropdown active"></a>
@@ -585,10 +580,8 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </li>
+                            </li>-->
                         </ul>
-
-
                     </div>
                     <!-- //depth2Wrap -->
                 </div>
