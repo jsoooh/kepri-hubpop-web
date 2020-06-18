@@ -86,7 +86,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -134,7 +134,7 @@ resources:
             EOF
 {% endif %}
             systemctl enable mariadb
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_id/status
             echo "mariadb setting end"
 
   server:

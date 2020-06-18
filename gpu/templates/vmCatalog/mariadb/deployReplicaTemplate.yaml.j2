@@ -110,7 +110,7 @@ resources:
           template: |
             #!/bin/sh
             echo "master mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -194,7 +194,7 @@ resources:
             sleep 5
 
             systemctl enable mariadb.service
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_id/status
             echo "master mariadb setting end"
 
   init_config2:
@@ -220,7 +220,7 @@ resources:
           template: |
             #!/bin/sh
             echo "slave mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
