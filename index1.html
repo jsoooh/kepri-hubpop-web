@@ -250,16 +250,23 @@
             loadJavascript(_COMM_STAGE_+'/js/properties/localhost.constants.js'+_VERSION_TAIL_HEAD_);
         }
 
-        loadJavascript(_COMM_STAGE_+'/js/services/commonServices.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/services/userServices.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/services/portalServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/commonServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/userServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/userSettingServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/portalServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/memberServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/orgServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/quotaServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/signupServices.js'+_VERSION_TAIL_HEAD_);
 
-        loadJavascript(_COMM_STAGE_+'/js/controllers/commonControllers.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/controllers/userControllers.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/controllers/portalControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/commonControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/userControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/portalControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/orgControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/signupControllers.js'+_VERSION_TAIL_HEAD_);
 
-        // COMMON
-        loadJavascript(_COMM_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
+		// COMMON
+		loadJavascript(_COMM_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
 
         // Sample
         if (_MODE_ == "DEBUG") loadJavascript(_COMM_STAGE_+'/js/controllers/sampleControllers.js'+_VERSION_TAIL_HEAD_);
