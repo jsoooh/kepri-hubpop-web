@@ -968,7 +968,10 @@
         "warning": "Warning",
         "widen": "Widen",
         "yn_yes": "Yes",
-        "yn_no": "No"
+        "yn_no": "No",
+        "receiver": "Receiver Group",
+        "admin": "Administrator",
+        "target": "Target"
     },
     "message" : {
         "data_processing": "The data is being processed.",

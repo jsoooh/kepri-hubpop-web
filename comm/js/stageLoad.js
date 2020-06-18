@@ -14,6 +14,7 @@ loadJavascript(_COMM_STAGE_+'/js/controllers/boardControllers.js'+_VERSION_TAIL_
 //loadJavascript(_COMM_STAGE_+'/js/controllers/serviceCatalogViewControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/controllers/tutorialControllers.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/controllers/signupControllers.js'+_VERSION_TAIL_HEAD_);
+loadJavascript(_COMM_STAGE_+'/js/controllers/notificationControllers.js'+_VERSION_TAIL_HEAD_);
 
 loadJavascript(_COMM_STAGE_+'/js/services/projectServices.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/services/serviceServices.js'+_VERSION_TAIL_HEAD_);

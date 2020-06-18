@@ -32,7 +32,7 @@
 					<span class="ico"></span>
 				</button>
 			</div> -->
-			<div class="col col-noti" ng-show="main.userTenantId">
+			<!-- <div class="col col-noti" ng-show="main.userTenantId">
 				<div class="dropdown">
 					<button type="button" name="button" class="btn btn-noti" data-toggle="dropdown" aria-haspopup="true"
 							aria-expanded="false" title="{{ 'comm.label.alarm' | translate }}">
@@ -41,15 +41,37 @@
 						</span>
 					</button>
 					<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
-						<li class="noti-txt ng-binding">총 <em class="ng-binding">{{ main.alarmCnt }}</em>개의 알람이 있습니다.</li>
+						<li class="noti-txt ">총 <em class="">{{ main.alarmCnt }}</em>개의 알람이 있습니다.</li>
 						<li class="divider"></li>
 						<li ng-repeat="alarm in main.alarmList | limitTo:5" class="noti-li" ng-click="main.alarmListOnClick('#/iaas/compute/alarm', alarm.id)">
 							<div class="noti-name">{{ alarm.alarmType.substr(0, 1).toUpperCase() }}</div>
-							<a class="ng-binding noti-tit">{{ alarm.title }}<div class="ng-binding noti-date">{{ alarm.regDate }}</div></a>
+							<a class=" noti-tit">{{ alarm.title }}<div class=" noti-date">{{ alarm.regDate }}</div></a>
 						</li>
 						<li class="divider"></li>
 						<li class="noti-more" ng-click="main.alarmMoreOnClick('#/iaas/compute/alarm')">
-							<a class="ng-binding">알람 더보기 <span class="ico"><em class="badge ng-binding"></em></span></a>
+							<a class="">알람 더보기 <span class="ico"><em class="badge "></em></span></a>
+						</li>
+					</ul>
+				</div>
+			</div> -->
+			<div class="col col-noti">
+				<div class="dropdown">
+					<button type="button" name="button" class="btn btn-noti" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false" title="{{ 'label.notification' | translate }}">
+						<span class="ico">
+							<em class="badge" ng-show="main.notificationCount > 0">{{ main.notificationCount }}</em>
+						</span>
+					</button>
+					<ul class="dropdown-menu" role="btn-noti" aria-labelledby="btn-noti">
+						<li class="noti-txt">총 <em class="">{{ main.notificationCount }}</em>개의 알람이 있습니다.</li>
+						<li class="divider"></li>
+						<li ng-repeat="notification in main.notifications | limitTo:5" class="noti-li">
+							<div class="noti-name">{{ notification.receiver.toUpperCase() }}</div>
+							<a href="{{ notification.url }}" target="_blank" class="noti-tit">{{ notification.message }}<div class="noti-date">{{ notification.time.time | date : "yyyy-MM-dd HH:mm" }}</div></a>
+						</li>
+						<li class="divider"></li>
+						<li class="noti-more"">
+							<a href="#/comm/notification">더보기 <span class="ico"><em class="badge "></em></span></a>
 						</li>
 					</ul>
 				</div>
@@ -65,7 +87,8 @@
 						<!-- 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정) -->
 						<li><a href="" ng-click="main.changePassword($event)"><span class="ico ico1"></span>{{ 'label.pwd_set' | translate }}</a></li>
 						<!-- // 20.03.09 - ksw / 사용자 메뉴 추가(회원탈퇴)-->
-						<li><a href="#/comm/boards/qna"><span class="ico ico2"></span>문의하기</a></li>
+						<li><a href="#/comm/boards/qna"><span class="ico ico2"></span>{{ 'label.qna' | translate }}</a></li>
+						<li><a href="#/comm/notification"><span class="ico ico2"></span>Notification</a></li>
 						<li><a href="" ng-click="main.signout()"><span class="ico ico1"></span>{{ 'label.signout' | translate }}</a></li>
 						<li><a href="/hsvc/no/retrieveNoticeView.do"><span class="ico ico3"></span>{{ 'label.board_notice' | translate }}</a></li>
 						<li><a href="" ng-click="main.logout()"><span class="ico ico4"></span>{{ 'label.logout' | translate }}</a></li>
