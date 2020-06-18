@@ -63,7 +63,7 @@ angular.module('gpu.controllers')
         ct.fn.createVmCatalogDeploy = function () {
             if (!ct.fn.commCheckFormValidity(subPage)) return;
 
-            ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);  // (single/replica/cluster, )
+            ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
 
         ct.fn.loadPage();
