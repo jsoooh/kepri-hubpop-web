@@ -196,6 +196,14 @@ angular.module('app')
                                 }
                             }
                         }
+                    },
+                    notification: {
+                        menuDisplayNo : false,
+                        name: "notification",
+                        stateKey: 'commNotification',
+                        url: '/comm/notification',
+                        controller: 'commNotificationCtrl',
+                        templateUrl: _COMM_VIEWS_+'/notification/notification.html'
                     }
                 }
             },

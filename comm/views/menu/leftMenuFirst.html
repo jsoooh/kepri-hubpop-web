@@ -2,7 +2,7 @@
             <div class="left-wrap">
                 <div class="header-top">
                     <h1>
-                        <a href="index.html">
+                        <a href="#/comm/projects/">
                             <p class="sr-only">HUB POP</p>
                         </a>
                     </h1>
@@ -10,13 +10,13 @@
                 <div class="header-mid">
                     <div class="inner">
                         <ul id="quick">
-                            <li class="lnb-depth1-item all active">
+                            <li class="lnb-depth1-item all">
                                 <a href="">
                                     <p class="sr-only">all menu</p>
                                 </a>
                             </li>
-                            <li class="lnb-depth1-item home">
-                                <a href="dashboard.html">
+                            <li class="lnb-depth1-item home" ng-class="{'active' : main.stateKey == 'commProjectDetail'}">
+                                <a href="#/comm/projects/projectDetail/{{ main.sltPortalOrgId }}">
                                     <p class="sr-only">dashboard</p>
                                 </a>
                             </li>
@@ -143,31 +143,31 @@
                             </a>
                             <ul class="user-info-wrap">
                                 <li>
-                                    <a href="">
+                                    <a href="#/comm/memberEdit">
                                         <i class="fas fa-user-check"></i>
                                         <span>개인정보 수정</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="" ng-click="main.changePassword($event)">
                                         <i class="fas fa-lock"></i>
                                         <span>비밀번호 설정</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="" ng-click="main.signout()">
                                         <i class="fas fa-user-times"></i>
                                         <span>회원탈퇴</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="#/comm/boards/qna">
                                         <i class="fas fa-microphone"></i>
                                         <span>공지사항</span>
                                     </a>
                                 </li>
                                 <li class="logout">
-                                    <a href="">
+                                    <a href="" ng-click="main.logout()">
                                         <i class="xi-power-off"></i>
                                         <span>Logout</span>
                                     </a>
