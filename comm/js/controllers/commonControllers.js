@@ -520,7 +520,7 @@ angular.module('common.controllers', [])
             if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
                 mc.dbMenuList = response.data.items;
                 mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
-                console.log("mc.dbMenuList : ", mc.dbMenuList);
+                //console.log("mc.dbMenuList : ", mc.dbMenuList);
             }
         };
 
@@ -984,7 +984,7 @@ angular.module('common.controllers', [])
         // left 메뉴 객체 셋팅
         mc.setSelectSiteMap = function (stateKey) {
             mc.selectSiteMap = common.getStateKeyBySelectSietMap(stateKey);
-            console.log("mc.selectSiteMap : ", mc.selectSiteMap);
+            //console.log("mc.selectSiteMap : ", mc.selectSiteMap);
         };
 
         mc.setLeftAllMunuParams = function () {
