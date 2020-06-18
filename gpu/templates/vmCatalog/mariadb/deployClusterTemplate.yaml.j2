@@ -165,7 +165,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 5 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -228,7 +228,7 @@ resources:
             EOF
             galera_new_cluster
             systemctl enable mariadb.service
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 5 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "mariadb setting end"
 
 
@@ -269,7 +269,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 5 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -372,7 +372,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 5 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path

@@ -9,12 +9,9 @@ angular.module('portal.controllers')
             receivers: [
                 {id: '', name: 'label.receiver'},
                 {id: 'p', name: 'label.project'},
-                {id: 'a', name: 'label.admin'},
                 {id: 'u', name: 'label.user'}
             ],
             types: [
-                {id: '', name: 'label.all'},
-                {id: 'target', name: 'label.target'},
                 {id: 'message', name: 'label.message'}
             ]
         };

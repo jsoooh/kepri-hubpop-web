@@ -35,7 +35,13 @@ angular.module('app')
                         menuDisplayNo : true,
                         url: '/comm/memberEdit',
                         controller: 'commUserEditCtrl',
-                        templateUrl: _COMM_VIEWS_ + '/user/userForm.html'
+                        templateUrl: _COMM_VIEWS_ + '/user/userForm.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_COMM_JS_+'/services/memberServices.js'],
+                            loadMyControllers: [_COMM_JS_+'/controllers/memberControllers.js'],
+                            loadMyDirectives: []
+                        }
                     },
                     project: {
                         mainTop: false,
@@ -46,6 +52,14 @@ angular.module('app')
                         controller: 'commOrgProjectsCtrl',
                         templateUrl: _COMM_VIEWS_+'/org/orgProjects.html',
                         mainContentsClass: 'pd0',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [_COMM_JS_+'/services/userSettingServices.js',
+                                             _COMM_JS_+'/services/orgServices.js',
+                                             _COMM_JS_+'/services/quotaServices.js'],
+                            loadMyControllers: [_COMM_JS_+'/controllers/orgControllers.js'],
+                            loadMyDirectives: []
+                        },
                         subPages: {
                             firstProjectMain: {
                                 mainTop: true,
@@ -62,7 +76,13 @@ angular.module('app')
                                 stateKey: 'commProjectDetail',
                                 url: '/comm/projects/projectDetail/:orgId',
                                 controller: 'commOrgProjectDetailCtrl',
-                                templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html'
+                                templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [_COMM_JS_+'/services/memberServices.js'],
+                                    loadMyControllers: [_COMM_JS_+'/controllers/orgDetailControllers.js'],
+                                    loadMyDirectives: []
+                                }
                             },
                             projectCreate: {
                                 mainTop: true,
@@ -70,7 +90,13 @@ angular.module('app')
                                 stateKey: 'commProjectCreate',
                                 url: '/comm/project/create',
                                 controller: 'commOrgProjectCreateCtrl',
-                                templateUrl: _COMM_VIEWS_+'/org/orgProjectCreate.html'
+                                templateUrl: _COMM_VIEWS_+'/org/orgProjectCreate.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [_COMM_JS_+'/services/memberServices.js'],
+                                    loadMyControllers: [],
+                                    loadMyDirectives: []
+                                }
                             }
                         }
                     },
@@ -106,6 +132,12 @@ angular.module('app')
                                 url: '/comm/boards/notice',
                                 controller: 'commBoardsCtrl',
                                 templateUrl: _COMM_VIEWS_+'/board/boards.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [_COMM_JS_+'/services/boardServices.js'],
+                                    loadMyControllers: [_COMM_JS_+'/controllers/boardControllers.js'],
+                                    loadMyDirectives: []
+                                },
                                 subPages: {
                                     boardDetail: {
                                         menuKey: 'boards',
@@ -120,7 +152,7 @@ angular.module('app')
                                         name: 'board_create',
                                         stateKey: 'commBoardCreateNotice',
                                         url: '/comm/boards/boardCreate/notice',
-                                        controller: 'commBoardCreateCtrl',
+                                        controller: 'commBoardCreateCtrl',  // 없음
                                         templateUrl: _COMM_VIEWS_+'/board/boardCreate.html'
                                     },
                                     boardUpdate: {
@@ -128,7 +160,7 @@ angular.module('app')
                                         name: 'board_update',
                                         stateKey: 'commBoardUpdateNotice',
                                         url: '/comm/boards/boardUpdate/notice/:id',
-                                        controller: 'commBoardUpdateCtrl',
+                                        controller: 'commBoardUpdateCtrl',  // 없음
                                         templateUrl: _COMM_VIEWS_+'/board/boardUpdate.html'
                                     }
                                 }
@@ -141,6 +173,12 @@ angular.module('app')
                                 url: '/comm/boards/faq',
                                 controller: 'commBoardsCtrl',
                                 templateUrl: _COMM_VIEWS_+'/board/boards.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [_COMM_JS_+'/services/boardServices.js'],
+                                    loadMyControllers: [_COMM_JS_+'/controllers/boardControllers.js'],
+                                    loadMyDirectives: []
+                                },
                                 subPages: {
                                     boardDetail: {
                                         menuKey: 'boards',
@@ -160,6 +198,12 @@ angular.module('app')
                                 url: '/comm/boards/qna',
                                 controller: 'commQnaBoardsCtrl',
                                 templateUrl: _COMM_VIEWS_+'/board/qnaBoards.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [_COMM_JS_+'/services/boardServices.js'],
+                                    loadMyControllers: [_COMM_JS_+'/controllers/boardControllers.js'],
+                                    loadMyDirectives: []
+                                },
                                 // controller: 'commBoardsCtrl',
                                 // templateUrl: _COMM_VIEWS_+'/board/boards.html',
                                 subPages: {
@@ -184,6 +228,12 @@ angular.module('app')
                                 url: '/comm/boards/data',
                                 controller: 'commBoardsCtrl',
                                 templateUrl: _COMM_VIEWS_+'/board/boards.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [_COMM_JS_+'/services/boardServices.js'],
+                                    loadMyControllers: [_COMM_JS_+'/controllers/boardControllers.js'],
+                                    loadMyDirectives: []
+                                },
                                 subPages: {
                                     boardDetail: {
                                         menuKey: 'boards',
@@ -213,6 +263,12 @@ angular.module('app')
                 notEdPAuth: "AA",
                 name: "tutorial",
                 icon: "ico4",
+                loadMyFile: {
+                    loadMyScripts: [],
+                    loadMyServices: [],
+                    loadMyControllers: [_COMM_JS_+'/controllers/tutorialControllers.js'],
+                    loadMyDirectives: []
+                },
                 menus: {
                     tutorial1: {
                         name: 'tutorial1',
@@ -277,8 +333,8 @@ angular.module('app')
                         controller: 'commTutorialCtrl',
                         templateUrl: _COMM_VIEWS_ + '/tutorial/tutorial9.html'
                     }/*,
-                    
-                    /*,
+
+                    /!*,
                     tutorial5: {
                         name: 'tutorial5',
                         stateKey: 'commTutorial5',
@@ -294,6 +350,12 @@ angular.module('app')
                 notPAuth: "AA",
                 notEdPAuth: "AA",
                 mainTop: true,
+                loadMyFile: {
+                    loadMyScripts: [],
+                    loadMyServices: [],
+                    loadMyControllers: [_COMM_JS_+'/controllers/sampleControllers.js'],
+                    loadMyDirectives: []
+                },
                 menus: {
                     sampleTable: {
                         name: '1. 일반 테이블',
