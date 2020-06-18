@@ -71,14 +71,14 @@
                     </td>
                     <td class="text-right">{{ combinedAnl.lastPerfAmt | number }} 원</td>    <!-- 전월 금액-->
                     <td class="text-right">{{ combinedAnl.currentPerfAmt | number }} 원</td>    <!-- 당월 금액 -->
-                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">{{
+                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">{{
                         combinedAnl.lastAnlsSumByItemGroup | number }} 원
                     </td>    <!-- 전월 합계 -->
-                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">{{
+                    <td ng-if="combinedAnl.sltAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">{{
                         combinedAnl.sltAnlsSumByItemGroup | number }} 원
                     </td>    <!-- 당월 합계 -->
 
-                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">
+                    <td ng-if="combinedAnl.sltAnlsSumByItemGroup >= 0 && combinedAnl.lastAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">
                         <a style="text-decoration: underline" ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a>
 					</td>
                 </tr>
