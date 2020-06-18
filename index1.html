@@ -289,8 +289,9 @@
 	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" class="" ng-include="\''+_COMM_VIEWS_+ '/menu/sitemapMenu.html'+_VERSION_TAIL_+'\'"></div>   ');
 	document.writeln('	<aside ng-if="main.isLoginPage" id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP
 	document.writeln('	<div id="container">                                      ');	//container
-	document.writeln('		<main id="contentWrap">                               ');
-	document.writeln('			<div ng-if="main.isLoginPage" class="page-title" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitle.html'+_VERSION_TAIL_+'\'"></div> ');
+	document.writeln('		<main id="contentWrap" ng-class="{ \'dashboard-wrap\' : main.stateKey == \'commProjectDetail\' }">                                   ');
+	document.writeln('			<div ng-if="main.isLoginPage && main.stateKey == \'commProjectDetail\'" class="page-title dashboard-top" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitleDashboard.html'+_VERSION_TAIL_+'\'"></div> ');
+	document.writeln('			<div ng-if="main.isLoginPage && main.stateKey != \'commProjectDetail\'" class="page-title" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitle.html'+_VERSION_TAIL_+'\'"></div> ');
 	document.writeln('			<div class="page-content" ui-view="mainBody"></div> ');		//콘텐츠 영역
 	document.writeln('		</main>                                               ');
 	document.writeln('	</div>                                                    ');	// #container
