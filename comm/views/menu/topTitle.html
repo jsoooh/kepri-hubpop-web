@@ -1,14 +1,14 @@
                 <div id="spot">
                     <div class="page-info">
-                        HUBPoP UI Kit
+                        {{ main.sltMenu.depth3 != "" ? main.sltMenu.depth3 : main.sltMenu.depth2 }}
                     </div>
                     <div class="page-location">
                         <span class="home">
                             <i class="xi-home-o"></i>
                             HUBPoP
                         </span>
-                        <span>HUBPoP UI Kit</span>
-                        <span>Buttons</span>
+                        <span ng-if="main.sltMenu.depth1 != ''">{{ main.sltMenu.depth1 }}</span>
+                        <span ng-if="main.sltMenu.depth2 != ''">{{ main.sltMenu.depth2 }}</span>
                     </div>
                     <a href="" class="btn-refresh" ng-click="main.replacePage();">
                         <i class="xi-renew"></i>

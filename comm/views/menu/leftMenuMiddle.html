@@ -52,8 +52,8 @@
                                 <ul class="lnb-depth2 active" ng-if="menuItem1.childCnt > 0">
                                     <!-- 페이지가 활성화 되면 class="on" 추가  -->
                                     <li ng-repeat="menuItem2 in (main.dbMenuList | filter : { level: 2 } | filter : { parentId: menuItem1.id })" class="all-depth2-item menu1 active on">
-                                        <div class="depth2">
-                                            <a href="{{ menuItem2.urlPath }}" class="link">
+                                        <div class="depth2" ng-click="main.setMenu(menuItem2);">
+                                            <a href="" class="link">
                                                 <div class="depth-icon-img">
                                                     <img src="../assets/img/user/ico_server.png" alt="">
                                                 </div>
@@ -63,8 +63,8 @@
                                         </div>
                                         <ul class="lnb-depth3" ng-if="menuItem2.childCnt > 0">
                                             <!-- 페이지가 활성화 되면 class="on" 추가  -->
-                                            <li class="all-depth3-item on" ng-repeat="menuItem3 in (main.dbMenuList | filter : { level: 3 } | filter : { parentId: menuItem2.id })">
-                                                <a href="{{ menuItem3.urlPath }}">
+                                            <li class="all-depth3-item on" ng-repeat="menuItem3 in (main.dbMenuList | filter : { level: 3 } | filter : { parentId: menuItem2.id })" ng-click="main.setMenu(menuItem3);">
+                                                <a href="">
                                                     <span>{{ menuItem3.depth3 }}</span>
                                                 </a>
                                             </li>
