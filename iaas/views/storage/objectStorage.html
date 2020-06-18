@@ -30,8 +30,10 @@
 					<!-- 내부컨텐츠 -->
 					<div class="data_area pt60">
 						<div class="txt_l">
-							<span class="t_lg" ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</span>
-							<span class="t_md">GB</span>
+							<!--<span class="t_lg" ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</span>-->
+							<span class="t_lg">{{contents.objectStorageUsedVolume}}</span>
+							<!--<span class="t_md">GB</span>-->
+							<span class="t_md">{{contents.objectStorageUsedVolumeUnit}}</span>
 							<span class="t_sm" ng-init="contents.objecteStorageQuator.teamQuator ='0'">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
 						</div>
 						<div class="txt_r">
@@ -105,7 +107,7 @@
 <!-- 버튼영역 -->
 <div class="btnWrap">
 	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>버킷 만들기</button>
-	<!--<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false"><span class="ico ico_usage_view"></span>사용법 안내</button>-->
+	<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false"><span class="ico ico_usage_view"></span>사용법 안내</button>
 </div>
 <!-- //버튼영역 -->
 
@@ -159,7 +161,7 @@
 										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="main.fileSelectBtnClick($event);">올리기</button>
 									</li>
 									<li>
-										<button type="button" name="button" class="btn btn-color1 btn-sm"  ng-class="{'disabled' : contents.fn.getCheckedDownloadItems()==false}" ng-click="contents.fn.downloadFiles()">내려받기</button>
+										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-disabled="contents.fn.getCheckedDownloadItems()==false" ng-class="{'disabled' : contents.fn.getCheckedDownloadItems()==false}" ng-click="contents.fn.downloadFiles()">내려받기</button>
 									</li>
 									<li>
 										<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="contents.fn.createFolder()">폴더만들기</button>
@@ -206,7 +208,7 @@
 									</tr>
 								</thead>
 								<tbody class="file-item">
-									<tr class="item-list" ng-repeat="item in contents.objectStorageObjectList.fileList | filterList:contents.objectStorageObjectList.currentPath | orderBy:'type'" ng-show="contents.objectStorageObjectList.fileList" ng-dblclick="contents.fn.onDblclickObjectStorageObject(item.name, item.type)">
+									<tr class="item-list" ng-repeat="item in contents.objectStorageObjectList.fileList | filterList:contents.objectStorageObjectList.currentPath | orderBy:'type'" ng-show="contents.objectStorageObjectList.fileList" >
 										<td>
 											<div class="checkbox checkbox-only">
 												<input type="checkbox" value="option1" ng-model="item.checked">
@@ -214,16 +216,17 @@
 											</div>
 										</td>
 										<td>
+											<!--<div href="" title="{{item.type}}" ng-click="contents.fn.onClickObjectStorageObject(item.name, item.type)">-->
 											<div href="" title="{{item.type}}">
 												<span class="ico ico-folder" ng-if="item.type === 'dir'" title="폴더"></span>
 												<span class="ico ico-file" ng-if="item.type === 'file'" title="파일"></span>
 											</div>
 										</td>
 										<td>
-											<a href="" title="{{item.name}}"> {{item.name.substring(contents.objectStorageObjectList.currentPath.length)}} </a>
+											<a href="" title="{{item.name}}" ng-click="contents.fn.onClickObjectStorageObject(item.name, item.type)"> {{item.name.substring(contents.objectStorageObjectList.currentPath.length)}} </a>
 										</td>
 										<td>
-											<a href="" title="{{item.name}} ({{item.size}})"> {{item.url}} </a>
+											<a href="" title="{{item.name}} ({{item.size}})" style="cursor:default"> {{item.url}} </a>
 										</td>
 										<td class="hidden-sm hidden-xs"> {{item.modifiedDate}} </td>
 										<td class="hidden-xs">

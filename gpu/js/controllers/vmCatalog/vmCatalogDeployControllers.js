@@ -11,12 +11,31 @@ angular.module('gpu.controllers')
     ct.vmCatalogDeployList = [];
     ct.schFilterText = "";
 
+    ct.fn.mappingOuputsData = function (vmCatalogDeploy) {
+        if (angular.isArray(vmCatalogDeploy.outputs)) {
+            angular.forEach(vmCatalogDeploy.outputs, function(output) {
+                if (output.output_key == "servers") {
+                    vmCatalogDeploy.servers = angular.copy(output.output_value);
+                } else if (output.output_key == "octaviaLb") {
+                    vmCatalogDeploy.octaviaLb = angular.copy(output.output_value);
+                    vmCatalogDeploy.octaviaLbUse = true;
+                }
+            });
+        }
+    };
+
     ct.fn.listAllVmCatalogDeploy = function (tenantId) {
         $scope.main.loadingMainBody = true;
         var promise = vmCatalogService.listAllVmCatalogDeploy(tenantId);
         promise.success(function (data) {
             if (angular.isArray(data.content)) {
                 ct.vmCatalogDeployList = data.content;
+                angular.forEach(ct.vmCatalogDeployList, function (vmCatalogDeploy, kdy) {
+                    ct.fn.mappingOuputsData(vmCatalogDeploy);
+                    if (vmCatalogDeploy.stackStatus.indexOf("PROGRESS") >= 0) {
+                        $scope.main.reloadTimmerStart("listAllVmCatalogDeploy", function () { ct.fn.listAllVmCatalogDeploy(tenantId); }, 10000);
+                    }
+                });
             } else {
                 ct.vmCatalogDeployList = [];
             }
@@ -45,7 +64,6 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("삭제되었습니다.");
                 ct.fn.loadPage();
             });
             promise.error(function (data, status, headers) {
@@ -78,14 +96,9 @@ angular.module('gpu.controllers')
     ct.vmCatalogDeployInfo = {};
     ct.vmCatalogTemplateUrl = "";
     ct.octaviaLbUse = false;
+
     ct.octaviaLb = {};
-    ct.octaviaLbListener = {};
-    ct.octaviaLbPool = {};
-    ct.octaviaLbMonitor = {};
-    ct.octaviaLbPoolMembers = [];
-    ct.instances = [];
-    ct.instancePorts = [];
-    ct.volumes = [];
+    ct.servers = [];
 
     ct.fn.loadVmCatalogDeployView = function (templatePath, controllerName, deployViewHtmlFile) {
         // 페이지 로드
@@ -134,59 +147,15 @@ angular.module('gpu.controllers')
     ct.fn.mappingOuputsData = function (outputs) {
         if (angular.isArray(outputs)) {
             angular.forEach(outputs, function(output) {
-                if (output.output_key == "octaviaLb") {
+                if (output.output_key == "servers") {
+                    ct.servers = angular.copy(output.output_value);
+                } else if (output.output_key == "octaviaLb") {
                     ct.octaviaLb = angular.copy(output.output_value);
                     ct.octaviaLbUse = true;
-                } else if (output.output_key == "octaviaLbListener") {
-                    ct.octaviaLbListener = angular.copy(output.output_value);
-                    ct.octaviaLbUse = true;
-                } else if (output.output_key == "octaviaLbPool") {
-                    ct.octaviaLbPool = angular.copy(output.output_value);
-                    ct.octaviaLbUse = true;
-                } else if (output.output_key == "octaviaLbMonitor") {
-                    ct.octaviaLbMonitor = angular.copy(output.output_value);
-                    ct.octaviaLbUse = true;
-                } else if (output.output_key.indexOf("octaviaLbPoolMember") == 0) {
-                    var idx = 0;
-                    if (output.output_key != "octaviaLbPoolMember") {
-                        idx = parseInt(output.output_key.substring("octaviaLbPoolMember_".length), 10) - 1;
-                    }
-                    ct.octaviaLbPoolMembers[idx] = angular.copy(output.output_value);
-                    ct.octaviaLbUse = true;
-                } else if (output.output_key.indexOf("instance") == 0) {
-                    if (output.output_key.indexOf("instancePort") == 0) {
-                        var idx = 0;
-                        if (output.output_key != "instancePort") {
-                            idx = parseInt(output.output_key.substring("instancePort_".length), 10) - 1;
-                        }
-                        ct.instancePorts[idx] = angular.copy(output.output_value);
-                    } else {
-                        var idx = 0;
-                        if (output.output_key != "instance") {
-                            idx = parseInt(output.output_key.substring("instance_".length), 10) - 1;
-                        }
-                        ct.instances[idx] = angular.copy(output.output_value);
-                    }
-                } else if (output.output_key.indexOf("volume") == 0) {
-                    var idx = 0;
-                    if (output.output_key != "volume") {
-                        idx = parseInt(output.output_key.substring("volume_".length), 10) - 1;
-                    }
-                    ct.volumes[idx] = angular.copy(output.output_value);
                 }
             });
-            if (angular.isArray(ct.instances)) {
-                angular.forEach(ct.instances, function(instance, k) {
-                    if (angular.isObject(ct.instancePorts[k])) {
-                        instance.instancePort = angular.copy(ct.instancePorts[k]);
-                    }
-                    if (angular.isObject(ct.volumes[k])) {
-                        instance.volume = angular.copy(ct.volumes[k]);
-                    }
-                });
-            }
         }
-    }
+    };
 
     ct.fn.getVmCatalogDeployAndLoadTemplate = function (tenantId, deployId) {
         $scope.main.loadingMainBody = true;
@@ -197,8 +166,11 @@ angular.module('gpu.controllers')
                 ct.vmCatalogInfo = angular.copy(ct.vmCatalogDeployInfo.vmCatalogInfo);
                 ct.fn.mappingOuputsData(data.content.outputs);
                 ct.fn.loadVmCatalogDeployViewTemplate(ct.vmCatalogInfo.templatePath);
+                if (ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
+                    $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
+                }
             } else {
-                ct.vmCatalogDeployInfo = {};
+                $scope.main.goToPage("/gpu/vmCatalogDeploy/list");
                 $scope.main.loadingMainBody = false;
             }
         });
@@ -207,6 +179,25 @@ angular.module('gpu.controllers')
             $scope.main.loadingMainBody = false;
         });
     };
+
+    ct.vmCatalogDeployStatusTimeout = null
+
+    ct.fn.getVmCatalogDeployStatus = function (tenantId, deployId) {
+        var promise = vmCatalogService.getVmCatalogDeploy(tenantId, deployId);
+        promise.success(function (data) {
+            if (angular.isObject(data.content) && data.content.id) {
+                ct.vmCatalogDeployInfo = data.content;
+                ct.fn.mappingOuputsData(data.content.outputs);
+                if (ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
+                    $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
+                }
+            } else {
+                $scope.main.goToPage("/gpu/vmCatalogDeploy/list");
+            }
+        });
+        promise.error(function (data, status, headers) {
+        });
+    }
 
     ct.fn.openVmCatalogDeployRenameForm = function ($event, vmCatalogDeploy) {
         $scope.dialogOptions = {
@@ -225,8 +216,8 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("삭제되었습니다.");
-                ct.fn.loadPage();
+                common.showAlertError("삭제가 진행 중입니다.");
+                ct.fn.getVmCatalogDeployStatus(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             });
             promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -238,15 +229,14 @@ angular.module('gpu.controllers')
         $scope.main.copyToClipboard(ipAddress, '"' + ipAddress + '"가 클립보드에 복사 되었습니다.');
     };
 
-    ct.fn.getKeyFile = function(keypair, type) {
-        document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
+    ct.fn.getKeyFile = function(keypairName, type) {
+        document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.tenantId+"&name="+keypairName;
     };
 
-    ct.fn.loadPage = function () {
-        ct.fn.getVmCatalogDeployAndLoadTemplate(ct.tenantId, ct.deployId);
-    }
+    ct.fn.getVmCatalogDeployAndLoadTemplate(ct.tenantId, ct.deployId);
 
-    ct.fn.loadPage();
+    ct.fn.loadPage = function () {
+    };
 
 })
 .controller('gpuVmCatalogDeployRenameCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, $interval, common, ValidationService, vmCatalogService, CONSTANTS) {

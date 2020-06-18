@@ -466,3 +466,7 @@ html{height: 100%; background: #f3f3f3; overflow: auto;  overflow-y: scroll;}
 
 /* 관리메뉴(...) absolute 값 관련 좌측메뉴 bg height 끊어지는 문제로 background-image 처리 */
 html {background:url("../images/bg_all.jpg") repeat-y #f3f3f3;}
+
+
+/*신규 UI 작업 관련 CSS 재정의 내용(2020.06.17~)*/
+#header .inner {padding-left:0;}

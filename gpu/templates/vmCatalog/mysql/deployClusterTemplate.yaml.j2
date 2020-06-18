@@ -1,0 +1,601 @@
+heat_template_version: '2018-08-31'
+
+description: mysql cluster volume template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Galera-Mysql.qcow2
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+{% if octaviaLbUse %}
+  lb_description:
+    type: string
+    default: "vmCatalog Mysql cluster lb"
+  lb_svc_port:
+    type: string
+  lb_svc_protocol:
+    type: string
+    default: TCP
+  lb_algorithm:
+    type: string
+    default: ROUND_ROBIN
+  lb_svc_connection_limit:
+    type: string
+    default: 2000
+  lb_svc_monitor_type:
+    type: string
+    default: TCP
+  lb_svc_monitor_delay:
+    type: string
+    default: 3
+  lb_svc_monitor_max_retries:
+    type: string
+    default: 5
+  lb_svc_monitor_timeout:
+    type: string
+    default: 5
+  lb_svc_monitor_url_path:
+    type: string
+    default: /
+{% endif %}
+  service_port:
+    type: string
+    default: 3306
+  galera_port:
+    type: string
+    default: 4567
+  root_password:
+    type: string
+{% if createUser %}
+  create_user_id:
+    type: string
+  create_user_password:
+    type: string
+  create_db_name:
+    type: string
+{% endif %}
+{% if volumeUse %}
+  volume_type:
+    type: string
+    default: RBD
+  volume_size:
+    type: string
+  volume_mount_point:
+    type: string
+    default: /dev/vdb
+  volume_format_type:
+    type: string
+    default: xfs
+  volume_mount_path:
+    type: string
+    default: /mnt/data
+{% endif %}
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+{% if volumeUse %}
+  cinder_volume1:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume2:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume3:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+{% endif %}
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volume %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+{% if createUser %}
+            $create_user_id: { get_param: create_user_id }
+            $create_user_password: { get_param: create_user_password }
+            $create_db_name: { get_param: create_db_name }
+{% endif %}
+            $service_port: { get_param: service_port }
+            $galera_port: { get_param: galera_port }
+            $root_password: { get_param: root_password }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server_addresses_and_ports:
+              list_join:
+                - ','
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+          template: |
+            #!/bin/sh
+            echo "mysql setting start"
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
+            ln -s $volume_mount_path/mysql /var/lib/mysql
+            sleep 1
+{% endif %}
+            touch /var/log/mysqld.log
+            chown mysql:mysql /var/log/mysqld.log
+            sleep 1
+
+            cp /etc/my.cnf /etc/my.cnf.backup
+            cat <<EOF> /etc/my.cnf
+            [mysqld]
+            port=$service_port
+            datadir=/var/lib/mysql
+            socket=/var/lib/mysql/mysql.sock
+            user=mysql
+            binlog_format=ROW
+            bind-address=0.0.0.0
+            default_storage_engine=innodb
+            innodb_autoinc_lock_mode=2
+            innodb_flush_log_at_trx_commit=0
+            innodb_buffer_pool_size=122M
+            wsrep_provider=/usr/lib64/galera-3/libgalera_smm.so
+            wsrep_provider_options="gcache.size=300M; gcache.page_size=300M"
+            wsrep_cluster_name="galeracluster"
+            wsrep_cluster_address="gcomm://$server_addresses_and_ports"
+            wsrep_sst_method=rsync
+            server_id=1
+            wsrep_node_address="$server1_ip_address"
+            wsrep_node_name="galera1"
+            symbolic-links=0
+
+            log-error=/var/log/mysqld.log
+            pid-file=/var/run/mysqld/mysqld.pid
+
+            EOF
+            sleep 1
+
+            /usr/bin/mysqld_bootstrap
+            sleep 1
+
+            # Change Mysql Root Password
+            /usr/bin/mysqld_bootstrap
+            sleep 1
+
+            TEMP_PASSWORD=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f11)
+            if [ "${TEMP_PASSWORD}" == "" ]; then
+              /usr/bin/mysqladmin -u root password 'P@ssw0rd'
+            else
+              /usr/bin/mysqladmin -u root -p${TEMP_PASSWORD} password 'P@ssw0rd'
+            fi
+
+            # Create DB, User Using Changed Password, TIP: [-p'$root_password'] causes [ERROR 1045 (28000): Access denied]
+            mysql -u root -pP@ssw0rd <<EOF
+              UNINSTALL PLUGIN validate_password;
+              ALTER USER 'root'@'localhost' IDENTIFIED BY '$root_password';
+{% if createUser %}
+              CREATE DATABASE $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+              CREATE USER '$create_user_id'@'%' IDENTIFIED BY '$create_user_password';
+              GRANT ALL ON $create_db_name.* TO '$create_user_id'@'%';
+              FLUSH PRIVILEGES;
+{% endif %}
+            EOF
+            sleep 1
+            systemctl enable mysqld
+            echo "mysql setting end"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $root_password: { get_param: root_password }
+            $galera_port: { get_param: galera_port }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server_addresses_and_ports:
+              list_join:
+                - ','
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+          template: |
+            #!/bin/sh
+            echo "mysql setting start"
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
+            ln -s $volume_mount_path/mysql /var/lib/mysql
+            sleep 1
+{% endif %}
+            touch /var/log/mysqld.log
+            chown mysql:mysql /var/log/mysqld.log
+            sleep 1
+
+            cp /etc/my.cnf /etc/my.cnf.backup
+            cat <<EOF> /etc/my.cnf
+            [mysqld]
+            datadir=/var/lib/mysql
+            socket=/var/lib/mysql/mysql.sock
+            user=mysql
+            binlog_format=ROW
+            bind-address=0.0.0.0
+            default_storage_engine=innodb
+            innodb_autoinc_lock_mode=2
+            innodb_flush_log_at_trx_commit=0
+            innodb_buffer_pool_size=122M
+            wsrep_provider=/usr/lib64/galera-3/libgalera_smm.so
+            wsrep_provider_options="gcache.size=300M; gcache.page_size=300M"
+            wsrep_cluster_name="galeracluster"
+            wsrep_cluster_address="gcomm://$server_addresses_and_ports"
+            wsrep_sst_method=rsync
+            server_id=2
+            wsrep_node_address="$server2_ip_address"
+            wsrep_node_name="galera2"
+            symbolic-links=0
+
+            log-error=/var/log/mysqld.log
+            pid-file=/var/run/mysqld/mysqld.pid
+
+            EOF
+            sleep 10
+
+            masterRun=1
+            while [ $masterRun -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $galera_port"
+              nc -z $server1_ip_address $galera_port
+              masterRun=$?
+              sleep 5
+            done
+            sleep 10
+
+            systemctl start mysqld
+            systemctl enable mysqld
+            echo "mysql setting end"
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $root_password: { get_param: root_password }
+            $galera_port: { get_param: galera_port }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server_addresses_and_ports:
+              list_join:
+                - ','
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: galera_port }
+          template: |
+            #!/bin/sh
+            echo "mysql setting start"
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mysql $volume_mount_path/
+            sleep 1
+{% endif %}
+            touch /var/log/mysqld.log
+            chown mysql:mysql /var/log/mysqld.log
+            sleep 1
+
+            cp /etc/my.cnf /etc/my.cnf.backup
+            cat <<EOF> /etc/my.cnf
+            [mysqld]
+            datadir=/var/lib/mysql
+            socket=/var/lib/mysql/mysql.sock
+            user=mysql
+            binlog_format=ROW
+            bind-address=0.0.0.0
+            default_storage_engine=innodb
+            innodb_autoinc_lock_mode=2
+            innodb_flush_log_at_trx_commit=0
+            innodb_buffer_pool_size=122M
+            wsrep_provider=/usr/lib64/galera-3/libgalera_smm.so
+            wsrep_provider_options="gcache.size=300M; gcache.page_size=300M"
+            wsrep_cluster_name="galeracluster"
+            wsrep_cluster_address="gcomm://$server_addresses_and_ports"
+            wsrep_sst_method=rsync
+            server_id=3
+            wsrep_node_address="$server3_ip_address"
+            wsrep_node_name="galera3"
+            symbolic-links=0
+
+            log-error=/var/log/mysqld.log
+            pid-file=/var/run/mysqld/mysqld.pid
+
+            EOF
+            sleep 10
+
+            masterRun=1
+            while [ $masterRun -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $galera_port"
+              nc -z $server1_ip_address $galera_port
+              masterRun=$?
+              sleep 5
+            done
+            sleep 10
+
+            systemctl start mysqld
+            systemctl enable mysqld
+            echo "mysql setting end"
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
+
+{% if volumeUse %}
+  cinder_volume1_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server1 }
+      volume_id: { get_resource: cinder_volume1 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume2_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server2 }
+      volume_id: { get_resource: cinder_volume2 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume3_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server3 }
+      volume_id: { get_resource: cinder_volume3 }
+      mountpoint: { get_param: volume_mount_point }
+{% endif %}
+
+{% if octaviaLbUse %}
+  octavia_lb:
+    type: OS::Octavia::LoadBalancer
+    properties:
+      vip_subnet: { get_param: provider_subnet }
+      description: { get_param: lb_description }
+
+  octavia_lb_svc_listener:
+    type: OS::Octavia::Listener
+    properties:
+      loadbalancer: { get_resource: octavia_lb }
+      connection_limit: { get_param: lb_svc_connection_limit }
+      protocol: { get_param: lb_svc_protocol }
+      protocol_port: { get_param: lb_svc_port }
+
+  octavia_lb_svc_pool:
+    type: OS::Octavia::Pool
+    properties:
+      listener: { get_resource: octavia_lb_svc_listener }
+      lb_algorithm: { get_param: lb_algorithm }
+      protocol: { get_param: lb_svc_protocol }
+      session_persistence:
+        type: SOURCE_IP
+
+  octavia_lb_svc_monitor:
+    type: OS::Octavia::HealthMonitor
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      type: { get_param: lb_svc_monitor_type }
+      delay: { get_param: lb_svc_monitor_delay }
+      max_retries: { get_param: lb_svc_monitor_max_retries }
+      timeout: { get_param: lb_svc_monitor_timeout }
+{% if monitorUrlPathUse %}
+      url_path: { get_param: lb_svc_monitor_url_path }
+{% endif %}
+
+  lb_svc_pool_member1:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+
+  lb_svc_pool_member2:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+
+  lb_svc_pool_member3:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+{% endif %}
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume1, show ] }
+{% endif %}
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume2, show ] }
+{% endif %}
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume3, show ] }
+{% endif %}
+{% if octaviaLbUse %}
+  octaviaLb:
+    value:
+      loadBalancer: { get_attr: [ octavia_lb, show ] }
+      listeners:
+        - listener: { get_attr: [ octavia_lb_svc_listener, show ] }
+          pool: { get_attr: [ octavia_lb_svc_pool, show ] }
+          monitor: { get_attr: [ octavia_lb_svc_monitor, show ] }
+          poolMembers:
+            - { get_attr: [ lb_svc_pool_member1, show ] }
+            - { get_attr: [ lb_svc_pool_member2, show ] }
+            - { get_attr: [ lb_svc_pool_member3, show ] }
+{% endif %}

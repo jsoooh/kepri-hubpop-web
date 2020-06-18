@@ -16,16 +16,17 @@
 						<ul class="form_list">
 							<li>
 								<div class="pnb_tit">
-									<i class="i_star"></i> <span class="pnb_t_txt">서버 이름</span>
+									<i class="i_star"></i> <span class="pnb_t_txt">인스턴스 이름</span>
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 								</div>
 								<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" ng-change="contents.serverNameChange();" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required">
 							</li>
 							<li>
 								<div class="pnb_tit">
-									<i class="i_star"></i> <span class="pnb_t_txt">OS 선택</span>
+									<i class="i_star"></i> <span class="pnb_t_txt">OS 타입</span>
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버에 설치되는 OS(운영체제, Operation System)를 선택할 수 있습니다.'"><span class="ico_info"></span></button></div>
 								</div>
+								<!--
 								<div ng-if="contents.imageListLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="os_select_panel">
 									<ul class="ul-list1">
 										<li ng-repeat="image in contents.imageList">
@@ -41,7 +42,56 @@
 									</ul>
 								</div>
 								<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
+								-->
+								<select id="ImageTypeList" name="ImageTypeList" class="form-control" ng-options="imageType as imageType.osType + ' ' + imageType.imageVersion for imageType in contents.imageTypeList" ng-model="ct.selectedImageType" ng-change="contents.fn.onchangeImageType(ct.selectedImageType);">
+									<option value="">{{ 'label.select' | translate }}</option>
+								</select>
 							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">이미지 선택</span>
+								</div>
+								<select class="form-control" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);">
+									<option value="">{{ 'label.select' | translate }}</option>
+									<option  ng-repeat="image in contents.imageList | filter: {osType: contents.selectedOsImageType, version: contents.selectedOsImageVersion}" value="{{image.id}}">
+										{{image.name}}
+									</option>
+								</select>
+							</li>
+
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">서버 유형</span>
+								</div>
+								<select class="form-control" ng-model="contents.selectedSpecType">
+									<option value="">{{ 'label.select' | translate }}</option>
+									<option ng-repeat="specType in contents.specTypeList" value={{specType}} ng-selected="$first">{{specType}}</option>
+								</select>
+							</li>
+
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">GPU 모델 선택</span>
+								</div>
+								<select class="form-control" ng-disabled="contents.selectedSpecType!='GPU'" ng-model="contents.selectedGpuCardId" ng-change="contents.fn.onchangeGpuCard(contents.selectedGpuCardId);" >
+									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
+									<option ng-repeat="gpuCard in contents.gpuCardList" value={{gpuCard.id}} >{{gpuCard.name}}</option>
+								</select>
+							</li>
+
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">존 선택</span>
+								</div>
+								<!--
+								<select class="form-control" ng-disabled="contents.selectedSpecType!='GPU'">
+								-->
+								<select class="form-control" ng-model="contents.selectedAvailabilityZone">
+									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
+									<option ng-repeat="zone in contents.availabilityZoneList" value="{{zone.availabilityZone}}">{{zone.availabilityZone}} [ {{zone.publicNetworkSubnet.cidr}} ] 생성 가능한 인스턴스: {{zone.publicNetworkSubnet.available}}개</option>
+								</select>
+							</li>
+
 							<!--<li ng-if="contents.data.image.osType == 'windows'">-->
 							<li ng-if="false">
 								<div class="pnb_tit">
@@ -66,13 +116,17 @@
 							<li>
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span>
+									<!--
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
+									-->
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button></div>
 								</div>
-								
 								<div class="tbl type1">
 									<table class="table">
 										<colgroup>
 											<col style="width:10%;">
+											<col ng-if="contents.selectedSpecType=='GPU'" style="width:15%;">
+											<col ng-if="contents.selectedSpecType=='GPU'" style="width:15%;">
 											<col style="width:15%;">
 											<col style="width:20%;">
 											<col style="width:20%;">
@@ -82,13 +136,15 @@
 											<tr>
 												<th scope="col"></th>
 												<th scope="col">종류</th>
+												<th ng-if="contents.selectedSpecType=='GPU'" scope="col">GPU</th>
+												<th ng-if="contents.selectedSpecType=='GPU'" scope="col">GPU 메모리</th>
 												<th scope="col">vCPU</th>
 												<th scope="col">메모리</th>
 												<th scope="col">OS디스크</th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m'}" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': (spec.uuid == contents.specUuid)}" ng-click="contents.fn.selectSpec(spec);">
+											<tr ng-if="contents.selectedSpecType!=''" ng-repeat="(key, spec) in contents.specList | filter:{name:'m', type: contents.selectedSpecType} " ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': (spec.uuid == contents.specUuid)}" ng-click="contents.fn.selectSpec(spec);">
 												<td>
 													<div class="radio radio-only" >
 														<input type="radio" 
@@ -96,11 +152,12 @@
 															   ng-model="contents.specUuid" 
 															   id="spec_radio_{{key}}" 
 															   value="{{spec.uuid}}" ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)">
-												
 														<label for="spec_radio_{{key}}"></label>
 													</div>
 												</td>
 												<td>{{spec.name}}</td>
+												<td ng-if="contents.selectedSpecType=='GPU'">{{spec.gpu}}</td>
+												<td ng-if="contents.selectedSpecType=='GPU'">{{spec.gpuCardInfo.memory}}</td>
 												<td>{{spec.vcpus}} Core</td>
 												<td>{{spec.ram | displayVolume : 'MB'}}</td>
 												<td>{{spec.disk | displayVolume : 'GB'}}</td>
@@ -115,7 +172,10 @@
 							<li class="pn-Toggle">
 								<div class="pnb_tit">
 									<span class="pnb_t_txt">디스크 추가</span>
+									<!--
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
+									-->
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버에 추가 디스크를 연결할 수 있습니다. 필요한 디스크 크기를 설정하여 제공되는 기본 저장공간외에 추가적인 저장공간을 확보할 수 있습니다.'"><span class="ico_info"></span></button></div>
 									<button ng-if="contents.specDisabledAllSetting" type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event, true);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 								</div>
 								<div class="s_cont_box">

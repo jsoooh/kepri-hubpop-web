@@ -1,0 +1,403 @@
+heat_template_version: '2018-08-31'
+
+description: redis cluster(M-S) template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Redis.qcow2
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+    default: default
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+{% if octaviaLbUse %}
+  lb_svc_port:
+    type: string
+  lb_svc_protocol:
+    type: string
+    default: TCP
+  lb_algorithm:
+    type: string
+    default: ROUND_ROBIN
+  lb_svc_connection_limit:
+    type: string
+    default: 2000
+  lb_svc_monitor_type:
+    type: string
+    default: TCP
+  lb_svc_monitor_delay:
+    type: string
+    default: 3
+  lb_svc_monitor_max_retries:
+    type: string
+    default: 5
+  lb_svc_monitor_timeout:
+    type: string
+    default: 5
+  lb_svc_monitor_url_path:
+    type: string
+    default: /
+{% endif %}
+  service_port:
+    type: string
+    default: 6379
+  redis1_port:
+    type: string
+    default: 6379
+  redis2_port:
+    type: string
+    default: 6380
+  redis_password:
+    type: string
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $redis1_port: { get_param: redis1_port }
+            $redis2_port: { get_param: redis2_port }
+            $redis_password: { get_param: redis_password }
+          template: |
+            #!/bin/sh
+            echo "redis setting start"
+
+            cp /etc/redis.conf /etc/redis_$redis1_port.conf
+            sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
+            sed -i 's/^# requirepass foobared/requirepass $redis_password/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-enabled yes/cluster-enabled yes/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-node-timeout 15000/cluster-node-timeout 15000/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-migration-barrier 1/cluster-migration-barrier 1/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# masterauth <master-password>/masterauth $redis_password/' /etc/redis_$redis1_port.conf
+
+            cp /etc/redis_$redis1_port.conf /etc/redis_$redis2_port.conf
+
+            sed -i "s/^port 6379/port $redis1_port/" /etc/redis_$redis1_port.conf
+            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/' /etc/redis_$redis1_port.conf
+            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/' /etc/redis_$redis1_port.conf
+            sed -i 's/^logfile \/var\/log\/redis\/redis.log"/logfile \/var\/log\/redis\/redis_$redis1_port.log/' /etc/redis_$redis1_port.conf
+
+            sed -i "s/^port 6379/port $redis2_port/" /etc/redis_$redis2_port.conf
+            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/' /etc/redis_$redis2_port.conf
+            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/' /etc/redis_$redis2_port.conf
+            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/' /etc/redis_$redis2_port.conf
+            sed -i 's/^logfile \/var\/log\/redis\/redis.log"/logfile \/var\/log\/redis\/redis_$redis2_port.log/' /etc/redis_$redis2_port.conf
+
+            sleep 1
+            redis-server /etc/redis_$redis1_port.conf &
+            redis-server /etc/redis_$redis2_port.conf &
+
+            redis2Run=1
+            while [ $redis2Run -ne 0 ]
+            do
+              sleep 5
+              echo "nc -z $server2_ip_address $redis2_port"
+              nc -z $server2_ip_address $redis2_port
+              redis2Run=$?
+              echo "nc -z $server2_ip_address $redis2_port > $redis2Run"
+            done
+
+            redis3Run=1
+            while [ $redis3Run -ne 0 ]
+            do
+              sleep 5
+              echo "nc -z $server3_ip_address $redis2_port"
+              nc -z $server3_ip_address $redis2_port
+              redis3Run=$?
+              echo "nc -z $server3_ip_address $redis2_port > $redis3Run"
+            done
+
+            sleep 5
+
+            echo "redis-cli -a $redis_password --cluster create $server1_ip_address:$redis1_port $server2_ip_address:$redis1_port $server3_ip_address:$redis1_port"
+            redis-cli -a $redis_password --cluster create $server1_ip_address:$redis1_port $server2_ip_address:$redis1_port $server3_ip_address:$redis1_port <<EOF
+            yes
+            EOF
+
+            sleep 5
+
+            echo "redis-cli -a $redis_password --cluster add-node $server2_ip_address:$redis2_port $server1_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server1_ip_address:$redis1_port | grep master | awk '{print \$1}')"
+            redis-cli -a $redis_password --cluster add-node $server2_ip_address:$redis2_port $server1_ip_address:$redis1_port --cluster-slave --cluster-master-id $(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server1_ip_address:$redis1_port | grep master | awk '{print $1}')
+            sleep 2
+            echo "redis-cli -a $redis_password --cluster add-node $server3_ip_address:$redis2_port $server2_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server2_ip_address:$redis1_port | grep master | awk '{print \$1}')"
+            redis-cli -a $redis_password --cluster add-node $server3_ip_address:$redis2_port $server2_ip_address:$redis1_port --cluster-slave --cluster-master-id $(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server2_ip_address:$redis1_port | grep master | awk '{print $1}')
+            sleep 2
+            echo "redis-cli -a $redis_password --cluster add-node $server1_ip_address:$redis2_port $server3_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server3_ip_address:$redis1_port | grep master | awk '{print \$1}')"
+            redis-cli -a $redis_password --cluster add-node $server1_ip_address:$redis2_port $server3_ip_address:$redis1_port --cluster-slave --cluster-master-id $(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server3_ip_address:$redis1_port | grep master | awk '{print $1}')
+            sleep 2
+
+            cat <<EOF>> /etc/rc.local
+            redis-server /etc/redis_$redis1_port.conf &
+            redis-server /etc/redis_$redis2_port.conf &
+            EOF
+
+            systemctl enable rc-local
+
+            echo "redis setting end"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $redis1_port: { get_param: redis1_port }
+            $redis2_port: { get_param: redis2_port }
+            $redis_password: { get_param: redis_password }
+          template: |
+            #!/bin/sh
+            echo "redis setting start"
+            cp /etc/redis.conf /etc/redis_$redis1_port.conf
+            sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
+            sed -i 's/^# requirepass foobared/requirepass $redis_password/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-enabled yes/cluster-enabled yes/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-node-timeout 15000/cluster-node-timeout 15000/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-migration-barrier 1/cluster-migration-barrier 1/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# masterauth <master-password>/masterauth $redis_password/' /etc/redis_$redis1_port.conf
+
+            cp /etc/redis_$redis1_port.conf /etc/redis_$redis2_port.conf
+
+            sed -i "s/^port 6379/port $redis1_port/" /etc/redis_$redis1_port.conf
+            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/' /etc/redis_$redis1_port.conf
+            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/' /etc/redis_$redis1_port.conf
+
+            sed -i "s/^port 6379/port $redis2_port/" /etc/redis_$redis2_port.conf
+            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/' /etc/redis_$redis2_port.conf
+            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/' /etc/redis_$redis2_port.conf
+            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/' /etc/redis_$redis2_port.conf
+
+            sleep 1
+            redis-server /etc/redis_$redis1_port.conf &
+            redis-server /etc/redis_$redis2_port.conf &
+
+            sleep 1
+            cat <<EOF>> /etc/rc.local
+            redis-server /etc/redis_$redis1_port.conf &
+            redis-server /etc/redis_$redis2_port.conf &
+            EOF
+
+            systemctl enable rc-local
+
+            echo "redis setting end"
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $redis1_port: { get_param: redis1_port }
+            $redis2_port: { get_param: redis2_port }
+            $redis_password: { get_param: redis_password }
+          template: |
+            #!/bin/sh
+            echo "redis setting start"
+
+            cp /etc/redis.conf /etc/redis_$redis1_port.conf
+            sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
+            sed -i 's/^# requirepass foobared/requirepass $redis_password/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-enabled yes/cluster-enabled yes/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-node-timeout 15000/cluster-node-timeout 15000/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-migration-barrier 1/cluster-migration-barrier 1/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# masterauth <master-password>/masterauth $redis_password/' /etc/redis_$redis1_port.conf
+
+            cp /etc/redis_$redis1_port.conf /etc/redis_$redis2_port.conf
+
+            sed -i "s/^port 6379/port $redis1_port/" /etc/redis_$redis1_port.conf
+            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/' /etc/redis_$redis1_port.conf
+            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/' /etc/redis_$redis1_port.conf
+            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/' /etc/redis_$redis1_port.conf
+
+            sed -i "s/^port 6379/port $redis2_port/" /etc/redis_$redis2_port.conf
+            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/' /etc/redis_$redis2_port.conf
+            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/' /etc/redis_$redis2_port.conf
+            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/' /etc/redis_$redis2_port.conf
+
+            sleep 1
+            redis-server /etc/redis_$redis1_port.conf &
+            redis-server /etc/redis_$redis2_port.conf &
+
+            sleep 1
+            cat <<EOF>> /etc/rc.local
+            redis-server /etc/redis_$redis1_port.conf &
+            redis-server /etc/redis_$redis2_port.conf &
+            EOF
+
+            systemctl enable rc-local
+
+            echo "redis setting end"
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
+
+{% if octaviaLbUse %}
+  octavia_lb:
+    type: OS::Octavia::LoadBalancer
+    properties:
+      vip_subnet: { get_param: provider_subnet }
+
+  octavia_lb_svc_listener:
+    type: OS::Octavia::Listener
+    properties:
+      loadbalancer: { get_resource: octavia_lb }
+      connection_limit: { get_param: lb_svc_connection_limit }
+      protocol: { get_param: lb_svc_protocol }
+      protocol_port: { get_param: lb_svc_port }
+
+  octavia_lb_svc_pool:
+    type: OS::Octavia::Pool
+    properties:
+      listener: { get_resource: octavia_lb_svc_listener }
+      lb_algorithm: { get_param: lb_algorithm }
+      protocol: { get_param: lb_svc_protocol }
+      session_persistence:
+        type: SOURCE_IP
+
+  octavia_lb_svc_monitor:
+    type: OS::Octavia::HealthMonitor
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      type: { get_param: lb_svc_monitor_type }
+      delay: { get_param: lb_svc_monitor_delay }
+      max_retries: { get_param: lb_svc_monitor_max_retries }
+      timeout: { get_param: lb_svc_monitor_timeout }
+{% if monitorUrlPathUse %}
+      url_path: { get_param: lb_svc_monitor_url_path }
+{% endif %}
+
+  lb_svc_pool_member1:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+
+  lb_svc_pool_member2:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+
+  lb_svc_pool_member3:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+{% endif %}
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
+{% if octaviaLbUse %}
+  octaviaLb:
+    value:
+      loadBalancer: { get_attr: [ octavia_lb, show ] }
+      listeners:
+        - listener: { get_attr: [ octavia_lb_svc_listener, show ] }
+          pool: { get_attr: [ octavia_lb_svc_pool, show ] }
+          monitor: { get_attr: [ octavia_lb_svc_monitor, show ] }
+          poolMembers:
+            - { get_attr: [ lb_svc_pool_member1, show ] }
+            - { get_attr: [ lb_svc_pool_member2, show ] }
+            - { get_attr: [ lb_svc_pool_member3, show ] }
+{% endif %}

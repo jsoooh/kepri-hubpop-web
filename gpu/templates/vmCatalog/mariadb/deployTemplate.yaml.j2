@@ -38,7 +38,7 @@ parameters:
   volume_size:
     type: string
     default: 10
-  volume_mountpoint:
+  volume_mount_point:
     type: string
     default: /dev/vdb
   volume_mount_path:
@@ -70,8 +70,10 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
 {% if volumeUse %}
-            $volume_mountpoint: { get_param: volume_mountpoint }
+            $volume_mount_point: { get_param: volume_mount_point }
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
 {% if createUser %}
@@ -84,6 +86,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -131,6 +134,7 @@ resources:
             EOF
 {% endif %}
             systemctl enable mariadb
+            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
             echo "mariadb setting end"
 
   server:
@@ -153,21 +157,14 @@ resources:
     properties:
       instance_uuid: { get_resource: server }
       volume_id: { get_resource: cinder_volume }
-      mountpoint: { get_param: volume_mountpoint }
+      mountpoint: { get_param: volume_mount_point }
 {% endif %}
 
 outputs:
-  instancePort:
+  servers:
     value:
-      get_attr: [ server_port, show ]
-  instance:
-    value:
-      get_attr: [ server, show ]
-  instanceInitConfig:
-    value:
-      get_attr: [ init_config, config ]
+      - instance: { get_attr: [ server, show ] }
+        instancePort: { get_attr: [ server_port, show ] }
 {% if volumeUse %}
-  volume:
-    value:
-      get_attr: [ cinder_volume, show ]
+        volume: { get_attr: [ cinder_volume, show ] }
 {% endif %}

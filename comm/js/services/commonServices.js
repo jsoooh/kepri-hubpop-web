@@ -2958,7 +2958,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 intervalTime = 2;
             } else if (timeRange == 'custom') {
                 var fromm = moment(from, 'YY.MM.DD h:mm');
-                var tom = moment(to, 'YY.MM.DD h:mm')
+                var tom = moment(to, 'YY.MM.DD h:mm');
                 hour = tom.diff(fromm, 'hour');
 
                 if (hour <= 24) {
@@ -3032,7 +3032,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 minutes = timeRange.replace('d', '') * 24;
             } else if (timeRange == 'custom') {
                 var fromm = moment(from, 'YY.MM.DD h:mm');
-                var tom = moment(to, 'YY.MM.DD h:mm')
+                var tom = moment(to, 'YY.MM.DD h:mm');
                 minutes = tom.diff(fromm, 'minutes');
             }
 
@@ -3047,7 +3047,7 @@ angular.module('common.services', ['LocalStorageModule'])
 
         common.selectGroupingByCustomTimeRange = function (from, to) {
             var fromm = moment(from, 'YYYY-MM-DD hh:mm');
-            var tom = moment(to, 'YYYY-MM-DD hh:mm')
+            var tom = moment(to, 'YYYY-MM-DD hh:mm');
             var subtraction = tom.diff(fromm, 'minutes');
             var grouping = '';
             if (subtraction <= 15) {

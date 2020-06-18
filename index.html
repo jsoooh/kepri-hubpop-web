@@ -265,40 +265,23 @@
     document.writeln('<div style="display: none;" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'block\' : \'none\' }" id="wrap" ng-class="main.mainLayoutClass">');
     document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="main.navigationTemplateUrl"></header>');
     document.writeln('	<div id="container" ng-class="main.containerLayoutClass">');
-    if (_MENU_TYPE_ == 'db') {
+    //if (_MENU_TYPE_ == 'db') {
         document.writeln('		<div ng-if="main.isLoginPage" class="leftCnt on">');
         document.writeln('			<div class="gnbMenu">');
         document.writeln('				<div class="gnb-in" ng-include="main.portalOrgSelectTemplateUrl"></div>');
         document.writeln('				<div class="gnb-in" id="leftMenu"></div>');
         document.writeln('			</div>');
         document.writeln('		</div>');
-	} else {
-        document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
-	}
+	// } else {
+    //     document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
+	// }
     document.writeln('		<div class="rightCnt" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }" id="{{main.rightCntId}}">');
     document.writeln('			<div ng-if="main.isLoginPage" class="titWrap" id="mainTop" ng-include="main.topTemplateUrl"></div>');
     document.writeln('			<div ui-view="mainBody"></div>');
     document.writeln('		</div>');
     document.writeln('	</div>');
-    if (_MENU_TYPE_ != 'db') {
-        if (_MENU_TYPE_ == 'part') {
-            document.writeln('	<div id="comm_layer_menu" class="gnbMenu" ng-include="main.commLayerMenuTempeUrl"></div >');
-        } else {
-            document.writeln('	<div id="comm_layer_menu" class="gnbMenu leftMenu" ng-include="main.commLayerMenuTempeUrl"></div >');
-        }
-    }
-    document.writeln('	<div class="aside" id="aside-md"></div>');
-    document.writeln('	<div class="aside" id="aside-aside1"><div ng-include="main.layerTemplateUrl"></div></div>');
-    document.writeln('	<div class="aside" id="aside-aside2"><div ng-include="main.layerTemplateUrl2"></div></div>');
-    document.writeln('	<div class="aside" id="aside-md-child"></div>');
-	document.writeln('	<div class="aside" id="aside-add"><div ng-include="main.layerTemplateUrlAdd"></div></div>'); // 프로젝트 관리 > 작업정보 탭 > 작업 등록
-	document.writeln('	<div class="aside" id="aside-mem"><div ng-include="main.layerTemplateUrlMem"></div></div>'); // 프로젝트 관리 > 프로젝트 구성원 탭 > 프로젝트 구성원 등록
-	document.writeln('	<div class="aside" id="aside-sch"><div ng-include="main.layerTemplateUrlSch"></div></div>'); // 프로젝트 목록 > 프로젝트  등록
-	document.writeln('	<div class="aside" id="aside-modi"><div ng-include="main.layerTemplateUrlModi"></div></div>'); // 프로젝트 상세 > 프로젝트  수정
-	document.writeln('	<div class="aside" id="aside-quota-req"><div ng-include="main.layerTemplateUrlQuotaReq"></div></div>'); // 작업 상세 > 용량
-	document.writeln('	<div class="aside" id="aside-quota-res"><div ng-include="main.layerTemplateUrlQuotaRes"></div></div>'); // 작업 상세 > 용량
-    document.writeln('	<div id="slider-contents-container" class="md-dialog-container backdrop_type" tabindex="-1"></div>'); // 가이드
-    document.writeln('	<div class="aside" id="slider-contents"></div>');
+	document.writeln('	<div id="slider-contents-container" class="md-dialog-container backdrop_type" tabindex="-1"></div>'); // 가이드
+	document.writeln('	<div class="aside" id="slider-contents"></div>');
 	document.writeln('</div>');
     document.writeln('<div growl></div>');
     document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
