@@ -34,6 +34,10 @@
                         <a ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" href="">{{ vmCatalogDeploy.deployName }}</a>
                         <a ng-if="vmCatalogDeploy.deployStatus != 'DELETE_IN_PROGRESS'" href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
                     </p>
+                    <p class="txt mb10">
+                        <a ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" href="">{{ vmCatalogDeploy.stackName }}</a>
+                        <a ng-if="vmCatalogDeploy.deployStatus != 'DELETE_IN_PROGRESS'" href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a>
+                    </p>
                     <p class="txt mb10">{{ vmCatalogDeploy.vmCatalogInfo.catalogName }} ( version {{ vmCatalogDeploy.vmCatalogInfo.version }} ) </p>
                     <div class="dropdown btn-option">
                         <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -115,8 +119,7 @@
                     <span ng-switch-when="DELETE_IN_PROGRESS" class="stateMark type3"></span>
                     <span ng-switch-when="CREATE_FAILED" class="stateMark type2"></span>
                     <span ng-switch-default class="stateMark type03"></span>
-                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS'" class="state-txt">배포 및 설정 중</span>
-                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE'" class="state-txt">생성 중</span>
+                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS' || (vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS')" class="state-txt">배포 및 설정 중</span>
                     <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE'" class="state-txt">배포 완료</span>
                     <span ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" class="state-txt">삭제 중</span>
                     <span ng-if="vmCatalogDeploy.deployStatus == 'CREATE_FAILED'" class="state-txt">생성 실패</span>

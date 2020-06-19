@@ -48,6 +48,7 @@ angular.module('gpu.controllers')
                     ct.data.checkPort++;
                 }
                 vmCatalogDeploy.parameters.check_port = ct.data.checkPort;
+                vmCatalogDeploy.parameters.repl_password = ct.data.rootPassword
             }
             vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
             if (vmCatalogDeploy.octaviaLbUse) {
@@ -59,6 +60,7 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
                 vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
             }
+
             return vmCatalogDeploy;
         };
 

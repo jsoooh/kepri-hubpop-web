@@ -2,7 +2,7 @@
     <div class="logoBox">
         <img ng-src="{{ main.gpuVmCatalogTemplatePath + contents.vmCatalogDeployInfo.vmCatalogInfo.templatePath + '/logo.png' }}">
     </div>
-    <p class="txt_tit">{{ contents.vmCatalogDeployInfo.deployName }}</p>
+    <p class="txt_tit">{{ contents.vmCatalogDeployInfo.deployName }} ({{ contents.vmCatalogDeployInfo.stackName }})</p>
     <p class="txt_s"><strong>{{ contents.vmCatalogDeployInfo.vmCatalogInfo.catalogName }}</strong><span>{{ contents.vmCatalogDeployInfo.vmCatalogInfo.version }}</span></p>
     <p class="txt_description">{{ contents.vmCatalogDeployInfo.vmCatalogInfo.description }}</p>
 </h4>
