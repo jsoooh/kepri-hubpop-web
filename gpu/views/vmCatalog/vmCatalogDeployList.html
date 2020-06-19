@@ -31,12 +31,10 @@
                         <img ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalogDeploy.vmCatalogInfo.templatePath + '/logo.png' }}" >
                     </div>
                     <p class="tit" title="{{ vmCatalogDeploy.deployName }}">
-                        <a ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" href="">{{ vmCatalogDeploy.deployName }}</a>
-                        <a ng-if="vmCatalogDeploy.deployStatus != 'DELETE_IN_PROGRESS'" href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
+                        <a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
                     </p>
                     <p class="txt mb10">
-                        <a ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" href="">{{ vmCatalogDeploy.stackName }}</a>
-                        <a ng-if="vmCatalogDeploy.deployStatus != 'DELETE_IN_PROGRESS'" href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a>
+                        <a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a>
                     </p>
                     <p class="txt mb10">{{ vmCatalogDeploy.vmCatalogInfo.catalogName }} ( version {{ vmCatalogDeploy.vmCatalogInfo.version }} ) </p>
                     <div class="dropdown btn-option">
@@ -94,10 +92,11 @@
         <tbody>
         <tr ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
             <td>
-                <a ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" href="">{{ vmCatalogDeploy.deployName }}</a>
-                <a ng-if="vmCatalogDeploy.deployStatus != 'DELETE_IN_PROGRESS'" href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
+                <a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
             </td>
-            <td>{{ vmCatalogDeploy.stackName }}</td>
+            <td>
+                <a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a>
+            </td>
             <td>{{ vmCatalogDeploy.vmCatalogInfo.catalogName }}</td>
             <td>{{ vmCatalogDeploy.version }}</td>
             <td ng-if="vmCatalogDeploy.deployType == 'single'">싱글</td>
