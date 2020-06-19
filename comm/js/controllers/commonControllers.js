@@ -57,6 +57,10 @@ angular.module('common.controllers', [])
 
         //좌측 메뉴 선택
         mc.setMenu = function (menuItem) {
+            if (!mc.sltPortalOrgId) {
+                common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                return;
+            }
             if (!menuItem.urlPath) return;
             mc.sltMenu = menuItem;
             common.locationHref(menuItem.urlPath);

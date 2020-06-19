@@ -1,7 +1,7 @@
             <script src="assets/js/common.js" type="text/javascript"></script>
             <nav id="lnb">
                 <div class="title-project">
-                    <div class="text" ng-bind-html="main.sltPortalOrgDisplayName ? main.sltPortalOrgDisplayName : ''"></div>    <!--청정발전 전력연구 <br>프로젝트-->
+                    <div class="text" ng-bind-html="main.sltPortalOrgDisplayName ? main.sltPortalOrgDisplayName : '프로젝트'"></div>    <!--청정발전 전력연구 <br>프로젝트-->
                     <div class="dropdown" ng-class="{ 'open' : main.topProjectMenuOpen }">
                         <button type="button" class="btn btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-expanded="{{ main.topProjectMenuOpen }}" ng-click="main.topProjectMenuClick();">
                             <div class="feather-icon">
@@ -51,7 +51,7 @@
                                 </div>
                                 <ul class="lnb-depth2 active" ng-if="menuItem1.childCnt > 0">
                                     <!-- 페이지가 활성화 되면 class="on" 추가  -->
-                                    <li ng-repeat="menuItem2 in (main.dbMenuList | filter : { level: 2 } | filter : { parentId: menuItem1.id })" class="all-depth2-item menu1 active on">
+                                    <li ng-repeat="menuItem2 in (main.dbMenuList | filter : { level: 2 } | filter : { parentId: menuItem1.id })" class="all-depth2-item menu1 active" ng-class="{ 'on' : (main.sltMenu.parentId == menuItem2.id || main.sltMenu.id == menuItem2.id) }">
                                         <div class="depth2" ng-click="main.setMenu(menuItem2);">
                                             <a href="" class="link">
                                                 <div class="depth-icon-img">
@@ -62,8 +62,8 @@
                                             <a href="" ng-class="{'btn-dropdown-depth' : menuItem2.childCnt > 0}"></a>
                                         </div>
                                         <ul class="lnb-depth3" ng-if="menuItem2.childCnt > 0">
-                                            <!-- 페이지가 활성화 되면 class="on" 추가  -->
-                                            <li class="all-depth3-item on" ng-repeat="menuItem3 in (main.dbMenuList | filter : { level: 3 } | filter : { parentId: menuItem2.id })" ng-click="main.setMenu(menuItem3);">
+                                            <!-- 페이지가 활성화 되면 class="on" 추가 : all-depth3-item on  -->
+                                            <li ng-repeat="menuItem3 in (main.dbMenuList | filter : { level: 3 } | filter : { parentId: menuItem2.id })" ng-click="main.setMenu(menuItem3);" class="all-depth3-item" ng-class="{ 'on' : main.sltMenu.parentId == menuItem3.id }">
                                                 <a href="">
                                                     <span>{{ menuItem3.depth3 }}</span>
                                                 </a>
