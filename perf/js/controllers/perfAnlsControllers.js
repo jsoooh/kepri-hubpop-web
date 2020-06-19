@@ -67,7 +67,7 @@ angular.module('perf.controllers')
             return maxRow;
         };
 
-        // 데이터 호출 Using $q
+        // 데이터 호출
         /**
          * HUBPOP_INT_PER_ANS_02 - 월별 과금 현황
          * @param params
@@ -91,12 +91,12 @@ angular.module('perf.controllers')
                         ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup = 0;
                         ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup = 0;
                         ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup = ct.combinedAnlList[startItemGroup].lastPerfAmt;
-                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup = ct.combinedAnlList[startItemGroup].currentPerfAmt;
+                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup = ct.combinedAnlList[startItemGroup].sltPerfAmt;
                     } else {
                         ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup += ct.combinedAnlList[i].lastPerfAmt;
-                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += ct.combinedAnlList[i].currentPerfAmt;
+                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += ct.combinedAnlList[i].sltPerfAmt;
                     }
-                    ct.data.totalPerfAnls += ct.combinedAnlList[i].currentPerfAmt;
+                    ct.data.totalPerfAnls += ct.combinedAnlList[i].sltPerfAmt;
                     ct.data.lastTotalPerfAnls += ct.combinedAnlList[i].lastPerfAmt;
                 }
                 $scope.main.loadingMainBody = false;
