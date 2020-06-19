@@ -9,6 +9,8 @@ angular.module('gpu.controllers')
     ct.fn                = {};
     ct.gpu_vm_catalog_template = _GPU_VM_CATALOG_TEMPLATE_;
 
+    ct.listType = 'image';
+
     ct.vmCatalogs = [];
     ct.schFilterText = "";
 
@@ -167,6 +169,7 @@ angular.module('gpu.controllers')
         var controllerTag = ' ng-controller="' + controllerName + ' as subPage"';
         var deployHtmlFilePath = templatePath + "/" + deployHtmlFile + _VERSION_TAIL_;
         var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployHtmlFilePath);
+
         promise.success(function (data) {
             $templateCache.put("deployFormTemplate", "<div class=\"panel_area\" id=\"vmCatalogDeploy\"" + controllerTag + ">\n" + data + "\n</div>");
             ct.vmCatalogTemplateUrl = "deployFormTemplate";
