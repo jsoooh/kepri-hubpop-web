@@ -145,7 +145,9 @@ angular.module('gpu.controllers')
                         break;
                     }
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.log(e);
+            }
             ct.checkClickBtn = false;
             return false;
         }
