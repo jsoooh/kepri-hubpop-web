@@ -1,0 +1,46 @@
+            <div class="all-menu-wrap">
+                <div class="all-menu-top">
+                    <div class="title">All Service</div>
+                    <a href="" class="btn-close" ng-click="main.allMenuOpenClick();">
+                        <span class="bar1"></span>
+                        <span class="bar2"></span>
+                        <p class="sr-only">닫기</p>
+                    </a>
+                </div>
+                <div class="menu-list">
+                    <ul class="category-list">
+                        <li ng-repeat="allMenuItem1 in (main.dbMenuList | filter : { level: 1 })">
+                            <div class="inner">
+                                <div class="title">
+                                    {{ allMenuItem1.depth1 }}
+                                </div>
+                                <ul class="all-lnb-depth2">
+                                    <li class="all-depth2-item" ng-class="{ 'on' : (main.sltMenu.parentId == allMenuItem2.id || main.sltMenu.id == allMenuItem2.id) }" ng-repeat="allMenuItem2 in (main.dbMenuList | filter : { level: 2 } | filter : { parentId: allMenuItem1.id })">
+                                        <div class="depth2">
+                                            <a href="" class="link" ng-click="!!allMenuItem2.urlPath && main.setMenu(allMenuItem2);">
+                                                <div class="depth-icon-img">
+                                                    <img ng-src="../assets/img/user/{{ !!allMenuItem2.iconId ? allMenuItem2.iconId : 'ico_server' }}.png" alt="">
+                                                </div>
+                                                <span>{{ allMenuItem2.depth2 }}</span>
+                                            </a>
+                                            <a href="" class="bookmark">
+                                                <p class="sr-only">북마크</p>
+                                            </a>
+                                        </div>
+                                        <ul class="all-lnb-depth3">
+                                            <li ng-repeat="allMenuItem3 in (main.dbMenuList | filter : { level: 3 } | filter : { parentId: allMenuItem2.id })" class="all-depth3-item" ng-class="{ 'on' : main.sltMenu.id == allMenuItem3.id }">
+                                                <a href="" ng-click="main.setMenu(allMenuItem3);">
+                                                    <div class="depth-icon-img">
+                                                        <img ng-src="../assets/img/user/{{ !!allMenuItem3.iconId ? allMenuItem3.iconId : 'ico_servermanager' }}.png" alt="">
+                                                    </div>
+                                                    <span>{{ allMenuItem3.depth3 }}</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>

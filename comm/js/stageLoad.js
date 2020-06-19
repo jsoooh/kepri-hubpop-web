@@ -1,4 +1,5 @@
 'use strict';
+/*
 
 // COMMON
 loadJavascript(_COMM_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
@@ -24,4 +25,6 @@ loadJavascript(_COMM_STAGE_+'/js/services/boardServices.js'+_VERSION_TAIL_HEAD_)
 loadJavascript(_COMM_STAGE_+'/js/services/quotaServices.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/services/userSettingServices.js'+_VERSION_TAIL_HEAD_);
 loadJavascript(_COMM_STAGE_+'/js/services/signupServices.js'+_VERSION_TAIL_HEAD_);
+
+*/
 

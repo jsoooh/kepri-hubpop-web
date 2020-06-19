@@ -6,32 +6,24 @@
                 <div class="ctlog-cnt">
                     <h5>서비스 접속정보</h5>
                     <ul>
-                        <li ng-if="contents.octaviaLbUse">
+                        <li>
                             <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
-                        </li>
-                        <li ng-if="!contents.octaviaLbUse">
-                            <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                        </li>
-                        <li ng-if="contents.octaviaLbUse">
-                            <strong class="tit">접속포트</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
-                        </li>
-                        <li ng-if="!contents.octaviaLbUse">
-                            <strong class="tit">접속포트</strong>
-                            <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+                            <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+                            <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
                         </li>
                         <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_id">
                             <strong class="tit">사용자계정</strong>
                             <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_id }}</span>
                         </li>
+<!--
                         <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_password">
                             <strong class="tit">사용자 초기 PW </strong>
                             <span class="txt"><span class="point_txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_password }}</span></span>
                         </li>
+-->
                     </ul>
                     <ul>
+<!--
                         <li>
                             <strong class="tit">관리자계정</strong>
                             <span class="txt">root</span>
@@ -39,6 +31,12 @@
                         <li>
                             <strong class="tit">관리자 초기 PW</strong>
                             <span class="txt"><span class="point_txt">{{ contents.vmCatalogDeployInfo.parameters.root_password }}</span></span>
+                        </li>
+-->
+                        <li>
+                            <strong class="tit">접속포트</strong>
+                            <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
+                            <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.servicePort }}</span>
                         </li>
                         <li ng-if="contents.vmCatalogDeployInfo.parameters.create_db_name">
                             <strong class="tit">사용자 DB명</strong>

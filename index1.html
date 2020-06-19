@@ -250,16 +250,23 @@
             loadJavascript(_COMM_STAGE_+'/js/properties/localhost.constants.js'+_VERSION_TAIL_HEAD_);
         }
 
-        loadJavascript(_COMM_STAGE_+'/js/services/commonServices.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/services/userServices.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/services/portalServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/commonServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/userServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/userSettingServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/portalServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/memberServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/orgServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/quotaServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/signupServices.js'+_VERSION_TAIL_HEAD_);
 
-        loadJavascript(_COMM_STAGE_+'/js/controllers/commonControllers.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/controllers/userControllers.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/controllers/portalControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/commonControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/userControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/portalControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/orgControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/signupControllers.js'+_VERSION_TAIL_HEAD_);
 
-        // COMMON
-        loadJavascript(_COMM_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
+		// COMMON
+		loadJavascript(_COMM_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
 
         // Sample
         if (_MODE_ == "DEBUG") loadJavascript(_COMM_STAGE_+'/js/controllers/sampleControllers.js'+_VERSION_TAIL_HEAD_);
@@ -284,14 +291,13 @@
 </head>
 <body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">
 <script type="text/javascript">
-	document.writeln('<div id="pageWrap">                                         ');
+	document.writeln('<div id="pageWrap" ng-class="{\'all-menu-open\' : main.allMenuOpen, \'dashboard-full\' : (main.isLoginPage && main.dashboardFull) }">                                         ');
 	document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuFirst.html'+_VERSION_TAIL_+'\'"></header>     ');
-	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" class="" ng-include="\''+_COMM_VIEWS_+ '/menu/sitemapMenu.html'+_VERSION_TAIL_+'\'"></div>   ');
+	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" ng-class="{\'active\' : main.allMenuOpen }" ng-include="\''+_COMM_VIEWS_+ '/menu/allMenuMap.html'+_VERSION_TAIL_+'\'"></div>   ');
 	document.writeln('	<aside ng-if="main.isLoginPage" id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP
 	document.writeln('	<div id="container">                                      ');	//container
 	document.writeln('		<main id="contentWrap" ng-class="{ \'dashboard-wrap\' : main.stateKey == \'commProjectDetail\' }">                                   ');
-	document.writeln('			<div ng-if="main.isLoginPage && main.stateKey == \'commProjectDetail\'" class="page-title dashboard-top" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitleDashboard.html'+_VERSION_TAIL_+'\'"></div> ');
-	document.writeln('			<div ng-if="main.isLoginPage && main.stateKey != \'commProjectDetail\'" class="page-title" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitle.html'+_VERSION_TAIL_+'\'"></div> ');
+	document.writeln('			<div ng-if="main.isLoginPage" class="page-title" ng-class="{ \'dashboard-top\' : main.stateKey == \'commProjectDetail\' }" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitle.html'+_VERSION_TAIL_+'\'"></div> ');
 	document.writeln('			<div class="page-content" ui-view="mainBody"></div> ');		//콘텐츠 영역
 	document.writeln('		</main>                                               ');
 	document.writeln('	</div>                                                    ');	// #container
@@ -304,7 +310,7 @@
 	document.writeln('<div growl></div>');
 	document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
 	document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.loadingMain || main.loadingMainBody) ? \'block\' : \'none\' }">'); //로딩바 영역
-	document.writeln('	<div class="loadWrap_spn"  ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
+	document.writeln('	<div class="loadWrap_spn" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
 	document.writeln('		<div class="loadBox_spn">');
 	document.writeln('			<div class="lds-css ng-scope">');
 	document.writeln('				<div class="lds-spinner" style="height:100%">');
