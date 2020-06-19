@@ -1,0 +1,40 @@
+<div class="ctlog_cntWrap">
+    <div class="ctlog-cnt">
+        <h5>서비스 접속정보</h5>
+        <ul>
+            <li>
+                <strong class="tit">접속 IP</strong>
+            </li>
+            <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_id">
+                <strong class="tit">사용자계정</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_id }}</span>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <strong class="tit">접속포트</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="ctlog-cnt">
+        <h5> 서비스 환경 설정 파일 경로</h5>
+        <ul>
+            <li>
+                <strong class="tit">my.cnf: </strong>
+                <span class="txt">/etc/my.cnf</span>
+            </li>
+            <li>
+                <strong class="tit">service.cnf: </strong>
+                <span class="txt">/etc/my.cnf.d/server.cnf</span>
+            </li>
+            <li>
+                <strong class="tit">mysql-clients.cnf: </strong>
+                <span class="txt">/etc/my.cnf.d/mysql-clients.cnf</span>
+            </li>
+            <li>
+                <strong class="tit">data: </strong>
+                <span class="txt">/var/lib/mysql</span>
+            </li>
+        </ul>
+    </div>
+</div>
