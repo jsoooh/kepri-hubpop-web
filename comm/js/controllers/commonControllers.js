@@ -52,7 +52,7 @@ angular.module('common.controllers', [])
         mc.setGroupMenu = function (menuItem) {
             mc.sltGroupMenu = menuItem;
             mc.sltGroupMenuIconId = menuItem.iconId;
-            console.log("mc.sltGroupMenu : ", mc.sltGroupMenu);
+            //console.log("mc.sltGroupMenu : ", mc.sltGroupMenu);
         };
 
         //좌측 메뉴 선택
@@ -60,7 +60,7 @@ angular.module('common.controllers', [])
             if (!menuItem.urlPath) return;
             mc.sltMenu = menuItem;
             common.locationHref(menuItem.urlPath);
-            console.log("mc.sltMenu : ", mc.sltMenu);
+            //console.log("mc.sltMenu : ", mc.sltMenu);
         };
 
         //전체 메뉴 오픈 여부
@@ -549,7 +549,7 @@ angular.module('common.controllers', [])
             if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
                 mc.dbMenuList = response.data.items;
                 mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
-                console.log("mc.dbMenuList : ", mc.dbMenuList);
+                //console.log("mc.dbMenuList : ", mc.dbMenuList);
             }
         };
 
@@ -1013,7 +1013,7 @@ angular.module('common.controllers', [])
         // left 메뉴 객체 셋팅
         mc.setSelectSiteMap = function (stateKey) {
             mc.selectSiteMap = common.getStateKeyBySelectSietMap(stateKey);
-            console.log("mc.selectSiteMap : ", mc.selectSiteMap);
+            //console.log("mc.selectSiteMap : ", mc.selectSiteMap);
         };
 
         mc.setLeftAllMunuParams = function () {
