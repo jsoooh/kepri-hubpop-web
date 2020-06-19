@@ -44,10 +44,7 @@ parameters:
     type: string
     default: /mnt/data
 {% endif %}
-  admin_id:
-    type: string
-    default: admin
-  admin_password:
+  root_password:
     type: string
     default: crossent12
 
@@ -83,8 +80,7 @@ resources:
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
             $service_port: { get_param: service_port }
-            $admin_id: { get_param: admin_id }
-            $admin_password: { get_param: admin_password }
+            $root_password: { get_param: root_password }
           template: |
             #!/bin/sh
             echo "mongodb setting start"
@@ -114,7 +110,7 @@ resources:
             systemctl start mongod
             mongo << EOF
             use admin
-            db.createUser({ user: "admin", pwd: "$admin_password", roles: [ "root" ] })
+            db.createUser({ user: "admin", pwd: "$root_password", roles: [ "root" ] })
             EOF
             systemctl restart mongod
 
