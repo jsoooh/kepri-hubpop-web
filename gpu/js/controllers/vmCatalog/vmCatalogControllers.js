@@ -106,6 +106,8 @@ angular.module('gpu.controllers')
         }
     };
 
+    ct.checkClickBtn = false;
+
     ct.fn.inputVolumeSizeChange = function () {
         var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
         if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
@@ -557,7 +559,9 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.volume_mount_point = ct.data.volumeMountPoint;
             vmCatalogDeploy.parameters.volume_mount_path = ct.data.volumeMountPath;
         }
-        vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);
+        if (angular.isFunction(appendSetVmCatalogDeploy)) {
+            vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);
+        }
 
         $scope.main.loadingMainBody = true;
 

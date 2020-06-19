@@ -29,8 +29,6 @@ angular.module('gpu.controllers')
         ct.data.createUserConfirmPassword = "Kepri!234";
 
 
-        ct.checkClickBtn = false;
-
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
