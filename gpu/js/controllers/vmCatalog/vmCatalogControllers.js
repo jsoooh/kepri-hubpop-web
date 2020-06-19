@@ -132,17 +132,21 @@ angular.module('gpu.controllers')
             try {
                 var deployForm = $('form[name="subPage.deployForm"]');
                 for (var i=0; i<subPage.$validationSummary.length; i++) {
-                    var validationTarget = deployForm.find('[name="' + subPage.$validationSummary[0].field + '"]');
-                    if (validationTarget.length == 0) continue;
-                    if (validationTarget.attr('type') == 'hidden') {
-                        var targetId = validationTarget.attr('targetId');
-                        if (targetId && deployForm.find('#'+targetId).length == 1) {
-                            deployForm.find('#'+targetId)[0].focus();
+                    try {
+                        var validationTarget = deployForm.find('[name="' + subPage.$validationSummary[0].field + '"]');
+                        if (validationTarget.length == 0) continue;
+                        if (validationTarget.attr('type') == 'hidden') {
+                            var targetId = validationTarget.attr('targetId');
+                            if (targetId && deployForm.find('#'+targetId).length == 1) {
+                                deployForm.find('#'+targetId)[0].focus();
+                                break;
+                            }
+                        } else {
+                            validationTarget[0].focus();
                             break;
                         }
-                    } else {
-                        validationTarget[0].focus();
-                        break;
+                    } catch (e) {
+                        console.log(e);
                     }
                 }
             } catch (e) {
