@@ -1,3 +1,10 @@
+<!-- 목록 이미지형/리스트형 선택 버튼 -->
+<div class="btnArea text-right">
+    <!-- 선택 된 class="on" 추가 -->
+    <button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
+    <button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
+</div>
+<!-- //목록 이미지형/리스트형 선택 버튼 -->
 <!-- 프로젝트 정보 -->
 <div class="cBox type0 projt-mana mt30">
     <div class="pull-left">
@@ -15,15 +22,18 @@
     </div>
 </div>
 <!-- //프로젝트 정보 -->
-<ul ng-show="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0" class="ul-panel thum_style">
-    <li ng-repeat="(key, vmCatalogDeploy) in contents.vmCatalogDeployList | filter: { deployName : contents.searchText }">
+<ul ng-show="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'image'" class="ul-panel thum_style">
+    <li ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
         <div class="panelWrap">
             <div class="panel type6 serv_list">
                 <div class="panel_head">
                     <div class="logo radius0">
                         <img ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalogDeploy.vmCatalogInfo.templatePath + '/logo.png' }}" >
                     </div>
-                    <p class="tit" title="{{ vmCatalogDeploy.deployName }}"><a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a></p>
+                    <p class="tit" title="{{ vmCatalogDeploy.deployName }}">
+                        <a ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" href="">{{ vmCatalogDeploy.deployName }}</a>
+                        <a ng-if="vmCatalogDeploy.deployStatus != 'DELETE_IN_PROGRESS'" href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
+                    </p>
                     <p class="txt mb10">{{ vmCatalogDeploy.vmCatalogInfo.catalogName }} ( version {{ vmCatalogDeploy.vmCatalogInfo.version }} ) </p>
                     <div class="dropdown btn-option">
                         <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -38,7 +48,13 @@
                 <div class="panel_body">
                     <div class="img_info_wrap">
                         <ul class="img_count" ng-class="{ 'imgType1': vmCatalogDeploy.deployServerCount == 1,  'imgType2': vmCatalogDeploy.deployServerCount == 2,  'imgType3': vmCatalogDeploy.deployServerCount == 3 }">
-                            <li ng-repeat="(key, server) in ( vmCatalogDeploy.servers )"><img src="images/thum/im_thum_centos_300.png" ></li>
+                            <li ng-repeat="(key, server) in ( vmCatalogDeploy.servers | filter: { instance : '!null' } )">
+                                <img ng-if="vmCatalogDeploy.deployStatus == 'CREATE_IN_PROGRESS' && vmCatalogDeploy.stackStatus != 'CREATE_FAILED'" ng-src="images/loading/loading_cloud.gif" >
+                                <img ng-if="(vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS' && vmCatalogDeploy.stackStatus != 'CREATE_FAILED') || (vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS')" ng-src="images/loading/lg.triple-gears-loading-icon.gif" >
+                                <img ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" ng-src="images/thum/im_thum_centos_300.png" >
+                                <img ng-if="vmCatalogDeploy.stackStatus == 'CREATE_FAILED'" ng-src="images/loading/614369-cloud_error-512.gif" >
+                                <img ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" ng-src="images/loading/funny-trash-playing.gif" >
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -47,6 +63,69 @@
     </li>
     <!-- //panel -->
 </ul>
+<div ng-if="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'list'" class="tbl type1">
+    <table class="table">
+        <colgroup>
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+        </colgroup>
+        <thead>
+        <tr>
+            <th scope="col">서비스 이름</th>
+            <th scope="col">서비스 영문 이름</th>
+            <th scope="col">카탈로그 이름</th>
+            <th scope="col">배포 버전</th>
+            <th scope="col">배포 유형</th>
+            <th scope="col">로드 밸런스</th>
+            <th scope="col">서버 수</th>
+            <th scope="col">상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
+            <td>
+                <a ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" href="">{{ vmCatalogDeploy.deployName }}</a>
+                <a ng-if="vmCatalogDeploy.deployStatus != 'DELETE_IN_PROGRESS'" href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
+            </td>
+            <td>{{ vmCatalogDeploy.stackName }}</td>
+            <td>{{ vmCatalogDeploy.vmCatalogInfo.catalogName }}</td>
+            <td>{{ vmCatalogDeploy.version }}</td>
+            <td ng-if="vmCatalogDeploy.deployType == 'single'">싱글</td>
+            <td ng-if="vmCatalogDeploy.deployType == 'replica'">클러스터</td>
+            <td ng-if="vmCatalogDeploy.deployType == 'cluster'">클러스터</td>
+            <td>{{ vmCatalogDeploy.octaviaLbUse ? '사용' : '미사용' }}</td>
+            <td>{{ vmCatalogDeploy.deployServerCount }}</td>
+            <td>
+                <span ng-if="vmCatalogDeploy.deployStatus == 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.stackStatus" class="stateWrap">
+                    <span ng-switch-when="CREATE_IN_PROGRESS" class="stateMark type1"></span>
+                    <span ng-switch-when="CREATE_COMPLETE" class="stateMark type5"></span>
+                    <span ng-switch-default class="stateMark type03"></span>
+                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'" class="state-txt">생성 중</span>
+                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="state-txt">배포 및 설정 중</span>
+                </span>
+                <span ng-if="vmCatalogDeploy.deployStatus != 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.stackStatus" class="stateWrap">
+                    <span ng-switch-when="CREATE_IN_PROGRESS" class="stateMark type4"></span>
+                    <span ng-switch-when="DEPLOY_COMPLETE" class="stateMark type01"></span>
+                    <span ng-switch-when="DELETE_IN_PROGRESS" class="stateMark type3"></span>
+                    <span ng-switch-when="CREATE_FAILED" class="stateMark type2"></span>
+                    <span ng-switch-default class="stateMark type03"></span>
+                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS'" class="state-txt">배포 및 설정 중</span>
+                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE'" class="state-txt">생성 중</span>
+                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE'" class="state-txt">배포 완료</span>
+                    <span ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" class="state-txt">삭제 중</span>
+                    <span ng-if="vmCatalogDeploy.deployStatus == 'CREATE_FAILED'" class="state-txt">생성 실패</span>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 <div ng-show="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length == 0" class="proj_list_area">
     <ul class="ul-panel dash_list no_data">
         <li><p class="no_data_txt pd0">생성된 서비스가 없습니다.</p></li>

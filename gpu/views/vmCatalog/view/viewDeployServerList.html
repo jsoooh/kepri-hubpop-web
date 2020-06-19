@@ -16,7 +16,11 @@
                     <div class="ctlog_cntWrap">
                         <div class="ctlog-cnt">
                             <div class="logoBox">
-                                <img src="images/thum/im_thum_centos_300.png" alt="">
+                                <img ng-if="contents.vmCatalogDeployInfo.deployStatus == 'CREATE_IN_PROGRESS' && contents.vmCatalogDeployInfo.stackStatus != 'CREATE_FAILED'" ng-src="images/loading/loading_cloud.gif" >
+                                <img ng-if="(contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_IN_PROGRESS' && contents.vmCatalogDeployInfo.stackStatus != 'CREATE_FAILED') || (contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS')" ng-src="images/loading/lg.triple-gears-loading-icon.gif" >
+                                <img ng-if="contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE'" ng-src="images/thum/im_thum_centos_300.png" >
+                                <img ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_FAILED'" ng-src="images/loading/614369-cloud_error-512.png" >
+                                <img ng-if="contents.vmCatalogDeployInfo.deployStatus == 'DELETE_IN_PROGRESS'" ng-src="images/loading/funny-trash-playing.gif" >
                             </div>
                         </div>
                         <div class="ctlog-cnt">

@@ -9,15 +9,38 @@
                 <img src="images/thum/im_logo_compute.png" class="logo" alt="">
             </h4>
         </div>
-<!--
-        <div class="pull-right">
-            <div class="stateWrap pt10">
-                <span class="stateMark type1">시작</span> <span class="state-txt">활성</span>
+    </div>
+    <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS'" class="cBox-cnt">
+        <div class="text-center pt30 pb30">
+            <div class="ul-in2 spinner_area">
+                <img ng-src="images/loading/loading_cloud.gif" height="160">
+                <div class="text-center">
+                    <p class="txt"><span class="ico ico-timer"></span>서버 생성 중입니다.</p>
+                </div>
             </div>
         </div>
--->
     </div>
-    <div class="cBox-cnt">
+    <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_FAILED'" class="cBox-cnt">
+        <div class="text-center pt30 pb30">
+            <div class="ul-in2 spinner_area">
+                <img ng-src="images/loading/614369-cloud_error-512.png" height="160">
+                <div class="text-center">
+                    <p class="txt"><span class="ico ico-timer"></span>생성 실패입니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'DELETE_IN_PROGRESS'" class="cBox-cnt">
+        <div class="text-center pt30 pb30">
+            <div class="ul-in2 spinner_area">
+                <img ng-src="images/loading/funny-trash-playing.gif" height="160">
+                <div class="text-center">
+                    <p class="txt"><span class="ico ico-timer"></span>삭제 중입니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE'" class="cBox-cnt">
         <div class="in">
             <div class="ctlog_cntWrap">
                 <div class="ctlog-cnt">

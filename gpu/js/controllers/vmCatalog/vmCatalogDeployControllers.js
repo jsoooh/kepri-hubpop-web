@@ -8,6 +8,7 @@ angular.module('gpu.controllers')
     ct.tenantId          = $scope.main.userTenantGpuId;
     ct.fn                = {};
 
+    ct.listType = 'image';
     ct.vmCatalogDeployList = [];
     ct.schFilterText = "";
 
@@ -100,18 +101,26 @@ angular.module('gpu.controllers')
     ct.octaviaLb = {};
     ct.servers = [];
 
-    ct.fn.loadVmCatalogDeployView = function (templatePath, controllerName, deployViewHtmlFile) {
+    ct.fn.loadVmCatalogDeployView = function (templatePath, controllerName, deployViewHtmlFile, deployViewHtmlFileType) {
         // 페이지 로드
         var controllerTag = ' ng-controller="' + controllerName + ' as subPage"';
         var deployViewHtmlFilePath = templatePath + "/" + deployViewHtmlFile;
         var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployViewHtmlFilePath);
         promise.success(function (data) {
-            $templateCache.put("deployViewTemplate", "<div id=\"vmCatalogDeployView\"" + controllerTag + ">\n" + data + "\n</div>");
+            if (deployViewHtmlFileType == "full") {
+                $templateCache.put("deployViewTemplate", "<div id=\"vmCatalogDeployView\" " + controllerTag + ">\n" + data + "\n</div>");
+            } else {
+                $templateCache.put("deployViewTemplate", "<div id=\"vmCatalogDeployView\" class=\"in\"" + controllerTag + ">\n" + data + "\n</div>");
+            }
             ct.vmCatalogTemplateUrl = "deployViewTemplate";
             $scope.main.loadingMainBody = false;
         });
         promise.error(function (data, status, headers) {
-            $templateCache.put("deployViewTemplate", "<div id=\"vmCatalogDeployView\"" + controllerTag + ">\nNot Found: " + deployViewHtmlFilePath + "\n</div>");
+            if (deployViewHtmlFileType == "full") {
+                $templateCache.put("deployViewTemplate", "<div id=\"vmCatalogDeployView\"" + controllerTag + ">\nNot Found: " + deployViewHtmlFilePath + "\n</div>");
+            } else {
+                $templateCache.put("deployViewTemplate", "<div id=\"vmCatalogDeployView\" class=\"in\"" + controllerTag + ">nNot Found: " + deployViewHtmlFilePath + "\n</div>");
+            }
             ct.vmCatalogTemplateUrl = "deployViewTemplateFail";
             $scope.main.loadingMainBody = false;
         });
@@ -120,7 +129,7 @@ angular.module('gpu.controllers')
     ct.fn.loadVmCatalogDeployController = function (templatePath, vmCatalogTemplateInfo) {
         var loadPromise = vmCatalogService.loadVmCatalogDeployController(templatePath + "/" + vmCatalogTemplateInfo.deployViewControllerFile);
         loadPromise.then(function (loadData) {
-            ct.fn.loadVmCatalogDeployView(templatePath, vmCatalogTemplateInfo.deployViewControllerName, vmCatalogTemplateInfo.deployViewHtmlFile);
+            ct.fn.loadVmCatalogDeployView(templatePath, vmCatalogTemplateInfo.deployViewControllerName, vmCatalogTemplateInfo.deployViewHtmlFile, vmCatalogTemplateInfo.deployViewHtmlFileType);
         });
         loadPromise.catch(function () {
             $scope.main.loadingMainBody = false;
@@ -187,6 +196,7 @@ angular.module('gpu.controllers')
         promise.success(function (data) {
             if (angular.isObject(data.content) && data.content.id) {
                 ct.vmCatalogDeployInfo = data.content;
+                ct.vmCatalogInfo = angular.copy(ct.vmCatalogDeployInfo.vmCatalogInfo);
                 ct.fn.mappingOuputsData(data.content.outputs);
                 if (ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
                     $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
