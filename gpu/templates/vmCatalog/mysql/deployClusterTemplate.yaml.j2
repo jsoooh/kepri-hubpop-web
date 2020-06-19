@@ -166,7 +166,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mysql setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 5 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -245,7 +245,7 @@ resources:
             EOF
             sleep 1
             systemctl enable mysqld
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 5 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "mysql setting end"
 
   init_config2:
@@ -284,7 +284,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mysql setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 5 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -385,7 +385,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mysql setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 5 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path

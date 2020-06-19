@@ -222,9 +222,9 @@
 
 		//assets.js
 		loadJavascript('assets/lib/feather/feather.min.js');
-		//loadJavascript('assets/js/common/html5shiv.min.js');		//IE 9
-		//loadJavascript('assets/js/common/respond.min'.js');		//IE 9
-		// loadJavascript('assets/lib/jquery-1.12.4.min.js');
+		//loadJavascript('assets/js/common/html5shiv.min.js');		//IE 9. 하단에 기재
+		//loadJavascript('assets/js/common/respond.min'.js');		//IE 9. 하단에 기재
+		loadJavascript('assets/lib/jquery-1.12.4.min.js');
 		loadJavascript('assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.js');
 		loadJavascript('assets/lib/bootstrap/js/bootstrap.min.js');
 		loadJavascript('assets/js/common.js');
@@ -287,6 +287,10 @@
         //loadJavascript(_MONIT_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
 
 	</script>
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="asssets/js/common/html5shiv.min.js"></script>
+	<script type="text/javascript" src="asssets/js/common/respond.min.js"></script>
+	<![endif]-->
 
 </head>
 <body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">
