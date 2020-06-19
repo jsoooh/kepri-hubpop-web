@@ -79,7 +79,8 @@ angular.module('app')
                                 templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html',
                                 loadMyFile: {
                                     loadMyScripts: [],
-                                    loadMyServices: [_COMM_JS_+'/services/memberServices.js'],
+                                    loadMyServices: [_COMM_JS_+'/services/memberServices.js',
+                                                     _COMM_JS_+'/services/projectServices.js'],
                                     loadMyControllers: [_COMM_JS_+'/controllers/orgDetailControllers.js'],
                                     loadMyDirectives: []
                                 }
@@ -253,7 +254,13 @@ angular.module('app')
                         stateKey: 'commNotification',
                         url: '/comm/notification',
                         controller: 'commNotificationCtrl',
-                        templateUrl: _COMM_VIEWS_+'/notification/notification.html'
+                        templateUrl: _COMM_VIEWS_+'/notification/notification.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [],
+                            loadMyControllers: [_COMM_JS_+'/controllers/notificationControllers.js'],
+                            loadMyDirectives: []
+                        }
                     }
                 }
             },

@@ -172,26 +172,4 @@ angular.module('portal.controllers')
         ct.listProjects();
 
 	})
-	.filter('orgRoleName', function(CONSTANTS) {
-		return function(input) {
-
-			var json = {};
-			json[CONSTANTS.roleName.owner] = '프로젝트 책임자';
-			json[CONSTANTS.roleName.admin] = '프로젝트 관리자';
-			json[CONSTANTS.roleName.user] = '프로젝트 사용자';
-
-			return json[input];
-		}
-	})
-    .filter('roleName2', function(CONSTANTS) {
-        return function(input) {
-
-            var json = {};
-            json[CONSTANTS.roleName.owner] = '책임자';
-            json[CONSTANTS.roleName.admin] = '관리자';
-            json[CONSTANTS.roleName.user] = '사용자';
-
-            return json[input];
-        }
-    })
 ;
