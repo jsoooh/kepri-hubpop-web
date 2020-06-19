@@ -2,7 +2,7 @@
     <div class="cBox-hd" ng-include="contents.htmlUrls.deployTitle"></div>
     <div ng-if="contents.vmCatalogDeployInfo.deployStatus != 'DEPLOY_COMPLETE' || contents.vmCatalogDeployInfo.stackStatus != 'CREATE_COMPLETE'" class="cBox-cnt">
         <div class="text-center pt30 pb30">
-            <div ng-if="contents.vmCatalogDeployInfo.deployStatus == 'CREATE_IN_PROGRESS' && contents.vmCatalogDeployInfo.stackStatus != 'CREATE_FAILED'" class="ul-in2 spinner_area">
+            <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
                 <img ng-src="images/loading/loading_cloud.gif" height="160">
                 <div class="text-center">
                     <p class="txt"><span class="ico ico-timer"></span>서버 생성 중입니다.</p>
@@ -14,7 +14,7 @@
                     <p class="txt"><span class="ico ico-timer"></span>생성 실패입니다.</p>
                 </div>
             </div>
-            <div ng-if="(contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_IN_PROGRESS' && contents.vmCatalogDeployInfo.stackStatus != 'CREATE_FAILED') || (contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS')" class="ul-in2 spinner_area">
+            <div ng-if="(contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_IN_PROGRESS' && contents.vmCatalogDeployInfo.stackStatus != 'CREATE_FAILED') || (contents.vmCatalogDeployInfo.deployStatus != 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE') || (contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS')" class="ul-in2 spinner_area">
                 <img ng-src="images/loading/lg.triple-gears-loading-icon.gif" height="160">
                 <div class="text-center">
                     <p class="txt"><span class="ico ico-timer"></span>서비스 배포 및 설정 중입니다.</p>
