@@ -113,7 +113,7 @@
                     <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'" class="state-txt">생성 중</span>
                     <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="state-txt">배포 및 설정 중</span>
                 </span>
-                <span ng-if="vmCatalogDeploy.deployStatus != 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.stackStatus" class="stateWrap">
+                <span ng-if="vmCatalogDeploy.deployStatus != 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.deployStatus" class="stateWrap">
                     <span ng-switch-when="CREATE_IN_PROGRESS" class="stateMark type4"></span>
                     <span ng-switch-when="DEPLOY_COMPLETE" class="stateMark type01"></span>
                     <span ng-switch-when="DELETE_IN_PROGRESS" class="stateMark type3"></span>
