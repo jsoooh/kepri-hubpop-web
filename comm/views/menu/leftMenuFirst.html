@@ -2,7 +2,7 @@
             <div class="left-wrap">
                 <div class="header-top">
                     <h1>
-                        <a href="#/comm/projects/">
+                        <a href="#/">
                             <p class="sr-only">HUB POP</p>
                         </a>
                     </h1>
@@ -11,7 +11,7 @@
                     <div class="inner">
                         <ul id="quick">
                             <li class="lnb-depth1-item all" ng-class="{'active' : main.allMenuOpen }">
-                                <a href="" ng-click="main.setAllMenuOpen();">
+                                <a href="" ng-click="main.allMenuOpenClick();">
                                     <p class="sr-only">all menu</p>
                                 </a>
                             </li>
@@ -27,31 +27,6 @@
                                     <p class="sr-only">{{ menuItem.depth1 }}}</p>
                                 </a>
                             </li>
-                            <!--<li class="lnb-depth1-item item2" ng-class="{ 'active' : main.sltGroupIconId == 'item2' }" ng-click="main.setGroup('item2')">
-                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Analytics">
-                                    <p class="sr-only">Analytics</p>
-                                </a>
-                            </li>
-                            <li class="lnb-depth1-item item3" ng-class="{ 'active' : main.sltGroupIconId == 'item3' }" ng-click="main.setGroup('item3')">
-                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Dev Tools">
-                                    <p class="sr-only">Dev Tools</p>
-                                </a>
-                            </li>
-                            <li class="lnb-depth1-item item4" ng-class="{ 'active' : main.sltGroupIconId == 'item4' }" ng-click="main.setGroup('item4')">
-                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Visualization Tools">
-                                    <p class="sr-only">Visualization Tools</p>
-                                </a>
-                            </li>
-                            <li class="lnb-depth1-item item5" ng-class="{ 'active' : main.sltGroupIconId == 'item5' }" ng-click="main.setGroup('item5')">
-                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Storage">
-                                    <p class="sr-only">Storage</p>
-                                </a>
-                            </li>
-                            <li class="lnb-depth1-item item6" ng-class="{ 'active' : main.sltGroupIconId == 'item6' }" ng-click="main.setGroup('item6')">
-                                <a href="" class="button" data-toggle="tooltip" data-placement="right" data-original-title="Service">
-                                    <p class="sr-only">Service</p>
-                                </a>
-                            </li>-->
                         </ul>
                     </div>
                 </div>
@@ -161,9 +136,15 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#/comm/boards/qna">
+                                    <a href="/hsvc/no/retrieveNoticeView.do">
                                         <i class="fas fa-microphone"></i>
                                         <span>공지사항</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/comm/boards/qna">
+                                        <i class="fas fa-microphone"></i>
+                                        <span>문의하기</span>
                                     </a>
                                 </li>
                                 <li class="logout">

@@ -45,6 +45,8 @@ angular.module('common.controllers', [])
         mc.sltGroupMenuIconId = "item1";    //좌측 대메뉴 선택
         mc.allMenuOpen = false;             //전체 메뉴 오픈 여부
         mc.sltMenu = {};                    //좌측 메뉴 선택
+        mc.topProjectMenuOpen = false;      //top 메뉴 오픈 여부. 프로젝트명 옆
+        mc.dashboardFull = false;           //대시보드 화면 전체보기
 
         //좌측 대메뉴 선택
         mc.setGroupMenu = function (menuItem) {
@@ -62,11 +64,29 @@ angular.module('common.controllers', [])
         };
 
         //전체 메뉴 오픈 여부
-        mc.setAllMenuOpen = function () {
+        mc.allMenuOpenClick = function () {
             if (mc.allMenuOpen) {
                 mc.allMenuOpen = false;
             } else {
                 mc.allMenuOpen = true;
+            }
+        };
+
+        //대시보드 화면 전체보기
+        mc.dashboardFullClick = function () {
+            if (mc.dashboardFull) {
+                mc.dashboardFull = false;
+            } else {
+                mc.dashboardFull = true;
+            }
+        };
+
+        //top 메뉴 클릭 : 프로젝트명 옆
+        mc.topProjectMenuClick = function () {
+            if (mc.topProjectMenuOpen) {
+                mc.topProjectMenuOpen = false;
+            } else {
+                mc.topProjectMenuOpen = true;
             }
         };
 
@@ -1623,6 +1643,11 @@ angular.module('common.controllers', [])
         $scope.main.replaceSeting();
 
         $scope.main.displayHistoryBtn = false;
+
+        // 메뉴에 없는 화면일 때 메뉴 정보 clear
+        if ($scope.main.stateKey == CONSTANTS.commHomeState || $scope.main.stateKey == "commMemberEdit" || $scope.main.stateKey == "commNotification" || $scope.main.stateKey == "commBoard_qna") {
+            $scope.main.sltMenu = {};    //좌측 메뉴 선택
+        }
 
         // 로그인 여부 체크
         if (!common.isAuthenticated()) {
