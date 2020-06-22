@@ -1,0 +1,330 @@
+heat_template_version: '2018-08-31'
+
+description: rabbitmq cluster template
+
+parameters:
+  image:
+    type: string
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  epmd_port:
+    type: string
+    default: 4369
+  erlang_port:
+    type: string
+    default: 25672
+  amqp_port:
+    type: string
+    default: 5672
+  management_port:
+    type: string
+    default: 15672
+  instance_name1:
+    type: string
+    default: crossent12
+  instance_name2:
+    type: string
+    default: crossent12
+  instance_name3:
+    type: string
+    default: crossent12
+  erlang_cookie:
+    type: string
+    default: CMAXAFWPGKUBELOPUZOP
+  nc_check_port:
+    type: string
+    default: 4444
+  admin_password:
+    type: string
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server1_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server1' ]] }
+            $server2_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server2' ]] }
+            $server3_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server3' ]] }
+            $erlang_cookie: { get_param: erlang_cookie }
+            $nc_check_port: { get_param: nc_check_port }
+            $amqp_port: { get_param: amqp_port }
+            $admin_password: { get_param: admin_password }
+          template: |
+            #!/bin/sh
+            echo "rabbitmq setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            cat <<EOF> /etc/hosts
+            $server1_ip_address $server1_hostname
+            $server2_ip_address $server2_hostname
+            $server3_ip_address $server3_hostname
+            EOF
+
+            systemctl start rabbitmq-server
+            sleep 1
+            rabbitmq-plugins enable rabbitmq_management
+            sleep 1
+            echo "$erlang_cookie" > /var/lib/rabbitmq/.erlang.cookie
+            sleep 1
+            systemctl restart rabbitmq-server
+
+            sleep 1
+            rabbitmqctl stop_app
+            sleep 1
+            rabbitmqctl change_cluster_node_type disc
+            sleep 1
+            rabbitmqctl start_app
+            sleep 1
+
+            nohup nc -kl $nc_check_port 2>&1 &
+            nc_pid=$!
+
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $amqp_port"
+              nc -z $server2_ip_address $amqp_port
+              server2Run=$?
+              echo "nc -z $server2_ip_address $amqp_port > $server2Run"
+              sleep 10
+            done
+
+            kill -9 $nc_pid
+
+            systemctl enable rabbitmq-server
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            echo "rabbitmq setting end"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server1_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server1' ]] }
+            $server2_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server2' ]] }
+            $server3_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server3' ]] }
+            $erlang_cookie: { get_param: erlang_cookie }
+            $nc_check_port: { get_param: nc_check_port }
+            $amqp_port: { get_param: amqp_port }
+            $admin_password: { get_param: admin_password }
+          template: |
+            #!/bin/sh
+            echo "rabbitmq setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            cat <<EOF> /etc/hosts
+            $server1_ip_address $server1_hostname
+            $server2_ip_address $server2_hostname
+            $server3_ip_address $server3_hostname
+            EOF
+
+            server1Run=1
+            while [ $server1Run -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $nc_check_port"
+              nc -z $server1_ip_address $nc_check_port
+              server1Run=$?
+              echo "nc -z $server1_ip_address $nc_check_port > $server1Run"
+              sleep 10
+            done
+
+            systemctl start rabbitmq-server
+            sleep 1
+            rabbitmq-plugins enable rabbitmq_management
+            sleep 1
+            echo "$erlang_cookie" > /var/lib/rabbitmq/.erlang.cookie
+            sleep 1
+            systemctl restart rabbitmq-server
+
+            sleep 1
+            rabbitmqctl stop_app
+            sleep 1
+            rabbitmqctl join_cluster --ram rabbit@$server1_hostname
+            sleep 1
+            rabbitmqctl start_app
+            sleep 1
+
+            nohup nc -kl $nc_check_port 2>&1 &
+            nc_pid=$!
+
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $amqp_port"
+              nc -z $server3_ip_address $amqp_port
+              server3Run=$?
+              echo "nc -z $server3_ip_address $amqp_port > $server3Run"
+              sleep 10
+            done
+
+            kill -9 $nc_pid
+
+            systemctl enable rabbitmq-server
+            echo "rabbitmq setting end"
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server1_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server1' ]] }
+            $server2_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server2' ]] }
+            $server3_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server3' ]] }
+            $erlang_cookie: { get_param: erlang_cookie }
+            $nc_check_port: { get_param: nc_check_port }
+            $amqp_port: { get_param: amqp_port }
+            $admin_password: { get_param: admin_password }
+          template: |
+            #!/bin/sh
+            echo "rabbitmq setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            cat <<EOF> /etc/hosts
+            $server1_ip_address $server1_hostname
+            $server2_ip_address $server2_hostname
+            $server3_ip_address $server3_hostname
+            EOF
+
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $nc_check_port"
+              nc -z $server2_ip_address $nc_check_port
+              server2Run=$?
+              echo "nc -z $server2_ip_address $nc_check_port > $server2Run"
+              sleep 10
+            done
+
+            systemctl start rabbitmq-server
+            sleep 1
+            rabbitmq-plugins enable rabbitmq_management
+            sleep 1
+            echo "$erlang_cookie" > /var/lib/rabbitmq/.erlang.cookie
+            sleep 1
+            systemctl restart rabbitmq-server
+
+            sleep 1
+            rabbitmqctl stop_app
+            sleep 1
+            rabbitmqctl join_cluster --ram rabbit@$server1_hostname
+            sleep 1
+            rabbitmqctl start_app
+            sleep 1
+
+            rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'
+            sleep 1
+
+            rabbitmqctl add_user admin $admin_password
+            rabbitmqctl set_user_tags admin administrator
+            rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+
+            systemctl enable rabbitmq-server
+            echo "rabbitmq setting end"
+
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      name: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server1' ]] }
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      name: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server2' ]] }
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      name: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server3' ]] }
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
+
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
