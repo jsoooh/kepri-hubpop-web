@@ -4,8 +4,8 @@
         <ul>
             <li>
                 <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="contents.deployType == 'cluster'" class="txt">각 서버로 접속</span>
+                <span ng-if="contents.data.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="contents.data.deployType == 'cluster'" class="txt">각 서버로 접속</span>
             </li>
         </ul>
         <ul>
