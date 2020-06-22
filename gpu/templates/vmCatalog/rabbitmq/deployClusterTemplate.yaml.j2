@@ -5,6 +5,7 @@ description: rabbitmq cluster template
 parameters:
   image:
     type: string
+    default: CentOS-7-x86_64-Heat-1907-Rabbitmq.qcow2
   flavor:
     type: string
   availability_zone:
@@ -324,6 +325,8 @@ outputs:
     value:
       - instance: { get_attr: [ server1, show ] }
         instancePort: { get_attr: [ server1_port, show ] }
+        managementPort: { get_param: management_port }
+        amqpPort: { get_param: amqp_port }
       - instance: { get_attr: [ server2, show ] }
         instancePort: { get_attr: [ server2_port, show ] }
       - instance: { get_attr: [ server3, show ] }
