@@ -45,9 +45,11 @@ parameters:
   lb_svc_monitor_timeout:
     type: string
     default: 5
+{% if monitorUrlPathUse %}
   lb_svc_monitor_url_path:
     type: string
     default: /
+{% endif %}
 {% endif %}
   service_port:
     type: string

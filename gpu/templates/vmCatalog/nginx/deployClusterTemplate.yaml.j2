@@ -1,0 +1,274 @@
+heat_template_version: '2018-08-31'
+
+description: single nginx template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Nginx.qcow2
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  service_port:
+    type: number
+    default: 80
+{% if octaviaLbUse %}
+  lb_description:
+    type: string
+    default: "vmCatalog Nginx lb"
+  lb_svc_port:
+    type: string
+  lb_svc_protocol:
+    type: string
+    default: TCP
+  lb_algorithm:
+    type: string
+    default: ROUND_ROBIN
+  lb_svc_connection_limit:
+    type: string
+    default: 2000
+  lb_svc_monitor_type:
+    type: string
+    default: TCP
+  lb_svc_monitor_delay:
+    type: string
+    default: 3
+  lb_svc_monitor_max_retries:
+    type: string
+    default: 5
+  lb_svc_monitor_timeout:
+    type: string
+    default: 5
+{% if monitorUrlPathUse %}
+  lb_svc_monitor_url_path:
+    type: string
+    default: /
+{% endif %}
+{% endif %}
+
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $service_port: { get_param: service_port }
+          template: |
+            #!/bin/sh
+            echo "nginx setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            systemctl start nginx
+            systemctl enable nginx
+            echo "nginx setting end"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $service_port: { get_param: service_port }
+          template: |
+            #!/bin/sh
+            echo "nginx setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            systemctl start nginx
+            systemctl enable nginx
+            echo "nginx setting end"
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $service_port: { get_param: service_port }
+            $server1_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "nginx setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            systemctl start nginx
+            systemctl enable nginx
+            server1Run=1
+            while [ $server1Run -ne 0 ]
+            do
+              echo "nc -z $server1_address $service_port"
+              nc -z $server1_address $galera_port
+              server1Run=$?
+              sleep 5
+            done
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_address $service_port"
+              nc -z $server2_address $galera_port
+              server2Run=$?
+              sleep 5
+            done
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
+            echo "nginx setting end"
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
+
+{% if octaviaLbUse %}
+  octavia_lb:
+    type: OS::Octavia::LoadBalancer
+    properties:
+      vip_subnet: { get_param: provider_subnet }
+      description: { get_param: lb_description }
+
+  octavia_lb_svc_listener:
+    type: OS::Octavia::Listener
+    properties:
+      loadbalancer: { get_resource: octavia_lb }
+      connection_limit: { get_param: lb_svc_connection_limit }
+      protocol: { get_param: lb_svc_protocol }
+      protocol_port: { get_param: lb_svc_port }
+
+  octavia_lb_svc_pool:
+    type: OS::Octavia::Pool
+    properties:
+      listener: { get_resource: octavia_lb_svc_listener }
+      lb_algorithm: { get_param: lb_algorithm }
+      protocol: { get_param: lb_svc_protocol }
+
+  octavia_lb_svc_monitor:
+    type: OS::Octavia::HealthMonitor
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      type: { get_param: lb_svc_monitor_type }
+      delay: { get_param: lb_svc_monitor_delay }
+      max_retries: { get_param: lb_svc_monitor_max_retries }
+      timeout: { get_param: lb_svc_monitor_timeout }
+{% if monitorUrlPathUse %}
+      url_path: { get_param: lb_svc_monitor_url_path }
+{% endif %}
+
+  lb_svc_pool_member1:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+
+  lb_svc_pool_member2:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+
+  lb_svc_pool_member3:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: service_port }
+{% endif %}
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
+{% if octaviaLbUse %}
+  octaviaLb:
+    value:
+      loadBalancer: { get_attr: [ octavia_lb, show ] }
+      listeners:
+        - listener: { get_attr: [ octavia_lb_svc_listener, show ] }
+          pool: { get_attr: [ octavia_lb_svc_pool, show ] }
+          monitor: { get_attr: [ octavia_lb_svc_monitor, show ] }
+          poolMembers:
+            - { get_attr: [ lb_svc_pool_member1, show ] }
+            - { get_attr: [ lb_svc_pool_member2, show ] }
+            - { get_attr: [ lb_svc_pool_member3, show ] }
+{% endif %}
