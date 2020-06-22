@@ -23,8 +23,8 @@
                         </ul>
                         <ul id="gnb">
                             <li ng-repeat="menuItem in (main.dbMenuList | filter : { level: 1 })" class="lnb-depth1-item {{ menuItem.iconId }}" ng-class="{ 'active' : main.sltGroupMenuIconId == menuItem.iconId }" ng-click="main.setGroupMenu(menuItem)">
-                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="Compute">
-                                    <p class="sr-only">{{ menuItem.depth1 }}}</p>
+                                <a href="" class="button" data-toggle="tooltip" data-placement="right" title="{{ menuItem.depth1 }}">
+                                    <p class="sr-only">{{ menuItem.depth1 }}</p>
                                 </a>
                             </li>
                         </ul>

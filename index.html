@@ -298,7 +298,7 @@
 	document.writeln('<div id="pageWrap" ng-class="{\'all-menu-open\' : main.allMenuOpen, \'dashboard-full\' : (main.isLoginPage && main.dashboardFull) }">                                         ');
 	document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuFirst.html'+_VERSION_TAIL_+'\'"></header>     ');
 	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" ng-class="{\'active\' : main.allMenuOpen }" ng-include="\''+_COMM_VIEWS_+ '/menu/allMenuMap.html'+_VERSION_TAIL_+'\'"></div>   ');
-	document.writeln('	<aside ng-if="main.isLoginPage" id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP
+	document.writeln('	<aside ng-if="main.isLoginPage && !!main.sltPortalOrgId" id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP
 	document.writeln('	<div id="container">                                      ');	//container
 	document.writeln('		<main id="contentWrap" ng-class="{ \'dashboard-wrap\' : main.stateKey == \'commProjectDetail\' }">                                   ');
 	document.writeln('			<div ng-if="main.isLoginPage" class="page-title" ng-class="{ \'dashboard-top\' : main.stateKey == \'commProjectDetail\' }" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitle.html'+_VERSION_TAIL_+'\'"></div> ');

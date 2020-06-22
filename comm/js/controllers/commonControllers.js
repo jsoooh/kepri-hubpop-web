@@ -42,7 +42,7 @@ angular.module('common.controllers', [])
         mc.sltLanguage = {};
         mc.sltRegion = {};
         mc.sltGroupMenu = {};               //좌측 대메뉴 선택
-        mc.sltGroupMenuIconId = "item1";    //좌측 대메뉴 선택
+        mc.sltGroupMenuIconId = "";         //좌측 대메뉴 선택
         mc.allMenuOpen = false;             //전체 메뉴 오픈 여부
         mc.sltMenu = {};                    //좌측 메뉴 선택
         mc.topProjectMenuOpen = false;      //top 메뉴 오픈 여부. 프로젝트명 옆
@@ -50,6 +50,10 @@ angular.module('common.controllers', [])
 
         //좌측 대메뉴 선택
         mc.setGroupMenu = function (menuItem) {
+            if (!mc.sltPortalOrgId) {
+                common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                return;
+            }
             mc.sltGroupMenu = menuItem;
             mc.sltGroupMenuIconId = menuItem.iconId;
             //console.log("mc.sltGroupMenu : ", mc.sltGroupMenu);
@@ -552,7 +556,7 @@ angular.module('common.controllers', [])
             var response = portal.menu.getMenuList();
             if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
                 mc.dbMenuList = response.data.items;
-                mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
+                //mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
                 //console.log("mc.dbMenuList : ", mc.dbMenuList);
             }
         };
@@ -606,6 +610,9 @@ angular.module('common.controllers', [])
                 mc.sltPortalOrgDisplayName = portalOrg.orgName;
                 mc.loadUserTenant();
                 mc.loadSltOrganization();
+                if (!mc.sltGroupMenuIconId) {
+                    mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
+                }
             } else {
                 $timeout(function () {
                     mc.desplayDbMenuList("none");
@@ -1650,6 +1657,8 @@ angular.module('common.controllers', [])
 
         // 메뉴에 없는 화면일 때 메뉴 정보 clear
         if ($scope.main.stateKey == CONSTANTS.commHomeState || $scope.main.stateKey == "commMemberEdit" || $scope.main.stateKey == "commNotification" || $scope.main.stateKey == "commBoard_qna") {
+            $scope.main.sltGroupMenu = {};        //좌측 대메뉴 선택
+            $scope.main.sltGroupMenuIconId = "";  //좌측 대메뉴 선택
             $scope.main.sltMenu = {};    //좌측 메뉴 선택
         }
 
