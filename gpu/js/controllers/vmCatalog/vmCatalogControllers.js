@@ -106,6 +106,8 @@ angular.module('gpu.controllers')
         }
     };
 
+    ct.checkClickBtn = false;
+
     ct.fn.inputVolumeSizeChange = function () {
         var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
         if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
@@ -130,20 +132,26 @@ angular.module('gpu.controllers')
             try {
                 var deployForm = $('form[name="subPage.deployForm"]');
                 for (var i=0; i<subPage.$validationSummary.length; i++) {
-                    var validationTarget = deployForm.find('[name="' + subPage.$validationSummary[0].field + '"]');
-                    if (validationTarget.length == 0) continue;
-                    if (validationTarget.attr('type') == 'hidden') {
-                        var targetId = validationTarget.attr('targetId');
-                        if (targetId && deployForm.find('#'+targetId).length == 1) {
-                            deployForm.find('#'+targetId)[0].focus();
+                    try {
+                        var validationTarget = deployForm.find('[name="' + subPage.$validationSummary[0].field + '"]');
+                        if (validationTarget.length == 0) continue;
+                        if (validationTarget.attr('type') == 'hidden') {
+                            var targetId = validationTarget.attr('targetId');
+                            if (targetId && deployForm.find('#'+targetId).length == 1) {
+                                deployForm.find('#'+targetId)[0].focus();
+                                break;
+                            }
+                        } else {
+                            validationTarget[0].focus();
                             break;
                         }
-                    } else {
-                        validationTarget[0].focus();
-                        break;
+                    } catch (e) {
+                        console.log(e);
                     }
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.log(e);
+            }
             ct.checkClickBtn = false;
             return false;
         }
@@ -557,7 +565,9 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.volume_mount_point = ct.data.volumeMountPoint;
             vmCatalogDeploy.parameters.volume_mount_path = ct.data.volumeMountPath;
         }
-        vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);
+        if (angular.isFunction(appendSetVmCatalogDeploy)) {
+            vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);
+        }
 
         $scope.main.loadingMainBody = true;
 

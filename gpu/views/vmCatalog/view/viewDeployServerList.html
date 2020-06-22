@@ -1,9 +1,9 @@
 <!-- 생성된 서버 -->
 <div class="cont-titWrap mt50">
-    <h3 class="h-tit3">생성된 서버</h3>
+    <h3 class="h-tit3">생성 서버 ({{ ( contents.servers | filter: { instance: { id: '!!'} } ).length }})</h3>
 </div>
 <ul class="ul-panel ctlog-panel">
-    <li ng-repeat="(key, server) in ( contents.servers | filter: { instance : '!null' } )">
+    <li ng-repeat="(key, server) in ( contents.servers | filter: { instance: { id: '!!'} } )">
         <!-- panel -->
         <div class="panelWrap">
             <div class="panel type5">
@@ -16,11 +16,31 @@
                     <div class="ctlog_cntWrap">
                         <div class="ctlog-cnt">
                             <div class="logoBox">
-                                <img ng-if="contents.vmCatalogDeployInfo.deployStatus == 'CREATE_IN_PROGRESS' && contents.vmCatalogDeployInfo.stackStatus != 'CREATE_FAILED'" ng-src="images/loading/loading_cloud.gif" >
-                                <img ng-if="(contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_IN_PROGRESS' && contents.vmCatalogDeployInfo.stackStatus != 'CREATE_FAILED') || (contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS')" ng-src="images/loading/lg.triple-gears-loading-icon.gif" >
+                                <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
+                                    <img ng-src="images/loading/loading_cloud.gif" height="160">
+                                    <div class="text-center">
+                                        <p class="txt"><span class="ico ico-timer"></span>서버 생성 중입니다.</p>
+                                    </div>
+                                </div>
+                                <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_FAILED'" class="ul-in2 spinner_area">
+                                    <img ng-src="images/loading/614369-cloud_error-512.png" height="160">
+                                    <div class="text-center">
+                                        <p class="txt"><span class="ico ico-timer"></span>생성 실패입니다.</p>
+                                    </div>
+                                </div>
+                                <div ng-if="(contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_IN_PROGRESS' && contents.vmCatalogDeployInfo.stackStatus != 'CREATE_FAILED') || (contents.vmCatalogDeployInfo.deployStatus != 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE') || (contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS')" class="ul-in2 spinner_area">
+                                    <img ng-src="images/loading/lg.triple-gears-loading-icon.gif" height="160">
+                                    <div class="text-center">
+                                        <p class="txt"><span class="ico ico-timer"></span>서비스 배포 및 설정 중입니다.</p>
+                                    </div>
+                                </div>
+                                <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'DELETE_IN_PROGRESS'" class="ul-in2 spinner_area">
+                                    <img ng-src="images/loading/funny-trash-playing.gif" height="160">
+                                    <div class="text-center">
+                                        <p class="txt"><span class="ico ico-timer"></span>삭제 중입니다.</p>
+                                    </div>
+                                </div>
                                 <img ng-if="contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE'" ng-src="images/thum/im_thum_centos_300.png" >
-                                <img ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_FAILED'" ng-src="images/loading/614369-cloud_error-512.png" >
-                                <img ng-if="contents.vmCatalogDeployInfo.deployStatus == 'DELETE_IN_PROGRESS'" ng-src="images/loading/funny-trash-playing.gif" >
                             </div>
                         </div>
                         <div class="ctlog-cnt">

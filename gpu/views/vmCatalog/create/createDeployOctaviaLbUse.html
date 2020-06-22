@@ -1,6 +1,6 @@
 <div class="pnb_tit">
     <i class="i_star"></i> <span class="pnb_t_txt">Octavia LB 사용여부</span>
-    <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 대상 서버 선택 (연결서버 유형)<br></button> 1. 서버: 만들어져 있는 서버에 부하분산 설정<br/>2. 이미지: 사용자가 생성한 백업이미지로 1) 서버를 생성하고 2) 부하분산 설정'"><span class="ico_info"></span></button></div>
+    <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'Octavia LB 사용 여부로 사용할 경우 자동으로 로드벨런서가 구성된다.<br/> 알고리즘을 \'ROUND_ROBIN\'을 기본으로 하고, 접속포트는 LB의 Listener 포트이다.'"><span class="ico_info"></span></button></div>
 </div>
 <div class="pl10 mt10">
     <span class="pnb_stit">- 배포 여부 선택  : </span>
@@ -13,7 +13,7 @@
         <label for="octavia-lb-use-false" class="label">아니오</label>
     </div>
 </div>
-<div ng-show="contents.data.octaviaLbUse" class="tbw type1 mt20">
+<div ng-if="contents.data.octaviaLbUse" class="tbw type1 mt20">
     <table class="table">
         <colgroup>
             <col style="width:20%;">
