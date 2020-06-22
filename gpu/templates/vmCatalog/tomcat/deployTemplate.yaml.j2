@@ -36,12 +36,20 @@ resources:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
-      config: |
-        #!/bin/sh
-        echo "tomcat setting start"
-        systemctl start tomcat
-        systemctl enable tomcat
-        echo "tomcat setting end"
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $service_port: { get_param: service_port }
+          template: |
+            #!/bin/sh
+            echo "tomcat setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            systemctl start tomcat
+            systemctl enable tomcat
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
+            echo "tomcat setting end"
 
 
   server:

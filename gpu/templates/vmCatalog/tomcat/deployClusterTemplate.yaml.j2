@@ -48,9 +48,11 @@ parameters:
   lb_svc_monitor_timeout:
     type: string
     default: 5
+{% if monitorUrlPathUse %}
   lb_svc_monitor_url_path:
     type: string
     default: /
+{% endif %}
 {% endif %}
 
 
@@ -81,34 +83,71 @@ resources:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
-      config: |
-        #!/bin/sh
-        echo "tomcat setting start"
-        systemctl start tomcat
-        systemctl enable tomcat
-        echo "tomcat setting end"
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $service_port: { get_param: service_port }
+          template: |
+            #!/bin/sh
+            echo "tomcat setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            systemctl start tomcat
+            systemctl enable tomcat
+            echo "tomcat setting end"
 
   init_config2:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
-      config: |
-        #!/bin/sh
-        echo "tomcat setting start"
-        systemctl start tomcat
-        systemctl enable tomcat
-        echo "tomcat setting end"
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $service_port: { get_param: service_port }
+          template: |
+            #!/bin/sh
+            echo "tomcat setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            systemctl start tomcat
+            systemctl enable tomcat
+            echo "tomcat setting end"
 
   init_config3:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
-      config: |
-        #!/bin/sh
-        echo "tomcat setting start"
-        systemctl start tomcat
-        systemctl enable tomcat
-        echo "tomcat setting end"
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $service_port: { get_param: service_port }
+            $server1_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "tomcat setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            systemctl start tomcat
+            systemctl enable tomcat
+            server1Run=1
+            while [ $server1Run -ne 0 ]
+            do
+              echo "nc -z $server1_address $service_port"
+              nc -z $server1_address $galera_port
+              server1Run=$?
+              sleep 5
+            done
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_address $service_port"
+              nc -z $server2_address $galera_port
+              server2Run=$?
+              sleep 5
+            done
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
+            echo "tomcat setting end"
 
   server1:
     type: OS::Nova::Server
