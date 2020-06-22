@@ -37,8 +37,6 @@ angular.module('gpu.controllers')
                     ct.data.galeraPort++;
                 }
                 vmCatalogDeploy.parameters.galera_port = ct.data.galeraPort;
-                vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
-                vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
             } else if (ct.data.deployType == "replica") {
                 if (ct.data.servicePort == ct.data.checkPort) {
                     ct.data.checkPort++;
@@ -46,11 +44,16 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.parameters.check_port = ct.data.checkPort;
             }
             vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
+            if (vmCatalogDeploy.octaviaLbUse) {
+                vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
+                vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
+            }
             if (ct.data.createUser) {
                 vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
                 vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
                 vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
             }
+
             return vmCatalogDeploy;
         };
 
