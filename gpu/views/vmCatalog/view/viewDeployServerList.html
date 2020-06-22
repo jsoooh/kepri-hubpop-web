@@ -3,7 +3,7 @@
     <h3 class="h-tit3">생성된 서버</h3>
 </div>
 <ul class="ul-panel ctlog-panel">
-    <li ng-repeat="(key, server) in ( contents.servers | filter: { instance : '!null' } )">
+    <li ng-repeat="(key, server) in ( contents.servers | filter: { instance : '!'+null } )">
         <!-- panel -->
         <div class="panelWrap">
             <div class="panel type5">
@@ -16,7 +16,7 @@
                     <div class="ctlog_cntWrap">
                         <div class="ctlog-cnt">
                             <div class="logoBox">
-                                <div ng-if="stackStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
+                                <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
                                     <img ng-src="images/loading/loading_cloud.gif" height="160">
                                     <div class="text-center">
                                         <p class="txt"><span class="ico ico-timer"></span>서버 생성 중입니다.</p>

@@ -12,7 +12,7 @@
                     <li ng-include="contents.htmlUrls.deployName"></li>
                     <li ng-include="contents.htmlUrls.stackName"></li>
                     <li ng-include="contents.htmlUrls.deployTypeRadio"></li>
-                    <li ng-show="contents.data.deployType == 'cluster'" ng-include="contents.htmlUrls.octaviaLbUse"></li>
+                    <li ng-if="contents.data.deployType == 'cluster'" ng-include="contents.htmlUrls.octaviaLbUse"></li>
                     <li ng-include="contents.htmlUrls.servicePort"></li>
                     <li ng-include="contents.htmlUrls.rootPassword"></li>
                     <li ng-include="contents.htmlUrls.rootConfirmPassword"></li>

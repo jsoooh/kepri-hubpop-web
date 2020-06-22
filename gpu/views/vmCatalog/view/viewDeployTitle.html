@@ -1,6 +1,6 @@
 <h4 class="c-tit">
     <div class="logoBox">
-        <img ng-src="{{ main.gpuVmCatalogTemplatePath + contents.vmCatalogInfo.templatePath + '/logo.png' }}">
+        <img ng-if="contents.vmCatalogInfo.templatePath" ng-src="{{ main.gpuVmCatalogTemplatePath + contents.vmCatalogInfo.templatePath + '/logo.png' }}">
     </div>
     <p class="txt_tit">{{ contents.vmCatalogDeployInfo.deployName }} ({{ contents.vmCatalogDeployInfo.stackName }})</p>
     <p class="txt_s"><strong>{{ contents.vmCatalogInfo.catalogName }}</strong><span>{{ contents.vmCatalogInfo.version }}</span></p>
