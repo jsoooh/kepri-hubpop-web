@@ -73,6 +73,10 @@ angular.module('common.controllers', [])
 
         //전체 메뉴 오픈 여부
         mc.allMenuOpenClick = function () {
+            if (!mc.sltPortalOrgId) {
+                common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                return;
+            }
             if (mc.allMenuOpen) {
                 mc.allMenuOpen = false;
             } else {
