@@ -286,7 +286,7 @@ $(function (){
 //card-type1 
 $(function (){
 	$('.card-type1 .card-footer-btn').on('click', function(){
-		$(this).parent().parent().toggleClass('card-footer-active');
+		$(this).parents('.card').toggleClass('card-footer-active');
 		return false;
 	});
 });

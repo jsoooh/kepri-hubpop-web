@@ -486,7 +486,7 @@ html {
   position: relative;
   margin: 0 auto;
   background: #102954;
-  width: 190px;
+  width: 210px;
   height: 35px;
   color: #fff;
   text-align: left;
@@ -601,6 +601,9 @@ html {
 }
 #contentWrap .page-content {
   min-height: 90vh;
+}
+#contentWrap .page-content .inner-wrap {
+  padding: 0 20px 40px;
 }
 /* 모달 팝업 스타일 재정의 */
 .modal-content {

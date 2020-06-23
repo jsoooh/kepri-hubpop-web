@@ -137,7 +137,6 @@ resources:
             kill -9 $nc_pid
 
             systemctl enable rabbitmq-server
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "rabbitmq setting end"
 
   init_config2:
@@ -286,6 +285,7 @@ resources:
             rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
 
             systemctl enable rabbitmq-server
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "rabbitmq setting end"
 
 
