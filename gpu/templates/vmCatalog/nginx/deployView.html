@@ -4,7 +4,9 @@
         <ul>
             <li>
                 <strong class="tit">접속 IP</strong>
-                <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+                <span ng-if="!contents.octaviaLbUse && contents.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="!contents.octaviaLbUse && contents.deployType == 'cluster'" class="txt">각 서버로 접속</span>
             </li>
         </ul>
         <ul>
@@ -19,8 +21,16 @@
         <h5> 서비스 환경 설정 파일 경로</h5>
         <ul>
             <li>
-                <strong class="tit">haproxy.cfg: </strong>
-                <span class="txt">/etc/haproxy.cfg</span>
+                <strong class="tit">nginx.conf path: </strong>
+                <span class="txt">/etc/nginx/nginx.conf</span>
+            </li>
+            <li>
+                <strong class="tit">conf.d path: </strong>
+                <span class="txt">/etc/nginx/conf.d</span>
+            </li>
+            <li>
+                <strong class="tit">web root path:  </strong>
+                <span class="txt">/usr/share/nginx/html</span>
             </li>
         </ul>
     </div>

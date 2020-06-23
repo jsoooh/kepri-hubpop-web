@@ -16,8 +16,8 @@ angular.module('gpu.controllers')
         // 테스트
         ct.data.deployName = "엔진엑스";
         ct.data.stackName = "nginx";
-        ct.data.deployType = "cluster";
-        ct.data.octaviaLbUse = true;
+        ct.data.deployType = "single";
+        ct.data.octaviaLbUse = false;
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
