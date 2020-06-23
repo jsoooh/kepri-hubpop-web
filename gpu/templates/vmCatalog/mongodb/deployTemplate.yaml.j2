@@ -51,7 +51,6 @@ parameters:
 
 
 resources:
-
   server_port:
     type: OS::Neutron::Port
     properties:
@@ -77,11 +76,11 @@ resources:
           params:
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-{% if volumeUse %}
+          {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
-{% endif %}
+          {% endif %}
             $service_port: { get_param: service_port }
             $admin_id: { get_param: admin_id }
             $admin_password: { get_param: admin_password }
@@ -89,7 +88,7 @@ resources:
             #!/bin/sh
             echo "mongodb setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
-{% if volumeUse %}
+          {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
             mount -t $volume_format_type $volume_mount_point $volume_mount_path
@@ -107,7 +106,7 @@ resources:
             mv /var/lib/mongo $volume_mount_path/
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
-{% endif %}
+          {% endif %}
 
             cp /etc/mongod.conf /etc/mongod.conf.backup
             sed -i 's/^  port: 20717/  port: $service_port/' /etc/mongod.conf

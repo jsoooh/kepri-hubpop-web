@@ -94,10 +94,15 @@ resources:
             #!/bin/sh
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+
+            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
+            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
+            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_hostname
-            $server2_ip_address $server2_hostname
-            $server3_ip_address $server3_hostname
+            $server1_ip_address $server1_tmp_hostname
+            $server2_ip_address $server2_tmp_hostname
+            $server3_ip_address $server3_tmp_hostname
             EOF
 
             systemctl start rabbitmq-server
@@ -158,10 +163,15 @@ resources:
             #!/bin/sh
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+
+            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
+            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
+            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_hostname
-            $server2_ip_address $server2_hostname
-            $server3_ip_address $server3_hostname
+            $server1_ip_address $server1_tmp_hostname
+            $server2_ip_address $server2_tmp_hostname
+            $server3_ip_address $server3_tmp_hostname
             EOF
 
             server1Run=1
@@ -185,7 +195,7 @@ resources:
             sleep 1
             rabbitmqctl stop_app
             sleep 1
-            rabbitmqctl join_cluster --ram rabbit@$server1_hostname
+            rabbitmqctl join_cluster --ram rabbit@$server1_tmp_hostname
             sleep 1
             rabbitmqctl start_app
             sleep 1
@@ -231,10 +241,15 @@ resources:
             #!/bin/sh
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+
+            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
+            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
+            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_hostname
-            $server2_ip_address $server2_hostname
-            $server3_ip_address $server3_hostname
+            $server1_ip_address $server1_tmp_hostname
+            $server2_ip_address $server2_tmp_hostname
+            $server3_ip_address $server3_tmp_hostname
             EOF
 
             server2Run=1
@@ -258,7 +273,7 @@ resources:
             sleep 1
             rabbitmqctl stop_app
             sleep 1
-            rabbitmqctl join_cluster --ram rabbit@$server1_hostname
+            rabbitmqctl join_cluster --ram rabbit@$server1_tmp_hostname
             sleep 1
             rabbitmqctl start_app
             sleep 1
