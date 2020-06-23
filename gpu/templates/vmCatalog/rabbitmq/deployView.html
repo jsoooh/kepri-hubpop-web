@@ -4,8 +4,12 @@
         <ul>
             <li>
                 <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.data.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="contents.data.deployType == 'cluster'" class="txt">각 서버로 접속</span>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
+            </li>
+            <li>
+                <strong class="tit">관리자 계정</strong>
+                <span class="txt">admin</span>
             </li>
         </ul>
         <ul>
@@ -14,7 +18,7 @@
                 <span class="txt">{{ contents.servers[0].amqpPort }}</span>
             </li>
             <li>
-                <strong class="tit">플러그인 포트</strong>
+                <strong class="tit">플러그인포트</strong>
                 <span class="txt">{{ contents.servers[0].managementPort }}</span>
             </li>
         </ul>
@@ -23,8 +27,8 @@
         <h5> 서비스 환경 설정 파일 경로</h5>
         <ul>
             <li>
-                <strong class="tit"> path: </strong>
-                <span class="txt">/</span>
+                <strong class="tit">rabbitmq-env path: </strong>
+                <span class="txt">/usr/lib/rabbitmq/bin/rabbitmq-env</span>
             </li>
             <li>
                 <strong class="tit">.erlang.cookie path: </strong>
