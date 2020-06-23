@@ -54,25 +54,31 @@
                                 <div ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
                                     <img ng-src="images/loading/loading_cloud.gif" height="160">
                                     <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>서버 생성 중입니다.</p>
+                                        <p class="txt"><span class="ico ico-timer"></span>서버 생성 중</p>
                                     </div>
                                 </div>
                                 <div ng-if="vmCatalogDeploy.stackStatus == 'CREATE_FAILED'" class="ul-in2 spinner_area">
                                     <img ng-src="images/loading/614369-cloud_error-512.png" height="160">
                                     <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>생성 실패입니다.</p>
+                                        <p class="txt"><span class="ico ico-timer"></span>서버 생성 실패</p>
                                     </div>
                                 </div>
                                 <div ng-if="(vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS' && vmCatalogDeploy.stackStatus != 'CREATE_FAILED') || (vmCatalogDeploy.deployStatus != 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE') || (vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS')" class="ul-in2 spinner_area">
                                     <img ng-src="images/loading/lg.triple-gears-loading-icon.gif" height="160">
                                     <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>서비스 배포 및 설정 중입니다.</p>
+                                        <p class="txt"><span class="ico ico-timer"></span>서비스 배포 중</p>
+                                    </div>
+                                </div>
+                                <div ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE' && vmCatalogDeploy.deployStatus == 'DEPLOY_FAILED'" class="ul-in2 spinner_area">
+                                    <img ng-src="images/loading/614369-cloud_error-512.png" height="160">
+                                    <div class="text-center">
+                                        <p class="txt"><span class="ico ico-timer"></span>서비스 배포 실패</p>
                                     </div>
                                 </div>
                                 <div ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" class="ul-in2 spinner_area">
                                     <img ng-src="images/loading/funny-trash-playing.gif" height="160">
                                     <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>삭제 중입니다.</p>
+                                        <p class="txt"><span class="ico ico-timer"></span>서버 삭제 중</p>
                                     </div>
                                 </div>
                             </div>
@@ -132,20 +138,22 @@
                 <span ng-if="vmCatalogDeploy.deployStatus == 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.stackStatus" class="stateWrap">
                     <span ng-switch-when="CREATE_IN_PROGRESS" class="stateMark type1"></span>
                     <span ng-switch-when="CREATE_COMPLETE" class="stateMark type5"></span>
+                    <span ng-switch-when="CREATE_FAILED" class="stateMark type2"></span>
                     <span ng-switch-default class="stateMark type03"></span>
-                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'" class="state-txt">생성 중</span>
-                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="state-txt">배포 및 설정 중</span>
+                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'" class="state-txt">서버 생성 중</span>
+                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="state-txt">서비스 배포 중</span>
+                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_FAILED'" class="state-txt">서버 생성 실패</span>
                 </span>
                 <span ng-if="vmCatalogDeploy.deployStatus != 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.deployStatus" class="stateWrap">
                     <span ng-switch-when="CREATE_IN_PROGRESS" class="stateMark type4"></span>
                     <span ng-switch-when="DEPLOY_COMPLETE" class="stateMark type01"></span>
                     <span ng-switch-when="DELETE_IN_PROGRESS" class="stateMark type3"></span>
-                    <span ng-switch-when="CREATE_FAILED" class="stateMark type2"></span>
+                    <span ng-switch-when="DEPLOY_FAILED" class="stateMark type2"></span>
                     <span ng-switch-default class="stateMark type03"></span>
                     <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS' || (vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS')" class="state-txt">배포 및 설정 중</span>
-                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE'" class="state-txt">배포 완료</span>
-                    <span ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" class="state-txt">삭제 중</span>
-                    <span ng-if="vmCatalogDeploy.deployStatus == 'CREATE_FAILED'" class="state-txt">생성 실패</span>
+                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE'" class="state-txt">서비스 배포 완료</span>
+                    <span ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" class="state-txt">서버 삭제 중</span>
+                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE' && vmCatalogDeploy.deployStatus == 'DEPLOY_FAILED'" class="state-txt">서비스 배포 실패</span>
                 </span>
             </td>
         </tr>
