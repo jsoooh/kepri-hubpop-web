@@ -17,12 +17,16 @@ angular.module('gpu.controllers')
         ct.data.erlangPort = 25672;
         ct.data.erlangCookie = "CMAXAFWPGKUBELOPUZOP";
 
-        // 테스트 입력값
-        ct.data.deployName = "래빗엠큐";
+        ct.usingPorts.cluster = [4444];
 
-        ct.data.stackName = "Rabbitmq";
-        ct.data.adminPassword = "Crossent!234";
-        ct.data.adminConfirmPassword = "Crossent!234";
+        // 테스트 입력값
+        if(ct.testInput) {
+            ct.data.deployName = "래빗엠큐";
+
+            ct.data.stackName = "Rabbitmq";
+            ct.data.adminPassword = "Crossent!234";
+            ct.data.adminConfirmPassword = "Crossent!234";
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
