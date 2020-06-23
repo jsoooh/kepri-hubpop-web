@@ -7,7 +7,6 @@ angular.module('portal.controllers')
         var ct = this;
         ct.conditions = {
             receivers: [
-                {id: '', name: 'label.receiver'},
                 {id: 'p', name: 'label.project'},
                 {id: 'u', name: 'label.user'}
             ],
@@ -23,7 +22,6 @@ angular.module('portal.controllers')
 
 
         ct.conditionParams = {
-            receiver: ct.conditions.receivers[0].id,
             schType: ct.conditions.types[0].id
         };
         ct.notifications = [];
