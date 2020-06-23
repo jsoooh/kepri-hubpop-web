@@ -1584,6 +1584,7 @@ angular.module('common.controllers', [])
                 if (data.resultCode == 0) {
                     mc.notifications = data.items;
                     mc.notificationCount = data.itemCount;
+                    console.log("mc.notifications : ", mc.notifications);
                 }
             });
         };
