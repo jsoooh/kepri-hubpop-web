@@ -537,20 +537,20 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.stackName = ct.data.stackName;
         vmCatalogDeploy.deployType = ct.data.deployType;
         vmCatalogDeploy.deployServerCount = 1;
-        if (ct.data.deployType == "cluster") {
-            vmCatalogDeploy.deployServerCount = ct.data.clusterCnt;
-        } else if (ct.data.deployType == "replica") {
-            vmCatalogDeploy.deployServerCount = ct.data.replicaCnt;
-        }
         vmCatalogDeploy.deployTemplate = deployTemplate;
         vmCatalogDeploy.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.createUser = ct.data.createUser;
-        vmCatalogDeploy.octaviaLbUse = false;
-        vmCatalogDeploy.context.octaviaLbUse = false;
         if (ct.data.deployType == "cluster") {
+            vmCatalogDeploy.deployServerCount = ct.data.clusterCnt;
             vmCatalogDeploy.octaviaLbUse = ct.data.octaviaLbUse;
             vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
+        } else {
+            if (ct.data.deployType == "replica") {
+                vmCatalogDeploy.deployServerCount = ct.data.replicaCnt;
+            }
+            vmCatalogDeploy.octaviaLbUse = false;
+            vmCatalogDeploy.context.octaviaLbUse = false;
         }
         vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
         vmCatalogDeploy.parameters.flavor = ct.data.flavor;
@@ -559,11 +559,28 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.parameters.availability_zone = ct.sltAvailabilityZone.availabilityZone;
         vmCatalogDeploy.parameters.provider_net = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
         vmCatalogDeploy.parameters.provider_subnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
+        if (vmCatalogDeploy.octaviaLbUse) {
+            vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
+            vmCatalogDeploy.parameters.lb_svc_protocol = "TCP";
+            vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
+            vmCatalogDeploy.parameters.lb_svc_connection_limit = 2000;
+            vmCatalogDeploy.parameters.lb_svc_monitor_type = "TCP";
+            vmCatalogDeploy.parameters.lb_svc_monitor_delay = 3;
+            vmCatalogDeploy.parameters.lb_svc_monitor_max_retries = 5;
+            vmCatalogDeploy.parameters.lb_svc_monitor_timeout = 5;
+            vmCatalogDeploy.parameters.lb_description = "vmCatalog " + ct.data.stackName + " lb";
+        }
         if (ct.data.volumeUse) {
             vmCatalogDeploy.parameters.volume_type = ct.data.volumeType;
             vmCatalogDeploy.parameters.volume_size = ct.data.volumeSize;
             vmCatalogDeploy.parameters.volume_mount_point = ct.data.volumeMountPoint;
+            vmCatalogDeploy.parameters.volume_format_type = "xfs";
             vmCatalogDeploy.parameters.volume_mount_path = ct.data.volumeMountPath;
+        }
+        if (ct.data.createUser) {
+            vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
+            vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
+            vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
         }
         if (angular.isFunction(appendSetVmCatalogDeploy)) {
             vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);

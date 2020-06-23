@@ -4,7 +4,8 @@
         <div class="form-group">
             <select id="receiver" name="receiver" 
                 ng-options="condition.id as ( condition.name | translate ) for condition in contents.conditions.receivers" 
-                ng-model="contents.conditionParams.receiver" style="width:100px;" ng-change="contents.selectNotifications();">
+                ng-model="contents.conditionParams.receiver" style="width:130px;" ng-change="contents.selectNotifications();">
+                <option value="">-- 수신그룹 --</option>
             </select>
             <select id="schType" name="schType" 
                 ng-options="condition.id as ( condition.name | translate ) for condition in contents.conditions.types" 

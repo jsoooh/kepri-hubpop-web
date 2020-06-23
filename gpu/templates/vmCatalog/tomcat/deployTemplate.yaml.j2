@@ -1,0 +1,75 @@
+heat_template_version: '2018-08-31'
+
+description: single tomcat template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Tomcat.qcow2
+  flavor:
+    type: string
+    default: m1.small
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  service_port:
+    type: number
+    default: 80
+
+resources:
+
+  server_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  init_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $service_port: { get_param: service_port }
+          template: |
+            #!/bin/sh
+            echo "tomcat setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+
+
+            systemctl start tomcat
+            systemctl enable tomcat
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
+            echo "tomcat setting end"
+
+
+  server:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server, show ] }
+        instancePort: { get_attr: [ server_port, show ] }

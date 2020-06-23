@@ -22,15 +22,15 @@ angular.module('gpu.controllers')
 
         ct.data.adminPassword = "Crossent!234";
         ct.data.adminConfirmPassword = "Crossent!234";
+        ct.data.erlangCookie = "CMAXAFWPGKUBELOPUZOP";
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.amqp_port = ct.data.servicePort;
             vmCatalogDeploy.parameters.management_port = ct.data.managementPort;
             vmCatalogDeploy.parameters.admin_password = ct.data.adminPassword;
-            if (vmCatalogDeploy.octaviaLbUse) {
-                vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
-                vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
+            if(ct.data.deployType == "cluster") {
+                vmCatalogDeploy.parameters.erlang_cookie = ct.data.erlangCookie;
             }
 
             return vmCatalogDeploy;

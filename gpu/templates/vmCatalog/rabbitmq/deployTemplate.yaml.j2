@@ -91,3 +91,5 @@ outputs:
     value:
       - instance: { get_attr: [ server, show ] }
         instancePort: { get_attr: [ server_port, show ] }
+        amqpPort: { get_param: amqp_port }
+        managementPort: { get_param: management_port }
