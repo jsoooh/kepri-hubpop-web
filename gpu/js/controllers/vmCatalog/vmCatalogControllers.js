@@ -42,6 +42,9 @@ angular.module('gpu.controllers')
     _DebugConsoleLog("vmCatalogControllers.js : gpuVmCatalogDeployFormCtrl", 1);
 
     var ct                      = this;
+
+    ct.testInput                = true;
+
     ct.tenantId                 = $scope.main.userTenantGpuId;
     ct.fn                       = {};
     ct.data                     = {};

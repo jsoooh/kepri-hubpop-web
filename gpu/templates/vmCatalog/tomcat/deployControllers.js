@@ -14,10 +14,12 @@ angular.module('gpu.controllers')
         ct.data.servicePort = 80;
 
         // 테스트
-        ct.data.deployName = "톰캣";
-        ct.data.stackName = "tomcat";
-        ct.data.deployType = "single";
-        ct.data.octaviaLbUse = false;
+        if (ct.testInput) {
+            ct.data.deployName = "톰캣";
+            ct.data.stackName = "tomcat";
+            ct.data.deployType = "single";
+            ct.data.octaviaLbUse = false;
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {

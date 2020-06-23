@@ -12,12 +12,12 @@
                 <strong class="tit">사용자계정</strong>
                 <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_id }}</span>
             </li>
-            <!--
-                                    <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_password">
-                                        <strong class="tit">사용자 PW </strong>
-                                        <span class="txt"><span class="point_txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_password }}</span></span>
-                                    </li>
-            -->
+<!--
+            <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_password">
+                <strong class="tit">사용자 PW </strong>
+                <span class="txt"><span class="point_txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_password }}</span></span>
+            </li>
+-->
         </ul>
         <ul>
             <li>
@@ -25,18 +25,18 @@
                 <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
                 <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.servicePort }}</span>
             </li>
-            <!--
-                                    <li>
-                                        <strong class="tit">관리자계정</strong>
-                                        <span class="txt">root</span>
-                                    </li>
-            -->
-            <!--
-                                    <li>
-                                        <strong class="tit">관리자 PW</strong>
-                                        <span class="txt"><span class="point_txt">{{ contents.vmCatalogDeployInfo.parameters.root_password }}</span></span>
-                                    </li>
-            -->
+<!--
+            <li>
+                <strong class="tit">관리자계정</strong>
+                <span class="txt">root</span>
+            </li>
+-->
+<!--
+            <li>
+                <strong class="tit">관리자 PW</strong>
+                <span class="txt"><span class="point_txt">{{ contents.vmCatalogDeployInfo.parameters.root_password }}</span></span>
+            </li>
+-->
             <li ng-if="contents.vmCatalogDeployInfo.parameters.create_db_name">
                 <strong class="tit">사용자 DB명</strong>
                 <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.create_db_name }}</span>
