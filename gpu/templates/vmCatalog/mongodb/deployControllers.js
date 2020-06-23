@@ -50,13 +50,8 @@ angular.module('gpu.controllers')
                     ct.data.galeraPort++;
                 }
                 vmCatalogDeploy.parameters.galera_port = ct.data.galeraPort;
-                vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
-                vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
-            } else if (ct.data.deployType == "replica") {
-                if (ct.data.servicePort == ct.data.checkPort) {
-                    ct.data.checkPort++;
-                }
-                vmCatalogDeploy.parameters.check_port = ct.data.checkPort;
+                //vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
+                //vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
             }
             vmCatalogDeploy.parameters.admin_id = ct.data.adminId;
             vmCatalogDeploy.parameters.admin_password = ct.data.adminPassword;
