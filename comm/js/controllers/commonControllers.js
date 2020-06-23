@@ -41,6 +41,66 @@ angular.module('common.controllers', [])
         mc.languages = [];
         mc.sltLanguage = {};
         mc.sltRegion = {};
+        mc.sltGroupMenu = {};               //좌측 대메뉴 선택
+        mc.sltGroupMenuIconId = "";         //좌측 대메뉴 선택
+        mc.allMenuOpen = false;             //전체 메뉴 오픈 여부
+        mc.sltMenu = {};                    //좌측 메뉴 선택
+        mc.topProjectMenuOpen = false;      //top 메뉴 오픈 여부. 프로젝트명 옆
+        mc.dashboardFull = false;           //대시보드 화면 전체보기
+
+        //좌측 대메뉴 선택
+        mc.setGroupMenu = function (menuItem) {
+            if (!mc.sltPortalOrgId) {
+                common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                return;
+            }
+            mc.sltGroupMenu = menuItem;
+            mc.sltGroupMenuIconId = menuItem.iconId;
+            //console.log("mc.sltGroupMenu : ", mc.sltGroupMenu);
+        };
+
+        //좌측 메뉴 선택
+        mc.setMenu = function (menuItem) {
+            if (!mc.sltPortalOrgId) {
+                common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                return;
+            }
+            if (!menuItem.urlPath) return;
+            mc.sltMenu = menuItem;
+            common.locationHref(menuItem.urlPath);
+            //console.log("mc.sltMenu : ", mc.sltMenu);
+        };
+
+        //전체 메뉴 오픈 여부
+        mc.allMenuOpenClick = function () {
+            if (mc.allMenuOpen) {
+                mc.allMenuOpen = false;
+            } else {
+                if (!mc.sltPortalOrgId) {
+                    common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                    return;
+                }
+                mc.allMenuOpen = true;
+            }
+        };
+
+        //대시보드 화면 전체보기
+        mc.dashboardFullClick = function () {
+            if (mc.dashboardFull) {
+                mc.dashboardFull = false;
+            } else {
+                mc.dashboardFull = true;
+            }
+        };
+
+        //top 메뉴 클릭 : 프로젝트명 옆
+        mc.topProjectMenuClick = function () {
+            if (mc.topProjectMenuOpen) {
+                mc.topProjectMenuOpen = false;
+            } else {
+                mc.topProjectMenuOpen = true;
+            }
+        };
 
         mc.regions = [];
         mc.commLeftFav = { setMode: false, dataLoad: false  };
@@ -216,7 +276,6 @@ angular.module('common.controllers', [])
                 $scope.changePasswordAction($scope.pop.changePasswordData);
             }
         };
-
 
         // 로그 아웃
         mc.logout = function () {
@@ -501,6 +560,8 @@ angular.module('common.controllers', [])
             var response = portal.menu.getMenuList();
             if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
                 mc.dbMenuList = response.data.items;
+                //mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
+                //console.log("mc.dbMenuList : ", mc.dbMenuList);
             }
         };
 
@@ -553,6 +614,9 @@ angular.module('common.controllers', [])
                 mc.sltPortalOrgDisplayName = portalOrg.orgName;
                 mc.loadUserTenant();
                 mc.loadSltOrganization();
+                if (!mc.sltGroupMenuIconId) {
+                    mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
+                }
             } else {
                 $timeout(function () {
                     mc.desplayDbMenuList("none");
@@ -964,6 +1028,7 @@ angular.module('common.controllers', [])
         // left 메뉴 객체 셋팅
         mc.setSelectSiteMap = function (stateKey) {
             mc.selectSiteMap = common.getStateKeyBySelectSietMap(stateKey);
+            //console.log("mc.selectSiteMap : ", mc.selectSiteMap);
         };
 
         mc.setLeftAllMunuParams = function () {
@@ -1519,7 +1584,7 @@ angular.module('common.controllers', [])
                 if (data.resultCode == 0) {
                     mc.notifications = data.items;
                     mc.notificationCount = data.itemCount;
-                };
+                }
             });
         };
 
@@ -1593,6 +1658,13 @@ angular.module('common.controllers', [])
         $scope.main.replaceSeting();
 
         $scope.main.displayHistoryBtn = false;
+
+        // 메뉴에 없는 화면일 때 메뉴 정보 clear
+        if ($scope.main.stateKey == CONSTANTS.commHomeState || $scope.main.stateKey == "commMemberEdit" || $scope.main.stateKey == "commNotification" || $scope.main.stateKey == "commBoard_qna") {
+            $scope.main.sltGroupMenu = {};        //좌측 대메뉴 선택
+            $scope.main.sltGroupMenuIconId = "";  //좌측 대메뉴 선택
+            $scope.main.sltMenu = {};    //좌측 메뉴 선택
+        }
 
         // 로그인 여부 체크
         if (!common.isAuthenticated()) {

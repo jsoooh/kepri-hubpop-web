@@ -1,0 +1,203 @@
+heat_template_version: '2018-08-31'
+
+description: single nginx template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Kong_Konga.qcow2
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  pg_port:
+    type: string
+    default: 5432
+  pg_password:
+    type: string
+  kong_user_id:
+    type: string
+    default: kong
+  kong_user_password:
+    type: string
+  kong_db_name:
+    type: string
+    default: kong
+  konga_port:
+    type: string
+    default: 1337
+  konga_user_id:
+    type: string
+    default: konga
+  konga_user_password:
+    type: string
+  konga_db_name:
+    type: string
+    default: konga
+
+
+resources:
+
+  server_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  init_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $pg_port: { get_param: pg_port }
+            $pg_password: { get_param: pg_password }
+            $kong_user_id: { get_param: kong_user_id }
+            $kong_user_password: { get_param: kong_user_password }
+            $kong_db_name: { get_param: kong_db_name }
+            $konga_port: { get_param: konga_port }
+            $konga_user_id: { get_param: konga_user_id }
+            $konga_user_password: { get_param: konga_user_password }
+            $konga_db_name: { get_param: konga_db_name }
+            $local_node_name: { get_param: 'OS::stack_name' }
+          template: |
+            #!/bin/sh
+            echo "kong setting start"
+
+            ulimit -SHn 65535
+            ulimit -s 65535
+            ulimit -u 65535
+
+            cat <<EOF>> /etc/security/limits.conf
+
+            # This is added for Open File Limit Increase
+            *               hard    nofile          65535
+            *               soft    nofile          65535
+            *               hard    stack           65535
+            *               soft    stack           65535
+
+            EOF
+
+            /usr/pgsql-11/bin/postgresql-11-setup initdb
+            sed -i 's/#port = 5432$/port = $pg_port/' /var/lib/pgsql/11/data/postgresql.conf
+            sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
+
+            systemctl start postgresql-11
+            sleep 1
+            sudo -u postgres psql <<EOF
+            ALTER USER postgres WITH PASSWORD '$pg_password';
+            CREATE USER $kong_user_id PASSWORD '$kong_user_password';
+            CREATE DATABASE $kong_db_name OWNER $kong_user_id;
+            CREATE USER $konga_user_id PASSWORD '$konga_user_password';
+            CREATE DATABASE $konga_db_name OWNER $konga_user_id;
+            EOF
+
+            cat <<EOF> /var/lib/pgsql/11/data/pg_hba.conf
+            # TYPE  DATABASE        USER            ADDRESS                 METHOD
+            # "local" is for Unix domain socket connections only
+            local   all             all                                     md5
+            # IPv4 local connections:
+            host    all             all             0.0.0.0/0               md5
+            host    all             all             127.0.0.1/32            md5
+            # IPv6 local connections:
+            host    all             all             ::1/128                 md5
+            # replication privilege.
+            local   replication     all                                     md5
+            host    replication     all             127.0.0.1/32            md5
+            host    replication     all             ::1/128                 md5
+            EOF
+
+            systemctl restart postgresql-11
+            systemctl enable postgresql-11
+
+            sleep 2
+
+            cat <<EOF> /etc/kong/kong.conf
+            database = postgres
+            pg_host = $pg_host
+            pg_port = $pg_port
+            pg_timeout = 5000
+            pg_user = $kong_user_id
+            pg_password = $kong_user_password
+            pg_database = $kong_db_name
+            pg_max_concurrent_queries = 0
+            pg_semaphore_timeout = 60000
+
+            #admin_listen = 127.0.0.1:8001 reuseport backlog=16384, 127.0.0.1:8444 http2 ssl reuseport backlog=16384
+
+            EOF
+
+            /usr/local/bin/kong migrations bootstrap /etc/kong/kong.conf
+            /usr/local/bin/kong start
+
+            sleep 2
+
+            cat <<EOF> /home/centos/konga-0.14.7/.env
+            PORT=$konga_port
+            NODE_ENV=production
+            KONGA_HOOK_TIMEOUT=120000
+            DB_ADAPTER=postgres
+            DB_URI="postgresql://$konga_user_id:$konga_user_password@127.0.0.1:$pg_port/$konga_db_name"
+            KONGA_LOG_LEVEL=warn
+            TOKEN_SECRET=some_secret_token
+
+            EOF
+
+            chown centos.centos /home/centos/konga-0.14.7/.env
+
+            su - centos -c "mkdir /home/centos/konga-0.14.7/logs"
+            su - centos -c "cd /home/centos/konga-0.14.7; ./start.sh -c prepare"
+
+            sleep 1
+
+            su - centos -c "cd /home/centos/konga-0.14.7; npm start >> /home/centos/konga-0.14.7/logs/konga.log 2>&1 &"
+
+            sleep 1
+
+            cat <<EOF> /root/konga_public_konga_kong_nodes.sql
+            INSERT INTO public.konga_kong_nodes
+            (id, name, type, kong_admin_url, netdata_url, kong_api_key, jwt_algorithm, jwt_key, jwt_secret, kong_version, health_checks, health_check_details, active, "createdAt", "updatedAt", "createdUserId", "updatedUserId")
+            VALUES (1, '$local_node_name', 'default', 'http://127.0.0.1:8001', null, '', 'HS256', null, null, '2.0.4', false, null, false, NOW(), NOW(), 1, 1);
+            EOF
+
+            expect <<EOF
+            spawn bash -c "psql -p $pg_port -U $konga_user_id -W $konga_db_name < /root/konga_public_konga_kong_nodes.sql";
+            expect "Password:"
+              send "$konga_user_password\r"
+            expect eof
+            EOF
+
+            sleep 1
+
+            rm -f /root/konga_public_konga_kong_nodes.sql
+
+            echo "kong setting end"
+
+  server:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config
+
+outputs:
+  server_ip:
+    value:
+      get_attr: [ server_port, fixed_ips, 0, ip_address]

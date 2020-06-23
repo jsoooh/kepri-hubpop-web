@@ -9,6 +9,8 @@ angular.module('gpu.controllers')
     ct.fn                = {};
     ct.gpu_vm_catalog_template = _GPU_VM_CATALOG_TEMPLATE_;
 
+    ct.listType = 'image';
+
     ct.vmCatalogs = [];
     ct.schFilterText = "";
 
@@ -104,6 +106,8 @@ angular.module('gpu.controllers')
         }
     };
 
+    ct.checkClickBtn = false;
+
     ct.fn.inputVolumeSizeChange = function () {
         var volumeSize = ct.inputVolumeSize ? parseInt(ct.inputVolumeSize, 10) : 0;
         if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
@@ -128,20 +132,26 @@ angular.module('gpu.controllers')
             try {
                 var deployForm = $('form[name="subPage.deployForm"]');
                 for (var i=0; i<subPage.$validationSummary.length; i++) {
-                    var validationTarget = deployForm.find('[name="' + subPage.$validationSummary[0].field + '"]');
-                    if (validationTarget.length == 0) continue;
-                    if (validationTarget.attr('type') == 'hidden') {
-                        var targetId = validationTarget.attr('targetId');
-                        if (targetId && deployForm.find('#'+targetId).length == 1) {
-                            deployForm.find('#'+targetId)[0].focus();
+                    try {
+                        var validationTarget = deployForm.find('[name="' + subPage.$validationSummary[0].field + '"]');
+                        if (validationTarget.length == 0) continue;
+                        if (validationTarget.attr('type') == 'hidden') {
+                            var targetId = validationTarget.attr('targetId');
+                            if (targetId && deployForm.find('#'+targetId).length == 1) {
+                                deployForm.find('#'+targetId)[0].focus();
+                                break;
+                            }
+                        } else {
+                            validationTarget[0].focus();
                             break;
                         }
-                    } else {
-                        validationTarget[0].focus();
-                        break;
+                    } catch (e) {
+                        console.log(e);
                     }
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.log(e);
+            }
             ct.checkClickBtn = false;
             return false;
         }
@@ -167,6 +177,7 @@ angular.module('gpu.controllers')
         var controllerTag = ' ng-controller="' + controllerName + ' as subPage"';
         var deployHtmlFilePath = templatePath + "/" + deployHtmlFile + _VERSION_TAIL_;
         var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployHtmlFilePath);
+
         promise.success(function (data) {
             $templateCache.put("deployFormTemplate", "<div class=\"panel_area\" id=\"vmCatalogDeploy\"" + controllerTag + ">\n" + data + "\n</div>");
             ct.vmCatalogTemplateUrl = "deployFormTemplate";
@@ -526,20 +537,20 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.stackName = ct.data.stackName;
         vmCatalogDeploy.deployType = ct.data.deployType;
         vmCatalogDeploy.deployServerCount = 1;
-        if (ct.data.deployType == "cluster") {
-            vmCatalogDeploy.deployServerCount = ct.data.clusterCnt;
-        } else if (ct.data.deployType == "replica") {
-            vmCatalogDeploy.deployServerCount = ct.data.replicaCnt;
-        }
         vmCatalogDeploy.deployTemplate = deployTemplate;
         vmCatalogDeploy.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.createUser = ct.data.createUser;
-        vmCatalogDeploy.octaviaLbUse = false;
-        vmCatalogDeploy.context.octaviaLbUse = false;
         if (ct.data.deployType == "cluster") {
+            vmCatalogDeploy.deployServerCount = ct.data.clusterCnt;
             vmCatalogDeploy.octaviaLbUse = ct.data.octaviaLbUse;
             vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
+        } else {
+            if (ct.data.deployType == "replica") {
+                vmCatalogDeploy.deployServerCount = ct.data.replicaCnt;
+            }
+            vmCatalogDeploy.octaviaLbUse = false;
+            vmCatalogDeploy.context.octaviaLbUse = false;
         }
         vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
         vmCatalogDeploy.parameters.flavor = ct.data.flavor;
@@ -548,13 +559,32 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.parameters.availability_zone = ct.sltAvailabilityZone.availabilityZone;
         vmCatalogDeploy.parameters.provider_net = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
         vmCatalogDeploy.parameters.provider_subnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
+        if (vmCatalogDeploy.octaviaLbUse) {
+            vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
+            vmCatalogDeploy.parameters.lb_svc_protocol = "TCP";
+            vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
+            vmCatalogDeploy.parameters.lb_svc_connection_limit = 2000;
+            vmCatalogDeploy.parameters.lb_svc_monitor_type = "TCP";
+            vmCatalogDeploy.parameters.lb_svc_monitor_delay = 3;
+            vmCatalogDeploy.parameters.lb_svc_monitor_max_retries = 5;
+            vmCatalogDeploy.parameters.lb_svc_monitor_timeout = 5;
+            vmCatalogDeploy.parameters.lb_description = "vmCatalog " + ct.data.stackName + " lb";
+        }
         if (ct.data.volumeUse) {
             vmCatalogDeploy.parameters.volume_type = ct.data.volumeType;
             vmCatalogDeploy.parameters.volume_size = ct.data.volumeSize;
             vmCatalogDeploy.parameters.volume_mount_point = ct.data.volumeMountPoint;
+            vmCatalogDeploy.parameters.volume_format_type = "xfs";
             vmCatalogDeploy.parameters.volume_mount_path = ct.data.volumeMountPath;
         }
-        vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);
+        if (ct.data.createUser) {
+            vmCatalogDeploy.parameters.create_user_id = ct.data.createUserId;
+            vmCatalogDeploy.parameters.create_db_name = ct.data.createDbName;
+            vmCatalogDeploy.parameters.create_user_password = ct.data.createUserPassword;
+        }
+        if (angular.isFunction(appendSetVmCatalogDeploy)) {
+            vmCatalogDeploy = appendSetVmCatalogDeploy(vmCatalogDeploy);
+        }
 
         $scope.main.loadingMainBody = true;
 

@@ -139,7 +139,7 @@
         loadCssLink('css/content_join.css'+_VERSION_TAIL_);
         loadCssLink('css/common_join.css'+_VERSION_TAIL_);
         loadCssLink('css/component.css'+_VERSION_TAIL_);
-
+        
         loadCssLink('css/components/dygraph.css');
 
         loadJavascript('js/components/modernizr-custom.js');
@@ -208,30 +208,7 @@
         loadJavascript('js/components/dygraph.min.js');
         loadJavascript('js/components/ckeditor/ckeditor.js');
 
-		//assets.css
-		loadCssLink('assets/lib/font-awesome/css/all.min.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/XEIcon/xeicon.min.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/NotoSansKr/NotoSansKr.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/NanumGothic/webfonts_NanumGothic.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/bootstrap/hubpop/bootstrap_hubpop.css'+_VERSION_TAIL_);
-		loadCssLink('assets/css/component.css'+_VERSION_TAIL_);
-		loadCssLink('assets/css/user_layout.css'+_VERSION_TAIL_);
-		loadCssLink('assets/css/contents.css'+_VERSION_TAIL_);
-		//assets.css
-
-		//assets.js
-		loadJavascript('assets/lib/feather/feather.min.js');
-		//loadJavascript('assets/js/common/html5shiv.min.js');		//IE 9
-		//loadJavascript('assets/js/common/respond.min'.js');		//IE 9
-		// loadJavascript('assets/lib/jquery-1.12.4.min.js');
-		loadJavascript('assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.js');
-		loadJavascript('assets/lib/bootstrap/js/bootstrap.min.js');
-		loadJavascript('assets/js/common.js');
-		loadJavascript('assets/js/user.js');
-		//assets.js
-
-		loadJavascript(_COMM_STAGE_+'/js/cmmFunction.js'+_VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_+'/js/cmmFunction.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/app.js'+_VERSION_TAIL_HEAD_);
 		loadJavascript(_COMM_STAGE_+'/js/properties/loadFiles.js'+_VERSION_TAIL_HEAD_);
 
@@ -252,14 +229,21 @@
 
         loadJavascript(_COMM_STAGE_+'/js/services/commonServices.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/services/userServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/userSettingServices.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/services/portalServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/memberServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/orgServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/quotaServices.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/services/signupServices.js'+_VERSION_TAIL_HEAD_);
 
         loadJavascript(_COMM_STAGE_+'/js/controllers/commonControllers.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/controllers/userControllers.js'+_VERSION_TAIL_HEAD_);
         loadJavascript(_COMM_STAGE_+'/js/controllers/portalControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/orgControllers.js'+_VERSION_TAIL_HEAD_);
+		loadJavascript(_COMM_STAGE_+'/js/controllers/signupControllers.js'+_VERSION_TAIL_HEAD_);
 
         // COMMON
-        loadJavascript(_COMM_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
+		loadJavascript(_COMM_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
 
         // Sample
         if (_MODE_ == "DEBUG") loadJavascript(_COMM_STAGE_+'/js/controllers/sampleControllers.js'+_VERSION_TAIL_HEAD_);
@@ -282,50 +266,57 @@
 	</script>
 
 </head>
-<body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">
+<body id="mainCtrl" class="{{ main.bodyLayout }}" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader">
 <script type="text/javascript">
-	document.writeln('<div id="pageWrap">                                         ');
-	document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuFirst.html'+_VERSION_TAIL_+'\'"></header>     ');
-	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" class="" ng-include="\''+_COMM_VIEWS_+ '/menu/sitemapMenu.html'+_VERSION_TAIL_+'\'"></div>   ');
-	document.writeln('	<aside ng-if="main.isLoginPage" id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP
-	document.writeln('	<div id="container">                                      ');	//container
-	document.writeln('		<main id="contentWrap" ng-class="{ \'dashboard-wrap\' : main.stateKey == \'commProjectDetail\' }">                                   ');
-	document.writeln('			<div ng-if="main.isLoginPage && main.stateKey == \'commProjectDetail\'" class="page-title dashboard-top" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitleDashboard.html'+_VERSION_TAIL_+'\'"></div> ');
-	document.writeln('			<div ng-if="main.isLoginPage && main.stateKey != \'commProjectDetail\'" class="page-title" ng-include="\''+_COMM_VIEWS_+ '/menu/topTitle.html'+_VERSION_TAIL_+'\'"></div> ');
-	document.writeln('			<div class="page-content" ui-view="mainBody"></div> ');		//콘텐츠 영역
-	document.writeln('		</main>                                               ');
-	document.writeln('	</div>                                                    ');	// #container
-	document.writeln('</div>                                                      ');	// #pageWrap
 
-	document.writeln('<div style="display: none;" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'block\' : \'none\' }" id="wrap" ng-class="main.mainLayoutClass">');
+    document.writeln('<div style="display: none;" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'block\' : \'none\' }" id="wrap" ng-class="main.mainLayoutClass">');
+    document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="main.navigationTemplateUrl"></header>');
+    document.writeln('	<div id="container" ng-class="main.containerLayoutClass">');
+    //if (_MENU_TYPE_ == 'db') {
+        document.writeln('		<div ng-if="main.isLoginPage" class="leftCnt on">');
+        document.writeln('			<div class="gnbMenu">');
+        document.writeln('				<div class="gnb-in" ng-include="main.portalOrgSelectTemplateUrl"></div>');
+        document.writeln('				<div class="gnb-in" id="leftMenu"></div>');
+        document.writeln('			</div>');
+        document.writeln('		</div>');
+	// } else {
+    //     document.writeln('		<div ng-if="main.isLoginPage" ng-class="main.leftMenuLayoutClass" ng-include="main.leftMenuTemplateUrl"></div>');
+	// }
+    document.writeln('		<div class="rightCnt" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }" id="{{main.rightCntId}}">');
+    document.writeln('			<div ng-if="main.isLoginPage" class="titWrap" id="mainTop" ng-include="main.topTemplateUrl"></div>');
+    document.writeln('			<div ui-view="mainBody"></div>');
+    document.writeln('		</div>');
+    document.writeln('	</div>');
 	document.writeln('	<div id="slider-contents-container" class="md-dialog-container backdrop_type" tabindex="-1"></div>'); // 가이드
 	document.writeln('	<div class="aside" id="slider-contents"></div>');
 	document.writeln('</div>');
-	document.writeln('<div growl></div>');
-	document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
-	document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.loadingMain || main.loadingMainBody) ? \'block\' : \'none\' }">'); //로딩바 영역
-	document.writeln('	<div class="loadWrap_spn"  ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
-	document.writeln('		<div class="loadBox_spn">');
-	document.writeln('			<div class="lds-css ng-scope">');
-	document.writeln('				<div class="lds-spinner" style="height:100%">');
-	document.writeln('					<div class="spiner_child_1"></div>');
-	document.writeln('					<div class="spiner_child_2"></div>');
-	document.writeln('					<div class="spiner_child_3"></div>');
-	document.writeln('					<div class="spiner_child_4"></div>');
-	document.writeln('					<div class="spiner_child_5"></div>');
-	document.writeln('					<div class="spiner_child_6"></div>');
-	document.writeln('					<div class="spiner_child_7"></div>');
-	document.writeln('					<div class="spiner_child_8"></div>');
-	document.writeln('					<div class="spiner_child_9"></div>');
-	document.writeln('					<div class="spiner_child_10"></div>');
-	document.writeln('					<div class="spiner_child_11"></div>');
-	document.writeln('					<div class="spiner_child_12"></div>');
-	document.writeln('				</div>');
-	document.writeln('			</div>');
-	document.writeln('		</div>');
-	document.writeln('	</div>');
-	document.writeln('</div>');
-	document.writeln('<div id="noticeDiv"><div>');
+    document.writeln('<div growl></div>');
+    document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
+    document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'none\' : \'block\' }">'); //로딩바 영역
+    document.writeln('	<div class="loadWrap_spn"  ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
+    document.writeln('		<div class="loadBox_spn">');
+    document.writeln('			<div class="lds-css ng-scope">');
+    document.writeln('				<div class="lds-spinner" style="height:100%">');
+    document.writeln('					<div class="spiner_child_1"></div>');
+    document.writeln('					<div class="spiner_child_2"></div>');
+    document.writeln('					<div class="spiner_child_3"></div>');
+    document.writeln('					<div class="spiner_child_4"></div>');
+    document.writeln('					<div class="spiner_child_5"></div>');
+    document.writeln('					<div class="spiner_child_6"></div>');
+    document.writeln('					<div class="spiner_child_7"></div>');
+    document.writeln('					<div class="spiner_child_8"></div>');
+    document.writeln('					<div class="spiner_child_9"></div>');
+    document.writeln('					<div class="spiner_child_10"></div>');
+    document.writeln('					<div class="spiner_child_11"></div>');
+    document.writeln('					<div class="spiner_child_12"></div>');
+    document.writeln('				</div>');
+    document.writeln('			</div>');
+    document.writeln('		</div>');
+    document.writeln('	</div>');
+    document.writeln('</div>');
+    document.writeln('<div id="noticeDiv"><div>');
+
 </script>
+
 </body>
 </html>

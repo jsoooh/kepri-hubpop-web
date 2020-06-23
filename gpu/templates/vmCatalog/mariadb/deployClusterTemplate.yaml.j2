@@ -18,6 +18,14 @@ parameters:
     type: string
   provider_subnet:
     type: string
+  service_port:
+    type: string
+    default: 3306
+  galera_port:
+    type: string
+    default: 4567
+  root_password:
+    type: string
 {% if octaviaLbUse %}
   lb_description:
     type: string
@@ -45,18 +53,12 @@ parameters:
   lb_svc_monitor_timeout:
     type: string
     default: 5
+{% if monitorUrlPathUse %}
   lb_svc_monitor_url_path:
     type: string
     default: /
 {% endif %}
-  service_port:
-    type: string
-    default: 3306
-  galera_port:
-    type: string
-    default: 4567
-  root_password:
-    type: string
+{% endif %}
 {% if createUser %}
   create_user_id:
     type: string
@@ -165,7 +167,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -228,7 +230,6 @@ resources:
             EOF
             galera_new_cluster
             systemctl enable mariadb.service
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
             echo "mariadb setting end"
 
 
@@ -269,7 +270,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -353,6 +354,7 @@ resources:
             $galera_port: { get_param: galera_port }
             $root_password: { get_param: root_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $node_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
             $server_addresses_and_ports:
               list_join:
@@ -372,7 +374,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stackId/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -423,17 +425,18 @@ resources:
 
             EOF
             sleep 10
-            masterRun=1
-            while [ $masterRun -ne 0 ]
+            server2Run=1
+            while [ $server2Run -ne 0 ]
             do
-              echo "nc -z $master_address $galera_port"
-              nc -z $master_address $galera_port
-              masterRun=$?
+              echo "nc -z $server2_address $galera_port"
+              nc -z $server2_address $galera_port
+              server2Run=$?
               sleep 5
             done
             sleep 10
             systemctl start mariadb.service
             systemctl enable mariadb
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "mariadb setting end"
 
   server1:

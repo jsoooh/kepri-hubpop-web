@@ -9,5 +9,6 @@ angular.module('gpu.controllers')
        var ct = $scope.$parent.$parent.contents;
 
        ct.fn.loadPage();
+
     })
 ;

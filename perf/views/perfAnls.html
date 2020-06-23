@@ -64,21 +64,21 @@
                         <span ng-if="!combinedAnl.lastMeteringValue">-</span>
                     </td>
                     <td>    <!-- 당월 사용량 -->
-                        <span ng-if="combinedAnl.currentMeteringValue" ng-switch-when="MB">{{ combinedAnl.currentMeteringValue | displayVolume:'MB'}}</span>
-                        <span ng-if="combinedAnl.currentMeteringValue" ng-switch-when="GB">{{ combinedAnl.currentMeteringValue | displayVolume:'GB'}}</span>
-                        <span ng-if="combinedAnl.currentMeteringValue" ng-switch-default="">{{ combinedAnl.currentMeteringValue | number }}</span>
-                        <span ng-if="!combinedAnl.currentMeteringValue">-</span>
+                        <span ng-if="combinedAnl.sltMeteringValue" ng-switch-when="MB">{{ combinedAnl.sltMeteringValue | displayVolume:'MB'}}</span>
+                        <span ng-if="combinedAnl.sltMeteringValue" ng-switch-when="GB">{{ combinedAnl.sltMeteringValue | displayVolume:'GB'}}</span>
+                        <span ng-if="combinedAnl.sltMeteringValue" ng-switch-default="">{{ combinedAnl.sltMeteringValue | number }}</span>
+                        <span ng-if="!combinedAnl.sltMeteringValue">-</span>
                     </td>
                     <td class="text-right">{{ combinedAnl.lastPerfAmt | number }} 원</td>    <!-- 전월 금액-->
-                    <td class="text-right">{{ combinedAnl.currentPerfAmt | number }} 원</td>    <!-- 당월 금액 -->
-                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">{{
+                    <td class="text-right">{{ combinedAnl.sltPerfAmt | number }} 원</td>    <!-- 당월 금액 -->
+                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">{{
                         combinedAnl.lastAnlsSumByItemGroup | number }} 원
                     </td>    <!-- 전월 합계 -->
-                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">{{
+                    <td ng-if="combinedAnl.sltAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">{{
                         combinedAnl.sltAnlsSumByItemGroup | number }} 원
                     </td>    <!-- 당월 합계 -->
 
-                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup" rowspan="{{ contents.data.maxRow + 1 }}">
+                    <td ng-if="combinedAnl.sltAnlsSumByItemGroup >= 0 && combinedAnl.lastAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">
                         <a style="text-decoration: underline" ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a>
 					</td>
                 </tr>

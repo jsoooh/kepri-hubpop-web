@@ -89,6 +89,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mysql setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -145,6 +146,7 @@ resources:
             EOF
 
             systemctl enable mysqld
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "mysql setting end"
 
   server:

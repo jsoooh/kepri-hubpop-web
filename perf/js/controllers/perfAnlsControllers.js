@@ -27,10 +27,6 @@ angular.module('perf.controllers')
         ct.data.sltYear = "";
         ct.data.sltMonth = "";
 
-        // ct.combinedAnlList = [];
-        ct.data.totalPerfAnls = 0;
-        ct.data.lastTotalPerfAnls = 0;
-
         // 미터링 서비스 그룹 리스트
         ct.fn.listAllMeteringGroupItems = function () {
             var promise = perfMeteringService.listAllMeteringGroupItems();
@@ -71,7 +67,7 @@ angular.module('perf.controllers')
             return maxRow;
         };
 
-        // 데이터 호출 Using $q
+        // 데이터 호출
         /**
          * HUBPOP_INT_PER_ANS_02 - 월별 과금 현황
          * @param params
@@ -85,17 +81,22 @@ angular.module('perf.controllers')
                 ct.data.maxRow = ct.fn.findMaxRow(data);
                 var itemGroupCode = "";
                 var startItemGroup = 0;
+                ct.data.totalPerfAnls = 0;
+                ct.data.lastTotalPerfAnls = 0;
+
                 for (var i = 0; i < data.itemCount; i++) {
                     if (ct.combinedAnlList[i].itemGroupCode != itemGroupCode) {
                         itemGroupCode = angular.copy(ct.combinedAnlList[i].itemGroupCode);
                         startItemGroup = i;
-                        ct.combinedAnlList[i].lastAnlsSumByItemGroup = ct.combinedAnlList[i].lastPerfAmt;
-                        ct.combinedAnlList[i].sltAnlsSumByItemGroup = ct.combinedAnlList[i].currentPerfAmt;
+                        ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup = 0;
+                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup = 0;
+                        ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup = ct.combinedAnlList[startItemGroup].lastPerfAmt;
+                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup = ct.combinedAnlList[startItemGroup].sltPerfAmt;
                     } else {
                         ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup += ct.combinedAnlList[i].lastPerfAmt;
-                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += ct.combinedAnlList[i].currentPerfAmt;
+                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += ct.combinedAnlList[i].sltPerfAmt;
                     }
-                    ct.data.totalPerfAnls += ct.combinedAnlList[i].currentPerfAmt;
+                    ct.data.totalPerfAnls += ct.combinedAnlList[i].sltPerfAmt;
                     ct.data.lastTotalPerfAnls += ct.combinedAnlList[i].lastPerfAmt;
                 }
                 $scope.main.loadingMainBody = false;
@@ -129,14 +130,14 @@ angular.module('perf.controllers')
 
             console.log(ct.lastDayOfLastMonth.getFullYear() + ":" + (ct.lastDayOfLastMonth.getMonth() + 1));
             console.log(ct.data.sltYear + ":" + ct.data.sltMonth);
-            var paramsSlt = {
+            var sltParams = {
                 urlPaths: {
                     "orgCode": ct.sltOrg.code
                 },
                 "year": ct.data.sltYear,
                 "month": ct.data.sltMonth
             };
-            ct.fn.totalAnlsByOrgCodeAndPerfYm(paramsSlt)
+            ct.fn.totalAnlsByOrgCodeAndPerfYm(sltParams)
         };
 
         // page Data 초기화 함수
