@@ -12,8 +12,8 @@
         <ul>
             <li>
                 <strong class="tit">접속포트</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
-                <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.servicePort }}</span>
+                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
+                <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
             </li>
         </ul>
     </div>

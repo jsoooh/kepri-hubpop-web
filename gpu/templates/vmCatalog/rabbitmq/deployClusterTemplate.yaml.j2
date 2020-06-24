@@ -340,8 +340,6 @@ outputs:
     value:
       - instance: { get_attr: [ server1, show ] }
         instancePort: { get_attr: [ server1_port, show ] }
-        managementPort: { get_param: management_port }
-        amqpPort: { get_param: amqp_port }
       - instance: { get_attr: [ server2, show ] }
         instancePort: { get_attr: [ server2_port, show ] }
       - instance: { get_attr: [ server3, show ] }
