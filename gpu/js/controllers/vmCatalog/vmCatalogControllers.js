@@ -388,9 +388,9 @@ angular.module('gpu.controllers')
         ct.isMaxSpecDisabled = false;
         if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource && ct.tenantResource.usedResource) {
             angular.forEach(ct.specList, function (spec) {
-                if ((spec.vcpus  * parseInt(ct.data.serverCnt, 10)) > ct.tenantResource.available.cores
-                    || (spec.ram  * parseInt(ct.data.serverCnt, 10)) > ct.tenantResource.available.ramSize
-                    || (spec.disk  * parseInt(ct.data.serverCnt, 10)) > ct.tenantResource.available.instanceDiskGigabytes) {
+                if ((spec.vcpus  * ct.data.serverCnt) > ct.tenantResource.available.cores
+                    || (spec.ram  * ct.data.serverCnt) > ct.tenantResource.available.ramSize
+                    || (spec.disk  * ct.data.serverCnt) > ct.tenantResource.available.instanceDiskGigabytes) {
                     spec.disabled = true;
                     ct.isMaxSpecDisabled = true;
                 }
