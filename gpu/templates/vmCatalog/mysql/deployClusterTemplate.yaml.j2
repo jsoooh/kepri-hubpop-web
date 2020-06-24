@@ -183,7 +183,7 @@ resources:
             systemctl enable rc-local
             sleep 1
 
-            mv /var/lib/mysql $volume_mount_path/
+            mv /var/lib/mysql $volume_mount_path/mysql
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
 {% endif %}
@@ -301,7 +301,7 @@ resources:
             systemctl enable rc-local
             sleep 1
 
-            mv /var/lib/mysql $volume_mount_path/
+            mv /var/lib/mysql $volume_mount_path/mysql
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
 {% endif %}
@@ -402,7 +402,8 @@ resources:
             systemctl enable rc-local
             sleep 1
 
-            mv /var/lib/mysql $volume_mount_path/
+            mv /var/lib/mysql $volume_mount_path/mysql
+            ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
 {% endif %}
             touch /var/log/mysqld.log

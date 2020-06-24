@@ -101,7 +101,7 @@ resources:
 
             sleep 1
 
-            mv /var/lib/kafka $volume_mount_path/
+            mv /var/lib/kafka $volume_mount_path/kafka
             ln -s $volume_mount_path/kafka /var/lib/kafka
             sleep 1
           {% endif %}
