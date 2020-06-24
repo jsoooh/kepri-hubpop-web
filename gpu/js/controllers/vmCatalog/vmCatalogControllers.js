@@ -275,6 +275,7 @@ angular.module('gpu.controllers')
     };
 
     // 상용존 셀렉트박스 조회
+    ct.isAvailabilityZoneLoad = false;
     ct.fn.availabilityZoneList = function() {
         var returnPromise = vmCatalogService.listAllAvailabilityZones();
         returnPromise.success(function (data, status, headers) {
@@ -283,8 +284,10 @@ angular.module('gpu.controllers')
             ct.data.availabilityZone = ct.sltAvailabilityZone.availabilityZone;
             ct.data.providerNet = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
             ct.data.providerSubnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
+            ct.isAvailabilityZoneLoad = true;
         });
         returnPromise.error(function (data, status, headers) {
+            ct.isAvailabilityZoneLoad = true;
         });
     };
 
@@ -430,7 +433,7 @@ angular.module('gpu.controllers')
             ct.sltSpacUuid = ct.sltSpac.uuid;
         } else {
             ct.sltSpac = {};
-            ct.data.flavor = {};
+            ct.data.flavor = "";
             ct.sltSpacUuid = "";
         }
     };
@@ -591,19 +594,25 @@ angular.module('gpu.controllers')
 
         $scope.main.loadingMainBody = true;
 
-        var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
-        promise.success(function (data) {
-            if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
-                $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
-            } else {
+        if (_DOMAIN_ == "localhost") {
+            var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
+            promise.success(function (data) {
+                if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
+                    $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
+                } else {
+                    $scope.main.loadingMainBody = false;
+                }
+                ct.checkClickBtn = false;
+            });
+            promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-            }
-            ct.checkClickBtn = false;
-        });
-        promise.error(function (data, status, headers) {
+                ct.checkClickBtn = false;
+            });
+        } else {
+            common.showAlertMessage("준비 중 입니다.");
             $scope.main.loadingMainBody = false;
             ct.checkClickBtn = false;
-        });
+        }
         if (templatePrint) {
             var printPromise = vmCatalogService.templateVmCatalogDeploy(vmCatalogDeploy);
             printPromise.success(function (data) {
