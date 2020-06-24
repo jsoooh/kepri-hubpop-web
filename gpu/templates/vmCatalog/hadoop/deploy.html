@@ -239,7 +239,7 @@
 
             <div class="pn-Toggle">
                 <div class="pn_head brdt">
-                    <h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan){{contents.sltMasterSpec.vcpus*parseInt(contents.data.masterCnt, 10)}}</h4>
+                    <h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
                     <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
                 </div>
                 <div class="pn_body">
@@ -250,34 +250,34 @@
                                     <span class="tit_txt">vcpu</span>
                                     <div class="progressWrap type2">
                                         <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.vcpus*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.cores)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.vcpus*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.cores)*100|number:0 }}%"></div>
+                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}" class="progress">
+                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}%"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.vcpus*parseInt(contents.data.workerCnt, 10)) }} 개 / {{ contents.tenantResource.maxResource.cores }} 개)</span>
+                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt) }} 개 / {{ contents.tenantResource.maxResource.cores }} 개)</span>
                                 </li>
                                 <li>
                                     <span class="tit_txt">메모리</span>
                                     <div class="progressWrap type2">
                                         <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.ram*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.ramSize)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.ram*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.ramSize)*100|number:0 }}%"></div>
+                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}" class="progress">
+                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}%"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.ram*parseInt(contents.data.workerCnt, 10)) | displayVolume:'MB' }} / {{ contents.tenantResource.maxResource.ramSize | displayVolume:'MB' }})</span>
+                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt) | displayVolume:'MB' }} / {{ contents.tenantResource.maxResource.ramSize | displayVolume:'MB' }})</span>
                                 </li>
                                 <li>
                                     <span class="tit_txt">디스크</span>
                                     <div class="progressWrap type2">
                                         <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.disk*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.disk*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}%"></div>
+                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}" class="progress">
+                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}%"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.disk*parseInt(contents.data.workerCnt, 10)) | displayVolume:'GB' }} / {{ contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB' }})</span>
+                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt) | displayVolume:'GB' }} / {{ contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB' }})</span>
                                 </li>
                             </ul>
                         </div>

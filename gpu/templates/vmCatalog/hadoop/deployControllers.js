@@ -76,9 +76,9 @@ angular.module('gpu.controllers')
         ct.isMaxSpecOver = false;
         ct.fn.chackSpecMaxOver = function () {
             if (ct.isMasterSpecLoad && ct.isWorkerSpecLoad && ct.tenantResource && ct.tenantResource.maxResource && ct.tenantResource.usedResource) {
-                if ((ct.sltMasterSpec.vcpus * parseInt(ct.data.masterCnt, 10) + ct.sltWorkerSpec.vcpus * parseInt(ct.data.workerCnt, 10)) > ct.tenantResource.available.cores
-                    || (ct.sltMasterSpec.ram * parseInt(ct.data.masterCnt, 10) + ct.sltWorkerSpec.ram * parseInt(ct.data.workerCnt, 10)) > ct.tenantResource.available.ramSize
-                    || (ct.sltMasterSpec.disk * parseInt(ct.data.masterCnt, 10) + ct.sltWorkerSpec.disk * parseInt(ct.data.workerCnt, 10)) > ct.tenantResource.available.instanceDiskGigabytes) {
+                if ((ct.sltMasterSpec.vcpus * ct.data.masterCnt + ct.sltWorkerSpec.vcpus * ct.data.workerCnt) > ct.tenantResource.available.cores
+                    || (ct.sltMasterSpec.ram * ct.data.masterCnt + ct.sltWorkerSpec.ram * ct.data.workerCnt) > ct.tenantResource.available.ramSize
+                    || (ct.sltMasterSpec.disk * ct.data.masterCnt + ct.sltWorkerSpec.disk * ct.data.workerCnt) > ct.tenantResource.available.instanceDiskGigabytes) {
                     ct.isMaxSpecOver = true;
                 }
             }
