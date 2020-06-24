@@ -12,6 +12,7 @@ angular.module('gpu.controllers')
 
         ct.data.replicaCnt = 3;
         ct.data.servicePort = 5432;
+        ct.data.checkPort = 25432;
         ct.data.applicationName = "master01";
 
         // 테스트
@@ -36,6 +37,10 @@ angular.module('gpu.controllers')
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
             if (ct.data.deployType == "replica") {
+                if (ct.data.checkPort == ct.data.servicePort) {
+                    ct.data.checkPort++;
+                }
+                vmCatalogDeploy.parameters.check_port = ct.data.checkPort;
                 vmCatalogDeploy.parameters.application_name = ct.data.applicationName
                 vmCatalogDeploy.parameters.repluser_password = ct.data.postgresPassword
             }

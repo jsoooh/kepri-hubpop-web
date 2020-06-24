@@ -20,6 +20,8 @@ parameters:
     type: string
   service_port:
     type: string
+  check_port:
+    type: string
   application_name:
     type: string
     default: master01
@@ -102,6 +104,7 @@ resources:
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
             $service_port: { get_param: service_port }
+            $check_port: { get_param: service_port }
             $application_name: { get_param: application_name }
             $postgres_password: { get_param: postgres_password }
             $repluser_password: { get_param: repluser_password }
@@ -253,7 +256,7 @@ resources:
 
             systemctl restart postgresql-11
 
-            nohup nc -kl $pcp_port 2>&1 &
+            nohup nc -kl $check_port 2>&1 &
             nc_pid=$!
 
             secondary2Run=1
@@ -286,6 +289,7 @@ resources:
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
             $service_port: { get_param: service_port }
+            $check_port: { get_param: service_port }
             $application_name: { get_param: application_name }
             $postgres_password: { get_param: postgres_password }
             $repluser_password: { get_param: repluser_password }
@@ -323,10 +327,10 @@ resources:
             masterRun=1
             while [ $masterRun -ne 0 ]
             do
-              echo "nc -z $server1_ip_address $pcp_port"
-              nc -z $server1_ip_address $pcp_port
+              echo "nc -z $server1_ip_address $check_port"
+              nc -z $server1_ip_address $check_port
               masterRun=$?
-              echo "nc -z $server1_ip_address $pcp_port > $masterRun"
+              echo "nc -z $server1_ip_address $check_port > $masterRun"
               sleep 10
             done
             sleep 10
@@ -377,6 +381,7 @@ resources:
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
             $service_port: { get_param: service_port }
+            $check_port: { get_param: service_port }
             $application_name: { get_param: application_name }
             $postgres_password: { get_param: postgres_password }
             $repluser_password: { get_param: repluser_password }
