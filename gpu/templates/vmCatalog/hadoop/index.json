@@ -6,7 +6,7 @@
   "deployViewControllerFile": "deployViewControllers.js",
   "deployViewControllerName": "hadoopDeployViewCtrl",
   "deployViewHtmlFile": "deployView.html",
-  "deployViewHtmlFileType": "full",
+  "deployViewHtmlFileType": "sub",
   "deployTemplates": {
     "core": "deployTemplateCore.yaml.j2",
     "hbase": "deployTemplateHBase.yaml.j2",

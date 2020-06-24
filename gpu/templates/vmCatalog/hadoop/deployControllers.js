@@ -18,8 +18,8 @@ angular.module('gpu.controllers')
 
         // 테스트
         if (ct.testInput) {
-            ct.data.deployName = "로드밸런스";
-            ct.data.stackName = "haproxy";
+            ct.data.deployName = "하둡";
+            ct.data.stackName = "hadoop";
         }
 
 
