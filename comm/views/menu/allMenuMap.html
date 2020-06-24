@@ -15,7 +15,7 @@
                                     {{ allMenuItem1.depth1 }}
                                 </div>
                                 <ul class="all-lnb-depth2">
-                                    <li class="all-depth2-item" ng-class="{ 'on' : (main.sltMenu.parentId == allMenuItem2.id || main.sltMenu.id == allMenuItem2.id) }" ng-repeat="allMenuItem2 in (main.dbMenuList | filter : { level: 2 } | filter : { parentId: allMenuItem1.id })">
+                                    <li class="all-depth2-item" ng-class="{ 'on' : (main.sltMenu.parentId == allMenuItem2.id || main.sltMenu.id == allMenuItem2.id) }" ng-repeat="allMenuItem2 in (main.dbMenuList | filter : { level: 2 } | filter : { parentId: allMenuItem1.id })" id="menu{{ allMenuItem2.id }}">
                                         <div class="depth2">
                                             <a href="" class="link" ng-click="!!allMenuItem2.urlPath && main.setMenu(allMenuItem2);">
                                                 <div class="depth-icon-img">
@@ -23,7 +23,7 @@
                                                 </div>
                                                 <span>{{ allMenuItem2.depth2 }}</span>
                                             </a>
-                                            <a href="" class="bookmark">
+                                            <a href="" class="bookmark" ng-class="{ 'active' : main.checkMyMenuByAllMenu(allMenuItem2.id) }" ng-click="main.clickMyMenu(allMenuItem2.id);">
                                                 <p class="sr-only">북마크</p>
                                             </a>
                                         </div>

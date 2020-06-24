@@ -115,6 +115,7 @@ angular.module('common.controllers', [])
         mc.connectType = _CONNECT_SITE_;
 
         mc.noticeList = [];     //팝업 공지사항 목록
+        mc.myMenus = [];        //메뉴 즐겨찾기 조회
 
         if (_MENU_TYPE_ == 'part') {
             mc.commLayerMenuTempeUrl = _COMM_VIEWS_ + '/menu/commLayerMenu.html' + _VERSION_TAIL_;
@@ -1629,6 +1630,52 @@ angular.module('common.controllers', [])
         mc.desplayNoticeList = function(notices) {
             mc.noticeList = notices;
             portal.notice.setNoticeList(mc);
+        };
+
+        //메뉴 즐겨찾기 조회
+        mc.getMyMenus = function () {
+            var promise = portal.menu.getMyMenuList();
+            promise.success(function (data) {
+                mc.myMenus = data.items;
+                console.log("mc.myMenus : ", mc.myMenus);
+                //console.log("mc.myMenus.findIndex : ", mc.myMenus.findIndex(i => i.id === 10103));
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+                // mc.loadingMainBody = false;
+            });
+        };
+        mc.getMyMenus();
+
+        //전체 메뉴 화면에서 메뉴 즐겨찾기 여부 확인
+        mc.checkMyMenuByAllMenu = function (menuId) {
+            var rtVal = false;
+            var i = mc.myMenus.findIndex(i => i.id === menuId);
+            if (i > -1) rtVal = true;
+            return rtVal;
+        };
+
+        //전체 메뉴 화면에서 메뉴 즐겨찾기 추가/삭제
+        mc.clickMyMenu = function (menuId) {
+            var indexMyMenu = mc.myMenus.findIndex(i => i.id === menuId);
+            var isAdd = true;
+            if (indexMyMenu > -1) isAdd = false;
+            if (isAdd) {
+                var promise = portal.menu.addMymenu(menuId);
+            } else {
+                var promise = portal.menu.deleteMymenu(menuId);
+            }
+            promise.success(function (data) {
+                mc.myMenus = data.items;
+                console.log("addMymenu > mc.myMenus : ", mc.myMenus);
+                //console.log("mc.myMenus.findIndex : ", mc.myMenus.findIndex(i => i.id === 10103));
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+                // mc.loadingMainBody = false;
+            });
         };
 
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
