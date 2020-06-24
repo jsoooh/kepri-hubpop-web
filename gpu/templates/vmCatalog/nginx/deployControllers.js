@@ -14,10 +14,12 @@ angular.module('gpu.controllers')
         ct.data.servicePort = 80;
 
         // 테스트
-        ct.data.deployName = "엔진엑스";
-        ct.data.stackName = "nginx";
-        ct.data.deployType = "single";
-        ct.data.octaviaLbUse = false;
+        if (ct.testInput) {
+            ct.data.deployName = "엔진엑스";
+            ct.data.stackName = "nginx";
+            ct.data.deployType = "single";
+            ct.data.octaviaLbUse = false;
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {

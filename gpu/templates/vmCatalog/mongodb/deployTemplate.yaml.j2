@@ -103,7 +103,7 @@ resources:
 
             sleep 1
 
-            mv /var/lib/mongo $volume_mount_path/
+            mv /var/lib/mongo $volume_mount_path/mongo
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
           {% endif %}

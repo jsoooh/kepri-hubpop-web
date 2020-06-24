@@ -182,7 +182,7 @@ resources:
             systemctl enable rc-local
             sleep 1
 
-            mv /var/lib/mysql $volume_mount_path/
+            mv /var/lib/mysql $volume_mount_path/mysql
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
 {% endif %}
@@ -285,7 +285,7 @@ resources:
             systemctl enable rc-local
             sleep 1
 
-            mv /var/lib/mysql $volume_mount_path/
+            mv /var/lib/mysql $volume_mount_path/mysql
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
 {% endif %}
@@ -374,7 +374,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.xfs $volume_mount_point
             mkdir -p $volume_mount_path
@@ -389,7 +389,7 @@ resources:
             systemctl enable rc-local
             sleep 1
 
-            mv /var/lib/mysql $volume_mount_path/
+            mv /var/lib/mysql $volume_mount_path/mysql
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
 {% endif %}

@@ -72,17 +72,18 @@ resources:
           params:
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-{% if volumeUse %}
-            $volume_mount_point: { get_param: volume_mount_point }
-            $volume_mount_path: { get_param: volume_mount_path }
-{% endif %}
+            $service_port: { get_param: service_port }
+            $root_password: { get_param: root_password }
 {% if createUser %}
             $create_user_id: { get_param: create_user_id }
             $create_user_password: { get_param: create_user_password }
             $create_db_name: { get_param: create_db_name }
 {% endif %}
-            $service_port: { get_param: service_port }
-            $root_password: { get_param: root_password }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
           template: |
             #!/bin/sh
             echo "mariadb setting start"
@@ -102,7 +103,7 @@ resources:
 
             sleep 1
 
-            mv /var/lib/mysql $volume_mount_path/
+            mv /var/lib/mysql $volume_mount_path/mysql
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
 {% endif %}

@@ -18,22 +18,22 @@ angular.module('gpu.controllers')
 
 
         // 테스트
-        ct.data.deployName = "마리아디비";
-        ct.data.stackName = "Mariadb-Cluster";
+        if (ct.testInput) {
+            ct.data.deployName = "마리아디비";
+            ct.data.stackName = "Mariadb-Cluster";
 
-        ct.data.deployType = "cluster";
-        ct.data.octaviaLbUse = true;
-        ct.data.volumeUse = true;
+            ct.data.deployType = "cluster";
+            ct.data.octaviaLbUse = true;
+            ct.data.volumeUse = true;
 
-        ct.data.rootPassword = "Crossent!234";
-        ct.data.rootConfirmPassword = "Crossent!234";
-        ct.data.createUser = true;
-        ct.data.createUserId = "kepri";
-        ct.data.createDbName = "kepri";
-        ct.data.createUserPassword = "Kepri!234";
-        ct.data.createUserConfirmPassword = "Kepri!234";
-
-
+            ct.data.rootPassword = "Crossent!234";
+            ct.data.rootConfirmPassword = "Crossent!234";
+            ct.data.createUser = true;
+            ct.data.createUserId = "kepri";
+            ct.data.createDbName = "kepri";
+            ct.data.createUserPassword = "Kepri!234";
+            ct.data.createUserConfirmPassword = "Kepri!234";
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {

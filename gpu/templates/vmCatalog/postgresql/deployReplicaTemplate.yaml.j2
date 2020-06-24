@@ -1,0 +1,546 @@
+heat_template_version: '2018-08-31'
+
+description: postgresql replica volume template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Postgresql.qcow2
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  service_port:
+    type: string
+  check_port:
+    type: string
+  application_name:
+    type: string
+    default: master01
+  postgres_password:
+    type: string
+  repluser_password:
+    type: string
+{% if createUser %}
+  create_user_id:
+    type: string
+  create_user_password:
+    type: string
+  create_db_name:
+    type: string
+{% endif %}
+{% if volumeUse %}
+  volume_type:
+    type: string
+  volume_size:
+    type: string
+  volume_mount_point:
+    type: string
+    default: /dev/vdb
+  volume_format_type:
+    type: string
+    default: xfs
+  volume_mount_path:
+    type: string
+    default: /mnt/data
+{% endif %}
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+{% if volumeUse %}
+  cinder_volume1:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume2:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume3:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+{% endif %}
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $service_port: { get_param: service_port }
+            $check_port: { get_param: service_port }
+            $application_name: { get_param: application_name }
+            $postgres_password: { get_param: postgres_password }
+            $repluser_password: { get_param: repluser_password }
+{% if createUser %}
+            $create_user_id: { get_param: create_user_id }
+            $create_user_password: { get_param: create_user_password }
+            $create_db_name: { get_param: create_db_name }
+{% endif %}
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+          template: |
+            #!/bin/sh
+            echo "postgresql setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/pgsql/11/data $volume_mount_path/postgres
+            ln -s $volume_mount_path/postgres /var/lib/pgsql/11/data
+            sleep 1
+{% endif %}
+            /usr/pgsql-11/bin/postgresql-11-setup initdb
+
+            sleep 2
+            mkdir -p /var/lib/pgsql/11/archive/
+            chmod 700 /var/lib/pgsql/11/archive/
+            chown -R postgres:postgres /var/lib/pgsql/11/archive/
+            cp -p /etc/pgpool-II/pgpool_remote_start.sample /var/lib/pgsql/11/data/pgpool_remote_start
+            cp -p /etc/pgpool-II/recovery_1st_stage.sample /var/lib/pgsql/11/data/recovery_1st_stage
+            cp -p /etc/pgpool-II/recovery_2nd_stage.sample /var/lib/pgsql/11/data/recovery_2nd_stage
+
+            cp -p /var/lib/pgsql/11/data/postgresql.conf /var/lib/pgsql/11/backups/postgresql.conf
+            cp -p /var/lib/pgsql/11/data/pg_hba.conf /var/lib/pgsql/11/backups/pg_hba.conf
+            cat <<EOF> /var/lib/pgsql/11/data/postgresql.conf
+            # - Connection Settings -
+            listen_addresses = '*'
+            port = $service_port
+            max_connections = 100
+
+            # - Memory -
+            shared_buffers = 128MB
+            dynamic_shared_memory_type = posix
+
+            # - Settings -
+            wal_level = replica
+            hot_standby = on
+            wal_log_hints = on
+            synchronous_commit = local
+
+            # - Checkpoints -
+            max_wal_size = 1GB
+            min_wal_size = 80MB
+
+            # - Archiving -
+            archive_mode = on
+            archive_command = 'cp %p /var/lib/pgsql/11/archive/%f'
+
+            # - Sending Servers -
+
+            max_wal_senders = 10
+            max_replication_slots = 10
+            wal_keep_segments = 32
+
+            # - Master Server -
+            synchronous_standby_names = '$application_name'
+
+            # - Where to Log -
+
+            log_destination = 'stderr'
+            logging_collector = on
+            log_directory = 'log'
+            log_filename = 'postgresql-%a.log'
+            log_truncate_on_rotation = on
+            log_rotation_age = 1d
+            log_rotation_size = 0
+
+            # - What to Log -
+            log_line_prefix = '%m [%p] '
+            log_timezone = 'Asia/Seoul'
+
+            # - Locale and Formatting -
+            datestyle = 'iso, mdy'
+            timezone = 'UTC'
+            lc_messages = 'en_US.UTF-8'
+            lc_monetary = 'en_US.UTF-8'
+            lc_numeric = 'en_US.UTF-8'
+            lc_time = 'en_US.UTF-8'
+
+            default_text_search_config = 'pg_catalog.english'
+
+            EOF
+
+            systemctl start postgresql-11
+            sleep 1
+            sudo -u postgres psql template1 -c "CREATE EXTENSION pgpool_recovery"
+            sudo -u postgres psql <<EOF
+            ALTER USER postgres WITH PASSWORD '$postgres_password';
+            CREATE ROLE repl WITH REPLICATION PASSWORD '$repluser_password' LOGIN;
+            SELECT * FROM pg_create_physical_replication_slot('repl_slot_01');
+            SELECT * FROM pg_create_physical_replication_slot('repl_slot_02');
+{% if createUser %}
+            CREATE USER $create_user_id PASSWORD '$create_user_password' SUPERUSER;
+            CREATE DATABASE $create_db_name OWNER $create_user_id;
+{% endif %}
+            EOF
+
+            sudo -u postgres cat <<EOF> /var/lib/pgsql/.pgpass
+            $server1_ip_address:$service_port:replication:repl:$repluser_password
+            $server2_ip_address:$service_port:replication:repl:$repluser_password
+            $server3_ip_address:$service_port:replication:repl:$repluser_password
+            $server1_ip_address:$service_port:postgres:postgres:$postgres_password
+            $server2_ip_address:$service_port:postgres:postgres:$postgres_password
+            $server3_ip_address:$service_port:postgres:postgres:$postgres_password
+            EOF
+
+            cat <<EOF> /var/lib/pgsql/11/data/pg_hba.conf
+            # TYPE  DATABASE        USER            ADDRESS                 METHOD
+            # "local" is for Unix domain socket connections only
+            local   all             all                                     md5
+            # IPv4 local connections:
+            host    all             all             0.0.0.0/0               md5
+            host    all             all             127.0.0.1/32            md5
+            host    all             all             $server1_ip_address/32        md5
+            # IPv6 local connections:
+            host    all             all             ::1/128                 md5
+            # replication privilege.
+            local   replication     all                                     md5
+            host    replication     all             127.0.0.1/32            md5
+            host    replication     all             ::1/128                 md5
+            host    replication     all             $server1_ip_address/32        md5
+            host    replication     all             $server2_ip_address/32        md5
+            host    replication     all             $server3_ip_address/32        md5
+
+            EOF
+
+            systemctl restart postgresql-11
+
+            nohup nc -kl $check_port 2>&1 &
+            nc_pid=$!
+
+            secondary2Run=1
+            while [ $secondary2Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $service_port"
+              nc -z $server3_ip_address $service_port
+              secondary2Run=$?
+              echo "nc -z $server3_ip_address $service_port > $secondaryRun"
+              sleep 10
+            done
+            sleep 10
+
+            kill -9 $nc_pid
+
+            systemctl enable postgresql-11
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            echo "postgresql setting end"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $service_port: { get_param: service_port }
+            $check_port: { get_param: service_port }
+            $application_name: { get_param: application_name }
+            $postgres_password: { get_param: postgres_password }
+            $repluser_password: { get_param: repluser_password }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+          template: |
+            #!/bin/sh
+            echo "postgresql setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/pgsql/11/data $volume_mount_path/postgres
+            ln -s $volume_mount_path/postgres /var/lib/pgsql/11/data
+            sleep 1
+{% endif %}
+            mkdir -p /var/lib/pgsql/11/archive/
+            chmod 700 /var/lib/pgsql/11/archive/
+            chown -R postgres:postgres /var/lib/pgsql/11/archive/
+
+            masterRun=1
+            while [ $masterRun -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $check_port"
+              nc -z $server1_ip_address $check_port
+              masterRun=$?
+              echo "nc -z $server1_ip_address $check_port > $masterRun"
+              sleep 10
+            done
+            sleep 10
+
+            sudo -u postgres expect <<EOF
+            spawn bash -c "/usr/pgsql-11/bin/pg_basebackup -h $server1_ip_address -U repl -p $service_port -D /var/lib/pgsql/11/data -v -X stream";
+            expect "Password:"
+              send "$repluser_password\r"
+            expect eof
+            EOF
+
+            sleep 10
+
+            sudo -u postgres cat <<EOF> /var/lib/pgsql/11/data/recovery.conf
+            standby_mode = 'on'
+            primary_conninfo = 'host=$server1_ip_address port=$service_port user=repl password=$repluser_password application_name=$application_name'
+            primary_slot_name = 'repl_slot_01'
+            trigger_file = '/var/lib/pgsql/11/data/failover_trigger'
+            EOF
+
+            chmod 600 /var/lib/pgsql/11/data/recovery.conf
+            chown postgres:postgres /var/lib/pgsql/11/data/recovery.conf
+
+            sudo -u postgres cat <<EOF> /var/lib/pgsql/.pgpass
+            $server1_ip_address:$service_port:replication:repl:$repluser_password
+            $server2_ip_address:$service_port:replication:repl:$repluser_password
+            $server3_ip_address:$service_port:replication:repl:$repluser_password
+            $server1_ip_address:$service_port:postgres:postgres:$postgres_password
+            $server2_ip_address:$service_port:postgres:postgres:$postgres_password
+            $server3_ip_address:$service_port:postgres:postgres:$postgres_password
+            EOF
+
+            systemctl start postgresql-11
+
+            systemctl enable postgresql-11
+            echo "postgresql setting end"
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $service_port: { get_param: service_port }
+            $check_port: { get_param: service_port }
+            $application_name: { get_param: application_name }
+            $postgres_password: { get_param: postgres_password }
+            $repluser_password: { get_param: repluser_password }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+          template: |
+            #!/bin/sh
+            echo "postgresql setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/pgsql/11/data $volume_mount_path/postgres
+            ln -s $volume_mount_path/postgres /var/lib/pgsql/11/data
+            sleep 1
+{% endif %}
+            mkdir -p /var/lib/pgsql/11/archive/
+            chmod 700 /var/lib/pgsql/11/archive/
+            chown -R postgres:postgres /var/lib/pgsql/11/archive/
+
+            secondaryRun=1
+            while [ $secondaryRun -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $service_port"
+              nc -z $server2_ip_address $service_port
+              secondaryRun=$?
+              echo "nc -z $server2_ip_address $service_port > $secondaryRun"
+              sleep 10
+            done
+            sleep 10
+
+            sudo -u postgres expect <<EOF
+            spawn bash -c "/usr/pgsql-11/bin/pg_basebackup -h $server1_ip_address -U repl -p $service_port -D /var/lib/pgsql/11/data -v -X stream";
+            expect "Password:"
+              send "$repluser_password\r"
+            expect eof
+
+            EOF
+
+            sleep 10
+
+            sudo -u postgres cat <<EOF> /var/lib/pgsql/11/data/recovery.conf
+            standby_mode = 'on'
+            primary_conninfo = 'host=$server1_ip_address port=$service_port user=repl password=$repluser_password application_name=$application_name'
+            primary_slot_name = 'repl_slot_02'
+            trigger_file = '/var/lib/pgsql/11/data/failover_trigger'
+            EOF
+
+            chmod 600 /var/lib/pgsql/11/data/recovery.conf
+            chown postgres:postgres /var/lib/pgsql/11/data/recovery.conf
+
+            sudo -u postgres cat <<EOF> /var/lib/pgsql/.pgpass
+            $server1_ip_address:$service_port:replication:repl:$repluser_password
+            $server2_ip_address:$service_port:replication:repl:$repluser_password
+            $server3_ip_address:$service_port:replication:repl:$repluser_password
+            $server1_ip_address:$service_port:postgres:postgres:$postgres_password
+            $server2_ip_address:$service_port:postgres:postgres:$postgres_password
+            $server3_ip_address:$service_port:postgres:postgres:$postgres_password
+            EOF
+
+            systemctl start postgresql-11
+
+            systemctl enable postgresql-11
+            echo "postgresql setting end"
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
+
+{% if volumeUse %}
+  cinder_volume1_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server1 }
+      volume_id: { get_resource: cinder_volume1 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume2_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server2 }
+      volume_id: { get_resource: cinder_volume2 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume3_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server3 }
+      volume_id: { get_resource: cinder_volume3 }
+      mountpoint: { get_param: volume_mount_point }
+{% endif %}
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume1, show ] }
+{% endif %}
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume2, show ] }
+{% endif %}
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume3, show ] }
+{% endif %}

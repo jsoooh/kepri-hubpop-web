@@ -60,6 +60,8 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
             $pg_port: { get_param: pg_port }
             $pg_password: { get_param: pg_password }
             $kong_user_id: { get_param: kong_user_id }
@@ -69,10 +71,10 @@ resources:
             $konga_user_id: { get_param: konga_user_id }
             $konga_user_password: { get_param: konga_user_password }
             $konga_db_name: { get_param: konga_db_name }
-            $local_node_name: { get_param: 'OS::stack_name' }
           template: |
             #!/bin/sh
             echo "kong setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 
             ulimit -SHn 65535
             ulimit -s 65535
@@ -89,7 +91,7 @@ resources:
             EOF
 
             /usr/pgsql-11/bin/postgresql-11-setup initdb
-            sed -i 's/#port = 5432$/port = $pg_port/' /var/lib/pgsql/11/data/postgresql.conf
+            sed -i 's/#port = 5432/port = $pg_port/' /var/lib/pgsql/11/data/postgresql.conf
             sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
 
             systemctl start postgresql-11
@@ -167,7 +169,7 @@ resources:
             cat <<EOF> /root/konga_public_konga_kong_nodes.sql
             INSERT INTO public.konga_kong_nodes
             (id, name, type, kong_admin_url, netdata_url, kong_api_key, jwt_algorithm, jwt_key, jwt_secret, kong_version, health_checks, health_check_details, active, "createdAt", "updatedAt", "createdUserId", "updatedUserId")
-            VALUES (1, '$local_node_name', 'default', 'http://127.0.0.1:8001', null, '', 'HS256', null, null, '2.0.4', false, null, false, NOW(), NOW(), 1, 1);
+            VALUES (1, '$stack_name', 'default', 'http://127.0.0.1:8001', null, '', 'HS256', null, null, '2.0.4', false, null, false, NOW(), NOW(), 1, 1);
             EOF
 
             expect <<EOF
@@ -181,6 +183,7 @@ resources:
 
             rm -f /root/konga_public_konga_kong_nodes.sql
 
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "kong setting end"
 
   server:
@@ -198,6 +201,7 @@ resources:
         get_resource: init_config
 
 outputs:
-  server_ip:
+  servers:
     value:
-      get_attr: [ server_port, fixed_ips, 0, ip_address]
+      - instance: { get_attr: [ server, show ] }
+        instancePort: { get_attr: [ server_port, show ] }

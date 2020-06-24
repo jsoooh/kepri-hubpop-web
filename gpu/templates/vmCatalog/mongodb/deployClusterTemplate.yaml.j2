@@ -1,6 +1,6 @@
 heat_template_version: '2018-08-31'
 
-description: mongoDB Cluster volume template
+description: mongoDB Cluster Volume template
 
 parameters:
   image:
@@ -24,6 +24,21 @@ parameters:
   provider_subnet:
     type: string
     default: provider01-01
+  check_port:
+    type: string
+    default: 9994
+  mongo_port1:
+    type: string
+    default: 27020
+  mongo_port2:
+    type: string
+    default: 27030
+  mongo_port3:
+    type: string
+    default: 27040
+  config_port:
+    type: string
+    default: 27011
   service_port:
     type: string
     default: 27017
@@ -48,9 +63,6 @@ parameters:
     type: string
   admin_password:
     type: string
-  replset_name:
-    type: string
-    default: rs01
 
 resources:
   server1_port:
@@ -102,18 +114,24 @@ resources:
       config:
         str_replace:
           params:
-          {% if volumeUse %}
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+           {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
-          {% endif %}
+           {% endif %}
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $check_port: { get_param: check_port }
+            $mongo_port1: { get_param: mongo_port1 }
+            $mongo_port2: { get_param: mongo_port2 }
+            $mongo_port3: { get_param: mongo_port3 }
+            $config_port: { get_param: config_port }
             $service_port: { get_param: service_port }
             $admin_id: { get_param: admin_id }
             $admin_password: { get_param: admin_password }
-            $replset_name: { get_param: replset_name }
           template: |
             #!/bin/sh
             echo "mongodb setting start"
@@ -132,7 +150,7 @@ resources:
             systemctl enable rc-local
             sleep 1
 
-            mv /var/lib/mongo $volume_mount_path/
+            mv /var/lib/mongo $volume_mount_path/mongo
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
           {% endif %}
@@ -191,6 +209,9 @@ resources:
             sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
             sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
 
+            sed -i 's/replSetName: rs01/replSetName: rs03/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/replSetName: rs01/replSetName: rs02/' /var/lib/mongo/conf/mongod3.conf
+
             sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
             sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
 
@@ -209,23 +230,38 @@ resources:
             mongod -f /var/lib/mongo/conf/mongod2.conf
             mongod -f /var/lib/mongo/conf/mongod3.conf
 
-            sleep 2
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $mongo_port2"
+              nc -z $server2_ip_address $mongo_port2
+              server2Run=$?
+              echo "nc -z $server2_ip_address $mongo_port2 > $server2Run"
+              sleep 10
+            done
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $mongo_port3"
+              nc -z $server3_ip_address $mongo_port3
+              server3Run=$?
+              echo "nc -z $server3_ip_address $mongo_port3 > $server3Run"
+              sleep 10
+            done
 
-            mongo localhost:27020/admin <<EOF
+            mongo localhost:$mongo_port1/admin <<EOF
             rs.initiate(
               {
                 _id: "rs01",
                 version: 1,
                 members: [
                   { _id: 0, host : "$server1_ip_address:$mongo_port1" },
-                  { _id: 1, host : "$server1_ip_address:$mongo_port2" },
-                  { _id: 2, host : "$server1_ip_address:$mongo_port3" }
+                  { _id: 1, host : "$server2_ip_address:$mongo_port2" },
+                  { _id: 2, host : "$server3_ip_address:$mongo_port3" }
                 ]
               }
             );
             rs.status();
-            use admin
-            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
             EOF
 
             cat <<EOF> /var/lib/mongo/conf/config.conf
@@ -274,6 +310,13 @@ resources:
               sleep 10
             done
 
+            sleep 10
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.status();
+            use admin
+            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            EOF
+
             mongo localhost:$config_port/admin <<EOF
             rs.initiate(
               {
@@ -314,14 +357,15 @@ resources:
 
             sleep 1
 
-            mongo localhost:27017/admin <<EOF
-            sh.addShard("rs01/$server1_ip_address:$mongo_port1,$server1_ip_address:$mongo_port2,$server1_ip_address:$mongo_port3");
-            sh.addShard("rs02/$server2_ip_address:$mongo_port1,$server2_ip_address:$mongo_port2,$server2_ip_address:$mongo_port3");
-            sh.addShard("rs03/$server3_ip_address:$mongo_port1,$server3_ip_address:$mongo_port2,$server3_ip_address:$mongo_port3");
+            mongo localhost:$service_port/admin <<EOF
+            sh.addShard("rs01/$server1_ip_address:$mongo_port1,$server2_ip_address:$mongo_port2,$server3_ip_address:$mongo_port3");
+            sh.addShard("rs02/$server2_ip_address:$mongo_port1,$server3_ip_address:$mongo_port2,$server1_ip_address:$mongo_port3");
+            sh.addShard("rs03/$server3_ip_address:$mongo_port1,$server1_ip_address:$mongo_port2,$server2_ip_address:$mongo_port3");
 
-            rs.status();
+            sh.status();
+
             use admin
-            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]})
+            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
             EOF
 
             cat <<EOF>> /etc/rc.local
@@ -345,13 +389,24 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
           {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
           {% endif %}
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $check_port: { get_param: check_port }
+            $mongo_port1: { get_param: mongo_port1 }
+            $mongo_port2: { get_param: mongo_port2 }
+            $mongo_port3: { get_param: mongo_port3 }
+            $config_port: { get_param: config_port }
             $service_port: { get_param: service_port }
-            $replset_name: { get_param: replset_name }
+            $admin_id: { get_param: admin_id }
+            $admin_password: { get_param: admin_password }
           template: |
             #!/bin/sh
             echo "mongodb setting start"
@@ -370,7 +425,7 @@ resources:
             systemctl enable rc-local
             sleep 1
 
-            mv /var/lib/mongo $volume_mount_path/
+            mv /var/lib/mongo $volume_mount_path/mongo
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
           {% endif %}
@@ -430,6 +485,9 @@ resources:
             sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
             sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
 
+            sed -i 's/replSetName: rs02/replSetName: rs01/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/replSetName: rs02/replSetName: rs03/' /var/lib/mongo/conf/mongod3.conf
+
             sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
             sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
 
@@ -448,23 +506,38 @@ resources:
             mongod -f /var/lib/mongo/conf/mongod2.conf
             mongod -f /var/lib/mongo/conf/mongod3.conf
 
-            sleep 2
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $mongo_port2"
+              nc -z $server3_ip_address $mongo_port2
+              server3Run=$?
+              echo "nc -z $server3_ip_address $mongo_port2 > $server3Run"
+              sleep 10
+            done
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $mongo_port3"
+              nc -z $server2_ip_address $mongo_port3
+              server2Run=$?
+              echo "nc -z $server2_ip_address $mongo_port3 > $server2Run"
+              sleep 10
+            done
 
-            mongo localhost:27020/admin <<EOF
+            mongo localhost:$mongo_port1/admin <<EOF
             rs.initiate(
               {
                 _id: "rs02",
                 version: 1,
                 members: [
                   { _id: 0, host : "$server2_ip_address:$mongo_port1" },
-                  { _id: 1, host : "$server2_ip_address:$mongo_port2" },
-                  { _id: 2, host : "$server2_ip_address:$mongo_port3" }
+                  { _id: 1, host : "$server3_ip_address:$mongo_port2" },
+                  { _id: 2, host : "$server1_ip_address:$mongo_port3" }
                 ]
               }
             );
             rs.status();
-            use admin
-            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
             EOF
 
             cat <<EOF> /var/lib/mongo/conf/config.conf
@@ -524,6 +597,13 @@ resources:
               sleep 10
             done
 
+            sleep 10
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.status();
+            use admin
+            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            EOF
+
             mongos -f /var/lib/mongo/conf/mongos.conf
 
             cat <<EOF>> /etc/rc.local
@@ -547,13 +627,24 @@ resources:
       config:
         str_replace:
           params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
           {% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
           {% endif %}
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $check_port: { get_param: check_port }
+            $mongo_port1: { get_param: mongo_port1 }
+            $mongo_port2: { get_param: mongo_port2 }
+            $mongo_port3: { get_param: mongo_port3 }
+            $config_port: { get_param: config_port }
             $service_port: { get_param: service_port }
-            $replset_name: { get_param: replset_name }
+            $admin_id: { get_param: admin_id }
+            $admin_password: { get_param: admin_password }
           template: |
             #!/bin/sh
             echo "mongodb setting start"
@@ -573,7 +664,7 @@ resources:
 
             sleep 1
 
-            mv /var/lib/mongo $volume_mount_path/
+            mv /var/lib/mongo $volume_mount_path/mongo
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
           {% endif %}
@@ -633,6 +724,9 @@ resources:
             sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
             sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
 
+            sed -i 's/replSetName: rs03/replSetName: rs02/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/replSetName: rs03/replSetName: rs01/' /var/lib/mongo/conf/mongod3.conf
+
             sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
             sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
 
@@ -651,23 +745,38 @@ resources:
             mongod -f /var/lib/mongo/conf/mongod2.conf
             mongod -f /var/lib/mongo/conf/mongod3.conf
 
-            sleep 2
+            server1Run=1
+            while [ $server1Run -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $mongo_port2"
+              nc -z $server1_ip_address $mongo_port2
+              server1Run=$?
+              echo "nc -z $server1_ip_address $mongo_port2 > $server1Run"
+              sleep 10
+            done
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $mongo_port3"
+              nc -z $server2_ip_address $mongo_port3
+              server2Run=$?
+              echo "nc -z $server2_ip_address $mongo_port3 > $server2Run"
+              sleep 10
+            done
 
-            mongo localhost:27020/admin <<EOF
+            mongo localhost:$mongo_port1/admin <<EOF
             rs.initiate(
               {
                 _id: "rs03",
                 version: 1,
                 members: [
                   { _id: 0, host : "$server3_ip_address:$mongo_port1" },
-                  { _id: 1, host : "$server3_ip_address:$mongo_port2" },
-                  { _id: 2, host : "$server3_ip_address:$mongo_port3" }
+                  { _id: 1, host : "$server1_ip_address:$mongo_port2" },
+                  { _id: 2, host : "$server2_ip_address:$mongo_port3" }
                 ]
               }
             );
             rs.status();
-            use admin
-            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
             EOF
 
             cat <<EOF> /var/lib/mongo/conf/config.conf
@@ -726,6 +835,13 @@ resources:
               echo "nc -z $server1_ip_address $service_port > $server1Run"
               sleep 10
             done
+
+            sleep 10
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.status();
+            use admin
+            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            EOF
 
             mongos -f /var/lib/mongo/conf/mongos.conf
 
