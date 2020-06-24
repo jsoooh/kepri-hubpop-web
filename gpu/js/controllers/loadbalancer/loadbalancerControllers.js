@@ -23,6 +23,8 @@ angular.module('gpu.controllers')
         ct.data.iaasLbInfo.name = "lb-server-01";
         ct.serverMainListCnt = 0;   //선택된 서버목록 갯수
 
+        ct.selectedAvailabilityZoneId = "";
+        ct.selectedAvailabilityZone = {};
         ct.availabilityZoneList = [];
 
         // 공통 레프트 메뉴의 userTenantId
@@ -66,6 +68,18 @@ angular.module('gpu.controllers')
             });
         }
 
+        ct.fn.onchangeAvailabilityZone = function(availabilityZoneId) {
+            ct.selectedAvailabilityZone = {};
+            if (availabilityZoneId) {
+                var index;
+                for (index = 0; index < ct.availabilityZoneList.length; index++) {
+                    if (availabilityZoneId == ct.availabilityZoneList[index].id) {
+                        ct.selectedAvailabilityZone = ct.availabilityZoneList[index];
+                        break;
+                    }
+                }
+            }
+        }
 
         // 연결서버 유형: 서버 선택 시 서버 목록 불러옴
         ct.fn.GetServerMainList = function() {
@@ -147,7 +161,8 @@ angular.module('gpu.controllers')
             param.iaasLbInfo = {
                 description: ct.data.iaasLbInfo.description,
                 name: ct.data.iaasLbInfo.name,
-                tenantId: ct.data.tenantId
+                tenantId: ct.data.tenantId,
+                subnetId: ct.selectedAvailabilityZone.publicNetworkSubnet.subnetId
             };
             param.iaasLbPort = {
                 connType: ct.data.iaasLbPort.connType,

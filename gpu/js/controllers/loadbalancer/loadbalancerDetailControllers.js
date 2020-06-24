@@ -318,10 +318,17 @@ angular.module('gpu.controllers')
 
         // 부하분산 관리 - 접속 IP 복사
         ct.fn.copyConnectInfoToClipboard = function (loadbalancer) {
+            /*
             if (loadbalancer.floatingIp) {
                 common.copyToClipboard(loadbalancer.floatingIp);
                 $scope.main.copyToClipboard(loadbalancer.floatingIp, '"' + loadbalancer.floatingIp + '"가 클립보드에 복사 되었습니다.');
-            } else {
+            }
+            */
+            if (loadbalancer.ipAddress) {
+                common.copyToClipboard(loadbalancer.ipAddress);
+                $scope.main.copyToClipboard(loadbalancer.ipAddress, '"' + loadbalancer.ipAddress + '"가 클립보드에 복사 되었습니다.');
+            }
+            else {
                 common.showAlertWarning("접속 IP가 존재하지 않습니다.");
             }
         };
