@@ -106,7 +106,7 @@ resources:
             sleep 1
 {% endif %}
             /usr/pgsql-11/bin/postgresql-11-setup initdb
-            sed -i 's/#port = 5432$/port = $service_port/' /var/lib/pgsql/11/data/postgresql.conf
+            sed -i 's/#port = 5432/port = $service_port/' /var/lib/pgsql/11/data/postgresql.conf
             sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
 
             systemctl start postgresql-11
@@ -136,7 +136,7 @@ resources:
 
             systemctl restart postgresql-11
             systemctl enable postgresql-11
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "postgresql setting end"
 
   server:

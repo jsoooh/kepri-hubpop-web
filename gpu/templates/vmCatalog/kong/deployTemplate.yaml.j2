@@ -91,7 +91,7 @@ resources:
             EOF
 
             /usr/pgsql-11/bin/postgresql-11-setup initdb
-            sed -i 's/#port = 5432$/port = $pg_port/' /var/lib/pgsql/11/data/postgresql.conf
+            sed -i 's/#port = 5432/port = $pg_port/' /var/lib/pgsql/11/data/postgresql.conf
             sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
 
             systemctl start postgresql-11
