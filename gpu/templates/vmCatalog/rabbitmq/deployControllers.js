@@ -17,8 +17,6 @@ angular.module('gpu.controllers')
         ct.data.erlangPort = 25672;
         ct.data.erlangCookie = "CMAXAFWPGKUBELOPUZOP";
 
-        ct.usingPorts.cluster = [4444];
-
         // 테스트 입력값
         if(ct.testInput) {
             ct.data.deployName = "래빗엠큐";
