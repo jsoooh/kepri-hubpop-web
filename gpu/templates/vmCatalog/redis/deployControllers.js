@@ -10,7 +10,6 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.clusterCnt = 3;
         ct.data.servicePort = 6379;
         ct.data.lbSvcPort = 6379;
         ct.data.redis1Port = 6379;
@@ -21,18 +20,14 @@ angular.module('gpu.controllers')
         if(ct.testInput) {
             ct.data.deployName = "레디스";
             ct.data.stackName = "Redis";
-            ct.data.octaviaLbUse = false;
             ct.data.redisPassword = "Crossent!234";
             ct.data.redisConfirmPassword = "Crossent!234";
         }
 
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
-            vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
             vmCatalogDeploy.parameters.redis_password = ct.data.redisPassword;
             if (ct.data.deployType == "cluster") {
-                vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
-                vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
                 vmCatalogDeploy.parameters.redis1_port = ct.data.redis1Port;
                 vmCatalogDeploy.parameters.redis2_port = ct.data.redis2Port;
             }
