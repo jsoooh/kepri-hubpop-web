@@ -26,7 +26,7 @@ angular.module('gpu.controllers')
             ct.data.redisConfirmPassword = "Crossent!234";
         }
 
-        subPage.fn.appendSetVmCatalogDeplooy = function (vmCatalogDeploy) {
+        subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
             vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
             vmCatalogDeploy.parameters.redis_password = ct.data.redisPassword;
