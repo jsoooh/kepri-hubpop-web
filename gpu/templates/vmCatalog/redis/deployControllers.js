@@ -21,7 +21,7 @@ angular.module('gpu.controllers')
         if(ct.testInput) {
             ct.data.deployName = "레디스";
             ct.data.stackName = "Redis";
-
+            ct.data.octaviaLbUse = false;
             ct.data.redisPassword = "Crossent!234";
             ct.data.redisConfirmPassword = "Crossent!234";
         }
