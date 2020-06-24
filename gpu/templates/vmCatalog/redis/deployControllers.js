@@ -12,28 +12,31 @@ angular.module('gpu.controllers')
 
         ct.data.clusterCnt = 3;
         ct.data.servicePort = 6379;
-        ct.data.lbSvcPort = 3306;
+        ct.data.lbSvcPort = 6379;
+        ct.data.redis1Port = 6379;
+        ct.data.redis2Port = 6380;
 
 
         // 테스트 입력값
-        ct.data.deployName = "레디스";
-        ct.data.stackName = "Redis";
+        if(ct.testInput) {
+            ct.data.deployName = "레디스";
+            ct.data.stackName = "Redis";
 
-        ct.data.rootPassword = "Crossent!234";
-        ct.data.rootConfirmPassword = "Crossent!234";
-
-        ct.data.securityGroup = "heat_stack_ocatva_test_default";
-
-        ct.checkClickBtn = false;
+            ct.data.redisPassword = "Crossent!234";
+            ct.data.redisConfirmPassword = "Crossent!234";
+        }
 
         subPage.fn.appendSetVmCatalogDeplooy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
             vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
+            vmCatalogDeploy.parameters.redis_password = ct.data.redisPassword;
             if (ct.data.deployType == "cluster") {
                 vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
                 vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
+                vmCatalogDeploy.parameters.redis1_port = ct.data.redis1Port;
+                vmCatalogDeploy.parameters.redis2_port = ct.data.redis2Port;
             }
-            vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
+
             return vmCatalogDeploy;
         };
 
@@ -44,7 +47,7 @@ angular.module('gpu.controllers')
         ct.fn.createVmCatalogDeploy = function () {
             if (!ct.fn.commCheckFormValidity(subPage)) return;
 
-            ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);  // (single/replica/cluster, )
+            ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
 
         ct.fn.loadPage();

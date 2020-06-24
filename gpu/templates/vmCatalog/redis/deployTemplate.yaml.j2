@@ -48,6 +48,8 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis.conf
             sed -i "s/^port 6379/port $service_port/" /etc/redis.conf
             sed -i 's/^pidfile \/var\/run\/redis_6379.pid\/pidfile \/var\/run\/redis_$service_port.pid/' /etc/redis.conf
@@ -55,6 +57,8 @@ resources:
             sleep 1
             systemctl start redis
             systemctl enable redis
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "redis setting end"
 
   server:

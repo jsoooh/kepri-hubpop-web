@@ -20,6 +20,9 @@ parameters:
   provider_subnet:
     type: string
 {% if octaviaLbUse %}
+  lb_description:
+    type: string
+    default: "vmCatalog Redis cluster lb"
   lb_svc_port:
     type: string
   lb_svc_protocol:
@@ -43,9 +46,11 @@ parameters:
   lb_svc_monitor_timeout:
     type: string
     default: 5
+{% if monitorUrlPathUse %}
   lb_svc_monitor_url_path:
     type: string
     default: /
+{% endif %}
 {% endif %}
   service_port:
     type: string
@@ -98,6 +103,7 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
@@ -173,6 +179,7 @@ resources:
 
             systemctl enable rc-local
 
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "redis setting end"
 
   init_config2:
@@ -191,6 +198,8 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
             sed -i 's/^# requirepass foobared/requirepass $redis_password/' /etc/redis_$redis1_port.conf
@@ -243,6 +252,7 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
 
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf

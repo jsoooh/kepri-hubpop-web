@@ -6,21 +6,22 @@
                 <div class="ctlog-cnt">
                     <h5>서비스 접속정보</h5>
                     <ul>
-                        <li ng-if="contents.octaviaLbUse">
+                        <li>
                             <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+                            <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+                            <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                            <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
                         </li>
-                        <li ng-if="!contents.octaviaLbUse">
-                            <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                        <li>
+                            <strong class="tit">관리자 계정</strong>
+                            <span class="txt">admin</span>
                         </li>
-                        <li ng-if="contents.octaviaLbUse">
+                    </ul>
+                    <ul>
+                        <li>
                             <strong class="tit">접속포트</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
-                        </li>
-                        <li ng-if="!contents.octaviaLbUse">
-                            <strong class="tit">접속포트</strong>
-                            <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+                            <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
+                            <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.servicePort }}</span>
                         </li>
                     </ul>
                 </div>
@@ -28,12 +29,8 @@
                     <h5> 서비스 환경 설정 파일 경로</h5>
                     <ul>
                         <li>
-                            <strong class="tit">: </strong>
-                            <span class="txt">/</span>
-                        </li>
-                        <li>
-                            <strong class="tit">: </strong>
-                            <span class="txt">/</span>
+                            <strong class="tit">redis.conf: </strong>
+                            <span class="txt">/etc/redis.conf</span>
                         </li>
                     </ul>
                 </div>
