@@ -136,6 +136,7 @@ resources:
 
             systemctl restart postgresql-11
             systemctl enable postgresql-11
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_name/$stack_id/status
             echo "postgresql setting end"
 
   server:

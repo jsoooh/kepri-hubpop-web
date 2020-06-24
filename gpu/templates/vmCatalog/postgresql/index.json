@@ -8,7 +8,7 @@
   "deployViewHtmlFile": "deployView.html",
   "deployTemplates": {
     "single": "deployTemplate.yaml.j2",
-    "replica": "deployClusterTemplate.yaml.j2"
+    "replica": "deployReplicaTemplate.yaml.j2"
   },
   "images": {
     "single": "CentOS-7-x86_64-Heat-1907-Postgresql.qcow2",
