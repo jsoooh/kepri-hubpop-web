@@ -134,7 +134,7 @@ $(function(){
 	$(window).on("load",function(){
 		$(".scroll-bar").mCustomScrollbar({theme:'minimal'});
 	});
-})
+});
 
 // 사용자 알림
 $(function(){
