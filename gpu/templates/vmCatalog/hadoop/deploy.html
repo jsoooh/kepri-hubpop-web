@@ -14,15 +14,39 @@
                         <li ng-include="contents.htmlUrls.zoneSelect"></li>
                         <li>
                             <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt">마스터 노드 수</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'해당 서비스의 Listen 포트'"><span class="ico_info"></span></button></div>
+                                <i class="i_star"></i> <span class="pnb_t_txt">노드 구성</span>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'Kong 및 Konga 서비스에서 사용 할 Postgresql DB를 생성하기 위한 정보 입니다.'"><span class="ico_info"></span></button></div>
                             </div>
-                            <div class="pl10 mt10">
-                                <select name="masterCnt" ng-model="contents.data.masterCnt" ng-change="contents.fn.selectMasterSpec(contents.sltMasterSpec);" style="width:100%;">
-                                    <option ng-value="1">1</option>
-                                    <option ng-value="2">2</option>
-                                    <option ng-value="3">3</option>
-                                </select>
+                            <div class="tbw type1 mt20">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width:20%;">
+                                        <col style="width:">
+                                        <col style="width:20%;">
+                                        <col style="width:;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th><i class="i_star"></i> 마스터 노드 수</th>
+                                        <td>
+                                            <select name="masterCnt" ng-model="contents.data.masterCnt" ng-change="contents.fn.changeMasterCnt();" style="width:100%;">
+                                                <option ng-value="1">1</option>
+                                                <option ng-value="2">2</option>
+                                                <option ng-value="3">3</option>
+                                            </select>
+                                        </td>
+                                        <th><i class="i_star"></i> 워커 노드 수</th>
+                                        <td>
+                                            <select name="workerCnt" ng-model="contents.data.workerCnt" ng-change="contents.fn.changeWorkerCnt();" style="width:100%;">
+                                                <option ng-value="2">2</option>
+                                                <option ng-value="3">3</option>
+                                                <option ng-value="4">4</option>
+                                                <option ng-value="5">5</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </li>
                         <li>
@@ -50,12 +74,12 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="(key, spec) in contents.masterSpecList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltMasterSpacUuid)}" ng-click="contents.fn.selectMasterSpec(spec);">
+                                    <tr ng-repeat="(key, spec) in contents.masterSpecList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltMasterSpecUuid)}" ng-click="contents.fn.selectMasterSpec(spec);">
                                         <td>
                                             <div class="radio radio-only" >
                                                 <input type="radio"
                                                        name="master_spec_radio"
-                                                       ng-model="contents.sltMasterSpacUuid"
+                                                       ng-model="contents.sltMasterSpecUuid"
                                                        id="master_spec_radio_{{key}}"
                                                        value="{{spec.uuid}}" ng-disabled="spec.disabled">
                                                 <label for="spec_radio_{{key}}"></label>
@@ -69,23 +93,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div ng-if="contents.isMasterMinSpecDisabled && !contents.isMasterMaxSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
-                            <div ng-if="!contents.isMasterMinSpecDisabled && contents.isMasterMaxSpecDisabled" class="cnt_msg_box msg-warnning">프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
-                            <div ng-if="contents.isMasterMinSpecDisabled && contents.isMasterMaxSpecDisabled" class="cnt_msg_box msg-warnning">선택한 이미지 보다 큰 사양만 선택 가능하고, 프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
-                        </li>
-                        <li>
-                            <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt">워커 노드 수</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성 할 워커 노드 수를 선택하다'"><span class="ico_info"></span></button></div>
-                            </div>
-                            <div class="pl10 mt10">
-                                <select name="workerCnt" ng-model="contents.data.workerCnt" ng-change="contents.fn.selectWorkerSpec(contents.sltWorkerSpec);" style="width:100%;">
-                                    <option ng-value="2">2</option>
-                                    <option ng-value="3">3</option>
-                                    <option ng-value="4">4</option>
-                                    <option ng-value="5">5</option>
-                                </select>
-                            </div>
+                            <div ng-if="contents.isMasterMinSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
                         </li>
                         <li>
                             <div class="pnb_tit">
@@ -112,12 +120,12 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="(key, spec) in contents.workerSpecList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltWorkerSpacUuid)}" ng-click="contents.fn.selectWorkerSpec(spec);">
+                                    <tr ng-repeat="(key, spec) in contents.workerSpecList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltWorkerSpecUuid)}" ng-click="contents.fn.selectWorkerSpec(spec);">
                                         <td>
                                             <div class="radio radio-only" >
                                                 <input type="radio"
                                                        name="worker_spec_radio"
-                                                       ng-model="contents.sltWorkerSpacUuid"
+                                                       ng-model="contents.sltWorkerSpecUuid"
                                                        id="spec_radio_{{key}}"
                                                        value="{{spec.uuid}}" ng-disabled="spec.disabled">
                                                 <label for="spec_radio_{{key}}"></label>
@@ -131,9 +139,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div ng-if="contents.isWorkerMinSpecDisabled && !contents.isWorkerMaxSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
-                            <div ng-if="!contents.isWorkerMinSpecDisabled && contents.isWorkerMaxSpecDisabled" class="cnt_msg_box msg-warnning">프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
-                            <div ng-if="contents.isWorkerMinSpecDisabled && contents.isWorkerMaxSpecDisabled" class="cnt_msg_box msg-warnning">선택한 이미지 보다 큰 사양만 선택 가능하고, 프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
+                            <div ng-if="contents.isWorkerMinSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
+                        </li>
+                        <li>
+                            <div ng-if="contents.isMaxSpecOver" class="cnt_msg_box msg-info">리소스가 부족 합니다. 가능 하도록 서버수나 노드 사양을 조정 하십시오.</div>
                         </li>
                     </ul>
                 </div>
@@ -162,8 +171,12 @@
                             <span class="s_txt">{{ contents.vmCatalogInfo.version }}</span>
                         </li>
                         <li>
-                            <span class="s_tit">서버 수</span>
-                            <span class="s_txt">{{ contents.data.serverCnt }}</span>
+                            <span class="s_tit">마스터 노드 수</span>
+                            <span class="s_txt">{{ contents.data.masterCnt }}</span>
+                        </li>
+                        <li>
+                            <span class="s_tit">워커 노드 수</span>
+                            <span class="s_txt">{{ contents.data.workerCnt }}</span>
                         </li>
                         <li>
                             <span class="s_tit">서버 OS</span>
@@ -176,27 +189,43 @@
                                 <div class="innr_tbl">
                                     <table>
                                         <colgroup>
+                                            <col width="10" />
                                             <col width="30" />
                                             <col width="30" />
                                             <col width="30" />
                                         </colgroup>
                                         <thead>
                                         <tr>
+                                            <th>NODE</th>
                                             <th>vCPU</th>
                                             <th>메모리</th>
                                             <th>디스크</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-show="contents.data.serverCnt == 1">
-                                            <td>{{ contents.sltSpac.vcpus }} Core</td>
-                                            <td>{{ contents.sltSpac.ram | displayVolume : 'MB' }}</td>
-                                            <td>{{ contents.sltSpac.disk | displayVolume : 'GB' }}</td>
+                                        <tr ng-show="contents.data.masterCnt == 1">
+                                            <td>M</td>
+                                            <td>{{ contents.sltMasterSpec.vcpus }} Core</td>
+                                            <td>{{ contents.sltMasterSpec.ram | displayVolume : 'MB' }}</td>
+                                            <td>{{ contents.sltMasterSpec.disk | displayVolume : 'GB' }}</td>
                                         </tr>
-                                        <tr ng-show="contents.data.serverCnt > 1">
-                                            <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.vcpus }} Core</td>
-                                            <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.ram | displayVolume : 'MB' }}</td>
-                                            <td>{{ contents.data.serverCnt }} X {{ contents.sltSpac.disk | displayVolume : 'GB' }}</td>
+                                        <tr ng-show="contents.data.masterCnt > 1">
+                                            <td>M</td>
+                                            <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.vcpus }} Core</td>
+                                            <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.ram | displayVolume : 'MB' }}</td>
+                                            <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.disk | displayVolume : 'GB' }}</td>
+                                        </tr>
+                                        <tr ng-show="contents.data.workerCnt == 1">
+                                            <td>W</td>
+                                            <td>{{ contents.sltWorkerSpec.vcpus }} Core</td>
+                                            <td>{{ contents.sltWorkerSpec.ram | displayVolume : 'MB' }}</td>
+                                            <td>{{ contents.sltWorkerSpec.disk | displayVolume : 'GB' }}</td>
+                                        </tr>
+                                        <tr ng-show="contents.data.workerCnt > 1">
+                                            <td>W</td>
+                                            <td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.vcpus }} Core</td>
+                                            <td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.ram | displayVolume : 'MB' }}</td>
+                                            <td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.disk | displayVolume : 'GB' }}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -208,31 +237,9 @@
                 </div>
             </div>
 
-            <div ng-if="contents.data.volumeUse" class="pn-Toggle brd0">
-                <div class="pn_head brdt">
-                    <h4 class="pnh_tit ico02">추가 디스크</h4>
-                    <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-                </div>
-                <div class="pn_body">
-                    <div class="s_cont_box">
-                        <ul>
-                            <li>
-                                <span class="s_tit">크기</span>
-                                <span ng-show="contents.data.serverCnt == 1" class="s_txt">{{ contents.data.volumeSize | displayVolume : 'GB' }}</span>
-                                <span ng-show="contents.data.serverCnt > 1" class="s_txt">{{ contents.data.serverCnt }} X {{ contents.data.volumeSize | displayVolume : 'GB' }}</span>
-                            </li>
-                            <li>
-                                <span class="s_tit">유형</span>
-                                <span class="s_txt">Volume Storage</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
             <div class="pn-Toggle">
                 <div class="pn_head brdt">
-                    <h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
+                    <h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan){{contents.sltMasterSpec.vcpus*parseInt(contents.data.masterCnt, 10)}}</h4>
                     <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
                 </div>
                 <div class="pn_body">
@@ -243,34 +250,34 @@
                                     <span class="tit_txt">vcpu</span>
                                     <div class="progressWrap type2">
                                         <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}%"></div>
+                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.vcpus*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.cores)*100|number:0 }}" class="progress">
+                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.vcpus*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.cores)*100|number:0 }}%"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.cores + contents.sltSpac.vcpus*contents.data.serverCnt) }} 개 / {{ contents.tenantResource.maxResource.cores }} 개)</span>
+                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.vcpus*parseInt(contents.data.workerCnt, 10)) }} 개 / {{ contents.tenantResource.maxResource.cores }} 개)</span>
                                 </li>
                                 <li>
                                     <span class="tit_txt">메모리</span>
                                     <div class="progressWrap type2">
                                         <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}%"></div>
+                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.ram*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.ramSize)*100|number:0 }}" class="progress">
+                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.ram*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.ramSize)*100|number:0 }}%"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.ramSize + contents.sltSpac.ram*contents.data.serverCnt) | displayVolume:'MB' }} / {{ contents.tenantResource.maxResource.ramSize | displayVolume:'MB' }})</span>
+                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.ram*parseInt(contents.data.workerCnt, 10)) | displayVolume:'MB' }} / {{ contents.tenantResource.maxResource.ramSize | displayVolume:'MB' }})</span>
                                 </li>
                                 <li>
                                     <span class="tit_txt">디스크</span>
                                     <div class="progressWrap type2">
                                         <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}%"></div>
+                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.disk*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}" class="progress">
+                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.disk*parseInt(contents.data.workerCnt, 10))/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}%"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltSpac.disk*contents.data.serverCnt) | displayVolume:'GB' }} / {{ contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB' }})</span>
+                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*parseInt(contents.data.masterCnt, 10) + contents.sltWorkerSpec.disk*parseInt(contents.data.workerCnt, 10)) | displayVolume:'GB' }} / {{ contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB' }})</span>
                                 </li>
                             </ul>
                         </div>

@@ -8,11 +8,19 @@ angular.module('gpu.controllers')
 
         var ct = $scope.$parent.$parent.contents;
 
+        ct.vs = new ValidationService({controllerAs : $scope.subPage});
+
         ct.masterSpecList = [];
         ct.workerSpecList = [];
 
         ct.data.masterCnt = "1";
         ct.data.workerCnt = "2";
+
+        // 테스트
+        if (ct.testInput) {
+            ct.data.deployName = "로드밸런스";
+            ct.data.stackName = "haproxy";
+        }
 
 
         //스펙그룹의 스펙 리스트 조회
@@ -32,9 +40,8 @@ angular.module('gpu.controllers')
                 ct.isMasterSpecLoad = true;
                 ct.isWorkerSpecLoad = true;
                 ct.fn.setMasterSpecMinDisabled();
-                ct.fn.setMasterSpecMaxDisabled();
                 ct.fn.setWorkerSpecMinDisabled();
-                ct.fn.setWorkerSpecMaxDisabled();
+                ct.fn.chackSpecMaxOver();
                 if (specListDefer) specListDefer.resolve(data);
             });
             returnPromise.error(function (data, status, headers) {
@@ -56,8 +63,8 @@ angular.module('gpu.controllers')
                     }
                 });
                 ct.masterSpecMinDisabledSetting = true;
-                if (ct.sltMasterSpac && ct.sltMasterSpac.uuid) {
-                    if (ct.sltMasterSpac.disk < 4 || ct.sltMasterSpac.ram < 512) {
+                if (ct.sltMasterSpec && ct.sltMasterSpec.uuid) {
+                    if (ct.sltMasterSpec.disk < 4 || ct.sltMasterSpec.ram < 512) {
                         ct.fn.defaultSelectMasterSpec();
                     }
                 } else {
@@ -66,36 +73,21 @@ angular.module('gpu.controllers')
             }
         };
 
-        // max spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
-        ct.isMasterMaxSpecDisabled = false;
-        // spec loading 체크
-        ct.masterSpecMaxDisabledSetting = false;
-        ct.fn.setMasterSpecMaxDisabled = function () {
-            ct.isMasterMaxSpecDisabled = false;
-            if (ct.isMasterSpecLoad && ct.tenantResource && ct.tenantResource.maxResource && ct.tenantResource.usedResource) {
-                angular.forEach(ct.masterSpecList, function (spec) {
-                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
-                        spec.disabled = true;
-                        ct.isMasterMaxSpecDisabled = true;
-                    }
-                });
-                ct.masterSpecMaxDisabledSetting = true;
-                ct.fn.defaultSelectMasterSpec();
-            }
-        };
-
-        ct.fn.setMasterSpecAllEnabled = function () {
-            if (ct.masterSpecList && ct.masterSpecList.length && ct.masterSpecList.length > 0) {
-                angular.forEach(ct.masterSpecList, function (spec) {
-                    spec.disabled = false;
-                });
+        ct.isMaxSpecOver = false;
+        ct.fn.chackSpecMaxOver = function () {
+            if (ct.isMasterSpecLoad && ct.isWorkerSpecLoad && ct.tenantResource && ct.tenantResource.maxResource && ct.tenantResource.usedResource) {
+                if ((ct.sltMasterSpec.vcpus * parseInt(ct.data.masterCnt, 10) + ct.sltWorkerSpec.vcpus * parseInt(ct.data.workerCnt, 10)) > ct.tenantResource.available.cores
+                    || (ct.sltMasterSpec.ram * parseInt(ct.data.masterCnt, 10) + ct.sltWorkerSpec.ram * parseInt(ct.data.workerCnt, 10)) > ct.tenantResource.available.ramSize
+                    || (ct.sltMasterSpec.disk * parseInt(ct.data.masterCnt, 10) + ct.sltWorkerSpec.disk * parseInt(ct.data.workerCnt, 10)) > ct.tenantResource.available.instanceDiskGigabytes) {
+                    ct.isMaxSpecOver = true;
+                }
             }
         };
 
         // spec loading 체크
         ct.masterSpecDisabledAllSetting = false;
         ct.fn.defaultSelectMasterSpec = function() {
-            if (ct.masterSpecMinDisabledSetting && ct.masterSpecMaxDisabledSetting) {
+            if (ct.masterSpecMinDisabledSetting) {
                 ct.masterSpecDisabledAllSetting = true;
                 var sltSpec = null;
                 for (var i=0; i<ct.masterSpecList.length; i++) {
@@ -110,20 +102,24 @@ angular.module('gpu.controllers')
             }
         };
 
-        //사양선택 이벤트 2018.11.13 sg0730 add
         ct.fn.selectMasterSpec = function(sltSpec) {
             if (!ct.masterSpecDisabledAllSetting || sltSpec.disabled) return;
             if (sltSpec && sltSpec.uuid) {
-                ct.sltMasterSpac = angular.copy(sltSpec);
-                ct.data.masterflavor = ct.sltMasterSpac.name;
-                ct.sltMasterSpacUuid = ct.sltMasterSpac.uuid;
+                ct.sltMasterSpec = angular.copy(sltSpec);
+                ct.data.masterFlavor = ct.sltMasterSpec.name;
+                ct.sltMasterSpecUuid = ct.sltMasterSpec.uuid;
+                ct.fn.setWorkerSpecMinDisabled();
             } else {
-                ct.sltMasterSpac = {};
-                ct.data.masterflavor = "";
-                ct.sltMasterSpacUuid = "";
+                ct.sltMasterSpec = {};
+                ct.data.masterFlavor = "";
+                ct.sltMasterSpecUuid = "";
             }
         };
 
+        ct.fn.changeMasterCnt = function() {
+            if (!ct.masterSpecDisabledAllSetting) return;
+            ct.fn.chackSpecMaxOver();
+        };
 
         ct.isWorkerMinSpecDisabled = false;
         // spec loading 체크
@@ -138,8 +134,8 @@ angular.module('gpu.controllers')
                     }
                 });
                 ct.workerSpecMinDisabledSetting = true;
-                if (ct.sltWorkerSpac && ct.sltWorkerSpac.uuid) {
-                    if (ct.sltWorkerSpac.disk < 4 || ct.sltWorkerSpac.ram < 512) {
+                if (ct.sltWorkerSpec && ct.sltWorkerSpec.uuid) {
+                    if (ct.sltWorkerSpec.disk < 4 || ct.sltWorkerSpec.ram < 512) {
                         ct.fn.defaultSelectWorkerSpec();
                     }
                 } else {
@@ -148,36 +144,10 @@ angular.module('gpu.controllers')
             }
         };
 
-        // max spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
-        ct.isWorkerMaxSpecDisabled = false;
-        // spec loading 체크
-        ct.workerSpecMaxDisabledSetting = false;
-        ct.fn.setWorkerSpecMaxDisabled = function () {
-            ct.isWorkerMaxSpecDisabled = false;
-            if (ct.isWorkerSpecLoad && ct.tenantResource && ct.tenantResource.maxResource && ct.tenantResource.usedResource) {
-                angular.forEach(ct.workerSpecList, function (spec) {
-                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
-                        spec.disabled = true;
-                        ct.isWorkerMaxSpecDisabled = true;
-                    }
-                });
-                ct.workerSpecMaxDisabledSetting = true;
-                ct.fn.defaultSelectWorkerSpec();
-            }
-        };
-
-        ct.fn.setWorkerSpecAllEnabled = function () {
-            if (ct.workerSpecList && ct.workerSpecList.length && ct.workerSpecList.length > 0) {
-                angular.forEach(ct.workerSpecList, function (spec) {
-                    spec.disabled = false;
-                });
-            }
-        };
-
         // spec loading 체크
         ct.workerSpecDisabledAllSetting = false;
         ct.fn.defaultSelectWorkerSpec = function() {
-            if (ct.workerSpecMinDisabledSetting && ct.workerSpecMaxDisabledSetting) {
+            if (ct.workerSpecMinDisabledSetting) {
                 ct.workerSpecDisabledAllSetting = true;
                 var sltSpec = null;
                 for (var i=0; i<ct.workerSpecList.length; i++) {
@@ -195,14 +165,39 @@ angular.module('gpu.controllers')
         ct.fn.selectWorkerSpec = function(sltSpec) {
             if (!ct.workerSpecDisabledAllSetting || sltSpec.disabled) return;
             if (sltSpec && sltSpec.uuid) {
-                ct.sltWorkerSpac = angular.copy(sltSpec);
-                ct.data.workerFlavor = ct.sltWorkerSpac.name;
-                ct.sltWorkerSpacUuid = ct.sltWorkerSpac.uuid;
+                ct.sltWorkerSpec = angular.copy(sltSpec);
+                ct.data.workerFlavor = ct.sltWorkerSpec.name;
+                ct.sltWorkerSpecUuid = ct.sltWorkerSpec.uuid;
+                ct.fn.setWorkerSpecMinDisabled();
             } else {
-                ct.sltWorkerSpac = {};
+                ct.sltWorkerSpec = {};
                 ct.data.workerFlavor = "";
-                ct.sltWorkerSpacUuid = "";
+                ct.sltWorkerSpecUuid = "";
             }
+        };
+
+        ct.fn.changeWorkerCnt = function() {
+            if (!ct.workerSpecDisabledAllSetting) return;
+            ct.fn.chackSpecMaxOver();
+        };
+
+        // 추가 셋팅
+        subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
+            vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
+            vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
+            vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
+            vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
+            return vmCatalogDeploy;
+        };
+
+        subPage.fn.setTocDeployAction = function (deployTemplate) {
+            ct.fn.createVmCatalogDeployAction(deployTemplate, subPage.fn.appendSetVmCatalogDeploy, false);
+        };
+
+        ct.fn.createVmCatalogDeploy = function () {
+            if (!ct.fn.commCheckFormValidity(subPage)) return;
+
+            ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
 
         ct.fn.loadPage();

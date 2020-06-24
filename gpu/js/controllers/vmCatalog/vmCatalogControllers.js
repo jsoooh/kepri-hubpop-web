@@ -61,7 +61,7 @@ angular.module('gpu.controllers')
     ct.htmlUrls.adminConfirmPassword    = _GPU_VIEWS_ + "/vmCatalog/create/createDeployAdminConfirmPassword.html" + _VERSION_TAIL_;
     ct.htmlUrls.userDbUse               = _GPU_VIEWS_ + "/vmCatalog/create/createDeployUserDbUse.html" + _VERSION_TAIL_;
     ct.htmlUrls.zoneSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeployZoneSelect.html" + _VERSION_TAIL_;
-    ct.htmlUrls.spacSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeploySpacSelect.html" + _VERSION_TAIL_;
+    ct.htmlUrls.specSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeploySpecSelect.html" + _VERSION_TAIL_;
     ct.htmlUrls.volumeSelect            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployVolumeSelect.html" + _VERSION_TAIL_;
     ct.htmlUrls.createDeployBtn         = _GPU_VIEWS_ + "/vmCatalog/create/createDeployBtn.html" + _VERSION_TAIL_;
     ct.htmlUrls.createDeployInfo        = _GPU_VIEWS_ + "/vmCatalog/create/createDeployInfo.html" + _VERSION_TAIL_;
@@ -80,7 +80,7 @@ angular.module('gpu.controllers')
     ct.specList = [];
     ct.availabilityZones = [];
     ct.sltAvailabilityZone = null;
-    ct.sltSpac = {};
+    ct.sltSpec = {};
     ct.data.replicaCnt = 3;
     ct.data.clusterCnt = 3;
     ct.data.serverCnt = 1;
@@ -356,7 +356,7 @@ angular.module('gpu.controllers')
         });
     };
 
-    // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+    // min spec disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
     ct.isMinSpecDisabled = false;
     // spec loading 체크
     ct.specMinDisabledSetting = false;
@@ -370,8 +370,8 @@ angular.module('gpu.controllers')
                 }
             });
             ct.specMinDisabledSetting = true;
-            if (ct.sltSpac && ct.sltSpac.uuid) {
-                if (ct.sltSpac.disk < 4 || ct.sltSpac.ram < 512) {
+            if (ct.sltSpec && ct.sltSpec.uuid) {
+                if (ct.sltSpec.disk < 4 || ct.sltSpec.ram < 512) {
                     ct.fn.defaultSelectSpec();
                 }
             } else {
@@ -380,7 +380,7 @@ angular.module('gpu.controllers')
         }
     };
 
-    // max spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+    // max spec disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
     ct.isMaxSpecDisabled = false;
     // spec loading 체크
     ct.specMaxDisabledSetting = false;
@@ -388,7 +388,9 @@ angular.module('gpu.controllers')
         ct.isMaxSpecDisabled = false;
         if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource && ct.tenantResource.usedResource) {
             angular.forEach(ct.specList, function (spec) {
-                if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
+                if ((spec.vcpus  * parseInt(ct.data.serverCnt, 10)) > ct.tenantResource.available.cores
+                    || (spec.ram  * parseInt(ct.data.serverCnt, 10)) > ct.tenantResource.available.ramSize
+                    || (spec.disk  * parseInt(ct.data.serverCnt, 10)) > ct.tenantResource.available.instanceDiskGigabytes) {
                     spec.disabled = true;
                     ct.isMaxSpecDisabled = true;
                 }
@@ -428,13 +430,13 @@ angular.module('gpu.controllers')
     ct.fn.selectSpec = function(sltSpec) {
         if (!ct.specDisabledAllSetting || sltSpec.disabled) return;
         if (sltSpec && sltSpec.uuid) {
-            ct.sltSpac = angular.copy(sltSpec);
-            ct.data.flavor = ct.sltSpac.name;
-            ct.sltSpacUuid = ct.sltSpac.uuid;
+            ct.sltSpec = angular.copy(sltSpec);
+            ct.data.flavor = ct.sltSpec.name;
+            ct.sltSpecUuid = ct.sltSpec.uuid;
         } else {
-            ct.sltSpac = {};
+            ct.sltSpec = {};
             ct.data.flavor = "";
-            ct.sltSpacUuid = "";
+            ct.sltSpecUuid = "";
         }
     };
 
