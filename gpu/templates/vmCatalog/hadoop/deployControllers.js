@@ -12,9 +12,17 @@ angular.module('gpu.controllers')
 
         ct.masterSpecList = [];
         ct.workerSpecList = [];
+        ct.deployTypes = [
+            {key: "core", value: "Core Hadoop : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), Hue(4.3.0)"},
+            {key: "hbase", value: "HBase : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), HBase(1.1.2), Zookeeper(3.5.6)"},
+            {key: "presto", value: "Presto : Presto(0.214), HDFS(2.7.3), YARN(2.7.3), HUE(4.3.0), Zeppelin Notebook(0.7.3)"},
+            {key: "spark", value: "Spark : HDFS(2.7.3), YARN(2.7.3), spark(1.6.3), spark2(2.2.0), HIVE(1.2.1), Hue(4.3.0), Zepplin Notebook(0.7.3)"}
+        ];
+        ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
+
         ct.data.deployType = "core";
-        ct.data.masterCnt = "1";
-        ct.data.workerCnt = "2";
+        ct.data.masterCnt = 1;
+        ct.data.workerCnt = 2;
 
         // 테스트
         if (ct.testInput) {
@@ -28,14 +36,17 @@ angular.module('gpu.controllers')
             var returnPromise = vmCatalogService.listAllSpec();
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
-                    var specList = [];
+                    var masterSpecList = [];
+                    var workerSpecList = [];
                     angular.forEach(data.content.specs, function(val, key) {
                         if (val.name[0] == 'm' &&  val.type == "general") {
-                            specList.push(val);
+                            masterSpecList.push(val);
+                        } else if (val.name[0] == 'p' &&  val.type == "GPU") {
+                            workerSpecList.push(val);
                         }
                     });
-                    ct.masterSpecList = angular.copy(specList);
-                    ct.workerSpecList = angular.copy(specList);
+                    ct.masterSpecList = angular.copy(masterSpecList);
+                    ct.workerSpecList = angular.copy(workerSpecList);
                 }
                 ct.isMasterSpecLoad = true;
                 ct.isWorkerSpecLoad = true;
