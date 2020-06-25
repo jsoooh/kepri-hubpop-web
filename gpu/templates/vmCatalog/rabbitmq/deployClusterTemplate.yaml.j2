@@ -135,12 +135,31 @@ resources:
               nc -z $server2_ip_address $amqp_port
               server2Run=$?
               echo "nc -z $server2_ip_address $amqp_port > $server2Run"
-              sleep 10
+              sleep 5
+            done
+
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $amqp_port"
+              nc -z $server3_ip_address $amqp_port
+              server3Run=$?
+              echo "nc -z $server3_ip_address $amqp_port > $server2Run"
+              sleep 5
             done
 
             kill -9 $nc_pid
 
+            rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'
+            sleep 1
+
+            rabbitmqctl add_user admin $admin_password
+            rabbitmqctl set_user_tags admin administrator
+            rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+
+
             systemctl enable rabbitmq-server
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "rabbitmq setting end"
 
   init_config2:
@@ -205,21 +224,6 @@ resources:
             rabbitmqctl start_app
             sleep 1
 
-            nohup nc -kl $nc_check_port 2>&1 &
-            nc_pid=$!
-
-            server3Run=1
-            while [ $server3Run -ne 0 ]
-            do
-              echo "nc -z $server3_ip_address $amqp_port"
-              nc -z $server3_ip_address $amqp_port
-              server3Run=$?
-              echo "nc -z $server3_ip_address $amqp_port > $server3Run"
-              sleep 10
-            done
-
-            kill -9 $nc_pid
-
             systemctl enable rabbitmq-server
             echo "rabbitmq setting end"
 
@@ -259,13 +263,13 @@ resources:
             $server3_ip_address $server3_tmp_hostname
             EOF
 
-            server2Run=1
-            while [ $server2Run -ne 0 ]
+            server1Run=1
+            while [ $server1Run -ne 0 ]
             do
-              echo "nc -z $server2_ip_address $nc_check_port"
-              nc -z $server2_ip_address $nc_check_port
-              server2Run=$?
-              echo "nc -z $server2_ip_address $nc_check_port > $server2Run"
+              echo "nc -z $server1_ip_address $nc_check_port"
+              nc -z $server1_ip_address $nc_check_port
+              server1Run=$?
+              echo "nc -z $server1_ip_address $nc_check_port > $server1Run"
               sleep 10
             done
 
@@ -285,15 +289,7 @@ resources:
             rabbitmqctl start_app
             sleep 1
 
-            rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'
-            sleep 1
-
-            rabbitmqctl add_user admin $admin_password
-            rabbitmqctl set_user_tags admin administrator
-            rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
-
             systemctl enable rabbitmq-server
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "rabbitmq setting end"
 
 
