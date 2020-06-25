@@ -10,8 +10,12 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.lbSvcPort = 80;
-        ct.data.servicePort = 80;
+        ct.data.lbSvcPort = 8080;
+        ct.data.servicePort = 8080;
+
+        // 선택 불가 포트
+        ct.usingPorts.single        = [8005, 8009];
+        ct.usingPorts.cluster       = [8005, 8009];
 
         // 테스트
         if (ct.testInput) {
