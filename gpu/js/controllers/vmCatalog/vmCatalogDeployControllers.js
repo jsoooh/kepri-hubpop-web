@@ -226,7 +226,6 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertError("삭제가 진행 중입니다.");
                 ct.fn.getVmCatalogDeployStatus(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             });
             promise.error(function (data, status, headers) {
