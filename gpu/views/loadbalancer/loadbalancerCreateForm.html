@@ -36,9 +36,9 @@
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">존 선택</span>
 								</div>
-								<select class="form-control">
+								<select class="form-control" ng-model="contents.selectedAvailabilityZoneId" ng-change="contents.fn.onchangeAvailabilityZone(contents.selectedAvailabilityZoneId);" required>
 									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
-									<option ng-repeat="zone in contents.availabilityZoneList" >{{zone.availabilityZone}} [ {{zone.publicNetworkSubnet.cidr}} ] 생성 가능한 인스턴스: {{zone.publicNetworkSubnet.available}}개</option>
+									<option ng-repeat="zone in contents.availabilityZoneList" value="{{zone.id}}">{{zone.availabilityZone}} [ {{zone.publicNetworkSubnet.cidr}} ] 생성 가능한 인스턴스: {{zone.publicNetworkSubnet.available}}개</option>
 								</select>
 							</li>
 

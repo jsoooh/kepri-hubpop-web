@@ -69,13 +69,13 @@
 								</select>
 							</li>
 
-							<li>
+							<li ng-if="contents.selectedSpecType=='GPU'">
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">GPU 모델 선택</span>
 								</div>
-								<select class="form-control" ng-disabled="contents.selectedSpecType!='GPU'" ng-model="contents.selectedGpuCardId" ng-change="contents.fn.onchangeGpuCard(contents.selectedGpuCardId);" >
+								<select class="form-control" ng-model="contents.selectedGpuCardId" ng-change="contents.fn.onchangeGpuCard(contents.selectedGpuCardId);" >
 									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
-									<option ng-repeat="gpuCard in contents.gpuCardList" value={{gpuCard.id}} >{{gpuCard.name}}</option>
+									<option ng-repeat="gpuCard in contents.gpuCardList" ng-if="gpuCard.count - gpuCard.usedCount > 0" value={{gpuCard.id}} >{{gpuCard.name}}  {{gpuCard.type}} (사용 가능: {{gpuCard.count - gpuCard.usedCount}}개)</option>
 								</select>
 							</li>
 
@@ -86,9 +86,9 @@
 								<!--
 								<select class="form-control" ng-disabled="contents.selectedSpecType!='GPU'">
 								-->
-								<select class="form-control" ng-model="contents.selectedAvailabilityZone">
+								<select class="form-control" ng-model="contents.selectedAvailabilityZoneId" ng-change="contents.fn.onchangeAvailabilityZone(contents.selectedAvailabilityZoneId);" required>
 									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
-									<option ng-repeat="zone in contents.availabilityZoneList" value="{{zone.availabilityZone}}">{{zone.availabilityZone}} [ {{zone.publicNetworkSubnet.cidr}} ] 생성 가능한 인스턴스: {{zone.publicNetworkSubnet.available}}개</option>
+									<option ng-repeat="zone in contents.availabilityZoneList" value="{{zone.id}}">{{zone.availabilityZone}} [ {{zone.publicNetworkSubnet.cidr}} ] 생성 가능한 인스턴스: {{zone.publicNetworkSubnet.available}}개</option>
 								</select>
 							</li>
 
@@ -144,13 +144,16 @@
 											</tr>
 										</thead>
 										<tbody>
+											<!--
 											<tr ng-if="contents.selectedSpecType!=''" ng-repeat="(key, spec) in contents.specList | filter:{name:'m', type: contents.selectedSpecType} " ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': (spec.uuid == contents.specUuid)}" ng-click="contents.fn.selectSpec(spec);">
+											-->
+											<tr ng-if="contents.selectedSpecType!=''" ng-repeat="(key, spec) in contents.specList | filterSpecList: contents.selectedSpecType: contents.selectedGpuCard" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': (spec.uuid == contents.specUuid)}" ng-click="contents.fn.selectSpec(spec);">
 												<td>
 													<div class="radio radio-only" >
 														<input type="radio" 
 															   name="spec_radio" 
 															   ng-model="contents.specUuid" 
-															   id="spec_radio_{{key}}" 
+															   id="spec_radio_{{key}}" +
 															   value="{{spec.uuid}}" ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)">
 														<label for="spec_radio_{{key}}"></label>
 													</div>

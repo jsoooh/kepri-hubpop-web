@@ -3,6 +3,8 @@ heat_template_version: '2018-08-31'
 description: single Kafka volume template
 
 parameters:
+  api_end_point:
+    type: string
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Kafka.qcow2
@@ -72,21 +74,23 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-          {% if volumeUse %}
+{% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
-          {% endif %}
+{% endif %}
             $server_ip_address: { get_attr: [server_port, fixed_ips, 0, ip_address] }
             $service_port: { get_param: service_port }
             $zookeeper_port: { get_param: zookeeper_port }
           template: |
             #!/bin/sh
             echo "kafka setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
-          {% if volumeUse %}
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
             mount -t $volume_format_type $volume_mount_point $volume_mount_path
@@ -104,7 +108,7 @@ resources:
             mv /var/lib/kafka $volume_mount_path/kafka
             ln -s $volume_mount_path/kafka /var/lib/kafka
             sleep 1
-          {% endif %}
+{% endif %}
 
             cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
             cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
@@ -122,7 +126,7 @@ resources:
 
             systemctl start kafka
             systemctl enable kafka
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "kafka setting end"
 
   server:

@@ -11,11 +11,20 @@
                     <ul class="form_list">
                         <li ng-include="contents.htmlUrls.deployName"></li>
                         <li ng-include="contents.htmlUrls.stackName"></li>
+                        <li>
+                            <div class="pnb_tit">
+                                <i class="i_star"></i> <span class="pnb_t_txt">배포 구성</span>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상를 생성할 존은 선택하다.<br/>선택한 존에 따라 네트워크가 결정된다.'"><span class="ico_info"></span></button><img ng-if="!contents.isAvailabilityZoneLoad" src="images/loading_sm.gif" /></div>
+                            </div>
+                            <div class="pl10 mt10">
+                                <select name="deployType" ng-options="deployType.key as deployType.value for deployType in contents.deployTypes" ng-model="contents.data.deployType" style="width:100%;"></select>
+                            </div>
+                        </li>
                         <li ng-include="contents.htmlUrls.zoneSelect"></li>
                         <li>
                             <div class="pnb_tit">
                                 <i class="i_star"></i> <span class="pnb_t_txt">노드 구성</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'Kong 및 Konga 서비스에서 사용 할 Postgresql DB를 생성하기 위한 정보 입니다.'"><span class="ico_info"></span></button></div>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포될 마스터 및 워커 노드 수를 정한다.'"><span class="ico_info"></span></button></div>
                             </div>
                             <div class="tbw type1 mt20">
                                 <table class="table">
@@ -29,20 +38,11 @@
                                     <tr>
                                         <th><i class="i_star"></i> 마스터 노드 수</th>
                                         <td>
-                                            <select name="masterCnt" ng-model="contents.data.masterCnt" ng-change="contents.fn.changeMasterCnt();" style="width:100%;">
-                                                <option ng-value="1">1</option>
-                                                <option ng-value="2">2</option>
-                                                <option ng-value="3">3</option>
-                                            </select>
+                                            <select name="masterCnt" ng-options="masterCnt.key as masterCnt.value for masterCnt in contents.masterCnts" ng-model="contents.data.masterCnt" ng-change="contents.fn.changeMasterCnt();" style="width:100%;"></select>
                                         </td>
                                         <th><i class="i_star"></i> 워커 노드 수</th>
                                         <td>
-                                            <select name="workerCnt" ng-model="contents.data.workerCnt" ng-change="contents.fn.changeWorkerCnt();" style="width:100%;">
-                                                <option ng-value="2">2</option>
-                                                <option ng-value="3">3</option>
-                                                <option ng-value="4">4</option>
-                                                <option ng-value="5">5</option>
-                                            </select>
+                                            <input type="text" name="workerCnt" class="form-control" maxlength="50" ng-model="contents.data.workerCnt" validation="number|min:1|max:20|required" placeholder="워커 노드 수를 입력하세요." >
                                         </td>
                                     </tr>
                                     </tbody>
@@ -59,7 +59,7 @@
                                 <table class="table">
                                     <colgroup>
                                         <col style="width:10%;">
-                                        <col style="width:15%;">
+                                        <col style="width:;">
                                         <col style="width:20%;">
                                         <col style="width:20%;">
                                         <col style="width:20%;">
@@ -74,7 +74,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="(key, spec) in contents.masterSpecList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltMasterSpecUuid)}" ng-click="contents.fn.selectMasterSpec(spec);">
+                                    <tr ng-repeat="(key, spec) in contents.masterSpecList" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltMasterSpecUuid)}" ng-click="contents.fn.selectMasterSpec(spec);">
                                         <td>
                                             <div class="radio radio-only" >
                                                 <input type="radio"
@@ -105,7 +105,7 @@
                                 <table class="table">
                                     <colgroup>
                                         <col style="width:10%;">
-                                        <col style="width:15%;">
+                                        <col style="width:;">
                                         <col style="width:20%;">
                                         <col style="width:20%;">
                                         <col style="width:20%;">
@@ -120,7 +120,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="(key, spec) in contents.workerSpecList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltWorkerSpecUuid)}" ng-click="contents.fn.selectWorkerSpec(spec);">
+                                    <tr ng-repeat="(key, spec) in contents.workerSpecList" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltWorkerSpecUuid)}" ng-click="contents.fn.selectWorkerSpec(spec);">
                                         <td>
                                             <div class="radio radio-only" >
                                                 <input type="radio"

@@ -3,6 +3,8 @@ heat_template_version: '2018-08-31'
 description: redis cluster(M-S) template
 
 parameters:
+  api_end_point:
+    type: string
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Redis.qcow2
@@ -19,39 +21,6 @@ parameters:
     type: string
   provider_subnet:
     type: string
-{% if octaviaLbUse %}
-  lb_description:
-    type: string
-    default: "vmCatalog Redis cluster lb"
-  lb_svc_port:
-    type: string
-  lb_svc_protocol:
-    type: string
-    default: TCP
-  lb_algorithm:
-    type: string
-    default: ROUND_ROBIN
-  lb_svc_connection_limit:
-    type: string
-    default: 2000
-  lb_svc_monitor_type:
-    type: string
-    default: TCP
-  lb_svc_monitor_delay:
-    type: string
-    default: 3
-  lb_svc_monitor_max_retries:
-    type: string
-    default: 5
-  lb_svc_monitor_timeout:
-    type: string
-    default: 5
-{% if monitorUrlPathUse %}
-  lb_svc_monitor_url_path:
-    type: string
-    default: /
-{% endif %}
-{% endif %}
   service_port:
     type: string
     default: 6379
@@ -94,6 +63,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -105,7 +76,7 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
@@ -181,7 +152,7 @@ resources:
 
             systemctl enable rc-local
 
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "redis setting end"
 
   init_config2:
@@ -191,6 +162,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -202,7 +175,7 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
@@ -247,6 +220,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -258,7 +233,7 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
@@ -338,63 +313,6 @@ resources:
       user_data:
         get_resource: init_config3
 
-{% if octaviaLbUse %}
-  octavia_lb:
-    type: OS::Octavia::LoadBalancer
-    properties:
-      vip_subnet: { get_param: provider_subnet }
-
-  octavia_lb_svc_listener:
-    type: OS::Octavia::Listener
-    properties:
-      loadbalancer: { get_resource: octavia_lb }
-      connection_limit: { get_param: lb_svc_connection_limit }
-      protocol: { get_param: lb_svc_protocol }
-      protocol_port: { get_param: lb_svc_port }
-
-  octavia_lb_svc_pool:
-    type: OS::Octavia::Pool
-    properties:
-      listener: { get_resource: octavia_lb_svc_listener }
-      lb_algorithm: { get_param: lb_algorithm }
-      protocol: { get_param: lb_svc_protocol }
-      session_persistence:
-        type: SOURCE_IP
-
-  octavia_lb_svc_monitor:
-    type: OS::Octavia::HealthMonitor
-    properties:
-      pool: { get_resource: octavia_lb_svc_pool }
-      type: { get_param: lb_svc_monitor_type }
-      delay: { get_param: lb_svc_monitor_delay }
-      max_retries: { get_param: lb_svc_monitor_max_retries }
-      timeout: { get_param: lb_svc_monitor_timeout }
-{% if monitorUrlPathUse %}
-      url_path: { get_param: lb_svc_monitor_url_path }
-{% endif %}
-
-  lb_svc_pool_member1:
-    type: OS::Octavia::PoolMember
-    properties:
-      pool: { get_resource: octavia_lb_svc_pool }
-      address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-      protocol_port: { get_param: service_port }
-
-  lb_svc_pool_member2:
-    type: OS::Octavia::PoolMember
-    properties:
-      pool: { get_resource: octavia_lb_svc_pool }
-      address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
-      protocol_port: { get_param: service_port }
-
-  lb_svc_pool_member3:
-    type: OS::Octavia::PoolMember
-    properties:
-      pool: { get_resource: octavia_lb_svc_pool }
-      address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-      protocol_port: { get_param: service_port }
-{% endif %}
-
 outputs:
   servers:
     value:
@@ -404,16 +322,3 @@ outputs:
         instancePort: { get_attr: [ server2_port, show ] }
       - instance: { get_attr: [ server3, show ] }
         instancePort: { get_attr: [ server3_port, show ] }
-{% if octaviaLbUse %}
-  octaviaLb:
-    value:
-      loadBalancer: { get_attr: [ octavia_lb, show ] }
-      listeners:
-        - listener: { get_attr: [ octavia_lb_svc_listener, show ] }
-          pool: { get_attr: [ octavia_lb_svc_pool, show ] }
-          monitor: { get_attr: [ octavia_lb_svc_monitor, show ] }
-          poolMembers:
-            - { get_attr: [ lb_svc_pool_member1, show ] }
-            - { get_attr: [ lb_svc_pool_member2, show ] }
-            - { get_attr: [ lb_svc_pool_member3, show ] }
-{% endif %}
