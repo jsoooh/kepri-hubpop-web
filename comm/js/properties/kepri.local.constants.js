@@ -63,8 +63,7 @@ angular.module('app')
             myJobsKey: "MY_JOBS",
             myQuickMenusKey: "MY_QUICK_MENUS",
             personalProjectCnt: "personal_project_cnt",
-            userMenuBookmark: "user_menu_bookmark",     //사용자 my service
-            adminMenuBookmark: "admin_menu_bookmark"    //운영자 my service
+            userMenuBookmark: "user_menu_bookmark"     //사용자 my service
         },
         rdpConnect : {
             baseDomain : "wins.hubpop.io",
