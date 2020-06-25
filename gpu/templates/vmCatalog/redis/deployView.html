@@ -4,16 +4,14 @@
         <ul>
             <li>
                 <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
-                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
             </li>
         </ul>
         <ul>
             <li>
                 <strong class="tit">접속포트</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
-                <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
             </li>
         </ul>
     </div>
@@ -26,7 +24,7 @@
             </li>
             <li ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">
                 <strong class="tit">nodes.conf path: </strong>
-                <span class="txt">/var/lib/redis/nodes.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성되며 파일명은 nodes_포트번호.conf 입니다.'"><span class="ico_info"></span></button></div></span>
+                <span class="txt">/var/lib/redis/nodes.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성되며 파일명은 nodes-포트번호.conf 입니다.'"><span class="ico_info"></span></button></div></span>
             </li>
         </ul>
     </div>
