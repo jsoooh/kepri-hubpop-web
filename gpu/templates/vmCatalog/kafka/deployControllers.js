@@ -12,8 +12,13 @@ angular.module('gpu.controllers')
         if (ct.testInput) {
             ct.data.deployName = "DB 카프카";
             ct.data.stackName = "kafka";
+            ct.data.deployType = "single";
             ct.data.servicePort = 9092;
             ct.data.zookeeperPort = 2181;
+            ct.data.volumeUse = true;
+            /*
+            ct.data.deployType = "cluster";
+             */
         }
 
         ct.fn.kafkaPortCustomValidationCheck = function(port, type) {

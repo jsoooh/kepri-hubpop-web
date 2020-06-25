@@ -10,16 +10,21 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs: $scope.subPage});
 
-        // single 테스트
         if (ct.testInput) {
-            ct.data.servicePort = 20717;
             ct.data.deployName = "몽고DB";
             ct.data.stackName = "MongoDB";
-            ct.data.volumeUse = true;
-
+            ct.data.deployType = "single";
+            ct.data.servicePort = 20717;
             ct.data.adminId = "admin";
             ct.data.adminPassword = "Crossent!234";
             ct.data.adminConfirmPassword = "Crossent!234";
+            ct.data.volumeUse = true;
+            /*
+            ct.data.deployName = "몽고DB클러스터";
+            ct.data.stackName = "MongoDBCluster";
+            ct.data.deployType = "cluster";
+            ct.data.volumeUse = true;
+            */
         }
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
