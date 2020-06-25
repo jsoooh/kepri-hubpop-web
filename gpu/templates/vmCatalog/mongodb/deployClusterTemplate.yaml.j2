@@ -3,6 +3,8 @@ heat_template_version: '2018-08-31'
 description: mongoDB Cluster Volume template
 
 parameters:
+  api_end_point:
+    type: string
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Mongodb.qcow2
@@ -114,13 +116,15 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-           {% if volumeUse %}
+{% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
-           {% endif %}
+{% endif %}
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
@@ -135,8 +139,8 @@ resources:
           template: |
             #!/bin/sh
             echo "mongodb setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
-          {% if volumeUse %}
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
             mount -t $volume_format_type $volume_mount_point $volume_mount_path
@@ -153,7 +157,7 @@ resources:
             mv /var/lib/mongo $volume_mount_path/mongo
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
-          {% endif %}
+{% endif %}
 
             mkdir -p /var/lib/mongo/rs/data1
             mkdir -p /var/lib/mongo/rs/data2
@@ -389,13 +393,15 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-          {% if volumeUse %}
+{% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
-          {% endif %}
+{% endif %}
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
@@ -410,8 +416,8 @@ resources:
           template: |
             #!/bin/sh
             echo "mongodb setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
-          {% if volumeUse %}
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
             mount -t $volume_format_type $volume_mount_point $volume_mount_path
@@ -428,7 +434,7 @@ resources:
             mv /var/lib/mongo $volume_mount_path/mongo
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
-          {% endif %}
+{% endif %}
 
             mkdir -p /var/lib/mongo/rs/data1
             mkdir -p /var/lib/mongo/rs/data2
@@ -627,13 +633,15 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-          {% if volumeUse %}
+{% if volumeUse %}
             $volume_mount_point: { get_param: volume_mount_point }
             $volume_format_type: { get_param: volume_format_type}
             $volume_mount_path: { get_param: volume_mount_path }
-          {% endif %}
+{% endif %}
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
@@ -648,8 +656,8 @@ resources:
           template: |
             #!/bin/sh
             echo "mongodb setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
-          {% if volumeUse %}
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
             mount -t $volume_format_type $volume_mount_point $volume_mount_path
@@ -667,7 +675,7 @@ resources:
             mv /var/lib/mongo $volume_mount_path/mongo
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
-          {% endif %}
+{% endif %}
 
             mkdir -p /var/lib/mongo/rs/data1
             mkdir -p /var/lib/mongo/rs/data2
@@ -855,7 +863,7 @@ resources:
             EOF
 
             systemctl enable rc-local
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "mongodb setting end"
 
   server1:

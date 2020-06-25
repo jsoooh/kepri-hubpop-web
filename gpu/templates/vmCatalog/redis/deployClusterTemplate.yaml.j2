@@ -3,6 +3,8 @@ heat_template_version: '2018-08-31'
 description: redis cluster(M-S) template
 
 parameters:
+  api_end_point:
+    type: string
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Redis.qcow2
@@ -61,6 +63,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -72,7 +76,7 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
@@ -148,7 +152,7 @@ resources:
 
             systemctl enable rc-local
 
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "redis setting end"
 
   init_config2:
@@ -158,6 +162,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -169,7 +175,7 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
@@ -214,6 +220,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -225,7 +233,7 @@ resources:
           template: |
             #!/bin/sh
             echo "redis setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
