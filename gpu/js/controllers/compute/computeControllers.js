@@ -2,6 +2,28 @@
 
 // angular.module('iaas.controllers')
 angular.module('gpu.controllers')
+
+    .filter('filterSpecList', function () {
+        return function (items, specType, gpuCard) {
+            var out = [];
+            if (angular.isArray(items)) {
+                items.forEach(function (item) {
+                    if (item.type == specType) {
+                        if (specType == "GPU") {
+                            if (item.gpuCardInfo.model == gpuCard.model) {
+                                out.push(item);
+                            }
+                        }
+                        else
+                            out.push(item);
+                    }
+                });
+                return out;
+            }
+            return out;
+        }
+    })
+
     // .controller('iaasComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
     .controller('gpuComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
         // _DebugConsoleLog("computeControllers.js : iaasComputeCtrl", 1);
@@ -814,10 +836,17 @@ angular.module('gpu.controllers')
 
         // 부하분산 관리 - 접속 IP 복사
         ct.fn.copyConnectLbInfoToClipboard = function (loadbalancer) {
+            /*
             if (loadbalancer.floatingIp) {
                 common.copyToClipboard(loadbalancer.floatingIp);
                 $scope.main.copyToClipboard(loadbalancer.floatingIp, '"' + loadbalancer.floatingIp + '"가 클립보드에 복사 되었습니다.');
-            } else {
+            }
+            */
+            if (loadbalancer.ipAddress) {
+                common.copyToClipboard(loadbalancer.ipAddress);
+                $scope.main.copyToClipboard(loadbalancer.ipAddress, '"' + loadbalancer.ipAddress + '"가 클립보드에 복사 되었습니다.');
+            }
+            else {
                 common.showAlertWarning("접속 IP가 존재하지 않습니다.");
             }
         };
@@ -1177,9 +1206,11 @@ angular.module('gpu.controllers')
         ct.selectedSpecType = "";
 
         ct.gpuCardList  = [];
+        ct.selectedGpuCard = {};
         ct.selectedGpuCardId = "";
 
-        ct.selectedAvailabilityZone = "";
+        ct.selectedAvailabilityZoneId = "";
+        ct.selectedAvailabilityZone = {};
         ct.availabilityZoneList = [];
 
         // 네트워크 셀렉트박스 조회
@@ -1484,11 +1515,19 @@ angular.module('gpu.controllers')
         }
 
         ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
+
+            ct.selectedGpuCard = {};
             if (selectedGpuCardId) {
+                var index;
+                for (index = 0; index < ct.gpuCardList.length; index++) {
+                    if (selectedGpuCardId == ct.gpuCardList[index].id) {
+                        ct.selectedGpuCard = ct.gpuCardList[index];
+                        break;
+                    }
+                }
                 ct.fn.getAvailabilityZoneList(selectedGpuCardId);
             }
             else
-                // ct.availableZoneList  = [];
                 ct.fn.getAvailabilityZoneList();
         }
 
@@ -1509,6 +1548,19 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
+        }
+
+        ct.fn.onchangeAvailabilityZone = function(availabilityZoneId) {
+            ct.selectedAvailabilityZone = {};
+            if (availabilityZoneId) {
+                var index;
+                for (index = 0; index < ct.availabilityZoneList.length; index++) {
+                    if (availabilityZoneId == ct.availabilityZoneList[index].id) {
+                        ct.selectedAvailabilityZone = ct.availabilityZoneList[index];
+                        break;
+                    }
+                }
+            }
         }
 
         // 네트워크 리스트 조회
@@ -1713,12 +1765,14 @@ angular.module('gpu.controllers')
             params.instance = {};
             params.instance.name = ct.data.name;
             params.instance.tenantId = ct.data.tenantId;
-            params.instance.networks = [{ id: (ct.data.networks && angular.isArray(ct.data.networks) && ct.data.networks[0] && ct.data.networks[0].id)?ct.data.networks[0].id:0 }];
+            // params.instance.networks = [{ id: (ct.data.networks && angular.isArray(ct.data.networks) && ct.data.networks[0] && ct.data.networks[0].id)?ct.data.networks[0].id:0 }];
+            params.instance.networks = [{ id: ct.selectedAvailabilityZone.publicNetworkSubnet.networkId} ];
             params.instance.image = {id: ct.data.image.id};
             params.instance.keypair = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
             params.instance.spec = ct.data.spec;
-            params.instance.zone = ct.selectedAvailabilityZone;
+            params.instance.zone = ct.selectedAvailabilityZone.availabilityZone;
+
 
             //windows RDP 관련 수정. domain 저장하지 않음. 2019.07.16
             /*if (ct.data.image.osType == 'windows') {

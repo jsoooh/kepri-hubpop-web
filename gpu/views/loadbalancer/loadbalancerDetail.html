@@ -27,6 +27,7 @@
 						<strong class="tit">설명</strong>
 						<div class="txt">{{ contents.loadbalancer.iaasLbInfo.description }}</div>
 					</li>
+					<!--
 					<li>
 						<strong class="tit">접속 IP</strong>
 						<div class="txt">{{ contents.loadbalancer.iaasLbInfo.floatingIp }}<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.loadbalancer.iaasLbInfo)"><span class="ico_sm ico_copy"></span></button></div>
@@ -34,6 +35,11 @@
 					<li>
 						<strong class="tit">내부 IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를<br>사용할 수 있습니다.'"><span class="ico_info"></span></button></strong>
 						<div class="txt">{{ contents.loadbalancer.iaasLbInfo.ipAddress }}</div>
+					</li>
+					-->
+					<li>
+						<strong class="tit">접속 IP</strong>
+						<div class="txt">{{ contents.loadbalancer.iaasLbInfo.ipAddress }}<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.loadbalancer.iaasLbInfo)"><span class="ico_sm ico_copy"></span></button></div>
 					</li>
 					<li>
 						<strong class="tit">상태</strong>

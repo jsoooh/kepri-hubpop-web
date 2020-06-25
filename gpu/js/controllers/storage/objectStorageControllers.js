@@ -54,7 +54,7 @@ angular.module('gpu.controllers')
         };
     }])
     // .controller('iaasObjectStorageCtrl', function ($scope, $location, $state,$translate,$filter, $stateParams, user, $q,paging, common, CONSTANTS) {
-    .controller('gpuObjectStorageCtrl', function ($scope, $location, $state,$translate,$filter, $stateParams, user, $q,paging, common, CONSTANTS) {
+    .controller('gpuObjectStorageCtrl', function ($scope, $location, $timeout, $state, $translate, $filter, $stateParams, user, $q, paging, common, CONSTANTS) {
         // _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageCtrl", 1);
         _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageCtrl", 1);
 
@@ -393,6 +393,28 @@ angular.module('gpu.controllers')
                 });
             }
             $scope.main.loadingMainBody = false;
+
+            /* donwload 작업  - 임시
+            var timer = function() {
+                var param = {};
+                param.tenantId = ct.data.tenantId;
+                param.bucket = ct.data.bucketName;
+                var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/object/state', 'GET', param, "application/x-www-form-urlencoded"));
+                returnPromise.success(function (data, status, headers) {
+                });
+                returnPromise.error(function (data, status, headers) {
+                    $scope.main.loadingMainBody = false;
+                    $state.reload();
+                    common.showAlertError(data.message);
+                });
+                returnPromise.finally(function (data, status, headers) {
+                    // $scope.main.loadingMainBody = false;
+                });
+                $timeout(timer, 2000);
+            }
+            $timeout(timer, 2000);
+            */
+
 
         }
 

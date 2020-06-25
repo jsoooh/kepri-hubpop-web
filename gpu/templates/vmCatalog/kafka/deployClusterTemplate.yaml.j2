@@ -354,6 +354,7 @@ resources:
 
             systemctl start kafka
             systemctl enable kafka
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "kafka setting end"
 
   server1:
@@ -419,11 +420,6 @@ resources:
       volume_id: { get_resource: cinder_volume3 }
       mountpoint: { get_param: volume_mount_point }
 {% endif %}
-  octavia_lb:
-    type: OS::Octavia::LoadBalancer
-    properties:
-      vip_subnet: { get_param: provider_subnet }
-
 
 outputs:
   servers:
@@ -443,9 +439,3 @@ outputs:
 {% if volumeUse %}
         volume: { get_attr: [ cinder_volume3, show ] }
 {% endif %}
-  octavia_lb_ip:
-    value:
-      get_attr: [octavia_lb, vip_address]
-  lb_svc_port:
-    value:
-      get_param: lb_svc_port
