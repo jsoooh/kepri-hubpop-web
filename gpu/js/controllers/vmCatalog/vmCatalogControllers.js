@@ -61,7 +61,7 @@ angular.module('gpu.controllers')
     ct.htmlUrls.adminConfirmPassword    = _GPU_VIEWS_ + "/vmCatalog/create/createDeployAdminConfirmPassword.html" + _VERSION_TAIL_;
     ct.htmlUrls.userDbUse               = _GPU_VIEWS_ + "/vmCatalog/create/createDeployUserDbUse.html" + _VERSION_TAIL_;
     ct.htmlUrls.zoneSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeployZoneSelect.html" + _VERSION_TAIL_;
-    ct.htmlUrls.spacSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeploySpacSelect.html" + _VERSION_TAIL_;
+    ct.htmlUrls.specSelect              = _GPU_VIEWS_ + "/vmCatalog/create/createDeploySpecSelect.html" + _VERSION_TAIL_;
     ct.htmlUrls.volumeSelect            = _GPU_VIEWS_ + "/vmCatalog/create/createDeployVolumeSelect.html" + _VERSION_TAIL_;
     ct.htmlUrls.createDeployBtn         = _GPU_VIEWS_ + "/vmCatalog/create/createDeployBtn.html" + _VERSION_TAIL_;
     ct.htmlUrls.createDeployInfo        = _GPU_VIEWS_ + "/vmCatalog/create/createDeployInfo.html" + _VERSION_TAIL_;
@@ -80,7 +80,7 @@ angular.module('gpu.controllers')
     ct.specList = [];
     ct.availabilityZones = [];
     ct.sltAvailabilityZone = null;
-    ct.sltSpac = {};
+    ct.sltSpec = {};
     ct.data.replicaCnt = 3;
     ct.data.clusterCnt = 3;
     ct.data.serverCnt = 1;
@@ -275,6 +275,7 @@ angular.module('gpu.controllers')
     };
 
     // 상용존 셀렉트박스 조회
+    ct.isAvailabilityZoneLoad = false;
     ct.fn.availabilityZoneList = function() {
         var returnPromise = vmCatalogService.listAllAvailabilityZones();
         returnPromise.success(function (data, status, headers) {
@@ -283,8 +284,10 @@ angular.module('gpu.controllers')
             ct.data.availabilityZone = ct.sltAvailabilityZone.availabilityZone;
             ct.data.providerNet = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
             ct.data.providerSubnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
+            ct.isAvailabilityZoneLoad = true;
         });
         returnPromise.error(function (data, status, headers) {
+            ct.isAvailabilityZoneLoad = true;
         });
     };
 
@@ -353,7 +356,7 @@ angular.module('gpu.controllers')
         });
     };
 
-    // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+    // min spec disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
     ct.isMinSpecDisabled = false;
     // spec loading 체크
     ct.specMinDisabledSetting = false;
@@ -367,8 +370,8 @@ angular.module('gpu.controllers')
                 }
             });
             ct.specMinDisabledSetting = true;
-            if (ct.sltSpac && ct.sltSpac.uuid) {
-                if (ct.sltSpac.disk < 4 || ct.sltSpac.ram < 512) {
+            if (ct.sltSpec && ct.sltSpec.uuid) {
+                if (ct.sltSpec.disk < 4 || ct.sltSpec.ram < 512) {
                     ct.fn.defaultSelectSpec();
                 }
             } else {
@@ -377,7 +380,7 @@ angular.module('gpu.controllers')
         }
     };
 
-    // max spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
+    // max spec disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
     ct.isMaxSpecDisabled = false;
     // spec loading 체크
     ct.specMaxDisabledSetting = false;
@@ -385,7 +388,9 @@ angular.module('gpu.controllers')
         ct.isMaxSpecDisabled = false;
         if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource && ct.tenantResource.usedResource) {
             angular.forEach(ct.specList, function (spec) {
-                if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
+                if ((spec.vcpus  * ct.data.serverCnt) > ct.tenantResource.available.cores
+                    || (spec.ram  * ct.data.serverCnt) > ct.tenantResource.available.ramSize
+                    || (spec.disk  * ct.data.serverCnt) > ct.tenantResource.available.instanceDiskGigabytes) {
                     spec.disabled = true;
                     ct.isMaxSpecDisabled = true;
                 }
@@ -425,13 +430,13 @@ angular.module('gpu.controllers')
     ct.fn.selectSpec = function(sltSpec) {
         if (!ct.specDisabledAllSetting || sltSpec.disabled) return;
         if (sltSpec && sltSpec.uuid) {
-            ct.sltSpac = angular.copy(sltSpec);
-            ct.data.flavor = ct.sltSpac.name;
-            ct.sltSpacUuid = ct.sltSpac.uuid;
+            ct.sltSpec = angular.copy(sltSpec);
+            ct.data.flavor = ct.sltSpec.name;
+            ct.sltSpecUuid = ct.sltSpec.uuid;
         } else {
-            ct.sltSpac = {};
-            ct.data.flavor = {};
-            ct.sltSpacUuid = "";
+            ct.sltSpec = {};
+            ct.data.flavor = "";
+            ct.sltSpecUuid = "";
         }
     };
 
@@ -591,19 +596,25 @@ angular.module('gpu.controllers')
 
         $scope.main.loadingMainBody = true;
 
-        var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
-        promise.success(function (data) {
-            if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
-                $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
-            } else {
+        if (_DOMAIN_ == "localhost") {
+            var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
+            promise.success(function (data) {
+                if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
+                    $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
+                } else {
+                    $scope.main.loadingMainBody = false;
+                }
+                ct.checkClickBtn = false;
+            });
+            promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-            }
-            ct.checkClickBtn = false;
-        });
-        promise.error(function (data, status, headers) {
+                ct.checkClickBtn = false;
+            });
+        } else {
+            common.showAlertMessage("준비 중 입니다.");
             $scope.main.loadingMainBody = false;
             ct.checkClickBtn = false;
-        });
+        }
         if (templatePrint) {
             var printPromise = vmCatalogService.templateVmCatalogDeploy(vmCatalogDeploy);
             printPromise.success(function (data) {

@@ -11,8 +11,10 @@ angular.module('gpu.controllers')
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
         // 테스트
-        ct.data.deployName = "로드밸런스";
-        ct.data.stackName = "haproxy";
+        if (ct.testInput) {
+            ct.data.deployName = "로드밸런스";
+            ct.data.stackName = "haproxy";
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {

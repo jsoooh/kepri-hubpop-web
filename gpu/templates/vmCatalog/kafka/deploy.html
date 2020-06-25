@@ -1,0 +1,35 @@
+<ul class="pn_list_style">
+    <li>
+        <div class="panel_box pn_l">
+            <div class="pn_head">
+                <h4 class="pnh_tit">MongoDB 서비스 만들기</h4>
+            </div>
+            <form name="subPage.deployForm" novalidate>
+                <input type="password" style="display: block; width:0px; height:0px; border: 0;"><!-- 아이디 패스워드 자동 입력 방지 -->
+                <div class="pn_body">
+                    <span class="sm_txt">* 는 필수입력 사항입니다.</span>
+                    <ul class="form_list">
+                        <li ng-include="contents.htmlUrls.deployName"></li>
+                        <li ng-include="contents.htmlUrls.stackName"></li>
+                        <li ng-include="contents.htmlUrls.deployTypeRadio"></li>
+                        <li ng-include="contents.htmlUrls.servicePort"></li>
+                        <li>
+                            <div class="pnb_tit">
+                                <i class="i_star"></i> <span class="pnb_t_txt">zookeper 포트</span>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'zookeeper 포트'"><span class="ico_info"></span></button></div>
+                            </div>
+                            <input type="text" name="zookeeperPort" class="form-control" maxlength="50" ng-model="contents.data.zookeeperPort" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck('single', contents.data.zookeeperPort)|custom:contents.fn.kafkaPortCustomValidationCheck(contents.data.zookeeperPort, 'zookeeper')" placeholder="zookeeper 포트를 입력하세요." >
+                        </li>
+                        <li ng-include="contents.htmlUrls.zoneSelect"></li>
+                        <li ng-include="contents.htmlUrls.specSelect"></li>
+                        <li ng-include="contents.htmlUrls.volumeSelect"></li>
+                    </ul>
+                </div>
+            </form>
+            <div class="pn_footer" ng-include="contents.htmlUrls.createDeployBtn"></div>
+        </div>
+    </li>
+    <li>
+        <div class="panel_box pn_r" ng-include="contents.htmlUrls.createDeployInfo"></div>
+    </li>
+</ul>

@@ -10,9 +10,7 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.clusterCnt = 3;
         ct.data.servicePort = 6379;
-        ct.data.lbSvcPort = 6379;
         ct.data.redis1Port = 6379;
         ct.data.redis2Port = 6380;
 

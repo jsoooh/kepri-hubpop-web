@@ -122,8 +122,8 @@ resources:
 
             systemctl start kafka
             systemctl enable kafka
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
             echo "kafka setting end"
-
 
   server:
     type: OS::Nova::Server
