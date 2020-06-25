@@ -1,0 +1,443 @@
+heat_template_version: '2018-08-31'
+
+description: cluster Kafka volume template
+
+parameters:
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Kafka.qcow2
+  flavor:
+    type: string
+    default: m1.small
+  availability_zone:
+    type: string
+    default: zone01
+  key_name:
+    type: string
+    default: heat_stack_octavia_test_keypair
+  security_group:
+    type: string
+    default: default
+  provider_net:
+    type: string
+    default: provider01
+  provider_subnet:
+    type: string
+    default: provider01-01
+  zookeeper_port:
+    type: string
+    default: 2181
+  service_port:
+    type: string
+    default: 9092
+{% if volumeUse %}
+  volume_type:
+    type: string
+    default: RBD
+  volume_size:
+    type: string
+    default: 10
+  volume_mount_point:
+    type: string
+    default: /dev/vdb
+  volume_format_type:
+    type: string
+    default: xfs
+  volume_mount_path:
+    type: string
+    default: /mnt/data
+{% endif %}
+
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+{% if volumeUse %}
+  cinder_volume1:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume2:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume3:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+{% endif %}
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $service_port: { get_param: service_port }
+            $zookeeper_port: { get_param: zookeeper_port }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server_addresses_and_ports:
+              list_join:
+                - ','
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+          template: |
+            #!/bin/sh
+            echo "kafka setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.xfs $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/kafka $volume_mount_path/kafka
+            ln -s $volume_mount_path/kafka /var/lib/kafka
+            sleep 1
+{% endif %}
+            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
+            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
+
+            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
+            cat <<EOF>> /home/kafka/kafka/config/zookeeper.properties
+
+            initLimit=5
+            syncLimit=3
+
+            server.1=$server1_ip_address:2888:3888
+            server.2=$server2_ip_address:2888:3888
+            server.3=$server3_ip_address:2888:3888
+
+            EOF
+
+            mkdir /tmp/zookeeper
+            echo 1 > /tmp/zookeeper/myid
+
+            chown -R kafka.kafka /tmp/zookeeper
+
+            sed -i "s/^broker.id=0/broker.id=1/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server1_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/kafka/config/server.properties
+
+            systemctl start kafka
+            systemctl enable kafka
+            echo "kafka setting end"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $service_port: { get_param: service_port }
+            $zookeeper_port: { get_param: zookeeper_port }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server_addresses_and_ports:
+              list_join:
+                - ','
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+          template: |
+            #!/bin/sh
+            echo "kafka setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.xfs $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/kafka $volume_mount_path/kafka
+            ln -s $volume_mount_path/kafka /var/lib/kafka
+            sleep 1
+{% endif %}
+            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
+            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
+
+            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
+            cat <<EOF>> /home/kafka/kafka/config/zookeeper.properties
+
+            initLimit=5
+            syncLimit=3
+
+            server.1=$server1_ip_address:2888:3888
+            server.2=$server2_ip_address:2888:3888
+            server.3=$server3_ip_address:2888:3888
+
+            EOF
+
+            mkdir /tmp/zookeeper
+            echo 2 > /tmp/zookeeper/myid
+
+            chown -R kafka.kafka /tmp/zookeeper
+
+            sed -i "s/^broker.id=0/broker.id=2/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server2_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/kafka/config/server.properties
+
+            systemctl start kafka
+            systemctl enable kafka
+            echo "kafka setting end"
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $service_port: { get_param: service_port }
+            $zookeeper_port: { get_param: zookeeper_port }
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server_addresses_and_ports:
+              list_join:
+                - ','
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+                - - list_join:
+                      - ':'
+                      - - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+                      - - { get_param: zookeeper_port }
+          template: |
+            #!/bin/sh
+            echo "kafka setting start"
+            echo "kafka setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.xfs $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/kafka $volume_mount_path/kafka
+            ln -s $volume_mount_path/kafka /var/lib/kafka
+            sleep 1
+{% endif %}
+            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
+            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
+
+            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
+            cat <<EOF>> /home/kafka/kafka/config/zookeeper.properties
+
+            initLimit=5
+            syncLimit=3
+
+            server.1=$server1_ip_address:2888:3888
+            server.2=$server2_ip_address:2888:3888
+            server.3=$server3_ip_address:2888:3888
+
+            EOF
+
+            mkdir /tmp/zookeeper
+            echo 3 > /tmp/zookeeper/myid
+
+            chown -R kafka.kafka /tmp/zookeeper
+
+            sed -i "s/^broker.id=0/broker.id=3/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server3_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/kafka/config/server.properties
+
+            systemctl start kafka
+            systemctl enable kafka
+            echo "kafka setting end"
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
+{% if volumeUse %}
+  cinder_volume1_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server1 }
+      volume_id: { get_resource: cinder_volume1 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume2_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server2 }
+      volume_id: { get_resource: cinder_volume2 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume3_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server3 }
+      volume_id: { get_resource: cinder_volume3 }
+      mountpoint: { get_param: volume_mount_point }
+{% endif %}
+  octavia_lb:
+    type: OS::Octavia::LoadBalancer
+    properties:
+      vip_subnet: { get_param: provider_subnet }
+
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume1, show ] }
+{% endif %}
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume2, show ] }
+{% endif %}
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume3, show ] }
+{% endif %}
+  octavia_lb_ip:
+    value:
+      get_attr: [octavia_lb, vip_address]
+  lb_svc_port:
+    value:
+      get_param: lb_svc_port
