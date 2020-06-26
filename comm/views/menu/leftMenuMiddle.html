@@ -30,10 +30,10 @@
                 </div>
                 <div class="scroll-bar">
                     <!-- myService -->
-                    <div id="myService" class="sub-menu active">
+                    <div id="myService" class="sub-menu" ng-class="{'active': main.myServiceOpen}">
                         <div class="sub-title">
                             <span>My Service</span>
-                            <a href="" class="btn-dropdown"></a>
+                            <a href="" class="btn-dropdown" ng-click="main.myServiceOpenClick();"></a>
                         </div>
                         <ul class="lnb-depth2">
                             <li class="all-depth2-item" ng-repeat="myMenuItem2 in (main.myMenus | filter : { level: 2 })">
