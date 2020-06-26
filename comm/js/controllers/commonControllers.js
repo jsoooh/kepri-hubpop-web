@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('common.controllers', [])
-// 최초 접속 혹은 새로고침 시 as main
+    // 최초 접속 혹은 새로고침 시 as main
     .controller('mainCtrl', function ($scope, $location, $state, $stateParams, $translate, $window, $timeout, $interval, $cookies, cache, cookies, user, common, portal, userSettingService, CONSTANTS, FileUploader, memberService) {
         _DebugConsoleLog('commonControllers.js : mainCtrl Start, path : ' + $location.path(), 1);
 
@@ -1637,8 +1637,7 @@ angular.module('common.controllers', [])
             var promise = portal.menu.getMyMenuList();
             promise.success(function (data) {
                 mc.myMenus = data.items;
-                console.log("mc.myMenus : ", mc.myMenus);
-                //console.log("mc.myMenus.findIndex : ", mc.myMenus.findIndex(i => i.id === 10103));
+                //console.log("mc.myMenus : ", mc.myMenus);
             });
             promise.error(function (data, status, headers) {
             });
@@ -1668,8 +1667,7 @@ angular.module('common.controllers', [])
             }
             promise.success(function (data) {
                 mc.myMenus = data.items;
-                console.log("addMymenu > mc.myMenus : ", mc.myMenus);
-                //console.log("mc.myMenus.findIndex : ", mc.myMenus.findIndex(i => i.id === 10103));
+                //console.log("addMymenu > mc.myMenus : ", mc.myMenus);
             });
             promise.error(function (data, status, headers) {
             });
@@ -1680,7 +1678,7 @@ angular.module('common.controllers', [])
 
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
-    // 매인 BODY Conroller
+    // 메인 BODY Conroller
     .controller('mainBodyCtrl', function ($scope, $location, $templateCache, $state, $stateParams, $timeout, $interval, $window, $translate, user, common, CONSTANTS) {
         _DebugConsoleLog("commonControllers.js : mainBodyCtrl Start, path : " + $location.path(), 1);
 

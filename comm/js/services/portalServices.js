@@ -33,15 +33,15 @@ angular.module('portal.services', [])
         /* 사용자포탈 메뉴 즐겨찾기 등록 */
         portal.menu.addMymenu = function(menuId) {
             var getParams = {
-                "menuId" : menuId.toString()
+                "menuId" : menuId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/user/myMenu', 'POST', getParams,'application/x-www-form-urlencoded'));
         };
 
-        /* 사용자포탈 메뉴 즐겨찾기 삭 */
+        /* 사용자포탈 메뉴 즐겨찾기 삭제 */
         portal.menu.deleteMymenu = function(menuId) {
             var getParams = {
-                "menuId" : menuId.toString()
+                "menuId" : menuId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/user/myMenu', 'DELETE', getParams,'application/x-www-form-urlencoded'));
         };
