@@ -27,8 +27,8 @@ angular.module('portal.services', [])
 
         /* 사용자포탈 메뉴 즐겨찾기 조회 */
         portal.menu.getMyMenuList = function() {
-            //return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/user/myMenu', 'GET'));
-            return common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/user/myMenu', 'GET');
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/user/myMenu', 'GET'));
+            //return common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/user/myMenu', 'GET');
         };
 
         /* 사용자포탈 메뉴 즐겨찾기 등록 */

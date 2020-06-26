@@ -1642,15 +1642,23 @@ angular.module('common.controllers', [])
             portal.notice.setNoticeList(mc);
         };
 
-        //메뉴 즐겨찾기 조회 : sync로 변경. 화면이 먼저 나타나면 안됨
+        //메뉴 즐겨찾기 조회
         mc.getMyMenus = function () {
             var promise = portal.menu.getMyMenuList();
+            promise.success(function (data) {
+                mc.myMenus = data.items;
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+            });
+            /* sync 변경
             if (promise && promise.status == 200 && angular.isObject(promise.data) && angular.isArray(promise.data.items)) {
                 mc.myMenus = promise.data.items;
                 //console.log("mc.myMenus : ", mc.myMenus);
-            }
+            }*/
         };
-        mc.getMyMenus();
+        //mc.getMyMenus();
 
         //전체 메뉴 화면에서 메뉴 즐겨찾기 여부 확인
         mc.checkMyMenuByAllMenu = function (menuId) {
