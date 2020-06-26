@@ -12,7 +12,6 @@ angular.module('perf.controllers')
         ct.data = {};
 
         ct.data.sltOrgCode = $scope.main.sltPortalOrg.orgId;
-        console.log("orgCode: "+ct.data.sltOrgCode);
 
         ct.meteringItemGroups = [];
         ct.meteringItems = [];
@@ -222,14 +221,12 @@ angular.module('perf.controllers')
             var promise = perfAnlsService.sumTotalAnlsByOrg(params);
             promise.success(function (data) {
                 if(data.itemCount > 0) {
-                    console.log("perfTotalAmt: "+data.items[0].perfTotalAmt);
                     ct.data.lastSumPerfAmt = data.items[0].perfTotalAmt;
                 } else {
                     ct.data.lastSumPerfAmt = 0;
                 }
 
                 ct.lastSumLoading = false;
-                console.log("lastPerfTotalAmt: "+ct.data.lastSumPerfAmt);
             });
             promise.error(function (data) {
                 ct.data.lastSumPerfAmt = [];
@@ -259,23 +256,18 @@ angular.module('perf.controllers')
             var promise = perfAnlsService.sumTotalAnlsByOrg(params);
             promise.success(function (data) {
                 if(data.itemCount > 0) {
-                    console.log("perfTotalAmt: "+data.items[0].perfTotalAmt);
                     ct.data.nextSumPerfAmt = data.items[0].perfTotalAmt;
                 } else if(!ct.isToday) {
                     ct.data.nextSumPerfAmt = 0;
                 }
 
                 ct.nextSumLoading = false;
-
-                console.log("lastPerfTotalAmt: "+ct.data.nextSumPerfAmt);
             });
             promise.error(function (data) {
                 ct.data.nextSumPerfAmt = [];
 
                 ct.nextSumLoading = false;
             });
-
-            console.log("nextPerfTotalAmt: "+ct.data.nextSumPerfAmt);
         };
 
         /* 사용 금액 월별 추이 */
@@ -326,10 +318,7 @@ angular.module('perf.controllers')
                     series: anlsMonthlySummaryListsToChartData
                 };
 
-                console.log("monthlyChartData");
-                console.log(ct.monthlyChart.data);
                 ct.fn.redrawChart(ct.monthlyChart);
-
                 ct.dailyChart.loading = false;
             });
             promise.error(function (data) {
@@ -397,10 +386,7 @@ angular.module('perf.controllers')
                     series: anlsDailySummaryListsToChartData
                 };
 
-                console.log("dailyChartData");
-                console.log(ct.dailyChart.data);
                 ct.fn.redrawChart(ct.dailyChart);
-
                 ct.dailyChart.loading = false;
             });
             promise.error(function (data) {
@@ -428,8 +414,6 @@ angular.module('perf.controllers')
             };
             var promise = perfAnlsService.listAnlsTotalByOrgAndItemGroup(params);
             promise.success(function (data) {
-                console.log("Success listAnlsTotalByOrgAndItemGroup");
-                console.log(data);
                 if(angular.isArray(data.items)) {
                     ct.anlsByItemGroupLists = data.items;
                     var anlsByItemGroupListsToChartData = [];
@@ -447,18 +431,13 @@ angular.module('perf.controllers')
                         series: anlsByItemGroupListsToChartData
                     };
 
-                    console.log("itemGroupChartData");
-                    console.log(ct.itemGroupChart.data);
-
                     ct.fn.redrawChart(ct.itemGroupChart);
                 }
 
                 ct.itemGroupChart.loading = false;
             });
             promise.error(function (data, status, header) {
-                console.log("Fail listAnlsTotalByOrgAndItemGroup");
                 ct.anlsByItemGroupLists = [];
-
                 ct.itemGroupChart.loading = false;
             });
         };
@@ -481,8 +460,6 @@ angular.module('perf.controllers')
             };
             var promise = perfAnlsService.listAnlsTotalByOrgAndItem(params);
             promise.success(function (data) {
-                console.log("Success listAnlsTotalByOrgAndItem");
-                console.log(data);
                 if(angular.isArray(data.items)) {
                     ct.anlsByItemLists = data.items;
 
@@ -492,18 +469,12 @@ angular.module('perf.controllers')
                         series: anlsByItemListsToChartData
                     };
 
-                    console.log("itemChartData");
-                    console.log(ct.itemChart.data);
-
                     ct.fn.redrawChart(ct.itemChart);
-
                     ct.itemChart.loading = false;
                 }
             });
             promise.error(function (data, status, header) {
-                console.log("Fail listAnlsTotalByOrgAndItem");
                 ct.anlsByItemLists = [];
-
                 ct.itemChart.loading = false;
             });
         };
@@ -580,9 +551,6 @@ angular.module('perf.controllers')
                 ct.itemChart.data = {
                     series: anlsByItemListsToChartData
                 };
-
-                console.log("changedItemChartData");
-                console.log(ct.itemChart.data);
 
                 ct.fn.redrawChart(ct.itemChart);
             }
