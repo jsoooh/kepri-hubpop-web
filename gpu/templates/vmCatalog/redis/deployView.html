@@ -1,48 +1,31 @@
-<div class="cBox type1 appCnt-info ctlog-info">
-    <div class="cBox-hd" ng-include="contents.htmlUrls.deployTitle"></div>
-    <div class="cBox-cnt">
-        <div class="in">
-            <div class="ctlog_cntWrap">
-                <div class="ctlog-cnt">
-                    <h5>서비스 접속정보</h5>
-                    <ul>
-                        <li ng-if="contents.octaviaLbUse">
-                            <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
-                        </li>
-                        <li ng-if="!contents.octaviaLbUse">
-                            <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                        </li>
-                        <li ng-if="contents.octaviaLbUse">
-                            <strong class="tit">접속포트</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
-                        </li>
-                        <li ng-if="!contents.octaviaLbUse">
-                            <strong class="tit">접속포트</strong>
-                            <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="ctlog-cnt">
-                    <h5> 서비스 환경 설정 파일 경로</h5>
-                    <ul>
-                        <li>
-                            <strong class="tit">: </strong>
-                            <span class="txt">/</span>
-                        </li>
-                        <li>
-                            <strong class="tit">: </strong>
-                            <span class="txt">/</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+<div class="ctlog_cntWrap">
+    <div class="ctlog-cnt">
+        <h5>서비스 접속정보</h5>
+        <ul>
+            <li>
+                <strong class="tit">접속 IP</strong>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <strong class="tit">접속포트</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="ctlog-cnt">
+        <h5> 서비스 환경 설정 파일 경로</h5>
+        <ul>
+            <li>
+                <strong class="tit">redis.conf path: </strong>
+                <span class="txt">/etc/redis.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우 파일명은 redis_포트번호.conf 입니다.'"><span class="ico_info"></span></button></div></span>
+            </li>
+            <li ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">
+                <strong class="tit">nodes.conf path: </strong>
+                <span class="txt">/var/lib/redis/nodes.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성되며 파일명은 nodes-포트번호.conf 입니다.'"><span class="ico_info"></span></button></div></span>
+            </li>
+        </ul>
     </div>
 </div>
-<!-- //서비스 정보 -->
-
-<!-- 부하분산 서버정보 -->
-<div ng-if="contents.octaviaLbUse" ng-include="contents.htmlUrls.deployOctaviaLb"></div>
-<div ng-include="contents.htmlUrls.deployServerList"></div>

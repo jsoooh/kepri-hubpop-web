@@ -3,6 +3,8 @@ heat_template_version: '2018-08-31'
 description: single mongoDB volume template
 
 parameters:
+  api_end_point:
+    type: string
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Mongodb.qcow2
@@ -51,7 +53,6 @@ parameters:
 
 
 resources:
-
   server_port:
     type: OS::Neutron::Port
     properties:
@@ -75,6 +76,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
 {% if volumeUse %}
@@ -88,7 +91,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mongodb setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -104,7 +107,7 @@ resources:
 
             sleep 1
 
-            mv /var/lib/mongo $volume_mount_path/
+            mv /var/lib/mongo $volume_mount_path/mongo
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
 {% endif %}
@@ -123,7 +126,7 @@ resources:
 
             systemctl enable mongod
             echo "mongodb setting end"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
   server:
     type: OS::Nova::Server

@@ -10,14 +10,20 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.lbSvcPort = 80;
-        ct.data.servicePort = 80;
+        ct.data.lbSvcPort = 8080;
+        ct.data.servicePort = 8080;
+
+        // 선택 불가 포트
+        ct.usingPorts.single        = [8005, 8009];
+        ct.usingPorts.cluster       = [8005, 8009];
 
         // 테스트
-        ct.data.deployName = "톰캣";
-        ct.data.stackName = "tomcat";
-        ct.data.deployType = "cluster";
-        ct.data.octaviaLbUse = true;
+        if (ct.testInput) {
+            ct.data.deployName = "톰캣";
+            ct.data.stackName = "tomcat";
+            ct.data.deployType = "single";
+            ct.data.octaviaLbUse = false;
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {

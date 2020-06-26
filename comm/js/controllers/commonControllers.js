@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('common.controllers', [])
-// 최초 접속 혹은 새로고침 시 as main
+    // 최초 접속 혹은 새로고침 시 as main
     .controller('mainCtrl', function ($scope, $location, $state, $stateParams, $translate, $window, $timeout, $interval, $cookies, cache, cookies, user, common, portal, userSettingService, CONSTANTS, FileUploader, memberService) {
         _DebugConsoleLog('commonControllers.js : mainCtrl Start, path : ' + $location.path(), 1);
 
@@ -115,6 +115,7 @@ angular.module('common.controllers', [])
         mc.connectType = _CONNECT_SITE_;
 
         mc.noticeList = [];     //팝업 공지사항 목록
+        mc.myMenus = [];        //메뉴 즐겨찾기 조회
 
         if (_MENU_TYPE_ == 'part') {
             mc.commLayerMenuTempeUrl = _COMM_VIEWS_ + '/menu/commLayerMenu.html' + _VERSION_TAIL_;
@@ -1584,6 +1585,7 @@ angular.module('common.controllers', [])
                 if (data.resultCode == 0) {
                     mc.notifications = data.items;
                     mc.notificationCount = data.itemCount;
+                    //console.log("mc.notifications : ", mc.notifications);
                 }
             });
         };
@@ -1630,9 +1632,53 @@ angular.module('common.controllers', [])
             portal.notice.setNoticeList(mc);
         };
 
+        //메뉴 즐겨찾기 조회
+        mc.getMyMenus = function () {
+            var promise = portal.menu.getMyMenuList();
+            promise.success(function (data) {
+                mc.myMenus = data.items;
+                //console.log("mc.myMenus : ", mc.myMenus);
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+                // mc.loadingMainBody = false;
+            });
+        };
+        mc.getMyMenus();
+
+        //전체 메뉴 화면에서 메뉴 즐겨찾기 여부 확인
+        mc.checkMyMenuByAllMenu = function (menuId) {
+            var rtVal = false;
+            var i = mc.myMenus.findIndex(i => i.id === menuId);
+            if (i > -1) rtVal = true;
+            return rtVal;
+        };
+
+        //전체 메뉴 화면에서 메뉴 즐겨찾기 추가/삭제
+        mc.clickMyMenu = function (menuId) {
+            var indexMyMenu = mc.myMenus.findIndex(i => i.id === menuId);
+            var isAdd = true;
+            if (indexMyMenu > -1) isAdd = false;
+            if (isAdd) {
+                var promise = portal.menu.addMymenu(menuId);
+            } else {
+                var promise = portal.menu.deleteMymenu(menuId);
+            }
+            promise.success(function (data) {
+                mc.myMenus = data.items;
+                //console.log("addMymenu > mc.myMenus : ", mc.myMenus);
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+                // mc.loadingMainBody = false;
+            });
+        };
+
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
-    // 매인 BODY Conroller
+    // 메인 BODY Conroller
     .controller('mainBodyCtrl', function ($scope, $location, $templateCache, $state, $stateParams, $timeout, $interval, $window, $translate, user, common, CONSTANTS) {
         _DebugConsoleLog("commonControllers.js : mainBodyCtrl Start, path : " + $location.path(), 1);
 

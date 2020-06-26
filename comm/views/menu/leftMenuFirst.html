@@ -43,66 +43,23 @@
                                     {{ main.notificationCount }} New Notifications
                                 </div>
                                 <ul class="notification-content">
-                                    <li class="notification-type{{ key + 1 }}" ng-repeat="(key, notiItem) in main.notifications | limitTo:5">
+                                    <li ng-repeat="notiItem in main.notifications | limitTo:5" ng-class="{'notification-type1' : notiItem.receiver == 'u', 'notification-type2' : notiItem.receiver == 'p'}">
                                         <a href="{{ notiItem.url }}" target="_blank">
                                             <div class="round">
-                                                <i class="far fa-comment-alt"></i>
+                                                <i class="far" ng-class="{'fa-user' : notiItem.receiver == 'u', 'fa-folder' : notiItem.receiver == 'p'}"></i>
                                             </div>
                                             <div class="text">
                                                 <strong class="title">
                                                     {{ notiItem.message }}
                                                 </strong>
-                                                <span>
-                                                    {{ notiItem.time.time | date : "yyyy-MM-dd HH:mm" }}
-                                                </span>
+                                                <div class="clear">
+                                                    <span class="date">
+                                                        {{ notiItem.time.time | date : "yyyy-MM-dd HH:mm" }}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </a>
                                     </li>
-                                    <!--<li class="notification-type2">
-                                        <a href="">
-                                            <div class="round">
-                                                <i class="far fa-envelope"></i>
-                                            </div>
-                                            <div class="text">
-                                                <strong class="title">
-                                                    New Message
-                                                </strong>
-                                                <span>
-                                                    Are Your goning to meet me
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-type3">
-                                        <a href="">
-                                            <div class="round">
-                                                <i class="far fa-comment-alt"></i>
-                                            </div>
-                                            <div class="text">
-                                                <strong class="title">
-                                                    New Message
-                                                </strong>
-                                                <span>
-                                                    Are Your goning to meet me
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="notification-type4">
-                                        <a href="">
-                                            <div class="round">
-                                                <i class="far fa-comment-alt"></i>
-                                            </div>
-                                            <div class="text">
-                                                <strong class="title">
-                                                    New Message
-                                                </strong>
-                                                <span>
-                                                    Are Your goning to meet me
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>-->
                                 </ul>
                                 <div class="notification-show">
                                     <a href="#/comm/notification">
@@ -143,7 +100,7 @@
                                 </li>
                                 <li>
                                     <a href="#/comm/boards/qna">
-                                        <i class="fas fa-microphone"></i>
+                                        <i class="fas fa-comment-alt"></i>
                                         <span>문의하기</span>
                                     </a>
                                 </li>

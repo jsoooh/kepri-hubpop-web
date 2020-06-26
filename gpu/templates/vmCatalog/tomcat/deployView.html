@@ -4,7 +4,9 @@
         <ul>
             <li>
                 <strong class="tit">접속 IP</strong>
-                <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
             </li>
         </ul>
         <ul>
@@ -19,8 +21,16 @@
         <h5> 서비스 환경 설정 파일 경로</h5>
         <ul>
             <li>
-                <strong class="tit">haproxy.cfg: </strong>
-                <span class="txt">/etc/haproxy.cfg</span>
+                <strong class="tit">tomcat home path: </strong>
+                <span class="txt">/usr/local/tomcat</span>
+            </li>
+            <li>
+                <strong class="tit">tomcat conf path: </strong>
+                <span class="txt">/usr/local/tomcat/conf</span>
+            </li>
+            <li>
+                <strong class="tit">web root path: </strong>
+                <span class="txt">/usr/local/tomcat/webapps/ROOT</span>
             </li>
         </ul>
     </div>

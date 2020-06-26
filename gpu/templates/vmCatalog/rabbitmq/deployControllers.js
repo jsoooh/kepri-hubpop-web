@@ -13,21 +13,25 @@ angular.module('gpu.controllers')
 
         ct.data.servicePort = 5672;
         ct.data.managementPort = 15672;
-        ct.data.lbSvcPort = 5672;
-        ct.data.checkPort = 9898;
+        ct.data.epmdPort = 4369;
+        ct.data.erlangPort = 25672;
+        ct.data.erlangCookie = "CMAXAFWPGKUBELOPUZOP";
 
         // 테스트 입력값
-        ct.data.deployName = "래빗엠큐";
-        ct.data.stackName = "Rabbitmq";
+        if(ct.testInput) {
+            ct.data.deployName = "래빗엠큐";
 
-        ct.data.adminPassword = "Crossent!234";
-        ct.data.adminConfirmPassword = "Crossent!234";
-        ct.data.erlangCookie = "CMAXAFWPGKUBELOPUZOP";
+            ct.data.stackName = "Rabbitmq";
+            ct.data.adminPassword = "Crossent!234";
+            ct.data.adminConfirmPassword = "Crossent!234";
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.amqp_port = ct.data.servicePort;
             vmCatalogDeploy.parameters.management_port = ct.data.managementPort;
+            vmCatalogDeploy.parameters.epmd_port = ct.data.epmdPort;
+            vmCatalogDeploy.parameters.erlang_port = ct.data.erlangPort;
             vmCatalogDeploy.parameters.admin_password = ct.data.adminPassword;
             if(ct.data.deployType == "cluster") {
                 vmCatalogDeploy.parameters.erlang_cookie = ct.data.erlangCookie;

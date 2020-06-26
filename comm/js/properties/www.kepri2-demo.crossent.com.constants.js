@@ -62,7 +62,8 @@ angular.module('app')
             myProjectsKey: "MY_PROJECTS",
             myJobsKey: "MY_JOBS",
             myQuickMenusKey: "MY_QUICK_MENUS",
-            personalProjectCnt: "personal_project_cnt"
+            personalProjectCnt: "personal_project_cnt",
+            userMenuBookmark: "user_menu_bookmark"     //사용자 my service
         },
         rdpConnect: {
             baseDomain: "wins.hubpop.io",
@@ -427,7 +428,9 @@ angular.module('app')
                 ['TextColor', 'BGColor'],
                 ['Table', 'SpecialChar', 'Link', 'Unlink']
             ]
-        }
+        },
+        startYear: 2019,
+        startMonth: 12
     })
     .constant('tenantChartConfig', [
         {

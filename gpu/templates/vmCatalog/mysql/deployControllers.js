@@ -17,17 +17,18 @@ angular.module('gpu.controllers')
         ct.data.checkPort = 9898;
 
         // 테스트 입력값
-        ct.data.deployName = "마이에스큐엘";
-        ct.data.stackName = "Mysql";
+        if(ct.testInput) {
+            ct.data.deployName = "마이에스큐엘";
+            ct.data.stackName = "Mysql";
 
-        ct.data.rootPassword = "Crossent!234";
-        ct.data.rootConfirmPassword = "Crossent!234";
-        ct.data.createUser = true;
-        ct.data.createUserId = "kepri";
-        ct.data.createDbName = "kepri";
-        ct.data.createUserPassword = "Kepri!234";
-        ct.data.createUserConfirmPassword = "Kepri!234";
-
+            ct.data.rootPassword = "Crossent!234";
+            ct.data.rootConfirmPassword = "Crossent!234";
+            ct.data.createUser = true;
+            ct.data.createUserId = "kepri";
+            ct.data.createDbName = "kepri";
+            ct.data.createUserPassword = "Kepri!234";
+            ct.data.createUserConfirmPassword = "Kepri!234";
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {

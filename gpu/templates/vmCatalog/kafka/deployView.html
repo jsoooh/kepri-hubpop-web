@@ -1,0 +1,39 @@
+<div class="ctlog_cntWrap">
+    <div class="ctlog-cnt">
+        <h5>서비스 접속정보</h5>
+        <ul>
+            <li>
+                <strong class="tit">접속 IP</strong>
+                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span class="txt" ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'">각 서버로 접속</span>
+            </li>
+            <li>
+                <strong class="tit">Kafka 계정</strong>
+                <span class="txt">Kafka 접속 하여 생성</span>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <strong class="tit">Kafka 포트</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port}}</span>
+            </li>
+            <li>
+                <strong class="tit">Zookeeper</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.zookeeper_port}}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="ctlog-cnt">
+        <h5> 서비스 환경 설정 파일 경로</h5>
+        <ul>
+            <li>
+                <strong class="tit">kafka: </strong>
+                <span class="txt">/home/kafka/kafka/config/server.properties</span>
+            </li>
+            <li>
+                <strong class="tit">zookeeper: </strong>
+                <span class="txt">/home/kafka/kafka/config/zookeeper.properties</span>
+            </li>
+        </ul>
+    </div>
+</div>

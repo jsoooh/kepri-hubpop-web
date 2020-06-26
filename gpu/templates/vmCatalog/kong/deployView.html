@@ -1,0 +1,58 @@
+<div class="ctlog_cntWrap">
+    <div class="ctlog-cnt">
+        <h5>서비스 접속정보</h5>
+        <ul>
+            <li>
+                <strong class="tit">접속 IP</strong>
+                <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+            </li>
+            <li>
+                <strong class="tit">Konga 계정</strong>
+                <span class="txt">Konga 접속 하여 생성</span>
+            </li>
+            <li>
+                <strong class="tit">Kong DB 계정</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.kong_user_id }}</span>
+            </li>
+            <li>
+                <strong class="tit">Konga DB 계정</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_user_id }}</span>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <strong class="tit">Konga 포트</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_port }}</span>
+            </li>
+            <li>
+                <strong class="tit">DB Port</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.pg_port }}</span>
+            </li>
+            <li>
+                <strong class="tit">Kong DB 명</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_db_name }}</span>
+            </li>
+            <li>
+                <strong class="tit">Konga DB 명</strong>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_user_id }}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="ctlog-cnt">
+        <h5> 서비스 환경 설정 파일 경로</h5>
+        <ul>
+            <li>
+                <strong class="tit">postgresql data path: </strong>
+                <span class="txt">/var/lib/pgsql/11/data</span>
+            </li>
+            <li>
+                <strong class="tit">kong.conf path: </strong>
+                <span class="txt">/etc/kong/kong.conf</span>
+            </li>
+            <li>
+                <strong class="tit">Konga Home path: </strong>
+                <span class="txt">/home/centos/konga-0.14.7</span>
+            </li>
+        </ul>
+    </div>
+</div>

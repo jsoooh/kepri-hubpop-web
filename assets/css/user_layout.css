@@ -318,10 +318,11 @@ html {
   color: #414141;
   margin-bottom: 5px;
 }
-#header .left-wrap > .header-bottom .notification-wrap .notification-content > li .text span {
+#header .left-wrap > .header-bottom .notification-wrap .notification-content > li .text .date {
   display: block;
   color: #7f7f7f;
-  font-size: 13px;
+  font-size: 12px;
+  float: right;
 }
 #header .left-wrap > .header-bottom .notification-wrap .notification-content > li.notification-type2 .round {
   background: #8fa4ae;
@@ -383,7 +384,7 @@ html {
   color: #dd124b;
 }
 #pageWrap.all-menu-open {
-  height: 1100px;
+  height: 100vh;
   overflow-y: hidden;
 }
 #pageWrap.all-menu-open #header {
@@ -396,7 +397,7 @@ html {
   top: 0;
   left: 70px;
   width: 0;
-  height: 1100px;
+  height: inherit;
   background: #1a386d;
   color: #fff;
   z-index: -1;
@@ -412,6 +413,7 @@ html {
   display: block;
   z-index: 10;
   width: calc(100% - 70px);
+  overflow-y: auto;
 }
 #allMenu .all-menu-wrap {
   width: 1202px;
@@ -585,7 +587,7 @@ html {
   background-color: #fff;
   min-height: inherit;
   border-right: 1px solid #e5e6ed;
-  z-index: 2;
+  z-index: 10;
 }
 #lnbWrap #lnb .title-project {
   height: 80px;
@@ -954,6 +956,10 @@ html {
   position: relative;
   z-index: 1;
 }
+#contentWrap .page-content .inner-wrap {
+  padding: 20px 25px;
+  position: relative;
+}
 /* 모달 팝업 스타일 재정의 */
 /* 임시 스타일 정의 - componet lg 사이즈는 800px */
 .modal-dialog.modal-lg {
@@ -977,7 +983,6 @@ html {
 }
 .modal-header .modal-title {
   float: left;
-  font-size: 20px;
   color: #232323;
   font-weight: 400;
 }

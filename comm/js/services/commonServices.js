@@ -79,8 +79,8 @@ angular.module('common.services', ['LocalStorageModule'])
             cookies.setTeamCode(teamCode);
         };
 
-        common.setTemeCode = function () {
-            cookies.setTeamCode();
+        common.clearTeamCode = function () {
+            cookies.clearTeamCode();
         };
 
         // userTenantId
@@ -97,8 +97,7 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         // gpuUserTenantId
-        /*
-        common.getGpuUserTenantId = function () {
+        /*common.getGpuUserTenantId = function () {
             return cookies.getUserTenantId();
         };
 
@@ -108,8 +107,7 @@ angular.module('common.services', ['LocalStorageModule'])
 
         common.clearGpuUserTenantId = function () {
             cookies.clearUserTenantId();
-        };
-         */
+        };*/
 
         // company
         common.getRegionChangToPath = function () {
@@ -3329,7 +3327,7 @@ angular.module('common.services', ['LocalStorageModule'])
             $cookies.put(_PROJECT_CODE_COOKIE_NAME_, teamCode, cookiesOption);
         };
 
-        cookies.setTemeCode = function () {
+        cookies.clearTeamCode = function () {
             $cookies.remove(_PROJECT_CODE_COOKIE_NAME_, cookiesOption);
         };
 
@@ -3347,8 +3345,7 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         // gpuUserTenantId
-        /*
-        cookies.getGpuUserTenantId = function () {
+        /*cookies.getGpuUserTenantId = function () {
             return $cookies.get(_GPU_TENANT_ID_COOKIE_NAME_);
         };
 
@@ -3358,8 +3355,7 @@ angular.module('common.services', ['LocalStorageModule'])
 
         cookies.clearGpuUserTenantId = function () {
             $cookies.remove(_GPU_TENANT_ID_COOKIE_NAME_, cookiesOption);
-        };
-        */
+        };*/
 
         cookies.getLeftMenuShow = function () {
             return $cookies.get(_LEFT_MENU_SHOW_COOKIE_NAME_);
@@ -3379,6 +3375,7 @@ angular.module('common.services', ['LocalStorageModule'])
             cookies.clearUser();
             cookies.clearPortalOrgKey();
             cookies.clearUserTenantId();
+            cookies.clearTeamCode();
         };
 
         var dtFormat = 'YYYY-MM-DD HH:mm';

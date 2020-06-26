@@ -3,6 +3,8 @@ heat_template_version: '2018-08-31'
 description: rabbitmq cluster template
 
 parameters:
+  api_end_point:
+    type: string
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Rabbitmq.qcow2
@@ -78,6 +80,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -93,11 +97,16 @@ resources:
           template: |
             #!/bin/sh
             echo "rabbitmq setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
+            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
+            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
+            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_hostname
-            $server2_ip_address $server2_hostname
-            $server3_ip_address $server3_hostname
+            $server1_ip_address $server1_tmp_hostname
+            $server2_ip_address $server2_tmp_hostname
+            $server3_ip_address $server3_tmp_hostname
             EOF
 
             systemctl start rabbitmq-server
@@ -126,13 +135,31 @@ resources:
               nc -z $server2_ip_address $amqp_port
               server2Run=$?
               echo "nc -z $server2_ip_address $amqp_port > $server2Run"
-              sleep 10
+              sleep 5
+            done
+
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $amqp_port"
+              nc -z $server3_ip_address $amqp_port
+              server3Run=$?
+              echo "nc -z $server3_ip_address $amqp_port > $server2Run"
+              sleep 5
             done
 
             kill -9 $nc_pid
 
+            rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'
+            sleep 1
+
+            rabbitmqctl add_user admin $admin_password
+            rabbitmqctl set_user_tags admin administrator
+            rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+
+
             systemctl enable rabbitmq-server
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "rabbitmq setting end"
 
   init_config2:
@@ -142,6 +169,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -157,11 +186,16 @@ resources:
           template: |
             #!/bin/sh
             echo "rabbitmq setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
+            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
+            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
+            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_hostname
-            $server2_ip_address $server2_hostname
-            $server3_ip_address $server3_hostname
+            $server1_ip_address $server1_tmp_hostname
+            $server2_ip_address $server2_tmp_hostname
+            $server3_ip_address $server3_tmp_hostname
             EOF
 
             server1Run=1
@@ -185,25 +219,10 @@ resources:
             sleep 1
             rabbitmqctl stop_app
             sleep 1
-            rabbitmqctl join_cluster --ram rabbit@$server1_hostname
+            rabbitmqctl join_cluster --ram rabbit@$server1_tmp_hostname
             sleep 1
             rabbitmqctl start_app
             sleep 1
-
-            nohup nc -kl $nc_check_port 2>&1 &
-            nc_pid=$!
-
-            server3Run=1
-            while [ $server3Run -ne 0 ]
-            do
-              echo "nc -z $server3_ip_address $amqp_port"
-              nc -z $server3_ip_address $amqp_port
-              server3Run=$?
-              echo "nc -z $server3_ip_address $amqp_port > $server3Run"
-              sleep 10
-            done
-
-            kill -9 $nc_pid
 
             systemctl enable rabbitmq-server
             echo "rabbitmq setting end"
@@ -215,6 +234,8 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -230,20 +251,25 @@ resources:
           template: |
             #!/bin/sh
             echo "rabbitmq setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
+            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
+            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
+            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_hostname
-            $server2_ip_address $server2_hostname
-            $server3_ip_address $server3_hostname
+            $server1_ip_address $server1_tmp_hostname
+            $server2_ip_address $server2_tmp_hostname
+            $server3_ip_address $server3_tmp_hostname
             EOF
 
-            server2Run=1
-            while [ $server2Run -ne 0 ]
+            server1Run=1
+            while [ $server1Run -ne 0 ]
             do
-              echo "nc -z $server2_ip_address $nc_check_port"
-              nc -z $server2_ip_address $nc_check_port
-              server2Run=$?
-              echo "nc -z $server2_ip_address $nc_check_port > $server2Run"
+              echo "nc -z $server1_ip_address $nc_check_port"
+              nc -z $server1_ip_address $nc_check_port
+              server1Run=$?
+              echo "nc -z $server1_ip_address $nc_check_port > $server1Run"
               sleep 10
             done
 
@@ -258,17 +284,10 @@ resources:
             sleep 1
             rabbitmqctl stop_app
             sleep 1
-            rabbitmqctl join_cluster --ram rabbit@$server1_hostname
+            rabbitmqctl join_cluster --ram rabbit@$server1_tmp_hostname
             sleep 1
             rabbitmqctl start_app
             sleep 1
-
-            rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'
-            sleep 1
-
-            rabbitmqctl add_user admin $admin_password
-            rabbitmqctl set_user_tags admin administrator
-            rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
 
             systemctl enable rabbitmq-server
             echo "rabbitmq setting end"
@@ -325,8 +344,6 @@ outputs:
     value:
       - instance: { get_attr: [ server1, show ] }
         instancePort: { get_attr: [ server1_port, show ] }
-        managementPort: { get_param: management_port }
-        amqpPort: { get_param: amqp_port }
       - instance: { get_attr: [ server2, show ] }
         instancePort: { get_attr: [ server2_port, show ] }
       - instance: { get_attr: [ server3, show ] }

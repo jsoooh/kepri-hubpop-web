@@ -34,7 +34,6 @@ angular.module('perf.services')
 
         // sltMonth, when change year
         perfCommonService.monthWhenChangeYear = function(prevSltYear, sltYear) {
-            console.log("-- monthWhenChangeYear --" + prevSltYear+":"+sltYear);
             var listPerfMonth = perfCommonService.listPerfMonth(sltYear);
             var sltMonth = null;
             if (prevSltYear > sltYear) {
@@ -42,7 +41,6 @@ angular.module('perf.services')
             } else if (prevSltYear < sltYear) {
                 sltMonth = listPerfMonth[0];
             } else {
-                console.log("prevSltYear == sltYear");
                 sltMonth = -1;
             }
             return sltMonth;

@@ -1,0 +1,120 @@
+<ul class="pn_list_style">
+    <li>
+        <div class="panel_box pn_l">
+            <div class="pn_head">
+                <h4 class="pnh_tit">{{ contents.vmCatalogInfo.catalogName }} 서비스 만들기</h4>
+            </div>
+            <form name="subPage.deployForm" novalidate>
+                <input type="password" style="display: block; width:0px; height:0px; border: 0;"><!-- 아이디 패스워드 자동 입력 방지 -->
+                <div class="pn_body">
+                    <span class="sm_txt">* 는 필수입력 사항입니다.</span>
+                    <ul class="form_list">
+                        <li ng-include="contents.htmlUrls.deployName"></li>
+                        <li ng-include="contents.htmlUrls.stackName"></li>
+                        <li>
+                            <div class="pnb_tit">
+                                <i class="i_star"></i> <span class="pnb_t_txt">Konga 서비스 포트</span>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'Konga 서비스의 Listen 포트'"><span class="ico_info"></span></button></div>
+                            </div>
+                            <input type="text" name="kongaPort" class="form-control" maxlength="50" ng-model="contents.data.kongaPort" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck('single', contents.data.kongaPort)|custom:contents.fn.kongPortCustomValidationCheck(contents.data.kongaPort, 'konga')" placeholder="Konga 서비스 포트를 입력하세요." >
+                        </li>
+                        <li>
+                            <div class="pnb_tit">
+                                <i class="i_star"></i> <span class="pnb_t_txt">DB(Postgresql) 정보</span>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'Kong 및 Konga 서비스에서 사용 할 Postgresql DB를 생성하기 위한 정보 입니다.'"><span class="ico_info"></span></button></div>
+                            </div>
+                            <div class="tbw type1 mt20">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width:20%;">
+                                        <col style="width:">
+                                        <col style="width:20%;">
+                                        <col style="width:;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th><i class="i_star"></i> DB Port</th>
+                                        <td colspan="3"><input type="text" name="pgPort" class="form-control" maxlength="50" ng-model="contents.data.pgPort" placeholder="포트" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck('single', contents.data.pgPort)|custom:contents.fn.kongPortCustomValidationCheck(contents.data.pgPort, 'pg')" placeholder="DB 포트를 입력하세요." ></td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="i_star"></i> 관리 비밀번호</th>
+                                        <td><input type="password" name="pgPassword" class="form-control" maxlength="50" ng-model="contents.data.pgPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
+                                        <th><i class="i_star"></i> 관리 비밀번호 확인</th>
+                                        <td><input type="password" name="pgConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.pgConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.pgPassword, contents.data.pgConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pnb_tit">
+                                <i class="i_star"></i> <span class="pnb_t_txt">Kong DB 계정 및 DB 생성 정보</span>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'Kong 서비스에서 사용 할 Postgresql 계정 및 DB를 생성하기 위한 정보 입니다.'"><span class="ico_info"></span></button></div>
+                            </div>
+                            <div class="tbw type1 mt20">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width:20%;">
+                                        <col style="width:">
+                                        <col style="width:20%;">
+                                        <col style="width:;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th><i class="i_star"></i> 계정명</th>
+                                        <td><input type="text" name="kongUserId" class="form-control" maxlength="50" ng-model="contents.data.kongUserId" placeholder="계정명" ></td>
+                                        <th><i class="i_star"></i> DB명</th>
+                                        <td><input type="text" name="kongUserIdDbName" class="form-control" maxlength="50" ng-model="contents.data.kongDbName" placeholder="DB명" ></td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="i_star"></i> 계정 비밀번호</th>
+                                        <td><input type="password" name="kongUserPassword" class="form-control" maxlength="50" ng-model="contents.data.kongUserPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
+                                        <th><i class="i_star"></i> 계정 비밀번호 확인</th>
+                                        <td><input type="password" name="kongUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.kongUserConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.kongUserPassword, contents.data.kongUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pnb_tit">
+                                <i class="i_star"></i> <span class="pnb_t_txt">Konga DB 계정 및 DB 생성 정보</span>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'Konga 서비스에서 사용 할 Postgresql 계정 및 DB를 생성하기 위한 정보 입니다.'"><span class="ico_info"></span></button></div>
+                            </div>
+                            <div class="tbw type1 mt20">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width:20%;">
+                                        <col style="width:">
+                                        <col style="width:20%;">
+                                        <col style="width:;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th><i class="i_star"></i> 계정명</th>
+                                        <td><input type="text" name="kongaUserId" class="form-control" maxlength="50" ng-model="contents.data.kongaUserId" placeholder="계정명" ></td>
+                                        <th><i class="i_star"></i> DB명</th>
+                                        <td><input type="text" name="kongaUserIdDbName" class="form-control" maxlength="50" ng-model="contents.data.kongaDbName" placeholder="DB명" ></td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="i_star"></i> 계정 비밀번호</th>
+                                        <td><input type="password" name="kongaUserPassword" class="form-control" maxlength="50" ng-model="contents.data.kongaUserPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
+                                        <th><i class="i_star"></i> 계정 비밀번호 확인</th>
+                                        <td><input type="password" name="kongaUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.kongaUserConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.kongaUserPassword, contents.data.kongaUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                        <li ng-include="contents.htmlUrls.zoneSelect"></li>
+                        <li ng-include="contents.htmlUrls.specSelect"></li>
+                    </ul>
+                </div>
+            </form>
+            <div class="pn_footer" ng-include="contents.htmlUrls.createDeployBtn"></div>
+        </div>
+    </li>
+    <li>
+        <div class="panel_box pn_r" ng-include="contents.htmlUrls.createDeployInfo"></div>
+    </li>
+</ul>

@@ -11,7 +11,7 @@
 <div class="btnArea text-right">
     <!-- 선택 된 class="on" 추가 -->
     <button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
-    <button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트</button>
+    <button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트형</button>
 </div>
 <!-- //목록 이미지형/리스트형 선택 버튼 -->
 
@@ -106,14 +106,19 @@
                             <span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
                         </td>
                         <td>{{ instance.image.osType }}</td>
+                        <!--
                         <td ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></td>
+                        -->
+                        <td ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></td>
                         <td ng-if="instance.image.osType == 'windows'">{{ instance.rdpDomain }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button></td>
+
                         <td>{{ instance.spec.vcpus }} 개</td>
                         <td>{{ (instance.spec.ram / 1024 | number:1).replace('.0', '') }}</td>
                         <td>{{ instance.spec.disk }}</td>
                         <td ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></td>
                         <td ng-if="instance.image.osType == 'windows'">-</td>
                         <td>
+                            <!--
                             <div ng-if="instance.alarmStatus">
                                     <span class="stateWrap">
                                         <span ng-if="!instance.alarmOccur && instance.vmState == 'active'" class="stateMark type1">정상배포</span>
@@ -126,6 +131,16 @@
                                         <span class="state-txt" ng-if="!instance.alarmOccur">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
                                         <span class="state-txt" ng-if="instance.alarmOccur">{{ 'iaas.label.instance_' + instance.alarmStatus | translate }}</span>
                                     </span>
+                            </div>
+                            -->
+                            <div>
+                                <span class="stateWrap">
+                                    <span ng-if="instance.vmState == 'active'" class="stateMark type1">정상배포</span>
+                                    <span ng-if="instance.vmState == 'error'" class="stateMark type2">오류</span>
+                                    <span ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building' || instance.vmState == 'shelved_offloaded'" class="stateMark type4">대기</span>
+                                    <span ng-if="instance.vmState == 'stopped'" class="stateMark type3">중지</span>
+                                    <span class="state-txt">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
+                                </span>
                             </div>
                         </td>
                         <td>{{instance.created | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
@@ -226,28 +241,50 @@
                             </div>
                             <div class="panel_body">
                                 <!-- 접속정보 -->
+                                <!--
                                 <div class="tg_box" ng-show="instance.showVal">
+                                -->
+                                <!--
+                                <div class="tg_box">
+                                -->
+                                <div style="padding-left: 20px;">
+
+                                    <!--
                                     <div class="tgb_head">
                                         <p class="tit">접속 정보</p>
+                                        <! --
                                         <button class="close_sm" ng-click="contents.showInfo(instance);">닫기</button>
+                                        -- >
                                     </div>
+                                    -->
+
                                     <!-- ubuntu  -->
                                     <div ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'" class="tgb_body">
                                         <ul>
+                                            <p class="tb_tit"></p>
                                             <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
                                             <!--<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>--><!-- vnc 사용할 경우 a태그에 class="ext_link" 지정하여 링크스타일 적용. <a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)"></a>-->
+                                            <!--
                                             <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
+                                            -->
+                                            <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
                                             <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
                                             <li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></li>
                                         </ul>
                                         <div class="guide_link">
+                                            <!--
                                             <a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">접속방법 가이드</a>
+                                            -->
+                                            <a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.fixedIp, osType: instance.image.osType});">접속방법 가이드</a>
                                         </div>
                                         <div class="guide_link">
+                                            <!--
                                             <a href="" ng-click="main.showRightSliderContents($event, 'AGENT 설치 가이드', '/guideInfo/installGuideMonitAgent.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});">AGENT 설치 가이드</a>
+                                            -->
+                                            <a href="" ng-click="main.showRightSliderContents($event, 'AGENT 설치 가이드', '/guideInfo/installGuideMonitAgent.html', {floatingIp : instance.fixedIp, osType: instance.image.osType});">AGENT 설치 가이드</a>
                                         </div>
                                         <div class="cnt_wrap" style="padding:5px;">
-                                            <div class="cnt_infoBox" style="padding-left:80px;">
+                                            <div class="cnt_infoBox">
                                                 <button tooltip-placement="center" tooltip-class="tooltip_long" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instance, 'server');">
                                                     <span class="cnt_tooltip type02" style="padding:1px 10px 1px 13px; margin: 0px;" >설명
                                                         <span class="ico_tip"></span>
@@ -285,6 +322,7 @@
                                 <!-- //접속정보 -->
                                 <!--<div ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id);" class="ul-in">-->
                                 <div ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id);" class="ul-in">
+                                    <!--
                                     <div class="up">
                                         <ul class="ul-prog">
                                             <li>
@@ -298,8 +336,10 @@
                                                 <span class="percent_txt">{{ instance.cpuUsage | number }}<span>%</span></span>
                                                 <strong class="tit mt10">CPU</strong>
                                                 <span class="flavor_info">{{instance.spec.vcpus}} 개</span>
+
                                             </li>
                                             <li>
+
                                                 <div class="progressWrap type1">
                                                     <div class="progress">
                                                         <div percent-progress-bar-animate bar-type="height" percent="{{ instance.memoryUsage | number }}" class="progress">
@@ -308,8 +348,10 @@
                                                     </div>
                                                 </div>
                                                 <span class="percent_txt">{{ instance.memoryUsage | number }}<span>%</span></span>
+
                                                 <strong class="tit mt10">Memory</strong>
                                                 <span class="flavor_info">{{(instance.spec.ram/1024|number:1).replace('.0', '')}} GB</span>
+
                                             </li>
                                             <li>
                                                 <div class="progressWrap type1">
@@ -320,11 +362,13 @@
                                                     </div>
                                                 </div>
                                                 <span class="percent_txt">{{ instance.diskUsage | number }}<span>%</span></span>
+
                                                 <strong class="tit mt10">Disk</strong>
                                                 <span class="flavor_info">{{instance.spec.disk}} GB</span>
                                             </li>
                                         </ul>
                                     </div>
+                                    -->
                                     <!--
                                     <div ng-if="!instance.alarmStatus" class="down">
                                         <p><img src="images/loading_sm.gif"></p>
@@ -533,7 +577,10 @@
                             <a ng-click="main.goToPage('/gpu/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}</a>
                         </td>
                         <td>{{ lbServiceList.iaasLbPorts.length }}</td>
+                        <!--
                         <td>{{ lbServiceList.iaasLbInfo.floatingIp }}<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectLbInfoToClipboard(lbServiceList.iaasLbInfo)"><span class="ico_sm ico_copy"></span></button></td>
+                        -->
+                        <td>{{ lbServiceList.iaasLbInfo.ipAddress }}<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectLbInfoToClipboard(lbServiceList.iaasLbInfo)"><span class="ico_sm ico_copy"></span></button></td>
                         <td>{{ lbServiceList.iaasLbInfo.description }}</td>
                         <td>{{ lbServiceList.iaasLbInfo.created | date: 'yyyy.MM.dd HH:mm:ss'}}</td>
                         <td>

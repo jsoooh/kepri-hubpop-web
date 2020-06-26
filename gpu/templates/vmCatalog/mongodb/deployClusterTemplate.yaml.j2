@@ -1,0 +1,950 @@
+heat_template_version: '2018-08-31'
+
+description: mongoDB Cluster Volume template
+
+parameters:
+  api_end_point:
+    type: string
+  image:
+    type: string
+    default: CentOS-7-x86_64-Heat-1907-Mongodb.qcow2
+  flavor:
+    type: string
+    default: m1.small
+  availability_zone:
+    type: string
+    default: zone01
+  key_name:
+    type: string
+    default: heat_stack_octavia_test_keypair
+  security_group:
+    type: string
+    default: default
+  provider_net:
+    type: string
+    default: provider01
+  provider_subnet:
+    type: string
+    default: provider01-01
+  check_port:
+    type: string
+    default: 9994
+  mongo_port1:
+    type: string
+    default: 27020
+  mongo_port2:
+    type: string
+    default: 27030
+  mongo_port3:
+    type: string
+    default: 27040
+  config_port:
+    type: string
+    default: 27011
+  service_port:
+    type: string
+    default: 27017
+{% if volumeUse %}
+  volume_type:
+    type: string
+    default: RBD
+  volume_size:
+    type: string
+    default: 10
+  volume_mount_point:
+    type: string
+    default: /dev/vdb
+  volume_format_type:
+    type: string
+    default: xfs
+  volume_mount_path:
+    type: string
+    default: /mnt/data
+{% endif %}
+  admin_id:
+    type: string
+  admin_password:
+    type: string
+
+resources:
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+{% if volumeUse %}
+  cinder_volume1:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume2:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+
+  cinder_volume3:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      volume_type: { get_param: volume_type }
+{% endif %}
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      outputs:
+        - name: result
+      config:
+        str_replace:
+          params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $check_port: { get_param: check_port }
+            $mongo_port1: { get_param: mongo_port1 }
+            $mongo_port2: { get_param: mongo_port2 }
+            $mongo_port3: { get_param: mongo_port3 }
+            $config_port: { get_param: config_port }
+            $service_port: { get_param: service_port }
+            $admin_id: { get_param: admin_id }
+            $admin_password: { get_param: admin_password }
+          template: |
+            #!/bin/sh
+            echo "mongodb setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mongo $volume_mount_path/mongo
+            ln -s $volume_mount_path/mongo /var/lib/mongo
+            sleep 1
+{% endif %}
+
+            mkdir -p /var/lib/mongo/rs/data1
+            mkdir -p /var/lib/mongo/rs/data2
+            mkdir -p /var/lib/mongo/rs/data3
+
+            mkdir -p /var/lib/mongo/config/data
+
+            mkdir /var/lib/mongo/conf
+
+            chown -R mongod:mongod /var/lib/mongo
+
+            cat <<EOF> /var/lib/mongo/conf/mongod1.conf
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/mongod1.log
+              logAppend: true
+              logRotate: rename
+            storage:
+              engine: wiredTiger
+              directoryPerDB: true
+              wiredTiger:
+                engineConfig:
+                  journalCompressor: snappy
+                collectionConfig:
+                  blockCompressor: snappy
+                indexConfig:
+                  prefixCompression: true
+              dbPath: /var/lib/mongo/rs/data1
+              journal:
+                enabled: true
+                commitIntervalMs: 300
+            processManagement:
+              fork: true
+              pidFilePath: /var/run/mongodb/mongod1.pid
+            net:
+              port: $mongo_port1
+              bindIpAll: true
+              maxIncomingConnections: 20000
+              unixDomainSocket:
+                enabled: false
+            replication:
+              oplogSizeMB: 10240
+              replSetName: rs01
+            setParameter:
+              failIndexKeyTooLong: false
+            sharding:
+              clusterRole: shardsvr
+            EOF
+
+            cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod2.conf
+            cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/replSetName: rs01/replSetName: rs03/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/replSetName: rs01/replSetName: rs02/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/' /var/lib/mongo/conf/mongod3.conf
+
+            chown -R mongod:mongod /var/lib/mongo/conf
+
+            mkdir -p /var/run/mongodb
+            chown mongod:mongod /var/run/mongodb
+
+            mongod -f /var/lib/mongo/conf/mongod1.conf
+            mongod -f /var/lib/mongo/conf/mongod2.conf
+            mongod -f /var/lib/mongo/conf/mongod3.conf
+
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $mongo_port2"
+              nc -z $server2_ip_address $mongo_port2
+              server2Run=$?
+              echo "nc -z $server2_ip_address $mongo_port2 > $server2Run"
+              sleep 10
+            done
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $mongo_port3"
+              nc -z $server3_ip_address $mongo_port3
+              server3Run=$?
+              echo "nc -z $server3_ip_address $mongo_port3 > $server3Run"
+              sleep 10
+            done
+
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.initiate(
+              {
+                _id: "rs01",
+                version: 1,
+                members: [
+                  { _id: 0, host : "$server1_ip_address:$mongo_port1" },
+                  { _id: 1, host : "$server2_ip_address:$mongo_port2" },
+                  { _id: 2, host : "$server3_ip_address:$mongo_port3" }
+                ]
+              }
+            );
+            rs.status();
+            EOF
+
+            cat <<EOF> /var/lib/mongo/conf/config.conf
+            storage:
+              dbPath: /var/lib/mongo/config/data
+              journal:
+                enabled: true
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/config.log
+              logAppend: true
+            processManagement:
+              fork: true
+            net:
+              bindIpAll: true
+              port: $config_port
+            replication:
+              oplogSizeMB: 40960
+              replSetName: cstest
+            sharding:
+              clusterRole: configsvr
+
+            EOF
+
+            chown mongod:mongod /var/lib/mongo/conf/config.conf
+
+            mongod -f /var/lib/mongo/conf/config.conf
+
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $config_port"
+              nc -z $server2_ip_address $config_port
+              server2Run=$?
+              echo "nc -z $server2_ip_address $config_port > $server2Run"
+              sleep 10
+            done
+
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $config_port"
+              nc -z $server3_ip_address $config_port
+              server3Run=$?
+              echo "nc -z $server3_ip_address $config_port > $server3Run"
+              sleep 10
+            done
+
+            sleep 10
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.status();
+            use admin
+            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            EOF
+
+            mongo localhost:$config_port/admin <<EOF
+            rs.initiate(
+              {
+                _id: "cstest",
+                version: 1,
+                members: [
+                  { _id: 0, host : "$server1_ip_address:$config_port" },
+                  { _id: 1, host : "$server2_ip_address:$config_port" },
+                  { _id: 2, host : "$server3_ip_address:$config_port" }
+                ]
+              }
+            );
+            rs.status();
+            EOF
+
+            cat <<EOF> /var/lib/mongo/conf/mongos.conf
+            sharding:
+              configDB: "cstest/$server1_ip_address:$config_port,$server2_ip_address:$config_port,$server3_ip_address:$config_port"
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/mongos.log
+              logAppend: true
+            processManagement:
+              fork: true
+            net:
+              port: $service_port
+              bindIpAll: true
+              maxIncomingConnections: 30000
+            setParameter:
+              ShardingTaskExecutorPoolHostTimeoutMS : 3600000
+              ShardingTaskExecutorPoolMaxSize : 20
+              ShardingTaskExecutorPoolMinSize : 10
+            EOF
+
+            chown mongod:mongod /var/lib/mongo/conf/mongos.conf
+
+            mongos -f /var/lib/mongo/conf/mongos.conf
+
+            sleep 1
+
+            mongo localhost:$service_port/admin <<EOF
+            sh.addShard("rs01/$server1_ip_address:$mongo_port1,$server2_ip_address:$mongo_port2,$server3_ip_address:$mongo_port3");
+            sh.addShard("rs02/$server2_ip_address:$mongo_port1,$server3_ip_address:$mongo_port2,$server1_ip_address:$mongo_port3");
+            sh.addShard("rs03/$server3_ip_address:$mongo_port1,$server1_ip_address:$mongo_port2,$server2_ip_address:$mongo_port3");
+
+            sh.status();
+
+            use admin
+            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            EOF
+
+            cat <<EOF>> /etc/rc.local
+            mongod -f /var/lib/mongo/conf/mongod1.conf
+            mongod -f /var/lib/mongo/conf/mongod2.conf
+            mongod -f /var/lib/mongo/conf/mongod3.conf
+            mongod -f /var/lib/mongo/conf/config.conf
+            mongos -f /var/lib/mongo/conf/mongos.conf
+            EOF
+
+            systemctl enable rc-local
+
+            echo "mongodb setting end"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      outputs:
+        - name: result
+      config:
+        str_replace:
+          params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $check_port: { get_param: check_port }
+            $mongo_port1: { get_param: mongo_port1 }
+            $mongo_port2: { get_param: mongo_port2 }
+            $mongo_port3: { get_param: mongo_port3 }
+            $config_port: { get_param: config_port }
+            $service_port: { get_param: service_port }
+            $admin_id: { get_param: admin_id }
+            $admin_password: { get_param: admin_password }
+          template: |
+            #!/bin/sh
+            echo "mongodb setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+            sleep 1
+
+            mv /var/lib/mongo $volume_mount_path/mongo
+            ln -s $volume_mount_path/mongo /var/lib/mongo
+            sleep 1
+{% endif %}
+
+            mkdir -p /var/lib/mongo/rs/data1
+            mkdir -p /var/lib/mongo/rs/data2
+            mkdir -p /var/lib/mongo/rs/data3
+
+            mkdir -p /var/lib/mongo/config/data
+            mkdir -p /var/lib/mongo/mongos/data
+
+            mkdir /var/lib/mongo/conf
+
+            chown -R mongod:mongod /var/lib/mongo
+
+            cat <<EOF> /var/lib/mongo/conf/mongod1.conf
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/mongod1.log
+              logAppend: true
+              logRotate: rename
+            storage:
+              engine: wiredTiger
+              directoryPerDB: true
+              wiredTiger:
+                engineConfig:
+                  journalCompressor: snappy
+                collectionConfig:
+                  blockCompressor: snappy
+                indexConfig:
+                  prefixCompression: true
+              dbPath: /var/lib/mongo/rs/data1
+              journal:
+                enabled: true
+                commitIntervalMs: 300
+            processManagement:
+              fork: true
+              pidFilePath: /var/run/mongodb/mongod1.pid
+            net:
+              port: $mongo_port1
+              bindIpAll: true
+              maxIncomingConnections: 20000
+              unixDomainSocket:
+                enabled: false
+            replication:
+              oplogSizeMB: 10240
+              replSetName: rs02
+            setParameter:
+              failIndexKeyTooLong: false
+            sharding:
+              clusterRole: shardsvr
+            EOF
+
+            cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod2.conf
+            cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/replSetName: rs02/replSetName: rs01/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/replSetName: rs02/replSetName: rs03/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/' /var/lib/mongo/conf/mongod3.conf
+
+            chown -R mongod:mongod /var/lib/mongo/conf
+
+            mkdir -p /var/run/mongodb
+            chown mongod:mongod /var/run/mongodb
+
+            mongod -f /var/lib/mongo/conf/mongod1.conf
+            mongod -f /var/lib/mongo/conf/mongod2.conf
+            mongod -f /var/lib/mongo/conf/mongod3.conf
+
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $mongo_port2"
+              nc -z $server3_ip_address $mongo_port2
+              server3Run=$?
+              echo "nc -z $server3_ip_address $mongo_port2 > $server3Run"
+              sleep 10
+            done
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $mongo_port3"
+              nc -z $server2_ip_address $mongo_port3
+              server2Run=$?
+              echo "nc -z $server2_ip_address $mongo_port3 > $server2Run"
+              sleep 10
+            done
+
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.initiate(
+              {
+                _id: "rs02",
+                version: 1,
+                members: [
+                  { _id: 0, host : "$server2_ip_address:$mongo_port1" },
+                  { _id: 1, host : "$server3_ip_address:$mongo_port2" },
+                  { _id: 2, host : "$server1_ip_address:$mongo_port3" }
+                ]
+              }
+            );
+            rs.status();
+            EOF
+
+            cat <<EOF> /var/lib/mongo/conf/config.conf
+            storage:
+              dbPath: /var/lib/mongo/config/data
+              journal:
+                enabled: true
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/config.log
+              logAppend: true
+            processManagement:
+              fork: true
+            net:
+              bindIpAll: true
+              port: $config_port
+            replication:
+              oplogSizeMB: 40960
+              replSetName: cstest
+            sharding:
+              clusterRole: configsvr
+
+            EOF
+
+            chown mongod:mongod /var/lib/mongo/conf/config.conf
+
+            mongod -f /var/lib/mongo/conf/config.conf
+
+            cat <<EOF> /var/lib/mongo/conf/mongos.conf
+            sharding:
+              configDB: "cstest/$server1_ip_address:$config_port,$server2_ip_address:$config_port,$server3_ip_address:$config_port"
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/mongos.log
+              logAppend: true
+            processManagement:
+              fork: true
+            net:
+              port: $service_port
+              bindIpAll: true
+              maxIncomingConnections: 30000
+            setParameter:
+              ShardingTaskExecutorPoolHostTimeoutMS : 3600000
+              ShardingTaskExecutorPoolMaxSize : 20
+              ShardingTaskExecutorPoolMinSize : 10
+            EOF
+
+            chown mongod:mongod /var/lib/mongo/conf/mongos.conf
+
+            server1Run=1
+            while [ $server1Run -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $service_port"
+              nc -z $server1_ip_address $service_port
+              server1Run=$?
+              echo "nc -z $server1_ip_address $service_port > $server1Run"
+              sleep 10
+            done
+
+            sleep 10
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.status();
+            use admin
+            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            EOF
+
+            mongos -f /var/lib/mongo/conf/mongos.conf
+
+            cat <<EOF>> /etc/rc.local
+            mongod -f /var/lib/mongo/conf/mongod1.conf
+            mongod -f /var/lib/mongo/conf/mongod2.conf
+            mongod -f /var/lib/mongo/conf/mongod3.conf
+            mongod -f /var/lib/mongo/conf/config.conf
+            mongos -f /var/lib/mongo/conf/mongos.conf
+            EOF
+
+            systemctl enable rc-local
+
+            echo "mongodb setting end"
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      outputs:
+        - name: result
+      config:
+        str_replace:
+          params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
+            $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $check_port: { get_param: check_port }
+            $mongo_port1: { get_param: mongo_port1 }
+            $mongo_port2: { get_param: mongo_port2 }
+            $mongo_port3: { get_param: mongo_port3 }
+            $config_port: { get_param: config_port }
+            $service_port: { get_param: service_port }
+            $admin_id: { get_param: admin_id }
+            $admin_password: { get_param: admin_password }
+          template: |
+            #!/bin/sh
+            echo "mongodb setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+{% if volumeUse %}
+            mkfs.$volume_format_type $volume_mount_point
+            mkdir -p $volume_mount_path
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            sleep 1
+
+            chmod u+x /etc/rc.d/rc.local
+            cat <<EOF>> /etc/rc.d/rc.local
+            mount -t $volume_format_type $volume_mount_point $volume_mount_path
+            EOF
+
+            systemctl enable rc-local
+
+            sleep 1
+
+            mv /var/lib/mongo $volume_mount_path/mongo
+            ln -s $volume_mount_path/mongo /var/lib/mongo
+            sleep 1
+{% endif %}
+
+            mkdir -p /var/lib/mongo/rs/data1
+            mkdir -p /var/lib/mongo/rs/data2
+            mkdir -p /var/lib/mongo/rs/data3
+
+            mkdir -p /var/lib/mongo/config/data
+            mkdir -p /var/lib/mongo/mongos/data
+
+            mkdir /var/lib/mongo/conf
+
+            chown -R mongod:mongod /var/lib/mongo
+
+            cat <<EOF> /var/lib/mongo/conf/mongod1.conf
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/mongod1.log
+              logAppend: true
+              logRotate: rename
+            storage:
+              engine: wiredTiger
+              directoryPerDB: true
+              wiredTiger:
+                engineConfig:
+                  journalCompressor: snappy
+                collectionConfig:
+                  blockCompressor: snappy
+                indexConfig:
+                  prefixCompression: true
+              dbPath: /var/lib/mongo/rs/data1
+              journal:
+                enabled: true
+                commitIntervalMs: 300
+            processManagement:
+              fork: true
+              pidFilePath: /var/run/mongodb/mongod1.pid
+            net:
+              port: $mongo_port1
+              bindIpAll: true
+              maxIncomingConnections: 20000
+              unixDomainSocket:
+                enabled: false
+            replication:
+              oplogSizeMB: 10240
+              replSetName: rs03
+            setParameter:
+              failIndexKeyTooLong: false
+            sharding:
+              clusterRole: shardsvr
+            EOF
+
+            cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod2.conf
+            cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/replSetName: rs03/replSetName: rs02/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/replSetName: rs03/replSetName: rs01/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/' /var/lib/mongo/conf/mongod3.conf
+
+            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/' /var/lib/mongo/conf/mongod2.conf
+            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/' /var/lib/mongo/conf/mongod3.conf
+
+            chown -R mongod:mongod /var/lib/mongo/conf
+
+            mkdir -p /var/run/mongodb
+            chown mongod:mongod /var/run/mongodb
+
+            mongod -f /var/lib/mongo/conf/mongod1.conf
+            mongod -f /var/lib/mongo/conf/mongod2.conf
+            mongod -f /var/lib/mongo/conf/mongod3.conf
+
+            server1Run=1
+            while [ $server1Run -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $mongo_port2"
+              nc -z $server1_ip_address $mongo_port2
+              server1Run=$?
+              echo "nc -z $server1_ip_address $mongo_port2 > $server1Run"
+              sleep 10
+            done
+            server2Run=1
+            while [ $server2Run -ne 0 ]
+            do
+              echo "nc -z $server2_ip_address $mongo_port3"
+              nc -z $server2_ip_address $mongo_port3
+              server2Run=$?
+              echo "nc -z $server2_ip_address $mongo_port3 > $server2Run"
+              sleep 10
+            done
+
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.initiate(
+              {
+                _id: "rs03",
+                version: 1,
+                members: [
+                  { _id: 0, host : "$server3_ip_address:$mongo_port1" },
+                  { _id: 1, host : "$server1_ip_address:$mongo_port2" },
+                  { _id: 2, host : "$server2_ip_address:$mongo_port3" }
+                ]
+              }
+            );
+            rs.status();
+            EOF
+
+            cat <<EOF> /var/lib/mongo/conf/config.conf
+            storage:
+              dbPath: /var/lib/mongo/config/data
+              journal:
+                enabled: true
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/config.log
+              logAppend: true
+            processManagement:
+              fork: true
+            net:
+              bindIpAll: true
+              port: $config_port
+            replication:
+              oplogSizeMB: 40960
+              replSetName: cstest
+            sharding:
+              clusterRole: configsvr
+
+            EOF
+
+            chown mongod:mongod /var/lib/mongo/conf/config.conf
+
+            mongod -f /var/lib/mongo/conf/config.conf
+
+            cat <<EOF> /var/lib/mongo/conf/mongos.conf
+            sharding:
+              configDB: "cstest/$server1_ip_address:$config_port,$server2_ip_address:$config_port,$server3_ip_address:$config_port"
+            systemLog:
+              destination: file
+              path: /var/log/mongodb/mongos.log
+              logAppend: true
+            processManagement:
+              fork: true
+            net:
+              port: $service_port
+              bindIpAll: true
+              maxIncomingConnections: 30000
+            setParameter:
+              ShardingTaskExecutorPoolHostTimeoutMS : 3600000
+              ShardingTaskExecutorPoolMaxSize : 20
+              ShardingTaskExecutorPoolMinSize : 10
+            EOF
+
+            chown mongod:mongod /var/lib/mongo/conf/mongos.conf
+
+            server1Run=1
+            while [ $server1Run -ne 0 ]
+            do
+              echo "nc -z $server1_ip_address $service_port"
+              nc -z $server1_ip_address $service_port
+              server1Run=$?
+              echo "nc -z $server1_ip_address $service_port > $server1Run"
+              sleep 10
+            done
+
+            sleep 10
+            mongo localhost:$mongo_port1/admin <<EOF
+            rs.status();
+            use admin
+            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            EOF
+
+            mongos -f /var/lib/mongo/conf/mongos.conf
+
+            sleep 1
+            cat <<EOF>> /etc/rc.local
+            mongod -f /var/lib/mongo/conf/mongod1.conf
+            mongod -f /var/lib/mongo/conf/mongod2.conf
+            mongod -f /var/lib/mongo/conf/mongod3.conf
+            mongod -f /var/lib/mongo/conf/config.conf
+            mongos -f /var/lib/mongo/conf/mongos.conf
+            EOF
+
+            systemctl enable rc-local
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            echo "mongodb setting end"
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
+{% if volumeUse %}
+  cinder_volume1_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server1 }
+      volume_id: { get_resource: cinder_volume1 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume2_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server2 }
+      volume_id: { get_resource: cinder_volume2 }
+      mountpoint: { get_param: volume_mount_point }
+
+  cinder_volume3_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: server3 }
+      volume_id: { get_resource: cinder_volume3 }
+      mountpoint: { get_param: volume_mount_point }
+{% endif %}
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume1, show ] }
+{% endif %}
+      - instance: { get_attr: [ server2, show ] }
+        instancePort: { get_attr: [ server2_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume2, show ] }
+{% endif %}
+      - instance: { get_attr: [ server3, show ] }
+        instancePort: { get_attr: [ server3_port, show ] }
+{% if volumeUse %}
+        volume: { get_attr: [ cinder_volume3, show ] }
+{% endif %}

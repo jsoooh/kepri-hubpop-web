@@ -4,9 +4,8 @@
         <ul>
             <li>
                 <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
-                <span ng-if="!contents.octaviaLbUse && contents.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="!contents.octaviaLbUse && contents.deployType == 'cluster'" class="txt">각 서버로 접속</span>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
             </li>
             <li>
                 <strong class="tit">관리자 계정</strong>
@@ -16,8 +15,8 @@
         <ul>
             <li>
                 <strong class="tit">접속포트</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}{{ contents.vmCatalogDeployInfo.servicePort }}</span>
-                <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
             </li>
         </ul>
     </div>

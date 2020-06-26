@@ -121,7 +121,7 @@ angular.module('perf.controllers')
 
     })
     .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS, perfCommService) {
-        _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 1);
+        _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 3);
 
         var ct = this;
         ct.scope = $scope;
@@ -249,7 +249,6 @@ angular.module('perf.controllers')
         ct.fn.listAllMeteringItemGroups = function (defer) {
             var promise = perfMeteringService.listAllMeteringGroupItems();
             promise.success(function (data) {
-                console.log("Success listAllMeteringGroupItems");
                 ct.meteringItemGroups = data.items;
                 if (ct.meteringItemGroups.length > 0 && angular.isUndefined(ct.data.sltItemGroupCode) || ct.data.sltItemGroupCode == "") {
                     ct.sltItemGroup = angular.copy(ct.meteringItemGroups[0]);
@@ -260,7 +259,6 @@ angular.module('perf.controllers')
                 }
             });
             promise.error(function (data, status, headers) {
-                console.log("Fail listAllMeteringGroupItems");
                 ct.meteringItemGroups = []
                 if (defer) {
                     defer.reject();
@@ -290,7 +288,6 @@ angular.module('perf.controllers')
             $scope.main.loadingMainBody = true;
             var promise = perfMeteringService.listAllMeteringItems();
             promise.success(function (data) {
-                console.log("Success listAllMeteringItems");
                 ct.meteringItems = data.items;
                 ct.fn.changeMeteringItemsByItemGroupCode(ct.data.sltItemGroupCode);
                 if (defer) {
@@ -299,7 +296,6 @@ angular.module('perf.controllers')
                 $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
-                console.log("Fail listAllMeteringItems");
                 ct.meteringItems = [];
                 if (defer) {
                     defer.reject();
@@ -358,17 +354,13 @@ angular.module('perf.controllers')
             ct.meteringMonths = perfCommService.listPerfMonth(ct.data.sltYear);
             ct.data.sltMonth = perfCommService.monthWhenChangeYear(ct.data.prevSltYear, ct.data.sltYear);
             // error, return -1
-            if (ct.data.sltMonth < 1) {
-                console.log("error");
-                return
-            }
+            if (ct.data.sltMonth < 1) return;
 
             ct.data.prevSltYear = ct.data.sltYear;
             ct.fn.reconstructData();
         };
         // year, itemCdoe 변경시 GET Monthly Data, Daily Data
         ct.fn.reconstructData = function () {
-            console.log("reconstruct ------")
             if (ct.sltItem.itemCode != false) {
                 if (ct.data.sltYear != false) {
                     ct.fn.listPerfMeteringMonthlyByOrgAndItemCode(ct.sltOrg.code, ct.data.sltItemCode, ct.data.sltYear);
@@ -417,9 +409,6 @@ angular.module('perf.controllers')
             };
             var promise = perfMeteringService.listPerfMeteringMonthlyByOrgAndItemCode(params);
             promise.success(function (data) {
-                console.log(data);
-                console.log("Success listPerfMeteringMonthlyByOrgAndItemCode");
-
                 ct.perfMeteringMonthlyByOrgAndItems = [];
                 ct.perfMeteringMonthlyByOrgAndItemSum = 0;
                 var dataIndex = 0;
@@ -455,7 +444,6 @@ angular.module('perf.controllers')
                 ct.fn.redrawChart(ct.monthlyChart);
             });
             promise.error(function (data, status, headers) {
-                console.log("Fail listPerfMeteringMonthlyByOrgAndItemCode");
                 ct.perfMeteringMonthlyByOrgAndItems = [];
                 ct.perfMeteringMonthlyByOrgAndItemSum = 0;
                 $scope.main.loadingMainBody = false;
@@ -480,10 +468,8 @@ angular.module('perf.controllers')
                 "year": sltYear,
                 "month": sltMonth
             };
-            console.log(params);
             var promise = perfMeteringService.listPerfMeteringDailyByOrgAndItemCode(params);
             promise.success(function (data) {
-                console.log("Success listPerfMeteringDailyByOrgAndItemCode");
                 var lastDay = (new Date(sltYear, sltMonth, 0)).getDate();
 
                 ct.perfMeteringDailyByOrgAndItems = [];
@@ -522,7 +508,6 @@ angular.module('perf.controllers')
                 ct.fn.redrawChart(ct.dailyChart);
             });
             promise.error(function (data, status, headers) {
-                console.log("Fail listPerfMeteringDailyByOrgAndItemCode");
                 ct.perfMeteringDailyByOrgAndItems = [];
                 ct.perfMeteringDailyByOrgAndItemSum = 0;
                 $scope.main.loadingMainBody = false;
@@ -537,7 +522,6 @@ angular.module('perf.controllers')
 
             var allProcessForInit = $q.all([listItemGroupsDefer.promise, listItemsDefer.promise]);
             allProcessForInit.then(function (datas) {
-                console.log(ct.sltOrg.code);
                 ct.fn.listPerfMeteringMonthlyByOrgAndItemCode(ct.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear);
                 ct.fn.listPerfMeteringDailyByOrgAndItemCode(ct.sltOrg.code, ct.sltItem.itemCode, ct.data.sltYear, ct.data.sltMonth);
             });

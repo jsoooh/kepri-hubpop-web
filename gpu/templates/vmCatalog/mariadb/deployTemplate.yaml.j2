@@ -3,6 +3,8 @@ heat_template_version: '2018-08-31'
 description: single mariadb template
 
 parameters:
+  api_end_point:
+    type: string
   image:
     type: string
     default: CentOS-7-x86_64-Heat-1907-Mariadb.qcow2
@@ -70,23 +72,26 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-{% if volumeUse %}
-            $volume_mount_point: { get_param: volume_mount_point }
-            $volume_mount_path: { get_param: volume_mount_path }
-{% endif %}
+            $service_port: { get_param: service_port }
+            $root_password: { get_param: root_password }
 {% if createUser %}
             $create_user_id: { get_param: create_user_id }
             $create_user_password: { get_param: create_user_password }
             $create_db_name: { get_param: create_db_name }
 {% endif %}
-            $service_port: { get_param: service_port }
-            $root_password: { get_param: root_password }
+{% if volumeUse %}
+            $volume_mount_point: { get_param: volume_mount_point }
+            $volume_format_type: { get_param: volume_format_type}
+            $volume_mount_path: { get_param: volume_mount_path }
+{% endif %}
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -102,7 +107,7 @@ resources:
 
             sleep 1
 
-            mv /var/lib/mysql $volume_mount_path/
+            mv /var/lib/mysql $volume_mount_path/mysql
             ln -s $volume_mount_path/mysql /var/lib/mysql
             sleep 1
 {% endif %}
@@ -134,7 +139,7 @@ resources:
             EOF
 {% endif %}
             systemctl enable mariadb
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" {{ apiExternalEndPoint }}/vm_catalog/external/{{ tenantId }}/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "mariadb setting end"
 
   server:
