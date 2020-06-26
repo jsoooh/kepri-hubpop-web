@@ -596,25 +596,19 @@ angular.module('gpu.controllers')
 
         $scope.main.loadingMainBody = true;
 
-        if (_DOMAIN_ == "localhost") {
-            var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
-            promise.success(function (data) {
-                if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
-                    $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
-                } else {
-                    $scope.main.loadingMainBody = false;
-                }
-                ct.checkClickBtn = false;
-            });
-            promise.error(function (data, status, headers) {
+        var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
+        promise.success(function (data) {
+            if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
+                $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
+            } else {
                 $scope.main.loadingMainBody = false;
-                ct.checkClickBtn = false;
-            });
-        } else {
-            common.showAlertMessage("준비 중 입니다.");
+            }
+            ct.checkClickBtn = false;
+        });
+        promise.error(function (data, status, headers) {
             $scope.main.loadingMainBody = false;
             ct.checkClickBtn = false;
-        }
+        });
         if (templatePrint) {
             var printPromise = vmCatalogService.templateVmCatalogDeploy(vmCatalogDeploy);
             printPromise.success(function (data) {

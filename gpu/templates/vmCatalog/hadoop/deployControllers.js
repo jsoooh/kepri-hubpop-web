@@ -39,18 +39,19 @@ angular.module('gpu.controllers')
                     var masterSpecList = [];
                     var workerSpecList = [];
                     angular.forEach(data.content.specs, function(val, key) {
-/*
                         if (val.name[0] == 'm' &&  val.type == "general") {
                             masterSpecList.push(val);
+                            workerSpecList.push(val);
                         }
-*/
+/*
                         if (val.name[0] == 'p' &&  val.type == "GPU") {
                             masterSpecList.push(val);
                             workerSpecList.push(val);
                         }
+*/
                     });
-                    ct.masterSpecList = angular.copy(masterSpecList);
-                    ct.workerSpecList = angular.copy(workerSpecList);
+                    ct.masterSpecList = masterSpecList;
+                    ct.workerSpecList = workerSpecList;
                 }
                 ct.isMasterSpecLoad = true;
                 ct.isWorkerSpecLoad = true;
