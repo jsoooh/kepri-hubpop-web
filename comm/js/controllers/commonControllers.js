@@ -47,6 +47,7 @@ angular.module('common.controllers', [])
         mc.sltMenu = {};                    //좌측 메뉴 선택
         mc.topProjectMenuOpen = false;      //top 메뉴 오픈 여부. 프로젝트명 옆
         mc.dashboardFull = false;           //대시보드 화면 전체보기
+        mc.myServiceOpen = true;            //메뉴 즐겨찾기 dropdown
 
         //좌측 대메뉴 선택
         mc.setGroupMenu = function (menuItem) {
@@ -99,6 +100,15 @@ angular.module('common.controllers', [])
                 mc.topProjectMenuOpen = false;
             } else {
                 mc.topProjectMenuOpen = true;
+            }
+        };
+
+        //메뉴 즐겨찾기 dropdown 여부
+        mc.myServiceOpenClick = function () {
+            if (mc.myServiceOpen) {
+                mc.myServiceOpen = false;
+            } else {
+                mc.myServiceOpen = true;
             }
         };
 
@@ -1637,15 +1647,18 @@ angular.module('common.controllers', [])
             var promise = portal.menu.getMyMenuList();
             promise.success(function (data) {
                 mc.myMenus = data.items;
-                //console.log("mc.myMenus : ", mc.myMenus);
             });
             promise.error(function (data, status, headers) {
             });
             promise.finally(function (data, status, headers) {
-                // mc.loadingMainBody = false;
             });
+            /* sync 변경
+            if (promise && promise.status == 200 && angular.isObject(promise.data) && angular.isArray(promise.data.items)) {
+                mc.myMenus = promise.data.items;
+                //console.log("mc.myMenus : ", mc.myMenus);
+            }*/
         };
-        mc.getMyMenus();
+        //mc.getMyMenus();
 
         //전체 메뉴 화면에서 메뉴 즐겨찾기 여부 확인
         mc.checkMyMenuByAllMenu = function (menuId) {
