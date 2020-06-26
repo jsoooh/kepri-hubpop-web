@@ -587,7 +587,7 @@ html {
   background-color: #fff;
   min-height: inherit;
   border-right: 1px solid #e5e6ed;
-  z-index: 2;
+  z-index: 10;
 }
 #lnbWrap #lnb .title-project {
   height: 80px;
