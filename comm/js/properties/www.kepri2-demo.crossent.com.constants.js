@@ -428,7 +428,9 @@ angular.module('app')
                 ['TextColor', 'BGColor'],
                 ['Table', 'SpecialChar', 'Link', 'Unlink']
             ]
-        }
+        },
+        startYear: 2019,
+        startMonth: 12
     })
     .constant('tenantChartConfig', [
         {

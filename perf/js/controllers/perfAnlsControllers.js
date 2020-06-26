@@ -76,7 +76,6 @@ angular.module('perf.controllers')
         ct.fn.totalAnlsByOrgCodeAndPerfYm = function (params) {
             var promise = perfAnlsService.totalAnlsByOrgCodeAndPerfYm(params)
             promise.success(function (data) {
-                console.log("Success get" + params.year + "_" + params.month + "perfAnls");
                 ct.combinedAnlList = data.items;
                 ct.data.maxRow = ct.fn.findMaxRow(data);
                 var itemGroupCode = "";
@@ -102,7 +101,6 @@ angular.module('perf.controllers')
                 $scope.main.loadingMainBody = false;
             });
             promise.error(function (data, status, headers) {
-                console.log("Fail get" + params.year + "_" + params.month + "perfAnls");
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -117,8 +115,6 @@ angular.module('perf.controllers')
             ct.data.prevSltYear = ct.data.sltYear;
 
             ct.fn.selectMonth(ct.data.sltMonth);
-
-            console.log("year: " + ct.data.sltYear + " month: " + ct.data.sltMonth);
         };
 
         // 데이터 요청
@@ -128,8 +124,6 @@ angular.module('perf.controllers')
             var firstDayOfMonth = new Date(ct.data.sltYear, ct.data.sltMonth - 1, 1);
             ct.lastDayOfLastMonth = new Date(firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 1));
 
-            console.log(ct.lastDayOfLastMonth.getFullYear() + ":" + (ct.lastDayOfLastMonth.getMonth() + 1));
-            console.log(ct.data.sltYear + ":" + ct.data.sltMonth);
             var sltParams = {
                 urlPaths: {
                     "orgCode": ct.sltOrg.code
