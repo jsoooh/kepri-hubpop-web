@@ -7,8 +7,8 @@ angular.module('portal.controllers')
         var ct = this;
         ct.conditions = {
             receivers: [
-                {id: 'p', name: 'label.project'},
-                {id: 'u', name: 'label.user'}
+                {id: 'u', name: 'label.user'},
+                {id: 'p', name: 'label.project'}
             ],
             types: [
                 {id: 'message', name: 'label.message'}

@@ -838,10 +838,10 @@ angular.module('portal.controllers')
             if (ct.paramParentId) {
                 ct.showBtnBack = true;
             }
+            if (ct.boardData.level == 1) {
+                ct.showBtnReply = true;    //[답글쓰기]
+            }
             if (ct.boardData.ownerEmail == common.getUser().email) {
-                if (ct.boardData.level == 1) {
-                    ct.showBtnReply = true;    //[답글쓰기]
-                }
                 if (ct.mode == 'U') {
                     ct.showBtnSave = true;
                     ct.showBtnCancel = true;
