@@ -354,10 +354,7 @@ angular.module('perf.controllers')
             ct.meteringMonths = perfCommService.listPerfMonth(ct.data.sltYear);
             ct.data.sltMonth = perfCommService.monthWhenChangeYear(ct.data.prevSltYear, ct.data.sltYear);
             // error, return -1
-            if (ct.data.sltMonth < 1) {
-                console.log("error");
-                return
-            }
+            if (ct.data.sltMonth < 1) return;
 
             ct.data.prevSltYear = ct.data.sltYear;
             ct.fn.reconstructData();
