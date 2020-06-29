@@ -90,6 +90,21 @@ resources:
             #!/bin/sh
             echo "kafka setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
+            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
+            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
+
+            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
+
+            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_ip_address:$zookeeper_port/" /home/kafka/kafka/config/server.properties
+
+            mkdir /tmp/zookeeper
+            echo 0 > /tmp/zookeeper/myid
+
+            chown -R kafka.kafka /tmp/zookeeper
+
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
             mkdir -p $volume_mount_path
@@ -105,24 +120,11 @@ resources:
 
             sleep 1
 
-            mv /var/lib/kafka $volume_mount_path/kafka
-            ln -s $volume_mount_path/kafka /var/lib/kafka
+            mv /home/kafka/kafka_2* $volume_mount_path/kafka
+            rm -rf /home/kafka/kafka
+            ln -s $volume_mount_path/kafka /home/kafka/kafka
             sleep 1
 {% endif %}
-
-            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
-            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
-
-            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
-
-            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_ip_address:$zookeeper_port/" /home/kafka/kafka/config/server.properties
-
-            mkdir /tmp/zookeeper
-            echo 0 > /tmp/zookeeper/myid
-
-            chown -R kafka.kafka /tmp/zookeeper
 
             systemctl start kafka
             systemctl enable kafka
