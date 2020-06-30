@@ -37,6 +37,11 @@
                 <strong class="tit">mongos.conf path: </strong>
                 <span class="txt">/var/lib/mongo/conf/mongos.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성됩니다.'"><span class="ico_info"></span></button></div></span>
             </li>
+            <li>
+                <strong class="tit">data path: </strong>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">/var/lib/mongo/rs/data1~3 <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포하는 경우 data directory에 번호가 부여됩니다.'"><span class="ico_info"></span></button></div></span>
+                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">/var/lib/mongo</span>
+            </li>
         </ul>
     </div>
 </div>
