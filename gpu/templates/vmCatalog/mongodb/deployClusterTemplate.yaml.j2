@@ -55,8 +55,6 @@ parameters:
     type: string
     default: /mnt/data
 {% endif %}
-  admin_id:
-    type: string
   admin_password:
     type: string
 
@@ -128,7 +126,6 @@ resources:
             $mongo_port3: { get_param: mongo_port3 }
             $config_port: { get_param: config_port }
             $service_port: { get_param: service_port }
-            $admin_id: { get_param: admin_id }
             $admin_password: { get_param: admin_password }
           template: |
             #!/bin/sh
@@ -312,7 +309,7 @@ resources:
             mongo localhost:$mongo_port1/admin <<EOF
             rs.status();
             use admin
-            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            db.createUser({user: "admin", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
             EOF
 
             mongo localhost:$config_port/admin <<EOF
@@ -363,7 +360,7 @@ resources:
             sh.status();
 
             use admin
-            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            db.createUser({user: "admin", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
             EOF
 
             cat <<EOF>> /etc/rc.local
@@ -405,7 +402,6 @@ resources:
             $mongo_port3: { get_param: mongo_port3 }
             $config_port: { get_param: config_port }
             $service_port: { get_param: service_port }
-            $admin_id: { get_param: admin_id }
             $admin_password: { get_param: admin_password }
           template: |
             #!/bin/sh
@@ -601,7 +597,7 @@ resources:
             mongo localhost:$mongo_port1/admin <<EOF
             rs.status();
             use admin
-            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            db.createUser({user: "admin", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
             EOF
 
             mongos -f /var/lib/mongo/conf/mongos.conf
@@ -645,7 +641,6 @@ resources:
             $mongo_port3: { get_param: mongo_port3 }
             $config_port: { get_param: config_port }
             $service_port: { get_param: service_port }
-            $admin_id: { get_param: admin_id }
             $admin_password: { get_param: admin_password }
           template: |
             #!/bin/sh
@@ -842,7 +837,7 @@ resources:
             mongo localhost:$mongo_port1/admin <<EOF
             rs.status();
             use admin
-            db.createUser({user: "$admin_id", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
+            db.createUser({user: "admin", pwd: "$admin_password", roles:[{role: "root", db: "admin"}]});
             EOF
 
             mongos -f /var/lib/mongo/conf/mongos.conf
