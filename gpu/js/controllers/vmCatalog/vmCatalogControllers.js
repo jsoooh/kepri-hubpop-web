@@ -280,10 +280,20 @@ angular.module('gpu.controllers')
         var returnPromise = vmCatalogService.listAllAvailabilityZones();
         returnPromise.success(function (data, status, headers) {
             ct.availabilityZones = data.content;
-            ct.sltAvailabilityZone = ct.availabilityZones[0];
-            ct.data.availabilityZone = ct.sltAvailabilityZone.availabilityZone;
-            ct.data.providerNet = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
-            ct.data.providerSubnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
+            if (angular.isArray(data.content)) {
+                var maxNum = 0;
+                angular.forEach(ct.availabilityZones, function (availabilityZone, k) {
+                    if (availabilityZone.publicNetworkSubnet.available == 0) {
+                        availabilityZone.disabled = true;
+                    } else {
+                        availabilityZone.disabled = false;
+                        if (maxNum < availabilityZone.publicNetworkSubnet.available) {
+                            maxNum = availabilityZone.publicNetworkSubnet.available;
+                            ct.sltAvailabilityZone = availabilityZone;
+                        }
+                    }
+                });
+            }
             ct.isAvailabilityZoneLoad = true;
         });
         returnPromise.error(function (data, status, headers) {
