@@ -10,22 +10,16 @@ parameters:
     default: CentOS-7-x86_64-Heat-1907-Mongodb.qcow2
   flavor:
     type: string
-    default: m1.small
   availability_zone:
     type: string
-    default: zone01
   key_name:
     type: string
-    default: heat_stack_octavia_test_keypair
   security_group:
     type: string
-    default: default
   provider_net:
     type: string
-    default: provider01
   provider_subnet:
     type: string
-    default: provider01-01
   service_port:
     type: string
     default: 271017

@@ -15,7 +15,6 @@ angular.module('gpu.controllers')
             ct.data.deployType = "single";
             ct.data.servicePort = 9092;
             ct.data.zookeeperPort = 2181;
-            ct.data.volumeUse = true;
             /*
             ct.data.deployType = "cluster";
              */
