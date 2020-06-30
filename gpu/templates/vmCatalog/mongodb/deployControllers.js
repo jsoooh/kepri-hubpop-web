@@ -25,6 +25,13 @@ angular.module('gpu.controllers')
             ct.data.volumeUse = true;
             */
         }
+
+        var checkPort = '9994';
+        var port1 = '27020';
+        var port2 = '27030';
+        var port3 = '27040';
+        var configPort = '27011';
+        ct.usingPorts.cluster = [checkPort, port1, port2, port3, configPort];
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
