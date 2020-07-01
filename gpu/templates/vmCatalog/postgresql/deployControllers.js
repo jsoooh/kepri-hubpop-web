@@ -15,6 +15,8 @@ angular.module('gpu.controllers')
         ct.data.checkPort = 25432;
         ct.data.applicationName = "master01";
 
+        ct.usingPorts.cluster = ['25432'];
+
         // 테스트
         if (ct.testInput) {
             ct.data.deployName = "포스트그래스SQL";

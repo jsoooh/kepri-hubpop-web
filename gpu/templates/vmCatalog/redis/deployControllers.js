@@ -14,6 +14,7 @@ angular.module('gpu.controllers')
         ct.data.redis1Port = 6379;
         ct.data.redis2Port = 6380;
 
+        ct.usingPorts.cluster = ['6379', '6380'];
 
         // 테스트 입력값
         if(ct.testInput) {
