@@ -15,12 +15,12 @@ angular.module('gpu.controllers')
             ct.data.deployType = "single";
             ct.data.servicePort = 9092;
             ct.data.zookeeperPort = 2181;
-            ct.data.volumeUse = true;
             /*
             ct.data.deployType = "cluster";
              */
         }
 
+        ct.usingPorts.cluster = ['2888', '3888'];
         ct.fn.kafkaPortCustomValidationCheck = function(port, type) {
             if (port == undefined || port == null || port == "") return;
             if (type == "kafka" && port == ct.data.zookeeperPort) {

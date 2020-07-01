@@ -280,10 +280,20 @@ angular.module('gpu.controllers')
         var returnPromise = vmCatalogService.listAllAvailabilityZones();
         returnPromise.success(function (data, status, headers) {
             ct.availabilityZones = data.content;
-            ct.sltAvailabilityZone = ct.availabilityZones[0];
-            ct.data.availabilityZone = ct.sltAvailabilityZone.availabilityZone;
-            ct.data.providerNet = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
-            ct.data.providerSubnet = ct.sltAvailabilityZone.publicNetworkSubnet.subnetId;
+            if (angular.isArray(data.content)) {
+                var maxNum = 0;
+                angular.forEach(ct.availabilityZones, function (availabilityZone, k) {
+                    if (availabilityZone.publicNetworkSubnet.available == 0) {
+                        availabilityZone.disabled = true;
+                    } else {
+                        availabilityZone.disabled = false;
+                        if (maxNum < availabilityZone.publicNetworkSubnet.available) {
+                            maxNum = availabilityZone.publicNetworkSubnet.available;
+                            ct.sltAvailabilityZone = availabilityZone;
+                        }
+                    }
+                });
+            }
             ct.isAvailabilityZoneLoad = true;
         });
         returnPromise.error(function (data, status, headers) {
@@ -596,25 +606,19 @@ angular.module('gpu.controllers')
 
         $scope.main.loadingMainBody = true;
 
-        if (_DOMAIN_ == "localhost") {
-            var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
-            promise.success(function (data) {
-                if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
-                    $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
-                } else {
-                    $scope.main.loadingMainBody = false;
-                }
-                ct.checkClickBtn = false;
-            });
-            promise.error(function (data, status, headers) {
+        var promise = vmCatalogService.createVmCatalogDeploy(ct.tenantId, vmCatalogDeploy);
+        promise.success(function (data) {
+            if (angular.isObject(data.content) && angular.isNumber(data.content.id) && data.content.id > 0) {
+                $scope.main.goToPage("/gpu/vmCatalogDeploy/view/" + data.content.id);
+            } else {
                 $scope.main.loadingMainBody = false;
-                ct.checkClickBtn = false;
-            });
-        } else {
-            common.showAlertMessage("준비 중 입니다.");
+            }
+            ct.checkClickBtn = false;
+        });
+        promise.error(function (data, status, headers) {
             $scope.main.loadingMainBody = false;
             ct.checkClickBtn = false;
-        }
+        });
         if (templatePrint) {
             var printPromise = vmCatalogService.templateVmCatalogDeploy(vmCatalogDeploy);
             printPromise.success(function (data) {

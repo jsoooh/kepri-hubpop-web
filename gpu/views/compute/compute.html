@@ -201,12 +201,14 @@
                                 </div>
                                 <p class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</p>
                                 <!--<p class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</p>-->
-                                <p class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</p>
+                                <p class="tit" style="font-size: 20px; padding:13px 8px 0 5px;" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</p>
                                 <!-- <p class="txt" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.image.serviceName}}</p> -->
                                 <!-- 접속정보 -->
+                                <!--
                                 <div ng-if="instance.procState == 'end'" class="tg_box_area btn-option type2">
                                     <button type="button" class="btn_txt" ng-click="contents.showInfo(instance);">접속정보</button>
                                 </div>
+                                -->
                                 <!-- //접속정보 -->
                                 <div ng-if="instance.procState == 'end'" class="dropdown btn-option">
                                     <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -247,7 +249,7 @@
                                 <!--
                                 <div class="tg_box">
                                 -->
-                                <div style="padding-left: 20px;">
+                                <div style="padding-left: 20px;" ng-if="instance.procState != 'creating'">
 
                                     <!--
                                     <div class="tgb_head">
