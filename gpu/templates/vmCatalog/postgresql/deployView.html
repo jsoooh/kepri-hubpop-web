@@ -14,7 +14,7 @@
         <ul>
             <li>
                 <strong class="tit">접속포트</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.servicePort }}</span>
+                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
             </li>
             <li ng-if="contents.vmCatalogDeployInfo.parameters.create_db_name">
                 <strong class="tit">사용자 DB명</strong>
