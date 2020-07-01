@@ -15,6 +15,7 @@ angular.module('gpu.controllers')
             ct.data.stackName = "MongoDB";
             ct.data.deployType = "single";
             ct.data.servicePort = 20717;
+            ct.data.adminId = "admin";
             ct.data.adminPassword = "Crossent!234";
             ct.data.adminConfirmPassword = "Crossent!234";
             ct.data.volumeUse = true;
@@ -35,6 +36,7 @@ angular.module('gpu.controllers')
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
+            vmCatalogDeploy.parameters.admin_id = ct.data.adminId;
             vmCatalogDeploy.parameters.admin_password = ct.data.adminPassword;
 
             return vmCatalogDeploy;

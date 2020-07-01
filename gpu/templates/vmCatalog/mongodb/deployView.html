@@ -7,12 +7,10 @@
                 <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
                 <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
             </li>
-<!--
             <li>
                 <strong class="tit">관리자 계정</strong>
                 <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.admin_id }}</span>
             </li>
--->
         </ul>
         <ul>
             <li>

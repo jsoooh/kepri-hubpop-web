@@ -40,6 +40,8 @@ parameters:
     type: string
     default: /mnt/data
 {% endif %}
+  admin_id:
+    type: string
   admin_password:
     type: string
 
@@ -78,6 +80,7 @@ resources:
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
             $service_port: { get_param: service_port }
+            $admin_id: { get_param: admin_id }
             $admin_password: { get_param: admin_password }
           template: |
             #!/bin/sh
@@ -109,7 +112,7 @@ resources:
             systemctl start mongod
             mongo << EOF
             use admin
-            db.createUser({ user: "admin", pwd: "$admin_password", roles: [ "root" ] })
+            db.createUser({ user: "$admin_id", pwd: "$admin_password", roles: [ "root" ] })
             EOF
             systemctl restart mongod
 
