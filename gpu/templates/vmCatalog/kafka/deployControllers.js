@@ -18,7 +18,7 @@ angular.module('gpu.controllers')
         // single 테스트
         if (ct.testInput) {
             ct.data.deployName = "DB 카프카";
-            ct.data.stackName = "kafka";
+            ct.data.stackName = "kafka-single";
             /*
             ct.data.deployType = "cluster";
              */
