@@ -16,6 +16,8 @@ angular.module('gpu.controllers')
 
         ct.usingPorts.cluster = ['6380'];
 
+        ct.data.deployType = "single";
+
         // 테스트 입력값
         if(ct.testInput) {
             ct.data.deployName = "레디스";
