@@ -10,15 +10,25 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs: $scope.subPage});
 
+        ct.data.clusterCnt = 3;
+        ct.data.servicePort = 20717;
+        ct.data.checkPort = 9994;
+        ct.data.mongoPort1 = 27020;
+        ct.data.mongoPort2 = 27030;
+        ct.data.mongoPort3 = 27040;
+        ct.data.configPort = 27011;
+
+        ct.usingPorts.cluster = ['27020', '27030', '27040', '27011'];
+
+        ct.data.deployType = "single";
+        ct.data.adminId = "admin";
+        ct.data.volumeUse = false;
+
         if (ct.testInput) {
             ct.data.deployName = "몽고DB";
             ct.data.stackName = "MongoDB";
-            ct.data.deployType = "single";
-            ct.data.servicePort = 20717;
-            ct.data.adminId = "admin";
             ct.data.adminPassword = "Crossent!234";
             ct.data.adminConfirmPassword = "Crossent!234";
-            ct.data.volumeUse = true;
             /*
             ct.data.deployName = "몽고DB클러스터";
             ct.data.stackName = "MongoDBCluster";
@@ -27,15 +37,19 @@ angular.module('gpu.controllers')
             */
         }
 
-        var checkPort = '9994';
-        var port1 = '27020';
-        var port2 = '27030';
-        var port3 = '27040';
-        var configPort = '27011';
-        ct.usingPorts.cluster = [checkPort, port1, port2, port3, configPort];
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
+            if (ct.data.deployType == "cluster") {
+                if (ct.data.servicePort == ct.data.checkPort) {
+                    ct.data.checkPort++;
+                }
+                vmCatalogDeploy.parameters.check_port = ct.data.checkPort;
+                vmCatalogDeploy.parameters.mongo_port1 = ct.data.mongoPort1;
+                vmCatalogDeploy.parameters.mongo_port2 = ct.data.mongoPort2;
+                vmCatalogDeploy.parameters.mongo_port3 = ct.data.mongoPort3;
+                vmCatalogDeploy.parameters.config_port = ct.data.configPort;
+            }
             vmCatalogDeploy.parameters.admin_id = ct.data.adminId;
             vmCatalogDeploy.parameters.admin_password = ct.data.adminPassword;
 
