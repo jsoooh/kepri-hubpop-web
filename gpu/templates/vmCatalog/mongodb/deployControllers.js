@@ -10,7 +10,7 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs: $scope.subPage});
 
-        ct.data.deployType = "single";
+        ct.data.clusterCnt = 3;
         ct.data.servicePort = 20717;
         ct.data.checkPort = 9994;
         ct.data.mongoPort1 = 27020;
@@ -20,6 +20,7 @@ angular.module('gpu.controllers')
 
         ct.usingPorts.cluster = ['27020', '27030', '27040', '27011'];
 
+        ct.data.deployType = "single";
         ct.data.adminId = "admin";
         ct.data.volumeUse = false;
 
@@ -43,7 +44,7 @@ angular.module('gpu.controllers')
                 if (ct.data.servicePort == ct.data.checkPort) {
                     ct.data.checkPort++;
                 }
-                vmCatalogDeploy.parameters.checkPort = ct.data.checkPort;
+                vmCatalogDeploy.parameters.check_port = ct.data.checkPort;
                 vmCatalogDeploy.parameters.mongo_port1 = ct.data.mongoPort1;
                 vmCatalogDeploy.parameters.mongo_port2 = ct.data.mongoPort2;
                 vmCatalogDeploy.parameters.mongo_port3 = ct.data.mongoPort3;
