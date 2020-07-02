@@ -364,6 +364,13 @@ angular.module('app')
                     loadMyDirectives: []
                 },
                 menus: {
+                    sampleIndex: {
+                        name: '샘플 목록',
+                        stateKey: 'sampleIndex',
+                        url: '/sample/index',
+                        controller: 'sampleTableCtrl',
+                        templateUrl: _COMM_VIEWS_ + '/sample/index.html'
+                    },
                     sampleTable: {
                         name: '1. 일반 테이블',
                         stateKey: 'sampleTable',
