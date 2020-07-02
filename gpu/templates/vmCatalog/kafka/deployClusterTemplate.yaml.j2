@@ -113,6 +113,18 @@ resources:
 
             systemctl start kafka
             systemctl enable kafka
+
+            server3Run=1
+            while [ $server3Run -ne 0 ]
+            do
+              echo "nc -z $server3_ip_address $service_port"
+              nc -z $server3_ip_address $service_port
+              server3Run=$?
+              echo "nc -z $server3_ip_address $service_port > $server3Run"
+              sleep 10
+            done
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "kafka setting end"
 
   init_config2:
@@ -243,7 +255,6 @@ resources:
 
             systemctl start kafka
             systemctl enable kafka
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "kafka setting end"
 
   server1:

@@ -330,10 +330,9 @@ angular.module('perf.controllers')
                         ct.meteringItemsBySltItemGroup.push(item)
                     }
                 }
-                if (ct.meteringItemsBySltItemGroup.length > 0 && angular.isUndefined(ct.data.sltItemCode) || ct.data.sltItemCode == "") {
-                    ct.sltItem = angular.copy(ct.meteringItemsBySltItemGroup[0]);
-                    ct.data.sltItemCode = ct.sltItem.itemCode;
-                }
+                ct.sltItem = angular.copy(ct.meteringItemsBySltItemGroup[0]);
+                ct.data.sltItemCode = ct.sltItem.itemCode;
+                ct.fn.changeMeteringItem(ct.data.sltItemCode);
             }
         };
 
