@@ -1,6 +1,6 @@
 heat_template_version: '2018-08-31'
 
-description: cluster Kafka volume template
+description: cluster Kafka template
 
 parameters:
   api_end_point:
@@ -114,14 +114,24 @@ resources:
             systemctl start kafka
             systemctl enable kafka
 
-            server3Run=1
-            while [ $server3Run -ne 0 ]
+            kafka2Run=1
+            while [ $kafka2Run -ne 0 ]
             do
+              sleep 5
+              echo "nc -z $server2_ip_address $service_port"
+              nc -z $server2_ip_address $service_port
+              kafka2Run=$?
+              echo "nc -z $server2_ip_address $service_port > $kafka2Run"
+            done
+
+            kafka3Run=1
+            while [ $kafka3Run -ne 0 ]
+            do
+              sleep 5
               echo "nc -z $server3_ip_address $service_port"
               nc -z $server3_ip_address $service_port
-              server3Run=$?
-              echo "nc -z $server3_ip_address $service_port > $server3Run"
-              sleep 10
+              kafka3Run=$?
+              echo "nc -z $server3_ip_address $service_port > $kafka3Run"
             done
 
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
