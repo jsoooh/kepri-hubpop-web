@@ -1,6 +1,6 @@
 heat_template_version: '2018-08-31'
 
-description: single Kafka volume template
+description: single Kafka template
 
 parameters:
   api_end_point:
@@ -26,24 +26,6 @@ parameters:
   service_port:
     type: string
     default: 9092
-{% if volumeUse %}
-  volume_type:
-    type: string
-    default: RBD
-  volume_size:
-    type: string
-    default: 10
-  volume_mount_point:
-    type: string
-    default: /dev/vdb
-  volume_format_type:
-    type: string
-    default: xfs
-  volume_mount_path:
-    type: string
-    default: /mnt/data
-{% endif %}
-
 
 resources:
 
@@ -53,13 +35,6 @@ resources:
       fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
-{% if volumeUse %}
-  cinder_volume:
-    type: OS::Cinder::Volume
-    properties:
-      size: { get_param: volume_size }
-      volume_type: { get_param: volume_type }
-{% endif %}
 
   init_config:
     type: OS::Heat::SoftwareConfig
@@ -72,11 +47,6 @@ resources:
             $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-{% if volumeUse %}
-            $volume_mount_point: { get_param: volume_mount_point }
-            $volume_format_type: { get_param: volume_format_type}
-            $volume_mount_path: { get_param: volume_mount_path }
-{% endif %}
             $server_ip_address: { get_attr: [server_port, fixed_ips, 0, ip_address] }
             $service_port: { get_param: service_port }
             $zookeeper_port: { get_param: zookeeper_port }
@@ -84,25 +54,7 @@ resources:
             #!/bin/sh
             echo "kafka setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
-{% if volumeUse %}
-            mkfs.$volume_format_type $volume_mount_point
-            mkdir -p $volume_mount_path
-            mount -t $volume_format_type $volume_mount_point $volume_mount_path
-            sleep 1
 
-            chmod u+x /etc/rc.d/rc.local
-            cat <<EOF>> /etc/rc.d/rc.local
-            mount -t $volume_format_type $volume_mount_point $volume_mount_path
-            EOF
-
-            systemctl enable rc-local
-
-            sleep 1
-
-            mv /home/kafka/kafka/kafka $volume_mount_path/kafka
-            ln -s $volume_mount_path/kafka /home/kafka/kafka/kafka
-            sleep 1
-{% endif %}
             cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
             cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
 
@@ -135,20 +87,9 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config
-{% if volumeUse %}
-  cinder_volume_attachment:
-    type: OS::Cinder::VolumeAttachment
-    properties:
-      instance_uuid: { get_resource: server }
-      volume_id: { get_resource: cinder_volume }
-      mountpoint: { get_param: volume_mount_point }
-{% endif %}
 
 outputs:
   servers:
     value:
       - instance: { get_attr: [ server, show ] }
         instancePort: { get_attr: [ server_port, show ] }
-{% if volumeUse %}
-        volume: { get_attr: [ cinder_volume, show ] }
-{% endif %}

@@ -37,7 +37,7 @@ angular.module('portal.controllers')
             promise.success(function (data) {
                 if (data.resultCode == 0) {
                     ct.notifications = data.items;
-                    ct.pageOptions.total = data.itemCount;
+                    ct.pageOptions.total = data.counts;
                 };
             });
             promise.error(function (data) {

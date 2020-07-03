@@ -32,15 +32,6 @@ parameters:
   management_port:
     type: string
     default: 15672
-  instance_name1:
-    type: string
-    default: crossent12
-  instance_name2:
-    type: string
-    default: crossent12
-  instance_name3:
-    type: string
-    default: crossent12
   erlang_cookie:
     type: string
     default: CMAXAFWPGKUBELOPUZOP
@@ -87,9 +78,6 @@ resources:
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-            $server1_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server1' ]] }
-            $server2_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server2' ]] }
-            $server3_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server3' ]] }
             $erlang_cookie: { get_param: erlang_cookie }
             $nc_check_port: { get_param: nc_check_port }
             $amqp_port: { get_param: amqp_port }
@@ -99,14 +87,12 @@ resources:
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
-            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
-            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+            hostnamectl set-hostname rabbitmq-server1
 
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_tmp_hostname
-            $server2_ip_address $server2_tmp_hostname
-            $server3_ip_address $server3_tmp_hostname
+            $server1_ip_address rabbitmq-server1
+            $server2_ip_address rabbitmq-server2
+            $server3_ip_address rabbitmq-server3
             EOF
 
             systemctl start rabbitmq-server
@@ -176,9 +162,6 @@ resources:
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-            $server1_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server1' ]] }
-            $server2_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server2' ]] }
-            $server3_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server3' ]] }
             $erlang_cookie: { get_param: erlang_cookie }
             $nc_check_port: { get_param: nc_check_port }
             $amqp_port: { get_param: amqp_port }
@@ -188,14 +171,12 @@ resources:
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
-            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
-            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+            hostnamectl set-hostname rabbitmq-server2
 
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_tmp_hostname
-            $server2_ip_address $server2_tmp_hostname
-            $server3_ip_address $server3_tmp_hostname
+            $server1_ip_address rabbitmq-server1
+            $server2_ip_address rabbitmq-server2
+            $server3_ip_address rabbitmq-server3
             EOF
 
             server1Run=1
@@ -241,9 +222,6 @@ resources:
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
-            $server1_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server1' ]] }
-            $server2_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server2' ]] }
-            $server3_hostname: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server3' ]] }
             $erlang_cookie: { get_param: erlang_cookie }
             $nc_check_port: { get_param: nc_check_port }
             $amqp_port: { get_param: amqp_port }
@@ -253,14 +231,12 @@ resources:
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-            server1_tmp_hostname=`echo $server1_hostname | tr [:upper:] [:lower:]`
-            server2_tmp_hostname=`echo $server2_hostname | tr [:upper:] [:lower:]`
-            server3_tmp_hostname=`echo $server3_hostname | tr [:upper:] [:lower:]`
+            hostnamectl set-hostname rabbitmq-server3
 
             cat <<EOF> /etc/hosts
-            $server1_ip_address $server1_tmp_hostname
-            $server2_ip_address $server2_tmp_hostname
-            $server3_ip_address $server3_tmp_hostname
+            $server1_ip_address rabbitmq-server1
+            $server2_ip_address rabbitmq-server2
+            $server3_ip_address rabbitmq-server3
             EOF
 
             server1Run=1
@@ -296,7 +272,6 @@ resources:
   server1:
     type: OS::Nova::Server
     properties:
-      name: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server1' ]] }
       flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
@@ -311,7 +286,6 @@ resources:
   server2:
     type: OS::Nova::Server
     properties:
-      name: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server2' ]] }
       flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
@@ -326,7 +300,6 @@ resources:
   server3:
     type: OS::Nova::Server
     properties:
-      name: { list_join: ['-', [ get_param: 'OS::stack_name', 'rabbitmq-server3' ]] }
       flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
