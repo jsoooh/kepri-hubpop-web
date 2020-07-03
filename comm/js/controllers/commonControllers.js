@@ -1662,8 +1662,10 @@ angular.module('common.controllers', [])
         //전체 메뉴 화면에서 메뉴 즐겨찾기 여부 확인
         mc.checkMyMenuByAllMenu = function (menuId) {
             var rtVal = false;
-            var i = mc.myMenus.findIndex(i => i.id === menuId);
-            if (i > -1) rtVal = true;
+            //var i = mc.myMenus.findIndex(i => i.id === menuId);
+            //if (i > -1) rtVal = true;
+            var sltMenu = common.objectsFindCopyByField(mc.myMenus, "id", menuId);
+            if (!!sltMenu && !!sltMenu.id) rtVal = true;
             return rtVal;
         };
 
