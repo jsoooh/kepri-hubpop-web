@@ -802,9 +802,9 @@
                                     <span class="ico">실행 설정</span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
-                                    <li title="권한 변경" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" ng-click="contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a></li>
-                                    <li title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" ng-click="contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a></li>
-                                    <li title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" class="delete" ng-click="contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a></li>
+                                    <li title="권한 변경" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a></li>
+                                    <li title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a></li>
+                                    <li title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" ng-class="!contents.isOrgManager ? 'disabled' : 'delete'" ng-click="contents.isOrgManager && contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a></li>
                                 </ul>
                             </div>
                         </td>
