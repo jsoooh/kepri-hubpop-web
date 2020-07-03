@@ -81,7 +81,8 @@ angular.module('app')
                                     loadMyScripts: [],
                                     loadMyServices: [_COMM_JS_+'/services/memberServices.js',
                                                      _COMM_JS_+'/services/projectServices.js'],
-                                    loadMyControllers: [_COMM_JS_+'/controllers/orgDetailControllers.js'],
+                                    loadMyControllers: [_COMM_JS_+'/controllers/orgDetailControllers.js',
+                                                        _COMM_JS_+'/controllers/orgControllers.js'],
                                     loadMyDirectives: []
                                 }
                             },

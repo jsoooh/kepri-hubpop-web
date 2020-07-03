@@ -1657,8 +1657,20 @@ angular.module('portal.controllers')
             ct.listOrgUsers();
         };
 
+        /*프로젝트 삭제 전 체크 화면 오픈*/
+        ct.checkDeleteForm = function ($event) {
+            $scope.dialogOptions = {
+                controller: "commCheckDeleteFormCtrl",
+                callBackFunction: null,
+                selOrgProject : ct.selOrgProject
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, $scope.dialogOptions);
+            $scope.actionLoading = true; // action loading
+        };
+
         ct.pageLoadData();
-        $scope.main.getMyMenus();
+        $scope.main.getMyMenus();   //메뉴 즐겨찾기 조회
     })
     .controller('commPopOrgProjectSchAddUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, ValidationService, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
         _DebugConsoleLog('orgDetailControllers.js : commPopOrgProjectSchAddUsersCtrl', 1);
@@ -2309,7 +2321,6 @@ angular.module('portal.controllers')
         //pop.fn.listQuotaValues();
 
     })
-    /* 20.05.07 - 프로젝트 관리 > 프로젝트 구성원 > 권한 변경 컨트롤러 by ksw */
     .controller('commChangeRoleFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common, CONSTANTS) {
         _DebugConsoleLog("orgDetailController.js : commChangeRoleFormCtrl", 1);
         $scope.actionBtnHied = false;

@@ -1,0 +1,30 @@
+<div class="pop_cont_area mg0">
+	<div class="pop_cont_box">
+		<h4 class="tit mt30">사용현황</h4>
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width:35%;">
+					<col style="width:;">
+					<col style="width:20%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col" colspan="2">항목</th>
+						<th scope="col">건수</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in pop.data.useItems">
+						<td class="text-left">{{ item.groupName }}</td>
+						<td class="text-left">{{ item.name }}</td>
+						<td>{{ item.cnt }}</td>
+					</tr>
+					<tr ng-if="!pop.data.useItems || pop.data.useItems.length == 0">
+						<td colspan="3" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

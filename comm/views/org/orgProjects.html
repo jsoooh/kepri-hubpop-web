@@ -180,12 +180,10 @@
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
 								<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
 								<li><a href="" title="사용자변경" ng-click="contents.changeOrgUser(org);">사용자변경</a></li>
-								<!-- 선택 된 class="active" 추가 -->
-								<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
 								<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
 								<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
 								<li><a href="" ng-class="org.managerId == main.userInfo.email ? 'disabled' : ''" ng-click="org.managerId != main.userInfo.email && contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
-								<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'">{{ 'label.del' | translate }}</a></li>
+								<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'" ng-click="contents.checkDeleteForm($event, org);">{{ 'label.del' | translate }}</a></li>
 							</ul>
 						</div>
 					</td>
@@ -241,13 +239,10 @@
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
 							<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
 							<li><a href="" title="사용자변경" ng-click="contents.changeOrgUser(org);">사용자변경</a></li>
-							<!-- 선택 된 class="active" 추가 -->
-							<!-- 20.04.08 - 즐겨찾기 및 해제 기능 추가 by ksw -->
 							<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
 							<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
-							<!-- 2020.03.24 - 사용자 탈퇴 기능 추가 by ksw -->
 							<li><a href="" ng-class="org.managerId == main.userInfo.email ? 'disabled' : ''" ng-click="org.managerId != main.userInfo.email && contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
-							<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'">{{ 'label.del' | translate }}</a></li>
+							<li><a href="" title="삭제" ng-class="(org.managerId == main.userInfo.email || org.myRoleName == 'ADMIN') ? 'delete' : 'disabled'" ng-click="contents.checkDeleteForm($event, org);">{{ 'label.del' | translate }}</a></li>
 						</ul>
 					</div>
 				</div>

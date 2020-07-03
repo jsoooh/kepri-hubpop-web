@@ -671,7 +671,8 @@
                         {{ contents.selOrgProject.orgName }}
                     </h4>
                     <div class="pull-right">
-                        <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProject();"><span class="ico">삭제</span></button>
+                        <!--<button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProject();"><span class="ico">삭제</span></button>-->
+                        <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.checkDeleteForm($event);"><span class="ico">삭제</span></button>
                     </div>
                 </div>
                 <div class="cBox-cnt">

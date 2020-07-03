@@ -42,7 +42,6 @@ angular.module('portal.controllers')
 
         /*Org 목록 조회*/
         ct.listOrgProjects = function () {
-            /* 20.05.08 - 프로젝트 목록으로 돌아갈 경우 다시 대시보드부터 볼수 있도록 false 변경 by ksw */
             orgService.changeUser = false;
             ct.orgProjects = [];
             $scope.main.loadingMainBody = true;
@@ -50,6 +49,7 @@ angular.module('portal.controllers')
             promise.success(function (data) {
                 if (data && data.items && angular.isArray(data.items)) {
                     common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
+                    console.log("ct.orgProjects : ", ct.orgProjects);
                     $scope.main.setListAllPortalOrgs(data.items);
                 } else {
                     $scope.main.setListAllPortalOrgs();
@@ -178,6 +178,18 @@ angular.module('portal.controllers')
                     common.showAlertError($translate.instant('message.mi_egov_fail_org_unbookmark'));
                 });
             })
+        };
+
+        /*프로젝트 삭제 전 체크 화면 오픈*/
+        ct.checkDeleteForm = function ($event, orgItem) {
+            $scope.dialogOptions = {
+                controller: "commCheckDeleteFormCtrl",
+                callBackFunction: null,
+                selOrgProject : orgItem
+            };
+            $scope.actionBtnHied = false;
+            common.showDialog($scope, $event, $scope.dialogOptions);
+            $scope.actionLoading = true; // action loading
         };
 
         ct.listOrgProjects();   //조직 목록 조회
@@ -680,5 +692,129 @@ angular.module('portal.controllers')
                 common.showAlertError($translate.instant('message.mi_egov_fail_common_update'));
             });
         };
+    })
+    .controller('commCheckDeleteFormCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $translate, $q ,ValidationService, common, CONSTANTS, orgService) {
+        _DebugConsoleLog("orgDetailController.js : commCheckDeleteFormCtrl", 1);
+        $scope.actionBtnHied = false;
+
+        var pop = this;
+        $scope.actionLoading = false;
+
+        pop.fn = {};
+        pop.data = {};
+        pop.data.useItems = [];     //사용현황
+        pop.formName = "checkDeleteForm";
+        pop.selOrgProject = angular.copy($scope.dialogOptions.selOrgProject);
+        $scope.dialogOptions.formName = pop.formName;
+        $scope.dialogOptions.validDisabled = true;
+        $scope.dialogOptions.dialogClassName = "modal-dialog";  //modal-dialog / modal-md / modal-lg
+        $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popCheckDeleteForm.html" + _VersionTail();
+        $scope.dialogOptions.title = "프로젝트 삭제 전 사용현황 확인";
+        $scope.dialogOptions.okName =  $translate.instant("label.project_del");
+        pop.method = "POST";
+        //console.log("pop.selOrgProject : ", pop.selOrgProject);
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+            if (checkUseItems()) {
+                common.showAlertWarningHtml("사용 중인 항목이 있습니다. <br>항목 삭제 후 프로젝트 삭제를 진행해 주세요.");
+                $scope.actionBtnHied = false;
+                return;
+            }
+            var showConfirm = common.showConfirm($translate.instant('label.del') + '(' + pop.selOrgProject.orgName + ')', '프로젝트를 삭제하시겠습니까?');
+            showConfirm.then(function () {
+                pop.fn.okFunction();
+            });
+        };
+
+        //삭제 전 사용항목 확인
+        function checkUseItems() {
+            var isUse = false;
+            angular.forEach(pop.data.useItems, function(item, key) {
+                if (item.cnt > 0) {
+                    isUse = true;
+                    return isUse;
+                }
+            });
+            return isUse;
+        }
+
+        $scope.popCancel = function () {
+            $scope.popHide();
+        };
+
+        //프로젝트 삭제
+        pop.fn.okFunction = function() {
+            $scope.main.loadingMainBody = true;
+            var promise = orgService.deleteOrg(pop.selOrgProject.id);
+            promise.success(function (data) {
+                $scope.main.loadingMainBody = false;
+                common.showAlert($translate.instant('label.org_del') + '(' + pop.selOrgProject.orgName + ')', '해당 프로젝트를 삭제 처리 중 입니다.');
+                $scope.main.goToPage('/comm/projects/');
+            });
+            promise.error(function (data, status) {
+                $scope.main.loadingMainBody = false;
+                if (status == 406) {
+                    common.showAlertError($translate.instant('label.org_del') + '(' + pop.selOrgProject.orgName + ')', '삭제 권한이 없습니다.');
+                } else if (status == 403) {
+                    common.showAlertErrorHtml($translate.instant('label.org_del') + '(' + pop.selOrgProject.orgName + ')', '아래 시스템에서 사용중 입니다.');
+                } else {
+                    common.showAlertError('', data);
+                }
+            });
+        };
+
+        /*iaas 테넌트 삭제 전 체크 : 인스턴스/디스크/부하분산서버/서버백업이미지/디스크백업이미지 */
+        pop.fn.checkDeleteIaas = function() {
+            var params = {
+                teamCode : pop.selOrgProject.orgId
+            };
+            pop.iaasItems = [];
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/delete/check', 'GET', params));
+            returnPromise.success(function (data) {
+                pop.iaasItems = data.content;
+                //console.log("pop.iaasItems : ", pop.iaasItems);
+            });
+            returnPromise.error(function (data) {
+                pop.iaasItems = [];
+                common.showAlert("message", data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                angular.forEach(pop.iaasItems, function(item, key) {
+                    item.groupName = "서버 가상화";
+                });
+                console.log("pop.iaasItems : ", pop.iaasItems);
+                pop.data.useItems.push.apply(pop.data.useItems, pop.iaasItems);
+                //console.log("pop.data.useItems : ", pop.data.useItems);
+            });
+        };
+
+        /*paas appCnt 조회*/
+        pop.fn.checkDeletePaas = function() {
+            var params = {
+                urlPaths : {
+                    "name" : pop.selOrgProject.orgId
+                }
+            };
+            pop.paasAppCnt = 0;
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'GET', params));
+            returnPromise.success(function (data) {
+                pop.paasAppCnt = data;
+                console.log("pop.paasAppCnt : ", pop.paasAppCnt);
+            });
+            returnPromise.error(function (data) {
+                common.showAlert("message", data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                pop.paasItem = {"groupName": "App 실행 서비스", "id": "appCnt", "name": "앱 수", "cnt": pop.paasAppCnt};
+                pop.data.useItems.push(pop.paasItem);
+                //console.log("pop.data.useItems : ", pop.data.useItems);
+            });
+        };
+
+        pop.fn.checkDeleteIaas();   //iaas 테넌트 삭제 전 체크
+        pop.fn.checkDeletePaas();   //paas 조직 삭제 전 체크 : appCnt
     })
 ;
