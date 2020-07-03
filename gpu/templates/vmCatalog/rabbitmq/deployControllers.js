@@ -27,11 +27,11 @@ angular.module('gpu.controllers')
         }
 
         ct.fn.createErlangCookie = function() {
-            var arr="A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(",");
+            var alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var erlangCookie = "";
 
             for (var i=0; i<20; i++) {
-                erlangCookie += arr[Math.floor(Math.random()*arr.length)];
+                erlangCookie += alphabet.charAt(Math.floor(Math.random()*alphabet.length));
             }
 
             return erlangCookie;
