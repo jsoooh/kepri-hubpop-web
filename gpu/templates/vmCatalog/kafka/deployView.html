@@ -7,10 +7,12 @@
                 <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
                 <span class="txt" ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'">각 서버로 접속</span>
             </li>
+<!--
             <li>
                 <strong class="tit">Kafka 계정</strong>
                 <span class="txt">Kafka 접속 하여 생성</span>
             </li>
+-->
         </ul>
         <ul>
             <li>

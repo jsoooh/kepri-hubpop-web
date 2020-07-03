@@ -200,7 +200,7 @@ resources:
             sleep 1
             rabbitmqctl stop_app
             sleep 1
-            rabbitmqctl join_cluster --ram rabbit@$server1_tmp_hostname
+            rabbitmqctl join_cluster --ram rabbit@rabbitmq-server1
             sleep 1
             rabbitmqctl start_app
             sleep 1
@@ -260,7 +260,7 @@ resources:
             sleep 1
             rabbitmqctl stop_app
             sleep 1
-            rabbitmqctl join_cluster --ram rabbit@$server1_tmp_hostname
+            rabbitmqctl join_cluster --ram rabbit@rabbitmq-server1
             sleep 1
             rabbitmqctl start_app
             sleep 1

@@ -18,15 +18,24 @@ angular.module('gpu.controllers')
 
         ct.usingPorts.cluster = ['4369', '15672', '25672'];
 
-        ct.data.erlangCookie = "CMAXAFWPGKUBELOPUZOP";
-
         // 테스트 입력값
         if(ct.testInput) {
             ct.data.deployName = "래빗엠큐";
-            ct.data.stackName = "Rabbitmq";
+            ct.data.stackName = "rabbitmq";
             ct.data.adminPassword = "Crossent!234";
             ct.data.adminConfirmPassword = "Crossent!234";
         }
+
+        ct.fn.createErlangCookie = function() {
+            var arr="A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(",");
+            var erlangCookie = "";
+
+            for (var i=0; i<20; i++) {
+                erlangCookie += arr[Math.floor(Math.random()*arr.length)];
+            }
+
+            return erlangCookie;
+        };
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
@@ -39,6 +48,7 @@ angular.module('gpu.controllers')
                 if(ct.data.servicePort == ct.data.ncCheckPort) {
                     ct.data.ncCheckPort++;
                 }
+                ct.data.erlangCookie = ct.fn.createErlangCookie();
                 vmCatalogDeploy.parameters.erlang_cookie = ct.data.erlangCookie;
                 vmCatalogDeploy.parameters.nc_check_port = ct.data.ncCheckPort;
             }
