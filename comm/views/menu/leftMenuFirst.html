@@ -50,7 +50,7 @@
                                             </div>
                                             <div class="text">
                                                 <strong class="title">
-                                                    {{ notiItem.message }}
+                                                    {{ (!!notiItem.message && notiItem.message.length > 20) ? notiItem.message.substring(0, 20) + "..." : notiItem.message }}
                                                 </strong>
                                                 <div class="clear">
                                                     <span class="date">

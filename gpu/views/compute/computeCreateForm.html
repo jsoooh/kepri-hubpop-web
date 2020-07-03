@@ -75,6 +75,9 @@
 								</div>
 								<select class="form-control" ng-model="contents.selectedGpuCardId" ng-change="contents.fn.onchangeGpuCard(contents.selectedGpuCardId);" >
 									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
+									<!--
+									<option ng-repeat="gpuCard in contents.gpuCardList" ng-if="gpuCard.count - gpuCard.usedCount > 0" value={{gpuCard.id}} >{{gpuCard.name}}  {{gpuCard.type}} (사용 가능: {{gpuCard.count - gpuCard.usedCount}}개)</option>
+									-->
 									<option ng-repeat="gpuCard in contents.gpuCardList" ng-if="gpuCard.count - gpuCard.usedCount > 0" value={{gpuCard.id}} >{{gpuCard.name}}  {{gpuCard.type}} (사용 가능: {{gpuCard.count - gpuCard.usedCount}}개)</option>
 								</select>
 							</li>

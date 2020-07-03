@@ -8,19 +8,21 @@ angular.module('gpu.controllers')
 
         var ct = $scope.$parent.$parent.contents;
 
-
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
         ct.data.servicePort = 5672;
         ct.data.managementPort = 15672;
         ct.data.epmdPort = 4369;
         ct.data.erlangPort = 25672;
+        ct.data.ncCheckPort = 4444;
+
+        ct.usingPorts.cluster = ['4369', '15672', '25672'];
+
         ct.data.erlangCookie = "CMAXAFWPGKUBELOPUZOP";
 
         // 테스트 입력값
         if(ct.testInput) {
             ct.data.deployName = "래빗엠큐";
-
             ct.data.stackName = "Rabbitmq";
             ct.data.adminPassword = "Crossent!234";
             ct.data.adminConfirmPassword = "Crossent!234";
@@ -34,7 +36,11 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.erlang_port = ct.data.erlangPort;
             vmCatalogDeploy.parameters.admin_password = ct.data.adminPassword;
             if(ct.data.deployType == "cluster") {
+                if(ct.data.servicePort == ct.data.ncCheckPort) {
+                    ct.data.ncCheckPort++;
+                }
                 vmCatalogDeploy.parameters.erlang_cookie = ct.data.erlangCookie;
+                vmCatalogDeploy.parameters.nc_check_port = ct.data.ncCheckPort;
             }
 
             return vmCatalogDeploy;

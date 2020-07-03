@@ -1658,6 +1658,7 @@ angular.module('portal.controllers')
         };
 
         ct.pageLoadData();
+        $scope.main.getMyMenus();
     })
     .controller('commPopOrgProjectSchAddUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, ValidationService, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
         _DebugConsoleLog('orgDetailControllers.js : commPopOrgProjectSchAddUsersCtrl', 1);

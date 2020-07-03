@@ -15,18 +15,18 @@ angular.module('gpu.controllers')
         ct.data.checkPort = 25432;
         ct.data.applicationName = "master01";
 
+        ct.usingPorts.replica = ['25432'];
+
+        ct.data.deployType = "single";
+        ct.data.volumeUse = false;
+        ct.data.createUser = true;
+
         // 테스트
         if (ct.testInput) {
             ct.data.deployName = "포스트그래스SQL";
             ct.data.stackName = "PostgresSql";
-
-            ct.data.deployType = "single";
-            ct.data.volumeUse = true;
-
             ct.data.postgresPassword = "Crossent!234";
             ct.data.postgresConfirmPassword = "Crossent!234";
-
-            ct.data.createUser = true;
             ct.data.createUserId = "kepri";
             ct.data.createDbName = "kepri";
             ct.data.createUserPassword = "Kepri!234";
@@ -41,8 +41,8 @@ angular.module('gpu.controllers')
                     ct.data.checkPort++;
                 }
                 vmCatalogDeploy.parameters.check_port = ct.data.checkPort;
-                vmCatalogDeploy.parameters.application_name = ct.data.applicationName
-                vmCatalogDeploy.parameters.repluser_password = ct.data.postgresPassword
+                vmCatalogDeploy.parameters.application_name = ct.data.applicationName;
+                vmCatalogDeploy.parameters.repluser_password = ct.data.postgresPassword;
             }
             vmCatalogDeploy.parameters.postgres_password = ct.data.postgresPassword;
 

@@ -8,14 +8,17 @@ angular.module('gpu.controllers')
         var ct = $scope.$parent.$parent.contents;
         ct.vs = new ValidationService({controllerAs: $scope.subPage});
 
+        ct.data.servicePort = 9092;
+        ct.data.zookeeperPort = 2181;
+
+        ct.usingPorts.cluster = ['2888', '3888'];
+
+        ct.data.deployType = "single";
+
         // single 테스트
         if (ct.testInput) {
             ct.data.deployName = "DB 카프카";
-            ct.data.stackName = "kafka";
-            ct.data.deployType = "single";
-            ct.data.servicePort = 9092;
-            ct.data.zookeeperPort = 2181;
-            ct.data.volumeUse = true;
+            ct.data.stackName = "kafka-single";
             /*
             ct.data.deployType = "cluster";
              */
@@ -30,7 +33,8 @@ angular.module('gpu.controllers')
             } else {
                 return {isValid: true};
             }
-        }
+        };
+
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
