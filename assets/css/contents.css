@@ -1,2 +1,23 @@
 /* 가이드 사이트 컨텐츠 */
 
+/*-----  [공통] 로그인  -----*/
+.login-wrap h2 {font-weight:700; text-align:center; margin-bottom:30px;}
+.login-wrap .login-img {margin-bottom:0;}
+
+.checkbox {padding-left:0;}
+.checkbox i {vertical-align:unset;}
+.memWrap {display:block; padding-bottom:0;}
+
+.btn.btn-info:hover, .btn.btn-info:focus {color:#fff;}
+
+/* [validation] */
+.form-group small.has-error {display:block;}
+.form-group small.has-error::before {display:inline-block; width:7px; height:16px; content:' * ' ; vertical-align:inherit; background:none; margin-right:5px;}
+
+
+.register-wrap .register-foot {font-size:13px; color:#8a8f98; text-align:center; padding:14px; margin-top:60px;}
+.register-wrap.card-type .register-foot {border-top: 1px solid #dfdfdf;}
+
+.register-wrap.regi_success {padding:40px 0;}
+.register-body .alert-title {font-size: 24px; color: #3f3f3f; font-weight: 600; margin-bottom: 10px;}
+.register-body p {font-size: 13px; color: #5a5a5a; margin-top: 10px; margin-bottom: 35px;}

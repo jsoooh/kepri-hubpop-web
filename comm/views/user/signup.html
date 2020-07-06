@@ -1,95 +1,95 @@
-		<!-- login -->
-		<div class="memWrap" ng-show="joinStep=='step1'">
-            <form name="requestForm">
-				<div class="mem-hd">
-					<h1>hubpop</h1>
-					<h2>HUB-PoP 계정생성</h2>
-				</div>
-
-				<div class="mem-body">
-					<ul class="ul-join">
-						<li>
-							<div class="input-group">
-								<div class="input-group-addon">
-									<span class="ico type1"></span>
-								</div>
-								<input type="text" id="user_name" name="user_name" maxlength="30" ng-model="memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" required class="form-control" />
-							</div>
-							<p class="has-error" ng-show="requestForm.user_name.$error.required && !requestForm.user_name.$pristine">{{ 'message.mi_required_item' | translate }}</p>
-						</li>
-						<li>
-							<div class="input-group">
-								<div class="input-group-addon">
-									<span class="ico type3"></span>
-								</div>
-								<input type="text" name="position" ng-model="memberInfo.position" placeholder="{{ 'message.mi_type_position' | translate }}" required class="form-control" />
-							</div>
-							<p class="has-error" ng-show="requestForm.position.$error.required && !requestForm.position.$pristine">{{ 'message.mi_required_item' | translate }}</p>
-						</li>
-						<li>
-							<div class="input-group mt30">
-								<div class="input-group-addon">
-									<span class="ico type1"></span>
-								</div>
-								<!-- <input type="text" name="" value="" class="form-control" placeholder="Usename"> -->
-								<input type="text" id="nsignupEmail" name="nsignupEmail" maxlength="30" ng-model="memberInfo.email" ng-blur="validationEmail();blurSignupEmail=true;" ng-focus="resetEmail()" placeholder="{{ 'message.mi_type_id_email' | translate }}" required class="form-control" />
-							</div>
-							<p class="has-error" ng-show="emailError">{{ 'message.mi_exist_duplicate_email' | translate }}</p>
-							<p class="has-error" ng-show="emailTempError">{{ 'message.mi_allow_temp_email' | translate }}</p>
-							<p class="has-error" ng-show="blurSignupEmail && requestForm.nsignupEmail.$error.pattern">{{ 'message.mi_invalid_email_address' | translate }}</p>
-							<p class="has-error" ng-show="blurSignupEmail && requestForm.nsignupEmail.$error.required && !requestForm.nsignupEmail.$pristine">{{ 'message.mi_required_item' | translate }}</p>
-							<p class="has-error" ng-show="emailCommonOrgError">{{ 'message.mi_unusable_commonorguser_email' | translate }}</p>
-						</li>
-						<li>
-							<div class="input-group">
-								<div class="input-group-addon">
-									<span class="ico type2"></span>
-								</div>
-								<!-- <input type="text" name="" value="" class="form-control" placeholder="Password"> -->
-								<input type="password" id="npassword1" name="npassword1" maxlength="20" ng-model="memberInfo.password" ng-pattern="/^.*(?=^.{10,20}$)(?=.*\d)(?=.*[a-zA-Z]).*$/" placeholder="{{ 'message.mi_type_pwd' | translate }}" required ng-blur="blurPassword=true" class="form-control"/>
-							</div>
-							<p class="has-error" ng-show="blurPassword && requestForm.npassword1.$error.pattern">{{ 'message.mi_type_eng_number_10to20_pwd' | translate }}</p>
-							<p class="has-error" ng-show="blurPassword && requestForm.npassword1.$error.required && !requestForm.npassword1.$pristine">{{ 'message.mi_required_item' | translate }}</p>
-						</li>
-						<li>
-							<div class="input-group">
-								<div class="input-group-addon">
-									<span class="ico type2"></span>
-								</div>
-								<!-- <input type="text" name="" value="" class="form-control" placeholder="Password Confirm"> -->
-								<input type="password" id="npassword2" name="npassword2" maxlength="20" ng-model="memberInfo.password2" ng-blur="checkPasswordConfirm()"  placeholder="{{ 'message.mi_type_pwd_again' | translate }}" required ng-blur="blurPassword=true" class="form-control"/>
-							</div>
-							<p class="has-error" ng-show="invalidPassword">{{ 'message.mi_wrong_pwd' | translate }}</p>
-							<p class="has-error" ng-show="blurPassword && requestForm.npassword2.$error.required && !requestForm.npassword2.$pristine">{{ 'message.mi_required_item' | translate }}</p>
-						</li>
-					</ul>
-				</div>
-				<div class="mem-foot">
-					<button type="submit" name="button" class="btn btn-color1" ng-click="signup()" ng-disabled="requestForm.$invalid">생성하기</button>
-					<p class="text-right"><a href="/">이전화면으로 돌아가기</a></p>
-				</div>
-            </form>
-		</div>
-
-		<div class="memWrap" ng-show="joinStep=='step4'">
-			<div class="mem-hd">
-				<h1>hubpop</h1>
-				<h2>HUB-PoP 계정생성</h2>
+<script src="assets/js/common.js" type="text/javascript"></script>		
+<!-- inner -->
+<div class="inner-wrap full-wrap bg-gray" ng-show="joinStep=='step1'">
+	<form name="requestForm">
+	<div class="float-center">
+		<div class="register-wrap card-type">
+			<div class="register-img">
+				<img src="../assets/img/common/logo_login.png" alt="">
 			</div>
-
-			<div class="mem-body">
-				<div class="compMsgBox">
-					<span class="ico"></span>
-					<strong class="msg-tit">가입완료</strong>
-					<div class="msg-txt">
-						계정 생성이 완료되었습니다. <br>
-						외부 사용자의 경우, 한전 담당자가 생성한 프로젝트에 참여하여 HUB-PoP을 사용할 수 있습니다.<br>
-						생성한 계정 정보를 한전 담당자에게 전달하여 프로젝트 참여자로 등록하도록 요청하여 주세요.
+			<div class="register-body">
+				<form>
+					<div class="form-group">
+						<div class="input-icon-type2 icon-left">
+							<span class="input-icon-addon">
+								<i data-feather="user"></i>
+							</span>
+							<input type="text" id="user_name" class="form-control" name="user_name" maxlength="30" ng-model="memberInfo.user_name" placeholder="{{ 'message.mi_type_name' | translate }}" required />
+						</div>
+						<small class="has-error" ng-show="requestForm.user_name.$error.required && !requestForm.user_name.$pristine">{{ 'message.mi_required_item' | translate }}</small>
 					</div>
-				</div>
+					<div class="form-group margin-bottom-30">
+						<div class="input-icon-type2 icon-left">
+							<span class="input-icon-addon">
+								<i data-feather="briefcase"></i>
+							</span>
+							<input type="text" class="form-control" name="position" ng-model="memberInfo.position" placeholder="{{ 'message.mi_type_position' | translate }}" required />
+						</div>
+						<small class="has-error" ng-show="requestForm.position.$error.required && !requestForm.position.$pristine">{{ 'message.mi_required_item' | translate }}</small>
+					</div>
+					<div class="form-group">
+						<div class="input-icon-type2 icon-left">
+							<span class="input-icon-addon">
+								<i data-feather="user-check"></i>
+							</span>
+							<input type="text" id="nsignupEmail" class="form-control" name="nsignupEmail" maxlength="30" ng-model="memberInfo.email" ng-blur="validationEmail();blurSignupEmail=true;" ng-focus="resetEmail()" placeholder="{{ 'message.mi_type_id_email' | translate }}" required />
+						</div>
+						<small class="has-error" ng-show="emailError">{{ 'message.mi_exist_duplicate_email' | translate }}</small>
+						<small class="has-error" ng-show="emailTempError">{{ 'message.mi_allow_temp_email' | translate }}</small>
+						<small class="has-error" ng-show="blurSignupEmail && requestForm.nsignupEmail.$error.pattern">{{ 'message.mi_invalid_email_address' | translate }}</small>
+						<small class="has-error" ng-show="blurSignupEmail && requestForm.nsignupEmail.$error.required && !requestForm.nsignupEmail.$pristine">{{ 'message.mi_required_item' | translate }}</small>
+						<small class="has-error" ng-show="emailCommonOrgError">{{ 'message.mi_unusable_commonorguser_email' | translate }}</small>
+					</div>
+					<div class="form-group">
+						<div class="input-icon-type2 icon-left">
+							<span class="input-icon-addon">
+								<i data-feather="unlock"></i>
+							</span>
+							<input type="password" id="npassword1" class="form-control" name="npassword1" maxlength="20" ng-model="memberInfo.password" ng-pattern="/^.*(?=^.{10,20}$)(?=.*\d)(?=.*[a-zA-Z]).*$/" placeholder="{{ 'message.mi_type_pwd' | translate }}" required ng-blur="blurPassword=true"/>
+						</div>
+						<small class="has-error" ng-show="blurPassword && requestForm.npassword1.$error.pattern">{{ 'message.mi_type_eng_number_10to20_pwd' | translate }}</small>
+						<small class="has-error" ng-show="blurPassword && requestForm.npassword1.$error.required && !requestForm.npassword1.$pristine">{{ 'message.mi_required_item' | translate }}</small>
+					</div>
+					<div class="form-group margin-bottom-30">
+						<div class="input-icon-type2 icon-left">
+							<span class="input-icon-addon">
+								<i data-feather="unlock"></i>
+							</span>
+							<input type="password" id="npassword2" class="form-control" name="npassword2" maxlength="20" ng-model="memberInfo.password2" ng-blur="checkPasswordConfirm()"  placeholder="{{ 'message.mi_type_pwd_again' | translate }}" required ng-blur="blurPassword=true"/>
+						</div>
+						<small class="has-error" ng-show="invalidPassword">{{ 'message.mi_wrong_pwd' | translate }}</small>
+						<small class="has-error" ng-show="blurPassword && requestForm.npassword2.$error.required && !requestForm.npassword2.$pristine">{{ 'message.mi_required_item' | translate }}</small>
+					</div>
+					<button type="submit" class="btn btn-info btn-block btn-lg" ng-click="signup()" ng-disabled="requestForm.$invalid">생성하기</button>
+				</form>
 			</div>
-			<div class="mem-foot">
-				<button type="button" name="button" class="btn btn-color1" ng-click="moveLoginPage();">로그인</button>
+			<div class="register-foot"">
+				<a href="/" class="color-primary">이전화면으로 돌아가기</a>
 			</div>
 		</div>
-		<!-- //login-->
+	</div>
+	</form>
+</div>
+
+
+<div class="inner-wrap" ng-show="joinStep=='step4'">
+	<div class="float-center">
+		<div class="register-wrap card-type regi_success">
+			<div class="register-img">
+				<img src="../assets/img/icon/modal_alert_success.jpg" alt="">
+			</div>
+			<div class="register-body">
+				<div class="alert-title text-center">가입완료</div>
+				<p class="mt30">
+					계정 생성이 완료되었습니다. <br>
+					외부 사용자의 경우, 한전 담당자가 생성한 프로젝트에 참여하여 HUB-PoP을 사용할 수 있습니다.<br>
+					생성한 계정 정보를 한전 담당자에게 전달하여 프로젝트 참여자로 등록하도록 요청하여 주세요.
+				</p>
+				<div class="text-center">
+					<button type="button" class="btn btn-success" ng-click="moveLoginPage();">로그인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- // inner -->
