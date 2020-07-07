@@ -1671,9 +1671,11 @@ angular.module('common.controllers', [])
 
         //전체 메뉴 화면에서 메뉴 즐겨찾기 추가/삭제
         mc.clickMyMenu = function (menuId) {
-            var indexMyMenu = mc.myMenus.findIndex(i => i.id === menuId);
+            //var indexMyMenu = mc.myMenus.findIndex(i => i.id === menuId);
+            //if (indexMyMenu > -1) isAdd = false;
+            var sltMenu = common.objectsFindCopyByField(mc.myMenus, "id", menuId);
             var isAdd = true;
-            if (indexMyMenu > -1) isAdd = false;
+            if (!!sltMenu && !!sltMenu.id) isAdd = false;
             if (isAdd) {
                 var promise = portal.menu.addMymenu(menuId);
             } else {
