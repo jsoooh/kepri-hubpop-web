@@ -49,7 +49,7 @@ angular.module('portal.controllers')
             promise.success(function (data) {
                 if (data && data.items && angular.isArray(data.items)) {
                     common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
-                    console.log("ct.orgProjects : ", ct.orgProjects);
+                    //console.log("ct.orgProjects : ", ct.orgProjects);
                     $scope.main.setListAllPortalOrgs(data.items);
                 } else {
                     $scope.main.setListAllPortalOrgs();
