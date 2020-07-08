@@ -33,7 +33,8 @@ angular.module('gpu.controllers')
                 ct.vmCatalogDeployList = data.content;
                 angular.forEach(ct.vmCatalogDeployList, function (vmCatalogDeploy, kdy) {
                     ct.fn.mappingOuputsData(vmCatalogDeploy);
-                    if (vmCatalogDeploy.stackStatus.indexOf("FAILED") == -1 && vmCatalogDeploy.stackStatus.indexOf("PROGRESS") >= 0) {
+                    if (vmCatalogDeploy.stackStatus.indexOf("FAILED") == -1 && vmCatalogDeploy.deployStatus.indexOf("PROGRESS") >= 0) {
+                        vmCatalogService.checkDeployTimeOutStatus(vmCatalogDeploy);
                         $scope.main.reloadTimmerStart("listAllVmCatalogDeploy", function () { ct.fn.listAllVmCatalogDeploy(tenantId); }, 10000);
                     }
                 });
@@ -176,6 +177,7 @@ angular.module('gpu.controllers')
                 ct.fn.mappingOuputsData(data.content.outputs);
                 ct.fn.loadVmCatalogDeployViewTemplate(ct.vmCatalogInfo.templatePath);
                 if (ct.vmCatalogDeployInfo.stackStatus.indexOf("FAILED") == -1 && ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
+                    vmCatalogService.checkDeployTimeOutStatus(ct.vmCatalogDeployInfo);
                     $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
                 }
             } else {
@@ -199,6 +201,7 @@ angular.module('gpu.controllers')
                 ct.vmCatalogInfo = angular.copy(ct.vmCatalogDeployInfo.vmCatalogInfo);
                 ct.fn.mappingOuputsData(data.content.outputs);
                 if (ct.vmCatalogDeployInfo.stackStatus.indexOf("FAILED") == -1 && ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
+                    vmCatalogService.checkDeployTimeOutStatus(ct.vmCatalogDeployInfo);
                     $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
                 }
             } else {
