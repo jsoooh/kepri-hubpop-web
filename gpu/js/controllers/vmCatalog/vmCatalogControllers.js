@@ -43,7 +43,7 @@ angular.module('gpu.controllers')
 
     var ct                      = this;
 
-    ct.testInput                = true;
+    ct.testInput                = false;
 
     ct.tenantId                 = $scope.main.userTenantGpuId;
     ct.fn                       = {};
