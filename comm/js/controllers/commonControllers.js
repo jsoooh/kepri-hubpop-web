@@ -66,6 +66,7 @@ angular.module('common.controllers', [])
                 common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
                 return;
             }
+            console.log("mc.sltPortalOrg : ", mc.sltPortalOrg);
             if (!menuItem.urlPath) return;
             mc.sltMenu = menuItem;
             common.locationHref(menuItem.urlPath);
