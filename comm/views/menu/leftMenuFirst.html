@@ -1,3 +1,9 @@
+<script type="text/javascript">
+	//font-icon feather
+	$(function () {
+	    feather.replace({width: '1em', height: '1em'});
+	});
+</script>
             <!-- left-menu WRAP -->
             <div class="left-wrap">
                 <div class="header-top">
@@ -88,31 +94,31 @@
 								</li>
                                 <li>
                                     <a href="#/comm/memberEdit">
-                                        <i class="fas fa-user-check"></i>
+                                        <i data-feather="user-check"></i>
                                         <span>개인정보 수정</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="" ng-click="main.changePassword($event)">
-                                        <i class="fas fa-lock"></i>
+                                        <i data-feather="lock"></i>
                                         <span>비밀번호 설정</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="" ng-click="main.signout()">
-                                        <i class="fas fa-user-times"></i>
+                                        <i data-feather="user-x"></i>
                                         <span>회원탈퇴</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="/hsvc/no/retrieveNoticeView.do">
-                                        <i class="fas fa-microphone"></i>
+                                        <i data-feather="mic"></i>
                                         <span>공지사항</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#/comm/boards/qna">
-                                        <i class="fas fa-comment-alt"></i>
+                                        <i data-feather="message-square"></i>
                                         <span>문의하기</span>
                                     </a>
                                 </li>
