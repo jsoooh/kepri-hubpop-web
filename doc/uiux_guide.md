@@ -336,7 +336,7 @@ http://www.kepri2-demo.crossent.com
     $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/notification?token=de26d10dd2294328b937a019c1ddc23b&project_code=42-125'
     http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/notification?token=de26d10dd2294328b937a019c1ddc23b&project_code=42-125
     ```
-- 결과  
+- 결과 : 7일 이내 전달된 notification에 대해서만 신규 notification으로 조회됨 
     ```
     {
       "counts": 6,
