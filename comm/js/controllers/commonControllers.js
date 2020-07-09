@@ -66,7 +66,11 @@ angular.module('common.controllers', [])
                 common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
                 return;
             }
-            console.log("mc.sltPortalOrg : ", mc.sltPortalOrg);
+            //console.log("mc.sltPortalOrg : ", mc.sltPortalOrg);
+            if (!mc.sltPortalOrg.isActive) {
+                common.showDialogAlert('알림', '현재 프로젝트는 비활성화 상태입니다.');
+                return;
+            }
             if (!menuItem.urlPath) return;
             mc.sltMenu = menuItem;
             common.locationHref(menuItem.urlPath);
@@ -593,6 +597,10 @@ angular.module('common.controllers', [])
         };
 
         mc.goToPortalOrgPage = function(portalOrg) {
+            if (!portalOrg.id) {
+                common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                return;
+            }
             mc.goToPage("/comm/projects/projectDetail/" + portalOrg.id)
         };
 
