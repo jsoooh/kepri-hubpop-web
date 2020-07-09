@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portal.controllers')
-    .controller('commOrgProjectDetailCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, ValidationService, common, cache, orgService, portal, quotaService, memberService) {
+    .controller('commOrgProjectDetailCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, ValidationService, common, cache, orgService, portal, quotaService, memberService, CONSTANTS) {
         _DebugConsoleLog('orgDetailControllers.js : commOrgProjectDetailCtrl', 1);
 
         var ct = this;
@@ -1270,6 +1270,42 @@ angular.module('portal.controllers')
             });
         };
 
+        /*프로젝트 삭제 전 체크*/
+        ct.checkDeleteOrgProject = function ($event) {
+            var params = {
+                teamCode : ct.selOrgProject.orgId
+            };
+            var iaasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/check/useYn', 'GET', params));
+            params = {
+                urlPaths : {
+                    "name" : ct.selOrgProject.orgId
+                }
+            };
+            var paasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'GET', params));
+            ct.iaasUseYn = "N";
+            ct.paasAppCnt = 0;
+            ct.useServices = "";
+            $scope.main.loadingMainBody = true;
+            $q.all([iaasPromise, paasPromise]).then(function (results) {
+                $scope.main.loadingMainBody = false;
+                ct.iaasUseYn = results[0].data.content;
+                ct.paasAppCnt = results[1].data;
+                if (ct.iaasUseYn == "Y") {
+                    ct.useServices += "서버 가상화";
+                }
+                if (ct.paasAppCnt > 0) {
+                    if (ct.useServices != "") ct.useServices += ", ";
+                    ct.useServices += "App 실행 서비스";
+                }
+                //사용중인 서비스가 있을 때 리턴
+                if (ct.useServices != "") {
+                    common.showAlertWarningHtml("아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><b>" + ct.useServices + "</b>");
+                    return;
+                }
+                ct.deleteOrgProject();
+            });
+        };
+
         // 조직 삭제
         ct.deleteOrgProject = function () {
             var showConfirm = common.showConfirm($translate.instant('label.del') + '(' + ct.selOrgProject.orgName + ')', '프로젝트를 삭제하시겠습니까?');
@@ -1655,18 +1691,6 @@ angular.module('portal.controllers')
         ct.pageLoadData = function () {
             ct.getOrgProject();
             ct.listOrgUsers();
-        };
-
-        /*프로젝트 삭제 전 체크 화면 오픈*/
-        ct.checkDeleteForm = function ($event) {
-            $scope.dialogOptions = {
-                controller: "commCheckDeleteFormCtrl",
-                callBackFunction: null,
-                selOrgProject : ct.selOrgProject
-            };
-            $scope.actionBtnHied = false;
-            common.showDialog($scope, $event, $scope.dialogOptions);
-            $scope.actionLoading = true; // action loading
         };
 
         ct.pageLoadData();

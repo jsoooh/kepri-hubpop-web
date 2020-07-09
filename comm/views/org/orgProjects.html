@@ -183,7 +183,7 @@
 								<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
 								<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
 								<li><a href="" ng-class="org.managerId == main.userInfo.email ? 'disabled' : ''" ng-click="org.managerId != main.userInfo.email && contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
-								<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'" ng-click="contents.checkDeleteForm($event, org);">{{ 'label.del' | translate }}</a></li>
+								<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'" ng-click="contents.checkDeleteOrgProject($event, org);">{{ 'label.del' | translate }}</a></li>
 							</ul>
 						</div>
 					</td>
@@ -242,7 +242,7 @@
 							<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기" class="favorit active">즐겨찾기</a></li>
 							<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제" class="favorit">즐겨찾기 해제</a></li>
 							<li><a href="" ng-class="org.managerId == main.userInfo.email ? 'disabled' : ''" ng-click="org.managerId != main.userInfo.email && contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
-							<li><a href="" title="삭제" ng-class="(org.managerId == main.userInfo.email || org.myRoleName == 'ADMIN') ? 'delete' : 'disabled'" ng-click="contents.checkDeleteForm($event, org);">{{ 'label.del' | translate }}</a></li>
+							<li><a href="" title="삭제" ng-class="(org.managerId == main.userInfo.email || org.myRoleName == 'ADMIN') ? 'delete' : 'disabled'" ng-click="contents.checkDeleteOrgProject($event, org);">{{ 'label.del' | translate }}</a></li>
 						</ul>
 					</div>
 				</div>
