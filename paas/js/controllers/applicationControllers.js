@@ -1628,6 +1628,7 @@ angular.module('paas.controllers')
 
                 ct.cpuRoundProgress.value = cpuValue;
                 ct.cpuRoundProgress.percentage = (instanceStatsUsageCpu / ct.instanceStats.length).toFixed(1);
+                ct.cpuRoundProgress.percentage = ct.cpuRoundProgress.percentage > 100 ? 100 : ct.cpuRoundProgress.percentage;   // CPU 이용률 100% 이상일때 100% 고정
                 ct.memoryRoundProgress.value = memoryValue;
                 ct.memoryRoundProgress.value2 = (instanceStatsUsageMemory / ct.instanceStats.length).toFixed(1)+ " %";
                 ct.memoryRoundProgress.percentage = (instanceStatsUsageMemory / ct.instanceStats.length).toFixed(1);
