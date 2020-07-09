@@ -96,7 +96,7 @@ resources:
           template: |
             #!/bin/sh
             echo "nginx setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             systemctl start nginx
             systemctl enable nginx
             echo "nginx setting end"
@@ -116,7 +116,7 @@ resources:
           template: |
             #!/bin/sh
             echo "nginx setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             systemctl start nginx
             systemctl enable nginx
             echo "nginx setting end"
@@ -138,14 +138,14 @@ resources:
           template: |
             #!/bin/sh
             echo "nginx setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             systemctl start nginx
             systemctl enable nginx
             server1Run=1
             while [ $server1Run -ne 0 ]
             do
               echo "nc -z $server1_address $service_port"
-              nc -z $server1_address $galera_port
+              nc -z $server1_address $service_port
               server1Run=$?
               sleep 5
             done
@@ -153,11 +153,11 @@ resources:
             while [ $server2Run -ne 0 ]
             do
               echo "nc -z $server2_address $service_port"
-              nc -z $server2_address $galera_port
+              nc -z $server2_address $service_port
               server2Run=$?
               sleep 5
             done
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "nginx setting end"
 
   server1:
