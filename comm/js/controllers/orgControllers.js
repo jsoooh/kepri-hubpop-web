@@ -209,7 +209,7 @@ angular.module('portal.controllers')
                 }
                 //사용중인 서비스가 있을 때 리턴
                 if (ct.useServices != "") {
-                    common.showAlertWarningHtml("아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><b>" + ct.useServices + "</b>");
+                    common.showDialogAlertHtml('알림','아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br><b>'+ ct.useServices +'</b>', 'warning');
                     return;
                 }
                 ct.deleteOrgProject(orgItem);
