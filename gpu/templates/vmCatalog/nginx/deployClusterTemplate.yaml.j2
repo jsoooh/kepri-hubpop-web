@@ -1,6 +1,6 @@
 heat_template_version: '2018-08-31'
 
-description: single nginx template
+description: nginx cluster template
 
 parameters:
   api_end_point:
@@ -26,7 +26,7 @@ parameters:
 {% if octaviaLbUse %}
   lb_description:
     type: string
-    default: "vmCatalog Nginx lb"
+    default: "vmCatalog Nginx cluster lb"
   lb_svc_port:
     type: string
   lb_svc_protocol:
