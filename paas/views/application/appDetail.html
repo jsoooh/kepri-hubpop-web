@@ -196,7 +196,7 @@
                                     <strong class="tit">CPU</strong>
                                     <div class="progressWrap color-type1">
                                         <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="{{statItem.usage.cpu*100}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': statItem.usage.cpu*100}">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="{{statItem.usage.cpu*100 > 100 ? 100 : statItem.usage.cpu*100}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': statItem.usage.cpu*100 > 100 ? 100 : statItem.usage.cpu*100}">
                                             </div>
                                         </div>
                                     </div>

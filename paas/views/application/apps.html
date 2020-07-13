@@ -178,8 +178,8 @@
 	                                    <li>
 	                                        <div class="progressWrap type1">
 	                                            <div class="progress">
-	                                                <div percent-progress-bar-animate bar-type="height" percent="{{appItem.cpuRoundProgressPercentage}}" class="progress">
-	                                                    <div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{appItem.cpuRoundProgressPercentage}}%"></div>
+	                                                <div percent-progress-bar-animate bar-type="height" percent="{{appItem.cpuRoundProgressPercentage > 100 ? 100 : appItem.cpuRoundProgressPercentage}}" class="progress">
+	                                                    <div class="progress-bar color-type3" role='progressbar' tooltip-placement="top" uib-tooltip="{{appItem.cpuRoundProgressPercentage > 100 ? 100 : appItem.cpuRoundProgressPercentage}}%"></div>
 	                                                </div>
 	                                            </div>
 	                                        </div>

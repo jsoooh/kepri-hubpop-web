@@ -21,3 +21,12 @@
 .register-wrap.regi_success {padding:40px 0;}
 .register-body .alert-title {font-size: 24px; color: #3f3f3f; font-weight: 600; margin-bottom: 10px;}
 .register-body p {font-size: 13px; color: #5a5a5a; margin-top: 10px; margin-bottom: 35px;}
+
+/*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
+
+.nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}
+.modal-content {border:0;}
+.modal-header {padding:15px 20px;}
+.modal-title {color:#fff; font-size:18px;}
+.proj_dashboard .type_cloud .cloud_chartWrap ul > li {padding:0 10px;}
+.cBox.appCnt-info .cBox-hd .c-tit .only-ico.thum_modify {top:40px; left:25px;}

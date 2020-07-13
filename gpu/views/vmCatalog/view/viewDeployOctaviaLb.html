@@ -40,6 +40,7 @@
                         <li>
                             <strong class="tit">접속 IP</strong>
                             <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+                            <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.octaviaLb.loadBalancer.vip_address)"><span class="ico_sm ico_copy"></span></button>
                         </li>
                         <li>
                             <strong class="tit">연결포트</strong>

@@ -1,6 +1,6 @@
 heat_template_version: '2018-08-31'
 
-description: single tomcat template
+description: tomcat cluster template
 
 parameters:
   api_end_point:
@@ -26,7 +26,7 @@ parameters:
 {% if octaviaLbUse %}
   lb_description:
     type: string
-    default: "vmCatalog Nginx lb"
+    default: "vmCatalog Tomcat cluster lb"
   lb_svc_port:
     type: string
   lb_svc_protocol:
@@ -85,6 +85,7 @@ resources:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
+      config:
         str_replace:
           params:
             $api_end_point: { get_param: api_end_point }
@@ -95,7 +96,7 @@ resources:
           template: |
             #!/bin/sh
             echo "tomcat setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             systemctl start tomcat
             systemctl enable tomcat
             echo "tomcat setting end"
@@ -104,6 +105,7 @@ resources:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
+      config:
         str_replace:
           params:
             $api_end_point: { get_param: api_end_point }
@@ -114,7 +116,7 @@ resources:
           template: |
             #!/bin/sh
             echo "tomcat setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             systemctl start tomcat
             systemctl enable tomcat
             echo "tomcat setting end"
@@ -123,6 +125,7 @@ resources:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
+      config:
         str_replace:
           params:
             $api_end_point: { get_param: api_end_point }
@@ -135,14 +138,14 @@ resources:
           template: |
             #!/bin/sh
             echo "tomcat setting start"
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             systemctl start tomcat
             systemctl enable tomcat
             server1Run=1
             while [ $server1Run -ne 0 ]
             do
               echo "nc -z $server1_address $service_port"
-              nc -z $server1_address $galera_port
+              nc -z $server1_address $service_port
               server1Run=$?
               sleep 5
             done
@@ -150,11 +153,11 @@ resources:
             while [ $server2Run -ne 0 ]
             do
               echo "nc -z $server2_address $service_port"
-              nc -z $server2_address $galera_port
+              nc -z $server2_address $service_port
               server2Run=$?
               sleep 5
             done
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "tomcat setting end"
 
   server1:
@@ -164,12 +167,12 @@ resources:
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
-        - network: { get_param: private_net }
+        - port: { get_resource: server1_port }
       key_name: { get_param: key_name }
       user_data_update_policy: IGNORE
       user_data_format: RAW
       user_data:
-        get_resource: init_config
+        get_resource: init_config1
 
   server2:
     type: OS::Nova::Server
@@ -178,12 +181,12 @@ resources:
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
-        - network: { get_param: private_net }
+        - port: { get_resource: server2_port }
       key_name: { get_param: key_name }
       user_data_update_policy: IGNORE
       user_data_format: RAW
       user_data:
-        get_resource: init_config
+        get_resource: init_config2
 
   server3:
     type: OS::Nova::Server
@@ -192,12 +195,12 @@ resources:
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
-        - network: { get_param: private_net }
+        - port: { get_resource: server3_port }
       key_name: { get_param: key_name }
       user_data_update_policy: IGNORE
       user_data_format: RAW
       user_data:
-        get_resource: init_config
+        get_resource: init_config3
 
 {% if octaviaLbUse %}
   octavia_lb:
