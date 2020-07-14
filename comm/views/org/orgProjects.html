@@ -187,7 +187,7 @@
 								</div>
 								<div class="text-area pull-left">
 									<div>
-										<a ng-click="main.goToPortalOrgPage(org);">
+										<a class="link" ng-click="main.goToPortalOrgPage(org);">
 											<b>{{org.orgName}}</b>
 										</a>
 									</div>
@@ -202,9 +202,9 @@
 						</div>
 						<div class="pull-right grey-500 card-info-bottom">
 							<div class="font-size-12">
-								<span class="feather-icon"><i data-feather="clock"></i></span> 
-								<span ng-if="org.updatedDate">최근활동일 : {{org.updatedDate.time | date : 'yyyy.MM.dd'}}</span> 
-								<span ng-if="!org.updatedDate">최근활동일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
+								<span class="feather-icon"><i data-feather="clock"></i></span>
+								<span class="margin-left-0" ng-if="org.updatedDate">최근활동일 : {{org.updatedDate.time | date : 'yyyy.MM.dd'}}</span> 
+								<span class="margin-left-0" ng-if="!org.updatedDate">최근활동일 : {{org.createdDate.time | date : 'yyyy.MM.dd'}}</span>
 							</div>
 						</div>
 					</div>

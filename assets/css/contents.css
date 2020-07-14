@@ -32,6 +32,13 @@
 .btn.btn-default.on {background-color: #3159a1 !important; border-color: #3159a1; color: #fff;}
 
 .blank-page.no-project {width:800px; margin:0 auto;}
+.ink {background-color: transparent; border-color: transparent; color: #3159a1; text-decoration: underline; text-underline-position: under; font-weight: 600;}
+.link:hover, .link:focus {color: #5c7dd0; text-decoration: underline; background-color: transparent;}
+
+/*목록 돌아가기 버튼*/
+#contentWrap .page-title #spot .btn-back-list {display: block; width: 32px; height: 32px; border-radius: 50%; border: 1px solid #dcdcdc; position: absolute; top: 39px; right: 80px; z-index: 1;}
+#contentWrap .page-title #spot .btn-back-list i {display: block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 25px; -webkit-transition: all 0.2s linear; -o-transition: all 0.2s linear; transition: all 0.2s linear;}
+#contentWrap .page-title #spot .btn-back-list:hover i {transform: translate(-50%, -50%) rotate(180deg);}
 
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
