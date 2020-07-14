@@ -35,8 +35,10 @@ parameters:
 {% if volumeUse %}
   volume_type:
     type: string
+    default: RBD
   volume_size:
     type: string
+    default: 10
   volume_mount_point:
     type: string
     default: /dev/vdb
