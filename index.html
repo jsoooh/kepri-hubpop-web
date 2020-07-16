@@ -219,7 +219,7 @@
 		loadCssLink('assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.css'+_VERSION_TAIL_);
 		//loadCssLink('assets/lib/bootstrap/hubpop/bootstrap_hubpop.css'+_VERSION_TAIL_);		//중복으로 상단으로 이동
 		loadCssLink('assets/css/component.css'+_VERSION_TAIL_);
-		//loadCssLink('assets/css/user_layout.css'+_VERSION_TAIL_);	//로그인/계정생성 화면에서는 skip
+		loadCssLink('assets/css/user_layout.css'+_VERSION_TAIL_);	//로그인/계정생성 화면에서는 skip
 		loadCssLink('assets/css/contents.css'+_VERSION_TAIL_);
 		//assets.css
 
@@ -298,7 +298,7 @@
 </head>
 <body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader" ng-class="{'full-layout' : (main.stateKey == 'login' || main.stateKey == 'signup')}">
 <script type="text/javascript">
-	document.writeln('<link rel="stylesheet" ng-if="main.stateKey != \'login\' && main.stateKey != \'signup\'" href="assets/css/user_layout.css'+_VERSION_TAIL_+'" type="text/css"/>');
+	//document.writeln('<link rel="stylesheet" ng-if="main.stateKey != \'login\' && main.stateKey != \'signup\'" href="assets/css/user_layout.css'+_VERSION_TAIL_+'" type="text/css"/>');
 	document.writeln('<div id="pageWrap" ng-class="{\'all-menu-open\' : main.allMenuOpen, \'dashboard-full\' : (main.isLoginPage && main.dashboardFull), \'page-blank\' : (main.isLoginPage && !main.sltPortalOrgId) }">                                         ');
 	document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuFirst.html'+_VERSION_TAIL_+'\'"></header>     ');
 	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" ng-class="{\'active\' : main.allMenuOpen }" ng-include="\''+_COMM_VIEWS_+ '/menu/allMenuMap.html'+_VERSION_TAIL_+'\'"></div>   ');
