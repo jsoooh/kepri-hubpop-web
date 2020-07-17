@@ -64,6 +64,9 @@ angular.module('perf.controllers')
                     itemCnt++;
                 }
             }
+            if (maxRow < itemCnt) {
+                maxRow = itemCnt;
+            }
             return maxRow;
         };
 
