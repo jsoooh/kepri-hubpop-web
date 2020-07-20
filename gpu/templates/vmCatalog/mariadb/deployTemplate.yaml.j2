@@ -43,6 +43,9 @@ parameters:
   volume_mount_point:
     type: string
     default: /dev/vdb
+  volume_format_type:
+    type: string
+    default: xfs
   volume_mount_path:
     type: string
     default: /mnt/data
@@ -123,9 +126,8 @@ resources:
             [client]
             default-character-set = utf8
 
-            sleep 1
-
             EOF
+            sleep 1
 
             systemctl start mariadb
             sleep 1

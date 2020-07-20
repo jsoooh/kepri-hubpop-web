@@ -35,21 +35,19 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/'+userId+'/orgList', 'GET'));
         };
 
-        /*조직 목록 조회 - 소속 조직 : 로그인 사용자 관련*/
-        orgService.getMyOrgList = function (schType, schText) {
+        /*조직 목록 조회 - 소속 조직 : 로그인 사용자 관련 : 사용안함*/
+        /*orgService.getMyOrgList = function (schType, schText) {
             var getParams = {
                 'schType' : schType,
                 'schText' : schText
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams));
-        };
+        };*/
 
         /*조직 목록 조회 - 소속 조직 : 로그인 사용자 관련*/
-        orgService.getMyProjectOrgList = function (projectId, schType, schText) {
+        orgService.getMyProjectOrgList = function (projectId) {
             var getParams = {
-                'projectId' : projectId,
-                'schType' : schType,
-                'schText' : schText
+                'projectId' : projectId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams));
         };

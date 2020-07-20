@@ -910,7 +910,7 @@ angular.module('common.services', ['LocalStorageModule'])
             }
             var params = {};
             if (paramsData) {
-                params = angular.copy(paramsData);
+                params = $.extend(true, {}, paramsData);
                 if (params.urlPaths) {
                     for (var key in params.urlPaths) {
                         pathUrl = common.replaceAll(pathUrl, "{" + key + "}", params.urlPaths[key]);

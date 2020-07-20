@@ -336,7 +336,7 @@ http://www.kepri2-demo.crossent.com
     $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/notification?token=de26d10dd2294328b937a019c1ddc23b&project_code=42-125'
     http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/notification?token=de26d10dd2294328b937a019c1ddc23b&project_code=42-125
     ```
-- 결과  
+- 결과 : 7일 이내 전달된 notification에 대해서만 신규 notification으로 조회됨 
     ```
     {
       "counts": 6,
@@ -603,43 +603,13 @@ http://www.kepri2-demo.crossent.com
 - 결과값
     ```
     {
-      "itemCount": 3,
+      "itemCount": 2,
       "items": [
         {
-          "parentNm": "공통메뉴",
-          "menuOrder": 2,
-          "level": 2,
-          "serviceNm": "사용자 관리",
-          "useYn": "Y",
-          "id": "HUB20102",
-          "iconPath": "ico_usersetting",
-          "urlPath": null,
-          "parentId": "HUB201",
-          "urlParam": null
+          "menuId": "HUB20103"
         },
         {
-          "parentNm": "사용자 관리",
-          "menuOrder": 1,
-          "level": 3,
-          "serviceNm": "운영자 관리",
-          "useYn": "Y",
-          "id": "HUB2010201",
-          "iconPath": "",
-          "urlPath": "/cloud/#/comm/adminUsers",
-          "parentId": "HUB20102",
-          "urlParam": null
-        },
-        {
-          "parentNm": "사용자 관리",
-          "menuOrder": 2,
-          "level": 3,
-          "serviceNm": "사용자 관리",
-          "useYn": "Y",
-          "id": "HUB2010202",
-          "iconPath": "",
-          "urlPath": "/cloud/#/comm/users",
-          "parentId": "HUB20102",
-          "urlParam": null
+          "menuId": "HUB20201"
         }
       ],
       "resultCode": "0",
@@ -651,108 +621,21 @@ http://www.kepri2-demo.crossent.com
   - 호출
     ```
     $ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20201'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20201
+    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20404
     ```
   - 결과값
     ```
     {
-      "itemCount": 8,
+      "itemCount": 3,
       "items": [
         {
-          "parentNm": "공통메뉴",
-          "menuOrder": 2,
-          "level": 2,
-          "serviceNm": "사용자 관리",
-          "useYn": "Y",
-          "id": "HUB20102",
-          "iconPath": "ico_usersetting",
-          "urlPath": null,
-          "parentId": "HUB201",
-          "urlParam": null
+          "menuId": "HUB20103"
         },
         {
-          "parentNm": "사용자 관리",
-          "menuOrder": 1,
-          "level": 3,
-          "serviceNm": "운영자 관리",
-          "useYn": "Y",
-          "id": "HUB2010201",
-          "iconPath": "",
-          "urlPath": "/cloud/#/comm/adminUsers",
-          "parentId": "HUB20102",
-          "urlParam": null
+          "menuId": "HUB20201"
         },
         {
-          "parentNm": "사용자 관리",
-          "menuOrder": 2,
-          "level": 3,
-          "serviceNm": "사용자 관리",
-          "useYn": "Y",
-          "id": "HUB2010202",
-          "iconPath": "",
-          "urlPath": "/cloud/#/comm/users",
-          "parentId": "HUB20102",
-          "urlParam": null
-        },
-        {
-          "parentNm": "서버가상화",
-          "menuOrder": 1,
-          "level": 2,
-          "serviceNm": "어드민 관리",
-          "useYn": "Y",
-          "id": "HUB20201",
-          "iconPath": "ico_usersetting",
-          "urlPath": null,
-          "parentId": "HUB202",
-          "urlParam": null
-        },
-        {
-          "parentNm": "어드민 관리",
-          "menuOrder": 1,
-          "level": 3,
-          "serviceNm": "가상서버 이미지",
-          "useYn": "Y",
-          "id": "HUB2020101",
-          "iconPath": null,
-          "urlPath": "/cloud/#/iaas/server",
-          "parentId": "HUB20201",
-          "urlParam": null
-        },
-        {
-          "parentNm": "어드민 관리",
-          "menuOrder": 2,
-          "level": 3,
-          "serviceNm": "사용자 백업 이미지",
-          "useYn": "Y",
-          "id": "HUB2020102",
-          "iconPath": null,
-          "urlPath": "/cloud/#/iaas/admin/user",
-          "parentId": "HUB20201",
-          "urlParam": null
-        },
-        {
-          "parentNm": "어드민 관리",
-          "menuOrder": 3,
-          "level": 3,
-          "serviceNm": "가상서버 사양",
-          "useYn": "Y",
-          "id": "HUB2020103",
-          "iconPath": null,
-          "urlPath": "/cloud/#/iaas/admin/spec",
-          "parentId": "HUB20201",
-          "urlParam": null
-        },
-        {
-          "parentNm": "어드민 관리",
-          "menuOrder": 4,
-          "level": 3,
-          "serviceNm": "기본 정보 관리",
-          "useYn": "Y",
-          "id": "HUB2020104",
-          "iconPath": null,
-          "urlPath": "/cloud/#/iaas/tenant/baseInfo",
-          "parentId": "HUB20201",
-          "urlParam": null
+          "menuId": "HUB20404"
         }
       ],
       "resultCode": "0",
@@ -764,52 +647,22 @@ http://www.kepri2-demo.crossent.com
 - 호출
     ```
     $ curl -X DELETE --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20201'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20201
+    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20404
     ```
 - 결과값
     ```
     {
-    "itemCount": 3,
-    "items": [
-      {
-        "parentNm": "공통메뉴",
-        "menuOrder": 2,
-        "level": 2,
-        "serviceNm": "사용자 관리",
-        "useYn": "Y",
-        "id": "HUB20102",
-        "iconPath": "ico_usersetting",
-        "urlPath": null,
-        "parentId": "HUB201",
-        "urlParam": null
-      },
-      {
-        "parentNm": "사용자 관리",
-        "menuOrder": 1,
-        "level": 3,
-        "serviceNm": "운영자 관리",
-        "useYn": "Y",
-        "id": "HUB2010201",
-        "iconPath": "",
-        "urlPath": "/cloud/#/comm/adminUsers",
-        "parentId": "HUB20102",
-        "urlParam": null
-      },
-      {
-        "parentNm": "사용자 관리",
-        "menuOrder": 2,
-        "level": 3,
-        "serviceNm": "사용자 관리",
-        "useYn": "Y",
-        "id": "HUB2010202",
-        "iconPath": "",
-        "urlPath": "/cloud/#/comm/users",
-        "parentId": "HUB20102",
-        "urlParam": null
-      }
-    ],
-    "resultCode": "0",
-    "resultMsg": "NORMAL_CODE"
+      "itemCount": 2,
+      "items": [
+        {
+          "menuId": "HUB20103"
+        },
+        {
+          "menuId": "HUB20201"
+        }
+      ],
+      "resultCode": "0",
+      "resultMsg": "NORMAL_CODE"
     }
     ```
   

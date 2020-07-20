@@ -384,9 +384,9 @@ angular.module('portal.services', [])
 			return common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/projects/all', 'GET');
 		};
 
-        portal.portalOrgs.listAllPortalOrgs = function () {
+        /*portal.portalOrgs.listAllPortalOrgs = function () {
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET'));
-        };
+        };*/
 
         portal.portalOrgs.syncListAllPortalOrgs = function (projectId) {
             var getParams = null;
@@ -398,13 +398,13 @@ angular.module('portal.services', [])
             return common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams);
         };
 
-        portal.portalOrgs.listPortalOrgsByProjectId = function (projectId) {
+        /*portal.portalOrgs.listPortalOrgsByProjectId = function (projectId) {
             var getParams = {
                 "schType": "projectId",
                 "schText": projectId
             };
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams));
-        };
+        };*/
 
         portal.portalOrgs.syncGetOrganizationByName = function (name, depth) {
             var getParams = {

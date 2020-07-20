@@ -1,6 +1,6 @@
 heat_template_version: '2018-08-31'
 
-description: single postgresql volume template
+description: single postgresql template
 
 parameters:
   api_end_point:
@@ -35,8 +35,10 @@ parameters:
 {% if volumeUse %}
   volume_type:
     type: string
+    default: RBD
   volume_size:
     type: string
+    default: 10
   volume_mount_point:
     type: string
     default: /dev/vdb

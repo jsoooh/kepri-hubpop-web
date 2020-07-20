@@ -103,7 +103,20 @@ angular.module('gpu.services')
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/{tenantId}/deploy/stacks/{id}', 'GET', params));
         };
 
-        // VM 카탈로그 배포 삭제
+        // VM 카탈로그 배포 상태 정보 UPDATE
+        vmCatalogService.setVmCatalogDeployStatus = function(tenantId, stackName, stackId, deployStatus) {
+            var params = {
+                urlPaths : {
+                    "tenantId" : tenantId,
+                    "stackName" : stackName,
+                    "stackId" : stackId
+                },
+                deployStatus : deployStatus
+            };
+            return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.gpuApiContextUrl + '/vm_catalog/external/{tenantId}/deploy/{stackName}/{stackId}/status', 'PUT', params));
+        };
+
+        // VM 카탈로그 서비스 이름 변경
         vmCatalogService.renameVmCatalogDeploy = function(tenantId, deployId, deployName) {
             var params = {
                 urlPaths : {
@@ -175,6 +188,16 @@ angular.module('gpu.services')
         // 스펙 리스트 조회
         vmCatalogService.listAllSpec = function() {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET'));
+        };
+
+        // 서비스 배포 time out 체크
+        vmCatalogService.checkDeployTimeOutStatus = function(vmCatalogDeployInfo) {
+            if(vmCatalogDeployInfo.stackStatus.indexOf("PROGRESS") >= 0) {
+                return;
+            }
+            if((new Date()).getTime() - vmCatalogDeployInfo.updated > vmCatalogDeployInfo.vmCatalogInfo.deployTimeOut * 60000) {
+                vmCatalogDeployInfo.deployStatus = "DEPLOY_TIME_OUT";
+            }
         };
 
         return vmCatalogService;

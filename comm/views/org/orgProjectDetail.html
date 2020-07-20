@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                     <ul>
-                                        <li>프로젝트 ID : <span>{{contents.selOrgProject.id}}</span></li>
+                                        <li>프로젝트 ID : <span>{{contents.selOrgProject.orgId}}</span></li>
                                         <li>프로젝트 생성자 : <span>{{contents.selOrgProject.managerName}}</span></li>
                                         <li>프로젝트 구성원 수 : <span>{{contents.selOrgProject.orgUserCount}} 명</span></li>
                                         <li>프로젝트 생성일자 : <span>{{contents.selOrgProject.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</span></li>
@@ -672,7 +672,7 @@
                     </h4>
                     <div class="pull-right">
                         <!--<button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProject();"><span class="ico">삭제</span></button>-->
-                        <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.checkDeleteForm($event);"><span class="ico">삭제</span></button>
+                        <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.checkDeleteOrgProject($event);"><span class="ico">삭제</span></button>
                     </div>
                 </div>
                 <div class="cBox-cnt">
@@ -690,7 +690,7 @@
                                 <ul>
                                     <li>
                                         <strong class="tit">Project ID</strong>
-                                        <div class="txt">{{ contents.selOrgProject.id }}</div>
+                                        <div class="txt">{{ contents.selOrgProject.orgId }}</div>
                                     </li>
                                 </ul>
                             </div>

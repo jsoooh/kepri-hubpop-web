@@ -66,6 +66,11 @@ angular.module('common.controllers', [])
                 common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
                 return;
             }
+            //console.log("mc.sltPortalOrg : ", mc.sltPortalOrg);
+            if (!mc.sltPortalOrg.isActive) {
+                common.showDialogAlert('알림', '현재 프로젝트는 비활성화 상태입니다.');
+                return;
+            }
             if (!menuItem.urlPath) return;
             mc.sltMenu = menuItem;
             common.locationHref(menuItem.urlPath);
@@ -592,6 +597,10 @@ angular.module('common.controllers', [])
         };
 
         mc.goToPortalOrgPage = function(portalOrg) {
+            if (!portalOrg.id) {
+                common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                return;
+            }
             mc.goToPage("/comm/projects/projectDetail/" + portalOrg.id)
         };
 
@@ -1662,8 +1671,6 @@ angular.module('common.controllers', [])
         //전체 메뉴 화면에서 메뉴 즐겨찾기 여부 확인
         mc.checkMyMenuByAllMenu = function (menuId) {
             var rtVal = false;
-            //var i = mc.myMenus.findIndex(i => i.id === menuId);
-            //if (i > -1) rtVal = true;
             var sltMenu = common.objectsFindCopyByField(mc.myMenus, "id", menuId);
             if (!!sltMenu && !!sltMenu.id) rtVal = true;
             return rtVal;
@@ -1671,9 +1678,9 @@ angular.module('common.controllers', [])
 
         //전체 메뉴 화면에서 메뉴 즐겨찾기 추가/삭제
         mc.clickMyMenu = function (menuId) {
-            var indexMyMenu = mc.myMenus.findIndex(i => i.id === menuId);
+            var sltMenu = common.objectsFindCopyByField(mc.myMenus, "id", menuId);
             var isAdd = true;
-            if (indexMyMenu > -1) isAdd = false;
+            if (!!sltMenu && !!sltMenu.id) isAdd = false;
             if (isAdd) {
                 var promise = portal.menu.addMymenu(menuId);
             } else {
