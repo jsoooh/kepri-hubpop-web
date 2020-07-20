@@ -80,7 +80,7 @@ angular.module('perf.controllers')
         ct.fn.totalAnlsByOrgCodeAndPerfYm = function (params) {
             var promise = perfAnlsService.totalAnlsByOrgCodeAndPerfYm(params)
             promise.success(function (data) {
-                var tempCombinedAnlList = data.items;
+                ct.combinedAnlList = data.items;
                 ct.data.maxRow = ct.fn.findMaxRow(data);
                 var itemGroupCode = "";
                 var startItemGroup = 0;
@@ -88,46 +88,35 @@ angular.module('perf.controllers')
                 ct.data.lastTotalPerfAnls = 0;
 
                 for (var i = 0; i < data.itemCount; i++) {
-                    if (tempCombinedAnlList[i].itemGroupCode != itemGroupCode) {
-                        itemGroupCode = angular.copy(tempCombinedAnlList[i].itemGroupCode);
+                    if (ct.combinedAnlList[i].itemGroupCode != itemGroupCode) {
+                        itemGroupCode = angular.copy(ct.combinedAnlList[i].itemGroupCode);
                         startItemGroup = i;
-                        tempCombinedAnlList[startItemGroup].lastAnlsSumByItemGroup = 0;
-                        tempCombinedAnlList[startItemGroup].sltAnlsSumByItemGroup = 0;
-                        tempCombinedAnlList[startItemGroup].lastAnlsSumByItemGroup = tempCombinedAnlList[startItemGroup].lastPerfAmt;
-                        tempCombinedAnlList[startItemGroup].sltAnlsSumByItemGroup = tempCombinedAnlList[startItemGroup].sltPerfAmt;
+                        ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup = 0;
+                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup = 0;
+                        ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup = ct.combinedAnlList[startItemGroup].lastPerfAmt;
+                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup = ct.combinedAnlList[startItemGroup].sltPerfAmt;
                     } else {
-                        tempCombinedAnlList[startItemGroup].lastAnlsSumByItemGroup += tempCombinedAnlList[i].lastPerfAmt;
-                        tempCombinedAnlList[startItemGroup].sltAnlsSumByItemGroup += tempCombinedAnlList[i].sltPerfAmt;
+                        ct.combinedAnlList[startItemGroup].lastAnlsSumByItemGroup += ct.combinedAnlList[i].lastPerfAmt;
+                        ct.combinedAnlList[startItemGroup].sltAnlsSumByItemGroup += ct.combinedAnlList[i].sltPerfAmt;
                     }
-                    ct.data.totalPerfAnls += tempCombinedAnlList[i].sltPerfAmt;
-                    ct.data.lastTotalPerfAnls += tempCombinedAnlList[i].lastPerfAmt;
+                    ct.data.totalPerfAnls += ct.combinedAnlList[i].sltPerfAmt;
+                    ct.data.lastTotalPerfAnls += ct.combinedAnlList[i].lastPerfAmt;
                 }
 
                 var startIdx = 0;
                 for (var i = 0; i < ct.meteringItemGroups.length; i++) {
                     var exist = false;
                     for(var j = startIdx; j < data.itemCount; j++) {
-                        if(ct.meteringItemGroups[i].itemGroupCode == tempCombinedAnlList[j].itemGroupCode) {
-                            ct.combinedAnlList.push(tempCombinedAnlList[j]);
+                        if(ct.meteringItemGroups[i].itemGroupCode == ct.combinedAnlList[j].itemGroupCode) {
                             exist = true;
+                            ct.meteringItemGroups[i].existData = exist;
                         } else {
                             startIdx = j;
                             break;
                         }
                     }
                     if (exist == false) {
-                        var combinedData = {
-                            itemGroupCode: ct.meteringItemGroups[i].itemGroupCode,
-                            itemGroupName: ct.meteringItemGroups[i].itemGroupName,
-                            itemName: "",
-                            lastAnlsSumByItemGroup: 0,
-                            lastMeteringValue: 0,
-                            lastPerfAmt: 0,
-                            sltAnlsSumByItemGroup: 0,
-                            sltMeteringValue: 0,
-                            sltPerfAmt: 0
-                        };
-                        ct.combinedAnlList.push(combinedData);
+                        ct.meteringItemGroups[i].existData = exist;
                     }
                 }
                 $scope.main.loadingMainBody = false;

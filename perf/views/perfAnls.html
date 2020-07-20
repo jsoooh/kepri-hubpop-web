@@ -51,40 +51,51 @@
                 <tbody class="tbody_group"
                        ng-if="!(contents.combinedAnlList.length == 0 || !contents.combinedAnlList)"
                        ng-repeat="meteringItemGroup in contents.meteringItemGroups">
-                <tr>
-                    <th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
-                </tr>
-                <tr ng-repeat="combinedAnl in contents.combinedAnlList | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }"
-                    ng-switch="combinedAnl.itemUnit">
-                    <td>
-                        <span ng-if="combinedAnl.itemName != ''">{{ combinedAnl.itemName }}</span>
-                        <span ng-if="combinedAnl.itemName == ''">-</span>
-                    </td>
-                    <td>    <!-- 전월 사용량 -->
-                        <span ng-if="combinedAnl.lastMeteringValue" ng-switch-when="MB">{{ combinedAnl.lastMeteringValue | displayVolume:'MB'}}</span>
-                        <span ng-if="combinedAnl.lastMeteringValue" ng-switch-when="GB">{{ combinedAnl.lastMeteringValue | displayVolume:'GB'}}</span>
-                        <span ng-if="combinedAnl.lastMeteringValue" ng-switch-default="">{{ combinedAnl.lastMeteringValue | number }}</span>
-                        <span ng-if="!combinedAnl.lastMeteringValue">-</span>
-                    </td>
-                    <td>    <!-- 당월 사용량 -->
-                        <span ng-if="combinedAnl.sltMeteringValue" ng-switch-when="MB">{{ combinedAnl.sltMeteringValue | displayVolume:'MB'}}</span>
-                        <span ng-if="combinedAnl.sltMeteringValue" ng-switch-when="GB">{{ combinedAnl.sltMeteringValue | displayVolume:'GB'}}</span>
-                        <span ng-if="combinedAnl.sltMeteringValue" ng-switch-default="">{{ combinedAnl.sltMeteringValue | number }}</span>
-                        <span ng-if="!combinedAnl.sltMeteringValue">-</span>
-                    </td>
-                    <td class="text-right">{{ combinedAnl.lastPerfAmt | number }} 원</td>    <!-- 전월 금액-->
-                    <td class="text-right">{{ combinedAnl.sltPerfAmt | number }} 원</td>    <!-- 당월 금액 -->
-                    <td ng-if="combinedAnl.lastAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">{{
-                        combinedAnl.lastAnlsSumByItemGroup | number }} 원
-                    </td>    <!-- 전월 합계 -->
-                    <td ng-if="combinedAnl.sltAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">{{
-                        combinedAnl.sltAnlsSumByItemGroup | number }} 원
-                    </td>    <!-- 당월 합계 -->
+                    <tr ng-if="meteringItemGroup.existData">
+                        <th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
+                    </tr>
+                    <tr ng-repeat="combinedAnl in contents.combinedAnlList | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }"
+                        ng-switch="combinedAnl.itemUnit">
+                        <td>
+                            <span ng-if="combinedAnl.itemName != ''">{{ combinedAnl.itemName }}</span>
+                            <span ng-if="combinedAnl.itemName == ''">-</span>
+                        </td>
+                        <td>    <!-- 전월 사용량 -->
+                            <span ng-if="combinedAnl.lastMeteringValue" ng-switch-when="MB">{{ combinedAnl.lastMeteringValue | displayVolume:'MB'}}</span>
+                            <span ng-if="combinedAnl.lastMeteringValue" ng-switch-when="GB">{{ combinedAnl.lastMeteringValue | displayVolume:'GB'}}</span>
+                            <span ng-if="combinedAnl.lastMeteringValue" ng-switch-default="">{{ combinedAnl.lastMeteringValue | number }}</span>
+                            <span ng-if="!combinedAnl.lastMeteringValue">-</span>
+                        </td>
+                        <td>    <!-- 당월 사용량 -->
+                            <span ng-if="combinedAnl.sltMeteringValue" ng-switch-when="MB">{{ combinedAnl.sltMeteringValue | displayVolume:'MB'}}</span>
+                            <span ng-if="combinedAnl.sltMeteringValue" ng-switch-when="GB">{{ combinedAnl.sltMeteringValue | displayVolume:'GB'}}</span>
+                            <span ng-if="combinedAnl.sltMeteringValue" ng-switch-default="">{{ combinedAnl.sltMeteringValue | number }}</span>
+                            <span ng-if="!combinedAnl.sltMeteringValue">-</span>
+                        </td>
+                        <td class="text-right">{{ combinedAnl.lastPerfAmt | number }} 원</td>    <!-- 전월 금액-->
+                        <td class="text-right">{{ combinedAnl.sltPerfAmt | number }} 원</td>    <!-- 당월 금액 -->
+                        <td ng-if="combinedAnl.lastAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">
+                            {{ combinedAnl.lastAnlsSumByItemGroup | number }} 원
+                        </td>    <!-- 전월 합계 -->
+                        <td ng-if="combinedAnl.sltAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">
+                            {{ combinedAnl.sltAnlsSumByItemGroup | number }} 원
+                        </td>    <!-- 당월 합계 -->
 
-                    <td ng-if="combinedAnl.sltAnlsSumByItemGroup >= 0 && combinedAnl.lastAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">
-                        <a style="text-decoration: underline" ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a>
-					</td>
-                </tr>
+                        <td ng-if="combinedAnl.sltAnlsSumByItemGroup >= 0 && combinedAnl.lastAnlsSumByItemGroup >= 0" rowspan="{{ contents.data.maxRow + 1 }}">
+                            <a style="text-decoration: underline" ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a>
+                        </td>
+                    </tr>
+                    <tr ng-if="!meteringItemGroup.existData">
+                        <th>{{ meteringItemGroup.itemGroupName }}</th>
+                        <td>-</td>
+                        <td>-</td>    <!-- 전월 사용량 -->
+                        <td>-</td>    <!-- 당월 사용량 -->
+                        <td class="text-right">0 원</td>    <!-- 전월 금액-->
+                        <td class="text-right">0 원</td>    <!-- 당월 금액 -->
+                        <td> 0 원</td>    <!-- 전월 합계 -->
+                        <td>0 원</td>    <!-- 당월 합계 -->
+                        <td><a style="text-decoration: underline" ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a></td>
+                    </tr>
                 </tbody>
                 <tfoot class="tbody_group">
                 <tr>
