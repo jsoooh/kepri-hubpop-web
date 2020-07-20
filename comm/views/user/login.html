@@ -26,7 +26,7 @@
 				<!-- user 분기처리 -->
 				<div ng-show="!main.ssoUserLoginChecking && contents.ssoUserJoin">
 					<p class="mb20">
-						<span class="point2" ng-bind-html="contents.ssoMessage"></span>{{contents.ssoMessage}}
+						<span class="point2" ng-bind-html="contents.ssoMessage"></span>
 					</p>
 					<div class="form-group default-label margin-bottom-20">
 						<input type="text" id="sso_email" name="sso_email" maxlength="30" placeholder="{{ 'message.mi_type_id_email' | translate }}" ng-model="contents.ssoUser.email" disabled="disabled" required ng-blur="blurEmail=true;" class="form-control"/>
