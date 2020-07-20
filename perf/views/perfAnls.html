@@ -56,7 +56,10 @@
                 </tr>
                 <tr ng-repeat="combinedAnl in contents.combinedAnlList | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }"
                     ng-switch="combinedAnl.itemUnit">
-                    <td>{{ combinedAnl.itemName }}</td>
+                    <td>
+                        <span ng-if="combinedAnl.itemName != ''">{{ combinedAnl.itemName }}</span>
+                        <span ng-if="combinedAnl.itemName == ''">-</span>
+                    </td>
                     <td>    <!-- 전월 사용량 -->
                         <span ng-if="combinedAnl.lastMeteringValue" ng-switch-when="MB">{{ combinedAnl.lastMeteringValue | displayVolume:'MB'}}</span>
                         <span ng-if="combinedAnl.lastMeteringValue" ng-switch-when="GB">{{ combinedAnl.lastMeteringValue | displayVolume:'GB'}}</span>
