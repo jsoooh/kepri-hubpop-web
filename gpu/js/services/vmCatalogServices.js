@@ -192,6 +192,9 @@ angular.module('gpu.services')
 
         // 서비스 배포 time out 체크
         vmCatalogService.checkDeployTimeOutStatus = function(vmCatalogDeployInfo) {
+            if(vmCatalogDeployInfo.stackStatus.indexOf("PROGRESS") >= 0) {
+                return;
+            }
             if((new Date()).getTime() - vmCatalogDeployInfo.updated > vmCatalogDeployInfo.vmCatalogInfo.deployTimeOut * 60000) {
                 vmCatalogDeployInfo.deployStatus = "DEPLOY_TIME_OUT";
             }

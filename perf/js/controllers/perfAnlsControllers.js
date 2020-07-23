@@ -21,6 +21,7 @@ angular.module('perf.controllers')
         ct.data.startYear = ct.scope.CONSTANTS.startYear;
 
         ct.meteringItemGroups = [];
+        ct.combinedAnlList = [];
 
         ct.perfYears = [];
         //ct.perfMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -64,6 +65,9 @@ angular.module('perf.controllers')
                     itemCnt++;
                 }
             }
+            if (maxRow < itemCnt) {
+                maxRow = itemCnt;
+            }
             return maxRow;
         };
 
@@ -97,6 +101,23 @@ angular.module('perf.controllers')
                     }
                     ct.data.totalPerfAnls += ct.combinedAnlList[i].sltPerfAmt;
                     ct.data.lastTotalPerfAnls += ct.combinedAnlList[i].lastPerfAmt;
+                }
+
+                var startIdx = 0;
+                for (var i = 0; i < ct.meteringItemGroups.length; i++) {
+                    var exist = false;
+                    for(var j = startIdx; j < data.itemCount; j++) {
+                        if(ct.meteringItemGroups[i].itemGroupCode == ct.combinedAnlList[j].itemGroupCode) {
+                            exist = true;
+                            ct.meteringItemGroups[i].existData = exist;
+                        } else {
+                            startIdx = j;
+                            break;
+                        }
+                    }
+                    if (exist == false) {
+                        ct.meteringItemGroups[i].existData = exist;
+                    }
                 }
                 $scope.main.loadingMainBody = false;
             });
