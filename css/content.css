@@ -229,8 +229,8 @@
 .ul-panel:after{display: block; content: ''; clear:both;}
 .ul-panel > li{float: left; width:22.5%; margin-left: 2.5%; }
 .panelWrap{display: inline-block; width:100%; vertical-align: top; border-radius: 0; background: none;}
-.panel{position: relative; margin-bottom: 50px; border-radius: 5px; background: #fff; -webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); -webkit-transform: translate(0, 0px); transform: translate(0, 0px);-webkit-transition: -webkit-box-shadow .3s,-webkit-transform .3s; transition: box-shadow .3s,transform .3s; cursor: pointer;}
-.panel:hover{-webkit-box-shadow: 0 6px 15px 0 rgba(0,0,0,0.6); box-shadow: 0 6px 15px 0 rgba(0,0,0,0.6); -webkit-transform: translate(0, -4px); transform: translate(0, -4px);border:1px solid #333;}
+/* .panel{position: relative; margin-bottom: 50px; border-radius: 5px; background: #fff; -webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); -webkit-transform: translate(0, 0px); transform: translate(0, 0px);-webkit-transition: -webkit-box-shadow .3s,-webkit-transform .3s; transition: box-shadow .3s,transform .3s; cursor: pointer;}
+.panel:hover{-webkit-box-shadow: 0 6px 15px 0 rgba(0,0,0,0.6); box-shadow: 0 6px 15px 0 rgba(0,0,0,0.6); -webkit-transform: translate(0, -4px); transform: translate(0, -4px);border:1px solid #333;} */
 
 @keyframes fadein {from {opacity: 0;} to {opacity: 1;}}
 @-moz-keyframes fadein { from {opacity: 0;} to {opacity: 1;}}

@@ -44,6 +44,9 @@
 .card-txt {height:32px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
 .pdContent .card {height:270px;}
 
+/*테이블 보더 0 설정*/
+.table-wrap.border-0 .table > colgroup + thead > tr:first-child > th {border-top:0px !important;}
+
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}

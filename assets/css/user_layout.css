@@ -10,9 +10,6 @@
   width: 100%;
   clear: both;
 }
-.ft-nanum {
-  font-family: 'Nanum Gothic';
-}
 /* 공통 */
 ul,
 ol,
@@ -56,9 +53,6 @@ a:hover,
 a:focus,
 a:visited {
   text-decoration: none;
-}
-.dropdown .dropdown-menu li .dropdown-icon {
-  margin-top: 4px;
 }
 /* 레이아웃 */
 html {
@@ -286,6 +280,8 @@ html {
   background: #545c6b;
   text-align: center;
   padding: 14px;
+  font-weight: 600;
+  font-size: 13px;  
 }
 #header .left-wrap > .header-bottom .notification-wrap .notification-content > li {
   border-bottom: 1px solid #eaeaea;
@@ -318,6 +314,7 @@ html {
   font-weight: 400;
   color: #414141;
   margin-bottom: 5px;
+  font-size: 13px;
 }
 #header .left-wrap > .header-bottom .notification-wrap .notification-content > li .text .date {
   display: block;
@@ -337,7 +334,7 @@ html {
 #header .left-wrap > .header-bottom .notification-wrap .notification-show a {
   display: block;
   text-align: center;
-  color: #b0b0b0;
+  color: #767676;
   font-size: 13px;
   padding: 10px;
 }
@@ -383,12 +380,13 @@ html {
   float: left;
   width: calc(100% - 40px);
   padding-left: 10px;
-  padding-top: 5px;
+  padding-top: 8px;
   display: block;
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
   overflow: hidden;
+  font-size: 13px;
 }
 #header .left-wrap > .header-bottom .user-info-wrap > li > a {
   display: block;
@@ -402,10 +400,13 @@ html {
   background: #f8f8f8;
 }
 #header .left-wrap > .header-bottom .user-info-wrap > li > a i {
-  width: 24px;
+  width: 21px;
 }
 #header .left-wrap > .header-bottom .user-info-wrap > li:first-child > a {
   padding-top: 22px;
+}
+#header .left-wrap > .header-bottom .user-info-wrap > li > a .feather {
+  color: #868686;
 }
 #header .left-wrap > .header-bottom .user-info-wrap > li.logout {
   border-top: 1px solid #eee;
@@ -417,6 +418,10 @@ html {
 #header .left-wrap > .header-bottom .user-info-wrap > li.logout i {
   color: #dd124b;
 }
+#header .left-wrap > .header-bottom .user-info-wrap > li.logout span {
+  font-size: 12px;
+}
+
 #pageWrap.all-menu-open {
   height: 100vh;
   overflow-y: hidden;
@@ -467,6 +472,7 @@ html {
   float: left;
   font-size: 20px;
   line-height: 80px;
+  font-family: "Noto Sans KR";
 }
 #allMenu .all-menu-top .btn-close {
   display: block;
@@ -512,6 +518,7 @@ html {
 #allMenu .category-list .inner .title {
   color: #9ab9f1;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 #allMenu .category-list .all-lnb-depth2 .all-depth2-item .depth2 {
   padding: 10px;
@@ -527,7 +534,7 @@ html {
 #allMenu .category-list .all-lnb-depth2 .all-depth2-item .depth2 .link .depth-icon-img {
   display: inline-block;
   vertical-align: top;
-  margin-right: 10px;
+  margin-right: 8px;
   margin-top: 4px;
   width: 16px;
   height: 16px;
@@ -540,8 +547,9 @@ html {
   display: inline-block;
   vertical-align: top;
   color: #fff;
-  font-weight: 400;
+  font-weight: 600;
   max-width: 260px;
+  font-size:14px;
 }
 #allMenu .category-list .all-lnb-depth2 .all-depth2-item .depth2 .bookmark {
   display: block;
@@ -624,9 +632,10 @@ html {
   z-index: 2;
 }
 #lnbWrap #lnb .title-project {
-  height: 80px;
+  height: 81px;
   position: relative;
   padding: 20px;
+  border-bottom: 1px solid #e5e6ed;
 }
 #lnbWrap #lnb .title-project .text {
   color: #000;
@@ -635,7 +644,7 @@ html {
 #lnbWrap #lnb .title-project .dropdown {
   position: absolute;
   top: 20px;
-  right: 10px;
+  right: 3px;
 }
 #lnbWrap #lnb .title-project .dropdown .feather-icon {
   color: #a6b4cd;
@@ -665,7 +674,7 @@ html {
   content: '';
   width: 12px;
   height: 2px;
-  background: #939393;
+  background: #b5b5b5;
   position: absolute;
   top: 9px;
   right: 0;
@@ -691,15 +700,15 @@ html {
   background-color: rgba(221, 221, 221, 0.6);
 }
 #lnbWrap #myService {
-  padding: 15px 20px;
-  border-top: 1px solid #e5e6ed;
+  padding: 15px 20px;  
 }
 #lnbWrap #myService .sub-title {
   position: relative;
 }
 #lnbWrap #myService .sub-title span {
   color: #668ba8;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 13px;
 }
 #lnbWrap #myService .sub-title .btn-dropdown {
   display: block;
@@ -708,7 +717,7 @@ html {
   right: 0;
   width: 14px;
   height: 8px;
-  background-image: url('../../assets/img/user/lnb_icon_dropdown.jpg');
+  background-image: url('../../assets/img/user/lnb_icon_dropdown.png');
   background-position: 0 bottom;
   background-repeat: no-repeat;
   -webkit-transition: all 0.2s linear;
@@ -740,7 +749,7 @@ html {
   overflow: hidden;
   vertical-align: top;
   margin-right: 5px;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 #lnbWrap #myService .lnb-depth2 > li a.link .depth-icon-img img {
   vertical-align: top;
@@ -750,6 +759,7 @@ html {
   display: inline-block;
   vertical-align: top;
   max-width: 140px;
+  font-size:13px;
 }
 #lnbWrap #myService .lnb-depth2 > li a.bookmark {
   display: none;
@@ -825,7 +835,8 @@ html {
 }
 #lnbWrap #depth2Wrap .sub-title span {
   color: #668ba8;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 13px;
 }
 #lnbWrap #depth2Wrap .sub-title .btn-dropdown {
   display: block;
@@ -834,7 +845,7 @@ html {
   right: 0;
   width: 14px;
   height: 8px;
-  background-image: url('../../assets/img/user/lnb_icon_dropdown.jpg');
+  background-image: url('../../assets/img/user/lnb_icon_dropdown.png');
   background-position: 0 bottom;
   background-repeat: no-repeat;
   -webkit-transition: all 0.2s linear;
@@ -860,19 +871,22 @@ html {
   font-weight: 500;
   position: relative;
   width: calc(100% - 25px);
+  padding-left: 24px;
   z-index: 1;
 }
 #lnbWrap #depth2Wrap .lnb-depth2 > li a.link:hover {
   text-decoration: none;
 }
 #lnbWrap #depth2Wrap .lnb-depth2 > li a.link .depth-icon-img {
-  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 16px;
   height: 16px;
   overflow: hidden;
   vertical-align: top;
   margin-right: 5px;
-  margin-top: 3px;
+  margin-top: 2px;
   text-align: center;
 }
 #lnbWrap #depth2Wrap .lnb-depth2 > li a.link .depth-icon-img img {
@@ -883,6 +897,9 @@ html {
   display: inline-block;
   vertical-align: top;
   max-width: 140px;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: -0.2px;
 }
 #lnbWrap #depth2Wrap .lnb-depth2 > li.active .btn-dropdown-depth:after {
   display: none;
@@ -918,7 +935,8 @@ html {
   display: inline-block;
   position: relative;
   padding-left: 10px;
-}
+  letter-spacing: -0.2px;
+ }
 #lnbWrap #depth2Wrap .lnb-depth3 > li > a span::before {
   content: '';
   width: 3px;
@@ -952,7 +970,7 @@ html {
   clear: both;
 }
 #contentWrap .page-title #spot {
-  padding: 20px 28px;
+  padding: 20px 30px;
   position: relative;
 }
 #contentWrap .page-title #spot .page-info {
@@ -960,16 +978,17 @@ html {
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 5px;
+  font-family: "Noto Sans KR";
 }
 #contentWrap .page-title #spot .btn-refresh {
   display: block;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1px solid #dcdcdc;
   position: absolute;
-  top: 39px;
+  top: 32px;
   right: 35px;
+  background: #fff;
   z-index: 1;
 }
 #contentWrap .page-title #spot .btn-refresh i {
@@ -982,6 +1001,7 @@ html {
   -webkit-transition: all 0.2s linear;
   -o-transition: all 0.2s linear;
   transition: all 0.2s linear;
+  font-size: 20px;
 }
 #contentWrap .page-title #spot .btn-refresh:hover i {
   transform: translate(-50%, -50%) rotate(180deg);
@@ -991,6 +1011,6 @@ html {
   z-index: 1;
 }
 #contentWrap .page-content .inner-wrap {
-  padding: 20px 25px 50px;
+  padding: 20px 30px 50px;
   position: relative;
 }
