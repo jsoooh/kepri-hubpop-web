@@ -233,7 +233,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="table-wrap">
+			<div class="table-wrap border-0">
 				<table class="table" cellspacing="0" width="100%">
 					<colgroup>
 						<col style="width: 4%;">
@@ -265,7 +265,7 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }">
-							<td>{{ $index+1 }}</td>
+							<td class="text-center">{{ $index+1 }}</td>
 							<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgId }}</a></td>
 							<td class="text-left">
 								<a href="" ng-click="main.goToPortalOrgPage(org);">
