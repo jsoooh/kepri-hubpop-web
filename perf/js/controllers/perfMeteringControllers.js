@@ -74,6 +74,19 @@ angular.module('perf.controllers')
                     if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
                         ct.fn.findMaxRow(data);
                     }
+                    for (var itemGroup of ct.meteringItemGroups) {
+                        var exist = false;
+                        for (var meteringMonthly of ct.orgMeteringMonthlyLists) {
+                            if (itemGroup.exist == true) break;
+                            if (itemGroup.itemGroupCode == meteringMonthly.itemGroupCode) {
+                                exist = true;
+                                itemGroup.exist = exist;
+                            }
+                        }
+                        if (itemGroup.exist != true) {
+                            itemGroup.exist = exist;
+                        }
+                    }
                 } else {
                     ct.orgMeteringMonthlyLists = [];
                 }
@@ -99,6 +112,9 @@ angular.module('perf.controllers')
                     }
                 } else {
                     itemCnt++;
+                }
+                if (ct.data.maxRow < itemCnt) {
+                    ct.data.maxRow = itemCnt;
                 }
             }
         };
