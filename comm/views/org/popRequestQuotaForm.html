@@ -64,10 +64,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="item in pop.quotaItems">
+					<tr ng-repeat="(key, item) in pop.quotaItems">
 						<td>{{ item.orgQuotaItemGroup.name }}</td>
 						<td class="text-left">{{ item.name }}</td>
-						<td><input type="text" class="form-control text-right" ng-model="item.value"></td>
+						<td><input type="number" class="form-control text-right" name="key" ng-model="item.value"  validation="between:{{item.min}},{{item.max}}"></td>
 						<td>{{ item.unit }}</td>
 						<td>{{ item.min }}</td>
 						<td>{{ item.max }}</td>
