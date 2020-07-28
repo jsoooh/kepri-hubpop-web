@@ -2224,10 +2224,7 @@ angular.module('portal.controllers')
         $scope.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
-            /*if (!new ValidationService().checkFormValidity($scope[pop.formName])) {
-                $scope.actionBtnHied = false;
-                return;
-            }*/
+
             var params = {};
             params.orgId = pop.selOrgProject.id;
             params.requestReason = pop.data.requestReason;
@@ -2245,6 +2242,14 @@ angular.module('portal.controllers')
                 }
             });
             params.orgQuotaValues = orgQuotaValues;
+            // 쿼터값 범위 체크
+            for (var i = 0; i < pop.quotaItems.length; i++) {
+                if (pop.quotaItems[i].value < pop.quotaItems[i].min || pop.quotaItems[i].value > pop.quotaItems[i].max) {
+                    common.showAlertWarning("쿼터범위를 초과했습니다.");
+                    $scope.actionBtnHied = false;
+                    return;
+                }
+            }
             if (!params.requestReason) {
                 common.showAlertWarning("변경요청사유는 필수사항입니다.");
                 $scope.actionBtnHied = false;
