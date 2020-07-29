@@ -905,7 +905,7 @@ angular.module('common.services', ['LocalStorageModule'])
                 if (pathUrl.indexOf(CONSTANTS.paasApiCfContextUrl) > -1
                     || pathUrl.indexOf(CONSTANTS.paasApiCoreContextUrl) > -1
                     || pathUrl.indexOf(CONSTANTS.paasApiMarketContextUrl)  > -1) {
-                    common.syncHttpResponse(CONSTANTS.paasApiCoreContextUrl + "/ping", "GET");
+                    common.syncHttpResponse(CONSTANTS.paasApiCoreContextUrl + "/checkServer", "GET");
                 }
             }
             var params = {};
