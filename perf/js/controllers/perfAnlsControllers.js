@@ -48,29 +48,6 @@ angular.module('perf.controllers')
             $location.path('/perf/perfRefAmt').search('itemGroupCode=' + itemGroupCode);
         };
 
-        // rowspan 최대값
-        ct.fn.findMaxRow = function (data) {
-            var itemGroupCode = "";
-            var itemCnt = 1;
-            var maxRow = 0;
-
-            for (var i = 0; i < data.itemCount; i++) {
-                if (data.items[i].itemGroupCode != itemGroupCode) {
-                    itemGroupCode = data.items[i].itemGroupCode;
-                    if (maxRow < itemCnt) {
-                        maxRow = itemCnt;
-                        itemCnt = 1;
-                    }
-                } else {
-                    itemCnt++;
-                }
-            }
-            if (maxRow < itemCnt) {
-                maxRow = itemCnt;
-            }
-            return maxRow;
-        };
-
         // 데이터 호출
         /**
          * HUBPOP_INT_PER_ANS_02 - 월별 과금 현황
@@ -81,7 +58,7 @@ angular.module('perf.controllers')
             var promise = perfAnlsService.totalAnlsByOrgCodeAndPerfYm(params)
             promise.success(function (data) {
                 ct.combinedAnlList = data.items;
-                ct.data.maxRow = ct.fn.findMaxRow(data);
+                ct.data.maxRow = perfCommService.findMaxRow(data);
                 var itemGroupCode = "";
                 var startItemGroup = 0;
                 ct.data.totalPerfAnls = 0;

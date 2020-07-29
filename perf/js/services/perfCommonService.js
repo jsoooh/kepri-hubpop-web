@@ -46,5 +46,24 @@ angular.module('perf.services')
             return sltMonth;
         };
 
+        perfCommonService.findMaxRow = function (data) {
+            var itemGroupCode = "";
+            var sltItemGroupCnt = 1;
+            var maxRow = 0;
+
+            for (var i = 0; i < data.itemCount; i++) {
+                if (data.items[i].itemGroupCode != itemGroupCode) {
+                    itemGroupCode = angular.copy(data.items[i].itemGroupCode);
+                    sltItemGroupCnt = 1;
+                } else {
+                    sltItemGroupCnt++;
+                }
+                if (maxRow < sltItemGroupCnt) {
+                    maxRow = sltItemGroupCnt;
+                }
+            }
+            return maxRow
+        };
+
         return perfCommonService;
     });
