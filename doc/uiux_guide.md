@@ -11,6 +11,7 @@
   2-3. 전체화면 메뉴 즐겨찾기 추가
   2-4. 전체화면 메뉴 즐겨찾기 삭제
   2-5. notification 조회
+  2-6. 좌측하단 사용자 관련 팝업 호출 url
 3. 관리자포탈 API
   3-1. 메뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
   3-2. 메뉴 즐겨찾기 조회
@@ -461,6 +462,17 @@ http://www.kepri2-demo.crossent.com
       "resultMsg": "NORMAL_CODE"
     }
     ```
+
+##### 2-6. 좌측하단 사용자 관련 팝업 호출 url
+- 비밀번호 설정
+    ```
+    http://www.kepri2-demo.crossent.com/#/comm/memberEdit/password
+    ```
+- 회원탈퇴
+    ```
+    http://www.kepri2-demo.crossent.com/#/comm/memberEdit/signout
+    ```
+
 #### 3. 관리자포탈 API
 ##### 3-1. 메뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
 - 호출
