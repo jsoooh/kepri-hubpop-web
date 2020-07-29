@@ -1000,15 +1000,29 @@ angular.module('common.services', ['LocalStorageModule'])
                             if (angular.isArray(value)) {
                                 for (var i=0; i<value.length; i++) {
                                     if(angular.isObject(value[i]) && value[i] instanceof $window.File) {
-                                        formData.append(key, value[i], value[i].name);
+                                        try {
+                                            formData.append(key, value[i], value[i].name);
+                                        } catch (e) {
+                                            value = paramsData[key];
+                                            if (value[i]) {
+                                                formData.append(key, value[i], value[i].name);
+                                            }
+                                        }
                                         isFile = true;
-                                        totalSize += value.size;
+                                        totalSize += value[i].size;
                                     } else {
                                         formData.append(key, value[i]);
                                     }
                                 }
                             } else if(angular.isObject(value) && value instanceof $window.File) {
-                                formData.append(key, value, value.name);
+                                try {
+                                    formData.append(key, value, value.name);
+                                } catch (e) {
+                                    value = paramsData[key];
+                                    if (value) {
+                                        formData.append(key, value, value.name);
+                                    }
+                                }
                                 isFile = true;
                                 totalSize += value.size;
                             } else {
