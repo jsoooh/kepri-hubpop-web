@@ -49,7 +49,7 @@
 				</thead>
 				<tbody class="tbody_group" ng-if="!(contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists)" class="ng-scope"
 					   ng-repeat="meteringItemGroup in contents.meteringItemGroups">
-					<tr>
+					<tr ng-if="meteringItemGroup.exist">
 						<th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
 					</tr>
 					<tr ng-repeat="orgMeteringMonthlyList in contents.orgMeteringMonthlyLists | filter:{ itemGroupCode: meteringItemGroup.itemGroupCode }">
@@ -68,6 +68,23 @@
 							<span ng-switch-when="GB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'GB'}}</span>
 							<span ng-switch-default="">{{ orgMeteringMonthlyList.totalMeteringValue | number }}</span>
 						</td>
+					</tr>
+					<tr ng-if="!meteringItemGroup.exist">
+						<th>{{ meteringItemGroup.itemGroupName }}</th>
+						<td>-</td>
+						<td>-</td>    <!-- 1월 -->
+						<td>-</td>    <!-- 2월 -->
+						<td>-</td>    <!-- 3월 -->
+						<td>-</td>    <!-- 4월 -->
+						<td>-</td>    <!-- 5월 -->
+						<td>-</td>    <!-- 6월 -->
+						<td>-</td>    <!-- 7월 -->
+						<td>-</td>    <!-- 8월 -->
+						<td>-</td>    <!-- 9월 -->
+						<td>-</td>    <!-- 10월 -->
+						<td>-</td>    <!-- 11월 -->
+						<td>-</td>    <!-- 12월 -->
+						<td>0</td>    <!-- 합계 -->
 					</tr>
 				</tbody>
 				<tbody ng-if="contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists" class="ng-scope">
