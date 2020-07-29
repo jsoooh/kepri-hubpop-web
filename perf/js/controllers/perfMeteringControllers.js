@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('perf.controllers')
-    .controller('perfMonthlyMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $interval, $filter, common, perfMeteringService, CONSTANTS) {
+    .controller('perfMonthlyMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $interval, $filter, common, perfMeteringService, perfCommService, CONSTANTS) {
         _DebugConsoleLog("perfMeteringControllers.js : perfMonthlyMeteringCtrl", 1);
 
         var ct = this;
@@ -72,7 +72,7 @@ angular.module('perf.controllers')
                     ct.orgMeteringMonthlyLists = data.items;
 
                     if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
-                        ct.fn.findMaxRow(data);
+                        ct.data.maxRow = perfCommService.findMaxRow(data);
                     }
                     for (var itemGroup of ct.meteringItemGroups) {
                         var exist = false;
@@ -96,27 +96,6 @@ angular.module('perf.controllers')
                 ct.orgMeteringMonthlyLists = [];
                 $scope.main.loadingMainBody = false;
             });
-        };
-
-        ct.fn.findMaxRow = function (data) {
-            var itemGroupCode = "";
-            var itemCnt = 1;
-            ct.data.maxRow = 0;
-
-            for (var i = 0; i < data.itemCount; i++) {
-                if (data.items[i].itemGroupCode != itemGroupCode) {
-                    itemGroupCode = angular.copy(data.items[i].itemGroupCode);
-                    if (ct.data.maxRow < itemCnt) {
-                        ct.data.maxRow = itemCnt;
-                        itemCnt = 1;
-                    }
-                } else {
-                    itemCnt++;
-                }
-                if (ct.data.maxRow < itemCnt) {
-                    ct.data.maxRow = itemCnt;
-                }
-            }
         };
 
         // 과거 확인
