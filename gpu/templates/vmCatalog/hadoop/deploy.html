@@ -35,15 +35,15 @@
                                     </colgroup>
                                     <tbody>
                                         <tr>
-                                            <th><i class="i_star"></i> Mysql root 비밀번호</th>
+                                            <th><i class="i_star"></i> root 비밀번호</th>
                                             <td><input type="password" name="mysqlRootPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlRootPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
-                                            <th><i class="i_star"></i> Mysql root 비밀번호 확인</th>
+                                            <th><i class="i_star"></i> root 비밀번호 확인</th>
                                             <td><input type="password" name="mysqlRootConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlRootConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.mysqlRootPassword, contents.data.mysqlRootConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
                                         </tr>
                                         <tr>
-                                            <th><i class="i_star"></i> Mysql hive 비밀번호</th>
+                                            <th><i class="i_star"></i> hive 비밀번호</th>
                                             <td><input type="password" name="mysqlHivePassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlHivePassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
-                                            <th><i class="i_star"></i> Mysql hive 비밀번호 확인</th>
+                                            <th><i class="i_star"></i> hive 비밀번호 확인</th>
                                             <td><input type="password" name="mysqlHiveConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlHiveConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.mysqlHivePassword, contents.data.mysqlHiveConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
                                         </tr>
                                     </tbody>
@@ -66,15 +66,15 @@
                                     <tbody>
                                         <tr>
                                             <th><i class="i_star"></i> S3 endpoint</th>
-                                            <td><input type="text" name="endPoint" class="form-control" maxlength="50" ng-model="contents.data.endPoint" validation="min:6|max:20|required" placeholder="endpoint를 입력하세요." ></td>
+                                            <td><input type="text" name="s3EndPoint" class="form-control" maxlength="50" ng-model="contents.data.endPoint" validation="min:6|max:20|required" placeholder="endpoint를 입력하세요." ></td>
                                             <th><i class="i_star"></i> S3 access key</th>
-                                            <td><input type="text" name="accessKey" class="form-control" maxlength="50" ng-model="contents.data.accessKey" validation="min:6|max:20|required" placeholder="access key를 입력하세요." ></td>
+                                            <td><input type="text" name="s3AccessKey" class="form-control" maxlength="50" ng-model="contents.data.accessKey" validation="min:6|max:20|required" placeholder="access key를 입력하세요." ></td>
                                         </tr>
                                         <tr>
                                             <th><i class="i_star"></i> S3 secret key</th>
-                                            <td><input type="text" name="secretKey" class="form-control" maxlength="50" ng-model="contents.data.secretKey" validation="min:6|max:20|required" placeholder="secret key를 입력하세요." ></td>
+                                            <td><input type="text" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.secretKey" validation="min:6|max:20|required" placeholder="secret key를 입력하세요." ></td>
                                             <th><i class="i_star"></i> 버킷명</th>
-                                            <td><input type="text" name="bucketName" class="form-control" maxlength="50" ng-model="contents.data.bucketName" validation="min:6|max:20|required" placeholder="버킷명을 입력하세요." ></td>
+                                            <td><select name="bucketName" ng-options="objectStorageList.containerName for objectStorage in contents.objectStorageList" ng-model="contents.data.bucketName" style="width:100%;"></select></td>
                                         </tr>
                                     </tbody>
                                 </table>
