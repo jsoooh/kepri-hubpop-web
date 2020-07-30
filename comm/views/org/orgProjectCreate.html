@@ -201,20 +201,14 @@
 							</li>
 						</ul>
 					</div>
-					<!--<div class="pn_footer">
+					<div class="pn_footer">
 						<div class="btn-btm mgt0">
 							<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.createOrg();">프로젝트 신청</button>
 							<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
 						</div>
-					</div>-->
-				</div>
-				</form>
-				<div class="pn_footer">
-					<div class="btn-btm mgt0">
-						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.createOrg();">프로젝트 신청</button>
-						<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
 					</div>
 				</div>
+				</form>
 			</li>
 			<li>
 				<div class="panel_box pn_r">
@@ -239,32 +233,6 @@
 								<li>
 									<span class="s_tit">이용기간</span>
 									<span class="s_txt">{{ contents.orgData.startDate }} ~ {{ contents.orgData.endDate }}</span>
-									<div class="s_inner_cont">
-										<div class="innr_tbl">
-											<table>
-												<colgroup>
-													<col width="30" />
-													<col width="30" />
-													<col width="30" />
-												</colgroup>
-												<thead>
-												<tr>
-													<th>vCPU</th>
-													<th>메모리</th>
-													<th>디스크</th>
-												</tr>
-												</thead>
-												<tbody>
-												<tr>
-													<td>{{contents.data.spec.vcpus}} Core</td>
-													<td>{{contents.data.spec.ram | displayVolume : 'MB'}}</td>
-													<td>{{contents.data.spec.disk | displayVolume : 'GB'}}</td>
-												</tr>
-												</tbody>
-											</table>
-											<span class="info_txt">*  ‘디스크’ 크기는 OS 설치에 필요한 디스크 공간을 포함한 수치입니다.</span>
-										</div>
-									</div>
 								</li>
 							</ul>
 						</div>
@@ -287,46 +255,54 @@
 									</li>
 									<li>
 										<span class="s_tit">상세쿼터</span>
-										<span class="s_txt" >{{ contents.orgData.personal == "nomal" ? "일반" : "개인" }}</span>
+										<span class="s_txt" ></span>
+										<div class="s_inner_cont">
+											<div class="innr_tbl">
+												<table>
+													<colgroup>
+														<col style="width:87px" />
+														<col style="width:" />
+														<col style="width:55px" />
+														<col style="width:35px" />
+													</colgroup>
+													<thead>
+													<tr>
+														<th colspan="2">항목</th>
+														<th>값</th>
+														<th>단위</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr ng-repeat="paasItem in contents.paasQuotas | filter:{guid: contents.orgData.paasQuotaGuid}" ng-if="!!contents.orgData.paasQuotaGuid">
+														<td>PaaS</td>
+														<td class="text-left">{{ 'label.service' | translate }}</td>
+														<td class="text-right">{{ paasItem.totalServices }}</td>
+														<td></td>
+													</tr>
+													<tr ng-repeat="paasItem in contents.paasQuotas | filter:{guid: contents.orgData.paasQuotaGuid}" ng-if="!!contents.orgData.paasQuotaGuid">
+														<td>PaaS</td>
+														<td class="text-left">{{ 'label.route' | translate }}</td>
+														<td class="text-right">{{ paasItem.totalRoutes }}</td>
+														<td></td>
+													</tr>
+													<tr ng-repeat="paasItem in contents.paasQuotas | filter:{guid: contents.orgData.paasQuotaGuid}" ng-if="!!contents.orgData.paasQuotaGuid">
+														<td>PaaS</td>
+														<td class="text-left">{{ 'label.memory' | translate }}</td>
+														<td class="text-right">{{ paasItem.memoryLimit/1024 }}</td>
+														<td>GB</td>
+													</tr>
+													<tr ng-repeat="item in contents.quotaItem" ng-if="!!item.value">
+														<td>{{ item.orgQuotaItemGroup.name }}</td>
+														<td class="text-left">{{ item.name }}</td>
+														<td class="text-right">{{ item.value }}</td>
+														<td>{{ item.unit}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
 									</li>
 								</ul>
-								<div class="s_progress_box wd_tit">
-									<ul>
-										<li>
-											<span class="tit_txt">vcpu</span>
-											<div class="progressWrap type2">
-												<div class="progress">
-													<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}%"></div>
-													</div>
-												</div>
-											</div>
-											<span class="txt_count">({{(contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)}} 개 / {{contents.tenantResource.maxResource.cores}} 개)</span>
-										</li>
-										<li>
-											<span class="tit_txt">메모리</span>
-											<div class="progressWrap type2">
-												<div class="progress">
-													<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}%"></div>
-													</div>
-												</div>
-											</div>
-											<span class="txt_count">({{(contents.tenantResource.usedResource.ramSize + contents.data.spec.ram) | displayVolume:'MB'}} / {{contents.tenantResource.maxResource.ramSize | displayVolume:'MB'}})</span>
-										</li>
-										<li>
-											<span class="tit_txt">디스크</span>
-											<div class="progressWrap type2">
-												<div class="progress">
-												  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}%"></div>
-													</div>
-												</div>
-											</div>
-											<span class="txt_count">({{(contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB'}})</span>
-										</li>
-									</ul>
-								</div>
 							</div>
 						</div>
 					</div>
