@@ -201,34 +201,44 @@
 							</li>
 						</ul>
 					</div>
-					<div class="pn_footer">
+					<!--<div class="pn_footer">
 						<div class="btn-btm mgt0">
 							<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.createOrg();">프로젝트 신청</button>
 							<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
 						</div>
-					</div>
+					</div>-->
 				</div>
 				</form>
+				<div class="pn_footer">
+					<div class="btn-btm mgt0">
+						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.createOrg();">프로젝트 신청</button>
+						<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
+					</div>
+				</div>
 			</li>
 			<li>
 				<div class="panel_box pn_r">
 					<div class="pn_head">
-						<h4 class="pnh_tit ico01">서버 기본정보</h4>
+						<h4 class="pnh_tit ico01">프로젝트 기본정보</h4>
 					</div>
 					<div class="pn_body">
 						<div class="s_cont_box">
 							<ul>
 								<li>
-									<span class="s_tit">서버 이름</span>
-									<span class="s_txt">{{contents.data.name}}</span>
+									<span class="s_tit">프로젝트 ID</span>
+									<span class="s_txt">{{ contents.orgData.orgId }}</span>
 								</li>
 								<li>
-									<span class="s_tit">서버 OS</span>
-									<span class="s_txt">{{contents.data.image.serviceName}}</span>
+									<span class="s_tit">프로젝트명</span>
+									<span class="s_txt">{{ contents.orgData.orgName }}</span>
 								</li>
 								<li>
-									<span class="s_tit">서버 사양</span>
-									<span class="s_txt" >{{contents.data.spec.name}}</span>
+									<span class="s_tit">프로젝트 유형</span>
+									<span class="s_txt" >{{ contents.orgData.personal == "nomal" ? "일반" : "개인" }}</span>
+								</li>
+								<li>
+									<span class="s_tit">이용기간</span>
+									<span class="s_txt">{{ contents.orgData.startDate }} ~ {{ contents.orgData.endDate }}</span>
 									<div class="s_inner_cont">
 										<div class="innr_tbl">
 											<table>
@@ -238,18 +248,18 @@
 													<col width="30" />
 												</colgroup>
 												<thead>
-													<tr>
-														<th>vCPU</th>
-														<th>메모리</th>
-														<th>디스크</th>
-													</tr>
+												<tr>
+													<th>vCPU</th>
+													<th>메모리</th>
+													<th>디스크</th>
+												</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>{{contents.data.spec.vcpus}} Core</td>
-														<td>{{contents.data.spec.ram | displayVolume : 'MB'}}</td>
-														<td>{{contents.data.spec.disk | displayVolume : 'GB'}}</td>
-													</tr>
+												<tr>
+													<td>{{contents.data.spec.vcpus}} Core</td>
+													<td>{{contents.data.spec.ram | displayVolume : 'MB'}}</td>
+													<td>{{contents.data.spec.disk | displayVolume : 'GB'}}</td>
+												</tr>
 												</tbody>
 											</table>
 											<span class="info_txt">*  ‘디스크’ 크기는 OS 설치에 필요한 디스크 공간을 포함한 수치입니다.</span>
@@ -259,36 +269,27 @@
 							</ul>
 						</div>
 					</div>
-					
-					<div class="pn-Toggle brd0">
+					<div class="pn-Toggle">
 						<div class="pn_head brdt">
-							<h4 class="pnh_tit ico02">추가 디스크</h4>
+							<h4 class="pnh_tit ico09">쿼터</h4>
 							<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 						</div>
 						<div class="pn_body">
 							<div class="s_cont_box">
 								<ul>
 									<li>
-										<span class="s_tit">크기</span>
-										<span class="s_txt">{{contents.volumeSize | displayVolume : 'GB'}}</span>
+										<span class="s_tit">유형</span>
+										<span class="s_txt" >{{ contents.orgData.orgQuotaPlan.id == "" ? "" : contents.orgData.orgQuotaPlan.name }}</span>
 									</li>
 									<li>
-										<span class="s_tit">유형</span>
-										<!--<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div> -->
-										<span class="s_txt">Volume Storage</span>
+										<span class="s_tit">세부유형</span>
+										<span class="s_txt" >{{(contents.orgData.orgQuotas.length = 0 || contents.orgData.orgQuotas.id == "") ? "" : contents.orgData.orgQuotas.code }}</span>
+									</li>
+									<li>
+										<span class="s_tit">상세쿼터</span>
+										<span class="s_txt" >{{ contents.orgData.personal == "nomal" ? "일반" : "개인" }}</span>
 									</li>
 								</ul>
-							</div>
-						</div>
-					</div>
-					
-					<div class="pn-Toggle">
-						<div class="pn_head brdt">
-							<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
-							<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-						</div>
-						<div class="pn_body">
-							<div class="s_cont_box">
 								<div class="s_progress_box wd_tit">
 									<ul>
 										<li>
