@@ -53,7 +53,7 @@
                         <li>
                             <div class="pnb_tit">
                                 <i class="i_star"></i> <span class="pnb_t_txt">오브젝트 스토리지 선택</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'오브젝트 스토리지를 선택한다.<br/>?'"><span class="ico_info"></span></button></div>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'오브젝트 스토리지를 선택한다.<br/>'"><span class="ico_info"></span></button></div>
                             </div>
                             <div class="tbw type1 mt20">
                                 <table class="table">
@@ -89,17 +89,17 @@
                             <div class="pl10 mt10">
                                 <span class="pnb_stit">- 노드 구성  : </span>
                                 <div class="radio radio-inline">
-                                    <input type="radio" name="master_cnt" id="deploy-type-single" value="server" ng-model="contents.data.masterCnt" ng-value="1" ng-change="contents.fn.changeDeployType(contents.data.masterCnt)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+                                    <input type="radio" name="nodeType" id="deploy-type-single" value="server" ng-model="contents.data.nodeType" ng-value="'single'" ng-change="contents.fn.changeNodeType(contents.data.nodeType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
                                     <label for="deploy-type-single" class="label">단일노드</label>
                                 </div>
                                 <div class="radio radio-inline">
-                                    <input type="radio" name="master_cnt" id="deploy-type-cluster" value="image" ng-model="contents.data.masterCnt" ng-value="2" ng-change="contents.fn.changeDeployType(contents.data.masterCnt)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+                                    <input type="radio" name="nodeType" id="deploy-type-cluster" value="image" ng-model="contents.data.nodeType" ng-value="'cluster'" ng-change="contents.fn.changeNodeType(contents.data.nodeType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
                                     <label for="deploy-type-cluster" class="label">다중노드</label>
                                 </div>
                             </div>
 
                         </li>
-                        <li ng-if="contents.data.masterCnt > 1">
+                        <li ng-if="contents.data.nodeType == 'cluster'">
                             <div class="pnb_tit">
                                 <i class="i_star"></i> <span class="pnb_t_txt">다중노드 구성</span>
                                 <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포될 마스터 및 워커 노드 수를 정한다.'"><span class="ico_info"></span></button></div>
@@ -130,8 +130,8 @@
                         <li>
                             <div class="pnb_tit">
                                 <i class="i_star"></i>
-                                <span ng-if="contents.data.masterCnt == 1" class="pnb_t_txt"> 노드 사양 선택</span>
-                                <span ng-if="contents.data.masterCnt > 1" class="pnb_t_txt"> 마스터 노드 사양 선택</span>
+                                <span ng-if="contents.data.nodeType == 'single'" class="pnb_t_txt"> 노드 사양 선택</span>
+                                <span ng-if="contents.data.nodeType == 'cluster'" class="pnb_t_txt"> 마스터 노드 사양 선택</span>
                                 <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성 할 마스터 노드의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.isMasterSpecLoad" src="images/loading_sm.gif" /></div>
                             </div>
 
@@ -175,7 +175,7 @@
                             </div>
                             <div ng-if="contents.isMasterMinSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
                         </li>
-                        <li ng-if="contents.data.masterCnt > 1">
+                        <li ng-if="contents.data.nodeType == 'cluster'">
                             <div class="pnb_tit">
                                 <i class="i_star"></i> <span class="pnb_t_txt"> 워커 노드 사양 선택</span>
                                 <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'워커노드의 가상 서버 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.isWorkerSpecLoad" src="images/loading_sm.gif" /></div>
@@ -285,19 +285,19 @@
                                             <td>{{ contents.sltMasterSpec.ram | displayVolume : 'MB' }}</td>
                                             <td>{{ contents.sltMasterSpec.disk | displayVolume : 'GB' }}</td>
                                         </tr>
-                                        <tr ng-show="contents.data.masterCnt > 1">
+                                        <tr ng-show="contents.data.nodeType == 'cluster' && contents.data.masterCnt > 1">
                                             <td>M</td>
                                             <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.vcpus }} Core</td>
                                             <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.ram | displayVolume : 'MB' }}</td>
                                             <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.disk | displayVolume : 'GB' }}</td>
                                         </tr>
-                                        <tr ng-show="contents.data.workerCnt == 1">
+                                        <tr ng-show="contents.data.nodeType == 'cluster' && contents.data.workerCnt == 1">
                                             <td>W</td>
                                             <td>{{ contents.sltWorkerSpec.vcpus }} Core</td>
                                             <td>{{ contents.sltWorkerSpec.ram | displayVolume : 'MB' }}</td>
                                             <td>{{ contents.sltWorkerSpec.disk | displayVolume : 'GB' }}</td>
                                         </tr>
-                                        <tr ng-show="contents.data.workerCnt > 1">
+                                        <tr ng-show="contents.data.nodeType == 'cluster' && contents.data.workerCnt > 1">
                                             <td>W</td>
                                             <td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.vcpus }} Core</td>
                                             <td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.ram | displayVolume : 'MB' }}</td>
