@@ -695,8 +695,7 @@ angular.module('portal.controllers')
         ct.listQuotaItem();         //상세쿼타조정 조회 로딩
         ct.orgCaseChange();         //프로젝트 유형 변경 감지 로딩
         ct.listPaasQuotas();        //paas 프로젝트 쿼터 조회
-        //개인 프로젝트 설정 건수 조회
-        ct.getPersonalProjectCount();
+        ct.getPersonalProjectCount();   //개인 프로젝트 설정 건수 조회
     })
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);
