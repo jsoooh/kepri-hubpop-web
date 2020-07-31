@@ -11,7 +11,8 @@ angular.module('gpu.controllers')
         ct.data.servicePort = 9092;
         ct.data.zookeeperPort = 2181;
 
-        ct.usingPorts.cluster = ['2888', '3888'];
+        ct.usingPorts.cluster.push(2888);
+        ct.usingPorts.cluster.push(3888);
 
         ct.data.deployType = "single";
 

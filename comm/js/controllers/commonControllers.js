@@ -152,7 +152,7 @@ angular.module('common.controllers', [])
             }
         };
 
-        // 20.03.09 - ksw / 사용자 메뉴 추가(회원탈퇴)
+        //회원탈퇴. 2020.03.09
         mc.signout = function () {
             var userAuth = $scope.main.userAuth;
             if (userAuth == "M") {
@@ -195,7 +195,7 @@ angular.module('common.controllers', [])
             });
         };
 
-        // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
+        //비밀번호 수정. 2020.03.10
         $scope.changePasswordAction = function(passData){
             $scope.main.loadingMainBody = true;
 
@@ -269,7 +269,7 @@ angular.module('common.controllers', [])
             }
         };
 
-        // 20.03.10 - ksw / 사용자 메뉴 추가(비밀번호 수정)
+        //비밀번호 수정. 2020.03.10
         mc.changePassword = function ($event) {
             var dialogOptions = {
                 title : $translate.instant("label.pwd_set"),

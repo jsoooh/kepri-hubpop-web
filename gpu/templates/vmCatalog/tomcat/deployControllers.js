@@ -14,8 +14,11 @@ angular.module('gpu.controllers')
         ct.data.servicePort = 8080;
 
         // 선택 불가 포트
-        ct.usingPorts.single        = [8005, 8009];
-        ct.usingPorts.cluster       = [8005, 8009];
+        ct.usingPorts.single.push(8005);
+        ct.usingPorts.single.push(8009);
+
+        ct.usingPorts.cluster.push(8005);
+        ct.usingPorts.cluster.push(8009);
 
         // 테스트
         if (ct.testInput) {

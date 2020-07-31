@@ -21,6 +21,7 @@ angular.module('gpu.controllers')
         ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
 
         ct.data.deployType = "core";
+        ct.data.nodeType = "single";
         ct.data.masterCnt = 1;
         ct.data.workerCnt = 2;
 
@@ -197,12 +198,18 @@ angular.module('gpu.controllers')
             ct.fn.chackSpecMaxOver();
         };
 
+        ct.fn.changeNodeType = function (nodeType) {
+            ct.data.nodeType = nodeType;
+        };
+
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
             vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
-            vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
-            vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
+            if(ct.data.nodeType == 'cluster') {
+                vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
+                vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
+            }
             vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
             return vmCatalogDeploy;
         };

@@ -15,7 +15,7 @@ angular.module('gpu.controllers')
         ct.data.checkPort = 25432;
         ct.data.applicationName = "master01";
 
-        ct.usingPorts.replica = ['25432'];
+        ct.usingPorts.replica.push(25432);
 
         ct.data.deployType = "single";
         ct.data.volumeUse = false;

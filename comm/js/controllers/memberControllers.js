@@ -6,6 +6,7 @@ angular.module('portal.controllers')
 
         var ct = this;
         ct.bCommon = (common.getUser() != null && common.getUser().common != null) ? common.getUser().common : false;
+        ct.part = $stateParams.part;    //타사업자 메뉴에서 비밀번호설정/회원탈퇴 클릭 시(password/signout)
 
         // popup modal에서 사용 할 객체 선언
         var pop = $scope.pop = {};
@@ -58,9 +59,16 @@ angular.module('portal.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertError($translate.instant('label.user_info'), data);
             });
+            memberPromise.finally(function (data, status, headers) {
+                if (!!ct.part && ct.part == "password") {
+                    //비밀번호 설정 팝업창 오픈
+                    $scope.main.changePassword();
+                } else if (!!ct.part && ct.part == "signout") {
+                    //회원탈퇴 팝업창 오픈
+                    $scope.main.signout();
+                }
+            });
         };
-
-        ct.getUserInfo();
 
         // 저장 버튼 클릭
         $scope.updateUser = function() {
@@ -135,9 +143,7 @@ angular.module('portal.controllers')
             });
         };
 
-        /*
-         * [비밀번호 수정] 클릭 이벤트
-         * */
+        /* [비밀번호 수정] 클릭 이벤트 */
         $scope.changePassword = function ($event) {
             var dialogOptions = {
                 title : $translate.instant("label.pwd_change"),
@@ -161,9 +167,7 @@ angular.module('portal.controllers')
             }
         };
 
-        /*
-         * [비밀번호 수정] 실제 액션
-         * */
+        /* [비밀번호 수정] 실제 액션 */
         pop.changePasswordAction = function(passData){
             if(passData.oldPassword == undefined || passData.oldPassword == ""){
                 alert($translate.instant("message.mi_type_current_pwd"));
@@ -223,5 +227,7 @@ angular.module('portal.controllers')
                 }
             });
         };
+
+        ct.getUserInfo();
     })
 ;

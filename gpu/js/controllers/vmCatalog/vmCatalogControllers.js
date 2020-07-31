@@ -68,9 +68,9 @@ angular.module('gpu.controllers')
 
     ct.stackNames               = [];
     ct.usingPorts               = {};
-    ct.usingPorts.single        = [];
-    ct.usingPorts.replica       = [];
-    ct.usingPorts.cluster       = [];
+    ct.usingPorts.single        = [9100];
+    ct.usingPorts.replica       = [9100];
+    ct.usingPorts.cluster       = [9100];
     ct.catalogId                = $stateParams.id;
     ct.vmCatalogInfo            = {};
     ct.vmCatalogTemplateInfo    = {};
@@ -507,6 +507,7 @@ angular.module('gpu.controllers')
 
     ct.fn.systemPortCustomValidationCheck = function(deployType, port) {
         if (port == undefined || port == null || port == "") return;
+        if (!angular.isNumber(port)) port = parseInt(port, 10);
         if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
             if (ct.usingPorts[deployType].indexOf(port) >= 0) {
                 return {isValid : false, message: "사용이 예약된 포트 입니다."};
@@ -520,6 +521,7 @@ angular.module('gpu.controllers')
 
     ct.fn.systemLbPortCustomValidationCheck = function(port) {
         if (port == undefined || port == null || port == "") return;
+        if (!angular.isNumber(port)) port = parseInt(port, 10);
         if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
             return {isValid: true};
         } else {

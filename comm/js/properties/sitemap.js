@@ -33,7 +33,7 @@ angular.module('app')
                         name: 'member_edit',
                         stateKey: 'commMemberEdit',
                         menuDisplayNo : true,
-                        url: '/comm/memberEdit',
+                        url: '/comm/memberEdit/:part',
                         controller: 'commUserEditCtrl',
                         templateUrl: _COMM_VIEWS_ + '/user/userForm.html',
                         loadMyFile: {
