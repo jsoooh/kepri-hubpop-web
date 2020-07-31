@@ -340,122 +340,24 @@ http://www.kepri2-demo.crossent.com
 - 결과 : 7일 이내 전달된 notification에 대해서만 신규 notification으로 조회됨 
     ```
     {
-      "counts": 6,
-      "itemCount": 6,
+      "counts": 2,
+      "itemCount": 2,
       "items": [
         {
-          "id": 14,
           "receiver": "u",
-          "target": "kepri1234",
-          "message": "사용자 알림입니다.",
-          "url": "",
-          "time": {
-            "date": 18,
-            "hours": 17,
-            "seconds": 22,
-            "month": 5,
-            "nanos": 0,
-            "timezoneOffset": -540,
-            "year": 120,
-            "minutes": 23,
-            "time": 1592468602000,
-            "day": 4
-          }
+          "id": 26,
+          "time": "2020-07-31 09:34",
+          "message": "aaaaaaaaa",
+          "url": "http://naver.com",
+          "target": "kepri1234"
         },
         {
-          "id": 15,
-          "receiver": "u",
-          "target": "kepri1234",
-          "message": "사용자 알림 2번째입니다.",
-          "url": "",
-          "time": {
-            "date": 18,
-            "hours": 17,
-            "seconds": 29,
-            "month": 5,
-            "nanos": 0,
-            "timezoneOffset": -540,
-            "year": 120,
-            "minutes": 23,
-            "time": 1592468609000,
-            "day": 4
-          }
-        },
-        {
-          "id": 16,
           "receiver": "p",
-          "target": "42-125",
-          "message": "프로젝트 알림 첫번째 입니다.",
-          "url": "",
-          "time": {
-            "date": 18,
-            "hours": 17,
-            "seconds": 47,
-            "month": 5,
-            "nanos": 0,
-            "timezoneOffset": -540,
-            "year": 120,
-            "minutes": 23,
-            "time": 1592468627000,
-            "day": 4
-          }
-        },
-        {
-          "id": 17,
-          "receiver": "p",
-          "target": "42-125",
-          "message": "프로젝트 알림 2번째 입니다.",
-          "url": "",
-          "time": {
-            "date": 18,
-            "hours": 17,
-            "seconds": 1,
-            "month": 5,
-            "nanos": 0,
-            "timezoneOffset": -540,
-            "year": 120,
-            "minutes": 41,
-            "time": 1592469661000,
-            "day": 4
-          }
-        },
-        {
-          "id": 18,
-          "receiver": "p",
-          "target": "42-125",
-          "message": "프로젝트 알림 3번째 입니다.",
-          "url": "",
-          "time": {
-            "date": 18,
-            "hours": 17,
-            "seconds": 5,
-            "month": 5,
-            "nanos": 0,
-            "timezoneOffset": -540,
-            "year": 120,
-            "minutes": 41,
-            "time": 1592469665000,
-            "day": 4
-          }
-        },
-        {
-          "id": 19,
-          "receiver": "p",
-          "target": "42-125",
-          "message": "프로젝트 알림 3번째 입니다.",
-          "url": "",
-          "time": {
-            "date": 18,
-            "hours": 17,
-            "seconds": 9,
-            "month": 5,
-            "nanos": 0,
-            "timezoneOffset": -540,
-            "year": 120,
-            "minutes": 41,
-            "time": 1592469669000,
-            "day": 4
-          }
+          "id": 27,
+          "time": "2020-07-31 09:35",
+          "message": "aaaaaaaaa",
+          "url": "http://naver.com",
+          "target": "42-125"
         }
       ],
       "resultCode": "0",
