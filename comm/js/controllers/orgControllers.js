@@ -571,8 +571,15 @@ angular.module('portal.controllers')
 
         /*프로젝트 쿼터 세부 유형 선택*/
         ct.changePlan = function () {
-            ct.orgData.paasQuotaGuid = ct.orgData.orgQuotas.paasQuotaGuid;
-            ct.listQuotaItemValue();
+            if (ct.orgData.orgQuotas.id != "") {
+                ct.orgData.paasQuotaGuid = ct.orgData.orgQuotas.paasQuotaGuid;
+                ct.listQuotaItemValue();
+            } else {
+                ct.orgData.paasQuotaGuid = "";
+                for (var i =0; i < ct.quotaItem.length; i++) {
+                    ct.quotaItem[i].value = "";
+                }
+            }
         };
 
         /*프로젝트 유형 변경 감지*/

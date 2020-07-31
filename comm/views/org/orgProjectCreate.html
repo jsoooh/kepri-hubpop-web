@@ -140,7 +140,7 @@
 										<ul class="ul-list1">
 											<li ng-repeat="(key, paasQuota) in contents.paasQuotas">
 												<div class="radio1 radio-inline">
-													<input type="radio" name="personal" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid">
+													<input type="radio" name="paasQuota" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid">
 													<label for="{{paasQuota.$$hashKey}}" class="label">
 														<div class="volume_cont">
 															<ul>
