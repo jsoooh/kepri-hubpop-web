@@ -68,9 +68,9 @@ angular.module('gpu.controllers')
 
     ct.stackNames               = [];
     ct.usingPorts               = {};
-    ct.usingPorts.single        = [];
-    ct.usingPorts.replica       = [];
-    ct.usingPorts.cluster       = [];
+    ct.usingPorts.single        = [9100];
+    ct.usingPorts.replica       = [9100];
+    ct.usingPorts.cluster       = [9100];
     ct.catalogId                = $stateParams.id;
     ct.vmCatalogInfo            = {};
     ct.vmCatalogTemplateInfo    = {};
