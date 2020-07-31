@@ -55,6 +55,17 @@
                                 <i class="i_star"></i> <span class="pnb_t_txt">오브젝트 스토리지 선택</span>
                                 <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'오브젝트 스토리지를 선택한다.<br/>'"><span class="ico_info"></span></button></div>
                             </div>
+                            <div class="pl10 mt10">
+                                <span class="pnb_stit">- 유형  : </span>
+                                <div class="radio radio-inline">
+                                    <input type="radio" name="bucketType" id="defined_bucket" value="server" ng-model="contents.data.bucketType" ng-value="'defined'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+                                    <label for="defined_bucket" class="label">정의된 버킷</label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <input type="radio" name="bucketType" id="customized_bucket" value="image" ng-model="contents.data.bucketType" ng-value="'customized'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+                                    <label for="customized_bucket" class="label">사용자 정의</label>
+                                </div>
+                            </div>
                             <div class="tbw type1 mt20">
                                 <table class="table">
                                     <colgroup>
@@ -64,19 +75,27 @@
                                         <col style="width:;">
                                     </colgroup>
                                     <tbody>
-                                        <tr>
-                                            <th><i class="i_star"></i> S3 endpoint</th>
-                                            <td><input type="text" name="s3EndPoint" class="form-control" maxlength="50" ng-model="contents.data.endPoint" validation="min:6|max:20|required" placeholder="endpoint를 입력하세요." ></td>
-                                            <th><i class="i_star"></i> S3 access key</th>
-                                            <td><input type="text" name="s3AccessKey" class="form-control" maxlength="50" ng-model="contents.data.accessKey" validation="min:6|max:20|required" placeholder="access key를 입력하세요." ></td>
-                                        </tr>
-                                        <tr>
-                                            <th><i class="i_star"></i> S3 secret key</th>
-                                            <td><input type="text" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.secretKey" validation="min:6|max:20|required" placeholder="secret key를 입력하세요." ></td>
-                                            <th><i class="i_star"></i> 버킷명</th>
-                                            <td><select name="bucketName" ng-options="objectStorageList.containerName for objectStorage in contents.objectStorageList" ng-model="contents.data.bucketName" style="width:100%;"></select></td>
-                                        </tr>
+                                    <tr>
+                                        <th><i class="i_star"></i> S3 endpoint</th>
+                                        <td><input type="text" name="s3EndPoint" class="form-control" maxlength="50" ng-model="contents.data.endPoint" validation="min:6|max:20|required" placeholder="endpoint를 입력하세요." ></td>
+                                        <th><i class="i_star"></i> S3 access key</th>
+                                        <td><input type="text" name="s3AccessKey" class="form-control" maxlength="50" ng-model="contents.data.accessKey" validation="min:6|max:20|required" placeholder="access key를 입력하세요." ></td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="i_star"></i> S3 secret key</th>
+                                        <td><input type="text" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.secretKey" validation="min:6|max:20|required" placeholder="secret key를 입력하세요." ></td>
+                                        <th><i class="i_star"></i> 버킷명</th>
+                                        <td><input type="text" name="bucketName" class="form-control" maxlength="50" ng-model="contents.data.bucketName" validation="" placeholder="버킷명을 입력하세요." ></td>
+                                    </tr>
                                     </tbody>
+                                    <tfoot>
+                                    <tr ng-if="contents.data.bucketType == 'defined'">
+                                        <td colspan="4" style="text-align: right;"><button type="button" name="button" class="btn btn-color1 btn-md" ng-click="" ng-disabled="">버킷 가져오기</button></td>
+                                    </tr>
+                                    <tr ng-if="contents.data.bucketType == 'customized'">
+                                        <td colspan="4" style="text-align: right;"><button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createBucket(contents.data.bucketName)" ng-disabled="">버킷 생성하기</button></td>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </li>

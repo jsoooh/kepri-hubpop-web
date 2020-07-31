@@ -20,6 +20,7 @@ angular.module('gpu.controllers')
         ];
         ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
 
+        ct.data.bucketType = "defined";
         ct.data.deployType = "core";
         ct.data.nodeType = "single";
         ct.data.masterCnt = 1;
@@ -200,6 +201,14 @@ angular.module('gpu.controllers')
 
         ct.fn.changeNodeType = function (nodeType) {
             ct.data.nodeType = nodeType;
+        };
+
+        ct.fn.changeBucketType = function(bucketType) {
+
+        };
+
+        ct.fn.createBucket = function(bucketName) {
+
         };
 
         // 추가 셋팅
