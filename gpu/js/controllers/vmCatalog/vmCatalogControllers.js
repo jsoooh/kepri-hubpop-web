@@ -507,6 +507,7 @@ angular.module('gpu.controllers')
 
     ct.fn.systemPortCustomValidationCheck = function(deployType, port) {
         if (port == undefined || port == null || port == "") return;
+        if (!angular.isNumber(port)) port = parseInt(port, 10);
         if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
             if (ct.usingPorts[deployType].indexOf(port) >= 0) {
                 return {isValid : false, message: "사용이 예약된 포트 입니다."};
@@ -520,6 +521,7 @@ angular.module('gpu.controllers')
 
     ct.fn.systemLbPortCustomValidationCheck = function(port) {
         if (port == undefined || port == null || port == "") return;
+        if (!angular.isNumber(port)) port = parseInt(port, 10);
         if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
             return {isValid: true};
         } else {

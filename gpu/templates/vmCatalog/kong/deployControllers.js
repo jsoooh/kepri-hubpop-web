@@ -17,7 +17,10 @@ angular.module('gpu.controllers')
         ct.data.kongaUserId = "konga";
         ct.data.kongaDbName = "konga";
 
-        ct.usingPorts.single        = [8443, 8444, 8000, 8001];
+        ct.usingPorts.single.push(8443);
+        ct.usingPorts.single.push(8444);
+        ct.usingPorts.single.push(8000);
+        ct.usingPorts.single.push(8001);
 
         // 테스트
         if (ct.testInput) {

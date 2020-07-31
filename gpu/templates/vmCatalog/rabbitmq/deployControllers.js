@@ -16,7 +16,9 @@ angular.module('gpu.controllers')
         ct.data.erlangPort = 25672;
         ct.data.ncCheckPort = 4444;
 
-        ct.usingPorts.cluster = ['4369', '15672', '25672'];
+        ct.usingPorts.cluster.push(4369);
+        ct.usingPorts.cluster.push(15672);
+        ct.usingPorts.cluster.push(25672);
 
         // 테스트 입력값
         if(ct.testInput) {

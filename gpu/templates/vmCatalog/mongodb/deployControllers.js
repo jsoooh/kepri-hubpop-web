@@ -18,7 +18,10 @@ angular.module('gpu.controllers')
         ct.data.mongoPort3 = 27040;
         ct.data.configPort = 27011;
 
-        ct.usingPorts.cluster = ['27020', '27030', '27040', '27011'];
+        ct.usingPorts.cluster.push(27020);
+        ct.usingPorts.cluster.push(27030);
+        ct.usingPorts.cluster.push(27040);
+        ct.usingPorts.cluster.push(27011);
 
         ct.data.deployType = "single";
         ct.data.adminId = "admin";
