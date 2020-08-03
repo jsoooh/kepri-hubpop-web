@@ -920,6 +920,7 @@ button {
 .btn.btn-success {
   background-color: #249b97;
   border-color: #249b97;
+  color:#fff;
 }
 .btn.btn-success:hover,
 .btn.btn-success:focus {

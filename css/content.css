@@ -3587,3 +3587,7 @@ h4.note {float: left; font-size:22px; color:#333; line-height: 80px;	}
 .dropdown-menu > li > a.favorit {padding-left:33px !important;}
 .dropdown-menu > li > a.favorit:before {top:11px; left:15px;}
 .pj_etc_box .bookmark {top:31px;}
+
+/*팝업 슬라이드 +,- 버튼 수정*/
+.modal-body .cnt_sliderWrap .disk_area .range_box .ico_minus .btn {min-width: 21px;}
+.modal-body .cnt_sliderWrap .disk_area .range_box .ico_plus .btn {min-width: 21px;}
