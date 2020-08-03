@@ -413,6 +413,513 @@ angular.module('app')
                         controller: 'samplePopCtrl',
                         templateUrl: _COMM_VIEWS_ + '/sample/samplePop.html'
                     },
+                  //표준UI샘플화면 추가//
+                    //빈화면 샘플
+                    sampleAccordion1: {
+                        name: '1. accordion1',
+                        stateKey: 'suser_accordion01',
+                        url: '/sample/suser_accordion01',
+                        controller: 'samplePopCtrl',
+                        templateUrl: _COMM_VIEWS_ + '/sample/suser_accordion01.html'
+                    },
+                    sampleAccordion2: {
+                    	name: '1. accordion2',
+                    	stateKey: 'suser_accordion02',
+                    	url: '/sample/suser_accordion02',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_accordion02.html'
+                    },
+                    sampleBlank1: {
+                    	name: '1. blank1',
+                    	stateKey: 'suser_blank1',
+                    	url: '/sample/suser_blank1',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_blank1.html'
+                    },
+                    sampleBlank2: {
+                    	name: '1. blank2',
+                    	stateKey: 'suser_blank2',
+                    	url: '/sample/suser_blank2',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_blank2.html'
+                    },
+                    //카드 샘플
+                    sampleCard1: {
+                    	name: '1. card1',
+                    	stateKey: 'suser_card01',
+                    	url: '/sample/suser_card01',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card01.html'
+                    },
+                    sampleCard2: {
+                    	name: '2. card2',
+                    	stateKey: 'suser_card02',
+                    	url: '/sample/suser_card02',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card02.html'
+                    },
+                    sampleCard3: {
+                    	name: '3. card3',
+                    	stateKey: 'suser_card03',
+                    	url: '/sample/suser_card03',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card03.html'
+                    },
+                    sampleCard4: {
+                    	name: '4. card4',
+                    	stateKey: 'suser_card04',
+                    	url: '/sample/suser_card04',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card04.html'
+                    },
+                    sampleCard5: {
+                    	name: '5. card5',
+                    	stateKey: 'suser_card05',
+                    	url: '/sample/suser_card05',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card05.html'
+                    },
+                    sampleCard6: {
+                    	name: '6. card6',
+                    	stateKey: 'suser_card06',
+                    	url: '/sample/suser_card06',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card06.html'
+                    },
+                    sampleCard7: {
+                    	name: '7. card7',
+                    	stateKey: 'suser_card07',
+                    	url: '/sample/suser_card07',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card07.html'
+                    },
+                    sampleCard8: {
+                    	name: '8. card8',
+                    	stateKey: 'suser_card08',
+                    	url: '/sample/suser_card08',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card08.html'
+                    },
+                    sampleCard9: {
+                    	name: '9. card9',
+                    	stateKey: 'suser_card09',
+                    	url: '/sample/suser_card09',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card09.html'
+                    },
+                    sampleCard10: {
+                    	name: '10. card10',
+                    	stateKey: 'suser_card10',
+                    	url: '/sample/suser_card10',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card10.html'
+                    },
+                    sampleCard11: {
+                    	name: '11. card11',
+                    	stateKey: 'suser_card11',
+                    	url: '/sample/suser_card11',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card11.html'
+                    },
+                    sampleCard12: {
+                    	name: '12. card12',
+                    	stateKey: 'suser_card12',
+                    	url: '/sample/suser_card12',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card12.html'
+                    },
+                    sampleCard13: {
+                    	name: '13. card13',
+                    	stateKey: 'suser_card13',
+                    	url: '/sample/suser_card13',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card13.html'
+                    },
+                    sampleCard14: {
+                    	name: '14. card14',
+                    	stateKey: 'suser_card14',
+                    	url: '/sample/suser_card14',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card14.html'
+                    },
+                    sampleCard15: {
+                    	name: '15. card15',
+                    	stateKey: 'suser_card15',
+                    	url: '/sample/suser_card15',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card15.html'
+                    },
+                    sampleCard16: {
+                    	name: '16. card16',
+                    	stateKey: 'suser_card16',
+                    	url: '/sample/suser_card16',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card16.html'
+                    },
+                    sampleCard17: {
+                    	name: '17. card17',
+                    	stateKey: 'suser_card17',
+                    	url: '/sample/suser_card17',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card17.html'
+                    },
+                    sampleCard18: {
+                    	name: '18. card18',
+                    	stateKey: 'suser_card18',
+                    	url: '/sample/suser_card18',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card18.html'
+                    },
+                    sampleCard19: {
+                    	name: '19. card19',
+                    	stateKey: 'suser_card19',
+                    	url: '/sample/suser_card19',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card19.html'
+                    },
+                    sampleCard20: {
+                    	name: '20. card20',
+                    	stateKey: 'suser_card20',
+                    	url: '/sample/suser_card20',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card20.html'
+                    },
+                    sampleCard21: {
+                    	name: '21. card21',
+                    	stateKey: 'suser_card21',
+                    	url: '/sample/suser_card21',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card21.html'
+                    },
+                    sampleCard22: {
+                    	name: '22. card22',
+                    	stateKey: 'suser_card22',
+                    	url: '/sample/suser_card22',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card22.html'
+                    },
+                    sampleCard23: {
+                    	name: '23. card23',
+                    	stateKey: 'suser_card23',
+                    	url: '/sample/suser_card23',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card23.html'
+                    },
+                    sampleCard24: {
+                    	name: '24. card24',
+                    	stateKey: 'suser_card24',
+                    	url: '/sample/suser_card24',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card24.html'
+                    },
+                    sampleCard25: {
+                    	name: '25. card25',
+                    	stateKey: 'suser_card25',
+                    	url: '/sample/suser_card25',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_card25.html'
+                    },
+                    //폼 샘플
+                    sampleForm1: {
+                    	name: '1. Form1',
+                    	stateKey: 'suser_form01',
+                    	url: '/sample/suser_form01',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_form01.html'
+                    },
+                    sampleForm2: {
+                    	name: '2. Form2',
+                    	stateKey: 'suser_form02',
+                    	url: '/sample/suser_form02',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_form02.html'
+                    },
+                    sampleForm3: {
+                    	name: '3. Form3',
+                    	stateKey: 'suser_form03',
+                    	url: '/sample/suser_form03',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_form03.html'
+                    },
+                    sampleForm4: {
+                    	name: '4. Form4',
+                    	stateKey: 'suser_form04',
+                    	url: '/sample/suser_form04',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_form04.html'
+                    },
+                    //Information 샘플
+                    sampleInfo1: {
+                    	name: '1. Info1',
+                    	stateKey: 'suser_information01',
+                    	url: '/sample/suser_information01',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_information01.html'
+                    },
+                    sampleInfo2: {
+                    	name: '2. Info2',
+                    	stateKey: 'suser_information02',
+                    	url: '/sample/suser_information02',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_information02.html'
+                    },
+                    sampleInfo3: {
+                    	name: '3. Info3',
+                    	stateKey: 'suser_information03',
+                    	url: '/sample/suser_information03',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_information03.html'
+                    },
+                    sampleInfo4: {
+                    	name: '4. Info4',
+                    	stateKey: 'suser_information04',
+                    	url: '/sample/suser_information04',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_information04.html'
+                    },
+                    sampleInfo5: {
+                    	name: '5. Info5',
+                    	stateKey: 'suser_information05',
+                    	url: '/sample/suser_information05',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_information05.html'
+                    },
+                    //모달 샘플
+                    sampleModal1: {
+                    	name: '1. Modal1',
+                    	stateKey: 'suser_modal01',
+                    	url: '/sample/suser_modal01',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal01.html'
+                    },
+                    sampleModal2: {
+                    	name: '2. Modal2',
+                    	stateKey: 'suser_modal02',
+                    	url: '/sample/suser_modal02',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal02.html'
+                    },
+                    sampleModal3: {
+                    	name: '3. Modal3',
+                    	stateKey: 'suser_modal03',
+                    	url: '/sample/suser_modal03',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal03.html'
+                    },
+                    sampleModal4: {
+                    	name: '4. Modal4',
+                    	stateKey: 'suser_modal04',
+                    	url: '/sample/suser_modal04',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal04.html'
+                    },
+                    sampleModal5: {
+                    	name: '5. Modal5',
+                    	stateKey: 'suser_modal05',
+                    	url: '/sample/suser_modal05',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal05.html'
+                    },
+                    sampleModal6: {
+                    	name: '6. Modal6',
+                    	stateKey: 'suser_modal06',
+                    	url: '/sample/suser_modal06',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal06.html'
+                    },
+                    sampleModal7: {
+                    	name: '7. Modal7',
+                    	stateKey: 'suser_modal07',
+                    	url: '/sample/suser_modal07',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal07.html'
+                    },
+                    sampleModal8: {
+                    	name: '8. Modal8',
+                    	stateKey: 'suser_modal08',
+                    	url: '/sample/suser_modal08',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal08.html'
+                    },
+                    sampleModal9: {
+                    	name: '9. Modal9',
+                    	stateKey: 'suser_modal09',
+                    	url: '/sample/suser_modal09',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal09.html'
+                    },
+                    sampleModal10: {
+                    	name: '10. Modal10',
+                    	stateKey: 'suser_modal10',
+                    	url: '/sample/suser_modal10',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal10.html'
+                    },
+                    sampleModal11: {
+                    	name: '11. Modal11',
+                    	stateKey: 'suser_modal11',
+                    	url: '/sample/suser_modal11',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal11.html'
+                    },
+                    sampleModal12: {
+                    	name: '12. Modal12',
+                    	stateKey: 'suser_modal12',
+                    	url: '/sample/suser_modal12',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal12.html'
+                    },
+                    sampleModal13: {
+                    	name: '13. Modal13',
+                    	stateKey: 'suser_modal13',
+                    	url: '/sample/suser_modal13',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_modal13.html'
+                    },
+                    //테이블 샘플
+                    sampleTable1: {
+                    	name: '1. Table1',
+                    	stateKey: 'suser_table01',
+                    	url: '/sample/suser_table01',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_table01.html'
+                    },
+                    sampleTable2: {
+                    	name: '2. Table2',
+                    	stateKey: 'suser_table02',
+                    	url: '/sample/suser_table02',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_table02.html'
+                    },
+                    sampleTable3: {
+                    	name: '3. Table3',
+                    	stateKey: 'suser_table03',
+                    	url: '/sample/suser_table03',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_table03.html'
+                    },
+                    sampleTable4: {
+                    	name: '4. Table4',
+                    	stateKey: 'suser_table04',
+                    	url: '/sample/suser_table04',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_table04.html'
+                    },
+                    sampleTable5: {
+                    	name: '5. Table5',
+                    	stateKey: 'suser_table05',
+                    	url: '/sample/suser_table05',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_table05.html'
+                    },
+                    //뷰 샘플
+                    sampleView1: {
+                    	name: '1. View1',
+                    	stateKey: 'suser_view01',
+                    	url: '/sample/suser_view01',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_view01.html'
+                    },
+                    sampleView2: {
+                    	name: '2. View2',
+                    	stateKey: 'suser_view02',
+                    	url: '/sample/suser_view02',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_view02.html'
+                    },
+                    sampleView3: {
+                    	name: '3. View3',
+                    	stateKey: 'suser_view03',
+                    	url: '/sample/suser_view03',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_view03.html'
+                    },
+                    sampleView4: {
+                    	name: '4. View4',
+                    	stateKey: 'suser_view04',
+                    	url: '/sample/suser_view04',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_view04.html'
+                    },
+                    sampleView5: {
+                    	name: '5. View5',
+                    	stateKey: 'suser_view05',
+                    	url: '/sample/suser_view05',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_view05.html'
+                    },
+                    //Write 샘플
+                    sampleWrite1: {
+                    	name: '1. Write1',
+                    	stateKey: 'suser_write01',
+                    	url: '/sample/suser_write01',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write01.html'
+                    },
+                    sampleWrite2: {
+                    	name: '2. Write2',
+                    	stateKey: 'suser_write02',
+                    	url: '/sample/suser_write02',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write02.html'
+                    },
+                    sampleWrite3: {
+                    	name: '3. Write3',
+                    	stateKey: 'suser_write03',
+                    	url: '/sample/suser_write03',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write03.html'
+                    },
+                    sampleWrite4: {
+                    	name: '4. Write4',
+                    	stateKey: 'suser_write04',
+                    	url: '/sample/suser_write04',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write04.html'
+                    },
+                    sampleWrite5: {
+                    	name: '5. Write5',
+                    	stateKey: 'suser_write05',
+                    	url: '/sample/suser_write05',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write05.html'
+                    },
+                    sampleWrite6: {
+                    	name: '6. Write6',
+                    	stateKey: 'suser_write06',
+                    	url: '/sample/suser_write06',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write06.html'
+                    },
+                    sampleWrite7: {
+                    	name: '7. Write7',
+                    	stateKey: 'suser_write07',
+                    	url: '/sample/suser_write07',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write07.html'
+                    },
+                    sampleWrite8: {
+                    	name: '8. Write8',
+                    	stateKey: 'suser_write081',
+                    	url: '/sample/suser_write08',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write08.html'
+                    },
+                    sampleWrite9: {
+                    	name: '9. Write9',
+                    	stateKey: 'suser_write09',
+                    	url: '/sample/suser_write09',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write09.html'
+                    },
+                    sampleWrite10: {
+                    	name: '10. Write10',
+                    	stateKey: 'suser_write10',
+                    	url: '/sample/suser_write10',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_write10.html'
+                    },
+                    //*표준UI샘플화면 추가*//
                     demo: {
                         name: 'demoPage',
                         stateKey: 'demo',
