@@ -453,7 +453,7 @@ angular.module('portal.controllers')
         ct.orgNameCustomValidationCheck = function (orgName) {
             var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문
             var bInValid = false;
-            var text = orgProjectName;
+            var text = orgName;
             var orgNameErrorString = "";             //문제되는 문자
             if (!text) return;
             for (var i=0; i<text.length; i++) {
@@ -709,7 +709,7 @@ angular.module('portal.controllers')
         ct.fn.changeOrgCase();              // 프로젝트 유형 변경 기본설정
         ct.fn.getPaasQuotas();              // paas 프로젝트 쿼터 조회
         ct.fn.getPersonalProjectCount();    // 개인 프로젝트 설정 건수 조회
-        ct.fn.getMyPersonalCnt();           // 사용자가 생성한 개인프로젝트 건수
+        ct.fn.getMyPersonalCnt();           // 사용자가 생성한 개인프로젝트 건수 조회
     })
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);
