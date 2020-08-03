@@ -11,7 +11,7 @@
     "cluster": "deployClusterTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS-7-x86_64-Heat-1907-Tomcat.qcow2",
-    "cluster": "CentOS-7-x86_64-Heat-1907-Tomcat.qcow2"
+    "single": "CentOS76-Tomcat.raw",
+    "cluster": "CentOS76-Tomcat.raw"
   }
 }

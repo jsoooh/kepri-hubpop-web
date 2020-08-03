@@ -12,8 +12,8 @@
     "cluster": "deployClusterTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS-7-x86_64-Heat-1907-Mariadb.qcow2",
-    "replica": "CentOS-7-x86_64-Heat-1907-Mariadb.qcow2",
-    "cluster": "CentOS-7-x86_64-Heat-1907-Galera-Mariadb.qcow2"
+    "single": "CentOS76-Mariadb.raw",
+    "replica": "CentOS76-Mariadb.raw",
+    "cluster": "CentOS76-Galera-Mariadb.raw"
   }
 }
