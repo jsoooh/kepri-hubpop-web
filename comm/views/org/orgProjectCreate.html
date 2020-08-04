@@ -139,14 +139,14 @@
 							<div class="col-md-9">
 								<div class="custom-file-group">
 									<span class="custom-file-btn">
-									  <label class="btn-file" for="attachFile">
-										<input type="text" id="attachFile" name="attachFile" ng-model="contents.appFileItem.file.name" readonly>
-										<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" style="display: none;">
-										<span class="text-btn"  ng-click="main.fileSelectBtnClick($event);">
-											파일찾기
-										</span>
-									  </label>
+									  	<label class="btn-file" for="attachFile">
+											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" style="display: none;">
+											<span class="text-btn"  ng-click="main.fileSelectBtnClick($event);">
+												파일찾기
+											</span>
+									  	</label>
 									</span>
+									<input type="text" id="attachFile" class="form-control" name="attachFile" ng-model="contents.appFileItem.file.name" readonly>
 									<span class="file-input-label"></span>
 									<div class="mt10">
 										<span class="validation validation-userfile text-danger"></span>
