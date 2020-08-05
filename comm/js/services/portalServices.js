@@ -246,13 +246,14 @@ angular.module('portal.services', [])
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   Start  ///////////////////////////////////
         portal.dashboard = {};
 
+        /*사용하지 않음
         portal.dashboard.getTenantInfoByName = function (orgCode, teamCode) {
             var getParams = {
                 orgCode : orgCode,
                 teamCode : teamCode
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams));
-        };
+        };*/
 
         portal.dashboard.getIaasInseanceInfos = function (tenantId) {
             var getParams = {
