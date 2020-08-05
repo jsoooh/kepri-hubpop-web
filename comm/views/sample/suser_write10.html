@@ -1,0 +1,403 @@
+	<!-- 신규소스 -->
+	<div class="pj_write_wrap">
+		<div class="alert alert-primary" role="alert">
+			<i data-feather="file-text"></i>
+			<div class="text-area">'프로젝트 신청'을 통해 프로젝트 생성을 신청할 수 있습니다.</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<section class="panel panel-bordered">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-md-6">
+								<h3 class="panel-title">프로젝트 신청하기</h3>
+							</div>
+							<div class="col-md-6 text-right">
+								<div class="panel-heading-right">
+									<div class="add-txt padding-top-5">
+										<span><b class="caution-star">*</b> 는 필수입력 사항입니다</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- // panel-heading -->
+					<div class="panel-body">
+						<form name="{{contents.formName}}" novalidate>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 프로젝트 ID
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-_’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'">	i</a></div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-group">
+									<input type="text" class="form-control form-control-sm" name="orgId" ng-model="contents.orgData.orgId" maxlength="20" placeholder="아이디를 입력하세요." validation="max_len:20|required|custom:contents.orgIdCustomValidationCheck(contents.orgData.orgId)">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 프로젝트명
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'* 2자 이상 20자 이하, 특수문자 입력 불가'">	i</a></div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-group">
+									<input type="text" class="form-control form-control-sm" name="orgName" ng-model="contents.orgData.orgName" maxlength="20" placeholder="프로젝트명을 입력하세요." validation="min_len:2|max_len:20|required|custom:contents.validationOrgProjectName(contents.orgData.orgName)">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 프로젝트 유형
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'일반 프로젝트의 경우 운영자 승인을 통해 이용 가능하고 개인 프로젝트의 경우 간단한 확인용으로 이용 가능합니다.'">	i</a></div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="list-inline">
+									<li>
+										<div class="radio-group">
+											<input type="radio" name="personal" id="app-radio1-1" value="nomal"  class="radio-input" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()">
+											<label for="app-radio1-1" class="radio-item">
+												<div class="radio">
+													<div class="checked-icon"></div>
+												</div>
+												<span class="text">
+													일반
+												</span>
+											</label>
+										</div>
+									</li>
+									<li>
+										<div class="radio-group">
+											<input type="radio" name="personal" id="app-radio1-2" value="personal" class="radio-input" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()" ng-disabled="contents.myPersonalCnt >= contents.personalProjectCnt">
+											<label for="app-radio1-2" class="radio-item">
+												<div class="radio">
+													<div class="checked-icon"></div>
+												</div>
+												<span class="text">
+													개인
+													<!-- : {{ contents.myPersonalCnt }} / {{ contents.personalProjectCnt }}-->
+												</span>
+											</label>
+										</div>
+									</li>
+									<!-- <div class="radio radio-inline">
+										<input type="radio" name="personal" id="app-radio1-1" value="nomal" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()">
+										<label for="app-radio1-1" class="label">일반</label>
+									</div>
+									<div class="radio radio-inline">
+										<input type="radio" name="personal" id="app-radio1-2" value="personal" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()" ng-disabled="contents.myPersonalCnt >= contents.personalProjectCnt">
+										<label for="app-radio1-2" class="label">개인: {{ contents.myPersonalCnt }} / {{ contents.personalProjectCnt }}</label>
+									</div> -->
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 이용기간
+								</div>
+							</div>
+							<div class="col-md-9">
+								<fieldset ng-disabled="contents.orgData.personal=='personal'">
+									<div class="datepickerWrap">
+										<div class="date-inpt">
+											<adm-dtp name="'startDate'" ng-model="contents.orgData.startDate" options="{format:'YYYY-MM-DD'}" maxdate="'{{contents.orgData.endDate}}'"></adm-dtp>
+										</div>
+										<span class="wave">~</span>
+										<div class="date-inpt">
+											<adm-dtp name="'endDate'" ng-model="contents.orgData.endDate" options="{format:'YYYY-MM-DD'}" mindate="'{{contents.orgData.startDate}}'"></adm-dtp>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 개발비 (백만원)
+								</div>
+							</div>
+							<div class="col-md-8">
+								<div class="form-group">
+									<input type="number" class="form-control form-control-sm"  maxlength="50" name="cost"  placeholder="개발비를 입력해 주세요." ng-model="contents.orgData.cost">
+								</div>
+							</div>
+							<div class="col-md-1">백만원</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 과제계획서 첨부
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="custom-file-group custom-file-group-sm">
+									<span class="custom-file-btn">
+									  <label class="btn-file" for="multiple_input_group">
+										<input type="text" id="attachFile" name="attachFile" ng-model="contents.appFileItem.file.name" readonly><!--validation="required:alt=업로드 해야 할 App 실행용 파일이 선택되지 않았습니다."-->
+										<span class="text-btn"  ng-click="main.fileSelectBtnClick($event);">
+											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" style="display: none;">
+											Browse
+										</span>
+									  </label>
+									</span>
+									<span class="file-input-label"></span>
+									<div class="mt10">
+										<span class="validation validation-userfile text-danger"></span>
+										<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 설명
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-group">
+									<textarea class="form-control" name="description" ng-model="contents.orgData.description" placeholder="설명을 입력해 주세요." rows="4"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="row" ng-if="contents.orgData.personal=='nomal'">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 프로젝트 쿼터 유형 선택
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-group">
+									<select name="orgQuotaPlan" title="쿼터유형 선택" class="form-control form-control-sm select2" ng-model="contents.orgData.orgQuotaPlan" ng-options="quota as quota.name for quota in contents.quotaPlanGroups track by quota.id" ng-change="contents.listQuotaPlan()"></select>
+									{{ contents.orgData.orgQuotaPlan.description }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 프로젝트 쿼터 세부 유형 선택
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-group">
+									<select name="orgQuotas" title="쿼터 세부 유형 선택" class="form-control form-control-sm select2" ng-model="contents.orgData.orgQuotas" ng-options="quota as quota.code for quota in contents.quotaPlan track by quota.id" ng-change="contents.changePlan();"></select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 상세 쿼터 조정
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'각 서비스의 쿼터를 상세 조정 가능합니다.'">	i</a></div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="s_inner_cont">
+									<div class="pnb_tit">
+										<div class="pull-left">
+											<span class="pnb_t_txt">PaaS 용량</span>
+											<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'paas 쿼터에 대한 조정이 가능합니다.'"><span class="ico_info"></span></button></div>
+										</div>
+										<div class="pull-right">
+											<button type="button" name="button" class="btn btn-color1 btn-sm" ng-click="contents.orgData.paasQuotaGuid = null" tooltip-placement="bottom" uib-tooltip="{{ 'label.select_unset' | translate }}">{{ 'label.select_unset' | translate }}</button>
+										</div>
+									</div>
+									<div class="pj_paas_volume">
+										<ul class="ul-list1">
+											<li ng-repeat="(key, paasQuota) in contents.paasQuotas">
+												<div class="radio1 radio-inline">
+													<input type="radio" name="paasQuota" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid">
+													<label for="{{paasQuota.$$hashKey}}" class="label">
+														<div class="volume_cont">
+															<ul>
+																<li>
+																	<span>{{ 'label.service' | translate }}</span>
+																	<span>{{ paasQuota.totalServices }}</span>
+																</li>
+																<li>
+																	<span>{{ 'label.route' | translate }}</span>
+																	<span>{{ paasQuota.totalRoutes }}</span>
+																</li>
+																<li>
+																	<span>{{ 'label.memory' | translate }}</span>
+																	<span>{{ paasQuota.memoryLimit|displayVolume:'MB' }}</span>
+																</li>
+															</ul>
+														</div>
+													</label>
+												</div>
+												<p class="label-txt" >{{ paasQuota.name }}</p>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="table-wrap margin-top-30">
+									<div class="table-head-area">
+										<table class="table">
+											<colgroup>
+												<col style="width:10%;">
+												<col style="width:30%;">
+												<col style="width:15%;">
+												<col style="width:15%;">
+												<col style="width:15%;">
+												<col style="width:15%;">
+											</colgroup>
+											<thead class="black white-text">
+												<tr>
+													<th scope="col" colspan="2">항목</th>
+													<th scope="col">값</th>
+													<th scope="col">단위</th>
+													<th scope="col">최소값</th>
+													<th scope="col">최대값</th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+									<div class="table-body-area scroll-content" style="height:700px;">
+										<table class="table">
+											<tbody>
+												<tr ng-repeat="itemValue in contents.quotaItem">
+													<td>{{ itemValue.orgQuotaItemGroup.name }}</td>
+													<td class="text-left">{{ itemValue.name }}</td>
+													<td><input type="number" class="form-control form-control-sm text-right" value="{{ contents.quotaItem[$index].value }}" name="listQuotaItemValue{{$index}}" ng-model="contents.quotaItem[$index].value" validation="between:{{itemValue.min}},{{itemValue.max}}"/></td>
+													<td>{{ itemValue.unit }}</td>
+													<td>{{ itemValue.min }}</td>
+													<td>{{ itemValue.max }}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					</div>
+				</section>
+			</div>
+		
+			<div class="col-md-4">
+				<section class="panel panel-bordered">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-sm-12">
+								<h3 class="panel-title">프로젝트 기본정보</h3>
+							</div>
+						</div>
+					</div>
+					<!-- // panel-heading -->
+					<div class="panel-body">
+						<!-- 콘텐츠영역 -->
+						<div class="s_cont_box">
+							<ul>
+								<li>
+									<span class="s_tit">프로젝트 ID</span>
+									<span class="s_txt">{{ contents.orgData.orgId }}</span>
+								</li>
+								<li>
+									<span class="s_tit">프로젝트명</span>
+									<span class="s_txt">{{ contents.orgData.orgName }}</span>
+								</li>
+								<li>
+									<span class="s_tit">프로젝트 유형</span>
+									<span class="s_txt" >{{ contents.orgData.personal == "nomal" ? "일반" : "개인" }}</span>
+								</li>
+								<li>
+									<span class="s_tit">이용기간</span>
+									<span class="s_txt">{{ contents.orgData.startDate }} ~ {{ contents.orgData.endDate }}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			
+				<div class="panel-group">
+					<section class="panel panel-bordered">
+						<div class="panel-heading">
+							<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse1" href="" aria-expanded="false"><h3>쿼터</h3></a>
+						</div>
+						<!-- // panel-heading -->
+						<div class="panel-collapse collapse" id="basicCollapse1">
+							<div class="panel-body">
+								<!-- 콘텐츠영역 -->
+								<div class="s_cont_box">
+									<ul>
+										<li>
+											<span class="s_tit">유형</span>
+											<span class="s_txt" >{{ contents.orgData.orgQuotaPlan.id == "" ? "" : contents.orgData.orgQuotaPlan.name }}</span>
+										</li>
+										<li>
+											<span class="s_tit">세부유형</span>
+											<span class="s_txt" >{{(contents.orgData.orgQuotas.length = 0 || contents.orgData.orgQuotas.id == "") ? "" : contents.orgData.orgQuotas.code }}</span>
+										</li>
+										<li>
+											<span class="s_tit">상세쿼터</span>
+											<span class="s_txt" ></span>
+											<div class="s_inner_cont">
+												<div class="innr_tbl">
+													<table>
+														<colgroup>
+															<col style="width:50%;" />
+															<col style="width:20%;" />
+															<col style="width:15%;" />
+															<col style="width:15%;" />
+														</colgroup>
+														<thead>
+															<tr>
+																<th colspan="2">항목</th>
+																<th>값</th>
+																<th>단위</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr ng-repeat="paasItem in contents.paasQuotas | filter:{guid: contents.orgData.paasQuotaGuid}" ng-if="!!contents.orgData.paasQuotaGuid">
+																<td>PaaS</td>
+																<td class="text-left">{{ 'label.service' | translate }}</td>
+																<td class="text-right">{{ paasItem.totalServices }}</td>
+																<td></td>
+															</tr>
+															<tr ng-repeat="paasItem in contents.paasQuotas | filter:{guid: contents.orgData.paasQuotaGuid}" ng-if="!!contents.orgData.paasQuotaGuid">
+																<td>PaaS</td>
+																<td class="text-left">{{ 'label.route' | translate }}</td>
+																<td class="text-right">{{ paasItem.totalRoutes }}</td>
+																<td></td>
+															</tr>
+															<tr ng-repeat="paasItem in contents.paasQuotas | filter:{guid: contents.orgData.paasQuotaGuid}" ng-if="!!contents.orgData.paasQuotaGuid">
+																<td>PaaS</td>
+																<td class="text-left">{{ 'label.memory' | translate }}</td>
+																<td class="text-right">{{ paasItem.memoryLimit/1024 }}</td>
+																<td>GB</td>
+															</tr>
+															<tr ng-repeat="item in contents.quotaItem" ng-if="!!item.value">
+																<td>{{ item.orgQuotaItemGroup.name }}</td>
+																<td class="text-left">{{ item.name }}</td>
+																<td class="text-right">{{ item.value }}</td>
+																<td>{{ item.unit}}</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+		<div class="text-right">
+			<button class="btn btn-lg btn-primary" ng-click="contents.createOrg();">프로젝트 신청</button>
+			<button class="btn btn-lg btn-default" ng-click="main.goToHistoryBack();">취소</button>
+			<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
+			<!-- <button class="btn btn-lg btn-success" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button> -->
+		</div>
+	</div>

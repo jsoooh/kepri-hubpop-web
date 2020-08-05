@@ -648,7 +648,7 @@ angular.module('common.controllers', [])
                     mc.sltPortalOrgId = "";
                     mc.sltPortalOrgIsActive = false;
                     mc.sltPortalOrgDisplayName = "";
-                    mc.setUserTenant(null);
+                    mc.setUserTenant(null, null);
                     mc.setOrganization(null);
                 }
             }
@@ -676,16 +676,21 @@ angular.module('common.controllers', [])
 
         mc.loadUserTenant = function () {
             if (angular.isObject(mc.sltProject) && mc.sltProjectId && angular.isObject(mc.sltPortalOrg) && mc.sltPortalOrg.orgId) {
-                var userTenant = mc.syncGetTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
-                /* 20.05.18 - gpu 객체 정보 불러오기 by ksw */
-                var userTenant2 = mc.syncGetGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                var userTenant = null;
+                var userTenant2 = null;
+                if (mc.sltPortalOrg.isUseIaas) {
+                    userTenant = mc.syncGetTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                }
+                if (mc.sltPortalOrg.isUseGpu) {
+                    userTenant2 = mc.syncGetGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                }
                 if (userTenant) {
                     userTenant.orgCode = userTenant.pk.orgCode;
                     userTenant.teamCode = userTenant.pk.teamCode;
                 }
                 mc.setUserTenant(userTenant, userTenant2);
             } else {
-                mc.setUserTenant(null);
+                mc.setUserTenant(null, null);
             }
         };
 
@@ -693,14 +698,8 @@ angular.module('common.controllers', [])
         mc.setUserTenant = function(userTenant, userTenant2) {
             if (angular.isObject(userTenant) && userTenant.tenantId) {
                 mc.userTenant = userTenant;
-                mc.userTenantGpu = userTenant2;
                 mc.userTenantId = userTenant.tenantId;
                 mc.userTenant.id = userTenant.tenantId;
-                /* 20.05.18 - gpu 객체 담기 by ksw */
-                if (userTenant2) {
-                    mc.userTenantGpuId = userTenant2.tenantId;
-                    mc.userTenantGpu.id = userTenant2.tenantId;
-                }
                 mc.userTenant.korName = mc.sltPortalOrg.orgName;
                 mc.uaerTenantDisplayName = mc.userTenant.korName;
                 common.setUserTenantId(mc.userTenantId);
@@ -709,6 +708,15 @@ angular.module('common.controllers', [])
                 mc.userTenantId = "";
                 mc.uaerTenantDisplayName = "";
                 common.clearUserTenantId();
+            }
+            if (angular.isObject(userTenant2) && userTenant2.tenantId) {
+                mc.userTenantGpu = userTenant2;
+                mc.userTenantGpuId = userTenant2.tenantId;
+                mc.userTenantGpu.id = userTenant2.tenantId;
+            } else {
+                mc.userTenantGpu = {};
+                mc.userTenantGpuId = "";
+                mc.userTenantGpu.id = "";
             }
         };
 

@@ -388,18 +388,20 @@ angular.module('portal.controllers')
         _DebugConsoleLog("orgControllers.js : commOrgProjectCreateCtrl", 1);
 
         var ct = this;
+        $scope.main.loadingMainBody = false;
 
+        ct.fn = {};
         ct.orgData = {};
-        ct.orgData.orgQuotaPlan = [];
-        ct.orgData.orgQuotas = [];
-        ct.quotaItemValue = [];
-        ct.orgData.personal = "nomal";
-        ct.formName = "orgCreateForm";
-        ct.orgIdValidationResult = false;
-        ct.personalProjectCnt = 0;      //개인프로젝트 생성 갯수
-        ct.myPersonalCnt = 0;           //사용자별 개인프로젝트 생성 갯수
 
-        ct.attachFile = null;         //과제계획서 파일
+        ct.formName = "orgCreateForm";
+        ct.orgData.personal = "nomal";
+        ct.orgIdValidationResult = false;
+        ct.quotaPlanGroups = [{id:"", name:"-- 유형 선택 --"}];
+        ct.quotaPlans = [{id:"", code:"-- 세부 유형 선택 --"}];
+        ct.orgData.quotaPlanGroup = ct.quotaPlanGroups[0];
+        ct.orgData.quotaPlan = ct.quotaPlans[0];
+
+        ct.attachFile = null;         // 과제계획서 파일
         ct.uploader = common.setDefaultFileUploader($scope);
         ct.uploader.onAfterAddingFile = function(fileItem) {
             $('#attachFile').val(fileItem._file.name);
@@ -409,7 +411,7 @@ angular.module('portal.controllers')
             }, 0);
         };
 
-        /*프로젝트 ID 유효성 검사 및 중복체크*/
+        // 프로젝트 ID 유효성 검사 및 중복체크
         ct.orgIdCustomValidationCheck = function(orgId) {
             var regexp = /[0-9a-zA-Z\-_]/;    //숫자,영문,특수문자(-_)
             var bInValid = false;
@@ -447,11 +449,11 @@ angular.module('portal.controllers')
             }
         };
 
-        /*프로젝트 이름 유효성 검사*/
-        ct.validationOrgProjectName = function (orgProjectName) {
+        // 프로젝트 이름 유효성 검사
+        ct.orgNameCustomValidationCheck = function (orgName) {
             var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문
             var bInValid = false;
-            var text = orgProjectName;
+            var text = orgName;
             var orgNameErrorString = "";             //문제되는 문자
             if (!text) return;
             for (var i=0; i<text.length; i++) {
@@ -467,65 +469,40 @@ angular.module('portal.controllers')
             }
         };
 
-        /*참조플랜 그룹 목록 조회*/
-        ct.listQuotaPlanGroups = function() {
-            $scope.main.loadingMainBody = true;
+        // 프로젝트 쿼터 유형 조회
+        ct.fn.getQuotaPlanGroups = function() {
             var params = {
                 schType : "name",
                 schText : ""
             };
             var returnPromise = quotaService.listQuotaPlanGroups(params);
             returnPromise.success(function (data) {
-                ct.quotaPlanGroups = [];
-                ct.quotaPlanGroups = data;
+                ct.quotaPlanGroups.push.apply(ct.quotaPlanGroups, data);
             });
             returnPromise.error(function (data) {
-                ct.quotaPlanGroups = [];
-                common.showAlert("message",data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-                ct.quotaPlanGroups.unshift({id:"", name:"-- 유형 선택 --"});
-                ct.orgData.orgQuotaPlan = ct.quotaPlanGroups[0];
-                $scope.main.loadingMainBody = false;
+                common.showAlertError("message", data.message);
             });
         };
 
-        /*참조플랜 그룹 세부목록 조회*/
-        ct.listQuotaPlan = function() {
-            var returnPromise = "";
-            if (ct.orgData.personal == "personal") { //프로젝트 유형 확인
-                var params = {
-                    isPersonal : true
-                };
-                returnPromise = quotaService.listQuotaPlanPersonal(params);
-            } else {
-                var initSchGroupId = ct.orgData.orgQuotaPlan.id;
-                if (!initSchGroupId) {
-                    initSchGroupId = -1;
-                }
-                var params = {
-                    schGroupId : initSchGroupId,
-                    schType : "name",
-                    schText:  ""
-                };
-                returnPromise = quotaService.listQuotaPlan(params);
-            }
+        // 프로젝트 쿼터 세부 유형 조회
+        ct.fn.getQuotaPlans = function() {
+            ct.quotaPlansData = [];
+            var params = {
+                schGroupId : 0,
+                schType : "name"
+            };
+            var returnPromise = quotaService.listQuotaPlan(params);
             returnPromise.success(function (data) {
-                ct.quotaPlan = [];
-                ct.quotaPlan = data;
+                ct.quotaPlansData = data;
             });
             returnPromise.error(function (data) {
-                ct.quotaPlan = [];
-                common.showAlert("message",data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-                ct.quotaPlan.unshift({id:"", code:"-- 세부 유형 선택 --"});
-                ct.orgData.orgQuotas = ct.quotaPlan[0];
+                common.showAlertError("message", data.message);
             });
         };
 
-        /*상세쿼타조정 조회*/
-        ct.listQuotaItem = function() {
+        // 상세 쿼터 조정 항목 조회
+        ct.fn.getQuotaItems = function() {
+            ct.quotaItems = [];
             var params = {
                 schGroupId : 0,
                 schType : "name",
@@ -533,57 +510,40 @@ angular.module('portal.controllers')
             };
             var returnPromise = quotaService.listQuotaItem(params);
             returnPromise.success(function (data) {
-                ct.quotaItem = [];
-                ct.quotaItem = data;
+                ct.quotaItems = data;
             });
             returnPromise.error(function (data) {
-                ct.quotaItem = [];
-                common.showAlert("message",data.message);
+                common.showAlertError("message",data.message);
             });
         };
 
-        /*상세쿼타조정 값 조회*/
-        ct.listQuotaItemValue = function() {
-            var planId = ct.orgData.orgQuotas.id;
-            if(!planId) {
-                planId = 1;
+        // 상세쿼타조정 값 조회
+        ct.fn.getQuotaItemValues = function(quotaPlanId) {
+            ct.quotaItemValues = [];
+            if(!quotaPlanId) {
+                return;
             }
-            var returnPromise = quotaService.listQuotaItemValue(planId);
+            var returnPromise = quotaService.listQuotaItemValue(quotaPlanId);
             returnPromise.success(function (data) {
-                ct.quotaItemValue = [];
-                ct.quotaItemValue = data;
-
-                for (var i=0; i<ct.quotaItem.length; i++) { //상세쿼타조정 값 매칭
-                    ct.quotaItem[i].value = "";
-                    for (var j=0; j<ct.quotaItemValue.length; j++) {
-                        if (ct.quotaItem[i].id == ct.quotaItemValue[j].orgQuotaItem.id) {
-                            ct.quotaItem[i].value = ct.quotaItemValue[j].value;
+                ct.quotaItemValues = data;
+                // 상세 쿼터 아이템 값 매칭
+                angular.forEach(ct.quotaItems, function (quotaItem) {
+                    quotaItem.value = "";
+                    for (var i=0; i < ct.quotaItemValues.length; i++) {
+                        if (quotaItem.id == ct.quotaItemValues[i].orgQuotaItem.id) {
+                            quotaItem.value = ct.quotaItemValues[i].value;
                             break;
                         }
                     }
-                }
+                });
             });
             returnPromise.error(function (data) {
-                ct.quotaItemValue = [];
-                common.showAlert("message",data.message);
+                common.showAlertError("message",data.message);
             });
         };
 
-        /*프로젝트 쿼터 세부 유형 선택*/
-        ct.changePlan = function () {
-            if (ct.orgData.orgQuotas.id != "") {
-                ct.orgData.paasQuotaGuid = ct.orgData.orgQuotas.paasQuotaGuid;
-                ct.listQuotaItemValue();
-            } else {
-                ct.orgData.paasQuotaGuid = "";
-                for (var i =0; i < ct.quotaItem.length; i++) {
-                    ct.quotaItem[i].value = "";
-                }
-            }
-        };
-
-        /*프로젝트 유형 변경 감지*/
-        ct.orgCaseChange = function() {
+        // 프로로젝트 유형 변경
+        ct.fn.changeOrgCase = function() {
             var calendarButton = $('.datepickerWrap').find('.dtp-ig');
             if(ct.orgData.personal == "personal") {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
@@ -592,58 +552,51 @@ angular.module('portal.controllers')
             } else {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
                 ct.orgData.endDate = moment().subtract(1,'days').add(1,'month').format('YYYY-MM-DD');
-                ct.listQuotaPlanGroups();
                 calendarButton.show();
             }
-            ct.listQuotaPlan();
+            // 쿼터 선택 및 값 초기화
+            ct.orgData.quotaPlanGroup = ct.quotaPlanGroups[0];
+            ct.fn.changeQuotaPlanGroup(ct.orgData.quotaPlanGroup);
         };
 
-        /*프로젝트 신청*/
-        ct.createOrg = function () {
-            if (!new ValidationService().checkFormValidity($scope[ct.formName]) || !ct.orgData.startDate || !ct.orgData.endDate) { //프로젝트 신청 유효성 검증
-                common.showAlertSuccess("잘못된 값이 있거나 필수사항을 입력해 주세요", "잘못된 값이 있거나 필수사항을 입력해 주세요");
+        // 쿼터 유형선택 변경시 쿼터 세부 유형 리스트
+        ct.fn.changeQuotaPlanGroup = function(quotaPlanGroup) {
+            if (!quotaPlanGroup) {
                 return;
             }
-
-            var params = {};
-            params['orgId'] = ct.orgData.orgId.trim();
-            params['orgName'] = ct.orgData.orgName.trim();
-            params['personal'] = ct.orgData.personal == "personal" ? true : false;
-            params['startDate'] = ct.orgData.startDate;
-            params['endDate'] = ct.orgData.endDate;
-            params['cost'] = !ct.orgData.cost ? 0 : ct.orgData.cost;
-            params['description'] = !ct.orgData.description ? "" : ct.orgData.description;
-            params['orgQuotaPlanId'] = ct.orgData.orgQuotas.id;
-            params['paasQuotaGuid'] = !ct.orgData.paasQuotaGuid ? "" : ct.orgData.paasQuotaGuid;
-            var quotasList = [];
-            for (var i=0; i<ct.quotaItem.length; i++) {
-                if (ct.quotaItem[i].value) {
-                    var orgQuotas = ct.quotaItem[i].id + "/" + ct.quotaItem[i].value;
-                    quotasList.push(orgQuotas);
+            ct.quotaPlans.length = 1;
+            ct.orgData.quotaPlan = ct.quotaPlans[0];
+            angular.forEach(ct.quotaPlansData, function (value) {
+                // 개인설정 일때
+                if (ct.orgData.personal == "personal") {
+                    if (value.personal == true) {
+                        ct.quotaPlans.push(value);
+                    }
                 }
-            }
-            params['orgQuotaValues'] = quotasList;
-            if (!ct.orgData.paasQuotaGuid && quotasList.length == 0) {
-                common.showAlertSuccess("상세 쿼터 설정은 필수사항입니다.", "상세 쿼터 설정은 필수사항입니다.");
-                return;
-            }
-            if (ct.attachFile != null) {
-                params['attachFile'] = ct.attachFile._file;
-            }
-            var returnPromise = orgService.requestOrgCreate(params);
-            returnPromise.success(function (data, status, headers) {
-                $location.path('/comm/projects');
-                common.showAlertSuccess("프로젝트 신청 성공", "프로젝트 신청을 완료했습니다.");
+                // 일반설정 일때
+                else if (value.orgQuotaPlanGroup != null && value.orgQuotaPlanGroup.id == quotaPlanGroup.id) {
+                    ct.quotaPlans.push(value);
+                }
             });
-            returnPromise.error(function (data) {
-                common.showAlert("message",data.message);
-            });
+            ct.fn.changeQuotaPlan(); //쿼터 상세값 초기화
         };
 
-        /*개인 프로젝트 설정 건수 조회*/
-        ct.getPersonalProjectCount = function () {
+        // 쿼터 세부 유형선택 변경시 쿼터 상세값 매칭
+        ct.fn.changeQuotaPlan = function (orgQuotas) {
+            if (orgQuotas && orgQuotas.id) {
+                ct.orgData.paasQuotaGuid = orgQuotas.paasQuotaGuid;
+                ct.fn.getQuotaItemValues(orgQuotas.id);
+            } else {    // 쿼터 세부 유형선택 및 쿼터 상세값 초기화
+                ct.orgData.paasQuotaGuid = "";
+                angular.forEach(ct.quotaItems, function (value) {
+                    value.value = "";
+                });
+            }
+        };
+
+        // 개인 프로젝트 설정 건수 조회
+        ct.fn.getPersonalProjectCount = function () {
             ct.personalProjectCnt = 0;
-            $scope.main.loadingMainBody = true;
             var returnPromise = userSettingService.getUserSetting(CONSTANTS.userSettingKeys.personalProjectCnt);
             returnPromise.success(function (data) {
                 data = userSettingService.userSettingParse(data);
@@ -651,37 +604,29 @@ angular.module('portal.controllers')
                     ct.personalProjectCnt = data.contents.projectCnt;
                 }
             });
-            returnPromise.error(function (data, status, headers) {
-                ct.personalProjectCnt = 0;
-            });
-            returnPromise.finally(function (data, status, headers) {
-                //$scope.main.loadingMainBody = false;
-                //사용자가 생성한 개인프로젝트 건수
-                ct.getMyPersonalCnt();
+            returnPromise.error(function (data) {
+                common.showAlertError("message", data.message)
             });
         };
 
-        /*사용자가 생성한 개인프로젝트 건수*/
-        ct.getMyPersonalCnt = function () {
+        // 사용자가 생성한 개인프로젝트 건수 조회
+        ct.fn.getMyPersonalCnt = function () {
             ct.myPersonalCnt = 0;
-            //$scope.main.loadingMainBody = true;
             var returnPromise = orgService.getMyPersonalCnt();
             returnPromise.success(function (data) {
                 if (data) {
                     ct.myPersonalCnt = data;
                 }
             });
-            returnPromise.error(function (data, status, headers) {
-                ct.myPersonalCnt = 0;
-            });
-            returnPromise.finally(function (data, status, headers) {
-                //$scope.main.loadingMainBody = false;
+            returnPromise.error(function (data) {
+                common.showAlertError("message", data.message);
             });
         };
 
-        /*paas 프로젝트 쿼터 조회*/
-        ct.listPaasQuotas = function (currentPage) {
+        // paas 프로젝트 쿼터 조회
+        ct.fn.getPaasQuotas = function (currentPage) {
             $scope.main.loadingMainBody = true;
+            ct.paasQuotas = [];
             if (!currentPage) {
                 currentPage = 1;
             }
@@ -690,19 +635,81 @@ angular.module('portal.controllers')
                 ct.paasQuotas = data.content;
             });
             returnPromise.error(function (data) {
-                ct.paasQuotas = [];
+                common.showAlertError("message", data.message);
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function () {
                 $scope.main.loadingMainBody = false;
             });
         };
 
-        ct.listQuotaPlanGroups();   //참조플랜 그룹 목록 조회 로딩
-        ct.listQuotaPlan();         //참조플랜 그룹 세부목록 조회 로딩
-        ct.listQuotaItem();         //상세쿼타조정 조회 로딩
-        ct.orgCaseChange();         //프로젝트 유형 변경 감지 로딩
-        ct.listPaasQuotas();        //paas 프로젝트 쿼터 조회
-        ct.getPersonalProjectCount();   //개인 프로젝트 설정 건수 조회
+        // 프로젝트 신청 유효성 검사
+        ct.fn.createOrgValidationCheck = function() {
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                common.showAlertError("항목", "잘못된 값이 있거나 필수사항을 입력하지 않았습니다.");
+                return false;
+            }
+            if (!ct.orgData.startDate || !ct.orgData.endDate) {
+                common.showAlertError("날짜", "날짜 값이 없습니다.");
+                return false;
+            }
+            var quotaItemList = ct.quotaItems.filter(function (value) {
+                if (value.value) return value;
+            });
+            if (quotaItemList.length == 0) {
+                common.showAlertError("쿼터", "상세 쿼터 설정은 필수사항입니다.");
+                return false;
+            }
+            return true;
+        };
+
+        // 프로젝트 신청
+        ct.fn.createOrg = function () {
+            $scope.main.loadingMainBody = true;
+
+            // 프로젝트 신청 유효성 검사
+            if (!ct.fn.createOrgValidationCheck()) {
+                $scope.main.loadingMainBody = false;
+                return;
+            }
+            var params = {};
+            params['orgId'] = ct.orgData.orgId.trim();
+            params['orgName'] = ct.orgData.orgName.trim();
+            params['personal'] = ct.orgData.personal == "personal" ? true : false;
+            params['startDate'] = ct.orgData.startDate;
+            params['endDate'] = ct.orgData.endDate;
+            params['cost'] = !ct.orgData.cost ? 0 : ct.orgData.cost;
+            params['description'] = !ct.orgData.description ? "" : ct.orgData.description;
+            params['orgQuotaPlanId'] = ct.orgData.quotaPlan.id;
+            params['paasQuotaGuid'] = !ct.orgData.paasQuotaGuid ? "" : ct.orgData.paasQuotaGuid;
+            var orgQuotaValues = [];
+            angular.forEach(ct.quotaItems, function (value) {
+                if (value.value)
+                    orgQuotaValues.push(value.id + "/" + value.value);
+            });
+            params['orgQuotaValues'] = orgQuotaValues;
+            if (ct.attachFile != null) {
+                params['attachFile'] = ct.attachFile._file;
+            }
+            var returnPromise = orgService.requestOrgCreate(params);
+            returnPromise.success(function () {
+                common.showAlertSuccess("프로젝트 신청 성공", "프로젝트 신청을 완료했습니다.");
+                $location.path('/comm/projects');
+            });
+            returnPromise.error(function (data) {
+                common.showAlertError("message", data.message);
+            });
+            returnPromise.finally(function () {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.getQuotaPlanGroups();         // 쿼터 그룹 유형 조회
+        ct.fn.getQuotaPlans();              // 쿼터 세부 유형 조회
+        ct.fn.getQuotaItems();              // 쿼터 상세 항목 조회
+        ct.fn.changeOrgCase();              // 프로젝트 유형 변경 기본설정
+        ct.fn.getPaasQuotas();              // paas 프로젝트 쿼터 조회
+        ct.fn.getPersonalProjectCount();    // 개인 프로젝트 설정 건수 조회
+        ct.fn.getMyPersonalCnt();           // 사용자가 생성한 개인프로젝트 건수 조회
     })
     .controller('commChangeNameFormCtrl', function ($scope, $location, $state, $stateParams,$mdDialog,$translate, $q,ValidationService, orgService, common) {
         _DebugConsoleLog("orgControllers.js : commChangeNameFormCtrl", 1);

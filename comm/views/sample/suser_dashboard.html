@@ -1,0 +1,1202 @@
+<!-- inner -->
+<div class="page-content">
+	
+	<!-- dashboard-body -->
+	<div class="dashboard-body">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type4">
+					<div class="panel-body">
+						<h3 class="heading h3 margin-bottom-25">프로젝트 정보</h3>
+						<div class="project-info-area">
+							<div class="clearfix margin-bottom-30">
+								<div class="round-img pull-left">
+									<img src="../assets/img/guide/guide_user_dashboard.jpg" alt="">
+								</div>
+								<div class="text-area pull-left">
+									<span class="tit">청정발전 전력연구 프로젝트</span>
+									<p class="txt">청정발전 전력연구 프로젝트 설명</p>
+								</div>
+							</div>
+							<ul class="list-dot font-size-13">
+								<li>
+									<b>프로젝트ID : </b> <span> 321 </span>
+								</li>
+								<li>
+									<b>프로젝트 생성자 : </b> <span> 책임자 </span>
+								</li>
+								<li>
+									<b>프로젝트 구성원 수 : </b> <span> 1명 </span>
+								</li>
+								<li>
+									<b>프로젝트 생성일자 : </b> <span> 2020-01-29 15:16:03 </span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+					<div class="panel-body">
+						<h3 class="heading h3 margin-bottom-25">데이터 구독 현황</h3>
+						<div class="row">
+							<div class="col-xs-3">
+								<div class="margin-top-50">
+									<ul class="chart-index-list">
+										<li>
+											<span class="color-bul bg-grey-200"></span> <span class="category"> 요청 </span> <span class="count"> <b>80</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+										<li>
+											<span class="color-bul bg-cyan-600"></span> <span class="category"> 승인 </span> <span class="count cyan-600"> <b>35</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+										<li>
+											<span class="color-bul bg-pink-600"></span> <span class="category"> 반려 </span> <span class="count pink-600"> <b>45</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="margin-bottom-20 text-center">
+									<b>데이터 요청</b>
+								</div>
+								<div class="chart-area" style="width: 100%; height: 140px;">
+									<canvas id="halfDoughnut1"></canvas>
+								</div>
+								<script>
+													var ctx = document.getElementById("halfDoughnut1");
+													var myChart = new Chart(ctx, {
+														type: 'doughnut',
+														data: {
+															labels: ['승인', '반려'],
+															datasets: [{
+																data: [35, 45],
+																backgroundColor: [
+																	'#00bcd4',
+																	'#ff6384',
+																]
+															}]
+														},
+														options: {
+															maintainAspectRatio: false,
+															tooltips: {
+																enabled: false
+															},
+															legend: {
+																display: false,
+															},
+															rotation: 1 * Math.PI,
+															circumference: 1 * Math.PI
+														}
+													});
+												</script>
+							</div>
+							<div class="col-xs-3 text-center ">
+								<div class="margin-bottom-20">
+									<b>데이터 구독</b>
+								</div>
+								<div class="round-box bg-grey-200 margin-bottom-10">
+									<div class="font-size-40">
+										<b>50</b>
+									</div>
+								</div>
+								<div class="grey-500">Total</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-5">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+					<div class="panel-body">
+						<h3 class="heading h3 margin-bottom-25">API 서비스 사용 현황</h3>
+						<div class="row">
+							<div class="col-xs-3">
+								<div class="margin-top-50">
+									<ul class="chart-index-list">
+										<li>
+											<span class="color-bul bg-grey-200"></span> <span class="category"> 등록 </span> <span class="count"> <b>100</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+										<li>
+											<span class="color-bul bg-cyan-600"></span> <span class="category"> 활성 </span> <span class="count cyan-600"> <b>75</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+										<li>
+											<span class="color-bul bg-pink-600"></span> <span class="category"> 비활성 </span> <span class="count pink-600"> <b>25</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="margin-bottom-20 text-center">
+									<b>API 등록</b>
+								</div>
+								<div class="chart-area" style="width: 230px; height: 140px;">
+									<canvas id="halfDoughnut2"></canvas>
+									<script>
+														var ctx = document.getElementById("halfDoughnut2");
+														var myChart = new Chart(ctx, {
+															type: 'doughnut',
+															data: {
+																labels: ['활성', '비활성'],
+																datasets: [{
+																	data: [75, 25],
+																	backgroundColor: [
+																		'#00bcd4',
+																		'#ff6384',
+																	]
+																}]
+															},
+															options: {
+																maintainAspectRatio: false,
+																tooltips: {
+																	enabled: false
+																},
+																legend: {
+																	display: false,
+																},
+																rotation: 1 * Math.PI,
+																circumference: 1 * Math.PI
+															}
+														});
+													</script>
+								</div>
+							</div>
+							<div class="col-xs-3 text-center ">
+								<div class="margin-bottom-20">
+									<b>API 구독</b>
+								</div>
+								<div class="round-box bg-grey-200 margin-bottom-10">
+									<div class="font-size-40">
+										<b>30</b>
+									</div>
+								</div>
+								<div class="grey-500">Total</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+			<div class="panel-heading padding-25">
+				<h3 class="heading h3 margin-0">클라우드 자원사용 현황</h3>
+			</div>
+			<div class="panel-body padding-0">
+				<div class="row">
+					<div class="col-md-6 border-right">
+						<div class="padding-20">
+							<div class="box">
+								<h3 class="heading h3 margin-bottom-30 text-center">가상서버</h3>
+								<div class="row text-center">
+									<div class="col-xs-2">
+										<div class="font-size-13">
+											<b>TOTAL</b>
+										</div>
+										<div class="font-size-45">
+											<b>3</b>
+										</div>
+									</div>
+									<div class="col-xs-2 light-green-700">
+										<div class="font-size-13">
+											<b>STARTED</b>
+										</div>
+										<div class="font-size-45">
+											<b>3</b>
+										</div>
+									</div>
+									<div class="col-xs-2 yellow-800">
+										<div class="font-size-13">
+											<b>STOPPED</b>
+										</div>
+										<div class="font-size-45">
+											<b>0</b>
+										</div>
+									</div>
+									<div class="col-xs-2 pink-700">
+										<div class="font-size-13">
+											<b>ERROR</b>
+										</div>
+										<div class="font-size-45">
+											<b>0</b>
+										</div>
+									</div>
+									<div class="col-xs-4">
+										<div class="chart-area" style="width: 100%; height: 100px;">
+											<canvas id="lineChart"></canvas>
+										</div>
+										<script>	
+															var ctx = document.getElementById('lineChart').getContext('2d');
+															var chart3 = new Chart(ctx, {
+																// The type of chart we want to create
+																type: 'line',
+				
+																// The data for our dataset
+																data: {
+																	labels: ['2010.01', '2018.03', '2018.05', '2018.07', '2018.9', '2018.12'],
+																	datasets: [{
+																		label: 'My First',
+																		borderWidth: 1,
+																		backgroundColor: '#fbe8ef',
+																		borderColor: '#fdaec9',
+																		data: [30, 75, 40, 70, 55, 60],
+																	}]
+																},
+				
+																// Configuration options go here
+																options: {
+																	maintainAspectRatio: false,
+																	title: {
+																		display: true,
+																		text: 'CPU 상태'
+																	},
+																	elements: {
+																		point:{
+																			radius: 0
+																		}
+																	},
+																	legend: {
+																		display: false,
+																		labels: {
+																			fontColor: "#656565",
+																			fontSize: 12,
+																			boxWidth: 15
+																		},
+																		position: "bottom"
+																	},
+																	scales: {
+																		xAxes: [{
+																			display: false,
+																			ticks:{
+																				fontColor : '#666',
+																				fontSize : 12
+																			},
+																			gridLines:{
+																				display: false
+																			}
+																		}],
+																		yAxes: [{
+																			ticks: {
+																				beginAtZero: true,
+																				stepSize : 100,
+																				fontColor : "#838383",
+																				fontSize : 11,
+																				min: 0,
+																				max: 100
+																			},
+																			gridLines:{
+																				display: false
+																			}
+																		}]
+																	}
+																}
+															});
+														</script>
+									</div>
+								</div>
+							</div>
+							<div class="box border-top">
+								<div class="row">
+									<div class="col-xs-4 chart-center">
+										<div class="clearfix">
+											<div class="pull-left">
+												<div class="chart-area" style="width: 120px; height: 120px;">
+													<canvas id="doughnut1"></canvas>
+													<div class="chart-inner-text text-center" style="top: 30px;">
+														<div class="half-text-area">
+															<div class="top">
+																<b>3</b>
+															</div>
+															<div class="line"></div>
+															<div class="bottom">
+																<b>40</b>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="chart-caption pull-left margin-left-15 padding-top-40">
+												<div class="font-size-13">
+													<b>CPU</b>
+												</div>
+												<div class="font-size-20">
+													<b>7.5</b> <sub>%</sub>
+												</div>
+											</div>
+										</div>
+										<script>
+															var value = 50;
+															var data = {
+															labels: [
+																"CPU",
+															],
+															datasets: [
+																{
+																	data: [value, 100-value],
+																	backgroundColor: [
+																		"#00bcd4",
+																		"#f5f5f5"
+																	],
+																	hoverBackgroundColor: [
+																		"#00bcd4",
+																		"#f5f5f5"
+																	],
+																	hoverBorderColor: [
+																		"#00bcd4",
+																		"#ffffff"
+																	]
+																}]
+															};
+
+															var myChart = new Chart(document.getElementById('doughnut1'), {
+															type: 'doughnut',
+															data: data,
+															options: {
+																maintainAspectRatio: false,
+																legend: {
+																display: false
+																},
+																cutoutPercentage: 75,
+																tooltips: {
+																	enabled: false
+																},
+															}
+															});
+
+														</script>
+									</div>
+
+									<div class="col-xs-4 chart-center">
+										<div class="clearfix">
+											<div class="pull-left">
+												<div class="chart-area" style="width: 120px; height: 120px;">
+													<canvas id="doughnut2"></canvas>
+													<div class="chart-inner-text text-center" style="top: 30px;">
+														<div class="half-text-area">
+															<div class="top">
+																<b>1.5</b> <small>GB</small>
+															</div>
+															<div class="line"></div>
+															<div class="bottom">
+																<b>100</b> <small>GB</small>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="chart-caption pull-left margin-left-15 padding-top-40">
+												<div class="font-size-13">
+													<b>MEMORY</b>
+												</div>
+												<div class="font-size-20">
+													<b>1.5</b> <sub>%</sub>
+												</div>
+											</div>
+										</div>
+										<script>
+															var value = 25;
+															var data = {
+															labels: [
+																"MEMORY",
+															],
+															datasets: [
+																{
+																	data: [value, 100-value],
+																	backgroundColor: [
+																		"#ffce56",
+																		"#f5f5f5"
+																	],
+																	hoverBackgroundColor: [
+																		"#ffce56",
+																		"#f5f5f5"
+																	],
+																	hoverBorderColor: [
+																		"#ffce56",
+																		"#ffffff"
+																	]
+																}]
+															};
+
+															var myChart = new Chart(document.getElementById('doughnut2'), {
+															type: 'doughnut',
+															data: data,
+															options: {
+																maintainAspectRatio: false,
+																legend: {
+																display: false
+																},
+																cutoutPercentage: 75,
+																tooltips: {
+																	enabled: false
+																},
+															}
+															});
+
+														</script>
+									</div>
+
+									<div class="col-xs-4 chart-center">
+										<div class="clearfix">
+											<div class="pull-left">
+												<div class="chart-area" style="width: 120px; height: 120px;">
+													<canvas id="doughnut3"></canvas>
+													<div class="chart-inner-text text-center" style="top: 30px;">
+														<div class="half-text-area">
+															<div class="top">
+																<b>100</b> <small>GB</small>
+															</div>
+															<div class="line"></div>
+															<div class="bottom">
+																<b>1.95</b> <small>GB</small>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="chart-caption pull-left margin-left-15 padding-top-40">
+												<div class="font-size-13">
+													<b>STORAGE</b>
+												</div>
+												<div class="font-size-20">
+													<b>5.0</b> <sub>%</sub>
+												</div>
+											</div>
+										</div>
+										<script>
+															var value = 70;
+															var data = {
+															labels: [
+																"STORAGE",
+															],
+															datasets: [
+																{
+																	data: [value, 100-value],
+																	backgroundColor: [
+																		"#ff6384",
+																		"#f5f5f5"
+																	],
+																	hoverBackgroundColor: [
+																		"#ff6384",
+																		"#f5f5f5"
+																	],
+																	hoverBorderColor: [
+																		"#ff6384",
+																		"#ffffff"
+																	]
+																}]
+															};
+
+															var myChart = new Chart(document.getElementById('doughnut3'), {
+															type: 'doughnut',
+															data: data,
+															options: {
+																maintainAspectRatio: false,
+																tooltips: {
+																	enabled: false
+																},
+																legend: {
+																display: false
+																},
+																cutoutPercentage: 75,
+															}
+															});
+
+														</script>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="padding-20">
+							<div class="box">
+								<h3 class="heading h3 margin-bottom-30 text-center">표준 App.</h3>
+								<div class="row text-center">
+									<div class="col-xs-2">
+										<div class="font-size-13">
+											<b>TOTAL</b>
+										</div>
+										<div class="font-size-45">
+											<b>3</b>
+										</div>
+									</div>
+									<div class="col-xs-2 light-green-700">
+										<div class="font-size-13">
+											<b>STARTED</b>
+										</div>
+										<div class="font-size-45">
+											<b>3</b>
+										</div>
+									</div>
+									<div class="col-xs-2 yellow-800">
+										<div class="font-size-13">
+											<b>STOPPED</b>
+										</div>
+										<div class="font-size-45">
+											<b>0</b>
+										</div>
+									</div>
+									<div class="col-xs-2 pink-700">
+										<div class="font-size-13">
+											<b>ERROR</b>
+										</div>
+										<div class="font-size-45">
+											<b>0</b>
+										</div>
+									</div>
+									<div class="col-xs-4">
+										<div class="chart-area" style="width: 100%; height: 100px;">
+											<canvas id="lineChart2"></canvas>
+										</div>
+										<script>	
+															var ctx = document.getElementById('lineChart2').getContext('2d');
+															var chart3 = new Chart(ctx, {
+																// The type of chart we want to create
+																type: 'line',
+				
+																// The data for our dataset
+																data: {
+																	labels: ['2010.01', '2018.03', '2018.05', '2018.07', '2018.9', '2018.12'],
+																	datasets: [{
+																		label: 'My First',
+																		borderWidth: 1,
+																		backgroundColor: '#fbe8ef',
+																		borderColor: '#fdaec9',
+																		data: [30, 75, 40, 70, 55, 60],
+																	}]
+																},
+				
+																// Configuration options go here
+																options: {
+																	maintainAspectRatio: false,
+																	title: {
+																		display: true,
+																		text: 'CPU 상태'
+																	},
+																	elements: {
+																		point:{
+																			radius: 0
+																		}
+																	},
+																	legend: {
+																		display: false,
+																		labels: {
+																			fontColor: "#656565",
+																			fontSize: 12,
+																			boxWidth: 15
+																		},
+																		position: "bottom"
+																	},
+																	scales: {
+																		xAxes: [{
+																			display: false,
+																			ticks:{
+																				fontColor : '#666',
+																				fontSize : 12
+																			},
+																			gridLines:{
+																				display: false
+																			}
+																		}],
+																		yAxes: [{
+																			ticks: {
+																				beginAtZero: true,
+																				stepSize : 100,
+																				fontColor : "#838383",
+																				fontSize : 11,
+																				min: 0,
+																				max: 100
+																			},
+																			gridLines:{
+																				display: false
+																			}
+																		}]
+																	}
+																}
+															});
+														</script>
+									</div>
+								</div>
+							</div>
+							<div class="box border-top">
+								<div class="row">
+									<div class="col-xs-4 chart-center">
+										<div class="clearfix">
+											<div class="pull-left">
+												<div class="chart-area" style="width: 120px; height: 120px;">
+													<canvas id="doughnut4"></canvas>
+													<div class="chart-inner-text text-center" style="top: 30px;">
+														<div class="half-text-area">
+															<div class="top">
+																<b>3</b>
+															</div>
+															<div class="line"></div>
+															<div class="bottom">
+																<b>40</b>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="chart-caption pull-left margin-left-15 padding-top-40">
+												<div class="font-size-13">
+													<b>CPU</b>
+												</div>
+												<div class="font-size-20">
+													<b>7.5</b> <sub>%</sub>
+												</div>
+											</div>
+										</div>
+										<script>
+															var value = 50;
+															var data = {
+															labels: [
+																"CPU",
+															],
+															datasets: [
+																{
+																	data: [value, 100-value],
+																	backgroundColor: [
+																		"#00bcd4",
+																		"#f5f5f5"
+																	],
+																	hoverBackgroundColor: [
+																		"#00bcd4",
+																		"#f5f5f5"
+																	],
+																	hoverBorderColor: [
+																		"#00bcd4",
+																		"#ffffff"
+																	]
+																}]
+															};
+
+															var myChart = new Chart(document.getElementById('doughnut4'), {
+															type: 'doughnut',
+															data: data,
+															options: {
+																maintainAspectRatio: false,
+																legend: {
+																display: false
+																},
+																cutoutPercentage: 75,
+																tooltips: {
+																	enabled: false
+																},
+															}
+															});
+
+														</script>
+									</div>
+
+									<div class="col-xs-4 chart-center">
+										<div class="clearfix">
+											<div class="pull-left">
+												<div class="chart-area" style="width: 120px; height: 120px;">
+													<canvas id="doughnut5"></canvas>
+													<div class="chart-inner-text text-center" style="top: 30px;">
+														<div class="half-text-area">
+															<div class="top">
+																<b>1.5</b> <small>GB</small>
+															</div>
+															<div class="line"></div>
+															<div class="bottom">
+																<b>100</b> <small>GB</small>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="chart-caption pull-left margin-left-15 padding-top-40">
+												<div class="font-size-13">
+													<b>MEMORY</b>
+												</div>
+												<div class="font-size-20">
+													<b>1.5</b> <sub>%</sub>
+												</div>
+											</div>
+										</div>
+										<script>
+															var value = 25;
+															var data = {
+															labels: [
+																"MEMORY",
+															],
+															datasets: [
+																{
+																	data: [value, 100-value],
+																	backgroundColor: [
+																		"#ffce56",
+																		"#f5f5f5"
+																	],
+																	hoverBackgroundColor: [
+																		"#ffce56",
+																		"#f5f5f5"
+																	],
+																	hoverBorderColor: [
+																		"#ffce56",
+																		"#ffffff"
+																	]
+																}]
+															};
+
+															var myChart = new Chart(document.getElementById('doughnut5'), {
+															type: 'doughnut',
+															data: data,
+															options: {
+																maintainAspectRatio: false,
+																legend: {
+																display: false
+																},
+																cutoutPercentage: 75,
+																tooltips: {
+																	enabled: false
+																},
+															}
+															});
+
+														</script>
+									</div>
+
+									<div class="col-xs-4 chart-center">
+										<div class="clearfix">
+											<div class="pull-left">
+												<div class="chart-area" style="width: 120px; height: 120px;">
+													<canvas id="doughnut6"></canvas>
+													<div class="chart-inner-text text-center" style="top: 30px;">
+														<div class="half-text-area">
+															<div class="top">
+																<b>100</b> <small>GB</small>
+															</div>
+															<div class="line"></div>
+															<div class="bottom">
+																<b>1.95</b> <small>GB</small>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="chart-caption pull-left margin-left-15 padding-top-40">
+												<div class="font-size-13">
+													<b>STORAGE</b>
+												</div>
+												<div class="font-size-20">
+													<b>5.0</b> <sub>%</sub>
+												</div>
+											</div>
+										</div>
+										<script>
+															var value = 70;
+															var data = {
+															labels: [
+																"STORAGE",
+															],
+															datasets: [
+																{
+																	data: [value, 100-value],
+																	backgroundColor: [
+																		"#ff6384",
+																		"#f5f5f5"
+																	],
+																	hoverBackgroundColor: [
+																		"#ff6384",
+																		"#f5f5f5"
+																	],
+																	hoverBorderColor: [
+																		"#ff6384",
+																		"#ffffff"
+																	]
+																}]
+															};
+
+															var myChart = new Chart(document.getElementById('doughnut6'), {
+															type: 'doughnut',
+															data: data,
+															options: {
+																maintainAspectRatio: false,
+																tooltips: {
+																	enabled: false
+																},
+																legend: {
+																display: false
+																},
+																cutoutPercentage: 75,
+															}
+															});
+
+														</script>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-5">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+					<div class="panel-body">
+						<h3 class="heading h3 margin-bottom-25">데이터 카탈로그 이용 현황</h3>
+						<div class="row">
+							<div class="col-xs-3">
+								<div class="margin-top-50">
+									<ul class="chart-index-list">
+										<li>
+											<span class="color-bul bg-yellow-700"></span> <span class="category"> 대기 </span> <span class="count"> <b>20</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+										<li>
+											<span class="color-bul bg-cyan-600"></span> <span class="category"> 승인 </span> <span class="count cyan-600"> <b>35</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+										<li>
+											<span class="color-bul bg-pink-600"></span> <span class="category"> 반려 </span> <span class="count pink-600"> <b>45</b>
+											</span> <span class="desc"> 건 </span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="margin-bottom-20 text-center">
+									<b>데이터 카탈로그 이용 개수</b>
+								</div>
+								<div class="chart-area" style="width: 230px; height: 140px;">
+									<canvas id="halfDoughnut3"></canvas>
+								</div>
+								<script>
+													var ctx = document.getElementById("halfDoughnut3");
+													var myChart = new Chart(ctx, {
+														type: 'doughnut',
+														data: {
+															labels: ['대기', '승인', '반려'],
+															datasets: [{
+																data: [20, 35, 45],
+																backgroundColor: [
+																	'#f9cd48',
+																	'#00bcd4',
+																	'#ff6384',
+																]
+															}]
+														},
+														options: {
+															maintainAspectRatio: false,
+															legend: {
+																display: false,
+															},
+															rotation: 1 * Math.PI,
+															circumference: 1 * Math.PI
+														}
+													});
+												</script>
+							</div>
+							<div class="col-xs-3 text-center ">
+								<div class="margin-bottom-20">
+									<b>MY 데이터</b>
+								</div>
+								<div class="round-box bg-grey-200 margin-bottom-10">
+									<div class="font-size-40">
+										<b>50</b>
+									</div>
+								</div>
+								<div class="grey-500">Total</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-7">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+					<div class="panel-body">
+						<h3 class="heading h3 margin-bottom-25">개발 파이프라인 사용 현황</h3>
+						<div class="row margin-top-30 margin-bottom-15">
+							<div class="col-xs-5">
+								<div class="row">
+									<div class="col-xs-7">
+										<div class="margin-bottom-20 text-center">
+											<b>코드 저장소</b>
+										</div>
+										<div class="chart-area" style="width: 120px; height: 120px;">
+											<canvas id="doughnutChart1"></canvas>
+											<div class="chart-inner-text text-center" style="top: 40px;">
+												<strong class="chart-count font-size-25">50</strong> <span class="chart-category">TOTAL</span>
+											</div>
+										</div>
+										<script>	
+															var ctx = document.getElementById('doughnutChart1').getContext('2d');
+															var chart = new Chart(ctx, {
+																// The type of chart we want to create
+																type: 'doughnut',
+				
+																// The data for our dataset
+																data: {
+																	labels: ['SVN', 'GIT'],
+																	datasets: [{
+																		data: [25, 25],
+																		backgroundColor: [
+																			'#1ec1cb',
+																			'#f9cd48'
+																		],
+																	}]
+																},
+				
+																// Configuration options go here
+																options: {
+																	maintainAspectRatio: false,
+																	cutoutPercentage: 75,
+																	tooltips: {
+																		enabled: false
+																	},
+																	legend: {
+																		display: false,
+																	},
+																}
+															});
+														</script>
+									</div>
+									<div class="col-xs-5">
+										<ul class="chart-index-list2 padding-top-70">
+											<li>
+												<span class="color-bul bg-cyan-600"></span> <span class="category"> SVN </span> <span class="count"> 25개 </span>
+											</li>
+											<li>
+												<span class="color-bul bg-yellow-700"></span> <span class="category"> GIT </span> <span class="count"> 25개 </span>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-7">
+								<div class="margin-bottom-20 text-center">
+									<b>빌드/배포</b>
+								</div>
+								<ul class="chart-index-list2 inline-type margin-top-30">
+									<li>
+										<span class="color-bul bg-cyan-600"></span> <span class="category"> 성공 </span> <span class="count"> 50건 </span>
+									</li>
+									<li>
+										<span class="color-bul bg-pink-600"></span> <span class="category"> 실패 </span> <span class="count"> 25건 </span>
+									</li>
+								</ul>
+								<div class="progress progress-square margin-30">
+									<div class="progress-bar bg-cyan-600" style="width: 50%"></div>
+									<div class="progress-bar bg-pink-600" style="width: 25%"></div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+					<div class="panel-heading padding-25">
+						<h3 class="heading h3 margin-0">GIS 서비스 요약</h3>
+					</div>
+					<div class="panel-body padding-0">
+						<div class="row no-margin">
+							<div class="col-sm-4 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">40</div>
+									<div class="caption">레이어 그룹</div>
+								</div>
+							</div>
+							<div class="col-sm-4 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">20</div>
+									<div class="caption">레이어</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="dashboard-number-box">
+									<div class="number">50</div>
+									<div class="caption">스타일</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+					<div class="panel-heading padding-25">
+						<h3 class="heading h3 margin-0">프로젝트 데이터 분석현황</h3>
+					</div>
+					<div class="panel-body padding-0">
+						<div class="row no-margin">
+							<div class="col-sm-4 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">0</div>
+									<div class="caption">알고리즘</div>
+								</div>
+							</div>
+							<div class="col-sm-4 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">10</div>
+									<div class="caption">데이터</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="dashboard-number-box">
+									<div class="number">
+										0 <small> MB </small>
+									</div>
+									<div class="caption">데이터 사용량</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+					<div class="panel-heading padding-25">
+						<h3 class="heading h3 margin-0">마이크로서비스 사용현황</h3>
+					</div>
+					<div class="panel-body padding-0">
+						<div class="row no-margin">
+							<div class="col-sm-6 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">10</div>
+									<div class="caption">워크로드 등록</div>
+								</div>
+							</div>
+							<div class="col-sm-6 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">25</div>
+									<div class="caption">서비스 발견</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+					<div class="panel-heading padding-25">
+						<h3 class="heading h3 margin-0">분석 App.실행</h3>
+					</div>
+					<div class="panel-body padding-0">
+						<div class="row no-margin">
+							<div class="col-sm-4 border-right">
+								<div class="dashboard-number-box">
+									<div class="number cyan-600">40</div>
+									<div class="caption">시작</div>
+								</div>
+							</div>
+							<div class="col-sm-4 border-right">
+								<div class="dashboard-number-box">
+									<div class="number yellow-700">20</div>
+									<div class="caption">중지</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="dashboard-number-box">
+									<div class="number pink-600">50</div>
+									<div class="caption">오류</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-sm-5">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+					<div class="panel-heading padding-25">
+						<h3 class="heading h3 margin-0">쿠버네티스 사용 현황</h3>
+					</div>
+					<div class="panel-body padding-0">
+						<div class="row no-margin">
+							<div class="col-sm-3 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">0</div>
+									<div class="caption">네임스페이스</div>
+								</div>
+							</div>
+							<div class="col-sm-3 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">10</div>
+									<div class="caption">워크로드</div>
+								</div>
+							</div>
+							<div class="col-sm-3 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">0</div>
+									<div class="caption">포드</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="dashboard-number-box">
+									<div class="number">
+										0 <small> GB </small>
+									</div>
+									<div class="caption">볼륨용량</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+					<div class="panel-heading padding-25">
+						<h3 class="heading h3 margin-0">DBaas 신청 현황</h3>
+					</div>
+					<div class="panel-body padding-0">
+						<div class="row no-margin">
+							<div class="col-sm-6 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">10</div>
+									<div class="caption">신청개수</div>
+								</div>
+							</div>
+							<div class="col-sm-6 border-right">
+								<div class="dashboard-number-box">
+									<div class="number">
+										25 <small> GB </small>
+									</div>
+									<div class="caption">신청용량</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+
+
+	</div>
+
+</div>
+<!-- // inner -->
