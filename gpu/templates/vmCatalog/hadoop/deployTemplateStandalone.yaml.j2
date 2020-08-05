@@ -135,7 +135,7 @@ resources:
             sudo systemctl enable mariadb
             echo "mariadb setting end"
 
-            cat <<EOF>> /home/centos/hive/conf/hive-site.xml
+            cat <<EOF> /home/centos/hive/conf/hive-site.xml
             <?xml version="1.0" encoding="UTF-8" standalone="no"?>
             <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
             <configuration>
@@ -186,7 +186,7 @@ resources:
             echo "##### [06]spark setting end ###########"
 
             echo "##### [07].hbase setting start ###########"
-            cat <<EOF>> /home/centos/hbase/conf/hbase-site.xml
+            cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
             <?xml version="1.0"?>
             <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
             <configuration>
@@ -196,6 +196,8 @@ resources:
                 </property>
             </configuration>
             EOF
+
+            chown centos:centos /home/centos/hbase/conf/hbase-site.xml
 
             cat <<EOF>> /home/centos/hbase/conf/hbase-env.sh
             export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.el7_8.x86_64
@@ -220,3 +222,4 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config1
+
