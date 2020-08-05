@@ -919,6 +919,13 @@ angular.module('app')
                     	controller: 'samplePopCtrl',
                     	templateUrl: _COMM_VIEWS_ + '/sample/suser_write10.html'
                     },
+                    sampleDashboard: {
+                    	name: 'sample. dashboard-1',
+                    	stateKey: 'suser_dashboard',
+                    	url: '/sample/suser_dashboard',
+                    	controller: 'samplePopCtrl',
+                    	templateUrl: _COMM_VIEWS_ + '/sample/suser_dashboard.html'
+                    },
                     //*표준UI샘플화면 추가*//
                     demo: {
                         name: 'demoPage',

@@ -1,946 +1,1301 @@
-<!-- tab wrap -->
-<div class="tabWrap type1">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-        <li ng-class="{'active':contents.sltInfoTab == 'dashboard'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('dashboard');">대시보드</a></li>
-        <li ng-class="{'active':contents.sltInfoTab == 'info'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('info');">프로젝트 개요</a></li>
-        <li ng-class="{'active':contents.sltInfoTab == 'member'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('member');">프로젝트 구성원</a></li>
-        <li ng-class="{'active':contents.sltInfoTab == 'resource'}"><a href="" class="workTab" ng-click="contents.changeSltInfoTab('resource');">프로젝트 자원</a></li>
-    </ul>
-    <!-- //Nav tabs -->
+<!-- //Nav tabs -->
+<ul class="nav nav-tabs nav-tabs-btn nav-tabs-lg">
+	<li ng-class="{'active':contents.sltInfoTab == 'dashboard'}">	<a href="" ng-click="contents.changeSltInfoTab('dashboard');">대시보드</a></li>
+	<li ng-class="{'active':contents.sltInfoTab == 'info'}">	<a href=""  ng-click="contents.changeSltInfoTab('info');">프로젝트 개요</a>	</li>
+	<li ng-class="{'active':contents.sltInfoTab == 'member'}"><a href=""  ng-click="contents.changeSltInfoTab('member');">프로젝트 구성원</a></li>
+	<li ng-class="{'active':contents.sltInfoTab == 'resource'}"><a href=""  ng-click="contents.changeSltInfoTab('resource');">프로젝트 자원</a></li>
+</ul>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <!-- 프로젝트 대시보드 panel -->
-        <div ng-show="contents.sltInfoTab == 'dashboard'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'dashboard'}">
-            <!-- 대시보드 컨텐츠 -->
-            <div class="proj_dashboard">
-                <ul class="ul-panel">
-
-                    <!-- 프로젝트 정보 -->
-                    <li class="mgl0">
-                        <div class="panelWrap">
-                            <div class="panel type_info">
-                                <div class="panel_head">
-                                    <h4 class="tit">프로젝트 정보</h4>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="thum_area">
-                                        <div class="thum">
-                                            <span class="thum_in img_line ng-hide"><img class="logo" alt=""></span>
-                                            <span class="thum_in"><span class="txt">P</span></span>
-                                        </div>
-                                        <div class="list_in">
-                                            <dl>
-                                                <dt><strong>{{contents.selOrgProject.orgName}}</strong></dt>
-                                                <dd>{{ contents.selOrgProject.description }}</dd>
-                                            </dl>
-                                        </div>
-                                    </div>
-                                    <ul>
-                                        <li>프로젝트 ID : <span>{{contents.selOrgProject.orgId}}</span></li>
-                                        <li>프로젝트 생성자 : <span>{{contents.selOrgProject.managerName}}</span></li>
-                                        <li>프로젝트 구성원 수 : <span>{{contents.selOrgProject.orgUserCount}} 명</span></li>
-                                        <li>프로젝트 생성일자 : <span>{{contents.selOrgProject.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}}</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- //프로젝트 정보 -->
-
-                    <!-- 데이터 구독 현황 -->
-                    <li>
-                        <div class="panelWrap">
-                            <div class="panel type_api">
-                                <div class="panel_head">
-                                    <h4 class="tit">데이터 구독 현황</h4>
-                                    <a class="btn_more" href="/dcp/cl/doDataCatlView.do">데이터 구독현황 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="fl_l">
-                                        <div class="tit_area">
-                                            <h5 class="tit">데이터 요청</h5>
-                                        </div>
-                                        <div class="cont_area">
-                                            <div class="txt_data">
-                                                <ul>
-                                                    <li>
-                                                        <span class="state_mark type1"></span>
-                                                        <span class="state_txt">요청</span>
-                                                        <span class="state_result">{{contents.dcpDashboardInfo.dataReqAllNoca}} 건</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="state_mark type2"></span>
-                                                        <span class="state_txt">승인</span>
-                                                        <span class="state_result"> {{contents.dcpDashboardInfo.dataReqAprvNoca}} 건</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="state_mark type3"></span>
-                                                        <span class="state_txt">반려</span>
-                                                        <span class="state_result"><span class="type1"> {{contents.dcpDashboardInfo.dataReqRejNoca}} </span>건</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="chart_data">
-                                                <div id="chart-area"></div>
-                                                <div class="cht_val">
-                                                    <span>0</span>
-                                                    <span>{{contents.dcpDashboardInfo.totTmpCnt}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fl_r">
-                                        <div class="tit_area">
-                                            <h5 class="tit">데이터 구독</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.dcpDashboardInfo.dataSubsNoca}} </span>
-                                        <span class="sm_txt">Total</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- //데이터 구독 현황 -->
-
-                    <!-- API 서비스 사용현황 -->
-                    <li>
-                        <div class="panelWrap">
-                            <div class="panel type_api">
-                                <div class="panel_head">
-                                    <h4 class="tit">API 서비스 사용 현황</h4>
-                                    <a class="btn_more" href="/apip/com/main.do">API 서비스 사용 현황 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="fl_l">
-                                        <div class="tit_area">
-                                            <h5 class="tit">API 등록</h5>
-                                        </div>
-                                        <div class="cont_area">
-                                            <div class="txt_data">
-                                                <ul>
-                                                    <li>
-                                                        <span class="state_mark type1"></span>
-                                                        <span class="state_txt">등록</span>
-                                                        <span class="state_result">{{contents.apipeDashboardInfo.appTotalCnt}} 개</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="state_mark type2"></span>
-                                                        <span class="state_txt">활성</span>
-                                                        <span class="state_result">{{contents.apipeDashboardInfo.apiVtlzYCnt}}개</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="state_mark type3"></span>
-                                                        <span class="state_txt">비활성</span>
-                                                        <span class="state_result"><span class="type1">{{contents.apipeDashboardInfo.apiVtlzNCnt}}</span>개</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="chart_data">
-                                                <div id="chart-area1"></div>
-                                                <div class="cht_val">
-                                                    <span>0</span>
-                                                    <span>{{contents.apipeDashboardInfo.totTmpCnt}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fl_r">
-                                        <div class="tit_area">
-                                            <h5 class="tit">API 구독</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.apipeDashboardInfo.apiTotalCnt}}</span>
-                                        <span class="sm_txt">Total</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- //API 서비스 사용현황 -->
-
-                    <!-- 클라우드 자원사용 현황  2018.10.19 sg0730 IaaS는 차후 데이터 값 정리되면 다시 설정 필요. 현재는 하드코딩. -->
-                    <li class="mgl0 clear_bt">
-                        <div class="panelWrap">
-                            <div class="panel type_cloud">
-                                <div class="panel_head">
-                                    <h4 class="tit">클라우드 자원사용 현황</h4>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="fl_l">
-                                        <div class="tit_area">
-                                            <h5 class="tit">가상서버</h5>
-                                            <a class="btn_more" href="#/iaas/compute">가상서버 바로가기<span class="ico_more"></span></a>
-                                        </div>
-                                        <div class="cont_area_ct">
-                                            <div class="cloud_stateWrap">
-                                            	<div class="state_data">
-	                                                <ul>
-	                                                    <li class="type1">
-	                                                        <span class="sm_txt">TOTAL</span>
-	                                                        <span class="lg_txt">{{contents.iaasInstanceStateCount.TOTAL}}</span>
-	                                                    </li>
-	                                                    <li class="type2">
-	                                                        <span class="sm_txt">STARTED</span>
-	                                                        <span class="lg_txt">{{contents.iaasInstanceStateCount.STARTED}}</span>
-	                                                    </li>
-	                                                    <li class="type3">
-	                                                        <span class="sm_txt">STOPPED</span>
-	                                                        <span class="lg_txt">{{contents.iaasInstanceStateCount.STOPPED}}</span>
-	                                                    </li>
-	                                                    <li class="type4">
-	                                                        <span class="sm_txt">ERROR</span>
-	                                                        <span class="lg_txt">{{contents.iaasInstanceStateCount.ERROR}}</span>
-	                                                    </li>
-	                                                </ul>
-                                            	</div>
-                                                <div class="line_chart_data">
-                                                    <span class="sm_tit">CPU 상태</span>
-                                                    <div id="chart-area2"></div>
-                                                </div>
-                                            </div>
-                                            <div class="cloud_chartWrap">
-                                                <ul>
-                                                    <li>
-                                                        <div class="chart_info">
-                                                            <span class="tit">CPU</span>
-                                                            <span class="txt">{{contents.dataReq4.series[0].data}}<span class="sm_txt">%</span></span>
-                                                        </div>
-                                                        <div class="donut_chart_data">
-                                                            <div ng-if="contents.dataReq4.series[0].cpuUsed == null || contents.dataReq4.series[0].cpuMax == null" class="data_txt">
-                                                                <span>0</span>
-                                                                <span>0</span>
-                                                            </div>
-                                                            <div class="data_txt">
-                                                                <span>{{contents.dataReq4.series[0].cpuUsed}}</span>
-                                                                <span>{{contents.dataReq4.series[0].cpuMax}}</span>
-                                                            </div>
-                                                            <div id="chart-area3"></div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="chart_info">
-                                                            <span class="tit">MEMORY</span>
-                                                            <span class="txt">{{contents.dataReq5.series[0].data}}<span class="sm_txt">%</span></span>
-                                                        </div>
-                                                        <div class="donut_chart_data">
-                                                            <div class="data_txt">
-                                                                <span>{{contents.dataReq5.series[0].ramSizeUsed | displayVolume:'MB'}}</span>
-                                                                <span>{{contents.dataReq5.series[0].ramSizeMax | displayVolume:'MB'}}</span>
-                                                            </div>
-                                                            <div id="chart-area4"></div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="chart_info">
-                                                            <span class="tit">STORAGE</span>
-                                                            <span class="txt">{{contents.dataReq6.series[0].data}}<span class="sm_txt">%</span></span>
-                                                        </div>
-                                                        <div class="donut_chart_data">
-                                                            <div class="data_txt">
-                                                                <span>{{contents.dataReq6.series[0].objectStorageGigaByteUsed | displayVolume:'GB'}}</span>
-                                                                <span>{{contents.dataReq6.series[0].objectStorageGigaByteMax | displayVolume:'GB'}}</span>
-                                                            </div>
-                                                            <div id="chart-area5"></div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fl_r">
-                                        <div class="tit_area">
-                                            <h5 class="tit">표준 App.</h5>
-                                            <a class="btn_more" href="#/paas/apps">표준 App 바로가기<span class="ico_more"></span></a>
-                                        </div>
-                                        <div class="cont_area_ct">
-                                            <div class="cloud_stateWrap">
-                                            	<div class="state_data">
-	                                                <ul>
-	                                                    <li class="type1">
-	                                                        <span class="sm_txt">TOTAL</span>
-	                                                        <span class="lg_txt">{{contents.paasAppsStateCount.TOTAL}}</span>
-	                                                    </li>
-	                                                    <li class="type2">
-	                                                        <span class="sm_txt">STARTED</span>
-	                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STARTED}}</span>
-	                                                    </li>
-	                                                    <li class="type3">
-	                                                        <span class="sm_txt">STOPPED</span>
-	                                                        <span class="lg_txt">{{contents.paasAppsStateCount.STOPPED}}</span>
-	                                                    </li>
-	                                                    <li class="type4">
-	                                                        <span class="sm_txt">ERROR</span>
-	                                                        <span class="lg_txt">{{contents.paasAppsStateCount.ERROR}}</span>
-	                                                    </li>
-	                                                </ul>
-                                            	</div>
-                                                <div class="line_chart_data">
-                                                    <span class="sm_tit">CPU 상태</span>
-                                                    <div id="chart-area6"></div>
-                                                </div>
-                                            </div>
-                                            <div class="cloud_chartWrap" >
-                                                <ul>
-                                                    <li>
-                                                        <div class="chart_info" ng-init="contents.dataReq7 ='0.0'">
-                                                            <span class="tit">CPU</span>
-                                                            <span class="txt">{{contents.dataReq7}}<span class="sm_txt">%</span></span>
-                                                        </div>
-                                                        <div class="donut_chart_data">
-                                                            <div class="data_txt">
-                                                                <span>{{contents.dataReq7}}</span>
-                                                                <span>100</span>
-                                                            </div>
-                                                            <div id="chart-area7"></div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="chart_info" ng-init="contents.dataReq8 ='0.0'">
-                                                            <span class="tit">MEMORY</span>
-                                                            <span class="txt">{{contents.dataReq8}}<span class="sm_txt">%</span></span>
-                                                        </div>
-                                                        <div class="donut_chart_data">
-                                                            <div class="data_txt">
-                                                                <span>{{contents.dataReq8}}</span>
-                                                                <span>100</span>
-                                                            </div>
-                                                            <div id="chart-area8"></div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="chart_info" ng-init="contents.dataReq9 ='0.0'">
-                                                            <span class="tit">STORAGE</span>
-                                                            <span class="txt">{{contents.dataReq9}}<span class="sm_txt">%</span></span>
-                                                        </div>
-                                                        <div class="donut_chart_data">
-                                                            <div class="data_txt">
-                                                                <span>{{contents.dataReq9}}</span>
-                                                                <span>100</span>
-                                                            </div>
-                                                            <div id="chart-area9"></div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- //클라우드 자원사용 현황 -->
-
-                    <!-- GIS 서비스 요약 -->
-                    <li class="mgl0 clear_bt">
-                        <div class="panelWrap">
-                            <div class="panel type_gis">
-                                <div class="panel_head">
-                                    <h4 class="tit">GIS 서비스 요약</h4>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">레이어 그룹</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.gisDashBoardInfo.prjcLayGroupCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">레이어</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.gisDashBoardInfo.prjcLayCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">스타일</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.gisDashBoardInfo.prjcStyCnt}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- //GIS 서비스 요약 -->
-
-                    <!-- 개발 파이프라인 사용 현황 -->
-                    <li>
-                        <div class="panelWrap">
-                            <div class="panel type_pipeLine">
-                                <div class="panel_head">
-                                    <h4 class="tit">개발 파이프라인 사용 현황</h4>
-                                    <a class="btn_more" href="/dpl/coderepo">개발 파이프라인 사용 현황 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="fl_l">
-                                        <div class="tit_area">
-                                            <h5 class="tit">코드 저장소</h5>
-                                        </div>
-                                        <div class="cont_area">
-                                            <div class="donut_chart_data">
-                                                <div class="data_txt_type2">
-                                                    <span class="txt_result">{{contents.dataReq10.totCnt}}</span>
-                                                    <span class="txt_total">TOTAL</span>
-                                                </div>
-                                                <div id="chart-area10"></div>
-                                            </div>
-                                            <div class="txt_data">
-                                                <ul>
-                                                    <li>
-                                                        <span class="state_mark type4"></span>
-                                                        <span class="state_txt">SVN</span>
-                                                        <span class="state_result">{{contents.dataReq10.svnCnt}}개</span>
-
-                                                    </li>
-                                                    <li>
-                                                        <span class="state_mark type5"></span>
-                                                        <span class="state_txt">GIT</span>
-                                                        <span class="state_result">{{contents.dataReq10.gitCnt}}개</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fl_r">
-                                        <div class="tit_area">
-                                            <h5 class="tit">빌드/배포</h5>
-                                        </div>
-                                        <div class="cont_area">
-                                            <div class="txt_data txt_inline">
-                                                <ul>
-                                                    <li>
-                                                        <span class="state_mark type2"></span>
-                                                        <span class="state_txt">성공</span>
-                                                        <span class="state_result">{{contents.pipelineDashboardInfo.sucCnt}}건</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="state_mark type3"></span>
-                                                        <span class="state_txt">실패</span>
-                                                        <span class="state_result"><span class="type1">{{contents.pipelineDashboardInfo.failCnt}}</span>건</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="bar_chart_data">
-                                                <div id="chart-area11"></div>
-                                                <div class="cht_val">
-                                                    <span>0</span>
-                                                    <span>{{contents.pipelineDashboardInfo.totCnt}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- //개발 파이프라인 사용 현황 -->
-                    
-                     <!-- 프로젝트 데이터 분석현황 -->
-                    <li class="mgl0 clear_bt">
-                        <div class="panelWrap">
-                            <div class="panel type_gis">
-                                <div class="panel_head">
-                                    <h4 class="tit">프로젝트 데이터 분석현황</h4>
-                                    <a class="btn_more" href="/DeePoP/dashboard/dashboard.do?menu_id=01">데이터 분석 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">알고리즘</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.pdaDashBoardInfo.algorithmCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">데이터</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.pdaDashBoardInfo.dataCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">데이터 사용량</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.pdaDashBoardInfo.dataUsage}}<span>MB</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                     <!-- //프로젝트 데이터 분석현황 -->
-
-                    <!-- 데이터 카탈로그 이용 현황 -->
-                    <li>
-                        <div class="panelWrap">
-                            <div class="panel type_api dataCtlog">
-                                <div class="panel_head">
-                                    <h4 class="tit">데이터 카탈로그 이용 현황</h4>
-                                    <a class="btn_more" href="/dbp/dataSubscription/subscriptionStatus/list.do">데이터 카탈로그 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="fl_l">
-                                        <div class="tit_area">
-                                            <h5 class="tit">데이터 카탈로그 이용 개수</h5>
-                                        </div>
-                                        <div class="cont_area">
-                                            <div class="txt_data">
-                                                <ul>
-                                                    <li>
-                                                        <span class="state_mark type6"></span>
-                                                        <span class="state_txt">대기</span>
-                                                        <span class="state_result">{{contents.ctlgDashboardInfo.ctlgWaitCnt}} 건</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="state_mark type2"></span>
-                                                        <span class="state_txt">승인</span>
-                                                        <span class="state_result"> {{contents.ctlgDashboardInfo.ctlgApproveCnt}} 건</span>
-                                                    </li>
-                                                    <li>
-                                                        <span class="state_mark type3"></span>
-                                                        <span class="state_txt">반려</span>
-                                                        <span class="state_result"><span class="type1"> {{contents.ctlgDashboardInfo.ctlgRejectCnt}} </span>건</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="chart_data">
-                                                <div id="chart-area12"></div>
-                                                <div class="cht_val">
-                                                    <span>0</span>
-                                                    <span>{{contents.ctlgDashboardInfo.ctlgTotalCnt}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fl_r">
-                                        <div class="tit_area">
-                                            <h5 class="tit">My 데이터</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.dcpDashboardInfo.dataSubsNoca}} </span>
-                                        <span class="sm_txt">Total</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                     <!-- //데이터 카탈로그 이용 현황 -->
-
-                     <!-- 마이크로서비스 사용현황 -->
-                    <li>
-                        <div class="panelWrap">
-                            <div class="panel type_gis">
-                                <div class="panel_head">
-                                    <h4 class="tit">마이크로서비스 사용현황</h4>
-                                    <a class="btn_more" href="/apim/msApp/list.do">마이크로서비스 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">워크로드 등록</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.msDashBoardInfo.msAppFileTotalCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">서비스 발견</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.msDashBoardInfo.msAppAddrTotalCnt}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                     <!-- //마이크로서비스 사용현황-->
-
-                     <!-- 분석 App. 실행 -->
-                    <li class="mgl0 clear_bt">
-                        <div class="panelWrap">
-                            <div class="panel type_gis">
-                                <div class="panel_head">
-                                    <h4 class="tit">분석 App. 실행</h4>
-                                    <a class="btn_more" href="/aes/svce_list_grid.html">분석 App. 실행 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">시작</h5>
-                                        </div>
-                                        <span class="lg_txt c_start">{{contents.appDashBoardInfo.START_CNT}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">중지</h5>
-                                        </div>
-                                        <span class="lg_txt c_stop">{{contents.appDashBoardInfo.STOP_CNT}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">오류</h5>
-                                        </div>
-                                        <span class="lg_txt c_error">{{contents.appDashBoardInfo.FAIL_CNT}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                     <!-- //분석 App. 실행 -->
-
-                     <!-- 쿠버네티스 사용 현황 -->
-                    <li>
-                        <div class="panelWrap">
-                            <div class="panel type_gis type_kubernetes">
-                                <div class="panel_head">
-                                    <h4 class="tit">쿠버네티스 사용 현황</h4>
-                                    <a class="btn_more" href="https://caas.kepco.co.kr:48000/dashBoard.do">쿠버네티스 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">네임스페이스</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.kuberDashBoardInfo.nsUseCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">워크로드</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.kuberDashBoardInfo.wlUseCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">포드</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.kuberDashBoardInfo.podUseCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">볼륨용량</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.kuberDashBoardInfo.volUseSize}}<span>GB</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                     <!-- //쿠버네티스 사용 현황 -->
-
-                     <!-- DBaas 신청 현황 -->
-                    <li>
-                        <div class="panelWrap">
-                            <div class="panel type_gis">
-                                <div class="panel_head">
-                                    <h4 class="tit">DBaas 신청 현황</h4>
-                                    <a class="btn_more" href="/dss/dbshared/dbSharedList.do">DBaas 신청 바로가기<span class="ico_more"></span></a>
-                                </div>
-                                <div class="panel_body">
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">신청 개수</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.dbaasDashBoardInfo.totalCnt}}</span>
-                                    </div>
-                                    <div class="txt_box">
-                                        <div class="tit_area">
-                                            <h5 class="tit">신청 용량</h5>
-                                        </div>
-                                        <span class="lg_txt">{{contents.dbaasDashBoardInfo.totalSize}}<span>GB</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                     <!-- //DBaas 신청 현황 -->
-                    
-                </ul>
-            </div>
-            <!-- //대시보드 컨텐츠 -->
-        </div>
-        <!-- //프로젝트 대시보드 panel -->
-
-        <!-- 프로젝트 개요 panel -->
-        <div ng-if="contents.sltInfoTab == 'info'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'info'}">
-            <!-- cBox -->
-            <div class="cBox type1 appCnt-info">
-                <div class="cBox-hd">
-                    <h4 class="c-tit">
-                        <span ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image" class="thum_box img_line">
-                            <img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" class="logo" alt="">
-                        </span>
-                        <span class="thum_box" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image">
-                            <span class="txt">{{contents.selOrgProject.orgName.substr(0, 1)}}</span>
-                        </span>
-                        <button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.createOrgProjectIcon($event)"><span class="ico">썸네일 수정</span></button>
-                        {{ contents.selOrgProject.orgName }}
-                    </h4>
-                    <div class="pull-right">
-                        <!--<button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProject();"><span class="ico">삭제</span></button>-->
-                        <button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.checkDeleteOrgProject($event);"><span class="ico">삭제</span></button>
-                    </div>
-                </div>
-                <div class="cBox-cnt">
-                    <div class="l_box">
-                        <div class="in">
-                            <div class="col info-txt pdb0">
-                                <ul>
-                                    <li>
-                                        <strong class="tit">생성자</strong>
-                                        <div class="txt">{{ contents.selOrgProject.managerName }}</div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col info-txt">
-                                <ul>
-                                    <li>
-                                        <strong class="tit">Project ID</strong>
-                                        <div class="txt">{{ contents.selOrgProject.orgId }}</div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="in">
-                            <div class="col-non info-txt4 rbox-2-width"><!-- r_box에 갯수 추가될 때 사용 -->
-                                <strong class="tit">설명<button type="button" name="button" class="btn only-ico ico-txt_modi" title="수정" data-user="aside" data-username="#" ng-click="contents.createOrgProjectDesc();"><span class="ico">수정</span></button></strong>
-                                <div class="txt">
-                                    <span class="txt_normal">{{ contents.selOrgProject.description }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="r_box">
-                        <!-- 멤버 수 -->
-                        <div class="col info-txt3">
-                            <p class="txt"><span>{{ contents.orgUsers.length }}</span><strong>Member</strong></p>
-                        </div>
-                        <!-- //멤버 수 -->
-                    </div>
-                </div>
-            </div>
-            <!-- //cBox -->
-
-            <div class="cont-titWrap mt50">
-                <h3 class="h-tit3 pd0">프로젝트 참여자</h3>
-            </div>
-
-            <!-- table -->
-            <div class="tbl type1">
-                <table class="table">
-                    <colgroup>
-                        <col style="width:10%;">
-                        <col style="width:15%;">
-                        <col style="width:30%;">
-                        <col style="width:15%;">
-                        <col style="width:30%;">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">이름</th>
-                        <th scope="col">아이디</th>
-                        <th scope="col">역할</th>
-                        <th scope="col">멤버 등록일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="orgUser in contents.orgUsers">
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ orgUser.usersInfo.name }}</td>
-                        <td>{{ orgUser.usersInfo.email }}</td>
-                        <td>{{ orgUser.roleName | orgRoleName }}</td>
-                        <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
-                    </tr>
-                    <!-- 등록된 멤버가 없을 때 -->
-                    <tr ng-if="contents.orgUsers.length == 0" class="no-data">
-                        <td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- //table -->
-        </div>
-        <!-- //프로젝트 개요 panel -->
-
-        <!-- 프로젝트 구성원 panel -->
-        <div ng-if="contents.sltInfoTab == 'member'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'member'}">
-            <!-- table -->
-            <div class="tb-top">
-                <div class="pull-right">
-                    <button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
-                    <button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
-					<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
-                </div>
-            </div>
-            <div class="tbl type1">
-                <table class="table">
-                    <colgroup>
-                        <col style="width:15%;">
-                        <col style="width:15%;">
-                        <col style="width:20%;">
-                        <col style="width:20%;">
-                        <col style="width:15%;">
-                        <col style="width:15%;">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">이름</th>
-                        <th scope="col">아이디</th>
-                        <th scope="col">역할</th>
-                        <th scope="col">멤버 등록일</th>
-                        <th scope="col">관리</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="orgUser in contents.orgUsers | orderBy: '-createDate.time'">
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ orgUser.usersInfo.name }}</td>
-                        <td>{{ orgUser.usersInfo.email }}</td>
-                        <td>{{ orgUser.roleName | orgRoleName }}</td>
-                        <td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
-                        <td>
-                            <!--<button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'" ng-click="contents.resetPassword(orgUser.usersInfo);"><span class="ico">패스워드 초기화</span></button>
-                            <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'" ng-click="contents.deleteOrgProjectUser(orgUser.usersInfo);"><span class="ico">삭제</span></button>-->
-                            <div class="dropdown btn-option">
-                                <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정">
-                                    <span class="ico">실행 설정</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
-                                    <li title="권한 변경" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a></li>
-                                    <li title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a></li>
-                                    <li title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'"><a href="" ng-class="!contents.isOrgManager ? 'disabled' : 'delete'" ng-click="contents.isOrgManager && contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- 등록된 멤버가 없을 때 -->
-                    <tr ng-if="contents.orgUsers.length == 0" class="no-data">
-                        <td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- //table -->
-        </div>
-        <!-- //프로젝트 구성원 panel -->
-
-        <!-- 프로젝트 자원 panel -->
-        <div ng-if="contents.sltInfoTab == 'resource'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'resource'}">
-            <!-- cBox -->
-            <div class="cBox type4">
-                <h3 class="h-tit3 pb20">자원쿼터</h3>
-
-                <div class="cBox-cnt pd0">
-                    <div class="in">
-                        <!-- 신규 자원쿼터 UI -->
-						<div class="resource_box">
-							<ul class="ul-panel">
-								<li ng-repeat="itemGroup in contents.orgQuotaItemGroups | orderBy: 'code'">
-									<!-- panel -->
-									<div class="panelWrap">
-										<div class="panel">
-											<div class="panel_head">
-												<div class="tit_area">
-													<p class="tit">{{ itemGroup.name }}</p>
+<!-- Tab panes -->
+<div class="tab-content padding-top-30">
+	<!-- 프로젝트 대시보드 panel -->
+	<div ng-show="contents.sltInfoTab == 'dashboard'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'dashboard'}">
+		<!-- 대시보드 컨텐츠 -->
+		<div class="dashboard-body padding-0">
+			<div class="row">
+				<!-- 프로젝트 정보 -->
+				<div class="col-md-3">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type4">
+						<div class="panel-body" style="height:268px;">
+							<h3 class="heading h3 margin-bottom-25">프로젝트 정보</h3>
+							<div class="project-info-area">
+								<div class="clearfix margin-bottom-30">
+									<div class="round-img pull-left">
+										<img src="../assets/img/guide/guide_user_dashboard.jpg" alt="">
+									</div>
+									<div class="text-area pull-left">
+										<span class="tit">{{contents.selOrgProject.orgName}}</span>
+										<p class="txt">{{ contents.selOrgProject.description }}</p>
+									</div>
+								</div>
+								<ul class="list-dot font-size-13">
+									<li>
+										<b>프로젝트ID : </b> <span> {{contents.selOrgProject.orgId}} </span>
+									</li>
+									<li>
+										<b>프로젝트 생성자 : </b> <span> {{contents.selOrgProject.managerName}} </span>
+									</li>
+									<li>
+										<b>프로젝트 구성원 수 : </b> <span> {{contents.selOrgProject.orgUserCount}}명 </span>
+									</li>
+									<li>
+										<b>프로젝트 생성일자 : </b> <span> {{contents.selOrgProject.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}} </span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //프로젝트 정보 -->
+				
+				<!-- 데이터 구독 현황 -->
+				<div class="col-md-4" style="width:37.5%;">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">데이터 구독 현황</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="/dcp/cl/doDataCatlView.do" class="btn_more"><span class="font-size-12">데이터 구독현황 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3 text-center">
+									<div class="margin-top-50">
+										<ul class="chart-index-list">
+											<li>
+												<span class="color-bul bg-grey-200"></span> <span class="category"> 요청 </span> <span class="count"> <b>{{contents.dcpDashboardInfo.dataReqAllNoca}}</b></span> <span class="desc"> 건 </span>
+											</li>
+											<li>
+												<span class="color-bul bg-cyan-600"></span> <span class="category"> 승인 </span> <span class="count cyan-600"> <b>{{contents.dcpDashboardInfo.dataReqAprvNoca}}</b>	</span> <span class="desc"> 건 </span>
+											</li>
+											<li>
+												<span class="color-bul bg-pink-600"></span> <span class="category"> 반려 </span> <span class="count pink-600"> <b>{{contents.dcpDashboardInfo.dataReqRejNoca}}</b>	</span> <span class="desc"> 건 </span>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-xs-6">
+									<div class="margin-bottom-20 text-center">
+										<b>데이터 요청</b>
+									</div>
+									<div class="chart_data">
+										<div id="chart-area"></div>
+										<div class="cht_val">
+											<span>0</span> <span>{{contents.dcpDashboardInfo.totTmpCnt}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-3 text-center ">
+									<div class="margin-bottom-20">
+										<b>데이터 구독</b>
+									</div>
+									<div class="round-box bg-grey-200 margin-bottom-10">
+										<div class="font-size-40">
+											<b>{{contents.dcpDashboardInfo.dataSubsNoca}}</b>
+										</div>
+									</div>
+									<div class="grey-500">Total</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //데이터 구독 현황 -->
+				
+				<!-- API 서비스 사용현황 -->
+				<div class="col-md-5" style="width:37.5%;">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">API 서비스 사용 현황</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="/apip/com/main.do" class="btn_more"><span class="font-size-12">API 서비스 사용 현황 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3 text-center">
+									<div class="margin-top-50">
+										<ul class="chart-index-list">
+											<li>
+												<span class="color-bul bg-grey-200"></span> <span class="category"> 등록 </span> <span class="count"> <b>{{contents.apipeDashboardInfo.appTotalCnt}}</b></span> <span class="desc"> 건 </span>
+											</li>
+											<li>
+												<span class="color-bul bg-cyan-600"></span> <span class="category"> 활성 </span> <span class="count cyan-600"> <b>{{contents.apipeDashboardInfo.apiVtlzYCnt}}</b></span> <span class="desc"> 건 </span>
+											</li>
+											<li>
+												<span class="color-bul bg-pink-600"></span> <span class="category"> 비활성 </span> <span class="count pink-600"> <b>{{contents.apipeDashboardInfo.apiVtlzNCnt}}</b></span> <span class="desc"> 건 </span>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-xs-6">
+									<div class="margin-bottom-20 text-center">
+										<b>API 등록</b>
+									</div>
+									<div class="chart_data">
+										<div id="chart-area1"></div>
+										<div class="cht_val">
+											<span>0</span> <span>{{contents.apipeDashboardInfo.totTmpCnt}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-3 text-center ">
+									<div class="margin-bottom-20">
+										<b>API 구독</b>
+									</div>
+									<div class="round-box bg-grey-200 margin-bottom-10">
+										<div class="font-size-40">
+											<b>{{contents.apipeDashboardInfo.apiTotalCnt}}</b>
+										</div>
+									</div>
+									<div class="grey-500">Total</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //API 서비스 사용현황 -->
+			</div>
+			
+			<!-- 클라우드 자원사용 현황 신규 -->
+			<div class="panel panel-bordered dashboard-panel dashboard-panel-type3 margin-top-0">
+				<div class="panel-heading padding-25">
+					<h3 class="heading h3 margin-0">클라우드 자원사용 현황</h3>
+				</div>
+				<div class="panel-body padding-0">
+					<div class="row">
+						<!-- //클라우드 자원사용 현황(가상서버) -->
+						<div class="col-md-6 border-right">
+							<div class="padding-20">
+								<div class="box">
+									<div class="box-heading">
+										<h3 class="heading h3 margin-bottom-30 text-center">가상서버</h3>
+										<a href="#/iaas/compute" class="btn_more"><span class="font-size-12">가상서버 바로가기</span><i class="xi-angle-right"></i>	</a>
+									</div>
+									<div class="row text-center">
+										<!-- 가상서버 현황 -->
+										<div class="col-xs-2">
+											<div class="font-size-13">
+												<b>TOTAL</b>
+											</div>
+											<div class="font-size-45">
+												<b>{{contents.iaasInstanceStateCount.TOTAL}}</b>
+											</div>
+										</div>
+										<div class="col-xs-2 light-green-700">
+											<div class="font-size-13">
+												<b>STARTED</b>
+											</div>
+											<div class="font-size-45">
+												<b>{{contents.iaasInstanceStateCount.STARTED}}</b>
+											</div>
+										</div>
+										<div class="col-xs-2 yellow-800">
+											<div class="font-size-13">
+												<b>STOPPED</b>
+											</div>
+											<div class="font-size-45">
+												<b>{{contents.iaasInstanceStateCount.STOPPED}}</b>
+											</div>
+										</div>
+										<div class="col-xs-2 pink-700">
+											<div class="font-size-13">
+												<b>ERROR</b>
+											</div>
+											<div class="font-size-45">
+												<b>{{contents.iaasInstanceStateCount.ERROR}}</b>
+											</div>
+										</div>
+										<!-- //가상서버 현황 -->
+										
+										<!-- CPU상태(임시콘텐츠) -->
+										<div class="col-xs-4">
+											<div class="chart-area" style="width: 100%; height: 100px;">
+												<canvas id="lineChart"></canvas>
+											</div>
+											<script>	
+												var ctx = document.getElementById('lineChart').getContext('2d');
+												var chart3 = new Chart(ctx, {
+													// The type of chart we want to create
+													type: 'line',
+	
+													// The data for our dataset
+													data: {
+														labels: ['2010.01', '2018.03', '2018.05', '2018.07', '2018.9', '2018.12'],
+														datasets: [{
+															label: 'My First',
+															borderWidth: 1,
+															backgroundColor: '#fbe8ef',
+															borderColor: '#fdaec9',
+															data: [30, 75, 40, 70, 55, 60],
+														}]
+													},
+	
+													// Configuration options go here
+													options: {
+														maintainAspectRatio: false,
+														title: {
+															display: true,
+															text: 'CPU 상태'
+														},
+														elements: {
+															point:{
+																radius: 0
+															}
+														},
+														legend: {
+															display: false,
+															labels: {
+																fontColor: "#656565",
+																fontSize: 12,
+																boxWidth: 15
+															},
+															position: "bottom"
+														},
+														scales: {
+															xAxes: [{
+																display: false,
+																ticks:{
+																	fontColor : '#666',
+																	fontSize : 12
+																},
+																gridLines:{
+																	display: false
+																}
+															}],
+															yAxes: [{
+																ticks: {
+																	beginAtZero: true,
+																	stepSize : 100,
+																	fontColor : "#838383",
+																	fontSize : 11,
+																	min: 0,
+																	max: 100
+																},
+																gridLines:{
+																	display: false
+																}
+															}]
+														}
+													}
+												});
+											</script>
+										</div>
+										<!-- //CPU상태(임시콘텐츠) -->
+									</div>
+								</div>
+								<!-- 가상서버 차트 -->
+								<div class="box border-top">
+									<div class="row">
+										<div class="chartWrap">
+											<!-- CPU 차트 -->
+											<div class="col-xs-4 chart-center">
+												<div class="clearfix">
+													<div class="pull-left">
+														<div class="chart-area">
+															<div class="donut_chart_data">
+																<div id="chart-area3"></div>
+															</div>
+															<div class="chart-inner-text text-center" style="top: 30px;">
+																<div class="half-text-area" ng-if="contents.dataReq4.series[0].cpuUsed == null || contents.dataReq4.series[0].cpuMax == null" class="data_txt">
+																	<div class="top">
+																		<b>0</b>
+																	</div>
+																	<div class="line"></div>
+																	<div class="bottom">
+																		<b>0</b>
+																	</div>
+																</div>
+																<div class="half-text-area">
+																	<div class="top">
+																		<b>{{contents.dataReq4.series[0].cpuUsed}}</b>
+																	</div>
+																	<div class="line"></div>
+																	<div class="bottom">
+																		<b>{{contents.dataReq4.series[0].cpuMax}}</b>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="chart-caption pull-left margin-left-15 padding-top-30">
+														<div class="font-size-13">
+															<b>CPU</b>
+														</div>
+														<div class="font-size-20">
+															<b>{{contents.dataReq4.series[0].data}}</b> <sub>%</sub>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="panel_body">
-												<div class="tbl_cont">
-													<table class="table">
-														<colgroup>
-															<col style="width:;">
-															<col style="width:;">
-														</colgroup>
-														<tbody>
-															<tr ng-repeat="quotaValue in contents.orgQuotaValues | filter:{ orgQuotaItemGroupCode: itemGroup.code }">
-																<th>{{ quotaValue.orgQuotaItem.name }}</th>
-																<td>{{ quotaValue.value }} {{ quotaValue.orgQuotaItem.unit }}</td>
-															</tr>
-														</tbody>
-													</table>
+											<!-- //CPU 차트 -->
+											
+											<!-- MEMORY 차트 -->
+											<div class="col-xs-4 chart-center">
+												<div class="clearfix">
+													<div class="pull-left">
+														<div class="chart-area">
+															<div class="donut_chart_data">
+																<div id="chart-area4"></div>
+															</div>
+															<div class="chart-inner-text text-center" style="top: 30px;">
+																<div class="half-text-area">
+																	<div class="top">
+																		<b>{{contents.dataReq5.series[0].ramSizeUsed | displayVolume:'MB'}}</b>
+																	</div>
+																	<div class="line"></div>
+																	<div class="bottom">
+																		<b>{{contents.dataReq5.series[0].ramSizeMax | displayVolume:'MB'}}</b>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="chart-caption pull-left margin-left-15 padding-top-30">
+														<div class="font-size-13">
+															<b>MEMORY</b>
+														</div>
+														<div class="font-size-20">
+															<b>{{contents.dataReq5.series[0].data}}</b> <sub>%</sub>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- //MEMORY 차트 -->
+											
+											<!-- STORAGE 차트 -->
+											<div class="col-xs-4 chart-center">
+												<div class="clearfix">
+													<div class="pull-left">
+														<div class="chart-area">
+															<div class="donut_chart_data">
+																<div id="chart-area5"></div>
+															</div>
+															<div class="chart-inner-text text-center" style="top: 30px;">
+																<div class="half-text-area">
+																	<div class="top">
+																		<b>{{contents.dataReq6.series[0].objectStorageGigaByteUsed | displayVolume:'GB'}}</b>
+																	</div>
+																	<div class="line"></div>
+																	<div class="bottom">
+																		<b>{{contents.dataReq6.series[0].objectStorageGigaByteMax | displayVolume:'GB'}}</b>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="chart-caption pull-left margin-left-15 padding-top-30">
+														<div class="font-size-13">
+															<b>STORAGE</b>
+														</div>
+														<div class="font-size-20">
+															<b>{{contents.dataReq6.series[0].data}}</b> <sub>%</sub>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- //STORAGE 차트 -->
+											
+										</div>
+									</div>
+								</div>
+								<!-- //가상서버 차트 -->
+							</div>
+						</div>
+						<!-- //클라우드 자원사용 현황(가상서버) -->
+						
+						<!-- 클라우드 자원사용 현황(표준App.) -->
+						<div class="col-md-6">
+							<div class="padding-20">
+								<div class="box">
+									<div class="box-heading">
+										<h3 class="heading h3 margin-bottom-30 text-center">표준 App.</h3>
+										<a href=#/paas/apps class="btn_more"><span class="font-size-12">표준 App. 바로가기</span><i class="xi-angle-right"></i>	</a>
+									</div>
+									<div class="row text-center">
+										<!-- 표준App. 현황 -->
+										<div class="col-xs-2">
+											<div class="font-size-13">
+												<b>TOTAL</b>
+											</div>
+											<div class="font-size-45">
+												<b>{{contents.paasAppsStateCount.TOTAL}}</b>
+											</div>
+										</div>
+										<div class="col-xs-2 light-green-700">
+											<div class="font-size-13">
+												<b>STARTED</b>
+											</div>
+											<div class="font-size-45">
+												<b>{{contents.paasAppsStateCount.STARTED}}</b>
+											</div>
+										</div>
+										<div class="col-xs-2 yellow-800">
+											<div class="font-size-13">
+												<b>STOPPED</b>
+											</div>
+											<div class="font-size-45">
+												<b>{{contents.paasAppsStateCount.STOPPED}}</b>
+											</div>
+										</div>
+										<div class="col-xs-2 pink-700">
+											<div class="font-size-13">
+												<b>ERROR</b>
+											</div>
+											<div class="font-size-45">
+												<b>{{contents.paasAppsStateCount.ERROR}}</b>
+											</div>
+										</div>
+										<!-- //표준App. 현황 -->
+										
+										<!-- CPU상태(임시콘텐츠) -->
+										<div class="col-xs-4">
+											<div class="chart-area" style="width: 100%; height: 100px;">
+												<canvas id="lineChart2"></canvas>
+											</div>
+											<script>	
+												var ctx = document.getElementById('lineChart2').getContext('2d');
+												var chart3 = new Chart(ctx, {
+													// The type of chart we want to create
+													type: 'line',
+	
+													// The data for our dataset
+													data: {
+														labels: ['2010.01', '2018.03', '2018.05', '2018.07', '2018.9', '2018.12'],
+														datasets: [{
+															label: 'My First',
+															borderWidth: 1,
+															backgroundColor: '#fbe8ef',
+															borderColor: '#fdaec9',
+															data: [30, 75, 40, 70, 55, 60],
+														}]
+													},
+	
+													// Configuration options go here
+													options: {
+														maintainAspectRatio: false,
+														title: {
+															display: true,
+															text: 'CPU 상태'
+														},
+														elements: {
+															point:{
+																radius: 0
+															}
+														},
+														legend: {
+															display: false,
+															labels: {
+																fontColor: "#656565",
+																fontSize: 12,
+																boxWidth: 15
+															},
+															position: "bottom"
+														},
+														scales: {
+															xAxes: [{
+																display: false,
+																ticks:{
+																	fontColor : '#666',
+																	fontSize : 12
+																},
+																gridLines:{
+																	display: false
+																}
+															}],
+															yAxes: [{
+																ticks: {
+																	beginAtZero: true,
+																	stepSize : 100,
+																	fontColor : "#838383",
+																	fontSize : 11,
+																	min: 0,
+																	max: 100
+																},
+																gridLines:{
+																	display: false
+																}
+															}]
+														}
+													}
+												});
+											</script>
+										</div>
+										<!-- //CPU상태(임시콘텐츠) -->
+										
+									</div>
+								</div>
+								<!-- 표준App. 차트 -->
+								<div class="box border-top">
+									<div class="row">
+										<div class="chartWrap">
+										
+											<!-- CPU 차트 -->
+											<div class="col-xs-4 chart-center">
+												<div class="clearfix">
+													<div class="pull-left">
+														<div class="chart-area">
+															<div class="donut_chart_data">
+																<div id="chart-area7"></div>
+															</div>
+															<div class="chart-inner-text text-center" style="top: 30px;">
+																<div class="half-text-area">
+																	<div class="top">
+																		<b>{{contents.dataReq7}}</b>
+																	</div>
+																	<div class="line"></div>
+																	<div class="bottom">
+																		<b>100</b>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="chart-caption pull-left margin-left-15 padding-top-30">
+														<div class="font-size-13">
+															<b>CPU</b>
+														</div>
+														<div class="font-size-20" ng-init="contents.dataReq7 ='0.0'">
+															<b>{{contents.dataReq7}}</b> <sub>%</sub>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- //CPU 차트 -->
+											
+											<!-- MEMORY 차트 -->
+											<div class="col-xs-4 chart-center">
+												<div class="clearfix">
+													<div class="pull-left">
+														<div class="chart-area">
+															<div class="donut_chart_data">
+																<div id="chart-area8"></div>
+															</div>
+															<div class="chart-inner-text text-center" style="top: 30px;">
+																<div class="half-text-area">
+																	<div class="top">
+																		<b>{{contents.dataReq8}}</b>
+																	</div>
+																	<div class="line"></div>
+																	<div class="bottom">
+																		<b>100</b>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="chart-caption pull-left margin-left-15 padding-top-30">
+														<div class="font-size-13">
+															<b>MEMORY</b>
+														</div>
+														<div class="font-size-20" ng-init="contents.dataReq8 ='0.0'">
+															<b>{{contents.dataReq8}}</b> <sub>%</sub>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!--// MEMORY 차트 -->
+											
+											<!-- STORAGE 차트 -->
+											<div class="col-xs-4 chart-center">
+												<div class="clearfix">
+													<div class="pull-left">
+														<div class="chart-area">
+															<div class="donut_chart_data">
+																<div id="chart-area9"></div>
+															</div>
+															<div class="chart-inner-text text-center" style="top: 30px;">
+																<div class="half-text-area">
+																	<div class="top">
+																		<b>{{contents.dataReq9}}</b>
+																	</div>
+																	<div class="line"></div>
+																	<div class="bottom">
+																		<b>100</b>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="chart-caption pull-left margin-left-15 padding-top-30">
+														<div class="font-size-13">
+															<b>STORAGE</b>
+														</div>
+														<div class="font-size-20" ng-init="contents.dataReq9 ='0.0'">
+															<b>{{contents.dataReq9}}</b> <sub>%</sub>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- //STORAGE 차트 -->
+											
+										</div>		
+									</div>
+								</div>
+								<!-- //표준App. 차트 -->
+							</div>
+						</div>
+						<!-- //클라우드 자원사용 현황(표준App.) -->
+						
+					</div>
+				</div>
+			</div>
+			<!-- //클라우드 자원사용 현황 신규 -->
+			
+			<div class="row">
+				<!-- 데이터 카탈로그 이용 현황 -->
+				<div class="col-md-5">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">데이터 카탈로그 이용 현황</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="/dbp/dataSubscription/subscriptionStatus/list.do" class="btn_more"><span class="font-size-12">데이터 카탈로그 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3 text-center">
+									<div class="margin-top-50">
+										<ul class="chart-index-list">
+											<li>
+												<span class="color-bul bg-yellow-700"></span> <span class="category"> 대기 </span> <span class="count"> <b>{{contents.ctlgDashboardInfo.ctlgWaitCnt}}</b></span> <span class="desc"> 건 </span>
+											</li>
+											<li>
+												<span class="color-bul bg-cyan-600"></span> <span class="category"> 승인 </span> <span class="count cyan-600"> <b>{{contents.ctlgDashboardInfo.ctlgApproveCnt}}</b></span> <span class="desc"> 건 </span>
+											</li>
+											<li>
+												<span class="color-bul bg-pink-600"></span> <span class="category"> 반려 </span> <span class="count pink-600"> <b>{{contents.ctlgDashboardInfo.ctlgRejectCnt}}</b></span> <span class="desc"> 건 </span>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-xs-6">
+									<div class="margin-bottom-20 text-center">
+										<b>데이터 카탈로그 이용 개수</b>
+									</div>
+									<div class="chart_data">
+										<div id="chart-area"></div>
+										<div class="cht_val">
+											<span>0</span> <span>{{contents.ctlgDashboardInfo.ctlgTotalCnt}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-3 text-center ">
+									<div class="margin-bottom-20">
+										<b>MY 데이터</b>
+									</div>
+									<div class="round-box bg-grey-200 margin-bottom-10">
+										<div class="font-size-40">
+											<b>{{contents.dcpDashboardInfo.dataSubsNoca}}</b>
+										</div>
+									</div>
+									<div class="grey-500">Total</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //데이터 카탈로그 이용 현황 -->
+				
+				<!-- 개발 파이프라인 사용 현황 -->
+				<div class="col-md-7">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">개발 파이프라인 사용 현황</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="/dpl/coderepo" class="btn_more"><span class="font-size-12">개발 파이프라인 사용 현황 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-5">
+									<div class="row">
+										<div class="col-xs-7">
+											<div class="margin-bottom-20 text-center">
+												<b>코드 저장소</b>
+											</div>
+											<div class="chartWrap">
+												<div class="chart-area" style="width: 120px; height: 120px;">
+													<div class="donut_chart_data">
+														<div id="chart-area10"></div>
+														<div class="chart-inner-text text-center" style="top: 33px;">
+															<strong class="chart-count font-size-25">{{contents.dataReq10.totCnt}}</strong> <span class="chart-category">TOTAL</span>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
+										<div class="col-xs-5">
+											<ul class="chart-index-list2 padding-top-70">
+												<li>
+													<span class="color-bul bg-cyan-600"></span> <span class="category"> SVN </span> <span class="count"> {{contents.dataReq10.svnCnt}}개 </span>
+												</li>
+												<li>
+													<span class="color-bul bg-yellow-700"></span> <span class="category"> GIT </span> <span class="count"> {{contents.dataReq10.gitCnt}}개 </span>
+												</li>
+											</ul>
+										</div>
 									</div>
-									<!-- //panel -->
+								</div>
+								<div class="col-xs-7">
+									<div class="margin-bottom-20 text-center">
+										<b>빌드/배포</b>
+									</div>
+									<ul class="chart-index-list2 inline-type margin-top-30">
+										<li>
+											<span class="color-bul bg-cyan-600"></span> <span class="category"> 성공 </span> <span class="count"> {{contents.pipelineDashboardInfo.sucCnt}}건 </span>
+										</li>
+										<li>
+											<span class="color-bul bg-pink-600"></span> <span class="category"> 실패 </span> <span class="count"> {{contents.pipelineDashboardInfo.failCnt}}건 </span>
+										</li>
+									</ul>
+									<div class="chartWrap">
+										<div class="bar_chart_data margin-top-30">
+											<div id="chart-area11"></div>
+											<div class="cht_val">
+												<span>0</span> <span>{{contents.pipelineDashboardInfo.totCnt}}</span>
+											</div>
+										</div>
+									</div>
+	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //개발 파이프라인 사용 현황 -->
+			</div>
+			
+			<div class="row">
+				<!-- GIS 서비스 요약 -->
+				<div class="col-sm-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading h3 margin-0">GIS 서비스 요약</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="row no-margin">
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.gisDashBoardInfo.prjcLayGroupCnt}}</div>
+										<div class="caption">레이어 그룹</div>
+									</div>
+								</div>
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.gisDashBoardInfo.prjcLayCnt}}</div>
+										<div class="caption">레이어</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.gisDashBoardInfo.prjcStyCnt}}</div>
+										<div class="caption">스타일</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //GIS 서비스 요약 -->
+				<!-- 프로젝트 데이터 분석현황 -->
+				<div class="col-sm-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">프로젝트 데이터 분석현황</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="/DeePoP/dashboard/dashboard.do?menu_id=01" class="btn_more"><span class="font-size-12">데이터 분석 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="row no-margin">
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.pdaDashBoardInfo.algorithmCnt}}</div>
+										<div class="caption">알고리즘</div>
+									</div>
+								</div>
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.pdaDashBoardInfo.dataCnt}}</div>
+										<div class="caption">데이터</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="dashboard-number-box">
+										<div class="number">
+											{{contents.pdaDashBoardInfo.dataUsage}} <small> MB </small>
+										</div>
+										<div class="caption">데이터 사용량</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //프로젝트 데이터 분석현황 -->
+				
+				<!-- 마이크로서비스 사용현황 -->
+				<div class="col-sm-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">마이크로서비스 사용현황</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="/apim/msApp/list.do" class="btn_more"><span class="font-size-12">마이크로서비스 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="row no-margin">
+								<div class="col-sm-6 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.msDashBoardInfo.msAppFileTotalCnt}}</div>
+										<div class="caption">워크로드 등록</div>
+									</div>
+								</div>
+								<div class="col-sm-6 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.msDashBoardInfo.msAppAddrTotalCnt}}</div>
+										<div class="caption">서비스 발견</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //마이크로서비스 사용현황 -->
+			</div>
+			
+			<div class="row">
+				<!-- 분석 App.실행 -->
+				<div class="col-sm-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">분석 App.실행</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="/aes/svce_list_grid.html" class="btn_more"><span class="font-size-12">분석 App. 실행 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="row no-margin">
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number cyan-600">{{contents.appDashBoardInfo.START_CNT}}</div>
+										<div class="caption">시작</div>
+									</div>
+								</div>
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number yellow-700">{{contents.appDashBoardInfo.STOP_CNT}}</div>
+										<div class="caption">중지</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="dashboard-number-box">
+										<div class="number pink-600">{{contents.appDashBoardInfo.FAIL_CNT}}</div>
+										<div class="caption">오류</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 분석 App.실행 -->
+				
+				<!-- 쿠버네티스 사용 현황 -->
+				<div class="col-sm-5">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">쿠버네티스 사용 현황</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="https://caas.kepco.co.kr:48000/dashBoard.do" class="btn_more"><span class="font-size-12">쿠버네티스 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="row no-margin">
+								<div class="col-sm-3 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.kuberDashBoardInfo.nsUseCnt}}</div>
+										<div class="caption">네임스페이스</div>
+									</div>
+								</div>
+								<div class="col-sm-3 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.kuberDashBoardInfo.wlUseCnt}}</div>
+										<div class="caption">워크로드</div>
+									</div>
+								</div>
+								<div class="col-sm-3 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.kuberDashBoardInfo.podUseCnt}}</div>
+										<div class="caption">포드</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="dashboard-number-box">
+										<div class="number">
+											{{contents.kuberDashBoardInfo.volUseSize}} <small> GB </small>
+										</div>
+										<div class="caption">볼륨용량</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //쿠버네티스 사용 현황 -->
+				
+				<!-- DBaas 신청 현황 -->
+				<div class="col-sm-3">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<div class="row">
+								<div class="col-xs-6">
+									<h3 class="heading">DBaas 신청 현황</h3>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a href="/dss/dbshared/dbSharedList.do" class="btn_more"><span class="font-size-12">DBaas 신청 바로가기</span><i class="xi-angle-right"></i>	</a>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="row no-margin">
+								<div class="col-sm-6 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">{{contents.dbaasDashBoardInfo.totalCnt}}</div>
+										<div class="caption">신청개수</div>
+									</div>
+								</div>
+								<div class="col-sm-6 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">
+											{{contents.dbaasDashBoardInfo.totalSize}} <small> GB </small>
+										</div>
+										<div class="caption">신청용량</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //DBaas 신청 현황 -->
+			</div>
+		</div>
+		<!-- //대시보드 컨텐츠 -->
+	</div>
+	<!-- //프로젝트 대시보드 panel -->
+
+	<!-- 프로젝트 개요 panel -->
+	<div ng-if="contents.sltInfoTab == 'info'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'info'}">
+		<!-- cBox -->
+		<div class="cBox type1 appCnt-info">
+			<div class="cBox-hd">
+				<h4 class="c-tit">
+					<span ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image" class="thum_box img_line"> <img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" class="logo" alt="">
+					</span> <span class="thum_box" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image"> <span class="txt">{{contents.selOrgProject.orgName.substr(0, 1)}}</span>
+					</span>
+					<button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.createOrgProjectIcon($event)"><span class="ico">썸네일 수정</span></button> {{ contents.selOrgProject.orgName }}
+				</h4>
+				<div class="pull-right">
+					<!--<button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProject();"><span class="ico">삭제</span></button>-->
+					<button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.checkDeleteOrgProject($event);"><span class="ico">삭제</span></button>
+				</div>
+			</div>
+			<div class="cBox-cnt">
+				<div class="l_box">
+					<div class="in">
+						<div class="col info-txt pdb0">
+							<ul>
+								<li>
+									<strong class="tit">생성자</strong>
+									<div class="txt">{{ contents.selOrgProject.managerName }}</div>
 								</li>
 							</ul>
 						</div>
-                        <!-- //신규 자원쿼터 UI -->
-                        <div class="tb-top">
-                            <div class="pull-left">
-                                <h4 class="c-tit ng-binding" style="line-height: 80px; font-weight: 700; font-size: 24px;">쿼터변경요청</h4>
-                            </div>
-                            <div class="pull-right">
-                                <!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
-                                    <span class="ico">추가(기존)</span>
-                                </button>-->
-                                <button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-disabled="!contents.isOrgManager || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">
-                                    <span class="ico">추가2</span>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- table -->
-                        <div class="tbl type1">
-                            <table class="table">
-                                <colgroup>
-                                    <col style="width:5%;">
-                                    <col style="width:15%;">
-                                    <col style="width:auto;">
-                                    <col style="width:20%;">
-                                    <col style="width:8%;">
-                                    <col style="width:10%;">
-                                    <col style="width:10%;">
-                                    <col style="width:5%;">
-                                    <col style="width:5%;">
-                                </colgroup>
-                                <thead>
-                                <tr>
-                                    <th scope="col">번호</th>
-                                    <th scope="col">신청사유</th>
-                                    <th scope="col">이전값</th>
-                                    <th scope="col">변경값</th>
-                                    <th scope="col">요청자</th>
-                                    <th scope="col">요청일</th>
-                                    <th scope="col">처리일</th>
-                                    <th scope="col">상태</th>
-                                    <th scope="col">관리</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="item in contents.quotaHistories">
-                                    <td>{{ contents.quotaHistories.length - $index }}</td>
-                                    <td class="text-left">{{ item.requestReason }}</td>
-                                    <td class="text-left">
-                                        <ul>
-                                            <li ng-repeat="detail in item.oldValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
-                                        </ul>
-                                    </td>
-                                    <td class="text-left">
-                                        <ul>
-                                            <li ng-repeat="detail in item.changeValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
-                                        </ul>
-                                    </td>
-                                    <td>{{ item.createdId }}</td>
-                                    <td>{{ item.createdDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
-                                    <td>{{ item.treatDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
-                                    <td>{{ item.treatCodeNm }}</td>
-                                    <td>
-                                        <div class="dropdown btn-option">
-                                            <button id="btn-option2" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정">
-                                                <span class="ico">실행 설정</span>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-right" role="btn-option2" aria-labelledby="btn-option2">
-                                                <li title="삭제"><a href="" ng-class="($index == 0 && item.treatCodeNm == '요청') ? 'delete' : 'disabled'" ng-click="$index == 0 && item.treatCodeNm == '요청' && contents.deleteQuotaHistory(item);">{{ 'label.del' | translate }}</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- //table -->
-                    </div>
-                </div>
-            </div>
-            <!-- //cBox -->
-        </div>
-        <!-- //프로젝트 자원 panel -->
-    </div>
+						<div class="col info-txt">
+							<ul>
+								<li>
+									<strong class="tit">Project ID</strong>
+									<div class="txt">{{ contents.selOrgProject.orgId }}</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="in">
+						<div class="col-non info-txt4 rbox-2-width">
+							<!-- r_box에 갯수 추가될 때 사용 -->
+							<strong class="tit">설명
+								<button type="button" name="button" class="btn only-ico ico-txt_modi" title="수정" data-user="aside" data-username="#" ng-click="contents.createOrgProjectDesc();"><span class="ico">수정</span></button>
+							</strong>
+							<div class="txt">
+								<span class="txt_normal">{{ contents.selOrgProject.description }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="r_box">
+					<!-- 멤버 수 -->
+					<div class="col info-txt3">
+						<p class="txt">
+							<span>{{ contents.orgUsers.length }}</span><strong>Member</strong>
+						</p>
+					</div>
+					<!-- //멤버 수 -->
+				</div>
+			</div>
+		</div>
+		<!-- //cBox -->
+
+		<div class="cont-titWrap mt50">
+			<h3 class="h-tit3 pd0">프로젝트 참여자</h3>
+		</div>
+
+		<!-- table -->
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width: 10%;">
+					<col style="width: 15%;">
+					<col style="width: 30%;">
+					<col style="width: 15%;">
+					<col style="width: 30%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">No.</th>
+						<th scope="col">이름</th>
+						<th scope="col">아이디</th>
+						<th scope="col">역할</th>
+						<th scope="col">멤버 등록일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="orgUser in contents.orgUsers">
+						<td>{{ $index + 1 }}</td>
+						<td>{{ orgUser.usersInfo.name }}</td>
+						<td>{{ orgUser.usersInfo.email }}</td>
+						<td>{{ orgUser.roleName | orgRoleName }}</td>
+						<td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
+					</tr>
+					<!-- 등록된 멤버가 없을 때 -->
+					<tr ng-if="contents.orgUsers.length == 0" class="no-data">
+						<td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- //table -->
+	</div>
+	<!-- //프로젝트 개요 panel -->
+
+	<!-- 프로젝트 구성원 panel -->
+	<div ng-if="contents.sltInfoTab == 'member'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'member'}">
+		<!-- table -->
+		<div class="tb-top">
+			<div class="pull-right">
+				<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
+				<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
+				<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
+			</div>
+		</div>
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+					<col style="width: 20%;">
+					<col style="width: 20%;">
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">No.</th>
+						<th scope="col">이름</th>
+						<th scope="col">아이디</th>
+						<th scope="col">역할</th>
+						<th scope="col">멤버 등록일</th>
+						<th scope="col">관리</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="orgUser in contents.orgUsers | orderBy: '-createDate.time'">
+						<td>{{ $index + 1 }}</td>
+						<td>{{ orgUser.usersInfo.name }}</td>
+						<td>{{ orgUser.usersInfo.email }}</td>
+						<td>{{ orgUser.roleName | orgRoleName }}</td>
+						<td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
+						<td>
+							<!--<button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'" ng-click="contents.resetPassword(orgUser.usersInfo);"><span class="ico">패스워드 초기화</span></button>
+                           <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'" ng-click="contents.deleteOrgProjectUser(orgUser.usersInfo);"><span class="ico">삭제</span></button>-->
+							<div class="dropdown btn-option">
+								<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정"><span class="ico">실행 설정</span></button>
+								<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
+									<li title="권한 변경" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
+										<a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a>
+									</li>
+									<li title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
+										<a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
+									</li>
+									<li title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
+										<a href="" ng-class="!contents.isOrgManager ? 'disabled' : 'delete'" ng-click="contents.isOrgManager && contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a>
+									</li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+					<!-- 등록된 멤버가 없을 때 -->
+					<tr ng-if="contents.orgUsers.length == 0" class="no-data">
+						<td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- //table -->
+	</div>
+	<!-- //프로젝트 구성원 panel -->
+
+	<!-- 프로젝트 자원 panel -->
+	<div ng-if="contents.sltInfoTab == 'resource'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'resource'}">
+		<!-- cBox -->
+		<div class="cBox type4">
+			<h3 class="h-tit3 pb20">자원쿼터</h3>
+
+			<div class="cBox-cnt pd0">
+				<div class="in">
+					<!-- 신규 자원쿼터 UI -->
+					<div class="resource_box">
+						<ul class="ul-panel">
+							<li ng-repeat="itemGroup in contents.orgQuotaItemGroups | orderBy: 'code'">
+								<!-- panel -->
+								<div class="panelWrap">
+									<div class="panel">
+										<div class="panel_head">
+											<div class="tit_area">
+												<p class="tit">{{ itemGroup.name }}</p>
+											</div>
+										</div>
+										<div class="panel_body">
+											<div class="tbl_cont">
+												<table class="table">
+													<colgroup>
+														<col style="width:;">
+														<col style="width:;">
+													</colgroup>
+													<tbody>
+														<tr ng-repeat="quotaValue in contents.orgQuotaValues | filter:{ orgQuotaItemGroupCode: itemGroup.code }">
+															<th>{{ quotaValue.orgQuotaItem.name }}</th>
+															<td>{{ quotaValue.value }} {{ quotaValue.orgQuotaItem.unit }}</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- //panel -->
+							</li>
+						</ul>
+					</div>
+					<!-- //신규 자원쿼터 UI -->
+					<div class="tb-top">
+						<div class="pull-left">
+							<h4 class="c-tit ng-binding" style="line-height: 80px; font-weight: 700; font-size: 24px;">쿼터변경요청</h4>
+						</div>
+						<div class="pull-right">
+							<!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
+                                   <span class="ico">추가(기존)</span>
+                               </button>-->
+							<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-disabled="!contents.isOrgManager || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);"><span class="ico">추가2</span></button>
+						</div>
+					</div>
+					<!-- table -->
+					<div class="tbl type1">
+						<table class="table">
+							<colgroup>
+								<col style="width: 5%;">
+								<col style="width: 15%;">
+								<col style="width: auto;">
+								<col style="width: 20%;">
+								<col style="width: 8%;">
+								<col style="width: 10%;">
+								<col style="width: 10%;">
+								<col style="width: 5%;">
+								<col style="width: 5%;">
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">번호</th>
+									<th scope="col">신청사유</th>
+									<th scope="col">이전값</th>
+									<th scope="col">변경값</th>
+									<th scope="col">요청자</th>
+									<th scope="col">요청일</th>
+									<th scope="col">처리일</th>
+									<th scope="col">상태</th>
+									<th scope="col">관리</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="item in contents.quotaHistories">
+									<td>{{ contents.quotaHistories.length - $index }}</td>
+									<td class="text-left">{{ item.requestReason }}</td>
+									<td class="text-left">
+										<ul>
+											<li ng-repeat="detail in item.oldValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+										</ul>
+									</td>
+									<td class="text-left">
+										<ul>
+											<li ng-repeat="detail in item.changeValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+										</ul>
+									</td>
+									<td>{{ item.createdId }}</td>
+									<td>{{ item.createdDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+									<td>{{ item.treatDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+									<td>{{ item.treatCodeNm }}</td>
+									<td>
+										<div class="dropdown btn-option">
+											<button id="btn-option2" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정"><span class="ico">실행 설정</span></button>
+											<ul class="dropdown-menu dropdown-menu-right" role="btn-option2" aria-labelledby="btn-option2">
+												<li title="삭제">
+													<a href="" ng-class="($index == 0 && item.treatCodeNm == '요청') ? 'delete' : 'disabled'" ng-click="$index == 0 && item.treatCodeNm == '요청' && contents.deleteQuotaHistory(item);">{{ 'label.del' | translate }}</a>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- //table -->
+				</div>
+			</div>
+		</div>
+		<!-- //cBox -->
+	</div>
+	<!-- //프로젝트 자원 panel -->
 </div>
