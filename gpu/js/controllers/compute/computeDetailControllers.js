@@ -1563,6 +1563,21 @@ angular.module('gpu.controllers')
                 $scope.main.loadingMainBody = false;
             });
         };
+
+        // 모니터링 URL 복사하기 클릭 리스너
+        ct.fn.copyMonitoringInfoToClipboard = function (monitoringUrl) {
+            if (monitoringUrl) {
+                common.copyToClipboard(monitoringUrl);
+                $scope.main.copyToClipboard(monitoringUrl, '"' + monitoringUrl + '"가 클립보드에 복사 되었습니다.');
+            } else {
+                common.showAlertWarning("모니터링 링크가 존재하지 않습니다.");
+            }
+        };
+        
+        // 모니터링 활성화 여부 지정
+        ct.fn.setMonitoringYn = function (instance) {
+            computeDetailService.setMonitoringYn(instance);
+        };
     })
     // .controller('iaasComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
     .controller('gpuComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
