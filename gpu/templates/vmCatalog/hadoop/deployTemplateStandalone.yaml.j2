@@ -1,6 +1,6 @@
 heat_template_version: '2018-08-31'
 
-description: hadoop stand alone template
+description: hadoop standalone template
 
 parameters:
   api_end_point:
@@ -21,13 +21,9 @@ parameters:
   provider_subnet:
     type: string
   root_password:
-    label: "root 비밀번호"
     type: string
-    default: crossent12
   hive_password:
-    label: "hive 비밀번호"
     type: string
-    default: hive1234
 
 resources:
 
