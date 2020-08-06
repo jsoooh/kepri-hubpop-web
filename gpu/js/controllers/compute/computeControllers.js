@@ -25,7 +25,7 @@ angular.module('gpu.controllers')
     })
 
     // .controller('iaasComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
-    .controller('gpuComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
+    .controller('gpuComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, computeDetailService, CONSTANTS) {
         // _DebugConsoleLog("computeControllers.js : iaasComputeCtrl", 1);
         _DebugConsoleLog("computeControllers.js : gpuComputeCtrl", 1);
 
@@ -773,6 +773,16 @@ angular.module('gpu.controllers')
             });
         };
 
+        // 모니터링 URL 복사하기 클릭 리스너
+        ct.fn.copyMonitoringInfoToClipboard = function (monitoringUrl) {
+            if (monitoringUrl) {
+                common.copyToClipboard(monitoringUrl);
+                $scope.main.copyToClipboard(monitoringUrl, '"' + monitoringUrl + '"가 클립보드에 복사 되었습니다.');
+            } else {
+                common.showAlertWarning("모니터링 링크가 존재하지 않습니다.");
+            }
+        };
+
         ct.fn.copyConnectInfoToClipboard = function (instance) {
             if (instance.image.osType == 'ubuntu') {
                 if (instance.floatingIp) {
@@ -1067,6 +1077,11 @@ angular.module('gpu.controllers')
 
         ct.modifyServerDescCallBackFunction = function () {
             $scope.main.replacePage();
+        };
+
+        // 모니터링 활성화 여부 지정
+        ct.fn.setMonitoringYn = function (instance) {
+            computeDetailService.setMonitoringYn(instance);
         };
 
         $interval(function () {
