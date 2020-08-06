@@ -10,13 +10,11 @@
   "deployTemplates": {
     "core": "deployTemplateCore.yaml.j2",
     "hbase": "deployTemplateHBase.yaml.j2",
-    "presto": "deployTemplatePresto.yaml.j2",
     "spark": "deployTemplateSpark.yaml.j2"
   },
   "images": {
-    "core": "CentOS-7-x86_64-Heat-1907-Hadoop_Core.qcow2",
-    "hbase": "CentOS-7-x86_64-Heat-1907-Hadoop_HBase.qcow2",
-    "presto": "CentOS-7-x86_64-Heat-1907-Hadoop_Presto.qcow2",
-    "spark": "CentOS-7-x86_64-Heat-1907-Hadoop_Spark.qcow2"
+    "core": "CentOS76-Hadoop_Core.qcow2",
+    "hbase": "CentOS76-Hadoop_HBase.qcow2",
+    "spark": "CentOS76-Hadoop_Spark.qcow2"
   }
 }
