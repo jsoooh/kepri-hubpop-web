@@ -13,10 +13,9 @@ angular.module('gpu.controllers')
         ct.masterSpecList = [];
         ct.workerSpecList = [];
         ct.deployTypes = [
-            {key: "core", value: "Core Hadoop : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), Hue(4.3.0)"},
-            {key: "hbase", value: "HBase : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), HBase(1.1.2), Zookeeper(3.5.6)"},
-            {key: "presto", value: "Presto : Presto(0.214), HDFS(2.7.3), YARN(2.7.3), HUE(4.3.0), Zeppelin Notebook(0.7.3)"},
-            {key: "spark", value: "Spark : HDFS(2.7.3), YARN(2.7.3), spark(1.6.3), spark2(2.2.0), HIVE(1.2.1), Hue(4.3.0), Zepplin Notebook(0.7.3)"}
+            {key: "core", value: "Core Hadoop : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1)"},
+            {key: "hbase", value: "HBase : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), HBase(1.1.2)"},
+            {key: "spark", value: "Spark : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), spark(1.6.3)"}
         ];
         ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
 
@@ -27,9 +26,12 @@ angular.module('gpu.controllers')
         ct.data.workerCnt = 2;
 
         // 테스트
+        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "하둡";
             ct.data.stackName = "hadoop";
+            ct.data.rootPassword = "crossent12";
+            ct.data.hivePassword = "hive1234";
         }
 
 
@@ -215,6 +217,8 @@ angular.module('gpu.controllers')
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
             vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
+            vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
+            vmCatalogDeploy.parameters.hive_password = ct.data.hivePassword;
             if(ct.data.nodeType == 'cluster') {
                 vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
                 vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
