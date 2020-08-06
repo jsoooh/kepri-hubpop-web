@@ -1102,9 +1102,7 @@ angular.module('app')
         return {
             restrict: 'C',
             link: function(scope, elem, attrs) {
-                $(document).ready(function () {
-                    feather.replace({width: '1em', height: '1em'});
-                });
+                feather.replace({width: '1em', height: '1em'});
             }
         }
     }]);
