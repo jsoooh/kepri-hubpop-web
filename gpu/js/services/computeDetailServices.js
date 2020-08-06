@@ -383,21 +383,19 @@ angular.module('gpu.services')
                 if (isActive) {
                     // 활성화 명령
                     if (instance.spec.type == 'GPU') {
-                        // GPU 모니터링 활성화 요청
-                        console.log(1);
+                        // GPU, VM 모니터링
                         computeDetailService.callMonitoringYn('post', 'gpu', instance, function () { computeDetailService.callMonitoringYn('post', 'vm', instance); });
                     } else {
-                        console.log(2);
+                        // VM 모니터링
                         computeDetailService.callMonitoringYn('post', 'vm', instance);
                     }
                 } else {
                     // 비활성화 명령
                     if (instance.spec.type == 'GPU') {
-                        // GPU 모니터링 활성화 요청
-                        console.log(3);
+                        // GPU, VM 모니터링
                         computeDetailService.callMonitoringYn('delete', 'gpu', instance, function () { computeDetailService.callMonitoringYn('delete', 'vm', instance); });
                     } else {
-                        console.log(4);
+                        // VM 모니터링
                         computeDetailService.callMonitoringYn('delete', 'vm', instance)
                     }
                 }
