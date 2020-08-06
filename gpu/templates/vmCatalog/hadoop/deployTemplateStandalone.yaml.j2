@@ -1,48 +1,42 @@
 heat_template_version: '2018-08-31'
 
-description: hadoop test template
-
-parameter_groups:
-- parameters:
-  - image
-  - flavor
-  - availability_zone
-  - key_name
-  - private_net
-  - root_password
+description: hadoop stand alone template
 
 parameters:
+  api_end_point:
+    type: string
   image:
-    label: "이미지"
     type: string
     default: hadoop-base2-3
   availability_zone:
-    label: "가용구역"
     type: string
-    default: zone01
   flavor:
-    label: "사양"
     type: string
-    default: m1.small
   key_name:
-    label: "보안키"
     type: string
-    default: kepri-msa_default
-  private_net:
-    label: "내부 내트워크"
+  security_group:
     type: string
-    default: provider01
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
   root_password:
     label: "root 비밀번호"
     type: string
     default: crossent12
+  hive_password:
+    label: "hive 비밀번호"
+    type: string
+    default: hive1234
 
 resources:
 
   server1_port:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: private_net }
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
 
   init_config1:
     type: OS::Heat::SoftwareConfig
@@ -51,7 +45,12 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
             $root_password: { get_param: root_password }
+            $hive_password: { get_param: hive_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server_addresses:
               list_join:
@@ -60,6 +59,7 @@ resources:
           template: |
             #!/bin/sh
             echo "01.hadoop core install start ......"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             sudo -i -u centos bash << EOF
             source ~/.bashrc
@@ -129,7 +129,7 @@ resources:
 
             mysql -u root -p$root_password <<EOF
             create database hive CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY 'hive1234';
+            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY '$hive_password';
             EOF
 
             sudo systemctl enable mariadb
@@ -167,6 +167,7 @@ resources:
             sudo su - centos -c "/home/centos/hive/bin/schematool -initSchema -dbType mysql "
             echo "##### [05]hive setting end ###########"
 
+{% if sparkUse %}
             echo "##### [06]spark setting start ###########"
             cat <<EOF>> /home/centos/spark/conf/spark-env.sh
             export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.el7_8.x86_64
@@ -184,7 +185,9 @@ resources:
             echo "## spark start-all ## "
             sudo su - centos -c "/home/centos/spark/sbin/start-all.sh  "
             echo "##### [06]spark setting end ###########"
+{% endif %}
 
+{% if hbaseUse %}
             echo "##### [07].hbase setting start ###########"
             cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
             <?xml version="1.0"?>
@@ -209,6 +212,10 @@ resources:
             sudo su - centos -c "/home/centos/hbase/bin/start-hbase.sh "
 
             echo "##### 04.hbase setting end ###########"
+{% endif %}
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            echo "01.hadoop core install end ......"
 
   server1:
     type: OS::Nova::Server
@@ -219,7 +226,7 @@ resources:
       networks:
         - port: { get_resource: server1_port }
       key_name: { get_param: key_name}
+      user_data_update_policy: IGNORE
       user_data_format: RAW
       user_data:
         get_resource: init_config1
-
