@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('app', [
-        , 'common.controllers'
+          'common.controllers'
         , 'common.services'
         , 'portal.controllers'
         , 'portal.services'
-//        , 'product.controllers'
-//        , 'product.services'
+        //, 'product.controllers'
+        //, 'product.services'
         , 'iaas.controllers'
         , 'iaas.services'
         , 'gpu.controllers'
@@ -216,7 +216,7 @@ angular.module('app', [
 
             $stateProvider.state(option.stateKey, { url: option.url, views: views } );
             return mainContents;
-        };
+        }
 
         function setParentMergeMyFiles (parentFiles, childrenFiles) {
             var loadMyFiles = [];
@@ -264,20 +264,16 @@ angular.module('app', [
                 if (!SITEMAP.pages[key])    SITEMAP.pages[key] = option;
             });
         }
-/*
-        if (MARKETSITEMAP.pages) {
+        /*if (MARKETSITEMAP.pages) {
             angular.forEach(MARKETSITEMAP.pages, function (option, key) {
                 if (!SITEMAP.pages[key]) SITEMAP.pages[key] = option;
             });
         }
-*/
-/*
         if (MONITSITEMAP.pages) {
             angular.forEach(MONITSITEMAP.pages, function (option, key) {
                 if (!SITEMAP.pages[key]) SITEMAP.pages[key] = option;
             });
-        }
-*/
+        }*/
 
         if (IAASSITEMAP.leftMenus) {
             angular.forEach(IAASSITEMAP.leftMenus, function (option, key) {
@@ -299,20 +295,16 @@ angular.module('app', [
                 if (!SITEMAP.leftMenus[key]) SITEMAP.leftMenus[key] = option;
             });
         }
-/*
-        if (MARKETSITEMAP.leftMenus) {
+        /*if (MARKETSITEMAP.leftMenus) {
             angular.forEach(MARKETSITEMAP.leftMenus, function (option, key) {
                 if (!SITEMAP.leftMenus[key]) SITEMAP.leftMenus[key] = option;
             });
         }
-*/
-/*
         if (MONITSITEMAP.leftMenus) {
             angular.forEach(MONITSITEMAP.leftMenus, function (option, key) {
                 if (!SITEMAP.leftMenus[key]) SITEMAP.leftMenus[key] = option;
             });
-        }
-*/
+        }*/
 
         angular.forEach(SITEMAP.pages, function(option, key) {
             option.pageStage = (option.pageStage) ? option.pageStage : "comm";
