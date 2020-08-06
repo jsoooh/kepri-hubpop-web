@@ -135,11 +135,11 @@
                                     <tr>
                                         <th><i class="i_star"></i> 마스터 노드 수</th>
                                         <td>
-                                            <select name="masterCnt" ng-options="masterCnt.key as masterCnt.value for masterCnt in contents.masterCnts" ng-model="contents.data.masterCnt" ng-change="contents.fn.changeMasterCnt();" style="width:100%;"></select>
+                                            <select name="masterCnt" ng-options="masterCnt.key as masterCnt.value for masterCnt in contents.masterCnts" ng-model="contents.data.masterCnt" ng-change="contents.fn.changeMasterCnt(contents.data.masterCnt);" style="width:100%;"></select>
                                         </td>
                                         <th><i class="i_star"></i> 워커 노드 수</th>
                                         <td>
-                                            <input type="text" name="workerCnt" class="form-control" maxlength="50" ng-model="contents.data.workerCnt" validation="number|min:1|max:20|required" placeholder="워커 노드 수를 입력하세요." >
+                                            <input type="text" name="workerCnt" class="form-control" maxlength="50" ng-model="contents.data.masterCnt" validation="number|min:1|max:20|required" placeholder="워커 노드 수를 입력하세요." ng-change="contents.fn.changeWorkerCnt(contents.data.masterCnt);">
                                         </td>
                                     </tr>
                                     </tbody>

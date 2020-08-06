@@ -1,11 +1,10 @@
-            <script src="assets/js/common.js" type="text/javascript"></script>
             <nav id="lnb">
                 <div class="title-project">
                     <div class="text" ng-bind-html="main.sltPortalOrgDisplayName ? main.sltPortalOrgDisplayName : '프로젝트'"></div>
                     <div class="dropdown" ng-class="{ 'open' : main.topProjectMenuOpen }">
                         <button type="button" class="btn btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-expanded="{{ main.topProjectMenuOpen }}" ng-click="main.topProjectMenuClick();">
                             <div class="feather-icon">
-                                <i data-feather="more-vertical"></i>
+                                <i data-feather="more-vertical" class="feather-directive"></i>
                             </div>
                         </button>
                         <ul class="dropdown-menu" role="menu">
