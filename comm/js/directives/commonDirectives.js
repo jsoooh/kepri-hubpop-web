@@ -1098,7 +1098,7 @@ angular.module('app')
             }
         };
     })
-    .directive("featherIcon", [function() {
+    .directive("featherDierective", [function() {
         return {
             restrict: 'C',
             link: function(scope, elem, attrs) {
