@@ -30,8 +30,14 @@ angular.module('gpu.controllers')
         if (ct.testInput) {
             ct.data.deployName = "하둡";
             ct.data.stackName = "hadoop";
-            ct.data.rootPassword = "crossent12";
-            ct.data.hivePassword = "hive1234";
+            ct.data.mysqlRootPassword = "Crossent!234";
+            ct.data.mysqlRootConfirmPassword = "Crossent!234";
+            ct.data.mysqlHivePassword = "Hive!234";
+            ct.data.mysqlHiveConfirmPassword = "Hive!234";
+            ct.data.endPoint = "s3EndPoint";
+            ct.data.accessKey = "s3AccessKey";
+            ct.data.secretKey = "s3SecretKey";
+            ct.data.bucketName = "bucketName";
         }
 
 
@@ -196,7 +202,14 @@ angular.module('gpu.controllers')
             }
         };
 
-        ct.fn.changeWorkerCnt = function() {
+        ct.fn.changeMasterCnt = function(masterCnt) {
+            ct.data.masterCnt = masterCnt;
+            if (!ct.masterSpecDisabledAllSetting) return;
+            ct.fn.chackSpecMaxOver();
+        };
+
+        ct.fn.changeWorkerCnt = function(workerCnt) {
+            ct.data.workerCnt = workerCnt;
             if (!ct.workerSpecDisabledAllSetting) return;
             ct.fn.chackSpecMaxOver();
         };
@@ -217,8 +230,8 @@ angular.module('gpu.controllers')
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
             vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
-            vmCatalogDeploy.parameters.root_password = ct.data.rootPassword;
-            vmCatalogDeploy.parameters.hive_password = ct.data.hivePassword;
+            vmCatalogDeploy.parameters.root_password = ct.data.mysqlRootPassword;
+            vmCatalogDeploy.parameters.hive_password = ct.data.mysqlHivePassword;
             if(ct.data.nodeType == 'cluster') {
                 vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
                 vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
