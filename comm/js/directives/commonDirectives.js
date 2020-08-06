@@ -1097,5 +1097,15 @@ angular.module('app')
                 });
             }
         };
-    });
+    })
+    .directive("featherIcon", [function() {
+        return {
+            restrict: 'C',
+            link: function(scope, elem, attrs) {
+                $(document).ready(function () {
+                    feather.replace({width: '1em', height: '1em'});
+                });
+            }
+        }
+    }]);
 ;
