@@ -336,6 +336,44 @@ angular.module('gpu.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/portForwarding/service', 'DELETE', params));
         };
 
+        computeDetailService.callMonitoringYn = function (method, type, instance, fnCallback) {
+            var url = '';
+            var message = '';
+            var errorMessage = '';
+            var params = {};
+            var yesOrNo = '';
+            if (method == 'post') {
+                params = {
+                    tenantId: instance.tenantId,
+                    orgCode: instance.orgCode,
+                    name: instance.name,
+                    fixedIp: instance.fixedIp
+                };
+                url = CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/' + type + '/enable';
+                message = type.toUpperCase() + '모니터링 활성화 성공';
+                errorMessage = type.toUpperCase() + '모니터링 활성화 실패';
+                yesOrNo = 'Y';
+            } else {
+                url = CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/' + type + '/disable';
+                message = type.toUpperCase() + '모니터링 비활성화 성공';
+                errorMessage = type.toUpperCase() + '모니터링 비활성화 실패';
+                yesOrNo = 'N';
+            }
+            var rp = common.resourcePromise(url, method, params);
+            rp.success(function (data) {
+                common.showAlertSuccess(message);
+                instance[type + 'MonitoringYn'] = yesOrNo;
+            });
+            rp.error(function (data) {
+                if (data && data.message) {
+                    common.showAlertError(errorMessage, data.message);
+                }
+            });
+            rp.finally(function () {
+                if (fnCallback) fnCallback();
+            });
+        };
+
         //모니터링 (비)활성화 세팅
         computeDetailService.setMonitoringYn = function (instance) {
             console.log(instance)
@@ -343,70 +381,24 @@ angular.module('gpu.services')
             var confirmMsg = isActive ? '모니터링 기능을 활성화 하시겠습니까?': '모니터링 기능을 비활성화 하시겠습니까?';
             common.showConfirm('확인', confirmMsg).then(function() {
                 if (isActive) {
-                    var params = {
-                        tenantId: instance.tenantId,
-                        orgCode: instance.orgCode,
-                        name: instance.name,
-                        fixedIp: instance.fixedIp
-                    };
                     // 활성화 명령
-                    if (instance.gpuMonitoringYn == 'N' && instance.spec.type == 'GPU') {
+                    if (instance.spec.type == 'GPU') {
                         // GPU 모니터링 활성화 요청
-                        var rp = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/gpu/enable', 'POST', params);
-                        rp.success(function (data) {
-                            common.showAlertSuccess('GPU 모니터링 활성화 성공');
-                            instance.gpuMonitoringYn = 'Y';
-                        });
-                        rp.error(function (data) {
-                            if (data && data.message) {
-                                common.showAlertError('GPU 모니터링 활성화 실패', data.message);
-                            }
-                            console.log(data);
-                        });
-                    }
-                    if (instance.vmMonitoringYn == 'N') {
-                        // VM 모니터링 활성화 요청
-                        var rp = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/vm/enable', 'POST', params);
-                        rp.success(function (data) {
-                            common.showAlertSuccess('VM 모니터링 활성화 성공');
-                            instance.vmMonitoringYn = 'Y';
-                        });
-                        rp.error(function (data) {
-                            if (data && data.message) {
-                                common.showAlertError('VM 모니터링 활성화 실패', data.message);
-                            }
-                            console.log(data);
-                        });
+                        console.log(1);
+                        computeDetailService.callMonitoringYn('post', 'gpu', instance, function () { computeDetailService.callMonitoringYn('post', 'vm', instance); });
+                    } else {
+                        console.log(2);
+                        computeDetailService.callMonitoringYn('post', 'vm', instance);
                     }
                 } else {
                     // 비활성화 명령
-                    if (instance.gpuMonitoringYn == 'Y' && instance.spec.type == 'GPU') {
-                        // GPU 모니터링 비활성화 요청
-                        var rp = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/gpu/disable', 'DELETE', params);
-                        rp.success(function (data) {
-                            common.showAlertSuccess('GPU 모니터링 비활성화 성공');
-                            instance.gpuMonitoringYn = 'N';
-                        });
-                        rp.error(function (data) {
-                            if (data && data.message) {
-                                common.showAlertError('GPU 모니터링 비활성화 실패', data.message);
-                            }
-                            console.log(data);
-                        });
-                    }
-                    if (instance.vmMonitoringYn == 'Y') {
-                        // VM 모니터링 비활성화 요청
-                        var rp = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/vm/disable', 'DELETE', params);
-                        rp.success(function (data) {
-                            common.showAlertSuccess('VM 모니터링 비활성화 성공');
-                            instance.vmMonitoringYn = 'N';
-                        });
-                        rp.error(function (data) {
-                            if (data && data.message) {
-                                common.showAlertError('VM 모니터링 비활성화 실패', data.message);
-                            }
-                            console.log(data);
-                        });
+                    if (instance.spec.type == 'GPU') {
+                        // GPU 모니터링 활성화 요청
+                        console.log(3);
+                        computeDetailService.callMonitoringYn('delete', 'gpu', instance, function () { computeDetailService.callMonitoringYn('delete', 'vm', instance); });
+                    } else {
+                        console.log(4);
+                        computeDetailService.callMonitoringYn('delete', 'vm', instance)
                     }
                 }
             });
