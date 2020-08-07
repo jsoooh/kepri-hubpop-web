@@ -1105,4 +1105,22 @@ angular.module('app')
                 feather.replace({width: '1em', height: '1em'});
             }
         }
+    }])
+    .directive("scrollContentX", [function() {
+        return {
+            restrict: 'C',
+            link: function(scope, elem, attrs) {
+                elem.mCustomScrollbar({
+                    axis:"x"
+                });
+            }
+        }
+    }])
+    .directive("scrollContent", [function() {
+        return {
+            restrict: 'C',
+            link: function(scope, elem, attrs) {
+                elem.mCustomScrollbar();
+            }
+        }
     }]);
