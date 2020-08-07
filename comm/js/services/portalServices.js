@@ -432,7 +432,7 @@ angular.module('portal.services', [])
             return common.syncHttpResponse(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams, 'application/x-www-form-urlencoded');
         };
 
-        /* 20.05.18 - gpu 객체 정보 불러오기 by ksw */
+        /* gpu 객체 정보 불러오기 by ksw. 2020.05.18 */
         portal.portalOrgs.syncGetGpuTenantByName = function (orgCode, teamCode) {
             var getParams = {
                 "orgCode" : orgCode,
@@ -443,6 +443,19 @@ angular.module('portal.services', [])
 
         portal.portalOrgs.getNotices = function () {
             return common.retrieveResource(common.resourcePromise('/hsvc/api/noti/info/v1.0', 'GET'));
+        };
+
+        // iaas/gpu/paas 추후에 프로젝트 생성하도록 변경
+        portal.portalOrgs.createPortalOrgSystem = function (id, system) {
+            var getParams = {
+                "system" : system
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/createSystem', 'PUT', getParams, 'application/x-www-form-urlencoded'));
+        };
+
+        // 조직 정보 조회
+        portal.portalOrgs.getPotalOrg = function (id) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id, 'GET'));
         };
 
         portal.users = {};
@@ -481,7 +494,6 @@ angular.module('portal.services', [])
             };
             return common.syncHttpResponseJson(CONSTANTS.paasApiMarketContextUrl + '/regions/my/{email}/all', 'GET', getParams);
         };
-
 
         portal.organizations = {};
         // 동기 방식
