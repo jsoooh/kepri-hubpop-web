@@ -228,15 +228,17 @@ angular.module('gpu.controllers')
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
-            vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
+            // vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
             vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
+            vmCatalogDeploy.workerUse = false;
             vmCatalogDeploy.parameters.root_password = ct.data.mysqlRootPassword;
             vmCatalogDeploy.parameters.hive_password = ct.data.mysqlHivePassword;
             if(ct.data.nodeType == 'cluster') {
                 vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
                 vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
+                vmCatalogDeploy.workerUse = true;
             }
-            vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
+            //vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
             return vmCatalogDeploy;
         };
 

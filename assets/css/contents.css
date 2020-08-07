@@ -208,6 +208,13 @@
 .dashboard-body .chartWrap .bar_chart_data .cht_val span:first-child {left:0px;}
 .dashboard-body .chartWrap .bar_chart_data .cht_val span:last-child {right:0px;}
 
+.app-info-area .panel-heading {padding:10px 20px;}
+.app-info-area .round-img {width: 45px; height: 45px; line-height:44px; color:#fff; background:#99b7c1; border-radius: 50%; overflow: hidden; margin-top:5px; margin-right: 10px;}
+.app-info-area .round-img img {display: block; margin: 0 auto; min-width: 100%; min-height: 100%;}
+/* .app-info-area .thum_box {display:block; width:45px; height:45px; color:#fff; border-radius:50%; background:#99b7c1; overflow:hidden; line-height:44px;} */
+.app-info-area .round-img.img_line {background:none; border:1px solid #e3e3e3;}
+.app-info-area .round-img span.txt {display: inline-block; width: 100%; text-align: center; font-size:16px;}
+
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}
@@ -223,3 +230,4 @@ input[type="text"], input[type="password"] {height:38px;}
 .pj_write_wrap .radio {padding:0;}
 
 .btn.btn-success {background-color: #249b97; border-color: #249b97; color:#fff;}
+.panel .panel-heading .dropdown .feather-icon {font-size: 20px; color: #9d9d9d;}

@@ -10,8 +10,12 @@ parameters:
     default: hadoop-base2-3
   availability_zone:
     type: string
-  flavor:
+  master_flavor:
     type: string
+{% if workerUse %}
+  worker_flavor:
+    type: string
+{% endif %}
   key_name:
     type: string
   security_group:
@@ -169,13 +173,19 @@ resources:
   server1:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: flavor }
+      flavor: { get_param: master_flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
         - port: { get_resource: server1_port }
-      key_name: { get_param: key_name}
+      key_name: { get_param: key_name }
       user_data_update_policy: IGNORE
       user_data_format: RAW
       user_data:
         get_resource: init_config1
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }

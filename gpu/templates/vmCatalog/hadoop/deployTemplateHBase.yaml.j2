@@ -204,3 +204,9 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config1
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }

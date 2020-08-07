@@ -96,6 +96,11 @@ angular.module('gpu.controllers')
     ct.data.octaviaLbUse = false;
     ct.data.volumeUse = false;
 
+    ct.volumeTypes = [
+        {key: "sdd", value: "SDD"},
+        {key: "hdd", value: "HDD"}
+    ];
+
     //디스크생성 변수
     ct.inputVolumeSize = ct.data.volumeSize;
     ct.volumeSliderOptions = {
@@ -573,7 +578,9 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.context.octaviaLbUse = false;
         }
         vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
-        vmCatalogDeploy.parameters.flavor = ct.data.flavor;
+        if(ct.vmCatalogInfo.id != 1) {
+            vmCatalogDeploy.parameters.flavor = ct.data.flavor;
+        }
         vmCatalogDeploy.parameters.key_name = ct.data.keyName;
         vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
         vmCatalogDeploy.parameters.availability_zone = ct.sltAvailabilityZone.availabilityZone;
