@@ -574,7 +574,7 @@ angular.module('gpu.controllers')
         }
         vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
         vmCatalogDeploy.parameters.flavor = ct.data.flavor;
-        vmCatalogDeploy.parameters.key_name = ct.data.keyName;
+        vmCatalogDeploy.parameters.key_name = "serviceCatalog_default";
         vmCatalogDeploy.parameters.security_group = ct.data.securityGroup;
         vmCatalogDeploy.parameters.availability_zone = ct.sltAvailabilityZone.availabilityZone;
         vmCatalogDeploy.parameters.provider_net = ct.sltAvailabilityZone.publicNetworkSubnet.networkId;
