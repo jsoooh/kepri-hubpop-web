@@ -1010,104 +1010,99 @@
 
 	<!-- 프로젝트 개요 panel -->
 	<div ng-if="contents.sltInfoTab == 'info'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'info'}">
-		<!-- cBox -->
-		<div class="cBox type1 appCnt-info">
-			<div class="cBox-hd">
-				<h4 class="c-tit">
-					<span ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image" class="thum_box img_line"> <img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" class="logo" alt="">
-					</span> <span class="thum_box" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image"> <span class="txt">{{contents.selOrgProject.orgName.substr(0, 1)}}</span>
-					</span>
-					<button type="button" name="button" class="btn only-ico thum_modify" title="수정" ng-disabled="!contents.isOrgManager" ng-click="contents.createOrgProjectIcon($event)"><span class="ico">썸네일 수정</span></button> {{ contents.selOrgProject.orgName }}
-				</h4>
-				<div class="pull-right">
-					<!--<button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.deleteOrgProject();"><span class="ico">삭제</span></button>-->
-					<button type="button" name="button" class="btn only-ico ico-del" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.checkDeleteOrgProject($event);"><span class="ico">삭제</span></button>
-				</div>
-			</div>
-			<div class="cBox-cnt">
-				<div class="l_box">
-					<div class="in">
-						<div class="col info-txt pdb0">
-							<ul>
-								<li>
-									<strong class="tit">생성자</strong>
-									<div class="txt">{{ contents.selOrgProject.managerName }}</div>
-								</li>
-							</ul>
+		<section class="panel panel-bordered app-info-area">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="round-img pull-left" ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image" >
+							<img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" alt="">
 						</div>
-						<div class="col info-txt">
-							<ul>
-								<li>
-									<strong class="tit">Project ID</strong>
-									<div class="txt">{{ contents.selOrgProject.orgId }}</div>
-								</li>
+						<div class="round-img pull-left" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image">
+							<span class="txt">{{contents.selOrgProject.orgName.substr(0, 1)}}</span>
+						</div>
+						<div class="pull-left">
+							<h3 class="panel-title padding-left-5">
+								{{ contents.selOrgProject.orgName }}
+							</h3>
+						</div>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="dropdown pull-right">
+							<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" title="실행 설정">
+								<div class="feather-icon">
+									<i data-feather="more-horizontal"></i>
+								</div>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="" title="사용자이미지 수정" ng-disabled="!contents.isOrgManager" ng-click="contents.createOrgProjectIcon($event)">프로젝트 이미지 수정</a></li>
+								<li><a href="" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.checkDeleteOrgProject($event);">{{ 'label.del' | translate }}</a></li>
 							</ul>
 						</div>
 					</div>
-					<div class="in">
-						<div class="col-non info-txt4 rbox-2-width">
-							<!-- r_box에 갯수 추가될 때 사용 -->
-							<strong class="tit">설명
-								<button type="button" name="button" class="btn only-ico ico-txt_modi" title="수정" data-user="aside" data-username="#" ng-click="contents.createOrgProjectDesc();"><span class="ico">수정</span></button>
-							</strong>
-							<div class="txt">
-								<span class="txt_normal">{{ contents.selOrgProject.description }}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="r_box">
-					<!-- 멤버 수 -->
-					<div class="col info-txt3">
-						<p class="txt">
-							<span>{{ contents.orgUsers.length }}</span><strong>Member</strong>
-						</p>
-					</div>
-					<!-- //멤버 수 -->
 				</div>
 			</div>
-		</div>
-		<!-- //cBox -->
+			<div class="panel-body">
+				<ul class="list-dot margin-bottom-20">
+					<li>
+						<b>생성자 : </b>
+						<span>{{ contents.selOrgProject.managerName }}</span>
+					</li>
+					<li>
+						<b>Project ID : </b>
+						<span>{{ contents.selOrgProject.orgId }}</span>
+					</li>
+					<li>
+						<b>프로젝트 멤버 : </b>
+						<span>{{ contents.orgUsers.length }}</span>
+					</li>
+					<li>
+						<b>설명 
+							<a ng-click="contents.createOrgProjectDesc();">
+								<div class="feather-icon">
+									<i data-feather="edit" class="feather-directive"></i>
+								</div>
+							</a> : 
+						</b>
+						<span>{{ contents.selOrgProject.description }}</span>
+					</li>
+				</ul>
+				<h4 class="heading h4 margin-top-30">프로젝트 참여자</h4>
+				<div class="table-wrap margin-top-20">
+					<table class="table table-hover">
+						<colgroup>
+							<col style="width: 10%;">
+							<col style="width: 15%;">
+							<col style="width: 30%;">
+							<col style="width: 15%;">
+							<col style="width: 30%;">
+						</colgroup>
+						<thead class="text-center grey">
+							<tr>
+								<th scope="col">No.</th>
+								<th scope="col">이름</th>
+								<th scope="col">아이디</th>
+								<th scope="col">역할</th>
+								<th scope="col">멤버 등록일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="text-center" ng-repeat="orgUser in contents.orgUsers">
+								<td>{{ $index + 1 }}</td>
+								<td>{{ orgUser.usersInfo.name }}</td>
+								<td>{{ orgUser.usersInfo.email }}</td>
+								<td>{{ orgUser.roleName | orgRoleName }}</td>
+								<td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
+							</tr>
+							<!-- 등록된 멤버가 없을 때 -->
+							<tr ng-if="contents.orgUsers.length == 0" class="text-center no-data">
+								<td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div> 
 
-		<div class="cont-titWrap mt50">
-			<h3 class="h-tit3 pd0">프로젝트 참여자</h3>
-		</div>
-
-		<!-- table -->
-		<div class="tbl type1">
-			<table class="table">
-				<colgroup>
-					<col style="width: 10%;">
-					<col style="width: 15%;">
-					<col style="width: 30%;">
-					<col style="width: 15%;">
-					<col style="width: 30%;">
-				</colgroup>
-				<thead>
-					<tr>
-						<th scope="col">No.</th>
-						<th scope="col">이름</th>
-						<th scope="col">아이디</th>
-						<th scope="col">역할</th>
-						<th scope="col">멤버 등록일</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="orgUser in contents.orgUsers">
-						<td>{{ $index + 1 }}</td>
-						<td>{{ orgUser.usersInfo.name }}</td>
-						<td>{{ orgUser.usersInfo.email }}</td>
-						<td>{{ orgUser.roleName | orgRoleName }}</td>
-						<td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
-					</tr>
-					<!-- 등록된 멤버가 없을 때 -->
-					<tr ng-if="contents.orgUsers.length == 0" class="no-data">
-						<td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<!-- //table -->
+			</div>
+		</section>
 	</div>
 	<!-- //프로젝트 개요 panel -->
 
@@ -1121,59 +1116,66 @@
 				<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
 			</div>
 		</div>
-		<div class="tbl type1">
-			<table class="table">
-				<colgroup>
-					<col style="width: 15%;">
-					<col style="width: 15%;">
-					<col style="width: 20%;">
-					<col style="width: 20%;">
-					<col style="width: 15%;">
-					<col style="width: 15%;">
-				</colgroup>
-				<thead>
-					<tr>
-						<th scope="col">No.</th>
-						<th scope="col">이름</th>
-						<th scope="col">아이디</th>
-						<th scope="col">역할</th>
-						<th scope="col">멤버 등록일</th>
-						<th scope="col">관리</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="orgUser in contents.orgUsers | orderBy: '-createDate.time'">
-						<td>{{ $index + 1 }}</td>
-						<td>{{ orgUser.usersInfo.name }}</td>
-						<td>{{ orgUser.usersInfo.email }}</td>
-						<td>{{ orgUser.roleName | orgRoleName }}</td>
-						<td>{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
-						<td>
-							<!--<button type="button" name="button" class="btn btn-ico-pw_reset-s only-ico" title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'" ng-click="contents.resetPassword(orgUser.usersInfo);"><span class="ico">패스워드 초기화</span></button>
-                           <button type="button" name="button" class="btn btn-ico-del-s only-ico" title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'" ng-click="contents.deleteOrgProjectUser(orgUser.usersInfo);"><span class="ico">삭제</span></button>-->
-							<div class="dropdown btn-option">
-								<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정"><span class="ico">실행 설정</span></button>
-								<ul class="dropdown-menu dropdown-menu-right" role="btn-option" aria-labelledby="btn-option">
-									<li title="권한 변경" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
-										<a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a>
-									</li>
-									<li title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
-										<a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
-									</li>
-									<li title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
-										<a href="" ng-class="!contents.isOrgManager ? 'disabled' : 'delete'" ng-click="contents.isOrgManager && contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a>
-									</li>
-								</ul>
-							</div>
-						</td>
-					</tr>
-					<!-- 등록된 멤버가 없을 때 -->
-					<tr ng-if="contents.orgUsers.length == 0" class="no-data">
-						<td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		
+		<section class="panel panel-bordered">
+			<div class="panel-body padding-0">
+				<div class="table-wrap border-0">
+					<table class="table table-hover" cellspacing="0" width="100%">
+						<colgroup>
+							<col style="width: 15%;">
+							<col style="width: 15%;">
+							<col style="width: 20%;">
+							<col style="width: 20%;">
+							<col style="width: 15%;">
+							<col style="width: 15%;">
+						</colgroup>
+						<thead class="black white-text text-center">
+							<tr>
+								<th scope="col">No.</th>
+								<th scope="col">이름</th>
+								<th scope="col">아이디</th>
+								<th scope="col">역할</th>
+								<th scope="col">멤버 등록일</th>
+								<th scope="col">관리</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="orgUser in contents.orgUsers | orderBy: '-createDate.time'">
+								<td class="text-center">{{ $index + 1 }}</td>
+								<td class="text-center">{{ orgUser.usersInfo.name }}</td>
+								<td class="text-center">{{ orgUser.usersInfo.email }}</td>
+								<td class="text-center">{{ orgUser.roleName | orgRoleName }}</td>
+								<td class="text-center">{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
+								<td class="text-center">
+									<div class="dropdown">
+										<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+											<div class="feather-icon">
+												<i data-feather="more-horizontal" class="feather-directive"></i>
+											</div>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="menu">
+											<li title="권한 변경" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
+												<a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a>
+											</li>
+											<li title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
+												<a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
+											</li>
+											<li title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
+												<a href="" ng-class="!contents.isOrgManager ? 'disabled' : 'delete'" ng-click="contents.isOrgManager && contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a>
+											</li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+							<!-- 등록된 멤버가 없을 때 -->
+							<tr ng-if="contents.orgUsers.length == 0" class="no-data text-center">
+								<td colspan="5">등록된 프로젝트 구성원이 없습니다.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
 		<!-- //table -->
 	</div>
 	<!-- //프로젝트 구성원 panel -->
