@@ -18,7 +18,6 @@ parameters:
 {% endif %}
   key_name:
     type: string
-    default: serviceCatalog_default
   security_group:
     type: string
   provider_net:
@@ -184,3 +183,9 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config1
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
