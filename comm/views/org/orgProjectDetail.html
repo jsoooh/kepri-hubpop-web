@@ -1109,12 +1109,10 @@
 	<!-- 프로젝트 구성원 panel -->
 	<div ng-if="contents.sltInfoTab == 'member'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'member'}">
 		<!-- table -->
-		<div class="tb-top">
-			<div class="pull-right">
-				<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
-				<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
-				<button type="button" name="button" class="btn btn-color1 btn-md" ng-disabled="!contents.isOrgManager" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
-			</div>
+		<div class="margin-bottom-20 text-right">
+			<button type="button" name="button" class="btn btn-primary" ng-disabled="!contents.isOrgManager" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
+			<button type="button" name="button" class="btn btn-primary" ng-disabled="!contents.isOrgManager" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
+			<button type="button" name="button" class="btn btn-primary" ng-disabled="!contents.isOrgManager" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
 		</div>
 		
 		<section class="panel panel-bordered">
@@ -1182,122 +1180,120 @@
 
 	<!-- 프로젝트 자원 panel -->
 	<div ng-if="contents.sltInfoTab == 'resource'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'resource'}">
-		<!-- cBox -->
-		<div class="cBox type4">
-			<h3 class="h-tit3 pb20">자원쿼터</h3>
-
-			<div class="cBox-cnt pd0">
-				<div class="in">
-					<!-- 신규 자원쿼터 UI -->
-					<div class="resource_box">
-						<ul class="ul-panel">
-							<li ng-repeat="itemGroup in contents.orgQuotaItemGroups | orderBy: 'code'">
-								<!-- panel -->
-								<div class="panelWrap">
-									<div class="panel">
-										<div class="panel_head">
-											<div class="tit_area">
-												<p class="tit">{{ itemGroup.name }}</p>
-											</div>
-										</div>
-										<div class="panel_body">
-											<div class="tbl_cont">
-												<table class="table">
-													<colgroup>
-														<col style="width:;">
-														<col style="width:;">
-													</colgroup>
-													<tbody>
-														<tr ng-repeat="quotaValue in contents.orgQuotaValues | filter:{ orgQuotaItemGroupCode: itemGroup.code }">
-															<th>{{ quotaValue.orgQuotaItem.name }}</th>
-															<td>{{ quotaValue.value }} {{ quotaValue.orgQuotaItem.unit }}</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
+		
+		<div class="card-input-wrap">
+			<div class="ciw-tit">
+				<b class="tit">자원쿼터 <span class="sub-tit">(2)</span></b>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3" ng-repeat="itemGroup in contents.orgQuotaItemGroups | orderBy: 'code'">
+				<div class="panel panel-bordered">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							{{ itemGroup.name }}
+						</h3>
+					</div>
+					<div class="panel-body padding-0">
+						<div class="scroll-content" style="height: 250px">
+							<ul class="list-striped">
+								<li ng-repeat="quotaValue in contents.orgQuotaValues | filter:{ orgQuotaItemGroupCode: itemGroup.code }">
+									<div class="pull-left">
+										{{ quotaValue.orgQuotaItem.name }}
 									</div>
-								</div>
-								<!-- //panel -->
-							</li>
-						</ul>
-					</div>
-					<!-- //신규 자원쿼터 UI -->
-					<div class="tb-top">
-						<div class="pull-left">
-							<h4 class="c-tit ng-binding" style="line-height: 80px; font-weight: 700; font-size: 24px;">쿼터변경요청</h4>
-						</div>
-						<div class="pull-right">
-							<!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
-                                   <span class="ico">추가(기존)</span>
-                               </button>-->
-							<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req" ng-disabled="!contents.isOrgManager || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);"><span class="ico">추가2</span></button>
+									<div class="pull-right">
+										{{ quotaValue.value }} {{ quotaValue.orgQuotaItem.unit }}
+									</div>
+								</li>
+							</ul>
 						</div>
 					</div>
-					<!-- table -->
-					<div class="tbl type1">
-						<table class="table">
-							<colgroup>
-								<col style="width: 5%;">
-								<col style="width: 15%;">
-								<col style="width: auto;">
-								<col style="width: 20%;">
-								<col style="width: 8%;">
-								<col style="width: 10%;">
-								<col style="width: 10%;">
-								<col style="width: 5%;">
-								<col style="width: 5%;">
-							</colgroup>
-							<thead>
-								<tr>
-									<th scope="col">번호</th>
-									<th scope="col">신청사유</th>
-									<th scope="col">이전값</th>
-									<th scope="col">변경값</th>
-									<th scope="col">요청자</th>
-									<th scope="col">요청일</th>
-									<th scope="col">처리일</th>
-									<th scope="col">상태</th>
-									<th scope="col">관리</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="item in contents.quotaHistories">
-									<td>{{ contents.quotaHistories.length - $index }}</td>
-									<td class="text-left">{{ item.requestReason }}</td>
-									<td class="text-left">
-										<ul>
-											<li ng-repeat="detail in item.oldValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
-										</ul>
-									</td>
-									<td class="text-left">
-										<ul>
-											<li ng-repeat="detail in item.changeValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
-										</ul>
-									</td>
-									<td>{{ item.createdId }}</td>
-									<td>{{ item.createdDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
-									<td>{{ item.treatDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
-									<td>{{ item.treatCodeNm }}</td>
-									<td>
-										<div class="dropdown btn-option">
-											<button id="btn-option2" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="실행 설정"><span class="ico">실행 설정</span></button>
-											<ul class="dropdown-menu dropdown-menu-right" role="btn-option2" aria-labelledby="btn-option2">
-												<li title="삭제">
-													<a href="" ng-class="($index == 0 && item.treatCodeNm == '요청') ? 'delete' : 'disabled'" ng-click="$index == 0 && item.treatCodeNm == '요청' && contents.deleteQuotaHistory(item);">{{ 'label.del' | translate }}</a>
-												</li>
-											</ul>
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<!-- //table -->
 				</div>
 			</div>
 		</div>
-		<!-- //cBox -->
+		
+		<div class="card-input-wrap">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="ciw-tit">
+						<b class="tit">쿼터변경요청 <span class="sub-tit">({{ contents.quotaHistories.length - $index }})</span></b>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="text-right">
+						<button type="button" name="button" class="btn btn-primary" data-user="aside" data-username="#aside-quota-req" ng-disabled="!contents.isOrgManager || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">쿼터변경요청</button>
+						<!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
+			                 <span class="ico">추가(기존)</span>
+			             </button>-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<section class="panel panel-bordered">
+			<div class="panel-body padding-0">
+				<div class="table-wrap border-0">
+					<table class="table table-hover" cellspacing="0" width="100%">
+						<colgroup>
+							<col style="width: 5%;">
+							<col style="width: 15%;">
+							<col style="width: 17.5%;">
+							<col style="width: 17.5%;">
+							<col style="width: 10%;">
+							<col style="width: 10%;">
+							<col style="width: 10%;">
+							<col style="width: 5%;">
+							<col style="width: 5%;">
+						</colgroup>
+						<thead class="black white-text text-center">
+							<tr>
+								<th scope="col">번호</th>
+								<th scope="col">신청사유</th>
+								<th scope="col">이전값</th>
+								<th scope="col">변경값</th>
+								<th scope="col">요청자</th>
+								<th scope="col">요청일</th>
+								<th scope="col">처리일</th>
+								<th scope="col">상태</th>
+								<th scope="col">관리</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in contents.quotaHistories">
+								<td class="text-center">{{ contents.quotaHistories.length - $index }}</td>
+								<td class="text-center">{{ item.requestReason }}</td>
+								<td class="text-left">
+									<ul>
+										<li ng-repeat="detail in item.oldValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+									</ul>
+								</td>
+								<td class="text-left">
+									<ul>
+										<li ng-repeat="detail in item.changeValueDetails | orderBy: 'orgQuotaItemCode' | filter:{isSame:false}">{{ detail.orgQuotaItemGroupName }} {{ detail.orgQuotaItemName }} : {{ detail.value }} {{ detail.orgQuotaItemUnit }}</li>
+									</ul>
+								</td>
+								<td class="text-center">{{ item.createdId }}</td>
+								<td class="text-center">{{ item.createdDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+								<td class="text-center">{{ item.treatDate | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+								<td class="text-center">{{ item.treatCodeNm }}</td>
+								<td class="text-center">
+									<div class="dropdown">
+										<button type="button" id="btn-option2" class="btn btn-nostyle dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+											<div class="feather-icon">
+												<i data-feather="more-horizontal" class="feather-directive"></i>
+											</div>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right"  role="btn-option2" aria-labelledby="btn-option2">
+											<li><a href="" title="삭제" ng-class="($index == 0 && item.treatCodeNm == '요청') ? 'delete' : 'disabled'" ng-click="$index == 0 && item.treatCodeNm == '요청' && contents.deleteQuotaHistory(item);">{{ 'label.del' | translate }}</a></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
 	</div>
 	<!-- //프로젝트 자원 panel -->
 </div>
