@@ -1340,6 +1340,11 @@ angular.module('portal.controllers')
             var promise = orgService.listOrgUsers(ct.paramId);
             promise.success(function (data) {
                 ct.orgUsers = data.items;
+                angular.forEach(ct.orgUsers, function (userItem, key) {
+                    if (!!userItem.usersInfo) {
+                        userItem.isCommonOrg = userItem.usersInfo.isCommonOrg;
+                    }
+                });
             });
             promise.error(function (data) {
             });
