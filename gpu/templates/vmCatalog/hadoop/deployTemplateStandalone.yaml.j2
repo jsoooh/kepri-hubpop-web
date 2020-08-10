@@ -10,8 +10,12 @@ parameters:
     default: CentOS76-Hadoop.raw
   availability_zone:
     type: string
-  flavor:
+  master_flavor:
     type: string
+{% if workerUse %}
+  worker_flavor:
+    type: string
+{% endif %}
   key_name:
     type: string
   security_group:
@@ -232,3 +236,9 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config1
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }

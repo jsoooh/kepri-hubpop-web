@@ -1,5 +1,5 @@
 <!-- 목록 이미지형/리스트형 선택 버튼 -->
-<div class="btnArea text-right">
+<div ng-if="!!main.userTenantId" class="btnArea text-right">
 	<!-- 선택 된 class="on" 추가 -->
 	<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
 	<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트형</button>
@@ -7,7 +7,7 @@
 <!-- //목록 이미지형/리스트형 선택 버튼 -->
 
 <!-- 프로젝트 정보 -->
-<div class="cBox type0 projt-mana mt30">
+<div ng-if="!!main.userTenantId" class="cBox type0 projt-mana mt30">
 	<div class="pull-left">
 		<h4 class="c-tit">전체 디스크 <em class="point1">({{(contents.storageMainList | filter:{ status: '!deleting' }).length}})</em></h4>
 	</div>
@@ -24,9 +24,8 @@
 </div>
 <!-- //프로젝트 정보 -->
 
-<!-- 2018.11.14 sg0730 디스크 만들기 버튼 추가.-->
 <!-- button area Start-->
-<div class="btnWrap">
+<div ng-if="!!main.userTenantId" class="btnWrap">
 	<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/storage/create')">
 		<span class="ico ico_vlm_str"></span>디스크 만들기
 	</button>
@@ -198,7 +197,7 @@
 </div>
 
 <!-- //panel area-->
-<div ng-if="!contents.isStorageMainListLoad && (contents.storageMainList | filter:{ taskState : '!deleting' }).length == 0" class="welcome_layer">
+<div ng-if="!!main.userTenantId && !contents.isStorageMainListLoad && (contents.storageMainList | filter:{ taskState : '!deleting' }).length == 0" class="welcome_layer">
 	<div class="guide_fnt arrw_btm">신규 디스크를 만들고 가상서버와 연결하세요.</div>
 	<div class="guide_cnt">
 		디스크 관리는 <span class="fnt20"><span class="color1">Block Storage 기반의 데이터 저장공간 서비스를 제공</span></span>합니다.<br>
@@ -206,3 +205,19 @@
 		<span class="fnt20"><spna class="color1">‘디스크 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
 	</div>
 </div>
+
+<!-- 테넌트 생성 전인 경우 -->
+<div ng-if="!main.userTenantId" class="proj_main_cont">
+	<div class="p_main_top">
+		<div class="top_txt">
+			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
+			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+		</div>
+		<div class="top_btn">
+			<a href="" ng-click="main.createPortalOrgSystem('iaas');">
+				<span>프로젝트 생성</span>
+			</a>
+		</div>
+	</div>
+</div>
+<!-- //테넌트 생성 전인 경우 -->

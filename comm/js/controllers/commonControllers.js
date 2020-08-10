@@ -72,6 +72,18 @@ angular.module('common.controllers', [])
                 return;
             }
             if (!menuItem.urlPath) return;
+            if (menuItem.urlPath && menuItem.urlPath.indexOf("/iaas/") > -1 && !mc.sltPortalOrg.isUseIaas) {
+                common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
+                return;
+            }
+            if (menuItem.urlPath && menuItem.urlPath.indexOf("/gpu/") > -1 && !mc.sltPortalOrg.isUseGpu) {
+                common.showDialogAlert('알림', '현재 프로젝트는 "GPU 서버 가상화"를 이용하지 않는 프로젝트입니다.');
+                return;
+            }
+            if (menuItem.urlPath && menuItem.urlPath.indexOf("/paas/") > -1 && !mc.sltPortalOrg.isUsePaas) {
+                common.showDialogAlert('알림', '현재 프로젝트는 "App 실행 서비스"를 이용하지 않는 프로젝트입니다.');
+                return;
+            }
             mc.sltMenu = menuItem;
             common.locationHref(menuItem.urlPath);
             //console.log("mc.sltMenu : ", mc.sltMenu);
@@ -377,7 +389,7 @@ angular.module('common.controllers', [])
                 common.goHomePath();
             } else {
                 if ((pageStage == 'iaas' || pageStage == 'paas' || pageStage == 'monit') && (!mc.sltProject || !mc.sltProject.orgs || mc.sltProject.orgs.length == 0 || !mc.userTenantId || !mc.sltOrganizationGuid)) {
-                    common.showAlertWarning("작업 정복가 존재하지 않습니다. 작업을 선택 하십시오.");
+                    common.showAlertWarning("작업 정보가 존재하지 않습니다. 작업을 선택 하십시오.");
                 }
                 var target = $(evt.currentTarget);
                 var il_items = target.parent().parent().find("> il");
@@ -696,6 +708,12 @@ angular.module('common.controllers', [])
 
         // UserTenant 값 셋팅
         mc.setUserTenant = function(userTenant, userTenant2) {
+            mc.userTenant = {};
+            mc.userTenantId = "";
+            mc.uaerTenantDisplayName = "";
+            mc.userTenantGpu = {};
+            mc.userTenantGpuId = "";
+            mc.userTenantGpu.id = "";
             if (angular.isObject(userTenant) && userTenant.tenantId) {
                 mc.userTenant = userTenant;
                 mc.userTenantId = userTenant.tenantId;
@@ -704,19 +722,12 @@ angular.module('common.controllers', [])
                 mc.uaerTenantDisplayName = mc.userTenant.korName;
                 common.setUserTenantId(mc.userTenantId);
             } else {
-                mc.userTenant = {};
-                mc.userTenantId = "";
-                mc.uaerTenantDisplayName = "";
                 common.clearUserTenantId();
             }
             if (angular.isObject(userTenant2) && userTenant2.tenantId) {
                 mc.userTenantGpu = userTenant2;
                 mc.userTenantGpuId = userTenant2.tenantId;
                 mc.userTenantGpu.id = userTenant2.tenantId;
-            } else {
-                mc.userTenantGpu = {};
-                mc.userTenantGpuId = "";
-                mc.userTenantGpu.id = "";
             }
         };
 
@@ -1705,6 +1716,62 @@ angular.module('common.controllers', [])
             });
         };
 
+        //iaas/gpu/paas 테넌트/조직이 생성되지 않은 경우 테넌트 생성
+        //  org.status_code : updating 상태에서 시스템 연계 진행
+        mc.createPortalOrgSystem = function (system) {
+            if (!mc.sltPortalOrgId) return;
+            if (system == "iaas" && !mc.sltPortalOrg.isUseIaas) return;
+            if (system == "gpu" && !mc.sltPortalOrg.isUseGpu) return;
+            if (system == "paas" && !mc.sltPortalOrg.isUsePaas) return;
+            mc.loadingMainBody = true;
+            var promise = portal.portalOrgs.createPortalOrgSystem(mc.sltPortalOrgId, system);
+            promise.success(function (data) {
+                mc.getOrgProject(system); //조직정보조회
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+                mc.loadingMainBody = false;
+            });
+        };
+
+        // 조직 정보 조회
+        mc.getOrgProject = function (system) {
+            mc.searchFirst = false;
+            if (!mc.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
+                mc.searchFirst = true;
+            }
+            var orgPromise = portal.portalOrgs.getPotalOrg(mc.sltPortalOrgId);
+            orgPromise.success(function (data) {
+                //생성 완료되지 않은 경우 재조회.
+                if (data.statusCode == "updating") {
+                    if (mc.searchFirst) {
+                        common.showAlertWarning("프로젝트 생성 중입니다.");
+                    }
+                    mc.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = $timeout(function () {
+                        console.log("재조회 : getOrgProject_" + mc.sltPortalOrgId);
+                        mc.getOrgProject();
+                    }, 2000);
+                } else {
+                    mc.loadingMainBody = false;
+                    if ($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
+                        $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]);
+                        $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
+                    }
+                    mc.sltPortalOrg = data;
+                    //mc.changePortalOrg(data);
+                    if (system == "iaas" || system == "gpu") {
+                        mc.loadUserTenant();
+                    } else if (system == "paas") {
+                        mc.loadSltOrganization();
+                    }
+                }
+            });
+            orgPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
     })
     // 메인 BODY Conroller
@@ -1795,9 +1862,9 @@ angular.module('common.controllers', [])
 
             // paas menu 처리
             if ($scope.main.pageStage == "paas") {
-                if (!$scope.main.sltOrganizationGuid) {
+                /*if (!$scope.main.sltOrganizationGuid) {
                     common.goHomePath();
-                }
+                }*/
                 if (!mb.paasApplicationDetailSiteMap) {
                     mb.paasApplicationDetailSiteMap = common.getStateKeyBySelectSietMap('paasApplicationDetail');
                 }
@@ -1819,15 +1886,15 @@ angular.module('common.controllers', [])
                         mb.paasApplicationLogSiteMap.menuDisplayNo = true;
                     }
                 }
-            } else if ($scope.main.pageStage == "iaas") {
+            } /*else if ($scope.main.pageStage == "iaas") {
                 if (!$scope.main.userTenantId) {
-                    common.showAlertWarning("정보가 존재 하지 않습니다. 작업을 선택 하십시오.");
+                    common.showAlertWarning("정보가 존재 하지 않습니다. 프로젝트를 선택 하십시오.");
                     common.goHomePath();
                     return false;
                 }
-            } else if ($scope.main.pageStage == "monit") {
+            }*/ else if ($scope.main.pageStage == "monit") {
                 if (!$scope.main.userTenantId) {
-                    common.showAlertWarning("정보가 존재 하지 않습니다. 작업을 선택 하십시오.");
+                    common.showAlertWarning("정보가 존재 하지 않습니다. 프로젝트를 선택 하십시오.");
                     common.goHomePath();
                 }
             }

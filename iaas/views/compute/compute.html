@@ -6,9 +6,9 @@
 		</div>
 	</div>
 	<!-- //작업 추가 및 선택 -->
-	
+
 	<!-- 목록 이미지형/리스트형 선택 버튼 -->
-	<div class="btnArea text-right">
+	<div ng-if="!!main.userTenantId" class="btnArea text-right">
 		<!-- 선택 된 class="on" 추가 -->
 		<button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
 		<button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트형</button>
@@ -16,7 +16,7 @@
 	<!-- //목록 이미지형/리스트형 선택 버튼 -->
 	
 	<!-- 프로젝트 정보 -->
-	<div class="cBox type0 projt-mana mt30">
+	<div ng-if="!!main.userTenantId" class="cBox type0 projt-mana mt30">
 		<div class="pull-left">
 			<h4 class="c-tit">전체 서버 <em class="point1">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</em></h4>
 		</div>
@@ -35,7 +35,7 @@
 	<!-- //프로젝트 정보 -->
 
 	<!-- 탭영역 -->
-	<div role="tabpanel" class="tabWrap type1">
+	<div ng-if="!!main.userTenantId" role="tabpanel" class="tabWrap type1">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 관리<span>({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</span></a></li>
@@ -458,6 +458,16 @@
 						<span class="fnt20"><spna class="color1">‘서버 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
 					</div>
 				</div>
+
+				<div ng-if="!main.userTenantId" class="welcome_layer">
+					<div class="guide_fnt arrw_btm">신규 가상서버를 만듭니다.</div>
+					<div class="guide_fnt arrw_top">다른 프로젝트의 백업 이미지로부터 신규 가상서버를 만듭니다.</div>
+					<div class="guide_cnt">
+						서버가상화 서비스에서는 <span class="fnt20"><span class="color1">리눅스(Linux)</span> 또는 <span class="color1">윈도우(Windows)</span>를 실행하는 <span class="color1">가상 서버</span></span>를 만듭니다. <br>
+						사용자 스스로가 쉽고 빠르게 필요한 서버를 만들고 활용할 수 있습니다. <br>
+						<span class="fnt20"><spna class="color1">‘서버 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+					</div>
+				</div>
 			</div>
 			<!-- //tab1 cnt -->
 		
@@ -635,3 +645,19 @@
 		</div>
 	</div>
 	<!-- 탭영역 -->
+
+	<!-- 테넌트 생성 전인 경우 -->
+	<div ng-if="!main.userTenantId" class="proj_main_cont">
+		<div class="p_main_top">
+			<div class="top_txt">
+				<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
+				<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+			</div>
+			<div class="top_btn">
+				<a href="" ng-click="main.createPortalOrgSystem('iaas');">
+					<span>프로젝트 생성</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- //테넌트 생성 전인 경우 -->
