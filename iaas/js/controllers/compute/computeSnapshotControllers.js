@@ -299,35 +299,33 @@ angular.module('iaas.controllers')
             });
         };
 
+        // 서버만들기 - 사양선택 관련 속도개선 api로 변경
         ct.fn.getTenantResource = function() {
             var params = {
                 tenantId : ct.data.tenantId
             };
             ct.tenantResource = {};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', params);
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    ct.tenantResource = data.content[0];
+                if (data && data.content) {
+                    ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
                     ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
-                    ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
-                    ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
+                    ct.tenantResource.available.licenseRedhat = ct.tenantResource.maxResource.licenseRedhat - ct.tenantResource.usedResource.licenseRedhat;
+                    ct.tenantResource.available.licenseWindows = ct.tenantResource.maxResource.licenseWindows - ct.tenantResource.usedResource.licenseWindows;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    if (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
+                    if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
                         ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize;
                     }
                     ct.fn.setSpecMaxDisabled();
                 }
             });
-            returnPromise.error(function (data, status, headers) {
-                //common.showAlert("message",data.message);
-            });
-            returnPromise.finally(function() {
+            returnPromise.error(function (data) {
+                common.showAlertError("message", data.message);
             });
         };
 
@@ -404,6 +402,9 @@ angular.module('iaas.controllers')
                 }
                 if (sltSpec) {
                     ct.fn.selectSpec(sltSpec);
+                } else {
+                    ct.specUuid = "";
+                    ct.data.spec = "";
                 }
             }
         };
