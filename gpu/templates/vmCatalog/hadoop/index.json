@@ -13,8 +13,8 @@
     "spark": "deployTemplateSpark.yaml.j2"
   },
   "images": {
-    "core": "hadoop-base2-3",
-    "hbase": "hadoop-base2-3",
-    "spark": "hadoop-base2-3"
+    "core": "CentOS76-Hadoop.raw",
+    "hbase": "CentOS76-Hadoop.raw",
+    "spark": "CentOS76-Hadoop.raw"
   }
 }

@@ -7,7 +7,7 @@ parameters:
     type: string
   image:
     type: string
-    default: hadoop-base2-3
+    default: CentOS76-Hadoop.raw
   availability_zone:
     type: string
   master_flavor:
@@ -61,12 +61,18 @@ resources:
             echo "01.hadoop core install start ......"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
+            cat <<EOF>> /etc/ssh/ssh_config
+            Port 20022
+            EOF
+
+            sudo service sshd restart
+
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "[00]key setup"
             ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
             cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-            chmod 0600 ~/.ssh/authorized_keys
+            chmod og-wx /home/centos/.ssh/authorized_keys
             ssh-keyscan -H localhost,0.0.0.0 >> /home/centos/.ssh/known_hosts
             EOF
 
