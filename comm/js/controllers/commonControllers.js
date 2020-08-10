@@ -389,7 +389,7 @@ angular.module('common.controllers', [])
                 common.goHomePath();
             } else {
                 if ((pageStage == 'iaas' || pageStage == 'paas' || pageStage == 'monit') && (!mc.sltProject || !mc.sltProject.orgs || mc.sltProject.orgs.length == 0 || !mc.userTenantId || !mc.sltOrganizationGuid)) {
-                    common.showAlertWarning("작업 정복가 존재하지 않습니다. 작업을 선택 하십시오.");
+                    common.showAlertWarning("작업 정보가 존재하지 않습니다. 작업을 선택 하십시오.");
                 }
                 var target = $(evt.currentTarget);
                 var il_items = target.parent().parent().find("> il");
@@ -1726,7 +1726,7 @@ angular.module('common.controllers', [])
             mc.loadingMainBody = true;
             var promise = portal.portalOrgs.createPortalOrgSystem(mc.sltPortalOrgId, system);
             promise.success(function (data) {
-                mc.getOrgProject(); //조직정보조회
+                mc.getOrgProject(system); //조직정보조회
             });
             promise.error(function (data, status, headers) {
             });
@@ -1862,9 +1862,9 @@ angular.module('common.controllers', [])
 
             // paas menu 처리
             if ($scope.main.pageStage == "paas") {
-                if (!$scope.main.sltOrganizationGuid) {
+                /*if (!$scope.main.sltOrganizationGuid) {
                     common.goHomePath();
-                }
+                }*/
                 if (!mb.paasApplicationDetailSiteMap) {
                     mb.paasApplicationDetailSiteMap = common.getStateKeyBySelectSietMap('paasApplicationDetail');
                 }

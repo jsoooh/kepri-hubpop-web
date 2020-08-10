@@ -34,8 +34,6 @@ angular.module('paas.controllers')
         /* 20.06.03 - 대표 도메인 설정 후 리스트 화면 변경시 라우트 탭 선택되어 있는 상태를 초기화 by ksw */
         applicationService.sltInfoTab = '';
 
-
-
         // main changeOrganization 와 연결
         $scope.$on('organizationChanged', function(event, orgItem) {
             ct.pageLoadData();
