@@ -69,7 +69,7 @@ resources:
             ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
             cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
             chmod og-wx /home/centos/.ssh/authorized_keys
-            ssh-keyscan -H localhost,0.0.0.0 >> /home/centos/.ssh/known_hosts
+            ssh-keyscan -p 20022 localhost,0.0.0.0 >> /home/centos/.ssh/known_hosts
             EOF
 
             echo "[01]hadoop config file update"
