@@ -96,11 +96,6 @@ angular.module('gpu.controllers')
     ct.data.octaviaLbUse = false;
     ct.data.volumeUse = false;
 
-    ct.volumeTypes = [
-        {key: "sdd", value: "SDD"},
-        {key: "hdd", value: "HDD"}
-    ];
-
     //디스크생성 변수
     ct.inputVolumeSize = ct.data.volumeSize;
     ct.volumeSliderOptions = {
