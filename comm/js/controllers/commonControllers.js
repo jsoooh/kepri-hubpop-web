@@ -729,6 +729,7 @@ angular.module('common.controllers', [])
                 mc.userTenantGpuId = userTenant2.tenantId;
                 mc.userTenantGpu.id = userTenant2.tenantId;
             }
+            console.log("mc.userTenant : ", mc.userTenant);
         };
 
         mc.syncGetOrganizationByName = function (name) {
@@ -759,6 +760,7 @@ angular.module('common.controllers', [])
                 mc.sltOrganizationGuid = "";
                 mc.sltOrganizationDisplayName = "";
             }
+            console.log("mc.sltOrganization : ", mc.sltOrganization);
         };
 
         mc.syncListAllProjects = function () {
@@ -1729,8 +1731,6 @@ angular.module('common.controllers', [])
                 mc.getOrgProject(system); //조직정보조회
             });
             promise.error(function (data, status, headers) {
-            });
-            promise.finally(function (data, status, headers) {
                 mc.loadingMainBody = false;
             });
         };
@@ -1753,18 +1753,16 @@ angular.module('common.controllers', [])
                         mc.getOrgProject();
                     }, 2000);
                 } else {
-                    mc.loadingMainBody = false;
                     if ($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
                         $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]);
                         $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
                     }
-                    mc.sltPortalOrg = data;
-                    //mc.changePortalOrg(data);
-                    if (system == "iaas" || system == "gpu") {
-                        mc.loadUserTenant();
-                    } else if (system == "paas") {
-                        mc.loadSltOrganization();
-                    }
+                    mc.changePortalOrg(data);
+                    /*if (mc.sltPortalOrg && mc.sltPortalOrg.isUseIaas && mc.sltPortalOrg.iaasSuccessYn == "Y") {
+                        mc.syncGetTenantByName(mc.sltPortalOrg.projectId, mc.sltPortalOrg.orgId);
+                    }*/
+                    mc.goToPage("/comm/projects/projectDetail/" + mc.sltPortalOrgId);
+                    mc.loadingMainBody = false;
                 }
             });
             orgPromise.error(function (data) {

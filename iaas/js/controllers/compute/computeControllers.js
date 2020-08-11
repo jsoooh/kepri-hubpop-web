@@ -102,7 +102,7 @@ angular.module('iaas.controllers')
             ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
             ct.network = ct.networks[0];
             ct.fnGetServerMainList();
-            ct.fnGetUsedResource();
+            //ct.fnGetUsedResource();
         });
         
         ct.fn.getKeyFile = function(keypair,type) {
