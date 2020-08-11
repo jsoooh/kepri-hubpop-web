@@ -42,6 +42,7 @@
 		<colgroup>
 			<col style="width:20%;">
 			<col style="width:10%;">
+			<col style="width:10%;">
 			<col style="width:">
 			<col style="width: 10%;">
 			<col style="width: 8%;">
@@ -53,6 +54,7 @@
 			<tr>
 				<th scope="col">디스크명</th>
 				<th scope="col">크기(GB)</th>
+				<th scope="col">볼륨타입</th>
 				<th scope="col">설명</th>
 				<th scope="col">연결서버</th>
 				<th scope="col">백업이미지개수</th>
@@ -66,6 +68,7 @@
 			<tr ng-repeat="volume in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }">
 				<td style="text-align: left">{{volume.name}}</td>
 				<td>{{volume.size}}</td>
+				<td>{{volume.type}}</td>
 				<td>{{volume.description | enterByNbr}}</td>
 				<td>
 					<!--<span ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></span>-->
@@ -152,6 +155,8 @@
 								</div>
 								<div class="cnt_infoBox">
 									<dl class="mt15">
+										<dt>볼륨타입</dt>
+										<dd>{{volume.type}}</dd>
 										<dt>연결서버</dt>
 										<!--<dd ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>-->
 										<dd ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/gpu/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>

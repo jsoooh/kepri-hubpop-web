@@ -24,6 +24,18 @@
 						</li>
 						<li>
 							<div class="pnb_tit">
+								<i class="i_star"></i> <span class="pnb_t_txt">볼륨 타입 선택</span>
+								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'원하는 타입의 볼륨을 생성할 수 있습니다.'"><span class="ico_info"></span></button></div>
+							</div>
+							<div>
+								<select class="form-control" ng-model="contents.volume.type">
+									<option value="">볼륨 타입 선택</option>
+									<option ng-repeat="volumeType in contents.volumeTypes" value="{{volumeType.volumeType}}">{{volumeType.volumeType}}</option>
+								</select>
+							</div>
+						</li>
+						<li>
+							<div class="pnb_tit">
 								<i class="i_star"></i> <span class="pnb_t_txt">디스크 크기</span>
 								<div class="t_tip_bx">
 									<button type="button" tooltip-placement="top" uib-tooltip-html="'추가하는 디스크의 크기(Size)를 설정할 수 있습니다. 프로젝트에 할당된 디스크 쿼터(최대 크기) 내에서 자유롭게 설정이 가능합니다.'"><span class="ico_info"></span></button>
@@ -144,6 +156,10 @@
 							<li>
 								<span class="s_tit">디스크 이름</span>
 								<span class="s_txt">{{contents.volume.name}}</span>
+							</li>
+							<li>
+								<span class="s_tit">디스크 타입</span>
+								<span class="s_txt">{{contents.volume.type}}</span>
 							</li>
 							<li>
 								<span class="s_tit">디스크 크기</span>
