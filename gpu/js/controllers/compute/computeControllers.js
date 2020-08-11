@@ -785,9 +785,9 @@ angular.module('gpu.controllers')
 
         ct.fn.copyConnectInfoToClipboard = function (instance) {
             if (instance.image.osType == 'ubuntu') {
-                if (instance.floatingIp) {
-                    common.copyToClipboard(instance.floatingIp);
-                    $scope.main.copyToClipboard(instance.floatingIp, '"' + instance.floatingIp + '"가 클립보드에 복사 되었습니다.');
+                if (instance.fixedIp) {
+                    common.copyToClipboard(instance.fixedIp);
+                    $scope.main.copyToClipboard(instance.fixedIp, '"' + instance.fixedIp + '"가 클립보드에 복사 되었습니다.');
                 } else {
                     common.showAlertWarning("접속 IP가 존재하지 않습니다.");
                 }
@@ -802,9 +802,9 @@ angular.module('gpu.controllers')
                     common.showAlertWarning("접속 URL이 존재하지 않습니다.");
                 }
             } else if (instance.image.osType == 'centos') {
-                if (instance.floatingIp) {
-                    common.copyToClipboard(instance.floatingIp);
-                    $scope.main.copyToClipboard(instance.floatingIp, '"' + instance.floatingIp + '"가 클립보드에 복사 되었습니다.');
+                if (instance.fixedIp) {
+                    common.copyToClipboard(instance.fixedIp);
+                    $scope.main.copyToClipboard(instance.fixedIp, '"' + instance.fixedIp + '"가 클립보드에 복사 되었습니다.');
                 } else {
                     common.showAlertWarning("접속 IP가 존재하지 않습니다.");
                 }
@@ -1818,7 +1818,7 @@ angular.module('gpu.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고
-                $scope.main.goToPage("/iaas/compute");
+                $scope.main.goToPage("/gpu/compute");
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
