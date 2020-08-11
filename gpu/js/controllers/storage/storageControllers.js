@@ -348,7 +348,7 @@ angular.module('gpu.controllers')
         ct.formName          = "storageForm";
         ct.validDisabled = true;
         ct.isTenantResourceLoad = false;
-
+        ct.volume.type       ="";
         ct.volume.name      = 'disk-01';
         ct.storageNameList = [];
 
@@ -393,6 +393,10 @@ angular.module('gpu.controllers')
                 return common.showAlert("이미 사용중인 이름 입니다.");
             }
 
+            if (ct.volume.type == "") {
+                clickCheck = false;
+                return common.showAlert("볼륨타입을 선택해주세요.");
+            }
             ct.fn.createStorageVolumeAction();
         };
 
@@ -432,6 +436,15 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
             });
         };
+        // 볼륨 타입 호출
+        ct.fn.getVolumeTypeList = function() {
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/common/volumeType', 'GET', ct.params , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.volumeTypes = data.content.volumeTypes;
+
+            });
+        };
         
         // val 통과 실제 디스크 생성 호출
         ct.fn.createStorageVolumeAction = function() {
@@ -442,7 +455,7 @@ angular.module('gpu.controllers')
             params.volume = {};
             params.volume.tenantId = ct.data.tenantId;
             params.volume.name = ct.volume.name;
-            params.volume.type = 'HDD';
+            params.volume.type = ct.volume.type;
             params.volume.size = ct.volumeSize;
             params.volume.description = ct.volume.description;
 
@@ -551,6 +564,7 @@ angular.module('gpu.controllers')
         ct.fn.getTenantResource();
         ct.fn.serverList();
         ct.fn.getStorageList();
+        ct.fn.getVolumeTypeList();
 
     })
     // .controller('iaasStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
