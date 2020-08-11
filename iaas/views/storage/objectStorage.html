@@ -1,5 +1,5 @@
 <!-- 용량정보 및 접속정보 -->
-<div class="storage_infoWrap mb50">
+<div ng-if="!!main.userTenantId" class="storage_infoWrap mb50">
 	<ul>
 		<!-- 사용량 -->
 		<li>
@@ -87,14 +87,14 @@
 <!-- //용량정보 및 접속정보 -->
 
 <!-- 버튼영역 -->
-<div class="btnWrap">
+<div ng-if="!!main.userTenantId" class="btnWrap">
 	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>버킷 만들기</button>
 	<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false"><span class="ico ico_usage_view"></span>사용법 안내</button>
 </div>
 <!-- //버튼영역 -->
 
 <!-- 버킷목록 -->
-<div class="storage_bucketWrap">
+<div ng-if="!!main.userTenantId" class="storage_bucketWrap">
 	<ul>
 		<li>
 			<div class="infoBox">
@@ -233,3 +233,19 @@
 	</ul>
 </div>
 <!-- //버킷목록 -->
+
+<!-- 테넌트 생성 전인 경우 -->
+<div ng-if="!main.userTenantId" class="proj_main_cont">
+	<div class="p_main_top">
+		<div class="top_txt">
+			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
+			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+		</div>
+		<div class="top_btn">
+			<a href="" ng-click="main.createPortalOrgSystem('iaas');">
+				<span>프로젝트 생성</span>
+			</a>
+		</div>
+	</div>
+</div>
+<!-- //테넌트 생성 전인 경우 -->
