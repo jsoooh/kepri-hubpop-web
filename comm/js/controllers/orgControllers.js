@@ -679,7 +679,7 @@ angular.module('portal.controllers')
             params['endDate'] = ct.orgData.endDate;
             params['cost'] = !ct.orgData.cost ? 0 : ct.orgData.cost;
             params['description'] = !ct.orgData.description ? "" : ct.orgData.description;
-            params['orgQuotaPlanId'] = ct.orgData.quotaPlan.id;
+            params['orgQuotaPlanId'] = (!ct.orgData.quotaPlan || !ct.orgData.quotaPlan.id) ? 0 : ct.orgData.quotaPlan.id;
             params['paasQuotaGuid'] = !ct.orgData.paasQuotaGuid ? "" : ct.orgData.paasQuotaGuid;
             var orgQuotaValues = [];
             angular.forEach(ct.quotaItems, function (value) {
