@@ -634,11 +634,14 @@ angular.module('common.controllers', [])
             if (!mc.dbMenuList || mc.dbMenuList.length == 0) {
                 mc.setDbMenuList();
             }
+            if (!mc.myMenus || mc.myMenus.length == 0) {
+                mc.getMyMenus();
+            }
             if (angular.isObject(portalOrg) && portalOrg.id) {
-                $timeout(function () {
+                /*$timeout(function () {
                     mc.desplayDbMenuList(portalOrg.myRoleName);
                     $scope.main.urlCheck();
-                }, 100);
+                }, 100);*/
                 common.setPortalOrgKey(portalOrg.id);
                 mc.sltPortalOrg = portalOrg;
                 mc.sltPortalOrgId = portalOrg.id;
@@ -650,10 +653,10 @@ angular.module('common.controllers', [])
                     mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
                 }
             } else {
-                $timeout(function () {
+                /*$timeout(function () {
                     mc.desplayDbMenuList("none");
                     $scope.main.urlCheck();
-                }, 100);
+                }, 100);*/
                 if (mc.sltPortalOrgId) {
                     common.clearPortalOrgKey();
                     mc.sltPortalOrg = {};
@@ -729,7 +732,6 @@ angular.module('common.controllers', [])
                 mc.userTenantGpuId = userTenant2.tenantId;
                 mc.userTenantGpu.id = userTenant2.tenantId;
             }
-            console.log("mc.userTenant : ", mc.userTenant);
         };
 
         mc.syncGetOrganizationByName = function (name) {
@@ -760,7 +762,6 @@ angular.module('common.controllers', [])
                 mc.sltOrganizationGuid = "";
                 mc.sltOrganizationDisplayName = "";
             }
-            console.log("mc.sltOrganization : ", mc.sltOrganization);
         };
 
         mc.syncListAllProjects = function () {
@@ -1126,7 +1127,6 @@ angular.module('common.controllers', [])
                 mc.commLeftFav.dataLoad = false;
             });
         };
-
 
         mc.setLeftCateMenuParams = function (cate_id) {
             mc.leftCateMenuParams = [];
@@ -1758,10 +1758,6 @@ angular.module('common.controllers', [])
                         $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
                     }
                     mc.changePortalOrg(data);
-                    /*if (mc.sltPortalOrg && mc.sltPortalOrg.isUseIaas && mc.sltPortalOrg.iaasSuccessYn == "Y") {
-                        mc.syncGetTenantByName(mc.sltPortalOrg.projectId, mc.sltPortalOrg.orgId);
-                    }*/
-                    mc.goToPage("/comm/projects/projectDetail/" + mc.sltPortalOrgId);
                     mc.loadingMainBody = false;
                 }
             });
@@ -1970,16 +1966,16 @@ angular.module('common.controllers', [])
             }
             $scope.main.setLayout();
             $scope.main.commMenuHide();
-            var policyStop = $interval(function () {
+            /*var policyStop = $interval(function () {
                 if (angular.isFunction($scope.main.getAlarmPolicy)) {
                     $interval.cancel(policyStop);
                     $scope.main.getAlarmPolicy(CONSTANTS.nodeKey.TENANT, undefined, $scope.main.userTenantId);
                 }
-            }, 100);
+            }, 100);*/
 
-            $timeout(function () {
+            /*$timeout(function () {
                 $scope.main.listNotification();
-            }, 100);
+            }, 100);*/
 
             if (_MENU_TYPE_ == 'part') {
                 common.leftMenuShow();

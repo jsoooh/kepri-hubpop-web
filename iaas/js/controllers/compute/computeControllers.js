@@ -176,8 +176,11 @@ angular.module('iaas.controllers')
 
         // 서버메인 tenant list 함수
         ct.fnGetServerMainList = function() {
+            if (!ct.data || !ct.data.tenantId) {
+                common.showAlertWarning('테넌트 정보가 없습니다.');
+                return;
+            }
             $scope.main.loadingMainBody = true;
-
             var param = {
                 tenantId : ct.data.tenantId,
                 queryType : 'list'

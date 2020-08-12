@@ -1699,7 +1699,6 @@ angular.module('portal.controllers')
         };
 
         ct.pageLoadData();
-        $scope.main.getMyMenus();   //메뉴 즐겨찾기 조회
     })
     .controller('commPopOrgProjectSchAddUsersCtrl', function($scope, $location, $state, $stateParams, $translate, $interval, common, cache, ValidationService, orgService, memberService, projectService, CONSTANTS, SITEMAP) {
         _DebugConsoleLog('orgDetailControllers.js : commPopOrgProjectSchAddUsersCtrl', 1);
