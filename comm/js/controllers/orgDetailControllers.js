@@ -13,7 +13,7 @@ angular.module('portal.controllers')
         ct.isOrgManager = false;
         /* 20.04.24 - 프로젝트 목록 : 우측 메뉴 기능 by ksw */
         /* 사용자 변경을 통해 DetailController로 넘어올 경우 구성원 탭 선택(기본은 대시보드) */
-        if (orgService.changeUser == true) {
+        if (orgService.changeUser) {
             ct.sltInfoTab = 'member';
         } else {
             ct.sltInfoTab = 'dashboard';
