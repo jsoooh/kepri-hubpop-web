@@ -1549,7 +1549,7 @@ angular.module('iaas.controllers')
             total : 0
         };
 
-        // Snapshot List
+        // orgCode 내의 다른 테넌트 스냅샷 조회
         ct.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -1558,63 +1558,62 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshotList/others', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && angular.isArray(data.content)) {
-                    common.objectOrArrayMergeData(ct.instanceSnapshotList, data.content);
-                    angular.forEach(ct.instanceSnapshotList, function (item) {
+                    // 스냅샷 리스트중 참여중인 프로젝트만 필터링
+                    ct.instanceSnapshotList = data.content.filter(function (item) {
                         var userTenant = common.objectsFindCopyByField(ct.userTenants, "id", item.tenantId);
                         if (userTenant && userTenant.korName) {
                             item.portalOrgName = userTenant.korName;
+                            return item;
                         }
                     });
                     ct.pageOptions.total = ct.instanceSnapshotList.length;
                 }
-                $scope.main.loadingMainBody = false;
             });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+            returnPromise.error(function (data) {
                 common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function () {
                 $scope.main.loadingMainBody = false;
             });
         };
 
+        // 테넌트 리스트 조회
         ct.fn.getUserTenants = function() {
+            $scope.main.loadingMainBody = true;
             var param = {
                 orgCode : ct.projectId
             };
             ct.userTenants = [];
-            $scope.main.loadingMainBody = false;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.length > 0 && data.content[0].teams && data.content[0].teams.length > 0) {
-                    ct.userTenants = data.content[0].teams;
-                    angular.forEach(ct.userTenants, function (item) {
-                        var portalOrg = common.objectsFindCopyByField(ct.portalOrgs, "orgId", item.teamCode);
-                        if (portalOrg && portalOrg.orgName) {
-                            item.korName = portalOrg.orgName;
-                        }
+                    // 테넌트 리스트중 참여중인 프로젝트만 필터링
+                    angular.forEach(ct.portalOrgs, function (item) {
+                        var tenant = common.objectsFindCopyByField(data.content[0].teams, "teamCode", item.orgId);
+                        if (tenant)
+                            ct.userTenants.push(tenant);
                     });
                 }
                 ct.fn.getInstanceSnapshotList();
             });
-            returnPromise.error(function (data, status, headers) {
+            returnPromise.error(function (data) {
+                common.showAlertError(data.message);
             });
         };
 
+        // select 변경
         ct.fn.onChangeSchPortalOrg = function(schPortalOrgId) {
             var userTenant = null;
             if (schPortalOrgId) {
                 userTenant = common.objectsFindCopyByField(ct.userTenants, "teamCode", schPortalOrgId);
             }
-            if (userTenant && userTenant.id) {
+            if (schPortalOrgId == "") {
+                ct.schFilterTenantId = "";
+            } else if (userTenant && userTenant.id) {
                 ct.schFilterTenantId = userTenant.id;
             } else {
-                ct.schFilterTenantId = "";
+                ct.schFilterTenantId = null;
             }
-        };
-
-        ct.fn.changeCurrentPage = function(currentPage) {
-            ct.pageOptions.currentPage = currentPage;
         };
 
         ct.fn.getUserTenants();

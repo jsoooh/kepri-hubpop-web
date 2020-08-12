@@ -553,6 +553,12 @@ angular.module('gpu.controllers')
                 var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'DELETE', param);
                 returnPromise.success(function (data, status, headers) {
                     if (status == 200 && data) {
+                        for (var idx in ct.serverMainList) {
+                            if (id == ct.serverMainList[idx]) {
+                                computeDetailService.setMonitoringYn(ct.serverMainList[idx])
+                                break;
+                            }
+                        }
                         common.showAlertSuccess('삭제되었습니다.');
                         ct.fnGetServerMainList();
                     } else {
