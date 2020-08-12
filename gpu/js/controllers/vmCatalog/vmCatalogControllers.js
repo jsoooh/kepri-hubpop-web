@@ -85,7 +85,7 @@ angular.module('gpu.controllers')
     ct.data.clusterCnt = 3;
     ct.data.serverCnt = 1;
     ct.data.securityGroup = "default";
-    ct.data.volumeType = "RBD";
+    ct.data.volumeType = "HDD";
     ct.data.lbAlgorithm = "ROUND_ROBIN";
     ct.data.volumeMountPoint = "/dev/vdb";
     ct.data.volumeMountPath = "/mnt/data";
