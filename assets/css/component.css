@@ -1,8 +1,10 @@
 @charset "utf-8";
 /* 허브팝 공용 CSS */
-/* A2M KMH 2020-03-10 */
-/* A2M KSI 2020-04-24 */
 /* A2M JH 2020-07-13 */
+
+select::-ms-expand {
+  display: none;
+}
 .ft-noto {
   font-family: "Noto Sans KR";
 }
@@ -920,7 +922,6 @@ button {
 .btn.btn-success {
   background-color: #249b97;
   border-color: #249b97;
-  color:#fff;
 }
 .btn.btn-success:hover,
 .btn.btn-success:focus {
@@ -1653,7 +1654,7 @@ span.btn.btn-danger:focus {
 }
 /* pagination */
 .pagination {
-  margin: 15px 0 0;
+  margin: 20px 0 0 0;
 }
 .pagination > li {
   display: inline-block;
@@ -1806,6 +1807,12 @@ span.btn.btn-danger:focus {
 .label.label-warning[href]:focus {
   background-color: #fb6340;
 }
+.label.label-pill.label-round.label-ico {
+  font-size:14px;
+  padding: 3px 5px !important;
+}
+
+
 .badge {
   margin-left: 5px;
   vertical-align: text-bottom;
@@ -2364,8 +2371,6 @@ span.btn.btn-danger:focus {
 .modal-body .project-wrap .project .tit b {font-size:15px;margin-right:3px;}
 .modal-body .project-wrap .project .date {color:#757575;margin-bottom:0;}
 .modal-body .project-wrap .project-btn {padding-top:7px;}
-
-
 
 .modal-footer {
   padding: 11px 20px;
@@ -3332,6 +3337,7 @@ label {
 .form-group {
   position: relative;
   margin-bottom: 10px;
+  vertical-align:middle;
 }
 .form-group:last-child {
   margin-bottom: 0;
@@ -5940,6 +5946,9 @@ table.dataTable tbody > tr > .selected {
   border-left: 1px solid #e4e4e4;
   border-right: 1px solid #e4e4e4;
 }
+.dataTables_wrapper .row + .row {
+    margin-top: 0;
+}
 .scroll-content .mCustomScrollBox .table-wrap .table-in-table, 
 .scroll-content .mCustomScrollBox .table.table-outline,
 .scroll-content .mCustomScrollBox .table.table-outline th,
@@ -6017,6 +6026,12 @@ table.dataTable tbody > tr > .selected {
 }
 .panel .table-bottom-wrap {
   margin-bottom: 20px;
+}
+.panel .table-bottom-wrap nav {
+  margin-right: 20px;
+}
+.panel .table-bottom-wrap nav .pagination {
+  margin-top: 0;
 }
 .table-path {padding:15px 10px 0 20px;font-size:13px;}
 .table-path .tit {font-weight:600;}
@@ -6787,7 +6802,7 @@ h6,
   color: #9d9d9d;
 }
 .card-info-area .date {
-  font-size: 11px;
+  font-size: 12px;
   color: #7d7d7d;
   line-height: 20px;
 }
@@ -7034,16 +7049,26 @@ h6,
   margin-right: 0;
 }
 .card-icon-list span:nth-child(1) .feather-icon {	
-  color:#585858;
+  color:#545c6b;
 }
 .card-icon-list span:nth-child(2) .feather-icon {	
-  color:#f52628;
+  color:#3977d5;
 }
 .card-icon-list span:nth-child(3) .feather-icon {	
-  color:#225985;
+  color:#f5365c;
 }
 .card-icon-list span .feather {	
   line-height: 14px;
+}
+.card-icon-list span i {	
+  font-size:16px;
+  margin-right:2px;
+}
+.card-icon-list span:nth-child(2) i {	
+  margin-right:5px;
+}
+.card-icon-list span i.on {
+	display:none;
 }
 /* blank page 빈페이지 */
 .blank-page {
@@ -7102,7 +7127,6 @@ h6,
 /* suser write 1 */
 .caution-star {
   display: inline-block;
-  vertical-align: middle;
   color: #f5365c;
 }
 .write-sub-title {
@@ -8055,3 +8079,81 @@ h6,
     box-shadow: 9999px 0 0 -5px #fff;
   }
 }
+
+/* Tab Scroll */
+.nav-scr {
+    position:relative;
+    margin:0 auto;
+    overflow:hidden;
+	padding:5px;
+  	height:47px;
+}
+.nav-scr .list {
+    position:absolute;
+    left:0px;
+    top:0px;
+  	min-width:3000px;
+    margin-top:0px;		
+}
+.nav-scr .list li{
+	display:table-cell;
+    position:relative;
+    text-align:center;
+    cursor:grab;
+    cursor:-webkit-grab;
+    color:#efefef;
+    vertical-align:middle;
+}
+.nav-tabs-wrap .nav-scroll {
+  position: absolute;
+  top: 0;
+  text-align:center;
+  cursor:pointer;
+  white-space:no-wrap;
+  vertical-align:middle;
+  padding:13px 7px 10px 7px;	
+  background: #fff;  
+  z-index: 1;
+}
+.nav-tabs-wrap .nav-scroll.nav-scroll-right{
+  float:right;
+  right: 0;
+}
+.nav-tabs-wrap .nav-scroll.nav-scroll-left {
+  float:right;
+  right: 28px;
+}
+
+.nav-tabs-wrap.nav-src-line .nav-scroll {
+  padding:13px 7px 11px 7px;	
+  background: #f8f8f9;  
+}
+.nav-tabs-wrap.nav-src-line .nav-scr .nav-tabs.list.nav-tabs-line {
+  height:47px;
+}
+
+/* IE */
+@media screen and (min-width:0\0){
+  .table {
+	border-collapse: separate;  
+  }
+  .board-warp .table {
+	border-top:none;
+	border-right:1px solid #e4e4e4;
+	border-left:1px solid #e4e4e4;
+  }
+  .board-warp .table th .caution-star {
+	position: absolute;
+    top: auto;
+    left: 10px;
+    margin-top: 0;
+  }
+
+
+
+
+
+} 
+
+
+

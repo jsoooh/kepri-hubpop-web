@@ -5,7 +5,8 @@
 	$(document).on("click", "#header #gnb .depth1-item > a", function(e){
 		if($(this).next('.depth2-list').length == 1) {
 			e.preventDefault();
-			$(this).parent().addClass('active').siblings().removeClass('active');
+			$(this).parent().toggleClass('active');
+			// $(this).parent().addClass('active').siblings().removeClass('active');
 	   }
 	});
  });
@@ -95,4 +96,7 @@ $(function(){
 	});
 });
 
-
+// contents 툴팁 옵션 변경
+$(function(){
+	$('[data-toggle="tooltip"]').tooltip({trigger : 'hover'}); 
+});
