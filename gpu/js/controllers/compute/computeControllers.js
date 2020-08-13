@@ -1057,13 +1057,13 @@ angular.module('gpu.controllers')
         if (ct.data.tenantId) {
             ct.fnGetServerMainList();
             ct.fngetLbList();
-        } else { // 프로젝트 선택
+        } /*else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
             showAlert.then(function () {
                 $scope.main.goToPage("/");
             });
             return false;
-        }
+        }*/
 
         // 인스턴스 설명 팝업
         ct.fn.descriptionFormOpen = function($event, instance, state) {
