@@ -1062,7 +1062,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: 'Nanum Gothic', "Noto Sans KR", sans-serif;
   font-size: 14px;
   line-height: 1.57142857;
   color: #222;
@@ -1163,10 +1163,9 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 300;
   line-height: 1.2;
-  color: #000000;
+  color: #555555;
 }
 h1 small,
 h2 small,
@@ -19107,6 +19106,9 @@ div.widget-title {
 }
 .padding-top-5 {
   padding-top: 5px !important;
+}
+.padding-top-8 {
+  padding-top: 8px !important;
 }
 .padding-top-10 {
   padding-top: 10px !important;
