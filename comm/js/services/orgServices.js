@@ -52,7 +52,6 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams));
         };
 
-
         /*조직 사용자 조회*/
         orgService.listOrgUsers = function (id) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/users', 'GET'));
@@ -78,19 +77,6 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/orgName', 'PUT', param));
         };
 
-        /*
-        * 연계 재실행
-        *   -조직 재생성
-        *   -조직 쿼터 재실행
-        * */
-        orgService.reRunSystemLink = function (id, quotaId) {
-            if (quotaId == null) {
-                return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/systemLink', 'PUT'));
-            } else {
-                return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/systemLink/quota/' + quotaId, 'PUT'));
-            }
-        };
-
         /*조직 사용자 추가/초대*/
         orgService.orgUserAdd = function (id, param) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/orgUserAdd', 'POST', param, 'application/x-www-form-urlencoded'));
@@ -104,11 +90,6 @@ angular.module('portal.services')
         /*[조직삭제] 실행*/
         orgService.deleteOrg = function (id) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id, 'DELETE'));
-        };
-
-        /*삭제요청 : 삭제요청으로 상태 변경*/
-        orgService.deleteOrgstatusCall = function (id) {
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/deleteStatusCall', 'PUT'));
         };
 
         /*조직 책임자 수정*/
