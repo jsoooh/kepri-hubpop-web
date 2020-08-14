@@ -1,12 +1,12 @@
 <!-- 목록 이미지형/리스트형 선택 버튼 -->
-<div class="btnArea text-right">
+<div ng-if="!!main.userTenantGpuId" class="btnArea text-right">
     <!-- 선택 된 class="on" 추가 -->
     <button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
     <button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트형</button>
 </div>
 <!-- //목록 이미지형/리스트형 선택 버튼 -->
 <!-- 프로젝트 정보 -->
-<div class="cBox type0 projt-mana mt30">
+<div ng-if="!!main.userTenantGpuId" class="cBox type0 projt-mana mt30">
     <div class="pull-left">
         <h4 class="c-tit">전체 서비스 <em class="point1">({{ (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length }})</em></h4>
     </div>
@@ -22,7 +22,7 @@
     </div>
 </div>
 <!-- //프로젝트 정보 -->
-<ul ng-show="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'image'" class="ul-panel thum_style">
+<ul ng-show="!!main.userTenantGpuId && (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'image'" class="ul-panel thum_style">
     <li ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
         <div class="panelWrap">
             <div class="panel type6 serv_list">
@@ -95,7 +95,7 @@
     </li>
     <!-- //panel -->
 </ul>
-<div ng-if="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'list'" class="tbl type1">
+<div ng-if="!!main.userTenantGpuId && (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'list'" class="tbl type1">
     <table class="table">
         <colgroup>
             <col style="width: 12%;">
@@ -161,8 +161,24 @@
         </tbody>
     </table>
 </div>
-<div ng-show="(contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length == 0" class="proj_list_area">
+<div ng-show="!!main.userTenantGpuId && (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length == 0" class="proj_list_area">
     <ul class="ul-panel dash_list no_data">
         <li><p class="no_data_txt pd0">생성된 서비스가 없습니다.</p></li>
     </ul>
 </div>
+
+<!-- 테넌트 생성 전인 경우 -->
+<div ng-if="!main.userTenantGpuId" class="proj_main_cont">
+    <div class="p_main_top">
+        <div class="top_txt">
+            <span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
+            <span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+        </div>
+        <div class="top_btn">
+            <a href="" ng-click="main.createPortalOrgSystem('gpu');">
+                <span>프로젝트 생성</span>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- //테넌트 생성 전인 경우 -->
