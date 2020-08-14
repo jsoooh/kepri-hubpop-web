@@ -1736,7 +1736,9 @@ angular.module('common.controllers', [])
         };
 
         // 조직 정보 조회
+        mc.searchCnt = 0;
         mc.getOrgProject = function (system) {
+            mc.searchCnt++;
             mc.searchFirst = false;
             if (!mc.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
                 mc.searchFirst = true;
@@ -1744,7 +1746,7 @@ angular.module('common.controllers', [])
             var orgPromise = portal.portalOrgs.getPotalOrg(mc.sltPortalOrgId);
             orgPromise.success(function (data) {
                 //생성 완료되지 않은 경우 재조회.
-                if (data.statusCode == "updating") {
+                if (data.statusCode == "updating" && mc.searchCnt < 10) {
                     if (mc.searchFirst) {
                         common.showAlertWarning("프로젝트 생성 중입니다.");
                     }
@@ -1753,6 +1755,7 @@ angular.module('common.controllers', [])
                         mc.getOrgProject();
                     }, 2000);
                 } else {
+                    mc.searchCnt = 0;
                     if ($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
                         $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]);
                         $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
