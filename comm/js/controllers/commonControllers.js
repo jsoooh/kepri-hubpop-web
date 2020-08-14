@@ -45,7 +45,6 @@ angular.module('common.controllers', [])
         mc.sltGroupMenuIconId = "";         //좌측 대메뉴 선택
         mc.allMenuOpen = false;             //전체 메뉴 오픈 여부
         mc.sltMenu = {};                    //좌측 메뉴 선택
-        mc.topProjectMenuOpen = false;      //top 메뉴 오픈 여부. 프로젝트명 옆
         mc.dashboardFull = false;           //대시보드 화면 전체보기
         mc.myServiceOpen = true;            //메뉴 즐겨찾기 dropdown
 
@@ -108,15 +107,6 @@ angular.module('common.controllers', [])
                 mc.dashboardFull = false;
             } else {
                 mc.dashboardFull = true;
-            }
-        };
-
-        //top 메뉴 클릭 : 프로젝트명 옆
-        mc.topProjectMenuClick = function () {
-            if (mc.topProjectMenuOpen) {
-                mc.topProjectMenuOpen = false;
-            } else {
-                mc.topProjectMenuOpen = true;
             }
         };
 
