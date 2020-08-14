@@ -9,10 +9,10 @@
 	
 	<!-- 서버 정보 -->
 	<div class="card-input-wrap">
-		<div class="row" ng-if="!!main.userTenantId">
+		<div class="row">
 			<div class="col-md-6">
 				<div class="font-size-18 padding-top-5">
-					<b>전체 서버 <span class="color-primary">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</span></b>
+					<b>전체 서버 <span class="color-primary" ng-if="!!main.userTenantId">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</span></b>
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -21,13 +21,13 @@
 					<div class="form-group inline-block margin-bottom-0">
 						<div class="input-icon-type2 icon-right" ng-if="contents.tabIndex == 0">
 							<input type="text" class="form-control form-control-md" placeholder="서버 검색" style="width:300px;" ng-model="contents.schFilterText" >
-							<span class="input-icon-addon" ng-click="contents.schFilterText = ' ' ">
+							<span class="input-icon-addon" ng-click="contents.schFilterText = ''">
 								<i class="xi-close"></i>
 							</span>
 						</div>
 						<div class="input-icon-type2 icon-right" ng-if="contents.tabIndex == 1">
 							<input type="text" class="form-control form-control-md" placeholder="부하분산 서버 검색" style="width:300px;" ng-model="contents.schLbFilterText">
-							<span class="input-icon-addon" ng-click="contents.schFilterText = ' ' ">
+							<span class="input-icon-addon" ng-click="contents.schLbFilterText = ''">
 								<i class="xi-close"></i>
 							</span>
 						</div>

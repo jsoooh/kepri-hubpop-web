@@ -16,9 +16,9 @@
 <!-- //목록 이미지형/리스트형 선택 버튼 -->
 
 <!-- 프로젝트 정보 -->
-<div ng-if="!!main.userTenantGpuId" class="cBox type0 projt-mana mt30">
+<div class="cBox type0 projt-mana mt30">
     <div class="pull-left">
-        <h4 class="c-tit">전체 서버 <em class="point1">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</em></h4>
+        <h4 class="c-tit">전체 서버 <em class="point1" ng-if="!!main.userTenantGpuId">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</em></h4>
     </div>
     <div class="pull-right">
         <!-- 검색 -->
