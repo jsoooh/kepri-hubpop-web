@@ -215,6 +215,24 @@
 .app-info-area .round-img.img_line {background:none; border:1px solid #e3e3e3;}
 .app-info-area .round-img span.txt {display: inline-block; width: 100%; text-align: center; font-size:16px;}
 
+.card-body-info {position:absolute; top:0; left:0; z-index: 4; float: left; width:100%; height:100%; font-size: 14px; text-align: left; list-style: none; background:#fff; padding:0 25px 25px; cursor:default;}
+.card-body-info .info-head {position:relative;}
+.card-body-info .info-head .btn-close {position:absolute; top:32px; right:8px; font-size:18px;}
+.card-body-info .info-head .btn-close i {display: block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 25px; -webkit-transition: all 0.2s linear; -o-transition: all 0.2s linear; transition: all 0.2s linear; font-size: 20px;}
+.card-body-info .info-head .btn-close:hover i {transform: translate(-50%, -50%) rotate(180deg);}
+.card-body-info  button {vertical-align:inherit;}
+.card-body-info .domain_txt {display:inline-block; vertical-align:middle; width: 65%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+
+/*서비스 시작하기*/
+.welcome_layer {position:relative;}
+.welcome_layer .blank-page {padding:150px 0; margin:0;}
+.welcome_layer .guide_fnt {display:inline-block; font-family:'NanumPen'; font-size:27px;}
+.welcome_layer .guide_fnt.arrw_btm {position:absolute; top:0; left: 110px;}
+.welcome_layer .guide_fnt.arrw_top {position:absolute ;top:-77px; left: 350px;}
+.welcome_layer .guide_fnt::before {display:inline-block; content:''; width:34px; height:28px; background:url("../../images/bg_arrow.png") no-repeat; margin-right:10px;}
+.welcome_layer .guide_fnt.arrw_btm::before {background-position:left top;}
+.welcome_layer .guide_fnt.arrw_top::before {background-position:-48px center;}
+
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}
