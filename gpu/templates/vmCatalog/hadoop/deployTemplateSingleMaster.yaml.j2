@@ -1,34 +1,41 @@
 heat_template_version: '2018-08-31'
 
-description: hadoop multi node template
+description: hadoop test template
+
+parameter_groups:
+- parameters:
+  - image
+  - flavor
+  - availability_zone
+  - key_name
+  - private_net
+  - root_password
 
 parameters:
-  api_end_point:
-    type: string
   image:
+    label: "이미지"
     type: string
     default: CentOS76-Hadoop.raw
   availability_zone:
+    label: "가용구역"
     type: string
-  master_flavor:
+    default: zone01
+  flavor:
+    label: "사양"
     type: string
-  worker_flavor:
-    type: string
+    default: m1.small
   key_name:
+    label: "보안키"
     type: string
-  security_group:
+    default: kepri-msa_default
+  private_net:
+    label: "내부 내트워크"
     type: string
-  provider_net:
-    type: string
-  provider_subnet:
-    type: string
+    default: provider01
   root_password:
+    label: "root 비밀번호"
     type: string
-  hive_password:
-    type: string
-  private_key:
-    type: string
-
+    default: crossent12
 
 resources:
 
@@ -77,7 +84,33 @@ resources:
 
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
-            $private_key
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
+            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
+            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
+            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
+            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
+            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
+            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
+            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
+            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
+            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
+            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
+            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
+            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
+            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
+            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
+            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
+            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
+            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
+            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
+            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
+            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
+            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
+            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
+            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
+            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
+            -----END RSA PRIVATE KEY-----
             EOF
 
             chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
@@ -251,7 +284,6 @@ resources:
             sudo su - centos -c "start-yarn.sh "
             echo "##### [04].start-dfs end ###########"
 
-{% if sparkUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 02.spark setting start ###########"
@@ -260,9 +292,7 @@ resources:
             /home/centos/spark/sbin/start-master.sh
             echo "##### 02.spark setting end ###########"
             EOF
-{% endif %}
 
-{% if hbaseUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 03.zookeeper setting start ###########"
@@ -364,10 +394,11 @@ resources:
             EOF
 
             echo "##### 04.hbase setting end ###########"
-{% endif %}
 
             echo "##### [05]hive setting start ###########"
             echo "mariadb setting start"
+            #cp /etc/my.cnf /etc/my.cnf.backup
+            #sed -i 's/^port            = 3306/port            = $service_port/' /etc/my.cnf
             sleep 1
             systemctl start mariadb
             /usr/bin/mysqladmin -u root password '$root_password'
@@ -441,7 +472,33 @@ resources:
 
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
-            $private_key
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
+            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
+            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
+            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
+            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
+            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
+            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
+            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
+            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
+            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
+            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
+            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
+            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
+            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
+            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
+            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
+            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
+            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
+            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
+            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
+            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
+            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
+            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
+            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
+            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
+            -----END RSA PRIVATE KEY-----
             EOF
 
             chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
@@ -573,7 +630,6 @@ resources:
             </configuration>
             EOF
 
-{% if sparkUse %}
             echo "##### 02.spark setting start ###########"
             #yum -y install nc
 
@@ -594,9 +650,7 @@ resources:
             /home/centos/spark/sbin/start-slave.sh 'spark://hmaster:7077'
             echo "##### 02.spark setting end ###########"
             EOF
-{% endif %}
 
-{% if hbaseUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 03.zookeeper setting start ###########"
@@ -665,7 +719,6 @@ resources:
 
             echo "##### 04.hbase setting end ###########"
             EOF
-{% endif %}
 
   init_config3:
     type: OS::Heat::SoftwareConfig
@@ -696,9 +749,33 @@ resources:
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
             -----BEGIN RSA PRIVATE KEY-----
-            $private_key
+            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
+            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
+            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
+            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
+            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
+            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
+            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
+            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
+            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
+            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
+            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
+            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
+            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
+            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
+            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
+            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
+            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
+            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
+            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
+            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
+            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
+            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
+            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
+            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
+            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
+            -----END RSA PRIVATE KEY-----
             EOF
-
             chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
             chmod 600 /home/centos/.ssh/kepri-msa_default.pem
 
@@ -828,7 +905,6 @@ resources:
             </configuration>
             EOF
 
-{% if sparkUse %}
             echo "##### 02.spark setting start ###########"
             #yum -y install nc
 
@@ -849,10 +925,7 @@ resources:
             /home/centos/spark/sbin/start-slave.sh 'spark://hmaster:7077'
             echo "##### 02.spark setting end ###########"
             EOF
-{% endif %}
 
-
-{% if hbaseUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 03.zookeeper setting start ###########"
@@ -920,12 +993,11 @@ resources:
 
             echo "##### 04.hbase setting end ###########"
             EOF
-{% endif %}
 
   server1:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: master_flavor }
+      flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
@@ -938,7 +1010,7 @@ resources:
   server2:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: worker_flavor }
+      flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
@@ -951,7 +1023,7 @@ resources:
   server3:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: worker_flavor }
+      flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:

@@ -1,0 +1,1261 @@
+heat_template_version: '2018-08-31'
+
+description: hadoop test template
+
+parameter_groups:
+- parameters:
+  - image
+  - flavor
+  - availability_zone
+  - key_name
+  - private_net
+  - root_password
+
+parameters:
+  image:
+    label: "이미지"
+    type: string
+    default: CentOS76-Hadoop.raw
+  availability_zone:
+    label: "가용구역"
+    type: string
+    default: zone01
+  flavor:
+    label: "사양"
+    type: string
+    default: m1.small
+  key_name:
+    label: "보안키"
+    type: string
+    default: kepri-msa_default
+  private_net:
+    label: "내부 내트워크"
+    type: string
+    default: provider01
+  root_password:
+    label: "root 비밀번호"
+    type: string
+    default: crossent12
+
+resources:
+
+  server1_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: private_net }
+
+  server2_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: private_net }
+
+  server3_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: private_net }
+
+
+  init_config1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $root_password: { get_param: root_password }
+            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $node1_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $node2_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server_addresses:
+              list_join:
+                - ','
+                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "01.hadoop core install start ......7"
+
+            cat <<EOF>> /etc/ssh/ssh_config
+            Port 20022
+            EOF
+
+            sudo service sshd restart
+
+
+            cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
+            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
+            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
+            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
+            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
+            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
+            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
+            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
+            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
+            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
+            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
+            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
+            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
+            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
+            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
+            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
+            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
+            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
+            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
+            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
+            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
+            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
+            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
+            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
+            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
+            -----END RSA PRIVATE KEY-----
+            EOF
+
+            chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
+            chmod 600 /home/centos/.ssh/kepri-msa_default.pem
+
+            echo "address1=$master_address"
+            echo "address2=$node1_address"
+            echo "address3=$node2_address"
+
+            masterRun=1
+            while [[ masterRun -eq 1 ]]
+            do
+              echo "nc -z $node1_address 20022"
+              nc -z $node1_address 20022
+              masterRun=$?
+              sleep 5
+            done
+            echo "node1 active"
+
+            masterRun=1
+            while [[ masterRun -eq 1 ]]
+            do
+              echo "nc -z $node2_address 20022"
+              nc -z $node2_address 20022
+              masterRun=$?
+              sleep 5
+            done
+            echo "node2 active"
+
+            echo "##### 01.hadoop core setting start ###########"
+            echo "[01] host setting"
+            echo "##### 01.1 host file setting ###########"
+            cat <<EOF>> /etc/hosts
+            $master_address hmaster
+            $node1_address hworker-1
+            $node2_address hworker-2
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            mkdir -p /home/centos/hadoop/pids
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/data
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/name
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/journalnode
+            sudo chmod 755 /home/centos/hadoop/pids
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/data
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/name
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/journalnode
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 01.2 add_known_hosts ###########"
+            ssh-keyscan -p 20022 localhost,0.0.0.0 >> /home/centos/.ssh/known_hosts
+            ssh-keyscan -p 20022 hmaster,$master_addres >> /home/centos/.ssh/known_hosts
+            ssh-keyscan -p 20022 hworker-1,$node1_address >> /home/centos/.ssh/known_hosts
+            ssh-keyscan -p 20022 hworker-2,$node2_address >> /home/centos/.ssh/known_hosts
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 01.3 add_authorized_keys ###########"
+            ssh-keygen -b 2048 -t rsa -f /home/centos/.ssh/id_rsa -q -N ''
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@localhost  "cat - >> /home/centos/.ssh/authorized_keys"
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hmaster  "cat - >> /home/centos/.ssh/authorized_keys"
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-1  "cat - >> /home/centos/.ssh/authorized_keys"
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-2  "cat - >> /home/centos/.ssh/authorized_keys"
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            cp ~/hadoop/share/hadoop/tools/lib/hadoop-aws-2.7.7.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/aws-java-sdk-1.7.4.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/joda-time-2.10.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/jackson-*.jar  ~/hadoop/share/hadoop/common/lib/
+            export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
+            EOF
+
+            echo "[01]hadoop config file update"
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/hadoop_env.sh
+            export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
+            EOF
+
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/core-site.xml
+            <configuration>
+            <property>
+                <name>fs.defaultFS</name>
+                <value>hdfs://hmaster:9000</value>
+            </property>
+            <property>
+                 <name>ha.zookeeper.quorum</name>
+                 <value>hmaster:2181,hworker-1:2181,hworker-2:2181</value>
+            </property>
+            <property>
+                <name>fs.s3a.impl</name>
+                <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+            </property>
+            <property>
+              <name>fs.s3a.aws.credentials.provider</name>
+              <value>org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider</value>
+            </property>
+            <property>
+              <name>fs.s3a.access.key</name>
+              <value>KB3R94LCZUUHGFI9DH92</value>
+            </property>
+            <property>
+              <name>fs.s3a.secret.key</name>
+              <value>gD4jR0mWRur8lWdxEUXZhBD8NKIW5kbrgiBSaMwq</value>
+            </property>
+            <property>
+              <name>fs.s3a.connection.ssl.enabled</name>
+              <value>false</value>
+            </property>
+            <property>
+              <name>fs.s3a.endpoint</name>
+              <value>101.55.126.196:7480</value>
+            </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/hdfs-site.xml
+            <configuration>
+                    <property>
+                            <name>dfs.namenode.name.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/name</value>
+                    </property>
+                    <property>
+                            <name>dfs.datanode.data.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/data</value>
+                    </property>
+                    <property>
+                            <name>dfs.journalnode.edits.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/journal</value>
+                    </property>
+                    <property>
+                            <name>dfs.nameservices</name>
+                            <value>hadoop-cluster</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.namenodes.hadoop-cluster</name>
+                            <value>nn1,nn2</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.rpc-address.hadoop-cluster.nn1</name>
+                            <value>hmaster:9000</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.rpc-address.hadoop-cluster.nn2</name>
+                            <value>hworker-1:9000</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.http-address.hadoop-cluster.nn1</name>
+                            <value>hmaster:50070</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.http-address.hadoop-cluster.nn2</name>
+                            <value>hworker-1:50070</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.shared.edits.dir</name>
+                            <value>qjournal://hmaster:8485;hworker-1:8485;hworker-2:8485/hadoop-cluster</value>
+                    </property>
+                    <property>
+                            <name>dfs.client.failover.proxy.provider.hadoop-cluster</name>
+                            <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.fencing.methods</name>
+                            <value>sshfence</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.fencing.ssh.private-key-files</name>
+                            <value>/home/centos/.ssh/id_rsa</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.automatic-failover.enabled</name>
+                            <value>true</value>
+                    </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/mapred-site.xml
+            <configuration>
+                <property>
+                    <name>mapreduce.job.ubertask.enable</name>
+                    <value>true</value>
+                </property>
+                <property>
+                    <name>mapreduce.framework.name</name>
+                    <value>yarn</value>
+                </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/yarn-site.xml
+            <configuration>
+            <property>
+                <name>yarn.nodemanager.aux-services</name>
+                <value>mapreduce_shuffle</value>
+            </property>
+            <property>
+                <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+            <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+            </property>
+            <property>
+                <name>yarn.resourcemanager.hostname</name>
+                <value>hmaster</value>
+            </property>
+            <property>
+                <name>yarn.application.classpath</name>
+                <value>
+                    /home/centos/hadoop/etc/hadoop,
+                    /home/centos/hadoop/share/hadoop/common/*,
+                    /home/centos/hadoop/share/hadoop/common/lib/*,
+                    /home/centos/hadoop/share/hadoop/hdfs/*,
+                    /home/centos/hadoop/share/hadoop/hdfs/lib/*,
+                    /home/centos/hadoop/share/hadoop/mapreduce/*,
+                    /home/centos/hadoop/share/hadoop/mapreduce/lib/*,
+                    /home/centos/hadoop/share/hadoop/yarn/*,
+                    /home/centos/hadoop/share/hadoop/yarn/lib/*
+                </value>
+            </property>
+            </configuration>
+            EOF
+
+            sudo -- sh -c "echo hworker-1 > /home/centos/hadoop/etc/hadoop/slaves"
+            sudo -- sh -c "echo hworker-2 >> /home/centos/hadoop/etc/hadoop/slaves"
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 03.zookeeper setting start ###########"
+            mkdir /home/centos/zookeeper/tmp
+            cp /home/centos/zookeeper/conf/zoo_sample.cfg /home/centos/zookeeper/conf/zoo.cfg
+            cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
+            dataDir=/home/centos/zookeeper/tmp
+            server.1=hmaster:2888:3888
+            server.2=hworker-1:2888:3888
+            server.3=hworker-2:2888:3888
+            EOF
+            echo "1" > /home/centos/zookeeper/tmp/myid
+            chown centos:centos /home/centos/zookeeper/tmp/myid
+            chmod 777 /home/centos/zookeeper/tmp/myid
+            EOF
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            /home/centos/zookeeper/bin/zkServer.sh start
+            echo "##### 03.zookeeper setting end ###########"
+            EOF
+
+            echo "#####[00]ZooKeeper 모든노드 실행 확인 #####"
+            masterRun=1
+            while [[ masterRun -eq 1 ]]
+            do
+              echo "nc -z $node1_address 3888"
+              nc -z $node1_address 3888
+              masterRun=$?
+              sleep 5
+            done
+            echo "zookeeper node1 active"
+
+            masterRun=1
+            while [[ masterRun -eq 1 ]]
+            do
+              echo "nc -z $node2_address 3888"
+              nc -z $node2_address 3888
+              masterRun=$?
+              sleep 5
+            done
+            echo "zookeeper node2 active"
+
+
+            echo "#####[01]ZooKeeper 초기화 #####"
+            sudo su - centos -c "hdfs zkfc -formatZK"
+
+            echo "#####[02]모든 서버에서 journalnode 시작 #####"
+            sudo su - centos -c "ssh hmaster '~/hadoop/sbin/hadoop-daemon.sh start journalnode'"
+            sudo su - centos -c "ssh hworker-1 '~/hadoop/sbin/hadoop-daemon.sh start journalnode'"
+            sudo su - centos -c "ssh hworker-2 '~/hadoop/sbin/hadoop-daemon.sh start journalnode'"
+
+            echo "#####[03]Namenode 초기화 및 namenode 실행 #####"
+            sudo su - centos -c "hadoop namenode -format -force "
+            sudo su - centos -c "~/hadoop/sbin/hadoop-daemon.sh start namenode "
+
+            echo "#####[04]FailOverController 실행 #####"
+            sudo su - centos -c "~/hadoop/sbin/hadoop-daemon.sh start zkfc"
+
+            echo "#####[05]Datanode 서버에서 Datanode 시작 #####"
+            sudo su - centos -c "ssh hworker-1 '~/hadoop/sbin/hadoop-daemon.sh start datanode'"
+            sudo su - centos -c "ssh hworker-2 '~/hadoop/sbin/hadoop-daemon.sh start datanode'"
+
+            echo "#####[06]Standby namenode 서버 실행 #####"
+            sudo su - centos -c "ssh hworker-1 'hdfs namenode -bootstrapStandby'"
+            sudo su - centos -c "ssh hworker-1 '~/hadoop/sbin/hadoop-daemon.sh start namenode'"
+
+            echo "#####[07]Standby namenode FailOverController 실행 #####"
+            sudo su - centos -c "ssh hworker-1 '~/hadoop/sbin/hadoop-daemon.sh start zkfc'"
+
+            echo "#####[08]yarn 실행 #####"
+            sudo su - centos -c "start-yarn.sh"
+
+
+            echo "##### [05]hive setting start ###########"
+            echo "mariadb setting start"
+            #cp /etc/my.cnf /etc/my.cnf.backup
+            #sed -i 's/^port            = 3306/port            = $service_port/' /etc/my.cnf
+            sleep 1
+            systemctl start mariadb
+            /usr/bin/mysqladmin -u root password '$root_password'
+
+            mysql -u root -p$root_password <<EOF
+            create database hive CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY 'hive1234';
+            EOF
+
+            sudo systemctl enable mariadb
+            echo "mariadb setting end"
+
+            cat <<EOF> /home/centos/hive/conf/hive-site.xml
+            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+            <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+            <configuration>
+                <property>
+                    <name>hive.metastore.local</name>
+                    <value>false</value>
+                </property>
+                <property>
+                    <name>javax.jdo.option.ConnectionURL</name>
+                    <value>jdbc:mariadb://localhost:3306/hive?createDatabaseIfNotExist=true</value>
+                </property>
+                <property>
+                    <name>javax.jdo.option.ConnectionDriverName</name>
+                    <value>org.mariadb.jdbc.Driver</value>
+                </property>
+                <property>
+                    <name>javax.jdo.option.ConnectionUserName</name>
+                    <value>hive</value>
+                </property>
+                <property>
+                    <name>javax.jdo.option.ConnectionPassword</name>
+                    <value>hive1234</value>
+                </property>
+            </configuration>
+            EOF
+
+            chown centos:centos /home/centos/hive/conf/hive-site.xml
+            echo "## MariaDB connetc init "
+            sudo su - centos -c "/home/centos/hive/bin/schematool -initSchema -dbType mysql "
+            echo "##### [05]hive setting end ###########"
+
+            echo "##### 04.hbase setting start ###########"
+            VAR1=$(cat <<EOF
+            <?xml version="1.0"?>
+            <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+            <configuration>
+                <property>
+                    <name>hbase.rootdir</name>
+                    <value>hdfs://hmaster:9000/hbase</value>
+                </property>
+                <property>
+                    <name>hbase.cluster.distributed</name>
+                    <value>true</value>
+                </property>
+                <property>
+                    <name>hbase.zookeeper.quorum</name>
+                    <value>hmaster,hworker-1,hworker-2</value>
+                </property>
+                <property>
+                    <name>dfs.replication</name>
+                    <value>3</value>
+                </property>
+                <property>
+                  <name>hbase.unsafe.stream.capability.enforce</name>
+                  <value>false</value>
+                </property>
+                <property>
+                    <name>hbase.zookeeper.property.clientPort</name>
+                    <value>2181</value>
+                </property>
+            </configuration>
+            EOF
+            )
+
+            cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
+            ${VAR1}
+            EOF
+
+            chown centos:centos /home/centos/hbase/conf/hbase-site.xml
+
+            cat <<EOF> /home/centos/hbase/conf/regionservers
+            hmaster
+            hworker-1
+            hworker-2
+            EOF
+
+            chown centos:centos /home/centos/hbase/conf/regionservers
+
+            cat <<EOF>> /home/centos/hbase/conf/hbase-env.sh
+            export HBASE_MANAGES_ZK=false
+            export HBASE_PID_DIR=/home/centos/hbase/pid
+            EOF
+
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            hadoop dfsadmin -safemode leave
+            /home/centos/hbase/bin/start-hbase.sh
+            EOF
+
+            echo "##### 04.hbase setting end ###########"
+
+            echo "##### 02.spark setting start ###########"
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            sudo -- sh -c "echo hworker-1 >> /home/centos/spark/conf/slaves"
+            sudo -- sh -c "echo hworker-2 >> /home/centos/spark/conf/slaves"
+            /home/centos/spark/sbin/start-master.sh
+            EOF
+
+            echo "##### 02.spark setting end ###########"
+
+  init_config2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $root_password: { get_param: root_password }
+            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $node1_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $node2_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server_addresses:
+              list_join:
+                - ','
+                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "hadoop2 install start"
+
+            cat <<EOF>> /etc/ssh/ssh_config
+            Port 20022
+            EOF
+
+            sudo service sshd restart
+
+
+            cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
+            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
+            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
+            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
+            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
+            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
+            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
+            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
+            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
+            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
+            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
+            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
+            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
+            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
+            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
+            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
+            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
+            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
+            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
+            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
+            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
+            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
+            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
+            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
+            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
+            -----END RSA PRIVATE KEY-----
+            EOF
+
+            chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
+            chmod 600 /home/centos/.ssh/kepri-msa_default.pem
+
+            echo "[01] host setting"
+            echo "##### 01.1 host file setting ###########"
+            cat <<EOF>> /etc/hosts
+            $master_address hmaster
+            $node1_address hworker-1
+            $node2_address hworker-2
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            mkdir -p /home/centos/hadoop/pids
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/data
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/name
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/journalnode
+            sudo chmod 755 /home/centos/hadoop/pids
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/data
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/name
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/journalnode
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 01.2 add_known_hosts ###########"
+            ssh-keyscan -p 20022 hmaster,$master_addres >> /home/centos/.ssh/known_hosts
+            ssh-keyscan -p 20022 hworker-1,$node1_address >> /home/centos/.ssh/known_hosts
+            ssh-keyscan -p 20022 hworker-2,$node2_address >> /home/centos/.ssh/known_hosts
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 01.3 add_authorized_keys ###########"
+            ssh-keygen -b 2048 -t rsa -f /home/centos/.ssh/id_rsa -q -N ''
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hmaster  "cat - >> /home/centos/.ssh/authorized_keys"
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-1  "cat - >> /home/centos/.ssh/authorized_keys"
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-2  "cat - >> /home/centos/.ssh/authorized_keys"
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            cp ~/hadoop/share/hadoop/tools/lib/hadoop-aws-2.7.7.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/aws-java-sdk-1.7.4.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/joda-time-2.10.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/jackson-*.jar  ~/hadoop/share/hadoop/common/lib/
+            export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/hadoop_env.sh
+            export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
+            EOF
+
+            echo "[01]hadoop config file update"
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/core-site.xml
+            <configuration>
+            <property>
+                <name>fs.defaultFS</name>
+                <value>hdfs://hmaster:9000</value>
+            </property>
+            <property>
+                 <name>ha.zookeeper.quorum</name>
+                 <value>hmaster:2181,hworker-1:2181,hworker-2:2181</value>
+            </property>
+            <property>
+                <name>fs.s3a.impl</name>
+                <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+            </property>
+            <property>
+              <name>fs.s3a.aws.credentials.provider</name>
+              <value>org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider</value>
+            </property>
+            <property>
+              <name>fs.s3a.access.key</name>
+              <value>KB3R94LCZUUHGFI9DH92</value>
+            </property>
+            <property>
+              <name>fs.s3a.secret.key</name>
+              <value>gD4jR0mWRur8lWdxEUXZhBD8NKIW5kbrgiBSaMwq</value>
+            </property>
+            <property>
+              <name>fs.s3a.connection.ssl.enabled</name>
+              <value>false</value>
+            </property>
+            <property>
+              <name>fs.s3a.endpoint</name>
+              <value>101.55.126.196:7480</value>
+            </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/hdfs-site.xml
+            <configuration>
+                    <property>
+                            <name>dfs.namenode.name.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/name</value>
+                    </property>
+                    <property>
+                            <name>dfs.datanode.data.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/data</value>
+                    </property>
+                    <property>
+                            <name>dfs.journalnode.edits.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/journal</value>
+                    </property>
+                    <property>
+                            <name>dfs.nameservices</name>
+                            <value>hadoop-cluster</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.namenodes.hadoop-cluster</name>
+                            <value>nn1,nn2</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.rpc-address.hadoop-cluster.nn1</name>
+                            <value>hmaster:9000</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.rpc-address.hadoop-cluster.nn2</name>
+                            <value>hworker-1:9000</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.http-address.hadoop-cluster.nn1</name>
+                            <value>hmaster:50070</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.http-address.hadoop-cluster.nn2</name>
+                            <value>hworker-1:50070</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.shared.edits.dir</name>
+                            <value>qjournal://hmaster:8485;hworker-1:8485;hworker-2:8485/hadoop-cluster</value>
+                    </property>
+                    <property>
+                            <name>dfs.client.failover.proxy.provider.hadoop-cluster</name>
+                            <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.fencing.methods</name>
+                            <value>sshfence</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.fencing.ssh.private-key-files</name>
+                            <value>/home/centos/.ssh/id_rsa</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.automatic-failover.enabled</name>
+                            <value>true</value>
+                    </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/mapred-site.xml
+            <configuration>
+                <property>
+                    <name>mapreduce.job.ubertask.enable</name>
+                    <value>true</value>
+                </property>
+                <property>
+                    <name>mapreduce.framework.name</name>
+                    <value>yarn</value>
+                </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/yarn-site.xml
+            <configuration>
+            <property>
+                <name>yarn.nodemanager.aux-services</name>
+                <value>mapreduce_shuffle</value>
+            </property>
+            <property>
+                <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+            <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+            </property>
+            <property>
+                <name>yarn.resourcemanager.hostname</name>
+                <value>hmaster</value>
+            </property>
+            <property>
+                <name>yarn.application.classpath</name>
+                <value>
+                    /home/centos/hadoop/etc/hadoop,
+                    /home/centos/hadoop/share/hadoop/common/*,
+                    /home/centos/hadoop/share/hadoop/common/lib/*,
+                    /home/centos/hadoop/share/hadoop/hdfs/*,
+                    /home/centos/hadoop/share/hadoop/hdfs/lib/*,
+                    /home/centos/hadoop/share/hadoop/mapreduce/*,
+                    /home/centos/hadoop/share/hadoop/mapreduce/lib/*,
+                    /home/centos/hadoop/share/hadoop/yarn/*,
+                    /home/centos/hadoop/share/hadoop/yarn/lib/*
+                </value>
+            </property>
+            </configuration>
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 03.zookeeper setting start ###########"
+            mkdir /home/centos/zookeeper/tmp
+            cp /home/centos/zookeeper/conf/zoo_sample.cfg /home/centos/zookeeper/conf/zoo.cfg
+            cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
+            dataDir=/home/centos/zookeeper/tmp
+            server.1=hmaster:2888:3888
+            server.2=hworker-1:2888:3888
+            server.3=hworker-2:2888:3888
+            EOF
+            echo "2" > /home/centos/zookeeper/tmp/myid
+            chown centos:centos /home/centos/zookeeper/tmp/myid
+            chmod 777 /home/centos/zookeeper/tmp/myid
+            EOF
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            /home/centos/zookeeper/bin/zkServer.sh start
+            echo "##### 03.zookeeper setting end ###########"
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 04.hbase setting start ###########"
+            cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
+            <?xml version="1.0"?>
+            <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+            <configuration>
+                <property>
+                    <name>hbase.rootdir</name>
+                    <value>hdfs://hmaster:9000/hbase</value>
+                </property>
+                <property>
+                    <name>hbase.cluster.distributed</name>
+                    <value>true</value>
+                </property>
+                <property>
+                    <name>hbase.zookeeper.quorum</name>
+                    <value>hmaster,hworker-1,hworker-2</value>
+                </property>
+                <property>
+                    <name>dfs.replication</name>
+                    <value>3</value>
+                </property>
+                <property>
+                  <name>hbase.unsafe.stream.capability.enforce</name>
+                  <value>false</value>
+                </property>
+                <property>
+                    <name>hbase.zookeeper.property.clientPort</name>
+                    <value>2181</value>
+                </property>
+            </configuration>
+            EOF
+
+            cat <<EOF> /home/centos/hbase/conf/regionservers
+            hmaster
+            hworker-1
+            hworker-2
+            EOF
+
+            cat <<EOF>> /home/centos/hbase/conf/hbase-env.sh
+            export HBASE_MANAGES_ZK=false
+            export HBASE_PID_DIR=/home/centos/hbase/pid
+            EOF
+
+            echo "##### 04.hbase setting end ###########"
+            EOF
+
+            echo "##### 02.spark setting start ###########"
+
+            masterRun=1
+            while [[ masterRun -eq 1 ]]
+            do
+              echo "nc -z $master_address 7077"
+              nc -z $master_address 7077
+              masterRun=$?
+              sleep 5
+            done
+            echo "master node active"
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            sudo -- sh -c "echo hworker-1 >> /home/centos/spark/conf/slaves"
+            sudo -- sh -c "echo hworker-2 >> /home/centos/spark/conf/slaves"
+            /home/centos/spark/sbin/start-slave.sh 'spark://hmaster:7077'
+            EOF
+
+            echo "##### 02.spark setting end ###########"
+
+  init_config3:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $root_password: { get_param: root_password }
+            $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+            $node1_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+            $node2_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+            $server_addresses:
+              list_join:
+                - ','
+                - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server2_port, fixed_ips, 0, ip_address] }
+                  - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
+          template: |
+            #!/bin/sh
+            echo "hadoop3 install start"
+
+            cat <<EOF>> /etc/ssh/ssh_config
+            Port 20022
+            EOF
+
+            sudo service sshd restart
+
+            cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
+            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
+            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
+            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
+            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
+            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
+            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
+            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
+            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
+            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
+            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
+            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
+            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
+            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
+            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
+            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
+            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
+            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
+            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
+            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
+            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
+            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
+            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
+            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
+            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
+            -----END RSA PRIVATE KEY-----
+            EOF
+            chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
+            chmod 600 /home/centos/.ssh/kepri-msa_default.pem
+
+            echo "[01] host setting"
+            echo "##### 01.1 host file setting ###########"
+            cat <<EOF>> /etc/hosts
+            $master_address hmaster
+            $node1_address hworker-1
+            $node2_address hworker-2
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            mkdir -p /home/centos/hadoop/pids
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/data
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/name
+            mkdir -p /home/centos/hadoop/etc/hadoop/dfs/journalnode
+            sudo chmod 755 /home/centos/hadoop/pids
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/data
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/name
+            sudo chmod 755 /home/centos/hadoop/etc/hadoop/dfs/journalnode
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 01.2 add_known_hosts ###########"
+            ssh-keyscan -p 20022 hmaster,$master_addres >> /home/centos/.ssh/known_hosts
+            ssh-keyscan -p 20022 hworker-1,$node1_address >> /home/centos/.ssh/known_hosts
+            ssh-keyscan -p 20022 hworker-2,$node2_address >> /home/centos/.ssh/known_hosts
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 01.3 add_authorized_keys ###########"
+            ssh-keygen -b 2048 -t rsa -f /home/centos/.ssh/id_rsa -q -N ''
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hmaster  "cat - >> /home/centos/.ssh/authorized_keys"
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-1  "cat - >> /home/centos/.ssh/authorized_keys"
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-2  "cat - >> /home/centos/.ssh/authorized_keys"
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            cp ~/hadoop/share/hadoop/tools/lib/hadoop-aws-2.7.7.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/aws-java-sdk-1.7.4.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/joda-time-2.10.jar ~/hadoop/share/hadoop/common/lib/
+            cp ~/hadoop/share/hadoop/tools/lib/jackson-*.jar  ~/hadoop/share/hadoop/common/lib/
+            export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/hadoop_env.sh
+            export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$HADOOP_HOME/share/hadoop/tools/lib/*
+            EOF
+
+            echo "[01]hadoop config file update"
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/core-site.xml
+            <configuration>
+            <property>
+                <name>fs.defaultFS</name>
+                <value>hdfs://hmaster:9000</value>
+            </property>
+            <property>
+                 <name>ha.zookeeper.quorum</name>
+                 <value>hmaster:2181,hworker-1:2181,hworker-2:2181</value>
+            </property>
+            <property>
+                <name>fs.s3a.impl</name>
+                <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+            </property>
+            <property>
+              <name>fs.s3a.aws.credentials.provider</name>
+              <value>org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider</value>
+            </property>
+            <property>
+              <name>fs.s3a.access.key</name>
+              <value>KB3R94LCZUUHGFI9DH92</value>
+            </property>
+            <property>
+              <name>fs.s3a.secret.key</name>
+              <value>gD4jR0mWRur8lWdxEUXZhBD8NKIW5kbrgiBSaMwq</value>
+            </property>
+            <property>
+              <name>fs.s3a.connection.ssl.enabled</name>
+              <value>false</value>
+            </property>
+            <property>
+              <name>fs.s3a.endpoint</name>
+              <value>101.55.126.196:7480</value>
+            </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/hdfs-site.xml
+            <configuration>
+                    <property>
+                            <name>dfs.namenode.name.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/name</value>
+                    </property>
+                    <property>
+                            <name>dfs.datanode.data.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/data</value>
+                    </property>
+                    <property>
+                            <name>dfs.journalnode.edits.dir</name>
+                            <value>/home/centos/hadoop/etc/hadoop/dfs/journal</value>
+                    </property>
+                    <property>
+                            <name>dfs.nameservices</name>
+                            <value>hadoop-cluster</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.namenodes.hadoop-cluster</name>
+                            <value>nn1,nn2</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.rpc-address.hadoop-cluster.nn1</name>
+                            <value>hmaster:9000</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.rpc-address.hadoop-cluster.nn2</name>
+                            <value>hworker-1:9000</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.http-address.hadoop-cluster.nn1</name>
+                            <value>hmaster:50070</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.http-address.hadoop-cluster.nn2</name>
+                            <value>hworker-1:50070</value>
+                    </property>
+                    <property>
+                            <name>dfs.namenode.shared.edits.dir</name>
+                            <value>qjournal://hmaster:8485;hworker-1:8485;hworker-2:8485/hadoop-cluster</value>
+                    </property>
+                    <property>
+                            <name>dfs.client.failover.proxy.provider.hadoop-cluster</name>
+                            <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.fencing.methods</name>
+                            <value>sshfence</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.fencing.ssh.private-key-files</name>
+                            <value>/home/centos/.ssh/id_rsa</value>
+                    </property>
+                    <property>
+                            <name>dfs.ha.automatic-failover.enabled</name>
+                            <value>true</value>
+                    </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/mapred-site.xml
+            <configuration>
+                <property>
+                    <name>mapreduce.job.ubertask.enable</name>
+                    <value>true</value>
+                </property>
+                <property>
+                    <name>mapreduce.framework.name</name>
+                    <value>yarn</value>
+                </property>
+            </configuration>
+            EOF
+
+            cat <<EOF>> /home/centos/hadoop/etc/hadoop/yarn-site.xml
+            <configuration>
+            <property>
+                <name>yarn.nodemanager.aux-services</name>
+                <value>mapreduce_shuffle</value>
+            </property>
+            <property>
+                <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+            <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+            </property>
+            <property>
+                <name>yarn.resourcemanager.hostname</name>
+                <value>hmaster</value>
+            </property>
+            <property>
+                <name>yarn.application.classpath</name>
+                <value>
+                    /home/centos/hadoop/etc/hadoop,
+                    /home/centos/hadoop/share/hadoop/common/*,
+                    /home/centos/hadoop/share/hadoop/common/lib/*,
+                    /home/centos/hadoop/share/hadoop/hdfs/*,
+                    /home/centos/hadoop/share/hadoop/hdfs/lib/*,
+                    /home/centos/hadoop/share/hadoop/mapreduce/*,
+                    /home/centos/hadoop/share/hadoop/mapreduce/lib/*,
+                    /home/centos/hadoop/share/hadoop/yarn/*,
+                    /home/centos/hadoop/share/hadoop/yarn/lib/*
+                </value>
+            </property>
+            </configuration>
+            EOF
+
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 03.zookeeper setting start ###########"
+            mkdir /home/centos/zookeeper/tmp
+            cp /home/centos/zookeeper/conf/zoo_sample.cfg /home/centos/zookeeper/conf/zoo.cfg
+            cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
+            dataDir=/home/centos/zookeeper/tmp
+            server.1=hmaster:2888:3888
+            server.2=hworker-1:2888:3888
+            server.3=hworker-2:2888:3888
+            EOF
+            echo "3" > /home/centos/zookeeper/tmp/myid
+            chown centos:centos /home/centos/zookeeper/tmp/myid
+            chmod 777 /home/centos/zookeeper/tmp/myid
+            EOF
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            /home/centos/zookeeper/bin/zkServer.sh start
+            echo "##### 03.zookeeper setting end ###########"
+            EOF
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            echo "##### 04.hbase setting start ###########"
+            cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
+            <?xml version="1.0"?>
+            <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+            <configuration>
+                <property>
+                    <name>hbase.rootdir</name>
+                    <value>hdfs://hmaster:9000/hbase</value>
+                </property>
+                <property>
+                    <name>hbase.cluster.distributed</name>
+                    <value>true</value>
+                </property>
+                <property>
+                    <name>hbase.zookeeper.quorum</name>
+                    <value>hmaster,hworker-1,hworker-2</value>
+                </property>
+                <property>
+                    <name>dfs.replication</name>
+                    <value>3</value>
+                </property>
+                <property>
+                  <name>hbase.unsafe.stream.capability.enforce</name>
+                  <value>false</value>
+                </property>
+                <property>
+                    <name>hbase.zookeeper.property.clientPort</name>
+                    <value>2181</value>
+                </property>
+            </configuration>
+            EOF
+            cat <<EOF> /home/centos/hbase/conf/regionservers
+            hmaster
+            hworker-1
+            hworker-2
+            EOF
+
+            cat <<EOF>> /home/centos/hbase/conf/hbase-env.sh
+            export HBASE_MANAGES_ZK=false
+            export HBASE_PID_DIR=/home/centos/hbase/pid
+            EOF
+
+            echo "##### 04.hbase setting end ###########"
+            EOF
+
+
+            echo "##### 02.spark setting start ###########"
+            #yum -y install nc
+
+            masterRun=1
+            while [[ masterRun -eq 1 ]]
+            do
+              echo "nc -z $master_address 7077"
+              nc -z $master_address 7077
+              masterRun=$?
+              sleep 5
+            done
+            echo "master node active"
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            sudo -- sh -c "echo hworker-1 >> /home/centos/spark/conf/slaves"
+            sudo -- sh -c "echo hworker-2 >> /home/centos/spark/conf/slaves"
+            /home/centos/spark/sbin/start-slave.sh 'spark://hmaster:7077'
+            EOF
+
+            echo "##### 02.spark setting end ###########"
+
+  server1:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server1_port }
+      key_name: { get_param: key_name}
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config1
+
+  server2:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server2_port }
+      key_name: { get_param: key_name}
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config2
+
+  server3:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server3_port }
+      key_name: { get_param: key_name}
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config3
