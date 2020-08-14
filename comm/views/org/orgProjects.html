@@ -100,11 +100,11 @@
 			<div class="col-md-6">
 				<div class="text-right">
 					<div class="form-group inline-block margin-bottom-0">
-						<div class="input-icon-type2 icon-left">
-							<span class="input-icon-addon">
-								<i class="xi-search"></i>
-							</span>
+						<div class="input-icon-type2 icon-right">
 							<input type="text" class="form-control form-control-md" ng-model="contents.schFilterText" placeholder="프로젝트 검색">
+							<span class="input-icon-addon" ng-click="contents.schFilterText = ' ' ">
+								<i class="xi-close"></i>
+							</span>
 						</div>
 					</div>
 					<!-- 프로젝트 리스트 보기 유형(이미지/리스트) -->
