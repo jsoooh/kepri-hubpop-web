@@ -497,7 +497,7 @@
 				<!-- //버튼영역 -->
 				
 				<!-- 부하분산 리스트(카드형) -->
-				<div class="card-list-wrap"  ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0 && contents.listType == 'image'"><!-- style="display:none;" -->
+				<div class="card-list-wrap"  ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0 && contents.listType == 'image'">
 					<div class="row">
 						<div class="col-md-4" ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
 							<div class="card card-type1">
