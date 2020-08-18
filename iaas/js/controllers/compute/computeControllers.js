@@ -982,7 +982,7 @@ angular.module('iaas.controllers')
         if (ct.data.tenantId) {
             ct.fnGetServerMainList();
             ct.fngetLbList();
-            var delay = 100;                // 딜레이 100ms
+            /*var delay = 100;                // 딜레이 100ms
             var maxCount = 10 * 60 * 10;    // 최대 횟수 6000번(10분)
             var firstLoading = $interval(function () {
                 $scope.main.loadingMainBody = true;
@@ -991,7 +991,7 @@ angular.module('iaas.controllers')
                     $scope.main.loadingMainBody = false;
                 }
                 maxCount--;
-            }, delay);
+            }, delay);*/
         } /*else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
             showAlert.then(function () {
