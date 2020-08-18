@@ -11,12 +11,12 @@
                     <div class="inner">
                         <ul id="quick">
                             <li class="lnb-depth1-item all" ng-class="{'active' : main.allMenuOpen }">
-                                <a href="" ng-click="main.allMenuOpenClick();">
+                                <a href="" ng-click="main.allMenuOpenClick();"><span><img src="../assets/img/user/gnb_all.png"></span>
                                     <p class="sr-only">all menu</p>
                                 </a>
                             </li>
                             <li class="lnb-depth1-item home" ng-class="{'active' : main.stateKey == 'commProjectDetail'}">
-                                <a href="" ng-click="main.goToPortalOrgPage(main.sltPortalOrg);">
+                                <a href="" ng-click="main.goToPortalOrgPage(main.sltPortalOrg);"><span><img src="../assets/img/user/gnb_home.png"></span>
                                     <p class="sr-only">dashboard</p>
                                 </a>
                             </li>
@@ -24,6 +24,7 @@
                         <ul id="gnb">
                             <li ng-repeat="menuItem in (main.dbMenuList | filter : { level: 1 })" class="lnb-depth1-item {{ menuItem.iconId }}" ng-class="{ 'active' : main.sltGroupMenuIconId == menuItem.iconId }" ng-click="main.setGroupMenu(menuItem)">
                                 <a href="" class="button" data-toggle="tooltip" data-placement="right" title="{{ menuItem.depth1 }}">
+                                    <span><img src="../assets/img/user/{{ menuItem.iconId }}.png"></span>
                                     <p class="sr-only">{{ menuItem.depth1 }}</p>
                                 </a>
                             </li>

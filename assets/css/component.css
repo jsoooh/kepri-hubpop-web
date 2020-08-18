@@ -2,6 +2,126 @@
 /* 허브팝 공용 CSS */
 /* A2M JH 2020-07-13 */
 
+/* typography */
+h1,
+.h1 {
+  font-size: 26px;
+  line-height: 34px;
+  margin-top:20px;
+  margin-bottom:15px;
+}
+h2,
+.h2 {
+  font-size: 22px;
+  line-height: 32px;
+  margin-top:20px;
+  margin-bottom:15px;
+}
+h3,
+.h3 {
+  font-size: 16px;
+  line-height: 30px;
+  margin-top:15px;
+  margin-bottom:10px;
+}
+h4,
+.h4 {
+  font-size: 14px;
+  line-height: 28px;
+  margin-top:15px;
+  margin-bottom:10px;
+}
+h5,
+.h5 {
+  font-size: 13px;
+  line-height: 22px;
+  margin-top:15px;
+  margin-bottom:10px;
+}
+h6,
+.h6 {
+  font-size: 12px;
+  line-height: 20px;
+  margin-top:15px;
+  margin-bottom:8px;
+}
+.heading {
+  font-weight: 600;
+  padding-left:5px;
+}
+.heading .sub-heading {
+  display:inline-block;
+  font-weight: 400;
+  font-size: 13px;
+  margin-left:5px;
+  color:#5a5a5a;
+}
+h1.heading {
+  font-family: "Noto Sans KR"; 
+  font-weight: 500;
+  color:#0c0c0c;
+ }
+h1.heading .sub-heading {
+  font-size: 24px;
+  font-weight: 400;
+}
+h2.heading {
+  font-family: "Noto Sans KR"; 
+  font-weight: 500;
+  color:#191919;
+ }
+h2.heading .sub-heading {
+  font-size: 18px;
+  font-weight: 400;
+}
+h3.heading {  
+  color:#2b2b2b;  
+}
+h4.heading {  
+  color:#234683;  
+}
+h4.heading .sub-heading {
+  color:#3159a1;  
+}
+h5.heading {  
+  color: #333;
+  }
+h5.heading .sub-heading {
+  font-size: 12px;
+}
+h6.heading {  
+  color: #333;
+}
+h6.heading .sub-heading {
+  font-size: 12px;
+}
+.content-title1 {
+  font-size: 16px;
+  color: #222222;
+  font-weight: 600;
+  margin: 30px 0 20px;
+}
+[class^="display-"] {
+  color: #4c4c4c;
+  margin: 10px 0 5px 0;
+}
+.display-1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+.display-2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+.display-3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.display-4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+/* common */
 select::-ms-expand {
   display: none;
 }
@@ -25,6 +145,12 @@ select::-ms-expand {
 }
 img {
   max-width: 100%;
+}
+.descript {
+  font-size:13px;
+  line-height:22px;
+  padding:0 5px 0 5px;
+  margin-bottom:25px;
 }
 /* grid */
 .row {
@@ -2145,7 +2271,7 @@ span.btn.btn-danger:focus {
   font-weight: 400;
 }
 .panel .panel-heading .panel-heading-right {
-  padding: 10px 20px 0;
+  padding: 20px 30px 0;
 }
 .panel .panel-heading .title-primary {
   color: #3159a1;
@@ -2190,6 +2316,10 @@ span.btn.btn-danger:focus {
   padding-bottom: 15px;
   border-bottom: 1px solid #dfdfdf;
   margin-bottom: 15px;
+}
+.panel .panel-body h3, .panel .panel-body h4 {
+  padding-left:0;
+  padding-right:0;
 }
 .panel .panel-body .title-sub-type1 {
   color: #535353;
@@ -6309,64 +6439,6 @@ table.dataTable tbody > tr > .selected {
   color: #9a9a9a;
   vertical-align: middle;
 }
-/* typography */
-h1,
-.h1 {
-  font-size: 26px;
-}
-h2,
-.h2 {
-  font-size: 22px;
-}
-h3,
-.h3 {
-  font-size: 16px;
-  color:#424242;
-}
-h4,
-.h4 {
-  font-size: 14px;
-}
-h5,
-.h5 {
-  font-size: 12px;
-}
-h6,
-.h6 {
-  font-size: 12px;
-}
-.heading {
-  font-weight: 600;
-}
-.heading .sub-heading {
-  font-weight: 600;
-}
-.content-title1 {
-  font-size: 16px;
-  color: #222222;
-  font-weight: 600;
-  margin: 30px 0 20px;
-}
-[class^="display-"] {
-  color: #4c4c4c;
-  margin: 15px 0;
-}
-.display-1 {
-  font-size: 50px;
-  font-weight: 600;
-}
-.display-2 {
-  font-size: 40px;
-  font-weight: 600;
-}
-.display-3 {
-  font-size: 35px;
-  font-weight: 600;
-}
-.display-4 {
-  font-size: 25px;
-  font-weight: 600;
-}
 /* typography - list */
 .list-unstyled > li {
   margin-bottom: 5px;
@@ -6530,10 +6602,6 @@ h6,
 }
 .list-inline.list-inline-dot > li:first-child::before {
   display: none;
-}
-.search-inline {
-  padding-top:10px;
-  padding-right:20px;
 }
 .search-inline li {
   display: inline-block;

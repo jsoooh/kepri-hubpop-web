@@ -10,9 +10,6 @@
   width: 100%;
   clear: both;
 }
-.ft-nanum {
-  font-family: 'Nanum Gothic';
-}
 /* 부트스트랩 스타일 재정의 */
 a {
   color: #333;
@@ -93,6 +90,12 @@ html {
   top: 0;
   height: 100vh;
 }
+/* IE */
+@media screen and (min-width:0\0){
+  #header {
+	background:#1e3c72;
+  }	
+}
 #header .header-top h1 {
   text-shadow: none;
   margin: 0;
@@ -105,7 +108,6 @@ html {
   background: url('../../assets/img/admin/logo_admin.png') center no-repeat;
 }
 #header .header-mid {
-  font-family: 'Nanum Gothic';
   position: relative;
   z-index: 1;
 }
@@ -269,9 +271,11 @@ html {
   opacity: 1;
   visibility: visible;
 }
+/*
 #header #gnb {
   padding-top: 10px;
 }
+*/
 #header #gnb .depth1-list .depth1-item > a {
   display: block;
   padding: 13px 15px;
@@ -283,6 +287,7 @@ html {
   display: inline-block;
   vertical-align: top;
   max-width: 150px;
+  font-size: 13px;
 }
 #header #gnb .depth1-list .depth1-item > a .arr {
   position: absolute;
@@ -326,6 +331,8 @@ html {
 }
 #header #gnb .depth1-list .depth1-item.active .depth2-list {
   display: block;
+  padding-top:5px;
+  padding-bottom:5px;
 }
 #header #gnb .depth1-list .depth2-list {
   display: none;
@@ -345,6 +352,9 @@ html {
   width: 100%;
   position: relative;
   z-index: 1;
+}
+#header #gnb .depth1-list .depth2-list .depth2-item > .link:hover {
+  color: #fff;
 }
 #header #gnb .depth1-list .depth2-list .depth2-item > .link span {
   display: inline-block;
@@ -497,6 +507,7 @@ html {
   display: inline-block;
   padding-left: 19px;
   position: relative;
+  font-size: 12px;
   background: url('../../assets/img/admin/user_btn_name.png') left center no-repeat;
 }
 #header .header-bottom .user-btn .etc {
@@ -539,6 +550,7 @@ html {
 #header .header-bottom .user-popup .inner ul > li a {
   display: block;
   padding: 10px 20px;
+  font-size: 12px;
 }
 #header .header-bottom .user-popup .inner ul > li a i {
   margin-right: 5px;
@@ -565,7 +577,7 @@ html {
   clear: both;
 }
 #contentWrap .page-title #spot {
-  padding: 20px 28px;
+  padding: 20px 30px;
   position: relative;
 }
 #contentWrap .page-title #spot .page-info {
@@ -573,16 +585,17 @@ html {
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 5px;
+  font-family: "Noto Sans KR";
 }
 #contentWrap .page-title #spot .btn-refresh {
   display: block;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1px solid #dcdcdc;
   position: absolute;
-  top: 39px;
+  top: 32px;
   right: 35px;
+  background: #fff;
   z-index: 1;
 }
 #contentWrap .page-title #spot .btn-refresh i {
@@ -595,6 +608,7 @@ html {
   -webkit-transition: all 0.2s linear;
   -o-transition: all 0.2s linear;
   transition: all 0.2s linear;
+  font-size: 20px;
 }
 #contentWrap .page-title #spot .btn-refresh:hover i {
   transform: translate(-50%, -50%) rotate(180deg);
@@ -603,43 +617,5 @@ html {
   min-height: 90vh;
 }
 #contentWrap .page-content .inner-wrap {
-  padding: 0 20px 40px;
-}
-/* 모달 팝업 스타일 재정의 */
-.modal-content {
-  box-shadow: none;
-  border: 0;
-  padding: 0;
-}
-.modal-header {
-  width: 100%;
-  height: 60px;
-  border-bottom: 1px solid #dedede;
-}
-.modal-header::after {
-  content: '';
-  display: block;
-  width: 100%;
-  clear: both;
-}
-.modal-header .modal-title {
-  float: left;
-  font-size: 20px;
-  color: #232323;
-  font-weight: 400;
-}
-.modal-header .btn-project {
-  float: right;
-  padding-left: 22px;
-  background: url('../../assets/img/user/modal_icon_project.jpg') left center no-repeat;
-  font-size: 13px;
-  color: #626262;
-  margin-top: 5px;
-}
-.modal-footer .btn {
-  padding: 7px 20px;
-}
-.modal-footer .btn-default {
-  background-color: #fff;
-  border-color: #d7d7d7;
+  padding: 0 30px 40px;
 }
