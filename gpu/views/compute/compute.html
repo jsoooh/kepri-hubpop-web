@@ -75,6 +75,7 @@
                     <colgroup>
                         <col style="width: 10%;">
                         <col style="width: 10%;">
+                        <col style="width: 10%;">
                         <col style="width: ">
                         <col style="width: 10%;">
                         <col style="width: 4%;">
@@ -89,6 +90,7 @@
                     <tr>
                         <th scope="col">서버명</th>
                         <th scope="col">OS유형</th>
+                        <th scope="col">서버유형</th>
                         <th scope="col">접속주소(IP)</th>
                         <th scope="col">모니터링</th>
                         <th scope="col">CPU</th>
@@ -108,6 +110,8 @@
                             <span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
                         </td>
                         <td>{{ instance.image.osType }}</td>
+                        <td ng-if="instance.spec.type == 'GPU'">GPU</td>
+                        <td ng-if="instance.spec.type != 'GPU'">CPU</td>
                         <!--
                         <td ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></td>
                         -->
@@ -209,6 +213,7 @@
                                     <img ng-if="!instance.image.icon" src="images/thum/im_logo_compute.png" class="" alt="" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" >
                                 </div>
                                 <p class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</p>
+
                                 <!--<p class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</p>-->
                                 <p class="tit" style="font-size: 20px; padding:13px 8px 0 5px;" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</p>
                                 <!-- <p class="txt" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" >{{instance.image.serviceName}}</p> -->
@@ -275,6 +280,8 @@
                                         <ul>
                                             <p class="tb_tit"></p>
                                             <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
+                                            <li ng-if="instance.spec.type == 'GPU'"><strong><span class="tb_tit">서버 유형 :</span></strong><span class="tb_txt">GPU</span></li>
+                                            <li ng-if="instance.spec.type != 'GPU'"><strong><span class="tb_tit">서버 유형 :</span></strong><span class="tb_txt">CPU</span></li>
                                             <!--<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>--><!-- vnc 사용할 경우 a태그에 class="ext_link" 지정하여 링크스타일 적용. <a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)"></a>-->
                                             <!--
                                             <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
