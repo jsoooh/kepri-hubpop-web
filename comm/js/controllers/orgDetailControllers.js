@@ -711,15 +711,15 @@ angular.module('portal.controllers')
         ct.iaasInstanceStateCountInit();
         ct.iaasInstanceUsageInit();
 
-        // IAAS 가상 서버 정보
+        // IAAS 가상 서버 정보 - 2020.08.19 (DB 조회로 속도개선)
         ct.iaasInstances = [];
-        ct.getIaasInseanceInfos = function (tenantId) {
+        ct.getIaasInstanceVmsView = function (tenantId) {
             ct.iaasInstanceStateCountInit();
             ct.iaasInstances = [];
-            var promise = portal.dashboard.getIaasInseanceInfos(tenantId);
+            var promise = portal.dashboard.getIaasInstanceVmsView(tenantId);
             promise.success(function (data, status, headers) {
-                if (data && data.content && data.content.instances && data.content.instances.length > 0) {
-                    ct.iaasInstances = data.content.instances;
+                if (data && data.content && data.content.content && data.content.content.length > 0) {
+                    ct.iaasInstances = data.content.content;
                     angular.forEach(ct.iaasInstances, function (instance, instanceKey) {
                         ct.iaasInstanceStateCount.TOTAL++;
                         if (instance.vmState == "active") {
@@ -738,7 +738,7 @@ angular.module('portal.controllers')
 
         // IAAS 가상 서버 할당 정보  리소스 사용 현황 - 2020.08.18 (DB 조회로 속도개선)
         ct.iaasResourceUsed = {};
-        ct.getIaasResourceUsed = function (tenantId) {
+        ct.getIaasResourceUsedLookup = function (tenantId) {
             ct.iaasInstanceUsageInit();
             ct.iaasResourceUsed = {};
             var promise = portal.dashboard.getIaasResourceUsedLookup(tenantId);
@@ -1148,8 +1148,8 @@ angular.module('portal.controllers')
             // IaaS 정보
             if ($scope.main.userTenantId) {
                 ct.iaasCpuStatusChart();
-                ct.getIaasInseanceInfos($scope.main.userTenantId);
-                ct.getIaasResourceUsed($scope.main.userTenantId);
+                ct.getIaasInstanceVmsView($scope.main.userTenantId);
+                ct.getIaasResourceUsedLookup($scope.main.userTenantId);
             }
 
             // PaaS 정보
