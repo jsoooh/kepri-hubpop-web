@@ -262,11 +262,20 @@ angular.module('portal.services', [])
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', getParams));
         };
 
+        /* // 오픈스택에서 테넌트 자원조회
         portal.dashboard.getIaasResourceUsed = function (tenantId) {
             var getParams = {
                 tenantId : tenantId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', getParams));
+        };*/
+
+        // DB에서 테넌트 자원조회
+        portal.dashboard.getIaasResourceUsedLookup = function (tenantId) {
+            var getParams = {
+                tenantId : tenantId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', getParams));
         };
 
         portal.dashboard.getOrganizationByName = function (name) {

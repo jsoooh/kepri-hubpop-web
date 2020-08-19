@@ -736,15 +736,15 @@ angular.module('portal.controllers')
             });
         };
 
-        // IAAS 가상 서버 할당 정보  리소스 사용 현황
+        // IAAS 가상 서버 할당 정보  리소스 사용 현황 - 2020.08.18 (DB 조회로 속도개선)
         ct.iaasResourceUsed = {};
         ct.getIaasResourceUsed = function (tenantId) {
             ct.iaasInstanceUsageInit();
             ct.iaasResourceUsed = {};
-            var promise = portal.dashboard.getIaasResourceUsed(tenantId);
+            var promise = portal.dashboard.getIaasResourceUsedLookup(tenantId);
             promise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    ct.iaasResourceUsed = data.content[0];
+                if (data && data.content) {
+                    ct.iaasResourceUsed = data.content;
                     if (ct.iaasResourceUsed.maxResource && ct.iaasResourceUsed.usedResource) {
                         // 할당 코어수
                         ct.iaasInstanceUsage.cpu.maxQuota = ct.iaasResourceUsed.maxResource.cores;

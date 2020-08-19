@@ -984,14 +984,26 @@ angular.module('iaas.controllers')
             ct.fngetLbList();
             var delay = 100;                // 딜레이 100ms
             var maxCount = 10 * 60 * 3;    // 최대 횟수1800번(3분)
-            var firstLoading = $interval(function () {
+            var firstLoadingLoop = $interval(function () {
                 $scope.main.loadingMainBody = true;
                 if (maxCount <= 0 || (ct.fnGetServerMainListLoading == true && ct.fngetLbListLoading == true)) {
-                    $interval.cancel(firstLoading);
+                    $interval.cancel(firstLoadingLoop);
                     $scope.main.loadingMainBody = false;
                 }
                 maxCount--;
             }, delay);
+
+            // 인스턴스 자원 사용량 조회
+            var instancesDataLoop = $interval(function () {
+                if ($location.url() != "/iaas/compute") {  // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
+                    $interval.cancel(instancesDataLoop);
+                }
+                ct.fnGetInstancesData();
+                /*angular.forEach(ct.serverMainList, function (server) {
+                    ct.fnSetInstanceUseRate(server);
+                });*/
+            }, 1000 * 60);
+
         } /*else { // 프로젝트 선택
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
             showAlert.then(function () {
@@ -999,13 +1011,6 @@ angular.module('iaas.controllers')
             });
             return false;
         }*/
-
-        $interval(function () {
-            ct.fnGetInstancesData();
-            /*angular.forEach(ct.serverMainList, function (server) {
-                ct.fnSetInstanceUseRate(server);
-            });*/
-        }, 1000 * 60)
     })
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);
