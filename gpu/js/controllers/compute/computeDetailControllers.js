@@ -249,19 +249,19 @@ angular.module('gpu.controllers')
 
                     var massage = '"' + instance.name + '" ';
                     if (beforUiTask == "starting") {
-                        massage += '서버가 시작 되었습니다.'
+                        massage += '인스턴스가 시작 되었습니다.'
                     } else if (beforUiTask == "stopping")  {
-                        massage += '서버가 정지 되었습니다.'
+                        massage += '인스턴스가 정지 되었습니다.'
                     } else if (beforUiTask == "pausing")  {
-                        massage += '서버가 일시정지 되었습니다.'
+                        massage += '인스턴스가 일시정지 되었습니다.'
                     } else if (beforUiTask == "unpausing")  {
-                        massage += '서버가 정지해제 되었습니다.'
+                        massage += '인스턴스가 정지해제 되었습니다.'
                     } else if (beforUiTask == "rebooting")  {
-                        massage += '서버가 재시작 되었습니다.'
+                        massage += '인스턴스가 재시작 되었습니다.'
                     } else if (beforUiTask == "resized")  {
-                        massage += '서버의 사양이 되었습니다.'
+                        massage += '인스턴스의 사양이 되었습니다.'
                     } else {
-                        massage += '서버에 적용 되었습니다.'
+                        massage += '인스턴스에 적용 되었습니다.'
                     }
                     common.showAlertSuccess(massage);
                 }
@@ -288,7 +288,7 @@ angular.module('gpu.controllers')
         ct.fn.createPopSnapshot = function($event,instance) {
         	var dialogOptions = {};
         	if(instance.vmState != 'stopped') {
-                common.showAlertWarning('서버를 정지 후 생성가능합니다.');
+                common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
             	dialogOptions = {
             			// controller : "iaasCreatePopSnapshotCtrl" ,
@@ -729,29 +729,29 @@ angular.module('gpu.controllers')
 
         ct.fn.serverActionConfirm = function(action,instance) {
             if(action == "START") {
-                common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('정지',instance.name +' 서버를 정지하시겠습니까?').then(function(){
+                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "PAUSE") {
-                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "UNPAUSE") {
-                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "REBOOT") {
-                common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "IPCONNECT"){
                 ct.fn.IpConnectPop();
             } else if(action == "IPDISCONNECT"){
-                common.showConfirm('접속 IP를 해제',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
+                common.showConfirm('접속 IP를 해제',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function(){
                     ct.fn.ipConnectionSet("detach");
                 });
             }
@@ -764,7 +764,7 @@ angular.module('gpu.controllers')
 
         // 서버삭제
         ct.deleteInstanceJob = function(id) {
-            common.showConfirm('서버 삭제','선택한 서버를 삭제하시겠습니까?').then(function(){
+            common.showConfirm('인스턴스 삭제','선택한 인스턴스를 삭제하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : ct.data.tenantId,
@@ -835,7 +835,7 @@ angular.module('gpu.controllers')
         // SnapShot 생성
         ct.fn.createSnapshot = function($event,instance) {
             if(instance.vmState != 'stopped') {
-                common.showAlertWarning('서버를 정지 후 생성가능합니다.');
+                common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
                 ct.selectInstance = instance;
                 // $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeSnapshotForm.html" + _VersionTail();
@@ -869,7 +869,7 @@ angular.module('gpu.controllers')
 
         // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
-            common.showConfirm('디스크 연결해제','서버와의 연결을 해제 하시겠습니까?').then(function(){
+            common.showConfirm('볼륨 연결해제','인스턴스와의 연결을 해제 하시겠습니까?').then(function(){
                 ct.fn.restorationVolume(volume);
             });
         };
@@ -882,7 +882,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach:volume});
             returnPromise.success(function (data, status, headers) {
                 ct.fn.searchInstanceVolumeList();
-                common.showAlertSuccess("서버와의 연결을 해제 되었습니다.");
+                common.showAlertSuccess("인스턴스와의 연결을 해제 되었습니다.");
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -1954,29 +1954,29 @@ angular.module('gpu.controllers')
 
         ct.fn.serverActionConfirm = function(action,instance) {
             if(action == "START") {
-                common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "STOP") {
-                common.showConfirm('정지',instance.name +' 서버를 정지하시겠습니까?').then(function(){
+                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "PAUSE") {
-                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "UNPAUSE") {
-                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "REBOOT") {
-                common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance);
                 });
             } else if(action == "IPCONNECT"){
                 ct.fn.IpConnectPop();
             } else if(action == "IPDISCONNECT"){
-            	common.showConfirm('접속 IP를 해제',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
+            	common.showConfirm('접속 IP를 해제',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function(){
             		ct.fn.ipConnectionSet("detach");
             	});
             }
@@ -2011,7 +2011,7 @@ angular.module('gpu.controllers')
         // SnapShot 생성
         ct.fn.createSnapshot = function($event,instance) {
             if(instance.vmState != 'stopped') {
-            	common.showAlertWarning('서버를 정지 후 생성가능합니다.');
+            	common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
             	ct.selectInstance = instance;
             	// $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeSnapshotForm.html" + _VersionTail();
@@ -2043,7 +2043,7 @@ angular.module('gpu.controllers')
 
         // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
-            common.showConfirm('디스크 연결해제','서버와의 연결을 해제 하시겠습니까?').then(function(){
+            common.showConfirm('볼륨 연결해제','인스턴스와의 연결을 해제 하시겠습니까?').then(function(){
                 ct.fn.restorationVolume(volume);
             });
         };
@@ -2056,7 +2056,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach:volume});
             returnPromise.success(function (data, status, headers) {
                 ct.fn.searchInstanceVolumeList();
-                common.showAlertSuccess("서버와의 연결을 해제 되었습니다.");
+                common.showAlertSuccess("인스턴스와의 연결을 해제 되었습니다.");
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -3009,7 +3009,7 @@ angular.module('gpu.controllers')
         
         pop.fn = {};
         pop.formName = "createSnapshotForm";
-        pop.title = "인스턴스 백업 이미지 생성";
+        pop.title = "인스턴스 스냅샷 생성";
         
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.actionBtnHied = false;
@@ -3073,7 +3073,7 @@ angular.module('gpu.controllers')
         
         pop.fn = {};
         pop.formName = "computeVolumeForm";
-        pop.title = "디스크 연결";
+        pop.title = "볼륨 연결";
 
       //디스크 리스트 조회
         pop.fn.getVolumeList = function() {
@@ -3117,7 +3117,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/instanceAttach', 'POST', {volumeAttach : param});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("디스크이 추가 되었습니다.");
+                common.showAlertSuccess("볼륨이 추가 되었습니다.");
             	$scope.contents.fn.searchInstanceVolumeList();
             });
             returnPromise.error(function (data, status, headers) {
@@ -3291,7 +3291,7 @@ angular.module('gpu.controllers')
             pop.tenantId = $scope.main.userTenantGpuId;
         }
 
-        $scope.dialogOptions.title 		= "서버 사양 변경";
+        $scope.dialogOptions.title 		= "인스턴스 사양 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computePopEditServerForm.html" + _VersionTail();
@@ -3491,7 +3491,7 @@ angular.module('gpu.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         
-        $scope.dialogOptions.title 		= "백업 이미지 생성";
+        $scope.dialogOptions.title 		= "스냅샷 생성";
         $scope.dialogOptions.okName 	= "생성";
         $scope.dialogOptions.closeName 	= "닫기";
         // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeCreatePopSnapshotForm.html" + _VersionTail();
@@ -3749,7 +3749,7 @@ angular.module('gpu.controllers')
         pop.instance 					= $scope.dialogOptions.selectInstance;
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         //pop.formName 		= "computeVolumeForm";
-        $scope.dialogOptions.title 		= "디스크 연결";
+        $scope.dialogOptions.title 		= "볼륨 연결";
         $scope.dialogOptions.okName 	= "연결";
     	$scope.dialogOptions.closeName 	= "닫기";
     	// $scope.dialogOptions.templateUrl= _IAAS_VIEWS_ + "/compute/computeServerConnVolPopForm.html" + _VersionTail();
@@ -3816,7 +3816,7 @@ angular.module('gpu.controllers')
             if ($scope.actionBtnHied) return;
             $scope.actionBtnHied = true;
         	if (pop.sltVolume == false ) {
-        		common.showAlertWarning('추가할 디스크를 선택 하십시요.');
+        		common.showAlertWarning('추가할 볼륨을 선택 하십시요.');
                 $scope.actionBtnHied = false;
 				return;
 			}
@@ -3832,7 +3832,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/instanceAttach', 'POST', {volumeAttach : param});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("디스크가 추가 되었습니다.");
+                common.showAlertSuccess("볼륨이 추가 되었습니다.");
                 if ( angular.isFunction(pop.callBackFunction) ) {
                     pop.callBackFunction();
                 }

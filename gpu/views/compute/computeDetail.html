@@ -165,14 +165,14 @@
 				<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 					<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen($event, contents.instance);">이름 변경</a></li>
 					<li ng-if="contents.instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);" title="재시작">재시작</a></li>
-					<li ng-if="contents.instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
-					<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="서버 사양 변경">서버 사양 변경</a></li>
-					<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
-					<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="백업 이미지 생성">백업 이미지 생성</a></li>
-					<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
-					<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
+					<li ng-if="contents.instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+					<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="인스턴스 사양 변경">인스턴스 사양 변경</a></li>
+					<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '인스턴스 사양 변경'이 가능합니다.">인스턴스 사양 변경</a></li>
+					<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="스냅샷 생성">스냅샷 생성</a></li>
+					<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '스냅샷 생성'이 가능합니다.">스냅샷 생성</a></li>
+					<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">볼륨 연결</a></li>
 					<li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(contents.instance);">모니터링 <span ng-if="(contents.instance.spec.type == 'GPU' && contents.instance.gpuMonitoringYn == 'N') || contents.instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="!((contents.instance.spec.type == 'GPU' && contents.instance.gpuMonitoringYn == 'N') || contents.instance.vmMonitoringYn == 'N')">비활성화</span></a></li>
-					<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">서버 삭제</a></li>
+					<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">인스턴스 삭제</a></li>
 					<!--<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>-->
 					<!--<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>-->
 					<!--<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>-->
@@ -219,7 +219,7 @@
 						-->
 					</li>
 					<li>
-						<strong class="tit">IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를 사용할 수 있습니다.'"><span class="ico_info"></span></button></strong>
+						<strong class="tit">IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'외부 통신이 가능한 IP'"><span class="ico_info"></span></button></strong>
 						<div class="txt">{{contents.instance.fixedIp}}</div>
 					</li>
 					<li ng-if="contents.instance.image.osType != 'windows'">
@@ -399,7 +399,7 @@
 <div class="cBox type2 appCnt-vol strgList">
 	<div class="cBox-hd">
 		<!-- <h4 class="c-tit">디스크 연결 정보 <em class="point1">({{contents.instanceVolList.length}})</em></h4> -->
-		<h4 class="c-tit">디스크 연결 정보 <em class="point1">({{contents.instanceVolList.length}})</em></h4>
+		<h4 class="c-tit">볼륨 연결 정보 <em class="point1">({{contents.instanceVolList.length}})</em></h4>
 	</div>
 
 	<div class="cBox-cnt">
@@ -441,8 +441,8 @@
 		<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">서비스 도메인</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'portForwarding'}"><a href="" ng-click="contents.fn.changeSltInfoTab('portForwarding');">포트포워딩</a></li>
 		-->
-		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">서버 이벤트</a></li>
-		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">서버 부트 로그</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">인스턴스 이벤트</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">인스턴스 부트 로그</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'systemLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('systemLog');">시스템 로그</a></li>
 		<!--
 		<li ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('virtualMonit');">가상머신 모니터링</a></li>
@@ -574,7 +574,7 @@
 			<div class="panelWrap">
 				<div class="panel type2" style="cursor: unset;">
 					<div class="panel_head">
-						<div class="tit pull-left">서버 이벤트</div>
+						<div class="tit pull-left">인스턴스 이벤트</div>
 						<div class="pull-right">
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'actEvent')"><span class="ico">확대/축소</span></button>
 						</div>
@@ -584,7 +584,7 @@
 						<!-- 메세지영역 -->
 						<div class="pop_message_area mb20">
 							<div class="msg_bg"></div>
-							<div class="msg_txt"><span>사용자가 서버에 명령하는 시작, 중지 등의 액션에 대한 실행 이력을 표시합니다.</span></div>
+							<div class="msg_txt"><span>사용자가 인스턴스에 명령하는 시작, 중지 등의 액션에 대한 실행 이력을 표시합니다.</span></div>
 						</div>
 						<!-- //메세지영역 -->
 							<div class="tbl type1">
@@ -625,7 +625,7 @@
 			<div class="panelWrap">
 				<div class="panel type2" style="cursor: unset;">
 					<div class="panel_head">
-						<div class="tit pull-left">서버 부트 로그</div>
+						<div class="tit pull-left">인스턴스 부트 로그</div>
 						<div class="pull-right">
 							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'bootLog')"><span class="ico">확대/축소</span></button>
 						</div>
@@ -634,7 +634,7 @@
 						<!-- 메세지영역 -->
 						<div class="pop_message_area mb20">
 							<div class="msg_bg"></div>
-							<div class="msg_txt"><span>서버가 시작될 때 기록되는 Booting Log를 표시합니다.</span></div>
+							<div class="msg_txt"><span>인스턴스가 시작될 때 기록되는 Booting Log를 표시합니다.</span></div>
 						</div>
 						<!-- //메세지영역 -->
 						<div id="boot_log_terminal_panel" class="in type2">

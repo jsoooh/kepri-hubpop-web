@@ -940,7 +940,7 @@ angular.module('gpu.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "백업 이미지 설명 변경";
+        $scope.dialogOptions.title 		= "스냅샷 설명 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/serverSnapshotDescriptionPopForm.html" + _VersionTail();
@@ -959,7 +959,7 @@ angular.module('gpu.controllers')
 
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newSnapshotDesc);
             if (checkByte > 255) {
-                common.showAlertWarning("백업 이미지 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("스냅샷 설명이 255Byte를 초과하였습니다.");
                 $scope.actionBtnHied = false;
                 return;
             }
@@ -988,7 +988,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/snapshot', 'PUT', {instanceSnapShot : param});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
+                common.showAlertSuccess("스냅샷 설명이 변경 되었습니다.");
 
                 /* 20.04.29 - 리스트형 추가로 이미지형일때와 리스트형일때 callbackFunction 분기 by ksw*/
                 if ( angular.isFunction(pop.callBackFunction) ) {
