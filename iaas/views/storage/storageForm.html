@@ -20,7 +20,7 @@
 								<i class="i_star"></i> <span class="pnb_t_txt">디스크 이름</span>
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 							</div>
-							<input type="text" ng-model="contents.volume.name" name="volumeName" validation="required|custom:contents.fn.storageNameCustomValidationCheck(contents.volume.name)" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요." >
+							<input type="text" ng-model="contents.volume.name" name="volumeName" validation="alpha_dash|required|custom:contents.fn.storageNameCustomValidationCheck(contents.volume.name)" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요." >
 						</li>
 						<li>
 							<div class="pnb_tit">
@@ -84,7 +84,7 @@
 										</div>
 										<div class="range_box rb_r">
 											<div class="range-text">
-												<input type="text" class="form-control" ng-model="contents.volumeSize" name="volumeSize" maxlength="4" only-digits style="width:60px; display: inline-block;">
+												<input type="text" class="form-control" ng-model="contents.inputVolumeSize"  ng-change="contents.fn.inputVolumeSizeChange()" ng-blur="contents.fn.inputVolumeSizeBlur()" name="volumeSize" maxlength="4" only-digits style="width:60px; display: inline-block;">
 												<span class="app-tit">GB</span>
 											</div>
 										</div>
@@ -106,7 +106,7 @@
 						</li>
 						<li>
 							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">가상서버와 연결</span>
+								<span class="pnb_t_txt">가상서버와 연결</span>
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'원하는 서버를 선택하여 추가되는 디스크와 연결할 수 있습니다. 디스크를 생성하고 선택된 서버와 연결하는 작업을 진행합니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<div>
@@ -126,8 +126,8 @@
 				</div>
 				<div class="pn_footer">
 					<div class="btn-btm mgt0">
-						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.checkVal();">디스크 만들기</button>
-						<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
+						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createVolumeCheck();">디스크 만들기</button>
+						<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
 					</div>
 				</div>
 			</div>

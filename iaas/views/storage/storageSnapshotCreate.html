@@ -23,9 +23,9 @@
 		                    <li>
 		                        <div class="pnb_tit">
 		                            <i class="i_star"></i> <span class="pnb_t_txt">디스크 이름</span>
-									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'백업된 디스크 이미지로부터 신규 생성되는 디스크 이름을 입력합니다.'"><span class="ico_info"></span></button></div>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'백업된 디스크 이미지로부터 신규 생성되는 디스크 이름을 입력합니다. 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 		                        </div>
-		                        <input type="text" ng-model="contents.volume.name" name="volumeName" validation="required" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요." >
+		                        <input type="text" ng-model="contents.volume.name" name="volumeName" validation="alpha_dash|required|custom:contents.fn.storageNameCustomValidationCheck(contents.volume.name)" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요." >
 		                    </li>
 		                    <li>
 		                        <div class="pnb_tit">
@@ -87,7 +87,7 @@
 		                                    </div>
 		                                    <div class="range_box rb_r">
 		                                        <div class="range-text">
-		                                            <input type="text" class="form-control" ng-model="contents.inputVolumeSize" ng-change="contents.inputVolumeSizeChange()" ng-blur="contents.inputVolumeSizeBlur()" name="volumeSize" maxlength="4" style="width:60px; display: inline-block;">
+		                                            <input type="text" class="form-control" ng-model="contents.inputVolumeSize" ng-change="contents.fn.inputVolumeSizeChange()" ng-blur="contents.fn.inputVolumeSizeBlur()" name="volumeSize" maxlength="4" style="width:60px; display: inline-block;">
 		                                            <span class="app-tit">GB</span>
 		                                        </div>
 		                                    </div>
@@ -109,7 +109,7 @@
 		                    </li>
 		                    <li>
 		                        <div class="pnb_tit">
-		                            <i class="i_star"></i> <span class="pnb_t_txt">가상서버와 연결</span>
+		                            <span class="pnb_t_txt">가상서버와 연결</span>
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'디스크 생성시 기존에 생성된 가상서버와 바로 연결할수 있습니다.'"><span class="ico_info"></span></button></div>
 		                        </div>
 		                        <div>
@@ -124,8 +124,8 @@
 		        </form>
 		        <div class="pn_footer">
 		            <div class="btn-btm mgt0">
-		                <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.snapshotAndCreateStorage()">디스크 만들기</button>
-		                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
+		                <button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createVolumeCheck();">디스크 만들기</button>
+		                <button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack();">취소</button>
 		            </div>
 		        </div>
 		    </div>
