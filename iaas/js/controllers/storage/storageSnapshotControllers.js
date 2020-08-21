@@ -112,7 +112,7 @@ angular.module('iaas.controllers')
 
         ct.data.snapshotId = $stateParams.snapshotId;
 
-        //디스크생성 변수
+        // 디스크 크기 제한 설정
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
             showSelectionBar : true,
@@ -193,7 +193,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', params);
 
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content) {
+                if (data && data.content) {
                     ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
                     ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
@@ -321,7 +321,7 @@ angular.module('iaas.controllers')
         };
 
         // 페이지 첫 로딩
-        ct.fn.firstLoading = function() {
+        ct.fn.firstPageLoading = function() {
             ct.fn.getServerList();
             ct.fn.getTenantResource();
             ct.fn.getStorageList();
@@ -340,7 +340,7 @@ angular.module('iaas.controllers')
             }, delay);
         };
 
-        ct.fn.firstLoading();
+        ct.fn.firstPageLoading();
     })
     .controller('iaasStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);

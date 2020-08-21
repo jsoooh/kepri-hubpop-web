@@ -978,10 +978,19 @@ angular.module('iaas.controllers')
             });
         };
         
-        // 서버 관리 접속시 로딩처리
-        if (ct.data.tenantId) {
+        // 페이지 첫 로딩
+        ct.firstPageLoading = function () {
+            if (!ct.data.tenantId) {
+                /*var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                showAlert.then(function () {
+                    $scope.main.goToPage("/");
+                });*/
+                return;
+            }
             ct.fnGetServerMainList();
             ct.fngetLbList();
+
+            // 함수 로딩 체크
             var delay = 100;                // 딜레이 100ms
             var maxCount = 10 * 60 * 3;    // 최대 횟수1800번(3분)
             var firstLoadingLoop = $interval(function () {
@@ -1003,14 +1012,10 @@ angular.module('iaas.controllers')
                     ct.fnSetInstanceUseRate(server);
                 });*/
             }, 1000 * 60);
+        };
 
-        } /*else { // 프로젝트 선택
-            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
-            showAlert.then(function () {
-                $scope.main.goToPage("/");
-            });
-            return false;
-        }*/
+        ct.firstPageLoading();
+
     })
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);
