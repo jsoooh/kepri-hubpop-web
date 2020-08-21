@@ -242,6 +242,36 @@
 .tbl_cont .table .tbl_cont_state ul li span.inactive {background:#c3c3c3;}
 .tbl_cont .table .tbl_cont_state ul li span.txt {display:inline-block; font-size:14px; font-weight:400; vertical-align:middle;}
 
+.detail-info .list-dot > li b {display:inline-block; width:100px;}
+.detail-info .list-dot > li .txt {display:inline-block;}
+.detail-info .list-dot > li button {vertical-align:unset;}
+
+/*서버상세*/
+.appCnt-vol.strgList .ul-volume{width:100%;}
+.appCnt-vol.strgList .cBox-cnt > .in {overflow-x:auto;}
+.appCnt-vol.strgList .ul-volume > li .in{position: relative; width:350px; height: 105px; padding: 0 15px 10px 92px; margin-left: 0px; background: url("../../images/ico_hard2.png") no-repeat left 11px;}
+.appCnt-vol.strgList .ul-volume > li{width:400px; padding-left:70px;}
+.appCnt-vol.strgList .ul-volume > li:first-child{width:350px; padding-left:0;}
+.appCnt-vol.strgList .in_tit {display:inline-block; width:225px; font-size:16px; font-weight:700; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; word-break: break-all; padding:0 40px 0 0;}
+.appCnt-vol.strgList .btn-wrap {position:absolute; top:0; right:10px;}
+
+/*패널 확대/축소*/
+.panel-bordered .panel-heading button {margin-left:10px;}
+.panel-bordered.zoom {position: absolute; top: 0; left: 0; z-index: 1000; width: 100%; height: 100%; margin-bottom: 0;border:none;box-shadow:none;transform:none;transition:none;}
+.panel-bordered.zoom .panel_body {height:95%;}
+.panel-bordered .btn-zoom::before {display: inline-block; content: '\e954'; font-family: 'xeicon'; font-size:25px;}
+.panel-bordered.zoom .btn-zoom::before {content: '\e955';}
+
+
+.page-detail .panel-body {height:400px;}
+
+/* .mCSB_container{overflow:unset;} */
+
+.table-input-wrap .form-inline > .radio-group,
+.table-input-wrap .form-inline > .checkbox-group {
+	margin-right: 13px;
+}
+
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}
@@ -255,6 +285,7 @@ body {line-height:1.57142857;}
 input[type="text"], input[type="password"] {height:38px;}
 .pj_write_wrap .table, .pj_write_wrap .table td {font-size:13px !important;}
 .pj_write_wrap .radio {padding:0;}
+.radio {padding:0;}
 
 .btn.btn-success {background-color: #249b97; border-color: #249b97; color:#fff;}
 .panel .panel-heading .dropdown .feather-icon {font-size: 20px; color: #9d9d9d;}
