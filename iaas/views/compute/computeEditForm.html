@@ -6,8 +6,12 @@
 		</colgroup>
 		<tbody>
 			<tr>
-				<th scope="row">이름 입력</th>
-				<td><input type="text" name="changeName" class="form-control" ng-model="pop.instance.changeName" value="" maxlength="50" placeholder="이름을 입력해 주세요." validation="alpha_number|required"></td>
+				<th scope="row">서버 이름(변경 전)</th>
+				<td><input type="text" name="" value="" class="form-control" placeholder="{{pop.instance.name}}" disabled></td>
+			</tr>
+			<tr>
+				<th scope="row">서버 이름(변경 후)</th>
+				<td><input type="text" name="changeName" class="form-control" ng-model="pop.newInstanceName" value="" maxlength="50" placeholder="이름을 입력해 주세요." validation="alpha_dash|required|custom:pop.fn.serverNameCustomValidationCheck(pop.newInstanceName)"></td>
 			</tr>
 		</tbody>
 	</table>

@@ -1018,6 +1018,7 @@ angular.module('iaas.controllers')
     	pop.data						= {};
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
     	pop.storageNameList             = [];
+        pop.newVolNm                    = "";
     	
     	$scope.dialogOptions.title 		= "디스크 이름 변경";
     	$scope.dialogOptions.okName 	= "변경";
@@ -1025,15 +1026,16 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reNameStoragePopForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
+        $scope.actionBtnHied            = false;
     	pop.btnClickCheck 				= false;
 
-    	for (var i = 0; i < pop.volumes.length; i++) {
-            pop.storageNameList.push(pop.volumes[i].name);
-        }
+    	angular.forEach(pop.volumes, function (item) {
+            pop.storageNameList.push(item.name);
+        });
 
     	pop.fn.storageNameCustomValidationCheck = function(name) {
             if (pop.storageNameList.indexOf(name) > -1) {
-                return {isValid : false, message: "이미 사용중인 이름 입니다."};
+                return {isValid : false, message : "이미 사용중인 이름 입니다."};
             } else {
                 return {isValid : true};
             }
@@ -1049,7 +1051,6 @@ angular.module('iaas.controllers')
     			$scope.actionBtnHied = false;
     			return common.showAlert("이미 사용중인 이름 입니다.");
     		}
-    		
     		pop.fn.reNmStor();
     	};
     	
@@ -1059,7 +1060,7 @@ angular.module('iaas.controllers')
     	};
     	
     	pop.fn.reNmStor = function() {
-    		$scope.main.loadingMainBody = true;
+            $scope.actionLoading = true;
     		var param = {
 		                    tenantId : pop.userTenant.id,
 		                    volumeId : pop.volume.volumeId,
@@ -1069,20 +1070,17 @@ angular.module('iaas.controllers')
     		common.mdDialogHide();
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		returnPromise.success(function (data, status, headers) {
-    			$scope.main.loadingMainBody = false;
     			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
-    			
     			if (angular.isFunction(pop.callBackFunction)) {
     				pop.callBackFunction();
     			}
     		});
     		returnPromise.error(function (data, status, headers) {
-    			$scope.main.loadingMainBody = false;
     			common.showAlertError(data.message);
     		});
-    		returnPromise.finally(function (data, status, headers) {
+    		returnPromise.finally(function () {
     			$scope.actionBtnHied = false;
-    			$scope.main.loadingMainBody = false;
+                $scope.actionLoading = false;
     		});
     	}
     })

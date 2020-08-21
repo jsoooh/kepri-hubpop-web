@@ -1001,21 +1001,21 @@ angular.module('iaas.controllers')
                 }
                 maxCount--;
             }, delay);
-
-            // 인스턴스 자원 사용량 조회
-            var instancesDataLoop = $interval(function () {
-                if ($location.url() != "/iaas/compute") {  // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
-                    $interval.cancel(instancesDataLoop);
-                }
-                ct.fnGetInstancesData();
-                /*angular.forEach(ct.serverMainList, function (server) {
-                    ct.fnSetInstanceUseRate(server);
-                });*/
-            }, 1000 * 60);
         };
 
-        ct.firstPageLoading();
+        // 인스턴스 자원 사용량 조회
+        var instancesDataLoop = $interval(function () {
+            if ($location.url() != "/iaas/compute") {  // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
+                $interval.cancel(instancesDataLoop);
+                console.log("로드 종료");
+            }
+            ct.fnGetInstancesData();
+            /*angular.forEach(ct.serverMainList, function (server) {
+                ct.fnSetInstanceUseRate(server);
+            });*/
+        }, 1000 * 60);
 
+        ct.firstPageLoading();
     })
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);

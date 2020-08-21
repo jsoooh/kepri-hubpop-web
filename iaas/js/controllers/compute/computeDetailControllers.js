@@ -2730,36 +2730,51 @@ angular.module('iaas.controllers')
             ct.fn.changeSltInfoTab();
         }
     }) 
-    .controller('iaasComputeEditFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
+    .controller('iaasComputeEditFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes, ValidationService, user, common, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeEditFormCtrl", 1);
         
         var pop = this;
 
-        pop.userTenant = angular.copy($scope.main.userTenant);
-        pop.serverMainLists = angular.copy($scope.contents.serverMainList);
+        pop.validationService   = new ValidationService({controllerAs: pop});
+        pop.formName            = $scope.dialogOptions.formName;
+        pop.callBackFunction    = $scope.dialogOptions.callBackFunction;
+        pop.userTenant          = angular.copy($scope.main.userTenant);
+        pop.serverMainLists     = angular.copy($scope.contents.serverMainList);
         pop.fn = {};
-        pop.formName = $scope.dialogOptions.formName;
-        pop.callBackFunction = $scope.dialogOptions.callBackFunction;
-        if ($scope.contents.instance == undefined) {
-            pop.instance = $scope.dialogOptions.instance;
-            pop.instance.tenantId = pop.userTenant.tenantId;
-            pop.instance.changeName = $scope.dialogOptions.instance.name;
-        } else {
-            pop.instance = $scope.contents.instance;
-        }
         pop.serverNameList = [];
+        pop.newInstanceName = "";
 
         $scope.dialogOptions.title 		= "이름 변경";
-        $scope.dialogOptions.okName 	    = "변경";
+        $scope.dialogOptions.okName     = "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
 
         $scope.actionLoading 			= false;
         pop.btnClickCheck 				= false;
 
-        for (var i = 0; i < pop.serverMainLists.length; i++) {
-            pop.serverNameList.push(pop.instance.name);
+        if ($scope.contents.instance == undefined) {
+            pop.instance = $scope.dialogOptions.instance;
+            pop.instance.tenantId = pop.userTenant.tenantId;
+        } else {
+            pop.instance = $scope.contents.instance;
         }
+
+        angular.forEach(pop.serverMainLists, function (item) {
+            pop.serverNameList.push(item.name)
+        });
+
+        for (var i = 0; i < pop.serverMainLists.length; i++) {
+            pop.serverNameList.push(pop.serverMainLists[i].name);
+        }
+
+        // 서버 이름 중복 검사
+        pop.fn.serverNameCustomValidationCheck = function(name) {
+            if (pop.serverNameList.indexOf(name) > -1) {
+                return {isValid : false, message : "이미 사용중인 이름입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
@@ -2767,11 +2782,10 @@ angular.module('iaas.controllers')
 
             $scope.actionBtnHied = true;
 
-            if (pop.serverNameList.indexOf(pop.instance.changeName) > -1) {
+            if (pop.serverNameList.indexOf(pop.newInstanceName) > -1) {
                 $scope.actionBtnHied = false;
                 return common.showAlert("이미 사용중인 이름 입니다.");
             }
-
             pop.fn.changeInstance();
         };
 
@@ -2782,27 +2796,24 @@ angular.module('iaas.controllers')
 
         //인스턴스 상세 정보 변경
         pop.fn.changeInstance = function() {
+            $scope.actionLoading = true;
             /* detail 페이지와 팝업창의 인스턴스 이름 동기화 방지를 위함.*/
-            pop.instance.name = pop.instance.changeName;
+            pop.instance.name = pop.newInstanceName;
             var param = {
                 instance : pop.instance
             };
-            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'PUT', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.replacePage();
                 common.mdDialogHide();
-                $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("수정되었습니다");
             });
             returnPromise.error(function (data, status, headers) {
-                common.mdDialogHide();
-                $scope.main.loadingMainBody = false;
                 common.showAlertError("실패하였습니다");
             });
             returnPromise.finally(function() {
-                common.mdDialogHide();
-                $scope.main.loadingMainBody = false;
+                $scope.actionBtnHied = false;
+                $scope.actionLoading = false;
             });
         };
 
@@ -3236,19 +3247,17 @@ angular.module('iaas.controllers')
             var params = {
                 tenantId : pop.tenantId
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', params);
 
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    pop.tenantResource = data.content[0];
+                if (data && data.content) {
+                    pop.tenantResource = data.content;
                     pop.tenantResource.available = {};
                     pop.tenantResource.available.instances = pop.tenantResource.maxResource.instances - pop.tenantResource.usedResource.instances;
-                    pop.tenantResource.available.floatingIps = pop.tenantResource.maxResource.floatingIps - pop.tenantResource.usedResource.floatingIps;
                     pop.tenantResource.available.cores = pop.tenantResource.maxResource.cores - pop.tenantResource.usedResource.cores;
                     pop.tenantResource.available.ramSize = pop.tenantResource.maxResource.ramSize - pop.tenantResource.usedResource.ramSize;
                     pop.tenantResource.available.instanceDiskGigabytes = pop.tenantResource.maxResource.instanceDiskGigabytes - pop.tenantResource.usedResource.instanceDiskGigabytes;
                     pop.tenantResource.available.volumeGigabytes = pop.tenantResource.maxResource.volumeGigabytes - pop.tenantResource.usedResource.volumeGigabytes;
-                    pop.tenantResource.available.objectStorageGigaByte = pop.tenantResource.maxResource.objectStorageGigaByte - pop.tenantResource.usedResource.objectStorageGigaByte;
                     pop.setSpecMaxDisabled();
                 }
             });
