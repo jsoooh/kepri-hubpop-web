@@ -23,44 +23,6 @@
 							</li>
 							<li>
 								<div class="pnb_tit">
-									<i class="i_star"></i> <span class="pnb_t_txt">OS 타입</span>
-									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 인스턴스에 설치되는 OS(운영체제, Operation System)를 선택할 수 있습니다.'"><span class="ico_info"></span></button></div>
-								</div>
-								<!--
-								<div ng-if="contents.imageListLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="os_select_panel">
-									<ul class="ul-list1">
-										<li ng-repeat="image in contents.imageList">
-											<div class="radio1 radio-inline">
-												<input type="radio" id="os_image_{{image.id}}" name="osImage" value="{{image.id}}" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);" >
-												<label for="os_image_{{image.id}}" class="label">
-													<img ng-if="image.icon" class="im"  ng-src="data:{{ image.contentType }}; base64, {{ image.icon }}"/>
-													<img ng-if="!image.icon" class="im"  ng-src="images/thum/{{image.iconFileName}}.png"/>
-												</label>
-											</div>
-											<p class="label-txt" >{{image.serviceName}}</p>
-										</li>
-									</ul>
-								</div>
-								<input type="hidden" ng-model="contents.data.image" name="selectImage" validation="required">
-								-->
-								<select id="ImageTypeList" name="ImageTypeList" class="form-control" ng-options="imageType as imageType.osType + ' ' + imageType.imageVersion for imageType in contents.imageTypeList" ng-model="ct.selectedImageType" ng-change="contents.fn.onchangeImageType(ct.selectedImageType);">
-									<option value="">{{ 'label.select' | translate }}</option>
-								</select>
-							</li>
-							<li>
-								<div class="pnb_tit">
-									<i class="i_star"></i> <span class="pnb_t_txt">이미지 선택</span>
-								</div>
-								<select class="form-control" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);">
-									<option value="">{{ 'label.select' | translate }}</option>
-									<option  ng-repeat="image in contents.imageList | filter: {osType: contents.selectedOsImageType, version: contents.selectedOsImageVersion}" value="{{image.id}}">
-										{{image.name}}
-									</option>
-								</select>
-							</li>
-
-							<li>
-								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">인스턴스 유형</span>
 								</div>
 								<select class="form-control" ng-model="contents.selectedSpecType">
@@ -68,7 +30,46 @@
 									<option ng-repeat="specType in contents.specTypeList" value={{specType}} ng-selected="$first">{{specType}}</option>
 								</select>
 							</li>
+							<li>
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">OS 타입</span>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 인스턴스에 설치되는 OS(운영체제, Operation System)를 선택할 수 있습니다.'"><span class="ico_info"></span></button></div>
+								</div>
+								<select id="ImageTypeList" name="ImageTypeList" class="form-control" ng-options="imageType as imageType.osType + ' ' + imageType.imageVersion for imageType in contents.imageTypeList" ng-model="ct.selectedImageType" ng-change="contents.fn.onchangeImageType(ct.selectedImageType);">
+									<option value="">{{ 'label.select' | translate }}</option>
+								</select>
+							</li>
 
+							<li ng-if="contents.selectedSpecType == ''">
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">이미지 선택</span>
+								</div>
+								<select class="form-control" ng-model="contents.sltImageId">
+									<option value="">{{ 'label.select' | translate }}</option>
+								</select>
+							</li>
+							<li ng-if="contents.selectedSpecType == 'GPU' && contents.selectedSpecType != ''">
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">이미지 선택</span>
+								</div>
+								<select class="form-control" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);">
+									<option value="">{{ 'label.select' | translate }}</option>
+									<option  ng-repeat="image in contents.gpuImageList | filter: {osType: contents.selectedOsImageType, version: contents.selectedOsImageVersion}" value="{{image.id}}">
+										{{image.name}}
+									</option>
+								</select>
+							</li>
+							<li ng-if="contents.selectedSpecType != 'GPU' && contents.selectedSpecType != ''">
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">이미지 선택</span>
+								</div>
+								<select class="form-control" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);">
+									<option value="">{{ 'label.select' | translate }}</option>
+									<option  ng-repeat="image in contents.cpuImageList | filter: {osType: contents.selectedOsImageType, version: contents.selectedOsImageVersion}" value="{{image.id}}">
+										{{image.name}}
+									</option>
+								</select>
+							</li>
 							<li ng-if="contents.selectedSpecType=='GPU'">
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">GPU 모델 선택</span>

@@ -1466,11 +1466,21 @@ angular.module('gpu.controllers')
             }
             //param.imageType = ct.imageType;
             ct.imageList  = [];
+            ct.gpuImageList = [];
+            ct.cpuImageList = [];
             // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.images && data.content.images.length > 0) {
                     ct.imageList  = data.content.images;
+                    // gpu용 이미지와 cpu용 이미지 구분
+                    for (var i=0; i<ct.imageList.length; i++) {
+                        if (ct.imageList[i].gpuYn == true) {
+                            ct.gpuImageList.push(ct.imageList[i]);
+                        } else {
+                            ct.cpuImageList.push(ct.imageList[i]);
+                        }
+                    }
                     angular.forEach(ct.imageList, function (image) {
                         var sizeGb = image.size/(1024*1024*1024);
                         image.minDisk = (image.minDisk > sizeGb) ? image.minDisk : sizeGb;
@@ -1516,7 +1526,7 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         ct.fn.getGpuCardList = function() {
             $scope.main.loadingMainBody = true;
@@ -1533,7 +1543,7 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
 
@@ -1550,7 +1560,7 @@ angular.module('gpu.controllers')
             }
             else
                 ct.fn.getAvailabilityZoneList();
-        }
+        };
 
         ct.fn.getAvailabilityZoneList = function(id) {
             var param = {
@@ -1569,7 +1579,7 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         ct.fn.onchangeAvailabilityZone = function(availabilityZoneId) {
             ct.selectedAvailabilityZone = {};
@@ -1582,7 +1592,7 @@ angular.module('gpu.controllers')
                     }
                 }
             }
-        }
+        };
 
         // 네트워크 리스트 조회
         ct.fn.networkListSearch = function() {
