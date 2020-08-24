@@ -952,10 +952,12 @@ angular.module('iaas.controllers')
        // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
+
             $scope.actionBtnHied = true;
+
             if (!pop.validationService.checkFormValidity(pop[pop.formName])) {
-             $scope.actionBtnHied = false;
-             return;
+                $scope.actionBtnHied = false;
+                return;
             }
             pop.fn.createStorageSnapshot();
         };
@@ -966,24 +968,22 @@ angular.module('iaas.controllers')
         };
 
         pop.fn.createStorageSnapshot = function() {
-            $scope.main.loadingMainBody = true;
+            $scope.actionLoading = true;
             pop.data.tenantId = pop.userTenant.id;
             pop.data.volumeId = pop.volume.volumeId;
             pop.data.volumeName = pop.volume.name;
-            common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'POST', {volumeSnapShot:pop.data});
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                common.mdDialogHide();
                 common.showAlertSuccess("생성 되었습니다.");
                 common.locationHref('/#/iaas/snapshot?tabIndex=1');
             });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+            returnPromise.error(function (data) {
             	common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function () {
                 $scope.actionBtnHied = false;
-                $scope.main.loadingMainBody = false;
+                $scope.actionLoading = false;
             });
         }
     })
@@ -1032,10 +1032,10 @@ angular.module('iaas.controllers')
 
             $scope.actionBtnHied = true;
 
-    		if (pop.storageNameList.indexOf(pop.newVolNm) > -1) {
-    			$scope.actionBtnHied = false;
-    			return common.showAlert("이미 사용중인 이름 입니다.");
-    		}
+            if(!new ValidationService().checkFormValidity(pop[pop.formName])) {
+                $scope.actionBtnHied = false;
+                return;
+            }
     		pop.fn.reNmStor();
     	};
     	
@@ -1051,10 +1051,9 @@ angular.module('iaas.controllers')
 		                    volumeId : pop.volume.volumeId,
 		                    name     : pop.newVolNm
 		                };
-    		
-    		common.mdDialogHide();
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		returnPromise.success(function (data, status, headers) {
+                common.mdDialogHide();
     			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
     			if (angular.isFunction(pop.callBackFunction)) {
     				pop.callBackFunction();
@@ -1180,6 +1179,14 @@ angular.module('iaas.controllers')
     	$scope.popDialogOk = function () {
     		if ($scope.actionBtnHied) return;
     		$scope.actionBtnHied = true;
+
+    		if (pop.volumeSize == pop.volume.size) {
+    		    $scope.actionBtnHied = false;
+    		    return common.showAlert("디스크 크기가 변경되지 않았습니다.");
+            } else if (pop.volumeSize < pop.volumeSize) {
+                $scope.actionBtnHied = false;
+                return common.showAlert("디스크 크기가 기존보다 작습니다.")
+            }
     		pop.fn.reSizeStor();
     	};
     	
@@ -1196,9 +1203,9 @@ angular.module('iaas.controllers')
                 volumeId : pop.volume.volumeId,
                 size     : pop.volumeSize
             };
-    		common.mdDialogHide();
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		returnPromise.success(function (data, status, headers) {
+                common.mdDialogHide();
     			common.showAlertSuccess("디스크 크키가 변경 되었습니다.");
     			if ( angular.isFunction(pop.callBackFunction) ) {
     				pop.callBackFunction();

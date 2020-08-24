@@ -2744,13 +2744,13 @@ angular.module('iaas.controllers')
         pop.serverNameList = [];
         pop.newInstanceName = "";
 
-        $scope.dialogOptions.title 		= "이름 변경";
-        $scope.dialogOptions.okName     = "변경";
-        $scope.dialogOptions.closeName 	= "닫기";
-        $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
+        $scope.dialogOptions.title 		    = "이름 변경";
+        $scope.dialogOptions.okName         = "변경";
+        $scope.dialogOptions.closeName 	    = "닫기";
+        $scope.dialogOptions.templateUrl    = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
 
-        $scope.actionLoading 			= false;
-        pop.btnClickCheck 				= false;
+        $scope.actionLoading 			    = false;
+        pop.btnClickCheck 				    = false;
 
         if ($scope.contents.instance == undefined) {
             pop.instance = $scope.dialogOptions.instance;
@@ -2762,12 +2762,11 @@ angular.module('iaas.controllers')
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
-
             $scope.actionBtnHied = true;
 
-            if (pop.serverNameList.indexOf(pop.newInstanceName) > -1) {
+            if (!new ValidationService().checkFormValidity(pop[pop.formName])) {
                 $scope.actionBtnHied = false;
-                return common.showAlert("이미 사용중인 이름 입니다.");
+                return;
             }
             pop.fn.changeInstance();
         };
@@ -3232,9 +3231,9 @@ angular.module('iaas.controllers')
         $scope.dialogOptions.authenticate = true;
 
         //스펙그룹의 스펙 리스트 조회
-        pop.isSpecLoad = false;
-        //스펙그룹의 스펙 리스트 조회
         pop.getSpecList = function() {
+            $scope.actionLoading = true;
+            pop.isSpecLoad = false;
             pop.specList = [];
             pop.sltSpec = {};
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET');
@@ -3242,16 +3241,16 @@ angular.module('iaas.controllers')
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
                     pop.specList = data.content.specs;
                 }
-                pop.isSpecLoad = true;
-                pop.setSpecMinDisabled();
-                pop.setSpecMaxDisabled();
             });
-            returnPromise.error(function (data, status, headers) {
-                pop.isSpecLoad = true;
-                pop.setSpecMinDisabled();
-                pop.setSpecMaxDisabled();
+            returnPromise.error(function (data) {
                 common.showAlertError(data.message);
             });
+            returnPromise.finally(function () {
+                pop.isSpecLoad = true;
+                pop.setSpecMinDisabled();
+                pop.setSpecMaxDisabled();
+                $scope.actionLoading = false;
+            })
         };
 
         pop.setInstanceSpec = function(sltSpec) {
@@ -3286,12 +3285,8 @@ angular.module('iaas.controllers')
                     pop.setSpecMaxDisabled();
                 }
             });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+            returnPromise.error(function (data) {
                 common.showAlert("message",data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -3364,6 +3359,7 @@ angular.module('iaas.controllers')
                 return;
             }
 
+            $scope.actionLoading = true;
             var param = {
                 urlParams : {
                     instanceId : pop.instance.id,
@@ -3371,13 +3367,10 @@ angular.module('iaas.controllers')
                     specId     : pop.sltSpecUuid
                 }
             };
-            common.mdDialogHide();
-            $scope.main.loadingMain = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/resize', 'POST', param );
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMain = false;
+                common.mdDialogHide();
                 common.showAlertSuccess("변경 되었습니다.");
-                pop.btnClickCheck = false;
                 if (angular.isFunction(pop.callBackFunction) ) {
                     pop.instance.uiTask = "resized";
                     pop.instance.vmState = "resized";
@@ -3385,11 +3378,11 @@ angular.module('iaas.controllers')
                 }
             });
             returnPromise.error(function (data, status, headers) {
-                pop.btnClickCheck = false;
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function() {
+                pop.btnClickCheck = false;
+                $scope.actionLoading = false;
             });
         };
 
@@ -3650,7 +3643,7 @@ angular.module('iaas.controllers')
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeVolumeFormCtrl", 1);
 
         var pop 						= this;
-        var ct 							= $scope.contents;
+
         pop.validationService 			= new ValidationService({controllerAs: pop});
     	pop.formName 					= $scope.dialogOptions.formName;
         pop.fn 							= {};
@@ -3663,7 +3656,7 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.closeName 	= "닫기";
     	$scope.dialogOptions.templateUrl= _IAAS_VIEWS_ + "/compute/computeServerConnVolPopForm.html" + _VersionTail();
     	$scope.actionLoading 			= false;
-    	$scope.actionBtnHied = false;
+    	$scope.actionBtnHied            = false;
         pop.volumeList = [];
         pop.sltVolume = {};
         pop.sltVolumeId = "";
@@ -3672,26 +3665,22 @@ angular.module('iaas.controllers')
         $scope.dialogOptions.authenticate = true;
 
       //디스크 리스트 조회
-        pop.isVolumeListLoad = false;
         pop.fn.getVolumeList = function() {
-            $scope.main.loadingMainBody = true;
+            $scope.actionLoading = true;
             var param = {
-                tenantId       : ct.data.tenantId,
+                tenantId       : pop.userTenant.id,
                 conditionKey   : "status",
                 conditionValue : "available"
             };
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param , 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 pop.volumeList = data.content.volumes;
-                pop.isVolumeListLoad = true;
             });
-           returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-                pop.isVolumeListLoad = true;
+           returnPromise.error(function (data) {
                 common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function () {
+                $scope.actionLoading = false;
             });
         };
 
@@ -3718,36 +3707,36 @@ angular.module('iaas.controllers')
     	};
         
         //인스턴스 디스크 추가
-        $scope.actionBtnHied = false;
         pop.fn.addInstanceVolume = function() {
             if ($scope.actionBtnHied) return;
+
             $scope.actionBtnHied = true;
+
         	if (pop.sltVolume == false ) {
         		common.showAlertWarning('추가할 디스크를 선택 하십시요.');
                 $scope.actionBtnHied = false;
 				return;
 			}
+        	$scope.actionLoading = true;
             var param = {
                 instanceId : pop.instance.id,
                 tenantId : pop.userTenant.tenantId,
                 volumeId : pop.sltVolume.volumeId
             };
-            
-            $scope.main.loadingMainBody = true;
-            common.mdDialogHide();
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceAttach', 'POST', {volumeAttach : param});
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                common.mdDialogHide();
                 common.showAlertSuccess("디스크가 추가 되었습니다.");
                 if ( angular.isFunction(pop.callBackFunction) ) {
                     pop.callBackFunction();
                 }
             });
-            returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+            returnPromise.error(function (data) {
             	common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function () {
+                $scope.actionBtnHied = false;
+                $scope.actionLoading = false;
             });
         };
 
