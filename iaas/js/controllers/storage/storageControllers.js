@@ -314,8 +314,9 @@ angular.module('iaas.controllers')
 
         // 뒤로 가기 버튼 활성화
         $scope.main.displayHistoryBtn = true;
-        // 첫 시작 로딩
-        $scope.main.loadingMainBody = true;
+
+        $scope.main.loadingMainBody = false;
+
         var ct               = this;
         ct.data              = {};
         ct.fn                = {};
@@ -518,26 +519,10 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 페이지 첫 로딩
-        ct.fn.firstPageLoading = function() {
-            ct.fn.getServerList();
-            ct.fn.getTenantResource();
-            ct.fn.getStorageList();
+        ct.fn.getServerList();
+        ct.fn.getTenantResource();
+        ct.fn.getStorageList();
 
-            // 함수 로드 체크
-            var delay = 100;            // 100ms
-            var maxCount = 10 * 60 * 3; // 최대 3분(1800번)
-            var firstLoadingLoop = $interval(function () {
-                $scope.main.loadingMainBody = true;
-                if (maxCount < 0 || (ct.isServerListLoad == true && ct.isTenantResourceLoad == true && ct.isStorageListLoad == true)) {
-                    $interval.cancel(firstLoadingLoop);
-                    $scope.main.loadingMainBody = false;
-                }
-                maxCount--;
-            }, delay);
-        };
-
-        ct.fn.firstPageLoading();
     })
     .controller('iaasStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageDetailCtrl", 1);

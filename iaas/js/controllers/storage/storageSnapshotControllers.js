@@ -95,8 +95,7 @@ angular.module('iaas.controllers')
 
         // 뒤로 가기 버튼 활성화
         $scope.main.displayHistoryBtn = true;
-        // 첫 시작 로딩
-        $scope.main.loadingMainBody = true;
+
         var ct               = this;
         ct.data              = {};
         ct.data.tenantId     = $scope.main.userTenantId;
@@ -222,7 +221,7 @@ angular.module('iaas.controllers')
 
         // 볼륨 스냅샷 조회
         ct.fn.getStorageSnapshotInfo = function() {
-            ct.isStorageSnapshotLoad = false;
+            $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
                 snapshotId : ct.data.snapshotId
@@ -241,7 +240,7 @@ angular.module('iaas.controllers')
                 common.showAlertError("message",data.message);
             });
             returnPromise.finally(function () {
-                ct.isStorageSnapshotLoad = true;
+                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -320,27 +319,10 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 페이지 첫 로딩
-        ct.fn.firstPageLoading = function() {
-            ct.fn.getServerList();
-            ct.fn.getTenantResource();
-            ct.fn.getStorageList();
-            ct.fn.getStorageSnapshotInfo();
-
-            // 함수 로드 체크
-            var delay = 100;            // 100ms
-            var maxCount = 10 * 60 * 3; // 최대 3분(1800번)
-            var firstLoadingLoop = $interval(function () {
-                $scope.main.loadingMainBody = true;
-                if (maxCount < 0 || (ct.isServerListLoad == true && ct.isTenantResourceLoad == true && ct.isStorageListLoad == true == ct.isStorageSnapshotLoad == true)) {
-                    $interval.cancel(firstLoadingLoop);
-                    $scope.main.loadingMainBody = false;
-                }
-                maxCount--;
-            }, delay);
-        };
-
-        ct.fn.firstPageLoading();
+        ct.fn.getStorageSnapshotInfo();
+        ct.fn.getServerList();
+        ct.fn.getTenantResource();
+        ct.fn.getStorageList();
     })
     .controller('iaasStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);
