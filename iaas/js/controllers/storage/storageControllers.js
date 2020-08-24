@@ -1124,7 +1124,6 @@ angular.module('iaas.controllers')
 
         // 볼륨 리스트 조회
         pop.fn.getStorageList = function() {
-            pop.isStorageListLoad = false;
             var param = {
                 tenantId : pop.userTenant.id,
                 volumeId : pop.volume.volumeId
@@ -1145,14 +1144,11 @@ angular.module('iaas.controllers')
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError("message",data.message);
             });
-            returnPromise.finally(function () {
-                pop.isStorageListLoad = true;
-            });
         };
 
         // 테넌트 자원 사용량 조회
         pop.fn.getTenantResource = function() {
-            pop.isTenantResourceLoad = false;
+            $scope.actionLoading = true;
             var params = {
                 tenantId : pop.userTenant.id
             };
@@ -1173,7 +1169,10 @@ angular.module('iaas.controllers')
                 common.showAlertError("message",data.message);
             });
             returnPromise.finally(function () {
-                pop.isTenantResourceLoad = true;
+                $timeout(function () {
+                    pop.fn.refreshSlider();
+                    $scope.actionLoading = false;
+                }, 500);
             });
         };
 
@@ -1222,26 +1221,8 @@ angular.module('iaas.controllers')
             })
         };
 
-        // 페이지 첫 로딩
-        pop.fn.firstPageLoading = function() {
-            pop.fn.getStorageList();
-            pop.fn.getTenantResource();
-
-            // 함수 로드 체크
-            var delay = 100;            // 100ms
-            var maxCount = 10 * 60 * 3; // 최대 3분(1800번)
-            var firstLoadingLoop = $interval(function () {
-                $scope.actionLoading = true;
-                if (maxCount < 0 || (pop.isStorageListLoad == true && pop.isTenantResourceLoad == true)) {
-                    $interval.cancel(firstLoadingLoop);
-                    pop.fn.refreshSlider();
-                    $scope.actionLoading = false;
-                }
-                maxCount--;
-            }, delay);
-        };
-
-        pop.fn.firstPageLoading();
+        pop.fn.getStorageList();
+        pop.fn.getTenantResource();
     })
     .controller('iaasStorageDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         	_DebugConsoleLog("storageControllers.js : iaasStorageDescriptionCtrl", 1);
