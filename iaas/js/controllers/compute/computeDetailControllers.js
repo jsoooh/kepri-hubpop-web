@@ -2759,23 +2759,6 @@ angular.module('iaas.controllers')
             pop.instance = $scope.contents.instance;
         }
 
-        angular.forEach(pop.serverMainLists, function (item) {
-            pop.serverNameList.push(item.name)
-        });
-
-        for (var i = 0; i < pop.serverMainLists.length; i++) {
-            pop.serverNameList.push(pop.serverMainLists[i].name);
-        }
-
-        // 서버 이름 중복 검사
-        pop.fn.serverNameCustomValidationCheck = function(name) {
-            if (pop.serverNameList.indexOf(name) > -1) {
-                return {isValid : false, message : "이미 사용중인 이름입니다."};
-            } else {
-                return {isValid : true};
-            }
-        };
-
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
             if ($scope.actionBtnHied) return;
@@ -2792,6 +2775,40 @@ angular.module('iaas.controllers')
         $scope.popCancel = function() {
             $scope.dialogClose = true;
             common.mdDialogCancel();
+        };
+
+        // 서버 이름 중복 검사
+        pop.fn.serverNameCustomValidationCheck = function(name) {
+            if (pop.serverNameList.indexOf(name) > -1) {
+                return {isValid : false, message : "이미 사용중인 이름입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
+        // 인스턴스 목록 DB 조회
+        pop.fn.getInstanceList = function() {
+            $scope.actionLoading = true;
+            var params = {
+                tenantId : pop.userTenant.id,
+                deleteYn : "N",
+                size : -1,
+                page : 0
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vms/view', 'GET', params);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.content) {
+                    angular.forEach(data.content.content, function (item) {
+                        pop.serverNameList.push(item.instanceName);
+                    });
+                }
+            });
+            returnPromise.error(function (data) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function () {
+                $scope.actionLoading = false;
+            });
         };
 
         //인스턴스 상세 정보 변경
@@ -2817,6 +2834,14 @@ angular.module('iaas.controllers')
             });
         };
 
+        // 넘겨받은 인스턴스 목록이 있다면 조회하지 않음
+        if (pop.serverMainLists && pop.serverMainLists.length > 0) {
+            angular.forEach(pop.serverMainLists, function (item) {
+                pop.serverNameList.push(item.name)
+            });
+        } else {
+            pop.fn.getInstanceList();
+        }
     })
     .controller('iaasComputeDomainFormCtrl', function($scope, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeDomainFormCtrl", 1);

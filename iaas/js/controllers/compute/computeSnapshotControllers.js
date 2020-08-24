@@ -214,6 +214,7 @@ angular.module('iaas.controllers')
         ct.data.networks = [];
         ct.data.keypair = {};
         ct.data.securityPolicies = [];
+        ct.serverNameList = [];
         ct.subnet = {};
         ct.snapshotInfo = {};
         ct.networks = [];
@@ -234,6 +235,40 @@ angular.module('iaas.controllers')
 
         ct.snapshotId = $stateParams.snapshotId;
         ct.paramTenantId = !!$stateParams.tenantId ? $stateParams.tenantId : ct.data.tenantId;
+
+        // 서버 이름 중복 검사
+        ct.fn.serverNameCustomValidationCheck = function(name) {
+            if (ct.serverNameList.indexOf(name) > -1) {
+                return {isValid : false, message : "이미 사용중인 이름입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
+        // 인스턴스 목록 DB 조회
+        ct.fn.getInstanceList = function() {
+            ct.isInstanceListLoad = false;
+            var params = {
+                tenantId : ct.data.tenantId,
+                deleteYn : "N",
+                size : -1,
+                page : 0
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vms/view', 'GET', params);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.content) {
+                    angular.forEach(data.content.content, function (item) {
+                        ct.serverNameList.push(item.instanceName);
+                    });
+                }
+            });
+            returnPromise.error(function (data) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function () {
+                ct.isInstanceListLoad = true;
+            });
+        };
 
         ct.fn.getSnapshotInfo = function(snapshotId) {
             $scope.main.loadingMainBody = true;
@@ -557,6 +592,7 @@ angular.module('iaas.controllers')
 
         if (ct.data.tenantId && ct.snapshotId) {
             $scope.main.loadingMainBody = true;
+            ct.fn.getInstanceList();
             ct.fn.getTenantResource();
             //ct.fn.getDomainUsingList();     //windows rdp 포트포워딩으로 도메인 사용하지 않음
             ct.fn.getSnapshotInfo(ct.snapshotId);

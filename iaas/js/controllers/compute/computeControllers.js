@@ -992,7 +992,7 @@ angular.module('iaas.controllers')
 
             // 함수 로딩 체크
             var delay = 100;                // 딜레이 100ms
-            var maxCount = 10 * 60 * 3;    // 최대 횟수1800번(3분)
+            var maxCount = 10 * 60 * 3;     // 최대 횟수1800번(3분)
             var firstLoadingLoop = $interval(function () {
                 $scope.main.loadingMainBody = true;
                 if (maxCount <= 0 || (ct.fnGetServerMainListLoading == true && ct.fngetLbListLoading == true)) {
@@ -1007,7 +1007,6 @@ angular.module('iaas.controllers')
         var instancesDataLoop = $interval(function () {
             if ($location.url() != "/iaas/compute") {  // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
                 $interval.cancel(instancesDataLoop);
-                console.log("로드 종료");
             }
             ct.fnGetInstancesData();
             /*angular.forEach(ct.serverMainList, function (server) {
@@ -1034,6 +1033,7 @@ angular.module('iaas.controllers')
         ct.data.keypair      = {};
         ct.data.initScript   = {};
         ct.data.securityPolicys = [];
+        ct.serverNameList    = [];
         ct.subnet            = {};
         ct.networks          = [];
         ct.volume            = {};
@@ -1049,6 +1049,40 @@ angular.module('iaas.controllers')
         ct.data.subDomainName = "";
 
         ct.data.name = 'server-01';
+
+        // 서버 이름 중복 검사
+        ct.fn.serverNameCustomValidationCheck = function(name) {
+            if (ct.serverNameList.indexOf(name) > -1) {
+                return {isValid : false, message : "이미 사용중인 이름입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
+        // 인스턴스 목록 DB 조회
+        ct.fn.getInstanceList = function() {
+            ct.isInstanceListLoad = false;
+            var params = {
+                tenantId : ct.data.tenantId,
+                deleteYn : "N",
+                size : -1,
+                page : 0
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vms/view', 'GET', params);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.content) {
+                    angular.forEach(data.content.content, function (item) {
+                        ct.serverNameList.push(item.instanceName);
+                    });
+                }
+            });
+            returnPromise.error(function (data) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function () {
+                ct.isInstanceListLoad = true;
+            });
+        };
 
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
@@ -1537,6 +1571,7 @@ angular.module('iaas.controllers')
         };
 
         if (ct.data.tenantId) {
+            ct.fn.getInstanceList();
             ct.fn.getTenantResource();
             //ct.fn.getDomainUsingList();     //windows rdp 포트포워딩으로 도메인 사용하지 않음
             ct.fn.getSpecList();
