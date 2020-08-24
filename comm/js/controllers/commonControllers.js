@@ -1735,6 +1735,7 @@ angular.module('common.controllers', [])
             }
             var orgPromise = portal.portalOrgs.getPotalOrg(mc.sltPortalOrgId);
             orgPromise.success(function (data) {
+                console.log(1, data.statusCode, (data.statusCode == "updating" && mc.searchCnt < 10));
                 //생성 완료되지 않은 경우 재조회.
                 if (data.statusCode == "updating" && mc.searchCnt < 10) {
                     if (mc.searchFirst) {
@@ -1750,11 +1751,13 @@ angular.module('common.controllers', [])
                         $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]);
                         $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
                     }
+                    console.log(data);
                     mc.changePortalOrg(data);
                     mc.loadingMainBody = false;
                 }
             });
             orgPromise.error(function (data) {
+                console.log('error', data)
                 $scope.main.loadingMainBody = false;
             });
         };
