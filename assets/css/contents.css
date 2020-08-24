@@ -262,15 +262,23 @@
 .panel-bordered .btn-zoom::before {display: inline-block; content: '\e954'; font-family: 'xeicon'; font-size:25px;}
 .panel-bordered.zoom .btn-zoom::before {content: '\e955';}
 
-
 .page-detail .panel-body {height:400px;}
-
-/* .mCSB_container{overflow:unset;} */
 
 .table-input-wrap .form-inline > .radio-group,
 .table-input-wrap .form-inline > .checkbox-group {
 	margin-right: 13px;
 }
+
+.table-state ul > li  {position:relative;}
+.table-state .state-txt  {color:#888; font-weight:400; vertical-align:middle;}
+.table-state .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
+.table-state .server_con_detail {position:absolute; top:25px; z-index:1; width:100%; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
+.table-state .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
+.table-state .t_tip_bx {text-align:left; margin-top:-1px;}
+
+
+/*부하분산-상세화면 연결서버 탭(연결서버 이미지일 때 생성중 프로그래스 */
+.cont_progress_div {width:50%; height:200px; margin:0 auto;}
 
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
