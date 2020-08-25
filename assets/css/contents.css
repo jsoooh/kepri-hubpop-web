@@ -98,16 +98,16 @@
 .text_wrap textarea {height:100px;}
 
 /* 프로젝트 신청 > '상세쿼터조정' > 'paas 용량' */
-.pj_write_wrap .s_inner_cont .pj_paas_volume > ul > li {padding-bottom:0;}
-.pj_write_wrap .s_inner_cont .pj_paas_volume > ul > li p {font-size:15px; width:100%; }
-.pj_write_wrap .pj_paas_volume {clear:both;}
-.pj_write_wrap .pj_paas_volume .radio1 label {display:block; width:180px; height:180px; }
-.pj_write_wrap .pj_paas_volume .volume_cont {background:url("../../images/thum/im_thum_db_bg.png") no-repeat center 17px; padding:75px 15px 12px 15px;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li {display:table; width:100%; line-height:2.3em; border-bottom:1px solid #d7d7d7; padding:0; margin-top:0;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li:last-child {border-bottom:0;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li span {display:table-cell; width:50%; font-size:13px; box-sizing:border-box;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li span:first-child {text-align:left;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li span:last-child {font-weight:400; text-align:right;}
+.write_wrap .s_inner_cont .pj_paas_volume > ul > li {padding-bottom:0;}
+.write_wrap .s_inner_cont .pj_paas_volume > ul > li p {font-size:15px; width:100%; }
+.write_wrap .pj_paas_volume {clear:both;}
+.write_wrap .pj_paas_volume .radio1 label {display:block; width:180px; height:180px; }
+.write_wrap .pj_paas_volume .volume_cont {background:url("../../images/thum/im_thum_db_bg.png") no-repeat center 17px; padding:75px 15px 12px 15px;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li {display:table; width:100%; line-height:2.3em; border-bottom:1px solid #d7d7d7; padding:0; margin-top:0;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li:last-child {border-bottom:0;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li span {display:table-cell; width:50%; font-size:13px; box-sizing:border-box;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li span:first-child {text-align:left;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li span:last-child {font-weight:400; text-align:right;}
 
 /* form_list > s_inner_cont 유형 */
 .panel_area .pn_body .form_list .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
@@ -303,8 +303,8 @@
 
 body {line-height:1.57142857;}
 input[type="text"], input[type="password"] {height:38px;}
-.pj_write_wrap .table, .pj_write_wrap .table td {font-size:13px !important;}
-.pj_write_wrap .radio {padding:0;}
+.write_wrap .table, .write_wrap .table td {font-size:13px !important;}
+.write_wrap .radio {padding:0;}
 .radio {padding:0;}
 
 .btn.btn-success {background-color: #249b97; border-color: #249b97; color:#fff;}
