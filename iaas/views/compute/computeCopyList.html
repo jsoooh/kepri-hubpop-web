@@ -1,54 +1,52 @@
-<div class="message_area">
-	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>다른 프로젝트에서 생성한 백업 이미지로부터 현재 프로젝트에 새로운 서버를 생성합니다.</span></div>
+<div class="alert alert-primary" role="alert">
+	<i data-feather="file-text" class="feather-directive"></i>
+	<div class="text-area">다른 프로젝트에서 생성한 백업 이미지로부터 현재 프로젝트에 새로운 서버를 생성합니다.</div>
 </div>
-<div class="cont-titWrap mt50">
-	<h3 class="h-tit3">
-		다른 프로젝트의 서버 복사
-	</h3>
-</div>
-<div class="searchWrap text-center">
-	<div class="searchBox">
-		<div class="form-group">
-			<select title="검색 구분 선택" ng-model="contents.schPortalOrgId" ng-change="contents.fn.onChangeSchPortalOrg(contents.schPortalOrgId)">
-				<option value="">프로젝트</option>
-				<option ng-repeat="orgItem in (contents.portalOrgs | filter : { id: '!' + contents.sltPortalOrgId })" value="{{orgItem.orgId}}">{{orgItem.orgName}}</option>
-			</select>
-			<input type="text" placeholder="백업 이미지 이름을 입력해 주세요." ng-model="contents.schFilterText" style="width: 400px;">
+
+<div class="card-input-wrap">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="ciw-tit">
+				<b class="tit">다른 프로젝트의 서버 복사</b>
+			</div>
 		</div>
-		<button type="button" name="button" class="btn btn-sch" title="검색">
-			<span class="ico">검색</span>
-		</button>
+		<div class="col-md-6">
+			<div class="text-right">
+				<div class="form-group inline-block margin-bottom-0">
+					<select title="검색 구분 선택" class="form-control" ng-model="contents.schPortalOrgId" ng-change="contents.fn.onChangeSchPortalOrg(contents.schPortalOrgId)">
+						<option value="">프로젝트</option>
+						<option ng-repeat="orgItem in (contents.portalOrgs | filter : { id: '!' + contents.sltPortalOrgId })" value="{{orgItem.orgId}}">{{orgItem.orgName}}</option>
+					</select>
+				</div>
+				<div class="form-group inline-block margin-bottom-0">
+					<input type="text" class="form-control" placeholder="백업 이미지 이름을 입력해 주세요." ng-model="contents.schFilterText" style="width: 400px;">
+				</div>
+				<button type="button" class="btn btn-primary">
+					<div class="feather-icon">
+						<i data-feather="search" class="feather-directive"></i>
+					</div>
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
 
-<div class="tbl type1">
-	<table class="table">
+<div class="table-wrap margin-top-20">
+	<table class="table table-bordered">
 		<colgroup>
-			<!--번호-->
-			<col width="3%">
-			<!--프로젝트-->
-			<col width="15%">
-			<!--서버명-->
-			<col width="20%">
-			<!--OS이미지-->
-			<col width="10%">
-			<!--CPU-->
-			<col width="3%">
-			<!--메모리-->
-			<col width="5%">
-			<!--이름-->
-			<col width="19%">
-			<!--크기-->
-			<col width="5%">
-			<!--설명-->
-			<col width="5%">
-			<!--생성일시-->
-			<col width="10%">
-			<!--서버 복사-->
-			<col width="5%">
+			<col width="5%"><!--번호-->
+			<col width="16%"><!--프로젝트-->
+			<col width="16%"><!--서버명-->
+			<col width="10%"><!--OS이미지-->
+			<col width="4%"><!--CPU-->
+			<col width="8%"><!--메모리-->
+			<col width="16%"><!--이름-->
+			<col width="5%"><!--크기-->
+			<col width="5%"><!--설명-->
+			<col width="8%"><!--생성일시-->
+			<col width="7%"><!--서버 복사-->
 		</colgroup>
-		<thead>
+		<thead class="black white-text text-center">
 			<tr>
 				<th scope="row" rowspan="2" class="bd_r">번호</th>
 				<th scope="row" rowspan="2" class="bd_r">프로젝트</th>
@@ -69,20 +67,20 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="(key, instanceSnapshot) in (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText })"  ng-if="(key >= (contents.pageOptions.pageSize * (contents.pageOptions.currentPage-1))) && (key < (contents.pageOptions.pageSize * (contents.pageOptions.currentPage)))">
-				<td>{{ (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length - key }}</td>
+				<td class="text-center">{{ (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length - key }}</td>
 				<td style="text-align:left">{{ instanceSnapshot.portalOrgName }}</td>
 				<td style="text-align:left">{{ instanceSnapshot.instanceName }}</td>
 				<td>{{ instanceSnapshot.imageName }}</td>
-				<td>{{ instanceSnapshot.cpu }}</td>
-				<td>{{ instanceSnapshot.ram | displayVolume:'MB' }}</td>
+				<td class="text-center">{{ instanceSnapshot.cpu }}</td>
+				<td class="text-center">{{ instanceSnapshot.ram | displayVolume:'MB' }}</td>
 				<td style="text-align:left">{{ instanceSnapshot.name }}</td>
-				<td>{{ instanceSnapshot.disk | displayVolume:'GB' }}</td>
-				<td><a tooltip-placement="bottom" uib-tooltip="{{ instanceSnapshot.description }}">설명</a></td>
-				<td>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
-				<td><button type="button" name="button" class="btn btn-ico-copy-s only-ico" title="서버 복사" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/' + instanceSnapshot.tenantId)"><span class="ico">서버 복사</span></button></td>
+				<td class="text-center">{{ instanceSnapshot.disk | displayVolume:'GB' }}</td>
+				<td class="text-center"><a class="info-icon-tooltip" tooltip-placement="bottom" uib-tooltip="{{ instanceSnapshot.description }}">	i</a></td>
+				<td class="text-center">{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+				<td class="text-center"><button type="button" name="button" class="btn btn-ico-copy-s only-ico" title="서버 복사" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/' + instanceSnapshot.tenantId)"><span class="ico">서버 복사</span></button></td>
 			</tr>
 			<tr ng-if="(contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length == 0">
-				<td colspan="11">{{ 'message.mi_dont_exist_list' | translate }}</td>
+				<td colspan="11" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
 			</tr>
 		</tbody>
 	</table>

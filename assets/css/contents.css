@@ -309,3 +309,5 @@ input[type="text"], input[type="password"] {height:38px;}
 
 .btn.btn-success {background-color: #249b97; border-color: #249b97; color:#fff;}
 .panel .panel-heading .dropdown .feather-icon {font-size: 20px; color: #9d9d9d;}
+
+.pagiWrap li a {height:38px;}
