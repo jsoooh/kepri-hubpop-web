@@ -580,10 +580,10 @@ http://www.kepri2-demo.crossent.com
       "resultMsg": "NORMAL_CODE"
     }
     ```
-    #### 4. 기타 주의점
-  ##### 4-1. feather icon이 안나타날 때
-  - feather icon은 jQuery 방식이므로 angularjs 에서 제대로 반영되지 않는 경우 있음
-    directive 처리함으로 해서 화면에서는 한페이지당 한번만 아래 클래스 추가 :  class="feather-directive"
+#### 4. 기타 주의점
+##### 4-1. feather icon이 안나타날 때
+- feather icon은 jQuery 방식이므로 angularjs 에서 제대로 반영되지 않는 경우 있음 <br>
+  directive 처리함으로 해서 화면에서는 한페이지당 한번만 아래 클래스 추가 :  class="feather-directive"
   ```
   <i data-feather="more-vertical" class="feather-directive"></i>
   ```
