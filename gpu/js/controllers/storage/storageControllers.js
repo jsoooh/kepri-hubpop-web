@@ -131,14 +131,14 @@ angular.module('gpu.controllers')
 
         ct.deleteVolumes = function(type, id) {
         	if (type == 'thum') {
-        		common.showConfirm('디스크 삭제','디스크을 삭제 하시겠습니까?').then(function(){
+        		common.showConfirm('볼륨 삭제','볼륨을 삭제 하시겠습니까?').then(function(){
                     ct.deleteVolumesAction(type, id);
                 });
         	} else if (type == 'tbl') {
         		if (ct.roles.length == 0) {
-                    common.showAlert('메세지','선택된 디스크가 없습니다.');
+                    common.showAlert('메세지','선택된 볼륨이 없습니다.');
                 } else {
-                    common.showConfirm('디스크 삭제','선택된 '+ct.roles.length+'개의 디스크을 삭제 하시겠습니까?').then(function(){
+                    common.showConfirm('볼륨 삭제','선택된 '+ct.roles.length+'개의 볼륨을 삭제 하시겠습니까?').then(function(){
                         ct.deleteVolumesAction(type, id);
                     });
                 }
@@ -161,7 +161,7 @@ angular.module('gpu.controllers')
                         common.showAlert('메세지','오류가 발생하였습니다.');
                     }
                 }
-                common.showAlertSuccess('디스크가 삭제 되었습니다.');
+                common.showAlertSuccess('볼륨이 삭제 되었습니다.');
                 ct.fn.getStorageList();
                 ct.roles = [];
             }).catch(function(e){
@@ -222,7 +222,7 @@ angular.module('gpu.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','백업 이미지을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
             }
         };
 
@@ -471,7 +471,7 @@ angular.module('gpu.controllers')
             returnPromise.success(function (data, status, headers) {
             	// 서버생성후 -> 디스크 생성 후 sucess 처리.
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess(ct.volume.name+" 디스크 생성이 시작 되었습니다.");
+                common.showAlertSuccess(ct.volume.name+" 볼륨 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고
                 // $scope.main.goToPage("/iaas/storage");
                 $scope.main.goToPage("/gpu/storage");
@@ -758,7 +758,7 @@ angular.module('gpu.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','백업 이미지을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
             }
         };
         
@@ -802,7 +802,7 @@ angular.module('gpu.controllers')
         pop.formName = "snapshotEditForm";
         pop.validDisabled = true;
         pop.dialogClassName = "modal-lg";
-        pop.title = "디스크 수정";
+        pop.title = "볼륨 수정";
 
         // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/subMenus/storageEditForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/subMenus/storageEditForm.html" + _VersionTail();
@@ -876,16 +876,16 @@ angular.module('gpu.controllers')
             if (isNaN(Number(pop.expandVolumeSize))) return;
             var checkByte = $bytes.lengthInUtf8Bytes(pop.volume.description);
         	if (checkByte > 255) {
-                common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("볼륨 설명이 255Byte를 초과하였습니다.");
         		return;
         	}
             if (Number(pop.expandVolumeSize) < pop.volume.size) {
-                common.showAlertWarning("디스크 크기는 size up만 가능 합니다. 디스크 크기 최소값 : " + pop.volume.size + ", 입력값 : " + pop.expandVolumeSize);
+                common.showAlertWarning("볼륨 크기는 size up만 가능 합니다. 볼륨 크기 최소값 : " + pop.volume.size + ", 입력값 : " + pop.expandVolumeSize);
                 pop.expandVolumeSize = pop.volume.size;
                 return;
             }
             if (Number(pop.expandVolumeSize) > (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)) {
-                common.showAlertWarning("디스크 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.expandVolumeSize );
+                common.showAlertWarning("볼륨 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.expandVolumeSize );
                 pop.expandVolumeSize = pop.volume.size;
                 return;
             }
@@ -950,7 +950,7 @@ angular.module('gpu.controllers')
         pop.formName = "createSnapshotForm";
         pop.validDisabled = true;
         pop.dialogClassName = "modal-lg";
-        pop.title = "디스크 백업 이미지 생성";
+        pop.title = "볼륨 스냅샷 생성";
 
         // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
@@ -1014,7 +1014,7 @@ angular.module('gpu.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         
-        $scope.dialogOptions.title 		= "백업 이미지  생성";
+        $scope.dialogOptions.title 		= "스냅샷 생성";
         $scope.dialogOptions.okName 	= "생성";
         $scope.dialogOptions.closeName 	= "닫기";
         // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageCreatePopSnapshotForm.html" + _VersionTail();
@@ -1084,7 +1084,7 @@ angular.module('gpu.controllers')
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
     	pop.storageNameList             = [];
     	
-    	$scope.dialogOptions.title 		= "디스크 이름 변경";
+    	$scope.dialogOptions.title 		= "볼륨 이름 변경";
     	$scope.dialogOptions.okName 	= "변경";
     	$scope.dialogOptions.closeName 	= "닫기";
     	// $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reNameStoragePopForm.html" + _VersionTail();
@@ -1137,7 +1137,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		returnPromise.success(function (data, status, headers) {
     			$scope.main.loadingMainBody = false;
-    			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
+    			common.showAlertSuccess("볼륨 이름이 변경 되었습니다.");
     			
     			if (angular.isFunction(pop.callBackFunction)) {
     				pop.callBackFunction();
@@ -1171,7 +1171,7 @@ angular.module('gpu.controllers')
     	pop.data						= {};
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
     	
-    	$scope.dialogOptions.title 		= "디스크 크기 변경";
+    	$scope.dialogOptions.title 		= "볼륨 크기 변경";
     	$scope.dialogOptions.okName 	= "변경";
     	$scope.dialogOptions.closeName 	= "닫기";
     	// $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
@@ -1287,7 +1287,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		returnPromise.success(function (data, status, headers) {
     			$scope.main.loadingMainBody = false;
-    			common.showAlertSuccess("디스크 크키가 변경 되었습니다.");
+    			common.showAlertSuccess("볼륨 크기가 변경 되었습니다.");
     			if ( angular.isFunction(pop.callBackFunction) ) {
     				pop.callBackFunction();
     			}
@@ -1323,7 +1323,7 @@ angular.module('gpu.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "디스크 설명 변경";
+        $scope.dialogOptions.title 		= "볼륨 설명 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageDescriptionPopForm.html" + _VersionTail();
@@ -1338,7 +1338,7 @@ angular.module('gpu.controllers')
             $scope.actionBtnHied = true;
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newVolDesc);
             if (checkByte > 255) {
-                common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("볼륨 설명이 255Byte를 초과하였습니다.");
                 $scope.actionBtnHied = false;
                 return;
             }
@@ -1363,7 +1363,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("디스크 설명이 변경 되었습니다.");
+                common.showAlertSuccess("볼륨 설명이 변경 되었습니다.");
 
                 /* 20.04.29 - 리스트형 추가로 이미지형일때와 리스트형일때 callbackFunction 분기 by ksw*/
                 if ($scope.contents.listType == 'image') {

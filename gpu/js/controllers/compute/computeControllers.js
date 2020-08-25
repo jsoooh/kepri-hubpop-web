@@ -67,7 +67,7 @@ angular.module('gpu.controllers')
 
         //임시 알림 설정 2020.02.03
         ct.showTempAlert = function() {
-            common.showDialogAlert("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 가상머신 생성을 제한하고 있습니다.\n자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다.");
+            common.showDialogAlert("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 인스턴스 생성을 제한하고 있습니다.\n자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다.");
             return;
         };
 
@@ -360,9 +360,9 @@ angular.module('gpu.controllers')
                             ct.fn.setRdpConnectDomain(serverItem);
                             // VM 생성시 1시간 초과하여 미생성시 자동 삭제 처리
                             if (newItem && serverItem.floatingIp == "") {
-                                common.showAlertInfo('"' + serverItem.name + '" 서버가 생성한지 1시간이 지나 삭제되었습니다.');
+                                common.showAlertInfo('"' + serverItem.name + '" 인스턴스가 생성한지 1시간이 지나 삭제되었습니다.');
                             } else if (newItem) {
-                                common.showAlertSuccess('"' + serverItem.name + '" 서버가 생성 되었습니다.');
+                                common.showAlertSuccess('"' + serverItem.name + '" 인스턴스가 생성 되었습니다.');
                                 serverItem.newCreated = true;
                                 $timeout(function () {
                                     serverItem.newCreated = false;
@@ -370,23 +370,23 @@ angular.module('gpu.controllers')
                             } else {
                                 var message = '"' + serverItem.name + '" ';
                                 if (beforUiTask == "starting") {
-                                    message += '서버가 시작 되었습니다.'
+                                    message += '인스턴스가 시작 되었습니다.'
                                 } else if (beforUiTask == "stopping")  {
-                                    message += '서버가 정지 되었습니다.'
+                                    message += '인스턴스가 정지 되었습니다.'
                                 } else if (beforUiTask == "pausing")  {
-                                    message += '서버가 일시정지 되었습니다.'
+                                    message += '인스턴스가 일시정지 되었습니다.'
                                 } else if (beforUiTask == "unpausing")  {
-                                    message += '서버가 정지해제 되었습니다.'
+                                    message += '인스턴스가 정지해제 되었습니다.'
                                 } else if (beforUiTask == "rebooting")  {
-                                    message += '서버가 재시작 되었습니다.'
+                                    message += '인스턴스가 재시작 되었습니다.'
                                 } else if (beforUiTask == "shelved")  {
-                                    message += '서버가 비활성화 되었습니다.'
+                                    message += '인스턴스가 비활성화 되었습니다.'
                                 } else if (beforUiTask == "shelved_offloaded")  {
-                                    message += '서버가 활성화 되었습니다.'
+                                    message += '인스턴스가 활성화 되었습니다.'
                                 } else if (beforUiTask == "resized")  {
-                                    message += '서버의 사양이 되었습니다.'
+                                    message += '인스턴스의 사양이 되었습니다.'
                                 } else {
-                                    message += '서버에 적용 되었습니다.'
+                                    message += '인스턴스에 적용 되었습니다.'
                                 }
                                 common.showAlertSuccess(message);
                             }
@@ -543,7 +543,7 @@ angular.module('gpu.controllers')
         //추가 E
         // 서버삭제
         ct.deleteInstanceJob = function(id) {
-            common.showConfirm('서버 삭제','선택한 서버를 삭제하시겠습니까?').then(function(){
+            common.showConfirm('인스턴스 삭제','선택한 인스턴스를 삭제하시겠습니까?').then(function(){
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : ct.data.tenantId,
@@ -576,31 +576,31 @@ angular.module('gpu.controllers')
         ct.selectedValues = {};
         ct.fnServerConfirm = function(action,instance,index,$event) {
             if (action == "START") {
-                common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "STOP") {
-                common.showConfirm('정지',instance.name +' 서버를 정지하시겠습니까?').then(function(){
+                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "PAUSE") {
-                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "UNPAUSE") {
-                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "REBOOT") {
-                common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "SHELVE") {
-                common.showConfirm('비활성화', instance.name + ' 서버를 비활성화 하시겠습니까?').then(function () {
+                common.showConfirm('비활성화', instance.name + ' 인스턴스를 비활성화 하시겠습니까?').then(function () {
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if (action == "UNSHELVE") {
-                common.showConfirm('비활성화 해제',instance.name +' 서버를 활성화 하시겠습니까?').then(function(){
+                common.showConfirm('비활성화 해제',instance.name +' 인스턴스를 활성화 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "DELETE") {
@@ -667,7 +667,7 @@ angular.module('gpu.controllers')
         ct.fn.createPopSnapshot = function($event,instance) {
             var dialogOptions = {};
             if (instance.vmState != 'stopped') {
-                common.showAlertWarning('서버를 정지 후 생성가능합니다.');
+                common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
                 dialogOptions = {
                     // controller : "iaasCreatePopSnapshotCtrl" ,
@@ -753,7 +753,7 @@ angular.module('gpu.controllers')
 
         // 공인 IP 연결 해제 펑션
         ct.fn.ipConnectionSet = function(instance,type,index) {
-            common.showConfirm('메세지',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
+            common.showConfirm('메세지',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function(){
                 var param = {
                     tenantId : ct.data.tenantId,
                     instanceId : instance.id
@@ -1466,11 +1466,21 @@ angular.module('gpu.controllers')
             }
             //param.imageType = ct.imageType;
             ct.imageList  = [];
+            ct.gpuImageList = [];
+            ct.cpuImageList = [];
             // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.images && data.content.images.length > 0) {
                     ct.imageList  = data.content.images;
+                    // gpu용 이미지와 cpu용 이미지 구분
+                    for (var i=0; i<ct.imageList.length; i++) {
+                        if (ct.imageList[i].gpuYn == true) {
+                            ct.gpuImageList.push(ct.imageList[i]);
+                        } else {
+                            ct.cpuImageList.push(ct.imageList[i]);
+                        }
+                    }
                     angular.forEach(ct.imageList, function (image) {
                         var sizeGb = image.size/(1024*1024*1024);
                         image.minDisk = (image.minDisk > sizeGb) ? image.minDisk : sizeGb;
@@ -1516,7 +1526,7 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         ct.fn.getGpuCardList = function() {
             $scope.main.loadingMainBody = true;
@@ -1533,7 +1543,7 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
 
@@ -1550,7 +1560,7 @@ angular.module('gpu.controllers')
             }
             else
                 ct.fn.getAvailabilityZoneList();
-        }
+        };
 
         ct.fn.getAvailabilityZoneList = function(id) {
             var param = {
@@ -1569,7 +1579,7 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         ct.fn.onchangeAvailabilityZone = function(availabilityZoneId) {
             ct.selectedAvailabilityZone = {};
@@ -1582,7 +1592,7 @@ angular.module('gpu.controllers')
                     }
                 }
             }
-        }
+        };
 
         // 네트워크 리스트 조회
         ct.fn.networkListSearch = function() {
@@ -1822,7 +1832,7 @@ angular.module('gpu.controllers')
             returnPromise.success(function (data, status, headers)  {
                 // 서버생성후 -> 디스크 생성 후 sucess 처리.
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                common.showAlertSuccess(ct.data.name+" 인스턴스 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고
                 $scope.main.goToPage("/gpu/compute");
             });

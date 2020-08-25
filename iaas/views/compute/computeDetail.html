@@ -112,7 +112,7 @@
 	}
 	.datepicker-div {
 		position: relative;
-		top: -8px;
+		/* top: -8px; */
 	}
 	.datepicker-div.ie {
 		position: relative;
@@ -144,740 +144,904 @@
 		cursor: pointer;
 	}
 </style>
-<!-- cBox -->
-<div class="cBox type1 appCnt-info">
-	<div class="cBox-hd">
-		<h4 class="c-tit"><img ng-if="contents.instance.image.icon" ng-src="data:{{ contents.instance.image.contentType }}; base64, {{ contents.instance.image.icon }}" class="logo" alt=""><img ng-if="!contents.instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="">{{contents.instance.name}}</h4>
-		<div ng-if="contents.instance.procState != 'end'" class="pull-right">
-			<img src="images/loading_sm.gif">
-		</div>
-		<div ng-if="contents.instance.procState == 'end'" class="pull-right">
-			<!-- vnc 사용할 경우 웹콘솔 버튼 주석 해제 -->
-			<!-- <button type="button" name="button" class="btn only-ico ico-ssh" tooltip-placement="bottom" uib-tooltip="웹콘솔" ng-click="contents.fn.openWebConsole(contents.instance)"><span class="ico">웹콘솔</span></button> -->
-			<button ng-if="contents.instance.vmState == 'stopped'" type="button" name="button" class="btn only-ico ico-start" tooltip-placement="bottom" uib-tooltip="시작" ng-click="contents.fn.serverActionConfirm('START',contents.instance);"><span class="ico">시작</span></button>
-			<button ng-if="contents.instance.vmState == 'active'" type="button" name="button" class="btn only-ico ico-pause" tooltip-placement="bottom" uib-tooltip="정지" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);"><span class="ico">정지</span></button>
-			<!--<button ng-if="main.projectType == 'pjt'" type="button" name="button" class="btn only-ico ico-refresh" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();"><span class="ico">새로고침</span></button>-->
-			<div class="dropdown btn-option">
-				<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-					<span class="ico">실행 설정</span>
-				</button>
-				<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-					<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen($event, contents.instance);">이름 변경</a></li>
-					<li ng-if="contents.instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);" title="재시작">재시작</a></li>
-					<li ng-if="contents.instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
-					<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="서버 사양 변경">서버 사양 변경</a></li>
-					<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
-					<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="백업 이미지 생성">백업 이미지 생성</a></li>
-					<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
-					<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
-					<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">서버 삭제</a></li>
-					<!--<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>-->
-					<!--<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>-->
-					<!--<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>-->
-					<!--<li ng-if="(contents.instance.vmState != 'fail' && contents.instance.vmState == 'active')"><a href="" ng-click="contents.fn.serverActionConfirm('PAUSE',contents.instance)">일시정지</a></li>-->
-					<!--<li ng-if="(contents.instance.vmState != 'fail' && contents.instance.vmState == 'paused')"><a href="" ng-click="contents.fn.serverActionConfirm('UNPAUSE',contents.instance)">정지해제</a></li>-->
-					<!-- <li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li> -->
-				</ul>
-			</div>
-		</div>
-	</div>
 
-	<div class="cBox-cnt">
-		<div class="in">
-			<!-- app 정보 -->
-			<div class="col info-txt useChart" style="padding-top: 30px;">
-				<ul>
-					<li>
-						<strong class="tit">OS 유형</strong>
-						<div class="txt" ng-if="contents.instance.image.osType">{{contents.instance.image.osType | firstUpperCase}}</div>
-					</li>
-					<li ng-if="contents.instance.image.osType == 'windows' && !contents.instance.rdpDomain">
-						<strong class="tit">접속 도메인</strong>
-						<div class="txt">{{ (contents.instance.rdpConnectDomain) ? contents.instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
-					</li>
-					<li ng-if="contents.instance.image.osType == 'windows' && contents.instance.rdpDomain">
-						<strong class="tit">접속 주소</strong>
-						<div class="txt">{{ contents.instance.rdpDomain ? contents.instance.rdpDomain : '' }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
-					</li>
-                    <li>
-                        <strong class="tit">가상 IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'다른 프로젝트에서 생성된 가상서버와 통신할 때 사용하는 IP'"><span class="ico_info"></span></button></strong>
-                        <div class="txt">{{contents.instance.floatingIp}}<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="ico_sm ico_copy"></span></button></div>
-                    </li>
-					<li>
-						<strong class="tit">내부 IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를 사용할 수 있습니다.'"><span class="ico_info"></span></button></strong>
-						<div class="txt">{{contents.instance.fixedIp}}</div>
-					</li>
-					<li ng-if="contents.instance.image.osType != 'windows'">
-						<strong class="tit">키페어</strong>
-						<div class="txt">{{contents.instance.keypair.name}}<button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></div>
-					</li>
-					<!--<li>
-						<strong class="tit">보안그룹</strong>
-						<div class="txt">{{contents.instance.securityPolicies | join:' ,':'name'}}</div>
-					</li>-->
-					<li>
-						<strong class="tit">생성일시</strong>
-						<div class="txt">{{contents.instance.created | date : 'yyyy-MM-dd HH:mm:ss'}}</div>
-					</li>
-					<li>
-						<strong class="tit">상태</strong>
-						<div ng-if="contents.instance.procState != 'end' && contents.instance.vmState" class="txt">
-							<p><img src="images/loading_sm.gif"> {{'iaas.label.instance_' + contents.instance.vmState | translate}} 입니다.</p>
-						</div>
-						<div ng-if="contents.instance.procState == 'end'" class="txt">
-							<div ng-if="!contents.instance.alarmStatus" class="txt">
-								<p><img src="images/loading_sm.gif"></p>
+
+<section class="panel panel-bordered app-info-area">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="round-img pull-left">
+					<img ng-if="contents.instance.image.icon" ng-src="data:{{ contents.instance.image.contentType }}; base64, {{ contents.instance.image.icon }}" class="logo" alt="">
+					<img ng-if="!contents.instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="">
+				</div>
+				<div class="pull-left">
+					<h3 class="panel-title padding-left-5">
+						{{contents.instance.name}}
+					</h3>
+				</div>
+			</div>
+			<div class="col-md-6 text-right padding-top-10">
+				<div ng-if="contents.instance.procState != 'end'">
+					<img src="images/loading_sm.gif">
+				</div>
+				<div ng-if="contents.instance.procState == 'end'">
+					<!-- vnc 사용할 경우 웹콘솔 버튼 주석 해제 -->
+					<!-- <button type="button" name="button" class="btn only-ico ico-ssh" tooltip-placement="bottom" uib-tooltip="웹콘솔" ng-click="contents.fn.openWebConsole(contents.instance)"><span class="ico">웹콘솔</span></button> -->
+					<button ng-if="contents.instance.vmState == 'stopped'" type="button" name="button" tooltip-placement="bottom" uib-tooltip="시작" ng-click="contents.fn.serverActionConfirm('START',contents.instance);">
+						<i class="xi-play-circle-o font-size-30"></i>
+						<p class="sr-only">시작</p>
+					</button>
+					<button ng-if="contents.instance.vmState == 'active'" type="button" name="button" tooltip-placement="bottom" uib-tooltip="정지" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);">
+						<i class="xi-recording-stop font-size-30"></i>
+						<p class="sr-only">정지</p>
+					</button>
+					<!-- <button ng-if="main.projectType == 'pjt'" type="button" name="button" tooltip-placement="bottom" uib-tooltip="새로고침" ng-click="main.replacePage();">
+						<i class="xi-refresh font-size-30"></i>
+						<p class="sr-only">새로고침</p>
+					</button> -->
+					
+					<div class="dropdown">
+						<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+							<div class="feather-icon">
+								<i data-feather="more-horizontal" class="feather-directive"></i>
 							</div>
-							<span ng-if="contents.instance.alarmStatus" class="stateWrap">
-								<span ng-if="!contents.instance.alarmOccur && contents.instance.vmState == 'active'" class="stateMark type1"></span>
-								<span ng-if="contents.instance.vmState == 'error'" class="stateMark type2"></span>
-								<span ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'shelved_offloaded'" class="stateMark type4"></span>
-								<span ng-if="contents.instance.vmState == 'stopped'" class="stateMark type3"></span>
-								<span ng-if="contents.instance.alarmStatus == 'minor'" class="stateMark type5"></span>
-								<span ng-if="contents.instance.alarmStatus == 'warning'" class="stateMark type4"></span>
-								<span ng-if="contents.instance.alarmStatus == 'critical'" class="stateMark type2"></span>
-								<span class="state-txt" ng-if="!contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
-								<span class="state-txt" ng-if="contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.alarmStatus | translate }}</span>
-							</span>
-						</div>
-					</li>
-					<li>
-						<strong class="tit">모니터링<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'가상 자원 사용현황을<br>모니터링 합니다'"><span class="ico_info"></span></button></strong>
-						<div ng-if="!contents.instance.alarmStatus" class="txt">
-							<p><img src="images/loading_sm.gif"></p>
-						</div>
-						<div ng-if="contents.instance.alarmStatus" class="txt">
-							<span class="stateWrap">
-								<span ng-if="contents.instance.alarmStatus != 'no agent' && contents.instance.alarmStatus != 'failed'" class="stateMark type1"></span>
-								<span ng-if="contents.instance.alarmStatus == 'no agent' || contents.instance.alarmStatus == 'failed'" class="stateMark type3"></span>
-								<span ng-if="contents.instance.alarmStatus != 'no agent' && contents.instance.alarmStatus != 'failed'" class="state-txt">{{ 'iaas.label.instance_active'| translate }}</span>
-								<span ng-if="contents.instance.alarmStatus == 'no agent' || contents.instance.alarmStatus == 'failed'" class="state-txt">{{ 'iaas.label.instance_inactive'| translate }}</span>
-							</span>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<!-- //app 정보 -->
-
-			<!-- app 챠트 정보 -->
-			<div class="col info-chart type3">
-				<div class="chartWrap" style="height:270px;width:180px;"><!-- 인라인 border를 속성과 내용을 지우고 챠트를 삽입하세요. -->
-					<p class="chrt-tit">vCPU</p>
-					<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">{{contents.instance.spec.vcpus}} 개</p>
-					<canvas id="doughnutCpu" class="chart chart-doughnut chart-xs" height="180" width="180"
-							chart-data="contents.doughnut.data.cpu"
-							chart-labels="contents.doughnut.labels"
-							chart-colors="contents.doughnut.colors.cpu"
-							chart-options="contents.doughnut.options"></canvas>
-					<div class="doughnut-label-box">
-						<ul>
-							<li><span>{{contents.doughnut.data.cpu[1] | number}}</span><span>%</span></li>
-							<li><span>{{'label.use_rate' | translate}}</span></li>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+							<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen($event, contents.instance);">이름 변경</a></li>
+							<li ng-if="contents.instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);" title="재시작">재시작</a></li>
+							<li ng-if="contents.instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+							<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="서버 사양 변경">서버 사양 변경</a></li>
+							<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
+							<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="백업 이미지 생성">백업 이미지 생성</a></li>
+							<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
+							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
+							<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">서버 삭제</a></li>
+							<!--<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>-->
+							<!--<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>-->
+							<!--<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>-->
+							<!--<li ng-if="(contents.instance.vmState != 'fail' && contents.instance.vmState == 'active')"><a href="" ng-click="contents.fn.serverActionConfirm('PAUSE',contents.instance)">일시정지</a></li>-->
+							<!--<li ng-if="(contents.instance.vmState != 'fail' && contents.instance.vmState == 'paused')"><a href="" ng-click="contents.fn.serverActionConfirm('UNPAUSE',contents.instance)">정지해제</a></li>-->
+							<!-- <li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen();">인스턴스수정</a></li> -->
 						</ul>
 					</div>
 				</div>
 			</div>
-			<!-- //app 챠트 정보 -->
-
-			<!-- app 챠트 정보 -->
-			<div class="col info-chart type1">
-				<div class="chartWrap" style="height:270px;width:180px;"><!-- 인라인 border를 속성과 내용을 지우고 챠트를 삽입하세요. -->
-					<p class="chrt-tit">메모리</p>
-					<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">{{(contents.instance.spec.ram/1024|number:1).replace('.0', '')}} GB</p>
-					<canvas id="doughnutRam" class="chart chart-doughnut chart-xs" height="180" width="180"
-							chart-data="contents.doughnut.data.ram"
-							chart-labels="contents.doughnut.labels"
-							chart-colors="contents.doughnut.colors.ram"
-							chart-options="contents.doughnut.options"></canvas>
-					<div class="doughnut-label-box">
-						<ul>
-							<li><span>{{contents.doughnut.data.ram[1] | number}}</span><span>%</span></li>
-							<li><span>{{'label.use_rate' | translate}}</span></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<!-- //app 챠트 정보 -->
-
-			<!-- app 챠트 정보 -->
-			<div class="col info-chart type2">
-				<div class="chartWrap" style="height:270px;width:180px;"><!-- 인라인 border를 속성과 내용을 지우고 챠트를 삽입하세요. -->
-					<p class="chrt-tit">디스크</p>
-					<p style="margin-top: -15px;margin-bottom: 20px;font-size: 18px;">{{contents.instance.spec.disk}} GB</p>
-					<canvas id="doughnutDisk" class="chart chart-doughnut chart-xs" height="180" width="180"
-							chart-data="contents.doughnut.data.disk"
-							chart-labels="contents.doughnut.labels"
-							chart-colors="contents.doughnut.colors.disk"
-							chart-options="contents.doughnut.options"></canvas>
-					<div class="doughnut-label-box">
-						<ul>
-							<li><span>{{contents.doughnut.data.disk[1] | number}}</span><span>%</span></li>
-							<li><span>{{'label.use_rate' | translate}}</span></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<!-- //app 챠트 정보 -->
 		</div>
 	</div>
-</div>
-<!-- //cBox -->
-
-<!-- cBox -->
-<div class="cBox type2 appCnt-vol strgList">
-	<div class="cBox-hd">
-		<!-- <h4 class="c-tit">디스크 연결 정보 <em class="point1">({{contents.instanceVolList.length}})</em></h4> -->
-		<h4 class="c-tit">디스크 연결 정보 <em class="point1">({{contents.instanceVolList.length}})</em></h4>
-	</div>
-
-	<div class="cBox-cnt">
-		<div ng-if="contents.instanceVolList.length > 0" class="in scroll-pane">
-			<ul class="ul-volume">
-				<li ng-repeat="volume in contents.instanceVolList">
-					<div class="in">
-					<span class="in_tit">{{volume.volumeName}}</span>
-					<div class="progressWrap">
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-								</div>
-							</div>
-							<p class="progress-txt">{{volume.size}}GB</p>
-						</div>
-						<div class="dropdown">
-							<button type="button" class="txt2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="연결해제">
-								<span class="ico">연결해제</span>
-							</button>
-							<ul class="dropdown-menu dropdown-menu-right" role="btn-volum" aria-labelledby="btn-volum">
-								<li><a href="javascript:void(0);" ng-click="contents.fn.restorationConfirm(volume);">연결해제</a></li>
-							</ul>
-						</div>
+	<div class="panel-body detail-info">
+		<div class="col-md-4">
+			<ul class="list-dot margin-bottom-20">
+				<li>
+					<b>OS 유형</b>
+					<span ng-if="contents.instance.image.osType">{{contents.instance.image.osType | firstUpperCase}}</span>
+				</li>
+				<li ng-if="contents.instance.image.osType == 'windows' && !contents.instance.rdpDomain">
+					<strong class="tit">접속 도메인</strong>
+					<span>{{ (contents.instance.rdpConnectDomain) ? contents.instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</span>
+					<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
+				</li>
+				<li ng-if="contents.instance.image.osType == 'windows' && contents.instance.rdpDomain">
+					<strong class="tit">접속 주소</strong>
+					<span>{{ contents.instance.rdpDomain ? contents.instance.rdpDomain : '' }}</span>
+					<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
+				</li>
+				<li>
+					<b>가상 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'다른 프로젝트에서 생성된 가상서버와 통신할 때 사용하는 IP'">i</a></div></b>
+					<span>{{contents.instance.floatingIp}}</span>
+					<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
+				</li>
+				<li>
+					<b>내부 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를 사용할 수 있습니다.'">i</a></div></b>
+					<span>{{contents.instance.fixedIp}}</span>
+				</li>
+				<li ng-if="contents.instance.image.osType != 'windows'">
+					<b>키페어</b>
+					<span>{{contents.instance.keypair.name}}</span>
+					<button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')"><span class="feather-icon blue-600 margin-left-5"><i data-feather="download" class="feather-directive"></i></span></button>
+				</li>
+				<!--<li>
+					<b>보안그룹</b>
+					<span>{{contents.instance.securityPolicies | join:' ,':'name'}}</span>
+				</li>-->
+				<li>
+					<b>생성일시</b>
+					<span>{{contents.instance.created | date : 'yyyy-MM-dd HH:mm:ss'}}</span>
+				</li>
+				<li>
+					<b>상태</b>
+					<div ng-if="contents.instance.procState != 'end' && contents.instance.vmState" class="txt">
+						<p><img src="images/loading_sm.gif"> {{'iaas.label.instance_' + contents.instance.vmState | translate}} 입니다.</p>
+					</div>
+					<div ng-if="contents.instance.procState == 'end'" class="txt">
+						<span ng-if="!contents.instance.alarmStatus" class="margin-right-5">
+							<img src="images/loading_sm.gif">
+						</span>
+						<span ng-if="contents.instance.alarmStatus" class="state">
+							<span class="state-round rgba-green-strong" ng-if="!contents.instance.alarmOccur && contents.instance.vmState == 'active'"></span>
+							<span class="state-round rgba-brown-strong" ng-if="contents.instance.vmState == 'error'"></span>
+							<span class="state-round rgba-blue-grey-strong" ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'shelved_offloaded'"></span>
+							<span class="state-round rgba-black-strong" ng-if="contents.instance.vmState == 'stopped'"></span>
+							<span class="state-round rgba-orange-strong" ng-if="contents.instance.alarmStatus == 'minor'"></span>
+							<span class="state-round rgba-pink-strong" ng-if="contents.instance.alarmStatus == 'warning'"></span>
+							<span class="state-round rgba-red-strong" ng-if="contents.instance.alarmStatus == 'critical'"></span>
+							<span class="state-txt" ng-if="!contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
+							<span class="state-txt" ng-if="contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.alarmStatus | translate }}</span>
+						</span>
+					</div>
+				</li>
+				<li>
+					<b>모니터링<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'가상 자원 사용현황을 모니터링 합니다.'">i</a></div></b>
+					<div class="txt">
+						<span ng-if="!contents.instance.alarmStatus" class="margin-right-5">
+							<img src="images/loading_sm.gif">
+						</span>
+						<span ng-if="contents.instance.alarmStatus" class="state">
+							<span class="state-round rgba-green-strong" ng-if="contents.instance.alarmStatus != 'no agent' && contents.instance.alarmStatus != 'failed'"></span>
+							<span class="state-round rgba-black-strong"  ng-if="contents.instance.alarmStatus == 'no agent' || contents.instance.alarmStatus == 'failed'"></span>
+							<span ng-if="contents.instance.alarmStatus != 'no agent' && contents.instance.alarmStatus != 'failed'" class="state-txt">{{ 'iaas.label.instance_active'| translate }}</span>
+							<span ng-if="contents.instance.alarmStatus == 'no agent' || contents.instance.alarmStatus == 'failed'" class="state-txt">{{ 'iaas.label.instance_inactive'| translate }}</span>
+						</span>
 					</div>
 				</li>
 			</ul>
 		</div>
-		<div ng-if="contents.instanceVolList.length == 0">
-			연결 디스크 정보가 없습니다.
+		<div class="col-md-8">
+			<div class="col-sm-4">
+				<!-- app 챠트 정보 -->
+				<div class="col info-chart type3 text-center">
+					<div class="chartWrap" style="height:270px;width:180px;"><!-- 인라인 border를 속성과 내용을 지우고 챠트를 삽입하세요. -->
+						<p class="font-size-20 margin-bottom-10"><b>vCPU</b></p>
+						<p class="margin-bottom-20">{{contents.instance.spec.vcpus}} 개</p>
+						<canvas id="doughnutCpu" class="chart chart-doughnut chart-xs" height="180" width="180"
+								chart-data="contents.doughnut.data.cpu"
+								chart-labels="contents.doughnut.labels"
+								chart-colors="contents.doughnut.colors.cpu"
+								chart-options="contents.doughnut.options">
+						</canvas>
+						<div class="doughnut-label-box">
+							<ul>
+								<li><span class="font-size-18">{{contents.doughnut.data.cpu[1] | number}}</span><span>%</span></li>
+								<li><span>{{'label.use_rate' | translate}}</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- //app 챠트 정보 -->
+			</div>
+			<div class="col-sm-4">
+				<!-- app 챠트 정보 -->
+				<div class="col info-chart type1 text-center">
+					<div class="chartWrap" style="height:270px;width:180px;"><!-- 인라인 border를 속성과 내용을 지우고 챠트를 삽입하세요. -->
+						<p class="font-size-20 margin-bottom-10"><b>메모리</b></p>
+						<p class="margin-bottom-20">{{(contents.instance.spec.ram/1024|number:1).replace('.0', '')}} GB</p>
+						<canvas id="doughnutRam" class="chart chart-doughnut chart-xs" height="180" width="180"
+								chart-data="contents.doughnut.data.ram"
+								chart-labels="contents.doughnut.labels"
+								chart-colors="contents.doughnut.colors.ram"
+								chart-options="contents.doughnut.options">
+						</canvas>
+						<div class="doughnut-label-box">
+							<ul>
+								<li><span class="font-size-18">{{contents.doughnut.data.ram[1] | number}}</span><span>%</span></li>
+								<li><span>{{'label.use_rate' | translate}}</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- //app 챠트 정보 -->
+			</div>
+			<div class="col-sm-4">
+				<!-- app 챠트 정보 -->
+				<div class="col info-chart type2 text-center">
+					<div class="chartWrap" style="height:270px;width:180px;"><!-- 인라인 border를 속성과 내용을 지우고 챠트를 삽입하세요. -->
+						<p class="font-size-20 margin-bottom-10"><b>디스크</b></p>
+						<p class="margin-bottom-20">{{contents.instance.spec.disk}} GB</p>
+						<canvas id="doughnutDisk" class="chart chart-doughnut chart-xs" height="180" width="180"
+								chart-data="contents.doughnut.data.disk"
+								chart-labels="contents.doughnut.labels"
+								chart-colors="contents.doughnut.colors.disk"
+								chart-options="contents.doughnut.options">
+						</canvas>
+						<div class="doughnut-label-box">
+							<ul>
+								<li><span class="font-size-18">{{contents.doughnut.data.disk[1] | number}}</span><span>%</span></li>
+								<li><span>{{'label.use_rate' | translate}}</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- //app 챠트 정보 -->
+			</div>
+
 		</div>
 	</div>
-</div>
-<!-- //cBox -->
+</section>
 
-<div class="tabWrap type1 mt30">
-	<!-- Nav tabs -->
-	<ul class="nav nav-tabs padding40">
-		<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">서비스 도메인</a></li>
+
+<section class="panel panel-bordered">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-sm-12">
+				<h3 class="panel-title">
+					<b class="tit">디스크 연결 정보<span class="color-primary">({{contents.instanceVolList.length}})</span></b>
+					<img ng-if="!contents.isSearchInstanceVolumeListLoad" src="images/loading_sm.gif">
+				</h3>
+			</div>
+		</div>
+	</div> <!-- // panel-heading -->
+	<div class="panel-body">
+		<div class="appCnt-vol strgList">
+			<div class="scroll-content" style="height:80px;" ng-if="contents.instanceVolList.length > 0">
+				<div class="row">
+					<ul>
+						<li class="col-md-3" ng-repeat="volume in contents.instanceVolList">
+							<div class="in">
+								<div class="col-sm-4">
+									<div class="img-size85">
+										<img src="../images/ico_hard2.png" alt="">
+									</div>
+								</div>
+								<div class="col-sm-8">
+									<b class="in_tit">{{volume.volumeName}}</b>
+									<div class="btn-wrap">
+										<button type="button" title="연결해제" ng-click="contents.fn.restorationConfirm(volume);"><a class="link"><i class="fas fa-unlink"></i></a></button>
+									</div>
+									<div class="progress progress-sm progress-square margin-top-5">
+										<div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"></div>
+									</div>
+									<div class="grey-500 margin-top-5">{{volume.size}}GB</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+            <p ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
+                연결 디스크 정보가 없습니다.
+            </p>
+		</div>
+	</div>
+</section>
+
+
+<!-- //Nav tabs -->
+<ul class="nav nav-tabs nav-tabs-btn nav-tabs-lg">
+	<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">서비스 도메인</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'portForwarding'}"><a href="" ng-click="contents.fn.changeSltInfoTab('portForwarding');">포트포워딩</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">서버 이벤트</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">서버 부트 로그</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'systemLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('systemLog');">시스템 로그</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('virtualMonit');">가상머신 모니터링</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'alarmEvent'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('alarmEvent');">알람 이벤트</a></li>
-	</ul>
-	<!-- //Nav tabs -->
+</ul>
 
-	<!-- Tab panes -->
-	<div class="tab-content inst">
-		<div ng-if="contents.sltInfoTab == 'domain'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'domain'}">
-			<!-- panel -->
-			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset;">
-					<div class="panel_head">
-						<div class="tit pull-left">서비스 도메인</div>
-						<div class="pull-right">
+
+<!-- Tab panes -->
+<div class="tab-content inst padding-top-30 page-detail">
+	<div ng-if="contents.sltInfoTab == 'domain'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'domain'}">
+		<!-- panel -->
+		<section class="panel panel-bordered">
+			<!-- panel-heading -->
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<b class="tit">서비스 도메인</b>
+						</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="padding-top-10 padding-horizontal-20">
 							<!-- 20181121 sg0730 접속 도메인 연결 기능 변경으로 인한 팝업 호출  -->
-							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><span class="ico">추가</span></button>
-							<!-- <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><span class="ico">추가</span></button> -->
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'domain')"><span class="ico">확대/축소</span></button>
+							<button type="button" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+							<!-- <button type="button" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><i class="xi-plus-circle-o font-size-25"></i></button> -->
+							<button type="button" title="확대/축소" class="btn-zoom grey-600"  ng-click="contents.zoomPanel($event, 'domain')"></button>
 						</div>
 					</div>
-					<div ng-if="contents.instance.instanceDomainLinkInfos" class="panel_body">
-						<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_domain_panel" class="in">
-							<!-- 메세지영역 -->
-							<div class="pop_message_area mb20">
-								<div class="msg_bg"></div>
-								<div class="msg_txt"><span>서버에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</span></div>
-							</div>
-							<div class="tbl type1">
-								<table class="table">
-									<colgroup>
-										<col style="width:30%;">
-										<col style="width:25%;">
-										<col style="width:25%;">
-										<col style="width:20%;">
-									</colgroup>
-									<thead>
-									<tr>
-										<th scope="col">도메인</th>
-										<th scope="col">프로토콜 타입</th>
-										<th scope="col">포트</th>
-										<th scope="col">삭제</th>
-									</tr>
-									</thead>
-									<tbody>
+				</div>
+			</div> 
+			<!-- // panel-heading -->
+			<!-- panel-body -->
+			<div class="panel-body" ng-if="contents.instance.instanceDomainLinkInfos">
+				<div id="action_domain_panel" class="in"><!--  scroll-pane scroll-config="{ contentWidth: '0px' }"  -->
+					<div class="alert alert-primary" role="alert">
+						<i class="xi-info font-size-20"></i>
+						<div class="text-area">서버에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</div>
+					</div>
+					<div class=" scroll-content" style="height:270px;">
+						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
+							<table class="table table-hover">
+								<colgroup>
+									<col style="width:30%;">
+									<col style="width:25%;">
+									<col style="width:25%;">
+									<col style="width:20%;">
+								</colgroup>
+								<thead class="text-center black white-text">
+								<tr>
+									<th scope="col">도메인</th>
+									<th scope="col">프로토콜 타입</th>
+									<th scope="col">포트</th>
+									<th scope="col">삭제</th>
+								</tr>
+								</thead>
+								<tbody>
 									<tr ng-if="(contents.instance.instanceDomainLinkInfos | filter : {isRdpDomain: false}).length == 0">
-										<td colspan="4">연결된 도메인이 없습니다.</td>
+										<td colspan="4" class="text-center">연결된 도메인이 없습니다.</td>
 									</tr>
 									<tr ng-repeat="item in contents.instance.instanceDomainLinkInfos | filter : {isRdpDomain: false}">
 										<td>{{ item.domainInfo.domain }}</td>
 										<td>{{ item.protocolType }}</td>
 										<td>{{ item.sourcePort }}</td>
-										<td>
-											<button type="button" name="button" class="btn btn-ico-modi-s only-ico ng-scope" ng-click="contents.fn.popModDomainForm($event, item);" tooltip-placement="bottom" uib-tooltip="수정"><span class="ico">수정</span></button>
-											<button type="button" name="button" class="btn btn-ico-del-s only-ico ng-scope" ng-click="contents.fn.deleteDomain(item);" tooltip-placement="bottom" uib-tooltip="삭제"><span class="ico">삭제</span></button>
+										<td class="text-center">
+											<div class="dropdown">
+												<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+													<div class="feather-icon">
+														<i data-feather="more-horizontal" class="feather-directive"></i>
+													</div>
+												</button>
+												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+													<li><a href="javascript:void(0);" ng-click="contents.fn.popModDomainForm($event, item);">수정</a></li>
+													<li><a href="javascript:void(0);" ng-click="contents.fn.deleteDomain(item);">삭제</a></li>
+												</ul>
+											</div>
 										</td>
 									</tr>
-									</tbody>
-								</table>
-							</div>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- panel -->
-		</div>
+			<!-- //panel-body -->
+		</section>
+		<!-- //panel -->
+	</div>
 
-		<div ng-if="contents.sltInfoTab == 'portForwarding'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'portForwarding'}">
-			<!-- panel -->
-			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset;">
-					<div class="panel_head">
-						<div class="tit pull-left">포트포워딩</div>
-						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="contents.fn.popPortForwardingForm($event);"><span class="ico">추가</span></button>
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'portForwarding')"><span class="ico">확대/축소</span></button>
+	<div ng-if="contents.sltInfoTab == 'portForwarding'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'portForwarding'}">
+		<!-- panel -->
+		<section class="panel panel-bordered">
+			<!-- panel-heading -->
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<b class="tit">포트포워딩</b>
+						</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="padding-top-10 padding-horizontal-20">
+							<!-- 20181121 sg0730 접속 도메인 연결 기능 변경으로 인한 팝업 호출  -->
+							<button type="button" title="추가"  ng-click="contents.fn.popPortForwardingForm($event);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+							<button type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel($event, 'portForwarding')"></button>
 						</div>
 					</div>
-					<div ng-if="contents.instance.instancePortForwardings" class="panel_body">
-						<div scroll-pane scroll-config="{ contentWidth: '0px' }" class="in">
-							<!-- 메세지영역 -->
-							<div class="pop_message_area mb20">
-								<div class="msg_bg"></div>
-								<div class="msg_txt"><span>서버에서 실행되는 외부 공개 서비스(DB 서비스 등)에 대한 접근 정보를 구성합니다.</span></div>
-							</div>
-							<div class="tbl type1">
-								<table class="table">
-									<colgroup>
-										<col style="width:40%;">
-										<col style="width:30%;">
-										<col style="width:30%;">
-									</colgroup>
-									<thead>
-									<tr>
-										<th scope="col">접속정보</th>
-										<th scope="col">포트</th>
-										<th scope="col">관리</th>
-									</tr>
-									</thead>
-									<tbody>
+				</div>
+			</div> 
+			<!-- // panel-heading -->
+			<!-- panel-body -->
+			<div class="panel-body" ng-if="contents.instance.instancePortForwardings">
+				<div scroll-pane scroll-config="{ contentWidth: '0px' }" class="in">
+					<div class="alert alert-primary" role="alert">
+						<i class="xi-info font-size-20"></i>
+						<div class="text-area">서버에서 실행되는 외부 공개 서비스(DB 서비스 등)에 대한 접근 정보를 구성합니다.</div>
+					</div>
+					<div class=" scroll-content" style="height:270px;">
+						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
+							<table class="table table-hover">
+								<colgroup>
+									<col style="width:40%;">
+									<col style="width:30%;">
+									<col style="width:30%;">
+								</colgroup>
+								<thead class="text-center black white-text">
+								<tr>
+									<th scope="col">접속정보</th>
+									<th scope="col">포트</th>
+									<th scope="col">관리</th>
+								</tr>
+								</thead>
+								<tbody>
 									<tr ng-if="(contents.instance.instancePortForwardings).length == 0">
-										<td colspan="3">연결된 포트포워딩 정보가 없습니다.</td>
+										<td colspan="3" class="text-center">연결된 포트포워딩 정보가 없습니다.</td>
 									</tr>
 									<tr ng-repeat="item in contents.instance.instancePortForwardings">
 										<td>{{ item.domainInfo }}</td>
 										<td>{{ item.targetPort }}</td>
-										<td>
-											<button type="button" name="button" class="btn btn-ico-modi-s only-ico ng-scope" ng-click="contents.fn.popModPortForwardingForm($event, item);" tooltip-placement="bottom" uib-tooltip="수정"><span class="ico">수정</span></button>
-											<button type="button" name="button" class="btn btn-ico-del-s only-ico ng-scope" ng-click="contents.fn.deletePortForwarding(item);" tooltip-placement="bottom" uib-tooltip="삭제"><span class="ico">삭제</span></button>
+										<td class="text-center">
+											<div class="dropdown">
+												<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+													<div class="feather-icon">
+														<i data-feather="more-horizontal" class="feather-directive"></i>
+													</div>
+												</button>
+												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+													<li><a href="javascript:void(0);" ng-click="contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
+													<li><a href="javascript:void(0);" ng-click="contents.fn.deletePortForwarding(item);">삭제</a></li>
+												</ul>
+											</div>
 										</td>
 									</tr>
-									</tbody>
-								</table>
-							</div>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- panel -->
-		</div>
+		</section>
+		<!-- //panel -->
+	</div>
 
-		<div ng-if="contents.sltInfoTab == 'actEvent'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'actEvent'}">
-			<!-- panel -->
-			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset;">
-					<div class="panel_head">
-						<div class="tit pull-left">서버 이벤트</div>
-						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'actEvent')"><span class="ico">확대/축소</span></button>
+	<div ng-if="contents.sltInfoTab == 'actEvent'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'actEvent'}">
+		<!-- panel -->
+		<section class="panel panel-bordered">
+			<!-- panel-heading -->
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<b class="tit">서버 이벤트</b>
+						</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="padding-top-10 padding-horizontal-20">
+							<button type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel($event, 'actEvent')"></button>
 						</div>
 					</div>
-					<div ng-if="contents.serverEvent.actionLogs" class="panel_body">
-						<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="action_event_panel" class="in">
-						<!-- 메세지영역 -->
-						<div class="pop_message_area mb20">
-							<div class="msg_bg"></div>
-							<div class="msg_txt"><span>사용자가 서버에 명령하는 시작, 중지 등의 액션에 대한 실행 이력을 표시합니다.</span></div>
-						</div>
-						<!-- //메세지영역 -->
-							<div class="tbl type1">
-								<table class="table">
-									<colgroup>
-										<col style="width:30%;">
-										<col style="width:30%;">
-										<col style="width:40%;">
-									</colgroup>
-									<thead>
+				</div>
+			</div> 
+			<!-- // panel-heading -->
+			<!-- panel-body -->
+			<div class="panel-body" ng-if="contents.serverEvent.actionLogs">
+				<div id="action_event_panel"  class="in"><!-- scroll-pane scroll-config="{ contentWidth: '0px' }" -->
+					<div class="alert alert-primary" role="alert">
+						<i class="xi-info font-size-20"></i>
+						<div class="text-area">사용자가 서버에 명령하는 시작, 중지 등의 액션에 대한 실행 이력을 표시합니다.</div>
+					</div>
+					<div class=" scroll-content" style="height:270px;">
+						<div class="table-wrap border-0 margin-top-20" >
+							<table class="table table-hover">
+								<colgroup>
+									<col style="width:30%;">
+									<col style="width:30%;">
+									<col style="width:40%;">
+								</colgroup>
+								<thead class="text-center black white-text">
 									<tr>
 										<th scope="col">사용자</th>
 										<th scope="col">동작</th>
 										<th scope="col">시간</th>
 									</tr>
-									</thead>
-									<tbody>
-									<tr ng-repeat="actionLog in contents.serverEvent.actionLogs">
+								</thead>
+								<tbody>
+									<tr class="text-center" ng-repeat="actionLog in contents.serverEvent.actionLogs">
 										<td>{{actionLog.userName}}</td>
 										<td>{{actionLog.action}}</td>
 										<td>{{actionLog.time | date : "yyyy-MM-dd HH:mm:ss"}}</td>
 									</tr>
 									<tr ng-if="contents.serverEvent.actionLogs == null">
-										<td colspan="3" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+										<td colspan="3" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
 									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- //panel -->
+	</div>
+
+	<div ng-if="contents.sltInfoTab == 'bootLog'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'bootLog'}">
+		<!-- panel -->
+		<section class="panel panel-bordered">
+			<!-- panel-heading -->
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<b class="tit">서버 부트 로그</b>
+						</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="padding-top-10 padding-horizontal-20">
+							<button type="button" title="확대/축소" class="btn-zoom grey-600"  ng-click="contents.zoomPanel($event, 'bootLog')"></button>
+						</div>
+					</div>
+				</div>
+			</div> 
+			<!-- // panel-heading -->
+			<!-- panel-body -->
+			<div class="panel-body" style="height:450px;">
+				<div class="alert alert-primary" role="alert">
+					<i class="xi-info font-size-20"></i>
+					<div class="text-area">서버가 시작될 때 기록되는 Booting Log를 표시합니다.</div>
+				</div>
+				<div id="boot_log_terminal_panel" class="in">
+					<div id="boot_log_terminal"></div>
+				</div>
+			</div>
+		</section>
+		<!-- //panel -->
+	</div>
+
+	<div ng-if="contents.sltInfoTab == 'systemLog'" class="tab-pane height-high" ng-class="{'active':contents.sltInfoTab == 'systemLog'}">
+		<!-- panel -->
+		<section class="panel panel-bordered">
+			<!-- panel-heading -->
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<b class="tit">시스템 로그</b>
+						</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="padding-top-10 padding-horizontal-20">
+							<button type="button" title="확대/축소" class="btn-zoom grey-600"  ng-click="contents.zoomPanel($event, 'systemLog')"></button>
+						</div>
+					</div>
+				</div>
+			</div> 
+			<!-- // panel-heading -->
+			<!-- panel-body -->
+			<div class="panel-body">
+				<div class="in">
+					<div class="table-input-wrap">
+						<div class="row">
+							<form name="searchForm">
+								<div class="form-inline text-left">
+									<div class="form-group datepicker-div" ng-class="contents.fn.setPosition()">
+										<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+											<input type="text" id="startDatetime" aria-label="Date-Time">
+											<span class="tui-ico-date"></span>
+										</div>
+										<div id="startDatetime-wrapper" style="margin-top: -1px;"></div>
+									</div>
+									<span class="wave padding-horizontal-5"> ~ </span>
+									<div class="form-group datepicker-div" ng-class="contents.fn.setPosition()">
+										<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+											<input type="text" id="endDatetime" aria-label="Date-Time">
+											<span class="tui-ico-date"></span>
+										</div>
+										<div id="endDatetime-wrapper" style="margin-top: -1px;"></div>
+									</div>
+									<div class="form-group inline-block margin-bottom-0">
+										<input class="form-control" name="searchKeyword_program" type="text"
+												ng-model="contents.programName" placeholder="프로그램명" ng-keypress="contents.schEnter($event);" >
+									</div>
+									<div class="form-group inline-block margin-bottom-0">
+										<input class="form-control" name="searchKeyword_message" type="text"
+											ng-model="contents.message" placeholder="내용" ng-keypress="contents.schEnter($event);" >
+									</div>
+									<button type="button" class="btn btn-primary" ng-click="contents.fn.specificLogs();">
+										<div class="feather-icon"><i data-feather="search" class="feather-directive"></i></div><span class="sr-only">검색</span>
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class=" scroll-content" style="height:270px;">
+						<div class="table-wrap border-0 margin-top-20" >
+							<div class="log-row list">
+								<table class="table table-hover logs">
+									<colgroup>
+										<col style="width:12%;" />
+										<col style="width:12%;" />
+										<col style="width:12%;" />
+										<col />
+									</colgroup>
+									<thead class="text-center black white-text">
+										<tr>
+											<th>{{ 'iaas.label.server_name' | translate }}</th>
+											<th>{{ 'iaas.label.program' | translate }}</th>
+											<th>{{ 'iaas.label.created_date' | translate }}</th>
+											<th>{{ 'iaas.label.log_message' | translate }}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="text-center" ng-repeat="item in contents.data.specificLogs.messages track by $index">
+											<td>{{ item.serverName.replace('"', '').replace('"', '') }}</td>
+											<td>{{ item.program.replace('"', '').replace('"', '') }}</td>
+											<td>{{ item.time.replace('T', ' ') }}</td>
+											<td class="text-left">{{ item.message.replace('"', '').replace('"', '') }}</td>
+										</tr>
+										<tr ng-if="contents.data.specificLogs.messages.length == 0 || !contents.data.specificLogs.messages">
+											<td colspan="4" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+										</tr>
 									</tbody>
 								</table>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-			<!-- panel -->
-		</div>
-
-		<div ng-if="contents.sltInfoTab == 'bootLog'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'bootLog'}">
-			<!-- panel -->
-			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset;">
-					<div class="panel_head">
-						<div class="tit pull-left">서버 부트 로그</div>
-						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'bootLog')"><span class="ico">확대/축소</span></button>
-						</div>
-					</div>
-					<div class="panel_body">
-						<!-- 메세지영역 -->
-						<div class="pop_message_area mb20">
-							<div class="msg_bg"></div>
-							<div class="msg_txt"><span>서버가 시작될 때 기록되는 Booting Log를 표시합니다.</span></div>
-						</div>
-						<!-- //메세지영역 -->
-						<div id="boot_log_terminal_panel" class="in type2">
-							<div id="boot_log_terminal"></div>
+						<div class="paginationWrap">
+							<div class="totalWrap">
+								{{ 'label.total' | translate }} {{ pageOptions.total }} {{ 'label.count' | translate }}
+							</div>
+							<nav class="pagiWrap" style="margin-top: 0;">
+								<paging-custom
+										page="pageOptions.currentPage"
+										page-size="pageOptions.pageSize"
+										total="pageOptions.total"
+										pg-href=""
+										show-prev-next="true"
+										show-first-last="true"
+										paging-action="contents.fn.selectLogs(page)"
+										text-first-class="firstPage"
+										text-last-class="lastPage"
+										text-next-class="nextPage"
+										text-prev-class="prevPage">
+								</paging-custom>
+							</nav>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- //panel -->
-		</div>
+		</section>
+		<!-- //panel -->
+	</div>
 
-		<div ng-if="contents.sltInfoTab == 'systemLog'" class="tab-pane height-high" ng-class="{'active':contents.sltInfoTab == 'systemLog'}">
-			<!-- panel -->
-			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset; height: 670px;">
-					<div class="panel_head">
-						<div class="tit pull-left">시스템 로그</div>
-						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'systemLog')"><span class="ico">확대/축소</span></button>
+	<!-- virtualMonit -->
+	<div ng-if="contents.sltInfoTab == 'virtualMonit'" class="tab-pane height-high" ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}">
+		<!-- panel -->
+		<section class="panel panel-bordered">
+			<!-- panel-heading -->
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<b class="tit">가상머신 모니터링</b>
+						</h3>
+						<!-- <div class="tit-in-info info-minor">
+							<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('minor') }"></span>
+							<span class="info-text">Minor</span>
+						</div>
+						<div class="tit-in-info info-warning">
+							<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('warning') }"></span>
+							<span class="info-text">Warning</span>
+						</div>
+						<div class="tit-in-info info-critical">
+							<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('critical') }"></span>
+							<span class="info-text">Critical</span>
+						</div> -->
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="padding-top-10 padding-horizontal-20">
+							<button type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel($event, 'virtualMonit')"></button>
 						</div>
 					</div>
-					<div class="panel_body" style="height: auto;">
-						<div class="in scroll-pane pr10 jspScrollable" tabindex="0" style="overflow: hidden; padding: 0px;">
-							<div class="jspContainer">
-								<div class="jspPane" style="padding: 0px; top: 0px;">
-									<div class="searchWrap ng-scope" style="height: 68px;">
-										<form name="searchForm">
-											<div class="searchBox pull-left">
-												<div class="form-group datepicker-div" ng-class="contents.fn.setPosition()">
-													<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-														<input type="text" id="startDatetime" aria-label="Date-Time">
-														<span class="tui-ico-date"></span>
-													</div>
-													<div id="startDatetime-wrapper" style="margin-top: -1px;"></div>
-												</div>
-												<div class="form-group">
-													<span class="wave">~</span>
-												</div>
-												<div class="form-group datepicker-div" ng-class="contents.fn.setPosition()">
-													<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-														<input type="text" id="endDatetime" aria-label="Date-Time">
-														<span class="tui-ico-date"></span>
-													</div>
-													<div id="endDatetime-wrapper" style="margin-top: -1px;"></div>
-												</div>
-												<div class="form-group">
-													<input name="searchKeyword_program" type="text"
-														ng-model="contents.programName" placeholder="프로그램명" ng-keypress="contents.schEnter($event);" >
-												</div>
-												<div class="form-group">
-													<input name="searchKeyword_message" type="text"
-														ng-model="contents.message" placeholder="내용" ng-keypress="contents.schEnter($event);" >
-												</div>
-												<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.fn.specificLogs();"><span class="ico ng-binding">검색</span></button>
+				</div>
+			</div> 
+			<!-- // panel-heading -->
+			<!-- panel-body -->
+			<div class="panel-body">
+				<div class="in">
+					<div class="table-input-wrap">
+						<div class="row">
+							<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required">
+								<div class="form-inline text-left">
+									<div class="radio-group">
+										<input type="radio" id="timeRangeType01_00" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="1h" class="radio-input ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="timeRangeType01_00" class="radio-item ng-binding">
+											<div class="radio">
+												<div class="checked-icon"></div>
 											</div>
-										</form>
+											<span class="text">
+												최근 1시간
+											</span>
+										</label>
 									</div>
-									<div class="tbl type1" style="overflow-y: auto; height: 425px;">
-										<div class="log-row list">
-											<table class="table logs">
-												<colgroup>
-													<col style="width:12%;" />
-													<col style="width:12%;" />
-													<col style="width:12%;" />
-													<col />
-												</colgroup>
-												<thead>
-													<tr>
-														<th class="text-center">{{ 'iaas.label.server_name' | translate }}</th>
-														<th class="text-center">{{ 'iaas.label.program' | translate }}</th>
-														<th class="text-center">{{ 'iaas.label.created_date' | translate }}</th>
-														<th class="text-left">{{ 'iaas.label.log_message' | translate }}</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr class="text-center" ng-repeat="item in contents.data.specificLogs.messages track by $index">
-														<td>{{ item.serverName.replace('"', '').replace('"', '') }}</td>
-														<td>{{ item.program.replace('"', '').replace('"', '') }}</td>
-														<td>{{ item.time.replace('T', ' ') }}</td>
-														<td class="text-left">{{ item.message.replace('"', '').replace('"', '') }}</td>
-													</tr>
-													<tr ng-if="contents.data.specificLogs.messages.length == 0 || !contents.data.specificLogs.messages">
-														<td colspan="4" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-										<div class="paginationWrap">
-											<div class="totalWrap">
-												{{ 'label.total' | translate }} {{ pageOptions.total }} {{ 'label.count' | translate }}
+									<div class="radio-group">
+										<input type="radio" id="timeRangeType01_01" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="3h" class="radio-input ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="timeRangeType01_01" class="radio-item ng-binding">
+											<div class="radio">
+												<div class="checked-icon"></div>
 											</div>
-											<nav class="pagiWrap" style="margin-top: 0;">
-												<paging-custom
-														page="pageOptions.currentPage"
-														page-size="pageOptions.pageSize"
-														total="pageOptions.total"
-														pg-href=""
-														show-prev-next="true"
-														show-first-last="true"
-														paging-action="contents.fn.selectLogs(page)"
-														text-first-class="firstPage"
-														text-last-class="lastPage"
-														text-next-class="nextPage"
-														text-prev-class="prevPage">
-												</paging-custom>
-											</nav>
-										</div>
+											<span class="text">
+												최근 3시간
+											</span>
+										</label>
 									</div>
+									<div class="radio-group">
+										<input type="radio" id="timeRangeType01_02" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="6h" class="radio-input ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="timeRangeType01_02" class="radio-item ng-binding">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text">
+												최근 6시간
+											</span>
+										</label>
+									</div>
+									<div class="radio-group">
+										<input type="radio" id="timeRangeType01_03" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="12h" class="radio-input ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="timeRangeType01_03" class="radio-item ng-binding">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text">
+												최근 12시간
+											</span>
+										</label>
+									</div>
+									<div class="radio-group">
+										<input type="radio" id="timeRangeType01_04" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="1d" class="radio-input ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="timeRangeType01_04" class="radio-item ng-binding">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text">
+												최근 1일
+											</span>
+										</label>
+									</div>
+									<div class="radio-group">
+										<input type="radio" id="timeRangeType01_06" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="30d" class="radio-input ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="timeRangeType01_06" class="radio-item ng-binding">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text">
+												이번 달
+											</span>
+										</label>
+									</div>
+									<div class="radio-group">
+										<input type="radio" id="timeRangeType01_07" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="custom" class="radio-input ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+										<label for="timeRangeType01_07" class="radio-item ng-binding">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text">
+												수동설정
+											</span>
+										</label>
+									</div>
+									<div class="form-group datepicker-div">
+										<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+											<input type="text" id="startDate-input" aria-label="Date-Time"
+												ng-click="contents.fn.selectCustomBox()"
+												readonly="readonly"
+												ng-style="{ 'background-color': ((contents.selCTimeRange != 'custom') ? '#ddd': '#fff') }">
+											<span class="tui-ico-date"></span>
+										</div>
+										<div id="startDate-wrapper" style="margin-top: -1px;" ng-click="contents.fn.dateOnClick()"></div>
+									</div>
+									<span class="wave padding-horizontal-5">~</span>
+									<div class="form-group datepicker-div">
+										<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+											<input type="text" id="endDate-input" aria-label="Date-Time"
+												ng-click="contents.fn.selectCustomBox()"
+												readonly="readonly"
+												ng-style="{ 'background-color': ((contents.selCTimeRange != 'custom') ? '#ddd': '#fff') }">
+											<span class="tui-ico-date"></span>
+										</div>
+										<div id="endDate-wrapper" style="margin-top: -1px;"></div>
+									</div>
+									<div class="form-group margin-horizontal-20">
+										<label for="groupby" style="margin-right: 5px;">시간간격</label>
+										<select name="group" id="groupby" class="form-control select2"
+											ng-options="group.value as group.name for group in contents.groupResources" 
+											ng-change="contents.fn.selectGroupComboBox()"
+											ng-model="contents.selGroupBy">
+										</select>
+									</div>
+									<button type="button" class="btn btn-primary ng-binding ng-scope" ng-click="contents.fn.saveTimeRange()" aria-hidden="false"><i class="xi-search margin-right-5"></i> 조회</button>
 								</div>
-							</div>
+							</form>
 						</div>
 					</div>
-				</div>
-			</div>
-			<!-- //panel -->
-		</div>
-
-		<!-- virtualMonit -->
-		<div ng-if="contents.sltInfoTab == 'virtualMonit'" class="tab-pane height-high" ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}">
-			<!-- panel -->
-			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset; height: 670px; overflow: hidden;">
-					<div class="panel_head">
-						<div class="tit pull-left">가상머신 모니터링
-							<!-- <div class="tit-in-info info-minor">
-								<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('minor') }"></span>
-								<span class="info-text">Minor</span>
-							</div>
-							<div class="tit-in-info info-warning">
-								<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('warning') }"></span>
-								<span class="info-text">Warning</span>
-							</div>
-							<div class="tit-in-info info-critical">
-								<span class="info-line" ng-style="{ 'background-color': main.getAlarmColor('critical') }"></span>
-								<span class="info-text">Critical</span>
-							</div> -->
-						</div>
-						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'virtualMonit')">
-								<span class="ico">확대/축소</span>
-							</button>
-						</div>
-					</div>
-					<div class="panel_body" style="height: 100% !important">
-						<div class="in scroll-pane pr10 jspScrollable" tabindex="0" style="overflow: hidden; padding: 0px;">
-							<div class="jspContainer">
-								<div class="jspPane" style="padding: 0px; top: 0px;">
-									<div class="chartTabWrap searchWrap ng-scope">
-										<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required">
-											<div class="chartSearchBox">
-												<div class="chartSearchItem">
-													<input type="radio" id="timeRangeType01_00" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="1h" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-													<label for="timeRangeType01_00" class="ng-binding">최근 1시간</label>
+					<!-- chart -->
+					<div id="chart" class="tab-pane fade in active tab-ct scroll-content" style="height: 270px;">
+						<div gridster="gridsterOpts" style="min-width:1000px;">
+							<ul class="network-ct row">
+								<li gridster-item="widget" ng-repeat="widget in dashboard.widgets" class="col-md-4">
+									<div class="box">
+										<div class="box-header">
+											<h4>{{ widget.name }} <span class="">({{widget.axisLabel}})</span></h4>
+										</div>
+										<div class="box-content">
+											<div class="box-label">
+												<div class="label-item" ng-repeat="label in widget.chart.labels">
+													<div class="label-item-color" style="background-color: {{ label.color }}"></div>
+													<span>{{ label.label }}</span>
 												</div>
-												<div class="chartSearchItem">
-													<input type="radio" id="timeRangeType01_01" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="3h" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-													<label for="timeRangeType01_01" class="ng-binding">최근 3시간</label>
-												</div>
-												<div class="chartSearchItem">
-													<input type="radio" id="timeRangeType01_02" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="6h" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-													<label for="timeRangeType01_02" class="ng-binding">최근 6시간</label>
-												</div>
-												<div class="chartSearchItem">
-													<input type="radio" id="timeRangeType01_03" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="12h" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-													<label for="timeRangeType01_03" class="ng-binding">최근 12시간</label>
-												</div>
-												<div class="chartSearchItem">
-													<input type="radio" id="timeRangeType01_04" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="1d" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-													<label for="timeRangeType01_04" class="ng-binding">최근 1일</label>
-												</div>
-												<div class="chartSearchItem">
-													<input type="radio" id="timeRangeType01_05" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="7d" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-													<label for="timeRangeType01_05" class="ng-binding">이번 주</label>
-												</div>
-												<div class="chartSearchItem">
-													<input type="radio" id="timeRangeType01_06" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="30d" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-													<label for="timeRangeType01_06" class="ng-binding">이번 달</label>
-												</div>
-												<div class="chartSearchItem">
-													<div>
-														<input type="radio" id="timeRangeType01_07" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="custom" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-														<label for="timeRangeType01_07" class="ng-binding">수동설정</label>
-													</div>
-													<div>
-														<div class="form-inline" style="margin-bottom: 5px;">
-															<div class="input-group date date-inpt">
-																<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-																	<input type="text" id="startDate-input" aria-label="Date-Time"
-																		ng-click="contents.fn.selectCustomBox()"
-																		style="height: 28px;"
-																		readonly="readonly"
-																		ng-style="{ 'background-color': ((contents.selCTimeRange != 'custom') ? '#ddd': '#fff') }">
-																	<span class="tui-ico-date"></span>
-																</div>
-																<div id="startDate-wrapper" style="margin-top: -1px;" ng-click="contents.fn.dateOnClick()"></div>
-															</div>
-															<span class="wave">~</span>
-															<div class="input-group date date-inpt">
-																<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-																	<input type="text" id="endDate-input" aria-label="Date-Time"
-																		ng-click="contents.fn.selectCustomBox()"
-																		style="height: 28px;"
-																		readonly="readonly"
-																		ng-style="{ 'background-color': ((contents.selCTimeRange != 'custom') ? '#ddd': '#fff') }">
-																	<span class="tui-ico-date"></span>
-																</div>
-																<div id="endDate-wrapper" style="margin-top: -1px;"></div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="chartSearchItem">
-													<label for="groupby" style="margin-right: 5px;">시간간격</label>
-													<select name="group" id="groupby" class="customGroup" style="height: 30px; font-size: 0.9em;"
-														ng-options="group.value as group.name for group in contents.groupResources" 
-														ng-change="contents.fn.selectGroupComboBox()"
-														ng-model="contents.selGroupBy">
-													</select>
-												</div>
-												<button class="btn btn-color1 ng-binding ng-scope" ng-click="contents.fn.saveTimeRange()" aria-hidden="false">조회</button>
 											</div>
-										</form>
-									</div>
-									<div id="chart" class="tab-pane fade in active tab-ct" style="overflow-y: auto; height: 425px;">
-										<div gridster="gridsterOpts" style="min-width:1000px;">
-											<ul class="network-ct row">
-												<li gridster-item="widget" ng-repeat="widget in dashboard.widgets" class="col-md-4">
-													<div class="box">
-														<div class="box-header">
-															<h4>{{ widget.name }} <span class="">({{widget.axisLabel}})</span></h4>
-														</div>
-														<div class="box-content">
-															<div class="box-label">
-																<div class="label-item" ng-repeat="label in widget.chart.labels">
-																	<div class="label-item-color" style="background-color: {{ label.color }}"></div>
-																	<span>{{ label.label }}</span>
-																</div>
-															</div>
-															<div id="{{widget.nodeid}}" class="dygraphs"></div>
-														</div>
-													</div>
-												</li>
-											</ul>
-											<ul class="network-ct row" ng-repeat="interface in interfaceList">
-												<li class="tit-in-ct col-md-12">
-													<p>네트워크 인터페이스 <span class="point-txt">{{ interface }}</span></p>
-												</li>
-												<li gridster-item="widget" ng-repeat="widget in dashboard.netWidgets[interface]" class="col-md-4">
-													<div class="box">
-														<div class="box-header">
-															<h4>{{ widget.name }} <span class="">({{widget.axisLabel}})</span></h4>
-														</div>
-														<div class="box-content">
-															<div class="box-label">
-																<div class="label-item" ng-repeat="label in widget.chart.labels">
-																	<div class="label-item-color" style="background-color: {{ label.color }}"></div>
-																	<span>{{ label.label }}</span>
-																</div>
-															</div>
-															<div id="{{interface + '_' + widget.nodeid}}" class="dygraphs"></div>
-														</div>
-													</div>
-												</li>
-											</ul>
+											<div id="{{widget.nodeid}}" class="dygraphs"></div>
 										</div>
 									</div>
-								</div>
-							</div>
+								</li>
+							</ul>
+							<ul class="network-ct row" ng-repeat="interface in interfaceList">
+								<li class="tit-in-ct col-md-12">
+									<p>네트워크 인터페이스 <span class="point-txt">{{ interface }}</span></p>
+								</li>
+								<li gridster-item="widget" ng-repeat="widget in dashboard.netWidgets[interface]" class="col-md-4">
+									<div class="box">
+										<div class="box-header">
+											<h4>{{ widget.name }} <span class="">({{widget.axisLabel}})</span></h4>
+										</div>
+										<div class="box-content">
+											<div class="box-label">
+												<div class="label-item" ng-repeat="label in widget.chart.labels">
+													<div class="label-item-color" style="background-color: {{ label.color }}"></div>
+													<span>{{ label.label }}</span>
+												</div>
+											</div>
+											<div id="{{interface + '_' + widget.nodeid}}" class="dygraphs"></div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- //chart -->
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<!-- alarmEvent -->
+	<div ng-if="contents.sltInfoTab == 'alarmEvent'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'alarmEvent'}">
+		
+		<!-- panel -->
+		<section class="panel panel-bordered">
+			<!-- panel-heading -->
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">
+							<b class="tit">알람 이벤트</b>
+						</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="padding-top-10 padding-horizontal-20">
+							<button type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel($event, 'alarmEvent')"></button>
 						</div>
 					</div>
 				</div>
-			</div>
-			<!-- //panel -->
-		</div>
-
-		<!-- alarmEvent -->
-		<div ng-if="contents.sltInfoTab == 'alarmEvent'" class="tab-pane" ng-class="{'active':contents.sltInfoTab == 'alarmEvent'}">
-			<!-- panel -->
-			<div class="panelWrap">
-				<div class="panel type2" style="cursor: unset;">
-					<div class="panel_head">
-						<div class="tit pull-left">알람 이벤트</div>
-						<div class="pull-right">
-							<button type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel($event, 'alarmEvent')">
-								<span class="ico">확대/축소</span>
-							</button>
-						</div>
-					</div>
-					<div class="panel_body">
-						<div class="in scroll-pane pr10 jspScrollable" tabindex="0" style="overflow: hidden; padding: 0px;">
-							<div class="jspContainer" style="height: 340px;">
-								<div class="jspPane" style="padding: 0px; top: 0px;">
-									<div class="searchWrap ng-scope" style="height: 68px;">
-										<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required" style="">
-											<div class="searchBox pull-left" style="width: 60%;">
-												
-												<div class="form-group">
-													<select id="sch_alarm_type" 
-														ng-options="alarmType.value as ( alarmType.name | translate ) for alarmType in contents.options.alarmType" 
-														ng-model="contents.sch_condition.alarmType">
-													</select>
-												</div>
-												<div class="form-group">
-													<select id="sch_alarm_level" 
-														ng-options="alarmLevel.value as ( alarmLevel.name | translate ) for alarmLevel in contents.options.alarmLevel" 
-														ng-model="contents.sch_condition.alarmLevel">
-													</select>
-												</div>
-												<div class="form-group">
-													<select id="sch_resolve_status" 
-														ng-options="resolveStatus.value as ( resolveStatus.name | translate ) for resolveStatus in contents.options.resolveStatus" 
-														ng-model="contents.sch_condition.resolveStatus">
-													</select>
-												</div>
-												<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.fn.selectAlarmList();"><span class="ico ng-binding">검색</span></button>
+			</div> 
+			<!-- // panel-heading -->
+			<!-- panel-body -->
+			<div class="panel-body">
+				<div class="in">
+					<div class="table-input-wrap">
+						<div class="row">
+							<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-inline text-left">
+											<div class="form-group">
+												<select id="sch_alarm_type" class="form-control select2"
+													ng-options="alarmType.value as ( alarmType.name | translate ) for alarmType in contents.options.alarmType" 
+													ng-model="contents.sch_condition.alarmType">
+												</select>
 											</div>
-											<div class="pull-right" style="padding-left: 20px;">
-												<div style="width: 155px;display: inline-block;">
-													<button>{{ 'label.search_period' | translate }} &nbsp;</button>
-													<select id="timeRange" ng-options="timeRange.value+(timeRange.name | translate) for timeRange in contents.timeRanges" ng-change="contents.changeTimeRange(contents.selATimeRange.id);" ng-model="contents.selATimeRange">
-													</select>
-												</div>
+											<div class="form-group">
+												<select id="sch_alarm_level" class="form-control select2"
+													ng-options="alarmLevel.value as ( alarmLevel.name | translate ) for alarmLevel in contents.options.alarmLevel" 
+													ng-model="contents.sch_condition.alarmLevel">
+												</select>
+											</div>
+											<div class="form-group">
+												<select id="sch_resolve_status" class="form-control select2"
+													ng-options="resolveStatus.value as ( resolveStatus.name | translate ) for resolveStatus in contents.options.resolveStatus" 
+													ng-model="contents.sch_condition.resolveStatus">
+												</select>
+											</div>
+											<button type="button" class="btn btn-primary" ng-click="contents.fn.selectAlarmList();">
+												<div class="feather-icon"><i data-feather="search" class="feather-directive"></i></div><span class="sr-only">검색</span>
+											</button>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-inline text-right">
+											<div class="form-group">
+												<span class="text">{{ 'label.search_period' | translate }}</span>
+												<select id="timeRange" class="form-control select2" 
+													ng-options="timeRange.value+(timeRange.name | translate) for timeRange in contents.timeRanges" 
+													ng-change="contents.changeTimeRange(contents.selATimeRange.id);" ng-model="contents.selATimeRange">
+												</select>
+											</div>
+											<div class="form-group">
 												<div class="datepickerWrap" style="display: inline-block;">
 													<div class="date-inpt">
 														<adm-dtp name="'startDate'" ng-model="contents.sch_condition.dateFrom" options="{format:'YYYY-MM-DD'}" maxdate="'{{contents.sch_condition.dateTo}}'" ng-required=true></adm-dtp>
@@ -888,77 +1052,82 @@
 													</div>
 												</div>
 											</div>
-										</form>
-									</div>
-									<div class="tbl type1" style="overflow-y: auto; height: 235px;">
-										<div class="log-row list">
-											<table class="table">
-												<colgroup>
-													<col style="width:12%" />
-													<col style="width:8%" />
-													<col style="width:12%" />
-													<col style="width:12%" />
-													<col style="width:10%" />
-													<col/>
-													<col style="width:12%" />
-												</colgroup>
-												<thead>
-												<tr>
-													<th>{{ 'iaas.label.alarm_dt' | translate }}</th>
-													<th>{{ 'iaas.label.alarm_type' | translate }}</th>
-													<th>{{ 'iaas.label.alarm_level' | translate }}</th>
-													<th>{{ 'label.instance_name' | translate }}</th>
-													<th>IP</th>
-													<th>{{ 'label.message' | translate }}</th>
-													<th>{{ 'iaas.label.action_state' | translate }}</th>
-												</tr>
-												</thead>
-												<tbody>
-													<tr ng-repeat="alarms in contents.alarmData">
-														<td>{{ alarms.regDate }}</td>
-														<td>{{ main.getAlarmLabel(alarms.alarmType) }}</td>
-														<td><span class="label label-{{alarms.alarmLevel}}">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
-														<td ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.hostName }}</td>
-														<td>{{ alarms.ip }}</td>
-														<td ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)" class="text-left">{{ alarms.title }}</td>
-														<td>{{ alarms.resolveStatus }}</td>
-													</tr>
-													<tr ng-if="contents.alarmData.length == 0 || !contents.alarmData" class="ng-scope">
-														<td colspan="7" class="center ng-binding">목록이 존재하지 않습니다.</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-										<div class="paginationWrap" style="margin-top: 15px;">
-											<div class="totalWrap">
-												{{ 'label.total' | translate }} {{ alarmPageOptions.total }} {{ 'label.count' | translate }}
-											</div>
-											<nav class="pagiWrap" style="margin-top: 0;">
-												<paging-custom
-														page="alarmPageOptions.currentPage"
-														page-size="alarmPageOptions.pageSize"
-														total="alarmPageOptions.total"
-														pg-href=""
-														show-prev-next="true"
-														show-first-last="true"
-														paging-action="contents.fn.selectAlarmList(page)"
-														text-first-class="firstPage"
-														text-last-class="lastPage"
-														text-next-class="nextPage"
-														text-prev-class="prevPage">
-												</paging-custom>
-											</nav>
 										</div>
 									</div>
 								</div>
+							</form>
+							
+							
+							
+						</div>
+					</div>
+					<div class=" scroll-content" style="height:270px;">
+						<div class="table-wrap border-0 margin-top-20" >
+							<div class="log-row list">
+								<table class="table table-hover logs">
+									<colgroup>
+										<col style="width:12%" />
+										<col style="width:8%" />
+										<col style="width:12%" />
+										<col style="width:12%" />
+										<col style="width:10%" />
+										<col/>
+										<col style="width:12%" />
+									</colgroup>
+									<thead class="text-center black white-text">
+									<tr>
+										<th>{{ 'iaas.label.alarm_dt' | translate }}</th>
+										<th>{{ 'iaas.label.alarm_type' | translate }}</th>
+										<th>{{ 'iaas.label.alarm_level' | translate }}</th>
+										<th>{{ 'label.instance_name' | translate }}</th>
+										<th>IP</th>
+										<th>{{ 'label.message' | translate }}</th>
+										<th>{{ 'iaas.label.action_state' | translate }}</th>
+									</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="alarms in contents.alarmData">
+											<td>{{ alarms.regDate }}</td>
+											<td>{{ main.getAlarmLabel(alarms.alarmType) }}</td>
+											<td><span class="label label-{{alarms.alarmLevel}}">{{ main.getAlarmLabel(alarms.alarmLevel) }}</span></td>
+											<td><a href="" ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.hostName }}</a></td>
+											<td>{{ alarms.ip }}</td>
+											<td><a href="" class="text-left" ng-click="contents.fn.alarmListOnClick('#/iaas/compute/alarm', alarms.id)">{{ alarms.title }}</a></td>
+											<td>{{ alarms.resolveStatus }}</td>
+										</tr>
+										<tr ng-if="contents.alarmData.length == 0 || !contents.alarmData" class="ng-scope">
+											<td colspan="7" class="text-center ng-binding">목록이 존재하지 않습니다.</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
+						</div>
+						<div class="paginationWrap" style="margin-top: 15px;">
+							<div class="totalWrap">
+								{{ 'label.total' | translate }} {{ alarmPageOptions.total }} {{ 'label.count' | translate }}
+							</div>
+							<nav class="pagiWrap" style="margin-top: 0;">
+								<paging-custom
+										page="alarmPageOptions.currentPage"
+										page-size="alarmPageOptions.pageSize"
+										total="alarmPageOptions.total"
+										pg-href=""
+										show-prev-next="true"
+										show-first-last="true"
+										paging-action="contents.fn.selectAlarmList(page)"
+										text-first-class="firstPage"
+										text-last-class="lastPage"
+										text-next-class="nextPage"
+										text-prev-class="prevPage">
+								</paging-custom>
+							</nav>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- //panel -->
-		</div>
-
+		</section>
+		<!-- //panel -->
 	</div>
-	<!-- //Tab panes -->
+
 </div>
+<!-- //Tab panes -->

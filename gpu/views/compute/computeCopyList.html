@@ -1,10 +1,10 @@
 <div class="message_area">
 	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>다른 프로젝트에서 생성한 백업 이미지로부터 현재 프로젝트에 새로운 서버를 생성합니다.</span></div>
+	<div class="msg_txt"><span>다른 프로젝트에서 생성한 스냅샷 이미지로부터 현재 프로젝트에 새로운 인스턴스를 생성합니다.</span></div>
 </div>
 <div class="cont-titWrap mt50">
 	<h3 class="h-tit3">
-		다른 프로젝트의 서버 복사
+		다른 프로젝트의 인스턴스 복사
 	</h3>
 </div>
 <div class="searchWrap text-center">
@@ -14,7 +14,7 @@
 				<option value="">프로젝트</option>
 				<option ng-repeat="orgItem in (contents.portalOrgs | filter : { id: '!' + contents.sltPortalOrgId })" value="{{orgItem.orgId}}">{{orgItem.orgName}}</option>
 			</select>
-			<input type="text" placeholder="백업 이미지 이름을 입력해 주세요." ng-model="contents.schFilterText" style="width: 400px;">
+			<input type="text" placeholder="스냅샷 이미지 이름을 입력해 주세요." ng-model="contents.schFilterText" style="width: 400px;">
 		</div>
 		<button type="button" name="button" class="btn btn-sch" title="검색">
 			<span class="ico">검색</span>
@@ -29,7 +29,7 @@
 			<col width="3%">
 			<!--프로젝트-->
 			<col width="15%">
-			<!--서버명-->
+			<!--인스턴스명-->
 			<col width="20%">
 			<!--OS이미지-->
 			<col width="10%">
@@ -45,19 +45,19 @@
 			<col width="5%">
 			<!--생성일시-->
 			<col width="10%">
-			<!--서버 복사-->
+			<!--인스턴스 복사-->
 			<col width="5%">
 		</colgroup>
 		<thead>
 			<tr>
 				<th scope="row" rowspan="2" class="bd_r">번호</th>
 				<th scope="row" rowspan="2" class="bd_r">프로젝트</th>
-				<th scope="col" colspan="4" class="bd_r">원본서버</th>
-				<th scope="col" colspan="4" class="bd_r">백업 이미지</th>
-				<th scope="row" rowspan="2">서버 복사</th>
+				<th scope="col" colspan="4" class="bd_r">원본인스턴스</th>
+				<th scope="col" colspan="4" class="bd_r">스냅샷</th>
+				<th scope="row" rowspan="2">인스턴스 복사</th>
 			</tr>
 			<tr>
-				<th class="bd_r">서버명</th>
+				<th class="bd_r">인스턴스명</th>
 				<th class="bd_r">OS 이미지</th>
 				<th class="bd_r">CPU</th>
 				<th class="bd_r">메모리</th>
@@ -80,7 +80,7 @@
 				<td><a tooltip-placement="bottom" uib-tooltip="{{ instanceSnapshot.description }}">설명</a></td>
 				<td>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
 				<!--<td><button type="button" name="button" class="btn btn-ico-copy-s only-ico" title="서버 복사" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/' + instanceSnapshot.tenantId)"><span class="ico">서버 복사</span></button></td>-->
-				<td><button type="button" name="button" class="btn btn-ico-copy-s only-ico" title="서버 복사" ng-click="main.goToPage('/gpu/snapshot/serverCreate/' + instanceSnapshot.id + '/' + instanceSnapshot.tenantId)"><span class="ico">서버 복사</span></button></td>
+				<td><button type="button" name="button" class="btn btn-ico-copy-s only-ico" title="인스턴스 복사" ng-click="main.goToPage('/gpu/snapshot/serverCreate/' + instanceSnapshot.id + '/' + instanceSnapshot.tenantId)"><span class="ico">인스턴스 복사</span></button></td>
 			</tr>
 			<tr ng-if="(contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length == 0">
 				<td colspan="11">{{ 'message.mi_dont_exist_list' | translate }}</td>

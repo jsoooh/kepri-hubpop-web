@@ -255,18 +255,39 @@ angular.module('portal.services', [])
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams));
         };*/
 
+        /* // 오픈스택에서 인스턴스 리스트 조회
         portal.dashboard.getIaasInseanceInfos = function (tenantId) {
             var getParams = {
                 tenantId : tenantId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', getParams));
+        };*/
+
+        // DB 에서 인스턴스 리스트 조회
+        portal.dashboard.getIaasInstanceVmsView = function (tenantid) {
+            var getParams = {
+                tenantId : tenantid,
+                deleteYn : "N",
+                page : 0,
+                size : -1
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vms/view', 'GET', getParams));
         };
 
+        /* // 오픈스택에서 테넌트 자원조회
         portal.dashboard.getIaasResourceUsed = function (tenantId) {
             var getParams = {
                 tenantId : tenantId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', getParams));
+        };*/
+
+        // DB 에서 테넌트 자원조회
+        portal.dashboard.getIaasResourceUsedLookup = function (tenantId) {
+            var getParams = {
+                tenantId : tenantId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', getParams));
         };
 
         portal.dashboard.getOrganizationByName = function (name) {

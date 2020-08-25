@@ -181,13 +181,13 @@ angular.module('iaas.controllers')
                 return;
             }
             $scope.main.loadingMainBody = true;
+            ct.fnGetServerMainListLoading = false;
             var param = {
                 tenantId : ct.data.tenantId,
                 queryType : 'list'
             };
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 ct.loadingServerList = false;
                 ct.serverMainList = [];
                 var instances = [];
@@ -230,18 +230,16 @@ angular.module('iaas.controllers')
                     }
                     $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                 }
-                ct.pageFirstLoad = false;
             });
             returnPromise.error(function (data, status, headers) {
-                ct.pageFirstLoad = false;
-                $scope.main.loadingMainBody = false;
                 if (status != 307) {
                     common.showAlertError(data.message);
                 }
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function () {
                 ct.pageFirstLoad = false;
-                // $scope.main.loadingMainBody = false; // 인스턴스 상태 조회 후 로딩바 해제
+                ct.fnGetServerMainListLoading = true;
+                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -758,6 +756,7 @@ angular.module('iaas.controllers')
         // lb 전체 리스트 조회
         ct.fngetLbList = function() {
             $scope.main.loadingMainBody = true;
+            ct.fngetLbListLoading = false;
             var param = {
                 tenantId : ct.data.tenantId
             };
@@ -782,8 +781,9 @@ angular.module('iaas.controllers')
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function () {
                 $scope.main.loadingMainBody = false;
+                ct.fngetLbListLoading = true;
             });
         };
 
@@ -977,24 +977,44 @@ angular.module('iaas.controllers')
             rp.finally(function () {
             });
         };
-
-        if (ct.data.tenantId) {
+        
+        // 페이지 첫 로딩
+        ct.firstPageLoading = function () {
+            if (!ct.data.tenantId) {
+                /*var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                showAlert.then(function () {
+                    $scope.main.goToPage("/");
+                });*/
+                return;
+            }
             ct.fnGetServerMainList();
             ct.fngetLbList();
-        } /*else { // 프로젝트 선택
-            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
-            showAlert.then(function () {
-                $scope.main.goToPage("/");
-            });
-            return false;
-        }*/
 
-        $interval(function () {
+            // 함수 로딩 체크
+            var delay = 100;                // 딜레이 100ms
+            var maxCount = 10 * 60 * 3;     // 최대 횟수1800번(3분)
+            var firstLoadingLoop = $interval(function () {
+                $scope.main.loadingMainBody = true;
+                if (maxCount <= 0 || (ct.fnGetServerMainListLoading == true && ct.fngetLbListLoading == true)) {
+                    $interval.cancel(firstLoadingLoop);
+                    $scope.main.loadingMainBody = false;
+                }
+                maxCount--;
+            }, delay);
+        };
+
+        // 인스턴스 자원 사용량 조회
+        var instancesDataLoop = $interval(function () {
+            if ($location.url() != "/iaas/compute") {  // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
+                $interval.cancel(instancesDataLoop);
+            }
             ct.fnGetInstancesData();
             /*angular.forEach(ct.serverMainList, function (server) {
                 ct.fnSetInstanceUseRate(server);
             });*/
-        }, 1000 * 60)
+        }, 1000 * 60);
+
+        ct.firstPageLoading();
     })
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);
@@ -1013,6 +1033,7 @@ angular.module('iaas.controllers')
         ct.data.keypair      = {};
         ct.data.initScript   = {};
         ct.data.securityPolicys = [];
+        ct.serverNameList    = [];
         ct.subnet            = {};
         ct.networks          = [];
         ct.volume            = {};
@@ -1028,6 +1049,40 @@ angular.module('iaas.controllers')
         ct.data.subDomainName = "";
 
         ct.data.name = 'server-01';
+
+        // 서버 이름 중복 검사
+        ct.fn.serverNameCustomValidationCheck = function(name) {
+            if (ct.serverNameList.indexOf(name) > -1) {
+                return {isValid : false, message : "이미 사용중인 이름입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
+        // 인스턴스 목록 DB 조회
+        ct.fn.getInstanceList = function() {
+            ct.isInstanceListLoad = false;
+            var params = {
+                tenantId : ct.data.tenantId,
+                deleteYn : "N",
+                size : -1,
+                page : 0
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vms/view', 'GET', params);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.content) {
+                    angular.forEach(data.content.content, function (item) {
+                        ct.serverNameList.push(item.instanceName);
+                    });
+                }
+            });
+            returnPromise.error(function (data) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function () {
+                ct.isInstanceListLoad = true;
+            });
+        };
 
         // 네트워크 셀렉트박스 조회
         ct.fn.networkListSearch = function() {
@@ -1516,6 +1571,7 @@ angular.module('iaas.controllers')
         };
 
         if (ct.data.tenantId) {
+            ct.fn.getInstanceList();
             ct.fn.getTenantResource();
             //ct.fn.getDomainUsingList();     //windows rdp 포트포워딩으로 도메인 사용하지 않음
             ct.fn.getSpecList();

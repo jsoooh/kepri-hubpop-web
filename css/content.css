@@ -2440,7 +2440,7 @@ p.no-txt{
 .table .tbl_disabled td {background:#f3f3f3 !important; color:#bdbdbd !important;}
 
 /*테이블 tr 선택된 행 표시*/
-.table .tbl_selected td {background:#e5f0fa !important;}
+.table .tbl_selected td {background:#f4f7fa !important;}
 
 /*추가기능 설정하기 버튼*/
 .btn_add_area {margin:30px 0;}

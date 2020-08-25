@@ -90,7 +90,7 @@ angular.module('iaas.controllers')
             ct.fn.getStorageSnapshotList(1);
         }
     })
-    .controller('iaasStorageSnapshotCreateCtrl', function ($scope, $location, $state, $window, $translate, $timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
+    .controller('iaasStorageSnapshotCreateCtrl', function ($scope, $location, $state, $window, $translate, $timeout, $stateParams, $bytes, $interval, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotCreateCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -105,20 +105,33 @@ angular.module('iaas.controllers')
         ct.instances         = [];
         ct.sltInstance       = {};
         ct.formName          = "storageSnapshotForm";
-        ct.isTenantResourceLoad = false;
 
         ct.volume.name      = 'disk-01';
+        ct.storageNameList  = [];
 
         ct.data.snapshotId = $stateParams.snapshotId;
 
-        ct.inputVolumeSizeChange = function () {
+        // 디스크 크기 제한 설정
+        ct.volumeSize = 100;
+        ct.volumeSliderOptions = {
+            showSelectionBar : true,
+            minLimit : 0,
+            floor: 0,
+            ceil: 100,
+            step: 1,
+            onChange : function () {
+                ct.inputVolumeSize = ct.volumeSize;
+            }
+        };
+
+        ct.fn.inputVolumeSizeChange = function () {
             var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
             if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
                 ct.volumeSize = ct.inputVolumeSize;
             }
         };
 
-        ct.inputVolumeSizeBlur = function () {
+        ct.fn.inputVolumeSizeBlur = function () {
             var volumeSize = ct.inputVolumeSize ? ct.inputVolumeSize : 0;
             if (volumeSize < ct.volumeSliderOptions.minLimit || volumeSize > ct.volumeSliderOptions.ceil) {
                 ct.inputVolumeSize = ct.volumeSize;
@@ -128,117 +141,18 @@ angular.module('iaas.controllers')
             }
         };
 
-        //디스크생성 변수
-        ct.volumeSize = 100;
-        ct.volumeSliderOptions = {
-            showSelectionBar : true,
-            minLimit : 0,
-//            maxLimit : 100,
-            floor: 0,
-            ceil: 100,
-            step: 1,
-            onChange : function () {
-                ct.inputVolumeSize = ct.volumeSize;
+        // 볼륨 생성전 체크
+        ct.fn.createVolumeCheck = function () {
+            if (ct.storageNameList.indexOf(ct.volume.name) > -1) {
+                return common.showAlert("이미 사용중인 이름 입니다.");
+            } else if (ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
+                return common.showAlert("디스크 용량이 부족합니다.");
             }
+            ct.fn.createVolume();
         };
 
-        ct.fn.getTenantResource = function() {
-            var params = {
-                tenantId : ct.data.tenantId
-            };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
-
-            returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    ct.tenantResource = data.content[0];
-                    ct.tenantResource.available = {};
-                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
-                    ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
-                    ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
-                    ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
-                    ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
-                    ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
-                    ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-
-                    ct.tenantResource.usedResource.volumePercent = (ct.tenantResource.usedResource.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
-                    ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
-                }
-                ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                if(ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
-                    ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
-                }
-                ct.isTenantResourceLoad = true;
-            });
-            returnPromise.error(function (data, status, headers) {
-                ct.isTenantResourceLoad = true;
-                common.showAlert("message",data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-            });
-        };
-
-        ct.isStorageSnapshotLoad = false;
-        ct.fn.getStorageSnapshotInfo = function() {
-            var param = {
-                tenantId : ct.data.tenantId,
-                snapshotId : ct.data.snapshotId
-            };
-            ct.snapshotVolume = {};
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'GET', param);
-            returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.volumeSnapShot && data.content.volumeSnapShot.snapshotId) {
-                    ct.snapshotVolume = data.content.volumeSnapShot;
-                    ct.volumeSize = ct.snapshotVolume.size;
-                    ct.inputVolumeSize = ct.snapshotVolume.size;
-                    ct.volumeSliderOptions.minLimit = ct.snapshotVolume.size;
-                }
-                ct.isStorageSnapshotLoad = false;
-            });
-            returnPromise.error(function (data, status, headers) {
-                ct.isStorageSnapshotLoad = false;
-                common.showAlert("message",data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-            });
-        };
-
-        ct.fn.sltInstanceChange = function (sltInstanceId) {
-            var sltInstance = null;
-            if (sltInstanceId) {
-                sltInstance = common.objectsFindCopyByField(ct.instances, "id", sltInstanceId);
-            }
-            if (sltInstance && sltInstance.id) {
-                ct.sltInstance = sltInstance;
-                ct.sltInstanceId = sltInstanceId;
-            } else {
-                ct.sltInstance = {};
-                ct.sltInstanceId = "";
-            }
-        };
-
-        // 서버메인 tenant list 함수
-        ct.isServerListLoad = false;
-        ct.fn.serverList = function() {
-            var param = {
-                tenantId : ct.data.tenantId
-            };
-            ct.instances         = [];
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
-            returnPromise.success(function (data, status, headers) {
-                if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
-                    ct.instances = data.content.instances;
-                }
-                ct.isServerListLoad = true;
-            });
-            returnPromise.error(function (data, status, headers) {
-                //common.showAlertError(data.message);
-                ct.isServerListLoad = true;
-            });
-            returnPromise.finally(function (data, status, headers) {
-            });
-        };
-
-        ct.fn.createStorageVolumeAction = function() {
+        // 볼륨 생성
+        ct.fn.createVolume = function() {
             $scope.main.loadingMainBody = true;
             var params = {};
             params.volumeSnapShot = ct.snapshotVolume;
@@ -258,33 +172,157 @@ angular.module('iaas.controllers')
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', params);
             returnPromise.success(function (data, status, headers) {
+                common.showAlertSuccess(ct.volume.name+" 디스크 생성이 시작 되었습니다.");
                 $scope.main.goToPage('/iaas/storage');
             });
             returnPromise.error(function (data, status, headers) {
+                common.showAlertError("message",data.message);
+            });
+            returnPromise.finally(function () {
                 $scope.main.loadingMainBody = false;
-                common.showAlert("message",data.message);
             });
         };
 
-        ct.checkClickBtn = false;
-        ct.fn.snapshotAndCreateStorage = function () {
-            if (ct.checkClickBtn) return;
-            ct.checkClickBtn = true;
-            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                ct.checkClickBtn = false;
-                return;
+        // 테넌트 자원 사용량 조회
+        ct.fn.getTenantResource = function() {
+            ct.isTenantResourceLoad = false;
+            var params = {
+                tenantId : ct.data.tenantId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', params);
+
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.tenantResource = data.content;
+                    ct.tenantResource.available = {};
+                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
+                    ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
+                    ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
+                    ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
+                    ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+
+                    ct.tenantResource.usedResource.volumePercent = (ct.tenantResource.usedResource.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
+                    ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
+
+                    // 볼륨 크기 최대 제한
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
+                    if (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
+                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                    }
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError("message",data.message);
+            });
+            returnPromise.finally(function () {
+                ct.isTenantResourceLoad = true;
+            });
+        };
+
+        // 볼륨 스냅샷 조회
+        ct.fn.getStorageSnapshotInfo = function() {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                snapshotId : ct.data.snapshotId
+            };
+            ct.snapshotVolume = {};
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content && data.content.volumeSnapShot && data.content.volumeSnapShot.snapshotId) {
+                    ct.snapshotVolume = data.content.volumeSnapShot;
+                    ct.volumeSize = ct.snapshotVolume.size;
+                    ct.inputVolumeSize = ct.snapshotVolume.size;
+                    ct.volumeSliderOptions.minLimit = ct.snapshotVolume.size;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError("message",data.message);
+            });
+            returnPromise.finally(function () {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.sltInstanceChange = function (sltInstanceId) {
+            var sltInstance = null;
+            if (sltInstanceId) {
+                sltInstance = common.objectsFindCopyByField(ct.instances, "id", sltInstanceId);
             }
-
-            ct.fn.createStorageVolumeAction();
+            if (sltInstance && sltInstance.id) {
+                ct.sltInstance = sltInstance;
+                ct.sltInstanceId = sltInstanceId;
+            } else {
+                ct.sltInstance = {};
+                ct.sltInstanceId = "";
+            }
         };
 
-        ct.cancelAction = function () {
-            $window.history.back();
+        // 인스턴스 리스트 조회
+        ct.fn.getServerList = function() {
+            ct.isServerListLoad = false;
+            var param = {
+                tenantId : ct.data.tenantId
+            };
+            ct.instances = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
+                    ct.instances = data.content.instances;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function () {
+                ct.isServerListLoad = true;
+            });
         };
 
-        ct.fn.serverList();
-        ct.fn.getTenantResource();
+        // 볼륨 리스트 조회
+        ct.fn.getStorageList = function() {
+            ct.isStorageListLoad = false;
+            var param = {
+                tenantId : ct.data.tenantId,
+                conditionKey : ct.conditionKey,
+                conditionValue : ct.conditionValue
+            };
+
+            param.size = 0;
+
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                var volumes = [];
+                if (data && data.content && data.content.volumes && angular.isArray(data.content.volumes)) {
+                    volumes = data.content.volumes;
+                    for (var i = 0; i < volumes.length; i++) {
+                        ct.storageNameList.push(volumes[i].name);
+                    }
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                if (status != 307) {
+                    common.showAlertError("message", data.message);
+                }
+            });
+            returnPromise.finally(function () {
+                ct.isStorageListLoad = true;
+            });
+        };
+
+        // 볼륨 이름 중복 체크
+        ct.fn.storageNameCustomValidationCheck = function(name) {
+            if (ct.storageNameList.indexOf(name) > -1) {
+                return {isValid : false, message: "이미 사용중인 이름 입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
         ct.fn.getStorageSnapshotInfo();
+        ct.fn.getServerList();
+        ct.fn.getTenantResource();
+        ct.fn.getStorageList();
     })
     .controller('iaasStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);

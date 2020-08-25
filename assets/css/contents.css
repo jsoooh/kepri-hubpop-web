@@ -128,16 +128,17 @@
 .s_cont_box .progressWrap.type2 .progress{position: relative; width: 100%; height:7px; margin-bottom: 0px; border-radius: 10px; vertical-align: bottom; box-shadow: none; background-color: #eee; overflow: inherit;}
 .s_cont_box .s_progress_box ul li:nth-child(even) div.progressWrap.type2 .progress-bar {background:#02a0cf !important;}
 
-.pj_write_wrap .panel-group .panel .panel-heading .panel-title h3 {font-size: 14px; font-weight: 600; color: #515151;}
-.pj_write_wrap .panel-group .panel .panel-heading a.panel-title {font-size: 14px; font-weight: 600; color: #515151; padding:18px 20px;}
-.pj_write_wrap .panel-bordered > .panel-heading {border-bottom:0;}
-.pj_write_wrap .panel-bordered > .panel-body {border-top:1px solid #eeeeee;}
-.pj_write_wrap .panel-group .panel-heading + .panel-collapse .panel-body {border-top:0;}
-.pj_write_wrap .panel-group .panel-heading + .panel-collapse.in .panel-body {border-top:1px solid #eeeeee;}
+/*만들기화면 공통스타일*/
+.write_wrap .panel-group .panel .panel-heading .panel-title h3 {font-size: 14px; font-weight: 600; color: #515151;}
+.write_wrap .panel-group .panel .panel-heading a.panel-title {font-size: 14px; font-weight: 600; color: #515151; padding:15px 20px;}
+.write_wrap .panel-bordered > .panel-heading {border-bottom:0;}
+.write_wrap .panel-bordered > .panel-body {border-top:1px solid #eeeeee;}
+.write_wrap .panel-group .panel-heading + .panel-collapse .panel-body {border-top:0;}
+.write_wrap .panel-group .panel-heading + .panel-collapse.in .panel-body {border-top:1px solid #eeeeee;}
 
-.pj_write_wrap .panel-body  .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
-.pj_write_wrap .panel-body  .s_inner_cont .pnb_tit {font-size:14px; font-weight:500; margin-bottom:20px;}
-.pj_write_wrap .panel-body  .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
+.write_wrap .panel-body  .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
+.write_wrap .panel-body  .s_inner_cont .pnb_tit {font-size:14px; font-weight:500; margin-bottom:20px;}
+.write_wrap .panel-body  .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
 
 
 /*툴팁 type2(bootstrap 제공 tooltip 재정의)*/
@@ -242,6 +243,55 @@
 .tbl_cont .table .tbl_cont_state ul li span.inactive {background:#c3c3c3;}
 .tbl_cont .table .tbl_cont_state ul li span.txt {display:inline-block; font-size:14px; font-weight:400; vertical-align:middle;}
 
+.detail-info .list-dot > li b {display:inline-block; width:100px;}
+.detail-info .list-dot > li .txt {display:inline-block;}
+.detail-info .list-dot > li button {vertical-align:unset;}
+
+/*서버상세*/
+.appCnt-vol.strgList .ul-volume{width:100%;}
+.appCnt-vol.strgList .cBox-cnt > .in {overflow-x:auto;}
+.appCnt-vol.strgList .ul-volume > li .in{position: relative; width:350px; height: 105px; padding: 0 15px 10px 92px; margin-left: 0px; background: url("../../images/ico_hard2.png") no-repeat left 11px;}
+.appCnt-vol.strgList .ul-volume > li{width:400px; padding-left:70px;}
+.appCnt-vol.strgList .ul-volume > li:first-child{width:350px; padding-left:0;}
+.appCnt-vol.strgList .in_tit {display:inline-block; width:225px; font-size:16px; font-weight:700; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; word-break: break-all; padding:0 40px 0 0;}
+.appCnt-vol.strgList .btn-wrap {position:absolute; top:0; right:10px;}
+
+/*패널 확대/축소*/
+.panel-bordered .panel-heading button {margin-left:10px;}
+.panel-bordered.zoom {position: absolute; top: 0; left: 0; z-index: 1000; width: 100%; height: 100%; margin-bottom: 0;border:none;box-shadow:none;transform:none;transition:none;}
+.panel-bordered.zoom .panel_body {height:95%;}
+.panel-bordered .btn-zoom::before {display: inline-block; content: '\e954'; font-family: 'xeicon'; font-size:25px;}
+.panel-bordered.zoom .btn-zoom::before {content: '\e955';}
+
+.page-detail .panel-body {height:400px;}
+
+.table-input-wrap .form-inline > .radio-group,
+.table-input-wrap .form-inline > .checkbox-group {
+	margin-right: 13px;
+}
+
+.table-state ul > li  {position:relative;}
+.table-state .state-txt  {color:#888; font-weight:400; vertical-align:middle;}
+.table-state .stateWrap .state-txt:hover  {text-decoration:underline; cursor:pointer;}
+.table-state .server_con_detail {position:absolute; top:25px; z-index:1; width:100%; border-radius:2px; background:#000; opacity:0.6; padding:15px;}
+.table-state .server_con_detail li {font-size:14px; color:#fff; text-align:left; line-height:1.6; letter-spacing:0;}
+.table-state .t_tip_bx {text-align:left; margin-top:-1px;}
+
+
+/*부하분산-상세화면 연결서버 탭(연결서버 이미지일 때 생성중 프로그래스 */
+.cont_progress_div {width:50%; height:200px; margin:0 auto;}
+
+/*서버만들기 슬라이더*/
+/* .panel_area .pn_body .pnb_tit .disk_info {position:absolute; top:-7px; right:0; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 15px 6px 15px; background:#888;} */
+.disk_area {position:relative; border:1px solid #dedede; border-radius:3px; background:#fff; padding:30px;}
+.disk_area .disk_info {position:absolute; top:0px; right:20px; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 8px 6px 8px; background:#a1a1a1;}
+.disk_area p {font-size:16px; color:#666; text-align:center; margin-top:15px;}
+
+.write_wrap .panel-inner-collapse .panel-group .panel-title {padding:10px 20px 10px 20px; }
+.write_wrap .panel-inner-collapse .panel-group .panel-title h3 {font-size:13px; font-weight:600;}
+.write_wrap .panel-inner-collapse .panel-group .panel-body .disk_area {border:0; padding:0;}
+.write_wrap .panel-inner-collapse .panel-group .panel-heading {border-bottom:0;}
+
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}
@@ -255,6 +305,7 @@ body {line-height:1.57142857;}
 input[type="text"], input[type="password"] {height:38px;}
 .pj_write_wrap .table, .pj_write_wrap .table td {font-size:13px !important;}
 .pj_write_wrap .radio {padding:0;}
+.radio {padding:0;}
 
 .btn.btn-success {background-color: #249b97; border-color: #249b97; color:#fff;}
 .panel .panel-heading .dropdown .feather-icon {font-size: 20px; color: #9d9d9d;}

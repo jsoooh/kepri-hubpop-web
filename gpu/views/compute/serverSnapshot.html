@@ -9,14 +9,14 @@
 	<!-- 프로젝트 정보 -->
 	<div ng-if="!!main.userTenantGpuId" class="cBox type0 projt-mana mt30">
 		<div class="pull-left">
-			<h4 class="c-tit">전체 백업 이미지 <em class="point1">({{(contents.instanceSnapshotList | filter:{ status : '!deleting'}).length + (contents.storageSnapshotList | filter:{ status : '!deleting'}).length}})</em></h4>
+			<h4 class="c-tit">전체 스냅샷 <em class="point1">({{(contents.instanceSnapshotList | filter:{ status : '!deleting'}).length + (contents.storageSnapshotList | filter:{ status : '!deleting'}).length}})</em></h4>
 		</div>
 		<div class="pull-right">
 			<!-- 검색 -->
 			<div class="searchBox type2">
 				<div class="form-group">
-					<input ng-if="contents.tabIndex == 0" type="text" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schInstanceFilterText">
-					<input ng-if="contents.tabIndex == 1" type="text" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schStorageFilterText">
+					<input ng-if="contents.tabIndex == 0" type="text" placeholder="스냅샷 검색" style="width:300px;" ng-model="contents.schInstanceFilterText">
+					<input ng-if="contents.tabIndex == 1" type="text" placeholder="스냅샷 검색" style="width:300px;" ng-model="contents.schStorageFilterText">
 				</div>
 				<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schInstanceFilterText = ''; contents.schStorageFilterText = ''"><span class="ico">지우기</span></button>
 			</div>
@@ -29,8 +29,8 @@
 	<div ng-if="!!main.userTenantGpuId" role="tabpanel" class="tabWrap type1">
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 백업 이미지<span>({{(contents.instanceSnapshotList | filter:{ status : '!deleting'}).length}})</span></a></li>
-			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">디스크 백업 이미지<span>({{(contents.storageSnapshotList | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">서버 스냅샷<span>({{(contents.instanceSnapshotList | filter:{ status : '!deleting'}).length}})</span></a></li>
+			<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">볼륨 스냅샷<span>({{(contents.storageSnapshotList | filter:{ status : '!deleting'}).length}})</span></a></li>
 		</ul>
 	
 		<!-- Tab panes -->
@@ -52,7 +52,7 @@
 						<thead>
 							<tr>
 								<th scope="col">이름</th>
-								<th scope="col">원본서버</th>
+								<th scope="col">원본 인스턴스</th>
 								<th scope="col">OS이미지</th>
 								<th scope="col">설명</th>
 								<th scope="col">상태</th>
@@ -85,9 +85,9 @@
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 											<!--<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>-->
 											<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/gpu/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>
-											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
-											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">이미지 설명 변경</a></li>
-											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
+											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="스냅샷이‘사용가능’상태인 경우에만 '인스턴스 생성'이 가능합니다.">서버 생성</a></li>
+											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">스냅샷 설명 변경</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">스냅샷 삭제</a></li>
 										</ul>
 									</div>
 								</td>
@@ -113,9 +113,9 @@
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 											<!--<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>-->
-											<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/gpu/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>
-											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
-											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
+											<li ng-if="instanceSnapshot.status == 'active'"><a href="" ng-click="main.goToPage('/gpu/snapshot/serverCreate/' + instanceSnapshot.id + '/');">인스턴스 생성</a></li>
+											<li ng-if="instanceSnapshot.status != 'active'"><a href="" class="disabled" title="스냅샷이‘사용가능’상태인 경우에만 '인스턴스 생성'이 가능합니다.">인스턴스 생성</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">스냅샷 삭제</a></li>
 										</ul>
 									</div>
 								</div>
@@ -128,7 +128,7 @@
 											</div>
 											<div class="cnt_infoBox">
 												<dl>
-													<dt>원본 서버1231</dt>
+													<dt>원본 인스턴스</dt>
 													<dd class="d_block">
 														<!--<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>-->
 														<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/gpu/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>
@@ -155,7 +155,7 @@
 				<!-- //panel -->
 				<div class="proj_list_area" ng-if="!contents.loadingInstanceSnapshotList && (contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length == 0">
 					<ul class="ul-panel dash_list no_data">
-						<li><p class="no_data_txt pd0">생성된 서버 백업 이미지가 없습니다.</p></li>
+						<li><p class="no_data_txt pd0">생성된 서버 스냅샷이 없습니다.</p></li>
 					</ul>
 				</div>
 				<div class="proj_list_area" ng-if="contents.loadingInstanceSnapshotList && (contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length == 0">
@@ -183,7 +183,7 @@
 						<thead>
 							<tr>
 								<th scope="col">이름</th>
-								<th scope="col">원본디스크</th>
+								<th scope="col">원본 볼륨</th>
 								<th scope="col">크기(GB)</th>
 								<th scope="col">설명</th>
 								<th scope="col">상태</th>
@@ -211,10 +211,10 @@
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 											<!--<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>-->
-											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
-											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">디스크 생성</a></li>
-											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">이미지 설명 변경</a></li>
-											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
+											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">볼륨 생성</a></li>
+											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="스냅샷이‘사용가능’상태인 경우에만 '인스턴스 생성'이 가능합니다.">볼륨 생성</a></li>
+											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">스냅샷 설명 변경</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">스냅샷 삭제</a></li>
 										</ul>
 									</div>
 								</td>
@@ -239,9 +239,9 @@
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 											<!--<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>-->
-											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
-											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">디스크 생성</a></li>
-											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
+											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">볼륨 생성</a></li>
+											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="스냅샷이‘사용가능’상태인 경우에만 '인스턴스 생성'이 가능합니다.">볼륨 생성</a></li>
+											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">스냅샷 삭제</a></li>
 										</ul>
 									</div>
 								</div>
@@ -254,12 +254,12 @@
 											</div>
 											<div class="cnt_infoBox">
 												<dl>
-													<dt>원본 디스크</dt>
+													<dt>원본 볼륨</dt>
 													<!-- <dd><a href="" ng-click="main.goToPage('/iaas/storage/detail/'+storageSnapshot.volumeId)">{{storageSnapshot.volumeName}}</a></dd> -->
 													<dd><a class="none_click txt_long" href="" title="{{storageSnapshot.volumeName}}" >{{storageSnapshot.volumeName}}</a></dd>
 													<!-- <dd>{{storageSnapshot.volumeName}}</dd> -->
-													<dt>디스크 유형</dt>
-													<dd>디스크스토리지</dd>
+													<dt>볼륨 유형</dt>
+													<dd>볼륨스토리지</dd>
 												</dl>
 												<!--<button class="cnt_tooltip type02" tooltip-placement="bottom" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'">설명<span class="ico_tip"></span></button>-->
 												<button tooltip-placement="bottom" tooltip-class="tooltip_long" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');"><span class="cnt_tooltip type02">설명<span class="ico_tip"></span></span> </button>
@@ -280,7 +280,7 @@
 				<!-- //panel -->
 				<div class="proj_list_area" ng-if="!contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
 					<ul class="ul-panel dash_list no_data">
-						<li><p class="no_data_txt pd0">생성된 디스크 백업 이미지가 없습니다.</p></li>
+						<li><p class="no_data_txt pd0">생성된 볼륨 스냅샷이 없습니다.</p></li>
 					</ul>
 				</div>
 				<div class="proj_list_area" ng-if="contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
