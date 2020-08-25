@@ -128,16 +128,17 @@
 .s_cont_box .progressWrap.type2 .progress{position: relative; width: 100%; height:7px; margin-bottom: 0px; border-radius: 10px; vertical-align: bottom; box-shadow: none; background-color: #eee; overflow: inherit;}
 .s_cont_box .s_progress_box ul li:nth-child(even) div.progressWrap.type2 .progress-bar {background:#02a0cf !important;}
 
-.pj_write_wrap .panel-group .panel .panel-heading .panel-title h3 {font-size: 14px; font-weight: 600; color: #515151;}
-.pj_write_wrap .panel-group .panel .panel-heading a.panel-title {font-size: 14px; font-weight: 600; color: #515151; padding:18px 20px;}
-.pj_write_wrap .panel-bordered > .panel-heading {border-bottom:0;}
-.pj_write_wrap .panel-bordered > .panel-body {border-top:1px solid #eeeeee;}
-.pj_write_wrap .panel-group .panel-heading + .panel-collapse .panel-body {border-top:0;}
-.pj_write_wrap .panel-group .panel-heading + .panel-collapse.in .panel-body {border-top:1px solid #eeeeee;}
+/*만들기화면 공통스타일*/
+.write_wrap .panel-group .panel .panel-heading .panel-title h3 {font-size: 14px; font-weight: 600; color: #515151;}
+.write_wrap .panel-group .panel .panel-heading a.panel-title {font-size: 14px; font-weight: 600; color: #515151; padding:15px 20px;}
+.write_wrap .panel-bordered > .panel-heading {border-bottom:0;}
+.write_wrap .panel-bordered > .panel-body {border-top:1px solid #eeeeee;}
+.write_wrap .panel-group .panel-heading + .panel-collapse .panel-body {border-top:0;}
+.write_wrap .panel-group .panel-heading + .panel-collapse.in .panel-body {border-top:1px solid #eeeeee;}
 
-.pj_write_wrap .panel-body  .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
-.pj_write_wrap .panel-body  .s_inner_cont .pnb_tit {font-size:14px; font-weight:500; margin-bottom:20px;}
-.pj_write_wrap .panel-body  .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
+.write_wrap .panel-body  .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
+.write_wrap .panel-body  .s_inner_cont .pnb_tit {font-size:14px; font-weight:500; margin-bottom:20px;}
+.write_wrap .panel-body  .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
 
 
 /*툴팁 type2(bootstrap 제공 tooltip 재정의)*/
@@ -279,6 +280,17 @@
 
 /*부하분산-상세화면 연결서버 탭(연결서버 이미지일 때 생성중 프로그래스 */
 .cont_progress_div {width:50%; height:200px; margin:0 auto;}
+
+/*서버만들기 슬라이더*/
+/* .panel_area .pn_body .pnb_tit .disk_info {position:absolute; top:-7px; right:0; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 15px 6px 15px; background:#888;} */
+.disk_area {position:relative; border:1px solid #dedede; border-radius:3px; background:#fff; padding:30px;}
+.disk_area .disk_info {position:absolute; top:0px; right:20px; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 8px 6px 8px; background:#a1a1a1;}
+.disk_area p {font-size:16px; color:#666; text-align:center; margin-top:15px;}
+
+.write_wrap .panel-inner-collapse .panel-group .panel-title {padding:10px 20px 10px 20px; }
+.write_wrap .panel-inner-collapse .panel-group .panel-title h3 {font-size:13px; font-weight:600;}
+.write_wrap .panel-inner-collapse .panel-group .panel-body .disk_area {border:0; padding:0;}
+.write_wrap .panel-inner-collapse .panel-group .panel-heading {border-bottom:0;}
 
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
