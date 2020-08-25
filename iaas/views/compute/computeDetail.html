@@ -364,10 +364,10 @@
 			<div class="col-sm-12">
 				<h3 class="panel-title">
 					<b class="tit">디스크 연결 정보<span class="color-primary">({{contents.instanceVolList.length}})</span></b>
+					<img ng-if="!contents.isSearchInstanceVolumeListLoad" src="images/loading_sm.gif">
 				</h3>
 			</div>
 		</div>
-		
 	</div> <!-- // panel-heading -->
 	<div class="panel-body">
 		<div class="appCnt-vol strgList">
@@ -396,9 +396,11 @@
 					</ul>
 				</div>
 			</div>
-			<p class="padding-vertical-20" ng-if="contents.instanceVolList.length == 0">
-				연결 디스크 정보가 없습니다.
-			</p>
+			<div ng-class="{'padding-vertical-20' : contents.isSearchInstanceVolumeListLoad, 'padding-vertical-30' : !contents.isSearchInstanceVolumeListLoad}">
+				<p ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
+					연결 디스크 정보가 없습니다.
+				</p>
+			</div>
 		</div>
 	</div>
 </section>
