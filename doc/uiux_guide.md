@@ -17,8 +17,9 @@
   3-2. 메뉴 즐겨찾기 조회
   3-3. 메뉴 즐겨찾기 추가
   3-4. 메뉴 즐겨찾기 삭제
+4. 기타 주의점
+  4-1. feather icon이 안나타날 때
 ```
-
 #### 1. 사용자포탈 URL
 - 신규 개발을 위한 개발서버
 - 사용계정은 kepri-demo 사이트와 동일
@@ -579,4 +580,11 @@ http://www.kepri2-demo.crossent.com
       "resultMsg": "NORMAL_CODE"
     }
     ```
+    #### 4. 기타 주의점
+  ##### 4-1. feather icon이 안나타날 때
+  - feather icon은 jQuery 방식이므로 angularjs 에서 제대로 반영되지 않는 경우 있음
+    directive 처리함으로 해서 화면에서는 한페이지당 한번만 아래 클래스 추가 :  class="feather-directive"
+  ```
+  <i data-feather="more-vertical" class="feather-directive"></i>
+  ```
   
