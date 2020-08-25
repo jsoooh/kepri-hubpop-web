@@ -396,11 +396,9 @@
 					</ul>
 				</div>
 			</div>
-			<div ng-class="{'padding-vertical-20' : contents.isSearchInstanceVolumeListLoad, 'padding-vertical-30' : !contents.isSearchInstanceVolumeListLoad}">
-				<p ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
-					연결 디스크 정보가 없습니다.
-				</p>
-			</div>
+            <p ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
+                연결 디스크 정보가 없습니다.
+            </p>
 		</div>
 	</div>
 </section>
