@@ -47,7 +47,7 @@ angular.module('common.controllers', [])
         mc.sltMenu = {};                    //좌측 메뉴 선택
         mc.dashboardFull = false;           //대시보드 화면 전체보기
         mc.myServiceOpen = true;            //메뉴 즐겨찾기 dropdown
-        //mc.hideTitle = true;                //title 감추기
+        //mc.hideTitle = true;              //title 감추기
 
         //좌측 대메뉴 선택
         mc.setGroupMenu = function (menuItem) {
