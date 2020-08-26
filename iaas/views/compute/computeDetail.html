@@ -216,12 +216,12 @@
 					<span ng-if="contents.instance.image.osType">{{contents.instance.image.osType | firstUpperCase}}</span>
 				</li>
 				<li ng-if="contents.instance.image.osType == 'windows' && !contents.instance.rdpDomain">
-					<strong class="tit">접속 도메인</strong>
+					<b>접속 도메인</b>
 					<span>{{ (contents.instance.rdpConnectDomain) ? contents.instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</span>
 					<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
 				</li>
 				<li ng-if="contents.instance.image.osType == 'windows' && contents.instance.rdpDomain">
-					<strong class="tit">접속 주소</strong>
+					<b>접속 주소</b>
 					<span>{{ contents.instance.rdpDomain ? contents.instance.rdpDomain : '' }}</span>
 					<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
 				</li>
