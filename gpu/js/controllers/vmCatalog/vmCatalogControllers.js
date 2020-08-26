@@ -573,7 +573,7 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.context.octaviaLbUse = false;
         }
         vmCatalogDeploy.parameters.image = ct.vmCatalogTemplateInfo.images[ct.data.deployType];
-        if(ct.vmCatalogInfo.id != 1) {
+        if(ct.vmCatalogInfo.id != 12) {
             vmCatalogDeploy.parameters.flavor = ct.data.flavor;
         }
         vmCatalogDeploy.parameters.key_name = ct.data.keyName;

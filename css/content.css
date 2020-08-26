@@ -2580,7 +2580,7 @@ a.ext_link:hover {text-decoration:underline;}
 /*디스크 목록*/
 .cnt_wrap {display:table; width:100%; padding:15px;}
 .cnt_wrap > div.cnt_imgBox, .cnt_wrap > div.cnt_infoBox {position:relative; display:table-cell; box-sizing:border-box; vertical-align:top;}
-.cnt_wrap .cnt_imgBox {width:130px; text-align:center;}
+.cnt_wrap .cnt_imgBox {position:relative; width:130px; text-align:center;}
 .cnt_wrap .cnt_imgBox .cnt_img {display:inline-block; width:100px; height:100px; background:url("../images/ico_card_line.png") no-repeat;}
 .cnt_wrap .cnt_imgBox .cnt_img.ico01 {background-position:0 0;}
 .cnt_wrap .cnt_imgBox .cnt_img.ico02 {background-position:0 -110px;}
@@ -2588,7 +2588,7 @@ a.ext_link:hover {text-decoration:underline;}
 .cnt_wrap .cnt_imgBox .cnt_img.ico04 {background-position:0 -315px;}
 .cnt_wrap .cnt_imgBox .cnt_value {position:absolute; top:5px; right:20px; display:inline-block; width:60px; height:60px; border-radius:50%; background:#2858ad;}
 .cnt_wrap .cnt_imgBox .cnt_value span {display:block; color:#fff; text-align:center;}
-.cnt_wrap .cnt_imgBox .cnt_value .t_lg {font-family: 'Montserrat'; font-size:20px; font-weight:500; padding-top:14px;}
+.cnt_wrap .cnt_imgBox .cnt_value .t_lg {font-family: 'Montserrat'; font-size:20px; line-height:20px; font-weight:500; padding-top:14px;}
 .cnt_wrap .cnt_imgBox .cnt_value .t_sm {font-size:12px; font-weight:500;}
 .cnt_wrap .cnt_imgBox .guide_link {text-align:center; padding:0;}
 .cnt_wrap .cnt_imgBox .cnt_txt  {margin-top:10px;}
@@ -2603,6 +2603,7 @@ a.ext_link:hover {text-decoration:underline;}
 .cnt_wrap .cnt_infoBox dl dt > span {font-size:14px; color:#777;}
 .cnt_wrap .cnt_infoBox dl dd {display:inline-block; font-size:14px; color:#777; padding-left:10px; vertical-align:middle; line-height:25px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; word-break:break-word; }
 .cnt_wrap .cnt_infoBox dl dd a.txt_long {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all; vertical-align:middle;}
+.cnt_wrap .txt_long {display:inline-block; width:200px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all; vertical-align:middle;}
 /* .cnt_wrap .cnt_infoBox dl dd a {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all;} */
 .cnt_wrap .cnt_infoBox dl dd a:hover {text-decoration:underline; color:#2957cc;}
 .cnt_wrap .cnt_infoBox .cnt_tooltip {display:inline-block; font-size:13px; font-weight:500; color:#333; border-radius:50px; padding:5px 10px 4px 13px; margin:15px 0 0 6px;}
