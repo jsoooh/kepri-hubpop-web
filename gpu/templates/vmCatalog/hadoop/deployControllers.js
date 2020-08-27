@@ -246,12 +246,30 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.root_password = ct.data.mysqlRootPassword;
             vmCatalogDeploy.parameters.hive_password = ct.data.mysqlHivePassword;
 
-            if(ct.data.nodeType == 'cluster') { // 이중화 구성
+            if(ct.data.nodeType == 'single') {
+                vmCatalogDeploy.workerUse = false;
+                vmCatalogDeploy.deployTemplates = "standalone";
+                vmCatalogDeploy.parameters.master_flavor = ct.data.workerFlavor;
+
+            }else if(ct.data.nodeType == 'cluster') {
+                vmCatalogDeploy.workerUse = true;
                 vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
                 vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
-                vmCatalogDeploy.workerUse = true;
-                //vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
+                vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
+                vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
+                vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
+
+                // 마스터 구성 (단일노드 마스터)
+                if(ct.data.masterCnt == 1){
+                    vmCatalogDeploy.deployTemplates = "singleMaster";
+                    // 마스터 구성 (이중노드 마스터)
+                }else if(ct.data.masterCnt == 2){
+                    vmCatalogDeploy.deployTemplates = "multiMaster";
+                }
+
             }
+
+
             return vmCatalogDeploy;
         };
 
