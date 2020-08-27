@@ -64,9 +64,7 @@ angular.module('iaas.controllers')
                         ct.isStorageMainListLoad = true;
                     }
                 }
-                console.log("volumes : ", volumes);
                 common.objectOrArrayMergeData(ct.storageMainList, volumes);
-                console.log("ct.storageMainList : ", ct.storageMainList);
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
