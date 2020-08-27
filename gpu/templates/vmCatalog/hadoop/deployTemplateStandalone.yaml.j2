@@ -226,7 +226,7 @@ resources:
   server1:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: flavor }
+      flavor: { get_param: master_flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
