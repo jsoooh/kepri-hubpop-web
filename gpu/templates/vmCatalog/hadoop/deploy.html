@@ -17,7 +17,7 @@
                                 <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상를 생성할 존은 선택하다.<br/>선택한 존에 따라 네트워크가 결정된다.'"><span class="ico_info"></span></button><img ng-if="!contents.isAvailabilityZoneLoad" src="images/loading_sm.gif" /></div>
                             </div>
                             <div class="pl10 mt10">
-                                <select name="deployType" ng-options="deployType.key as deployType.value for deployType in contents.deployTypes" ng-model="contents.data.deployType" style="width:100%;"></select>
+                                <select name="type" ng-options="type.key as type.value for type in contents.types" ng-model="contents.data.type" style="width:100%;"></select>
                             </div>
                         </li>
                         <li>

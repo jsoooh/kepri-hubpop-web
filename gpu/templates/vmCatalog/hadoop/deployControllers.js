@@ -12,7 +12,7 @@ angular.module('gpu.controllers')
 
         ct.masterSpecList = [];
         ct.workerSpecList = [];
-        ct.deployTypes = [
+        ct.types = [
             {key: "core", value: "Core Hadoop : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1)"},
             {key: "hbase", value: "HBase : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), HBase(1.1.2)"},
             {key: "spark", value: "Spark : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), spark(1.6.3)"}
@@ -24,6 +24,7 @@ angular.module('gpu.controllers')
         ct.data.nodeType = "single";
         ct.data.masterCnt = 1;
         ct.data.workerCnt = 2;
+        ct.data.type = "core";
 
         // 테스트
         ct.testInput = true;
@@ -229,6 +230,12 @@ angular.module('gpu.controllers')
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             // vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
+            if(ct.data.type == 'core') {
+                vmCatalogDeploy.hbaseUse = false;
+                vmCatalogDeploy.sparkUse = false;
+            } else if (ct.data.type == 'hbase') {
+
+            }
             vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
             vmCatalogDeploy.workerUse = false;
             vmCatalogDeploy.parameters.root_password = ct.data.mysqlRootPassword;
@@ -238,7 +245,7 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
                 vmCatalogDeploy.workerUse = true;
             }
-            //vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
+            vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
             return vmCatalogDeploy;
         };
 
