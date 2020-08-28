@@ -20,8 +20,8 @@ angular.module('gpu.controllers')
         ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
 
         ct.data.bucketType = "defined";
-        ct.data.deployType = "standalone";
-        ct.data.nodeType = "single";
+        ct.data.deployType = "sMaster";
+        ct.data.nodeType = "cluster";
         ct.data.masterCnt = 1;
         ct.data.workerCnt = 2;
         ct.data.type = "core";
@@ -231,14 +231,14 @@ angular.module('gpu.controllers')
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             // vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
             if(ct.data.type == 'core') { // core 선택 경우
-                vmCatalogDeploy.hbaseUse = false;
-                vmCatalogDeploy.sparkUse = false;
+                vmCatalogDeploy.context.hbaseUse = false;
+                vmCatalogDeploy.context.sparkUse = false;
             } else if (ct.data.type == 'hbase') { // hbase 선택 경우
-                vmCatalogDeploy.coreUse = false;
-                vmCatalogDeploy.sparkUse = false;
+                vmCatalogDeploy.context.hbaseUse = true;
+                vmCatalogDeploy.context.sparkUse = false;
             } else { // spark 선택 경우
-                vmCatalogDeploy.coreUse = false;
-                vmCatalogDeploy.hbaseUse = false;
+                vmCatalogDeploy.context.sparkUse = true;
+                vmCatalogDeploy.context.hbaseUse = false;
             }
 
             vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
