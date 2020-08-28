@@ -335,7 +335,7 @@
 .disk-use-info .btm_use_left .txt_tit::before {display:inline-block; content:''; width:21px; height:21px; background:url("../../images/gauge_bg.png") repeat-x; vertical-align:middle; margin-right:9px;}
 .disk-use-info .btm_use_right .txt_tit::before {display:inline-block; content:''; width:21px; height:21px; background:#fff; border:1px solid #d3d3d3; vertical-align:middle; margin-right:9px;}
 
-
+.txt_long {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all; vertical-align:middle;}
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}

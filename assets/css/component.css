@@ -671,7 +671,7 @@ img {
   background: #636363;
   border-radius: 50%;
   position: absolute;
-  top: 7px;
+  top: 12px;
   left: 0;
 }
 .section-area .nav-tabs {
@@ -790,7 +790,7 @@ img {
 .alert.alert-success {
   border: 1px solid #e1f3d8;
   background: #f0f9eb;
-  color: #67C23Asssss;
+  color: #67C23A;
 }
 .alert.alert-success hr {
   border-top-color: #bbddc3;
@@ -831,7 +831,6 @@ img {
 }
 .alert .alert-heading {
   font-size: 16px;
-  color: #497e56;
   font-weight: 600;
   margin-bottom: 15px;
 }
@@ -1848,7 +1847,6 @@ span.btn.btn-danger:focus {
 }
 .label.label-outline {
   background-color: #fff !important;
-  border: 1px solid #fff;
 }
 .label.label-md {
   padding: 5px 10px;
@@ -2005,6 +2003,376 @@ span.btn.btn-danger:focus {
 .btn-outline:focus .badge.badge-color.badge-warning {
   color: #fb6340;
 }
+/* State color */
+.state-default {
+  color:#5b5b5b !important;	
+  border:1px solid #ddd;
+  background: #fff;
+}
+.state-total {
+  color:#fff !important;
+  background: #263238;
+}
+.state-stop {
+  color:#fff !important;	
+  background: #9e9e9e;
+}
+.state-return {
+  color:#fff !important;	
+  background: #9c27b0;
+}
+.state-normal {
+  color:#fff !important;	
+  background: #335cc4;
+}
+.state-completion {
+  color:#fff !important;	
+  background: #03a9f4;
+}
+.state-setting {
+  color:#fff !important;	
+  background: #00bcd4;
+}
+.state-start {
+  color:#fff !important;	
+  background: #4caf50;
+}
+.state-care {
+  color:#fff !important;	
+  background: #ffc107;
+}
+.state-warning {
+  color:#fff !important;
+  background: #ff5722;
+}
+.state-danger {
+  color:#fff !important;	
+  background: #f5365c;
+}
+.state-circle {
+  display:inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right:5px;  
+  vertical-align: middle;  
+}
+.state-square {
+  display:inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right:5px;  
+  vertical-align: middle; 
+}
+.state-triangle {
+  display:inline-block;
+  margin-right:5px;  
+  vertical-align: middle;    
+  width: 0;
+  height: 0;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;  
+  background:none;
+}
+.state-intriangle {
+  display:inline-block;
+  margin-right:5px;  
+  vertical-align: middle;    
+  width: 0;
+  height: 0;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  background:none;  
+}
+.state-round {
+	border-radius: 50px;
+}
+.state-default-text {
+  font-size:12px;	
+  color:#222;
+}
+.state-total-text {
+  font-size:12px;		
+  color: #263238;
+}
+.state-stop-text {
+  font-size:12px;		
+  color: #9e9e9e;
+}
+.state-return-text {	
+  font-size:12px;	
+  color: #9c27b0;
+}
+.state-normal-text {
+  font-size:12px;		
+  color: #335cc4;
+}
+.state-completion-text {
+  font-size:12px;		
+  color: #03a9f4;
+}
+.state-setting-text {
+  font-size:12px;		
+  color: #00bcd4;
+}
+.state-start-text {
+  font-size:12px;		
+  color: #4caf50;
+}
+.state-care-text {
+  font-size:12px;		
+  color: #ffc107;
+}
+.state-warning-text {
+  font-size:12px;		
+  color: #ff5722;
+}
+.state-danger-text {
+  font-size:12px;		
+  color: #f5365c;
+}
+.state-default.state-triangle {
+  border-bottom: 7px solid #ddd;
+}
+.state-total.state-triangle {
+  border-bottom: 7px solid #263238;
+}
+.state-stop.state-triangle {
+  border-bottom: 7px solid #9e9e9e;
+}
+.state-return.state-triangle {
+  border-bottom: 7px solid #9c27b0;
+}
+.state-normal.state-triangle {
+  border-bottom: 7px solid #335cc4;
+}
+.state-completion.state-triangle {
+  border-bottom: 7px solid #03a9f4;
+}
+.state-setting.state-triangle {
+  border-bottom: 7px solid #00bcd4;  
+}
+.state-start.state-triangle {
+  border-bottom: 7px solid #4caf50;
+}
+.state-care.state-triangle {
+  border-bottom: 7px solid #ffc107;
+}
+.state-warning.state-triangle {
+  border-bottom: 7px solid #ff5722;  
+}
+.state-danger.state-triangle {
+  border-bottom: 7px solid #f5365c; 
+}
+.state-default.state-intriangle {
+  border-top: 7px solid #ddd;
+}
+.state-total.state-intriangle {
+  border-top: 7px solid #263238;
+}
+.state-stop.state-intriangle {
+  border-top: 7px solid #9e9e9e;
+}
+.state-return.state-intriangle {
+  border-top: 7px solid #9c27b0;
+}
+.state-normal.state-intriangle {
+  border-top: 7px solid #335cc4;
+}
+.state-completion.state-intriangle {
+  border-top: 7px solid #03a9f4;
+}
+.state-setting.state-intriangle {
+  border-top: 7px solid #00bcd4;  
+}
+.state-start.state-intriangle {
+  border-top: 7px solid #4caf50;
+}
+.state-care.state-intriangle {
+  border-top: 7px solid #ffc107;
+}
+.state-warning.state-intriangle {
+  border-top: 7px solid #ff5722;  
+}
+.state-danger.state-intriangle {
+  border-top: 7px solid #f5365c; 
+}
+.state-default.state-outline {
+  border:1px solid #ddd;
+  background: #fff;
+}
+.state-total.state-outline {
+  color:#263238 !important;
+  border:1px solid #263238;
+  background: #fff;
+}
+.state-stop.state-outline {
+  color:#9e9e9e !important;	
+  border:1px solid  #9e9e9e;
+   background: #fff; 
+}
+.state-return.state-outline {
+  color:#9c27b0 !important;	
+  border:1px solid  #9c27b0;
+  background: #fff; 
+}
+.state-normal.state-outline {
+  color:#335cc4 !important;	
+  border:1px solid  #335cc4;
+  background: #fff;  
+}
+.state-completion.state-outline {
+  color:#03a9f4 !important;	
+  border:1px solid  #03a9f4;
+  background: #fff;   
+}
+.state-setting.state-outline {
+  color:#00bcd4 !important;	
+  border:1px solid  #00bcd4;
+  background: #fff;   
+}
+.state-start.state-outline {
+  color:#4caf50 !important;	
+  border:1px solid  #4caf50;
+  background: #fff;   
+}
+.state-care.state-outline {
+  color:#ffc107 !important;	
+  border:1px solid  #ffc107;
+  background: #fff;   
+}
+.state-warning.state-outline {
+  color:#ff5722 !important;
+  border:1px solid  #ff5722;
+  background: #fff;   
+}
+.state-danger.state-outline {
+  color:#f5365c !important;	
+  border:1px solid  #f5365c;
+  background: #fff;   
+}
+.state-default.state-dashed {
+  border:1px dashed #ddd;
+  background: #fff;
+}
+.state-total.state-dashed {
+  color:#263238 !important;
+  border:1px dashed #263238;
+  background: #fff;
+}
+.state-stop.state-dashed {
+  color:#9e9e9e !important;	
+  border:1px dashed  #9e9e9e;
+   background: #fff; 
+}
+.state-return.state-dashed {
+  color:#9c27b0 !important;	
+  border:1px dashed  #9c27b0;
+  background: #fff; 
+}
+.state-normal.state-dashed {
+  color:#335cc4 !important;	
+  border:1px dashed  #335cc4;
+  background: #fff;  
+}
+.state-completion.state-dashed {
+  color:#03a9f4 !important;	
+  border:1px dashed  #03a9f4;
+  background: #fff;   
+}
+.state-setting.state-dashed {
+  color:#00bcd4 !important;	
+  border:1px dashed  #00bcd4;
+  background: #fff;   
+}
+.state-start.state-dashed {
+  color:#4caf50 !important;	
+  border:1px dashed  #4caf50;
+  background: #fff;   
+}
+.state-care.state-dashed {
+  color:#ffc107 !important;	
+  border:1px dashed  #ffc107;
+  background: #fff;   
+}
+.state-warning.state-dashed {
+  color:#ff5722 !important;
+  border:1px dashed  #ff5722;
+  background: #fff;   
+}
+.state-danger.state-dashed {
+  color:#f5365c !important;	
+  border:1px dashed  #f5365c;
+  background: #fff;   
+}
+.state-default.state-soft {
+  border:none;	
+  background: #fff;
+}
+.state-total.state-soft {
+  color:#263238 !important;
+  background: #d5d5d5;
+}
+.state-stop.state-soft {
+  color:#9e9e9e !important;	
+   background: #f2f2f2; 
+}
+.state-return.state-soft {
+  color:#9c27b0 !important;	
+  background: #f4e8f6; 
+}
+.state-normal.state-soft {
+  color:#335cc4 !important;	
+  background: #e4ebfe;  
+}
+.state-completion.state-soft {
+  color:#03a9f4 !important;	
+  background: #e8f6fc;   
+}
+.state-setting.state-soft {
+  color:#00bcd4 !important;	
+  background: #def5f8;   
+}
+.state-start.state-soft {
+  color:#4caf50 !important;	
+  background: #dff2e0;   
+}
+.state-care.state-soft {
+  color:#ffc107 !important;	
+  background: #fff5d6;   
+}
+.state-warning.state-soft {
+  color:#fb6340 !important;
+  background: #fee6e0;   
+}
+.state-danger.state-soft {
+  color:#f5365c !important;	
+  background: #fdd1da;   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* tab */
 .nav-tabs {
   border-color: #e8e8e8;
