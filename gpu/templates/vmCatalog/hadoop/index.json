@@ -9,12 +9,12 @@
   "deployViewHtmlFileType": "sub",
   "deployTemplates": {
     "standalone": "deployTemplateStandalone.yaml.j2",
-    "singleMaster": "deployTemplateSingleMaster.yaml.j2",
-    "multiMaster": "deployTemplateHaMaster.yaml.j2"
+    "sMaster": "deployTemplateSingleMaster.yaml.j2",
+    "dMaster": "deployTemplateHaMaster.yaml.j2"
   },
   "images": {
     "standalone": "CentOS76-Hadoop.raw",
-    "singleMaster": "CentOS76-Hadoop.raw",
-    "multiMaster": "CentOS76-Hadoop.raw"
+    "sMaster": "CentOS76-Hadoop.raw",
+    "dMaster": "CentOS76-Hadoop.raw"
   }
 }

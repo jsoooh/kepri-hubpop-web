@@ -1,6 +1,6 @@
 heat_template_version: '2018-08-31'
 
-description: hadoop test template
+description: hadoop Mulity Master template
 
 parameter_groups:
 - parameters:
@@ -20,10 +20,14 @@ parameters:
     label: "가용구역"
     type: string
     default: zone01
-  flavor:
-    label: "사양"
+  master_flavor:
     type: string
-    default: m1.small
+  master_cnt:
+    type: string
+  worker_cnt:
+    type: string
+  worker_flavor:
+    type: string
   key_name:
     label: "보안키"
     type: string
@@ -74,7 +78,7 @@ resources:
                   - { get_attr: [server3_port, fixed_ips, 0, ip_address] }
           template: |
             #!/bin/sh
-            echo "01.hadoop core install start ......7"
+            echo "01.hadoop HAMaster install start ......7"
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -1224,7 +1228,7 @@ resources:
   server1:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: flavor }
+      flavor: { get_param: master_flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
@@ -1237,7 +1241,7 @@ resources:
   server2:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: flavor }
+      flavor: { get_param: worker_flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
@@ -1250,7 +1254,7 @@ resources:
   server3:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: flavor }
+      flavor: { get_param: worker_flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:

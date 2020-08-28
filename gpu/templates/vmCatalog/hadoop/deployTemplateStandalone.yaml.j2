@@ -58,7 +58,7 @@ resources:
                 - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
           template: |
             #!/bin/sh
-            echo "01.hadoop core install start ......"
+            echo "01.hadoop Stendalone install start ......"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cat <<EOF>> /etc/ssh/ssh_config
