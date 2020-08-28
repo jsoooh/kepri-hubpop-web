@@ -63,7 +63,6 @@ parameters:
 
 resources:
 
-
   server1_port:
     type: OS::Neutron::Port
     properties:
@@ -71,14 +70,17 @@ resources:
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
 
-{% for worker in range(workerCnt+1) %} {# 마스터 노드가 2개이므로 workerCnt보다 1개 더 생성 해줌 #}
-  server{{worker+2}}_port:
+  {% set pworker =  workerCnt + 1 %}
+  {%- for worker in range(1,pworker) %}
+
+  server{{worker}}_port:
     type: OS::Neutron::Port
     properties:
       fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
-{% endfor %}
+
+  {%- endfor %}
 
 
   init_config1:

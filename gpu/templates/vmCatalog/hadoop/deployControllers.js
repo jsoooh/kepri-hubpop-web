@@ -257,6 +257,8 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
                 vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
                 vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
+                vmCatalogDeploy.context.workerCnt = ct.data.workerCnt;
+                vmCatalogDeploy.context.masterCnt = ct.data.masterCnt;
                 //vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
             }
 
@@ -271,16 +273,22 @@ angular.module('gpu.controllers')
         ct.fn.createVmCatalogDeploy = function () {
             if (!ct.fn.commCheckFormValidity(subPage)) return;
 
-            // 마스터 구성 (단일노드 마스터)
-            if(ct.data.masterCnt == 1){
-                console.log(" singleMaster1 !!!!!!!!!!");
-                vmCatalogDeploy.deployTemplates = "sMaster";
-                ct.data.deployType = "sMaster";
-                // 마스터 구성 (이중노드 마스터)
-            }else if(ct.data.masterCnt == 2){
-                console.log(" multiMaster1 !!!!!!!!!!");
-                vmCatalogDeploy.deployTemplates = "dMaster";
-                ct.data.deployType = "dMaster";
+            if(ct.data.nodeType == 'single') {
+                console.log(" standalone !!!!!!!!!!");
+                vmCatalogDeploy.deployTemplates = "standalone";
+                ct.data.deployType = "standalone";
+            }else if(ct.data.nodeType == 'cluster') {
+                // 마스터 구성 (단일노드 마스터)
+                if (ct.data.masterCnt == 1) {
+                    console.log(" singleMaster !!!!!!!!!!");
+                    vmCatalogDeploy.deployTemplates = "sMaster";
+                    ct.data.deployType = "sMaster";
+                    // 마스터 구성 (이중노드 마스터)
+                } else if (ct.data.masterCnt == 2) {
+                    console.log(" multiMaster !!!!!!!!!!");
+                    vmCatalogDeploy.deployTemplates = "dMaster";
+                    ct.data.deployType = "dMaster";
+                }
             }
 
             console.log(" commCheckFormValidity >>>>>>>>>>>>>>>>!"+ct.data.deployType);
