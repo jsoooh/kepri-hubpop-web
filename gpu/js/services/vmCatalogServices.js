@@ -207,7 +207,7 @@ angular.module('gpu.services')
                     bucket : bucketName
             };
             console.log(CONSTANTS.gpuApiContextUrl);
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket?tenantId='+tenantId+"&bucketName="+bucketName+, 'POST', params));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket?tenantId='+tenantId+"&bucketName="+bucketName, 'POST', params));
         };
 
         return vmCatalogService;
