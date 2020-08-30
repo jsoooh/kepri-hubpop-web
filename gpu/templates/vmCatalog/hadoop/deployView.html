@@ -4,9 +4,24 @@
         <ul>
             <li>
                 <!-- <strong class="tit">접속 IP</strong> -->
-                <span class="txt"> Hadoop admin UI : {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070</span>
-                <span class="txt"> Yarn WEB UI : {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088</span>
-                <span class="txt"> Spark Web UI : {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089</span>
+                <span class="txt">
+                   [Hadoop admin UI] <br>
+                    <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070">
+                        {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070
+                    </a>
+                </span>
+                <span class="txt">
+                    [Yarn WEB UI] <br>
+                    <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088/cluster/nodes">
+                    {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088/cluster/nodes
+                    </a>
+                </span>
+                <span class="txt">
+                    [Spark Web UI] <br>
+                    <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089">
+                    {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089
+                    </a>
+                </span>
             </li>
         </ul>
         <ul>

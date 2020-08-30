@@ -55,11 +55,9 @@ parameters:
   root_password:
     label: "root 비밀번호"
     type: string
-    default: crossent12
   hive_password:
     label: "hive 비밀번호"
     type: string
-    default: hive1234
 
 resources:
 
@@ -322,6 +320,7 @@ resources:
             EOF
 {% endif %}
 
+{% if hbaseUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 03.zookeeper setting start ###########"
@@ -356,7 +355,7 @@ resources:
             echo "zookeeper node{{worker}} active"
             {%- endfor %}
 
-{% if hbaseUse %}
+
             echo "##### 04.hbase setting start ###########"
             VAR1=$(cat <<EOF
             <?xml version="1.0"?>
@@ -458,7 +457,7 @@ resources:
                 </property>
                 <property>
                     <name>javax.jdo.option.ConnectionPassword</name>
-                    <value>hive1234</value>
+                    <value><![CDATA[$hive_password]]></value>
                 </property>
             </configuration>
             EOF
@@ -685,6 +684,7 @@ resources:
             EOF
 {% endif %}
 
+{% if hbaseUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 03.zookeeper setting start ###########"
@@ -707,7 +707,7 @@ resources:
             echo "##### 03.zookeeper setting end ###########"
             EOF
 
-{% if hbaseUse %}
+
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 04.hbase setting start ###########"

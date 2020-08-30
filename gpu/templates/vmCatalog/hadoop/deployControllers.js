@@ -223,8 +223,21 @@ angular.module('gpu.controllers')
 
         };
 
+        // 하둡 오브젝트 스토리지 버킷 생성
         ct.fn.createBucket = function(bucketName) {
+           console.log('create Bucket start!!! ');
+            // 페이지 로드
 
+            let promise2;
+            promise2 = vmCatalogService.createBucket(ct.tenantId,bucketName);
+            promise2.success(function () {
+                //callBackFuncion(data);
+                console.log('create Bucket success  !!! ');
+            });
+            promise2.error(function (data, status, headers) {
+                console.log('create Bucket error  !!! ');
+                $scope.main.loadingMainBody = false;
+            });
         };
 
         // 추가 셋팅
