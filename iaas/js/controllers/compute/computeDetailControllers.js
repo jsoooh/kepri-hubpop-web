@@ -814,6 +814,7 @@ angular.module('iaas.controllers')
 
         //인스턴스 디스크 조회
         ct.fn.searchInstanceVolumeList = function() {
+            ct.isSearchInstanceVolumeListLoad = false;
             var param = {
                 tenantId : ct.data.tenantId,
                 instanceId : ct.data.instanceId
@@ -831,6 +832,9 @@ angular.module('iaas.controllers')
                     common.showAlertError(data.message);
                 }
             });
+            returnPromise.finally(function () {
+                ct.isSearchInstanceVolumeListLoad = true;
+            })
         };
 
         // 디스크 반환 버튼

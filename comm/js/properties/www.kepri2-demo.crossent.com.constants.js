@@ -24,9 +24,9 @@ angular.module('app')
         monitApiContextUrl: './monit-api/api/monit/v1.0',
         monitNewApiContextUrl: './monit-api/v2',
         layoutTemplateUrl: {
-            navigation: _LAYOUT_VIEWS_ + '/navigation.html',
-            leftMenu: _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
-            mainTop: _LAYOUT_VIEWS_ + '/mainTop.html'
+            navigation : _LAYOUT_VIEWS_ + '/navigation.html',
+            leftMenu : _LAYOUT_VIEWS_ + '/menu/consoleLeftMenu.html',
+            mainTop : _LAYOUT_VIEWS_ + '/menu/topTitle.html'
         },
         mainBody: {
             templateUrl: _LAYOUT_VIEWS_ + '/mainBody.html',

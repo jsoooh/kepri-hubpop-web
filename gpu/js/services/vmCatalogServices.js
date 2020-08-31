@@ -200,6 +200,16 @@ angular.module('gpu.services')
             }
         };
 
+        // VM 카탈로그 서비스 하둡에서 사용하는 버킷 생성
+        vmCatalogService.createBucket = function(tenantId,bucketName) {
+            var params = {
+                    tenantId : tenantId,
+                    bucket : bucketName
+            };
+            console.log(CONSTANTS.gpuApiContextUrl);
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket?tenantId='+tenantId+"&bucket="+bucketName, 'POST', params));
+        };
+
         return vmCatalogService;
     })
 

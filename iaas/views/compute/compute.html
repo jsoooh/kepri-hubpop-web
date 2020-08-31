@@ -158,9 +158,9 @@
 												<ul class="list-dot font-size-13 margin-top-10">
 													<li><b>접속 프로토콜 :</b><span>SSH</span></li>
 													<!--<li><b>접속 IP :</b><span>{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>--><!-- vnc 사용할 경우 a태그에 class="ext_link" 지정하여 링크스타일 적용. <a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)"></a>-->
-													<li><b>접속 IP :</b><span class="margin-right-5"><a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-direction"></i></span></button></li>
+													<li><b>접속 IP :</b><span class="margin-right-5"><a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li>
 													<li><b>접속 계정 :</b><span>{{instance.image.osType}}</span></li>
-													<li><b>접속 인증 키(KEY) :</b><span class="margin-right-5">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="feather-icon blue-600"><i data-feather="download" class="feather-direction"></i></span></button></li>
+													<li><b>접속 인증 키(KEY) :</b><span class="margin-right-5">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="feather-icon blue-600"><i data-feather="download" class="feather-directive"></i></span></button></li>
 												</ul>
 												<div class="row margin-top-30">
 													<div class="col-sm-6">
@@ -179,17 +179,17 @@
 													<li ng-if="!instance.rdpDomain">
 														<b>접속 도메인 :</b>
 														<span class="margin-right-5">
-															<a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
+															<a tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
 															<!-- <a href="" class="link" ng-click="contents.fn.openWebConsole(instance)"></a> -->
 														</span>
-														<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-direction"></i></span></button>
+														<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 													</li>
 													<li ng-if="instance.rdpDomain">
 														<b>접속 IP :</b>
 														<span class="margin-right-5">
-															<a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ instance.rdpDomain ? instance.rdpDomain : '' }}'">{{ instance.rdpDomain ? instance.rdpDomain : '' }}</a>
+															<a tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ instance.rdpDomain ? instance.rdpDomain : '' }}'">{{ instance.rdpDomain ? instance.rdpDomain : '' }}</a>
 														</span>
-														<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-direction"></i></span></button>
+														<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 													</li>
 													<li>
 														<b>접속 계정 :</b><span>Administrator</span>
@@ -269,7 +269,7 @@
 										</div>
 										
 										<!-- 서버생성 프로그래스 -->
-										<div class="ul-in" style="height:230px;" ng-if="instance.procState == 'creating'">
+										<div class="ul-in" style="height:285px;" ng-if="instance.procState == 'creating'">
 											<div class="pnb_progress_wrap">
 												<div class="progress_box">
 													<span class="bar_bg"></span>
@@ -303,7 +303,7 @@
 										<!-- //서버생성 프로그래스 -->
 										
 										<!-- 로딩스피너 -->
-										<div class="ul-in spinner_area text-center" style="height:230px;" ng-if="instance.procState == 'ing'">
+										<div class="ul-in spinner_area text-center" style="height:285px;" ng-if="instance.procState == 'ing'">
 											<div class="info-chart padding-top-60">
 												<!-- <img src="images/loading/loading_cloud.gif" width="140" height="90"> -->
 												<div class="spinner-border spinner-primary" role="status">

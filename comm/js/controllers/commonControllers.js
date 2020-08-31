@@ -47,6 +47,7 @@ angular.module('common.controllers', [])
         mc.sltMenu = {};                    //좌측 메뉴 선택
         mc.dashboardFull = false;           //대시보드 화면 전체보기
         mc.myServiceOpen = true;            //메뉴 즐겨찾기 dropdown
+        //mc.hideTitle = true;              //title 감추기
 
         //좌측 대메뉴 선택
         mc.setGroupMenu = function (menuItem) {
@@ -83,8 +84,10 @@ angular.module('common.controllers', [])
                 common.showDialogAlert('알림', '현재 프로젝트는 "App 실행 서비스"를 이용하지 않는 프로젝트입니다.');
                 return;
             }
+            //mc.hideTitle = true;               //title 감추기
             mc.sltMenu = menuItem;
             common.locationHref(menuItem.urlPath);
+            //mc.hideTitle = false;               //title 감추기
             //console.log("mc.sltMenu : ", mc.sltMenu);
         };
 
@@ -603,7 +606,9 @@ angular.module('common.controllers', [])
                 common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
                 return;
             }
-            mc.goToPage("/comm/projects/projectDetail/" + portalOrg.id)
+            //mc.hideTitle = true;
+            mc.goToPage("/comm/projects/projectDetail/" + portalOrg.id);
+            //mc.hideTitle = false;
         };
 
         // PortalOrg 변경 처리
@@ -1798,6 +1803,11 @@ angular.module('common.controllers', [])
             $scope.main.sltMenu = {};    //좌측 메뉴 선택
         }
 
+        $scope.main.topTemplateUrl = "";
+        if ($scope.main.stateKey == "commProjectDetail") {
+            $scope.main.topTemplateUrl = _COMM_VIEWS_ + '/menu/topTitleDashboard.html';
+        }
+
         // 로그인 여부 체크
         if (!common.isAuthenticated()) {
 
@@ -1960,6 +1970,7 @@ angular.module('common.controllers', [])
                     }
                 }
             }
+
             $scope.main.setLayout();
             $scope.main.commMenuHide();
             /*var policyStop = $interval(function () {

@@ -147,7 +147,6 @@ angular.module('common.controllers')
 
         /*회원가입*/
         $scope.signup = function() {
-
             //validation 체크
             //일반회원 가입
             if(!$scope.requestForm.$valid) return;

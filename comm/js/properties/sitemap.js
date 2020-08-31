@@ -44,7 +44,7 @@ angular.module('app')
                         }
                     },
                     project: {
-                        mainTop: false,
+                        mainTop: true,
                         name: 'project',
                         icon: "ico2",
                         stateKey: 'commProjectMgmt',
@@ -77,6 +77,7 @@ angular.module('app')
                                 url: '/comm/projects/projectDetail/:orgId',
                                 controller: 'commOrgProjectDetailCtrl',
                                 templateUrl: _COMM_VIEWS_+'/org/orgProjectDetail.html',
+                                topTemplateUrl: _COMM_VIEWS_+'/menu/topTitleDashboard.html',
                                 loadMyFile: {
                                     loadMyScripts: [],
                                     loadMyServices: [_COMM_JS_+'/services/memberServices.js',

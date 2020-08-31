@@ -98,16 +98,16 @@
 .text_wrap textarea {height:100px;}
 
 /* 프로젝트 신청 > '상세쿼터조정' > 'paas 용량' */
-.pj_write_wrap .s_inner_cont .pj_paas_volume > ul > li {padding-bottom:0;}
-.pj_write_wrap .s_inner_cont .pj_paas_volume > ul > li p {font-size:15px; width:100%; }
-.pj_write_wrap .pj_paas_volume {clear:both;}
-.pj_write_wrap .pj_paas_volume .radio1 label {display:block; width:180px; height:180px; }
-.pj_write_wrap .pj_paas_volume .volume_cont {background:url("../../images/thum/im_thum_db_bg.png") no-repeat center 17px; padding:75px 15px 12px 15px;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li {display:table; width:100%; line-height:2.3em; border-bottom:1px solid #d7d7d7; padding:0; margin-top:0;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li:last-child {border-bottom:0;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li span {display:table-cell; width:50%; font-size:13px; box-sizing:border-box;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li span:first-child {text-align:left;}
-.pj_write_wrap .pj_paas_volume .volume_cont > ul > li span:last-child {font-weight:400; text-align:right;}
+.write_wrap .s_inner_cont .pj_paas_volume > ul > li {padding-bottom:0;}
+.write_wrap .s_inner_cont .pj_paas_volume > ul > li p {font-size:15px; width:100%; }
+.write_wrap .pj_paas_volume {clear:both;}
+.write_wrap .pj_paas_volume .radio1 label {display:block; width:180px; height:180px; }
+.write_wrap .pj_paas_volume .volume_cont {background:url("../../images/thum/im_thum_db_bg.png") no-repeat center 17px; padding:75px 15px 12px 15px;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li {display:table; width:100%; line-height:2.3em; border-bottom:1px solid #d7d7d7; padding:0; margin-top:0;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li:last-child {border-bottom:0;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li span {display:table-cell; width:50%; font-size:13px; box-sizing:border-box;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li span:first-child {text-align:left;}
+.write_wrap .pj_paas_volume .volume_cont > ul > li span:last-child {font-weight:400; text-align:right;}
 
 /* form_list > s_inner_cont 유형 */
 .panel_area .pn_body .form_list .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
@@ -128,16 +128,17 @@
 .s_cont_box .progressWrap.type2 .progress{position: relative; width: 100%; height:7px; margin-bottom: 0px; border-radius: 10px; vertical-align: bottom; box-shadow: none; background-color: #eee; overflow: inherit;}
 .s_cont_box .s_progress_box ul li:nth-child(even) div.progressWrap.type2 .progress-bar {background:#02a0cf !important;}
 
-.pj_write_wrap .panel-group .panel .panel-heading .panel-title h3 {font-size: 14px; font-weight: 600; color: #515151;}
-.pj_write_wrap .panel-group .panel .panel-heading a.panel-title {font-size: 14px; font-weight: 600; color: #515151; padding:18px 20px;}
-.pj_write_wrap .panel-bordered > .panel-heading {border-bottom:0;}
-.pj_write_wrap .panel-bordered > .panel-body {border-top:1px solid #eeeeee;}
-.pj_write_wrap .panel-group .panel-heading + .panel-collapse .panel-body {border-top:0;}
-.pj_write_wrap .panel-group .panel-heading + .panel-collapse.in .panel-body {border-top:1px solid #eeeeee;}
+/*만들기화면 공통스타일*/
+.write_wrap .panel-group .panel .panel-heading .panel-title h3 {font-size: 14px; font-weight: 600; color: #515151;}
+.write_wrap .panel-group .panel .panel-heading a.panel-title {font-size: 14px; font-weight: 600; color: #515151; padding:15px 20px;}
+.write_wrap .panel-bordered > .panel-heading {border-bottom:0;}
+.write_wrap .panel-bordered > .panel-body {border-top:1px solid #eeeeee;}
+.write_wrap .panel-group .panel-heading + .panel-collapse .panel-body {border-top:0;}
+.write_wrap .panel-group .panel-heading + .panel-collapse.in .panel-body {border-top:1px solid #eeeeee;}
 
-.pj_write_wrap .panel-body  .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
-.pj_write_wrap .panel-body  .s_inner_cont .pnb_tit {font-size:14px; font-weight:500; margin-bottom:20px;}
-.pj_write_wrap .panel-body  .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
+.write_wrap .panel-body  .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
+.write_wrap .panel-body  .s_inner_cont .pnb_tit {font-size:14px; font-weight:500; margin-bottom:20px;}
+.write_wrap .panel-body  .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
 
 
 /*툴팁 type2(bootstrap 제공 tooltip 재정의)*/
@@ -280,6 +281,61 @@
 /*부하분산-상세화면 연결서버 탭(연결서버 이미지일 때 생성중 프로그래스 */
 .cont_progress_div {width:50%; height:200px; margin:0 auto;}
 
+/*서버만들기 슬라이더*/
+/* .panel_area .pn_body .pnb_tit .disk_info {position:absolute; top:-7px; right:0; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 15px 6px 15px; background:#888;} */
+.disk_area {position:relative; border:1px solid #dedede; border-radius:3px; background:#fff; padding:30px;}
+.disk_area .disk_info {position:absolute; top:-20px; right:20px; display:inline-block; font-size:12px; color:#fff; border-radius:50px; padding:4px 8px 6px 8px; background:#a1a1a1;}
+.disk_area p {font-size:16px; color:#666; text-align:center; margin-top:15px;}
+.disk_box {position:relative;}
+
+.write_wrap .panel-inner-collapse .panel-group .panel-title {padding:10px 20px 10px 20px; }
+.write_wrap .panel-inner-collapse .panel-group .panel-title h3 {font-size:13px; font-weight:600;}
+.write_wrap .panel-inner-collapse .panel-group .panel-body .disk_area {border:0; padding:0;}
+.write_wrap .panel-inner-collapse .panel-group .panel-heading {border-bottom:0;}
+
+
+/*디스크 만들기 > 사용량표시*/
+.disk-use-info {border:0; background:#fff; padding:0; margin:0;}
+.disk-use-info .pnb_bx_hd {position:relative;}
+.disk-use-info .pnb_bx_hd .hd_tit {font-size:16px; font-weight:500; color:#333; }
+.disk-use-info .pnb_bx_hd .btn-toggle {position:absolute; top:-4px; right:0; }
+.disk-use-info .pnb_bx_hd .ico_arw {display:inline-block; width:27px; height:27px; font-size:0; vertical-align:middle; background:url("../images/ico_arw.png") no-repeat left top; }
+.disk-use-info .cToggle-open .pnb_bx_hd .btn-toggle .ico_arw {background-position:left -32px;}
+
+.disk-use-info {display:block;}
+.disk-use-info ds_block {display:block;}
+.disk-use-info .p_cnt_top {position:relative; vertical-align:middle; margin-top:30px;}
+.disk-use-info .disk_cnt_top > span {display:inline-block; position:absolute; top:0; left:30px; font-size:14px; font-weight:500; color:#fff; background:#0cc2aa; border-radius:50px; padding:3px 20px 4px 20px;}
+.disk-use-info .disk_cnt_top .txt_top {text-align:center; padding-left:50px;}
+.disk-use-info .disk_cnt_top .txt_top span {display:inline-block; }
+.disk-use-info .disk_cnt_top .txt_top span.sty01 {position:absolute; top:6px; left:346px; font-size:15px; color:#5c5c5c;}
+.disk-use-info .disk_cnt_top .txt_top span.sty02 {font-family: 'Montserrat'; font-size:38px; font-weight:500; color:#3360c5; line-height:30px; margin-left:10px;}
+.disk-use-info .disk_cnt_top .txt_top span.sty03 {font-size:22px; font-weight:700; color:#676767; letter-spacing:-1px;}
+
+.disk-use-info .disk_cnt_mid {position:relative;}
+.disk-use-info .disk_cnt_mid .txt {font-size:14px; color:#5c5c5c; margin-bottom:5px;}
+.disk-use-info .disk_cnt_mid .cnt_usage {display:table; width:100%; height:30px; background:#f4f4f4; border:1px solid #e0e0e0; border-radius:5px; overflow:hidden;}
+.disk-use-info .disk_cnt_mid .cnt_usage > div {display:table-cell; box-sizing:border-box; text-align:center; line-height:30px;}
+.disk-use-info .disk_cnt_mid .cnt_usage .use_left {background:url("../../images/gauge_bg.png") repeat-x;}
+.disk-use-info .disk_cnt_mid .cnt_usage span {font-size:14px;}
+.disk-use-info .disk_cnt_mid .cnt_usage .use_left span {color:#fff;}
+.disk-use-info .disk_cnt_mid .cnt_usage .use_right span {color:#8c8c8c;}
+
+.disk-use-info .disk_cnt_btm {margin:20px 0 10px 0;}
+.disk-use-info .disk_cnt_btm ul {display:table; width:100%;}
+.disk-use-info .disk_cnt_btm ul li {display:table-cell; width:50%; box-sizing:border-box;}
+.disk-use-info .disk_cnt_btm ul li:first-child {padding-right:5px;}
+.disk-use-info .disk_cnt_btm ul li:last-child {padding-left:5px;}
+/* .disk-use-info .disk_cnt_btm ul li div {background:#fff; border-radius:5px; -webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); -webkit-transform: translate(0, 0px); transform: translate(0, 0px);-webkit-transition: -webkit-box-shadow .3s,-webkit-transform .3s; transition: box-shadow .3s,transform .3s; padding:15px;} */
+.disk-use-info .disk_cnt_btm ul li span {display:inline-block;}
+.disk-use-info .txt_tit {display:inline-block; font-size:15px; color:#333; vertical-align:middle;}
+.disk-use-info .txt_val {display:inline-block; font-size:15px; color:#444; vertical-align:middle; padding-left:8px;}
+.disk-use-info .txt_sm {display:inline-block; font-size:15px; color:#858585; padding-left:2px;}
+.disk-use-info .btm_use_left, .disk-use-info .btm_use_right {display:inline-block;}
+.disk-use-info .btm_use_left .txt_tit::before {display:inline-block; content:''; width:21px; height:21px; background:url("../../images/gauge_bg.png") repeat-x; vertical-align:middle; margin-right:9px;}
+.disk-use-info .btm_use_right .txt_tit::before {display:inline-block; content:''; width:21px; height:21px; background:#fff; border:1px solid #d3d3d3; vertical-align:middle; margin-right:9px;}
+
+.txt_long {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all; vertical-align:middle;}
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}
@@ -291,9 +347,11 @@
 
 body {line-height:1.57142857;}
 input[type="text"], input[type="password"] {height:38px;}
-.pj_write_wrap .table, .pj_write_wrap .table td {font-size:13px !important;}
-.pj_write_wrap .radio {padding:0;}
+.write_wrap .table, .write_wrap .table td {font-size:13px !important;}
+.write_wrap .radio {padding:0;}
 .radio {padding:0;}
 
 .btn.btn-success {background-color: #249b97; border-color: #249b97; color:#fff;}
 .panel .panel-heading .dropdown .feather-icon {font-size: 20px; color: #9d9d9d;}
+
+.pagiWrap li a {height:38px;}
