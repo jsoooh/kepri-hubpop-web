@@ -486,6 +486,103 @@ angular.module('portal.controllers')
             ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
         };
 
+        //////////////////////////////// GPU 인스턴스 CPU    ///////////////////////////////////
+        ct.gpuCpuChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                //ct.dataReq4 = { };
+                ser1.name = "사용율";
+                ser1.data = chartData.cpuTotUsed.toFixed(1);
+                ser1.cpuMax = chartData.cpuMax;
+                ser1.cpuUsed = chartData.cpuUsed;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.gpuDataReq4 = serJsonList  ;
+            var chartArea = 'chart-area3';
+            var tmpValue = '%';
+
+            //CPU Chart Color
+            var tmpColor1 = "#0a88bd";
+            var tmpColor2 = "#ebebeb";
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// GPU 인스턴스 MEMORY     ///////////////////////////////////
+        ct.gpuMemChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                ser1.name = "사용율";
+                ser1.data = chartData.ramSizeTot.toFixed(1);
+                ser1.ramSizeMax = chartData.ramSizeMax;
+                ser1.ramSizeUsed = chartData.ramSizeUsed;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.gpuDataReq5 = serJsonList;
+            var chartArea = 'chart-area-gpu4';
+            var tmpValue = '%';
+            //Memory Chart Color
+            var tmpColor1 = '#fe3392';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// GPU 인스턴스 STORAGE      ///////////////////////////////////
+        ct.gpuStorgeChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                //ct.dataReq4 = { };
+                ser1.name = "사용율";
+                // STRAGE 기준을 instance disk 로 할 것인지 volume으로 할 것인지 확인 필요
+                //ser1.data = chartData.instanceDiskGigabytesTot; // instance disk
+                ser1.data = chartData.objectStorageGigaByteTot.toFixed(1); // volume
+                ser1.objectStorageGigaByteMax = chartData.objectStorageGigaByteMax;
+                ser1.objectStorageGigaByteUsed = chartData.objectStorageGigaByteUsed;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.gpuDataReq6 = serJsonList;
+            var chartArea = 'chart-area-gpu5';
+            var tmpValue = '%';
+            var tmpColor1 = '#fe3392';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
         //////////////////////////////// API서비스 사용현황 Chart  ///////////////////////////////////
         ct.pipChartFunc = function (chartData) {
             var tmpCode = chartData.code ;
@@ -718,8 +815,8 @@ angular.module('portal.controllers')
             ct.iaasInstances = [];
             var promise = portal.dashboard.getIaasInstanceVmsView(tenantId);
             promise.success(function (data, status, headers) {
-                if (data && data.content && data.content.content && data.content.content.length > 0) {
-                    ct.iaasInstances = data.content.content;
+                if (data && data.content && data.content.length > 0) {
+                    ct.iaasInstances = data.content;
                     angular.forEach(ct.iaasInstances, function (instance, instanceKey) {
                         ct.iaasInstanceStateCount.TOTAL++;
                         if (instance.vmState == "active") {
@@ -1013,6 +1110,209 @@ angular.module('portal.controllers')
             }
         };
 
+        //////////////////////////////// CPU 상태  ///////////////////////////////////
+        // GPU 인스턴스 CPU 상태
+        ct.gpuCpuStatusChart = function () {
+            var container = document.getElementById('chart-area2');
+            var data = {
+                categories: ['2018.01', '2018.06', '2018.12'],
+                series: {
+                    area: [
+                        {
+                            name: ' ',                                 //차후 항목라벨 정리필요 sg0730 2018.10.17
+                            data: [80, 60, 90]
+                        }
+                    ],
+                    line: [
+                        {
+                            name: ' ',
+                            data: [80, 60, 90]
+                        }
+                    ]
+                }
+            };
+            var options = {
+                chart: {
+                    width: 230,
+                    height: 80
+                },
+                yAxis: {
+                    min: 0,
+                    pointOnColumn: true
+                },
+                xAxis: {
+                    tickInterval: 'auto'
+                },
+                series: {
+                    zoomable: true
+                },
+                tooltip: {
+                    suffix: '%'
+                },
+                legend: {
+                    visible: false
+                },
+                chartExportMenu : {
+                    visible: false
+                }
+            };
+
+            var theme = {
+                series: {
+                    area: {
+                        colors: ['#ffc4c4']
+                    },
+                    line: {
+                        colors: ['#fe5f9e']
+                    }
+                }
+            };
+
+            tui.chart.registerTheme('newTheme', theme);
+            options.theme = 'newTheme';
+
+            tui.chart.comboChart(container, data, options);
+        };
+
+        // GPU 대시보드 시작
+        ct.gpuInstanceStateCountInit = function () {
+            // 카운트
+            ct.gpuInstanceStateCount = {
+                TOTAL: 0,
+                STARTED: 0,
+                STOPPED: 0,
+                ERROR: 0
+            };
+        };
+
+        ct.gpuInstanceUsageInit = function () {
+            ct.gpuInstanceUsage = {
+                cpu : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당 코어수
+                    maxQuota : 0 // 프로젝트 할당량 코어수
+                },
+                mem : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Byte
+                    maxQuota : 0 // 프로젝트 할당량 Byte
+                },
+                disk : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Giga Byte
+                    maxQuota : 0 // 프로젝트 할당량 Giga Byte
+                },
+                volume : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Giga Byte
+                    maxQuota : 0 // 프로젝트 할당량 Giga Byte
+                }
+            };
+        };
+
+        ct.gpuInstanceStateCountInit();
+        ct.gpuInstanceUsageInit();
+
+        ct.gpuInstances = [];
+        ct.getGpuInstanceVmsView = function (tenantId) {
+            ct.gpuInstanceStateCountInit();
+            ct.gpuInstances = [];
+            var promise = portal.dashboard.getGpuInstanceVmsView(tenantId);
+            promise.success(function (data, status, headers) {
+                if (data && data.content && data.content.content && data.content.content.length > 0) {
+                    ct.gpuInstances = data.content.content;
+                    angular.forEach(ct.gpuInstances, function (instance, instanceKey) {
+                        ct.gpuInstanceStateCount.TOTAL++;
+                        if (instance.vmState == "active") {
+                            ct.gpuInstanceStateCount.STARTED++;
+                        } else if (instance.vmState == "error") {
+                            ct.gpuInstanceStateCount.ERROR++;
+                        } else {
+                            ct.gpuInstanceStateCount.STOPPED++;
+                        }
+                    });
+                }
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        ct.gpuResourceUsed = {};
+        ct.getGpuResourceUsedLookup = function (tenantId) {
+            ct.gpuInstanceUsageInit();
+            ct.gpuResourceUsed = {};
+            var promise = portal.dashboard.getGpuResourceUsedLookup(tenantId);
+            promise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.gpuResourceUsed = data.content;
+                    if (ct.gpuResourceUsed.maxResource && ct.gpuResourceUsed.usedResource) {
+                        // 할당 코어수
+                        ct.gpuInstanceUsage.cpu.maxQuota = ct.gpuResourceUsed.maxResource.cores;
+                        ct.gpuInstanceUsage.cpu.usedQuota = ct.gpuResourceUsed.usedResource.cores;
+                        ct.gpuInstanceUsage.cpu.percentUsedQuota = (ct.gpuInstanceUsage.cpu.usedQuota/ct.gpuInstanceUsage.cpu.maxQuota) * 100;
+
+                        // 할당 메모리 Byte
+                        ct.gpuInstanceUsage.mem.maxQuota = ct.gpuResourceUsed.maxResource.ramSize;
+                        ct.gpuInstanceUsage.mem.usedQuota = ct.gpuResourceUsed.usedResource.ramSize;
+                        ct.gpuInstanceUsage.mem.percentUsedQuota = (ct.gpuInstanceUsage.mem.usedQuota/ct.gpuInstanceUsage.mem.maxQuota) * 100;
+
+                        // 할당 인스트턴스 용량 Giga Byte
+                        ct.gpuInstanceUsage.disk.maxQuota = ct.gpuResourceUsed.maxResource.instanceDiskGigabytes;
+                        ct.gpuInstanceUsage.disk.usedQuota = ct.gpuResourceUsed.usedResource.instanceDiskGigabytes;
+                        ct.gpuInstanceUsage.disk.percentUsedQuota = (ct.gpuInstanceUsage.disk.usedQuota/ct.gpuInstanceUsage.disk.maxQuota) * 100;
+
+                        // 할당 디스크 용량 Giga Byte
+                        ct.gpuInstanceUsage.volume.maxQuota = ct.gpuResourceUsed.maxResource.volumeGigabytes;
+                        ct.gpuInstanceUsage.volume.usedQuota = ct.gpuResourceUsed.usedResource.volumeGigabytes;
+                        ct.gpuInstanceUsage.volume.percentUsedQuota = (ct.gpuInstanceUsage.volume.usedQuota/ct.gpuInstanceUsage.volume.maxQuota) * 100;
+
+                        var chartData = {
+                            code: "0000",
+                            cpuTotUsed : ct.gpuInstanceUsage.cpu.percentUsedQuota,
+                            cpuMax : ct.gpuInstanceUsage.cpu.maxQuota,
+                            cpuUsed : ct.gpuInstanceUsage.cpu.usedQuota,
+                            ramSizeTot : ct.gpuInstanceUsage.mem.percentUsedQuota,
+                            ramSizeMax : ct.gpuInstanceUsage.mem.maxQuota,
+                            ramSizeUsed : ct.gpuInstanceUsage.mem.usedQuota,
+                            instanceDiskGigabytesTot : ct.gpuInstanceUsage.disk.percentUsedQuota,
+                            objectStorageGigaByteTot : ct.gpuInstanceUsage.volume.percentUsedQuota,
+                            objectStorageGigaByteMax : ct.gpuInstanceUsage.volume.maxQuota,
+                            objectStorageGigaByteUsed : ct.gpuInstanceUsage.volume.usedQuota
+                        };
+
+                        ct.gpuCpuChartFunc(chartData);
+                        ct.gpuMemChartFunc(chartData);
+                        ct.gpuStorgeChartFunc(chartData);
+                    }
+                }
+
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        ct.getGpuCardList = function () {
+            ct.gpuCardList = [
+                {name: 'quadro RTX4000', used: 1, total: 4},
+                {name: 'quadro P400', used: 0, total: 2},
+                {name: 'Tesla V100 16', used: 0, total: 2},
+                {name: 'Tesla V100 32', used: 0, total: 2},
+                {name: 'Tesla P100', used: 0, total: 2},
+                {name: 'Tesla T4', used: 0, total: 2},
+                {name: 'Tesla K40', used: 0, total: 2}
+            ];
+            // var rp = portal.dashboard.getGpuCardList(ct.paramId);
+            // rp.success(function (data) {
+            //     if (data && data.content) {
+            //         gpuCardList = data.content;
+            //     }
+            // });
+            // rp.error(function (data) {
+            //     console.log(data);
+            // });
+        };
+        // gpu 대시보드 끝
+
         ct.dataReq10 = {
             totCnt: 0,
             svnCnt: 0,
@@ -1157,6 +1457,16 @@ angular.module('portal.controllers')
                 ct.paasCpuStatusChart();
                 ct.getPaasAppInfosAndInstanceInfos($scope.main.sltOrganizationGuid);
             }
+            
+            // GPU 정보
+            if ($scope.main.userTenantId) {
+                console.log(ct.paramId, $scope.main.userTenantId);
+                ct.gpuCpuStatusChart();
+                ct.getGpuCardList();
+                ct.getGpuInstanceVmsView($scope.main.userTenantId);
+                ct.getGpuResourceUsedLookup($scope.main.userTenantId);
+            }
+
             // Pipeline 정보
             ct.getPipelineDashBoardInfo(ct.paramId);
             // Gis 정보
