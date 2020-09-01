@@ -271,7 +271,7 @@ angular.module('portal.services', [])
                 page : 0,
                 size : -1
             };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vms/view', 'GET', getParams));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/lookup', 'GET', getParams));
         };
 
         /* // 오픈스택에서 테넌트 자원조회

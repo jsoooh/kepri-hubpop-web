@@ -718,8 +718,8 @@ angular.module('portal.controllers')
             ct.iaasInstances = [];
             var promise = portal.dashboard.getIaasInstanceVmsView(tenantId);
             promise.success(function (data, status, headers) {
-                if (data && data.content && data.content.content && data.content.content.length > 0) {
-                    ct.iaasInstances = data.content.content;
+                if (data && data.content && data.content.length > 0) {
+                    ct.iaasInstances = data.content;
                     angular.forEach(ct.iaasInstances, function (instance, instanceKey) {
                         ct.iaasInstanceStateCount.TOTAL++;
                         if (instance.vmState == "active") {

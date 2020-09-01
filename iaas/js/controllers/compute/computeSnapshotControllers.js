@@ -254,11 +254,11 @@ angular.module('iaas.controllers')
                 size : -1,
                 page : 0
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vms/view', 'GET', params);
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/lookup', 'GET', params);
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.content) {
-                    angular.forEach(data.content.content, function (item) {
-                        ct.serverNameList.push(item.instanceName);
+                if (data && data.content && data.content.length > 0) {
+                    angular.forEach(data.content, function (item) {
+                        ct.serverNameList.push(item.name);
                     });
                 }
             });
