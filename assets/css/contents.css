@@ -336,6 +336,22 @@
 .disk-use-info .btm_use_right .txt_tit::before {display:inline-block; content:''; width:21px; height:21px; background:#fff; border:1px solid #d3d3d3; vertical-align:middle; margin-right:9px;}
 
 .txt_long {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all; vertical-align:middle;}
+
+/*앱관리(이름변경)*/
+.renameWrap {width:auto;}
+.renameWrap .sdBtnWrap {position:absolute; top:1px; width:84px; }
+.renameWrap .sdBtnWrap .btn {height:36px; border-radius:0;}
+
+/* progress */
+.card-progress-area .progress {position: relative; width: 12px; height:162px; margin-bottom: 0px; vertical-align: bottom; box-shadow: none; background-color: #eee; overflow: inherit;}
+.card-progress-area .progress-bar {position: absolute; left:0; bottom:0; z-index: 2; width:12px;}
+.card-progress-area .tooltip .tooltip-inner {border-radius: 2px; background-color: #888;}
+.card-progress-area .tooltip.top .tooltip-arrow {margin-left: -4px; border-width: 5px 4px 0; border-top-color: #888;}
+
+/*보더 속성*/
+.border-right::after {display:block; content:''; width:1px; height:237px; background:#ececec; position:absolute; right:0; top:-20px;}
+
+
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}
