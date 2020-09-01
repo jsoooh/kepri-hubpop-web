@@ -272,7 +272,7 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
                 vmCatalogDeploy.context.workerCnt = ct.data.workerCnt;
                 vmCatalogDeploy.context.masterCnt = ct.data.masterCnt;
-                //vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
+                vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
             }
 
 
