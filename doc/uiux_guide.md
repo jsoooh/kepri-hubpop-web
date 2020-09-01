@@ -13,10 +13,10 @@
   2-5. notification 조회
   2-6. 좌측하단 사용자 관련 팝업 호출 url
 3. 관리자포탈 API
-  3-1. 메뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
-  3-2. 메뉴 즐겨찾기 조회
-  3-3. 메뉴 즐겨찾기 추가
-  3-4. 메뉴 즐겨찾기 삭제
+  3-1. 관리자포탈 메뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
+  3-2. 관리자포탈 메뉴 즐겨찾기 조회
+  3-3. 관리자포탈 메뉴 즐겨찾기 추가
+  3-4. 관리자포탈 메뉴 즐겨찾기 삭제
 4. 기타 주의점
   4-1. feather icon이 안나타날 때
 ```
@@ -377,7 +377,7 @@ http://www.kepri2-demo.crossent.com
     ```
 
 #### 3. 관리자포탈 API
-##### 3-1. 메뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
+##### 3-1. 관리자포탈 메뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
 - 호출
     ```
     $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/adminMenus/temp'
@@ -510,10 +510,11 @@ http://www.kepri2-demo.crossent.com
         },...
     ]
     ```
-##### 3-2. 메뉴 즐겨찾기 조회
+##### 3-2. 관리자포탈 메뉴 즐겨찾기 조회
 - 호출
     ```
-    $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89' 
+    #token : Cookies HubPop-ToKen 값
+    $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa'
     ```
 - 결과값
     ```
@@ -531,11 +532,12 @@ http://www.kepri2-demo.crossent.com
       "resultMsg": "NORMAL_CODE"
     }
     ```
-##### 3-3. 메뉴 즐겨찾기 추가
+##### 3-3. 관리자포탈 메뉴 즐겨찾기 추가
 - 2레벨에서만 진행됨
   - 호출
     ```
-    $ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20201'
+    #token : Cookies HubPop-ToKen 값
+    $ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa&menuId=HUB20201'
     http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20404
     ```
   - 결과값
@@ -557,11 +559,12 @@ http://www.kepri2-demo.crossent.com
       "resultMsg": "NORMAL_CODE"
     }
     ```
-##### 3-4. 메뉴 즐겨찾기 삭제
+##### 3-4. 관리자포탈 메뉴 즐겨찾기 삭제
 - 2레벨에서만 진행됨
 - 호출
     ```
-    $ curl -X DELETE --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20201'
+    #token : Cookies HubPop-ToKen 값
+    $ curl -X DELETE --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa&menuId=HUB20201'
     http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20404
     ```
 - 결과값
