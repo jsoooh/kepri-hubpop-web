@@ -312,13 +312,11 @@ resources:
             echo "##### 03.zookeeper setting start ###########"
             mkdir /home/centos/zookeeper/tmp
             cp /home/centos/zookeeper/conf/zoo_sample.cfg /home/centos/zookeeper/conf/zoo.cfg
-            cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
-            dataDir=/home/centos/zookeeper/tmp
-            server.1=hmaster:2888:3888
+            sudo -- sh -c "echo dataDir=/home/centos/zookeeper/tmp >> /home/centos/zookeeper/conf/zoo.cfg"
+            sudo -- sh -c "echo server.1=hmaster:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            server.{{server}}=hworker-{{worker}}:2888:3888
+            sudo -- sh -c "echo server.{{server}}=hworker-{{worker}}:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- endfor %}
-            EOF
             echo "1" > /home/centos/zookeeper/tmp/myid
             chown centos:centos /home/centos/zookeeper/tmp/myid
             chmod 777 /home/centos/zookeeper/tmp/myid
@@ -329,7 +327,7 @@ resources:
             echo "##### 03.zookeeper setting end ###########"
             EOF
 
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+            {% for worker in range(1,pworker) %} {% set server = worker + 1 %}
             masterRun=1
             while [[ masterRun -eq 1 ]]
             do
@@ -339,7 +337,7 @@ resources:
               sleep 5
             done
             echo "zookeeper node{{worker}} active"
-            {%- endfor %}
+            {% endfor %}
 
 
             echo "##### 04.hbase setting start ###########"
@@ -361,7 +359,7 @@ resources:
                 </property>
                 <property>
                     <name>dfs.replication</name>
-                    <value>{% set iworker = pworker + 1 %}{{iworker}}/value>
+                    <value>{% set iworker = pworker + 1 %}{{iworker}}</value>
                 </property>
                 <property>
                   <name>hbase.unsafe.stream.capability.enforce</name>
@@ -455,8 +453,8 @@ resources:
 
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-  init_config{{server}}:
+  {%- for worker in range(1,pworker) %} {% set gserver = worker + 1 %}
+  init_config{{gserver}}:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
@@ -482,9 +480,7 @@ resources:
                   {%- endfor %}
           template: |
             #!/bin/sh
-            echo "hadoop{{server}} SingleMaster worker{{server}}  install start"
-
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            echo "hadoop{{gserver}} SingleMaster worker{{gserver}}  install start"
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -659,14 +655,12 @@ resources:
             echo "##### 03.zookeeper setting start ###########"
             mkdir /home/centos/zookeeper/tmp
             cp /home/centos/zookeeper/conf/zoo_sample.cfg /home/centos/zookeeper/conf/zoo.cfg
-            cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
-            dataDir=/home/centos/zookeeper/tmp
-            server.1=hmaster:2888:3888
+            sudo -- sh -c "echo dataDir=/home/centos/zookeeper/tmp >> /home/centos/zookeeper/conf/zoo.cfg"
+            sudo -- sh -c "echo server.1=hmaster:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            server.{{server}}=hworker-{{worker}}:2888:3888
+            sudo -- sh -c "echo server.{{server}}=hworker-{{worker}}:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- endfor %}
-            EOF
-            echo "2" > /home/centos/zookeeper/tmp/myid
+            echo "{{gserver}}" > /home/centos/zookeeper/tmp/myid
             chown centos:centos /home/centos/zookeeper/tmp/myid
             chmod 777 /home/centos/zookeeper/tmp/myid
             EOF
@@ -677,10 +671,8 @@ resources:
             EOF
 
 
-            sudo -i -u centos bash << EOF
-            source ~/.bashrc
             echo "##### 04.hbase setting start ###########"
-            cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
+            VAR1=$(cat <<EOF
             <?xml version="1.0"?>
             <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
             <configuration>
@@ -710,6 +702,13 @@ resources:
                 </property>
             </configuration>
             EOF
+            )
+
+            cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
+            ${VAR1}
+            EOF
+
+            chown centos:centos /home/centos/hbase/conf/hbase-site.xml
 
             cat <<EOF> /home/centos/hbase/conf/regionservers
             hmaster
@@ -718,16 +717,17 @@ resources:
             {%- endfor %}
             EOF
 
+            chown centos:centos /home/centos/hbase/conf/regionservers
+
             cat <<EOF>> /home/centos/hbase/conf/hbase-env.sh
             export HBASE_MANAGES_ZK=false
             export HBASE_PID_DIR=/home/centos/hbase/pid
             EOF
 
             echo "##### 04.hbase setting end ###########"
-            EOF
 {% endif %}
 
-            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
 
   {%- endfor %}
 
