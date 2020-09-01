@@ -1,22 +1,15 @@
 heat_template_version: '2018-08-31'
 
-description: hadoop singleMaster template
+description: hadoop test template
 
 parameter_groups:
 - parameters:
   - image
-  - master_flavor
-  - worker_flavor
-  - master_cnt
-  - worker_cnt
+  - flavor
   - availability_zone
   - key_name
-  - provider_net
+  - private_net
   - root_password
-  - security_group
-  - api_end_point
-  - provider_subnet
-  - hive_password
 
 parameters:
   image:
@@ -27,58 +20,37 @@ parameters:
     label: "가용구역"
     type: string
     default: zone01
-  master_flavor:
+  flavor:
+    label: "사양"
     type: string
-  master_cnt:
-    type: string
-  worker_cnt:
-    type: string
-  worker_flavor:
-    type: string
+    default: m1.small
   key_name:
     label: "보안키"
     type: string
     default: kepri-msa_default
-  provider_net:
-    label: "provider_net"
+  private_net:
+    label: "내부 내트워크"
     type: string
-  api_end_point:
-    label: "api_end_point"
-    type: string
-  provider_subnet:
-    label: "provider_subnet"
-    type: string
-  security_group:
-    label: "security_group"
-    type: string
-    default: default
+    default: provider01
   root_password:
     label: "root 비밀번호"
     type: string
-  hive_password:
-    label: "hive 비밀번호"
-    type: string
+    default: crossent12
 
 resources:
 
   server1_port:
     type: OS::Neutron::Port
     properties:
-      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
-      network: { get_param: provider_net }
-      security_groups: [{ get_param: security_group }]
+      network: { get_param: private_net }
 
-  {% set pworker =  workerCnt + 1 %}
-  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-
-  server{{server}}_port:
+  {% set worker = 0 %} {# 초기 한번만 선언 #}
+  {% for worker in range(WorkerCnt) %} {# 마스터 노드가 1개 #}
+  server{{worker+2}}_port:
     type: OS::Neutron::Port
     properties:
-      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
-      network: { get_param: provider_net }
-      security_groups: [{ get_param: security_group }]
-
-  {%- endfor %}
+      network: { get_param: private_net }
+  {% endfor %}
 
   init_config1:
     type: OS::Heat::SoftwareConfig
@@ -89,19 +61,19 @@ resources:
           params:
             $root_password: { get_param: root_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            $node{{worker}}_address: { get_attr: [server{{server}}_port, fixed_ips, 0, ip_address] }
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            $node{{worker+1}}_address: { get_attr: [server{{worker+2}}_port, fixed_ips, 0, ip_address] }
+            {% endfor %}
             $server_addresses:
               list_join:
                 - ','
                 - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-                  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-                  - { get_attr: [server{{server}}_port, fixed_ips, 0, ip_address] }
-                  {%- endfor %}
+                  {% for worker in range(WorkerCnt) %}
+                  - { get_attr: [server{{worker+2}}_port, fixed_ips, 0, ip_address] }
+                  {% endfor %}
           template: |
             #!/bin/sh
-            echo "01.hadoop SingleMaster install start ......7"
+            echo "01.hadoop core install start ......7"
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -111,7 +83,7 @@ resources:
 
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
-            -----BEGIN RSA PRIVATE KEY-----
+            -----BEGIN RSA PRIVATE KEY----- {# 변수값 변경 예정 #}
             MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
             0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
             B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
@@ -144,30 +116,30 @@ resources:
             chmod 600 /home/centos/.ssh/kepri-msa_default.pem
 
             echo "address1=$master_address"
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            echo "address{{server}}=$node{{worker}}_address"
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            echo "address{{worker+2}}=$node{{worker+1}}_address"
+            {% endfor %}
 
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+            {% for worker in range(WorkerCnt) %} 
             masterRun=1
             while [[ masterRun -eq 1 ]]
             do
-              echo "nc -z $node{{worker}}_address 20022"
-              nc -z $node{{worker}}_address 20022
+              echo "nc -z $node{{worker+1}}_address 20022"
+              nc -z $node{{worker+1}}_address 20022
               masterRun=$?
               sleep 5
             done
-            echo "node{{worker}} active"
-            {%- endfor %} 
+            echo "node{{worker+1}} active"
+            {% endfor %}
 
             echo "##### 01.hadoop core setting start ###########"
             echo "[01] host setting"
             echo "##### 01.1 host file setting ###########"
             cat <<EOF>> /etc/hosts
             $master_address hmaster
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            $node{{worker}}_address hworker-{{worker}}
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %} 
+            $node{{worker+1}}_address hworker-{{worker+1}}
+            {% endfor %}
             EOF
 
             sudo -i -u centos bash << EOF
@@ -185,9 +157,9 @@ resources:
             echo "##### 01.2 add_known_hosts ###########"
             ssh-keyscan -p 20022 localhost,0.0.0.0 >> /home/centos/.ssh/known_hosts
             ssh-keyscan -p 20022 hmaster,$master_addres >> /home/centos/.ssh/known_hosts
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            ssh-keyscan -p 20022 hworker-{{worker}},$node{{worker}}_address >> /home/centos/.ssh/known_hosts
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            ssh-keyscan -p 20022 hworker-{{worker+1}},$node{{worker+1}}_address >> /home/centos/.ssh/known_hosts
+            {% endfor %}
             EOF
 
             sudo -i -u centos bash << EOF
@@ -196,9 +168,9 @@ resources:
             ssh-keygen -b 2048 -t rsa -f /home/centos/.ssh/id_rsa -q -N ''
             cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@localhost  "cat - >> /home/centos/.ssh/authorized_keys"
             cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hmaster  "cat - >> /home/centos/.ssh/authorized_keys"
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-{{worker}}  "cat - >> /home/centos/.ssh/authorized_keys"
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-{{worker+1}}  "cat - >> /home/centos/.ssh/authorized_keys"
+            {% endfor %}
             EOF
 
             echo "[01]hadoop config file update"
@@ -292,9 +264,9 @@ resources:
             </configuration>
             EOF
 
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            sudo -- sh -c "echo hworker-{{worker}} > /home/centos/hadoop/etc/hadoop/slaves"
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            sudo -- sh -c "echo hworker-{{worker+1}} > /home/centos/hadoop/etc/hadoop/slaves"
+            {% endfor %}
 
             echo "#####[02]hdfs namenode -format#####"
             sudo su - centos -c "hadoop namenode -format -force "
@@ -308,19 +280,16 @@ resources:
             sudo su - centos -c "start-yarn.sh "
             echo "##### [04].start-dfs end ###########"
 
-{% if sparkUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 02.spark setting start ###########"
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            sudo -- sh -c "echo hworker-{{worker}} >> /home/centos/spark/conf/slaves"
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            sudo -- sh -c "echo hworker-{{worker+1}} >> /home/centos/spark/conf/slaves"
+            {% endfor %}
             /home/centos/spark/sbin/start-master.sh
             echo "##### 02.spark setting end ###########"
             EOF
-{% endif %}
 
-{% if hbaseUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 03.zookeeper setting start ###########"
@@ -329,9 +298,9 @@ resources:
             cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
             dataDir=/home/centos/zookeeper/tmp
             server.1=hmaster:2888:3888
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            server.{{server}}=hworker-{{worker}}:2888:3888
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            server.{{worker+2}}=hworker-{{worker+1}}:2888:3888
+            {% endfor %}  
             EOF
             echo "1" > /home/centos/zookeeper/tmp/myid
             chown centos:centos /home/centos/zookeeper/tmp/myid
@@ -343,18 +312,17 @@ resources:
             echo "##### 03.zookeeper setting end ###########"
             EOF
 
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+            {% for worker in range(WorkerCnt) %}
             masterRun=1
             while [[ masterRun -eq 1 ]]
             do
-              echo "nc -z $node{{worker}}_address 3888"
-              nc -z $node{{worker}}_address 3888
+              echo "nc -z $node{{worker+1}}_address 3888"
+              nc -z $node{{worker+1}}_address 3888
               masterRun=$?
               sleep 5
             done
-            echo "zookeeper node{{worker}} active"
-            {%- endfor %}
-
+            echo "zookeeper node{{worker+1}} active"
+            {% endfor %}  
 
             echo "##### 04.hbase setting start ###########"
             VAR1=$(cat <<EOF
@@ -371,7 +339,7 @@ resources:
                 </property>
                 <property>
                     <name>hbase.zookeeper.quorum</name>
-                    <value>hmaster{%- for worker in range(1,pworker) %} {% set server = worker + 1 %}, hworker-{{worker}} {%- endfor %}</value>
+                    <value>hmaster{% for worker in range(WorkerCnt) %}, hworker-{{worker+1}} {% endfor %}</value>
                 </property>
                 <property>
                     <name>dfs.replication</name>
@@ -397,9 +365,9 @@ resources:
 
             cat <<EOF> /home/centos/hbase/conf/regionservers
             hmaster
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            hworker-{{worker}}
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            hworker-{{worker+1}}
+            {% endfor %}
             EOF
 
             chown centos:centos /home/centos/hbase/conf/regionservers
@@ -417,7 +385,6 @@ resources:
             EOF
 
             echo "##### 04.hbase setting end ###########"
-{% endif %}
 
             echo "##### [05]hive setting start ###########"
             echo "mariadb setting start"
@@ -429,7 +396,7 @@ resources:
 
             mysql -u root -p$root_password <<EOF
             create database hive CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY 'hive1234';
+            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY 'hive1234'; {# 변수값? #}
             EOF
 
             sudo systemctl enable mariadb
@@ -457,7 +424,7 @@ resources:
                 </property>
                 <property>
                     <name>javax.jdo.option.ConnectionPassword</name>
-                    <value><![CDATA[$hive_password]]></value>
+                    <value>hive1234</value>
                 </property>
             </configuration>
             EOF
@@ -467,8 +434,8 @@ resources:
             sudo su - centos -c "/home/centos/hive/bin/schematool -initSchema -dbType mysql "
             echo "##### [05]hive setting end ###########"
 
-  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-  init_config{{server}}:
+  {% for worker in range(WorkerCnt) %}
+  init_config{{worker+2}}:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
@@ -477,19 +444,19 @@ resources:
           params:
             $root_password: { get_param: root_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            $node{{worker}}_address: { get_attr: [server{{server}}_port, fixed_ips, 0, ip_address] }
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            $node{{worker+1}}_address: { get_attr: [server{{worker+2}}_port, fixed_ips, 0, ip_address] }
+            {% endfor %}
             $server_addresses:
               list_join:
                 - ','
                 - - { get_attr: [server1_port, fixed_ips, 0, ip_address] }
-                  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-                  - { get_attr: [server{{server}}_port, fixed_ips, 0, ip_address] }
-                  {%- endfor %}
+                {% for worker in range(WorkerCnt) %}
+                  - { get_attr: [server{{worker+2}}_port, fixed_ips, 0, ip_address] }
+                {% endfor %}
           template: |
             #!/bin/sh
-            echo "hadoop{{server}} install start"
+            echo "hadoop2 install start"
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -499,7 +466,7 @@ resources:
 
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
-            -----BEGIN RSA PRIVATE KEY-----
+            -----BEGIN RSA PRIVATE KEY----- {# 변수값 예정 #}
             MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
             0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
             B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
@@ -535,9 +502,9 @@ resources:
             echo "##### 01.1 host file setting ###########"
             cat <<EOF>> /etc/hosts
             $master_address hmaster
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            $node{{worker}}_address hworker-{{worker}}
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            $node{{worker+1}}_address hworker-{{worker+1}}
+            {% endfor %}
             EOF
 
             sudo -i -u centos bash << EOF
@@ -554,9 +521,9 @@ resources:
             source ~/.bashrc
             echo "##### 01.2 add_known_hosts ###########"
             ssh-keyscan -p 20022 hmaster,$master_addres >> /home/centos/.ssh/known_hosts
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            ssh-keyscan -p 20022 hworker-{{worker}},$node{{worker}}_address >> /home/centos/.ssh/known_hosts
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            ssh-keyscan -p 20022 hworker-{{worker+1}},$node{{worker+1}}_address >> /home/centos/.ssh/known_hosts
+            {% endfor %}
             EOF
 
             sudo -i -u centos bash << EOF
@@ -564,9 +531,9 @@ resources:
             echo "##### 01.3 add_authorized_keys ###########"
             ssh-keygen -b 2048 -t rsa -f /home/centos/.ssh/id_rsa -q -N ''
             cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hmaster  "cat - >> /home/centos/.ssh/authorized_keys"
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-{{worker}}  "cat - >> /home/centos/.ssh/authorized_keys"
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            cat /home/centos/.ssh/id_rsa.pub | ssh -i "/home/centos/.ssh/kepri-msa_default.pem" centos@hworker-{{worker+1}}  "cat - >> /home/centos/.ssh/authorized_keys"
+            {% endfor %}
             EOF
 
             echo "[01]hadoop config file update"
@@ -660,7 +627,6 @@ resources:
             </configuration>
             EOF
 
-{%if sparkUse %}
             echo "##### 02.spark setting start ###########"
             #yum -y install nc
 
@@ -676,15 +642,13 @@ resources:
 
             sudo -i -u centos bash << EOF
             source ~/.bashrc
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            sudo -- sh -c "echo hworker-{{worker}} >> /home/centos/spark/conf/slaves"
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            sudo -- sh -c "echo hworker-{{worker+1}} >> /home/centos/spark/conf/slaves"
+            {% endfor %}
             /home/centos/spark/sbin/start-slave.sh 'spark://hmaster:7077'
             echo "##### 02.spark setting end ###########"
             EOF
-{% endif %}
 
-{% if hbaseUse %}
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             echo "##### 03.zookeeper setting start ###########"
@@ -693,9 +657,9 @@ resources:
             cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
             dataDir=/home/centos/zookeeper/tmp
             server.1=hmaster:2888:3888
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            server.{{server}}=hworker-{{worker}}:2888:3888
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            server.{{worker+2}}=hworker-{{worker+1}}:2888:3888
+            {% endfor %}
             EOF
             echo "2" > /home/centos/zookeeper/tmp/myid
             chown centos:centos /home/centos/zookeeper/tmp/myid
@@ -706,7 +670,6 @@ resources:
             /home/centos/zookeeper/bin/zkServer.sh start
             echo "##### 03.zookeeper setting end ###########"
             EOF
-
 
             sudo -i -u centos bash << EOF
             source ~/.bashrc
@@ -725,7 +688,7 @@ resources:
                 </property>
                 <property>
                     <name>hbase.zookeeper.quorum</name>
-                    <value>hmaster{%- for worker in range(1,pworker) %} {% set server = worker + 1 %}, hworker-{{worker}}{%- endfor %} </value>
+                    <value>hmaster{% for worker in range(WorkerCnt) %}, hworker-{{worker+1}} {% endfor %}</value>
                 </property>
                 <property>
                     <name>dfs.replication</name>
@@ -744,9 +707,9 @@ resources:
 
             cat <<EOF> /home/centos/hbase/conf/regionservers
             hmaster
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            hworker-{{worker}}
-            {%- endfor %}
+            {% for worker in range(WorkerCnt) %}
+            hworker-{{worker+1}}
+            {% endfor %}
             EOF
 
             cat <<EOF>> /home/centos/hbase/conf/hbase-env.sh
@@ -756,13 +719,12 @@ resources:
 
             echo "##### 04.hbase setting end ###########"
             EOF
-{% endif %}
-  {%- endfor %}
-  
-  server1:
+  {% endfor %}
+ 
+  server1: {# 마스터 노드 default #}
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: master_flavor }
+      flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
@@ -772,18 +734,17 @@ resources:
       user_data:
         get_resource: init_config1
 
-  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-  server{{server}}:
+  {% for worker in range(WorkerCnt) %}
+  server{{worker+2}}:
     type: OS::Nova::Server
     properties:
-      flavor: { get_param: worker_flavor }
+      flavor: { get_param: flavor }
       image: { get_param: image }
       availability_zone: { get_param: availability_zone }
       networks:
-        - port: { get_resource: server{{server}}_port }
+        - port: { get_resource: server{{worker+2}}_port }
       key_name: { get_param: key_name}
       user_data_format: RAW
       user_data:
-        get_resource: init_config{{server}}
-  {%- endfor %}
-
+        get_resource: init_config{{worker+2}}
+  {% endfor %}

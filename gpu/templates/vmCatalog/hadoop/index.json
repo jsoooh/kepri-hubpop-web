@@ -8,13 +8,13 @@
   "deployViewHtmlFile": "deployView.html",
   "deployViewHtmlFileType": "sub",
   "deployTemplates": {
-    "core": "deployTemplateCore.yaml.j2",
-    "hbase": "deployTemplateHBase.yaml.j2",
-    "spark": "deployTemplateSpark.yaml.j2"
+    "standalone": "deployTemplateStandalone.yaml.j2",
+    "sMaster": "deployTemplateSingleMaster.yaml.j2",
+    "dMaster": "deployTemplateHaMaster.yaml.j2"
   },
   "images": {
-    "core": "CentOS76-Hadoop.raw",
-    "hbase": "CentOS76-Hadoop.raw",
-    "spark": "CentOS76-Hadoop.raw"
+    "standalone": "CentOS76-Hadoop.raw",
+    "sMaster": "CentOS76-Hadoop.raw",
+    "dMaster": "CentOS76-Hadoop.raw"
   }
 }

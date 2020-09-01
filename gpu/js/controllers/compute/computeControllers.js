@@ -133,7 +133,7 @@ angular.module('gpu.controllers')
             ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
             ct.network = ct.networks[0];
             ct.fnGetServerMainList();
-            ct.fnGetUsedResource();
+            // ct.fnGetUsedResource();
         });
 
         ct.fn.getKeyFile = function(keypair,type) {
@@ -211,6 +211,11 @@ angular.module('gpu.controllers')
 
         // 서버메인 tenant list 함수
         ct.fnGetServerMainList = function() {
+            if (!ct.data || !ct.data.tenantId) {
+                common.showAlertWarning('테넌트 정보가 없습니다.');
+                return;
+            }
+
             $scope.main.loadingMainBody = true;
 
             var param = {
@@ -1305,7 +1310,7 @@ angular.module('gpu.controllers')
                             ct.data.keypair = ct.keypairList[i];
                         }
                     }
-                    if (!ct.data.keypair) {
+                    if (!ct.data.keypair.keypairName) {
                         ct.data.keypair = ct.keypairList[0];
                     }
                     $scope.main.loadingMainBody = false;

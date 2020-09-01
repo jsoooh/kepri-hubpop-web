@@ -12,7 +12,7 @@ angular.module('gpu.controllers')
 
         ct.masterSpecList = [];
         ct.workerSpecList = [];
-        ct.deployTypes = [
+        ct.types = [
             {key: "core", value: "Core Hadoop : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1)"},
             {key: "hbase", value: "HBase : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), HBase(1.1.2)"},
             {key: "spark", value: "Spark : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), spark(1.6.3)"}
@@ -20,10 +20,11 @@ angular.module('gpu.controllers')
         ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
 
         ct.data.bucketType = "defined";
-        ct.data.deployType = "core";
-        ct.data.nodeType = "single";
+        ct.data.deployType = "sMaster";
+        ct.data.nodeType = "cluster";
         ct.data.masterCnt = 1;
         ct.data.workerCnt = 2;
+        ct.data.type = "core";
 
         // 테스트
         ct.testInput = true;
@@ -222,23 +223,59 @@ angular.module('gpu.controllers')
 
         };
 
+        // 하둡 오브젝트 스토리지 버킷 생성
         ct.fn.createBucket = function(bucketName) {
+           console.log('create Bucket start!!! ');
+            // 페이지 로드
 
+            let promise2;
+            promise2 = vmCatalogService.createBucket(ct.tenantId,bucketName);
+            promise2.success(function () {
+                //callBackFuncion(data);
+                console.log('create Bucket success  !!! ');
+            });
+            promise2.error(function (data, status, headers) {
+                console.log('create Bucket error  !!! ');
+                $scope.main.loadingMainBody = false;
+            });
         };
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
             // vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
+            if(ct.data.type == 'core') { // core 선택 경우
+                vmCatalogDeploy.context.hbaseUse = false;
+                vmCatalogDeploy.context.sparkUse = false;
+            } else if (ct.data.type == 'hbase') { // hbase 선택 경우
+                vmCatalogDeploy.context.hbaseUse = true;
+                vmCatalogDeploy.context.sparkUse = false;
+            } else { // spark 선택 경우
+                vmCatalogDeploy.context.sparkUse = true;
+                vmCatalogDeploy.context.hbaseUse = false;
+            }
+
             vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
             vmCatalogDeploy.workerUse = false;
             vmCatalogDeploy.parameters.root_password = ct.data.mysqlRootPassword;
             vmCatalogDeploy.parameters.hive_password = ct.data.mysqlHivePassword;
-            if(ct.data.nodeType == 'cluster') {
+
+            if(ct.data.nodeType == 'single') {
+                vmCatalogDeploy.workerUse = false;
+                vmCatalogDeploy.deployTemplates = "standalone";
+                vmCatalogDeploy.parameters.master_flavor = ct.data.workerFlavor;
+
+            }else if(ct.data.nodeType == 'cluster') {
+                vmCatalogDeploy.workerUse = true;
                 vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
                 vmCatalogDeploy.parameters.worker_flavor = ct.data.workerFlavor;
-                vmCatalogDeploy.workerUse = true;
+                vmCatalogDeploy.parameters.master_cnt = ct.data.masterCnt;
+                vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
+                vmCatalogDeploy.context.workerCnt = ct.data.workerCnt;
+                vmCatalogDeploy.context.masterCnt = ct.data.masterCnt;
+                //vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
             }
-            //vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
+
+
             return vmCatalogDeploy;
         };
 
@@ -249,6 +286,25 @@ angular.module('gpu.controllers')
         ct.fn.createVmCatalogDeploy = function () {
             if (!ct.fn.commCheckFormValidity(subPage)) return;
 
+            if(ct.data.nodeType == 'single') {
+                console.log(" standalone !!!!!!!!!!");
+                vmCatalogDeploy.deployTemplates = "standalone";
+                ct.data.deployType = "standalone";
+            }else if(ct.data.nodeType == 'cluster') {
+                // 마스터 구성 (단일노드 마스터)
+                if (ct.data.masterCnt == 1) {
+                    console.log(" singleMaster !!!!!!!!!!");
+                    vmCatalogDeploy.deployTemplates = "sMaster";
+                    ct.data.deployType = "sMaster";
+                    // 마스터 구성 (이중노드 마스터)
+                } else if (ct.data.masterCnt == 2) {
+                    console.log(" multiMaster !!!!!!!!!!");
+                    vmCatalogDeploy.deployTemplates = "dMaster";
+                    ct.data.deployType = "dMaster";
+                }
+            }
+
+            console.log(" commCheckFormValidity >>>>>>>>>>>>>>>>!"+ct.data.deployType);
             ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
 

@@ -3,8 +3,25 @@
         <h5>서비스 접속정보</h5>
         <ul>
             <li>
-                <strong class="tit">접속 IP</strong>
-                <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+                <!-- <strong class="tit">접속 IP</strong> -->
+                <span class="txt">
+                   [Hadoop admin UI] <br>
+                    <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070">
+                        {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070
+                    </a>
+                </span>
+                <span class="txt">
+                    [Yarn WEB UI] <br>
+                    <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088/cluster/nodes">
+                    {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088/cluster/nodes
+                    </a>
+                </span>
+                <span class="txt">
+                    [Spark Web UI] <br>
+                    <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089">
+                    {{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089
+                    </a>
+                </span>
             </li>
         </ul>
         <ul>
@@ -15,8 +32,12 @@
         <h5> 서비스 환경 설정 파일 경로</h5>
         <ul>
             <li>
-                <strong class="tit">: </strong>
-                <span class="txt"></span>
+                <span class="txt">/home/centos/hadoop/etc/hadoop/core-site.xml</span>
+                <span class="txt">/home/centos/hadoop/etc/hadoop/hdfs-site.xml</span>
+                <span class="txt">/home/centos/hadoop/etc/hadoop/mapred-site.xml</span>
+                <span class="txt">/home/centos/hadoop/etc/hadoop/yarn-site.xml</span>
+                <span class="txt">/home/centos/hadoop/etc/hadoop/workers</span>
+
             </li>
         </ul>
     </div>
