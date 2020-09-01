@@ -1301,7 +1301,7 @@ angular.module('portal.controllers')
                 {name: 'Tesla T4', used: 0, total: 2},
                 {name: 'Tesla K40', used: 0, total: 2}
             ];
-            // var rp = portal.dashboard.getGpuCardList(ct.paramId);
+            // var rp = portal.dashboard.getGpuCardList($scope.main.userTenantGpuId);
             // rp.success(function (data) {
             //     if (data && data.content) {
             //         gpuCardList = data.content;

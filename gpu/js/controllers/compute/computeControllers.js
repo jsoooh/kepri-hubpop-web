@@ -53,7 +53,7 @@ angular.module('gpu.controllers')
         // ct.data.tenantId = "f0a2f4e409254aea82dd748bd2ff458a";
         ct.data.tenantId = $scope.main.userTenantGpu.id;
         //ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantName = $scope.main.userTenantGpu.korName;
+        ct.data.tenantName = $scope.main.userTenantGpu.tenantKorName;
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
@@ -253,6 +253,8 @@ angular.module('gpu.controllers')
                         var createdDate = new Date(serverMain.created);
                         serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                     }
+                    // 20.9.1 by hrit, 모니터링 링크 세팅
+                    serverMain.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + serverMain.name;
                 });
                 if (isServerStatusCheck) {
                     if ($scope.main.reloadTimmer['instanceServerStateList']) {
@@ -832,11 +834,34 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/loadbalancers', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.lbServiceLists = data.content;
+                ct.lbIdList = [];
+                ct.lbPortMembers =[];
                 //console.log("ct.lbServiceLists : ", ct.lbServiceLists);
                 ct.iaasLbPortMembers = [];
                 ct.connectServer = "";
                 if (ct.lbServiceLists.length != 0) {
                     ct.loadingLbList = true;
+                }
+
+                var lenServiceList = ct.lbServiceLists.length;
+                for (var i = 0; i < lenServiceList; i++) {
+                    var iaasLbPorts =  ct.lbServiceLists[i].iaasLbPorts;
+                    if (iaasLbPorts != null) {
+                        for (var e = 0; e < iaasLbPorts.length; e++) {
+                            var iaasLbPort = iaasLbPorts[e];
+                            if (iaasLbPort != null) {
+                                ct.lbServiceLists[i].iaasLbPorts[e].activeCnt = 0;
+                                var iaasLbMembers = ct.lbServiceLists[i].iaasLbPortMembers;
+                                if (iaasLbMembers != null) {
+                                    for (var j = 0; j < iaasLbMembers.length; j++) {
+                                        if (iaasLbPort.protocolPort == iaasLbMembers[j].protocolPort && iaasLbMembers[j].operatingStatus == 'ONLINE') {
+                                            ct.lbServiceLists[i].iaasLbPorts[e].activeCnt++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 angular.forEach(ct.lbServiceLists, function (lbList) {
@@ -854,6 +879,9 @@ angular.module('gpu.controllers')
                 $scope.main.loadingMainBody = false;
             });
         };
+
+
+
 
         // 부하분산 관리 - 접속 IP 복사
         ct.fn.copyConnectLbInfoToClipboard = function (loadbalancer) {
