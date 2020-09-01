@@ -1292,24 +1292,16 @@ angular.module('portal.controllers')
         };
 
         ct.getGpuCardList = function () {
-            ct.gpuCardList = [
-                {name: 'quadro RTX4000', used: 1, total: 4},
-                {name: 'quadro P400', used: 0, total: 2},
-                {name: 'Tesla V100 16', used: 0, total: 2},
-                {name: 'Tesla V100 32', used: 0, total: 2},
-                {name: 'Tesla P100', used: 0, total: 2},
-                {name: 'Tesla T4', used: 0, total: 2},
-                {name: 'Tesla K40', used: 0, total: 2}
-            ];
-            // var rp = portal.dashboard.getGpuCardList(ct.paramId);
-            // rp.success(function (data) {
-            //     if (data && data.content) {
-            //         gpuCardList = data.content;
-            //     }
-            // });
-            // rp.error(function (data) {
-            //     console.log(data);
-            // });
+            ct.gpuCardList = [];
+            var rp = portal.dashboard.getGpuCardList($scope.main.userTenantGpuId);
+            rp.success(function (data) {
+                if (data && data.content) {
+                    gpuCardList = data.content;
+                }
+            });
+            rp.error(function (data) {
+                console.log(data);
+            });
         };
         // gpu 대시보드 끝
 

@@ -53,7 +53,7 @@ angular.module('gpu.controllers')
         // ct.data.tenantId = "f0a2f4e409254aea82dd748bd2ff458a";
         ct.data.tenantId = $scope.main.userTenantGpu.id;
         //ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantName = $scope.main.userTenantGpu.korName;
+        ct.data.tenantName = $scope.main.userTenantGpu.tenantKorName;
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
@@ -253,6 +253,8 @@ angular.module('gpu.controllers')
                         var createdDate = new Date(serverMain.created);
                         serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                     }
+                    // 20.9.1 by hrit, 모니터링 링크 세팅
+                    serverMain.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + serverMain.name;
                 });
                 if (isServerStatusCheck) {
                     if ($scope.main.reloadTimmer['instanceServerStateList']) {
