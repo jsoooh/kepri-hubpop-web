@@ -349,7 +349,10 @@
 .card-progress-area .tooltip.top .tooltip-arrow {margin-left: -4px; border-width: 5px 4px 0; border-top-color: #888;}
 
 /*보더 속성*/
-.border-right::after {display:block; content:''; width:1px; height:237px; background:#ececec; position:absolute; right:0; top:-20px;}
+.card-border-right::after {display:block; content:''; width:1px; height:237px; background:#ececec; position:absolute; right:0; top:-20px;}
+
+/*대시보드 마지막 박스 보더값 재정의*/
+.dashboard-panel-type3 .border-right:last-child {border-right: 0;}
 
 
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
