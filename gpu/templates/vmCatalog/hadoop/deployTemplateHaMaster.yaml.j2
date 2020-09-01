@@ -17,16 +17,15 @@ parameter_groups:
   - api_end_point
   - provider_subnet
   - hive_password
+  - private_key
 
 parameters:
   image:
     label: "이미지"
     type: string
-    default: CentOS76-Hadoop.raw
   availability_zone:
     label: "가용구역"
     type: string
-    default: zone01
   master_flavor:
     type: string
   master_cnt:
@@ -38,7 +37,6 @@ parameters:
   key_name:
     label: "보안키"
     type: string
-    default: kepri-msa_default
   provider_net:
     label: "provider_net"
     type: string
@@ -55,11 +53,12 @@ parameters:
   root_password:
     label: "root 비밀번호"
     type: string
-    default: crossent12
   hive_password:
-    label: "hive 비밀번호"
+    label: "hive_password"
     type: string
-    default: hive1234
+  private_key:
+    label: "private_key"
+    type: string
 
 resources:
 
@@ -89,7 +88,13 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $private_key: { get_param: private_key }
             $root_password: { get_param: root_password }
+            $hive_password: { get_param: hive_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
             $node{{worker}}_address: { get_attr: [server{{server}}_port, fixed_ips, 0, ip_address] }
@@ -103,7 +108,9 @@ resources:
                   {%- endfor %}
           template: |
             #!/bin/sh
-            echo "01.hadoop HAMaster install start ......7"
+            echo "01.hadoop HAMaster install start ......"
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -113,33 +120,7 @@ resources:
 
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
-            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
-            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
-            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
-            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
-            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
-            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
-            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
-            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
-            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
-            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
-            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
-            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
-            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
-            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
-            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
-            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
-            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
-            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
-            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
-            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
-            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
-            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
-            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
-            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
-            -----END RSA PRIVATE KEY-----
+            $private_key
             EOF
 
             chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
@@ -229,7 +210,7 @@ resources:
             </property>
             <property>
                  <name>ha.zookeeper.quorum</name>
-                 <value>hmaster:2181{%- for worker in range(1,pworker) %} {% set server = worker + 1 %}, hworker-{{worker}}:2181 {%- endfor %}</value>
+                 <value>hmaster:2181{%- for worker in range(1,pworker) %}{% set server = worker + 1 %},hworker-{{worker}}:2181{%- endfor %}</value>
             </property>
             <property>
                 <name>fs.s3a.impl</name>
@@ -362,35 +343,37 @@ resources:
             </property>
             </configuration>
             EOF
-            
+
+            echo "----------config file set end"
+
+            sudo -- sh -c "echo hworker-1 > /home/centos/hadoop/etc/hadoop/slaves"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            sudo -- sh -c "echo hworker-{{worker}} > /home/centos/hadoop/etc/hadoop/slaves"
+            sudo -- sh -c "echo hworker-{{worker}} >> /home/centos/hadoop/etc/hadoop/slaves"
             {%- endfor %}
 
+            echo "##### 03.zookeeper setting start ###########"
             sudo -i -u centos bash << EOF
             source ~/.bashrc
-            echo "##### 03.zookeeper setting start ###########"
             mkdir /home/centos/zookeeper/tmp
             cp /home/centos/zookeeper/conf/zoo_sample.cfg /home/centos/zookeeper/conf/zoo.cfg
-            cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
-            dataDir=/home/centos/zookeeper/tmp
-            server.1=hmaster:2888:3888
+            sudo -- sh -c "echo dataDir=/home/centos/zookeeper/tmp >> /home/centos/zookeeper/conf/zoo.cfg"
+            sudo -- sh -c "echo server.1=hmaster:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            server.{{server}}=hworker-{{worker}}:2888:3888
+            sudo -- sh -c "echo server.{{server}}=hworker-{{worker}}:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- endfor %}
-            EOF
             echo "1" > /home/centos/zookeeper/tmp/myid
             chown centos:centos /home/centos/zookeeper/tmp/myid
             chmod 777 /home/centos/zookeeper/tmp/myid
             EOF
+
             sudo -i -u centos bash << EOF
             source ~/.bashrc
             /home/centos/zookeeper/bin/zkServer.sh start
             echo "##### 03.zookeeper setting end ###########"
             EOF
 
+            echo "#####[00]ZooKeeper all node check #####"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            echo "#####[00]ZooKeeper 모든노드 실행 확인 #####"
             masterRun=1
             while [[ masterRun -eq 1 ]]
             do
@@ -401,42 +384,37 @@ resources:
             done
             echo "zookeeper node{{worker}} active"
             {%- endfor %}
+            echo "#####[00]ZooKeeper all node check end #####"
 
             echo "#####[01]ZooKeeper 초기화 #####"
             sudo su - centos -c "hdfs zkfc -formatZK"
 
-            echo "#####[02]모든 서버에서 journalnode 시작 #####"
+            echo "#####[02]all server  journalnode 시작 #####"
             sudo su - centos -c "ssh hmaster '~/hadoop/sbin/hadoop-daemon.sh start journalnode'"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
             sudo su - centos -c "ssh hworker-{{worker}} '~/hadoop/sbin/hadoop-daemon.sh start journalnode'"
             {%- endfor %}
 
-            echo "#####[03]Namenode 초기화 및 namenode 실행 #####"
+            echo "#####[03]Namenode init and  namenode run  #####"
             sudo su - centos -c "hadoop namenode -format -force "
             sudo su - centos -c "~/hadoop/sbin/hadoop-daemon.sh start namenode "
 
-            echo "#####[04]FailOverController 실행 #####"
+            echo "#####[04]FailOverController run  #####"
             sudo su - centos -c "~/hadoop/sbin/hadoop-daemon.sh start zkfc"
-
             echo "#####[05]Datanode 서버에서 Datanode 시작 #####"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
             sudo su - centos -c "ssh hworker-{{worker}} '~/hadoop/sbin/hadoop-daemon.sh start datanode'"
             {%- endfor %}
 
             echo "#####[06]Standby namenode 서버 실행 #####"
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            sudo su - centos -c "ssh hworker-{{worker}} 'hdfs namenode -bootstrapStandby'"
-            sudo su - centos -c "ssh hworker-{{worker}} '~/hadoop/sbin/hadoop-daemon.sh start namenode'"
-            {%- endfor %}
+            sudo su - centos -c "ssh hworker-1 'hdfs namenode -bootstrapStandby'"
+            sudo su - centos -c "ssh hworker-1 '~/hadoop/sbin/hadoop-daemon.sh start namenode'"
 
             echo "#####[07]Standby namenode FailOverController 실행 #####"
-            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            sudo su - centos -c "ssh hworker-{{worker}} '~/hadoop/sbin/hadoop-daemon.sh start zkfc'"
-            {%- endfor %}
+            sudo su - centos -c "ssh hworker-1 '~/hadoop/sbin/hadoop-daemon.sh start zkfc'"
 
             echo "#####[08]yarn 실행 #####"
             sudo su - centos -c "start-yarn.sh"
-
 
             echo "##### [05]hive setting start ###########"
             echo "mariadb setting start"
@@ -448,7 +426,7 @@ resources:
 
             mysql -u root -p$root_password <<EOF
             create database hive CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY 'hive1234';
+            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY '$hive_password';
             EOF
 
             sudo systemctl enable mariadb
@@ -502,11 +480,11 @@ resources:
                 </property>
                 <property>
                     <name>hbase.zookeeper.quorum</name>
-                    <value>hmaster{%- for worker in range(1,pworker) %} {% set server = worker + 1 %},hworker-{{worker}}{%- endfor %}</value>
+                    <value>hmaster{%- for worker in range(1,pworker) %}{% set server = worker + 1 %},hworker-{{worker}}{%- endfor %}</value>
                 </property>
                 <property>
                     <name>dfs.replication</name>
-                    <value>3</value>
+                    <value>{% set iworker = pworker + 1 %}{{iworker}}</value>
                 </property>
                 <property>
                   <name>hbase.unsafe.stream.capability.enforce</name>
@@ -561,15 +539,21 @@ resources:
 
             echo "##### 02.spark setting end ###########"
 {% endif %}
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-  init_config{{server}}:
+  {%- for worker in range(1,pworker) %} {% set gserver = worker + 1 %}
+  init_config{{gserver}}:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $private_key: { get_param: private_key }
             $root_password: { get_param: root_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
@@ -584,7 +568,7 @@ resources:
                   {%- endfor %}
           template: |
             #!/bin/sh
-            echo "hadoop{{server}} install start"
+            echo "hadoop{{gserver}} install start"
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -594,33 +578,7 @@ resources:
 
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
-            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
-            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
-            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
-            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
-            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
-            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
-            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
-            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
-            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
-            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
-            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
-            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
-            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
-            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
-            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
-            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
-            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
-            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
-            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
-            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
-            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
-            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
-            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
-            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
-            -----END RSA PRIVATE KEY-----
+            $private_key
             EOF
 
             chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
@@ -688,7 +646,7 @@ resources:
             </property>
             <property>
                  <name>ha.zookeeper.quorum</name>
-                 <value>hmaster:2181{%- for worker in range(1,pworker) %} {% set server = worker + 1 %}, hworker-{{worker}}:2181 {%- endfor %}</value>
+                 <value>hmaster:2181{%- for worker in range(1,pworker) %}{% set server = worker + 1 %},hworker-{{worker}}:2181{%- endfor %}</value>
             </property>
             <property>
                 <name>fs.s3a.impl</name>
@@ -757,7 +715,7 @@ resources:
                     </property>
                     <property>
                             <name>dfs.namenode.shared.edits.dir</name>
-                            <value>qjournal://hmaster:8485{%- for worker in range(1,pworker) %}{% set server = worker + 1 %};hworker-{{worker}}:8485{%- endfor $}/hadoop-cluster</value>
+                            <value>qjournal://hmaster:8485{%- for worker in range(1,pworker) %}{% set server = worker + 1 %};hworker-{{worker}}:8485{%- endfor %}/hadoop-cluster</value>
                     </property>
                     <property>
                             <name>dfs.client.failover.proxy.provider.hadoop-cluster</name>
@@ -827,14 +785,17 @@ resources:
             echo "##### 03.zookeeper setting start ###########"
             mkdir /home/centos/zookeeper/tmp
             cp /home/centos/zookeeper/conf/zoo_sample.cfg /home/centos/zookeeper/conf/zoo.cfg
-            cat <<EOF>> /home/centos/zookeeper/conf/zoo.cfg
-            dataDir=/home/centos/zookeeper/tmp
-            server.1=hmaster:2888:3888
+
+            sudo -i -u centos bash << EOF
+            source ~/.bashrc
+            sudo -- sh -c "echo dataDir=/home/centos/zookeeper/tmp >> /home/centos/zookeeper/conf/zoo.cfg"
+            sudo -- sh -c "echo server.1=hmaster:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            server.{{server}}=hworker-{{worker}}:2888:3888
+            sudo -- sh -c "echo server.{{server}}=hworker-{{worker}}:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- endfor %}
             EOF
-            echo "2" > /home/centos/zookeeper/tmp/myid
+
+            echo "{{gserver}}" > /home/centos/zookeeper/tmp/myid
             chown centos:centos /home/centos/zookeeper/tmp/myid
             chmod 777 /home/centos/zookeeper/tmp/myid
             EOF
@@ -845,10 +806,8 @@ resources:
             EOF
 
 {% if hbaseUse %}
-            sudo -i -u centos bash << EOF
-            source ~/.bashrc
             echo "##### 04.hbase setting start ###########"
-            cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
+            VAR1=$(cat <<EOF
             <?xml version="1.0"?>
             <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
             <configuration>
@@ -862,11 +821,11 @@ resources:
                 </property>
                 <property>
                     <name>hbase.zookeeper.quorum</name>
-                    <value>hmaster{%- for worker in range(1,pworker) %} {% set server = worker + 1 %}, hworker-{{worker}}{%- endfor %}</value>
+                    <value>hmaster{%- for worker in range(1,pworker) %}{% set server = worker + 1 %},hworker-{{worker}}{%- endfor %}</value>
                 </property>
                 <property>
                     <name>dfs.replication</name>
-                    <value>3</value>
+                    <value>{% set iworker = pworker + 1 %}{{iworker}}</value>
                 </property>
                 <property>
                   <name>hbase.unsafe.stream.capability.enforce</name>
@@ -878,6 +837,13 @@ resources:
                 </property>
             </configuration>
             EOF
+            )
+
+            cat <<EOF> /home/centos/hbase/conf/hbase-site.xml
+            ${VAR1}
+            EOF
+
+            chown centos:centos /home/centos/hbase/conf/hbase-site.xml
 
             cat <<EOF> /home/centos/hbase/conf/regionservers
             hmaster
@@ -886,13 +852,14 @@ resources:
             {%- endfor %}
             EOF
 
+            chown centos:centos /home/centos/hbase/conf/regionservers
+
             cat <<EOF>> /home/centos/hbase/conf/hbase-env.sh
             export HBASE_MANAGES_ZK=false
             export HBASE_PID_DIR=/home/centos/hbase/pid
             EOF
 
             echo "##### 04.hbase setting end ###########"
-            EOF
 {% endif %}
 {% if sparkUse %}
             echo "##### 02.spark setting start ###########"
@@ -909,13 +876,15 @@ resources:
 
             sudo -i -u centos bash << EOF
             source ~/.bashrc
+            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
             sudo -- sh -c "echo hworker-{{worker}} >> /home/centos/spark/conf/slaves"
-            sudo -- sh -c "echo hworker-2 >> /home/centos/spark/conf/slaves"
+            {%- endfor %}
             /home/centos/spark/sbin/start-slave.sh 'spark://hmaster:7077'
             EOF
 
             echo "##### 02.spark setting end ###########"
   {% endif %}
+
   {%- endfor %}
 
   server1:
@@ -944,4 +913,14 @@ resources:
       user_data_format: RAW
       user_data:
         get_resource: init_config{{server}}
+  {%- endfor %}
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+      - instance: { get_attr: [ server{{server}}, show ] }
+        instancePort: { get_attr: [ server{{server}}_port, show ] }
   {%- endfor %}

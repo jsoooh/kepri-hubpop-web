@@ -17,16 +17,15 @@ parameter_groups:
   - api_end_point
   - provider_subnet
   - hive_password
+  - private_key
 
 parameters:
   image:
     label: "이미지"
     type: string
-    default: CentOS76-Hadoop.raw
   availability_zone:
     label: "가용구역"
     type: string
-    default: zone01
   master_flavor:
     type: string
   master_cnt:
@@ -38,7 +37,6 @@ parameters:
   key_name:
     label: "보안키"
     type: string
-    default: kepri-msa_default
   provider_net:
     label: "provider_net"
     type: string
@@ -53,10 +51,13 @@ parameters:
     type: string
     default: default
   root_password:
-    label: "root 비밀번호"
+    label: "root_password"
     type: string
   hive_password:
-    label: "hive 비밀번호"
+    label: "hive_password"
+    type: string
+  private_key:
+    label: "private_key"
     type: string
 
 resources:
@@ -87,7 +88,13 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $private_key: { get_param: private_key }
             $root_password: { get_param: root_password }
+            $hive_password: { get_param: hive_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
             $node{{worker}}_address: { get_attr: [server{{server}}_port, fixed_ips, 0, ip_address] }
@@ -101,7 +108,9 @@ resources:
                   {%- endfor %}
           template: |
             #!/bin/sh
-            echo "01.hadoop SingleMaster install start ......7"
+            echo "01.hadoop SingleMaster msater install start ......7"
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -111,33 +120,7 @@ resources:
 
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
-            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
-            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
-            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
-            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
-            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
-            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
-            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
-            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
-            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
-            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
-            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
-            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
-            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
-            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
-            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
-            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
-            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
-            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
-            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
-            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
-            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
-            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
-            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
-            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
-            -----END RSA PRIVATE KEY-----
+            $private_key
             EOF
 
             chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
@@ -158,7 +141,7 @@ resources:
               sleep 5
             done
             echo "node{{worker}} active"
-            {%- endfor %} 
+            {%- endfor %}
 
             echo "##### 01.hadoop core setting start ###########"
             echo "[01] host setting"
@@ -292,8 +275,11 @@ resources:
             </configuration>
             EOF
 
+            echo "----------config file set end"
+
+            sudo -- sh -c "echo hworker-1 > /home/centos/hadoop/etc/hadoop/slaves"
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
-            sudo -- sh -c "echo hworker-{{worker}} > /home/centos/hadoop/etc/hadoop/slaves"
+            sudo -- sh -c "echo hworker-{{worker}} >> /home/centos/hadoop/etc/hadoop/slaves"
             {%- endfor %}
 
             echo "#####[02]hdfs namenode -format#####"
@@ -371,11 +357,11 @@ resources:
                 </property>
                 <property>
                     <name>hbase.zookeeper.quorum</name>
-                    <value>hmaster{%- for worker in range(1,pworker) %} {% set server = worker + 1 %}, hworker-{{worker}} {%- endfor %}</value>
+                    <value>hmaster{%- for worker in range(1,pworker) %}{% set server = worker + 1 %},hworker-{{worker}}{%- endfor %}</value>
                 </property>
                 <property>
                     <name>dfs.replication</name>
-                    <value>3</value>
+                    <value>{% set iworker = pworker + 1 %}{{iworker}}/value>
                 </property>
                 <property>
                   <name>hbase.unsafe.stream.capability.enforce</name>
@@ -429,7 +415,7 @@ resources:
 
             mysql -u root -p$root_password <<EOF
             create database hive CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY 'hive1234';
+            GRANT ALL PRIVILEGES ON hive.* To 'hive'@LOCALHOST IDENTIFIED BY '$hive_password';
             EOF
 
             sudo systemctl enable mariadb
@@ -467,6 +453,8 @@ resources:
             sudo su - centos -c "/home/centos/hive/bin/schematool -initSchema -dbType mysql "
             echo "##### [05]hive setting end ###########"
 
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
   {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
   init_config{{server}}:
     type: OS::Heat::SoftwareConfig
@@ -475,6 +463,11 @@ resources:
       config:
         str_replace:
           params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $private_key: { get_param: private_key }
             $root_password: { get_param: root_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
@@ -489,7 +482,9 @@ resources:
                   {%- endfor %}
           template: |
             #!/bin/sh
-            echo "hadoop{{server}} install start"
+            echo "hadoop{{server}} SingleMaster worker{{server}}  install start"
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -499,33 +494,7 @@ resources:
 
 
             cat <<EOF> /home/centos/.ssh/kepri-msa_default.pem
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIEowIBAAKCAQEAtCxfOF2as6oxUTYRS76Ecj2ZKjMEJlBKnTIrcoGADygJP2jL
-            0Wdz7P5XuJnhHeM0NVSiWxJgcYi4/A88hR4QDeVNYrgaqBUwssH6AOtBfq7alBKv
-            B9fQG2VYATdQHK7n2e7NoNYv1sPStIdAPRaGj7agFw+vLY4So6z6Wff/a+E8UxQX
-            Y5gtJFn+yyi/pD7fXU/rpw7hDOdIlPFzkHseT3OxVzIJwIo5unI+5znPRbUTA1m6
-            6xqp1UhdnICL/oh1jWH9A8dFPD2MK0GQQGFBe1RPggMnANVsIwjxusV1a/OUtSbd
-            C3EYumTN79/SqmaMuOgIqHhOkCE2uT2ptFrB4wIDAQABAoIBACaX0pWqRzbw37t7
-            j1zgJFKsKyDE6MCkNjdRxcizQJD+jGyOsAnc1RIQsQ2TuIrEXiyGQniriQkItkcX
-            pGkHNX0kft0EfoE+eL3xmvGTcuYF4kAReHh/m84ieSVZicl7FaKy6kznVDv2mi2d
-            Qv9S0eP6xHPsIiPp6MgyhzW6T3X13pSnBcJA5RurcIFVRwtgmzh/7R+g4nWmu8zG
-            EIGXmMUqYq//b8L0OULODMUtxwB0stq0u/2IYO24L3lJvIZhs7fk7aiv4XoP8eAV
-            Gqfa+6ZBh6B+80nulzCEqT7dgtI9XD8uqzQm3eX+bmd1ndRGOoRGpsU8r31z9vLX
-            coA5Z9ECgYEA7VTtkNekSrGtFufIwtPRj64NrffBjKpj8CICUn+sT6iu49WiInvj
-            34ig++r+oRIKY05S3FHJRVltNFozHZoCBiA+6FB6oAyJgopDZNauGxgThL4yKv75
-            XKR/0jqsqslnWsE+z9pHjchIxLkI/oe9+XZ/MYxletIwFlxq7RDIdhUCgYEAwlh2
-            pePEMLUeQkoMfso7qVBM0ygr61Wd1aGfDIBgCKpJF0hoVc8ZdJT2SfcwIEPdr/kq
-            MtholKApjh1oIehnwpdAOwDieJTjapvLwE/09Is0k2+N87ZBJENqoutP3uG29pQK
-            SsdtasLofkGZIVl5uu6lxEFlDycswGOQOSAXDhcCgYBVd50p6Q5oO736nrPkvYUd
-            OfABM1THRGFDC+xMK2AxO6znrXp68qSoTjqzHfhepvGIu58JaoaR69dw3/7CbUDH
-            Vftxi/HtCzbGBOaqPMlsRmpZBmlopHPGkhLZ8XlW87q9qxPkpFXaUEMsXPpJNzcJ
-            zEuX21h8N49LrjJvdvjJ1QKBgCELN4k3M9lwQifVPVClhAViwN06PFV0JjT3mPpg
-            LXPruCe8SPkmEFbxKPski0tBHsVX4SPqBcYXgVlHiLgTMuk0HFir6tXDwvMScE9P
-            iP+3V4Yl9oXUnDjVOaFfzyG/UQOV4jYauHDpmOw2rRmtg/QTtZ2r3Mn5yDMh+pir
-            6x+bAoGBAOG+mM2mzEBAIVn4IlqxvyTyZ6BoMJYXuQDjmV9hn+38Qo8gkh2gvlcq
-            IDuG0wsEWCAXsXsglpUunADRVtiwJQKss/TsmiX29ahNqUJqf8PRBuk9dE/uda6+
-            YzIkI7s0BHathDIoiwSGtcdJMosbh+kZRIE3jjIejtdaVd5IQU/A
-            -----END RSA PRIVATE KEY-----
+            $private_key
             EOF
 
             chown centos.centos /home/centos/.ssh/kepri-msa_default.pem
@@ -725,11 +694,11 @@ resources:
                 </property>
                 <property>
                     <name>hbase.zookeeper.quorum</name>
-                    <value>hmaster{%- for worker in range(1,pworker) %} {% set server = worker + 1 %}, hworker-{{worker}}{%- endfor %} </value>
+                    <value>hmaster{%- for worker in range(1,pworker) %}{% set server = worker + 1 %},hworker-{{worker}}{%- endfor %}</value>
                 </property>
                 <property>
                     <name>dfs.replication</name>
-                    <value>3</value>
+                    <value>{% set iworker = pworker + 1 %}{{iworker}}</value>
                 </property>
                 <property>
                   <name>hbase.unsafe.stream.capability.enforce</name>
@@ -757,8 +726,11 @@ resources:
             echo "##### 04.hbase setting end ###########"
             EOF
 {% endif %}
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
   {%- endfor %}
-  
+
   server1:
     type: OS::Nova::Server
     properties:
@@ -787,3 +759,12 @@ resources:
         get_resource: init_config{{server}}
   {%- endfor %}
 
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server1, show ] }
+        instancePort: { get_attr: [ server1_port, show ] }
+  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+      - instance: { get_attr: [ server{{server}}, show ] }
+        instancePort: { get_attr: [ server{{server}}_port, show ] }
+  {%- endfor %}

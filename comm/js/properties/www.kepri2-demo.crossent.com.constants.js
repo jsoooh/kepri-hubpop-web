@@ -430,7 +430,8 @@ angular.module('app')
             ]
         },
         startYear: 2019,
-        startMonth: 12
+        startMonth: 12,
+        monitoringUrl: 'http://192.168.0.7:3000/d/hb7fSE0tab/user_project_detail'
     })
     .constant('tenantChartConfig', [
         {

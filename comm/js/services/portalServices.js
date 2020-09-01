@@ -271,7 +271,24 @@ angular.module('portal.services', [])
                 page : 0,
                 size : -1
             };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vms/view', 'GET', getParams));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/lookup', 'GET', getParams));
+        };
+
+        portal.dashboard.getGpuInstanceVmsView = function (tenantid) {
+            var getParams = {
+                tenantId : tenantid,
+                deleteYn : "N",
+                page : 0,
+                size : -1
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/vms/view', 'GET', getParams));
+        };
+
+        portal.dashboard.getGpuCardList = function (tenantid) {
+            var params = {
+                tenantId: tenantId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/gpuUsed', 'GET', params));
         };
 
         /* // 오픈스택에서 테넌트 자원조회
@@ -288,6 +305,13 @@ angular.module('portal.services', [])
                 tenantId : tenantId
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', getParams));
+        };
+        
+        portal.dashboard.getGpuResourceUsedLookup = function (tenantId) {
+            var getParams = {
+                tenantId : tenantId
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', getParams));
         };
 
         portal.dashboard.getOrganizationByName = function (name) {
