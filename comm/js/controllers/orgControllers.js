@@ -186,6 +186,12 @@ angular.module('portal.controllers')
                 teamCode : orgItem.orgId
             };
             var iaasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/check/useYn', 'GET', params));
+
+            params = {
+                teamCode : orgItem.orgId
+            };
+            var gpuPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/check/useYn', 'GET', params));
+
             params = {
                 urlPaths : {
                     "name" : orgItem.orgId
@@ -193,15 +199,21 @@ angular.module('portal.controllers')
             };
             var paasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'GET', params));
             ct.iaasUseYn = "N";
+            ct.gpuUseYn = "N";
             ct.paasAppCnt = 0;
             ct.useServices = "";
             $scope.main.loadingMainBody = true;
-            $q.all([iaasPromise, paasPromise]).then(function (results) {
+            $q.all([iaasPromise, gpuPromise, paasPromise]).then(function (results) {
                 $scope.main.loadingMainBody = false;
                 ct.iaasUseYn = results[0].data.content;
-                ct.paasAppCnt = results[1].data;
+                ct.gpuUseYn = results[1].data.content;
+                ct.paasAppCnt = results[2].data;
                 if (ct.iaasUseYn == "Y") {
                     ct.useServices += "서버 가상화";
+                }
+                if (ct.gpuUseYn == "Y") {
+                    if (ct.useServices != "") ct.useServices += ", ";
+                    ct.useServices += "GPU 서버 가상화";
                 }
                 if (ct.paasAppCnt > 0) {
                     if (ct.useServices != "") ct.useServices += ", ";
@@ -213,6 +225,11 @@ angular.module('portal.controllers')
                     return;
                 }
                 ct.deleteOrgProject(orgItem);
+            }).catch(function(reject) {
+                $scope.main.loadingMainBody = false;
+                common.showDialogAlertHtml('알림','아래 서비스 확인 중 에러가 있습니다. <br>확인 후 진행해 주세요. <br><br>' + reject.config.url, 'warning');
+                console.log("프로젝트 삭제 전 체크 에러 :", reject);
+                return;
             });
         };
 
