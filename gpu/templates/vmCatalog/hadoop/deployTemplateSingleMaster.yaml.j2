@@ -69,7 +69,8 @@ resources:
       network: { get_param: provider_net }
       security_groups: [{ get_param: security_group }]
 
-  {% set pworker =  workerCnt + 1 %}
+  {% set iworkerCnt = workerCnt|int %}  {# string으로 받아서 추가 #}
+  {% set pworker =  iworkerCnt + 1 %}
   {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
 
   server{{server}}_port:
@@ -359,7 +360,7 @@ resources:
                 </property>
                 <property>
                     <name>dfs.replication</name>
-                    <value>{% set iworker = pworker + 1 %}{{iworker}}</value>
+                    <value>3</value>
                 </property>
                 <property>
                   <name>hbase.unsafe.stream.capability.enforce</name>
@@ -453,8 +454,8 @@ resources:
 
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-  {%- for worker in range(1,pworker) %} {% set gserver = worker + 1 %}
-  init_config{{gserver}}:
+  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+  init_config{{server}}:
     type: OS::Heat::SoftwareConfig
     properties:
       group: ungrouped
@@ -480,7 +481,7 @@ resources:
                   {%- endfor %}
           template: |
             #!/bin/sh
-            echo "hadoop{{gserver}} SingleMaster worker{{gserver}}  install start"
+            echo "hadoop{{server}} SingleMaster worker{{server}}  install start"
 
             cat <<EOF>> /etc/ssh/ssh_config
             Port 20022
@@ -660,7 +661,7 @@ resources:
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
             sudo -- sh -c "echo server.{{server}}=hworker-{{worker}}:2888:3888 >> /home/centos/zookeeper/conf/zoo.cfg"
             {%- endfor %}
-            echo "{{gserver}}" > /home/centos/zookeeper/tmp/myid
+            echo "{{server}}" > /home/centos/zookeeper/tmp/myid
             chown centos:centos /home/centos/zookeeper/tmp/myid
             chmod 777 /home/centos/zookeeper/tmp/myid
             EOF
@@ -690,7 +691,7 @@ resources:
                 </property>
                 <property>
                     <name>dfs.replication</name>
-                    <value>{% set iworker = pworker + 1 %}{{iworker}}</value>
+                    <value>3</value>
                 </property>
                 <property>
                   <name>hbase.unsafe.stream.capability.enforce</name>
@@ -764,7 +765,7 @@ outputs:
     value:
       - instance: { get_attr: [ server1, show ] }
         instancePort: { get_attr: [ server1_port, show ] }
-  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+      {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
       - instance: { get_attr: [ server{{server}}, show ] }
         instancePort: { get_attr: [ server{{server}}_port, show ] }
-  {%- endfor %}
+      {%- endfor %}
