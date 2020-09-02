@@ -17,21 +17,22 @@
   3-2. 관리자포탈 메뉴 즐겨찾기 조회
   3-3. 관리자포탈 메뉴 즐겨찾기 추가
   3-4. 관리자포탈 메뉴 즐겨찾기 삭제
+  3-5. 관리자포탈 메뉴 즐겨찾기 조회(하위포함)
+  3-6. 관리자포탈 메뉴 즐겨찾기 추가(하위포함)
+  3-7. 관리자포탈 메뉴 즐겨찾기 삭제(하위포함)
 4. 기타 주의점
   4-1. feather icon이 안나타날 때
 ```
 #### 1. 사용자포탈 URL
-- 신규 개발을 위한 개발서버
-- 사용계정은 kepri-demo 사이트와 동일
 ```
-http://www.kepri2-demo.crossent.com
+http://hubpop.kepco.co.kr
 ```
 #### 2. 사용자포탈 API
 ##### 2-1. 메뉴 목록 조회
 - 호출
     ```
-    $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/menus?token=de26d10dd2294328b937a019c1ddc23b'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/menus?token=de26d10dd2294328b937a019c1ddc23b
+    $ curl -X GET --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/menus?token=de26d10dd2294328b937a019c1ddc23b'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/menus?token=de26d10dd2294328b937a019c1ddc23b
     ```
 - 결과값
     ```
@@ -107,8 +108,8 @@ http://www.kepri2-demo.crossent.com
 ##### 2-2. 메뉴 즐겨찾기 조회
 - 호출
     ```
-    $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b
+    $ curl -X GET --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b
     ```
 - 결과
     ```
@@ -172,8 +173,8 @@ http://www.kepri2-demo.crossent.com
 - 2레벨에서만 진행됨
   - 호출
     ```
-    $ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b&menuId=10302'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b&menuId=10302
+    $ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b&menuId=10302'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b&menuId=10302
     ```
   - 결과
     ```
@@ -269,8 +270,8 @@ http://www.kepri2-demo.crossent.com
 - 2레벨에서만 진행됨
   - 호출
     ```
-    $ curl -X DELETE --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b&menuId=10302'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b&menuId=10302
+    $ curl -X DELETE --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b&menuId=10302'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/user/myMenu?token=de26d10dd2294328b937a019c1ddc23b&menuId=10302
     ```
   - 결과
     ```
@@ -335,8 +336,8 @@ http://www.kepri2-demo.crossent.com
 - 호출
     ```
     #project_code : Cookies PROJECT-CODE 값
-    $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/notification?token=de26d10dd2294328b937a019c1ddc23b&project_code=42-125'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/notification?token=de26d10dd2294328b937a019c1ddc23b&project_code=42-125
+    $ curl -X GET --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/notification?token=de26d10dd2294328b937a019c1ddc23b&project_code=42-125'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/notification?token=de26d10dd2294328b937a019c1ddc23b&project_code=42-125
     ```
 - 결과 : 7일 이내 전달된 notification에 대해서만 신규 notification으로 조회됨 
     ```
@@ -369,19 +370,19 @@ http://www.kepri2-demo.crossent.com
 ##### 2-6. 좌측하단 사용자 관련 팝업 호출 url
 - 비밀번호 설정
     ```
-    http://www.kepri2-demo.crossent.com/#/comm/memberEdit/password
+    http://hubpop.kepco.co.kr/#/comm/memberEdit/password
     ```
 - 회원탈퇴
     ```
-    http://www.kepri2-demo.crossent.com/#/comm/memberEdit/signout
+    http://hubpop.kepco.co.kr/#/comm/memberEdit/signout
     ```
 
 #### 3. 관리자포탈 API
 ##### 3-1. 관리자포탈 메뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
 - 호출
     ```
-    $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/adminMenus/temp'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/adminMenus/temp
+    $ curl -X GET --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/adminMenus/temp'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/adminMenus/temp
     ```
 - 결과값
     ```
@@ -514,7 +515,7 @@ http://www.kepri2-demo.crossent.com
 - 호출
     ```
     #token : Cookies HubPop-ToKen 값
-    $ curl -X GET --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa'
+    $ curl -X GET --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa'
     ```
 - 결과값
     ```
@@ -537,8 +538,8 @@ http://www.kepri2-demo.crossent.com
   - 호출
     ```
     #token : Cookies HubPop-ToKen 값
-    $ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa&menuId=HUB20201'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20404
+    $ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa&menuId=HUB20201'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20404
     ```
   - 결과값
     ```
@@ -564,8 +565,8 @@ http://www.kepri2-demo.crossent.com
 - 호출
     ```
     #token : Cookies HubPop-ToKen 값
-    $ curl -X DELETE --header 'Accept: application/json' 'http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa&menuId=HUB20201'
-    http://www.kepri2-demo.crossent.com/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20404
+    $ curl -X DELETE --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu?token=aaaaaaaaaaaaaaa&menuId=HUB20201'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu?token=6f80229fd68440e1b98ceef80cea6e89&menuId=HUB20404
     ```
 - 결과값
     ```
@@ -577,6 +578,360 @@ http://www.kepri2-demo.crossent.com
         },
         {
           "menuId": "HUB20201"
+        }
+      ],
+      "resultCode": "0",
+      "resultMsg": "NORMAL_CODE"
+    }
+    ```
+##### 3-5. 관리자포탈 메뉴 즐겨찾기 조회(하위포함)
+- 2레벨에서만 진행됨. 하위메뉴 포함한 전체 메뉴 정보 조회
+- 호출
+    ```
+    #token : Cookies HubPop-ToKen 값
+    $ curl -X GET --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu/all?token=aaaaaaaaaa'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu/all?token=aaaaaaaaaa
+    ```
+- 결과값
+    ```
+    {
+      "itemCount": 6,
+      "items": [
+        {
+          "parentNm": "공통 메뉴",
+          "menuOrder": 14,
+          "level": 2,
+          "serviceNm": "로그인 이력 조회",
+          "useYn": "Y",
+          "id": "HUB20104",
+          "iconPath": "ico_unlock",
+          "urlPath": "/cloud/#/comm/login/history",
+          "parentId": "HUB201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "서버 가상화",
+          "menuOrder": 18,
+          "level": 2,
+          "serviceNm": "어드민 관리",
+          "useYn": "Y",
+          "id": "HUB20201",
+          "iconPath": "ico_usersetting",
+          "urlPath": null,
+          "parentId": "HUB202",
+          "urlParam": null
+        },
+        {
+          "parentNm": "어드민 관리",
+          "menuOrder": 19,
+          "level": 3,
+          "serviceNm": "가상서버 이미지",
+          "useYn": "Y",
+          "id": "HUB2020101",
+          "iconPath": null,
+          "urlPath": "/cloud/#/iaas/server",
+          "parentId": "HUB20201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "어드민 관리",
+          "menuOrder": 20,
+          "level": 3,
+          "serviceNm": "사용자 백업 이미지",
+          "useYn": "Y",
+          "id": "HUB2020102",
+          "iconPath": null,
+          "urlPath": "/cloud/#/iaas/admin/user",
+          "parentId": "HUB20201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "어드민 관리",
+          "menuOrder": 21,
+          "level": 3,
+          "serviceNm": "가상서버 사양",
+          "useYn": "Y",
+          "id": "HUB2020103",
+          "iconPath": null,
+          "urlPath": "/cloud/#/iaas/admin/spec",
+          "parentId": "HUB20201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "어드민 관리",
+          "menuOrder": 22,
+          "level": 3,
+          "serviceNm": "기본 정보 관리",
+          "useYn": "Y",
+          "id": "HUB2020104",
+          "iconPath": null,
+          "urlPath": "/cloud/#/iaas/tenant/baseInfo",
+          "parentId": "HUB20201",
+          "urlParam": null
+        }
+      ],
+      "resultCode": "0",
+      "resultMsg": "NORMAL_CODE"
+    }
+    ```
+##### 3-6. 관리자포탈 메뉴 즐겨찾기 추가(하위포함)
+- 2레벨에서만 진행됨. 하위메뉴 포함한 전체 메뉴 정보 조회
+- 호출
+    ```
+    #token : Cookies HubPop-ToKen 값
+    $ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu/all?token=aaaaaaaaaa&menuId=HUB20103'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu/all?token=aaaaaaaaaa&menuId=HUB20103
+    ```
+- 결과값
+    ```
+    {
+      "itemCount": 12,
+      "items": [
+        {
+          "parentNm": "공통 메뉴",
+          "menuOrder": 14,
+          "level": 2,
+          "serviceNm": "로그인 이력 조회",
+          "useYn": "Y",
+          "id": "HUB20104",
+          "iconPath": "ico_unlock",
+          "urlPath": "/cloud/#/comm/login/history",
+          "parentId": "HUB201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "서버 가상화",
+          "menuOrder": 18,
+          "level": 2,
+          "serviceNm": "어드민 관리",
+          "useYn": "Y",
+          "id": "HUB20201",
+          "iconPath": "ico_usersetting",
+          "urlPath": null,
+          "parentId": "HUB202",
+          "urlParam": null
+        },
+        {
+          "parentNm": "어드민 관리",
+          "menuOrder": 19,
+          "level": 3,
+          "serviceNm": "가상서버 이미지",
+          "useYn": "Y",
+          "id": "HUB2020101",
+          "iconPath": null,
+          "urlPath": "/cloud/#/iaas/server",
+          "parentId": "HUB20201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "어드민 관리",
+          "menuOrder": 20,
+          "level": 3,
+          "serviceNm": "사용자 백업 이미지",
+          "useYn": "Y",
+          "id": "HUB2020102",
+          "iconPath": null,
+          "urlPath": "/cloud/#/iaas/admin/user",
+          "parentId": "HUB20201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "어드민 관리",
+          "menuOrder": 21,
+          "level": 3,
+          "serviceNm": "가상서버 사양",
+          "useYn": "Y",
+          "id": "HUB2020103",
+          "iconPath": null,
+          "urlPath": "/cloud/#/iaas/admin/spec",
+          "parentId": "HUB20201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "어드민 관리",
+          "menuOrder": 22,
+          "level": 3,
+          "serviceNm": "기본 정보 관리",
+          "useYn": "Y",
+          "id": "HUB2020104",
+          "iconPath": null,
+          "urlPath": "/cloud/#/iaas/tenant/baseInfo",
+          "parentId": "HUB20201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "공통 메뉴",
+          "menuOrder": 7,
+          "level": 2,
+          "serviceNm": "프로젝트 관리",
+          "useYn": "Y",
+          "id": "HUB20103",
+          "iconPath": "ico_script",
+          "urlPath": null,
+          "parentId": "HUB201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 8,
+          "level": 3,
+          "serviceNm": "쿼터 항목 관리",
+          "useYn": "Y",
+          "id": "HUB2010301",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/quota_items",
+          "parentId": "HUB20103",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 9,
+          "level": 3,
+          "serviceNm": "참조플랜 관리",
+          "useYn": "Y",
+          "id": "HUB2010302",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/quota_plans",
+          "parentId": "HUB20103",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 10,
+          "level": 3,
+          "serviceNm": "프로젝트 관리",
+          "useYn": "Y",
+          "id": "HUB2010303",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/org/projects",
+          "parentId": "HUB20103",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 11,
+          "level": 3,
+          "serviceNm": "프로젝트 쿼터 현황",
+          "useYn": "Y",
+          "id": "HUB2010304",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/quota/states",
+          "parentId": "HUB20103",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 13,
+          "level": 3,
+          "serviceNm": "프로젝트 쿼터 승인",
+          "useYn": "Y",
+          "id": "HUB2010306",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/quota/project/apprv",
+          "parentId": "HUB20103",
+          "urlParam": null
+        }
+      ],
+      "resultCode": "0",
+      "resultMsg": "NORMAL_CODE"
+    }
+    ```
+##### 3-7. 관리자포탈 메뉴 즐겨찾기 삭제(하위포함)
+- 2레벨에서만 진행됨. 하위메뉴 포함한 전체 메뉴 정보 조회
+- 호출
+    ```
+    #token : Cookies HubPop-ToKen 값
+    $ curl -X DELETE --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu/all?token=aaaaaaaaaa&menuId=HUB20201'
+    http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/admin/myMenu/all?token=aaaaaaaaaa&menuId=HUB20201
+    ```
+- 결과값
+    ```
+    {
+      "itemCount": 7,
+      "items": [
+        {
+          "parentNm": "공통 메뉴",
+          "menuOrder": 14,
+          "level": 2,
+          "serviceNm": "로그인 이력 조회",
+          "useYn": "Y",
+          "id": "HUB20104",
+          "iconPath": "ico_unlock",
+          "urlPath": "/cloud/#/comm/login/history",
+          "parentId": "HUB201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "공통 메뉴",
+          "menuOrder": 7,
+          "level": 2,
+          "serviceNm": "프로젝트 관리",
+          "useYn": "Y",
+          "id": "HUB20103",
+          "iconPath": "ico_script",
+          "urlPath": null,
+          "parentId": "HUB201",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 8,
+          "level": 3,
+          "serviceNm": "쿼터 항목 관리",
+          "useYn": "Y",
+          "id": "HUB2010301",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/quota_items",
+          "parentId": "HUB20103",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 9,
+          "level": 3,
+          "serviceNm": "참조플랜 관리",
+          "useYn": "Y",
+          "id": "HUB2010302",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/quota_plans",
+          "parentId": "HUB20103",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 10,
+          "level": 3,
+          "serviceNm": "프로젝트 관리",
+          "useYn": "Y",
+          "id": "HUB2010303",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/org/projects",
+          "parentId": "HUB20103",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 11,
+          "level": 3,
+          "serviceNm": "프로젝트 쿼터 현황",
+          "useYn": "Y",
+          "id": "HUB2010304",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/quota/states",
+          "parentId": "HUB20103",
+          "urlParam": null
+        },
+        {
+          "parentNm": "프로젝트 관리",
+          "menuOrder": 13,
+          "level": 3,
+          "serviceNm": "프로젝트 쿼터 승인",
+          "useYn": "Y",
+          "id": "HUB2010306",
+          "iconPath": null,
+          "urlPath": "/cloud/#/comm/quota/project/apprv",
+          "parentId": "HUB20103",
+          "urlParam": null
         }
       ],
       "resultCode": "0",
