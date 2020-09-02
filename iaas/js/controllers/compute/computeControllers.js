@@ -181,7 +181,6 @@ angular.module('iaas.controllers')
                 return;
             }
             $scope.main.loadingMainBody = true;
-            ct.fnGetServerMainListLoading = false;
             var param = {
                 tenantId : ct.data.tenantId,
                 queryType : 'list'
@@ -238,7 +237,6 @@ angular.module('iaas.controllers')
             });
             returnPromise.finally(function () {
                 ct.pageFirstLoad = false;
-                ct.fnGetServerMainListLoading = true;
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -755,8 +753,10 @@ angular.module('iaas.controllers')
 
         // lb 전체 리스트 조회
         ct.fngetLbList = function() {
-            $scope.main.loadingMainBody = true;
-            ct.fngetLbListLoading = false;
+            var pageFirstLoad = angular.copy(ct.pageFirstLoad);
+            if (!pageFirstLoad) {    // 로드밸런서는 페이지 첫 로드 때 로딩을 사용안함
+                $scope.main.loadingMainBody = true;
+            }
             var param = {
                 tenantId : ct.data.tenantId
             };
@@ -782,8 +782,9 @@ angular.module('iaas.controllers')
                 common.showAlert("message",data.message);
             });
             returnPromise.finally(function () {
-                $scope.main.loadingMainBody = false;
-                ct.fngetLbListLoading = true;
+                if (!pageFirstLoad) {   // 로드밸런서는 페이지 첫 로드 때 로딩을 사용안함
+                    $scope.main.loadingMainBody = false;
+                }
             });
         };
 
@@ -974,47 +975,33 @@ angular.module('iaas.controllers')
                     }
                 });
             });
-            rp.finally(function () {
-            });
-        };
-        
-        // 페이지 첫 로딩
-        ct.firstPageLoading = function () {
-            if (!ct.data.tenantId) {
-                /*var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
-                showAlert.then(function () {
-                    $scope.main.goToPage("/");
-                });*/
-                return;
-            }
-            ct.fnGetServerMainList();
-            ct.fngetLbList();
-
-            // 함수 로딩 체크
-            var delay = 100;                // 딜레이 100ms
-            var maxCount = 10 * 60 * 3;     // 최대 횟수1800번(3분)
-            var firstLoadingLoop = $interval(function () {
-                $scope.main.loadingMainBody = true;
-                if (maxCount <= 0 || (ct.fnGetServerMainListLoading == true && ct.fngetLbListLoading == true)) {
-                    $interval.cancel(firstLoadingLoop);
-                    $scope.main.loadingMainBody = false;
-                }
-                maxCount--;
-            }, delay);
         };
 
         // 인스턴스 자원 사용량 조회
         var instancesDataLoop = $interval(function () {
-            if ($location.url() != "/iaas/compute") {  // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
+            // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
+            if ($location.url() != "/iaas/compute") {
                 $interval.cancel(instancesDataLoop);
             }
             ct.fnGetInstancesData();
-            /*angular.forEach(ct.serverMainList, function (server) {
+            /*
+            angular.forEach(ct.serverMainList, function (server) {
                 ct.fnSetInstanceUseRate(server);
-            });*/
+            });
+            */
         }, 1000 * 60);
 
-        ct.firstPageLoading();
+        if (ct.data.tenantId) { // 페이지 첫 로딩
+            ct.fnGetServerMainList();
+            ct.fngetLbList();
+        } else {
+            /*
+            var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
+                showAlert.then(function () {
+                    $scope.main.goToPage("/");
+                });
+            */
+        }
     })
     .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);

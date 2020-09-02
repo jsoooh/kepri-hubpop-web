@@ -10,8 +10,18 @@
 			<div class="text-right">
 				<!-- 검색 -->
 				<div class="form-group inline-block margin-bottom-0">
-					<input ng-if="contents.tabIndex == 0" type="text" class="form-control form-control-md" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schInstanceFilterText">
-					<input ng-if="contents.tabIndex == 1" type="text" class="form-control form-control-md" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schStorageFilterText">
+					<div class="input-icon-type2 icon-right" ng-if="contents.tabIndex == 0">
+						<input type="text" class="form-control form-control-md" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schInstanceFilterText" >
+						<span class="input-icon-addon" ng-click="contents.schInstanceFilterText = ''">
+							<i class="xi-close"></i>
+						</span>
+					</div>
+					<div class="input-icon-type2 icon-right" ng-if="contents.tabIndex == 1">
+						<input type="text" class="form-control form-control-md" placeholder="백업 이미지 검색" style="width:300px;" ng-model="contents.schStorageFilterText">
+						<span class="input-icon-addon" ng-click="contents.schStorageFilterText = ''">
+							<i class="xi-close"></i>
+						</span>
+					</div>
 				</div>
 				<!-- <button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schInstanceFilterText = ''; contents.schStorageFilterText = ''"><span class="ico">지우기</span></button> -->
 				<!-- //검색 -->
@@ -216,9 +226,9 @@
 		<!-- tab1 cnt -->
 		<div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 1}">
 			<!-- 백업이미지 관리 리스트(카드형) -->
-			<div class="card-list-wrap" ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length  > 0 && contents.listType == 'image'">
+			<div class="card-list-wrap" ng-if="(contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }).length  > 0 && contents.listType == 'image'">
 				<div class="row">
-					<div class="col-md-4" ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }">
+					<div class="col-md-4" ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }">
 						<div class="card card-type1">
 							<div class="card-header">
 								<div class="card-info-area">
@@ -296,7 +306,7 @@
 			<!-- //백업이미지 관리 리스트(카드형) -->
 			
 			<!-- 디스크 백업이미지 관리 리스트(테이블형) -->
-			<section class="panel panel-bordered" ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length > 0 && contents.listType == 'list'">
+			<section class="panel panel-bordered" ng-if="(contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }).length > 0 && contents.listType == 'list'">
 				<div class="panel-body padding-0">
 					<div class="table-wrap border-0">
 						<table class="table table-hover" cellspacing="0" width="100%">
@@ -319,7 +329,7 @@
 								<th scope="col">관리</th>
 							</thead>
 							<tbody>
-								<tr ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }">
+								<tr ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }">
 									<td class="text-left">{{storageSnapshot.snapshotName}}</td>
 									<td class="text-center">{{storageSnapshot.volumeName}}</td>
 									<td class="text-center">{{storageSnapshot.size | displayVolume:'GB'}}</td>
@@ -355,7 +365,7 @@
 			<!-- //디스크 백업이미지 관리 리스트(테이블형) -->
 			
 			<!-- 생성된 서버 백업 이미지 없음 -->
-			<div class="text-center blank-page" ng-if="!contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
+			<div class="text-center blank-page" ng-if="!contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
 				<div class="img">
 					<img src="../assets/img/icon/servers1.png">
 				</div>
@@ -366,7 +376,7 @@
 			<!-- //생성된 서버 백업 이미지 없음 -->
 			
 			<!-- 검색결과 없음 -->
-			<div class="text-center blank-page" ng-if="contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
+			<div class="text-center blank-page" ng-if="contents.loadingStorageSnapshotList && (contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }).length == 0">
 				<div class="img">
 					<img src="../assets/img/icon/approval.png">
 				</div>
