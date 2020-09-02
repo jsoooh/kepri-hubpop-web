@@ -1561,6 +1561,11 @@ angular.module('gpu.controllers')
             });
         };
 
+        ct.fn.specTypeChange = function () {
+            ct.sltImageId = '';
+            ct.fn.getAvailabilityZoneList();
+        };
+
         ct.fn.getGpuCardList = function() {
             $scope.main.loadingMainBody = true;
 

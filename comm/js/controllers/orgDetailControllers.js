@@ -509,7 +509,7 @@ angular.module('portal.controllers')
             }
 
             ct.gpuDataReq4 = serJsonList  ;
-            var chartArea = 'chart-area3';
+            var chartArea = 'chart-area-gpu3';
             var tmpValue = '%';
 
             //CPU Chart Color
@@ -1113,7 +1113,7 @@ angular.module('portal.controllers')
         //////////////////////////////// CPU 상태  ///////////////////////////////////
         // GPU 인스턴스 CPU 상태
         ct.gpuCpuStatusChart = function () {
-            var container = document.getElementById('chart-area2');
+            var container = document.getElementById('chart-area-gpu2');
             var data = {
                 categories: ['2018.01', '2018.06', '2018.12'],
                 series: {
@@ -1219,8 +1219,8 @@ angular.module('portal.controllers')
             ct.gpuInstances = [];
             var promise = portal.dashboard.getGpuInstanceVmsView(tenantId);
             promise.success(function (data, status, headers) {
-                if (data && data.content && data.content.content && data.content.content.length > 0) {
-                    ct.gpuInstances = data.content.content;
+                if (data && data.content && data.content.length > 0) {
+                    ct.gpuInstances = data.content;
                     angular.forEach(ct.gpuInstances, function (instance, instanceKey) {
                         ct.gpuInstanceStateCount.TOTAL++;
                         if (instance.vmState == "active") {
@@ -1260,11 +1260,17 @@ angular.module('portal.controllers')
                         ct.gpuInstanceUsage.disk.maxQuota = ct.gpuResourceUsed.maxResource.instanceDiskGigabytes;
                         ct.gpuInstanceUsage.disk.usedQuota = ct.gpuResourceUsed.usedResource.instanceDiskGigabytes;
                         ct.gpuInstanceUsage.disk.percentUsedQuota = (ct.gpuInstanceUsage.disk.usedQuota/ct.gpuInstanceUsage.disk.maxQuota) * 100;
-
+                        
                         // 할당 디스크 용량 Giga Byte
                         ct.gpuInstanceUsage.volume.maxQuota = ct.gpuResourceUsed.maxResource.volumeGigabytes;
                         ct.gpuInstanceUsage.volume.usedQuota = ct.gpuResourceUsed.usedResource.volumeGigabytes;
                         ct.gpuInstanceUsage.volume.percentUsedQuota = (ct.gpuInstanceUsage.volume.usedQuota/ct.gpuInstanceUsage.volume.maxQuota) * 100;
+
+                        if (ct.gpuInstanceUsage.volume.maxQuota == 0) {
+                            ct.gpuInstanceUsage.volume.maxQuota = ct.gpuInstanceUsage.disk.maxQuota;
+                            ct.gpuInstanceUsage.volume.usedQuota = ct.gpuInstanceUsage.disk.usedQuota;
+                            ct.gpuInstanceUsage.volume.percentUsedQuota = ct.gpuInstanceUsage.disk.percentUsedQuota;
+                        }
 
                         var chartData = {
                             code: "0000",
@@ -1292,24 +1298,16 @@ angular.module('portal.controllers')
         };
 
         ct.getGpuCardList = function () {
-            ct.gpuCardList = [
-                {name: 'quadro RTX4000', used: 1, total: 4},
-                {name: 'quadro P400', used: 0, total: 2},
-                {name: 'Tesla V100 16', used: 0, total: 2},
-                {name: 'Tesla V100 32', used: 0, total: 2},
-                {name: 'Tesla P100', used: 0, total: 2},
-                {name: 'Tesla T4', used: 0, total: 2},
-                {name: 'Tesla K40', used: 0, total: 2}
-            ];
-            // var rp = portal.dashboard.getGpuCardList($scope.main.userTenantGpuId);
-            // rp.success(function (data) {
-            //     if (data && data.content) {
-            //         gpuCardList = data.content;
-            //     }
-            // });
-            // rp.error(function (data) {
-            //     console.log(data);
-            // });
+            ct.gpuCardList = [];
+            var rp = portal.dashboard.getGpuCardList($scope.main.userTenantGpuId);
+            rp.success(function (data) {
+                if (data && data.content) {
+                    ct.gpuCardList = data.content;
+                }
+            });
+            rp.error(function (data) {
+                console.log(data);
+            });
         };
         // gpu 대시보드 끝
 
@@ -1459,12 +1457,11 @@ angular.module('portal.controllers')
             }
             
             // GPU 정보
-            if ($scope.main.userTenantId) {
-                console.log(ct.paramId, $scope.main.userTenantId);
+            if ($scope.main.userTenantGpuId) {
                 ct.gpuCpuStatusChart();
                 ct.getGpuCardList();
-                ct.getGpuInstanceVmsView($scope.main.userTenantId);
-                ct.getGpuResourceUsedLookup($scope.main.userTenantId);
+                ct.getGpuInstanceVmsView($scope.main.userTenantGpuId);
+                ct.getGpuResourceUsedLookup($scope.main.userTenantGpuId);
             }
 
             // Pipeline 정보
