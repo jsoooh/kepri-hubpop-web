@@ -834,11 +834,34 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/loadbalancers', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.lbServiceLists = data.content;
+                ct.lbIdList = [];
+                ct.lbPortMembers =[];
                 //console.log("ct.lbServiceLists : ", ct.lbServiceLists);
                 ct.iaasLbPortMembers = [];
                 ct.connectServer = "";
                 if (ct.lbServiceLists.length != 0) {
                     ct.loadingLbList = true;
+                }
+
+                var lenServiceList = ct.lbServiceLists.length;
+                for (var i = 0; i < lenServiceList; i++) {
+                    var iaasLbPorts =  ct.lbServiceLists[i].iaasLbPorts;
+                    if (iaasLbPorts != null) {
+                        for (var e = 0; e < iaasLbPorts.length; e++) {
+                            var iaasLbPort = iaasLbPorts[e];
+                            if (iaasLbPort != null) {
+                                ct.lbServiceLists[i].iaasLbPorts[e].activeCnt = 0;
+                                var iaasLbMembers = ct.lbServiceLists[i].iaasLbPortMembers;
+                                if (iaasLbMembers != null) {
+                                    for (var j = 0; j < iaasLbMembers.length; j++) {
+                                        if (iaasLbPort.protocolPort == iaasLbMembers[j].protocolPort && iaasLbMembers[j].operatingStatus == 'ONLINE') {
+                                            ct.lbServiceLists[i].iaasLbPorts[e].activeCnt++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 angular.forEach(ct.lbServiceLists, function (lbList) {
@@ -856,6 +879,9 @@ angular.module('gpu.controllers')
                 $scope.main.loadingMainBody = false;
             });
         };
+
+
+
 
         // 부하분산 관리 - 접속 IP 복사
         ct.fn.copyConnectLbInfoToClipboard = function (loadbalancer) {

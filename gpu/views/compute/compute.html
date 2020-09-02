@@ -658,8 +658,8 @@
                                             <td>
                                                 <div class="tbl_cont_state">
                                                     <ul>
-                                                        <li><span class="s_count active">{{ iaasLbPort.memberCnt }}</span><span class="txt">활성</span></li>
-                                                        <li><span class="s_count inactive">0</span><span class="txt">비활성</span></li>
+                                                        <li><span class="s_count active">{{ iaasLbPort.activeCnt }}</span><span class="txt">정상</span></li>
+                                                        <li><span class="s_count inactive">{{iaasLbPort.memberCnt - iaasLbPort.activeCnt}}</span><span class="txt">비정상</span></li>
                                                     </ul>
                                                 </div>
                                             </td>
