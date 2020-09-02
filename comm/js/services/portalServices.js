@@ -281,10 +281,10 @@ angular.module('portal.services', [])
                 page : 0,
                 size : -1
             };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/vms/view', 'GET', getParams));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/lookup', 'GET', getParams));
         };
 
-        portal.dashboard.getGpuCardList = function (tenantid) {
+        portal.dashboard.getGpuCardList = function (tenantId) {
             var params = {
                 tenantId: tenantId
             };
