@@ -97,17 +97,17 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         // gpuUserTenantId
-        /*common.getGpuUserTenantId = function () {
-            return cookies.getUserTenantId();
+        common.getGpuUserTenantId = function () {
+            return cookies.getGpuUserTenantId();
         };
 
-        common.setGpuUserTenantId = function (userTenantId) {
-            cookies.setUserTenantId(userTenantId);
+        common.setGpuUserTenantId = function (gpuUserTenantId) {
+            cookies.setGpuUserTenantId(gpuUserTenantId);
         };
 
         common.clearGpuUserTenantId = function () {
-            cookies.clearUserTenantId();
-        };*/
+            cookies.clearGpuUserTenantId();
+        };
 
         // company
         common.getRegionChangToPath = function () {
@@ -3360,17 +3360,17 @@ angular.module('common.services', ['LocalStorageModule'])
         };
 
         // gpuUserTenantId
-        /*cookies.getGpuUserTenantId = function () {
+        cookies.getGpuUserTenantId = function () {
             return $cookies.get(_GPU_TENANT_ID_COOKIE_NAME_);
         };
 
-        cookies.setGpuUserTenantId = function (userTenantId) {
-            $cookies.put(_GPU_TENANT_ID_COOKIE_NAME_, userTenantId, cookiesOption);
+        cookies.setGpuUserTenantId = function (gpuUserTenantId) {
+            $cookies.put(_GPU_TENANT_ID_COOKIE_NAME_, gpuUserTenantId, cookiesOption);
         };
 
         cookies.clearGpuUserTenantId = function () {
             $cookies.remove(_GPU_TENANT_ID_COOKIE_NAME_, cookiesOption);
-        };*/
+        };
 
         cookies.getLeftMenuShow = function () {
             return $cookies.get(_LEFT_MENU_SHOW_COOKIE_NAME_);

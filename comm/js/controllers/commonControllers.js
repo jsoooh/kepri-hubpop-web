@@ -738,6 +738,9 @@ angular.module('common.controllers', [])
                 mc.userTenantGpu = userTenant2;
                 mc.userTenantGpuId = userTenant2.tenantId;
                 mc.userTenantGpu.id = userTenant2.tenantId;
+                common.setGpuUserTenantId(mc.userTenantGpuId);
+            } else {
+                common.clearGpuUserTenantId();
             }
         };
 
