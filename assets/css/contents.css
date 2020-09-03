@@ -210,7 +210,7 @@
 .dashboard-body .chartWrap .bar_chart_data .cht_val span:last-child {right:0px;}
 
 .app-info-area .panel-heading {padding:10px 20px;}
-.app-info-area .round-img {width: 45px; height: 45px; line-height:44px; color:#fff; background:#99b7c1; border-radius: 50%; overflow: hidden; margin-top:5px; margin-right: 10px;}
+.app-info-area .round-img {width: 45px; height: 45px; line-height:44px; color:#fff; background:#99b7c1; border-radius: 50%; overflow: hidden; margin-top:10px; margin-right: 10px;}
 .app-info-area .round-img img {display: block; margin: 0 auto; min-width: 100%; min-height: 100%;}
 /* .app-info-area .thum_box {display:block; width:45px; height:45px; color:#fff; border-radius:50%; background:#99b7c1; overflow:hidden; line-height:44px;} */
 .app-info-area .round-img.img_line {background:none; border:1px solid #e3e3e3;}
@@ -262,6 +262,13 @@
 .panel-bordered.zoom .panel_body {height:95%;}
 .panel-bordered .btn-zoom::before {display: inline-block; content: '\e954'; font-family: 'xeicon'; font-size:25px;}
 .panel-bordered.zoom .btn-zoom::before {content: '\e955';}
+
+/*앱로그 iframe 확장 시 사이즈 지정*/
+.panel-bordered.zoom .panel-body iframe {height: 2500px !important;}
+.panel-bordered.zoom .scroll-content {height: auto !important;}
+.panel-bordered.zoom .panel-body .jspContainer {height: auto !important; overflow:unset !important;}
+.panel-bordered.zoom .panel-body .jspScrollable {overflow:unset !important;}
+.panel-bordered.zoom .panel-body .scroll-pane {overflow:unset !important;}
 
 .page-detail .panel-body {height:400px;}
 
@@ -337,10 +344,6 @@
 
 .txt_long {display:inline-block; width:130px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; word-break: break-all; vertical-align:middle;}
 
-/*앱관리(이름변경)*/
-.renameWrap {width:auto;}
-.renameWrap .sdBtnWrap {position:absolute; top:1px; width:84px; }
-.renameWrap .sdBtnWrap .btn {height:36px; border-radius:0;}
 
 /* progress */
 .card-progress-area .progress {position: relative; width: 12px; height:162px; margin-bottom: 0px; vertical-align: bottom; box-shadow: none; background-color: #eee; overflow: inherit;}
@@ -354,6 +357,28 @@
 /*대시보드 마지막 박스 보더값 재정의*/
 .dashboard-panel-type3 .border-right:last-child {border-right: 0;}
 
+/*앱관리(이름변경)*/
+.renameWrap {width:auto;}
+.renameWrap .sdBtnWrap {position:absolute; top:1px; width:84px; }
+.renameWrap .sdBtnWrap .btn {height:36px; border-radius:0;}
+
+/* paas rename save&delete */
+input[name='renameApp'], input[name='renameSev'], input[name='renameInst'], input[name='renameServ']{padding-right:95px;display:inline-block;position:absolute;z-index:200;}
+input[name='renameApp']{position:relative;width:240px;}
+input[name='renameServ']{position:relative;width:245px;}
+input[name='renameInst']{width:450px; padding-right:64px; margin-left:0; top:15px;}
+input[name='renameSev']{position:relative; width:100%;}
+
+.panel .panel-heading .renameInstWrap {position:relative; height:50px; margin-top:16px; }
+.panel .panel-heading .renameInstWrap h3.panel-title {padding:0 0 0 5px;}
+.panel .panel-heading .renameInstWrap input[name='renameInst'] {position:absolute; top:0;}
+.panel .panel-heading .renameWrap {position:relative; top:-50px; width:508px; }
+.panel .panel-heading .renameWrap .sdBtnWrap {position:absolute; top:1px; width:84px; }
+.panel .panel-heading .renameWrap .sdBtnWrap .btn {height:36px; border-radius:0; margin-left:0;}
+
+.panel .panel-heading .left-bar {padding-left: 15px; display: inline-block; font-size: 13px; position: relative;}
+.panel .panel-heading .left-bar::before {content: ''; width: 1px; height: 11px; background: #b3b7be; position: absolute; left: 6px; top: 5px;}
+.panel .panel-heading .left-bar b {margin-right: 5px;}
 
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
