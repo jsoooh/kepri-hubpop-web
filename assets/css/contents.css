@@ -266,6 +266,7 @@
 /*앱로그 iframe 확장 시 사이즈 지정*/
 .panel-bordered.zoom .panel-body iframe {height: 2500px !important;}
 .panel-bordered.zoom .scroll-content {height: auto !important;}
+.panel-bordered.zoom .scroll-content .mCSB_container > div {height: auto !important;}
 .panel-bordered.zoom .panel-body .jspContainer {height: auto !important; overflow:unset !important;}
 .panel-bordered.zoom .panel-body .jspScrollable {overflow:unset !important;}
 .panel-bordered.zoom .panel-body .scroll-pane {overflow:unset !important;}
