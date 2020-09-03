@@ -18,12 +18,13 @@ angular.module('gpu.controllers')
             {key: "spark", value: "Spark : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), spark(1.6.3)"}
         ];
         ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
-
-        ct.data.bucketType = "defined";
-        ct.data.deployType = "sMaster";
+        ct.workerCnts = [{key: 1, value: "1개"}, {key: 2, value: "2개"},{key: 3, value: "3개"}, {key: 4, value: "4개"},{key: 5, value: "5개"}, {key: 6, value: "6개"},{key: 7, value: "7개"}, {key: 8, value: "8개"},{key: 9, value: "9개"}, {key: 10, value: "10개"},
+                         {key: 10, value: "10개"}, {key: 12, value: "12개"},{key: 13, value: "13개"}, {key: 14, value: "14개"},{key: 15, value: "15개"}, {key: 16, value: "16개"},{key: 17, value: "17개"}, {key: 18, value: "18개"},{key: 19, value: "19개"}, {key: 20, value: "20개"},];
+        //ct.data.bucketType = "defined";
+        //ct.data.deployType = "sMaster";
         ct.data.nodeType = "cluster";
-        ct.data.masterCnt = 1;
-        ct.data.workerCnt = 2;
+        ct.data.masterCnt = ct.masterCnts;
+        ct.data.workerCnt = ct.workerCnts;
         ct.data.type = "core";
 
         // 테스트
@@ -292,12 +293,12 @@ angular.module('gpu.controllers')
                 ct.data.deployType = "standalone";
             }else if(ct.data.nodeType == 'cluster') {
                 // 마스터 구성 (단일노드 마스터)
-                if (ct.data.masterCnt == 1) {
+                if (ct.masterCnts == 1) {
                     console.log(" singleMaster !!!!!!!!!!");
                     vmCatalogDeploy.deployTemplates = "sMaster";
                     ct.data.deployType = "sMaster";
                     // 마스터 구성 (이중노드 마스터)
-                } else if (ct.data.masterCnt == 2) {
+                } else if (ct.masterCnts == 2) {
                     console.log(" multiMaster !!!!!!!!!!");
                     vmCatalogDeploy.deployTemplates = "dMaster";
                     ct.data.deployType = "dMaster";

@@ -84,7 +84,8 @@
                             </div>
                         </div>
                         <ul ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="img_count" ng-class="{ 'imgType1': vmCatalogDeploy.deployServerCount == 1,  'imgType2': vmCatalogDeploy.deployServerCount == 2,  'imgType3': vmCatalogDeploy.deployServerCount == 3 }">
-                            <li ng-repeat="(key, server) in ( vmCatalogDeploy.servers | filter: { instance : '!null' } )">
+<!--                            <li ng-repeat="(key, server) in ( vmCatalogDeploy.servers | filter: { instance : '!null' } )">-->
+                            <li>
                                 <img ng-src="images/thum/im_thum_centos_300.png" >
                             </li>
                         </ul>
