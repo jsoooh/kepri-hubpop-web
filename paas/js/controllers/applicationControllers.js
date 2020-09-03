@@ -1371,8 +1371,47 @@ angular.module('paas.controllers')
 
         var originName = "";
 
-        //자바 상세 인스턴스 이름 변경
+        //자바 상세 인스턴스 이름 변경(변경 소스: 200902 howkiki0623)
         ct.renameInst = function () {
+            var nameP = $(".renameInst").parents('.panel-heading').find('.panel-title');
+            originName = nameP.text();//현재 앱 이름 저장
+            var el = "<div class='renameWrap'><div class='sdBtnWrap'><button type='button' name='button' class='btn btn-ico-saveName-s only-ico updateName' title='이름저장' ng-click='saveReName();'><i class='xi-save'></i></button><button type='button' name='button' class='btn btn-ico-delName-s only-ico updateName' title='변경취소' ng-click='cancelReName();'><i class='xi-close'></i></button></div></div>";
+            var compiledElement = $compile(el)($scope);
+            nameP.contents().unwrap().wrap("<input type='text' name='renameInst' value='"+originName+"' class='form-control'/>");
+            $(".renameInst").parents(".panel-heading").append(compiledElement);
+        };
+
+        $scope.saveReName = function () {
+            var newName = $('input[name=renameInst]').val();
+
+            if (newName.length < 3) {
+                common.showAlert("", "최소 3자 이상이어야 합니다.0 < contents.app.routes.length");
+                return;
+            }
+
+            $scope.main.loadingMainBody = true;
+            var appPromise = applicationService.updateAppNameAction(ct.appGuid, newName);
+            appPromise.success(function (data) {
+                $state.go($state.current, {}, {reload: true});
+                $scope.main.loadingMainBody = false;
+            });
+            appPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        $scope.cancelReName = function () {
+            var nameP = $(".sdBtnWrap").parents('.panel-heading').find('.form-control');
+            var name01 = nameP.text();//현재 앱 이름 저장
+            //console.log(name01);
+            var el = "<h3 class='panel-title'></h3>";
+            var compiledElement = $compile(el)($scope);
+            nameP.contents().unwrap().wrap(compiledElement);
+            $(".updateName").remove();
+        };
+        
+      //자바 상세 인스턴스 이름 변경(기존 소스)
+      /*  ct.renameInst = function () {
             var nameP = $(".renameInst").parents('.cBox-hd').find('.c-tit');
             originName = nameP.text();//현재 앱 이름 저장
             var el = "<div class='sdBtnWrap'><button type='button' name='button' class='btn btn-ico-saveName-s only-ico updateName' ng-click='saveReName();' title='이름저장' style='width: 32px;'><span class='ico'>이름저장</span></button><button type='button' name='button' class='btn btn-ico-delName-s only-ico updateName' ng-click='cancelReName();' title='변경취소' style='width: 32px;'><span class='ico'>변경취소</span></button></div>";
@@ -1408,7 +1447,7 @@ angular.module('paas.controllers')
             var compiledElement = $compile(el)($scope);
             nameP.contents().unwrap().wrap(compiledElement);
             $(".updateName").remove();
-        };
+        };*/
 
         // 인스턴스 재시작
         ct.instanceRestart = function (guid, index) {
