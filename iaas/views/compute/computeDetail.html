@@ -145,14 +145,16 @@
 	}
 </style>
 
-
+<!-- 서버 정보 -->
 <section class="panel panel-bordered app-info-area">
 	<div class="panel-heading">
 		<div class="row">
 			<div class="col-md-6">
-				<div class="round-img pull-left">
-					<img ng-if="contents.instance.image.icon" ng-src="data:{{ contents.instance.image.contentType }}; base64, {{ contents.instance.image.icon }}" class="logo" alt="">
-					<img ng-if="!contents.instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="">
+				<div class="round-img img_line pull-left" ng-if="contents.instance.image.icon">
+					<img ng-src="data:{{ contents.instance.image.contentType }}; base64, {{ contents.instance.image.icon }}" class="logo" alt="">
+				</div>
+				<div class="round-img pull-left" ng-if="!contents.instance.image.icon">
+					<img src="images/thum/im_logo_compute.png" class="logo" alt="">
 				</div>
 				<div class="pull-left">
 					<h3 class="panel-title padding-left-5">
@@ -356,8 +358,9 @@
 		</div>
 	</div>
 </section>
+<!-- //서버 정보 -->
 
-
+<!-- 디스크 연결 정보 -->
 <section class="panel panel-bordered">
 	<div class="panel-heading">
 		<div class="row">
@@ -376,7 +379,7 @@
 					<ul>
 						<li class="col-md-3" ng-repeat="volume in contents.instanceVolList">
 							<div class="in">
-								<div class="col-sm-4">
+								<div class="col-sm-3">
 									<div class="img-size85">
 										<img src="../images/ico_hard2.png" alt="">
 									</div>
@@ -391,19 +394,21 @@
 									</div>
 									<div class="grey-500 margin-top-5">{{volume.size}}GB</div>
 								</div>
+								<div class="col-sm-1"></div>
 							</div>
 						</li>
 					</ul>
 				</div>
 			</div>
-            <p class="padding-vertical-20" ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
-                연결 디스크 정보가 없습니다.
-            </p>
+			<p class="padding-vertical-20" ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
+				연결 디스크 정보가 없습니다.
+			</p>
 		</div>
 	</div>
 </section>
+<!-- //디스크 연결 정보 -->
 
-
+<!-- 탭영역 -->
 <!-- //Nav tabs -->
 <ul class="nav nav-tabs nav-tabs-btn nav-tabs-lg">
 	<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">서비스 도메인</a></li>
@@ -414,7 +419,6 @@
 		<li ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('virtualMonit');">가상머신 모니터링</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'alarmEvent'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('alarmEvent');">알람 이벤트</a></li>
 </ul>
-
 
 <!-- Tab panes -->
 <div class="tab-content inst padding-top-30 page-detail">
@@ -1131,3 +1135,4 @@
 
 </div>
 <!-- //Tab panes -->
+<!-- 탭영역 -->
