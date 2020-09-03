@@ -611,6 +611,18 @@ angular.module('common.controllers', [])
             //mc.hideTitle = false;
         };
 
+        //메뉴 즐겨찾기 조회
+        mc.getMyMenus = function () {
+            var promise = portal.menu.getMyMenuList();
+            promise.success(function (data) {
+                mc.myMenus = data.items;
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+            });
+        };
+
         // PortalOrg 변경 처리
         mc.changePortalOrg = function(portalOrg) {
             mc.setPortalOrg(portalOrg);
@@ -1665,24 +1677,6 @@ angular.module('common.controllers', [])
             mc.noticeList = notices;
             portal.notice.setNoticeList(mc);
         };
-
-        //메뉴 즐겨찾기 조회
-        mc.getMyMenus = function () {
-            var promise = portal.menu.getMyMenuList();
-            promise.success(function (data) {
-                mc.myMenus = data.items;
-            });
-            promise.error(function (data, status, headers) {
-            });
-            promise.finally(function (data, status, headers) {
-            });
-            /* sync 변경
-            if (promise && promise.status == 200 && angular.isObject(promise.data) && angular.isArray(promise.data.items)) {
-                mc.myMenus = promise.data.items;
-                //console.log("mc.myMenus : ", mc.myMenus);
-            }*/
-        };
-        //mc.getMyMenus();
 
         //전체 메뉴 화면에서 메뉴 즐겨찾기 여부 확인
         mc.checkMyMenuByAllMenu = function (menuId) {
