@@ -665,6 +665,8 @@ angular.module('gpu.controllers')
         ct.fn.getKeypairList(ct.tenantId);
         ct.fn.getStackNames(ct.tenantId);
         ct.fn.getDeployNames(ct.tenantId);
+        ct.fn.checkPasswordValidation(ct.rootPassword);
+        ct.fn.checkConfirmPasswordValidation(ct.rootPassword, ct.rootConfirmPassword);
 
         var allResourceMax = $q.all([resourceDefer.promise, specListDefer.promise]);
         allResourceMax.then(function (datas) {
