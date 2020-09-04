@@ -19,12 +19,11 @@ angular.module('gpu.controllers')
         ];
         ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
         ct.workerCnts = [{key: 1, value: "1개"}, {key: 2, value: "2개"},{key: 3, value: "3개"}, {key: 4, value: "4개"},{key: 5, value: "5개"}, {key: 6, value: "6개"},{key: 7, value: "7개"}, {key: 8, value: "8개"},{key: 9, value: "9개"}, {key: 10, value: "10개"},
-                         {key: 11, value: "11개"}, {key: 12, value: "12개"},{key: 13, value: "13개"}, {key: 14, value: "14개"},{key: 15, value: "15개"}, {key: 16, value: "16개"},{key: 17, value: "17개"}, {key: 18, value: "18개"},{key: 19, value: "19개"}, {key: 20, value: "20개"},];
-        ct.data.bucketType = "defined";
-        //ct.data.deployType = "sMaster";
-        //ct.data.nodeType = "single";
-        //ct.data.masterCnt = 1;
-        //ct.data.workerCnt = 2;
+                         {key: 11, value: "11개"}, {key: 12, value: "12개"},{key: 13, value: "13개"}, {key: 14, value: "14개"},{key: 15, value: "15개"}, {key: 16, value: "16개"},{key: 17, value: "17개"}, {key: 18, value: "18개"},{key: 19, value: "19개"}, {key: 20, value: "20개"}];
+        //ct.data.bucketType = "defined";
+        ct.data.nodeType = "cluster";
+        ct.data.masterCnt = 1; // default
+        ct.data.workerCnt = 2; // default
         ct.data.type = "core";
 
         // 테스트
@@ -36,10 +35,10 @@ angular.module('gpu.controllers')
             ct.data.mysqlRootConfirmPassword = "Crossent!234";
             ct.data.mysqlHivePassword = "Hive!234";
             ct.data.mysqlHiveConfirmPassword = "Hive!234";
-            //ct.data.endPoint = ct.endPoint;
-            //ct.data.accessKey = ct.accessKey;
-            //ct.data.secretKey = ct.secretKey;
-            //ct.data.bucketName = "bucketName";
+            ct.data.endPoint = "s3EndPoint";
+            ct.data.accessKey = "s3AccessKey";
+            ct.data.secretKey = "s3SecretKey";
+            ct.data.bucketName = "bucketName";
         }
 
 
@@ -217,7 +216,6 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.changeNodeType = function (nodeType) {
-            console.log(nodeType);
             ct.data.nodeType = nodeType;
         };
 
@@ -235,7 +233,6 @@ angular.module('gpu.controllers')
             promise2.success(function () {
                 //callBackFuncion(data);
                 console.log('create Bucket success  !!! ');
-                common.showAlertSuccessHtml("버킷 생성 완료!");
             });
             promise2.error(function (data, status, headers) {
                 console.log('create Bucket error  !!! ');
@@ -287,21 +284,20 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.createVmCatalogDeploy = function () {
-
             if (!ct.fn.commCheckFormValidity(subPage)) return;
-            console.log(" commCheckFormValidity 111>>>>>>>>>>>>>>>>!"+ct.data.deployType);
+
             if(ct.data.nodeType == 'single') {
                 console.log(" standalone !!!!!!!!!!");
                 vmCatalogDeploy.deployTemplates = "standalone";
                 ct.data.deployType = "standalone";
             }else if(ct.data.nodeType == 'cluster') {
                 // 마스터 구성 (단일노드 마스터)
-                if (ct.masterCnts == 1) {
+                if (ct.data.masterCnt == 1) {
                     console.log(" singleMaster !!!!!!!!!!");
                     vmCatalogDeploy.deployTemplates = "sMaster";
                     ct.data.deployType = "sMaster";
                     // 마스터 구성 (이중노드 마스터)
-                } else if (ct.masterCnts == 2) {
+                } else if (ct.data.masterCnt == 2) {
                     console.log(" multiMaster !!!!!!!!!!");
                     vmCatalogDeploy.deployTemplates = "dMaster";
                     ct.data.deployType = "dMaster";
@@ -312,24 +308,7 @@ angular.module('gpu.controllers')
             ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
 
-        // objectStorage 접속정보 조회 추가
-        ct.data.tenantId = $scope.main.userTenantGpuId;
-        ct.fn.getSendSecretInfoList = function() {
-            $scope.main.loadingMainBody = true;
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/sendSecretInfo', 'GET', {tenantId:ct.data.tenantId,containerName:ct.containerName}, 'application/x-www-form-urlencoded');
-            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/sendSecretInfo', 'GET', {tenantId:ct.data.tenantId}, 'application/x-www-form-urlencoded');
-            returnPromise.success(function (data, status, headers) {
-                if (data.content) {
-                    ct.sendSecretInfoList = data.content.secret
-                }
-            });
-            returnPromise.error(function (data, status, headers) {
-                common.showAlert("message",data.message);
-                $scope.main.loadingMainBody = false;
-            });
-        };
-        ct.fn.getSendSecretInfoList();
-
         ct.fn.loadPage();
+
     })
 ;
