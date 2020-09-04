@@ -287,9 +287,9 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.createVmCatalogDeploy = function () {
-
+            console.log(" commCheckFormValidity 000>>>>>>>>>>>>>>>>!"+ct.data.nodeType);
             if (!ct.fn.commCheckFormValidity(subPage)) return;
-            console.log(" commCheckFormValidity 111>>>>>>>>>>>>>>>>!"+ct.data.deployType);
+            console.log(" commCheckFormValidity 111>>>>>>>>>>>>>>>>!"+ct.data.nodeType);
             if(ct.data.nodeType == 'single') {
                 console.log(" standalone !!!!!!!!!!");
                 vmCatalogDeploy.deployTemplates = "standalone";
@@ -308,7 +308,7 @@ angular.module('gpu.controllers')
                 }
             }
 
-            console.log(" commCheckFormValidity >>>>>>>>>>>>>>>>!"+ct.data.deployType);
+            console.log(" commCheckFormValidity >>>>>>>>>>>>>>>>!"+ct.data.nodeType);
             ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
 
