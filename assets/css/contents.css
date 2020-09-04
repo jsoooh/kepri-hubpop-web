@@ -142,7 +142,7 @@
 
 
 /*툴팁 type2(bootstrap 제공 tooltip 재정의)*/
-.t_tip_bx {position:absolute; z-index:1; display:inline-block; width:unset;}
+.t_tip_bx {position:absolute; z-index:1; display:inline-block; width:auto;}
 .t_tip_bx a.info-icon-tooltip:active {background:#e3e3e3;}
 .t_tip_bx .tooltip {left:0 !important;}
 .t_tip_bx .tooltip.right .tooltip-arrow {top:50%; left: -1px; margin-top: -5px; width:13px; height:12px; background:url("../../images/tooltip_type2_arrow.png") no-repeat left center; border:0 !important;}
@@ -245,7 +245,7 @@
 
 .detail-info .list-dot > li b {display:inline-block; width:100px;}
 .detail-info .list-dot > li .txt {display:inline-block;}
-.detail-info .list-dot > li button {vertical-align:unset;}
+.detail-info .list-dot > li button {vertical-align:baseline;}
 
 /*서버상세*/
 .appCnt-vol.strgList .ul-volume{width:100%;}
@@ -383,7 +383,7 @@ input[name='renameSev']{position:relative; width:100%;}
 
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
-.nav-tabs + .tab-content {background-color:unset; border:0; padding:0;}
+.nav-tabs + .tab-content {background-color:transparent; border:0; padding:0;}
 .modal-content {border:0;}
 .modal-header {padding:15px 20px;}
 .modal-title {color:#fff; font-size:18px;}

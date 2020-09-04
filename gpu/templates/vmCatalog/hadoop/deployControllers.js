@@ -35,10 +35,10 @@ angular.module('gpu.controllers')
             ct.data.mysqlRootConfirmPassword = "Crossent!234";
             ct.data.mysqlHivePassword = "Hive!234";
             ct.data.mysqlHiveConfirmPassword = "Hive!234";
-            ct.data.endPoint = "s3EndPoint";
-            ct.data.accessKey = "s3AccessKey";
-            ct.data.secretKey = "s3SecretKey";
-            ct.data.bucketName = "bucketName";
+            //ct.data.endPoint = "s3EndPoint";
+            //ct.data.accessKey = "s3AccessKey";
+            //ct.data.secretKey = "s3SecretKey";
+            //ct.data.bucketName = "bucketName";
         }
 
 
@@ -226,6 +226,7 @@ angular.module('gpu.controllers')
         // 하둡 오브젝트 스토리지 버킷 생성
         ct.fn.createBucket = function(bucketName) {
            console.log('create Bucket start!!! ');
+           common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
             // 페이지 로드
 
             let promise2;
@@ -307,6 +308,26 @@ angular.module('gpu.controllers')
             console.log(" commCheckFormValidity >>>>>>>>>>>>>>>>!"+ct.data.deployType);
             ct.fn.loadTemplateAndCallAction(ct.data.deployType, subPage.fn.setTocDeployAction);
         };
+
+        // objectStorage 접속정보 조회 추가
+        ct.data.tenantId = $scope.main.userTenantGpuId;
+        ct.fn.getSendSecretInfoList = function() {
+            $scope.main.loadingMainBody = true;
+            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/sendSecretInfo', 'GET', {tenantId:ct.data.tenantId,containerName:ct.containerName}, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/sendSecretInfo', 'GET', {tenantId:ct.data.tenantId}, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                if (data.content) {
+                    ct.sendSecretInfoList = data.content.secret
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+        if (ct.data.tenantId) {
+            ct.fn.getSendSecretInfoList();
+        }
 
         ct.fn.loadPage();
 
