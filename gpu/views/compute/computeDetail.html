@@ -222,7 +222,7 @@
 						<strong class="tit">IP<button type="button" tooltip-class="" tooltip-placement="top" uib-tooltip-html="'외부 통신이 가능한 IP'"><span class="ico_info"></span></button></strong>
 						<div class="txt">{{contents.instance.fixedIp}}</div>
 					</li>
-					<li ng-if="contents.instance.image.osType != 'windows'">
+					<li ng-if="contents.instance.image.osType != 'windows' && contents.instance.keypair.privateKeyYn == 'Y'">
 						<strong class="tit">키페어</strong>
 						<div class="txt">{{contents.instance.keypair.name}}<button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></div>
 					</li>
@@ -233,8 +233,8 @@
 					<li ng-show="!((contents.instance.spec.type == 'GPU' && contents.instance.gpuMonitoringYn == 'N') || contents.instance.vmMonitoringYn == 'N')">
 						<strong class="tit">모니터링</strong>
 						<div>
-							<a href="http://naver.com" class="ext_link txt" target="_blank">모니터링 바로가기</a>
-							<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard('http://naver.com')">
+							<a href="{{ contents.instance.monitoringLink }}" class="ext_link txt" target="_blank">모니터링 바로가기</a>
+							<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(contents.instance.monitoringLink)">
 								<span class="ico_sm ico_copy"></span>
 							</button>
 						</div>

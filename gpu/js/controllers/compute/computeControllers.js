@@ -807,7 +807,9 @@ angular.module('gpu.controllers')
             } else if (instance.image.osType == 'windows') {
                 var rdpConnectUrl = (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + ct.rdpConnectPort : '';
                 var rdpDomain = instance.rdpDomain ? instance.rdpDomain : '';
-                var copyUrl = rdpConnectUrl ? rdpConnectUrl : rdpDomain;
+                var fixedIp = instance.fixedIp;
+                console.log(rdpConnectUrl, rdpDomain, fixedIp);
+                var copyUrl = rdpConnectUrl ? rdpConnectUrl : (rdpDomain ? rdpDomain : fixedIp);
                 if (copyUrl) {
                     common.copyToClipboard(copyUrl);
                     $scope.main.copyToClipboard(copyUrl, '"' + copyUrl + '"가 클립보드에 복사 되었습니다.');
