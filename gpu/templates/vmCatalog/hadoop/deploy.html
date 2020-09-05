@@ -78,13 +78,13 @@
                                     <tbody>
                                     <tr>
                                         <th><i class="i_star"></i> S3 endpoint</th>
-                                        <td><input type="hidden" name="s3EndPoint" class="form-control" maxlength="50" ng-model="contents.data.endPoint" validation="" value="{{contents.sendSecretInfoList.s3RadosEndPoint}}" > {{contents.sendSecretInfoList.s3RadosEndPoint}} </td>
+                                        <td><input type="text" name="s3EndPoint" class="form-control" maxlength="50" ng-model="contents.data.s3EndPoint" validation="" value="{{contents.sendSecretInfoList.s3RadosEndPoint}}" > {{contents.sendSecretInfoList.s3RadosEndPoint}} </td>
                                         <th><i class="i_star"></i> S3 access key</th>
-                                        <td><input type="hidden" name="s3AccessKey" class="form-control" maxlength="50" ng-model="contents.data.accessKey" validation="" value="{{contents.sendSecretInfoList.s3AccessKey}}" > {{contents.sendSecretInfoList.s3AccessKey}} </td>
+                                        <td><input type="text" name="s3AccessKey" class="form-control" maxlength="50" ng-model="contents.data.s3AccessKey" validation="" value="{{contents.sendSecretInfoList.s3AccessKey}}" > {{contents.sendSecretInfoList.s3AccessKey}} </td>
                                     </tr>
                                     <tr >
                                         <th><i class="i_star"></i> S3 secret key</th>
-                                        <td><input type="hidden" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.secretKey" validation="" value="{{contents.sendSecretInfoList.s3SecreteAccessKey}}" > {{contents.sendSecretInfoList.s3SecreteAccessKey}} </td>
+                                        <td><input type="text" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.s3SecretKey" validation="" value="{{contents.sendSecretInfoList.s3SecreteAccessKey}}" > {{contents.sendSecretInfoList.s3SecreteAccessKey}} </td>
                                         <th><i class="i_star"></i> 버킷명</th>
                                         <td><input type="text" name="bucketName" class="form-control" maxlength="50" ng-model="contents.data.bucketName" validation="" placeholder="버킷명을 입력하세요." ></td>
                                     </tr>

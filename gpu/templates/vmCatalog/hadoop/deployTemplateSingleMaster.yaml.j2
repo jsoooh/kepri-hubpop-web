@@ -18,6 +18,12 @@ parameter_groups:
   - provider_subnet
   - hive_password
   - private_key
+  - spark_use
+  - hbase_use
+  - s3_endpoint
+  - s3_accessKey
+  - s3_secretKey
+  - s3_bucket_name
 
 parameters:
   image:
@@ -58,6 +64,19 @@ parameters:
     type: string
   private_key:
     label: "private_key"
+    type: string
+  spark_use:
+    label: "spark_use"
+    type: string
+  hbase_use:
+    type: string
+  s3_endpoint:
+    type: string
+  s3_accessKey:
+    type: string
+  s3_secretKey:
+    type: string
+  s3_bucket_name:
     type: string
 
 resources:

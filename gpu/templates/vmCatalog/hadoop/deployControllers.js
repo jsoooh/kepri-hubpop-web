@@ -247,18 +247,30 @@ angular.module('gpu.controllers')
             if(ct.data.type == 'core') { // core 선택 경우
                 vmCatalogDeploy.context.hbaseUse = false;
                 vmCatalogDeploy.context.sparkUse = false;
+                vmCatalogDeploy.parameters.spark_use = false;
+                vmCatalogDeploy.parameters.hbase_use = false;
             } else if (ct.data.type == 'hbase') { // hbase 선택 경우
                 vmCatalogDeploy.context.hbaseUse = true;
                 vmCatalogDeploy.context.sparkUse = false;
+                vmCatalogDeploy.parameters.spark_use = false;
+                vmCatalogDeploy.parameters.hbase_use = true;
             } else { // spark 선택 경우
                 vmCatalogDeploy.context.sparkUse = true;
+                vmCatalogDeploy.parameters.spark_use = true;
                 vmCatalogDeploy.context.hbaseUse = false;
+                vmCatalogDeploy.parameters.hbase_use = false;
             }
 
             vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
             vmCatalogDeploy.workerUse = false;
             vmCatalogDeploy.parameters.root_password = ct.data.mysqlRootPassword;
             vmCatalogDeploy.parameters.hive_password = ct.data.mysqlHivePassword;
+
+            vmCatalogDeploy.parameters.s3_endpoint = ct.data.s3EndPoint;
+            vmCatalogDeploy.parameters.s3_accessKey = ct.data.s3AccessKey;
+            vmCatalogDeploy.parameters.s3_secretKey = ct.data.s3SecretKey;
+            vmCatalogDeploy.parameters.s3_bucket_name = ct.data.bucketName;
+console.log(">>>>>s3EndPoint="+ct.data.s3EndPoint+"/bucketName="+ct.data.bucketName);
 
             if(ct.data.nodeType == 'single') {
                 vmCatalogDeploy.workerUse = false;
@@ -317,7 +329,10 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/sendSecretInfo', 'GET', {tenantId:ct.data.tenantId}, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 if (data.content) {
-                    ct.sendSecretInfoList = data.content.secret
+                    ct.sendSecretInfoList = data.content.secret;
+                    ct.data.s3EndPoint = ct.sendSecretInfoList.s3RadosEndPoint;
+                    ct.data.s3AccessKey = ct.sendSecretInfoList.s3AccessKey;
+                    ct.data.s3SecretKey = ct.sendSecretInfoList.s3SecreteAccessKey;
                 }
             });
             returnPromise.error(function (data, status, headers) {
