@@ -263,7 +263,7 @@ angular.module('gpu.controllers')
             if(ct.data.nodeType == 'single') {
                 vmCatalogDeploy.workerUse = false;
                 vmCatalogDeploy.deployTemplates = "standalone";
-                vmCatalogDeploy.parameters.master_flavor = ct.data.workerFlavor;
+                vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
 
             }else if(ct.data.nodeType == 'cluster') {
                 vmCatalogDeploy.workerUse = true;

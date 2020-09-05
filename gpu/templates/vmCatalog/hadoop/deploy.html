@@ -24,7 +24,7 @@
                         <li>
                             <div class="pnb_tit">
                                 <i class="i_star"></i> <span class="pnb_t_txt">Mysql 비밀번호</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'최소 6 자 이상이어야 한다. 필수 입력값니다.'"><span class="ico_info"></span></button></div>
+                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'최소 6자 이상이어야 합니다. 필수 입력값입니다.'"><span class="ico_info"></span></button></div>
                             </div>
                             <div class="tbw type1 mt20">
                                 <table class="table">
@@ -39,13 +39,13 @@
                                             <th><i class="i_star"></i> root 비밀번호</th>
                                             <td><input type="password" name="mysqlRootPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlRootPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
                                             <th><i class="i_star"></i> root 비밀번호 확인</th>
-                                            <td><input type="password" name="mysqlRootConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlRootConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.mysqlRootPassword, contents.data.mysqlRootConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                            <td><input type="password" name="mysqlRootConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlRootConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.mysqlRootPassword, contents.data.mysqlRootConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
                                         </tr>
                                         <tr>
                                             <th><i class="i_star"></i> hive 비밀번호</th>
                                             <td><input type="password" name="mysqlHivePassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlHivePassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
                                             <th><i class="i_star"></i> hive 비밀번호 확인</th>
-                                            <td><input type="password" name="mysqlHiveConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlHiveConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.mysqlHivePassword, contents.data.mysqlHiveConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                            <td><input type="password" name="mysqlHiveConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlHiveConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.mysqlHivePassword, contents.data.mysqlHiveConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -56,17 +56,17 @@
                                 <i class="i_star"></i> <span class="pnb_t_txt">오브젝트 스토리지 선택</span>
                                 <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'오브젝트 스토리지를 선택한다.<br/>'"><span class="ico_info"></span></button></div>
                             </div>
-                            <div class="pl10 mt10">
+                            <!--<div class="pl10 mt10">
                                 <span class="pnb_stit">- 유형  : </span>
                                 <div class="radio radio-inline">
                                     <input type="radio" name="bucketType" id="defined_bucket" value="server" ng-model="contents.data.bucketType" ng-value="'defined'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" ng-checked="'defined'">
                                     <label for="defined_bucket" class="label">정의된 버킷</label>
                                 </div>
-                                <!--<div class="radio radio-inline">
+                                &lt;!&ndash;<div class="radio radio-inline">
                                     <input type="radio" name="bucketType" id="customized_bucket" value="image" ng-model="contents.data.bucketType" ng-value="'customized'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" ng-checked="'customized'">
                                     <label for="customized_bucket" class="label">사용자 정의</label>
-                                </div>-->
-                            </div>
+                                </div>&ndash;&gt;
+                            </div>-->
                             <div class="tbw type1 mt20">
                                 <table class="table">
                                     <colgroup>
