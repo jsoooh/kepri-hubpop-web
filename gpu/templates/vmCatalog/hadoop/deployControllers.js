@@ -226,7 +226,6 @@ angular.module('gpu.controllers')
         // 하둡 오브젝트 스토리지 버킷 생성
         ct.fn.createBucket = function(bucketName) {
            console.log('create Bucket start!!! ');
-           common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
             // 페이지 로드
 
             let promise2;
@@ -234,6 +233,9 @@ angular.module('gpu.controllers')
             promise2.success(function () {
                 //callBackFuncion(data);
                 console.log('create Bucket success  !!! ');
+                common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
+                common.showAlertSuccessHtml("한번만 생성 가능합니다.");
+                ct.fn.createBucket = "switch";
             });
             promise2.error(function (data, status, headers) {
                 console.log('create Bucket error  !!! ');
