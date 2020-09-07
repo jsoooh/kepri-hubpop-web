@@ -1,12 +1,11 @@
 heat_template_version: '2018-08-31'
 
 description: hadoop standalone template
+
+parameter_groups:
 - parameters:
   - image
   - master_flavor
-  - worker_flavor
-  - master_cnt
-  - worker_cnt
   - availability_zone
   - key_name
   - provider_net
@@ -15,7 +14,6 @@ description: hadoop standalone template
   - api_end_point
   - provider_subnet
   - hive_password
-  - private_key
   - spark_use
   - hbase_use
   - s3_endpoint

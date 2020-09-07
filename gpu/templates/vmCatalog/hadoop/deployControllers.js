@@ -114,6 +114,7 @@ angular.module('gpu.controllers')
         // spec loading 체크
         ct.masterSpecDisabledAllSetting = false;
         ct.fn.defaultSelectMasterSpec = function() {
+
             if (ct.masterSpecMinDisabledSetting) {
                 ct.masterSpecDisabledAllSetting = true;
                 var sltSpec = null;
@@ -130,6 +131,8 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.selectMasterSpec = function(sltSpec) {
+            console.log("selectMasterSpec!!!")
+
             if (!ct.masterSpecDisabledAllSetting || sltSpec.disabled) return;
             if (sltSpec && sltSpec.uuid) {
                 ct.sltMasterSpec = angular.copy(sltSpec);
@@ -169,11 +172,13 @@ angular.module('gpu.controllers')
                     ct.fn.defaultSelectWorkerSpec();
                 }
             }
+
         };
 
         // spec loading 체크
         ct.workerSpecDisabledAllSetting = false;
         ct.fn.defaultSelectWorkerSpec = function() {
+
             if (ct.workerSpecMinDisabledSetting) {
                 ct.workerSpecDisabledAllSetting = true;
                 var sltSpec = null;
@@ -187,9 +192,11 @@ angular.module('gpu.controllers')
                     ct.fn.selectWorkerSpec(sltSpec);
                 }
             }
+
         };
 
         ct.fn.selectWorkerSpec = function(sltSpec) {
+
             if (!ct.workerSpecDisabledAllSetting || sltSpec.disabled) return;
             if (sltSpec && sltSpec.uuid) {
                 ct.sltWorkerSpec = angular.copy(sltSpec);
@@ -201,6 +208,7 @@ angular.module('gpu.controllers')
                 ct.data.workerFlavor = "";
                 ct.sltWorkerSpecUuid = "";
             }
+
         };
 
         ct.fn.changeMasterCnt = function(masterCnt) {
@@ -272,7 +280,6 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.s3_accessKey = ct.data.s3AccessKey;
             vmCatalogDeploy.parameters.s3_secretKey = ct.data.s3SecretKey;
             vmCatalogDeploy.parameters.s3_bucket_name = ct.data.bucketName;
-console.log(">>>>>s3EndPoint="+ct.data.s3EndPoint+"/bucketName="+ct.data.bucketName);
 
             if(ct.data.nodeType == 'single') {
                 vmCatalogDeploy.workerUse = false;
