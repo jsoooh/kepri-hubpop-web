@@ -3281,7 +3281,6 @@ angular.module('iaas.controllers')
                 if (data && data.content) {
                     pop.tenantResource = data.content;
                     pop.tenantResource.available = {};
-                    pop.tenantResource.available.instances = pop.tenantResource.maxResource.instances - pop.tenantResource.usedResource.instances;
                     pop.tenantResource.available.cores = pop.tenantResource.maxResource.cores - pop.tenantResource.usedResource.cores;
                     pop.tenantResource.available.ramSize = pop.tenantResource.maxResource.ramSize - pop.tenantResource.usedResource.ramSize;
                     pop.tenantResource.available.instanceDiskGigabytes = pop.tenantResource.maxResource.instanceDiskGigabytes - pop.tenantResource.usedResource.instanceDiskGigabytes;

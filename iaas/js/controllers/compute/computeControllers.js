@@ -1366,12 +1366,10 @@ angular.module('iaas.controllers')
                 if (data && data.content) {
                     ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
-                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
-                    ct.tenantResource.available.licenseRedhat = ct.tenantResource.maxResource.licenseRedhat - ct.tenantResource.usedResource.licenseRedhat;
                     ct.tenantResource.available.licenseWindows = ct.tenantResource.maxResource.licenseWindows - ct.tenantResource.usedResource.licenseWindows;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
