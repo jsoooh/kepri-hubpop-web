@@ -323,7 +323,7 @@
 		</div>
 	</div>
 	<div class="text-right">
-		<button class="btn btn-lg btn-primary" ng-click="contents.fn.createServer();">서버 생성</button>
+		<button class="btn btn-lg btn-primary" ng-click="contents.fn.createServer();" ng-disabled="!main.checkResourceUserRole()">서버 생성</button>
 		<button class="btn btn-lg btn-default" ng-click="main.goToHistoryBack();">취소</button>
 		<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
 		<!-- <button class="btn btn-lg btn-success" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button> -->

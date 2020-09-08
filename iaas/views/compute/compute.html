@@ -713,7 +713,7 @@
 				<p>현재 생성한 프로젝트가 없습니다.</p>
 				<p><span class="point">프로젝트를 생성</span> 하고 HUB-PoP 서비스를 사용하세요.</p>
 			</div>
-			<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');" ng-disabled="main.checkResourceUserRole()">프로젝트 생성</button>
+			<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">프로젝트 생성</button>
 		</div>
 	</div>
 	<!-- //테넌트 생성 전인 경우(new) -->

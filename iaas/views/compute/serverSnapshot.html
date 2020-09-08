@@ -74,7 +74,7 @@
 												</div>
 												<div class="col-xs-2">
 													<div class="pull-right dropdown btn-option">
-														<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+														<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 															<div class="feather-icon">
 																<i data-feather="more-horizontal" class="feather-directive"></i>
 															</div>
@@ -118,7 +118,7 @@
 													</li>
 													<li>
 														<b>설명  </b>
-														<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">i</a></div>
+														<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="!main.checkResourceUserRole() || contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">i</a></div>
 													</li>
 												</ul>
 											</div>
@@ -179,7 +179,7 @@
 									<td class="text-center">{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 									<td class="text-center">
 										<div class="dropdown btn-option">
-											<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 												<div class="feather-icon">
 													<i data-feather="more-horizontal" class="feather-directive"></i>
 												</div>
@@ -241,7 +241,7 @@
 												</div>
 												<div class="col-xs-2">
 													<div class="pull-right dropdown btn-option">
-														<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+														<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 															<div class="feather-icon">
 																<i data-feather="more-horizontal" class="feather-directive"></i>
 															</div>
@@ -285,7 +285,7 @@
 													</li>
 													<li>
 														<b>설명  </b>
-														<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">i</a></div>
+														<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="!main.checkResourceUserRole() || contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">i</a></div>
 													</li>
 												</ul>
 											</div>
@@ -343,7 +343,7 @@
 									<td class="text-center">{{ storageSnapshot.createDate }}</td>
 									<td class="text-center">
 										<div class="dropdown btn-option">
-											<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 												<div class="feather-icon">
 													<i data-feather="more-horizontal" class="feather-directive"></i>
 												</div>
@@ -390,7 +390,7 @@
 </div>
 <!-- //탭영역 -->
 
-<!-- 테넌트 생성 전인 경우 -->
+<!-- 테넌트 생성 전인 경우(new) -->
 <div class="welcome_layer" ng-if="!main.userTenantId">
 	<div class="text-center blank-page">
 		<div class="img">
@@ -400,7 +400,7 @@
 			<p>현재 생성한 프로젝트가 없습니다.</p>
 			<p><span class="point">프로젝트를 생성</span> 하고 HUB-PoP 서비스를 사용하세요.</p>
 		</div>
-		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');">프로젝트 생성</button>
+		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">프로젝트 생성</button>
 	</div>
 </div>
-<!-- //테넌트 생성 전인 경우 -->
+<!-- //테넌트 생성 전인 경우(new) -->
