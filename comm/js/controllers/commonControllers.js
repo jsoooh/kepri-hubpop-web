@@ -305,6 +305,24 @@ angular.module('common.controllers', [])
             $scope.main.mainLayoutClass = "one_page";
         };
 
+        // 프로젝트 유저 권한 체크 ( [OWNER] : CRUD 가능, [ADMIN, USER] : Read만 가능 )
+        mc.checkProjectUserRole = function () {
+            if ($scope.main.sltPortalOrgMyRoleName && $scope.main.sltPortalOrgMyRoleName == CONSTANTS.roleName.owner) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        // 자원 유저 권한 체크 ( [OWNER, ADMIN] : CRUD 가능, [USER] : Read만 가능)
+        mc.checkResourceUserRole = function () {
+            if ($scope.main.sltPortalOrgMyRoleName && ($scope.main.sltPortalOrgMyRoleName == CONSTANTS.roleName.owner || $scope.main.sltPortalOrgMyRoleName == CONSTANTS.roleName.admin)) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
         // 페이지 이동
         mc.goToPage = function (path) {
             common.locationPath(path);
