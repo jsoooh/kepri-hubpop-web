@@ -37,7 +37,7 @@
 
 <!-- button area Start-->
 <div class="margin-bottom-20" ng-if="!!main.userTenantId">
-	<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/iaas/storage/create')">
+	<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/iaas/storage/create')" ng-disabled="!main.checkResourceUserRole()">
 		<div class="feather-icon color-primary"><i data-feather="hard-drive" class="feather-directive"></i></div> <b>디스크 만들기</b>
 	</button>
 </div>
@@ -60,7 +60,7 @@
 										<!-- 20181122 디스크과 인스턴스 연결된 것이 있으면 링크 이미지 표현. 차후 구현시 참조. -->
 										<!--<span class="link_info" ng-if="volume.volumeAttachment.instanceId"></span>-->
 										<div class="pull-right dropdown btn-option">
-											<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 												<div class="feather-icon">
 													<i data-feather="more-horizontal" class="feather-directive"></i>
 												</div>
@@ -111,7 +111,7 @@
 										</li>
 										<li>
 											<b>설명  </b>
-											<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{volume.description | enterByNbr}}'" ng-click="contents.fn.formOpen($event, 'description', volume);">i</a></div>
+											<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{volume.description | enterByNbr}}'" ng-click="!main.checkResourceUserRole() ||contents.fn.formOpen($event, 'description', volume);">i</a></div>
 										</li>
 										<li>
 											<b><a class="link" ng-click="main.showRightSliderContents($event, '디스크 연결 가이드', '/guideInfo/accessGuideInfoDiskConnect.html', {volume : volume});">디스크 연결 가이드<span class="feather-icon blue-600 margin-left-5"><i data-feather="file-text" class="feather-directive"></i></span></a></b>
@@ -188,7 +188,7 @@
 					<!--<td>2019-11-13 09:24:07</td>-->
 					<td class="text-center">
 						<div class="dropdown btn-option">
-							<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+							<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 								<div class="feather-icon">
 									<i data-feather="more-horizontal" class="feather-directive"></i>
 								</div>
@@ -243,19 +243,17 @@
 </div>
 <!-- //생성된 디스크 없을 경우 -->
 
-
-<!-- 테넌트 생성 전인 경우 -->
-<div ng-if="!main.userTenantId" class="proj_main_cont">
-	<div class="p_main_top">
-		<div class="top_txt">
-			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
-			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+<!-- 테넌트 생성 전인 경우(new) -->
+<div class="welcome_layer" ng-if="!main.userTenantId">
+	<div class="text-center blank-page">
+		<div class="img">
+			<img src="../assets/img/icon/data-center.png" alt="data-center">
 		</div>
-		<div class="top_btn">
-			<a href="" ng-click="main.createPortalOrgSystem('iaas');">
-				<span>프로젝트 생성</span>
-			</a>
+		<div class="cont">
+			<p>현재 생성한 프로젝트가 없습니다.</p>
+			<p><span class="point">프로젝트를 생성</span> 하고 HUB-PoP 서비스를 사용하세요.</p>
 		</div>
+		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');" ng-disabled="main.checkResourceUserRole()">프로젝트 생성</button>
 	</div>
 </div>
-<!-- //테넌트 생성 전인 경우 -->
+<!-- //테넌트 생성 전인 경우(new) -->
