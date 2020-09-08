@@ -1,81 +1,105 @@
 <div ng-if="tab.loadingAppMonit">
     <md-progress-linear md-mode="indeterminate"></md-progress-linear>
 </div>
-<div class="panel_head">
-    <div class="tit pull-left">{{ 'label.monitoring' | translate }}</div>
-    <div class="pull-right">
-        <button>시간 범위:</button>
-        <select id="timeRange" name="timeRange" ng-model="tab.selTimeRange" style="margin: 0px 7px 0px 7px;">
-            <option ng-repeat="timeRange in tab.timeRanges" value="{{ timeRange }}">{{ timeRange }}시간</option>
-        </select>
-        <button>주기:</button>
-        <select id="period" name="period" ng-model="tab.selPeriod" style="margin: 0px 7px 0px 7px;">
-            <option ng-repeat="period in tab.periods" value="{{ period }}">{{ period }}분</option>
-        </select>
-        <button type="button" name="button" class="btn-sm btn-color4" style="height: 38px; margin-right: 7px;" title="조회" ng-click="tab.changeTimestamp();">조회</button>
-        <button id="monitoring" type="button" name="button" class="btn btn-ico-zoom only-ico" ng-click="contents.zoomPanel('monitoring')" title="확대/축소"><span class="ico">확대/축소</span></button>
-    </div>
+
+<!-- panel-heading -->
+<div class="panel-heading">
+	<div class="row">
+		<div class="col-md-6">
+			<h3 class="panel-title">
+				<b class="tit">{{ 'label.monitoring' | translate }}</b>
+			</h3>
+		</div>
+		<div class="col-md-6 text-right">
+			<div class="padding-top-10 padding-horizontal-20">
+				<button id="monitoring" type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel('monitoring')"></button>
+			</div>
+		</div>
+	</div>
+</div> 
+<!-- // panel-heading -->
+<!-- panel-body -->
+<div class="panel-body">
+	<div class="in">
+		<div class=" scroll-content" style="height:270px;">
+			<div class="table-input-wrap">
+				<div class="row">
+					<div class="form-inline text-left">
+						<div class="form-group margin-left-0 margin-right-20">
+							<label for="timeRange" style="margin-right: 5px;">시간범위</label> 
+							<select id="timeRange" name="timeRange" ng-model="tab.selTimeRange">
+								<option ng-repeat="timeRange in tab.timeRanges" value="{{ timeRange }}">{{ timeRange }}시간</option>
+							</select>
+						</div>
+						<div class="form-group margin-horizontal-20">
+							<label for="period" style="margin-right: 5px;">주기</label> 
+							<select id="period" name="period" ng-model="tab.selPeriod">
+								<option ng-repeat="period in tab.periods" value="{{ period }}">{{ period }}분</option>
+							</select>
+						</div>
+						<button type="button" class="btn btn-primary ng-binding ng-scope" ng-click="tab.changeTimestamp();" aria-hidden="false"><i class="xi-search margin-right-5"></i> 조회</button>
+					</div>
+				</div>
+			</div>
+			<p class="padding-vertical-20" ng-if="!tab.monitoringGraphs">해당 앱 메트릭 데이터가 없습니다.</p>
+			<div scroll-pane scroll-config="{ contentWidth: '0px' }" id="instance_monitoring_panel" ng-if="tab.monitoringGraphs">
+				<!-- 탭 내용 -->
+				<ul class="visualizeList">
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li>
+									<span>CPU(%)</span>
+								</li>
+								<li>
+									<em style="background: {{ tab.lineChartCpu.colors[0].borderColor}}"></em>
+								</li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineCpu" class="chart chart-line chart-xl" chart-options="tab.lineChartCpu.options" chart-series="tab.lineChartCpu.series" chart-colors="tab.lineChartCpu.colors" chart-labels="tab.lineChartCpu.labels" chart-data="tab.lineChartCpu.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li>
+									<span>Memory(%)</span>
+								</li>
+								<li>
+									<em style="background: {{ tab.lineChartMem.colors[0].borderColor}}"></em>
+								</li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineMem" class="chart chart-line chart-xl" chart-options="tab.lineChartMem.options" chart-series="tab.lineChartMem.series" chart-colors="tab.lineChartMem.colors" chart-labels="tab.lineChartMem.labels" chart-data="tab.lineChartMem.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+					<li class="visualizeItem">
+						<div class="monitChratUsage">
+							<ul class="legendWrap">
+								<li>
+									<span>Disk(%)</span>
+								</li>
+								<li>
+									<em style="background: {{ tab.lineChartDisk.colors[0].borderColor}}"></em>
+								</li>
+							</ul>
+						</div>
+						<!-- chartWrap -->
+						<div class="chartWrap">
+							<canvas id="lineDisk" class="chart chart-line chart-xl" chart-options="tab.lineChartDisk.options" chart-series="tab.lineChartDisk.series" chart-colors="tab.lineChartDisk.colors" chart-labels="tab.lineChartDisk.labels" chart-data="tab.lineChartDisk.data"></canvas>
+						</div>
+						<!-- //chartWrap -->
+					</li>
+				</ul>
+				<!-- //탭 내용 -->
+			</div>
+		</div>
+	</div>
 </div>
-<div class="panel_body" style="height: 400px;">
-    <div ng-if="!tab.monitoringGraphs">해당 앱 메트릭 데이터가 없습니다.</div>
-    <div scroll-pane scroll-config="{ contentWidth: '0px' }" id="instance_monitoring_panel" class="in" ng-if="tab.monitoringGraphs">
-        <!-- 탭 내용 -->
-        <ul class="visualizeList">
-            <li class="visualizeItem">
-                <div class="monitChratUsage">
-                    <ul class="legendWrap">
-                        <li><span>CPU(%)</span></li>
-                        <li><em style="background:{{ tab.lineChartCpu.colors[0].borderColor}}"></em></li>
-                    </ul>
-                </div>
-                <!-- chartWrap -->
-                <div class="chartWrap">
-                    <canvas id="lineCpu" class="chart chart-line chart-xl"
-                            chart-options="tab.lineChartCpu.options"
-                            chart-series="tab.lineChartCpu.series"
-                            chart-colors="tab.lineChartCpu.colors"
-                            chart-labels="tab.lineChartCpu.labels"
-                            chart-data="tab.lineChartCpu.data"></canvas>
-                </div>
-                <!-- //chartWrap -->
-            </li>
-            <li class="visualizeItem">
-                <div class="monitChratUsage">
-                    <ul class="legendWrap">
-                        <li><span>Memory(%)</span></li>
-                        <li><em style="background:{{ tab.lineChartMem.colors[0].borderColor}}"></em></li>
-                    </ul>
-                </div>
-                <!-- chartWrap -->
-                <div class="chartWrap">
-                    <canvas id="lineMem" class="chart chart-line chart-xl"
-                            chart-options="tab.lineChartMem.options"
-                            chart-series="tab.lineChartMem.series"
-                            chart-colors="tab.lineChartMem.colors"
-                            chart-labels="tab.lineChartMem.labels"
-                            chart-data="tab.lineChartMem.data"></canvas>
-                </div>
-                <!-- //chartWrap -->
-            </li>
-            <li class="visualizeItem">
-                <div class="monitChratUsage">
-                    <ul class="legendWrap">
-                        <li><span>Disk(%)</span></li>
-                        <li><em style="background:{{ tab.lineChartDisk.colors[0].borderColor}}"></em></li>
-                    </ul>
-                </div>
-                <!-- chartWrap -->
-                <div class="chartWrap">
-                    <canvas id="lineDisk" class="chart chart-line chart-xl"
-                            chart-options="tab.lineChartDisk.options"
-                            chart-series="tab.lineChartDisk.series"
-                            chart-colors="tab.lineChartDisk.colors"
-                            chart-labels="tab.lineChartDisk.labels"
-                            chart-data="tab.lineChartDisk.data"></canvas>
-                </div>
-                <!-- //chartWrap -->
-            </li>
-        </ul>
-        <!-- //탭 내용 -->
-    </div>
-</div>
+<!-- //panel-body -->

@@ -1463,7 +1463,7 @@ angular.module('portal.controllers')
                 ct.getGpuInstanceVmsView($scope.main.userTenantGpuId);
                 ct.getGpuResourceUsedLookup($scope.main.userTenantGpuId);
             }
-
+            
             // Pipeline 정보
             ct.getPipelineDashBoardInfo(ct.paramId);
             // Gis 정보

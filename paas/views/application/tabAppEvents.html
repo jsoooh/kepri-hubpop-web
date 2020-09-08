@@ -1,49 +1,62 @@
 <!-- <div ng-if="tab.loadingAppEvents">
     <md-progress-linear md-mode="indeterminate"></md-progress-linear>
 </div> -->
-<div class="panel_head">
-    <div class="tit pull-left">{{ 'label.event_log' | translate }}<span class="countList">전체 : {{tab.appEvents.totalElements}}건</span></div>
-    <div class="pull-right">
-        <button id="event" type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel('event')"><span class="ico">확대/축소</span></button>
-    </div>
-</div>
-<div class="panel_body">
-    <div class="in scroll-pane pr10">
-    	<div class="pop_message_area mb20">
-			<div class="msg_bg"></div>
-			<div class="msg_txt"><span>APP에 대한 사용자 제어(시작, 중지, 재시작 등) 이벤트 로그를 실시간으로 표시 합니다.</span></div>
+
+<!-- panel-heading -->
+<div class="panel-heading">
+	<div class="row">
+		<div class="col-md-6">
+			<h3 class="panel-title">
+				<b class="tit">{{ 'label.event_log' | translate }}</b><span class="countList">(전체 : {{tab.appEvents.totalElements}}건)</span>
+			</h3>
 		</div>
-        <!-- table -->
-        <div class="tbl type1" id="tabAppEventsTable" style="width:100%;">
-            <table class="table">
-                <colgroup>
-                    <col style="width:10%;">
-                    <col style="width:20%;">
-                    <col style="width:25%;">
-                    <col style="width:35%;">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>{{ 'label.no' | translate }}</th>
-                    <th class="text-left">{{ 'label.event_dt' | translate }}</th>
-                    <th class="text-left">{{ 'label.user' | translate }}</th>
-                    <th class="text-left">{{ 'label.event' | translate }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="(k, eventItem) in tab.appEvents.content">
-                    <!--<td class="text-center">{{ (k + 1) }}</td>-->
-                    <td class="text-center">{{ (tab.appEvents.content.length - 1) - k + 1 }}</td>
-                    <td class="text-left">{{ eventItem.created | date:'yyyy-MM-dd HH:mm:ss' }}</td>
-                    <td class="text-left">{{ eventItem.actorName }}</td>
-                    <td class="text-left">{{ eventItem.type }}</td>
-                </tr>
-                <tr ng-if="tab.appEvents.content.length == 0">
-                    <td colspan="4"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- //table -->
-    </div>
+		<div class="col-md-6 text-right">
+			<div class="padding-top-10 padding-horizontal-20">
+				<button id="event" type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel('route')"></button>
+			</div>
+		</div>
+	</div>
+</div> 
+<!-- // panel-heading -->
+<!-- panel-body -->
+<div class="panel-body">
+	<div class="in">
+		<div class="alert alert-primary" role="alert">
+			<i class="xi-info font-size-20"></i>
+			<div class="text-area">APP에 대한 사용자 제어(시작, 중지, 재시작 등) 이벤트 로그를 실시간으로 표시 합니다.</div>
+		</div>
+		<div class=" scroll-content" style="height:270px;">
+			<div id="tabAppEventsTable" class="table-wrap border-0 margin-top-20 padding-bottom-70">
+				<table class="table table-hover">
+					<colgroup>
+						<col style="width: 10%;">
+						<col style="width: 20%;">
+						<col style="width: 25%;">
+						<col style="width: 35%;">
+					</colgroup>
+					<thead class="text-center black white-text">
+						<tr>
+							<th>{{ 'label.no' | translate }}</th>
+							<th class="text-left">{{ 'label.event_dt' | translate }}</th>
+							<th class="text-left">{{ 'label.user' | translate }}</th>
+							<th class="text-left">{{ 'label.event' | translate }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(k, eventItem) in tab.appEvents.content">
+							<!--<td class="text-center">{{ (k + 1) }}</td>-->
+							<td class="text-center">{{ (tab.appEvents.content.length - 1) - k + 1 }}</td>
+							<td class="text-left">{{ eventItem.created | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+							<td class="text-left">{{ eventItem.actorName }}</td>
+							<td class="text-left">{{ eventItem.type }}</td>
+						</tr>
+						<tr ng-if="tab.appEvents.content.length == 0">
+							<td colspan="4" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
+<!-- //panel-body -->

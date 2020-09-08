@@ -2,6 +2,25 @@ heat_template_version: '2018-08-31'
 
 description: hadoop standalone template
 
+parameter_groups:
+- parameters:
+  - image
+  - master_flavor
+  - availability_zone
+  - key_name
+  - provider_net
+  - root_password
+  - security_group
+  - api_end_point
+  - provider_subnet
+  - hive_password
+  - spark_use
+  - hbase_use
+  - s3_endpoint
+  - s3_accessKey
+  - s3_secretKey
+  - s3_bucket_name
+
 parameters:
   api_end_point:
     type: string
@@ -12,10 +31,6 @@ parameters:
     type: string
   master_flavor:
     type: string
-{% if workerUse %}
-  worker_flavor:
-    type: string
-{% endif %}
   key_name:
     type: string
   security_group:
@@ -27,6 +42,18 @@ parameters:
   root_password:
     type: string
   hive_password:
+    type: string
+  spark_use:
+    type: string
+  hbase_use:
+    type: string
+  s3_endpoint:
+    type: string
+  s3_accessKey:
+    type: string
+  s3_secretKey:
+    type: string
+  s3_bucket_name:
     type: string
 
 resources:
