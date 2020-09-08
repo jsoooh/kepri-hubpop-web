@@ -19,8 +19,8 @@
 						</div>
 					</button>
 					<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-						<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', contents.loadbalancer);">이름/설명 변경</a></li>
-						<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteLb(contents.loadbalancer.iaasLbInfo.id);">삭제</a></li>
+						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.formOpen($event, 'rename', contents.loadbalancer);">이름/설명 변경</a></li>
+						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.deleteLb(contents.loadbalancer.iaasLbInfo.id);">삭제</a></li>
 					</ul>
 				</div>
 			</div>
@@ -86,7 +86,7 @@
 					</div>
 					<div class="col-md-6 text-right">
 						<div class="padding-top-10 padding-horizontal-20">
-							<button type="button" title="추가" ng-click="contents.fn.formOpen($event, 'port', contents.loadbalancer);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+							<button type="button" title="추가" ng-click="contents.fn.formOpen($event, 'port', contents.loadbalancer);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
 						</div>
 					</div>
 				</div>
@@ -180,8 +180,8 @@
 									<h3 class="title-type1 title-border">
 										<span>포트 관리</span>
 										<div class="pull-right">
-											<button type="button" title="수정" ng-click="contents.fn.formOpen($event, 'editport', contents.loadbalancer);"><i class="xi-pen font-size-20 grey-600"></i></button>
-											<button type="button" title="삭제" ng-click="contents.deleteLbPort(contents.iaasLbPorts.id);"><i class="xi-trash font-size-20 grey-600"></i></button>
+											<button type="button" title="수정" ng-click="contents.fn.formOpen($event, 'editport', contents.loadbalancer);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-pen font-size-20 grey-600"></i></button>
+											<button type="button" title="삭제" ng-click="contents.deleteLbPort(contents.iaasLbPorts.id);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-trash font-size-20 grey-600"></i></button>
 										</div>
 									</h3>
 									
@@ -263,8 +263,8 @@
 									<h3 class="title-type1 title-border">
 										<span>연결 서버</span>
 										<div class="pull-right">
-											<button type="button" title="수정" ng-if="contents.iaasLbPorts.connType == 'server' || contents.iaasLbPorts.connType == 'image'" ng-click="contents.fn.formOpen($event, 'editserver', contents.loadbalancer);"><i class="xi-pen font-size-20 grey-600"></i></button>
-											<button type="button" title="추가" ng-if="contents.iaasLbPorts.connType == null" ng-click="contents.fn.formOpen($event, 'createserver', contents.loadbalancer);"><i class="xi-plus-circle font-size-20 grey-600"></i></button>
+											<button type="button" title="수정" ng-if="contents.iaasLbPorts.connType == 'server' || contents.iaasLbPorts.connType == 'image'" ng-click="contents.fn.formOpen($event, 'editserver', contents.loadbalancer);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-pen font-size-20 grey-600"></i></button>
+											<button type="button" title="추가" ng-if="contents.iaasLbPorts.connType == null" ng-click="contents.fn.formOpen($event, 'createserver', contents.loadbalancer);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-20 grey-600"></i></button>
 										</div>
 									</h3>
 									
@@ -456,7 +456,7 @@
 					</div>
 					<div class="col-md-6 text-right">
 						<div class="padding-top-10 padding-horizontal-20">
-							<button type="button" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+							<button type="button" title="추가" ng-click="contents.fn.popConnDomainForm($event);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
 							<!-- <button type="button" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><i class="xi-plus-circle font-size-25 grey-600"></i></button> -->
 							<button type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel($event, 'domain')"></button>
 						</div>
@@ -509,8 +509,8 @@
 													</div>
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-													<li><a href="javascript:void(0);" ng-click="contents.fn.popModDomainForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-click="contents.fn.deleteDomain(item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModDomainForm($event, item);">수정</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.deleteDomain(item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
@@ -539,7 +539,7 @@
 					</div>
 					<div class="col-md-6 text-right">
 						<div class="padding-top-10 padding-horizontal-20">
-							<button type="button" title="추가" ng-click="contents.fn.popPortForwardingForm($event);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+							<button type="button" title="추가" ng-click="contents.fn.popPortForwardingForm($event);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
 							<button type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel($event, 'portForwarding')"></button>
 						</div>
 					</div>
@@ -586,8 +586,8 @@
 													</div>
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-													<li><a href="javascript:void(0);" ng-click="contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-click="contents.fn.deletePortForwarding(item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="main.checkResourceUserRole() || contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="main.checkResourceUserRole() || contents.fn.deletePortForwarding(item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
