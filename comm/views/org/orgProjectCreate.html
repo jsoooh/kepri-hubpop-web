@@ -141,17 +141,17 @@
 									<span class="custom-file-btn">
 									  	<label class="btn-file" for="attachFile">
 											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" style="display: none;">
-											<span class="text-btn"  ng-click="main.fileSelectBtnClick($event);">
+											<span class="text-btn" ng-click="main.fileSelectBtnClick($event);">
 												파일찾기
 											</span>
 									  	</label>
 									</span>
-									<input type="text" id="attachFile" class="form-control" name="attachFile" ng-model="contents.appFileItem.file.name" readonly>
+									<input type="text" id="attachFile" class="form-control" name="attachFile" ng-model="contents.appFileItem.file.name" readonly style="border:0;">
 									<span class="file-input-label"></span>
-									<div class="mt10">
-										<span class="validation validation-userfile text-danger"></span>
-										<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
-									</div>
+								</div>
+								<div class="mt10">
+									<span class="validation validation-userfile text-danger"></span>
+									<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
 								</div>
 							</div>
 						</div>
