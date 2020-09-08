@@ -2,6 +2,39 @@
 	<div class="pop_cont_box">
 		<h4 class="tit">변경요청사유</h4>
 		<textarea type="text" class="form-control volTxt" name="requestReason" ng-model="pop.data.requestReason" validation="max_len:120|required"></textarea>
+		
+		<h4 class="tit mt30">쿼터값 변경</h4>
+		<div class="tbl type1">
+			<table class="table">
+				<colgroup>
+					<col style="width:15%;">
+					<col style="width:;">
+					<col style="width:15%;">
+					<col style="width:10%;">
+					<col style="width:10%;">
+					<col style="width:10%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col" colspan="2">항목</th>
+						<th scope="col">값</th>
+						<th scope="col">단위</th>
+						<th scope="col">최소값</th>
+						<th scope="col">최대값</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(key, item) in pop.quotaItems">
+						<td>{{ item.orgQuotaItemGroup.name }}</td>
+						<td class="text-left">{{ item.name }}</td>
+						<td><input type="number" class="form-control text-right" name="key" ng-model="item.value"  validation="between:{{item.min}},{{item.max}}"></td>
+						<td>{{ item.unit }}</td>
+						<td>{{ item.min }}</td>
+						<td>{{ item.max }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 		<div class="s_inner_cont">
 			<div class="pnb_tit">
@@ -42,38 +75,6 @@
 				</ul>
 			</div>
 		</div>
-		
-		<h4 class="tit mt30">쿼터값 변경</h4>
-		<div class="tbl type1">
-			<table class="table">
-				<colgroup>
-					<col style="width:15%;">
-					<col style="width:;">
-					<col style="width:15%;">
-					<col style="width:10%;">
-					<col style="width:10%;">
-					<col style="width:10%;">
-				</colgroup>
-				<thead>
-					<tr>
-						<th scope="col" colspan="2">항목</th>
-						<th scope="col">값</th>
-						<th scope="col">단위</th>
-						<th scope="col">최소값</th>
-						<th scope="col">최대값</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="(key, item) in pop.quotaItems">
-						<td>{{ item.orgQuotaItemGroup.name }}</td>
-						<td class="text-left">{{ item.name }}</td>
-						<td><input type="number" class="form-control text-right" name="key" ng-model="item.value"  validation="between:{{item.min}},{{item.max}}"></td>
-						<td>{{ item.unit }}</td>
-						<td>{{ item.min }}</td>
-						<td>{{ item.max }}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+
 	</div>
 </div>

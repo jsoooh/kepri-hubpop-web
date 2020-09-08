@@ -411,7 +411,7 @@ angular.module('portal.controllers')
         ct.orgData = {};
 
         ct.formName = "orgCreateForm";
-        ct.orgData.personal = "nomal";
+        ct.orgData.personal = "team";
         ct.orgIdValidationResult = false;
         ct.quotaPlanGroups = [{id:"", name:"-- 유형 선택 --"}];
         ct.quotaPlans = [{id:"", code:"-- 세부 유형 선택 --"}];
@@ -565,6 +565,9 @@ angular.module('portal.controllers')
             if(ct.orgData.personal == "personal") {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
                 ct.orgData.endDate = moment('9999-12-31','YYYY-MM-DD');
+                ct.orgData.cost = "";           // 개발비 항목 초기화
+                ct.appFileItem = {};            // 과제계획서 첨부 초기화
+                ct.orgData.description = "";    // 설명 초기화
                 calendarButton.hide();
             } else {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
@@ -595,7 +598,16 @@ angular.module('portal.controllers')
                     ct.quotaPlans.push(value);
                 }
             });
-            ct.fn.changeQuotaPlan(); //쿼터 상세값 초기화
+
+            if (ct.orgData.personal == "personal") {    // 개인설정 일때 쿼터 상세값 자동설정
+                if (!ct.quotaPlans || ct.quotaPlans.length < 2) {
+                    return common.showErrorAlert("프로젝트 개인유형의 쿼터 세부유형를 찾을 수 없습니다.");
+                }
+                ct.orgData.quotaPlan = ct.quotaPlans[1];
+                ct.fn.changeQuotaPlan(ct.orgData.quotaPlan);
+            } else {
+                ct.fn.changeQuotaPlan(); //쿼터 상세값 초기화
+            }
         };
 
         // 쿼터 세부 유형선택 변경시 쿼터 상세값 매칭

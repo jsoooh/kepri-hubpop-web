@@ -61,13 +61,13 @@
 								<div class="list-inline">
 									<li>
 										<div class="radio-group">
-											<input type="radio" name="personal" id="app-radio1-1" value="nomal"  class="radio-input" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.fn.changeOrgCase();">
+											<input type="radio" name="personal" id="app-radio1-1" value="team"  class="radio-input" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.fn.changeOrgCase();">
 											<label for="app-radio1-1" class="radio-item">
 												<div class="radio">
 													<div class="checked-icon"></div>
 												</div>
 												<span class="text">
-													일반
+													팀
 												</span>
 											</label>
 										</div>
@@ -87,7 +87,7 @@
 										</div>
 									</li>
 									<!-- <div class="radio radio-inline">
-										<input type="radio" name="personal" id="app-radio1-1" value="nomal" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()">
+										<input type="radio" name="personal" id="app-radio1-1" value="team" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()">
 										<label for="app-radio1-1" class="label">일반</label>
 									</div>
 									<div class="radio radio-inline">
@@ -104,7 +104,7 @@
 								</div>
 							</div>
 							<div class="col-md-9">
-								<fieldset ng-disabled="contents.orgData.personal=='personal'">
+								<fieldset ng-disabled="contents.orgData.personal =='personal'">
 									<div class="datepickerWrap">
 										<div class="date-inpt">
 											<adm-dtp name="'startDate'" ng-model="contents.orgData.startDate" options="{format:'YYYY-MM-DD'}" maxdate="'{{contents.orgData.endDate}}'"></adm-dtp>
@@ -117,7 +117,7 @@
 								</fieldset>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" ng-if="contents.orgData.personal != 'personal'">
 							<div class="col-md-3">
 								<div class="write-sub-title">
 									개발비 (백만원)
@@ -130,7 +130,7 @@
 							</div>
 							<div class="col-md-1">백만원</div>
 						</div>
-						<div class="row">
+						<div class="row" ng-if="contents.orgData.personal != 'personal'">
 							<div class="col-md-3">
 								<div class="write-sub-title">
 									과제계획서 첨부
@@ -155,7 +155,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" ng-if="contents.orgData.personal != 'personal'">
 							<div class="col-md-3">
 								<div class="write-sub-title">
 									설명
@@ -167,7 +167,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="row" ng-if="contents.orgData.personal=='nomal'">
+						<div class="row" ng-if="contents.orgData.personal=='team'">
 							<div class="col-md-3">
 								<div class="write-sub-title">
 									프로젝트 쿼터 유형 선택
@@ -188,7 +188,7 @@
 							</div>
 							<div class="col-md-9">
 								<div class="form-group">
-									<select name="quotaPlan" title="쿼터 세부 유형 선택" class="form-control select2" ng-model="contents.orgData.quotaPlan" ng-options="quota as quota.code for quota in contents.quotaPlans track by quota.id" ng-change="contents.fn.changeQuotaPlan(contents.orgData.quotaPlan);"></select>
+									<select name="quotaPlan" title="쿼터 세부 유형 선택" class="form-control select2" ng-model="contents.orgData.quotaPlan" ng-options="quota as quota.code for quota in contents.quotaPlans track by quota.id" ng-change="contents.fn.changeQuotaPlan(contents.orgData.quotaPlan);" ng-disabled="contents.orgData.personal == 'personal'"></select>
 								</div>
 							</div>
 						</div>
@@ -200,45 +200,6 @@
 								</div>
 							</div>
 							<div class="col-md-9">
-								<div class="s_inner_cont">
-									<div class="pnb_tit">
-										<div class="pull-left">
-											<span class="pnb_t_txt">PaaS 용량</span>
-											<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'paas 쿼터에 대한 조정이 가능합니다.'">	i</a></div>
-										</div>
-										<div class="pull-right">
-											<button type="button" name="button" class="btn btn-outline btn-info" ng-click="contents.orgData.paasQuotaGuid = null"><i class="xi-check-circle-o margin-right-5"></i>{{ 'label.select_unset' | translate }}</button>
-										</div>
-									</div>
-									<div class="pj_paas_volume">
-										<ul class="ul-list1">
-											<li ng-repeat="(key, paasQuota) in contents.paasQuotas">
-												<div class="radio1 radio-inline">
-													<input type="radio" name="paasQuota" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid">
-													<label for="{{paasQuota.$$hashKey}}" class="label">
-														<div class="volume_cont">
-															<ul>
-																<li>
-																	<span>{{ 'label.service' | translate }}</span>
-																	<span>{{ paasQuota.totalServices }}</span>
-																</li>
-																<li>
-																	<span>{{ 'label.route' | translate }}</span>
-																	<span>{{ paasQuota.totalRoutes }}</span>
-																</li>
-																<li>
-																	<span>{{ 'label.memory' | translate }}</span>
-																	<span>{{ paasQuota.memoryLimit|displayVolume:'MB' }}</span>
-																</li>
-															</ul>
-														</div>
-													</label>
-												</div>
-												<p class="label-txt" >{{ paasQuota.name }}</p>
-											</li>
-										</ul>
-									</div>
-								</div>
 								<div class="table-wrap margin-top-30">
 									<div class="table-head-area">
 										<table class="table">
@@ -275,7 +236,7 @@
 												<tr ng-repeat="item in contents.quotaItems">
 													<td>{{ item.orgQuotaItemGroup.name }}</td>
 													<td class="text-left">{{ item.name }}</td>
-													<td><input type="number" class="form-control form-control-sm text-right" name="quotaItem{{$index}}" ng-model="item.value" validation="between:{{ item.min }}, {{ item.max }}"/></td>
+													<td><input type="number" class="form-control form-control-sm text-right" name="quotaItem{{$index}}" ng-model="item.value" ng-disabled="contents.orgData.personal == 'personal'" validation="between:{{ item.min }}, {{ item.max }}"/></td>
 													<td class="text-center">{{ item.unit }}</td>
 													<td class="text-right">{{ item.min }}</td>
 													<td class="text-right">{{ item.max }}</td>
@@ -284,6 +245,47 @@
 										</table>
 									</div>
 								</div>
+								<!-- PaaS 용량-->
+								<div class="s_inner_cont">
+									<div class="pnb_tit">
+										<div class="pull-left">
+											<span class="pnb_t_txt">PaaS 용량</span>
+											<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'paas 쿼터에 대한 조정이 가능합니다.'">	i</a></div>
+										</div>
+										<div class="pull-right">
+											<button type="button" name="button" class="btn btn-outline btn-info" ng-click="contents.orgData.paasQuotaGuid = null"><i class="xi-check-circle-o margin-right-5"></i>{{ 'label.select_unset' | translate }}</button>
+										</div>
+									</div>
+									<div class="pj_paas_volume">
+										<ul class="ul-list1">
+											<li ng-repeat="(key, paasQuota) in contents.paasQuotas">
+												<div class="radio1 radio-inline">
+													<input type="radio" name="paasQuota" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid" ng-disabled="contents.orgData.personal == 'personal'">
+													<label for="{{paasQuota.$$hashKey}}" class="label">
+														<div class="volume_cont">
+															<ul>
+																<li>
+																	<span>{{ 'label.service' | translate }}</span>
+																	<span>{{ paasQuota.totalServices }}</span>
+																</li>
+																<li>
+																	<span>{{ 'label.route' | translate }}</span>
+																	<span>{{ paasQuota.totalRoutes }}</span>
+																</li>
+																<li>
+																	<span>{{ 'label.memory' | translate }}</span>
+																	<span>{{ paasQuota.memoryLimit|displayVolume:'MB' }}</span>
+																</li>
+															</ul>
+														</div>
+													</label>
+												</div>
+												<p class="label-txt" >{{ paasQuota.name }}</p>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<!-- PaaS 용량-->
 							</div>
 						</div>
 					</form>
@@ -315,7 +317,7 @@
 								</li>
 								<li>
 									<span class="s_tit">프로젝트 유형</span>
-									<span class="s_txt" >{{ contents.orgData.personal == "nomal" ? "일반" : "개인" }}</span>
+									<span class="s_txt" >{{ contents.orgData.personal == "team" ? "팀" : "개인" }}</span>
 								</li>
 								<li>
 									<span class="s_tit">이용기간</span>
