@@ -654,6 +654,7 @@ angular.module('common.controllers', [])
                 mc.sltPortalOrgId = portalOrg.id;
                 mc.sltPortalOrgIsActive = portalOrg.isActive;
                 mc.sltPortalOrgDisplayName = portalOrg.orgName;
+                mc.sltPortalOrgMyRoleName = portalOrg.myRoleName;
                 mc.loadUserTenant();
                 mc.loadSltOrganization();
                 if (!mc.sltGroupMenuIconId) {
@@ -670,6 +671,7 @@ angular.module('common.controllers', [])
                     mc.sltPortalOrgId = "";
                     mc.sltPortalOrgIsActive = false;
                     mc.sltPortalOrgDisplayName = "";
+                    mc.sltPortalOrgMyRoleName = "";
                     mc.setUserTenant(null, null);
                     mc.setOrganization(null);
                 }
