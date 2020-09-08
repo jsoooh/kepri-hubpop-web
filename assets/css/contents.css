@@ -296,6 +296,17 @@
 .disk_area p {font-size:16px; color:#666; text-align:center; margin-top:15px;}
 .disk_box {position:relative;}
 
+/*앱만들기 > App 사양설정*/
+.disk_area .style-table button > i {font-size:18px; color:#bdbdbd;}
+.disk_area .style-table button > i:hover {color:#757575;}
+.disk_box.type2 .rzslider .rz-bar {top:4px;}
+.disk_box.type2.color1 .rzslider .rz-selection {background-color:#3977d5;}
+.disk_box.type2.color1 .rzslider .rz-pointer:after {background-color:#3977d5;}
+.disk_box.type2.color2 .rzslider .rz-selection {background-color:#3159a1;}
+.disk_box.type2.color2 .rzslider .rz-pointer:after {background-color:#3159a1;}
+.disk_box.type2.color3 .rzslider .rz-selection {background-color:#545c6b;}
+.disk_box.type2.color3 .rzslider .rz-pointer:after {background-color:#545c6b;}
+
 .write_wrap .panel-inner-collapse .panel-group .panel-title {padding:10px 20px 10px 20px; }
 .write_wrap .panel-inner-collapse .panel-group .panel-title h3 {font-size:13px; font-weight:600;}
 .write_wrap .panel-inner-collapse .panel-group .panel-body .disk_area {border:0; padding:0;}
