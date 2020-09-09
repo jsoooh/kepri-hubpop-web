@@ -696,6 +696,17 @@ angular.module('common.controllers', [])
             }
         };
 
+        mc.notificationCount = 0;
+        mc.listNotification = function () {
+            var promise = common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/notificationAlarm', 'GET'));
+            promise.success(function (data) {
+                if (data.resultCode == 0) {
+                    mc.notifications = data.items;
+                    mc.notificationCount = data.counts;
+                }
+            });
+        };
+
         mc.syncGetTenantByName = function (orgCode, teamCode) {
             mc.listNotification();
             var response = portal.portalOrgs.syncGetTenantByName(orgCode, teamCode);
@@ -1645,17 +1656,6 @@ angular.module('common.controllers', [])
                 mc.alarmList = data.data;
             });
             serverStatsPromise.error(function (data, status, headers) {
-            });
-        };
-
-        mc.notificationCount = 0;
-        mc.listNotification = function () {
-            var promise = common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/notificationAlarm', 'GET'));
-            promise.success(function (data) {
-                if (data.resultCode == 0) {
-                    mc.notifications = data.items;
-                    mc.notificationCount = data.counts;
-                }
             });
         };
 
