@@ -3574,6 +3574,8 @@ a.ext_link:hover {text-decoration:underline;}
 h4.note {float: left; font-size:22px; color:#333; line-height: 80px;	}
 
 
+.dashboard_chart_wrap .tui-chart {margin:0 auto;}
+
 /*-----------  표준UI적용 전 CSS 재정의(200626)  ------------*/
 .pn_body .scrollBox {height:700px;}
 .bootstrap-filestyle.input-group .btn.btn-default:hover {background-color:unset !important;}
