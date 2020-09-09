@@ -27,34 +27,9 @@
 						<div class="row">
 							<div class="col-md-3">
 								<div class="write-sub-title">
-									<b class="caution-star">*</b> 프로젝트 ID
-									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-_’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'">	i</a></div>
-								</div>
-							</div>
-							<div class="col-md-9">
-								<div class="form-group">
-									<input type="text" class="form-control" name="orgId" ng-model="contents.orgData.orgId" maxlength="20" placeholder="아이디를 입력하세요." validation="max_len:20|required|custom:contents.orgIdCustomValidationCheck(contents.orgData.orgId)">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-3">
-								<div class="write-sub-title">
-									<b class="caution-star">*</b> 프로젝트명
-									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'* 2자 이상 20자 이하, 특수문자 입력 불가'">	i</a></div>
-								</div>
-							</div>
-							<div class="col-md-9">
-								<div class="form-group">
-									<input type="text" class="form-control" name="orgName" ng-model="contents.orgData.orgName" maxlength="20" placeholder="프로젝트명을 입력하세요." validation="min_len:2|max_len:20|required|custom:contents.orgNameCustomValidationCheck(contents.orgData.orgName)">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-3">
-								<div class="write-sub-title">
 									<b class="caution-star">*</b> 프로젝트 유형
-									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'일반 프로젝트의 경우 운영자 승인을 통해 이용 가능하고 개인 프로젝트의 경우 간단한 확인용으로 이용 가능합니다.'">	i</a></div>
+									<div class="t_tip_bx" ng-if="contents.orgData.personal == 'team'"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'사내 절차에 따라 공식으로 인정된 프로젝트를 관리자의 승인을 거쳐서 생성한다. 프로젝트의 수행에 필요한 자원 규모를 사용자가 선택할 수 있으며, 중규모 또는 대규모의 자원 사용이 가능하다.'">	i</a></div>
+									<div class="t_tip_bx" ng-if="contents.orgData.personal == 'personal'"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'개인적인 프로젝트 수행에 필요한 최소한의 자원(CPU 4코어, 8GB RAM, 100GB HDD)을 생성할 수 있다. 관리자의 승인이 필요 없으며, 1인당 1개의 개인 프로젝트만을 생성할 수 있다.'">	i</a></div>
 								</div>
 							</div>
 							<div class="col-md-9">
@@ -94,6 +69,32 @@
 										<input type="radio" name="personal" id="app-radio1-2" value="personal" aria-invalid="" ng-model="contents.orgData.personal" ng-change="contents.orgCaseChange()" ng-disabled="contents.myPersonalCnt >= contents.personalProjectCnt">
 										<label for="app-radio1-2" class="label">개인: {{ contents.myPersonalCnt }} / {{ contents.personalProjectCnt }}</label>
 									</div> -->
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 프로젝트 ID
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-_’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'">	i</a></div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-group">
+									<input type="text" class="form-control" name="orgId" ng-model="contents.orgData.orgId" maxlength="20" placeholder="아이디를 입력하세요." validation="max_len:20|required|custom:contents.orgIdCustomValidationCheck(contents.orgData.orgId)">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 프로젝트명
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'* 2자 이상 20자 이하, 특수문자 입력 불가'">	i</a></div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-group">
+									<input type="text" class="form-control" name="orgName" ng-model="contents.orgData.orgName" maxlength="20" placeholder="프로젝트명을 입력하세요." validation="min_len:2|max_len:20|required|custom:contents.orgNameCustomValidationCheck(contents.orgData.orgName)">
 								</div>
 							</div>
 						</div>
@@ -180,7 +181,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" ng-if="contents.orgData.personal == 'team'">
 							<div class="col-md-3">
 								<div class="write-sub-title">
 									프로젝트 쿼터 세부 유형 선택
@@ -188,11 +189,11 @@
 							</div>
 							<div class="col-md-9">
 								<div class="form-group">
-									<select name="quotaPlan" title="쿼터 세부 유형 선택" class="form-control select2" ng-model="contents.orgData.quotaPlan" ng-options="quota as quota.code for quota in contents.quotaPlans track by quota.id" ng-change="contents.fn.changeQuotaPlan(contents.orgData.quotaPlan);" ng-disabled="contents.orgData.personal == 'personal'"></select>
+									<select name="quotaPlan" title="쿼터 세부 유형 선택" class="form-control select2" ng-model="contents.orgData.quotaPlan" ng-options="quota as quota.code for quota in contents.quotaPlans track by quota.id" ng-change="contents.fn.changeQuotaPlan(contents.orgData.quotaPlan);"></select>
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row" ng-if="contents.orgData.personal == 'team'">
 							<div class="col-md-3">
 								<div class="write-sub-title">
 									<b class="caution-star">*</b> 상세 쿼터 조정
@@ -236,7 +237,7 @@
 												<tr ng-repeat="item in contents.quotaItems">
 													<td>{{ item.orgQuotaItemGroup.name }}</td>
 													<td class="text-left">{{ item.name }}</td>
-													<td><input type="number" class="form-control form-control-sm text-right" name="quotaItem{{$index}}" ng-model="item.value" ng-disabled="contents.orgData.personal == 'personal'" validation="between:{{ item.min }}, {{ item.max }}"/></td>
+													<td><input type="number" class="form-control form-control-sm text-right" name="quotaItem{{$index}}" ng-model="item.value" validation="between:{{ item.min }}, {{ item.max }}"/></td>
 													<td class="text-center">{{ item.unit }}</td>
 													<td class="text-right">{{ item.min }}</td>
 													<td class="text-right">{{ item.max }}</td>
@@ -260,7 +261,7 @@
 										<ul class="ul-list1">
 											<li ng-repeat="(key, paasQuota) in contents.paasQuotas">
 												<div class="radio1 radio-inline">
-													<input type="radio" name="paasQuota" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid" ng-disabled="contents.orgData.personal == 'personal'">
+													<input type="radio" name="paasQuota" id="{{paasQuota.$$hashKey}}" name="guid" ng-click="contents.orgData.paasQuotaGuid = paasQuota.guid;" ng-checked="contents.orgData.paasQuotaGuid == paasQuota.guid">
 													<label for="{{paasQuota.$$hashKey}}" class="label">
 														<div class="volume_cont">
 															<ul>
