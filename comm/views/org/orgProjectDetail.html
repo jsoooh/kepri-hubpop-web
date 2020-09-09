@@ -1300,14 +1300,14 @@
 					</div>
 					<div class="col-md-6 text-right">
 						<div class="dropdown pull-right">
-							<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" title="실행 설정">
+							<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" title="실행 설정" ng-disabled="!main.checkOrgUserRole()">
 								<div class="feather-icon">
 									<i data-feather="more-horizontal"></i>
 								</div>
 							</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="" title="사용자이미지 수정" ng-disabled="!contents.isOrgManager" ng-click="contents.createOrgProjectIcon($event)">프로젝트 이미지 수정</a></li>
-								<li><a href="" title="삭제" ng-disabled="!contents.isOrgManager" ng-click="contents.checkDeleteOrgProject($event);">{{ 'label.del' | translate }}</a></li>
+								<li><a href="" title="사용자이미지 수정" ng-click="contents.createOrgProjectIcon($event)">프로젝트 이미지 수정</a></li>
+								<li><a href="" title="삭제" ng-click="contents.checkDeleteOrgProject($event);">{{ 'label.del' | translate }}</a></li>
 							</ul>
 						</div>
 					</div>
@@ -1329,7 +1329,7 @@
 					</li>
 					<li>
 						<b>설명 
-							<a ng-click="contents.createOrgProjectDesc();">
+							<a ng-click="!main.checkOrgUserRole() || contents.createOrgProjectDesc();">
 								<div class="feather-icon">
 									<i data-feather="edit" class="feather-directive"></i>
 								</div>
@@ -1382,9 +1382,9 @@
 	<div ng-if="contents.sltInfoTab == 'member'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'member'}">
 		<!-- table -->
 		<div class="margin-bottom-20 text-right">
-			<button type="button" name="button" class="btn btn-primary" ng-disabled="!contents.isOrgManager" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
-			<button type="button" name="button" class="btn btn-primary" ng-disabled="!contents.isOrgManager" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
-			<button type="button" name="button" class="btn btn-primary" ng-disabled="!contents.isOrgManager" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
+			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole()" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
+			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole()" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
+			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole()" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
 		</div>
 		
 		<section class="panel panel-bordered">
@@ -1418,20 +1418,20 @@
 								<td class="text-center">{{ orgUser.createDate.time | date : 'yyyy.MM.dd HH:mm:ss' }}</td>
 								<td class="text-center">
 									<div class="dropdown">
-										<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+										<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false" ng-disabled="!main.checkOrgUserRole()">
 											<div class="feather-icon">
 												<i data-feather="more-horizontal" class="feather-directive"></i>
 											</div>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="menu">
-											<li title="권한 변경" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
-												<a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a>
+											<li title="권한 변경">
+												<a href="" ng-click="contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a>
 											</li>
-											<li title="패스워드 초기화" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
-												<a href="" ng-class="!contents.isOrgManager ? 'disabled' : ''" ng-click="contents.isOrgManager && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
+											<li title="패스워드 초기화">
+												<a href="" ng-click="contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
 											</li>
-											<li title="삭제" ng-disabled="!contents.isOrgManager" ng-if="orgUser.roleName != 'OWNER'">
-												<a href="" ng-class="!contents.isOrgManager ? 'disabled' : 'delete'" ng-click="contents.isOrgManager && contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a>
+											<li title="삭제" >
+												<a href="" ng-click="contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a>
 											</li>
 										</ul>
 									</div>
@@ -1493,7 +1493,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="text-right">
-						<button type="button" name="button" class="btn btn-primary" data-user="aside" data-username="#aside-quota-req" ng-disabled="!contents.isOrgManager || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">쿼터변경요청</button>
+						<button type="button" name="button" class="btn btn-primary" data-user="aside" data-username="#aside-quota-req" ng-disabled="!main.checkOrgUserRole() || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">쿼터변경요청</button>
 						<!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
 			                 <span class="ico">추가(기존)</span>
 			             </button>-->
@@ -1549,7 +1549,7 @@
 								<td class="text-center">{{ item.treatCodeNm }}</td>
 								<td class="text-center">
 									<div class="dropdown">
-										<button type="button" id="btn-option2" class="btn btn-nostyle dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+										<button type="button" id="btn-option2" class="btn btn-nostyle dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false" ng-disabled="!main.checkOrgUserRole()">
 											<div class="feather-icon">
 												<i data-feather="more-horizontal" class="feather-directive"></i>
 											</div>
