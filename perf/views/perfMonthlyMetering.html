@@ -1,24 +1,27 @@
-<style type="text/css">
-	h4.note {
-		float: left;
-		font-size:22px;
-		color:#333;
-		line-height: 80px;
-	}
-</style>
-<div class="cBox type2">
-	<div class="cBox-hd">
-		<h4 class="note">※ 각 항목의 사용량은 시간당 사용량의 합산입니다.</h4>
-		<div class="pull-right">
-			<select ng-model="contents.data.sltYear" ng-options="year + '년' for year in contents.meteringYears"
-					ng-change="contents.fn.selectMeteringYear(contents.data.sltYear)">
-			</select>
+<section class="panel panel-bordered">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6">
+				<h3 class="panel-title">월별 사용현황 </h3>
+			</div>
+			<div class="col-md-6">
+				<div class="text-right margin-15">
+					<div class="form-group inline-block margin-bottom-0">
+						<select class="form-control form-control-md" ng-model="contents.data.sltYear" ng-options="year + '년' for year in contents.meteringYears"
+								ng-change="contents.fn.selectMeteringYear(contents.data.sltYear)">
+						</select>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-
-	<div class="cBox-cnt">
-		<div class="tbl type3">
-			<table class="table">
+	<div class="panel-body">
+		<div class="alert alert-primary" role="alert">
+			<i data-feather="file-text" class="feather-directive"></i>
+			<div class="text-area">각 항목의 사용량은 시간당 사용량의 합산입니다.</div>
+		</div>
+		<div class="table-wrap border-0 margin-top-20">
+			<table class="table table-hover table-bordered">
 				<colgroup>
 					<col style="width:12%;" /><!-- 서비스 -->
 					<col style="width:15%;" /><!-- 항목 -->
@@ -36,7 +39,7 @@
 					<col style="width:;" /><!-- 12월 -->
 					<col style="width:7%;" /><!-- 합계 -->
 				</colgroup>
-				<thead>
+				<thead class="text-center black white-text">
 					<tr>
 						<th rowspan="2">서비스</th>
 						<th rowspan="2">항목</th>
@@ -48,7 +51,7 @@
 					</tr>
 				</thead>
 				<tbody class="tbody_group" ng-if="!(contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists)" class="ng-scope"
-					   ng-repeat="meteringItemGroup in contents.meteringItemGroups">
+						ng-repeat="meteringItemGroup in contents.meteringItemGroups">
 					<tr ng-if="meteringItemGroup.exist">
 						<th rowspan="{{ contents.data.maxRow + 1 }}">{{ meteringItemGroup.itemGroupName }}</th>
 					</tr>
@@ -57,20 +60,20 @@
 							<span ng-switch-when="CNT">({{ orgMeteringMonthlyList.itemUnit }})</span>
 							<span ng-switch-when="NUM">({{ orgMeteringMonthlyList.itemUnit }})</span>
 						</td>
-						<td ng-repeat="(idx, meteringMonth) in contents.meteringMonths" ng-switch="orgMeteringMonthlyList.itemUnit">
+						<td ng-repeat="(idx, meteringMonth) in contents.meteringMonths" ng-switch="orgMeteringMonthlyList.itemUnit" class="text-center">
 							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="MB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'MB'}}</span>
 							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-when="GB">{{ orgMeteringMonthlyList['mv' + meteringMonth] | displayVolume:'GB'}}</span>
 							<span ng-hide="orgMeteringMonthlyList['mv' + meteringMonth] == 0" ng-switch-default="">{{ orgMeteringMonthlyList['mv' + meteringMonth] | number }}</span>
 							<span ng-show="orgMeteringMonthlyList['mv' + meteringMonth] == 0 && contents.fn.isPast(contents.data.sltYear, idx) == true">-</span>
 						</td>
-						<td ng-switch="orgMeteringMonthlyList.itemUnit">
+						<td ng-switch="orgMeteringMonthlyList.itemUnit" class="text-center">
 							<span ng-switch-when="MB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'MB'}}</span>
 							<span ng-switch-when="GB">{{ orgMeteringMonthlyList.totalMeteringValue | displayVolume:'GB'}}</span>
 							<span ng-switch-default="">{{ orgMeteringMonthlyList.totalMeteringValue | number }}</span>
 						</td>
 					</tr>
-					<tr ng-if="!meteringItemGroup.exist">
-						<th>{{ meteringItemGroup.itemGroupName }}</th>
+					<tr ng-if="!meteringItemGroup.exist" class="text-center">
+						<th class="text-left">{{ meteringItemGroup.itemGroupName }}</th>
 						<td>-</td>
 						<td>-</td>    <!-- 1월 -->
 						<td>-</td>    <!-- 2월 -->
@@ -89,10 +92,10 @@
 				</tbody>
 				<tbody ng-if="contents.orgMeteringMonthlyLists.length == 0 || !contents.orgMeteringMonthlyLists" class="ng-scope">
 					<tr>
-						<td colspan="15" class="center ng-binding">목록이 존재하지 않습니다.</td>
+						<td colspan="15" class="text-center ng-binding">목록이 존재하지 않습니다.</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
-</div>
+</section>
