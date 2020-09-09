@@ -21,11 +21,11 @@
 						<i class="xi-repeat font-size-30"></i>
 						<p class="sr-only">재배포</p>
 					</button> -->
-					<button type="button" name="button" tooltip-placement="bottom" uib-tooltip="시작" ng-show="contents.app.state == 'STOPPED'" ng-click="contents.startAppState(contents.appGuid, contents.app.name);">
+					<button type="button" name="button" tooltip-placement="bottom" uib-tooltip="시작" ng-show="contents.app.state == 'STOPPED'" ng-click="contents.startAppState(contents.appGuid, contents.app.name);" ng-disabled="!main.checkResourceUserRole()">
 						<i class="xi-play-circle-o font-size-30"></i>
 						<p class="sr-only">시작</p>
 					</button>
-					<button type="button" name="button" tooltip-placement="bottom" uib-tooltip="정지" ng-show="contents.app.state == 'STARTED'" ng-click="contents.stopAppState(contents.appGuid, contents.app.name);">
+					<button type="button" name="button" tooltip-placement="bottom" uib-tooltip="정지" ng-show="contents.app.state == 'STARTED'" ng-click="contents.stopAppState(contents.appGuid, contents.app.name);" ng-disabled="!main.checkResourceUserRole()">
 						<i class="xi-recording-stop font-size-30"></i>
 						<p class="sr-only">정지</p>
 					</button>
@@ -41,10 +41,10 @@
 							</div>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li><a class="renameInst" ng-click="contents.renameInst();">이름 변경</a></li>
-							<li ng-if="contents.app.state == 'STARTED'"><a ng-click="contents.restartApp(contents.appGuid, contents.app.name);">재시작</a></li>
-							<li ng-if="contents.app.state != 'STARTED'"><a class="disabled" title="App가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
-							<li><a  class="delete" ng-click="contents.deleteApp(contents.appGuid, contents.app.name);">삭제</a></li>
+							<li><a ng-class="{'disabled' : !main.checkResourceUserRole(), 'renameInst' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.renameInst();">이름 변경</a></li>
+							<li ng-if="contents.app.state == 'STARTED' && main.checkResourceUserRole()"><a ng-click="contents.restartApp(contents.appGuid, contents.app.name);">재시작</a></li>
+							<li ng-if="contents.app.state != 'STARTED' && !main.checkResourceUserRole()"><a class="disabled" title="App가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+							<li><a ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.deleteApp(contents.appGuid, contents.app.name);">삭제</a></li>
 						</ul>
 					</div>
 				</div>
@@ -109,7 +109,7 @@
 				<li>
 					<b>재배포</b>
 					<span>
-						<button class="btn btn-xs btn-default" data-user="aside" data-username="#aside-rework" ng-click="contents.showFormRePush($event);">재배포</button>
+						<button class="btn btn-xs btn-default" data-user="aside" data-username="#aside-rework" ng-click="contents.showFormRePush($event);" ng-disabled="!main.checkResourceUserRole()">재배포</button>
 						<!-- <button class="btn btn-xs btn-default" data-user="aside" data-username="#aside-rework" ng-click="contents.showRightFormRePush($event);">재배포</button> -->
 					</span>
 					
@@ -219,13 +219,13 @@
 						</div>
 						<div ng-if="false"><!-- 사용시 감싸는 div 삭제 -->
 							<!-- 목록 카드형/리스트형 선택 버튼 -->
-							<button type="button" class="btn btn-default" title="카드형" ng-click="contents.changeViewType('image');" ng-class="{ on : contents.listType == 'image'}">
+							<button type="button" class="btn btn-default" title="카드형" ng-click="contents.changeViewType('image');" ng-class="{ on : contents.listType == 'image'}" ng-disabled="!main.checkResourceUserRole()">
 								<div class="feather-icon">
 									<i data-feather="grid" class="feather-directive"></i>
 								</div>
 								<span class="sr-only">카드형</span>
 							</button>
-							<button type="button" class="btn btn-default" title="리스트형" ng-click="contents.changeViewType('list');" ng-class="{ on : contents.listType == 'list'}">
+							<button type="button" class="btn btn-default" title="리스트형" ng-click="contents.changeViewType('list');" ng-class="{ on : contents.listType == 'list'}" ng-disabled="!main.checkResourceUserRole()">
 								<div class="feather-icon">
 									<i data-feather="list" class="feather-directive"></i>
 								</div>
@@ -251,7 +251,7 @@
 								<em>인스턴스</em><span>{{statItem.id}}</span>
 							</p>
 							<!-- 2020.02.19 인스턴스 재시작 버튼 오류 수정 : 인스턴스 상태가 시작중이거나 재시작 버튼을 누르면 5초 정도 버튼 누르기 금지 추가 -->
-							<button type="button" name="button" class="btn btn-ico-refresh-s only-ico" title="재시작" ng-disabled="statItem.isRestart || statItem.state == 'STARTING'" ng-click="contents.instanceRestart(contents.app.guid, statItem.id);"><span class="ico">재시작</span></button>
+							<button type="button" name="button" class="btn btn-ico-refresh-s only-ico" title="재시작" ng-disabled="statItem.isRestart || statItem.state == 'STARTING' || !main.checkResourceUserRole()" ng-click="contents.instanceRestart(contents.app.guid, statItem.id);"><span class="ico">재시작</span></button>
 							<ul class="instProg">
 								<li>
 									<strong class="tit">CPU</strong>
@@ -339,7 +339,7 @@
 								<img ng-src="{{ins.getImageUriBinding(serviceItem, contents.appGuid)}}" alt="{{ serviceItem.serviceLabel }}">
 								<!--<img ng-src="images/thum/im_app_{{ serviceItem.serviceLabel }}_{{ (serviceItem.serviceBindings.length > 0) ? 'on' : 'off' }}.png" alt="{{ serviceItem.serviceLabel }}">-->
 								<div class="dropdown btn-option" ng-controller="tabAppServiceBindingsCtrl as bind">
-									<button type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정"><span class="ico">실행 설정</span></button>
+									<button type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()"><span class="ico">실행 설정</span></button>
 									<!-- serviceNameEqIdx 값이 공백이 아닐 때 -->
 									<ul class="dropdown-menu dropdown-menu-left" role="btn-optionn" aria-labelledby="btn-option" ng-if="serviceItem.serviceNameEqIdx != ''">
 										<li>
@@ -349,7 +349,7 @@
 											<a href="javascript:void(0);" ng-click="bindingInfo($event, serviceItem, contents.appGuid);">연결 정보</a>
 										</li>
 										<li>
-											<a href="javascript:void(0);" ng-click="bind.deleteAppServiceBinding(serviceItem.serviceBindings, contents.app.name, serviceItem.name);">연결 해제</a>
+											<a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || bind.deleteAppServiceBinding(serviceItem.serviceBindings, contents.app.name, serviceItem.name);">연결 해제</a>
 										</li>
 									</ul>
 									<!-- serviceNameEqIdx 값이 공백일때 -->
@@ -358,7 +358,7 @@
 											<a href="javascript:void(0);" ng-click="serviceInfo($event, serviceItem);">서비스 정보보기</a>
 										</li>
 										<li>
-											<a href="javascript:void(0);" ng-click="bind.createAppServiceBinding(contents.appGuid, serviceItem.guid, serviceItem.name)">연결하기</a>
+											<a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || bind.createAppServiceBinding(contents.appGuid, serviceItem.guid, serviceItem.name)">연결하기</a>
 										</li>
 									</ul>
 								</div>

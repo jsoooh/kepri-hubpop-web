@@ -12,7 +12,7 @@
 		</div>
 		<div class="col-md-6 text-right">
 			<div class="padding-top-10 padding-horizontal-20">
-				<button type="button" title="추가" ng-click="tab.createAppEnvironment($event);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+				<button type="button" title="추가" ng-click="tab.createAppEnvironment($event);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
 				<button id="set" type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel('set')"></button>
 			</div>
 		</div>
@@ -51,8 +51,8 @@
 							<td class="text-center">{{ envItem.key }}</td>
 							<td class="text-center">{{ envItem.val }}</td>
 							<td class="text-center">
-								<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.edit' | translate }}" ng-click="tab.updateAppEnvironment($event, envItem);"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.edit' | translate }}" /></button>
-								<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppEnvironment(envItem)"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button>
+								<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.edit' | translate }}" ng-click="tab.updateAppEnvironment($event, envItem);" ng-disabled="!main.checkResourceUserRole()"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.edit' | translate }}" /></button>
+								<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppEnvironment(envItem)" ng-disabled="!main.checkResourceUserRole()"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button>
 							</td>
 						</tr>
 						<tr ng-if="tab.appUserEnvVars.length == 0">

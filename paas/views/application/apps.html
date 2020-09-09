@@ -37,7 +37,7 @@
 
 <!-- button area Start-->
 <div class="margin-bottom-20" ng-if="!!main.sltOrganizationGuid">
-	<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/paas/appsPush')">
+	<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/paas/appsPush')" ng-disabled="!main.checkResourceUserRole()">
 		<div class="feather-icon color-primary"><i data-feather="smartphone" class="feather-directive"></i></div> <b>App 배포</b>
 	</button>
 </div>
@@ -65,14 +65,14 @@
 										<div id="renameAppButton-{{appItem.name}}" class="renameWrap" style="display: none;">
 											<input id="inputAppName-{{appItem.name}}" type="text" data-guid="{{appItem.guid}}" name="{{appItem.name}}" class="form-control" ng-model="appItem.name" maxlength="20" validation="min_len:3|max_len:20|required">
 											<div class="sdBtnWrap">
-												<button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="contents.updateAppName(appItem.name)"><i class="xi-save"></i></button>
-												<button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameApp(appItem.name)"><i class="xi-close"></i></button>
+												<button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="contents.updateAppName(appItem.name)" ng-disabled="!main.checkResourceUserRole()"><i class="xi-save"></i></button>
+												<button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameApp(appItem.name)" ng-disabled="!main.checkResourceUserRole()"><i class="xi-close"></i></button>
 											</div>
 										</div>
 									</div>
 									<div class="col-xs-2">
 										<div class="dropdown btn-option pull-right">
-											<button type="button"  id="btn-option-{{appItem.name}}" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<button type="button"  id="btn-option-{{appItem.name}}" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 												<div class="feather-icon"><i data-feather="more-horizontal" class="feather-directive"></i></div>
 											</button>
 											<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
@@ -191,8 +191,8 @@
 							<div id="renameAppButton-{{appItem.name}}" class="renameWrap" style="display:none;">
 								<input id="inputAppName-{{appItem.name}}" type="text" data-guid="{{appItem.guid}}" name="{{appItem.name}}" class="form-control" ng-model="appItem.name" maxlength="20" validation="min_len:3|max_len:20|required">
 								<div class="sdBtnWrap">
-									<button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="contents.updateAppName(appItem.name)"><i class="xi-save"></i></button>
-									<button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameApp(appItem.name)"><i class="xi-close"></i></button>
+									<button type="button" name="button" class="btn btn-ico-saveName-s only-ico" title="이름저장" ng-click="contents.updateAppName(appItem.name)" ng-disabled="!main.checkResourceUserRole()"><i class="xi-save"></i></button>
+									<button type="button" name="button" class="btn btn-ico-delName-s only-ico" title="변경취소" ng-click="contents.renameApp(appItem.name)" ng-disabled="!main.checkResourceUserRole()"><i class="xi-close"></i></button>
 								</div>
 							</div>
 						</td>
@@ -220,7 +220,7 @@
 						<td class="text-center">{{ appItem.updated | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
 						<td class="text-center">
 							<div class="dropdown btn-option">
-								<button type="button" id="btn-option-{{appItem.name}}" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+								<button type="button" id="btn-option-{{appItem.name}}" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 									<div class="feather-icon"><i data-feather="more-horizontal" class="feather-directive"></i></div>
 								</button>
 								<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
@@ -280,7 +280,7 @@
 			<p>현재 생성한 프로젝트가 없습니다.</p>
 			<p><span class="point">프로젝트를 생성</span> 하고 HUB-PoP 서비스를 사용하세요.</p>
 		</div>
-		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('paas');">프로젝트 생성</button>
+		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('paas');" ng-disabled="!main.checkResourceUserRole()">프로젝트 생성</button>
 	</div>
 </div>
 <!-- //테넌트 생성 전인 경우(new) -->
