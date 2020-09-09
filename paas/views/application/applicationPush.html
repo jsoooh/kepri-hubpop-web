@@ -456,7 +456,7 @@
 		</div>
 	</div>	
 	<div class="text-right">
-		<button class="btn btn-lg btn-primary" ng-click="contents.checkDuplRoute();">App 생성</button>
+		<button class="btn btn-lg btn-primary" ng-click="contents.checkDuplRoute();" ng-disabled="!main.checkResourceUserRole()">App 생성</button>
 		<button class="btn btn-lg btn-default" ng-click="main.goToPage('/paas/apps')">취소</button>
 		<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
 		<!-- <button class="btn btn-lg btn-success" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button> -->

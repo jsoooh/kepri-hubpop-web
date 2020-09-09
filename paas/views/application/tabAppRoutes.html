@@ -12,7 +12,7 @@
 		</div>
 		<div class="col-md-6 text-right">
 			<div class="padding-top-10 padding-horizontal-20">
-				<button type="button" title="추가" ng-click="tab.createAppRoute($event);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+				<button type="button" title="추가" ng-click="tab.createAppRoute($event);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
 				<button id="route" type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel('route')"></button>
 			</div>
 		</div>
@@ -54,7 +54,7 @@
 							<td class="ovflw_visible text-center">
 								<!-- td의 overflow:hidden 해제 --> <!-- <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppRoute(routeItem.guid, routeItem.host)"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button> -->
 								<div class="dropdown btn-option">
-									<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+									<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 										<div class="feather-icon">
 											<i data-feather="more-horizontal" class="feather-directive"></i>
 										</div>
