@@ -10,7 +10,7 @@ angular.module('portal.controllers')
         $scope.main.displayHistoryBtn = true;
 
         ct.paramId = $stateParams.orgId;
-        ct.isOrgManager = false;
+        // ct.isOrgManager = false;     // 공통 컨트롤러 에서 처리
         /* 20.04.24 - 프로젝트 목록 : 우측 메뉴 기능 by ksw */
         /* 사용자 변경을 통해 DetailController로 넘어올 경우 구성원 탭 선택(기본은 대시보드) */
         if (orgService.changeUser) {
@@ -59,9 +59,10 @@ angular.module('portal.controllers')
                         $scope.main.reloadTimmer['getOrgProject_' + ct.paramId] = null;
                     }
                     ct.selOrgProject = data;
-                    if (ct.selOrgProject.myRoleName == 'OWNER' || ct.selOrgProject.myRoleName == 'ADMIN') {
+                    // 공통 컨트롤러 에서 처리
+                    /*if (ct.selOrgProject.myRoleName == 'OWNER' || ct.selOrgProject.myRoleName == 'ADMIN') {
                         ct.isOrgManager = true;
-                    }
+                    }*/
                     $timeout(function () {
                         $scope.main.changePortalOrg(data);
                         ct.loadDashBoard();

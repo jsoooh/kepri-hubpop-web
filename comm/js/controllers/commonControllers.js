@@ -306,7 +306,7 @@ angular.module('common.controllers', [])
         };
 
         // 프로젝트 유저 권한 체크 ( [OWNER] : CRUD 가능, [ADMIN, USER] : Read만 가능 )
-        mc.checkProjectUserRole = function () {
+        mc.checkOrgUserRole = function () {
             if ($scope.main.sltPortalOrgMyRoleName && $scope.main.sltPortalOrgMyRoleName == CONSTANTS.roleName.owner) {
                 return true;
             } else {
