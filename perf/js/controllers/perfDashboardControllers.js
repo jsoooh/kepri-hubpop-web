@@ -79,19 +79,20 @@ angular.module('perf.controllers')
                 },
                 option: {
                     chart: {
-                        width: 450,
-                        height: 400,
+                        width: 455,
+                        height: 299,
                         format: '1,000'
                     },
                     series: {
-                        radiusRange: ['40%', '100%'],
+                        radiusRange: ['75%', '100%'],
                         showLabel: false
                     },
                     tooltip: {
                         suffix: '원'
                     },
                     legend: {
-                        showCheckbox: false
+                        showCheckbox: false,
+                        align:'bottom'
                     }
                 },
                 instance: null
@@ -111,12 +112,12 @@ angular.module('perf.controllers')
                 },
                 option: {
                     chart: {
-                        width: 450,
-                        height: 400,
+                    	width: 425,
+                        height: 299,
                         format: '1,000'
                     },
                     series: {
-                        radiusRange: ['40%', '100%'],
+                        radiusRange: ['75%', '100%'],
                         showLabel: false
                     },
                     tooltip: {
