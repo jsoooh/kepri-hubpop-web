@@ -84,11 +84,8 @@ angular.module('common.controllers', [])
                 common.showDialogAlert('알림', '현재 프로젝트는 "App 실행 서비스"를 이용하지 않는 프로젝트입니다.');
                 return;
             }
-            //mc.hideTitle = true;               //title 감추기
             mc.sltMenu = menuItem;
             common.locationHref(menuItem.urlPath);
-            //mc.hideTitle = false;               //title 감추기
-            //console.log("mc.sltMenu : ", mc.sltMenu);
         };
 
         //전체 메뉴 오픈 여부
@@ -600,7 +597,7 @@ angular.module('common.controllers', [])
             if (response && response.status == 200 && angular.isObject(response.data) && angular.isArray(response.data.items)) {
                 mc.dbMenuList = response.data.items;
                 //mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
-                //console.log("mc.dbMenuList : ", mc.dbMenuList);
+                console.log("mc.dbMenuList : ", mc.dbMenuList);
             }
         };
 
@@ -1779,9 +1776,16 @@ angular.module('common.controllers', [])
                 }
             });
             orgPromise.error(function (data) {
-                console.log('error', data)
+                console.log('error', data);
                 $scope.main.loadingMainBody = false;
             });
+        };
+
+        //urlPath 로 메뉴 선택 후 화면전환
+        mc.setMenuByUrlPath = function(urlPath) {
+            var menuItem = common.objectsFindCopyByField(mc.dbMenuList, "urlPath", urlPath);
+            if (menuItem == null) return;
+            mc.setMenu(menuItem);
         };
 
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);
