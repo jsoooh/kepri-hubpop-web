@@ -1,0 +1,130 @@
+@charset "utf-8";
+
+.modal-header .close {color: #808080; opacity: 1;}
+
+.modal-content.modal-sm{width: 400px;margin:0 auto;}/*180404 width 300>400*/
+.modal-content.modal-sm .modal-header{padding:15px 20px; cursor:move;}/*180404 스타일 변경 padding 값 조정 : 10 28 > 15 20*/
+
+
+
+.modal-content.modal-sm .modal-body{padding:20px 20px 5px; text-align: center;}
+.modal-content.modal-sm .modal-body{font-size:17px;text-align: left;}/*180404 스타일 갱신*/
+.modal-content.modal-sm .modal-footer{padding:10px 10px 20px;}
+.modal-content.modal-sm .modal-footer .btn{min-width: 80px; height: 32px;}
+/*.modal-content.modal-sm .only-text{line-height: 20px; padding:10px 15px; border-radius:5px; background:#edf5fc;}*/
+.modal-content.modal-sm .only-text{line-height: 20px; padding:10px 0px 10px; color:#6e6e6e;}/*180404 스타일 갱신*/
+
+.modal-content.type2 {border:0; background-color: rgba(0,0,0,.49);}
+.modal-content.type2 .close{right:10px; top:10px; opacity:1; z-index: 1; text-shadow:none;}
+.modal-content.type2 .close span{color:#fff;}
+.modal-content.type2 .modal-body{color:#fff; z-index: 0; padding-top:50px;}
+.modal-content.type2 .only-text{font-size: 20px; line-height: 30px; text-align: center;}
+
+/* modal table */
+.modal-content .tbl tbody tr:nth-child(2n-1) td{background-color:#fafafa;}/*180404 스타일 추가*/
+.modal-content .tbl tbody tr.bg_none td{background-color:#fff;}
+.modal-content .tbl th{font-size: 15px;}
+.modal-content .tbl td{font-size: 15px;}
+
+.modal-content .tbl.type1 th{height: 40px; padding:5px;}
+.modal-content .tbl.type1 td{height: 40px; padding:5px;}
+
+.modal-content .tbl.type3{border-color: #ebebeb;}
+.modal-content .tbl.type3 th{color:#7d7d7d; height: 40px;}
+.modal-content .tbl.type3 td{height: 40px;}
+.modal-content .tbl.type3 tr:first-child td{ border-color: #ebebeb;}
+.modal-content .pagiWrap {margin-top: 20px;}
+
+.modal-content .tbw th, .modal .tbw td{font-size: 15px; height: 40px; padding:10px;}
+.modal-content .tbw.type1 td input[type="text"]{font-size: 14px; height:35px;}
+.modal-content .tbw.type1 td select{height:35px;}
+/*180615 팝업테이블 타이틀 추가*/
+.modal-content .tbw.type1 span.tbw_tit {display:block; font-size:18px; color:#333; margin-bottom:13px;}
+.modal-content .tbw.type1 span.tbw_tit.mgt30 {margin-top:30px;}
+
+/* modal search */
+.modal-content .searchWrap {padding:0; margin-bottom: 20px; background: none; }
+.modal-content .searchWrap .input-group input{height:34px; border-right:0; border-top-right-radius: 0; border-bottom-right-radius: 0;}
+.modal-content .searchWrap .label{font-size: 15px; padding-right: 5px;}
+.modal-content .searchWrap .control-label{color:#666;}
+.modal-content .searchWrap .btn-sch{min-width: 40px; height:34px; padding:0 10px;}
+.modal-content .searchWrap .btn-sch{font-size: 19px;}
+
+/* modal list */
+.modal-content .was-list li .im{width:80px; height: 60px; margin-top: 5px; border-color:#c9c8c8;}
+.modal-content .was-list li .radio-inline.radio label{line-height: 21px;}
+.modal-content .was-list .was-txt{font-size: 13px; color:#888;}
+
+/* modal scroll */
+.modal-content .scroll-pane{padding-bottom:10px !important; margin-bottom: -10px;}
+
+/* modal setting */
+.modal-content .appl-power-text{font-size:20px; color:#1e2d40; line-height:35px; padding:30px 0; text-align:center; border-radius:4px; background:#edf5fc;}
+.modal-content .appl-power-text .txt1 > span{display: inline-block; vertical-align: top;}
+.modal-content .appl-power-text .txt1::before{display: inline-block; content:"\f10d"; line-height: 1; margin-right: 10px; vertical-align: top; font-family: 'FontAwesome';}
+.modal-content .appl-power-text .txt1::after{display: inline-block; content:"\f10e"; line-height: 1; margin-left: 10px; vertical-align: top; font-family: 'FontAwesome';}
+.modal-content .appl-power-text .txt2{font-size: 18px;}
+.modal-content .appl-power-form{margin-top:20px; padding-bottom: 20px; text-align: center; border-bottom:1px solid #ebebeb;}
+.modal-content .appl-power-form .radio label{font-size: 16px; color:#666; font-weight: 700; padding-right: 0;}
+.modal-content .appl-power-form .radio  + .radio{margin-left:50px;}
+
+/* 테스트용 영역 */
+.bs-example-modal .modal {position: relative; top: auto; right: auto; bottom: auto; left: auto; z-index: 1; display: block; padding:15px;}
+.bs-example-modal .modal-dialog { left: auto; margin-top: 30px; margin-right: auto; margin-left: auto;}
+
+/* 개발 팝업 */
+.md-dialog-container{min-height: 600px; overflow: auto;}
+md-dialog.md-default-theme, md-dialog{background-color: inherit;}
+md-dialog{overflow: hidden;}
+md-dialog .modal-body{max-height: 600px; overflow-y: auto;}
+
+/*180726 공통팝업(알림, 경고) 스타일 추가*/
+.modal-body .alertWrap {position:relative;}
+.modal-body .alertWrap .alertIcon {position:absolute; top:0; left:0; display:inline-block;}
+.modal-body .alertWrap .alertContent h2.md-title {font-size:20px; font-weight:500; letter-spacing:0.005em; padding:12px 0 0 60px;}
+.modal-body .alertWrap .alertContent .md-dialog-content-body {padding:25px 0 10px 0;}
+
+
+/*================== 신규팝업 CSS(2018-10 ~) 작성자:김보람 =================*/
+
+.modal-content.modal-xlg {width:1200px;}
+
+.modal-type-proj .modal-header {position:relative; height:auto; padding:20px; background:#fff; cursor:move;}
+.modal-type-proj .modal-header.brdb0 {border-bottom:0;}
+.modal-type-proj .modal-title {font-size:18px; color:#333; letter-spacing:-0.03em; font-weight:500; text-align:left;}
+.modal-type-proj .modal-content .close {position:absolute; right:20px; top:13px; z-index: 0; font-size:0px; margin-top:0; opacity:1; color:#a7a7a7; text-shadow:none; width:31px; height:31px; background:url("../images/btn_pop_close.png") no-repeat 0 0;}
+.modal-type-proj .modal-content .close:hover {background:url("../images/btn_pop_close.png") no-repeat 0 -39px;}
+.modal-type-proj .modal-body .cnt_box {padding:0 40px 40px 40px; }
+.modal-type-proj .pop_logo {display:block; width:100%; height:58px; background:url("../images/join_logo.png") no-repeat center center; margin-bottom:30px;}
+.modal-type-proj .modal-body .pop_box {background:#f5f5f5; border:1px solid #ddd; border-radius:3px; padding:17px;}
+.modal-type-proj .modal-body .pop_box span {display:block; height:22px; font-size:20px; color:#333; text-align:center; padding-left:35px;}
+.modal-type-proj .modal-body .pop_box span.ico01 {background:url("../images/ico_pop_box.png") no-repeat 105px top;}
+.modal-type-proj .modal-body .pop_box span.ico02 {background:url("../images/ico_pop_box.png") no-repeat 125px bottom;}
+.modal-type-proj .modal-body .txt {font-size:22px; color:#333; text-align:center; line-height:33px; letter-spacing:-2px; padding:25px 0; }
+.modal-type-proj .modal-body .txt em {font-weight:500; color:#0f67d3; }
+.modal-type-proj .modal-body .cnt_box .btn_area {padding-top:30px; text-align:center;}
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create {width:340px; background:#3360c5; text-align:center; border-radius:50px;}
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create:hover {background:#00bfff;}
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create span {display:inline-block; font-size:18px; font-weight:500; color:#fff; line-height:22px; padding:13px 0 14px 0; }
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create span::before {display:inline-block; content:''; width:22px; height:19px; background:url("../images/ico_folder.png") no-repeat left top; margin-right:6px; vertical-align:bottom;}
+.modal-type-proj .modal-body .cnt_box .btn_area .btn_create.ico_none span::before {display:none;}
+/* .modal-type-proj .modal-body .cnt_box .btn_area .btn_create.ico_svr span::before {display:inline-block; content:''; width:22px; height:22px; background:url("../images/ico_vm.png") no-repeat left top; margin-right:6px; vertical-align:bottom;} */
+
+
+/*공지사항 레이어 팝업*/
+.notice_pop .pop_tit h5 {display:block; font-size:24px; font-weight:700; color:#333; line-height:1.3;  border-bottom:1px solid #ddd; padding-bottom:20px; margin-bottom:30px;}
+.notice_pop .noti_cont_area {height:300px; overflow-y:auto; margin-bottom:30px;}
+.notice_pop .noti_cont_area a {color:#337ab7;}
+.notice_pop pre {display:block; width:100%; max-height:300px; font-family:'Noto Sans KR', 'Montserrat','Apple SD Gothic Neo', sans-serif; font-size:15px; color:#333; line-height:1.42857143; word-break:break-all; word-wrap:break-word; white-space:pre-line; overflow-y:auto; background:none; border:0; border-radius:0px; margin:0;}
+.notice_pop .tbw {/* max-height:86px; min-height:46px; overflow-y:auto; */ margin:0 0 10px 0;}
+.notice_pop .tbw th span.ico_link_file {display:block;}
+.notice_pop .tbw th span.ico_link_file:before {display:inline-block; content:''; width:13px; height:15px; background:url("../images/ico_link_file.png") no-repeat left top; margin-right:5px;}
+.notice_pop .tbw td > a {display:block; color:#888; padding:5px 0;}
+.notice_pop .tbw td > a:hover {color:#333; text-decoration:underline;}
+.notice_pop .modal-footer {border:0; background:#3e424d; text-align:left; padding: 15px;}
+.notice_pop .modal-footer label {color:#fff; }
+.notice_pop img {width:100%; padding:10px; margin:0;}
+/* .popup_bg {position:absolute; width:100%; height:100%; background-color: rgba(33,33,33,1.0); opacity:.48;} */
+
+/*팝업 타이틀 스타일 추가*/
+.pop_tit .p_stit {display:inline-block; font-size:15px; line-heigt:15px; vertical-align:middle; padding-right:10px;}

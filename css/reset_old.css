@@ -27,6 +27,33 @@
        url('../fonts/Montserrat-Bold.woff') format('woff');
 }
 
+@font-face {
+   font-family: 'Noto Sans KR';
+   font-style: normal;
+   font-weight: 400;
+   src: url("../fonts/notosanskr/NotoSansKR-Regular.woff2") format("woff2"),
+        url("../fonts/notosanskr/NotoSansKR-Regular.woff") format("woff"),
+        url("../fonts/notosanskr/NotoSansKR-Regular.otf") format("opentype");
+ }
+
+@font-face {
+   font-family: 'Noto Sans KR';
+   font-style: normal;
+   font-weight: 500;
+   src: url("../fonts/notosanskr/NotoSansKR-Medium.woff2") format("woff2"),
+        url("../fonts/notosanskr/NotoSansKR-Medium.woff") format("woff"),
+        url("../fonts/notosanskr/NotoSansKR-Medium.otf") format("opentype");
+ }
+
+@font-face {
+   font-family: 'Noto Sans KR';
+   font-style: normal;
+   font-weight: 700;
+   src: url("../fonts/notosanskr/NotoSansKR-Bold.woff2") format("woff2"),
+        url("../fonts/notosanskr/NotoSansKR-Bold.woff") format("woff"),
+        url("../fonts/notosanskr/NotoSansKR-Bold.otf") format("opentype");
+ }
+ 
  @font-face {
     font-family: 'NanumPen';
     font-style: normal;
@@ -41,11 +68,12 @@
 
 /* reset */
 html {height:100%; font-size:10px;}
-body {width:100%; height:100%; margin:0; font-size:14px; color:#333; letter-spacing: -0.02em; line-height: 18px; font-weight:400;}
+body {width:100%; height:100%; margin:0; font-size:14px; color:#333; letter-spacing: -0.02em; line-height: 18px; font-weight:400; font-family: 'Noto Sans KR', 'Montserrat','Apple SD Gothic Neo', sans-serif;}
 * {margin:0; padding:0; border:none; -webkit-text-size-adjust:none; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; -webkit-tap-highlight-color:rgba(0,0,0,0) !important; }
 *:before, *:after {-moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box;}
 *:focus{outline: none !important; -webkit-tap-highlight-color:rgba(0,0,0,0) !important;}
 
+button, select, textarea, input { font-size:14px; font-family: 'Noto Sans KR', 'Montserrat','Apple SD Gothic Neo', sans-serif; }
 
 h1, h2, h3, h4, h5, h6 {color:inherit; font-size:inherit; margin:0; font-family:inherit;}
 fieldset, img {border:none; vertical-align:middle;}

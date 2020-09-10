@@ -1962,10 +1962,10 @@ angular.module('common.services', ['LocalStorageModule'])
                         } else {
                             dialogOptions.btnTemplate = '<p ng-show="dialogOptions.bottomLeftMessage" class="pull-left">{{ dialogOptions.bottomLeftMessage }}</p>\n';
                             if (dialogOptions.okBtnHide != true) {
-                                dialogOptions.btnTemplate += '<button ng-hide="actionBtnHied" class="btn btn-color1" ng-click="popDialogOk()" ng-hide="error || success" ng-disabled="dialogOptions.authenticate">{{ dialogOptions.okName }}</button>\n';
+                                dialogOptions.btnTemplate += '<button ng-hide="actionBtnHied" class="btn btn-primary" ng-click="popDialogOk()" ng-hide="error || success" ng-disabled="dialogOptions.authenticate">{{ dialogOptions.okName }}</button>\n';
                             }
                             if (dialogOptions.cancelBtnHide != true) {
-                                dialogOptions.btnTemplate += '<button ng-hide="actionBtnHied" class="btn btn-color2" data-dismiss="modal" ng-click="popCancel()">{{ dialogOptions.closeName }}</button>\n';
+                                dialogOptions.btnTemplate += '<button ng-hide="actionBtnHied" class="btn btn-default" data-dismiss="modal" ng-click="popCancel()">{{ dialogOptions.closeName }}</button>\n';
                             }
                         }
                     }
