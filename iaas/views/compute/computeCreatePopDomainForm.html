@@ -1,4 +1,4 @@
-<div class="tbw type1">
+<div class="board-warp board-write-wrap">
 	<table class="table">
 		<colgroup>
 			<col style="width: 25%;">
@@ -8,12 +8,12 @@
 			<tr>
 				<th scope="row" >접속도메인</th>
 				<td>
-					<div class="app-form-two">
-						<div class="two_box">
-							<input type="text" class="form-control" maxlength="30" name="subDomain" ng-model="pop.domain.subDomain" validation="alpha_lower_num|required|custom:pop.fn.subDomainCustomValidationCheck(pop.domain.subDomain)" placeholder="서브 도메인명을 입력하세요.">
+					<div class="style-table">
+						<div class="style-td padding-right-5" style="width: 60%;">
+							<input type="text" class="form-control form-control-sm" maxlength="30" name="subDomain" ng-model="pop.domain.subDomain" validation="alpha_lower_num|required|custom:pop.fn.subDomainCustomValidationCheck(pop.domain.subDomain)" placeholder="서브 도메인명을 입력하세요.">
 						</div>
-						<div class="two_box">
-							<select name="selectBaseDomain" class="form-control" ng-model="pop.domain.baseDomain" validation="required" style="width:180px;">
+						<div class="style-td padding-right-5" style="width: 40%;">
+							<select name="selectBaseDomain" class="form-control form-control-sm" ng-model="pop.domain.baseDomain" validation="required" style="width:160px;">
 								<option ng-if="!pop.baseDomains || pop.baseDomains.length == 0" value="">도메인 없음</option>
 								<option ng-repeat="item in pop.baseDomains" value="{{item.domain}}">{{item.domain}}</option>
 							</select>
@@ -23,9 +23,9 @@
 				</td>
 			</tr>
 			<tr>
-				<th scope="row" rowspan="2">접속 포트</th>
+				<th scope="row">접속 포트</th>
 				<td>
-					<input type="number" class="form-control" name="http_source_port" ng-model="pop.domain.sourcePort" min="1" max="99999" max-number-length="5" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.domain.sourcePort)">
+					<input type="number" class="form-control form-control-sm" name="http_source_port" ng-model="pop.domain.sourcePort" min="1" max="99999" max-number-length="5" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.domain.sourcePort)">
 				</td>
 			</tr>
 		</tbody>

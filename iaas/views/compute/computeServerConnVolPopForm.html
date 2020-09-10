@@ -1,30 +1,36 @@
 <!-- table -->
 <scrollable-table watch="pop.volumeList" class="tableHeight280"><!-- resizable 는 싸이즈 조절이 필요한 곳 만 적용 -->
-	<table class="table">
-		<thead>
-		<tr>
-			<th style="width:20%;">선택</th>
-			<th style="width:auto;">디스크명</th>
-			<th style="width:25%;">디스크 크기</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr ng-repeat="volume in pop.volumeList" row-id="{{ item.volumeId }}" ng-class="{'tbl_disabled': volume.volumeAttachment.instanceId, 'tbl_selected': volume.volumeId == pop.sltVolumeId}"  ng-click="pop.fn.setInstanceVolume(volume)">
-			<td>
-				<div class="radio radio-only">
-					<input type="radio" name="volumeRadio" ng-model="pop.sltVolumeId" value="{{volume.volumeId}}" id="volume-{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)" ng-disabled="volume.volumeAttachment.instanceId">
-					<label for="volume-{{volume.volumeId}}"></label>
-				</div>
-			</td>
-			<td>{{volume.name}}</td>
-			<!--<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>-->
-			<td>{{volume.size | displayVolume:'GB'}}</td>
-		</tr>
-		<tr ng-if="pop.volumeList == 0">
-			<td colspan="3">{{ 'message.mi_dont_exist_list' | translate }}</td>
-		</tr>
-		</tbody>
-	</table>
+	<div class="table-wrap">
+		<table class="table table-outline">
+			<thead class="grey">
+				<tr>
+					<th style="width:20%;">선택</th>
+					<th style="width:auto;">디스크명</th>
+					<th style="width:25%;">디스크 크기</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="volume in pop.volumeList" row-id="{{ item.volumeId }}" ng-class="{'tbl_disabled': volume.volumeAttachment.instanceId, 'tbl_selected': volume.volumeId == pop.sltVolumeId}"  ng-click="pop.fn.setInstanceVolume(volume)">
+					<td>
+						<div class="radio-group">
+							<input type="radio" name="volumeRadio" ng-model="pop.sltVolumeId" value="{{volume.volumeId}}" id="volume-{{volume.volumeId}}" class="radio-input" ng-click="pop.fn.setInstanceVolume(volume)" ng-disabled="volume.volumeAttachment.instanceId">
+							<label for="volume-{{volume.volumeId}}" class="radio-item">
+								<div class="radio">
+									<div class="checked-icon"></div>
+								</div>
+							</label>
+						</div>
+					</td>
+					<td>{{volume.name}}</td>
+					<!--<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>-->
+					<td>{{volume.size | displayVolume:'GB'}}</td>
+				</tr>
+				<tr ng-if="pop.volumeList == 0">
+					<td colspan="3">{{ 'message.mi_dont_exist_list' | translate }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </scrollable-table>
 <!--
 <div class="tbl type1">
