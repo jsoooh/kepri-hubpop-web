@@ -48,6 +48,9 @@ angular.module('common.controllers', [])
         mc.dashboardFull = false;           //대시보드 화면 전체보기
         mc.myServiceOpen = true;            //메뉴 즐겨찾기 dropdown
         //mc.hideTitle = true;              //title 감추기
+        mc.checkUseYnIaas = "";
+        mc.checkUseYnGpu = "";
+        mc.checkUseYnPaas = "";
 
         //좌측 대메뉴 선택
         mc.setGroupMenu = function (menuItem) {
@@ -1744,6 +1747,64 @@ angular.module('common.controllers', [])
             });
         };
 
+        //iaas/gpu/paas 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+        mc.checkUseYnPortalOrgSystem = function (system) {
+            if (system == "iaas") mc.checkUseYnIaas = "";
+            if (system == "gpu") mc.checkUseYnGpu = "";
+            if (system == "paas") mc.checkUseYnPaas = "";
+            var rVal = "";
+            if (!mc.sltPortalOrgId) return;
+            if (system == "iaas" && !mc.sltPortalOrg.isUseIaas) return;
+            if (system == "gpu" && !mc.sltPortalOrg.isUseGpu) return;
+            if (system == "paas" && !mc.sltPortalOrg.isUsePaas) return;
+            mc.loadingMainBody = true;
+            var promise = portal.portalOrgs.checkUseYnPortalOrgSystem(mc.sltPortalOrg.orgId, system);
+            promise.success(function (data) {
+                if (system == "iaas" || system == "gpu") {
+                    if (data && data.content) {
+                        rVal = data.content;             //iaas, gpu
+                    }
+                } else if (system == "paas" && data) {
+                    rVal = data == 0 ? "N" : "Y";    //paas
+                }
+                if (system == "iaas") mc.checkUseYnIaas = rVal;
+                if (system == "gpu") mc.checkUseYnGpu = rVal;
+                if (system == "paas") mc.checkUseYnPaas = rVal;
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+                mc.loadingMainBody = false;
+            });
+        };
+
+        //iaas/gpu/paas [서비스 삭제하기]
+        mc.deletePortalOrgSystem = function (system) {
+            if (system == "iaas") mc.checkUseYnIaas = "";
+            if (system == "gpu") mc.checkUseYnGpu = "";
+            if (system == "paas") mc.checkUseYnPaas = "";
+            var rVal = "";
+            if (!mc.sltPortalOrgId) return;
+            if (system == "iaas" && !mc.sltPortalOrg.isUseIaas) return;
+            if (system == "gpu" && !mc.sltPortalOrg.isUseGpu) return;
+            if (system == "paas" && !mc.sltPortalOrg.isUsePaas) return;
+            mc.loadingMainBody = true;
+            var promise = portal.portalOrgs.deletePortalOrgSystem(mc.sltProjectId, mc.sltPortalOrg.orgId, system);
+            promise.success(function (data) {
+                if (system == "iaas" || system == "gpu") {
+                    mc.loadUserTenant();
+                }
+                if (system == "paas") {
+                    mc.loadSltOrganization();
+                }
+            });
+            promise.error(function (data, status, headers) {
+            });
+            promise.finally(function (data, status, headers) {
+                mc.loadingMainBody = false;
+            });
+        };
+
         // 조직 정보 조회
         mc.searchCnt = 0;
         mc.getOrgProject = function (system) {
@@ -1770,7 +1831,7 @@ angular.module('common.controllers', [])
                         $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]);
                         $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
                     }
-                    console.log(data);
+                    //console.log(data);
                     mc.changePortalOrg(data);
                     mc.loadingMainBody = false;
                 }

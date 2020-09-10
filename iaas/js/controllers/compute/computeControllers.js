@@ -198,6 +198,10 @@ angular.module('iaas.controllers')
                         ct.loadingServerList = true;
                     }
                 }
+                //서버 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                if (!ct.loadingServerList) {
+                    $scope.main.checkUseYnPortalOrgSystem("iaas");
+                }
                 var isServerStatusCheck = false;
                 common.objectOrArrayMergeData(ct.serverMainList, instances);
                 ct.fnGetInstancesData();
