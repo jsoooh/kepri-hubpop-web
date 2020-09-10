@@ -1831,6 +1831,7 @@ angular.module('common.controllers', [])
             promise.success(function (data) {
                 if (system == "iaas" || system == "gpu") {
                     mc.loadUserTenant();
+                    mc.loadingMainBody = false;
                 }
                 if (system == "paas") {
                     mc.loadSltOrganization();

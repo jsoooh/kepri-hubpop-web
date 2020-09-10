@@ -1578,57 +1578,26 @@ angular.module('portal.controllers')
             });
         };
 
-        /*프로젝트 삭제 전 체크*/
+        /*프로젝트 삭제 전 체크 : useYnCheck --> 테넌트/org 여부 확인으로 대체*/
         ct.checkDeleteOrgProject = function ($event) {
-            var params = {
-                teamCode : ct.selOrgProject.orgId
-            };
-            var iaasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/check/useYn', 'GET', params));
-
-            params = {
-                teamCode : ct.selOrgProject.orgId
-            };
-            var gpuPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/check/useYn', 'GET', params));
-
-            params = {
-                urlPaths : {
-                    "name" : ct.selOrgProject.orgId
-                }
-            };
-            var paasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'GET', params));
-            ct.iaasUseYn = "N";
-            ct.gpuUseYn = "N";
-            ct.paasAppCnt = 0;
             ct.useServices = "";
-            $scope.main.loadingMainBody = true;
-            $q.all([iaasPromise, gpuPromise, paasPromise]).then(function (results) {
-                $scope.main.loadingMainBody = false;
-                ct.iaasUseYn = results[0].data.content;
-                ct.gpuUseYn = results[1].data.content;
-                ct.paasAppCnt = results[2].data;
-                if (ct.iaasUseYn == "Y") {
-                    ct.useServices += "서버 가상화";
-                }
-                if (ct.gpuUseYn == "Y") {
-                    if (ct.useServices != "") ct.useServices += ", ";
-                    ct.useServices += "GPU 서버 가상화";
-                }
-                if (ct.paasAppCnt > 0) {
-                    if (ct.useServices != "") ct.useServices += ", ";
-                    ct.useServices += "App 실행 서비스";
-                }
-                //사용중인 서비스가 있을 때 리턴
-                if (ct.useServices != "") {
-                    common.showDialogAlertHtml('알림','아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br><b>'+ ct.useServices +'</b>', 'warning');
-                    return;
-                }
-                ct.deleteOrgProject();
-            }).catch(function(reject) {
-                $scope.main.loadingMainBody = false;
-                common.showDialogAlertHtml('알림','아래 서비스 확인 중 에러가 있습니다. <br>확인 후 진행해 주세요. <br><br>' + reject.config.url, 'warning');
-                console.log("프로젝트 삭제 전 체크 에러 :", reject);
+            if (!!$scope.main.userTenantId) {
+                ct.useServices += "서버 가상화";
+            }
+            if (!!$scope.main.userTenantGpuId) {
+                if (ct.useServices != "") ct.useServices += ", ";
+                ct.useServices += "GPU 서버 가상화";
+            }
+            if (!!$scope.main.sltOrganizationGuid) {
+                if (ct.useServices != "") ct.useServices += ", ";
+                ct.useServices += "App 실행 서비스";
+            }
+            //사용중인 서비스가 있을 때 리턴
+            if (ct.useServices != "") {
+                common.showDialogAlertHtml('알림','아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br><b>'+ ct.useServices +'</b>', 'warning');
                 return;
-            });
+            }
+            ct.deleteOrgProject();
         };
 
         // 조직 삭제

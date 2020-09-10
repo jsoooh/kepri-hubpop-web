@@ -180,24 +180,27 @@ angular.module('portal.controllers')
             })
         };
 
-        /*프로젝트 삭제 전 체크*/
+        /*프로젝트 삭제 전 체크 : useYnCheck --> 테넌트/org 여부 확인으로 대체*/
         ct.checkDeleteOrgProject = function ($event, orgItem) {
             var params = {
-                teamCode : orgItem.orgId
+                "orgCode" : $scope.main.sltProjectId.toString(),
+                "teamCode" : orgItem.orgId
             };
-            var iaasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/check/useYn', 'GET', params));
+            var iaasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', params, 'application/x-www-form-urlencoded'));
 
             params = {
-                teamCode : orgItem.orgId
+                "orgCode" : $scope.main.sltProjectId.toString(),
+                "teamCode" : orgItem.orgId
             };
-            var gpuPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/check/useYn', 'GET', params));
+            var gpuPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/org/one', 'GET', params, 'application/x-www-form-urlencoded'));
 
             params = {
                 urlPaths : {
                     "name" : orgItem.orgId
-                }
+                },
+                "depth" : 0
             };
-            var paasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'GET', params));
+            var paasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', params));
             ct.iaasUseYn = "N";
             ct.gpuUseYn = "N";
             ct.paasAppCnt = 0;
@@ -205,17 +208,17 @@ angular.module('portal.controllers')
             $scope.main.loadingMainBody = true;
             $q.all([iaasPromise, gpuPromise, paasPromise]).then(function (results) {
                 $scope.main.loadingMainBody = false;
-                ct.iaasUseYn = results[0].data.content;
-                ct.gpuUseYn = results[1].data.content;
-                ct.paasAppCnt = results[2].data;
-                if (ct.iaasUseYn == "Y") {
+                var userTenant = results[0].data.content;
+                var userTenant2 = results[1].data.content;
+                var organization = results[2].data;
+                if (userTenant && userTenant.pk && !!userTenant.pk.teamCode) {
                     ct.useServices += "서버 가상화";
                 }
-                if (ct.gpuUseYn == "Y") {
+                if (userTenant2 && userTenant2.pk && !!userTenant2.pk.teamCode) {
                     if (ct.useServices != "") ct.useServices += ", ";
                     ct.useServices += "GPU 서버 가상화";
                 }
-                if (ct.paasAppCnt > 0) {
+                if (!!organization.guid) {
                     if (ct.useServices != "") ct.useServices += ", ";
                     ct.useServices += "App 실행 서비스";
                 }
