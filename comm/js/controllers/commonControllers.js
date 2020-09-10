@@ -803,6 +803,7 @@ angular.module('common.controllers', [])
                 mc.sltOrganizationGuid = "";
                 mc.sltOrganizationDisplayName = "";
             }
+            if (mc.loadingMainBody) mc.loadingMainBody = false; //2020.09.10 추가
         };
 
         mc.syncListAllProjects = function () {
@@ -1730,6 +1731,43 @@ angular.module('common.controllers', [])
             });
         };
 
+        // 조직 정보 조회
+        mc.searchCnt = 0;
+        mc.getOrgProject = function (system) {
+            mc.searchCnt++;
+            mc.searchFirst = false;
+            if (!mc.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
+                mc.searchFirst = true;
+            }
+            var orgPromise = portal.portalOrgs.getPotalOrg(mc.sltPortalOrgId);
+            orgPromise.success(function (data) {
+                console.log(1, data.statusCode, (data.statusCode == "updating" && mc.searchCnt < 10));
+                //생성 완료되지 않은 경우 재조회.
+                if (data.statusCode == "updating" && mc.searchCnt < 10) {
+                    if (mc.searchFirst) {
+                        common.showAlertWarning("프로젝트 생성 중입니다.");
+                    }
+                    mc.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = $timeout(function () {
+                        console.log("재조회 : getOrgProject_" + mc.sltPortalOrgId);
+                        mc.getOrgProject();
+                    }, 2000);
+                } else {
+                    mc.searchCnt = 0;
+                    if ($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
+                        $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]);
+                        $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
+                    }
+                    //console.log(data);
+                    mc.changePortalOrg(data);
+                    mc.loadingMainBody = false;
+                }
+            });
+            orgPromise.error(function (data) {
+                console.log('error', data);
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
         //iaas/gpu/paas 테넌트/조직이 생성되지 않은 경우 테넌트 생성
         //  org.status_code : updating 상태에서 시스템 연계 진행
         mc.createPortalOrgSystem = function (system) {
@@ -1799,46 +1837,9 @@ angular.module('common.controllers', [])
                 }
             });
             promise.error(function (data, status, headers) {
-            });
-            promise.finally(function (data, status, headers) {
                 mc.loadingMainBody = false;
             });
-        };
-
-        // 조직 정보 조회
-        mc.searchCnt = 0;
-        mc.getOrgProject = function (system) {
-            mc.searchCnt++;
-            mc.searchFirst = false;
-            if (!mc.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
-                mc.searchFirst = true;
-            }
-            var orgPromise = portal.portalOrgs.getPotalOrg(mc.sltPortalOrgId);
-            orgPromise.success(function (data) {
-                console.log(1, data.statusCode, (data.statusCode == "updating" && mc.searchCnt < 10));
-                //생성 완료되지 않은 경우 재조회.
-                if (data.statusCode == "updating" && mc.searchCnt < 10) {
-                    if (mc.searchFirst) {
-                        common.showAlertWarning("프로젝트 생성 중입니다.");
-                    }
-                    mc.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = $timeout(function () {
-                        console.log("재조회 : getOrgProject_" + mc.sltPortalOrgId);
-                        mc.getOrgProject();
-                    }, 2000);
-                } else {
-                    mc.searchCnt = 0;
-                    if ($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]) {
-                        $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId]);
-                        $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
-                    }
-                    //console.log(data);
-                    mc.changePortalOrg(data);
-                    mc.loadingMainBody = false;
-                }
-            });
-            orgPromise.error(function (data) {
-                console.log('error', data);
-                $scope.main.loadingMainBody = false;
+            promise.finally(function (data, status, headers) {
             });
         };
 

@@ -52,9 +52,7 @@ angular.module('iaas.controllers')
                 conditionKey : ct.conditionKey,
                 conditionValue : ct.conditionValue
             };
-
             param.size = 0;
-            
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 var volumes = [];
@@ -62,6 +60,10 @@ angular.module('iaas.controllers')
                     volumes = data.content.volumes;
                     if (data.totalElements != 0) {
                         ct.isStorageMainListLoad = true;
+                    }
+                    //디스크 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                    if (volumes.length == 0) {
+                        $scope.main.checkUseYnPortalOrgSystem("iaas");
                     }
                 }
                 common.objectOrArrayMergeData(ct.storageMainList, volumes);

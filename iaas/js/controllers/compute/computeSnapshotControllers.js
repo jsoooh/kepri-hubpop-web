@@ -50,6 +50,10 @@ angular.module('iaas.controllers')
                     if (data.content.length != 0) {
                         ct.loadingInstanceSnapshotList = true;
                     }
+                    //백업이미지 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                    if (instanceSnapshots.length == 0) {
+                        $scope.main.checkUseYnPortalOrgSystem("iaas");
+                    }
                 }
                 common.objectOrArrayMergeData(ct.instanceSnapshotList, instanceSnapshots);
                 $scope.main.loadingMainBody = false;

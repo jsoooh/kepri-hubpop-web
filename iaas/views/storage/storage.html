@@ -1,6 +1,6 @@
 <!-- 검색 및 목록 타입 선택 -->
-<div class="card-input-wrap">
-	<div class="row" ng-if="!!main.userTenantId">
+<div class="card-input-wrap" ng-if="!!main.userTenantId">
+	<div class="row">
 		<div class="col-md-6">
 			<div class="font-size-18 padding-top-5">
 				<b>전체 디스크 <span class="color-primary" ng-if="!!main.userTenantId">({{(contents.storageMainList | filter:{ status: '!deleting' }).length}})</span></b>
@@ -214,7 +214,6 @@
 </section>
 <!-- 디스크 관리 리스트(테이블형) -->
 
-
 <!-- 검색결과 없음 -->
 <div class="text-center blank-page" ng-if="contents.isStorageMainListLoad && (contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length == 0">
 	<div class="img">
@@ -226,11 +225,10 @@
 </div>
 <!-- //검색결과 없음 -->
 
-
 <!-- 생성된 디스크 없을 경우 -->
 <div class="welcome_layer" ng-if="!!main.userTenantId && !contents.isStorageMainListLoad && (contents.storageMainList | filter:{ taskState : '!deleting' }).length == 0">
 	<div class="guide_fnt arrw_btm">신규 디스크를 만들고 가상서버와 연결하세요.</div>
-		<div class="text-center blank-page">
+	<div class="text-center blank-page">
 		<div class="img">
 			<img src="../assets/img/icon/data-center.png">
 		</div>
@@ -239,8 +237,17 @@
 			<p>할당된 클라우드 자원 용량 내에서 사용자 스스로 필요한 만큼 디스크를 만들고, 생성된 가상 서버와 연결하는 방식으로 디스크를 수평적으로 확장할 수 있습니다.</p>
 			<p><span class="point">‘디스크 만들기’</span>를 통해 서비스를 시작해 보세요.</p>
 		</div>
+		<!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+		<div class="text-center" ng-if="main.checkUseYnIaas=='N'">
+			<div class="cont">
+				<p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+			</div>
+			<button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+		</div>
+		<!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
 	</div>
 </div>
+
 <!-- //생성된 디스크 없을 경우 -->
 
 <!-- 테넌트 생성 전인 경우(new) -->
