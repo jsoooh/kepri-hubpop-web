@@ -534,11 +534,10 @@ angular.module('portal.services', [])
                     orgCode : projectId,
                     teamCode : orgId
                 };
-            } else {
+            } else if (system=="paas") {
                 params = {
-                    urlPaths : {
-                        "name" : orgId
-                    }
+                    orgCode : projectId,
+                    teamCode : orgId
                 };
             }
             if (system=="iaas") {
@@ -546,7 +545,7 @@ angular.module('portal.services', [])
             } else if (system=="gpu") {
                 return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/manage', 'DELETE', params));
             } else if (system=="paas") {
-                return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'DELETE', params));
+                //return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'DELETE', params));
             }
         };
 
