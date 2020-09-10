@@ -18,9 +18,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal-footer" layout="row">
-			<button ng-click="dialog.hide()" class="btn btn-add btn-color1" md-autofocus="dialog.$type==='alert'">{{ dialog.ok }}</button>
-			<button ng-if="dialog.$type === 'confirm' || dialog.$type === 'prompt'" ng-click="dialog.abort()" class="btn btn-color2" data-dismiss="modal">{{ dialog.cancel }}</button>
+		<div class="modal-footer"><!-- layout="row" -->
+			<button ng-click="dialog.hide()" class="btn btn-primary" md-autofocus="dialog.$type==='alert'">{{ dialog.ok }}</button>
+			<button ng-if="dialog.$type === 'confirm' || dialog.$type === 'prompt'" ng-click="dialog.abort()" class="btn btn-default" data-dismiss="modal">{{ dialog.cancel }}</button>
 		</div>
 	</div>
 </md-dialog>
