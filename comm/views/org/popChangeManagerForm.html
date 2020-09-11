@@ -16,7 +16,7 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="orgUser in pop.orgUsers" ng-class="{'tbl_disabled': orgUser.roleName == 'OWNER'}"><!-- 선택 된 tr의 class="tbl_selected" -->
-				<td>
+				<td class="text-center">
 					<div class="radio-group"><!-- 170829 input radio 추가	-->
 						<input type="radio" id="{{orgUser.$$hashKey}}" class="radio-input" name="orgUserId" ng-click="pop.data.orgUser = orgUser;" ng-disabled="orgUser.roleName == 'OWNER'">
 						<label for="{{orgUser.$$hashKey}}" class="radio-item">
