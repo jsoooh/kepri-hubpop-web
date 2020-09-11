@@ -1,19 +1,29 @@
-<scrollable-table class="tableHeight280"><!-- resizable 는 싸이즈 조절이 필요한 곳 만 적용 -->
-	<table class="table">
-		<thead>
+<div class="table-wrap table-wrapper-scroll-y scroll-content" style="height:280px;">
+	<table class="table table-outline">
+		<colgroup>
+			<col style="width: 20%;">
+			<col style="width: auto;">
+			<col style="width: 25%;">
+			<col style="width: 25%;">
+		</colgroup>
+		<thead class="grey text-center">
 			<tr>
-				<th style="width:20%;">선택</th>
-				<th style="width:auto;">이름</th>
-				<th style="width:25%;">아이디</th>
-				<th style="width:25%;">역할</th>
+				<th>선택</th>
+				<th>이름</th>
+				<th>아이디</th>
+				<th>역할</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="orgUser in pop.orgUsers" ng-class="{'tbl_disabled': orgUser.roleName == 'OWNER'}"><!-- 선택 된 tr의 class="tbl_selected" -->
 				<td>
-					<p class="inputWrap">	<!-- 170829 input radio 추가	-->
-						<input type="radio" id="{{orgUser.$$hashKey}}" name="orgUserId" ng-click="pop.data.orgUser = orgUser;" ng-disabled="orgUser.roleName == 'OWNER'"><label for="{{orgUser.$$hashKey}}"></label>
-					</p>
+					<div class="radio-group"><!-- 170829 input radio 추가	-->
+						<input type="radio" id="{{orgUser.$$hashKey}}" class="radio-input" name="orgUserId" ng-click="pop.data.orgUser = orgUser;" ng-disabled="orgUser.roleName == 'OWNER'">
+						<label for="{{orgUser.$$hashKey}}" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+					</div>
 				</td>
 				<td>{{ orgUser.usersInfo.name }}</td>
 				<td>{{ orgUser.usersInfo.email }}</td>
@@ -22,9 +32,12 @@
 
 			<!-- 데이터 없을 때 -->
 			<tr ng-if="!pop.orgUsers || pop.orgUsers.length == 0">
-				<td colspan="4" class="center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+				<td colspan="4" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
 			</tr>
 			<!-- //데이터 없을 때 -->
 		</tbody>
 	</table>
-</scrollable-table>
+</div>
+
+
+

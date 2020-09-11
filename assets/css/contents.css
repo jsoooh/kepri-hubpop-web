@@ -136,9 +136,9 @@
 .write_wrap .panel-group .panel-heading + .panel-collapse .panel-body {border-top:0;}
 .write_wrap .panel-group .panel-heading + .panel-collapse.in .panel-body {border-top:1px solid #eeeeee;}
 
-.write_wrap .panel-body  .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
-.write_wrap .panel-body  .s_inner_cont .pnb_tit {font-size:14px; font-weight:500; margin-bottom:20px;}
-.write_wrap .panel-body  .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
+.write_wrap .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:30px; margin:27px 0 0 0;}
+.write_wrap .s_inner_cont .pnb_tit {font-size:14px; font-weight:500; margin-bottom:20px;}
+.write_wrap .s_inner_cont .pnb_tit:after {display:block; content:''; clear:both;}
 
 
 /*툴팁 type2(bootstrap 제공 tooltip 재정의)*/

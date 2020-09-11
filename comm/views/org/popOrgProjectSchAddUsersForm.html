@@ -1,40 +1,33 @@
-<div class="pop_message_area">
-	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>허브팝 사용자를 조회하여 프로젝트구성원으로 등록합니다.</span></div>
+<div class="alert alert-primary" role="alert">
+	<i data-feather="file-text" class="feather-directive"></i>
+	<div class="text-area">허브팝 사용자를 조회하여 프로젝트구성원으로 등록합니다.</div>
 </div>
-<div class="pop_cont_area">
-	<div class="pop_cont_box cont_l">
-		<h4 class="tit">조회</h4>
-		<div class="p_cont">
-			<div class="searchBox">
-				<div class="form-group type2">
-					<div class="frm_select">
-						<select name="searchKey" ng-model="pop.schKey" title="검색 구분 선택">
-							<option value="">전체</option>
-							<option value="email">ID</option>
-							<option value="name">이름</option>
-						</select>
-					</div>
-					<div class="frm_input">
-						<input type="text" placeholder="검색어를 입력해 주세요." style="width:100%;" ng-model="pop.schText" ng-key-enter="pop.setOrgNotUsers();">
-					</div>
-					<div class="frm_btn">
-						<button type="button" name="button" class="btn btn-sch" title="검색" ng-click="pop.setOrgNotUsers();"><span class="ico">검색</span></button>
-					</div>
-				</div>
-			</div>
 
-			<!-- table -->
-			<div class="tbl type1">
-				<table class="table">
+<div class="clearfix">
+	<div class="style-table">
+		<div class="style-td" style="width:45%;">
+			<h3 class="heading h3">조회</h3>
+			<div class="form-group inline-block margin-bottom-0">
+				<select class="form-control" name="searchKey" ng-model="pop.schKey" title="검색 구분 선택">
+					<option value="">전체</option>
+					<option value="email">ID</option>
+					<option value="name">이름</option>
+				</select>
+			</div>
+			<div class="form-group inline-block margin-bottom-0">
+				<input type="text" placeholder="검색어를 입력해 주세요." class="form-control" style="width:100%;" ng-model="pop.schText" ng-key-enter="pop.setOrgNotUsers();">
+			</div>
+			<button type="button" class="btn btn-primary" title="검색" ng-click="pop.setOrgNotUsers();"><i class="xi-search"></i></button>
+			<div class="table-wrap margin-top-10">
+				<table class="table table-outline">
 					<colgroup>
-					<col style="width:10%;">
-					<col style="width:10%;">
-					<col style="width:30%;">
-					<col style="width:20%;">
-					<col style="width:30%;">
+						<col style="width:13%;">
+						<col style="width:13%;">
+						<col style="width:26%;">
+						<col style="width:20%;">
+						<col style="width:30%;">
 					</colgroup>
-					<thead>
+					<thead class="grey text-center">
 						<tr>
 							<th scope="col">선택</th>
 							<th scope="col">번호</th>
@@ -46,7 +39,7 @@
 					<tbody>
 						<tr ng-repeat="(key, user) in pop.orgNotUsers" ng-if="(key >= (pop.pageOptions.pageSize * (pop.pageOptions.currentPage-1))) && (key < (pop.pageOptions.pageSize * (pop.pageOptions.currentPage)))">
 							<td>
-								<div class="checkbox checkbox-only">
+								<div class="checkbox checkbox-only padding-left-20">
 									<input class="checkSel" type="checkbox" ng-model="user.checked" value="true">
 									<label></label>
 								</div>
@@ -58,13 +51,11 @@
 						</tr>
 						<!-- 데이터가 없을 때 -->
 						<tr ng-if="pop.orgNotUsers.length == 0" class="no-data">
-							<td colspan="5">데이터가 없습니다.</td>
+							<td colspan="5" class="text-center">데이터가 없습니다.</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<!-- table -->
-
 			<nav class="pagiWrap">
 				<paging
 						page="pop.pageOptions.currentPage"
@@ -80,30 +71,29 @@
 				</paging>
 			</nav>
 		</div>
-	</div>
-	<div class="p_cont_btn">
-		<span class="ico_r_arrow"></span>
-		<button type="button" class="btn_txt_add" ng-click="pop.sltUserMove();">추가<span class="ico_add"></span></button>
-	</div>
-	<div class="pop_cont_box cont_r">
-		<h4 class="tit">등록</h4>
-		<div class="p_cont ovflw_y">
-			<div class="btn_top">
-				<!-- 관리자 다수 등록 가능 요청으로 인해 수정 -->
-				<!--<span class="t_txt">* 사용자 등록 시 관리자 역할은 한 명만 지정할 수 있습니다.</span>-->
-				<button type="button" class="btn_del" ng-click="pop.sltOrgUserClear()">선택 삭제</button>
+		<div class="style-td" style="width:10%; vertical-align:middle;">
+			<div class="text-center">
+				<button type="button" class="btn btn-primary" ng-click="pop.sltUserMove();">추가</button>
 			</div>
-			<!-- table -->
-			<div class="tbl type1">
-				<table class="table">
+		</div>
+		<div class="style-td" style="width:45%;">
+			<!-- 관리자 다수 등록 가능 요청으로 인해 수정 -->
+			<!--<span class="t_txt">* 사용자 등록 시 관리자 역할은 한 명만 지정할 수 있습니다.</span>-->
+			<h3 class="heading h3">등록</h3>
+			<div class="text-right">
+				<button type="button" class="btn btn-primary" ng-click="pop.sltOrgUserClear()">선택 삭제</button>
+			</div>
+			<div class="table-wrap margin-top-10">
+				<table class="table table-outline">
 					<colgroup>
-						<col style="width:10%;">
-						<col style="width:10%;">
-						<col style="width:30%;">
+						<colgroup>
+						<col style="width:13%;">
+						<col style="width:13%;">
+						<col style="width:26%;">
 						<col style="width:20%;">
 						<col style="width:30%;">
 					</colgroup>
-					<thead>
+					<thead class="grey text-center">
 						<tr>
 							<th scope="col">선택</th>
 							<th scope="col">번호</th>
@@ -115,7 +105,7 @@
 					<tbody>
 						<tr ng-repeat="(key, orgUser) in pop.schAddOrgUsers">
 							<td>
-								<div class="checkbox checkbox-only">
+								<div class="checkbox checkbox-only padding-left-20">
 									<input class="checkSel" type="checkbox" ng-model="orgUser.checked" value="true">
 									<label></label>
 								</div>
@@ -134,12 +124,11 @@
 						</tr>
 						<!-- 데이터가 없을 때 -->
 						<tr ng-if="pop.schAddOrgUsers.length == 0" class="no-data">
-							<td colspan="5">데이터가 없습니다.</td>
+							<td colspan="5" class="text-center">데이터가 없습니다.</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<!-- table -->
 		</div>
 	</div>
 </div>
