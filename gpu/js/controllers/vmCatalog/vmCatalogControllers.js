@@ -68,6 +68,7 @@ angular.module('gpu.controllers')
 
     ct.stackNames               = [];
     ct.deployNames              = [];
+    ct.bucketNames              = [];
     ct.usingPorts               = {};
     ct.usingPorts.single        = [9100];
     ct.usingPorts.replica       = [9100];
@@ -565,6 +566,36 @@ angular.module('gpu.controllers')
         return {isValid: true};
     };
 
+    //스펙그룹의 스펙 리스트 조회
+    ct.fn.getBucketNames = function(bucketName) {
+        var param = {
+            tenantId : ct.data.tenantId,
+            bucket : bucketName
+        };
+        var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/objects', 'GET', param);
+        returnPromise.success(function (data, status, headers) {
+            var bucketNames = [];
+            if (data && angular.isArray(data.content) && data.content.length > 0) {
+                angular.forEach(data.content, function(val, key) {
+                    bucketNames.push(val.bucketName);
+                });
+            }
+            ct.bucketNames = bucketNames;
+        });
+        returnPromise.error(function (data, status, headers) {
+            return {isValid : true};
+        });
+    };
+    ct.fn.validationBucketName = function (bucketName) {
+        ct.fn.getBucketNames(bucketName);
+        //if (!bucketName) return;
+        if (ct.bucketNames.indexOf(bucketName) >= 0) {
+            return {isValid : false, message: "'" + bucketName + "'은 이미 사용중인 이름 입니다."};
+        }
+        return {isValid : true};
+    };
+
+
     ct.checkClickBtn = false;
 
     ct.fn.createVmCatalogDeployAction = function (deployTemplate, appendSetVmCatalogDeploy, templatePrint) {
@@ -576,6 +607,7 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.version = ct.vmCatalogInfo.version;
         vmCatalogDeploy.deployName = ct.data.deployName;
         vmCatalogDeploy.stackName = ct.data.stackName;
+        vmCatalogDeploy.bucketName = ct.data.bucketName;
         vmCatalogDeploy.deployType = ct.data.deployType;
         vmCatalogDeploy.deployServerCount = 1;
         vmCatalogDeploy.deployTemplate = deployTemplate;
@@ -667,6 +699,7 @@ angular.module('gpu.controllers')
         ct.fn.getDeployNames(ct.tenantId);
         ct.fn.checkPasswordValidation(ct.rootPassword);
         ct.fn.checkConfirmPasswordValidation(ct.rootPassword, ct.rootConfirmPassword);
+
 
         var allResourceMax = $q.all([resourceDefer.promise, specListDefer.promise]);
         allResourceMax.then(function (datas) {

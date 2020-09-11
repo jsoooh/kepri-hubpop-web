@@ -233,23 +233,41 @@ angular.module('gpu.controllers')
 
         // 하둡 오브젝트 스토리지 버킷 생성
         ct.fn.createBucket = function(bucketName) {
-           console.log('create Bucket start!!! ');
+            console.log('create Bucket start!!! ');
             // 페이지 로드
-
             let promise2;
-            promise2 = vmCatalogService.createBucket(ct.tenantId,bucketName);
+            promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
                 //callBackFuncion(data);
                 console.log('create Bucket success  !!! ');
                 common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
-                common.showAlertSuccessHtml("한번만 생성 가능합니다.");
-                ct.fn.createBucket = "switch";
+                return true;
             });
             promise2.error(function (data, status, headers) {
                 console.log('create Bucket error  !!! ');
                 $scope.main.loadingMainBody = false;
+                return false;
             });
         };
+
+        // 하둡 오브젝트 스토리지 조회만
+        ct.fn.getObjectStorageObject = function (bucketName, path) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                bucket : bucketName
+            };
+            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/objects', 'GET', param);
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/objects', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError("존재하는 버킷명입니다.");
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertSuccessHtml("생성 가능한 버킷명입니다.");
+            });
+        }
 
         // 추가 셋팅
         subPage.fn.appendSetVmCatalogDeploy = function (vmCatalogDeploy) {
@@ -306,7 +324,21 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.createVmCatalogDeploy = function () {
+            let promise2;
+            promise2 = vmCatalogService.createBucket(ct.tenantId, ct.data.bucketName);
+            promise2.success(function () {
+                //callBackFuncion(data);
+                console.log('create Bucket success  !!! ');
+                common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
+            });
+            promise2.error(function (data, status, headers) {
+                console.log('create Bucket error  !!! ');
+                $scope.main.loadingMainBody = false;
+
+            });
+            if (!promise2) return;
             if (!ct.fn.commCheckFormValidity(subPage)) return;
+            console.log(" create Bucket END !!!!!!!!!!");
 
             if(ct.data.nodeType == 'single') {
                 console.log(" standalone !!!!!!!!!!");
