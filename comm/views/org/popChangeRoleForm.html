@@ -1,6 +1,11 @@
-<div class="tbl type1">
-	<table class="table">
-		<thead>
+<div class="table-wrap">
+	<table class="table table-outline">
+		<colgroup>
+			<col style="width:30%;">
+			<col style="width:;">
+			<col style="width:30%;">
+		</colgroup>
+		<thead class="grey text-center">
 			<tr>
 				<th style="width:;">이름</th>
 				<th style="width:">아이디</th>
@@ -9,10 +14,10 @@
 		</thead>
 		<tbody>
 			<tr class="bg_none">
-				<td>{{ pop.orgUser.usersInfo.name }}</td>
-				<td>{{ pop.orgUser.usersInfo.email }}</td>
-				<td>
-					<select ng-model="pop.orgUser.roleName">
+				<td class="text-center">{{ pop.orgUser.usersInfo.name }}</td>
+				<td class="text-center">{{ pop.orgUser.usersInfo.email }}</td>
+				<td class="text-center">
+					<select class="form-control form-control-sm" ng-model="pop.orgUser.roleName">
 						<option value="{{ pop.orgRoleNames.user }}" title="프로젝트 사용자">프로젝트 사용자</option>
 						<option value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">프로젝트 관리자</option>
 					</select>
@@ -21,3 +26,5 @@
 		</tbody>
 	</table>
 </div>
+		
+		
