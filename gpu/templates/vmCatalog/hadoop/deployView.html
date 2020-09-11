@@ -8,7 +8,7 @@
                 <span ng-if="contents.vmCatalogDeployInfo.deployType == 'standalone'" class="txt">단일노드</span>
                 <span ng-if="contents.vmCatalogDeployInfo.deployType == 'sMaster'" class="txt">다중노드 / 단일 마스터 </span>
                 <span ng-if="contents.vmCatalogDeployInfo.deployType == 'dMaster'" class="txt">다중노드 / 이중 마스터 </span>
-                <br><span class="txt">(worker node 갯수 : {{contents.vmCatalogDeployInfo.parameters.worker_cnt}})</span>
+                <br><span ng-if="contents.vmCatalogDeployInfo.deployType !== 'standalone'" class="txt">(worker node 갯수 : {{contents.vmCatalogDeployInfo.parameters.worker_cnt}})</span>
             </li>
 
             <li>
