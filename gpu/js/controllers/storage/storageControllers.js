@@ -83,6 +83,7 @@ angular.module('gpu.controllers')
                 }
             });
             returnPromise.finally(function (data, status, headers) {
+                if (!ct.storageMainList || ct.storageMainList.length == 0) $scope.main.checkUseYnPortalOrgSystem("gpu");
             });
         };
 

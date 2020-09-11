@@ -162,10 +162,21 @@
         </tbody>
     </table>
 </div>
-<div ng-show="!!main.userTenantGpuId && (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length == 0" class="proj_list_area">
-    <ul class="ul-panel dash_list no_data">
-        <li><p class="no_data_txt pd0">생성된 서비스가 없습니다.</p></li>
-    </ul>
+
+<div ng-show="!!main.userTenantGpuId && contents.vmCatalogDeployList.length == 0" class="welcome_layer">
+    <div class="text-center blank-page">
+        <!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+        <div class="text-center" ng-if="main.checkUseYnGpu == 'N' && main.userTenantGpuId">
+            <div class="img">
+                <img src="../assets/img/icon/data-center.png">
+            </div>
+            <div class="cont">
+                <p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+            </div>
+            <button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+        </div>
+        <!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+    </div>
 </div>
 
 <!-- 테넌트 생성 전인 경우 -->

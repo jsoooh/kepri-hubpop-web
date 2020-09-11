@@ -16,7 +16,7 @@
 <!-- //목록 이미지형/리스트형 선택 버튼 -->
 
 <!-- 프로젝트 정보 -->
-<div class="cBox type0 projt-mana mt30">
+<div ng-if="!!main.userTenantGpuId" class="cBox type0 projt-mana mt30">
     <div class="pull-left">
         <h4 class="c-tit">전체 인스턴스 <em class="point1" ng-if="!!main.userTenantGpuId">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</em></h4>
     </div>
@@ -440,36 +440,6 @@
                                 <div ng-if="instance.procState == 'ing'" class="ul-in2 spinner_area">
                                     <div class="info-chart">
                                         <img src="images/loading/loading_cloud.gif" width="140" height="90">
-
-                                        <!--<div class="chartWrap">
-                                            <ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
-                                                <svg viewBox="0 0 64 64">
-                                                    <g stroke-width="7" stroke-linecap="round">
-                                                        <line x1="10" x2="10" y2="48" y1="16">
-                                                            <animate attributeName="y1" dur="750ms" values="16;18;28;18;16;16" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="48;46;36;44;48;48" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;.4;.5;.8;1;1" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="24" x2="24" y2="45.2501" y1="17.3749">
-                                                            <animate attributeName="y1" dur="750ms" values="16;16;18;28;18;16" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="48;48;46;36;44;48" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;1;.4;.5;.8;1" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="38" x2="38" y2="38.5002" y1="24.8747">
-                                                            <animate attributeName="y1" dur="750ms" values="18;16;16;18;28;18" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="44;48;48;46;36;44" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".8;1;1;.4;.5;.8" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="52" x2="52" y2="42.8747" y1="21.1253">
-                                                            <animate attributeName="y1" dur="750ms" values="28;18;16;16;18;28" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="36;44;48;48;46;36" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".5;.8;1;1;.4;.5" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                    </g>
-                                                </svg>
-                                            </ion-spinner>
-                                        </div>-->
-
                                     </div>
                                     <div class="info-txt">
                                         <p class="txt"><span class="ico ico-timer"></span>{{'iaas.label.instance_' + instance.vmState | translate}} 입니다.</p>
@@ -477,52 +447,10 @@
                                 </div>
                             </div>
 
-                            <!--<div class="panel_body" ng-if="instance.vmState == 'building'">
-                                <div class="ul-in2 spinner_area">
-                                    <div class="info-chart">
-                                        <div class="chartWrap">
-                                            <ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
-                                                <svg viewBox="0 0 64 64">
-                                                    <g stroke-width="7" stroke-linecap="round">
-                                                        <line x1="10" x2="10" y2="48" y1="16">
-                                                            <animate attributeName="y1" dur="750ms" values="16;18;28;18;16;16" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="48;46;36;44;48;48" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;.4;.5;.8;1;1" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="24" x2="24" y2="45.2501" y1="17.3749">
-                                                            <animate attributeName="y1" dur="750ms" values="16;16;18;28;18;16" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="48;48;46;36;44;48" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;1;.4;.5;.8;1" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="38" x2="38" y2="38.5002" y1="24.8747">
-                                                            <animate attributeName="y1" dur="750ms" values="18;16;16;18;28;18" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="44;48;48;46;36;44" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".8;1;1;.4;.5;.8" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="52" x2="52" y2="42.8747" y1="21.1253">
-                                                            <animate attributeName="y1" dur="750ms" values="28;18;16;16;18;28" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="36;44;48;48;46;36" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".5;.8;1;1;.4;.5" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                    </g>
-                                                </svg>
-                                            </ion-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="info-txt">
-                                        <div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>
-                                        <p class="txt"><span class="ico ico-timer"></span>생성중입니다.</p>
-                                    </div>
-                                </div>
-                            </div>-->
-
                         </div>
                     </div>
                     <!-- //panel -->
                 </li>
-                <!-- <li>
-                    <button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" style="height:390px;" ng-click="contents.formOpen()"><span class="ico"></span><span class="txt">인스턴스 추가</span></button>
-                </li> -->
             </ul>
             <!-- //panel area-->
 
@@ -532,13 +460,26 @@
                 </ul>
             </div>
 
-            <div ng-if="!contents.pageFirstLoad && !contents.loadingServerList && (contents.serverMainList | filter:{ taskState : '!deleting' }).length == 0" class="welcome_layer">
+            <div ng-if="!!main.userTenantGpuId && !contents.pageFirstLoad && !contents.loadingServerList && contents.serverMainList.length == 0" class="welcome_layer">
                 <div class="guide_fnt arrw_btm">신규 인스턴스를 만듭니다.</div>
                 <div class="guide_fnt arrw_top">다른 프로젝트의 스냅샷 이미지로부터 신규 가상서버를 만듭니다.</div>
-                <div class="guide_cnt">
-                    서버가상화 서비스에서는 <span class="fnt20"><span class="color1">리눅스(Linux)</span> 또는 <span class="color1">윈도우(Windows)</span>를 실행하는 <span class="color1">인스턴스</span></span>를 만듭니다. <br>
-                    사용자 스스로가 쉽고 빠르게 필요한 서버를 만들고 활용할 수 있습니다. <br>
-                    <span class="fnt20"><spna class="color1">‘인스턴스 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+                <div class="text-center blank-page">
+                    <div class="img">
+                        <img src="../assets/img/icon/data-center.png">
+                    </div>
+                    <div class="cont">
+                        <p>서버가상화 서비스에서는<span class="point">리눅스(Linux)</span> 또는 <span class="point">윈도우(Windows)</span>를 실행하는 <span class="point">인스턴스</span>를 만듭니다.</p>
+                        <p>사용자 스스로가 쉽고 빠르게 필요한 서버를 만들고 활용할 수 있습니다.</p>
+                        <p><span class="point">인스턴스 만들기’</span>를 통해 서비스를 시작해 보세요.</p>
+                    </div>
+                    <!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+                    <div class="text-center" ng-if="main.checkUseYnGpu == 'N' && main.userTenantGpuId">
+                        <div class="cont">
+                            <p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+                        </div>
+                        <button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+                    </div>
+                    <!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
                 </div>
             </div>
         </div>
@@ -551,9 +492,6 @@
                 <button type="button" class="btn_lg" ng-click="contents.fn.checkLbPortLimit();"><!-- ng-if="false" -->
                     <span class="ico ico_create" ></span>부하 분산 설정
                 </button>
-                <!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')">&lt;!&ndash; ng-if="false" &ndash;&gt;
-                    <span class="ico ico_create" ></span>부하 분산 상세
-                </button>-->
             </div>
             <!-- //버튼영역 -->
 
@@ -707,17 +645,40 @@
                 </li>
             </ul>
             <!-- //panel -->
-
-            <div class="proj_list_area" ng-if="!contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
-                <ul class="ul-panel dash_list no_data">
-                    <li><p class="no_data_txt pd0">생성된 부하분산 서버가 없습니다.</p></li>
-                </ul>
+				
+            <!-- 생성된 부하분산 서버 없을 경우 -->
+            <div class="welcome_layer" ng-if="!!main.userTenantGpuId && !contents.loadingLbList && contents.lbServiceLists.length == 0">
+                <div class="guide_fnt arrw_btm">신규 부하 분산 서버를 만듭니다.</div>
+                <div class="text-center blank-page">
+                    <div class="img">
+                        <img src="../assets/img/icon/big-data2.png">
+                    </div>
+                    <div class="cont">
+                        <p>생성된 부하분산 서버가 없습니다.</p>
+                        <p><span class="point">‘부하 분산 설정’</span> 을 통해 서비스를 시작해 보세요.</p>
+                    </div>
+                    <!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+                    <div class="text-center" ng-if="main.checkUseYnGpu == 'N' && main.userTenantGpuId">
+                        <div class="cont">
+                            <p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+                        </div>
+                        <button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+                    </div>
+                    <!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+                </div>
             </div>
-            <div class="proj_list_area" ng-if="contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
-                <ul class="ul-panel dash_list no_data">
-                    <li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
-                </ul>
+            <!-- //생성된 부하분산 서버 없을 경우 -->
+            
+            <!-- 검색결과 없음 -->
+            <div class="text-center blank-page" ng-if="contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
+                <div class="img">
+                    <img src="../assets/img/icon/approval.png">
+                </div>
+                <div class="cont">
+                    <p>검색 결과가 없습니다.</p>
+                </div>
             </div>
+            <!-- //검색결과 없음 -->
         </div>
         <!-- //tab2 cnt -->
     </div>
@@ -732,7 +693,7 @@
             <span class="l_txt"><span class="c_blue">서비스를 생성</span> 하고 HUB-PoP을 이용하세요.</span>
         </div>
         <div class="top_btn">
-            <a href="" ng-click="main.createPortalOrgSystem('gpu');">
+            <a href="" ng-click="main.createPortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">
                 <span>서비스 시작하기</span>
             </a>
         </div>
