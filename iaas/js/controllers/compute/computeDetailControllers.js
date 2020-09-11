@@ -1112,6 +1112,13 @@ angular.module('iaas.controllers')
                 } else {
                     common.showAlertWarning("접속 URL이 존재하지 않습니다.");
                 }
+            } else if (instance.image.osType == 'centos') {
+                if (instance.floatingIp) {
+                    common.copyToClipboard(instance.floatingIp);
+                    $scope.main.copyToClipboard(instance.floatingIp, '"' + instance.floatingIp + '"가 클립보드에 복사 되었습니다.');
+                } else {
+                    common.showAlertWarning("접속 IP가 존재하지 않습니다.");
+                }
             }
         };
 
