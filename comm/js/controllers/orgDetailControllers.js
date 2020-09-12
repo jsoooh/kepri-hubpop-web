@@ -1946,13 +1946,19 @@ angular.module('portal.controllers')
 
         /*paas 프로젝트 쿼터 조회*/
         ct.listPaasQuotas = function (currentPage) {
+            ct.paasQuotas = [];
             $scope.main.loadingMainBody = true;
             if (!currentPage) {
                 currentPage = 1;
             }
             var returnPromise = quotaService.listPaasQuotas(10, currentPage, null);
             returnPromise.success(function (data) {
-                ct.paasQuotas = data.content;
+                //ct.paasQuotas = data.content;
+                angular.forEach(data.content, function(paasQuota) {
+                    if (paasQuota.name.indexOf("prj-") > -1) {
+                        ct.paasQuotas.push(paasQuota);
+                    }
+                });
             });
             returnPromise.error(function (data) {
                 ct.paasQuotas = [];
