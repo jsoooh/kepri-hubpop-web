@@ -981,6 +981,12 @@ angular.module('iaas.controllers')
             });
         };
 
+        //임시 알림 설정 2020.02.03
+        ct.showTempAlert = function() {
+            common.showDialogAlertHtml("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 가상머신 생성을 제한하고 있습니다.<br>자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다.");
+            return;
+        };
+
         // 인스턴스 자원 사용량 조회
         var instancesDataLoop = $interval(function () {
             // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
