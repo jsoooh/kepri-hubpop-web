@@ -1382,7 +1382,7 @@ angular.module('gpu.controllers')
             ct.isMaxSpecDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
-                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.volumeGigabytes) { // 내부디스크 체크 제거
+                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.hddVolumeGigabytes) { // 내부디스크 체크 제거
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
