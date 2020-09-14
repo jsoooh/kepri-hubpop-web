@@ -92,7 +92,7 @@
                         <th scope="col">OS유형</th>
                         <th scope="col">서버유형</th>
                         <th scope="col">접속주소(IP)</th>
-                        <th scope="col">모니터링</th>
+                        <!-- <th scope="col">모니터링</th> -->
                         <th scope="col">CPU</th>
                         <th scope="col">메모리(GB)</th>
                         <th scope="col">디스크(GB)</th>
@@ -120,10 +120,10 @@
                         <td ng-if="instance.image.osType == 'windows'">{{ instance.rdpDomain }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button></td>
                         <td ng-if="!instance.image.osType">-</td>
                         
-                        <td ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">
-                            <a href="javascript:alert('준비중입니다');" class="ext_link">바로가기</a><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard('http://naver.com')"><span class="ico_sm ico_copy"></span></button>
-                        </td>
-                        <td ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">-</td>
+                        <!-- <td ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">
+                            <a href="javascript:alert('준비중입니다');" class="ext_link">바로가기</a><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><span class="ico_sm ico_copy"></span></button>
+                        </td> -->
+                        <!-- <td ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">-</td> -->
                         <td>{{ instance.spec.vcpus }} 개</td>
                         <td>{{ (instance.spec.ram / 1024 | number:1).replace('.0', '') }}</td>
                         <td>{{ instance.spec.disk }}</td>
@@ -291,7 +291,7 @@
                                             <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
                                             <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
                                             <li ng-show="instance.keypair.privateKeyYn == 'Y'"><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></li>
-                                            <li ng-show="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')"><strong><span class="tb_tit">모니터링 :</span></strong><span class="tb_txt"><a href="{{ instance.monitoringLink }}" target="_blank" class="ext_link">모니터링 바로가기</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><span class="ico_sm ico_copy"></span></button></li>
+                                            <!-- <li ng-show="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')"><strong><span class="tb_tit">모니터링 :</span></strong><span class="tb_txt"><a href="{{ instance.monitoringLink }}" target="_blank" class="ext_link">모니터링 바로가기</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><span class="ico_sm ico_copy"></span></button></li> -->
                                         </ul>
                                         <!-- <div class="guide_link">
                                             <a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.fixedIp, osType: instance.image.osType});">접속방법 가이드</a>
