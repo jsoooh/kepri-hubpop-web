@@ -664,7 +664,12 @@ angular.module('portal.controllers')
             }
             var returnPromise = quotaService.listPaasQuotas(10, currentPage, null);
             returnPromise.success(function (data) {
-                ct.paasQuotas = data.content;
+                //ct.paasQuotas = data.content;
+                angular.forEach(data.content, function(paasQuota) {
+                    if (paasQuota.name.indexOf("prj-") > -1) {
+                        ct.paasQuotas.push(paasQuota);
+                    }
+                });
             });
             returnPromise.error(function (data) {
                 common.showAlertError("message", data.message);
