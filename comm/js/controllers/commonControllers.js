@@ -648,6 +648,7 @@ angular.module('common.controllers', [])
                 mc.asideClose();
                 $scope.$broadcast('portalOrgChanged', mc.sltPortalOrg);
                 $scope.$broadcast('userTenantChanged', mc.userTenant);
+                $scope.$broadcast('userTenantGpuChanged', mc.userTenantGpu);
                 $scope.$broadcast('organizationChanged', mc.sltOrganization);
             } else {
                 common.goHomePath();
