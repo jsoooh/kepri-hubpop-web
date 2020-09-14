@@ -317,8 +317,8 @@
 											<span class="tit_txt">디스크</span>
 											<div class="progressWrap type2">
 												<div class="progress">
-												  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.volumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.volumeGigabytes)*100|number:0}}" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.volumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.volumeGigabytes)*100|number:0}}%"></div>
+												  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.hddVolumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.hddVolumeGigabytes)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.hddVolumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.hddVolumeGigabytes)*100|number:0}}%"></div>
 													</div>
 												</div>
 											</div>
