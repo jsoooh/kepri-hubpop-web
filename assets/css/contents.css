@@ -411,3 +411,5 @@ input[type="text"], input[type="password"] {height:38px;}
 .panel .panel-heading .dropdown .feather-icon {font-size: 20px; color: #9d9d9d;}
 
 .pagiWrap li a {height:38px;}
+
+.md-dialog-is-showing {position:fixed !important;}
