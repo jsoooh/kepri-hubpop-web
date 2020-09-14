@@ -1381,13 +1381,7 @@ angular.module('gpu.controllers')
         ct.fn.setSpecMaxDisabled = function () {
             ct.isMaxSpecDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
-                // console.log('setSpecMaxDisabled');
                 angular.forEach(ct.specList, function (spec) {
-                    // if (spec.name == 'm1.small' || spec.name == 'win-image' || spec.name == 'm1.large') {
-                    //     console.log(spec.name);
-                    //     console.log('spec vcpus', spec.vcpus, 'spec ram', spec.ram, 'spec disk', spec.disk);
-                    //     console.log('cores', ct.tenantResource.available.cores, 'ramSize', ct.tenantResource.available.ramSize, 'volume', ct.tenantResource.available.volumeGigabytes);
-                    // }
                     if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.volumeGigabytes) { // 내부디스크 체크 제거
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
@@ -1430,14 +1424,13 @@ angular.module('gpu.controllers')
             if (sltSpec && sltSpec.uuid) {
                 ct.data.spec = angular.copy(sltSpec);
                 ct.specUuid = ct.data.spec.uuid;
-                // console.log('selectSpec', ct.data.spec.disk)
-                // if (ct.volume.type == 'HDD') {
-                //     ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes - ct.data.spec.disk;
-                // } else if (ct.volume.type == 'SSD') {
-                //     ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes;
-                // } else {
-                //     ct.volumeSliderOptions.ceil = 0;
-                // }
+                if (ct.volume.type == 'HDD') {
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes - ct.data.spec.disk;
+                } else if (ct.volume.type == 'SSD') {
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes;
+                } else {
+                    ct.volumeSliderOptions.ceil = 0;
+                }
             } else {
                 ct.data.spec = {};
                 ct.specUuid = "";
@@ -1664,14 +1657,15 @@ angular.module('gpu.controllers')
                 if (data && data.content) {
                     ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
-                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
-                    ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
-                    ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
+                    ct.tenantResource.maxResource.volumeGigabytes = (ct.tenantResource.maxResource.hddVolumeGigabytes + ct.tenantResource.maxResource.ssdVolumeGigabytes);
+                    ct.tenantResource.usedResource.volumeGigabytes = (ct.tenantResource.usedResource.hddVolumeGigabytes + ct.tenantResource.usedResource.ssdVolumeGigabytes);
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+                    ct.tenantResource.available.hddVolumeGigabytes = ct.tenantResource.maxResource.hddVolumeGigabytes - ct.tenantResource.usedResource.hddVolumeGigabytes;
+                    ct.tenantResource.available.ssdVolumeGigabytes = ct.tenantResource.maxResource.ssdVolumeGigabytes - ct.tenantResource.usedResource.ssdVolumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes;
                     if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
                         ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
                     }
@@ -1833,8 +1827,8 @@ angular.module('gpu.controllers')
 
             if (ct.volumeSize > 0) {
                 params.volume = {};
-                params.volume.name = ct.data.name+'_volume01';
-                params.volume.type = 'HDD';
+                params.volume.name = ct.data.name + '_volume01';
+                params.volume.type = ct.volume.type;
                 params.volume.size = ct.volumeSize;
                 params.volume.tenantId = ct.data.tenantId;
             }
@@ -1929,7 +1923,7 @@ angular.module('gpu.controllers')
             ct.fn.networkListSearch();
             ct.fn.getKeypairList();
 
-            // ct.fn.getVolumeTypeList();
+            ct.fn.getVolumeTypeList();
         }
 
     })
