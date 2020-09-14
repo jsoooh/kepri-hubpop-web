@@ -114,7 +114,7 @@ angular.module('gpu.controllers')
         };
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
-        $scope.$on('userTenantChanged',function(event,status) {
+        $scope.$on('userTenantGpuChanged',function(event,status) {
             ct.data.tenantId = status.id;
             ct.data.tenantName = status.korName;
             ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
@@ -197,9 +197,9 @@ angular.module('gpu.controllers')
                 common.showAlertWarning('테넌트 정보가 없습니다.');
                 return;
             }
-
+            
             $scope.main.loadingMainBody = true;
-
+            
             var param = {
                 tenantId : ct.data.tenantId,
                 queryType : 'list'
@@ -349,7 +349,7 @@ angular.module('gpu.controllers')
                             ct.fn.setProcState(serverItem);
                             ct.fn.setRdpConnectDomain(serverItem);
                             // VM 생성시 1시간 초과하여 미생성시 자동 삭제 처리
-                            if (newItem && serverItem.floatingIp == "") {
+                            if (newItem && serverItem.fixedIp == "") {
                                 common.showAlertInfo('"' + serverItem.name + '" 인스턴스가 생성한지 1시간이 지나 삭제되었습니다.');
                             } else if (newItem) {
                                 common.showAlertSuccess('"' + serverItem.name + '" 인스턴스가 생성 되었습니다.');
