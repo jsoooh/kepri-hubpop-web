@@ -431,6 +431,17 @@ angular.module('portal.controllers')
             }, 0);
         };
 
+        // 프로젝트 개인 유형 상세 쿼터값
+        ct.personQuotaItems = [
+            {id : 3, value : 4},        // 서버 가상화 vCore 개수
+            {id : 4, value : 8},        // 서버 가상화 메모리
+            {id : 5, value : 100},      // 서버 가상화 OS 디스크(HDD)
+            {id : 6, value : 100},      // 서버 가상화 데이터 디스크(HDD)
+            {id : 12, value : 30},      // 쿠버네티스 공통 클러스터 POD 개수
+            {id : 13, value : 100},     // 쿠버네티스 외부 볼륨 디스크(HDD)
+            {id : 18, value : 20}       // 서버리스 컴퓨팅 Function 개수
+        ];
+
         // 프로젝트 ID 유효성 검사 및 중복체크
         ct.orgIdCustomValidationCheck = function(orgId) {
             var regexp = /[0-9a-zA-Z\-_]/;    //숫자,영문,특수문자(-_)
@@ -565,21 +576,32 @@ angular.module('portal.controllers')
         // 프로로젝트 유형 변경
         ct.fn.changeOrgCase = function() {
             var calendarButton = $('.datepickerWrap').find('.dtp-ig');
+
+            // 쿼터 선택 및 값 초기화
+            ct.orgData.quotaPlanGroup = ct.quotaPlanGroups[0];
+            ct.fn.changeQuotaPlanGroup(ct.orgData.quotaPlanGroup);
+
             if(ct.orgData.personal == "personal") {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
                 ct.orgData.endDate = moment('9999-12-31','YYYY-MM-DD');
                 ct.orgData.cost = "";           // 개발비 항목 초기화
                 ct.appFileItem = {};            // 과제계획서 첨부 초기화
                 ct.orgData.description = "";    // 설명 초기화
+                // 개인유형 상세 쿼터 아이템값 매칭
+                angular.forEach(ct.quotaItems, function(item) {
+                    for (var i=0; i<ct.personQuotaItems.length; i++) {
+                        if (item.id == ct.personQuotaItems[i].id) {
+                            item.value = ct.personQuotaItems[i].value;
+                            break;
+                        }
+                    }
+                });
                 calendarButton.hide();
             } else {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
                 ct.orgData.endDate = moment().subtract(1,'days').add(1,'month').format('YYYY-MM-DD');
                 calendarButton.show();
             }
-            // 쿼터 선택 및 값 초기화
-            ct.orgData.quotaPlanGroup = ct.quotaPlanGroups[0];
-            ct.fn.changeQuotaPlanGroup(ct.orgData.quotaPlanGroup);
         };
 
         // 쿼터 유형선택 변경시 쿼터 세부 유형 리스트
@@ -587,30 +609,18 @@ angular.module('portal.controllers')
             if (!quotaPlanGroup) {
                 return;
             }
+            // 쿼터 세부유형 선택 초기화
             ct.quotaPlans.length = 1;
             ct.orgData.quotaPlan = ct.quotaPlans[0];
+
+            // 쿼터 세부유형 항목 재배치
             angular.forEach(ct.quotaPlansData, function (value) {
-                // 개인설정 일때
-                if (ct.orgData.personal == "personal") {
-                    if (value.personal == true) {
-                        ct.quotaPlans.push(value);
-                    }
-                }
-                // 일반설정 일때
-                else if (value.orgQuotaPlanGroup != null && value.orgQuotaPlanGroup.id == quotaPlanGroup.id) {
+                if (value.orgQuotaPlanGroup != null && value.orgQuotaPlanGroup.id == quotaPlanGroup.id) {
                     ct.quotaPlans.push(value);
                 }
             });
-
-            if (ct.orgData.personal == "personal") {    // 개인설정 일때 쿼터 상세값 자동설정
-                if (!ct.quotaPlans || ct.quotaPlans.length < 2) {
-                    return common.showErrorAlert("프로젝트 개인유형의 쿼터 세부유형를 찾을 수 없습니다.");
-                }
-                ct.orgData.quotaPlan = ct.quotaPlans[1];
-                ct.fn.changeQuotaPlan(ct.orgData.quotaPlan);
-            } else {
-                ct.fn.changeQuotaPlan(); //쿼터 상세값 초기화
-            }
+            // 쿼터 상세값 초기화
+            ct.fn.changeQuotaPlan();
         };
 
         // 쿼터 세부 유형선택 변경시 쿼터 상세값 매칭
