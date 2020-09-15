@@ -284,8 +284,8 @@
 											<span class="tit_txt">vcpu</span>
 											<div class="progressWrap type2">
 												<div class="progress">
-													<div percent-progress-bar-animate bar-type="width" percent="13" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="13%"></div>
+													<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.cores + contents.data.spec.vcpus)/contents.tenantResource.maxResource.cores)*100|number:0}}%"></div>
 													</div>
 												</div>
 											</div>
@@ -295,8 +295,8 @@
 											<span class="tit_txt">메모리</span>
 											<div class="progressWrap type2">
 												<div class="progress">
-													<div percent-progress-bar-animate bar-type="width" percent="50" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="50%"></div>
+													<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.ramSize + contents.data.spec.ram)/contents.tenantResource.maxResource.ramSize)*100|number:0}}%"></div>
 													</div>
 												</div>
 											</div>
@@ -306,8 +306,8 @@
 											<span class="tit_txt">디스크</span>
 											<div class="progressWrap type2">
 												<div class="progress">
-													<div percent-progress-bar-animate bar-type="width" percent="4" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="4%"></div>
+													<div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0}}%"></div>
 													</div>
 												</div>
 											</div>
