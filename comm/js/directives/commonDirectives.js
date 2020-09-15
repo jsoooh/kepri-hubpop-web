@@ -1125,4 +1125,13 @@ angular.module('app')
                 elem.mCustomScrollbar();
             }
         }
+    }])
+    //menu scroll 관련
+    .directive("scrollBar", [function() {
+        return {
+            restrict: 'C',
+            link: function(scope, elem, attrs) {
+                elem.mCustomScrollbar();
+            }
+        }
     }]);
