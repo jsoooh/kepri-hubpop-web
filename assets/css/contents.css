@@ -413,6 +413,3 @@ input[type="text"], input[type="password"] {height:38px;}
 .pagiWrap li a {height:38px;}
 
 .md-dialog-is-showing {position:fixed !important;}
-
-/*메뉴 스크롤 관련*/
-.scroll-content .mCSB_scrollTools .mCSB_draggerContainer {opacity:1;}
