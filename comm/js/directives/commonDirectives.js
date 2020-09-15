@@ -1131,7 +1131,7 @@ angular.module('app')
         return {
             restrict: 'C',
             link: function(scope, elem, attrs) {
-                elem.mCustomScrollbar();
+                elem.mCustomScrollbar({theme:'minimal'});
             }
         }
     }]);
