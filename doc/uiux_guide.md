@@ -948,8 +948,8 @@ http://hubpop.kepco.co.kr
   ```
 ##### 4-2. 메뉴 스크롤이 안나타날 때
 - custom scrollbar은 jQuery 방식이므로 angularjs 에서 제대로 반영되지 않는 경우 있음 <br>
-  directive 처리함으로 해서 화면에서는 아래 클래스 추가 :  class="scroll-content"
+  directive 처리함으로 해서 화면에서는 아래 클래스 추가 :  class="scroll-bar"
   ```
-  <div class="scroll-bar scroll-content">
+  <div class="scroll-bar">
   ```
   
