@@ -583,7 +583,7 @@ angular.module('portal.controllers')
 
             if(ct.orgData.personal == "personal") {
                 ct.orgData.startDate = moment().format('YYYY-MM-DD');
-                ct.orgData.endDate = moment('9999-12-31','YYYY-MM-DD');
+                ct.orgData.endDate = moment('9999-12-31').format('YYYY-MM-DD');
                 ct.orgData.cost = "";           // 개발비 항목 초기화
                 ct.appFileItem = {};            // 과제계획서 첨부 초기화
                 ct.orgData.description = "";    // 설명 초기화
