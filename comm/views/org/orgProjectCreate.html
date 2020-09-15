@@ -78,13 +78,13 @@
 							<div class="col-md-3">
 								<div class="write-sub-title">
 									<b class="caution-star">*</b> 프로젝트 ID
-									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-_’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'">	i</a></div>
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'* 영문, 숫자, -, _ 만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'">	i</a></div>
 								</div>
 							</div>
 							<div class="col-md-9">
 								<div class="form-group">
 									<input type="text" class="form-control" name="orgId" ng-model="contents.orgData.orgId" maxlength="20" placeholder="아이디를 입력하세요." validation="max_len:20|required|custom:contents.orgIdCustomValidationCheck(contents.orgData.orgId)">
-									<span>* 영문, 숫자, ‘-_’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.</span>
+									<span class="text">* 영문, 숫자, -, _ 만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.</span>
 								</div>
 							</div>
 						</div>
@@ -98,7 +98,7 @@
 							<div class="col-md-9">
 								<div class="form-group">
 									<input type="text" class="form-control" name="orgName" ng-model="contents.orgData.orgName" maxlength="20" placeholder="프로젝트명을 입력하세요." validation="min_len:2|max_len:20|required|custom:contents.orgNameCustomValidationCheck(contents.orgData.orgName)">
-									<span>* 2자 이상 20자 이하, 특수문자 입력 불가</span>
+									<span class="text">* 2자 이상 20자 이하, 특수문자 입력 불가</span>
 								</div>
 							</div>
 						</div>
@@ -114,7 +114,7 @@
 										<div class="date-inpt">
 											<adm-dtp name="'startDate'" ng-model="contents.orgData.startDate" options="{format:'YYYY-MM-DD'}" maxdate="'{{contents.orgData.endDate}}'"></adm-dtp>
 										</div>
-										<span>~</span>
+										<span class="text">~</span>
 										<div class="date-inpt">
 											<adm-dtp name="'endDate'" ng-model="contents.orgData.endDate" options="{format:'YYYY-MM-DD'}" mindate="'{{contents.orgData.startDate}}'"></adm-dtp>
 										</div>
