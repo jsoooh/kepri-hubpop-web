@@ -10,12 +10,12 @@
                 <div class="header-mid">
                     <div class="inner">
                         <ul id="quick">
-                            <li class="lnb-depth1-item all" ng-class="{'active' : main.allMenuOpen }">
+                            <li class="lnb-depth1-item all"><!-- 200915 brkim 메뉴 활성 상태가 겹치는 문제로 active 관련 소스 주석처리. ng-class="{'active' : main.allMenuOpen }" -->
                                 <a href="" ng-click="main.allMenuOpenClick();"><span><img src="../assets/img/user/gnb_all.png"></span>
                                     <p class="sr-only">all menu</p>
                                 </a>
                             </li>
-                            <li class="lnb-depth1-item home" ng-class="{'active' : main.stateKey == 'commProjectDetail'}">
+                            <li class="lnb-depth1-item home" ><!-- 200915 brkim 메뉴 활성 상태가 겹치는 문제로 active 관련 소스 주석처리. ng-class="{'active' : main.stateKey == 'commProjectDetail'}" -->
                                 <a href="" ng-click="main.goToPortalOrgPage(main.sltPortalOrg);"><span><img src="../assets/img/user/gnb_home.png"></span>
                                     <p class="sr-only">dashboard</p>
                                 </a>
