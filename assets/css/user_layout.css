@@ -991,3 +991,8 @@ html {
   padding: 20px 30px 50px;
   position: relative;
 }
+
+/* ---------- layout 추가 css ---------- */
+#lnbWrap #lnb .scroll-bar .mCS-light.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+  background-color: rgba(221, 221, 221, 0.6);
+}
