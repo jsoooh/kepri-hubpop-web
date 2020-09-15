@@ -20,8 +20,12 @@
 							<h3 class="heading h3 margin-bottom-25">프로젝트 정보</h3>
 							<div class="project-info-area">
 								<div class="clearfix margin-bottom-30">
-									<div class="round-img pull-left">
-										<img src="../assets/img/guide/guide_user_dashboard.jpg" alt="">
+									<div class="round-img pull-left" ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image">
+										<!--<img src="../assets/img/guide/guide_user_dashboard.jpg" alt="">-->
+										<img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" alt="">
+									</div>
+									<div class="round-img pull-left" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image">
+										<span class="txt">{{contents.selOrgProject.orgName.substr(0, 1)}}</span>
 									</div>
 									<div class="text-area pull-left">
 										<span class="tit">{{contents.selOrgProject.orgName}}</span>
@@ -1286,7 +1290,7 @@
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-md-6">
-						<div class="round-img pull-left" ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image" >
+						<div class="round-img pull-left" ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image">
 							<img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" alt="">
 						</div>
 						<div class="round-img pull-left" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image">
@@ -1322,6 +1326,10 @@
 					<li>
 						<b>Project ID : </b>
 						<span>{{ contents.selOrgProject.orgId }}</span>
+					</li>
+					<li>
+						<b>유형 : </b>
+						<span>{{ contents.selOrgProject.isPersonal ? '개인' : '팀' }}</span>
 					</li>
 					<li>
 						<b>프로젝트 멤버 : </b>
@@ -1382,7 +1390,7 @@
 	<div ng-if="contents.sltInfoTab == 'member'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'member'}">
 		<!-- table -->
 		<div class="margin-bottom-20 text-right">
-			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole()" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
+			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole() || contents.selOrgProject.isPersonal" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
 			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole()" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
 			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole()" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
 		</div>
@@ -1428,7 +1436,7 @@
 												<a href="" ng-click="contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a>
 											</li>
 											<li title="패스워드 초기화">
-												<a href="" ng-click="contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
+												<a href="" ng-class="(orgUser.usersInfo && orgUser.usersInfo.isSso) ? 'disabled' : ''" ng-click="(orgUser.usersInfo && !orgUser.usersInfo.isSso) && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
 											</li>
 											<li title="삭제" >
 												<a href="" ng-click="contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a>
