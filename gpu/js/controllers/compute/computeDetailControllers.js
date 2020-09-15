@@ -3798,6 +3798,7 @@ angular.module('gpu.controllers')
 
         //인스턴스 디스크 셋팅
         pop.fn.setInstanceVolume = function(volume) {
+            if (!volume.volumeAttachment) return;
             if (volume && volume.volumeId) {
                 pop.sltVolume = angular.copy(volume);
                 pop.sltVolumeId = volume.volumeId;
