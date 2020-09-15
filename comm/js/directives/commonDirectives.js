@@ -1098,6 +1098,7 @@ angular.module('app')
             }
         };
     })
+    //feather icon 관련
     .directive("featherDirective", [function() {
         return {
             restrict: 'C',
@@ -1116,6 +1117,7 @@ angular.module('app')
             }
         }
     }])
+    //scroll 관련
     .directive("scrollContent", [function() {
         return {
             restrict: 'C',
