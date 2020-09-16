@@ -316,9 +316,27 @@
 	document.writeln('	<div class="aside" id="slider-contents"></div>');
 	document.writeln('</div>');
 	document.writeln('<div growl></div>');
-	document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
-	document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.loadingMain || main.loadingMainBody) ? \'block\' : \'none\' }">'); //로딩바 영역
-	document.writeln('	<div class="loadWrap_spn" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
+	
+	//신규 로딩
+	document.writeln('<div class="loading-wrap" id="newLoading" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
+	document.writeln('<div class="loading-wrap" id="newLoading" ng-style="{ \'display\' : (main.loadingMain || main.loadingMainBody) ? \'block\' : \'none\' }">'); //로딩바 영역
+	document.writeln('	<div class="loading-box" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">'); 
+	document.writeln('		<div class="img"><img src="assets/img/common/loading.png" alt="" /></div>'); 
+	document.writeln('		<ul class="dot-pulse">'); 
+	document.writeln('			<li><div class="dot"></div></li>'); 
+	document.writeln('			<li><div class="dot"></div></li>'); 
+	document.writeln('			<li><div class="dot"></div></li>'); 
+	document.writeln('			<li><div class="dot"></div></li>'); 
+	document.writeln('			<li><div class="dot"></div></li>'); 
+	document.writeln('		</ul>'); 
+	document.writeln('	</div>'); 
+	document.writeln('</div>'); 
+
+	
+	//기존 로딩
+	//document.writeln('<div class="loader-container" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
+	//document.writeln('<div class="loader-container" ng-style="{ \'display\' : (main.loadingMain || main.loadingMainBody) ? \'block\' : \'none\' }">'); //로딩바 영역
+	/* document.writeln('	<div class="loadWrap_spn" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
 	document.writeln('		<div class="loadBox_spn">');
 	document.writeln('			<div class="lds-css ng-scope">');
 	document.writeln('				<div class="lds-spinner" style="height:100%">');
@@ -337,8 +355,8 @@
 	document.writeln('				</div>');
 	document.writeln('			</div>');
 	document.writeln('		</div>');
-	document.writeln('	</div>');
-	document.writeln('</div>');
+	document.writeln('	</div>'); 
+	document.writeln('</div>');*/
 	document.writeln('<div id="noticeDiv"><div>');
 </script>
 </body>
