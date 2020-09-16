@@ -65,12 +65,12 @@
 			<div role="tabpanel" class="tab-pane in" ng-class="{'active' : contents.tabIndex == 0}">
 				<!-- 버튼영역 -->
 				<div class="margin-bottom-20">
-					<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/iaas/compute/create')" ng-disabled="!main.checkResourceUserRole()">
+					<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="main.goToPage('/iaas/compute/create')" ng-disabled="!main.checkResourceUserRole()">
 					<!--<button type="button" class="btn btn-default btn-lg" ng-click="contents.showTempAlert()" ng-disabled="!main.checkResourceUserRole()">-->
 						<div class="feather-icon color-primary"><i data-feather="server" class="feather-directive"></i></div> <b>서버만들기</b>
 					</button>
-					<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/iaas/compute/copy')" ng-disabled="!main.checkResourceUserRole()">
-						<div class="feather-icon color-primary"><i data-feather="server" class="feather-directive"></i></div> <b>다른서버 복사하기</b>
+					<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="main.goToPage('/iaas/compute/copy')" ng-disabled="!main.checkResourceUserRole()">
+						<div class="feather-icon color-primary"><i data-feather="copy" class="feather-directive"></i></div> <b>다른서버 복사하기</b>
 					</button>
 					<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/iaas/loadbalancer/create')" ng-if="false" ng-disabled="!main.checkResourceUserRole()">
 						<div class="feather-icon color-primary"><i data-feather="server" class="feather-directive"></i></div> <b>부하 분산 설정</b>
@@ -504,8 +504,8 @@
 			<div role="tabpanel" class="tab-pane" ng-class="{'active' : contents.tabIndex == 1}">
 				<!-- 버튼영역 -->
 				<div class="margin-bottom-20">
-					<button type="button" class="btn btn-default btn-lg" ng-click="contents.fn.checkLbPortLimit();" ng-disabled="!main.checkResourceUserRole()">
-						<div class="feather-icon color-primary"><i data-feather="server" class="feather-directive"></i></div> <b>부하 분산 설정</b>
+					<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="contents.fn.checkLbPortLimit();" ng-disabled="!main.checkResourceUserRole()">
+						<div class="feather-icon color-primary"><i data-feather="monitor" class="feather-directive"></i></div> <b>부하 분산 설정</b>
 					</button>
 				</div>
 				<!-- //버튼영역 -->
