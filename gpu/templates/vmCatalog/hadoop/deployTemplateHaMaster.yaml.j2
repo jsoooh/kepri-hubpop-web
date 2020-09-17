@@ -114,6 +114,9 @@ resources:
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $private_key: { get_param: private_key }
+            $s3_endpoint: { get_param: s3_endpoint }
+            $s3_secretKey: { get_param: s3_secretKey }
+            $s3_accessKey: { get_param: s3_accessKey }
             $root_password: { get_param: root_password }
             $hive_password: { get_param: hive_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
@@ -243,11 +246,11 @@ resources:
             </property>
             <property>
               <name>fs.s3a.access.key</name>
-              <value>KB3R94LCZUUHGFI9DH92</value>
+              <value><![CDATA[$s3_accessKey]]></value>
             </property>
             <property>
               <name>fs.s3a.secret.key</name>
-              <value>gD4jR0mWRur8lWdxEUXZhBD8NKIW5kbrgiBSaMwq</value>
+              <value><![CDATA[$s3_secretKey]]></value>
             </property>
             <property>
               <name>fs.s3a.connection.ssl.enabled</name>
@@ -255,7 +258,7 @@ resources:
             </property>
             <property>
               <name>fs.s3a.endpoint</name>
-              <value>101.55.126.196:7480</value>
+              <value><![CDATA[$s3_endpoint]]></value>
             </property>
             </configuration>
             EOF
@@ -575,6 +578,9 @@ resources:
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
             $private_key: { get_param: private_key }
+            $s3_endpoint: { get_param: s3_endpoint }
+            $s3_secretKey: { get_param: s3_secretKey }
+            $s3_accessKey: { get_param: s3_accessKey }
             $root_password: { get_param: root_password }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
@@ -679,11 +685,11 @@ resources:
             </property>
             <property>
               <name>fs.s3a.access.key</name>
-              <value>KB3R94LCZUUHGFI9DH92</value>
+              <value><![CDATA[$s3_accessKey]]></value>
             </property>
             <property>
               <name>fs.s3a.secret.key</name>
-              <value>gD4jR0mWRur8lWdxEUXZhBD8NKIW5kbrgiBSaMwq</value>
+              <value><![CDATA[$s3_secretKey]]></value>
             </property>
             <property>
               <name>fs.s3a.connection.ssl.enabled</name>
@@ -691,7 +697,7 @@ resources:
             </property>
             <property>
               <name>fs.s3a.endpoint</name>
-              <value>101.55.126.196:7480</value>
+              <value><![CDATA[$s3_endpoint]]></value>
             </property>
             </configuration>
             EOF
