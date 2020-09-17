@@ -2098,16 +2098,16 @@ angular.module('common.controllers', [])
                 var contentsTemplateHtml = '';
                 if ($scope.main.selectSiteMap.contentsView.templateUrl) {
                     common.getTemplateHtml($scope.main.selectSiteMap.contentsView.templateUrl + _VersionTail(), function (templateHtml) {
-                        contentsTemplateHtml += '<div class="content" id="mainContents"' + controllerHtml + '>\n' + templateHtml + '\n</div>';
+                        contentsTemplateHtml += '<div class="content inner-wrap" id="mainContents"' + controllerHtml + '>\n' + templateHtml + '\n</div>';
                         $templateCache.put(contentsTemplateUrl, contentsTemplateHtml);
                         mb.mainContentsTemplateUrl = contentsTemplateUrl;
                     }, function (res) {
-                        contentsTemplateHtml += '<div class="content" id="mainContents"' + controllerHtml + '>\nNot Found: ' + $scope.main.selectSiteMap.contentsView.templateUrl + '\n</div>';
+                        contentsTemplateHtml += '<div class="content inner-wrap" id="mainContents"' + controllerHtml + '>\nNot Found: ' + $scope.main.selectSiteMap.contentsView.templateUrl + '\n</div>';
                         $templateCache.put(contentsTemplateUrl, contentsTemplateHtml);
                         mb.mainContentsTemplateUrl = contentsTemplateUrl;
                     });
                 } else {
-                    contentsTemplateHtml += '<div class="content" id="mainContents"' + controllerHtml + '></div>';
+                    contentsTemplateHtml += '<div class="content inner-wrap" id="mainContents"' + controllerHtml + '></div>';
                     $templateCache.put(contentsTemplateUrl, contentsTemplateHtml);
                     mb.mainContentsTemplateUrl = contentsTemplateUrl;
                 }
