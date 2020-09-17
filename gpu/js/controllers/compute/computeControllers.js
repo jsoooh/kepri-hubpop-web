@@ -2,7 +2,6 @@
 
 // angular.module('iaas.controllers')
 angular.module('gpu.controllers')
-
     .filter('filterSpecList', function () {
         return function (items, specType, gpuCard) {
             var out = [];
@@ -10,7 +9,7 @@ angular.module('gpu.controllers')
                 items.forEach(function (item) {
                     if (item.type == specType) {
                         if (specType == "GPU") {
-                            if (item.gpuCardInfo.model == gpuCard.model) {
+                            if (item.gpuCardInfo && item.gpuCardInfo.model == gpuCard.model) {
                                 out.push(item);
                             }
                         }
@@ -23,10 +22,7 @@ angular.module('gpu.controllers')
             return out;
         }
     })
-
-    // .controller('iaasComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
     .controller('gpuComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, computeDetailService, CONSTANTS) {
-        // _DebugConsoleLog("computeControllers.js : iaasComputeCtrl", 1);
         _DebugConsoleLog("computeControllers.js : gpuComputeCtrl", 1);
 
         $scope.actionBtnEnabled = true;
@@ -1406,9 +1402,10 @@ angular.module('gpu.controllers')
             if (ct.specMinDisabledSetting && ct.specMaxDisabledSetting) {
                 ct.specDisabledAllSetting = true;
                 var sltSpec = null;
-                for (var i=0; i<ct.specList.length; i++) {
-                    if (!ct.specList[i].disabled) {
-                        sltSpec = ct.specList[i];
+                var specList = $filter('filterSpecList')(ct.specList, ct.selectedSpecType, ct.selectedGpuCard);
+                for (var i=0; i<specList.length; i++) {
+                    if (!specList[i].disabled) {
+                        sltSpec = specList[i];
                         break;
                     }
                 }
@@ -1570,6 +1567,7 @@ angular.module('gpu.controllers')
                 for (index = 0; index < ct.gpuCardList.length; index++) {
                     if (selectedGpuCardId == ct.gpuCardList[index].id) {
                         ct.selectedGpuCard = ct.gpuCardList[index];
+                        ct.fn.defaultSelectSpec();
                         break;
                     }
                 }
@@ -1838,14 +1836,13 @@ angular.module('gpu.controllers')
                 clickCheck = false;
                 return;
             }
+
             $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers)  {
                 // 서버생성후 -> 디스크 생성 후 sucess 처리.
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess(ct.data.name + " 인스턴스 생성이 시작 되었습니다.");
-                // 서버생성후 전용 HDD 볼륨 생성
-                // ct.fn.createStorageVolumeAction(data);
                 // 페이지 이동으로 바꿔야 하고
                 $scope.main.goToPage("/gpu/compute");
             });

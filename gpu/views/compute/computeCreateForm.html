@@ -27,7 +27,7 @@
 								</div>
 								<select class="form-control" ng-model="contents.selectedSpecType" ng-change="contents.fn.specTypeChange();">
 									<option value="">{{ 'label.select' | translate }}</option>
-									<option ng-repeat="specType in contents.specTypeList" value={{specType}} ng-selected="$first">{{specType}}</option>
+									<option ng-repeat="specType in contents.specTypeList" value="{{specType}}">{{specType}}</option>
 								</select>
 							</li>
 							<li>
@@ -275,7 +275,7 @@
 									</li>
 									<li>
 										<span class="s_tit">유형</span>
-										<span class="s_txt">Volume Storage ({{content.volume.type}})</span>
+										<span class="s_txt">Volume Storage ({{contents.volume.type}})</span>
 									</li>
 								</ul>
 							</div>
