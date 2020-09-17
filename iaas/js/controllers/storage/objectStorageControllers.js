@@ -60,7 +60,7 @@ angular.module('iaas.controllers')
         var ct = this;
         ct.fn = {};
         ct.data = {};
-        ct.objectStorageQuator = {};
+        ct.objecteStorageQuator = {};
         ct.roles = [];
         // 공통 레프트 메뉴의 userTenantId
         ct.data.projectId = $scope.main.sltProjectId;

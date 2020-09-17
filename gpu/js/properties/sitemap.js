@@ -130,6 +130,12 @@ angular.module('app')
                         url: '/gpu/storage',
                         controller: 'gpuStorageCtrl',
                         templateUrl: _GPU_VIEWS_+'/storage/storage.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [],
+                            loadMyControllers: [_GPU_JS_+'/controllers/storage/storageControllers.js'],
+                            loadMyDirectives: []
+                        },
                         subPages: {
                         }
                     },
@@ -138,7 +144,13 @@ angular.module('app')
                         stateKey: 'gpuStorgeCreate',
                         url: '/gpu/storage/create',
                         controller: 'gpuStorageFormCtrl',
-                        templateUrl: _GPU_VIEWS_+'/storage/storageForm.html'
+                        templateUrl: _GPU_VIEWS_+'/storage/storageForm.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [],
+                            loadMyControllers: [_GPU_JS_+'/controllers/storage/storageControllers.js'],
+                            loadMyDirectives: []
+                        }
                     },
                     object_storage: {
                         name: "object_storage",
@@ -146,7 +158,13 @@ angular.module('app')
                         stateKey: 'gpuObjectStorage',
                         url: '/gpu/storage/object',
                         controller: 'gpuObjectStorageCtrl',
-                        templateUrl: _GPU_VIEWS_+'/storage/objectStorage.html'
+                        templateUrl: _GPU_VIEWS_+'/storage/objectStorage.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [],
+                            loadMyControllers: [_GPU_JS_+'/controllers/storage/objectStorageControllers.js'],
+                            loadMyDirectives: []
+                        }
                     },
                     server_snapshot: {
                         name: "server_snapshot",
@@ -155,6 +173,12 @@ angular.module('app')
                         url: '/gpu/snapshot',
                         controller: 'gpuServerSnapshotCtrl',
                         templateUrl: _GPU_VIEWS_+'/compute/serverSnapshot.html',
+                        loadMyFile: {
+                            loadMyScripts: [],
+                            loadMyServices: [],
+                            loadMyControllers: [_GPU_JS_+'/controllers/storage/storageControllers.js'],
+                            loadMyDirectives: []
+                        },
                         subPages: {
                             instanceSnashotCreate: {
                                 name: 'server_snapshot_create',
@@ -168,7 +192,13 @@ angular.module('app')
                                 stateKey: 'gpuStorageSnapshotCreate',
                                 url: '/gpu/snapshot/storageCreate/:snapshotId',
                                 controller: 'gpuStorageSnapshotCreateCtrl',
-                                templateUrl: _GPU_VIEWS_+'/storage/storageSnapshotCreate.html'
+                                templateUrl: _GPU_VIEWS_+'/storage/storageSnapshotCreate.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [],
+                                    loadMyControllers: [_GPU_JS_+'/controllers/storage/storageControllers.js'],
+                                    loadMyDirectives: []
+                                }
                             }
                         }
                     }
