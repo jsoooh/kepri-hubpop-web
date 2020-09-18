@@ -166,7 +166,6 @@ angular.module('gpu.controllers')
                     ct.objectStorageUsedVolume = ct.objectStorageUsedGigaByte;
                     ct.objectStorageUsedVolumeUnit = "GB";
                 }
-                console.log(objectStorageUsedVolumeUnit);
                 //console.log("ct.objectStorageList : ", ct.objectStorageList);
             });
             returnPromise.error(function (data, status, headers) {
@@ -370,7 +369,7 @@ angular.module('gpu.controllers')
             ct.fn.getSendSecretInfoList();
         }
 
-        ct.fn.onclickObjectStorageObject = function(name, type)  {
+        ct.fn.onClickObjectStorageObject = function(name, type)  {
             if (type == "dir") {
                 if (name.indexOf("...") != -1) { // parent folder
                     var path = name.substring(0, name.length-4); // path/... -> path
