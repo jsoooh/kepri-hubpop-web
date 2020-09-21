@@ -111,9 +111,8 @@ angular.module('perf.controllers')
             }
         };
 
-        ct.fn.listAllMeteringYears();
         ct.fn.listAllMeteringGroupItems();
-
+        ct.fn.listAllMeteringYears();
     })
     .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS, perfCommService) {
         _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 3);
