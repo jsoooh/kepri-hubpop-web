@@ -397,7 +397,7 @@ angular.module('iaas.controllers')
             }
         }
 
-        ct.fn.onClickAllChcked = function() {
+        ct.fn.onClickAllChecked = function() {
             ct.fn.changeCheckedState(ct.data.allChecked);
         };
 
