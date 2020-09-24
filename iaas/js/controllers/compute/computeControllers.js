@@ -1557,18 +1557,17 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers)  {
                 $timeout(function () {
-                    $scope.main.loadingMainBody = false;
                     common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
                     // 페이지 이동으로 바꿔야 하고
                     $scope.main.goToPage("/iaas/compute");
-                }, 3000);
+                }, 5000);
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function() {
                 clickCheck = false;
+                $scope.main.loadingMainBody = false;
             });
         };
 
