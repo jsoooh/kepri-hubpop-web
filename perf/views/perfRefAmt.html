@@ -1,51 +1,67 @@
-<div class="panelWrap">
-	<div class="panel type2">
-		<div class="panel_head">
-			<div class="pull-left">
-				<h4 class="tit">과금서비스 <em>('{{ contents.data.sltItemGroup.itemGroupName }}'에 대한 과금 기준정보 입니다.)</em></h4>
+<!-- 신규소스 200909 -->
+<section class="panel panel-bordered">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6">
+				<h3 class="panel-title">과금서비스 </h3>
 			</div>
-			<div class="pull-right">
-				<select id="itemGroup" name="itemGroup" ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups"  ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeItemGroup(contents.data.sltItemGroupCode)"></select>
-			</div>
-		</div>
-		<div class="panel_body h_auto">
-			<h4 class="h-tit4">항목별 과금 기준</h4>
-			<div class="tbl type3 mt30">
-				<table class="table">
-					<colgroup>
-						<col style="width: 20%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col style="width: 10%" />
-						<col />
-					</colgroup>
-					<thead>
-						<tr>
-							<th>항목</th>
-							<th>기준시간</th>
-							<th>기준용량</th>
-							<th>과금금액</th>
-							<th>부가설명</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="itemPerfRefAmt in contents.itemPerfRefAmts | filter:{ itemGroupCode: contents.data.sltItemGroupCode }">
-							<td>{{ itemPerfRefAmt.itemName }}</td>
-							<td>1 시간</td>
-							<td>{{ itemPerfRefAmt.refValue }} {{ itemPerfRefAmt.itemUnit }}</td>
-							<td>{{ itemPerfRefAmt.refAmt }} 원</td>
-							<td ng-if="itemPerfRefAmt.refCmd" class="text-left">{{ itemPerfRefAmt.refCmd }}</td>
-                            <td ng-if="!itemPerfRefAmt.refCmd" class="text-left">내용 없음</td>
-						</tr>
-						<tr ng-if="contents.itemPerfRefAmts.length == 0 || !contents.itemPerfRefAmts" class="ng-scope">
-							<td colspan="5" class="center ng-binding">목록이 존재하지 않습니다.</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="col-md-6">
+				<div class="text-right margin-15">
+					<div class="form-group inline-block margin-bottom-0">
+						<select id="itemGroup" class="form-control form-control-md" name="itemGroup" 
+								ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups" 
+								ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeItemGroup(contents.data.sltItemGroupCode)">
+						</select>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+	<div class="panel-body">
+		<div class="alert alert-primary" role="alert">
+			<i data-feather="file-text" class="feather-directive"></i>
+			<div class="text-area">'{{ contents.data.sltItemGroup.itemGroupName }}'에 대한 과금 기준정보 입니다.</div>
+		</div>
+		
+		<h4 class="heading h4 margin-top-30">- 항목별 과금 기준</h4>
+		<div class="table-wrap border-0 margin-top-20">
+			<table class="table table-hover table-bordered">
+				<colgroup>
+					<col style="width: 20%" />
+					<col style="width: 10%" />
+					<col style="width: 10%" />
+					<col style="width: 10%" />
+					<col />
+				</colgroup>
+				<thead class="text-center black white-text">
+					<tr>
+						<th>항목</th>
+						<th>기준시간</th>
+						<th>기준용량</th>
+						<th>과금금액</th>
+						<th>부가설명</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="itemPerfRefAmt in contents.itemPerfRefAmts | filter:{ itemGroupCode: contents.data.sltItemGroupCode }">
+						<td>{{ itemPerfRefAmt.itemName }}</td>
+						<td class="text-center">1 시간</td>
+						<td class="text-center">{{ itemPerfRefAmt.refValue }} {{ itemPerfRefAmt.itemUnit }}</td>
+						<td class="text-right">{{ itemPerfRefAmt.refAmt }} 원</td>
+						<td ng-if="itemPerfRefAmt.refCmd" class="text-left">{{ itemPerfRefAmt.refCmd }}</td>
+						<td ng-if="!itemPerfRefAmt.refCmd" class="text-left">내용 없음</td>
+					</tr>
+					<tr ng-if="contents.itemPerfRefAmts.length == 0 || !contents.itemPerfRefAmts" class="ng-scope">
+						<td colspan="5" class="center ng-binding">목록이 존재하지 않습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
+<!-- // 신규소스 200909 -->
+
+
 
 <!-- 기존에 있던 소스 주석처리함. 추후 삭제 필요 -->
 <div class="tabWrap type1 newMonitCon" ng-if="false">

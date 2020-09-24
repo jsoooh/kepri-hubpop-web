@@ -10,7 +10,7 @@ angular.module('portal.controllers')
         $scope.main.displayHistoryBtn = true;
 
         ct.paramId = $stateParams.orgId;
-        ct.isOrgManager = false;
+        // ct.isOrgManager = false;     // 공통 컨트롤러 에서 처리
         /* 20.04.24 - 프로젝트 목록 : 우측 메뉴 기능 by ksw */
         /* 사용자 변경을 통해 DetailController로 넘어올 경우 구성원 탭 선택(기본은 대시보드) */
         if (orgService.changeUser) {
@@ -59,9 +59,10 @@ angular.module('portal.controllers')
                         $scope.main.reloadTimmer['getOrgProject_' + ct.paramId] = null;
                     }
                     ct.selOrgProject = data;
-                    if (ct.selOrgProject.myRoleName == 'OWNER' || ct.selOrgProject.myRoleName == 'ADMIN') {
+                    // 공통 컨트롤러 에서 처리
+                    /*if (ct.selOrgProject.myRoleName == 'OWNER' || ct.selOrgProject.myRoleName == 'ADMIN') {
                         ct.isOrgManager = true;
-                    }
+                    }*/
                     $timeout(function () {
                         $scope.main.changePortalOrg(data);
                         ct.loadDashBoard();
@@ -479,6 +480,103 @@ angular.module('portal.controllers')
 
             ct.dataReq9 = ser1.data;
             var chartArea = 'chart-area9';
+            var tmpValue = '%';
+            var tmpColor1 = '#fe3392';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// GPU 인스턴스 CPU    ///////////////////////////////////
+        ct.gpuCpuChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                //ct.dataReq4 = { };
+                ser1.name = "사용율";
+                ser1.data = chartData.cpuTotUsed.toFixed(1);
+                ser1.cpuMax = chartData.cpuMax;
+                ser1.cpuUsed = chartData.cpuUsed;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.gpuDataReq4 = serJsonList  ;
+            var chartArea = 'chart-area-gpu3';
+            var tmpValue = '%';
+
+            //CPU Chart Color
+            var tmpColor1 = "#0a88bd";
+            var tmpColor2 = "#ebebeb";
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// GPU 인스턴스 MEMORY     ///////////////////////////////////
+        ct.gpuMemChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                ser1.name = "사용율";
+                ser1.data = chartData.ramSizeTot.toFixed(1);
+                ser1.ramSizeMax = chartData.ramSizeMax;
+                ser1.ramSizeUsed = chartData.ramSizeUsed;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.gpuDataReq5 = serJsonList;
+            var chartArea = 'chart-area-gpu4';
+            var tmpValue = '%';
+            //Memory Chart Color
+            var tmpColor1 = '#fe3392';
+            var tmpColor2 = '#ebebeb';
+
+            ct.pieChart (chartArea, serJsonList, tmpValue, tmpColor1, tmpColor2) ;
+        };
+
+        //////////////////////////////// GPU 인스턴스 STORAGE      ///////////////////////////////////
+        ct.gpuStorgeChartFunc = function (chartData) {
+            var tmpCode = chartData.code ;
+            var reqJsonArray = new Array();
+            var ser1 = new Object();
+            var ser2 = new Object();
+            var serJsonList = new Object();
+
+            if (tmpCode == '0000') {
+                //ct.dataReq4 = { };
+                ser1.name = "사용율";
+                // STRAGE 기준을 instance disk 로 할 것인지 volume으로 할 것인지 확인 필요
+                //ser1.data = chartData.instanceDiskGigabytesTot; // instance disk
+                ser1.data = chartData.objectStorageGigaByteTot.toFixed(1); // volume
+                ser1.objectStorageGigaByteMax = chartData.objectStorageGigaByteMax;
+                ser1.objectStorageGigaByteUsed = chartData.objectStorageGigaByteUsed;
+                reqJsonArray.push(ser1);
+
+                ser2.name = "미사용율";
+                ser2.data = parseInt(100 - parseInt(ser1.data));
+                reqJsonArray.push(ser2);
+                serJsonList.series = reqJsonArray;
+            }
+
+            ct.gpuDataReq6 = serJsonList;
+            var chartArea = 'chart-area-gpu5';
             var tmpValue = '%';
             var tmpColor1 = '#fe3392';
             var tmpColor2 = '#ebebeb';
@@ -1013,6 +1111,207 @@ angular.module('portal.controllers')
             }
         };
 
+        //////////////////////////////// CPU 상태  ///////////////////////////////////
+        // GPU 인스턴스 CPU 상태
+        ct.gpuCpuStatusChart = function () {
+            var container = document.getElementById('chart-area-gpu2');
+            var data = {
+                categories: ['2018.01', '2018.06', '2018.12'],
+                series: {
+                    area: [
+                        {
+                            name: ' ',                                 //차후 항목라벨 정리필요 sg0730 2018.10.17
+                            data: [80, 60, 90]
+                        }
+                    ],
+                    line: [
+                        {
+                            name: ' ',
+                            data: [80, 60, 90]
+                        }
+                    ]
+                }
+            };
+            var options = {
+                chart: {
+                    width: 230,
+                    height: 80
+                },
+                yAxis: {
+                    min: 0,
+                    pointOnColumn: true
+                },
+                xAxis: {
+                    tickInterval: 'auto'
+                },
+                series: {
+                    zoomable: true
+                },
+                tooltip: {
+                    suffix: '%'
+                },
+                legend: {
+                    visible: false
+                },
+                chartExportMenu : {
+                    visible: false
+                }
+            };
+
+            var theme = {
+                series: {
+                    area: {
+                        colors: ['#ffc4c4']
+                    },
+                    line: {
+                        colors: ['#fe5f9e']
+                    }
+                }
+            };
+
+            tui.chart.registerTheme('newTheme', theme);
+            options.theme = 'newTheme';
+
+            tui.chart.comboChart(container, data, options);
+        };
+
+        // GPU 대시보드 시작
+        ct.gpuInstanceStateCountInit = function () {
+            // 카운트
+            ct.gpuInstanceStateCount = {
+                TOTAL: 0,
+                STARTED: 0,
+                STOPPED: 0,
+                ERROR: 0
+            };
+        };
+
+        ct.gpuInstanceUsageInit = function () {
+            ct.gpuInstanceUsage = {
+                cpu : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당 코어수
+                    maxQuota : 0 // 프로젝트 할당량 코어수
+                },
+                mem : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Byte
+                    maxQuota : 0 // 프로젝트 할당량 Byte
+                },
+                disk : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Giga Byte
+                    maxQuota : 0 // 프로젝트 할당량 Giga Byte
+                },
+                volume : {
+                    percentUsedQuota : 0, // 할당률 %
+                    usedQuota : 0, // 인스턴스 할당량 Giga Byte
+                    maxQuota : 0 // 프로젝트 할당량 Giga Byte
+                }
+            };
+        };
+
+        ct.gpuInstanceStateCountInit();
+        ct.gpuInstanceUsageInit();
+
+        ct.gpuInstances = [];
+        ct.getGpuInstanceVmsView = function (tenantId) {
+            ct.gpuInstanceStateCountInit();
+            ct.gpuInstances = [];
+            var promise = portal.dashboard.getGpuInstanceVmsView(tenantId);
+            promise.success(function (data, status, headers) {
+                if (data && data.content && data.content.length > 0) {
+                    ct.gpuInstances = data.content;
+                    angular.forEach(ct.gpuInstances, function (instance, instanceKey) {
+                        ct.gpuInstanceStateCount.TOTAL++;
+                        if (instance.vmState == "active") {
+                            ct.gpuInstanceStateCount.STARTED++;
+                        } else if (instance.vmState == "error") {
+                            ct.gpuInstanceStateCount.ERROR++;
+                        } else {
+                            ct.gpuInstanceStateCount.STOPPED++;
+                        }
+                    });
+                }
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        ct.gpuResourceUsed = {};
+        ct.getGpuResourceUsedLookup = function (tenantId) {
+            ct.gpuInstanceUsageInit();
+            ct.gpuResourceUsed = {};
+            var promise = portal.dashboard.getGpuResourceUsedLookup(tenantId);
+            promise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.gpuResourceUsed = data.content;
+                    if (ct.gpuResourceUsed.maxResource && ct.gpuResourceUsed.usedResource) {
+                        // 할당 코어수
+                        ct.gpuInstanceUsage.cpu.maxQuota = ct.gpuResourceUsed.maxResource.cores;
+                        ct.gpuInstanceUsage.cpu.usedQuota = ct.gpuResourceUsed.usedResource.cores;
+                        ct.gpuInstanceUsage.cpu.percentUsedQuota = (ct.gpuInstanceUsage.cpu.usedQuota/ct.gpuInstanceUsage.cpu.maxQuota) * 100;
+
+                        // 할당 메모리 Byte
+                        ct.gpuInstanceUsage.mem.maxQuota = ct.gpuResourceUsed.maxResource.ramSize;
+                        ct.gpuInstanceUsage.mem.usedQuota = ct.gpuResourceUsed.usedResource.ramSize;
+                        ct.gpuInstanceUsage.mem.percentUsedQuota = (ct.gpuInstanceUsage.mem.usedQuota/ct.gpuInstanceUsage.mem.maxQuota) * 100;
+
+                        // 할당 인스트턴스 용량 Giga Byte
+                        ct.gpuInstanceUsage.disk.maxQuota = ct.gpuResourceUsed.maxResource.instanceDiskGigabytes;
+                        ct.gpuInstanceUsage.disk.usedQuota = ct.gpuResourceUsed.usedResource.instanceDiskGigabytes;
+                        ct.gpuInstanceUsage.disk.percentUsedQuota = (ct.gpuInstanceUsage.disk.usedQuota/ct.gpuInstanceUsage.disk.maxQuota) * 100;
+                        
+                        // 할당 디스크 용량 Giga Byte
+                        ct.gpuInstanceUsage.volume.maxQuota = ct.gpuResourceUsed.maxResource.volumeGigabytes;
+                        ct.gpuInstanceUsage.volume.usedQuota = ct.gpuResourceUsed.usedResource.volumeGigabytes;
+                        ct.gpuInstanceUsage.volume.percentUsedQuota = (ct.gpuInstanceUsage.volume.usedQuota/ct.gpuInstanceUsage.volume.maxQuota) * 100;
+
+                        if (ct.gpuInstanceUsage.volume.maxQuota == 0) {
+                            ct.gpuInstanceUsage.volume.maxQuota = ct.gpuInstanceUsage.disk.maxQuota;
+                            ct.gpuInstanceUsage.volume.usedQuota = ct.gpuInstanceUsage.disk.usedQuota;
+                            ct.gpuInstanceUsage.volume.percentUsedQuota = ct.gpuInstanceUsage.disk.percentUsedQuota;
+                        }
+
+                        var chartData = {
+                            code: "0000",
+                            cpuTotUsed : ct.gpuInstanceUsage.cpu.percentUsedQuota,
+                            cpuMax : ct.gpuInstanceUsage.cpu.maxQuota,
+                            cpuUsed : ct.gpuInstanceUsage.cpu.usedQuota,
+                            ramSizeTot : ct.gpuInstanceUsage.mem.percentUsedQuota,
+                            ramSizeMax : ct.gpuInstanceUsage.mem.maxQuota,
+                            ramSizeUsed : ct.gpuInstanceUsage.mem.usedQuota,
+                            instanceDiskGigabytesTot : ct.gpuInstanceUsage.disk.percentUsedQuota,
+                            objectStorageGigaByteTot : ct.gpuInstanceUsage.volume.percentUsedQuota,
+                            objectStorageGigaByteMax : ct.gpuInstanceUsage.volume.maxQuota,
+                            objectStorageGigaByteUsed : ct.gpuInstanceUsage.volume.usedQuota
+                        };
+
+                        ct.gpuCpuChartFunc(chartData);
+                        ct.gpuMemChartFunc(chartData);
+                        ct.gpuStorgeChartFunc(chartData);
+                    }
+                }
+
+            });
+            promise.error(function (data, status, headers) {
+            });
+        };
+
+        ct.getGpuCardList = function () {
+            ct.gpuCardList = [];
+            var rp = portal.dashboard.getGpuCardList($scope.main.userTenantGpuId);
+            rp.success(function (data) {
+                if (data && data.content) {
+                    ct.gpuCardList = data.content;
+                }
+            });
+            rp.error(function (data) {
+                console.log(data);
+            });
+        };
+        // gpu 대시보드 끝
+
         ct.dataReq10 = {
             totCnt: 0,
             svnCnt: 0,
@@ -1157,6 +1456,15 @@ angular.module('portal.controllers')
                 ct.paasCpuStatusChart();
                 ct.getPaasAppInfosAndInstanceInfos($scope.main.sltOrganizationGuid);
             }
+            
+            // GPU 정보
+            if ($scope.main.userTenantGpuId) {
+                ct.gpuCpuStatusChart();
+                ct.getGpuCardList();
+                ct.getGpuInstanceVmsView($scope.main.userTenantGpuId);
+                ct.getGpuResourceUsedLookup($scope.main.userTenantGpuId);
+            }
+            
             // Pipeline 정보
             ct.getPipelineDashBoardInfo(ct.paramId);
             // Gis 정보
@@ -1270,57 +1578,26 @@ angular.module('portal.controllers')
             });
         };
 
-        /*프로젝트 삭제 전 체크*/
+        /*프로젝트 삭제 전 체크 : useYnCheck --> 테넌트/org 여부 확인으로 대체*/
         ct.checkDeleteOrgProject = function ($event) {
-            var params = {
-                teamCode : ct.selOrgProject.orgId
-            };
-            var iaasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/check/useYn', 'GET', params));
-
-            params = {
-                teamCode : ct.selOrgProject.orgId
-            };
-            var gpuPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/check/useYn', 'GET', params));
-
-            params = {
-                urlPaths : {
-                    "name" : ct.selOrgProject.orgId
-                }
-            };
-            var paasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'GET', params));
-            ct.iaasUseYn = "N";
-            ct.gpuUseYn = "N";
-            ct.paasAppCnt = 0;
             ct.useServices = "";
-            $scope.main.loadingMainBody = true;
-            $q.all([iaasPromise, gpuPromise, paasPromise]).then(function (results) {
-                $scope.main.loadingMainBody = false;
-                ct.iaasUseYn = results[0].data.content;
-                ct.gpuUseYn = results[1].data.content;
-                ct.paasAppCnt = results[2].data;
-                if (ct.iaasUseYn == "Y") {
-                    ct.useServices += "서버 가상화";
-                }
-                if (ct.gpuUseYn == "Y") {
-                    if (ct.useServices != "") ct.useServices += ", ";
-                    ct.useServices += "GPU 서버 가상화";
-                }
-                if (ct.paasAppCnt > 0) {
-                    if (ct.useServices != "") ct.useServices += ", ";
-                    ct.useServices += "App 실행 서비스";
-                }
-                //사용중인 서비스가 있을 때 리턴
-                if (ct.useServices != "") {
-                    common.showDialogAlertHtml('알림','아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br><b>'+ ct.useServices +'</b>', 'warning');
-                    return;
-                }
-                ct.deleteOrgProject();
-            }).catch(function(reject) {
-                $scope.main.loadingMainBody = false;
-                common.showDialogAlertHtml('알림','아래 서비스 확인 중 에러가 있습니다. <br>확인 후 진행해 주세요. <br><br>' + reject.config.url, 'warning');
-                console.log("프로젝트 삭제 전 체크 에러 :", reject);
+            if (!!$scope.main.userTenantId) {
+                ct.useServices += "서버 가상화";
+            }
+            if (!!$scope.main.userTenantGpuId) {
+                if (ct.useServices != "") ct.useServices += ", ";
+                ct.useServices += "GPU 서버 가상화";
+            }
+            if (!!$scope.main.sltOrganizationGuid) {
+                if (ct.useServices != "") ct.useServices += ", ";
+                ct.useServices += "App 실행 서비스";
+            }
+            //사용중인 서비스가 있을 때 리턴
+            if (ct.useServices != "") {
+                common.showDialogAlertHtml('알림','아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br><b>'+ ct.useServices +'</b>', 'warning');
                 return;
-            });
+            }
+            ct.deleteOrgProject();
         };
 
         // 조직 삭제
@@ -1669,13 +1946,19 @@ angular.module('portal.controllers')
 
         /*paas 프로젝트 쿼터 조회*/
         ct.listPaasQuotas = function (currentPage) {
+            ct.paasQuotas = [];
             $scope.main.loadingMainBody = true;
             if (!currentPage) {
                 currentPage = 1;
             }
             var returnPromise = quotaService.listPaasQuotas(10, currentPage, null);
             returnPromise.success(function (data) {
-                ct.paasQuotas = data.content;
+                //ct.paasQuotas = data.content;
+                angular.forEach(data.content, function(paasQuota) {
+                    if (paasQuota.name.indexOf("prj-") > -1) {
+                        ct.paasQuotas.push(paasQuota);
+                    }
+                });
             });
             returnPromise.error(function (data) {
                 ct.paasQuotas = [];

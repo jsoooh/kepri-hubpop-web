@@ -1,74 +1,86 @@
 <!-- <div ng-if="tab.loadingAppEnvVar">
     <md-progress-linear md-mode="indeterminate"></md-progress-linear>
 </div> -->
-<div class="panel_head">
-    <div class="tit pull-left">{{ 'label.env_var' | translate }}<span class="countList">전체 : {{tab.appUserEnvVars.length}}건</span></div>
-    <div class="pull-right">
-        <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="tab.createAppEnvironment($event);"><span class="ico">추가</span></button>
-        <button id="set" type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel('set')"><span class="ico">확대/축소</span></button>
-    </div>
-</div>
-<div class="panel_body">
-    <div class="in pr10">
-    	<div class="pop_message_area mb20">
-			<div class="msg_bg"></div>
-			<div class="msg_txt"><span>APP 실행에 필요한 파라미터(환경변수)를 등록/관리하고, 현재 등록된 환경변수를 JSON 형태로 표시합니다.</span></div>
+
+<!-- panel-heading -->
+<div class="panel-heading">
+	<div class="row">
+		<div class="col-md-6">
+			<h3 class="panel-title">
+				<b class="tit">{{ 'label.env_var' | translate }}</b><span class="countList">(전체 : {{tab.appUserEnvVars.length}}건)</span>
+			</h3>
 		</div>
-        <ol>
-            <div class="logTitle">
-                <li><p class="title">{{ 'label.user_define' | translate }}</p></li><!-- 사용자 정의 -->
-            </div><br>
-            <!-- table -->
-            <div class="tbl type1" id="tabAppEnvVarTable" style="width:100%;">
-                <table class="table">
-                    <colgroup>
-                        <col style="width:15%;">
-                        <col style="width:25%;">
-                        <col style="width:auto;">
-                        <col style="width:25%;">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>{{ 'label.no' | translate }}</th>
-                        <th>{{ 'label.variable_name' | translate }}</th><!-- 변수 이름 -->
-                        <th>{{ 'label.variable_value' | translate }}</th><!-- 변수 값 -->
-                        <th>{{ 'label.set' | translate }}</th><!-- 설정 -->
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="(key, envItem) in tab.appUserEnvVars">
-                        <td>{{ key + 1 }}</td>
-                        <td>{{ envItem.key }}</td>
-                        <td>{{ envItem.val }}</td>
-                        <td>
-                            <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.edit' | translate }}" ng-click="tab.updateAppEnvironment($event, envItem);"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.edit' | translate }}" /></button>
-                            <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppEnvironment(envItem)"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button>
-                        </td>
-                    </tr>
-                    <tr ng-if="tab.appUserEnvVars.length == 0">
-                        <td colspan="4">{{ 'message.mi_dont_exist_list' | translate }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <br>
-                <div class="logwrap" style="padding-top:10px;">
-                    <div class="logTitle">
-                        <li><p class="title">{{ 'label.system_provide' | translate }}</p></li><!-- 시스템 제공 -->
-                        <!--<ul>
-                            <li ng-hide="tab.systemEnv">
-                                <button type="button" class="btn btn-text" tooltip-placement="bottom" uib-tooltip="{{ 'label.show' | translate }}" ng-click="tab.systemEnv=true"><img src="img/ico_widen.png" width="16" height="10" alt="{{ 'label.show' | translate }}" />{{ 'label.show' | translate }}</button>
-                            </li>
-                            <li ng-show="tab.systemEnv">
-                                <button type="button" class="btn btn-text" tooltip-placement="bottom" uib-tooltip="{{ 'label.hide' | translate }}" ng-click="tab.systemEnv=false"><img src="img/ico_decrease.png" width="16" height="10" alt="{{ 'label.hide' | translate }}" />{{ 'label.hide' | translate }}</button>
-                            </li>
-                        </ul>-->
-                    </div>
-                    <div class="modal-body">
-                        <pre ng-init="tab.systemEnv=true" ng-show="tab.systemEnv">{{ tab.appEnvVar | json }}</pre>
-                    </div>
-                </div>
-            </div>
-            <!-- //table -->
-        </ol>
-    </div>
+		<div class="col-md-6 text-right">
+			<div class="padding-top-10 padding-horizontal-20">
+				<button type="button" title="추가" ng-click="tab.createAppEnvironment($event);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+				<button id="set" type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel('set')"></button>
+			</div>
+		</div>
+	</div>
+</div> 
+<!-- // panel-heading -->
+<!-- panel-body -->
+<div class="panel-body">
+	<div class="in">
+		<div class="alert alert-primary" role="alert">
+			<i class="xi-info font-size-20"></i>
+			<div class="text-area">APP 실행에 필요한 파라미터(환경변수)를 등록/관리하고, 현재 등록된 환경변수를 JSON 형태로 표시합니다.</div>
+		</div>
+		
+		<div class=" scroll-content" style="height:270px;">
+			<div class="write-sub-title">{{ 'label.user_define' | translate }}</div><!-- 사용자 정의 -->
+			<div id="tabAppEnvVarTable" class="table-wrap border-0 margin-top-20 padding-bottom-70">
+				<table class="table table-hover">
+					<colgroup>
+						<col style="width: 15%;">
+						<col style="width: 25%;">
+						<col style="width: auto;">
+						<col style="width: 25%;">
+					</colgroup>
+					<thead class="text-center black white-text">
+						<tr>
+							<th>{{ 'label.no' | translate }}</th>
+							<th>{{ 'label.variable_name' | translate }}</th><!-- 변수 이름 -->
+							<th>{{ 'label.variable_value' | translate }}</th><!-- 변수 값 -->
+							<th>{{ 'label.set' | translate }}</th><!-- 설정 -->
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(key, envItem) in tab.appUserEnvVars">
+							<td class="text-center">{{ key + 1 }}</td>
+							<td class="text-center">{{ envItem.key }}</td>
+							<td class="text-center">{{ envItem.val }}</td>
+							<td class="text-center">
+								<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.edit' | translate }}" ng-click="tab.updateAppEnvironment($event, envItem);" ng-disabled="!main.checkResourceUserRole()"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.edit' | translate }}" /></button>
+								<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppEnvironment(envItem)" ng-disabled="!main.checkResourceUserRole()"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button>
+							</td>
+						</tr>
+						<tr ng-if="tab.appUserEnvVars.length == 0">
+							<td colspan="4" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="write-sub-title">{{ 'label.system_provide' | translate }}</div><!-- 시스템 제공 -->
+		<!--<ul>
+              <li ng-hide="tab.systemEnv">
+                  <button type="button" class="btn btn-text" tooltip-placement="bottom" uib-tooltip="{{ 'label.show' | translate }}" ng-click="tab.systemEnv=true"><img src="img/ico_widen.png" width="16" height="10" alt="{{ 'label.show' | translate }}" />{{ 'label.show' | translate }}</button>
+              </li>
+              <li ng-show="tab.systemEnv">
+                  <button type="button" class="btn btn-text" tooltip-placement="bottom" uib-tooltip="{{ 'label.hide' | translate }}" ng-click="tab.systemEnv=false"><img src="img/ico_decrease.png" width="16" height="10" alt="{{ 'label.hide' | translate }}" />{{ 'label.hide' | translate }}</button>
+              </li>
+          </ul>-->
+			<div class="modal-body">
+				<pre ng-init="tab.systemEnv=true" ng-show="tab.systemEnv">{{ tab.appEnvVar | json }}</pre>
+			</div>
+		</div>
+	</div>
 </div>
+<!-- //panel-body -->
+
+
+
+
+
+
+

@@ -24,7 +24,7 @@ angular.module('gpu.services')
             var params = {
                 instanceId : instanceId
             };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/domain/service', 'GET', params));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/domain/service', 'GET', params));
         };
 
         computeDetailService.getTimePicker = function () {
@@ -49,7 +49,7 @@ angular.module('gpu.services')
             return result;
         };
 
-        var tenantUrl = CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant';
+        var tenantUrl = CONSTANTS.monitNewApiContextUrl + '/admin/gpu/tenant';
 
         computeDetailService.tenantCpuUsageList = function (condition) {
             return common.resourcePromise(tenantUrl + '/cpu/' + condition.hostname + '/usageList', 'GET', condition);
@@ -320,7 +320,7 @@ angular.module('gpu.services')
             var params = {
                 instanceId : instanceId
             };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/portForwarding/service', 'GET', params));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/portForwarding/service', 'GET', params));
         };
 
         //포트포워딩 조회
@@ -328,12 +328,12 @@ angular.module('gpu.services')
             var params = {
                 instanceId : instanceId
             };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/portForwarding/service', 'GET', params));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/portForwarding/service', 'GET', params));
         };
 
         //포트포워딩 삭제
         computeDetailService.deletePortForwardings = function (params) {
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/portForwarding/service', 'DELETE', params));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/portForwarding/service', 'DELETE', params));
         };
 
         computeDetailService.callMonitoringYn = function (method, type, instance, fnCallback) {
@@ -381,22 +381,22 @@ angular.module('gpu.services')
             common.showConfirm('확인', confirmMsg).then(function() {
                 if (isActive) {
                     // 활성화 명령
-                    // if (instance.spec.type == 'GPU') {
-                    //     // GPU, VM 모니터링
-                    //     computeDetailService.callMonitoringYn('post', 'gpu', instance, function () { computeDetailService.callMonitoringYn('post', 'vm', instance); });
-                    // } else {
+                    if (instance.spec.type == 'GPU') {
+                        // GPU, VM 모니터링
+                        computeDetailService.callMonitoringYn('post', 'gpu', instance, function () { computeDetailService.callMonitoringYn('post', 'vm', instance); });
+                    } else {
                         // VM 모니터링
                         computeDetailService.callMonitoringYn('post', 'vm', instance);
-                    // }
+                    }
                 } else {
                     // 비활성화 명령
-                    // if (instance.spec.type == 'GPU') {
-                    //     // GPU, VM 모니터링
-                    //     computeDetailService.callMonitoringYn('delete', 'gpu', instance, function () { computeDetailService.callMonitoringYn('delete', 'vm', instance); });
-                    // } else {
+                    if (instance.spec.type == 'GPU') {
+                        // GPU, VM 모니터링
+                        computeDetailService.callMonitoringYn('delete', 'gpu', instance, function () { computeDetailService.callMonitoringYn('delete', 'vm', instance); });
+                    } else {
                         // VM 모니터링
                         computeDetailService.callMonitoringYn('delete', 'vm', instance)
-                    // }
+                    }
                 }
             });
         };

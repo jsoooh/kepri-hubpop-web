@@ -1,253 +1,316 @@
-<div class="message_area">
-	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>‘App 배포’를 통해 컨테이너 기반의 App실행환경을 생성하고, 사용자가 제작한 App을 배포할 수 있습니다.</span></div>
-</div>
-
-<div class="panel_area">
-	<ul class="pn_list_style">
-		<li>
-		<form name="{{contents.formName}}" method="POST" novalidate>
-			<div class="panel_box pn_l">
-				<div class="pn_head">
-					<h4 class="pnh_tit">App 배포</h4>
+<div class="write_wrap">
+	<div class="alert alert-primary" role="alert">
+		<i data-feather="file-text" class="feather-directive"></i>
+		<div class="text-area">‘App 배포’를 통해 컨테이너 기반의 App실행환경을 생성하고, 사용자가 제작한 App을 배포할 수 있습니다.</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-8">
+			<section class="panel panel-bordered">
+				<!-- panel-heading -->
+				<div class="panel-heading">
+					<h3 class="panel-title">App 배포</h3>
 				</div>
-				<div class="pn_body">
-					<span class="sm_txt">* 는 필수입력 사항입니다.</span>
-					<ul class="form_list">
-						<li>
-							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">App 이름</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성하는 App 이름을 입력합니다. 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+				<!-- // panel-heading -->
+				
+				<!-- panel-body -->
+				<div class="panel-body">
+					<form name="{{contents.formName}}" method="POST" novalidate>
+						<div class="form_list">
+							<div class="text-right add-txt">
+								<span><b class="caution-star">*</b> 는 필수입력 사항입니다</span>
 							</div>
-							<input type="text" class="form-control" maxlength="20" placeholder="App 이름을 입력하세요." id="appName" name="appName" ng-model="contents.appPushData.appName" ng-change="contents.appPushData.domainFirstName = contents.appPushData.appName" validation="alpha_dash|min_len:3|max_len:20|required|custom:contents.fn.appNameValidationCheck(contents.appPushData.appName)">
-						</li>
-						<li>
-							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">App 도메인</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'컨테이너 상에서 실행되는 WEB App에 대한 접근 도메인을 구성합니다.</br> 고정되어 제공되는 도메인(domain)에 사용자가 입력한 서브 도메인(sub-domain)을 연결하여 </br>전체 접근 도메인을 생성합니다.</br> 서브 도메인(sub-domain)은 전체 허브팝내에서 중복을 허용하지 않습니다.'"><span class="ico_info"></span></button></div>
+							
+							<!-- App 이름 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> App 이름
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'생성하는 App 이름을 입력합니다. 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'">	i</a></div>
 							</div>
-							<div class="app-form-two">
-								<div class="two_box w60">
-									<input type="text" class="form-control" maxlength="50" id="domainFirstName" name="domainFirstName" ng-model="contents.appPushData.domainFirstName" ng-change="contents.hostDup = false" validation="alpha_dash|min_len:3|max_len:50|required|custom:contents.fn.subDomainValidationCheck(contents.appPushData.domainFirstName)" placeholder="App 도메인을 입력하세요.">
+							<div class="form-group">
+								<input type="text" class="form-control" maxlength="20" placeholder="App 이름을 입력하세요." id="appName" name="appName" ng-model="contents.appPushData.appName" ng-change="contents.appPushData.domainFirstName = contents.appPushData.appName" validation="alpha_dash|min_len:3|max_len:20|required|custom:contents.fn.appNameValidationCheck(contents.appPushData.appName)">
+							</div>
+							<!-- // App 이름 -->
+							
+							<!-- App 도메인 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> App 도메인
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'컨테이너 상에서 실행되는 WEB App에 대한 접근 도메인을 구성합니다.</br> 고정되어 제공되는 도메인(domain)에 사용자가 입력한 서브 도메인(sub-domain)을 연결하여 </br>전체 접근 도메인을 생성합니다.</br> 서브 도메인(sub-domain)은 전체 허브팝내에서 중복을 허용하지 않습니다.'">	i</a></div>
+							</div>
+							<div class="style-table">
+								<div class="style-td padding-right-5" style="width: 60%;">
+									<div class="form-group">
+										<input type="text" class="form-control" maxlength="50" id="domainFirstName" name="domainFirstName" ng-model="contents.appPushData.domainFirstName" ng-change="contents.hostDup = false" validation="alpha_dash|min_len:3|max_len:50|required|custom:contents.fn.subDomainValidationCheck(contents.appPushData.domainFirstName)" placeholder="App 도메인을 입력하세요.">
+									</div>
 								</div>
-								<div class="two_box">
-									<select name="" title="검색 구분 선택" id="domainName" name="domainName" ng-model="contents.sltDomainName">
-										<option ng-repeat="domainItem in contents.domains" value="{{ domainItem.name }}">{{ domainItem.name }}</option>
-									</select>
+								<div class="style-td" style="width: 40%;">
+									<div class="form-group">
+										<select name="" title="검색 구분 선택" id="domainName" class="form-control" name="domainName" ng-model="contents.sltDomainName">
+											<option ng-repeat="domainItem in contents.domains" value="{{ domainItem.name }}">{{ domainItem.name }}</option>
+										</select>
+									</div>
 								</div>
 							</div>
 							<div ng-if="contents.appPushForm01.domainFirstName.$touched && contents.appPushForm01.domainFirstName.$invalid" class="validation validation-domainFirstName text-danger"></div>
 							<!--<div ng-if="contents.hostDup" class="validation text-danger"><span class="validation-icon"></span>이미 사용 중인 도메인입니다.</div>-->
-						</li>
-						<!-- 2019.11.26 고객 요청으로 주석 처리 -->
-						<!--<li>
-							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">App 유형</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'‘빌드팩(Buildpack) 기반’ 선택 시, </br>CF(Cloud Foundry) 플랫폼에서 제공하는 빌드팩(Buildpack)을 기반으로 컨테이너를 생성하고</br> App을 배포합니다.'"><span class="ico_info"></span></button></div>
-							</div>
-							<div class="mt20">
-								<div class="radio radio-inline">
-									<input type="radio" name="pushType" id="app-radio1-1" value="GENERAL" ng-model="contents.appPushData.pushType" >
-									<label for="app-radio1-1" class="label">빌드팩(Buildpack) 기반</label>
+							<!-- // App 도메인 -->
+							
+							<!-- App 유형( 2019.11.26 고객 요청으로 주석/숨김 처리) -->
+							<div ng-if="false">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b>App 유형
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'생성하는 App 이름을 입력합니다. 영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'">	i</a></div>
 								</div>
-								<div class="radio radio-inline">
-									<input type="radio" name="pushType" id="app-radio1-2" value="DOCKER" ng-model="contents.appPushData.pushType"  disabled> &lt;!&ndash; 2018.12.13 disabled 처리  &ndash;&gt;
-									<label for="app-radio1-2" class="label" title="현재는 서비스 하지 않습니다." >도커(Docker) 이미지 기반</label>
-								</div>
-							</div>
-						</li>-->
-						<li ng-if="contents.appPushData.pushType != 'DOCKER'">
-							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">빌드팩(Buildpack) 선택</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'빌드팩(Buildpack)은 사용자가 제작한 App이 실행되는 환경을 자동으로 구성하기 위한 S/W 패키지입니다. 일반적으로 App을 개발한 언어에 맞춰 빌드팩을 지정합니다.'"><span class="ico_info"></span></button></div>
-							</div>
-							<div ng-if="contents.portalBuildpacksLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="buildpack_select_panel">
-								<ul class="ul-list1">
-									<li ng-repeat="(key, buildpackItem) in contents.portalBuildpacks track by $index">
-										<div class="radio1 radio-inline">
-										   <input type="radio" id="buldpack_{{ buildpackItem.id }}" name="buldpack" value="{{ buildpackItem.id }}" ng-model="contents.sltBuildpackId" ng-change="contents.changePortalBuildpack();" />
-										   <label for="buldpack_{{ buildpackItem.id }}" class="label">
-											<img class="im" ng-if="buildpackItem.iconImage != null" ng-src="data:{{ buildpackItem.iconImage.contentType }}; base64, {{ buildpackItem.iconImage.image }}" width="40" height="40">
-											<img class="im" ng-if="buildpackItem.iconImage == null" src="img/default_image.png" width="40" height="40">
-										   </label>
-										</div>
-										<p class="label-txt">{{ buildpackItem.name }}</p>
-									</li>
-								</ul>
-							</div>
-							<div class="pnb_tit" ng-if="contents.sltPortalBuildpack">
-								<i class="i_star"></i> <span class="pnb_t_txt">빌드팩 버전(Buildpack Version) 선택</span>
-							</div>
-							<div ng-if="contents.sltPortalBuildpack" class="buildpack-version">
-								<ul class="ul-list1" ng-if="contents.sltPortalBuildpack.versions">
-									<li ng-repeat="version in contents.sltPortalBuildpack.versions">
-										<!-- <span>{{ version.versionName }}</span> -->
-										<div class="radio1 radio-inline">
-											<input type="radio" id="version_{{ version.id }}" name="version" value="{{ version.id }}" ng-model="contents.sltBuildpackVersionId" ng-change="contents.changePortalBuildpackVersion();" />
-											<label for="version_{{ version.id }}" class="label" style="line-height: 35px; height: 40px;">{{ version.versionName }}</label>
-										 </div>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<li ng-if="contents.appPushData.pushType == 'DOCKER'">
-							<div class="pnb_tit" ><i class="i_star"></i> <span class="pnb_t_txt">도커(Docker) 이미지 정보 입력</span></div>
-							<input type="text" maxlength="100" name="dockerImage" id="dockerImage" ng-model="contents.appPushData.dockerImage" class="form-control" placeholder="예 : cloudfoundry/lattice-app" validation="required">
-						</li>
-						
-						<!-- <li class="pn-Toggle" ng-if="contents.appPushData.pushType != 'DOCKER'"> --> <!-- 2018.12.13 필수값으로 변경되면서 토글 해제. 파일 필수값 validation 추가 필요. sg0730  -->
-						<li ng-if="contents.appPushData.pushType != 'DOCKER'">
-							<div class="pnb_tit" >
-								<i class="i_star"></i> <span class="pnb_t_txt">App 실행파일 업로드</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'파일찾기를 통해 사용자가 제작한 App을 업로드하고 컨테이너에 배포할 수 있습니다. </br>업로드 되는 파일은 jar, war, zip 포멧을 지원합니다.'"><span class="ico_info"></span></button></div>
-								<!-- <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button> -->
-							</div>
-							<div class="s_cont_box">
-								<div class="fileUploadWrap mt20">
-									<div class="bootstrap-filestyle input-group">
-										<input type="text" id="userfile" class="form-control" name="userfile" style="width:909px;" ng-model="contents.appFileItem.file.name" validation="required:alt=업로드 해야 할 App 실행용 파일이 선택되지 않았습니다." readonly>
-										<span class="group-span-filestyle input-group-btn" tabindex="0">
-											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
-											<label class="btn btn-default" ng-click="main.fileSelectBtnClick($event);">
-												<span class="btn btn-md btn-color1" >파일찾기</span>
+								<div class="list-inline">
+									<li>
+										<div class="radio-group">
+											<input type="radio" name="pushType" id="app-radio1-1" class="radio-input" value="GENERAL" ng-model="contents.appPushData.pushType" >
+											<label for="app-radio1-1" class="radio-item">
+												<div class="radio">
+													<div class="checked-icon"></div>
+												</div>
+												<span class="text">
+													빌드팩(Buildpack) 기반
+												</span>
 											</label>
-										</span>
-									</div>
+										</div>
+									</li>
+									<li>
+										<div class="radio-group">
+											<input type="radio" name="pushType" id="app-radio1-2" class="radio-input" value="DOCKER" ng-model="contents.appPushData.pushType"  disabled> &lt;!&ndash; 2018.12.13 disabled 처리  &ndash;&gt;
+											<label for="app-radio1-2" class="radio-item" title="현재는 서비스 하지 않습니다." >
+												<div class="radio">
+													<div class="checked-icon"></div>
+												</div>
+												<span class="text">
+													도커(Docker) 이미지 기반
+												</span>
+											</label>
+										</div>
+									</li>
 								</div>
 							</div>
-							<div class="mt10">
-								<span class="validation validation-userfile text-danger"></span>
-								<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
-							</div>
+							<!-- // App 유형 -->
 							
-							<!-- 샘플 앱 내려받기 -->
-							<!-- 2019.11.26 고객요청 변경 -->
-							<div class="txt_link_box">
-								<span class="txt">※ 실행파일이 없는 경우 샘플앱을 내려 받아 활용하세요.</span>
-								<a href="/download/staticfile_sample.zip" class="link_dw" title="staticfile_sample.zip">
-									<span class="app_txt">staticfile</span><span class="ico_dw">다운로드</span>
-								</a>
-								<span class="normal_txt">,</span>
-								<a href="/download/java_spring_music.war" class="link_dw" title="java spring music.war">
-									<span class="app_txt">java</span><span class="ico_dw">다운로드</span>
-								</a>
-								<span class="normal_txt">,</span>
-								<a href="/download/nodejs_sample.zip" class="link_dw" title="nodejs_sample.zip">
-									<span class="app_txt">nodejs</span><span class="ico_dw">다운로드</span>
-								</a>
-								<span class="normal_txt">,</span>
-								<a href="/download/go_sample.zip" class="link_dw" title="go_sample.zip">
-									<span class="app_txt">go</span><span class="ico_dw">다운로드</span>
-								</a>
-								<span class="normal_txt">,</span>
-								<a href="/download/python_hello_world.zip" class="link_dw" title="python_hello_world.zip">
-									<span class="app_txt">python</span><span class="ico_dw">다운로드</span>
-								</a>
-							</div>
-							<!-- //샘플 앱 내려받기 -->
-							
-						</li>
-					</ul>
-					<!-- 사양설정 -->
-					<div class="pnb_box type2 hd_type cToggle">
-						<div class="pnb_bx_hd">
-							<span class="hd_tit">App 사양설정</span>
-							<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'＊ 사용자 App에 대한 자원사용 사양을 설정합니다. </br>&nbsp;&nbsp;· 인스턴스 수 : 배포되는 App에 대한 인스턴스 수를 지정, 설정된 수만큼 Scale-Out</br>&nbsp;&nbsp;· 인스턴스 메모리 : 배포되는 App 인스턴스 별 사용 가능한 최대 메모리 용량을 설정</br>&nbsp;&nbsp;· 인스턴스 디스크 : 배포되는 App 인스턴스 별 사용 가능한 최대 디스크 용량을 설정'"><span class="ico_info"></span></button></div>
-							<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.pnbBoxToggleChange($event, true);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-						</div>
-						<div class="pnb_bx_cnt">
-						<!-- <div class="pnb_bx_cnt" > -->
-							<ul class="cnt_sliderWrap">
-								<li>
-									<div class="tit"><span>인스턴스 수</span></div>
-									<div class="slider_area">
-										<div class="disk_area color2">
-											<div class="disk_box">
-												<div class="rangeWrap type2">
-													<span class="s_txt" ng-if="false">최대 {{contents.insSlider.options.ceil}}개</span>
-													<div class="range_box">
-														<div class="ico_minus">
-															<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(1);" ><span>감소</span></button>
-														</div>
-														<div class="rzslider">
-															<rzslider rz-slider-model="contents.defaultSet.instances" rz-slider-options="contents.insSlider.options"></rzslider>
-														</div>
-														<div class="ico_plus">
-															<!-- <button type="button" name="button" class="btn" title="minus" ng-click="if(contents.defaultSet.instances <= contents.insSlider.options.ceil )contents.defaultSet.instances = (contents.defaultSet.instances + contents.insSlider.options.step);"><span>증가</span></button> -->
-															<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(1);"><span>증가</span></button>
-														</div>
+							<!-- 빌드팩/빌드팩 버전 선택 -->
+							<div ng-if="contents.appPushData.pushType != 'DOCKER'">
+								<!-- 빌드팩(Buildpack) 선택 -->
+								<div class="write-sub-title margin-top-30">
+									<b class="caution-star">*</b> 빌드팩(Buildpack) 선택
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'빌드팩(Buildpack)은 사용자가 제작한 App이 실행되는 환경을 자동으로 구성하기 위한 S/W 패키지입니다. 일반적으로 App을 개발한 언어에 맞춰 빌드팩을 지정합니다.'">	i</a></div>
+								</div>
+								
+								<div ng-if="contents.portalBuildpacksLoad" scroll-pane scroll-config="{ contentHeight: '0px' }" id="buildpack_select_panel" class="panel_area margin-top-0">
+									<ul class="ul-list1">
+										<li ng-repeat="(key, buildpackItem) in contents.portalBuildpacks track by $index">
+											<div class="radio1 radio-inline">
+											   <input type="radio" id="buldpack_{{ buildpackItem.id }}" name="buldpack" value="{{ buildpackItem.id }}" ng-model="contents.sltBuildpackId" ng-change="contents.changePortalBuildpack();" />
+											   <label for="buldpack_{{ buildpackItem.id }}" class="label">
+												<img class="im" ng-if="buildpackItem.iconImage != null" ng-src="data:{{ buildpackItem.iconImage.contentType }}; base64, {{ buildpackItem.iconImage.image }}" width="40" height="40">
+												<img class="im" ng-if="buildpackItem.iconImage == null" src="img/default_image.png" width="40" height="40">
+											   </label>
+											</div>
+											<p class="label-txt">{{ buildpackItem.name }}</p>
+										</li>
+									</ul>
+								</div>
+								<!-- // 빌드팩(Buildpack) 선택 -->
+								
+								<!-- 빌드팩 버전(Buildpack Version) 선택 -->
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 빌드팩 버전(Buildpack Version) 선택
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'빌드팩(Buildpack)은 사용자가 제작한 App이 실행되는 환경을 자동으로 구성하기 위한 S/W 패키지입니다. 일반적으로 App을 개발한 언어에 맞춰 빌드팩을 지정합니다.'">	i</a></div>
+								</div>
+								
+								<div ng-if="contents.sltPortalBuildpack" class="panel_area margin-top-0 buildpack-version">
+									<div class="list-inline" ng-if="contents.sltPortalBuildpack.versions">
+										<li ng-repeat="version in contents.sltPortalBuildpack.versions">
+											<div class="radio-group">
+												<input type="radio" id="version_{{ version.id }}" class="radio-input" name="version" value="{{ version.id }}" ng-model="contents.sltBuildpackVersionId" ng-change="contents.changePortalBuildpackVersion();" />
+												<label for="version_{{ version.id }}" class="radio-item">
+													<div class="radio">
+														<div class="checked-icon"></div>
 													</div>
+													<span class="text">
+														{{ version.versionName }}
+													</span>
+												</label>
+											</div>
+										</li>
+									</div>
+								</div>
+								<!-- // 빌드팩 버전(Buildpack Version) 선택 -->
+							</div>
+							<!-- // 빌드팩/빌드팩 버전 선택 -->
+							
+							<!-- 도커(Docker) 이미지 정보 입력 -->
+							<div ng-if="contents.appPushData.pushType == 'DOCKER'">
+								<div class="write-sub-title margin-top-30">
+									<b class="caution-star">*</b> 도커(Docker) 이미지 정보 입력
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'빌드팩(Buildpack)은 사용자가 제작한 App이 실행되는 환경을 자동으로 구성하기 위한 S/W 패키지입니다. 일반적으로 App을 개발한 언어에 맞춰 빌드팩을 지정합니다.'">	i</a></div>
+								</div>
+								
+								<div class="form-group">
+									<input type="text" maxlength="100" name="dockerImage" id="dockerImage" ng-model="contents.appPushData.dockerImage" class="form-control" placeholder="예 : cloudfoundry/lattice-app" validation="required">
+								</div>
+							</div>
+							<!-- 도커(Docker) 이미지 정보 입력 -->
+							<!-- <li class="pn-Toggle" ng-if="contents.appPushData.pushType != 'DOCKER'"> --> <!-- 2018.12.13 필수값으로 변경되면서 토글 해제. 파일 필수값 validation 추가 필요. sg0730  -->
+							
+							<!-- App 실행파일 업로드 -->
+							<div ng-if="contents.appPushData.pushType != 'DOCKER'">
+								<div class="write-sub-title margin-top-30">
+									<b class="caution-star">*</b> App 실행파일 업로드
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'파일찾기를 통해 사용자가 제작한 App을 업로드하고 컨테이너에 배포할 수 있습니다. </br>업로드 되는 파일은 jar, war, zip 포멧을 지원합니다.'">	i</a></div>
+								</div>
+								
+								<div class="custom-file-group">
+									<span class="custom-file-btn">
+										<label class="btn-file" for="attachFile" tabindex="0">
+											<input nv-file-select="" uploader="contents.uploader" id="appFileInput" name="appFileInput" type="file" class="form-control" style="display: none;" accept=".war, .jar, .zip" >
+											<span class="text-btn" ng-click="main.fileSelectBtnClick($event);">
+												파일찾기
+											</span>
+										</label>
+									</span>
+									<input type="text" id="userfile" class="form-control" name="userfile" ng-model="contents.appFileItem.file.name" validation="required:alt=업로드 해야 할 App 실행용 파일이 선택되지 않았습니다." readonly style="width:909px; border:0;">
+									<span class="file-input-label"></span>
+								</div>
+								<div class="mt10">
+									<span class="validation validation-userfile text-danger"></span>
+									<span ng-if="contents.appFileErrorMessage" style="color: red;" dynamic-template="contents.appFileErrorMessage"></span>
+								</div>
+								
+								<!-- 샘플 앱 내려받기 -->
+								<!-- 2019.11.26 고객요청 변경 -->
+								<div class="add-txt">
+									<span class="black margin-right-5">※ 실행파일이 없는 경우 샘플앱을 내려 받아 활용하세요.</span>
+									<a href="/download/staticfile_sample.zip" class="link blue-600" title="staticfile_sample.zip">staticfile<span class="feather-icon blue-600 margin-left-5"><i data-feather="download" class="feather-directive"></i></span></a> , 
+									<a href="/download/java_spring_music.war" class="link blue-600" title="java spring music.war">java<span class="feather-icon blue-600 margin-left-5"><i data-feather="download" class="feather-directive"></i></span></a> , 
+									<a href="/download/nodejs_sample.zip" class="link blue-600" title="nodejs_sample.zip">nodejs<span class="feather-icon blue-600 margin-left-5"><i data-feather="download" class="feather-directive"></i></span></a> , 
+									<a href="/download/go_sample.zip" class="link blue-600" title="go_sample.zip">go<span class="feather-icon blue-600 margin-left-5"><i data-feather="download" class="feather-directive"></i></span></a> , 
+									<a href="/download/python_hello_world.zip" class="link blue-600" title="python_hello_world.zip">python<span class="feather-icon blue-600 margin-left-5"><i data-feather="download" class="feather-directive"></i></span></a>
+								</div>
+								<!-- //샘플 앱 내려받기 -->
+							</div>
+							<!-- App 실행파일 업로드 -->
+							
+							<!-- App 사양설정 -->
+							<div class="panel-inner-collapse">
+								<div class="panel-group margin-top-30">
+									<section class="panel panel-bordered">
+										<div class="panel-heading">
+											<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse1" href="" aria-expanded="false" ng-click="main.pnbBoxToggleChange($event, true);">
+												<h3>
+													 App 사양설정
+													<div class="t_tip_bx">
+														<div class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'＊ 사용자 App에 대한 자원사용 사양을 설정합니다. </br>&nbsp;&nbsp;· 인스턴스 수 : 배포되는 App에 대한 인스턴스 수를 지정, 설정된 수만큼 Scale-Out</br>&nbsp;&nbsp;· 인스턴스 메모리 : 배포되는 App 인스턴스 별 사용 가능한 최대 메모리 용량을 설정</br>&nbsp;&nbsp;· 인스턴스 디스크 : 배포되는 App 인스턴스 별 사용 가능한 최대 디스크 용량을 설정'">	i</div>
+													</div>		
+												</h3>
 												
-												</div>
-											</div>
+											</a>
 										</div>
-									</div>
-								</li>
-								
-								<li>
-									<div class="tit"><span>인스턴스 메모리</span></div>
-									<div class="slider_area">
-										<div class="disk_area">
-											<div class="disk_box">
-												<div class="rangeWrap type2">
-													<span class="s_txt" ng-if="false">최대  {{ (contents.memorySlider.options.ceil < 1024) ?  (contents.memorySlider.options.ceil|number:0)  : (contents.memorySlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
-													<div class="range_box">
-														<div class="ico_minus">
-															<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(2);" ><span>감소</span></button>
+										<!-- // panel-heading -->
+										<div class="panel-collapse collapse" id="basicCollapse1">
+											<div class="panel-body">
+												<div class="disk_area padding-bottom-40">
+													<p class="margin-top-10">마우스를 움직이거나 +/- 버튼으로 사양을 설정 해주세요.</p>
+													<div class="row margin-top-20">
+														<div class="col-sm-2 padding-top-5"><b>인스턴스 수</b></div>
+														<div class="col-sm-10">
+															<div class="style-table">
+																<div class="style-td" style="width: 5%;">
+																	<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(1);" ><i class="xi-minus-circle"></i> </button>
+																</div>
+																<div class="style-td" style="width: 90%;">
+																	<span class="s_txt" ng-if="false">최대 {{contents.insSlider.options.ceil}}개</span>
+																	<div class="disk_box type2 color1">
+																		<div class="rzslider margin-0">
+																			<rzslider rz-slider-model="contents.defaultSet.instances" rz-slider-options="contents.insSlider.options" class="margin-0"></rzslider>
+																		</div>
+																	</div>
+																</div>
+																<div class="style-td" style="width: 5%;">
+																	<!-- <button type="button" name="button" class="btn" title="minus" ng-click="if(contents.defaultSet.instances <= contents.insSlider.options.ceil )contents.defaultSet.instances = (contents.defaultSet.instances + contents.insSlider.options.step);"><i class="xi-plus-circle"></i></button> -->
+																	<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(1);"><i class="xi-plus-circle"></i></button>
+																</div>
+															</div>
 														</div>
-														<div class="rzslider"><rzslider rz-slider-model="contents.defaultSet.memory" rz-slider-options="contents.memorySlider.options"></rzslider></div>
-														<div class="ico_plus">
-															<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(2);"><span>증가</span></button>
+													</div>
+													<div class="row margin-top-40">
+														<div class="col-sm-2 padding-top-5"><b>인스턴스 메모리</b></div>
+														<div class="col-sm-10">
+															<div class="style-table">
+																<div class="style-td" style="width: 5%;">
+																	<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(2);" ><i class="xi-minus-circle"></i> </button>
+																</div>
+																<div class="style-td" style="width: 90%;">
+																	<span class="s_txt" ng-if="false">최대  {{ (contents.memorySlider.options.ceil < 1024) ?  (contents.memorySlider.options.ceil|number:0)  : (contents.memorySlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
+																	<div class="disk_box type2 color2">
+																		<div class="rzslider margin-0">
+																			<rzslider rz-slider-model="contents.defaultSet.memory" rz-slider-options="contents.memorySlider.options" class="margin-0"></rzslider>
+																		</div>
+																	</div>
+																</div>
+																<div class="style-td" style="width: 5%;">
+																	<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(2);"><i class="xi-plus-circle"></i> </button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row margin-top-40">
+														<div class="col-sm-2 padding-top-5"><b>인스턴스 디스크</b></div>
+														<div class="col-sm-10">
+															<div class="style-table">
+																<div class="style-td" style="width: 5%;">
+																	<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(3);" ><i class="xi-minus-circle"></i> </button>
+																</div>
+																<div class="style-td" style="width: 90%;">
+																	<span class="s_txt" ng-if="false">최대 {{ (contents.diskQuotaSlider.options.ceil < 1024) ?  (contents.diskQuotaSlider.options.ceil|number:0)  : (contents.diskQuotaSlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
+																	<div class="disk_box type2 color3">
+																		<div class="rzslider margin-0">
+																			<rzslider rz-slider-model="contents.defaultSet.diskQuota" rz-slider-options="contents.diskQuotaSlider.options" class="margin-0"></rzslider>
+																		</div>
+																	</div>
+																</div>
+																<div class="style-td" style="width: 5%;">
+																	<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(3);" ><i class="xi-plus-circle"></i> </button>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
-											</div>
-										</div>
-									</div>
-								</li>
-								
-								<li>
-									<div class="tit"><span>인스턴스 디스크</span></div>
-									<div class="slider_area">
-										<div class="disk_area color3">
-											<div class="disk_box">
-												<div class="rangeWrap type2">
-													<span class="s_txt" ng-if="false">최대 {{ (contents.diskQuotaSlider.options.ceil < 1024) ?  (contents.diskQuotaSlider.options.ceil|number:0)  : (contents.diskQuotaSlider.options.ceil/1024|number:2).replace('.00', '').replace('.0', '')}}GB</span>
-													<div class="range_box">
-														<div class="ico_minus">
-															<button type="button" name="button" class="btn" title="감소" ng-click="contents.minValCheck(3);" ><span>감소</span></button>
-														</div>
-														<div class="rzslider"><rzslider rz-slider-model="contents.defaultSet.diskQuota" rz-slider-options="contents.diskQuotaSlider.options"></rzslider></div>
-														<div class="ico_plus">
-															<button type="button" name="button" class="btn" title="증가" ng-click="contents.maxValCheck(3);" ><span>증가</span></button>
-														</div>
-													</div>
+												<div class="alert alert-primary margin-top-30" role="alert">
+													<i data-feather="file-text" class="feather-directive"></i>
+													<div class="text-area">인스턴스 메모리와 디스크는 App 인스턴스 1개가 가질 수 있는 최대 크기를 설정합니다.</div>
 												</div>
 											</div>
 										</div>
-									</div>
-								</li>
-							</ul>
-							<div class="cnt_msg_box msg-info mt40">인스턴스 메모리와 디스크는 App 인스턴스 1개가 가질 수 있는 최대 크기를 설정합니다.</div>
+									</section>
+								</div>
+							</div>
+							<!-- // App 사양설정 -->
+							
+								
+							
+						</div>
+					</form>
+				</div>
+				<!-- //panel-body -->
+			</section>
+		</div>
+		<div  class="col-md-4">
+			<section class="panel panel-bordered">
+				<!-- panel-heading -->
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-sm-12">
+							<h3 class="panel-title">서버 기본정보</h3>
 						</div>
 					</div>
-					<!-- //사양설정 -->
 				</div>
-				<div class="pn_footer">
-					<div class="btn-btm mgt0">
-						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.checkDuplRoute();">App 생성</button>
-						<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToPage('/paas/apps')">취소</button>
-					</div>
-				</div>
-			</div>
-			</form>
-		</li>
-		<li>
-			<div class="panel_box pn_r">
-				<div class="pn_head">
-					<h4 class="pnh_tit ico04">App 기본정보</h4>
-				</div>
-				<div class="pn_body">
+				<!-- // panel-heading -->
+				<!-- panel-body -->
+				<div class="panel-body">
 					<div class="s_cont_box">
 						<ul>
 							<li>
@@ -265,7 +328,7 @@
 							</li>
 							<li ng-if="contents.appPushData.pushType == 'GENERAL'">
 								<span class="s_tit">빌드팩 정보</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'빌드팩에 대한 상세정보를 제공합니다.</br> Cloud Foundry 플랫폼에서 공식적으로 </br>제공하는 공개된 정보를 표시합니다.'"><span class="ico_info"></span></button></div>
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'빌드팩에 대한 상세정보를 제공합니다.</br> Cloud Foundry 플랫폼에서 공식적으로 </br>제공하는 공개된 정보를 표시합니다.'">	i</a></div>
 								<!-- 운영자 사이트에서 지정한 데이터 사용.-->
 								<div class="s_inner_cont">
 									<dl>
@@ -290,75 +353,63 @@
 						</ul>
 					</div>
 				</div>
-				
-				<!-- 'App 실행용 파일 업로드' 영역 상위로 이동 -->
-				<!-- <div class="pn-Toggle brd0">
-					<div class="pn_head brdt" ng-if="contents.appPushData.pushType == 'GENERAL'">
-						<h4 class="pnh_tit ico06">App 실행용 파일 업로드</h4>
-						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+				<!-- // panel-body -->
+			</section>
+			
+			<div class="panel-group">
+				<section class="panel panel-bordered">
+					<div class="panel-heading">
+						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse2" href="" aria-expanded="false" ng-click="main.panelToggleChange($event);"><h3>App 전체 사양</h3></a>
 					</div>
-					<div class="pn_body" ng-if="contents.appPushData.pushType == 'GENERAL'">
-						<div class="s_cont_box">
-							<ul>
-								<li>
-									<div class="s_inner_cont">
-										<p class="txt" ng-if="contents.appFileItem.file.name" >{{ contents.appFileItem.localFullFileName }}D:/dev/demand.war</p>
-										<p class="txt" ng-if="!contents.appFileItem.file.name" >선택된 파일이 없습니다.</p>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div> -->
-				
-				<div class="pn-Toggle brd0">
-					<div class="pn_head brdt">
-						<h4 class="pnh_tit ico05">App 전체 사양</h4>
-						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-					</div>
-					<div class="pn_body">
-						<div class="s_cont_box">
-							<ul>
-								<li>
-									<div class="s_inner_cont">
-										<div class="innr_tbl">
-											<table>
-												<colgroup>
-													<col width="30" />
-													<col width="30" />
-													<col width="30" />
-												</colgroup>
-												<thead>
-													<tr>
-														<th>인스턴스 수</th>
-														<th>전체 메모리</th>
-														<th>전체 디스크</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>{{contents.defaultSet.instances}} 개</td>
-														<td>{{(contents.defaultSet.memory * contents.defaultSet.instances) | displayVolume:'MB' }}</td>
-														<td>{{(contents.defaultSet.diskQuota * contents.defaultSet.instances) | displayVolume:'MB' }}</td>
-													</tr>
-												</tbody>
-											</table>
+					<!-- // panel-heading -->
+					<div class="panel-collapse collapse" id="basicCollapse2">
+						<div class="panel-body">
+							<div class="s_cont_box">
+								<ul>
+									<li>
+										<div class="s_inner_cont">
+											<div class="innr_tbl">
+												<table>
+													<colgroup>
+														<col width="30" />
+														<col width="30" />
+														<col width="30" />
+													</colgroup>
+													<thead>
+														<tr>
+															<th>인스턴스 수</th>
+															<th>전체 메모리</th>
+															<th>전체 디스크</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>{{contents.defaultSet.instances}} 개</td>
+															<td>{{(contents.defaultSet.memory * contents.defaultSet.instances) | displayVolume:'MB' }}</td>
+															<td>{{(contents.defaultSet.diskQuota * contents.defaultSet.instances) | displayVolume:'MB' }}</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<span class="info_txt">* 전체 메모리 = 인스턴스 수 x 설정된 메모리 크기</span>
+											<span class="info_txt">* 전체 디스크 = 인스턴스 수 x 설정된 디스크 크기</span>
 										</div>
-										<span class="info_txt">* 전체 메모리 = 인스턴스 수 x 설정된 메모리 크기</span>
-										<span class="info_txt">* 전체 디스크 = 인스턴스 수 x 설정된 디스크 크기</span>
-									</div>
-								</li>
-							</ul>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-		
-				<div class="pn-Toggle">
-						<div class="pn_head brdt">
-							<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
-							<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-						</div>
-						<div class="pn_body">
+				</section>
+			</div>
+			
+			<div class="panel-group">
+				<section class="panel panel-bordered">
+					<div class="panel-heading">
+						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse3" href="" aria-expanded="false" ng-click="main.panelToggleChange($event);"><h3>프로젝트 자원 계획(Resource Quota Plan)</h3></a>
+					</div>
+					<!-- // panel-heading -->
+					<div class="panel-collapse collapse" id="basicCollapse3">
+						<div class="panel-body">
 							<div class="s_cont_box">
 								<div class="s_progress_box wd_tit">
 									<ul>
@@ -400,12 +451,14 @@
 							</div>
 						</div>
 					</div>
-					
-				<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
-				<!-- <div class="btn-btm">
-					<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button>
-				</div> -->
+				</section>
 			</div>
-		</li>
-	</ul>
+		</div>
+	</div>	
+	<div class="text-right">
+		<button class="btn btn-lg btn-primary" ng-click="contents.checkDuplRoute();" ng-disabled="!main.checkResourceUserRole()">App 생성</button>
+		<button class="btn btn-lg btn-default" ng-click="main.goToPage('/paas/apps')">취소</button>
+		<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
+		<!-- <button class="btn btn-lg btn-success" onclick="location.href='#/tutorial/2';">서비스 튜토리얼 바로가기</button> -->
+	</div>	
 </div>

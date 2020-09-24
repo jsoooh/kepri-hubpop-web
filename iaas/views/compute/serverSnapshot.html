@@ -1,6 +1,6 @@
 <!-- 디스크 정보 -->
-<div class="card-input-wrap">
-	<div class="row" ng-if="!!main.userTenantId">
+<div class="card-input-wrap" ng-if="!!main.userTenantId">
+	<div class="row">
 		<div class="col-md-6">
 			<div class="font-size-18 padding-top-5">
 				<b>전체 백업 이미지 <span class="color-primary">({{(contents.instanceSnapshotList | filter:{ status : '!deleting'}).length + (contents.storageSnapshotList | filter:{ status : '!deleting'}).length}})</span></b>
@@ -74,7 +74,7 @@
 												</div>
 												<div class="col-xs-2">
 													<div class="pull-right dropdown btn-option">
-														<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+														<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 															<div class="feather-icon">
 																<i data-feather="more-horizontal" class="feather-directive"></i>
 															</div>
@@ -118,7 +118,7 @@
 													</li>
 													<li>
 														<b>설명  </b>
-														<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">i</a></div>
+														<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="!main.checkResourceUserRole() || contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">i</a></div>
 													</li>
 												</ul>
 											</div>
@@ -179,7 +179,7 @@
 									<td class="text-center">{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 									<td class="text-center">
 										<div class="dropdown btn-option">
-											<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 												<div class="feather-icon">
 													<i data-feather="more-horizontal" class="feather-directive"></i>
 												</div>
@@ -206,8 +206,16 @@
 					<img src="../assets/img/icon/servers1.png">
 				</div>
 				<div class="cont">
-					<p>생성된 서버 백업 이미지가 없습니다.</p>
+					<p>생성된 <span class="point">서버 백업 이미지</span>가 없습니다.</p>
 				</div>
+				<!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+				<div class="text-center" ng-if="main.checkUseYnIaas=='N'">
+					<div class="cont">
+						<p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+					</div>
+					<button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+				</div>
+				<!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
 			</div>
 			<!-- //생성된 서버 백업 이미지 없음 -->
 			
@@ -241,7 +249,7 @@
 												</div>
 												<div class="col-xs-2">
 													<div class="pull-right dropdown btn-option">
-														<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+														<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 															<div class="feather-icon">
 																<i data-feather="more-horizontal" class="feather-directive"></i>
 															</div>
@@ -285,7 +293,7 @@
 													</li>
 													<li>
 														<b>설명  </b>
-														<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">i</a></div>
+														<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{storageSnapshot.description | enterByNbr}}'" ng-click="!main.checkResourceUserRole() || contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">i</a></div>
 													</li>
 												</ul>
 											</div>
@@ -343,7 +351,7 @@
 									<td class="text-center">{{ storageSnapshot.createDate }}</td>
 									<td class="text-center">
 										<div class="dropdown btn-option">
-											<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+											<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
 												<div class="feather-icon">
 													<i data-feather="more-horizontal" class="feather-directive"></i>
 												</div>
@@ -370,8 +378,16 @@
 					<img src="../assets/img/icon/servers1.png">
 				</div>
 				<div class="cont">
-					<p>생성된 디스크 백업 이미지가 없습니다.</p>
+					<p>생성된 <span class="point">디스크 백업 이미지</span>가 없습니다.</p>
 				</div>
+				<!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+				<div class="text-center" ng-if="main.checkUseYnIaas=='N'">
+					<div class="cont">
+						<p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+					</div>
+					<button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+				</div>
+				<!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
 			</div>
 			<!-- //생성된 서버 백업 이미지 없음 -->
 			
@@ -390,17 +406,17 @@
 </div>
 <!-- //탭영역 -->
 
-<!-- 테넌트 생성 전인 경우 -->
+<!-- 테넌트 생성 전인 경우(new) -->
 <div class="welcome_layer" ng-if="!main.userTenantId">
 	<div class="text-center blank-page">
 		<div class="img">
 			<img src="../assets/img/icon/data-center.png" alt="data-center">
 		</div>
 		<div class="cont">
-			<p>현재 생성한 프로젝트가 없습니다.</p>
-			<p><span class="point">프로젝트를 생성</span> 하고 HUB-PoP 서비스를 사용하세요.</p>
+			<p>서버가상화 서비스에서는 리눅스(Linux) 또는 윈도우(Windows) 운영체제가 포함된 가상서버를 생성하여 사용할 수 있습니다.</p>
+			<p><span class="point">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</p>
 		</div>
-		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');">프로젝트 생성</button>
+		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 시작하기</button>
 	</div>
 </div>
-<!-- //테넌트 생성 전인 경우 -->
+<!-- //테넌트 생성 전인 경우(new) -->

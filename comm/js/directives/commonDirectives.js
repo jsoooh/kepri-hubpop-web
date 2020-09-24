@@ -1098,6 +1098,7 @@ angular.module('app')
             }
         };
     })
+    //feather icon 관련
     .directive("featherDirective", [function() {
         return {
             restrict: 'C',
@@ -1116,11 +1117,21 @@ angular.module('app')
             }
         }
     }])
+    //scroll 관련
     .directive("scrollContent", [function() {
         return {
             restrict: 'C',
             link: function(scope, elem, attrs) {
                 elem.mCustomScrollbar();
+            }
+        }
+    }])
+    //menu scroll 관련
+    .directive("scrollBar", [function() {
+        return {
+            restrict: 'C',
+            link: function(scope, elem, attrs) {
+                elem.mCustomScrollbar({theme:'minimal'});
             }
         }
     }]);

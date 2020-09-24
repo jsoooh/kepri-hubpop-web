@@ -153,12 +153,12 @@
 												</div>
 											</button>
 											<ul class="dropdown-menu" role="menu">
-												<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
-												<li><a href="" title="사용자변경" ng-click="contents.changeOrgUser(org);">사용자변경</a></li>
+												<li><a href="" title="명칭변경" ng-class="org.managerId == main.userInfo.email ? '' : 'disabled'" ng-click="org.managerId == main.userInfo.email && contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
+												<li><a href="" title="사용자변경" ng-class="org.managerId == main.userInfo.email ? '' : 'disabled'" ng-click="org.managerId == main.userInfo.email && contents.changeOrgUser(org);">사용자변경</a></li>
 												<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기"><i class="xi-bookmark blue-800"></i>즐겨찾기</a></li>
 												<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제"><i class="xi-bookmark grey-300"></i>즐겨찾기 해제</a></li>
 												<li><a href="" ng-class="org.managerId == main.userInfo.email ? 'disabled' : ''" ng-click="org.managerId != main.userInfo.email && contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
-												<li><a href="" title="삭제" ng-class="(org.managerId == main.userInfo.email || org.myRoleName == 'ADMIN') ? 'delete' : 'disabled'" ng-click="(org.managerId == main.userInfo.email || org.myRoleName == 'ADMIN') && contents.checkDeleteOrgProject($event, org);">{{ 'label.del' | translate }}</a></li>
+												<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'" ng-click="org.managerId == main.userInfo.email && contents.checkDeleteOrgProject($event, org);">{{ 'label.del' | translate }}</a></li>
 											</ul>
 										</div>
 										<div class="bookmark font-size-18">
@@ -189,9 +189,11 @@
 								</div>
 							</div>
 							<ul class="list-dot font-size-13">
-								<li><b>관리자 : </b> <span>{{org.managerName}}</span></li>
-								<li><b>참여자 수 : </b> <span>{{org.orgUserCount}}</span></li>
 								<li><b>프로젝트ID : </b> <span>{{org.orgId}}</span></li>
+								<li><b>책임자명 : </b> <span>{{org.managerName}}</span></li>
+								<li><b>참여자수 : </b> <span>{{org.orgUserCount}}</span></li>
+								<li><b>승인현황 : </b> <span>{{org.statusNm == '생성' ? '승인' : org.statusNm}}</span></li>
+								<li><b>상태 : </b> <span>{{org.isActive ? '활성' : '비활성'}}</span></li>
 							</ul>
 						</div>
 						<div class="pull-right grey-500 card-info-bottom">
@@ -270,7 +272,7 @@
 							</td>
 							<td class="text-center">{{ org.managerName }}</td>
 							<td class="text-center">{{ org.orgUserCount }}</td>
-							<td class="text-center">{{ org.isPersonal ? '개인' : '일반' }}</td>
+							<td class="text-center">{{ org.isPersonal ? '개인' : '팀' }}</td>
 							<td class="text-center">{{ org.startEndDate }}</td>
 							<td class="text-center">{{ org.createdDate.time | date : 'yyyy.MM.dd' }}</td>
 							<td class="text-center">{{ org.statusNm == '생성' ? '승인' : org.statusNm }}</td>
@@ -283,12 +285,12 @@
 										</div>
 									</button>
 									<ul class="dropdown-menu dropdown-menu-right" role="menu">
-										<li><a href="" title="명칭변경" ng-click="contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
-										<li><a href="" title="사용자변경" ng-click="contents.changeOrgUser(org);">사용자변경</a></li>
+										<li><a href="" title="명칭변경" ng-class="org.managerId == main.userInfo.email ? '' : 'disabled'" ng-click="org.managerId == main.userInfo.email && contents.changeNameOrgProject($event, org);" ng-class="main.userAuth != 'M' ? 'disabled':''">명칭변경</a></li>
+										<li><a href="" title="사용자변경" ng-class="org.managerId == main.userInfo.email ? '' : 'disabled'" ng-click="org.managerId == main.userInfo.email && contents.changeOrgUser(org);">사용자변경</a></li>
 										<li ng-if="org.isBookmark == false"><a href="" ng-click="contents.orgBookmarkAdd(org)" title="즐겨찾기"><i class="xi-bookmark blue-800"></i>즐겨찾기</a></li>
 										<li ng-if="org.isBookmark== true"><a href="" ng-click="contents.orgBookmarkDelete(org)" title="즐겨찾기 해제"><i class="xi-bookmark grey-300"></i>즐겨찾기 해제</a></li>
 										<li><a href="" ng-class="org.managerId == main.userInfo.email ? 'disabled' : ''" ng-click="org.managerId != main.userInfo.email && contents.withdrawOrgProjectUser(org);" title="탈퇴">탈퇴</a></li>
-										<li><a href="" title="삭제" ng-class="(org.managerId == main.userInfo.email || org.myRoleName == 'ADMIN') ? 'delete' : 'disabled'" ng-click="(org.managerId == main.userInfo.email || org.myRoleName == 'ADMIN') && contents.checkDeleteOrgProject($event, org);">{{ 'label.del' | translate }}</a></li>
+										<li><a href="" title="삭제" ng-class="org.managerId == main.userInfo.email ? 'delete' : 'disabled'" ng-click="org.managerId == main.userInfo.email && contents.checkDeleteOrgProject($event, org);">{{ 'label.del' | translate }}</a></li>
 									</ul>
 								</div>
 							</td>

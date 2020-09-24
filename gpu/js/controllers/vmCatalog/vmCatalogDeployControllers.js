@@ -49,6 +49,9 @@ angular.module('gpu.controllers')
             ct.vmCatalogDeployList = [];
             $scope.main.loadingMainBody = false;
         });
+        promise.finally(function () {
+            if (ct.vmCatalogDeployList.length == 0) $scope.main.checkUseYnPortalOrgSystem("gpu");
+        })
     };
 
     ct.fn.openVmCatalogDeployRenameForm = function ($event, vmCatalogDeploy) {

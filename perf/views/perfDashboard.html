@@ -1,103 +1,165 @@
-<div class="panelWrap">
-	<div class="panel type2">
-		<div class="panel_head">
-			<div class="tit pull-left">사용 금액</div>
-			<div class="pull-right">
-				<select ng-model = "contents.data.sltYear" ng-options=" year + '년' for year in contents.dashYears"
-						ng-change="contents.fn.changeMeteringYear(contents.data.sltYear)">
-				</select>
-				<select ng-model="contents.data.sltMonth" ng-options="month + '월' for month in contents.dashMonths"
-						ng-change="contents.fn.changeMeteringMonth(contents.data.sltMonth)">
-				</select>
+<!-- 대시보드 컨텐츠 -->
+<div class="dashboard-body padding-0">
+
+	<!-- 전체 사용금액 조회 영역 -->
+	<div class="card-input-wrap">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="font-size-18 padding-top-5">
+					<b>사용금액</b>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="text-right">
+					<div class="form-group inline-block margin-bottom-0">
+						<select class="form-control form-control-md" ng-model = "contents.data.sltYear" ng-options=" year + '년' for year in contents.dashYears"
+								ng-change="contents.fn.changeMeteringYear(contents.data.sltYear)">
+						</select>
+					</div>
+					<div class="form-group inline-block margin-bottom-0">
+						<select class="form-control form-control-md" ng-model="contents.data.sltMonth" ng-options="month + '월' for month in contents.dashMonths"
+								ng-change="contents.fn.changeMeteringMonth(contents.data.sltMonth)">
+						</select>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="panel_body h_auto">
-			<div class="in">
-				<div class="amount_usedWrap">
-					<div class="col-md-4">
-						<h4>전체 사용 금액</h4>
-						<span ng-if="contents.isToday" class="amount_used_date">{{ contents.today | date: 'yyyy년 MM월 dd일' }}</span>
-						<span ng-if="!contents.isToday" class="amount_used_date">{{ contents.data.sltYear }}년 {{ contents.data.sltMonth }}월 </span>
-						<div class="this_month">
-							<p ng-if="contents.isToday">이달 사용 금액</p>
-							<p ng-if="!contents.isToday">{{ contents.data.sltMonth }}월 사용 금액</p>
-							<div class="amountTxt">
-								<span class="amount" ng-if="!contents.dailyChart.loading">{{ contents.data.sltSumPerfAmt | number }}</span>
-								<img class="barLoadingImg" ng-if="contents.dailyChart.loading" src="images/loading/lg.equalizer-bars-loader.gif">
-								<span class="won"> 원</span>
+	</div>
+	<!-- // 전체 사용금액 조회 영역 -->
+	
+	<div class="row">
+		<!-- 전체 사용 금액 -->
+		<div class="col-md-4">
+			<div class="row">
+				<div class="col-md-12">
+					<section class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+						<div class="panel-body">
+							<div class="clearfix"> 
+								<h3 class="heading h3 margin-bottom-25">전체 사용 금액</h3>
 							</div>
-						</div>
-						<ul class="amountBox">
-							<li class="last_month">
-								<p ng-if="contents.isToday">지난달 사용 금액</p>
-								<p ng-if="!contents.isToday">{{ contents.data.lastMonth }}월 사용 금액</p>
-								<div class="amountTxt">
-									<span class="amount" ng-if="!contents.lastSumLoading">{{ contents.data.lastSumPerfAmt | number }}</span>
-									<img class="barLoadingImg" ng-if="contents.lastSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
-									<span class="won"> 원</span>
+							<div class="clearfix text-right margin-bottom-10"> 
+								<span ng-if="contents.isToday" class="amount_used_date font-size-12 grey-500">{{ contents.today | date: 'yyyy년 MM월 dd일' }}</span>
+								<span ng-if="!contents.isToday" class="amount_used_date font-size-12 grey-500">{{ contents.data.sltYear }}년 {{ contents.data.sltMonth }}월 </span>
+							</div>
+							<div class="row text-center">
+								<div class="col-md-12">
+									<div class="amount_usedWrap">
+										<div class="this_month">
+											<p class="font-size-14 margin-bottom-5" ng-if="contents.isToday">이달 사용 금액</p>
+											<p class="font-size-14 margin-bottom-5" ng-if="!contents.isToday">{{ contents.data.sltMonth }}월 사용 금액</p>
+											<div class="count-lg font-size-30 margin-bottom-15">
+												<div class="amountTxt">
+													<span class="amount" ng-if="!contents.dailyChart.loading">{{ contents.data.sltSumPerfAmt | number }}</span>
+													<img class="barLoadingImg" ng-if="contents.dailyChart.loading" src="images/loading/lg.equalizer-bars-loader.gif">
+													<span class="won"> 원</span>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-							</li>
-							<li class="next_month">
-								<p ng-if="contents.isToday">이달 사용 예상 금액</p>
-								<p ng-if="!contents.isToday">{{ contents.data.nextMonth }}월 사용 금액</p>
-								<div class="amountTxt">
-									<span class="amount" ng-if="!contents.nextSumLoading">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
-									<img class="barLoadingImg" ng-if="contents.nextSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
-									<span class="won">원</span>
+							</div>
+							<div class="row text-center margin-top-30">
+								<div class="col-md-6">
+									<div class="amount_usedWrap">
+										<p class="font-size-14 margin-bottom-5" ng-if="contents.isToday">지난달 사용 금액</p>
+										<p class="font-size-14 margin-bottom-5" ng-if="!contents.isToday">{{ contents.data.lastMonth }}월 사용 금액</p>
+										<div class="count-lg margin-bottom-15" style="border-left:0;">
+											<div class="amountTxt">
+												<span class="amount font-size-30" ng-if="!contents.lastSumLoading">{{ contents.data.lastSumPerfAmt | number }}</span>
+												<img class="barLoadingImg" ng-if="contents.lastSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
+												<span class="won font-size-24"> 원</span>
+											</div>
+										</div>
+									</div>
 								</div>
-							</li>
-						</ul>
-					</div>
-					<div class="col-md-4">
-						<h4>서비스별 사용 금액</h4>
-
-						<div class="dashboard_chart_wrap pt20" style="overflow:hidden;">
-							<div id="itemGroup-anls-chart"></div>
-							<div class="mainLoading" ng-if="contents.itemGroupChart.loading"></div>
-							<!-- <div class="chartWarningImg" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1"></div> -->
-							<div class="chartWarningImg" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1">사용량 없음</div>
+								<div class="col-md-6">
+									<div class="amount_usedWrap">
+										<p class="font-size-14 margin-bottom-5" ng-if="contents.isToday">이달 사용 예상 금액</p>
+										<p class="font-size-14 margin-bottom-5" ng-if="!contents.isToday">{{ contents.data.nextMonth }}월 사용 금액</p>
+										<div class="count-lg margin-bottom-15">
+											<div class="amountTxt">
+												<span class="amount font-size-30" ng-if="!contents.nextSumLoading">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
+												<img class="barLoadingImg" ng-if="contents.nextSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
+												<span class="won font-size-24">원</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
 						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+		<!-- // 전체 사용 금액 -->
+		
+		<!-- 서비스별 사용 금액 -->
+		<div class="col-md-4">
+			<section class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+				<div class="panel-body">
+					<h3 class="heading h3">서비스별 사용 금액</h3>
+					<div class="dashboard_chart_wrap" style="overflow:hidden;">
+						<div id="itemGroup-anls-chart"></div>
+						<div class="mainLoading" ng-if="contents.itemGroupChart.loading"></div>
+						<!-- <div class="chartWarningImg" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1"></div> -->
+						<div class="chartWarningImg" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1">사용량 없음</div>
 					</div>
-					<div class="col-md-4">
+				</div>
+			</section>
+		</div>
+		<!-- // 서비스별 사용 금액 -->
+		
+		<!-- 서비스 항목별 사용 금액 -->
+		<div class="col-md-4">
+			<section class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+				<div class="panel-body">
+					<div class="clearfix">
 						<div class="pull-left">
-							<h4>서비스 항목별 사용 금액</h4>
+							<h3 class="heading h3">서비스 항목별 사용 금액</h4>
 						</div>
 						<div class="pull-right">
-							<select ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups"
-									ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeMeteringItemsByItemGroupCode(contents.data.sltItemGroupCode)">
-							</select>
-						</div>
-
-						<div class="dashboard_chart_wrap pt20" style="overflow:hidden;">
-							<div id="item-anls-chart"></div>
-							<div class="mainLoading" ng-if="contents.itemChart.loading"></div>
-							<div class="chartWarningImg" ng-if="!contents.itemChart.loading && contents.itemChart.data.series.length < 1">사용량 없음</div>
+							<div class="form-group inline-block margin-bottom-0">
+								<select class="form-control form-control-sm" ng-options="meteringItemGroup.itemGroupCode as meteringItemGroup.itemGroupName for meteringItemGroup in contents.meteringItemGroups"
+										ng-model="contents.data.sltItemGroupCode" ng-change="contents.fn.changeMeteringItemsByItemGroupCode(contents.data.sltItemGroupCode)">
+								</select>
+							</div>
 						</div>
 					</div>
+					<div class="dashboard_chart_wrap" style="overflow:hidden;">
+						<div id="item-anls-chart"></div>
+						<div class="mainLoading" ng-if="contents.itemChart.loading"></div>
+						<div class="chartWarningImg" ng-if="!contents.itemChart.loading && contents.itemChart.data.series.length < 1">사용량 없음</div>
+					</div>
 				</div>
-			</div>
+			</section>
 		</div>
-	</div>
-
-	<div class="panel type2">
-		<div class="panel_head">
-			<div class="tit pull-left">사용 금액 추이<em>(단위:원)</em></div>
-			<div class="pull-right">
-				<select ng-options="columnOption.value as columnOption.label for columnOption in contents.columnOptions"
-						ng-model="contents.data.sltColumnOption" ng-change="contents.fn.changeColumnOption(contents.data.sltColumnOption)">
-				</select>
-			</div>
-		</div>
-		<div class="panel_body h_auto">
-			<div class="in">
-				<div class="dashboard_chart_wrap" style="overflow:hidden;">
-					<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
-					<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
-					<div class="mainLoading" ng-if="contents.dailyChart.loading"></div>
-					<div class="chartWarningImg" ng-if="contents.data.sltColumnOption == 'daily' && !contents.dailyChart.loading && contents.data.sltSumPerfAmt == 0">사용량 없음</div>
-					<div class="chartWarningImg"  ng-if="contents.data.sltColumnOption == 'monthly' && !contents.dailyChart.loading && contents.data.sltMonthlySumPerfAmt == 0">사용량 없음</div>
-				</div>
-			</div>
-		</div>
+		<!-- // 서비스 항목별 사용 금액 -->
 	</div>
 </div>
+
+<!-- 사용 금액 추이 -->
+<section class="panel panel-bordered dashboard-panel dashboard-panel-type1">
+	<div class="panel-body">
+		<div class="clearfix">
+			<div class="pull-left">
+				<h3 class="heading h3">사용 금액 추이<em>(단위:원)</em></h3>
+			</div>
+			<div class="pull-right">
+				<div class="form-group inline-block margin-bottom-0">
+					<select class="form-control form-control-md"  ng-options="columnOption.value as columnOption.label for columnOption in contents.columnOptions"
+						ng-model="contents.data.sltColumnOption" ng-change="contents.fn.changeColumnOption(contents.data.sltColumnOption)">
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="dashboard_chart_wrap margin-top-30" style="overflow:hidden;">
+			<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
+			<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
+			<div class="mainLoading" ng-if="contents.dailyChart.loading"></div>
+			<div class="chartWarningImg" ng-if="contents.data.sltColumnOption == 'daily' && !contents.dailyChart.loading && contents.data.sltSumPerfAmt == 0">사용량 없음</div>
+			<div class="chartWarningImg"  ng-if="contents.data.sltColumnOption == 'monthly' && !contents.dailyChart.loading && contents.data.sltMonthlySumPerfAmt == 0">사용량 없음</div>
+		</div>
+	</div>
+</section>
+<!-- // 사용 금액 추이 -->

@@ -1,6 +1,6 @@
 <div class="message_area">
 	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>원본 백업 이미지로부터 새로운 서버를 생성합니다.</span></div>
+	<div class="msg_txt"><span>원본 스냅샷로부터 새로운 인스턴스를 생성합니다.</span></div>
 </div>
 
 <div class="panel_area">
@@ -8,7 +8,7 @@
 		<li>
 			<div class="panel_box pn_l">
 				<div class="pn_head">
-					<h4 class="pnh_tit">백업 이미지로부터 신규 서버 만들기</h4>
+					<h4 class="pnh_tit">스냅샷으로부터 신규 인스턴스 만들기</h4>
 				</div>
 				<form name="{{contents.formName}}" novalidate>
 					<div class="pn_body">
@@ -16,13 +16,13 @@
 						<ul class="form_list">
 							<li>
 								<div class="pnb_tit">
-									<span class="pnb_t_txt">백업 이미지 이름</span>
+									<span class="pnb_t_txt">스냅샷 이름</span>
 								</div>
 								<input type="text" class="form-control" maxlength="50" ng-value="contents.snapshotInfo.name" disabled>
 							</li>
 							<li>
 								<div class="pnb_tit">
-									<i class="i_star"></i> <span class="pnb_t_txt">서버 이름</span>
+									<i class="i_star"></i> <span class="pnb_t_txt">인스턴스 이름</span>
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
 								</div>
 								<input type="text" class="form-control" name="serverName" ng-model="contents.data.name" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required">
@@ -31,7 +31,7 @@
 							<li ng-if="false">
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">접속 도메인</span>
-									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성된 윈도우 서버에 접속하기 위한 도메인 정보를 구성합니다.'"><span class="ico_info"></span></button></div>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성된 윈도우 인스턴스에 접속하기 위한 도메인 정보를 구성합니다.'"><span class="ico_info"></span></button></div>
 									<!--<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>-->
 								</div>
 								<div class="s_cont_box" style="display: block;">
@@ -45,13 +45,13 @@
 											</select>
 										</div>
 									</div>
-									<div class="cnt_msg_box msg-info">윈도우 서버는 사용자가 구성한 도메인을 통해서만 접속이 가능합니다. IP를 사용한 접근은 허용되지 않습니다.</div>
+									<div class="cnt_msg_box msg-info">윈도우 인스턴스는 사용자가 구성한 도메인을 통해서만 접속이 가능합니다. IP를 사용한 접근은 허용되지 않습니다.</div>
 								</div>
 							</li>
 							<li>
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span>
-									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
+									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'인스턴스의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 인스턴스가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.specDisabledAllSetting" src="images/loading_sm.gif" /></div>
 								</div>
 								<div class="tbl type1">
 									<table class="table">
@@ -128,7 +128,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="cnt_msg_box msg-info">디스크 크기는 최대 2TB까지 설정이 가능합니다.</div>
+									<div class="cnt_msg_box msg-info">볼륨 크기는 최대 2TB까지 설정이 가능합니다.</div>
 								</div>
 							</li>
 						</ul>
@@ -146,21 +146,21 @@
 			<div class="panel_box pn_r">
 			
 				<div class="pn_head">
-					<h4 class="pnh_tit ico01">서버 기본정보</h4>
+					<h4 class="pnh_tit ico01">인스턴스 기본정보</h4>
 				</div>
 				<div class="pn_body">
 					<div class="s_cont_box">
 						<ul>
 							<li>
-								<span class="s_tit">서버 이름</span>
+								<span class="s_tit">인스턴스 이름</span>
 								<span class="s_txt">{{contents.data.name}}</span>
 							</li>
 							<li>
-								<span class="s_tit">서버 OS</span>
+								<span class="s_tit">인스턴스 OS</span>
 								<span class="s_txt">{{contents.snapshotInfo.imageName}}</span>
 							</li>
 							<li>
-								<span class="s_tit">서버 사양</span>
+								<span class="s_tit">인스턴스 사양</span>
 								<span class="s_txt">{{contents.data.spec.name}}</span>
 								<div class="s_inner_cont">
 									<div class="innr_tbl">
@@ -194,7 +194,7 @@
 				</div>
 				<div class="pn-Toggle brd0">
 					<div class="pn_head brdt">
-						<h4 class="pnh_tit ico02">추가 디스크</h4>
+						<h4 class="pnh_tit ico02">추가 볼륨</h4>
 						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 					</div>
 					<div class="pn_body">

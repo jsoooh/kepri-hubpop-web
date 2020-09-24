@@ -151,14 +151,14 @@ angular.module('app')
                             loadMyDirectives: []
                         },
                         subPages: {
-                            instanceSnashotCreate: {
+                            instanceSnapshotCreate: {
                                 name: 'server_snapshot_create',
                                 stateKey: 'iaasServerSnapshotCreate',
                                 url: '/iaas/snapshot/serverCreate/:snapshotId/:tenantId',
                                 controller: 'iaasServerSnapshotCreateCtrl',
                                 templateUrl: _IAAS_VIEWS_+'/compute/serverSnapshotCreate.html'
                             },
-                            storageSnashotCreate: {
+                            storageSnapshotCreate: {
                                 name: 'storage_snapshot_create',
                                 stateKey: 'iaasStorageSnapshotCreate',
                                 url: '/iaas/snapshot/storageCreate/:snapshotId',

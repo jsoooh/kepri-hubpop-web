@@ -86,6 +86,10 @@ angular.module('gpu.controllers')
             });
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
+                //백업이미지 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                if (!ct.instanceSnapshotList || ct.instanceSnapshotList.length == 0) {
+                    $scope.main.checkUseYnPortalOrgSystem("gpu");
+                }
             });
         };
 
@@ -144,6 +148,7 @@ angular.module('gpu.controllers')
                 }
             });
             returnPromise.finally(function (data, status, headers) {
+                if (!ct.storageSnapshotList || ct.storageSnapshotList.length == 0) $scope.main.checkUseYnPortalOrgSystem("gpu");
             });
         };
 

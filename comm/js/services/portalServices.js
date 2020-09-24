@@ -44,7 +44,7 @@ angular.module('portal.services', [])
             var getParams = {
                 "menuId" : menuId
             };
-            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/user/myMenu', 'DELETE', getParams,'application/x-www-form-urlencoded'));
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/user/myMenu', 'DELETE', getParams, 'application/x-www-form-urlencoded'));
         };
 
         //Left Menu 구조 생성
@@ -490,7 +490,7 @@ angular.module('portal.services', [])
             return common.retrieveResource(common.resourcePromise('/hsvc/api/noti/info/v1.0', 'GET'));
         };
 
-        // iaas/gpu/paas 추후에 프로젝트 생성하도록 변경
+        // iaas/gpu/paas 프로젝트 생성은 별도 시점에 실행
         portal.portalOrgs.createPortalOrgSystem = function (id, system) {
             var getParams = {
                 "system" : system
@@ -501,6 +501,53 @@ angular.module('portal.services', [])
         // 조직 정보 조회
         portal.portalOrgs.getPotalOrg = function (id) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id, 'GET'));
+        };
+
+        // iaas/gpu/paas 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+        portal.portalOrgs.checkUseYnPortalOrgSystem = function (orgId, system) {
+            var params = {};
+            if (system=="iaas" || system=="gpu") {
+                params = {
+                    teamCode : orgId
+                };
+            } else {
+                params = {
+                    urlPaths : {
+                        "name" : orgId
+                    }
+                };
+            }
+            if (system=="iaas") {
+                return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/check/useYn', 'GET', params));
+            } else if (system=="gpu") {
+                return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/check/useYn', 'GET', params));
+            } else if (system=="paas") {
+                return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/app_count', 'GET', params));
+            }
+        };
+
+        // iaas/gpu/paas [서비스 삭제하기]
+        portal.portalOrgs.deletePortalOrgSystem = function (projectId, orgId, system) {
+            var params = {};
+            if (system=="iaas" || system=="gpu") {
+                params = {
+                    orgCode : projectId,
+                    teamCode : orgId
+                };
+            } else if (system=="paas") {
+                params = {
+                    urlPaths : {
+                        "name" : orgId
+                    }
+                };
+            }
+            if (system=="iaas") {
+                return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/manage', 'DELETE', params));
+            } else if (system=="gpu") {
+                return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/manage', 'DELETE', params));
+            } else if (system=="paas") {
+                return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}/recursive', 'DELETE', params));
+            }
         };
 
         portal.users = {};

@@ -145,14 +145,16 @@
 	}
 </style>
 
-
+<!-- 서버 정보 -->
 <section class="panel panel-bordered app-info-area">
 	<div class="panel-heading">
 		<div class="row">
 			<div class="col-md-6">
-				<div class="round-img pull-left">
-					<img ng-if="contents.instance.image.icon" ng-src="data:{{ contents.instance.image.contentType }}; base64, {{ contents.instance.image.icon }}" class="logo" alt="">
-					<img ng-if="!contents.instance.image.icon" src="images/thum/im_logo_compute.png" class="logo" alt="">
+				<div class="round-img img_line pull-left" ng-if="contents.instance.image.icon">
+					<img ng-src="data:{{ contents.instance.image.contentType }}; base64, {{ contents.instance.image.icon }}" class="logo" alt="">
+				</div>
+				<div class="round-img pull-left" ng-if="!contents.instance.image.icon">
+					<img src="images/thum/im_logo_compute.png" class="logo" alt="">
 				</div>
 				<div class="pull-left">
 					<h3 class="panel-title padding-left-5">
@@ -167,11 +169,11 @@
 				<div ng-if="contents.instance.procState == 'end'">
 					<!-- vnc 사용할 경우 웹콘솔 버튼 주석 해제 -->
 					<!-- <button type="button" name="button" class="btn only-ico ico-ssh" tooltip-placement="bottom" uib-tooltip="웹콘솔" ng-click="contents.fn.openWebConsole(contents.instance)"><span class="ico">웹콘솔</span></button> -->
-					<button ng-if="contents.instance.vmState == 'stopped'" type="button" name="button" tooltip-placement="bottom" uib-tooltip="시작" ng-click="contents.fn.serverActionConfirm('START',contents.instance);">
+					<button ng-if="contents.instance.vmState == 'stopped'" type="button" name="button" tooltip-placement="bottom" uib-tooltip="시작" ng-click="contents.fn.serverActionConfirm('START',contents.instance);" ng-disabled="!main.checkResourceUserRole()">
 						<i class="xi-play-circle-o font-size-30"></i>
 						<p class="sr-only">시작</p>
 					</button>
-					<button ng-if="contents.instance.vmState == 'active'" type="button" name="button" tooltip-placement="bottom" uib-tooltip="정지" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);">
+					<button ng-if="contents.instance.vmState == 'active'" type="button" name="button" tooltip-placement="bottom" uib-tooltip="정지" ng-click="contents.fn.serverActionConfirm('STOP',contents.instance);" ng-disabled="!main.checkResourceUserRole()">
 						<i class="xi-recording-stop font-size-30"></i>
 						<p class="sr-only">정지</p>
 					</button>
@@ -187,15 +189,18 @@
 							</div>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li ng-if="contents.instance.vmState != 'fail'"><a href="" ng-click="contents.computeEditFormOpen($event, contents.instance);">이름 변경</a></li>
-							<li ng-if="contents.instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);" title="재시작">재시작</a></li>
-							<li ng-if="contents.instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
-							<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="서버 사양 변경">서버 사양 변경</a></li>
-							<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
-							<li ng-if="contents.instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="백업 이미지 생성">백업 이미지 생성</a></li>
-							<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
-							<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
-							<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">서버 삭제</a></li>
+							<li ng-if="contents.instance.vmState != 'fail' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.computeEditFormOpen($event, contents.instance);">이름 변경</a></li>
+							<li ng-if="contents.instance.vmState != 'fail' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">이름 변경</a></li>
+							<li ng-if="contents.instance.vmState == 'active' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);" title="재시작">재시작</a></li>
+							<li ng-if="contents.instance.vmState != 'active' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+							<li ng-if="contents.instance.vmState == 'stopped' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="서버 사양 변경">서버 사양 변경</a></li>
+							<li ng-if="contents.instance.vmState != 'stopped' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
+							<li ng-if="contents.instance.vmState == 'stopped' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="백업 이미지 생성">백업 이미지 생성</a></li>
+							<li ng-if="contents.instance.vmState != 'stopped' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
+							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
+							<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">디스크 연결</a></li>
+							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">서버 삭제</a></li>
+							<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">서버 삭제</a></li>
 							<!--<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>-->
 							<!--<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>-->
 							<!--<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>-->
@@ -356,8 +361,9 @@
 		</div>
 	</div>
 </section>
+<!-- //서버 정보 -->
 
-
+<!-- 디스크 연결 정보 -->
 <section class="panel panel-bordered">
 	<div class="panel-heading">
 		<div class="row">
@@ -376,7 +382,7 @@
 					<ul>
 						<li class="col-md-3" ng-repeat="volume in contents.instanceVolList">
 							<div class="in">
-								<div class="col-sm-4">
+								<div class="col-sm-3">
 									<div class="img-size85">
 										<img src="../images/ico_hard2.png" alt="">
 									</div>
@@ -384,26 +390,28 @@
 								<div class="col-sm-8">
 									<b class="in_tit">{{volume.volumeName}}</b>
 									<div class="btn-wrap">
-										<button type="button" title="연결해제" ng-click="contents.fn.restorationConfirm(volume);"><a class="link"><i class="fas fa-unlink"></i></a></button>
+										<button type="button" title="연결해제" ng-click="contents.fn.restorationConfirm(volume);" ng-disabled="!main.checkResourceUserRole()"><a class="link"><i class="fas fa-unlink"></i></a></button>
 									</div>
 									<div class="progress progress-sm progress-square margin-top-5">
 										<div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"></div>
 									</div>
 									<div class="grey-500 margin-top-5">{{volume.size}}GB</div>
 								</div>
+								<div class="col-sm-1"></div>
 							</div>
 						</li>
 					</ul>
 				</div>
 			</div>
-            <p class="padding-vertical-20" ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
-                연결 디스크 정보가 없습니다.
-            </p>
+			<p class="padding-vertical-20" ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
+				연결 디스크 정보가 없습니다.
+			</p>
 		</div>
 	</div>
 </section>
+<!-- //디스크 연결 정보 -->
 
-
+<!-- 탭영역 -->
 <!-- //Nav tabs -->
 <ul class="nav nav-tabs nav-tabs-btn nav-tabs-lg">
 	<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">서비스 도메인</a></li>
@@ -414,7 +422,6 @@
 		<li ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('virtualMonit');">가상머신 모니터링</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'alarmEvent'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('alarmEvent');">알람 이벤트</a></li>
 </ul>
-
 
 <!-- Tab panes -->
 <div class="tab-content inst padding-top-30 page-detail">
@@ -432,7 +439,7 @@
 					<div class="col-md-6 text-right">
 						<div class="padding-top-10 padding-horizontal-20">
 							<!-- 20181121 sg0730 접속 도메인 연결 기능 변경으로 인한 팝업 호출  -->
-							<button type="button" title="추가" ng-click="contents.fn.popConnDomainForm($event);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+							<button type="button" title="추가" ng-click="contents.fn.popConnDomainForm($event);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
 							<!-- <button type="button" title="추가" ng-click="contents.fn.connectDomainFormOpen();"><i class="xi-plus-circle-o font-size-25"></i></button> -->
 							<button type="button" title="확대/축소" class="btn-zoom grey-600"  ng-click="contents.zoomPanel($event, 'domain')"></button>
 						</div>
@@ -480,8 +487,8 @@
 													</div>
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-													<li><a href="javascript:void(0);" ng-click="contents.fn.popModDomainForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-click="contents.fn.deleteDomain(item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModDomainForm($event, item);">수정</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.deleteDomain(item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
@@ -511,7 +518,7 @@
 					<div class="col-md-6 text-right">
 						<div class="padding-top-10 padding-horizontal-20">
 							<!-- 20181121 sg0730 접속 도메인 연결 기능 변경으로 인한 팝업 호출  -->
-							<button type="button" title="추가"  ng-click="contents.fn.popPortForwardingForm($event);"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+							<button type="button" title="추가"  ng-click="contents.fn.popPortForwardingForm($event);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
 							<button type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel($event, 'portForwarding')"></button>
 						</div>
 					</div>
@@ -555,8 +562,8 @@
 													</div>
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-													<li><a href="javascript:void(0);" ng-click="contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-click="contents.fn.deletePortForwarding(item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click=" !main.checkResourceUserRole() || contents.fn.deletePortForwarding(item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
@@ -1131,3 +1138,4 @@
 
 </div>
 <!-- //Tab panes -->
+<!-- 탭영역 -->

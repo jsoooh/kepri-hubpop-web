@@ -63,24 +63,28 @@ angular.module('gpu.controllers')
         var ct = this;
         ct.fn = {};
         ct.data = {};
-        ct.objectStorageQuator = {};
+        ct.objecteStorageQuator = {};
         ct.roles = [];
         // 공통 레프트 메뉴의 userTenantId
         ct.data.projectId = $scope.main.sltProjectId;
         // ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantId = $scope.main.userTenantGpuId;
         ct.data.sltPortalOrgId = $scope.main.sltPortalOrgId;
-        // ct.data.tenantName = $scope.main.userTenant.korName;
-        ct.data.tenantName = $scope.main.userTenantGpu.korName;
+        ct.data.tenantName = $scope.main.userTenant.korName;
 
         ct.data.cutObjectPath = "";
         ct.data.cutObjectName = "";
 
         ct.data.allChecked = false;
 
+        ct.objectStorageUsedKiloByte = 0;
+        ct.objectStorageUsedMegaByte = 0;
+        ct.objectStorageUsedGigaByte = 0;
+        ct.objectStorageUsedVolume = "";
+        ct.objectStorageUsedVolumeUnit = "";
+
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
-            ct.data.tenantId = status.tenantId;
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
 
@@ -100,30 +104,67 @@ angular.module('gpu.controllers')
                 if (data.content) {
                     ct.objectStorageList = data.content.objectContainers;
                     ct.objecteStorageQuator = data.content.objecteStorageQuator;
-
                     if (ct.objectStorageList.length > 0) {
                         ct.data.bucketName = ct.objectStorageList[0].containerName;
                         ct.fn.getObjectStorageObject(ct.objectStorageList[0].containerName, "");
                     }
                 }
-
+                /*
+                                if (ct.objectStorageList && ct.objectStorageList.length > 0) {
+                                    angular.forEach(ct.objectStorageList, function (objectStorage) {
+                                        if (objectStorage.usedKiloByte == 0) {
+                                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
+                                            objectStorage["usedVolumeUnit"] = "GB";
+                                        }
+                                          else if (objectStorage.usedKiloByte < 1024) {
+                                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
+                                            objectStorage["usedVolumeUnit"] = "KB";
+                                        } else if (objectStorage.usedKiloByte >= 1024 && objectStorage.usedKiloByte < 1024*1024 ) {
+                                            objectStorage["usedVolume"] = Math.round(objectStorage.usedKiloByte/1024);
+                                            objectStorage["usedVolumeUnit"] = "MB";
+                                        } else {
+                                            objectStorage["usedVolume"] = objectStorage.usedGiGaByte;
+                                            objectStorage["usedVolumeUnit"] = "GB";
+                                        }
+                                    });
+                                }
+                                */
                 if (ct.objectStorageList && ct.objectStorageList.length > 0) {
                     angular.forEach(ct.objectStorageList, function (objectStorage) {
                         if (objectStorage.usedKiloByte == 0) {
-                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
-                            objectStorage["usedVolumeUnit"] = "GB";
+                            // objectStorage["usedVolume"] = objectStorage.usedKiloByte;
+                            // objectStorage["usedVolumeUnit"] = "GB";
                         }
-                          else if (objectStorage.usedKiloByte < 1024) {
-                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
-                            objectStorage["usedVolumeUnit"] = "KB";
+                        else if (objectStorage.usedKiloByte < 1024) {
+                            //objectStorage["usedVolume"] = objectStorage.usedKiloByte;
+                            //objectStorage["usedVolumeUnit"] = "KB";
+                            ct.objectStorageUsedKiloByte += objectStorage.usedKiloByte;
                         } else if (objectStorage.usedKiloByte >= 1024 && objectStorage.usedKiloByte < 1024*1024 ) {
-                            objectStorage["usedVolume"] = Math.round(objectStorage.usedKiloByte/1024);
-                            objectStorage["usedVolumeUnit"] = "MB";
+                            // objectStorage["usedVolume"] = Math.round(objectStorage.usedKiloByte/1024);
+                            // objectStorage["usedVolumeUnit"] = "MB";
+                            ct.objectStorageUsedMegaByte += Math.round(objectStorage.usedKiloByte/1024);
                         } else {
-                            objectStorage["usedVolume"] = objectStorage.usedGiGaByte;
-                            objectStorage["usedVolumeUnit"] = "GB";
+                            // objectStorage["usedVolume"] = objectStorage.usedGiGaByte;
+                            // objectStorage["usedVolumeUnit"] = "GB";
+                            ct.objectStorageUsedGigaByte += objectStorage.usedGiGaByte;
                         }
                     });
+                }
+                if (ct.objectStorageUsedGigaByte > 0) {
+                    ct.objectStorageUsedVolume = ct.objectStorageUsedGigaByte;
+                    ct.objectStorageUsedVolumeUnit = "GB";
+                }
+                else if (ct.objectStorageUsedMegaByte > 0) {
+                    ct.objectStorageUsedVolume = ct.objectStorageUsedMegaByte;
+                    ct.objectStorageUsedVolumeUnit = "MB";
+                }
+                else if (ct.objectStorageUsedKiloByte > 0) {
+                    ct.objectStorageUsedVolume = ct.objectStorageUsedKiloByte;
+                    ct.objectStorageUsedVolumeUnit = "KB";
+                }
+                else {
+                    ct.objectStorageUsedVolume = ct.objectStorageUsedGigaByte;
+                    ct.objectStorageUsedVolumeUnit = "GB";
                 }
                 //console.log("ct.objectStorageList : ", ct.objectStorageList);
             });
@@ -305,6 +346,10 @@ angular.module('gpu.controllers')
                 if (data.content) {
                     ct.objectStorageObjectList.list(data.content, path);
                     ct.data.bucketName = bucketName;
+
+                    ct.data.cutObjectPath = "";
+                    ct.data.cutObjectName = "";
+
                 } else {
                     $scope.main.loadingMainBody = false;
                     common.showAlertError('오류가 발생하였습니다.');
@@ -324,7 +369,7 @@ angular.module('gpu.controllers')
             ct.fn.getSendSecretInfoList();
         }
 
-        ct.fn.onDblclickObjectStorageObject = function(name, type)  {
+        ct.fn.onClickObjectStorageObject = function(name, type)  {
             if (type == "dir") {
                 if (name.indexOf("...") != -1) { // parent folder
                     var path = name.substring(0, name.length-4); // path/... -> path
@@ -359,7 +404,7 @@ angular.module('gpu.controllers')
             }
         }
 
-        ct.fn.onClickAllChcked = function() {
+        ct.fn.onClickAllChecked = function() {
             ct.fn.changeCheckedState(ct.data.allChecked);
         };
 
@@ -784,11 +829,11 @@ angular.module('gpu.controllers')
                 $mdDialog.hide();
             });
             returnPromise.error(function (data, status, headers) {
-            $scope.main.loadingMainBody = false;
-            $state.reload();
-            common.showAlertError(data.message);
-        });
-    };
+                $scope.main.loadingMainBody = false;
+                $state.reload();
+                common.showAlertError(data.message);
+            });
+        };
     })
 
     //오브젝트스토리지 생성 컨트롤
@@ -873,9 +918,84 @@ angular.module('gpu.controllers')
         };
     })
 
+    .controller('gpuObjectStorageUploadCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
+        _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageUploadCtrl", 1);
+        $scope.contents = common.getMainContentsCtrlScope().contents;
+        $scope.dialogOptions = common.getMainContentsCtrlScope().dialogOptions;
+        var ct  = this;
+        var pop = this;
+        pop.validationService 			= new ValidationService({controllerAs: pop});
+        pop.formName 					= $scope.dialogOptions.formName;
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
+        pop.fn 							= {};
+        pop.data						= {};
+        pop.data.bucketName             = $scope.dialogOptions.bucketName;
+        pop.data.key                    = $scope.dialogOptions.key;
+        pop.data.rename                 = $scope.dialogOptions.key;
+        pop.data.currentPath            = $scope.dialogOptions.path;
+        pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+
+        $scope.dialogOptions.title      = "항목 이름 변경";
+        $scope.dialogOptions.okName 	= "변경";
+        $scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/popObjectStorageUploadForm.html" + _VersionTail();
+        ct.data.sltPortalOrgId = $scope.main.sltPortalOrgId;
+
+        $scope.actionLoading 			= false;
+        pop.btnClickCheck 				= false;
+        pop.validDisabled 				= true;
+
+        // Dialog ok 버튼 클릭 시 액션 정의
+        $scope.popDialogOk = function () {
+            if ($scope.actionBtnHied) return;
+            $scope.actionBtnHied = true;
+
+            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+            {
+                $scope.actionBtnHied = false;
+                return;
+            }
+            pop.fn.createObjectStorageCreateFolder();
+        };
+        $scope.popCancel = function() {
+            $scope.dialogClose = true;
+            common.mdDialogCancel();
+        };
+        $scope.schEnter = function (keyEvent){
+            if (keyEvent.which == 13){
+                $scope.popDialogOk();
+            }
+        };
+
+        pop.fn.createObjectStorageCreateFolder = function() {
+            $scope.main.loadingMainBody = true;
+            pop.data.tenantId = pop.userTenant.tenantId;
+            var param = {
+                tenantId : ct.data.tenantId,
+                sourceBucket : ct.data.bucketName,
+                sourceKey : ct.data.currentPath + pop.data.key,
+                destinationBucket : ct.data.bucketName,
+                destinationKey : ct.data.currentPath + pop.data.rename
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/object/move', 'POST', param, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                $scope.dialogOptions.callBackFunction();
+                $scope.actionLoading = false;
+                $scope.actionBtnHied = false;
+                common.showAlertSuccess("이름이 변경 되었습니다.");
+                $scope.main.loadingMainBody = false;
+                $mdDialog.hide();
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                $state.reload();
+                common.showAlertError(data.message);
+            });
+        };
+    })
+
     // .controller('iaasObjectStorageInformationCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuObjectStorageInformationCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
-        // _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageInformationCtrl", 1);
         _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageInformationCtrl", 1);
         $scope.contents = common.getMainContentsCtrlScope().contents;
         $scope.dialogOptions = common.getMainContentsCtrlScope().dialogOptions;
@@ -883,8 +1003,7 @@ angular.module('gpu.controllers')
         var pop = this;
         pop.validationService 			= new ValidationService({controllerAs: pop});
         pop.formName 					= $scope.dialogOptions.formName;
-        // pop.userTenant 					= angular.copy($scope.main.userTenant);
-        pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
+        pop.userTenant 					= angular.copy($scope.main.userTenant);
         pop.fn 							= {};
         pop.data						= {};
         pop.data.bucketName             = $scope.dialogOptions.bucketName;
@@ -896,7 +1015,6 @@ angular.module('gpu.controllers')
         $scope.dialogOptions.title      = "접속 정보";
         $scope.dialogOptions.okName 	= "확인";
         $scope.dialogOptions.closeName 	= "닫기";
-        // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/popObjectStorageInformationForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/popObjectStorageInformationForm.html" + _VersionTail();
         ct.data.sltPortalOrgId = $scope.main.sltPortalOrgId;
 

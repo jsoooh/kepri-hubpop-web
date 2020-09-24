@@ -103,9 +103,9 @@
 
 <!-- 버튼영역 -->
 <div class="margin-bottom-20" ng-if="!!main.userTenantId">
-	<button type="button" class="btn btn-default btn-lg" ng-click="contents.fn.createObjectStoragePop()">
+	<button type="button" class="btn btn-default btn-lg" ng-click="contents.fn.createObjectStoragePop()" ng-disabled="!main.checkResourceUserRole()">
 		<div class="feather-icon color-primary">
-			<i data-feather="server"></i>
+			<i data-feather="box"></i>
 		</div>
 		<b>버킷 만들기</b>
 	</button>
@@ -143,7 +143,7 @@
 								<span>{{ item.containerName }}</span>
 							</a>
 							<!-- 선택되었을 때(삭제버튼) -->
-							<button class="close" ng-if="item.containerName==contents.data.bucketName" type="button" ng-click="contents.fn.deleteObjectBucket(item.containerName)"><i class="xi-close"></i></button>
+							<button class="close" ng-if="item.containerName==contents.data.bucketName" type="button" ng-click="contents.fn.deleteObjectBucket(item.containerName)" ng-disabled="!main.checkResourceUserRole()"><i class="xi-close"></i></button>
 							<!-- //선택되었을 때(삭제버튼) -->
 						</li>
 					</ul>
@@ -160,17 +160,17 @@
 					<div class="col-md-6 text-right padding-top-10 padding-right-25">
 						<div class="inline-block">
 							<input type="file" id="uploaded" class="form-control" onchange="angular.element(this).scope().contents.fn.uploadFiles(this)" multiple placeholder="Upload File" style="display: none;">
-							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="main.fileSelectBtnClick($event);"><i data-feather="upload" class="feather-directive"></i> 올리기</button>
+							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="main.fileSelectBtnClick($event);" ng-disabled="!main.checkResourceUserRole()"><i data-feather="upload" class="feather-directive"></i> 올리기</button>
 						</div>
 						<div class="inline-block">
 							<button type="button" name="button" class="btn btn-sm btn-default" ng-disabled="contents.fn.getCheckedDownloadItems()==false" ng-class="{'disabled' : contents.fn.getCheckedDownloadItems()==false}" ng-click="contents.fn.downloadFiles()"><i data-feather="download" class="feather-directive"></i> 내려받기</button>
 						</div>
 						<div class="inline-block">
-							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="contents.fn.createFolder()"><i data-feather="folder-plus" class="feather-directive"></i> 폴더만들기</button>
+							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="contents.fn.createFolder()" ng-disabled="!main.checkResourceUserRole()"><i data-feather="folder-plus" class="feather-directive"></i> 폴더만들기</button>
 						</div>
 						<div class="inline-block">
 							<div class="dropdown btn-option">
-								<button type="button" name="button" id="btn-option" class="btn btn-sm btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="more-horizontal" class="feather-directive"></i> 작업</button>
+								<button type="button" name="button" id="btn-option" class="btn btn-sm btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-disabled="!main.checkResourceUserRole()"><i data-feather="more-horizontal" class="feather-directive"></i> 작업</button>
 								<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 									<li><a ng-class="{'disabled' : contents.fn.getCheckedFileItems().length!=1}" ng-click="contents.fn.renameObject()">선택 항목 이름 변경</a></li>
 									<li><a ng-class="{'disabled' : contents.fn.getCheckedFileItems().length!=1}" ng-click="contents.fn.cutObject()">선택 항목 자르기</a></li>
@@ -220,8 +220,8 @@
 										<tr class="item-list" ng-repeat="item in contents.objectStorageObjectList.fileList | filterList:contents.objectStorageObjectList.currentPath | orderBy:'type'" ng-show="contents.objectStorageObjectList.fileList">
 											<td>
 												<div class="checkbox-group">
-													<input type="checkbox" id="checkbox02" class="checkbox-input selectable">
-													<label for="checkbox02" class="checkbox-item">
+													<input type="checkbox" id="checkbox{{item.$$hashKey}}" class="checkbox-input selectable" ng-model="item.checked">
+													<label for="checkbox{{item.$$hashKey}}" class="checkbox-item">
 														<div class="checkbox">
 															<div class="checked-icon">
 																<i class="xi-check"></i>
@@ -277,10 +277,10 @@
 			<img src="../assets/img/icon/data-center.png" alt="data-center">
 		</div>
 		<div class="cont">
-			<p>현재 생성한 프로젝트가 없습니다.</p>
-			<p><span class="point">프로젝트를 생성</span> 하고 HUB-PoP 서비스를 사용하세요.</p>
+			<p>서버가상화 서비스에서는 리눅스(Linux) 또는 윈도우(Windows) 운영체제가 포함된 가상서버를 생성하여 사용할 수 있습니다.</p>
+			<p><span class="point">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</p>
 		</div>
-		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');">프로젝트 생성</button>
+		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 시작하기</button>
 	</div>
 </div>
 <!-- //테넌트 생성 전인 경우 -->

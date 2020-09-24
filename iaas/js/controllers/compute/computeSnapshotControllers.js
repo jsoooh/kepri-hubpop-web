@@ -50,6 +50,10 @@ angular.module('iaas.controllers')
                     if (data.content.length != 0) {
                         ct.loadingInstanceSnapshotList = true;
                     }
+                    //백업이미지 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                    if (instanceSnapshots.length == 0) {
+                        $scope.main.checkUseYnPortalOrgSystem("iaas");
+                    }
                 }
                 common.objectOrArrayMergeData(ct.instanceSnapshotList, instanceSnapshots);
                 $scope.main.loadingMainBody = false;
@@ -345,12 +349,10 @@ angular.module('iaas.controllers')
                 if (data && data.content) {
                     ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
-                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
-                    ct.tenantResource.available.licenseRedhat = ct.tenantResource.maxResource.licenseRedhat - ct.tenantResource.usedResource.licenseRedhat;
                     ct.tenantResource.available.licenseWindows = ct.tenantResource.maxResource.licenseWindows - ct.tenantResource.usedResource.licenseWindows;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {

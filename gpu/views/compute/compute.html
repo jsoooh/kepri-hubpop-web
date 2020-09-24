@@ -16,7 +16,7 @@
 <!-- //목록 이미지형/리스트형 선택 버튼 -->
 
 <!-- 프로젝트 정보 -->
-<div class="cBox type0 projt-mana mt30">
+<div ng-if="!!main.userTenantGpuId" class="cBox type0 projt-mana mt30">
     <div class="pull-left">
         <h4 class="c-tit">전체 인스턴스 <em class="point1" ng-if="!!main.userTenantGpuId">({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</em></h4>
     </div>
@@ -92,7 +92,7 @@
                         <th scope="col">OS유형</th>
                         <th scope="col">서버유형</th>
                         <th scope="col">접속주소(IP)</th>
-                        <th scope="col">모니터링</th>
+                        <!-- <th scope="col">모니터링</th> -->
                         <th scope="col">CPU</th>
                         <th scope="col">메모리(GB)</th>
                         <th scope="col">디스크(GB)</th>
@@ -110,8 +110,9 @@
                             <span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
                         </td>
                         <td>{{ instance.image.osType }}</td>
-                        <td ng-if="instance.spec.type == 'GPU'">GPU</td>
-                        <td ng-if="instance.spec.type != 'GPU'">CPU</td>
+                        <!-- <td ng-if="instance.spec.type == 'GPU'">GPU</td>
+                        <td ng-if="instance.spec.type != 'GPU'">CPU</td> -->
+                        <td>{{ instance.spec.type }}</td>
                         <!--
                         <td ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></td>
                         -->
@@ -119,10 +120,10 @@
                         <td ng-if="instance.image.osType == 'windows'">{{ instance.rdpDomain }} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button></td>
                         <td ng-if="!instance.image.osType">-</td>
                         
-                        <td ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">
-                            <a href="javascript:alert('준비중입니다');" class="ext_link">바로가기</a><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard('http://naver.com')"><span class="ico_sm ico_copy"></span></button>
-                        </td>
-                        <td ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">-</td>
+                        <!-- <td ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">
+                            <a href="javascript:alert('준비중입니다');" class="ext_link">바로가기</a><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><span class="ico_sm ico_copy"></span></button>
+                        </td> -->
+                        <!-- <td ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">-</td> -->
                         <td>{{ instance.spec.vcpus }} 개</td>
                         <td>{{ (instance.spec.ram / 1024 | number:1).replace('.0', '') }}</td>
                         <td>{{ instance.spec.disk }}</td>
@@ -280,16 +281,17 @@
                                         <ul>
                                             <p class="tb_tit"></p>
                                             <li><strong><span class="tb_tit">접속 프로토콜 :</span></strong><span class="tb_txt">SSH</span></li>
-                                            <li ng-if="instance.spec.type == 'GPU'"><strong><span class="tb_tit">인스턴스 유형 :</span></strong><span class="tb_txt">GPU</span></li>
-                                            <li ng-if="instance.spec.type != 'GPU'"><strong><span class="tb_tit">인스턴스 유형 :</span></strong><span class="tb_txt">CPU</span></li>
+                                            <!-- <li ng-if="instance.spec.type == 'GPU'"><strong><span class="tb_tit">인스턴스 유형 :</span></strong><span class="tb_txt">GPU</span></li>
+                                            <li ng-if="instance.spec.type != 'GPU'"><strong><span class="tb_tit">인스턴스 유형 :</span></strong><span class="tb_txt">CPU</span></li> -->
+                                            <li><strong><span class="tb_tit">인스턴스 유형 :</span></strong><span class="tb_txt">{{ instance.spec.type }}</span></li>
                                             <!--<li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>--><!-- vnc 사용할 경우 a태그에 class="ext_link" 지정하여 링크스타일 적용. <a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)"></a>-->
                                             <!--
                                             <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
                                             -->
                                             <li><strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></li>
                                             <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">{{instance.image.osType}}</span></li>
-                                            <li><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></li>
-                                            <li ng-show="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')"><strong><span class="tb_tit">모니터링 :</span></strong><span class="tb_txt"><a href="{{ instance.monitoringLink }}" target="_blank" class="ext_link">모니터링 바로가기</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><span class="ico_sm ico_copy"></span></button></li>
+                                            <li ng-show="instance.keypair.privateKeyYn == 'Y'"><strong><span class="tb_tit">접속 인증 키(KEY) :</span></strong><span class="tb_txt">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="ico_sm ico_file_dw"></span></button></li>
+                                            <!-- <li ng-show="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')"><strong><span class="tb_tit">모니터링 :</span></strong><span class="tb_txt"><a href="{{ instance.monitoringLink }}" target="_blank" class="ext_link">모니터링 바로가기</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><span class="ico_sm ico_copy"></span></button></li> -->
                                         </ul>
                                         <!-- <div class="guide_link">
                                             <a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {floatingIp : instance.fixedIp, osType: instance.image.osType});">접속방법 가이드</a>
@@ -313,12 +315,12 @@
                                                 <a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}'">{{ (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</a>
                                             </li> -->
                                             <li>
-                                                <strong><span class="tb_tit">접속 IP</span></strong><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
+                                                <strong><span class="tb_tit">접속 IP :</span></strong><span class="tb_txt">{{ instance.fixedIp }}</span> <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy mg0"></span></button>
                                                 <!-- vnc 사용할 경우 a태그에 class="ext_link pd_l14px" 지정하여 링크스타일 적용. <a href="" class="ext_link pd_l14px" ng-click="contents.fn.openWebConsole(instance)"></a> -->
                                                 <a class="domain_txt" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ instance.rdpDomain ? instance.rdpDomain : '' }}'">{{ instance.rdpDomain ? instance.rdpDomain : '' }}</a>
                                             </li>
-                                            <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
-                                            <li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li>
+                                            <!-- <li><strong><span class="tb_tit">접속 계정 :</span></strong><span class="tb_txt">Administrator</span></li>
+                                            <li><strong><span class="tb_tit">접속 비밀번호 :</span></strong><span class="tb_txt">(사용자 정의)</span></li> -->
                                         </ul>
                                         <!-- <div class="guide_link">
                                             <a href="" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : instance.rdpDomain, osType: instance.image.osType, rdpConnectDomain: instance.rdpConnectDomain, rdpDomain: instance.rdpDomain});">접속방법 가이드</a>
@@ -438,36 +440,6 @@
                                 <div ng-if="instance.procState == 'ing'" class="ul-in2 spinner_area">
                                     <div class="info-chart">
                                         <img src="images/loading/loading_cloud.gif" width="140" height="90">
-
-                                        <!--<div class="chartWrap">
-                                            <ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
-                                                <svg viewBox="0 0 64 64">
-                                                    <g stroke-width="7" stroke-linecap="round">
-                                                        <line x1="10" x2="10" y2="48" y1="16">
-                                                            <animate attributeName="y1" dur="750ms" values="16;18;28;18;16;16" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="48;46;36;44;48;48" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;.4;.5;.8;1;1" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="24" x2="24" y2="45.2501" y1="17.3749">
-                                                            <animate attributeName="y1" dur="750ms" values="16;16;18;28;18;16" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="48;48;46;36;44;48" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;1;.4;.5;.8;1" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="38" x2="38" y2="38.5002" y1="24.8747">
-                                                            <animate attributeName="y1" dur="750ms" values="18;16;16;18;28;18" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="44;48;48;46;36;44" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".8;1;1;.4;.5;.8" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="52" x2="52" y2="42.8747" y1="21.1253">
-                                                            <animate attributeName="y1" dur="750ms" values="28;18;16;16;18;28" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="36;44;48;48;46;36" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".5;.8;1;1;.4;.5" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                    </g>
-                                                </svg>
-                                            </ion-spinner>
-                                        </div>-->
-
                                     </div>
                                     <div class="info-txt">
                                         <p class="txt"><span class="ico ico-timer"></span>{{'iaas.label.instance_' + instance.vmState | translate}} 입니다.</p>
@@ -475,52 +447,10 @@
                                 </div>
                             </div>
 
-                            <!--<div class="panel_body" ng-if="instance.vmState == 'building'">
-                                <div class="ul-in2 spinner_area">
-                                    <div class="info-chart">
-                                        <div class="chartWrap">
-                                            <ion-spinner icon="lines" class="spinner-calm spinner spinner-lines">
-                                                <svg viewBox="0 0 64 64">
-                                                    <g stroke-width="7" stroke-linecap="round">
-                                                        <line x1="10" x2="10" y2="48" y1="16">
-                                                            <animate attributeName="y1" dur="750ms" values="16;18;28;18;16;16" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="48;46;36;44;48;48" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;.4;.5;.8;1;1" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="24" x2="24" y2="45.2501" y1="17.3749">
-                                                            <animate attributeName="y1" dur="750ms" values="16;16;18;28;18;16" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="48;48;46;36;44;48" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values="1;1;.4;.5;.8;1" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="38" x2="38" y2="38.5002" y1="24.8747">
-                                                            <animate attributeName="y1" dur="750ms" values="18;16;16;18;28;18" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="44;48;48;46;36;44" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".8;1;1;.4;.5;.8" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                        <line x1="52" x2="52" y2="42.8747" y1="21.1253">
-                                                            <animate attributeName="y1" dur="750ms" values="28;18;16;16;18;28" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="y2" dur="750ms" values="36;44;48;48;46;36" repeatCount="indefinite"></animate>
-                                                            <animate attributeName="stroke-opacity" dur="750ms" values=".5;.8;1;1;.4;.5" repeatCount="indefinite"></animate>
-                                                        </line>
-                                                    </g>
-                                                </svg>
-                                            </ion-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="info-txt">
-                                        <div class="sec_txt"><span>{{instance.vmStateSec}}</span>초</div>
-                                        <p class="txt"><span class="ico ico-timer"></span>생성중입니다.</p>
-                                    </div>
-                                </div>
-                            </div>-->
-
                         </div>
                     </div>
                     <!-- //panel -->
                 </li>
-                <!-- <li>
-                    <button type="button" name="button" class="btn btn-panel-add" data-user="aside" data-username="#aside-aside1" style="height:390px;" ng-click="contents.formOpen()"><span class="ico"></span><span class="txt">인스턴스 추가</span></button>
-                </li> -->
             </ul>
             <!-- //panel area-->
 
@@ -530,13 +460,26 @@
                 </ul>
             </div>
 
-            <div ng-if="!contents.pageFirstLoad && !contents.loadingServerList && (contents.serverMainList | filter:{ taskState : '!deleting' }).length == 0" class="welcome_layer">
+            <div ng-if="!!main.userTenantGpuId && !contents.loadingServerList && contents.serverMainList.length == 0" class="welcome_layer">
                 <div class="guide_fnt arrw_btm">신규 인스턴스를 만듭니다.</div>
                 <div class="guide_fnt arrw_top">다른 프로젝트의 스냅샷 이미지로부터 신규 가상서버를 만듭니다.</div>
-                <div class="guide_cnt">
-                    서버가상화 서비스에서는 <span class="fnt20"><span class="color1">리눅스(Linux)</span> 또는 <span class="color1">윈도우(Windows)</span>를 실행하는 <span class="color1">인스턴스</span></span>를 만듭니다. <br>
-                    사용자 스스로가 쉽고 빠르게 필요한 서버를 만들고 활용할 수 있습니다. <br>
-                    <span class="fnt20"><spna class="color1">‘인스턴스 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+                <div class="text-center blank-page">
+                    <div class="img">
+                        <img src="../assets/img/icon/data-center.png">
+                    </div>
+                    <div class="cont">
+                        <p>서버가상화 서비스에서는<span class="point">리눅스(Linux)</span> 또는 <span class="point">윈도우(Windows)</span>를 실행하는 <span class="point">인스턴스</span>를 만듭니다.</p>
+                        <p>사용자 스스로가 쉽고 빠르게 필요한 서버를 만들고 활용할 수 있습니다.</p>
+                        <p><span class="point">인스턴스 만들기’</span>를 통해 서비스를 시작해 보세요.</p>
+                    </div>
+                    <!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+                    <div class="text-center" ng-if="main.checkUseYnGpu == 'N' && main.userTenantGpuId">
+                        <div class="cont">
+                            <p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+                        </div>
+                        <button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+                    </div>
+                    <!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
                 </div>
             </div>
         </div>
@@ -549,9 +492,6 @@
                 <button type="button" class="btn_lg" ng-click="contents.fn.checkLbPortLimit();"><!-- ng-if="false" -->
                     <span class="ico ico_create" ></span>부하 분산 설정
                 </button>
-                <!--<button type="button" class="btn_lg" ng-click="main.goToPage('/iaas/loadbalancer/detail/:lbInfoId')">&lt;!&ndash; ng-if="false" &ndash;&gt;
-                    <span class="ico ico_create" ></span>부하 분산 상세
-                </button>-->
             </div>
             <!-- //버튼영역 -->
 
@@ -659,7 +599,7 @@
                                                 <div class="tbl_cont_state">
                                                     <ul>
                                                         <li><span class="s_count active">{{ iaasLbPort.activeCnt }}</span><span class="txt">정상</span></li>
-                                                        <li><span class="s_count inactive">{{iaasLbPort.memberCnt - iaasLbPort.activeCnt}}</span><span class="txt">비정상</span></li>
+                                                        <li><span class="s_count inactive" style="background-color: #ff1100;">{{iaasLbPort.memberCnt - iaasLbPort.activeCnt}}</span><span class="txt">비정상</span></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -705,17 +645,40 @@
                 </li>
             </ul>
             <!-- //panel -->
-
-            <div class="proj_list_area" ng-if="!contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
-                <ul class="ul-panel dash_list no_data">
-                    <li><p class="no_data_txt pd0">생성된 부하분산 서버가 없습니다.</p></li>
-                </ul>
+				
+            <!-- 생성된 부하분산 서버 없을 경우 -->
+            <div class="welcome_layer" ng-if="!!main.userTenantGpuId && !contents.loadingLbList && contents.lbServiceLists.length == 0">
+                <div class="guide_fnt arrw_btm">신규 부하 분산 서버를 만듭니다.</div>
+                <div class="text-center blank-page">
+                    <div class="img">
+                        <img src="../assets/img/icon/big-data2.png">
+                    </div>
+                    <div class="cont">
+                        <p>생성된 부하분산 서버가 없습니다.</p>
+                        <p><span class="point">‘부하 분산 설정’</span> 을 통해 서비스를 시작해 보세요.</p>
+                    </div>
+                    <!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+                    <div class="text-center" ng-if="main.checkUseYnGpu == 'N' && main.userTenantGpuId">
+                        <div class="cont">
+                            <p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+                        </div>
+                        <button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+                    </div>
+                    <!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+                </div>
             </div>
-            <div class="proj_list_area" ng-if="contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
-                <ul class="ul-panel dash_list no_data">
-                    <li><p class="no_data_txt pd0">검색 결과가 없습니다.</p></li>
-                </ul>
+            <!-- //생성된 부하분산 서버 없을 경우 -->
+            
+            <!-- 검색결과 없음 -->
+            <div class="text-center blank-page" ng-if="contents.loadingLbList && (contents.lbServiceLists |  filter: { name: contents.schLbFilterText }).length == 0">
+                <div class="img">
+                    <img src="../assets/img/icon/approval.png">
+                </div>
+                <div class="cont">
+                    <p>검색 결과가 없습니다.</p>
+                </div>
             </div>
+            <!-- //검색결과 없음 -->
         </div>
         <!-- //tab2 cnt -->
     </div>
@@ -726,12 +689,12 @@
 <div ng-if="!main.userTenantGpuId" class="proj_main_cont">
     <div class="p_main_top">
         <div class="top_txt">
-            <span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
-            <span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+            <span class="s_txt">GPU 서버 가상화에서는 Deep Learning 고속처리를 지원하는 GPU가 포함된 가상서버를 생성하여 사용할 수 있습니다.</span>
+            <span class="l_txt"><span class="c_blue">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</span>
         </div>
         <div class="top_btn">
-            <a href="" ng-click="main.createPortalOrgSystem('gpu');">
-                <span>프로젝트 생성</span>
+            <a href="" ng-click="main.createPortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">
+                <span>서비스 시작하기</span>
             </a>
         </div>
     </div>

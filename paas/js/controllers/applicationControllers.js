@@ -77,16 +77,15 @@ angular.module('paas.controllers')
          ct.listAllApps = function () {
             $scope.main.loadingMainBody = true;
             var conditions = [];
-            if(ct.sltOrganizationGuid) {
+            if (ct.sltOrganizationGuid) {
                 conditions.push("organization_guid:" + ct.sltOrganizationGuid);
             }
-            if(ct.sltSpaceGuid) {
+            if (ct.sltSpaceGuid) {
                 conditions.push("space_guid:" + ct.sltSpaceGuid);
             }
-            if(ct.sltAppNames && ct.sltAppNames.length > 0) {
+            if (ct.sltAppNames && ct.sltAppNames.length > 0) {
                 conditions.push("name:" + ct.sltAppNames.join(","));
             }
-
             var appPromise = applicationService.listAllApps(conditions);
             appPromise.success(function (data) {
                 ct.isAppsLoad = true;
@@ -95,24 +94,25 @@ angular.module('paas.controllers')
                 if (data && angular.isArray(data)) {
                     apps = data;
                 }
-
                 common.objectOrArrayMergeData(ct.apps, apps);
 
                 // 좌측 메뉴가 바뀌어서 추가한 구문 앱런타임 바로 볼 수 있도록 수정
                 if (ct.apps.length != 0) {
                   $scope.main.appGuid = ct.apps[0].guid;
+                    $scope.main.checkUseYnPaas = "Y";
+                } else {
+                    $scope.main.checkUseYnPaas = "N";
                 }
-
                 angular.forEach(ct.apps, function(option, mainKey) {
                     if (option.spaceQuota && option.spaceQuota.guid) {
                         option["memoryMax"] = option.spaceQuota.instanceMemoryLimit;
                     } else if (option.organization && option.organization.guid && option.organization.quotaDefinition && option.organization.quotaDefinition.guid) {
                         if (option.organization.quotaDefinition.instanceMemoryLimit > 0) {
                             option["memoryMax"] = option.organization.quotaDefinition.instanceMemoryLimit;
-                        }else{
+                        } else {
                             option["memoryMax"] = 4096;
                         }
-                    }else{
+                    } else {
                         option["memoryMax"] = 4096;
                     }
                     option["diskMax"] = 2048;
@@ -1371,8 +1371,47 @@ angular.module('paas.controllers')
 
         var originName = "";
 
-        //자바 상세 인스턴스 이름 변경
+        //자바 상세 인스턴스 이름 변경(변경 소스: 200902 howkiki0623)
         ct.renameInst = function () {
+            var nameP = $(".renameInst").parents('.panel-heading').find('.panel-title');
+            originName = nameP.text();//현재 앱 이름 저장
+            var el = "<div class='renameWrap'><div class='sdBtnWrap'><button type='button' name='button' class='btn btn-ico-saveName-s only-ico updateName' title='이름저장' ng-click='saveReName();'><i class='xi-save'></i></button><button type='button' name='button' class='btn btn-ico-delName-s only-ico updateName' title='변경취소' ng-click='cancelReName();'><i class='xi-close'></i></button></div></div>";
+            var compiledElement = $compile(el)($scope);
+            nameP.contents().unwrap().wrap("<input type='text' name='renameInst' value='"+originName+"' class='form-control'/>");
+            $(".renameInst").parents(".panel-heading").append(compiledElement);
+        };
+
+        $scope.saveReName = function () {
+            var newName = $('input[name=renameInst]').val();
+
+            if (newName.length < 3) {
+                common.showAlert("", "최소 3자 이상이어야 합니다.0 < contents.app.routes.length");
+                return;
+            }
+
+            $scope.main.loadingMainBody = true;
+            var appPromise = applicationService.updateAppNameAction(ct.appGuid, newName);
+            appPromise.success(function (data) {
+                $state.go($state.current, {}, {reload: true});
+                $scope.main.loadingMainBody = false;
+            });
+            appPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        $scope.cancelReName = function () {
+            var nameP = $(".sdBtnWrap").parents('.panel-heading').find('.form-control');
+            var name01 = nameP.text();//현재 앱 이름 저장
+            //console.log(name01);
+            var el = "<h3 class='panel-title'></h3>";
+            var compiledElement = $compile(el)($scope);
+            nameP.contents().unwrap().wrap(compiledElement);
+            $(".updateName").remove();
+        };
+        
+      //자바 상세 인스턴스 이름 변경(기존 소스)
+      /*  ct.renameInst = function () {
             var nameP = $(".renameInst").parents('.cBox-hd').find('.c-tit');
             originName = nameP.text();//현재 앱 이름 저장
             var el = "<div class='sdBtnWrap'><button type='button' name='button' class='btn btn-ico-saveName-s only-ico updateName' ng-click='saveReName();' title='이름저장' style='width: 32px;'><span class='ico'>이름저장</span></button><button type='button' name='button' class='btn btn-ico-delName-s only-ico updateName' ng-click='cancelReName();' title='변경취소' style='width: 32px;'><span class='ico'>변경취소</span></button></div>";
@@ -1408,7 +1447,7 @@ angular.module('paas.controllers')
             var compiledElement = $compile(el)($scope);
             nameP.contents().unwrap().wrap(compiledElement);
             $(".updateName").remove();
-        };
+        };*/
 
         // 인스턴스 재시작
         ct.instanceRestart = function (guid, index) {
@@ -2032,7 +2071,7 @@ angular.module('paas.controllers')
         pop.pageLoad = false;
         $timeout(function () {
             pop.pageLoad = true;
-        }, 300)
+        }, 300);
 
         //파일 관련 추가. 시작
         var uploadFilters = [];

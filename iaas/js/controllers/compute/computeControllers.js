@@ -198,6 +198,10 @@ angular.module('iaas.controllers')
                         ct.loadingServerList = true;
                     }
                 }
+                //서버 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                if (!ct.loadingServerList) {
+                    $scope.main.checkUseYnPortalOrgSystem("iaas");
+                }
                 var isServerStatusCheck = false;
                 common.objectOrArrayMergeData(ct.serverMainList, instances);
                 ct.fnGetInstancesData();
@@ -977,6 +981,12 @@ angular.module('iaas.controllers')
             });
         };
 
+        //임시 알림 설정 2020.02.03
+        ct.showTempAlert = function() {
+            common.showDialogAlertHtml("알림", "플랫폼 정책 변경에 따라 신규 프로젝트와 가상머신 생성을 제한하고 있습니다.<br>자세한 문의는 관리자(042-865-6786, 042-865-5236)으로 문의하여 주시기 바랍니다.");
+            return;
+        };
+
         // 인스턴스 자원 사용량 조회
         var instancesDataLoop = $interval(function () {
             // /iaas/compute 페이지가 아닌 곳에서는 작동을 멈춤
@@ -1366,12 +1376,10 @@ angular.module('iaas.controllers')
                 if (data && data.content) {
                     ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
-                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
-                    ct.tenantResource.available.licenseRedhat = ct.tenantResource.maxResource.licenseRedhat - ct.tenantResource.usedResource.licenseRedhat;
                     ct.tenantResource.available.licenseWindows = ct.tenantResource.maxResource.licenseWindows - ct.tenantResource.usedResource.licenseWindows;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {

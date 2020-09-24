@@ -2,6 +2,25 @@ heat_template_version: '2018-08-31'
 
 description: hadoop standalone template
 
+parameter_groups:
+- parameters:
+  - image
+  - master_flavor
+  - availability_zone
+  - key_name
+  - provider_net
+  - root_password
+  - security_group
+  - api_end_point
+  - provider_subnet
+  - hive_password
+  - spark_use
+  - hbase_use
+  - s3_endpoint
+  - s3_accessKey
+  - s3_secretKey
+  - s3_bucket_name
+
 parameters:
   api_end_point:
     type: string
@@ -12,10 +31,6 @@ parameters:
     type: string
   master_flavor:
     type: string
-{% if workerUse %}
-  worker_flavor:
-    type: string
-{% endif %}
   key_name:
     type: string
   security_group:
@@ -27,6 +42,18 @@ parameters:
   root_password:
     type: string
   hive_password:
+    type: string
+  spark_use:
+    type: string
+  hbase_use:
+    type: string
+  s3_endpoint:
+    type: string
+  s3_accessKey:
+    type: string
+  s3_secretKey:
+    type: string
+  s3_bucket_name:
     type: string
 
 resources:
@@ -51,6 +78,9 @@ resources:
             $stack_name: { get_param: 'OS::stack_name' }
             $root_password: { get_param: root_password }
             $hive_password: { get_param: hive_password }
+            $s3_endpoint: { get_param: s3_endpoint }
+            $s3_secretKey: { get_param: s3_secretKey }
+            $s3_accessKey: { get_param: s3_accessKey }
             $master_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server_addresses:
               list_join:
@@ -82,6 +112,30 @@ resources:
                     <property>
                         <name>fs.default.name</name>
                         <value>hdfs://localhost:9000</value>
+                    </property>
+                    <property>
+                        <name>fs.s3a.impl</name>
+                        <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+                    </property>
+                    <property>
+                      <name>fs.s3a.aws.credentials.provider</name>
+                      <value>org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider</value>
+                    </property>
+                    <property>
+                      <name>fs.s3a.access.key</name>
+                      <value><![CDATA[$s3_accessKey]]></value>
+                    </property>
+                    <property>
+                      <name>fs.s3a.secret.key</name>
+                      <value><![CDATA[$s3_secretKey]]></value>
+                    </property>
+                    <property>
+                      <name>fs.s3a.connection.ssl.enabled</name>
+                      <value>false</value>
+                    </property>
+                    <property>
+                      <name>fs.s3a.endpoint</name>
+                      <value><![CDATA[$s3_endpoint]]></value>
                     </property>
             </configuration>
             EOF

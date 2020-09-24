@@ -28,7 +28,7 @@ angular.module('gpu.controllers')
         // ct.data.tenantName = $scope.main.userTenant.korName;
 
         ct.data.tenantId = $scope.main.userTenantGpu.id;
-        ct.data.tenantName = $scope.main.userTenantGpu.korName;
+        ct.data.tenantName = $scope.main.userTenantGpu.tenantKorName;
 
         ct.data.instanceId = $stateParams.instanceId;
         ct.viewType = 'instance';
@@ -516,6 +516,10 @@ angular.module('gpu.controllers')
                     for (var i=0; i<ct.instance.consoleArr.length; i++) {
                         ct.instance.consoleArr[i] = common.replaceAll(ct.instance.consoleArr[i], "(\\[[0-9;]{1,}m(.){1,})\\[0m", "\x1B$1\x1B[0m");
                     }
+                    
+                    // 20.9.1 by hrit, 모니터링 링크 세팅
+                    ct.instance.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + ct.instance.name;
+
                     $timeout(function () {
                         $('#action_event_panel.scroll-pane').jScrollPane({});
                     }, 100);
@@ -3310,8 +3314,12 @@ angular.module('gpu.controllers')
         pop.getSpecList = function() {
             pop.specList = [];
             pop.sltSpec = {};
+            var params = {
+                type: pop.instance.spec.type
+            };
+
             // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET');
-            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET');
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET', params);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
                     pop.specList = data.content.specs;

@@ -2,7 +2,6 @@
 
 // angular.module('iaas.controllers')
 angular.module('gpu.controllers')
-
     .filter('filterSpecList', function () {
         return function (items, specType, gpuCard) {
             var out = [];
@@ -10,7 +9,7 @@ angular.module('gpu.controllers')
                 items.forEach(function (item) {
                     if (item.type == specType) {
                         if (specType == "GPU") {
-                            if (item.gpuCardInfo.model == gpuCard.model) {
+                            if (item.gpuCardInfo && item.gpuCardInfo.model == gpuCard.model) {
                                 out.push(item);
                             }
                         }
@@ -23,10 +22,7 @@ angular.module('gpu.controllers')
             return out;
         }
     })
-
-    // .controller('iaasComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, CONSTANTS) {
     .controller('gpuComputeCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, $timeout, $interval, user,paging, common, ValidationService, computeDetailService, CONSTANTS) {
-        // _DebugConsoleLog("computeControllers.js : iaasComputeCtrl", 1);
         _DebugConsoleLog("computeControllers.js : gpuComputeCtrl", 1);
 
         $scope.actionBtnEnabled = true;
@@ -48,11 +44,7 @@ angular.module('gpu.controllers')
         ct.schFilterText    = "";
         ct.schLbFilterText    = "";
         ct.listType = "image";          //리스트 타입
-        // 공통 레프트 메뉴의 userTenantId
-        // ct.data.tenantId = $scope.main.userTenant.id;
-        // ct.data.tenantId = "f0a2f4e409254aea82dd748bd2ff458a";
         ct.data.tenantId = $scope.main.userTenantGpu.id;
-        //ct.data.tenantName = $scope.main.userTenant.korName;
         ct.data.tenantName = $scope.main.userTenantGpu.tenantKorName;
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
@@ -84,11 +76,9 @@ angular.module('gpu.controllers')
 
         ct.computeEditFormOpen = function (instance, $event){
             var dialogOptions =  {
-                // controller       : "iaasComputeEditFormCtrl" ,
                 controller       : "gpuComputeEditFormCtrl" ,
                 formName         : 'computeEditForm',
                 instance         : angular.copy(instance)
-                // callBackFunction : ct.reNamePopServerCallBackFunction1
             };
 
             $scope.actionBtnHied = false;
@@ -96,16 +86,10 @@ angular.module('gpu.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-        /*ct.reNamePopServerCallBackFunction1 = function () {
-            ct.fnGetServerMainList();
-        };*/
-
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function (instance, $event, $index) {
             var dialogOptions = {
-                //controller : "iaasComputePopEditServerCtrl" ,
                 controller : "gpuComputePopEditServerCtrl" ,
-                //formName   : 'iaasComputePopEditServerForm',
                 formName   : 'gpuComputePopEditServerForm',
                 instance : angular.copy(instance),
                 callBackFunction : ct.reflashCallBackFunction
@@ -121,28 +105,24 @@ angular.module('gpu.controllers')
             reInstance.uiTask = instance.uiTask;
             ct.fn.setProcState(reInstance);
             $timeout(function () {
-                //ct.fn.checkServerState(instance.id);
                 ct.fn.checkServerState();
             }, 10000);
         };
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
-        $scope.$on('userTenantChanged',function(event,status) {
+        $scope.$on('userTenantGpuChanged',function(event,status) {
             ct.data.tenantId = status.id;
             ct.data.tenantName = status.korName;
             ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
             ct.network = ct.networks[0];
             ct.fnGetServerMainList();
-            // ct.fnGetUsedResource();
         });
 
         ct.fn.getKeyFile = function(keypair,type) {
-            // document.location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
             document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
         };
 
         ct.fn.getWindowAgentConfFile = function (instance) {
-            // return CONSTANTS.iaasApiContextUrl + '/server/windows/script/download?tenantId='+ct.data.tenantId+"&instanceId="+instance.id;
             return CONSTANTS.gpuApiContextUrl + '/server/windows/script/download?tenantId='+ct.data.tenantId+"&instanceId="+instance.id;
         };
 
@@ -153,7 +133,6 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
-            // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param));
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/networks', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
@@ -172,7 +151,6 @@ angular.module('gpu.controllers')
         ct.firstInstanceCreatePop = function() {
             var dialogOptions = {
                 controllerAs: "pop",
-                // templateUrl : _IAAS_VIEWS_ + "/compute/firstInstanceCreatePop.html" + _VersionTail()
                 templateUrl : _GPU_VIEWS_ + "/compute/firstInstanceCreatePop.html" + _VersionTail()
             };
             common.showCustomDialog($scope, null, dialogOptions);
@@ -215,14 +193,13 @@ angular.module('gpu.controllers')
                 common.showAlertWarning('테넌트 정보가 없습니다.');
                 return;
             }
-
+            
             $scope.main.loadingMainBody = true;
-
+            
             var param = {
                 tenantId : ct.data.tenantId,
                 queryType : 'list'
             };
-            // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param));
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -232,10 +209,13 @@ angular.module('gpu.controllers')
                 if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
                     instances = data.content.instances;
                     var rtFilter = $filter('filter')(instances, {taskState: '!deleting'});
-                    //if (data.totalElements != 0){
-                    if (rtFilter.length != 0){
+                    if (rtFilter.length != 0) {
                         ct.loadingServerList = true;
                     }
+                }
+                //서버 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                if (!ct.loadingServerList) {
+                    $scope.main.checkUseYnPortalOrgSystem("gpu");
                 }
                 var isServerStatusCheck = false;
                 common.objectOrArrayMergeData(ct.serverMainList, instances);
@@ -347,7 +327,6 @@ angular.module('gpu.controllers')
             if (instanceId) {
                 param.instanceId = instanceId;
             }
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
@@ -366,7 +345,7 @@ angular.module('gpu.controllers')
                             ct.fn.setProcState(serverItem);
                             ct.fn.setRdpConnectDomain(serverItem);
                             // VM 생성시 1시간 초과하여 미생성시 자동 삭제 처리
-                            if (newItem && serverItem.floatingIp == "") {
+                            if (newItem && serverItem.fixedIp == "") {
                                 common.showAlertInfo('"' + serverItem.name + '" 인스턴스가 생성한지 1시간이 지나 삭제되었습니다.');
                             } else if (newItem) {
                                 common.showAlertSuccess('"' + serverItem.name + '" 인스턴스가 생성 되었습니다.');
@@ -473,7 +452,6 @@ angular.module('gpu.controllers')
                     } else {
                         var serverStates = data.content.instances;
                         var isServerStatusCheck = false;
-                        // var isReplaceServerInfo = false;
                         if (ct.serverMainList.length > serverStates.length) {
                             ct.serverMainList.splice(serverStates.length, ct.serverMainList.length - serverStates.length);
                         }
@@ -803,7 +781,9 @@ angular.module('gpu.controllers')
             } else if (instance.image.osType == 'windows') {
                 var rdpConnectUrl = (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + ct.rdpConnectPort : '';
                 var rdpDomain = instance.rdpDomain ? instance.rdpDomain : '';
-                var copyUrl = rdpConnectUrl ? rdpConnectUrl : rdpDomain;
+                var fixedIp = instance.fixedIp;
+                console.log(rdpConnectUrl, rdpDomain, fixedIp);
+                var copyUrl = rdpConnectUrl ? rdpConnectUrl : (rdpDomain ? rdpDomain : fixedIp);
                 if (copyUrl) {
                     common.copyToClipboard(copyUrl);
                     $scope.main.copyToClipboard(copyUrl, '"' + copyUrl + '"가 클립보드에 복사 되었습니다.');
@@ -1203,9 +1183,7 @@ angular.module('gpu.controllers')
             });
         }
     })
-    // .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
     .controller('gpuComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
-        // _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);
         _DebugConsoleLog("computeControllers.js : gpuComputeCreateCtrl start", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -1226,9 +1204,7 @@ angular.module('gpu.controllers')
         ct.networks          = [];
         ct.volume            = {};
         ct.ipFlag            = true;
-        // ct.data.tenantId     = $scope.main.userTenant.id;
         ct.data.tenantId     = $scope.main.userTenantGpu.id;
-        // ct.data.tenantName   = $scope.main.userTenant.korName;
         ct.data.tenantName   = $scope.main.userTenantGpu.korName;
         ct.formName          = "computeCreateForm";
 
@@ -1269,7 +1245,6 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
@@ -1285,7 +1260,6 @@ angular.module('gpu.controllers')
         //보안정책 조회
         ct.fn.getSecurityPolicy = function() {
             var param = {tenantId:ct.data.tenantId};
-            // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param));
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/securityPolicy', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 ct.securityPolicyList = data.content;
@@ -1307,7 +1281,6 @@ angular.module('gpu.controllers')
         //키페어 조회
         ct.fn.getKeypairList = function(keypairName) {
             var param = {tenantId:ct.data.tenantId};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/keypair', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.keypairList = data.content;
@@ -1320,7 +1293,6 @@ angular.module('gpu.controllers')
                     var param = {
                         keypair : ct.createKeypair
                     };
-                    // var returnData = common.noMsgSyncHttpResponseJson(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'POST', param);
                     var returnData = common.noMsgSyncHttpResponseJson(CONSTANTS.gpuApiContextUrl + '/server/keypair', 'POST', param);
                     if (returnData.status == 200) {
                         ct.fn.getKeypairList();
@@ -1353,7 +1325,6 @@ angular.module('gpu.controllers')
             ct.specList = [];
             ct.data.spec = {};
             var param = {specGroupName:specGroup};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
@@ -1394,7 +1365,7 @@ angular.module('gpu.controllers')
                 }
             }
         };
-
+        
         // max spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
         ct.isMaxSpecDisabled = false;
         // spec loading 체크
@@ -1403,7 +1374,7 @@ angular.module('gpu.controllers')
             ct.isMaxSpecDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
-                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
+                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.hddVolumeGigabytes) { // 내부디스크 체크 제거
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
@@ -1427,9 +1398,10 @@ angular.module('gpu.controllers')
             if (ct.specMinDisabledSetting && ct.specMaxDisabledSetting) {
                 ct.specDisabledAllSetting = true;
                 var sltSpec = null;
-                for (var i=0; i<ct.specList.length; i++) {
-                    if (!ct.specList[i].disabled) {
-                        sltSpec = ct.specList[i];
+                var specList = $filter('filterSpecList')(ct.specList, ct.selectedSpecType, ct.selectedGpuCard);
+                for (var i=0; i<specList.length; i++) {
+                    if (!specList[i].disabled) {
+                        sltSpec = specList[i];
                         break;
                     }
                 }
@@ -1445,6 +1417,13 @@ angular.module('gpu.controllers')
             if (sltSpec && sltSpec.uuid) {
                 ct.data.spec = angular.copy(sltSpec);
                 ct.specUuid = ct.data.spec.uuid;
+                if (ct.volume.type == 'HDD') {
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes - ct.data.spec.disk;
+                } else if (ct.volume.type == 'SSD') {
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes;
+                } else {
+                    ct.volumeSliderOptions.ceil = 0;
+                }
             } else {
                 ct.data.spec = {};
                 ct.specUuid = "";
@@ -1493,11 +1472,9 @@ angular.module('gpu.controllers')
             if (ct.conditionKey == 'imageUseCase') {
                 param.imageUseCase = ct.conditionValue;
             }
-            //param.imageType = ct.imageType;
             ct.imageList  = [];
             ct.gpuImageList = [];
             ct.cpuImageList = [];
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/image', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/image', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.images && data.content.images.length > 0) {
@@ -1515,7 +1492,6 @@ angular.module('gpu.controllers')
                         image.minDisk = (image.minDisk > sizeGb) ? image.minDisk : sizeGb;
                         image.minRam = (image.minRam > 0) ? image.minRam/(1024) : 0;
                     });
-                    // ct.fn.imageChange(ct.imageList[0].id);
                 }
                 ct.imageListLoad = true;
                 $scope.main.loadingMainBody = false;
@@ -1587,6 +1563,7 @@ angular.module('gpu.controllers')
                 for (index = 0; index < ct.gpuCardList.length; index++) {
                     if (selectedGpuCardId == ct.gpuCardList[index].id) {
                         ct.selectedGpuCard = ct.gpuCardList[index];
+                        ct.fn.defaultSelectSpec();
                         break;
                     }
                 }
@@ -1634,7 +1611,6 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
@@ -1670,20 +1646,20 @@ angular.module('gpu.controllers')
             var params = {
                 tenantId : ct.data.tenantId
             };
-            // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/usedLookup', 'GET', params));
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params));
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content) {
                     ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
-                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
-                    ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
-                    ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
+                    ct.tenantResource.maxResource.volumeGigabytes = (ct.tenantResource.maxResource.hddVolumeGigabytes + ct.tenantResource.maxResource.ssdVolumeGigabytes);
+                    ct.tenantResource.usedResource.volumeGigabytes = (ct.tenantResource.usedResource.hddVolumeGigabytes + ct.tenantResource.usedResource.ssdVolumeGigabytes);
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+                    ct.tenantResource.available.hddVolumeGigabytes = ct.tenantResource.maxResource.hddVolumeGigabytes - ct.tenantResource.usedResource.hddVolumeGigabytes;
+                    ct.tenantResource.available.ssdVolumeGigabytes = ct.tenantResource.maxResource.ssdVolumeGigabytes - ct.tenantResource.usedResource.ssdVolumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes;
                     if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
                         ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
                     }
@@ -1719,7 +1695,6 @@ angular.module('gpu.controllers')
                 networkId : ct.network.id,
                 ipaddr : ct.subnet.cidr_A + '.' + ct.subnet.cidr_B + '.' + ct.subnet.cidr_C + '.' + ct.subnet.cidr_D
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/fixedIps', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/fixedIps', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (!data.content.ipinfos[0].used) {
@@ -1762,7 +1737,6 @@ angular.module('gpu.controllers')
             ct.usingDomainList = [];
             ct.usingDomainNames = [];
             var param = {};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/domain/all', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/domain/all', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && angular.isArray(data.content) && data.content.length > 0) {
@@ -1803,7 +1777,7 @@ angular.module('gpu.controllers')
             }
         };
 
-        //디스크생성 변수
+        // 디스크생성 변수
         ct.volumeSize = 0;
         ct.inputVolumeSize = ct.volumeSize;
         ct.volumeSliderOptions = {
@@ -1835,7 +1809,6 @@ angular.module('gpu.controllers')
             params.instance = {};
             params.instance.name = ct.data.name;
             params.instance.tenantId = ct.data.tenantId;
-            // params.instance.networks = [{ id: (ct.data.networks && angular.isArray(ct.data.networks) && ct.data.networks[0] && ct.data.networks[0].id)?ct.data.networks[0].id:0 }];
             params.instance.networks = [{ id: ct.selectedAvailabilityZone.publicNetworkSubnet.networkId} ];
             params.instance.image = {id: ct.data.image.id};
             params.instance.keypair = { keypairName: ct.data.keypair.keypairName };
@@ -1853,8 +1826,8 @@ angular.module('gpu.controllers')
 
             if (ct.volumeSize > 0) {
                 params.volume = {};
-                params.volume.name = ct.data.name+'_volume01';
-                params.volume.type = 'HDD';
+                params.volume.name = ct.data.name + '_volume01';
+                params.volume.type = ct.volume.type;
                 params.volume.size = ct.volumeSize;
                 params.volume.tenantId = ct.data.tenantId;
             }
@@ -1864,14 +1837,13 @@ angular.module('gpu.controllers')
                 clickCheck = false;
                 return;
             }
+
             $scope.main.loadingMainBody = true;
-            //console.log("ct.fn.createServer params : ", params); return;
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers)  {
                 // 서버생성후 -> 디스크 생성 후 sucess 처리.
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess(ct.data.name+" 인스턴스 생성이 시작 되었습니다.");
+                common.showAlertSuccess(ct.data.name + " 인스턴스 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고
                 $scope.main.goToPage("/gpu/compute");
             });
@@ -1946,6 +1918,8 @@ angular.module('gpu.controllers')
             ct.fn.getSecurityPolicy();
             ct.fn.networkListSearch();
             ct.fn.getKeypairList();
+
+            ct.fn.getVolumeTypeList();
         }
 
     })

@@ -1,63 +1,78 @@
 <!-- <div ng-if="tab.loadingAppRoutes">
     <md-progress-linear md-mode="indeterminate"></md-progress-linear>
 </div> -->
-<div class="panel_head">
-    <div class="tit pull-left">{{ 'label.route' | translate }}<span class="countList">전체 : {{tab.appRoutes.length}}건</span></div>
-    <div class="pull-right">
-        <button type="button" name="button" class="btn btn-ico-add only-ico" title="추가" ng-click="tab.createAppRoute($event);"><span class="ico">추가</span></button>
-        <button id="route" type="button" name="button" class="btn btn-ico-zoom only-ico" title="확대/축소" ng-click="contents.zoomPanel('route')"><span class="ico">확대/축소</span></button>
-    </div>
-</div>
-<div class="panel_body">
-    <div> <!--class="in scroll-pane"-->
-    	<div class="pop_message_area mb20">
-			<div class="msg_bg"></div>
-			<div class="msg_txt"><span>APP에 할당된 접근 도메인 주소(라우트)를 등록하고 관리합니다.</span></div>
+
+<!-- panel-heading -->
+<div class="panel-heading">
+	<div class="row">
+		<div class="col-md-6">
+			<h3 class="panel-title">
+				<b class="tit">{{ 'label.route' | translate }}</b><span class="countList">(전체 : {{tab.appRoutes.length}}건)</span>
+			</h3>
 		</div>
-        <!-- table -->
-        <div class="tbl type1" id="tabAppRoutesTable" style="width:100%;">
-            <table class="table">
-                <colgroup>
-                    <col style="width:15%;">
-                    <col style="width:20%;">
-                    <col style="width:25%;">
-                    <col style="width:auto;">
-                    <col style="width:auto;">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th scope="col">{{ 'label.no' | translate }}</th>
-                    <th scope="col">{{ 'label.host_name' | translate }}</th>
-                    <th scope="col">{{ 'label.domain_name' | translate }}</th>
-                    <th scope="col">{{ 'label.url' | translate }}</th>
-                    <th>{{ 'label.del' | translate }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="(k, routeItem) in tab.appRoutes">
-                    <td>{{ (k + 1) }}</td>
-                    <td>{{ routeItem.host }}</td>
-                    <td>{{ routeItem.domainName }}</td>
-                    <td><a href="http://{{ routeItem.url }}" target="_blank">{{ routeItem.url }}</a></td>
-                    <td class="ovflw_visible"><!-- td의 overflow:hidden 해제 -->
-                        <!-- <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppRoute(routeItem.guid, routeItem.host)"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button> -->
-                        <div class="dropdown btn-option">
-							<button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-								<span class="ico">실행 설정</span>
-							</button>
-							<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-                                <li><a href="javascript:void(0);" ng-click="tab.repAppRoute(routeItem.host);" title="대표 도메인 설정">대표 도메인 설정</a></li>
-                                <li><a class="delete" href="javascript:void(0);" ng-click="tab.deleteAppRoute(routeItem.guid, routeItem.host);" title="삭제">삭제</a></li>
-							</ul>
-						</div>
-                    </td>
-                </tr>
-                <tr ng-if="tab.appRoutes.length == 0">
-                    <td colspan="5">{{ 'message.mi_dont_exist_list' | translate }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- //table -->
-    </div>
+		<div class="col-md-6 text-right">
+			<div class="padding-top-10 padding-horizontal-20">
+				<button type="button" title="추가" ng-click="tab.createAppRoute($event);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-25 grey-600"></i></button>
+				<button id="route" type="button" title="확대/축소" class="btn-zoom grey-600" ng-click="contents.zoomPanel('route')"></button>
+			</div>
+		</div>
+	</div>
+</div> 
+<!-- // panel-heading -->
+<!-- panel-body -->
+<div class="panel-body">
+	<div class="in">
+		<div class="alert alert-primary" role="alert">
+			<i class="xi-info font-size-20"></i>
+			<div class="text-area">APP에 할당된 접근 도메인 주소(라우트)를 등록하고 관리합니다.</div>
+		</div>
+		<div class=" scroll-content" style="height:270px;">
+			<div id="tabAppRoutesTable" class="table-wrap border-0 margin-top-20 padding-bottom-70">
+				<table class="table table-hover">
+					<colgroup>
+						<col style="width: 15%;">
+						<col style="width: 20%;">
+						<col style="width: 25%;">
+						<col style="width: auto;">
+						<col style="width: auto;">
+					</colgroup>
+					<thead class="text-center black white-text">
+						<tr>
+							<th scope="col">{{ 'label.no' | translate }}</th>
+							<th scope="col">{{ 'label.host_name' | translate }}</th>
+							<th scope="col">{{ 'label.domain_name' | translate }}</th>
+							<th scope="col">{{ 'label.url' | translate }}</th>
+							<th>{{ 'label.del' | translate }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="(k, routeItem) in tab.appRoutes">
+							<td class="text-center">{{ (k + 1) }}</td>
+							<td class="text-center">{{ routeItem.host }}</td>
+							<td class="text-center">{{ routeItem.domainName }}</td>
+							<td class="text-center"><a class="link blue-600" href="http://{{ routeItem.url }}" target="_blank">{{ routeItem.url }} <i data-feather="external-link" class="feather-directive"></i></a></td>
+							<td class="ovflw_visible text-center">
+								<!-- td의 overflow:hidden 해제 --> <!-- <button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="tab.deleteAppRoute(routeItem.guid, routeItem.host)"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button> -->
+								<div class="dropdown btn-option">
+									<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
+										<div class="feather-icon">
+											<i data-feather="more-horizontal" class="feather-directive"></i>
+										</div>
+									</button>
+									<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+										<li><a href="javascript:void(0);" ng-click="tab.repAppRoute(routeItem.host);" title="대표 도메인 설정">대표 도메인 설정</a></li>
+										<li><a class="delete" href="javascript:void(0);" ng-click="tab.deleteAppRoute(routeItem.guid, routeItem.host);" title="삭제">삭제</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						<tr ng-if="tab.appRoutes.length == 0">
+							<td colspan="5" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
+<!-- //panel-body -->

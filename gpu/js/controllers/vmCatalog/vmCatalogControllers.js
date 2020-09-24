@@ -67,6 +67,8 @@ angular.module('gpu.controllers')
     ct.htmlUrls.createDeployInfo        = _GPU_VIEWS_ + "/vmCatalog/create/createDeployInfo.html" + _VERSION_TAIL_;
 
     ct.stackNames               = [];
+    ct.deployNames              = [];
+    ct.bucketNames              = [];
     ct.usingPorts               = {};
     ct.usingPorts.single        = [9100];
     ct.usingPorts.replica       = [9100];
@@ -452,7 +454,7 @@ angular.module('gpu.controllers')
 
     //스펙그룹의 스펙 리스트 조회
     ct.fn.getStackNames = function(tenantId) {
-        var returnPromise = vmCatalogService.listAllVmCatalogDeployNames(tenantId);
+        var returnPromise = vmCatalogService.listAllVmCatalogDeployStackDetails(tenantId);
         returnPromise.success(function (data, status, headers) {
             var stackNames = [];
             if (data && angular.isArray(data.content) && data.content.length > 0) {
@@ -461,6 +463,22 @@ angular.module('gpu.controllers')
                 });
             }
             ct.stackNames = stackNames;
+        });
+        returnPromise.error(function (data, status, headers) {
+        });
+    };
+
+    //서버네임 스펙 리스트 조회
+    ct.fn.getDeployNames = function(tenantId) {
+        var returnPromise = vmCatalogService.listAllVmCatalogDeployNames(tenantId);
+        returnPromise.success(function (data, status, headers) {
+            var deployNames = [];
+            if (data && angular.isArray(data.content) && data.content.length > 0) {
+                angular.forEach(data.content, function(val, key) {
+                    deployNames.push(val.deployName);
+                });
+            }
+            ct.deployNames = deployNames;
         });
         returnPromise.error(function (data, status, headers) {
         });
@@ -484,6 +502,10 @@ angular.module('gpu.controllers')
         var bInValid = false;
         var orgNameErrorString = "";                // 문제되는 문자
         if (!deployName) return;
+        if (ct.deployNames.indexOf(deployName) >= 0) {
+            return {isValid: false, message: "'" + deployName + "'은 이미 사용중인 이름 입니다."};
+        }
+
         for (var i=0; i<deployName.length; i++) {
             if (deployName.charAt(i) != " " && regexp.test(deployName.charAt(i)) == false) {
                 bInValid = true;
@@ -500,7 +522,7 @@ angular.module('gpu.controllers')
     ct.fn.validationStackName = function (stackName) {
         if (!stackName) return;
         if (ct.stackNames.indexOf(stackName) >= 0) {
-            return {isValid : false, message: "'" + stackName + "'은 이미 사용 중인 이름 입니다."};
+            return {isValid : false, message: "'" + stackName + "'은 이미 사용중인 이름 입니다."};
         }
         return {isValid : true};
     };
@@ -544,6 +566,36 @@ angular.module('gpu.controllers')
         return {isValid: true};
     };
 
+    //스펙그룹의 스펙 리스트 조회
+    ct.fn.getBucketNames = function(bucketName) {
+        var param = {
+            tenantId : ct.data.tenantId,
+            bucket : bucketName
+        };
+        var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/objects', 'GET', param);
+        returnPromise.success(function (data, status, headers) {
+            var bucketNames = [];
+            if (data && angular.isArray(data.content) && data.content.length > 0) {
+                angular.forEach(data.content, function(val, key) {
+                    bucketNames.push(val.bucketName);
+                });
+            }
+            ct.bucketNames = bucketNames;
+        });
+        returnPromise.error(function (data, status, headers) {
+            return {isValid : true};
+        });
+    };
+    ct.fn.validationBucketName = function (bucketName) {
+        ct.fn.getBucketNames(bucketName);
+        //if (!bucketName) return;
+        if (ct.bucketNames.indexOf(bucketName) >= 0) {
+            return {isValid : false, message: "'" + bucketName + "'은 이미 사용중인 이름 입니다."};
+        }
+        return {isValid : true};
+    };
+
+
     ct.checkClickBtn = false;
 
     ct.fn.createVmCatalogDeployAction = function (deployTemplate, appendSetVmCatalogDeploy, templatePrint) {
@@ -555,6 +607,7 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.version = ct.vmCatalogInfo.version;
         vmCatalogDeploy.deployName = ct.data.deployName;
         vmCatalogDeploy.stackName = ct.data.stackName;
+        vmCatalogDeploy.bucketName = ct.data.bucketName;
         vmCatalogDeploy.deployType = ct.data.deployType;
         vmCatalogDeploy.deployServerCount = 1;
         vmCatalogDeploy.deployTemplate = deployTemplate;
@@ -643,6 +696,10 @@ angular.module('gpu.controllers')
         ct.fn.availabilityZoneList();
         ct.fn.getKeypairList(ct.tenantId);
         ct.fn.getStackNames(ct.tenantId);
+        ct.fn.getDeployNames(ct.tenantId);
+        ct.fn.checkPasswordValidation(ct.rootPassword);
+        ct.fn.checkConfirmPasswordValidation(ct.rootPassword, ct.rootConfirmPassword);
+
 
         var allResourceMax = $q.all([resourceDefer.promise, specListDefer.promise]);
         allResourceMax.then(function (datas) {

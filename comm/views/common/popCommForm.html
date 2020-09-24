@@ -1,7 +1,9 @@
 <md-dialog draggable drag-handle=".modal-header" aria-label="{{ dialogOptions.title }}" class="{{ dialogOptions.dialogClassName }} modal-content">
 	<div class="modal-header">
-		<h1 class="modal-title">{{dialogOptions.title}}</h1>
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="popCancel()"><span aria-hidden="true">×</span></button>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="popCancel()">
+			<span aria-hidden="true">×</span>
+		</button>
+		<h4 class="modal-title">{{dialogOptions.title}}</h4>
 	</div>
 	<div class="modal-body">
 		<div ng-show="dialogClose" class="alert alert-error">

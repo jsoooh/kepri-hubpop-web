@@ -204,26 +204,40 @@
 	</ul>
 </div>
 
-<!-- //panel area-->
-<div ng-if="!!main.userTenantGpuId && !contents.isStorageMainListLoad && (contents.storageMainList | filter:{ taskState : '!deleting' }).length == 0" class="welcome_layer">
+<!-- 생성된 볼륨 없을 경우 -->
+<div ng-if="!!main.userTenantGpuId && !contents.isStorageMainListLoad && contents.storageMainList.length == 0" class="welcome_layer">
 	<div class="guide_fnt arrw_btm">신규 볼륨을 만들고 가상 인스턴스와 연결하세요.</div>
-	<div class="guide_cnt">
-		볼륨 관리는 <span class="fnt20"><span class="color1">Block Storage 기반의 데이터 저장공간 서비스를 제공</span></span>합니다.<br>
-		할당된 클라우드 자원 용량 내에서 사용자 스스로 필요한 만큼 볼륨을 만들고, 생성된 가상 인스턴스와 연결하는 방식으로 볼륨을 수평적으로 확장할 수 있습니다.<br>
-		<span class="fnt20"><spna class="color1">‘볼륨 만들기’</spna></span>를 통해 서비스를 시작해 보세요.
+	<div class="text-center blank-page">
+		<div class="img">
+			<img src="../assets/img/icon/data-center.png">
+		</div>
+		<div class="cont">
+			<p>볼륨 관리는 <span class="fnt20"><span class="color1">Block Storage 기반의 데이터 저장공간 서비스를 제공</span></span>합니다.</p>
+			<p>할당된 클라우드 자원 용량 내에서 사용자 스스로 필요한 만큼 볼륨을 만들고, 생성된 가상 인스턴스와 연결하는 방식으로 볼륨을 수평적으로 확장할 수 있습니다.</p>
+			<p><span class="point">‘볼륨 만들기’</span>를 통해 서비스를 시작해 보세요.</p>
+		</div>
+		<!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+		<div class="text-center" ng-if="main.checkUseYnGpu == 'N' && main.userTenantGpuId">
+			<div class="cont">
+				<p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+			</div>
+			<button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+		</div>
+		<!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
 	</div>
 </div>
+<!-- //생성된 볼륨 없을 경우 -->
 
 <!-- 테넌트 생성 전인 경우 -->
 <div ng-if="!main.userTenantGpuId" class="proj_main_cont">
     <div class="p_main_top">
         <div class="top_txt">
-            <span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
-            <span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+            <span class="s_txt">GPU 서버 가상화에서는 Deep Learning 고속처리를 지원하는 GPU가 포함된 가상서버를 생성하여 사용할 수 있습니다.</span>
+            <span class="l_txt"><span class="c_blue">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</span>
         </div>
         <div class="top_btn">
             <a href="" ng-click="main.createPortalOrgSystem('gpu');">
-                <span>프로젝트 생성</span>
+                <span>서비스 시작하기</span>
             </a>
         </div>
     </div>

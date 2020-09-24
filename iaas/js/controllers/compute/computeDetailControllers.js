@@ -1112,6 +1112,13 @@ angular.module('iaas.controllers')
                 } else {
                     common.showAlertWarning("접속 URL이 존재하지 않습니다.");
                 }
+            } else if (instance.image.osType == 'centos') {
+                if (instance.floatingIp) {
+                    common.copyToClipboard(instance.floatingIp);
+                    $scope.main.copyToClipboard(instance.floatingIp, '"' + instance.floatingIp + '"가 클립보드에 복사 되었습니다.');
+                } else {
+                    common.showAlertWarning("접속 IP가 존재하지 않습니다.");
+                }
             }
         };
 
@@ -3281,7 +3288,6 @@ angular.module('iaas.controllers')
                 if (data && data.content) {
                     pop.tenantResource = data.content;
                     pop.tenantResource.available = {};
-                    pop.tenantResource.available.instances = pop.tenantResource.maxResource.instances - pop.tenantResource.usedResource.instances;
                     pop.tenantResource.available.cores = pop.tenantResource.maxResource.cores - pop.tenantResource.usedResource.cores;
                     pop.tenantResource.available.ramSize = pop.tenantResource.maxResource.ramSize - pop.tenantResource.usedResource.ramSize;
                     pop.tenantResource.available.instanceDiskGigabytes = pop.tenantResource.maxResource.instanceDiskGigabytes - pop.tenantResource.usedResource.instanceDiskGigabytes;
