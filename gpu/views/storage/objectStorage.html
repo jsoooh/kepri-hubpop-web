@@ -1,13 +1,18 @@
-<!-- 검색영역  --c >
-<div class="cBox type0 mb30">
-	<div class="pull-left">
-		<h4 class="c-tit">전체 저장소 <em class="point1" ng-init="contents.objectStorageList.length ='0'">({{(contents.objectStorageList.length)}})</em></h4>
-	</div>
-	<div class="pull-right">
-		<! -- 검색 -- >
-		<div class="searchBox type2">
-			<div class="form-group">
-				<input type="text" placeholder="저장소 검색" style="width:300px;" ng-model="contents.schFilterText" class="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+
+<div class="row" ng-if="!!main.userTenantGpuId" class="storage_infoWrap mb50">
+	<!-- 사용량 -->
+	<div class="col-md-4">
+		<div class="panel panel-bordered">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-6">
+						<h3 class="panel-title">사용량</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<div class="desc padding-top-15 padding-right-20">{{contents.toDay}} 기준</div>
+					</div>
+				</div>
+
 			</div>
 			<button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText =''"><span class="ico">지우기</span></button>
 		</div>
@@ -103,27 +108,44 @@
 <!-- //용량정보 및 접속정보 -->
 
 <!-- 버튼영역 -->
-<div ng-if="!!main.userTenantGpuId" class="btnWrap">
-	<button type="button" class="btn_lg" ng-click="contents.fn.createObjectStoragePop()"><span class="ico ico_bk_add"></span>버킷 만들기</button>
-	<!--<button type="button" class="btn_lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false"><span class="ico ico_usage_view"></span>사용법 안내</button>-->
+<div class="margin-bottom-20" ng-if="!!main.userTenantGpuId">
+	<button type="button" class="btn btn-default btn-lg" ng-click="contents.fn.createObjectStoragePop()" ng-disabled="!main.checkResourceUserRole()">
+		<div class="feather-icon color-primary">
+			<i data-feather="box"></i>
+		</div>
+		<b>버킷 만들기</b>
+	</button>
+	<button type="button" class="btn btn-default btn-lg" ng-click="main.showRightSliderContents($event, '사용법 안내', '/guideInfo/accessGuideInfoObjectStorageConnect.html', {floatingIp : instance.floatingIp, osType: instance.image.osType});" ng-if="false">
+		<div class="feather-icon color-primary">
+			<i data-feather="server"></i>
+		</div>
+		<b>사용법 안내</b>
+	</button>
 </div>
 <!-- //버튼영역 -->
 
-<!-- 버킷목록 -->
-<div ng-if="!!main.userTenantGpuId" class="storage_bucketWrap">
-	<ul>
-		<li>
-			<div class="infoBox">
-				<div class="info_head">
-					<!--
-					<h5>버킷목록<em class="point1">(3)</em></h5>
-					-->
-					<h5>버킷목록<em class="point1"></em></h5>
-				</div>
-				<div class="info_body">
-					<ul class="bucket_list">
-						<li ng-repeat="item in contents.objectStorageList">
-							<a href="" id="folder-branch-item" ng-click="contents.fn.getObjectStorageObject(item.containerName, '')" ng-class="item.containerName==contents.data.bucketName ? 'animated fast fadeInDown active' : 'animated fast fadeInDown'">
+
+<div class="panel panel-bordered" ng-if="!!main.userTenantGpuId">
+	<div class="panel-heading">
+		<div class="row no-margin bordered">
+			<div class="col-md-4">
+				<h3 class="panel-title">버킷목록</h3>
+			</div>
+			<div class="col-md-8">
+				<h3 class="panel-title">파일 및 폴더</h3>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-body padding-0">
+		<div class="row no-margin bordered">
+			<!-- 버킷목록 -->
+			<div class="col-md-4">
+				<div class="scroll-content" style="height: 290px">
+					<ul class="list-group list-group-dividered list-group-link">
+						<li class="list-group-item" ng-repeat="item in contents.objectStorageList" ng-class="item.containerName==contents.data.bucketName ? 'animated fast fadeInDown active' : 'animated fast fadeInDown'">
+							<a id="folder-branch-item" ng-click="contents.fn.getObjectStorageObject(item.containerName, '')">
+								<img src="../assets/img/icon/icon_list_folder.png" alt="">
 								<span>{{ item.containerName }}</span>
 								<!-- 선택되었을 때(삭제버튼) -->
 								<button ng-if="item.containerName==contents.data.bucketName" type="button" ng-click="contents.fn.deleteObjectBucket(item.containerName)" class="close"><span aria-hidden="true">×</span></button>
@@ -448,11 +470,10 @@
 <!-- //기존 소스 주석처리함. 삭제필요.200401 -->
 
 <!-- 테넌트 생성 전인 경우 -->
-<div ng-if="!main.userTenantGpuId" class="proj_main_cont">
-	<div class="p_main_top">
-		<div class="top_txt">
-			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
-			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+<div class="welcome_layer" ng-if="!main.userTenantGpuId">
+	<div class="text-center blank-page">
+		<div class="img">
+			<img src="../assets/img/icon/data-center.png" alt="data-center">
 		</div>
 		<div class="top_btn">
 			<a href="" ng-click="main.createPortalOrgSystem('gpu');">

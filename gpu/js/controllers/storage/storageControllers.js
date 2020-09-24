@@ -71,9 +71,7 @@ angular.module('gpu.controllers')
                         ct.isStorageMainListLoad = true;
                     }
                 }
-                console.log("volumes : ", volumes);
                 common.objectOrArrayMergeData(ct.storageMainList, volumes);
-                console.log("ct.storageMainList : ", ct.storageMainList);
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
@@ -86,7 +84,7 @@ angular.module('gpu.controllers')
             });
         };
 
-        //추가 전체 디스크 크기E
+        //추가 전체 디스크 크기
         $scope.actionLoading = false; // action loading
         $scope.authenticating = false; // action loading massage contents
         $scope.actionBtnHied = false; // btn enabled
@@ -96,7 +94,6 @@ angular.module('gpu.controllers')
                 callBackFunction : ct.fn.getStorageList
             };
             $scope.actionBtnHied = false;
-            // $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/storageForm.html" + _VersionTail();
             $scope.main.layerTemplateUrl = _GPU_VIEWS_ + "/storage/storageForm.html" + _VersionTail();
             var name = $($event.currentTarget).attr("data-username"),
     		top = $(window).scrollTop();
@@ -104,7 +101,6 @@ angular.module('gpu.controllers')
 			$(".aside").stop().animate({"right":"-360px"}, 400);
 			$("#aside-aside1").stop().animate({"right":"0"}, 500);
             
-            //common.showDialog($scope, $event, $scope.dialogOptions);
             $scope.actionLoading = true; // action loading
         };
 
@@ -181,7 +177,6 @@ angular.module('gpu.controllers')
                 volumeId : id
             };
             
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'DELETE', param)
             returnPromise.success(function (data, status, headers) {
                 deferred.resolve(true);
@@ -203,7 +198,6 @@ angular.module('gpu.controllers')
                         tenantId : volume.tenantId,
                         volumeId : volume.volumeId
                     };
-                    // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     returnPromise.success(function (data, status, headers) {
                     	if (data.content.instanceStatus == 'active') {
@@ -239,13 +233,11 @@ angular.module('gpu.controllers')
         
         ct.fn.createPopSnapshot = function($event,volume) {
         	var dialogOptions =  {
-			            			// controller       : "iaasCreateStorageSnapshotPopFormCtrl" ,
-			            			// formName         : 'iaasCreatePopStorageSnapshotForm',
-                                    controller       : "gpuCreateStorageSnapshotPopFormCtrl" ,
-                                    formName         : 'gpuCreatePopStorageSnapshotForm',
-			            			selectStorage    : angular.copy(volume),
-			            			callBackFunction : ct.reStorageSnapShotCallBackFunction
-				            	};
+                    controller       : "gpuCreateStorageSnapshotPopFormCtrl" ,
+                    formName         : 'gpuCreatePopStorageSnapshotForm',
+                    selectStorage    : angular.copy(volume),
+                    callBackFunction : ct.reStorageSnapShotCallBackFunction
+                };
         	
             	$scope.actionBtnHied = false;
             	common.showDialog($scope, $event, dialogOptions);
@@ -306,8 +298,6 @@ angular.module('gpu.controllers')
         ct.fn.reSizePopStorage = function($event,volume) {
 
         	var dialogOptions =  {
-                // controller       : "iaasReSizePopStorageCtrl" ,
-                // formName         : 'iaasReSizePopStorageForm',
                 controller       : "gpuReSizePopStorageCtrl" ,
                 formName         : 'gpuReSizePopStorageForm',
                 selectStorage    : angular.copy(volume),
@@ -327,9 +317,7 @@ angular.module('gpu.controllers')
         }
 
     })
-    // .controller('iaasStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        // _DebugConsoleLog("storageControllers.js : iaasStorageFormCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuStorageFormCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -341,8 +329,6 @@ angular.module('gpu.controllers')
         ct.volume            = {};
         ct.instances         = [];
         ct.sltInstance       = {};
-        // ct.data.tenantId     = $scope.main.userTenantId;
-        // ct.data.tenantName   = $scope.main.userTenant.korName;
         ct.data.tenantId     = $scope.main.userTenantGpuId;
         ct.data.tenantName   = $scope.main.userTenantGpu.korName;
         ct.formName          = "storageForm";
@@ -370,10 +356,10 @@ angular.module('gpu.controllers')
         };
 
         //디스크생성 변수
-        ct.volumeSize = 100;
+        ct.volumeSize = 0;
         ct.volumeSliderOptions = {
             showSelectionBar : true,
-            minLimit : 10,
+            minLimit : 0,
             floor: 0,
             ceil: 100,
             step: 1,
@@ -397,6 +383,11 @@ angular.module('gpu.controllers')
                 clickCheck = false;
                 return common.showAlert("볼륨타입을 선택해주세요.");
             }
+
+            if (ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
+                clickCheck = false;
+                return common.showAlert("볼륨용량 제한으로 생성할 수 없습니다.");
+            }
             ct.fn.createStorageVolumeAction();
         };
 
@@ -405,27 +396,20 @@ angular.module('gpu.controllers')
             var params = {
                 tenantId : ct.data.tenantId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
-            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/used', 'GET', params);
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params);
             
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    ct.tenantResource = data.content[0];
+                if (data && data.content) {
+                    ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
                     ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
                     ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
-                    ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-
-                    ct.tenantResource.usedResource.volumePercent = (ct.tenantResource.usedResource.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
-                    ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
-                }
-                ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                if (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
-                    ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                    // hdd, ssd 구분
+                    ct.fn.changeVolumeType();
                 }
                 ct.isTenantResourceLoad = true;
             });
@@ -438,11 +422,9 @@ angular.module('gpu.controllers')
         };
         // 볼륨 타입 호출
         ct.fn.getVolumeTypeList = function() {
-            $scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/common/volumeType', 'GET', ct.params , 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 ct.volumeTypes = data.content.volumeTypes;
-
             });
         };
         
@@ -466,14 +448,12 @@ angular.module('gpu.controllers')
                 params.volume.volumeAttachment.instanceId = ct.sltInstance.id;
             }
 
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'POST', params);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'POST', params);
             returnPromise.success(function (data, status, headers) {
             	// 서버생성후 -> 디스크 생성 후 sucess 처리.
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess(ct.volume.name+" 볼륨 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고
-                // $scope.main.goToPage("/iaas/storage");
                 $scope.main.goToPage("/gpu/storage");
             });
             returnPromise.error(function (data, status, headers) {
@@ -506,7 +486,6 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId
             };
             ct.instances         = [];
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
@@ -515,7 +494,6 @@ angular.module('gpu.controllers')
                 ct.isServerListLoad = true;
             });
             returnPromise.error(function (data, status, headers) {
-                //common.showAlertError(data.message);
                 ct.isServerListLoad = true;
             });
             returnPromise.finally(function (data, status, headers) {
@@ -532,7 +510,6 @@ angular.module('gpu.controllers')
 
             param.size = 0;
 
-            // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param));
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 var volumes = [];
@@ -561,15 +538,46 @@ angular.module('gpu.controllers')
                 return {isValid : true};
             }
         };
+
+        ct.fn.changeVolumeType = function () {
+            if (ct.volume.type == 'HDD') {
+                ct.tenantResource.available.hddVolumeGigabytes = ct.tenantResource.maxResource.hddVolumeGigabytes - ct.tenantResource.usedResource.hddVolumeGigabytes;
+                ct.tenantResource.maxResource.volumeGigabytes = ct.tenantResource.maxResource.hddVolumeGigabytes
+                ct.tenantResource.usedResource.volumeGigabytes = ct.tenantResource.usedResource.hddVolumeGigabytes
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes;
+            } else if (ct.volume.type == 'SSD') {
+                ct.tenantResource.available.ssdVolumeGigabytes = ct.tenantResource.maxResource.ssdVolumeGigabytes - ct.tenantResource.usedResource.ssdVolumeGigabytes;
+                ct.tenantResource.maxResource.volumeGigabytes = ct.tenantResource.maxResource.ssdVolumeGigabytes
+                ct.tenantResource.usedResource.volumeGigabytes = ct.tenantResource.usedResource.ssdVolumeGigabytes
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes;
+            } else {
+                ct.tenantResource.available.hddVolumeGigabytes = 0;
+                ct.tenantResource.available.ssdVolumeGigabytes = 0;
+                ct.tenantResource.maxResource.volumeGigabytes = 0;
+                ct.tenantResource.usedResource.volumeGigabytes = 0;
+                ct.volumeSliderOptions.ceil = 0;
+            }
+            
+            ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+            ct.tenantResource.usedResource.volumePercent = (ct.tenantResource.usedResource.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
+            ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
+
+            ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
+            ct.inputVolumeSize = ct.volumeSize;
+        };
+
+        ct.fn.checkVolume = function () {
+            ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
+            ct.inputVolumeSize = ct.volumeSize;
+        };
+
         ct.fn.getTenantResource();
         ct.fn.serverList();
         ct.fn.getStorageList();
         ct.fn.getVolumeTypeList();
 
     })
-    // .controller('iaasStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
     .controller('gpuStorageDetailCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, user, common,$filter, ValidationService, CONSTANTS ) {
-        // _DebugConsoleLog("storageControllers.js : iaasStorageDetailCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuStorageDetailCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -581,12 +589,11 @@ angular.module('gpu.controllers')
         ct.roles = [];
         ct.volume = {};
         ct.data.volumeId = $stateParams.volumeid;
-        // ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantId = $scope.main.userTenantGpuId;
         ct.expandVolumeSize = 10;
 
         ct.fn.formOpen = function($event, state, data){
-        	ct.formType = state;
+            ct.formType = state;
     		if (state == 'storageEdit') {
     			ct.fn.storageEdit($event, data);
     		} else if (state == 'snapshot') {
@@ -596,9 +603,6 @@ angular.module('gpu.controllers')
         
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
-            //$scope.main.goToPage("/iaas/storage/detail/"+ct.data.volumeId);
-
-            // $scope.main.goToPage("/iaas");
             $scope.main.goToPage("/gpu");
             ct.data.tenantId = status.tenantId;
             ct.data.tenantName = status.korName;
@@ -611,7 +615,6 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId,
                 volumeId : ct.data.volumeId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 ct.volume = data.content.volumes[0];
@@ -636,7 +639,6 @@ angular.module('gpu.controllers')
                 queryType : 'detail'
             };
             $scope.main.loadingMain = true;
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 if (data.content.instances.length == 1) {
@@ -662,10 +664,8 @@ angular.module('gpu.controllers')
                 description : ct.volume.description,
                 name : ct.volume.name
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             returnPromise.success(function (data, status, headers) {
-                // $scope.main.goToPage('/iaas/storage');
                 $scope.main.goToPage('/gpu/storage');
             });
             returnPromise.error(function (data, status, headers) {
@@ -684,7 +684,6 @@ angular.module('gpu.controllers')
                 id : ct.volume.volumeAttachment.id,
                 instanceId : ct.volume.volumeAttachment.instanceId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach : param});
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/instanceDettach', 'POST', {volumeAttach : param});
             returnPromise.success(function (data, status, headers) {
                 ct.fn.getStorageInfo();
@@ -714,17 +713,14 @@ angular.module('gpu.controllers')
         //sg0730
         ct.fn.storageEdit = function ($event, data) {
             $scope.dialogOptions = {
-                // controller : "iaasStorageEditFormCtrl",
                 controller : "gpuStorageEditFormCtrl",
                 callBackFunction : null,
                 volume : data
                 
             };
             $scope.actionBtnHied = false;
-            // $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/subMenus/storageEditForm.html" + _VersionTail();
             $scope.main.layerTemplateUrl = _GPU_VIEWS_ + "/storage/subMenus/storageEditForm.html" + _VersionTail();
-            var name = $($event.currentTarget).attr("data-username"),
-    		top = $(window).scrollTop();
+            var name = $($event.currentTarget).attr("data-username"), top = $(window).scrollTop();
 
 			$(".aside").stop().animate({"right":"-360px"}, 400);
 			$("#aside-aside1").stop().animate({"right":"0"}, 500);
@@ -739,7 +735,6 @@ angular.module('gpu.controllers')
                         tenantId : volume.tenantId,
                         volumeId : volume.volumeId
                     };
-                    // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/attachedInstanceCheck', 'GET', param, 'application/x-www-form-urlencoded')
                     returnPromise.success(function (data, status, headers) {
                     	if (data.content.instanceStatus == 'active') {
@@ -764,13 +759,11 @@ angular.module('gpu.controllers')
         
         ct.fn.createSnapshotPop = function ($event,volume) {
             $scope.dialogOptions = {
-                // controller : "iaasCreateStorageSnapshotFormCtrl",
                 controller : "gpuCreateStorageSnapshotFormCtrl",
                 callBackFunction : null,
                 volume : volume
             };
             $scope.actionBtnHied = false;
-            // $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
             $scope.main.layerTemplateUrl = _GPU_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
             var name = $($event.currentTarget).attr("data-username"),
     		top = $(window).scrollTop();
@@ -784,9 +777,7 @@ angular.module('gpu.controllers')
             ct.fn.getStorageInfo();
         }
     })
-    // .controller('iaasStorageEditFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuStorageEditFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        // _DebugConsoleLog("storageControllers.js : iaasStorageEditFormCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuStorageEditFormCtrl", 1);
 
         $scope.contents = common.getMainContentsCtrlScope().contents;
@@ -795,7 +786,6 @@ angular.module('gpu.controllers')
         var pop = this;
         $scope.actionLoading = false;
 
-        // pop.userTenant = angular.copy($scope.main.userTenant);
         pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.volume = angular.copy($scope.dialogOptions.volume);
         pop.fn = {};
@@ -804,7 +794,6 @@ angular.module('gpu.controllers')
         pop.dialogClassName = "modal-lg";
         pop.title = "볼륨 수정";
 
-        // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/subMenus/storageEditForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/subMenus/storageEditForm.html" + _VersionTail();
 
         pop.popCancel = function () {
@@ -817,7 +806,6 @@ angular.module('gpu.controllers')
                 tenantId : pop.userTenant.tenantId,
                 volumeId : pop.volume.volumeId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 pop.volume = data.content.volumes[0];
@@ -838,8 +826,7 @@ angular.module('gpu.controllers')
                 tenantId : pop.userTenant.tenantId
             };
             $scope.main.loadingMainBody = true;
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
-            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/used', 'GET', params, 'application/x-www-form-urlencoded');
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 pop.resource = angular.copy(data.content[0]);
                 pop.resourceDefault = angular.copy(data.content[0]);
@@ -899,7 +886,6 @@ angular.module('gpu.controllers')
                 name : pop.volume.name
             };
             
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             returnPromise.success(function (data, status, headers) {
             	setTimeout(function() {
@@ -932,9 +918,7 @@ angular.module('gpu.controllers')
     //////////////////////////////////////////////////////////////////////////
     //////////////       2018.11.21 디스크 생성 폼      sg0730       //////////////////
     //////////////////////////////////////////////////////////////////////////
-    // .controller('iaasCreateStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuCreateStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        // _DebugConsoleLog("storageControllers.js : iaasCreateStorageSnapshotFormCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuCreateStorageSnapshotFormCtrl", 1);
 
         $scope.contents = common.getMainContentsCtrlScope().contents;
@@ -943,7 +927,6 @@ angular.module('gpu.controllers')
         var pop = this;
         $scope.actionLoading = false;
 
-        // pop.userTenant = angular.copy($scope.main.userTenant);
         pop.userTenant = angular.copy($scope.main.userTenantGpu);
         pop.volume = angular.copy($scope.dialogOptions.volume);
         pop.fn = {};
@@ -952,7 +935,6 @@ angular.module('gpu.controllers')
         pop.dialogClassName = "modal-lg";
         pop.title = "볼륨 스냅샷 생성";
 
-        // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
 
         // Dialog ok 버튼 클릭 시 액션 정의
@@ -999,15 +981,12 @@ angular.module('gpu.controllers')
     //////////////////////////////////////////////////////////////////////////
     //////////////       2018.11.22 디스크 백업 이미지 생성 팝업      sg0730 ///////////////
     //////////////////////////////////////////////////////////////////////////    
-     // .controller('iaasCreateStorageSnapshotPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuCreateStorageSnapshotPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        // _DebugConsoleLog("storageControllers.js : iaasCreateStorageSnapshotPopFormCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuCreateStorageSnapshotPopFormCtrl", 1);
 
         var pop = this;
         pop.validationService 			= new ValidationService({controllerAs: pop});
         pop.formName 					= $scope.dialogOptions.formName;
-        // pop.userTenant 					= angular.copy($scope.main.userTenant);
         pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
         pop.volume 						= $scope.dialogOptions.selectStorage;
         pop.fn 							= {};
@@ -1017,7 +996,6 @@ angular.module('gpu.controllers')
         $scope.dialogOptions.title 		= "스냅샷 생성";
         $scope.dialogOptions.okName 	= "생성";
         $scope.dialogOptions.closeName 	= "닫기";
-        // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageCreatePopSnapshotForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/storageCreatePopSnapshotForm.html" + _VersionTail();
 
         $scope.actionLoading 			= false;
@@ -1045,13 +1023,14 @@ angular.module('gpu.controllers')
             pop.data.tenantId = pop.userTenant.id;
             pop.data.volumeId = pop.volume.volumeId;
             pop.data.volumeName = pop.volume.name;
+            pop.data.size = pop.volume.size;
+            pop.data.type = pop.volume.type;
+            
             common.mdDialogHide();
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'POST', {volumeSnapShot:pop.data});
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/snapshot', 'POST', {volumeSnapShot:pop.data});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("생성 되었습니다.");
-                // common.locationHref('/#/iaas/snapshot?tabIndex=1');
                 common.locationHref('/#/gpu/snapshot?tabIndex=1');
             });
             returnPromise.error(function (data, status, headers) {
@@ -1067,15 +1046,12 @@ angular.module('gpu.controllers')
     //////////////////////////////////////////////////////////////////////////
     //////////       2018.11.21 디스크 이름 변경 팝업      sg0730       ////////////////
     //////////////////////////////////////////////////////////////////////////    
-    // .controller('iaasReNamePopStorageCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuReNamePopStorageCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-    	// _DebugConsoleLog("storageControllers.js : iaasReNamePopStorageCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuReNamePopStorageCtrl", 1);
     	
     	var pop = this;
     	pop.validationService 			= new ValidationService({controllerAs: pop});
     	pop.formName 					= $scope.dialogOptions.formName;
-    	// pop.userTenant 					= angular.copy($scope.main.userTenant);
         pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
     	pop.volume 						= $scope.dialogOptions.selectStorage;
     	pop.volumes                     = angular.copy($scope.contents.storageMainList);
@@ -1087,7 +1063,6 @@ angular.module('gpu.controllers')
     	$scope.dialogOptions.title 		= "볼륨 이름 변경";
     	$scope.dialogOptions.okName 	= "변경";
     	$scope.dialogOptions.closeName 	= "닫기";
-    	// $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reNameStoragePopForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/reNameStoragePopForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
@@ -1156,15 +1131,12 @@ angular.module('gpu.controllers')
     //////////////////////////////////////////////////////////////////////////
     //////////       2018.11.21 디스크 사이즈 변경 팝업      sg0730       ////////////////
     //////////////////////////////////////////////////////////////////////////    
-    // .controller('iaasReSizePopStorageCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuReSizePopStorageCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-    	// _DebugConsoleLog("storageControllers.js : iaasReSizePopStorageCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuReSizePopStorageCtrl", 1);
     	
     	var pop = this;
     	pop.validationService 			= new ValidationService({controllerAs: pop});
     	pop.formName 					= $scope.dialogOptions.formName;
-    	// pop.userTenant 					= angular.copy($scope.main.userTenant);
         pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
     	pop.volume 						= $scope.dialogOptions.selectStorage;
     	pop.fn 							= {};
@@ -1174,7 +1146,6 @@ angular.module('gpu.controllers')
     	$scope.dialogOptions.title 		= "볼륨 크기 변경";
     	$scope.dialogOptions.okName 	= "변경";
     	$scope.dialogOptions.closeName 	= "닫기";
-    	// $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
@@ -1216,13 +1187,12 @@ angular.module('gpu.controllers')
                 tenantId : pop.userTenant.id,
                 volumeId : pop.volume.volumeId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                pop.volume 							  = data.content.volumes[0];
-                pop.inputVolumeSize 				  = pop.volume.size;
-                pop.volumeSize 						  = pop.volume.size;
-                pop.reSizeSliderOptions.minLimit       = pop.volume.size ;
+                pop.volume 							= data.content.volumes[0];
+                pop.inputVolumeSize 				= pop.volume.size;
+                pop.volumeSize 						= pop.volume.size;
+                pop.reSizeSliderOptions.minLimit    = pop.volume.size;
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
@@ -1239,12 +1209,18 @@ angular.module('gpu.controllers')
             };
             $scope.main.loadingMainBody = true;
 
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
-            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/used', 'GET', params);
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params);
             returnPromise.success(function (data, status, headers) {
-                pop.resource 		 = angular.copy(data.content[0]);
-                pop.resourceDefault = angular.copy(data.content[0]);
-                pop.reSizeSliderOptions.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes ;
+                pop.resource 		 = angular.copy(data.content);
+                pop.resourceDefault = angular.copy(data.content);
+                if (pop.volume.type == 'HDD') {
+                    pop.resource.maxResource.volumeGigabytes = pop.resource.maxResource.hddVolumeGigabytes;
+                    pop.resource.usedResource.volumeGigabytes = pop.resource.usedResource.hddVolumeGigabytes;
+                } else if (pop.volume.type == 'SSD') {
+                    pop.resource.maxResource.volumeGigabytes = pop.resource.maxResource.ssdVolumeGigabytes;
+                    pop.resource.usedResource.volumeGigabytes = pop.resource.usedResource.ssdVolumeGigabytes;
+                }
+                pop.reSizeSliderOptions.ceil = pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes + pop.volumeSize;
                 if (pop.reSizeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
                     pop.reSizeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
                 }
@@ -1262,11 +1238,13 @@ angular.module('gpu.controllers')
     	$scope.popDialogOk = function () {
     		if ($scope.actionBtnHied) return;
     		$scope.actionBtnHied = true;
-    		 /*if (!pop.validationService.checkFormValidity(pop[pop.formName]))
-             {
-                 $scope.actionBtnHied = false;
-                 return;
-             }*/
+            /*
+            if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+            {
+                $scope.actionBtnHied = false;
+                return;
+            }
+            */
     		pop.fn.reSizeStor();
     	};
     	
@@ -1283,7 +1261,6 @@ angular.module('gpu.controllers')
                 size     : pop.volumeSize
             };
     		common.mdDialogHide();
-    		// var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		returnPromise.success(function (data, status, headers) {
     			$scope.main.loadingMainBody = false;
@@ -1294,8 +1271,8 @@ angular.module('gpu.controllers')
     			
     		});
     		returnPromise.error(function (data, status, headers) {
-		    			$scope.main.loadingMainBody = false;
-		    			common.showAlertError(data.message);
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
     		});
     		returnPromise.finally(function (data, status, headers) {
     			$scope.actionBtnHied = false;
@@ -1308,9 +1285,7 @@ angular.module('gpu.controllers')
     		pop.fn.getStorageInfo();
     	}
     })
-    // .controller('iaasStorageDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuStorageDescriptionCtrl', function ($scope, $rootScope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        	// _DebugConsoleLog("storageControllers.js : iaasStorageDescriptionCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuStorageDescriptionCtrl", 1);
 
         var pop = this;

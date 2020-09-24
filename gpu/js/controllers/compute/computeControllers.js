@@ -677,9 +677,7 @@ angular.module('gpu.controllers')
                 common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
                 dialogOptions = {
-                    // controller : "iaasCreatePopSnapshotCtrl" ,
                     controller : "gpuCreatePopSnapshotCtrl" ,
-                    // formName   : 'iaasCreatePopSnapshotForm',
                     formName   : 'gpuCreatePopSnapshotForm',
                     selectInstance : angular.copy(instance),
                     callBackFunction : ct.reflashSnapShotCallBackFunction
@@ -693,7 +691,6 @@ angular.module('gpu.controllers')
 
         // sg0730 차후 서버 이미지 생성 후 페이지 이동.
         ct.reflashSnapShotCallBackFunction = function () {
-            // $scope.main.goToPage('/iaas/compute');
             $scope.main.goToPage('/gpu/compute');
         };
 
@@ -707,7 +704,6 @@ angular.module('gpu.controllers')
                 instanceId : instance.id,
                 tenantId : ct.data.tenantId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vnc', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/vnc', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 window.open(data.content, '_blank');
@@ -1824,12 +1820,17 @@ angular.module('gpu.controllers')
         //서버 생성
         var clickCheck = false;
         ct.fn.createServer = function()  {
+            console.log(clickCheck);
             if(clickCheck) return;
+            console.log(111)
             clickCheck = true;
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                console.log(222)
                 clickCheck = false;
                 return;
             }
+
+            console.log(333)
             var params = {};
             params.instance = {};
             params.instance.name = ct.data.name;
@@ -1881,6 +1882,53 @@ angular.module('gpu.controllers')
             returnPromise.finally(function() {
                 clickCheck = false;
             });
+        };
+        
+        // 서버 디스크용 HDD 생성
+        ct.fn.createStorageVolumeAction = function (instance) {
+            var params = {};
+            params.volume = {};
+            params.volume.tenantId = ct.data.tenantId;
+            params.volume.name = ct.data.name + '-main';
+            params.volume.type = ct.volume.type;
+            params.volume.size = ct.data.spec.disk;
+            params.volume.description = ct.data.name;
+
+            if (instance && instance.id) {
+                params.volume.volumeAttachment = {};
+                params.volume.volumeAttachment.id = instance.id;
+                params.volume.volumeAttachment.instanceName = instance.name;
+                params.volume.volumeAttachment.instanceId = instance.id;
+            }
+
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'POST', params);
+            returnPromise.success(function (data, status, headers) {
+            	// 서버생성후 -> 디스크 생성 후 sucess 처리.
+                common.showAlertSuccess("메인디스크 생성이 시작 되었습니다.");
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message", data.message);
+            });
+        };
+
+        // 볼륨 타입 호출
+        ct.fn.getVolumeTypeList = function() {
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/common/volumeType', 'GET', ct.params , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.volumeTypes = data.content.volumeTypes;
+            });
+        };
+        // 볼륨 타입 변경
+        ct.fn.volumeChange = function () {
+            if (ct.volume.type == 'HDD') {
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes - ct.data.spec.disk;
+            } else if (ct.volume.type == 'SSD') {
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes;
+            } else {
+                ct.volumeSliderOptions.ceil = 0;
+            }
+            ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
+            ct.inputVolumeSize = ct.volumeSize;
         };
 
         if (ct.data.tenantId) {

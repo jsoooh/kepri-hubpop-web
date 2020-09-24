@@ -11,7 +11,7 @@
 				<td>
 				<!-- <input type="text" name="" value="" class="form-control" placeholder="{{pop.volume.size}}" disabled> <span class="app-tit">GB</span> -->
 					<div class="inputbox input-inline">
-						<input type="text" name="" value="" class="form-control" placeholder="{{pop.volume.size}}" style="width:90%;">
+						<input type="text" name="" class="form-control" value="{{pop.volume.size}}" style="width:90%;" readonly="readonly">
 						<label class="label-txt">GB</label>
 					</div>
 				</td>
@@ -21,7 +21,7 @@
 				<td>
 					<div class="inputbox input-inline">
 
-						<input type="number"  ng-model="pop.inputVolumeSize" ng-change="pop.inputVolumeSizeChange();" ng-blur="pop.inputVolumeSizeBlur();" name="volumeSize" maxlength="4" class="form-control" placeholder="내용입력" style="width:90%;">
+						<input type="number" ng-model="pop.inputVolumeSize" ng-change="pop.inputVolumeSizeChange();" ng-blur="pop.inputVolumeSizeBlur();" name="volumeSize" maxlength="4" class="form-control" placeholder="내용입력" style="width:90%;">
 						<label class="label-txt">GB</label>
 					</div>
 				</td>
