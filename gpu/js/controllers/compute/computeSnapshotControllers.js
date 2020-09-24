@@ -282,6 +282,24 @@ angular.module('gpu.controllers')
                 if (data && data.content && data.content.id) {
                     ct.snapshotInfo = data.content;
                     ct.fn.setSpecMinDisabled();
+
+                    var params = {
+                        tenantId: ct.snapshotInfo.tenantId,
+                        instanceId: ct.snapshotInfo.instanceId
+                    };
+
+                    var rp = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/snapshot/networkId', 'GET', params);
+                    rp.success(function (result) {
+                        if (result && result.content) {
+                            ct.networkId = result.content.networkId;
+                        } else {
+                            common.showAlertWarning('네트워크ID 가 설정되지 않았습니다.');
+                        }
+                    });
+                    rp.error(function (result) {
+                        console.log(result)
+                        common.showAlertWarning('네트워크ID 가 설정되지 않았습니다. >>> ' + result.exception);
+                    });
                 }
                 $scope.main.loadingMainBody = false;
             });
@@ -554,7 +572,7 @@ angular.module('gpu.controllers')
             params.instance                  = {};
             params.instance.name             = ct.data.name;
             params.instance.tenantId         = ct.data.tenantId;
-            params.instance.networks         = [{ id: ct.data.networks[0].id }];
+            params.instance.networks         = [{ id: ct.networkId }];
             params.instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
             params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
