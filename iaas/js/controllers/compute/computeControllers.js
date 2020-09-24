@@ -1554,14 +1554,14 @@ angular.module('iaas.controllers')
                 return;
             }
             $scope.main.loadingMainBody = true;
-            //console.log("ct.fn.createServer params : ", params); return;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers)  {
-                // 서버생성후 -> 디스크 생성 후 sucess 처리.
-                $scope.main.loadingMainBody = false;
-                common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
-                // 페이지 이동으로 바꿔야 하고
-                $scope.main.goToPage("/iaas/compute");
+                $timeout(function () {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                    // 페이지 이동으로 바꿔야 하고
+                    $scope.main.goToPage("/iaas/compute");
+                }, 3000);
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
