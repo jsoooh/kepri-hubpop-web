@@ -419,6 +419,13 @@ angular.module('gpu.controllers')
                 param.key = ct.objectStorageObjectList.currentPath;
                 param.files = [];
                 for (var i=0; i< uploadFiles.files.length; i++) {
+                    if (uploadFiles.files[i].size > 1024*1024*1024) {
+                        console.log("1GB 이상은 업로드 불가능 >>>>>"+uploadFiles.files[i].size+"KB");
+                        common.showAlertError("1GB 이상은 업로드 할 수 없습니다.");
+                        $scope.main.loadingMainBody = false;
+                        return false;
+                    }
+
                     param.files.push(uploadFiles.files[i]);
                 }
 
