@@ -134,12 +134,13 @@ angular.module('iaas.controllers')
         	$scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
             returnPromise.success(function (data, status, headers) {
+                common.showAlertSuccess('삭제되었습니다.');
                 ct.fn.getStorageList();
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message)
             });
-            returnPromise.finally(function (data, status, headers) {
+            returnPromise.finally(function () {
                 $scope.main.loadingMainBody = false;
             });
         };
