@@ -323,6 +323,44 @@ angular.module('common.controllers', [])
             }
         };
 
+        // 자원 삭제시 이름 체크 팝업창 (deleteFunciton : 삭제 함수, name : 삭제할 자원의 이름, deleteFunctionParams : 삭제 함수의 파라미터)
+        mc.popDeleteCheckName = function ($event, name, deleteFunction, ...deleteFunctionParams) {
+            if (!name) {
+                return common.showAlertWarning('삭제할 이름이 없습니다.');
+            } else if (!angular.isFunction(deleteFunction)) {
+                return common.showAlertWarning('호출함수가 없습니다.');
+            }
+            mc.pop = {};
+            mc.pop.deleteName = name;
+            mc.pop.name = '';
+            var dialogOptions = {
+                title : '자원 삭제',
+                okName : '삭제',
+                closeName : '취소',
+                authenticate : true,
+                templateUrl: _COMM_VIEWS_ + '/common/popCommDeleteCheckNameForm.html' + _VersionTail()
+            };
+            common.showDialog($scope, $event, dialogOptions);
+
+            // 삭제 이름 체크
+            mc.checkDeleteName = function () {
+                if (mc.pop.deleteName == mc.pop.name) {
+                    $scope.dialogOptions.authenticate = false;
+                    return {isValid : true};
+                }
+                else {
+                    $scope.dialogOptions.authenticate = true;
+                    return {isValid : false, message : '삭제할 항목의 이름과 일치하지 않습니다.'};
+                }
+            };
+
+            // 삭제 함수 실행
+            $scope.popDialogOk = function () {
+                $scope.popHide();
+                deleteFunction(...deleteFunctionParams);
+            };
+        };
+
         // 페이지 이동
         mc.goToPage = function (path) {
             common.locationPath(path);

@@ -1,0 +1,15 @@
+<div class="board-warp board-write-wrap">
+    <table class="table">
+        <colgroup>
+            <col style="width: auto;">
+        </colgroup>
+        <tbody>
+        <tr>
+            <td><input type="text" class="form-control form-control-sm" placeholder="{{main.pop.deleteName}}" disabled></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="popName" ng-model="main.pop.name" class="form-control form-control-sm" placeholder="삭제할 이름을 입력하세요" validation="required|custom:main.checkDeleteName()"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

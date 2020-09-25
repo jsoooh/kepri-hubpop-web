@@ -121,50 +121,8 @@ angular.module('iaas.controllers')
             }
         };
 
-        ct.deleteVolumes = function(type, id) {
-        	if (type == 'thum') {
-        		common.showConfirm('디스크 삭제','디스크을 삭제 하시겠습니까?').then(function(){
-                    ct.deleteVolumesAction(type, id);
-                });
-        	} else if (type == 'tbl') {
-        		if (ct.roles.length == 0) {
-                    common.showAlert('메세지','선택된 디스크가 없습니다.');
-                } else {
-                    common.showConfirm('디스크 삭제','선택된 '+ct.roles.length+'개의 디스크을 삭제 하시겠습니까?').then(function(){
-                        ct.deleteVolumesAction(type, id);
-                    });
-                }
-        	}
-        };
-
-        // 스토리지 삭제
-        ct.deleteVolumesAction = function(type, id) {
-            var prom = [];
-            if (type == 'thum') {
-            	prom.push(ct.deleteVolumesJob(id));
-            } else if (type == 'tbl') {
-            	for (var i=0; i< ct.roles.length; i++) {
-                    prom.push(ct.deleteVolumesJob(ct.roles[i]));
-                }
-            }
-            $q.all(prom).then(function(results){
-                for (var i=0; i < results.length; i++ ) {
-                    if (!results[i]) {
-                        common.showAlert('메세지','오류가 발생하였습니다.');
-                    }
-                }
-                common.showAlertSuccess('디스크가 삭제 되었습니다.');
-                ct.fn.getStorageList();
-                ct.roles = [];
-            }).catch(function(e){
-                common.showAlert('메세지',e);
-            });
-        };
-
         // 스토리지 삭제
         ct.deleteVolumesJob = function(id) {
-        	$scope.main.loadingMainBody = true;
-            var deferred = $q.defer();
             if (typeof id !== 'string') {
                 return;
             }
@@ -172,19 +130,18 @@ angular.module('iaas.controllers')
                 tenantId : ct.data.tenantId,
                 volumeId : id
             };
-            
+
+        	$scope.main.loadingMainBody = true;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
             returnPromise.success(function (data, status, headers) {
-                deferred.resolve(true);
+                ct.fn.getStorageList();
             });
             returnPromise.error(function (data, status, headers) {
-                deferred.reject(data.message);
+                common.showAlertError(data.message)
             });
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-
-            return deferred.promise;
         };
 
         ct.createSnapshotPopBefore = function ($event,volume) {
