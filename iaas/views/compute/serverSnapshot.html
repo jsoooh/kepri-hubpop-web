@@ -83,7 +83,7 @@
 															<li ng-if="instanceSnapshot.status == 'active'"><a ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>
 															<li ng-if="instanceSnapshot.status != 'active'"><a class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
 															<li><a ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">이미지 설명 변경</a></li>
-															<li><a class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
+															<li><a class="delete" ng-click="main.popDeleteCheckName($event, instanceSnapshot.name, contents.fn.deleteInstanceSnapshot, instanceSnapshot);">이미지 삭제</a></li>
 														</ul>
 													</div>
 												</div>
@@ -188,7 +188,7 @@
 												<li ng-if="instanceSnapshot.status == 'active'"><a ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/');">서버 생성</a></li>
 												<li ng-if="instanceSnapshot.status != 'active'"><a class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">서버 생성</a></li>
 												<li><a ng-click="contents.fn.descriptionFormOpen($event, instanceSnapshot, 'server');">이미지 설명 변경</a></li>
-												<li><a class="delete" ng-click="contents.fn.deleteInstanceSnapshot(instanceSnapshot);">이미지 삭제</a></li>
+												<li><a class="delete" ng-click="main.popDeleteCheckName($event, instanceSnapshot.name, contents.fn.deleteInstanceSnapshot, instanceSnapshot);">이미지 삭제</a></li>
 											</ul>
 										</div>
 									</td>
@@ -213,7 +213,7 @@
 					<div class="cont">
 						<p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
 					</div>
-					<button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+					<button type="button" class="btn btn-default btn-lg" ng-click="main.popDeleteCheckName($event, '서버 가상화', main.deletePortalOrgSystem, 'iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
 				</div>
 				<!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
 			</div>
@@ -258,7 +258,7 @@
 															<li ng-if="storageSnapshot.status == 'available'" ><a ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
 															<li ng-if="storageSnapshot.status != 'available'" ><a class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">디스크 생성</a></li>
 															<li><a ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">이미지 설명 변경</a></li>
-															<li><a class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
+															<li><a class="delete" ng-click="main.popDeleteCheckName($event, storageSnapshot.snapshotName, contents.fn.deleteStorageSnapshot, storageSnapshot);">이미지 삭제</a></li>
 														</ul>
 													</div>
 												</div>
@@ -360,7 +360,7 @@
 												<li ng-if="storageSnapshot.status == 'available'" ><a ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>
 												<li ng-if="storageSnapshot.status != 'available'" ><a class="disabled" title="백업 이미지가‘사용가능’상태인 경우에만 '서버 생성'이 가능합니다.">디스크 생성</a></li>
 												<li><a ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">이미지 설명 변경</a></li>
-												<li><a class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">이미지 삭제</a></li>
+												<li><a class="delete" ng-click="main.popDeleteCheckName($event, storageSnapshot.snapshotName, contents.fn.deleteStorageSnapshot, storageSnapshot);">이미지 삭제</a></li>
 											</ul>
 										</div>
 									</td>
@@ -385,7 +385,7 @@
 					<div class="cont">
 						<p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
 					</div>
-					<button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+					<button type="button" class="btn btn-default btn-lg" ng-click="main.popDeleteCheckName($event, '서버 가상화', main.deletePortalOrgSystem, 'iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
 				</div>
 				<!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
 			</div>

@@ -123,25 +123,27 @@ angular.module('iaas.controllers')
 
         // 스토리지 삭제
         ct.deleteVolumesJob = function(id) {
-            if (typeof id !== 'string') {
-                return;
-            }
-            var param = {
-                tenantId : ct.data.tenantId,
-                volumeId : id
-            };
+            common.showConfirm('디스크 삭제','선택한 디스크를 삭제하시겠습니까?').then(function() {
+                if (typeof id !== 'string') {
+                    return;
+                }
+                var param = {
+                    tenantId : ct.data.tenantId,
+                    volumeId : id
+                };
 
-        	$scope.main.loadingMainBody = true;
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
-            returnPromise.success(function (data, status, headers) {
-                common.showAlertSuccess('삭제되었습니다.');
-                ct.fn.getStorageList();
-            });
-            returnPromise.error(function (data, status, headers) {
-                common.showAlertError(data.message)
-            });
-            returnPromise.finally(function () {
-                $scope.main.loadingMainBody = false;
+                $scope.main.loadingMainBody = true;
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
+                returnPromise.success(function (data, status, headers) {
+                    common.showAlertSuccess('삭제되었습니다.');
+                    ct.fn.getStorageList();
+                });
+                returnPromise.error(function (data, status, headers) {
+                    common.showAlertError(data.message)
+                });
+                returnPromise.finally(function () {
+                    $scope.main.loadingMainBody = false;
+                });
             });
         };
 
