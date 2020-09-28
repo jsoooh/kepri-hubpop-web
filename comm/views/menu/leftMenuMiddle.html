@@ -85,7 +85,7 @@
                                         </div>
                                         <ul class="lnb-depth3" ng-if="menuItem2.childCnt > 0">
                                             <!-- 페이지가 활성화 되면 class="on" 추가 : all-depth3-item on  -->
-                                            <li ng-repeat="menuItem3 in (main.dbMenuList | filter : { level: 3 } | filter : { parentId: menuItem2.id })" ng-click="main.setMenu(menuItem3);" class="all-depth3-item" ng-class="{ 'on' : main.sltMenu.parentId == menuItem3.id }">
+                                            <li ng-repeat="menuItem3 in (main.dbMenuList | filter : { level: 3 } | filter : { parentId: menuItem2.id })" ng-click="main.setMenu(menuItem3);" class="all-depth3-item" ng-class="{ 'on' : main.sltMenu.id == menuItem3.id }">
                                                 <a href="">
                                                     <span>{{ menuItem3.depth3 }}</span>
                                                 </a>
