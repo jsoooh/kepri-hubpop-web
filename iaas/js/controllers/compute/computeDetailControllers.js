@@ -2758,6 +2758,7 @@ angular.module('iaas.controllers')
         $scope.dialogOptions.title 		    = "이름 변경";
         $scope.dialogOptions.okName         = "변경";
         $scope.dialogOptions.closeName 	    = "닫기";
+        $scope.dialogOptions.authenticate   = true;
         $scope.dialogOptions.templateUrl    = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
 
         $scope.actionLoading 			    = false;
@@ -2787,11 +2788,30 @@ angular.module('iaas.controllers')
             common.mdDialogCancel();
         };
 
+        pop.fn.inputEnter = function (keyEvent) {
+            if (keyEvent.which == 13 && $scope.dialogOptions.authenticate == false) {
+                $scope.popDialogOk();
+            }
+        };
+
         // 서버 이름 중복 검사
         pop.fn.serverNameCustomValidationCheck = function(name) {
-            if (pop.serverNameList.indexOf(name) > -1) {
+            var regexp = /[0-9a-zA-Z\-]/;    //숫자,영문,특수문자(-)
+            var bInValid = false;
+            var text = name;
+            for (var i=0; i<text.length; i++) {
+                if (text.charAt(i) != "" && regexp.test(text.charAt(i)) == false) {
+                    bInValid = true;
+                }
+            }
+            if (bInValid) {
+                $scope.dialogOptions.authenticate = true;
+                return {isValid : false, message : '영문자, 숫자 및 대시만 포함할 수 있습니다.'};
+            } else if (pop.serverNameList.indexOf(name) > -1) {
+                $scope.dialogOptions.authenticate = true;
                 return {isValid : false, message : "이미 사용중인 이름입니다."};
             } else {
+                $scope.dialogOptions.authenticate = false;
                 return {isValid : true};
             }
         };

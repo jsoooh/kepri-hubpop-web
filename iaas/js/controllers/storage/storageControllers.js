@@ -967,6 +967,7 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.title 		= "디스크 이름 변경";
     	$scope.dialogOptions.okName 	= "변경";
     	$scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.authenticate = true;
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reNameStoragePopForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
@@ -978,9 +979,11 @@ angular.module('iaas.controllers')
         });
 
     	pop.fn.storageNameCustomValidationCheck = function(name) {
-            if (pop.storageNameList.indexOf(name) > -1) {
+    	    if (pop.storageNameList.indexOf(name) > -1) {
+                $scope.dialogOptions.authenticate = true;
                 return {isValid : false, message : "이미 사용중인 이름 입니다."};
             } else {
+                $scope.dialogOptions.authenticate = false;
                 return {isValid : true};
             }
         };
@@ -1002,6 +1005,12 @@ angular.module('iaas.controllers')
     		$scope.dialogClose = true;
     		common.mdDialogCancel();
     	};
+
+    	pop.fn.inputEnter = function (keyEvent) {
+    	    if (keyEvent.which == 13 && $scope.dialogOptions.authenticate == false) {
+                $scope.popDialogOk();
+            }
+        };
     	
     	pop.fn.reNmStor = function() {
             $scope.actionLoading = true;
