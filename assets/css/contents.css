@@ -202,7 +202,7 @@
 .dashboard-body .chartWrap .bar_chart_data::before {position:absolute; content:''; display:block; width:100%; height:26px; background:#ebebeb;}
 .dashboard-body .chartWrap .bar_chart_data .tui-chart.tui-bar-chart svg {position:absolute !important; top:0; left:15px; z-index:500; width:100% !important; height:70px !important; overflow:hidden;}
 .dashboard-body .chartWrap .bar_chart_data .tui-chart.tui-bar-chart svg path {display:none !important;}
-.dashboard-body .chartWrap .bar_chart_data #chart-area11 {position:absolute !important; width:520px !important; height:70px !important;}
+.dashboard-body .chartWrap .bar_chart_data #chart-area11 {position:absolute !important; width:416px !important; height:70px !important;}
 
 .dashboard-body .chartWrap .bar_chart_data .cht_val {position:absolute; top:30px; left:0; z-index:502; width:100%;}
 .dashboard-body .chartWrap .bar_chart_data .cht_val span {position:absolute; display:inline-block; font-size:12px; color:#888; font-weight:700;}
