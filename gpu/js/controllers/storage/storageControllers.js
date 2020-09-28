@@ -370,23 +370,20 @@ angular.module('gpu.controllers')
         };
 
         // Dialog ok 버튼 클릭 시 액션 정의
-        var clickCheck = false;
         ct.checkVal = function () {
-        	if (clickCheck) return;
-            clickCheck = true;
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                return;
+            }
 
             if (ct.storageNameList.indexOf(ct.volume.name) > -1) {
-                clickCheck = false;
                 return common.showAlert("이미 사용중인 이름 입니다.");
             }
 
             if (ct.volume.type == "") {
-                clickCheck = false;
                 return common.showAlert("볼륨타입을 선택해주세요.");
             }
 
             if (ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
-                clickCheck = false;
                 return common.showAlert("볼륨용량 제한으로 생성할 수 없습니다.");
             }
             ct.fn.createStorageVolumeAction();

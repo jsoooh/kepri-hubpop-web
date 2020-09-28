@@ -25,7 +25,7 @@
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">인스턴스 유형</span>
 								</div>
-								<select class="form-control" ng-model="contents.selectedSpecType" ng-change="contents.fn.specTypeChange();">
+								<select class="form-control" name="selectedSpecType" ng-model="contents.selectedSpecType" ng-change="contents.fn.specTypeChange();" validation="required">
 									<option value="">{{ 'label.select' | translate }}</option>
 									<option ng-repeat="specType in contents.specTypeList" value="{{specType}}">{{specType}}</option>
 								</select>
@@ -35,7 +35,9 @@
 									<i class="i_star"></i> <span class="pnb_t_txt">OS 타입</span>
 									<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 인스턴스에 설치되는 OS(운영체제, Operation System)를 선택할 수 있습니다.'"><span class="ico_info"></span></button></div>
 								</div>
-								<select id="ImageTypeList" name="ImageTypeList" class="form-control" ng-options="imageType as imageType.osType + ' ' + imageType.imageVersion for imageType in contents.imageTypeList" ng-model="ct.selectedImageType" ng-change="contents.fn.onchangeImageType(ct.selectedImageType);">
+								<select id="ImageTypeList" name="ImageTypeList" class="form-control" 
+									ng-options="imageType as imageType.osType + ' ' + imageType.imageVersion for imageType in contents.imageTypeList" 
+									ng-model="ct.selectedImageType" ng-change="contents.fn.onchangeImageType(ct.selectedImageType);" validation="required">
 									<option value="">{{ 'label.select' | translate }}</option>
 								</select>
 							</li>
@@ -44,7 +46,7 @@
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">이미지 선택</span>
 								</div>
-								<select class="form-control" ng-model="contents.sltImageId">
+								<select class="form-control" name="sltImageId" ng-model="contents.sltImageId" validation="required">
 									<option value="">{{ 'label.select' | translate }}</option>
 								</select>
 							</li>
@@ -52,7 +54,7 @@
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">이미지 선택</span>
 								</div>
-								<select class="form-control" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);">
+								<select class="form-control" name="sltImageId" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);" validation="required">
 									<option value="">{{ 'label.select' | translate }}</option>
 									<option  ng-repeat="image in contents.gpuImageList | filter: {osType: contents.selectedOsImageType, version: contents.selectedOsImageVersion}" value="{{image.id}}">
 										{{image.name}}
@@ -63,7 +65,7 @@
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">이미지 선택</span>
 								</div>
-								<select class="form-control" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);">
+								<select class="form-control" name="sltImageId" ng-model="contents.sltImageId" ng-change="contents.fn.imageChange(contents.sltImageId);" validation="required">
 									<option value="">{{ 'label.select' | translate }}</option>
 									<option  ng-repeat="image in contents.cpuImageList | filter: {osType: contents.selectedOsImageType, version: contents.selectedOsImageVersion}" value="{{image.id}}">
 										{{image.name}}
@@ -74,7 +76,7 @@
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">GPU 모델 선택</span>
 								</div>
-								<select class="form-control" ng-model="contents.selectedGpuCardId" ng-change="contents.fn.onchangeGpuCard(contents.selectedGpuCardId);" >
+								<select class="form-control" name="selectedGpuCardId" ng-model="contents.selectedGpuCardId" ng-change="contents.fn.onchangeGpuCard(contents.selectedGpuCardId);" validation="custom:contents.checkGpu()">
 									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
 									<option ng-repeat="gpuCard in contents.gpuCardList" ng-if="gpuCard.count - gpuCard.usedCount > 0" value={{gpuCard.id}} >{{gpuCard.name}}  {{gpuCard.type}} (사용 가능: {{gpuCard.count - gpuCard.usedCount}}개)</option>
 								</select>
@@ -84,7 +86,9 @@
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">존 선택</span>
 								</div>
-								<select class="form-control" ng-model="contents.selectedAvailabilityZoneId" ng-change="contents.fn.onchangeAvailabilityZone(contents.selectedAvailabilityZoneId);" required>
+								<select class="form-control"  name="selectedAvailabilityZoneId"
+									ng-model="contents.selectedAvailabilityZoneId" ng-change="contents.fn.onchangeAvailabilityZone(contents.selectedAvailabilityZoneId);" 
+									validation="required">
 									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
 									<option ng-repeat="zone in contents.availabilityZoneList" value="{{zone.id}}">{{zone.availabilityZone}} [ {{zone.publicNetworkSubnet.cidr}} ] 생성 가능한 인스턴스: {{zone.publicNetworkSubnet.available}}개</option>
 								</select>

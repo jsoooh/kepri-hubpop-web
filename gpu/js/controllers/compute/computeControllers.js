@@ -1792,19 +1792,11 @@ angular.module('gpu.controllers')
         };
 
         //서버 생성
-        var clickCheck = false;
         ct.fn.createServer = function()  {
-            console.log(clickCheck);
-            if(clickCheck) return;
-            console.log(111)
-            clickCheck = true;
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                console.log(222)
-                clickCheck = false;
                 return;
             }
 
-            console.log(333)
             var params = {};
             params.instance = {};
             params.instance.name = ct.data.name;
@@ -1834,7 +1826,6 @@ angular.module('gpu.controllers')
 
             if (!ct.data.spec.uuid) {
                 common.showAlertError("사양이 선택되지 않았습니다.");
-                clickCheck = false;
                 return;
             }
 
@@ -1852,7 +1843,6 @@ angular.module('gpu.controllers')
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function() {
-                clickCheck = false;
             });
         };
         
@@ -1902,6 +1892,14 @@ angular.module('gpu.controllers')
             ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
             ct.inputVolumeSize = ct.volumeSize;
         };
+
+        ct.fn.checkGpu = function () {
+            if (ct.selectedSpecType == 'GPU') {
+                return ct.selectedGpuCardId != undefined && ct.selectedGpuCardId != '';
+            } else {
+                return true;
+            }
+        }
 
         if (ct.data.tenantId) {
             ct.fn.getTenantResource();

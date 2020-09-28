@@ -28,7 +28,7 @@
 								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'원하는 타입의 볼륨을 생성할 수 있습니다.'"><span class="ico_info"></span></button></div>
 							</div>
 							<div>
-								<select class="form-control" ng-model="contents.volume.type" ng-change="contents.fn.changeVolumeType();">
+								<select class="form-control" name="volume_type" ng-model="contents.volume.type" ng-change="contents.fn.changeVolumeType();" validation="required">
 									<option value="">볼륨 타입 선택</option>
 									<option ng-repeat="volumeType in contents.volumeTypes" value="{{volumeType.volumeType}}">{{volumeType.volumeType}}</option>
 								</select>
