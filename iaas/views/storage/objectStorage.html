@@ -143,7 +143,7 @@
 								<span>{{ item.containerName }}</span>
 							</a>
 							<!-- 선택되었을 때(삭제버튼) -->
-							<button class="close" ng-if="item.containerName==contents.data.bucketName" type="button" ng-click="contents.fn.deleteObjectBucket(item.containerName)" ng-disabled="!main.checkResourceUserRole()"><i class="xi-close"></i></button>
+							<button class="close" ng-if="item.containerName==contents.data.bucketName" type="button" ng-click="main.popDeleteCheckName($event, item.containerName, contents.fn.deleteObjectBucket, item.containerName)" ng-disabled="!main.checkResourceUserRole()"><i class="xi-close"></i></button>
 							<!-- //선택되었을 때(삭제버튼) -->
 						</li>
 					</ul>
@@ -181,7 +181,7 @@
 							</div>
 						</div>
 					</div>
-				</div>	
+				</div>
 				<div class="row">	
 					<div class="padding-left-30 padding-right-30 padding-bottom-30">
 						<div class="scroll-content scroll-line" style="height: 200px">

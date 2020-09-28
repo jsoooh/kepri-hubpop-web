@@ -207,10 +207,11 @@ angular.module('iaas.controllers')
                 ct.fnGetInstancesData();
                 var nowDate = new Date();
                 angular.forEach(ct.serverMainList, function (serverMain) {
-                    if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
+                    ct.fn.setProcState(serverMain);
+                    // 서버 생성중, 변경 상태가 있다면 true
+                    if (serverMain.procState != 'end') {
                         isServerStatusCheck = true;
                     }
-                    ct.fn.setProcState(serverMain);
                     ct.fn.setRdpConnectDomain(serverMain);
                     if (angular.isObject(serverMain.elapsed)) {
                         serverMain.creatingTimmer = parseInt(serverMain.elapsed.time/1000, 10);
@@ -309,7 +310,6 @@ angular.module('iaas.controllers')
             }
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
             returnPromise.success(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
                     if (instanceId) {
                         var instance = data.content.instances[0];
@@ -366,14 +366,13 @@ angular.module('iaas.controllers')
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
                                 ct.fn.setProcState(ct.serverMainList[inKey]);
                                 ct.fn.setRdpConnectDomain(ct.serverMainList[inKey]);
-                                ct.fnGetInstancesData(instance);
                             } else {
                                 ct.fn.setProcState(instance);
                                 ct.fn.setRdpConnectDomain(instance);
                                 ct.serverMainList.push(instance);
-                                ct.fnGetInstancesData(instance);
                             }
                         });
+                        ct.fnGetInstancesData(ct.serverMainList);
                     }
                 }
             });
@@ -436,9 +435,9 @@ angular.module('iaas.controllers')
                             ct.serverMainList.splice(serverStates.length, ct.serverMainList.length - serverStates.length);
                         }
                         var serverMainList = angular.copy(ct.serverMainList);
+                        ct.fnGetInstancesData(serverStates);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
                             ct.fn.setProcState(instanceStateInfo);
-                            ct.fnGetInstancesData(instanceStateInfo);
                             var serverItem = common.objectsFindByField(serverMainList, "id", instanceStateInfo.id);
                             if (serverItem && serverItem.id) {
                                 delete serverItem.taskState;
@@ -474,6 +473,8 @@ angular.module('iaas.controllers')
                             $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
                                 ct.fn.checkServerState();
                             }, 2000);
+                        } else {
+                            ct.fn.replaceServerInfo();
                         }
                         // fnGetUsedResource 사용안하므로 주석처리
                         // if (isReplaceServerInfo) {
@@ -520,13 +521,14 @@ angular.module('iaas.controllers')
                         common.showAlertSuccess('삭제되었습니다.');
                         ct.fnGetServerMainList();
                     } else {
-                        $scope.main.loadingMainBody = false;
                         common.showAlertError('오류가 발생하였습니다.');
                     }
                 });
                 returnPromise.error(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
                     common.showAlertError(data.message);
+                });
+                returnPromise.finally(function () {
+                    $scope.main.loadingMainBody = false;
                 });
             });
         };
@@ -957,12 +959,17 @@ angular.module('iaas.controllers')
 
             var rp = common.retrieveResource(common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/iaas/tenant/' + ct.data.tenantId + '/instances', 'GET', params));
             rp.success(function (data) {
-                var alarmInfo = {};
                 angular.forEach(data.metric, function (instance) {
-                    if (server && instance.alarmStatus) {
+                    if (angular.isArray(server)) {
+                        angular.forEach(server, function (serverItem) {
+                            if (serverItem.id == instance.instance_id) {
+                                ct.fnSetInstanceState(serverItem, instance);
+                                ct.fnSetInstanceUseRate(serverItem, instance);
+                            }
+                        });
+                    } else if (server && instance.alarmStatus) {
                         ct.fnSetInstanceState(server, instance);
-                        ct.fnSetInstanceUseRate(server, instance)
-
+                        ct.fnSetInstanceUseRate(server, instance);
                     } else {
                         // var stop = $interval(function () {
                         //     console.log(ct.serverMainList)
@@ -1547,21 +1554,20 @@ angular.module('iaas.controllers')
                 return;
             }
             $scope.main.loadingMainBody = true;
-            //console.log("ct.fn.createServer params : ", params); return;
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers)  {
-                // 서버생성후 -> 디스크 생성 후 sucess 처리.
-                $scope.main.loadingMainBody = false;
-                common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
-                // 페이지 이동으로 바꿔야 하고
-                $scope.main.goToPage("/iaas/compute");
+                $timeout(function () {
+                    clickCheck = false;
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                    // 페이지 이동으로 바꿔야 하고
+                    $scope.main.goToPage("/iaas/compute");
+                }, 5000);
             });
             returnPromise.error(function (data, status, headers) {
+                clickCheck = false;
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
-            });
-            returnPromise.finally(function() {
-                clickCheck = false;
             });
         };
 

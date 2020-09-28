@@ -121,70 +121,30 @@ angular.module('iaas.controllers')
             }
         };
 
-        ct.deleteVolumes = function(type, id) {
-        	if (type == 'thum') {
-        		common.showConfirm('디스크 삭제','디스크을 삭제 하시겠습니까?').then(function(){
-                    ct.deleteVolumesAction(type, id);
-                });
-        	} else if (type == 'tbl') {
-        		if (ct.roles.length == 0) {
-                    common.showAlert('메세지','선택된 디스크가 없습니다.');
-                } else {
-                    common.showConfirm('디스크 삭제','선택된 '+ct.roles.length+'개의 디스크을 삭제 하시겠습니까?').then(function(){
-                        ct.deleteVolumesAction(type, id);
-                    });
-                }
-        	}
-        };
-
-        // 스토리지 삭제
-        ct.deleteVolumesAction = function(type, id) {
-            var prom = [];
-            if (type == 'thum') {
-            	prom.push(ct.deleteVolumesJob(id));
-            } else if (type == 'tbl') {
-            	for (var i=0; i< ct.roles.length; i++) {
-                    prom.push(ct.deleteVolumesJob(ct.roles[i]));
-                }
-            }
-            $q.all(prom).then(function(results){
-                for (var i=0; i < results.length; i++ ) {
-                    if (!results[i]) {
-                        common.showAlert('메세지','오류가 발생하였습니다.');
-                    }
-                }
-                common.showAlertSuccess('디스크가 삭제 되었습니다.');
-                ct.fn.getStorageList();
-                ct.roles = [];
-            }).catch(function(e){
-                common.showAlert('메세지',e);
-            });
-        };
-
         // 스토리지 삭제
         ct.deleteVolumesJob = function(id) {
-        	$scope.main.loadingMainBody = true;
-            var deferred = $q.defer();
-            if (typeof id !== 'string') {
-                return;
-            }
-            var param = {
-                tenantId : ct.data.tenantId,
-                volumeId : id
-            };
-            
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
-            returnPromise.success(function (data, status, headers) {
-                deferred.resolve(true);
-            });
-            returnPromise.error(function (data, status, headers) {
-                deferred.reject(data.message);
-            });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-            });
+            common.showConfirm('디스크 삭제','선택한 디스크를 삭제하시겠습니까?').then(function() {
+                if (typeof id !== 'string') {
+                    return;
+                }
+                var param = {
+                    tenantId : ct.data.tenantId,
+                    volumeId : id
+                };
 
-            return deferred.promise;
+                $scope.main.loadingMainBody = true;
+                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
+                returnPromise.success(function (data, status, headers) {
+                    common.showAlertSuccess('삭제되었습니다.');
+                    ct.fn.getStorageList();
+                });
+                returnPromise.error(function (data, status, headers) {
+                    common.showAlertError(data.message)
+                });
+                returnPromise.finally(function () {
+                    $scope.main.loadingMainBody = false;
+                });
+            });
         };
 
         ct.createSnapshotPopBefore = function ($event,volume) {
@@ -1007,6 +967,7 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.title 		= "디스크 이름 변경";
     	$scope.dialogOptions.okName 	= "변경";
     	$scope.dialogOptions.closeName 	= "닫기";
+        $scope.dialogOptions.authenticate = true;
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reNameStoragePopForm.html" + _VersionTail();
     	
     	$scope.actionLoading 			= false;
@@ -1018,9 +979,11 @@ angular.module('iaas.controllers')
         });
 
     	pop.fn.storageNameCustomValidationCheck = function(name) {
-            if (pop.storageNameList.indexOf(name) > -1) {
+    	    if (pop.storageNameList.indexOf(name) > -1) {
+                $scope.dialogOptions.authenticate = true;
                 return {isValid : false, message : "이미 사용중인 이름 입니다."};
             } else {
+                $scope.dialogOptions.authenticate = false;
                 return {isValid : true};
             }
         };
@@ -1042,6 +1005,12 @@ angular.module('iaas.controllers')
     		$scope.dialogClose = true;
     		common.mdDialogCancel();
     	};
+
+    	pop.fn.inputEnter = function (keyEvent) {
+    	    if (keyEvent.which == 13 && $scope.dialogOptions.authenticate == false) {
+                $scope.popDialogOk();
+            }
+        };
     	
     	pop.fn.reNmStor = function() {
             $scope.actionLoading = true;

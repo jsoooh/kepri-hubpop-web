@@ -20,7 +20,7 @@
 					</button>
 					<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.formOpen($event, 'rename', contents.loadbalancer);">이름/설명 변경</a></li>
-						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.deleteLb(contents.loadbalancer.iaasLbInfo.id);">삭제</a></li>
+						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, contents.loadbalancer.iaasLbInfo.name, contents.deleteLb, contents.loadbalancer.iaasLbInfo.id);">삭제</a></li>
 					</ul>
 				</div>
 			</div>
@@ -181,7 +181,7 @@
 										<span>포트 관리</span>
 										<div class="pull-right">
 											<button type="button" title="수정" ng-click="contents.fn.formOpen($event, 'editport', contents.loadbalancer);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-pen font-size-20 grey-600"></i></button>
-											<button type="button" title="삭제" ng-click="contents.deleteLbPort(contents.iaasLbPorts.id);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-trash font-size-20 grey-600"></i></button>
+											<button type="button" title="삭제" ng-click="main.popDeleteCheckName($event, contents.iaasLbPorts.name, contents.deleteLbPort, contents.iaasLbPorts.id);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-trash font-size-20 grey-600"></i></button>
 										</div>
 									</h3>
 									
@@ -510,7 +510,7 @@
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModDomainForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.deleteDomain(item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, item.domainInfo.domain, contents.fn.deleteDomain, item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
@@ -587,7 +587,7 @@
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="main.checkResourceUserRole() || contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="main.checkResourceUserRole() || contents.fn.deletePortForwarding(item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, item.domainInfo, contents.fn.deletePortForwarding, item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
