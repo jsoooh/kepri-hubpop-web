@@ -334,7 +334,7 @@ angular.module('gpu.controllers')
             promise2.error(function (data, status, headers) {
                 console.log('create Bucket error  !!! ');
                 $scope.main.loadingMainBody = false;
-
+                return false;
             });
             if (!promise2) return;
             if (!ct.fn.commCheckFormValidity(subPage)) return;
