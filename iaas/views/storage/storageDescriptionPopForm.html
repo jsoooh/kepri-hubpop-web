@@ -9,7 +9,8 @@
 			<tr>
 				<th scope="row">디스크 설명</th>
 				<td>
-					<textarea id="disk_description_toUpdate" class="form-control volTxt" name="newVolDesc" ng-model="pop.volume.description"></textarea>
+					<textarea id="disk_description_toUpdate" class="form-control volTxt" name="newVolDesc" ng-model="pop.volume.description" validation="max_len:100"></textarea>
+					<span class="txt_limit"><em ng-class="{'red' : (pop.volume.description.length > 100)}">{{pop.volume.description.length}}</em>/100자</span>
 				</td>
 			</tr>
 		</tbody>

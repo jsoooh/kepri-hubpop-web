@@ -124,7 +124,9 @@
 											<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse2" aria-expanded="false" ng-click="main.panelToggleChange($event);">
 												<h3>
 													 설명
-													<div class="t_tip_bx"><div class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'추가할 디스크에 대한 설명을 100자 내외로 입력할 수 있습니다.'">	i</div></div>		
+													<div class="t_tip_bx">
+														<div class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'추가할 디스크에 대한 설명을 100자 내외로 입력할 수 있습니다.'">	i</div>
+													</div>
 												</h3>
 											</a>
 										</div>
@@ -133,7 +135,7 @@
 											<div class="panel-body">
 												<div class="form-gruop">
 													<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
-													<!-- <span class="txt_limit"><em ng-class="{'red' : (contents.volume.description.length > 100)}">{{contents.volume.description.length}}</em>/100자</span> -->
+													<span class="txt_limit"><em ng-class="{'red' : (contents.volume.description.length > 100)}">{{contents.volume.description.length}}</em>/100자</span>
 												</div>
 											</div>
 										</div>

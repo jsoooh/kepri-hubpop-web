@@ -143,10 +143,11 @@ angular.module('iaas.controllers')
 
         // 볼륨 생성전 체크
         ct.fn.createVolumeCheck = function () {
-            if (ct.storageNameList.indexOf(ct.volume.name) > -1) {
-                return common.showAlert("이미 사용중인 이름 입니다.");
+            if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
+                common.showAlertError("항목", "잘못된 값이 있거나 필수사항을 입력하지 않았습니다.");
+                return;
             } else if (ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
-                return common.showAlert("디스크 용량이 부족합니다.");
+                return common.showAlert("디스크 용량이 부족합니다.")
             }
             ct.fn.createVolume();
         };

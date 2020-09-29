@@ -1221,8 +1221,13 @@ angular.module('iaas.controllers')
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-            if ($scope.actionBtnHied) return;
+            if ($scope.actionBtnHied)
+                return;
+            else if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+                return;
+
             $scope.actionBtnHied = true;
+
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newVolDesc);
             if (checkByte > 255) {
                 common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
