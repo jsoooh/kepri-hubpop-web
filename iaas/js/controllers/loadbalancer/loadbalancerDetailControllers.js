@@ -624,7 +624,11 @@ angular.module('iaas.controllers')
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-            if ($scope.actionBtnHied) return;
+            if ($scope.actionBtnHied)
+                return;
+            else if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+                return;
+
             $scope.actionBtnHied = true;
 
             pop.fn.loadBalancerNameValidationCheck();

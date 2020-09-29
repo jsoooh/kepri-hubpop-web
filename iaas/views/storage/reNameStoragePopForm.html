@@ -1,4 +1,4 @@
-<div class="table-wrap">
+<div class="board-warp board-write-wrap">
 	<table class="table">
 		<colgroup>
 			<col style="width: 35%;">
@@ -7,11 +7,11 @@
 		<tbody>
 			<tr>
 				<th scope="row">디스크 이름(변경 전)</th>
-				<td><input type="text" name="" value="" class="form-control" placeholder="{{pop.volume.name}}" disabled></td>
+				<td><input type="text" name="" value="" class="form-control form-control-sm" placeholder="{{pop.volume.name}}" disabled></td>
 			</tr>
 			<tr>
 				<th scope="row">디스크 이름(변경 후)</th>
-				<td><input type="text" name="newVolNm" ng-model="pop.newVolNm" class="form-control" placeholder="변경할 이름을 입력하세요." ng-keypress="pop.fn.inputEnter($event)" validation="required|custom:pop.fn.storageNameCustomValidationCheck(pop.newVolNm)"></td>
+				<td><input type="text" name="newVolNm" ng-model="pop.newVolNm" class="form-control form-control-sm" placeholder="변경할 이름을 입력하세요." ng-keypress="pop.fn.inputEnter($event)" validation="required|custom:pop.fn.storageNameCustomValidationCheck(pop.newVolNm)"></td>
 			</tr>
 		</tbody>
 	</table>
