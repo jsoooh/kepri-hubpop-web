@@ -222,25 +222,18 @@ angular.module('portal.controllers')
                     if (ct.useServices != "") ct.useServices += ", ";
                     ct.useServices += "App 실행 서비스";
                 }
-                //사용중인 서비스가 있을 때 리턴
+                // 사용중인 서비스가 있을 때 리턴
                 if (ct.useServices != "") {
                     common.showDialogAlertHtml('알림','아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br><b>'+ ct.useServices +'</b>', 'warning');
                     return;
                 }
-                ct.deleteOrgProject(orgItem);
+                // 프로젝트 삭제전 이름체크 및 삭제
+                $scope.main.popDeleteCheckName($event, '프로젝트', orgItem.orgName, ct.deleteOrgProjectAction, orgItem)
             }).catch(function(reject) {
                 $scope.main.loadingMainBody = false;
                 common.showDialogAlertHtml('알림','아래 서비스 확인 중 에러가 있습니다. <br>확인 후 진행해 주세요. <br><br>' + reject.config.url, 'warning');
                 console.log("프로젝트 삭제 전 체크 에러 :", reject);
                 return;
-            });
-        };
-
-        // 조직 삭제
-        ct.deleteOrgProject = function (orgItem) {
-            var showConfirm = common.showConfirm($translate.instant('label.del') + '(' + orgItem.orgName + ')', '프로젝트를 삭제하시겠습니까?');
-            showConfirm.then(function () {
-                ct.deleteOrgProjectAction(orgItem);
             });
         };
 

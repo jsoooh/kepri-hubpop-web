@@ -82,7 +82,7 @@
 												<li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="App가‘시작’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
 												<li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.restartApp(appItem.guid, appItem.name)">재시작</a></li>
 												<li ng-if="appItem.state != 'STARTED'">	<a href="javascript:void(0);" class="disabled" title="App가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
-												<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteApp(appItem.guid, appItem.name)">삭제</a></li>
+												<li><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '애플리케이션', appItem.name, contents.deleteAppAction, appItem.guid)">삭제</a></li>
 											</ul>
 										</div>
 									</div>
@@ -230,7 +230,7 @@
 									<li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="App가‘시작’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
 									<li ng-if="appItem.state == 'STARTED'"><a href="javascript:void(0);" ng-click="contents.restartApp(appItem.guid, appItem.name)">재시작</a></li>
 									<li ng-if="appItem.state != 'STARTED'"><a href="javascript:void(0);" class="disabled" title="App가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
-									<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteApp(appItem.guid, appItem.name)">삭제</a></li>
+									<li><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '애플리케이션', appItem.name, contents.deleteAppAction, appItem.guid)">삭제</a></li>
 								</ul>
 							</div>
 						</td>

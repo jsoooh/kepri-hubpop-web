@@ -1597,15 +1597,8 @@ angular.module('portal.controllers')
                 common.showDialogAlertHtml('알림','아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br><b>'+ ct.useServices +'</b>', 'warning');
                 return;
             }
-            ct.deleteOrgProject();
-        };
-
-        // 조직 삭제
-        ct.deleteOrgProject = function () {
-            var showConfirm = common.showConfirm($translate.instant('label.del') + '(' + ct.selOrgProject.orgName + ')', '프로젝트를 삭제하시겠습니까?');
-            showConfirm.then(function () {
-                ct.deleteOrgProjectAction();
-            });
+            // 프로젝트 삭제전 이름 체크 및 삭제
+            $scope.main.popDeleteCheckName($event, '프로젝트', ct.selOrgProject.orgName, ct.deleteOrgProjectAction);
         };
 
         // 조직 삭제 액션
@@ -1696,14 +1689,6 @@ angular.module('portal.controllers')
             promise.error(function (data) {
                 $scope.main.loadingMain = false;
                 common.showAlertError('비밀번호 초기화가 실패하였습니다.');
-            });
-        };
-
-        // 사용자 삭제
-        ct.deleteOrgProjectUser = function (user) {
-            var showConfirm = common.showConfirm($translate.instant('label.del'), user.name + ' ' + $translate.instant('message.mq_delete'));
-            showConfirm.then(function() {
-                ct.deleteOrgProjectUserAction(user);
             });
         };
 

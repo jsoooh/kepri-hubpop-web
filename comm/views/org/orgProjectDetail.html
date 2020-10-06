@@ -1312,7 +1312,7 @@
 							</button>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="" title="사용자이미지 수정" ng-click="contents.createOrgProjectIcon($event)">프로젝트 이미지 수정</a></li>
-								<li><a href="" title="삭제" ng-click="contents.checkDeleteOrgProject($event);">{{ 'label.del' | translate }}</a></li>
+								<li><a href="" title="삭제" class="delete" ng-click="contents.checkDeleteOrgProject($event);">{{ 'label.del' | translate }}</a></li>
 							</ul>
 						</div>
 					</div>
@@ -1440,7 +1440,7 @@
 												<a href="" ng-class="(orgUser.usersInfo && orgUser.usersInfo.isSso) ? 'disabled' : ''" ng-click="(orgUser.usersInfo && !orgUser.usersInfo.isSso) && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
 											</li>
 											<li title="삭제" >
-												<a href="" ng-click="contents.deleteOrgProjectUser(orgUser.usersInfo);">{{ 'label.del' | translate }}</a>
+												<a href="" class="delete" ng-click="main.popDeleteCheckName($event, '구성원', orgUser.usersInfo.name, contents.deleteOrgProjectUserAction, orgUser.usersInfo);">{{ 'label.del' | translate }}</a>
 											</li>
 										</ul>
 									</div>
