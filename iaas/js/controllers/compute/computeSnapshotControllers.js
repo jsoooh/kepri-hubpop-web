@@ -250,14 +250,13 @@ angular.module('iaas.controllers')
             ct.isInstanceListLoad = false;
             var params = {
                 tenantId : ct.data.tenantId,
-                deleteYn : "N",
                 size : -1,
                 page : 0
             };
-            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/lookup', 'GET', params);
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', params);
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    angular.forEach(data.content, function (item) {
+                if (data && data.content && data.content && data.content.instances && data.content.instances.length > 0) {
+                    angular.forEach(data.content.instances, function (item) {
                         ct.serverNameList.push(item.name);
                     });
                 }
