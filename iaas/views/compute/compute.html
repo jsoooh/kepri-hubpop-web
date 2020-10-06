@@ -131,7 +131,7 @@
 																<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="디스크 연결">디스크 연결</a></li>
 																<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="디스크 연결">디스크 연결</a></li>
 																<li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
-																<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, instance.name, contents.deleteInstanceJob, instance.id);" title="서버 삭제">서버 삭제</a></li>
+																<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '서버', instance.name, contents.deleteInstanceJob, instance.id);" title="서버 삭제">서버 삭제</a></li>
 																<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버 삭제">서버 삭제</a></li>
 																<!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
 																<!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
@@ -428,7 +428,7 @@
 														<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="디스크 연결">디스크 연결</a></li>
 														<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="디스크 연결">디스크 연결</a></li>
 														<li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
-														<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, instance.name, contents.deleteInstanceJob, instance.id);" title="서버 삭제">서버 삭제</a></li>
+														<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '서버', instance.name, contents.deleteInstanceJob, instance.id);" title="서버 삭제">서버 삭제</a></li>
 														<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버 삭제">서버 삭제</a></li>
 														<!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
 														<!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
@@ -505,7 +505,7 @@
 				<!-- 버튼영역 -->
 				<div class="margin-bottom-20">
 					<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="contents.fn.checkLbPortLimit();" ng-disabled="!main.checkResourceUserRole()">
-						<div class="feather-icon color-primary"><i data-feather="monitor" class="feather-directive"></i></div> <b>부하 분산 설정</b>
+						<div class="feather-icon color-primary"><i data-feather="monitor" class="feather-directive"></i></div> <b>부하분산 설정</b>
 					</button>
 				</div>
 				<!-- //버튼영역 -->
@@ -532,13 +532,13 @@
 													</button>
 													<ul class="dropdown-menu" role="btn-optionn" aria-labelledby="btn-option">
 														<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.formOpen($event, 'rename', lbServiceList);" title="이름/설명 변경">이름/설명 변경</a></li>
-														<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, lbServiceList.name, contents.deleteLb, lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
+														<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '부하 분산 서버', lbServiceList.name, contents.deleteLb, lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
 													</ul>
 												</div>	
 											</div>
 										</div>
 										<div class="clearfix">
-											<span class="lagn">부하 분산 서버</span>
+											<span class="lagn">부하분산 서버</span>
 											<span class="state pull-right">
 												<span class="state-round rgba-green-strong"></span>
 												<span>활성</span>
@@ -668,7 +668,7 @@
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.formOpen($event, 'rename', lbServiceList);" title="이름/설명 변경">이름/설명 변경</a></li>
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, lbServiceList.name, contents.deleteLb, lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '부하 분산 서버', lbServiceList.name, contents.deleteLb, lbServiceList.iaasLbInfo.id);" title="삭제">삭제</a></li>
 												</ul>
 											</div>
 										</td>

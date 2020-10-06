@@ -658,13 +658,6 @@ angular.module('iaas.controllers')
             ct.fn.listDomains();
         };
 
-        // 도메인 반환 버튼
-        ct.fn.deleteDomain = function(domainLink) {
-            common.showConfirm('도메인 삭제','※'+domainLink.domainInfo.domain+' 도메인을 삭제 합니다.').then(function(){
-                ct.fn.deleteDomainAction(domainLink);
-            });
-        };
-
         // 도메인 삭제 job
         ct.fn.deleteDomainAction = function(domainLink) {
             $scope.main.loadingMainBody = true;
@@ -735,26 +728,24 @@ angular.module('iaas.controllers')
 
         // 서버삭제
         ct.deleteInstanceJob = function(id) {
-            common.showConfirm('서버 삭제','선택한 서버를 삭제하시겠습니까?').then(function(){
-                $scope.main.loadingMainBody = true;
-                var param = {
-                    tenantId : ct.data.tenantId,
-                    instanceId : id
-                };
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'DELETE', param);
-                returnPromise.success(function (data, status, headers) {
-                    if (status == 200 && data) {
-                        common.showAlertSuccess('삭제되었습니다.');
-                        $scope.main.goToPage('/iaas/compute');
-                    } else {
-                        $scope.main.loadingMainBody = false;
-                        common.showAlertError('오류가 발생하였습니다.');
-                    }
-                });
-                returnPromise.error(function (data, status, headers) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                instanceId : id
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'DELETE', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data) {
+                    common.showAlertSuccess('삭제되었습니다.');
+                    $scope.main.goToPage('/iaas/compute');
+                } else {
                     $scope.main.loadingMainBody = false;
-                    common.showAlertError(data.message);
-                });
+                    common.showAlertError('오류가 발생하였습니다.');
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
             });
         };
 
@@ -1501,13 +1492,6 @@ angular.module('iaas.controllers')
 
         ct.refalshPortForwardingCallBackFunction = function () {
             ct.fn.listPortForwardings();
-        };
-
-        //포트포워딩 삭제
-        ct.fn.deletePortForwarding = function(forwardingItem) {
-            common.showConfirm('포트포워딩 삭제','※'+forwardingItem.targetPort+' 포트포워딩을 삭제 하시겠습니까?').then(function(){
-                ct.fn.deletePortForwardingAction(forwardingItem);
-            });
         };
 
         //포트포워딩 삭제 실제 action

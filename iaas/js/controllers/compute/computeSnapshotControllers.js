@@ -70,29 +70,27 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.deleteInstanceSnapshot = function(instanceSnapshot) {
-            common.showConfirm('서버 백업 이미지 삭제', '"'+instanceSnapshot.name+'" 서버 백업 이미지을 삭제 하시겠습니까?').then(function(){
-                $scope.main.loadingMainBody = true;
-                var param = {
-                    tenantId : instanceSnapshot.tenantId,
-                    snapShotId : instanceSnapshot.id
-                };
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'DELETE', param);
-                returnPromise.success(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                    
-                    $timeout(function() {
-                    	ct.fn.getInstanceSnapshotList();
-                        common.showAlertSuccess("삭제 되었습니다.");
-                	}, 1000);
-                    
-                });
-                returnPromise.error(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                	common.showAlertError(data.message);
-                });
-                returnPromise.finally(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                });
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : instanceSnapshot.tenantId,
+                snapShotId : instanceSnapshot.id
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'DELETE', param);
+            returnPromise.success(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+
+                $timeout(function() {
+                    ct.fn.getInstanceSnapshotList();
+                    common.showAlertSuccess("삭제 되었습니다.");
+                }, 1000);
+
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -126,22 +124,20 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.deleteStorageSnapshot = function(storageSnapshot) {
-            common.showConfirm('디스크 백업 이미지 삭제', '"'+storageSnapshot.snapshotName+'" 디스크 백업 이미지을 삭제 하시겠습니까?').then(function(){
-                $scope.main.loadingMainBody = true;
-                var param = {
-                    tenantId : storageSnapshot.tenantId,
-                    snapshotId : storageSnapshot.snapshotId
-                };
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'DELETE', param);
-                returnPromise.success(function (data, status, headers) {
-                    ct.fn.getStorageSnapshotList();
-                });
-                returnPromise.error(function (data, status, headers) {
-                    common.showAlert("message",data.message);
-                });
-                returnPromise.finally(function (data, status, headers) {
-                    $scope.main.loadingMainBody = false;
-                });
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : storageSnapshot.tenantId,
+                snapshotId : storageSnapshot.snapshotId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'DELETE', param);
+            returnPromise.success(function (data, status, headers) {
+                ct.fn.getStorageSnapshotList();
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlert("message",data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
             });
         };
 

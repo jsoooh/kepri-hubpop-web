@@ -242,53 +242,49 @@ angular.module('iaas.controllers')
 
         // LB 삭제
         ct.deleteLb = function(id) {
-            common.showConfirm('LB 삭제','선택한 LB를 삭제하시겠습니까?').then(function(){
-                $scope.main.loadingMainBody = true;
-                var param = {
-                    tenantId : ct.data.tenantId,
-                    loadBalancerId : id
-                };
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'DELETE', param);
-                returnPromise.success(function (data, status, headers) {
-                    if (status == 200 && data) {
-                        $scope.main.loadingMainBody = false;
-                        common.showAlertSuccess('삭제되었습니다.');
-                        common.locationHref('/#/iaas/compute?tabIndex=1');
-                    } else {
-                        $scope.main.loadingMainBody = false;
-                        common.showAlertError('오류가 발생하였습니다.');
-                    }
-                });
-                returnPromise.error(function (data, status, headers) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                loadBalancerId : id
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'DELETE', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data) {
                     $scope.main.loadingMainBody = false;
-                    common.showAlertError(data.message);
-                });
+                    common.showAlertSuccess('삭제되었습니다.');
+                    common.locationHref('/#/iaas/compute?tabIndex=1');
+                } else {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertError('오류가 발생하였습니다.');
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
             });
         };
 
         // 부하분산 관리 - 포트관리 - 삭제 버튼
         ct.deleteLbPort = function(id) {
-            common.showConfirm('부하 분산 서버 포트 삭제','선택한 부하 분산 서버 포트를 삭제하시겠습니까?').then(function(){
-                $scope.main.loadingMainBody = true;
-                var param = {
-                    tenantId : ct.data.tenantId,
-                    loadBalancerPortId : id
-                };
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port', 'DELETE', param);
-                returnPromise.success(function (data, status, headers) {
-                    if (status == 200 && data) {
-                        $scope.main.loadingMainBody = false;
-                        $scope.main.replacePage();
-                        common.showAlertSuccess('삭제되었습니다.');
-                    } else {
-                        $scope.main.loadingMainBody = false;
-                        common.showAlertError('오류가 발생하였습니다.');
-                    }
-                });
-                returnPromise.error(function (data, status, headers) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                loadBalancerPortId : id
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer/port', 'DELETE', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data) {
                     $scope.main.loadingMainBody = false;
-                    common.showAlertError(data.message);
-                });
+                    $scope.main.replacePage();
+                    common.showAlertSuccess('삭제되었습니다.');
+                } else {
+                    $scope.main.loadingMainBody = false;
+                    common.showAlertError('오류가 발생하였습니다.');
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
             });
         };
 
@@ -467,13 +463,6 @@ angular.module('iaas.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-        // 도메인 반환 버튼
-        ct.fn.deleteDomain = function(domainLink) {
-            common.showConfirm('도메인 삭제','※'+domainLink.domainInfo.domain+' 도메인을 삭제 합니다.').then(function(){
-                ct.fn.deleteDomainAction(domainLink);
-            });
-        };
-
         // 도메인 삭제 job
         ct.fn.deleteDomainAction = function(domainLink) {
             $scope.main.loadingMainBody = true;
@@ -537,13 +526,6 @@ angular.module('iaas.controllers')
 
         ct.refreshPortForwardingCallBackFunction = function () {
             ct.fn.listPortForwardings();
-        };
-
-        //포트포워딩 삭제
-        ct.fn.deletePortForwarding = function(forwardingItem) {
-            common.showConfirm('포트포워딩 삭제','※'+forwardingItem.targetPort+' 포트포워딩을 삭제 하시겠습니까?').then(function(){
-                ct.fn.deletePortForwardingAction(forwardingItem);
-            });
         };
 
         //lb port limit 확인

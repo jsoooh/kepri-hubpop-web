@@ -191,26 +191,24 @@ angular.module('iaas.controllers')
 
          /*삭제 클릭*/
         ct.fn.deleteObjectBucket = function(objectName) {
-            common.showConfirm('저장소 삭제','선택한 저장소를 삭제하시겠습니까?').then(function() {
-                $scope.main.loadingMainBody = true;
-                var param = {
-                    tenantId : ct.data.tenantId,
-                    bucket : objectName
-                };
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket', 'DELETE', param);
-                returnPromise.success(function (data, status, headers) {
-                    if (status == 200 && data) {
-                        common.showAlertSuccess('삭제되었습니다.');
-                        ct.fn.getObjectStorageList();
-                    } else {
-                        $scope.main.loadingMainBody = false;
-                        common.showAlertError('오류가 발생하였습니다.');
-                    }
-                });
-                returnPromise.error(function (data, status, headers) {
+            $scope.main.loadingMainBody = true;
+            var param = {
+                tenantId : ct.data.tenantId,
+                bucket : objectName
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket', 'DELETE', param);
+            returnPromise.success(function (data, status, headers) {
+                if (status == 200 && data) {
+                    common.showAlertSuccess('삭제되었습니다.');
+                    ct.fn.getObjectStorageList();
+                } else {
                     $scope.main.loadingMainBody = false;
-                    common.showAlertError(data.message);
-                });
+                    common.showAlertError('오류가 발생하였습니다.');
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError(data.message);
             });
         };
 

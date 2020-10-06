@@ -323,18 +323,19 @@ angular.module('common.controllers', [])
             }
         };
 
-        // 자원 삭제시 이름 체크 팝업창 (name : 삭제할 자원의 이름, deleteFunciton : 삭제 함수, deleteFunctionParams : 삭제 함수의 파라미터)
-        mc.popDeleteCheckName = function ($event, name, deleteFunction, ...deleteFunctionParams) {
-            if (!name) {
+        // 자원 삭제시 이름 체크 팝업창 (titleName : 팝업타이틀 제목, resourceName : 삭제할 자원의 이름, deleteFunciton : 삭제 함수, deleteFunctionParams : 삭제 함수의 파라미터)
+        mc.popDeleteCheckName = function ($event, titleName, resourceName, deleteFunction, ...deleteFunctionParams) {
+            if (!resourceName) {
                 return common.showAlertWarning('삭제할 이름이 없습니다.');
             } else if (!angular.isFunction(deleteFunction)) {
                 return common.showAlertWarning('호출함수가 없습니다.');
             }
             mc.pop = {};
-            mc.pop.deleteName = name;
+            mc.pop.deleteName = resourceName;
+            mc.pop.titleName = titleName;
             mc.pop.name = '';
             var dialogOptions = {
-                title : '자원 삭제',
+                title : titleName + ' 삭제',
                 okName : '삭제',
                 closeName : '취소',
                 authenticate : true,
