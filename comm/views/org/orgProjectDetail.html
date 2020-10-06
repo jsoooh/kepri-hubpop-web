@@ -1434,7 +1434,7 @@
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="menu">
 											<li title="권한 변경">
-												<a href="" ng-click="contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a>
+												<a href="" ng-class="orgUser.roleName == 'OWNER' ? 'disabled' : ''" ng-click="orgUser.roleName != 'OWNER' && contents.changeRoleForm(orgUser.usersInfo);">권한 변경</a>
 											</li>
 											<li title="패스워드 초기화">
 												<a href="" ng-class="(orgUser.usersInfo && orgUser.usersInfo.isSso) ? 'disabled' : ''" ng-click="(orgUser.usersInfo && !orgUser.usersInfo.isSso) && contents.resetPassword(orgUser.usersInfo);">패스워드 초기화</a>
