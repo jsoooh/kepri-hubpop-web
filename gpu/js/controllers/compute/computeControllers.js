@@ -405,8 +405,15 @@ angular.module('gpu.controllers')
 
         // 서버 상태
         ct.fn.checkServerState = function(instanceId) {
+            var instanceIds = [];
+            for (var i = 0; i < ct.serverMainList.length; i++) {
+                if (ct.serverMainList[i].procState != 'end') {
+                    instanceIds.push(ct.serverMainList[i].id);
+                }
+            }
             var param = {
-                tenantId : ct.data.tenantId
+                tenantId : ct.data.tenantId,
+                instanceIds: instanceIds.join(',')
             };
             if (instanceId) {
                 param.instanceId = instanceId;
@@ -420,7 +427,6 @@ angular.module('gpu.controllers')
                     $scope.main.reloadTimmer['instanceServerStateList'] = null;
                 }
             }
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/states', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/states', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
@@ -534,7 +540,6 @@ angular.module('gpu.controllers')
                     tenantId : ct.data.tenantId,
                     instanceId : id
                 };
-                // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'DELETE', param);
                 var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'DELETE', param);
                 returnPromise.success(function (data, status, headers) {
                     if (status == 200 && data) {
