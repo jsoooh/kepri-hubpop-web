@@ -275,7 +275,12 @@ resources:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
-      image: { get_param: image }
+#      image: { get_param: image }
+      block_device_mapping_v2:
+         - image: { get_param: image }
+           delete_on_termination: true
+           volume_size: 40
+           boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
         - port: { get_resource: server1_port }
@@ -289,7 +294,12 @@ resources:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
-      image: { get_param: image }
+#      image: { get_param: image }
+      block_device_mapping_v2:
+         - image: { get_param: image }
+           delete_on_termination: true
+           volume_size: 40
+           boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
         - port: { get_resource: server2_port }
@@ -303,7 +313,12 @@ resources:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
-      image: { get_param: image }
+#      image: { get_param: image }
+      block_device_mapping_v2:
+         - image: { get_param: image }
+           delete_on_termination: true
+           volume_size: 40
+           boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
         - port: { get_resource: server3_port }
