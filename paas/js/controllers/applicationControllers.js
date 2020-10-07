@@ -300,14 +300,6 @@ angular.module('paas.controllers')
             });
         };*/
 
-        ct.deleteApp = function(guid, name) {
-            var showConfirm = common.showConfirmWarning($translate.instant('label.del') + "(" + name + ")", $translate.instant('message.mq_delete_app'));
-            showConfirm.then(function () {
-                common.mdDialogHide();
-                ct.deleteAppAction(guid);
-            });
-        };
-
         ct.startAppAction = function(guid) {
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.startApp(guid);
@@ -2022,15 +2014,6 @@ angular.module('paas.controllers')
             });
         };
 
-        ct.deleteApp = function(guid, name) {
-            var showConfirm = common.showConfirmWarning($translate.instant('label.del') + "(" + name + ")", $translate.instant('message.mq_delete_app'));
-            showConfirm.then(function () {
-                common.mdDialogHide();
-                $scope.main.refreshIntervalStop();
-                ct.deleteAppAction(guid);
-            });
-        };
-
         ct.deleteAppAction = function(guid) {
             $scope.main.loadingMainBody = true;
             var appPromise = applicationService.deleteApp(guid);
@@ -2582,15 +2565,6 @@ angular.module('paas.controllers')
             });
         };
 
-
-        tab.deleteAppRoute = function (routeGuid, host) {
-            var showConfirm = common.showConfirmWarning($translate.instant('label.del') + "(" + host + ")", $translate.instant('message.mq_delete_route'));
-            showConfirm.then(function () {
-                common.mdDialogHide();
-                tab.deleteAppRouteAction(tab.appGuid, routeGuid);
-            });
-        };
-
         tab.deleteAppRouteAction = function (guid, routeGuid) {
             $scope.main.loadingMainBody = true;
             var appRoutePromise = applicationService.removeAppRoute(guid, routeGuid);
@@ -2738,15 +2712,6 @@ angular.module('paas.controllers')
             routePromise.error(function (data) {
                 tab.appEnvVar = {};
                 tab.loadingAppEnvVar = false;
-            });
-        };
-
-
-        tab.deleteAppEnvironment = function (envItem) {
-            var showConfirm = common.showConfirmWarning($translate.instant('label.del') + "(" + envItem.key + ")", $translate.instant('message.mq_delete_environment_variable'));
-            showConfirm.then(function () {
-                common.mdDialogHide();
-                tab.deleteAppEnvironmentAction(envItem.key);
             });
         };
 

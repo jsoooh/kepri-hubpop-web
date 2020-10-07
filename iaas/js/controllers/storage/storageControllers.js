@@ -123,27 +123,25 @@ angular.module('iaas.controllers')
 
         // 스토리지 삭제
         ct.deleteVolumesJob = function(id) {
-            common.showConfirm('디스크 삭제','선택한 디스크를 삭제하시겠습니까?').then(function() {
-                if (typeof id !== 'string') {
-                    return;
-                }
-                var param = {
-                    tenantId : ct.data.tenantId,
-                    volumeId : id
-                };
+            if (typeof id !== 'string') {
+                return;
+            }
+            var param = {
+                tenantId : ct.data.tenantId,
+                volumeId : id
+            };
 
-                $scope.main.loadingMainBody = true;
-                var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
-                returnPromise.success(function (data, status, headers) {
-                    common.showAlertSuccess('삭제되었습니다.');
-                    ct.fn.getStorageList();
-                });
-                returnPromise.error(function (data, status, headers) {
-                    common.showAlertError(data.message)
-                });
-                returnPromise.finally(function () {
-                    $scope.main.loadingMainBody = false;
-                });
+            $scope.main.loadingMainBody = true;
+            var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'DELETE', param)
+            returnPromise.success(function (data, status, headers) {
+                common.showAlertSuccess('삭제되었습니다.');
+                ct.fn.getStorageList();
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message)
+            });
+            returnPromise.finally(function () {
+                $scope.main.loadingMainBody = false;
             });
         };
 
@@ -1221,8 +1219,13 @@ angular.module('iaas.controllers')
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-            if ($scope.actionBtnHied) return;
+            if ($scope.actionBtnHied)
+                return;
+            else if (!pop.validationService.checkFormValidity(pop[pop.formName]))
+                return;
+
             $scope.actionBtnHied = true;
+
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newVolDesc);
             if (checkByte > 255) {
                 common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");

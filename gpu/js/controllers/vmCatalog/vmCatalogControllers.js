@@ -572,12 +572,12 @@ angular.module('gpu.controllers')
             tenantId : ct.data.tenantId,
             bucket : bucketName
         };
-        var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/objects', 'GET', param);
+        var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/buckets', 'GET', param));
         returnPromise.success(function (data, status, headers) {
             var bucketNames = [];
             if (data && angular.isArray(data.content) && data.content.length > 0) {
                 angular.forEach(data.content, function(val, key) {
-                    bucketNames.push(val.bucketName);
+                    bucketNames.push(val.containerName);
                 });
             }
             ct.bucketNames = bucketNames;
@@ -590,6 +590,7 @@ angular.module('gpu.controllers')
         ct.fn.getBucketNames(bucketName);
         //if (!bucketName) return;
         if (ct.bucketNames.indexOf(bucketName) >= 0) {
+            console.log("사용중인 버킷 이름 : "+ct.bucketNames);
             return {isValid : false, message: "'" + bucketName + "'은 이미 사용중인 이름 입니다."};
         }
         return {isValid : true};

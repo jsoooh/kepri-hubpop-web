@@ -20,7 +20,7 @@
 					</button>
 					<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.formOpen($event, 'rename', contents.loadbalancer);">이름/설명 변경</a></li>
-						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, contents.loadbalancer.iaasLbInfo.name, contents.deleteLb, contents.loadbalancer.iaasLbInfo.id);">삭제</a></li>
+						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '부하분산 서버', contents.loadbalancer.iaasLbInfo.name, contents.deleteLb, contents.loadbalancer.iaasLbInfo.id);">삭제</a></li>
 					</ul>
 				</div>
 			</div>
@@ -113,13 +113,13 @@
 								</colgroup>
 								<thead class="text-center black white-text">
 									<tr>
-										<th scope="col" style="width:10%;">NO.</th>
-										<th scope="col" style="width:23%; text-align: left;">이름</th>
-										<th scope="col" style="width:10%;">포트</th>
-										<th scope="col" style="width:10%;">프로토콜</th>
-										<th scope="col" style="width:15%;">로드 밸런스 유형<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 로드밸런스 유형<br/> 1. 라운드로빈: 세션을 순차적으로 맺어주는 방식<br/>2. 소스: 사용자의 IP를 Hashing하여 분배하는 방식으로 특정 client는 특정 server로만 접속<br/>3. 최소연결: 연결 개수가 가장 적은 서버를 선택하는 방식'"><span class="ico_info"></span></button></div></th>
-										<th scope="col" style="width:20%; text-align: left;">연결서버</th>
-										<th scope="col" style="width:12%;">헬스체크유형</th>
+										<th scope="col">NO.</th>
+										<th scope="col" class="text-left">이름</th>
+										<th scope="col">포트</th>
+										<th scope="col">프로토콜</th>
+										<th scope="col">로드 밸런스 유형<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 로드밸런스 유형<br/> 1. 라운드로빈: 세션을 순차적으로 맺어주는 방식<br/>2. 소스: 사용자의 IP를 Hashing하여 분배하는 방식으로 특정 client는 특정 server로만 접속<br/>3. 최소연결: 연결 개수가 가장 적은 서버를 선택하는 방식'"><span class="ico_info"></span></button></div></th>
+										<th scope="col" class="text-left">연결서버</th>
+										<th scope="col">헬스체크유형</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -181,7 +181,7 @@
 										<span>포트 관리</span>
 										<div class="pull-right">
 											<button type="button" title="수정" ng-click="contents.fn.formOpen($event, 'editport', contents.loadbalancer);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-pen font-size-20 grey-600"></i></button>
-											<button type="button" title="삭제" ng-click="main.popDeleteCheckName($event, contents.iaasLbPorts.name, contents.deleteLbPort, contents.iaasLbPorts.id);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-trash font-size-20 grey-600"></i></button>
+											<button type="button" title="삭제" ng-click="main.popDeleteCheckName($event, '부하분산 포트', contents.iaasLbPorts.name, contents.deleteLbPort, contents.iaasLbPorts.id);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-trash font-size-20 grey-600"></i></button>
 										</div>
 									</h3>
 									
@@ -510,7 +510,7 @@
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModDomainForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, item.domainInfo.domain, contents.fn.deleteDomain, item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '서비스 도메인', item.domainInfo.domain, contents.fn.deleteDomainAction, item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
@@ -586,8 +586,8 @@
 													</div>
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="main.checkResourceUserRole() || contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, item.domainInfo, contents.fn.deletePortForwarding, item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '포트포워딩', item.domainInfo, contents.fn.deletePortForwardingAction, item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
