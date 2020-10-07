@@ -3484,25 +3484,21 @@ angular.module('gpu.controllers')
 
     })
     //////////////////////////////////////////////////////////////
-    // .controller('iaasCreatePopSnapshotCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $timeout, $bytes,ValidationService, user, common, CONSTANTS) {
     .controller('gpuCreatePopSnapshotCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $timeout, $bytes,ValidationService, user, common, CONSTANTS) {
-        //_DebugConsoleLog("iaasCreatePopSnapshotCtrl.js : iaasCreatePopSnapshotCtrl", 1);
         _DebugConsoleLog("iaasCreatePopSnapshotCtrl.js : gpuCreatePopSnapshotCtrl", 1);
 
         var pop = this;
         pop.validationService 			= new ValidationService({controllerAs: pop});
         pop.formName 					= $scope.dialogOptions.formName;
-        // pop.userTenant 					= angular.copy($scope.main.userTenant);
         pop.userTenant 					= angular.copy($scope.main.userTenantGpu);
         pop.instance 					= $scope.dialogOptions.selectInstance;
         pop.fn 							= {};
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
-        
+
         $scope.dialogOptions.title 		= "스냅샷 생성";
         $scope.dialogOptions.okName 	= "생성";
         $scope.dialogOptions.closeName 	= "닫기";
-        // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computeCreatePopSnapshotForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/compute/computeCreatePopSnapshotForm.html" + _VersionTail();
 
         $scope.actionLoading 			= false;
@@ -3530,14 +3526,15 @@ angular.module('gpu.controllers')
             $scope.main.loadingMainBody = true;
             pop.data.tenantId 			= pop.userTenant.id;
             pop.data.instanceId 		= pop.instance.id;
+            pop.data.disk               = pop.instance.spec.disk; // 사용량 체크를 위해 추가. by hrit 200923
+            pop.data.type               = 'HDD';
+            
             common.mdDialogHide();
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'POST', {instanceSnapShot:pop.data});
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/snapshot', 'POST', {instanceSnapShot:pop.data});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 //생성이후 Callback처리 할지 아니면 페이지를 아예 이동 할지 정의후 제작성 필요. sg0730 20181120
                 common.showAlertSuccess("생성 되었습니다.");
-                // $scope.main.goToPage('/iaas/snapshot');
                 $scope.main.goToPage('/gpu/snapshot');
             });
             returnPromise.error(function (data, status, headers) {
@@ -3798,7 +3795,7 @@ angular.module('gpu.controllers')
 
         //인스턴스 디스크 셋팅
         pop.fn.setInstanceVolume = function(volume) {
-            if (!volume.volumeAttachment) return;
+            if (volume.volumeAttachment && volume.volumeAttachment.instanceId) return;
             if (volume && volume.volumeId) {
                 pop.sltVolume = angular.copy(volume);
                 pop.sltVolumeId = volume.volumeId;

@@ -71,7 +71,6 @@
 				<td>{{volume.type}}</td>
 				<td>{{volume.description | enterByNbr}}</td>
 				<td>
-					<!--<span ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></span>-->
 					<span ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/gpu/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></span>
 					<span ng-if="volume.status != 'in-use'">연결 정보 없음</span>
 				</td>

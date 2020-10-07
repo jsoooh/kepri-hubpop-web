@@ -61,7 +61,7 @@
 									</button>
 									<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 										<li><a href="javascript:void(0);" ng-click="tab.repAppRoute(routeItem.host);" title="대표 도메인 설정">대표 도메인 설정</a></li>
-										<li><a class="delete" href="javascript:void(0);" ng-click="tab.deleteAppRoute(routeItem.guid, routeItem.host);" title="삭제">삭제</a></li>
+										<li><a class="delete" href="javascript:void(0);" ng-click="main.popDeleteCheckName($event, '라우트', routeItem.host, tab.deleteAppRouteAction, tab.appGuid, routeItem.guid);" title="삭제">삭제</a></li>
 									</ul>
 								</div>
 							</td>

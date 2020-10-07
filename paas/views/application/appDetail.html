@@ -44,7 +44,7 @@
 							<li><a ng-class="{'disabled' : !main.checkResourceUserRole(), 'renameInst' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.renameInst();">이름 변경</a></li>
 							<li ng-if="contents.app.state == 'STARTED' && main.checkResourceUserRole()"><a ng-click="contents.restartApp(contents.appGuid, contents.app.name);">재시작</a></li>
 							<li ng-if="contents.app.state != 'STARTED' && !main.checkResourceUserRole()"><a class="disabled" title="App가‘시작’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
-							<li><a ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.deleteApp(contents.appGuid, contents.app.name);">삭제</a></li>
+							<li><a ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '애플리케이션', contents.app.name, contents.deleteAppAction, contents.appGuid);">삭제</a></li>
 						</ul>
 					</div>
 				</div>
@@ -295,7 +295,7 @@
 <ul class="nav nav-tabs nav-tabs-btn nav-tabs-lg">
 	<li ng-if="false" ng-class="{'active':contents.sltInfoTab == 'service'}"><a href="" ng-click="contents.changeSltInfoTab('service');">연결 서비스</a></li>
 	<li ng-class="{'active':contents.sltInfoTab == 'appLog'}"><a href="" ng-click="contents.changeSltInfoTab('appLog');">앱 로그</a></li>
-	<li ng-class="{'active':contents.sltInfoTab == 'env'}"><a href="" ng-click="contents.changeSltInfoTab('env');">환경 변수</a></li>
+	<li ng-class="{'active':contents.sltInfoTab == 'env'}"><a href="" ng-click="contents.changeSltInfoTab('env');">환경변수</a></li>
 	<li ng-class="{'active':contents.sltInfoTab == 'ssh'}"><a href="" ng-click="contents.changeSltInfoTab('ssh');">SSH</a></li>
 	<li ng-class="{'active':contents.sltInfoTab == 'route'}"><a href="" ng-click="contents.changeSltInfoTab('route');">라우트</a></li>
 	<li ng-class="{'active':contents.sltInfoTab == 'event'}"><a href="" ng-click="contents.changeSltInfoTab('event');">이벤트 로그</a></li>

@@ -199,7 +199,7 @@
 							<li ng-if="contents.instance.vmState != 'stopped' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
 							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
 							<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">디스크 연결</a></li>
-							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">서버 삭제</a></li>
+							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '서버', contents.instance.name, contents.deleteInstanceJob, contents.instance.id);">서버 삭제</a></li>
 							<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">서버 삭제</a></li>
 							<!--<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>-->
 							<!--<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>-->
@@ -466,8 +466,8 @@
 								<thead class="text-center black white-text">
 								<tr>
 									<th scope="col">도메인</th>
-									<th scope="col">프로토콜 타입</th>
-									<th scope="col">포트</th>
+									<th scope="col" class="text-left">프로토콜 타입</th>
+									<th scope="col" class="text-left">포트</th>
 									<th scope="col">삭제</th>
 								</tr>
 								</thead>
@@ -488,7 +488,7 @@
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModDomainForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.deleteDomain(item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '서비스 도메인', item.domainInfo.domain, contents.fn.deleteDomainAction, item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>
@@ -563,7 +563,7 @@
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click=" !main.checkResourceUserRole() || contents.fn.deletePortForwarding(item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click=" !main.checkResourceUserRole() || main.popDeleteCheckName($event, '포트 포워딩', item.domainInfo, contents.fn.deletePortForwardingAction, item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>

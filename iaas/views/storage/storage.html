@@ -71,7 +71,7 @@
 												<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="디스크 크기 변경">디스크 크기 변경</a></li>
 												<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
 												<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
-												<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 삭제">디스크 삭제</a></li>
+												<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="main.popDeleteCheckName($event, '디스크', volume.name, contents.deleteVolumesJob, volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 삭제">디스크 삭제</a></li>
 												<li ng-if="volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="디스크에 백업이미지가 존재하여 삭제할수 없습니다.">디스크 삭제</a></li>
 												<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
 											</ul>
@@ -200,7 +200,7 @@
 								<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="디스크 크기 변경">디스크 크기 변경</a></li>
 								<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
 								<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
-								<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 삭제">디스크 삭제</a></li>
+								<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="main.popDeleteCheckName($event, '디스크', volume.name, contents.deleteVolumesJob, volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 삭제">디스크 삭제</a></li>
 								<li ng-if="volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="디스크에 백업이미지가 존재하여 삭제할수 없습니다.">디스크 삭제</a></li>
 								<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
 							</ul>

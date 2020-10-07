@@ -655,9 +655,7 @@ angular.module('gpu.controllers')
                 common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
                 dialogOptions = {
-                    // controller : "iaasCreatePopSnapshotCtrl" ,
                     controller : "gpuCreatePopSnapshotCtrl" ,
-                    // formName   : 'iaasCreatePopSnapshotForm',
                     formName   : 'gpuCreatePopSnapshotForm',
                     selectInstance : angular.copy(instance),
                     callBackFunction : ct.reflashSnapShotCallBackFunction
@@ -671,7 +669,6 @@ angular.module('gpu.controllers')
 
         // sg0730 차후 서버 이미지 생성 후 페이지 이동.
         ct.reflashSnapShotCallBackFunction = function () {
-            // $scope.main.goToPage('/iaas/compute');
             $scope.main.goToPage('/gpu/compute');
         };
 
@@ -685,7 +682,6 @@ angular.module('gpu.controllers')
                 instanceId : instance.id,
                 tenantId : ct.data.tenantId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/vnc', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/vnc', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 window.open(data.content, '_blank');
@@ -1796,14 +1792,11 @@ angular.module('gpu.controllers')
         };
 
         //서버 생성
-        var clickCheck = false;
         ct.fn.createServer = function()  {
-            if(clickCheck) return;
-            clickCheck = true;
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                clickCheck = false;
                 return;
             }
+
             var params = {};
             params.instance = {};
             params.instance.name = ct.data.name;
@@ -1833,7 +1826,6 @@ angular.module('gpu.controllers')
 
             if (!ct.data.spec.uuid) {
                 common.showAlertError("사양이 선택되지 않았습니다.");
-                clickCheck = false;
                 return;
             }
 
@@ -1851,18 +1843,16 @@ angular.module('gpu.controllers')
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function() {
-                clickCheck = false;
             });
         };
         
         // 서버 디스크용 HDD 생성
         ct.fn.createStorageVolumeAction = function (instance) {
-            console.log(instance);
             var params = {};
             params.volume = {};
             params.volume.tenantId = ct.data.tenantId;
             params.volume.name = ct.data.name + '-main';
-            params.volume.type = 'HDD';
+            params.volume.type = ct.volume.type;
             params.volume.size = ct.data.spec.disk;
             params.volume.description = ct.data.name;
 
@@ -1892,7 +1882,6 @@ angular.module('gpu.controllers')
         };
         // 볼륨 타입 변경
         ct.fn.volumeChange = function () {
-            console.log('volumeChange', ct.volumeSize, ct.volumeSliderOptions.ceil);
             if (ct.volume.type == 'HDD') {
                 ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes - ct.data.spec.disk;
             } else if (ct.volume.type == 'SSD') {
@@ -1903,6 +1892,14 @@ angular.module('gpu.controllers')
             ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
             ct.inputVolumeSize = ct.volumeSize;
         };
+
+        ct.fn.checkGpu = function () {
+            if (ct.selectedSpecType == 'GPU') {
+                return ct.selectedGpuCardId != undefined && ct.selectedGpuCardId != '';
+            } else {
+                return true;
+            }
+        }
 
         if (ct.data.tenantId) {
             ct.fn.getTenantResource();

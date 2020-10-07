@@ -1,24 +1,16 @@
-                <div id="spot">
-                    <div class="page-info" ng-if="!!main.sltMenu.id">
-                        {{ main.sltMenu.depth3 != "" ? main.sltMenu.depth3 : main.sltMenu.depth2 }}
-                    </div>
-                    <div class="page-info" ng-if="!main.sltMenu.id">
-                        {{ main.selectSiteMap.pageStage + 'Menu.menu.' + main.selectSiteMap.name | translate }}
-                    </div>
-                    <div class="page-location">
-                        <span class="home">
-                            <i class="xi-home-o"></i>
-                            HUBPoP
-                        </span>
-                        <span ng-if="!!main.sltMenu.depth1">{{ main.sltMenu.depth1 }}</span>
-                        <span ng-if="!!main.sltMenu.depth2">{{ main.sltMenu.depth2 }}</span>
-                    </div>
-                    <a href="" class="btn-back-list" title="목록보기" ng-if="main.selectSiteMap.subPage" ng-click="main.goToState(main.selectSiteMap.parentSiteMap.stateKey);">
-                        <i class="xi-align-justify"></i>
-                        <p class="sr-only">목록보기</p>
-                    </a>
-                    <a href="" class="btn-refresh" title="새로고침" ng-if="main.projectType == 'org'" ng-click="main.replacePage();">
-                        <i class="xi-renew"></i>
-                        <p class="sr-only">새로고침</p>
-                    </a>
-                </div>
+<div id="spot">
+	<div class="page-info" ng-if="!!main.sltMenu.id">{{ main.sltMenu.depth3 != "" ? main.sltMenu.depth3 : main.sltMenu.depth2 }}</div>
+	<div class="page-info" ng-if="!main.sltMenu.id">{{ main.selectSiteMap.pageStage + 'Menu.menu.' + main.selectSiteMap.name | translate }}</div>
+	<div class="page-location">
+		<span class="home"> <i class="xi-home-o"></i> Home
+		</span> <span ng-if="!!main.sltMenu.depth1">{{ main.sltMenu.depth1 }}</span> <span ng-if="!!main.sltMenu.depth2">{{ main.sltMenu.depth2 }}</span>
+	</div>
+	<a href="" class="btn-back-list" title="목록보기" ng-if="main.selectSiteMap.subPage" ng-click="main.goToState(main.selectSiteMap.parentSiteMap.stateKey);">
+		<i class="xi-align-justify"></i>
+		<p class="sr-only">목록보기</p>
+	</a>
+	<a href="" class="btn-refresh" title="새로고침" ng-if="main.projectType == 'org'" ng-click="main.replacePage();">
+		<i class="xi-renew"></i>
+		<p class="sr-only">새로고침</p>
+	</a>
+</div>

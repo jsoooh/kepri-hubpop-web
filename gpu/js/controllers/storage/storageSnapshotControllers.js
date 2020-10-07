@@ -2,9 +2,7 @@
 
 // angular.module('iaas.controllers')
 angular.module('gpu.controllers')
-    // .controller('iaasStorageSnapshotCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, user, common, ValidationService, CONSTANTS) {
     .controller('gpuStorageSnapshotCtrl', function ($scope, $location, $state, $stateParams,$mdDialog, $q, $filter, user, common, ValidationService, CONSTANTS) {
-        // _DebugConsoleLog("storageSnapshotControllers.js : iaasStorageSnapshotCtrl", 1);
         _DebugConsoleLog("storageSnapshotControllers.js : gpuStorageSnapshotCtrl", 1);
 
         var ct = this;
@@ -20,7 +18,6 @@ angular.module('gpu.controllers')
     	}
 
         // 공통 레프트 메뉴의 userTenantId
-        // ct.data.tenantId = $scope.main.userTenantId;
         ct.data.tenantId = $scope.main.userTenantGpuId;
 
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
@@ -37,7 +34,6 @@ angular.module('gpu.controllers')
                 volumeName: ct.volumeName,
                 number : page
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotList', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/snapshotList', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.snapshotList = data.content.volumeSnapShots;
@@ -58,7 +54,6 @@ angular.module('gpu.controllers')
                     tenantId : snapshot.tenantId,
                     snapshotId : snapshot.snapshotId
                 }
-                // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'DELETE', param);
                 var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/snapshot', 'DELETE', param);
                 returnPromise.success(function (data, status, headers) {
                     ct.fn.getStorageSnapshotList(1);
@@ -82,7 +77,6 @@ angular.module('gpu.controllers')
                 snapshot:snapshot
             };
             $scope.actionBtnHied = false;
-            // $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/storage/storageSnapshotForm.html" + _VersionTail();
             $scope.main.layerTemplateUrl = _GPU_VIEWS_ + "/storage/storageSnapshotForm.html" + _VersionTail();
             var name = $($event.currentTarget).attr("data-username"),
     		top = $(window).scrollTop();
@@ -97,9 +91,7 @@ angular.module('gpu.controllers')
             ct.fn.getStorageSnapshotList(1);
         }
     })
-    // .controller('iaasStorageSnapshotCreateCtrl', function ($scope, $location, $state, $window, $translate, $timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuStorageSnapshotCreateCtrl', function ($scope, $location, $state, $window, $translate, $timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        // _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotCreateCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuStorageSnapshotCreateCtrl", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -107,8 +99,6 @@ angular.module('gpu.controllers')
 
         var ct               = this;
         ct.data              = {};
-        // ct.data.tenantId     = $scope.main.userTenantId;
-        // ct.data.tenantName   = $scope.main.userTenant.korName;
         ct.data.tenantId     = $scope.main.userTenantGpuId;
         ct.data.tenantName   = $scope.main.userTenantGpu.korName;
         ct.fn                = {};
@@ -144,7 +134,6 @@ angular.module('gpu.controllers')
         ct.volumeSliderOptions = {
             showSelectionBar : true,
             minLimit : 0,
-//            maxLimit : 100,
             floor: 0,
             ceil: 100,
             step: 1,
@@ -157,26 +146,19 @@ angular.module('gpu.controllers')
             var params = {
                 tenantId : ct.data.tenantId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
-            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/used', 'GET', params);
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params);
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    ct.tenantResource = data.content[0];
+                if (data && data.content) {
+                    ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
                     ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
                     ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
                     ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
-                    ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-
-                    ct.tenantResource.usedResource.volumePercent = (ct.tenantResource.usedResource.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
-                    ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
-                }
-                ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                if(ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize){
-                    ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                    // hdd, ssd 구분
+                    ct.fn.changeVolumeType();
                 }
                 ct.isTenantResourceLoad = true;
             });
@@ -195,7 +177,6 @@ angular.module('gpu.controllers')
                 snapshotId : ct.data.snapshotId
             };
             ct.snapshotVolume = {};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/snapshot', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.volumeSnapShot && data.content.volumeSnapShot.snapshotId) {
@@ -203,6 +184,7 @@ angular.module('gpu.controllers')
                     ct.volumeSize = ct.snapshotVolume.size;
                     ct.inputVolumeSize = ct.snapshotVolume.size;
                     ct.volumeSliderOptions.minLimit = ct.snapshotVolume.size;
+                    ct.volume.type = ct.snapshotVolume.type;
                 }
                 ct.isStorageSnapshotLoad = false;
             });
@@ -235,7 +217,6 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId
             };
             ct.instances         = [];
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (status == 200 && data && data.content && data.content.instances && data.content.instances.length > 0) {
@@ -244,7 +225,6 @@ angular.module('gpu.controllers')
                 ct.isServerListLoad = true;
             });
             returnPromise.error(function (data, status, headers) {
-                //common.showAlertError(data.message);
                 ct.isServerListLoad = true;
             });
             returnPromise.finally(function (data, status, headers) {
@@ -258,7 +238,7 @@ angular.module('gpu.controllers')
             params.newVolumeInfo = {};
             params.newVolumeInfo.tenantId = ct.data.tenantId;
             params.newVolumeInfo.name = ct.volume.name;
-            params.newVolumeInfo.type = 'HDD';
+            params.newVolumeInfo.type = ct.volume.type;
             params.newVolumeInfo.size = ct.volumeSize;
             params.newVolumeInfo.description = ct.volume.description;
 
@@ -269,10 +249,8 @@ angular.module('gpu.controllers')
                 params.newVolumeInfo.volumeAttachment.instanceId = ct.sltInstance.id;
             }
 
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', params);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/snapshotToVolume', 'POST', params);
             returnPromise.success(function (data, status, headers) {
-                // $scope.main.goToPage('/iaas/storage');
                 $scope.main.goToPage('/gpu/storage');
             });
             returnPromise.error(function (data, status, headers) {
@@ -296,14 +274,53 @@ angular.module('gpu.controllers')
         ct.cancelAction = function () {
             $window.history.back();
         };
+        // 볼륨 타입 호출
+        ct.fn.getVolumeTypeList = function() {
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/common/volumeType', 'GET', ct.params , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.volumeTypes = data.content.volumeTypes;
+
+            });
+        };
+
+        ct.fn.changeVolumeType = function () {
+            if (ct.volume.type == 'HDD') {
+                ct.tenantResource.available.hddVolumeGigabytes = ct.tenantResource.maxResource.hddVolumeGigabytes - ct.tenantResource.usedResource.hddVolumeGigabytes;
+                ct.tenantResource.maxResource.volumeGigabytes = ct.tenantResource.maxResource.hddVolumeGigabytes
+                ct.tenantResource.usedResource.volumeGigabytes = ct.tenantResource.usedResource.hddVolumeGigabytes
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes;
+            } else if (ct.volume.type == 'SSD') {
+                ct.tenantResource.available.ssdVolumeGigabytes = ct.tenantResource.maxResource.ssdVolumeGigabytes - ct.tenantResource.usedResource.ssdVolumeGigabytes;
+                ct.tenantResource.maxResource.volumeGigabytes = ct.tenantResource.maxResource.ssdVolumeGigabytes
+                ct.tenantResource.usedResource.volumeGigabytes = ct.tenantResource.usedResource.ssdVolumeGigabytes
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes;
+            } else {
+                ct.tenantResource.available.hddVolumeGigabytes = 0;
+                ct.tenantResource.available.ssdVolumeGigabytes = 0;
+                ct.tenantResource.maxResource.volumeGigabytes = 0;
+                ct.tenantResource.usedResource.volumeGigabytes = 0;
+                ct.volumeSliderOptions.ceil = 0;
+            }
+            
+            ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+            ct.tenantResource.usedResource.volumePercent = (ct.tenantResource.usedResource.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
+            ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
+
+            ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
+            ct.inputVolumeSize = ct.volumeSize;
+        };
+
+        ct.fn.checkVolume = function () {
+            ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
+            ct.inputVolumeSize = ct.volumeSize;
+        };
 
         ct.fn.serverList();
         ct.fn.getTenantResource();
         ct.fn.getStorageSnapshotInfo();
+        ct.fn.getVolumeTypeList();
     })
-    // .controller('iaasStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
-        // _DebugConsoleLog("storageControllers.js : iaasStorageSnapshotFormCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuStorageSnapshotFormCtrl", 1);
 
         $scope.contents = common.getMainContentsCtrlScope().contents;

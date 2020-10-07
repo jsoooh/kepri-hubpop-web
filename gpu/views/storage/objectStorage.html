@@ -1,5 +1,5 @@
 
-<div class="row" ng-if="!!main.userTenantId" class="storage_infoWrap mb50">
+<div class="row" ng-if="!!main.userTenantGpuId" class="storage_infoWrap mb50">
 	<!-- 사용량 -->
 	<div class="col-md-4">
 		<div class="panel panel-bordered">
@@ -102,7 +102,7 @@
 </div>
 
 <!-- 버튼영역 -->
-<div class="margin-bottom-20" ng-if="!!main.userTenantId">
+<div class="margin-bottom-20" ng-if="!!main.userTenantGpuId">
 	<button type="button" class="btn btn-default btn-lg" ng-click="contents.fn.createObjectStoragePop()" ng-disabled="!main.checkResourceUserRole()">
 		<div class="feather-icon color-primary">
 			<i data-feather="box"></i>
@@ -119,7 +119,7 @@
 <!-- //버튼영역 -->
 
 
-<div class="panel panel-bordered" ng-if="!!main.userTenantId">
+<div class="panel panel-bordered" ng-if="!!main.userTenantGpuId">
 	<div class="panel-heading">
 		<div class="row no-margin bordered">
 			<div class="col-md-4">
@@ -199,7 +199,7 @@
 									<tr>
 										<th>
 											<div class="checkbox-group">
-												<input type="checkbox" id="checkbox01" class="checkbox-input selectable-toggle" value="option1" ng-model="contents.data.allChecked" ng-click="contents.fn.onClickAllChcked()">
+												<input type="checkbox" id="checkbox01" class="checkbox-input selectable-toggle" value="option1" ng-model="contents.data.allChecked" ng-click="contents.fn.onClickAllChecked()">
 												<label for="checkbox01" class="checkbox-item">
 													<div class="checkbox">
 														<div class="checked-icon">
@@ -271,7 +271,7 @@
 </div>
 
 <!-- 테넌트 생성 전인 경우 -->
-<div class="welcome_layer" ng-if="!main.userTenantId">
+<div class="welcome_layer" ng-if="!main.userTenantGpuId">
 	<div class="text-center blank-page">
 		<div class="img">
 			<img src="../assets/img/icon/data-center.png" alt="data-center">

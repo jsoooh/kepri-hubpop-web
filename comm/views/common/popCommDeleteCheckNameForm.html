@@ -1,0 +1,15 @@
+<div class="table-wrap">
+    <table class="table" style="border: none;">
+        <tbody>
+        <th style="border: none;">
+            <h3>선택한 {{main.pop.titleName}}를 삭제하시겠습니까?</h3>
+        </th>
+        <tr>
+            <td style="border: none;"><input type="text" class="form-control" placeholder="{{main.pop.deleteName}}" disabled></td>
+        </tr>
+        <tr>
+            <td style="border: none;"><input type="text" name="popName" ng-model="main.pop.name" ng-keypress="main.pop.deleteEnter($event)" class="form-control" placeholder="삭제할 이름을 입력하세요" validation="required|custom:main.pop.checkDeleteName()"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

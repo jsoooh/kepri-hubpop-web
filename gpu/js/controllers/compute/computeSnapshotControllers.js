@@ -1,10 +1,28 @@
 'use strict';
 
-// angular.module('iaas.controllers')
 angular.module('gpu.controllers')
-    // .controller('iaasServerSnapshotCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
+    // Spec 타입에 맞는 Spec만 표시. by hrit 200923.
+    .filter('filterSpecList', function () {
+        return function (items, specType, gpuCard) {
+            var out = [];
+            if (angular.isArray(items)) {
+                items.forEach(function (item) {
+                    if (item.type == specType) {
+                        if (specType == "GPU") {
+                            if (item.gpuCardInfo && item.gpuCardInfo.model == gpuCard.model) {
+                                out.push(item);
+                            }
+                        }
+                        else
+                            out.push(item);
+                    }
+                });
+                return out;
+            }
+            return out;
+        }
+    })
     .controller('gpuServerSnapshotCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
-        // _DebugConsoleLog("computeSnapshotControllers.js : iaasServerSnapshotCtrl", 1);
         _DebugConsoleLog("computeSnapshotControllers.js : gpuServerSnapshotCtrl", 1);
 
         var ct = this;
@@ -217,9 +235,7 @@ angular.module('gpu.controllers')
             ct.fn.getStorageSnapshotList(1);
         }
     })
-    // .controller('iaasServerSnapshotCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {
     .controller('gpuServerSnapshotCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {
-        // _DebugConsoleLog("computeSnapshotControllers.js : iaasServerSnapshotCreateCtrl start", 1);
         _DebugConsoleLog("computeSnapshotControllers.js : gpuServerSnapshotCreateCtrl start", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -240,8 +256,6 @@ angular.module('gpu.controllers')
 
         ct.volume            = {};
 
-        // ct.data.tenantId = $scope.main.userTenantId;
-        // ct.data.tenantName = $scope.main.userTenant.korName;
         ct.data.tenantId = $scope.main.userTenantGpuId;
         ct.data.tenantName = $scope.main.userTenantGpu.korName;
 
@@ -260,16 +274,32 @@ angular.module('gpu.controllers')
         ct.fn.getSnapshotInfo = function(snapshotId) {
             $scope.main.loadingMainBody = true;
             var params = {
-                //tenantId : ct.data.tenantId,
                 tenantId : ct.paramTenantId,
                 snapShotId : snapshotId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'GET', params);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/snapshot', 'GET', params);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.id) {
                     ct.snapshotInfo = data.content;
                     ct.fn.setSpecMinDisabled();
+
+                    var params = {
+                        tenantId: ct.snapshotInfo.tenantId,
+                        instanceId: ct.snapshotInfo.instanceId
+                    };
+
+                    var rp = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/snapshot/networkId', 'GET', params);
+                    rp.success(function (result) {
+                        if (result && result.content) {
+                            ct.networkId = result.content.networkId;
+                        } else {
+                            common.showAlertWarning('네트워크ID 가 설정되지 않았습니다.');
+                        }
+                    });
+                    rp.error(function (result) {
+                        console.log(result)
+                        common.showAlertWarning('네트워크ID 가 설정되지 않았습니다. >>> ' + result.exception);
+                    });
                 }
                 $scope.main.loadingMainBody = false;
             });
@@ -283,7 +313,6 @@ angular.module('gpu.controllers')
             ct.securityPolicyList = [];
             ct.roles = [];
             var param = {tenantId:ct.data.tenantId};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/securityPolicy', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/securityPolicy', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.length > 0) {
@@ -309,7 +338,6 @@ angular.module('gpu.controllers')
 
         ct.fn.getKeypairList = function() {
             var param = {tenantId:ct.data.tenantId};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair', 'GET', param );
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/keypair', 'GET', param );
             returnPromise.success(function (data, status, headers) {
                 ct.keypairList = data.content;
@@ -329,29 +357,27 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId
             };
             ct.tenantResource = {};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
-            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/used', 'GET', params);
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/usedLookup', 'GET', params);
             returnPromise.success(function (data, status, headers) {
-                if (data && data.content && data.content.length > 0) {
-                    ct.tenantResource = data.content[0];
+                if (data && data.content) {
+                    ct.tenantResource = data.content;
                     ct.tenantResource.available = {};
-                    ct.tenantResource.available.instances = ct.tenantResource.maxResource.instances - ct.tenantResource.usedResource.instances;
-                    ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
                     ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                     ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
-                    ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
+                    ct.tenantResource.maxResource.volumeGigabytes = (ct.tenantResource.maxResource.hddVolumeGigabytes + ct.tenantResource.maxResource.ssdVolumeGigabytes);
+                    ct.tenantResource.usedResource.volumeGigabytes = (ct.tenantResource.usedResource.hddVolumeGigabytes + ct.tenantResource.usedResource.ssdVolumeGigabytes);
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+                    ct.tenantResource.available.hddVolumeGigabytes = ct.tenantResource.maxResource.hddVolumeGigabytes - ct.tenantResource.usedResource.hddVolumeGigabytes;
+                    ct.tenantResource.available.ssdVolumeGigabytes = ct.tenantResource.maxResource.ssdVolumeGigabytes - ct.tenantResource.usedResource.ssdVolumeGigabytes;
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
-                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    if (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
-                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize;
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes;
+                    if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
+                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
                     }
                     ct.fn.setSpecMaxDisabled();
                 }
             });
             returnPromise.error(function (data, status, headers) {
-                //common.showAlert("message",data.message);
             });
             returnPromise.finally(function() {
             });
@@ -363,11 +389,16 @@ angular.module('gpu.controllers')
             ct.specList = [];
             ct.data.spec = {};
             var param = {specGroupName:specGroup};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
                     ct.specList = data.content.specs;
+                    // Spec 타입 체크를 위한 스냅샷 스펙 정보 저장 by hrit, 200923
+                    angular.forEach(ct.specList, function (spec) {
+                        if (spec.uuid == ct.snapshotInfo.specId) {
+                            ct.spec = spec;
+                        }
+                    });
                 }
                 ct.isSpecLoad = true;
                 ct.fn.setSpecMinDisabled();
@@ -407,7 +438,7 @@ angular.module('gpu.controllers')
             ct.isMaxSpecDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
-                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.instanceDiskGigabytes) {
+                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.hddVolumeGigabytes) {
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
@@ -423,9 +454,10 @@ angular.module('gpu.controllers')
             if (ct.specMinDisabledSetting && ct.specMaxDisabledSetting) {
                 ct.specDisabledAllSetting = true;
                 var sltSpec = null;
-                for (var i=0; i<ct.specList.length; i++) {
-                    if (!ct.specList[i].disabled) {
-                        sltSpec = ct.specList[i];
+                var specList = $filter('filterSpecList')(ct.specList, ct.spec.type, ct.spec.gpuCardInfo);
+                for (var i=0; i<specList.length; i++) {
+                    if (!specList[i].disabled) {
+                        sltSpec = specList[i];
                         break;
                     }
                 }
@@ -440,6 +472,13 @@ angular.module('gpu.controllers')
             if (sltSpec && sltSpec.uuid) {
                 ct.data.spec = angular.copy(sltSpec);
                 ct.specUuid = ct.data.spec.uuid;
+                if (ct.volume.type == 'HDD') {
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes - ct.data.spec.disk;
+                } else if (ct.volume.type == 'SSD') {
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes;
+                } else {
+                    ct.volumeSliderOptions.ceil = 0;
+                }
             } else {
                 ct.data.spec = {};
                 ct.specUuid = "";
@@ -452,7 +491,6 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId,
                 isExternal : false
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/networks', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/networks', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 ct.networks = data.content;
@@ -475,7 +513,6 @@ angular.module('gpu.controllers')
             ct.usingDomainList = [];
             ct.usingDomainNames = [];
             var param = {};
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/domain/all', 'GET', param);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/network/domain/all', 'GET', param);
             returnPromise.success(function (data, status, headers) {
                 if (data && angular.isArray(data.content) && data.content.length > 0) {
@@ -521,12 +558,8 @@ angular.module('gpu.controllers')
         };
 
 
-        var clickCheck = false;
         ct.fn.createServer = function() {
-            if (clickCheck) return;
-            clickCheck = true;
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                clickCheck = false;
                 return;
             }
 
@@ -535,7 +568,7 @@ angular.module('gpu.controllers')
             params.instance                  = {};
             params.instance.name             = ct.data.name;
             params.instance.tenantId         = ct.data.tenantId;
-            params.instance.networks         = [{ id: ct.data.networks[0].id }];
+            params.instance.networks         = [{ id: ct.networkId }];
             params.instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
             params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
@@ -550,25 +583,21 @@ angular.module('gpu.controllers')
             if (ct.volumeSize > 0) {
                 params.volume = {};
                 params.volume.name = ct.data.name+'_volume01';
-                params.volume.type = 'HDD';
+                params.volume.type = ct.volume.type;
                 params.volume.size = ct.volumeSize;
                 params.volume.tenantId = ct.data.tenantId;
             }
 
             $scope.main.loadingMainBody = true;
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'POST', params);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'POST', params);
             returnPromise.success(function (data, status, headers) {
-                clickCheck = false;
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
                 // 페이지 이동으로 바꿔야 하고
-                // $scope.main.goToPage("/iaas/compute");
                 $scope.main.goToPage("/gpu/compute");
             });
             returnPromise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                clickCheck = false;
                 common.showAlertError(data.message);
             });
             returnPromise.finally(function() {
@@ -584,16 +613,37 @@ angular.module('gpu.controllers')
             }
             return {isValid : true};
         };
+        
+        // 볼륨 타입 호출
+        ct.fn.getVolumeTypeList = function() {
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/common/volumeType', 'GET', ct.params , 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                ct.volumeTypes = data.content.volumeTypes;
+            });
+        };
+
+        // 볼륨 타입 변경
+        ct.fn.volumeChange = function () {
+            if (ct.volume.type == 'HDD') {
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.hddVolumeGigabytes - ct.data.spec.disk;
+            } else if (ct.volume.type == 'SSD') {
+                ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes;
+            } else {
+                ct.volumeSliderOptions.ceil = 0;
+            }
+            ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
+            ct.inputVolumeSize = ct.volumeSize;
+        };
 
         if (ct.data.tenantId && ct.snapshotId) {
             $scope.main.loadingMainBody = true;
             ct.fn.getTenantResource();
-            //ct.fn.getDomainUsingList();     //windows rdp 포트포워딩으로 도메인 사용하지 않음
             ct.fn.getSnapshotInfo(ct.snapshotId);
             ct.fn.networkListSearch();
             ct.fn.getKeypairList();
             ct.fn.getSecurityPolicy();
             ct.fn.getSpecList();
+            ct.fn.getVolumeTypeList();
         }
     })
     // .controller('iaasComputeRestoreCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {
