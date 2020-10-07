@@ -856,7 +856,6 @@ angular.module('gpu.controllers')
                 instanceId : ct.data.instanceId
             };
             ct.instanceVolList = [];
-            // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/instance', 'GET', param, 'application/x-www-form-urlencoded'));
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/instance', 'GET', param, 'application/x-www-form-urlencoded'));
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.volumeAttaches && data.content.volumeAttaches.length > 0) {
