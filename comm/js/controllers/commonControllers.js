@@ -722,9 +722,9 @@ angular.module('common.controllers', [])
                 mc.sltPortalOrgMyRoleName = portalOrg.myRoleName;
                 mc.loadUserTenant();
                 mc.loadSltOrganization();
-                if (!mc.sltGroupMenuIconId) {
+                /*if (!mc.sltGroupMenuIconId) {
                     mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
-                }
+                }*/
             } else {
                 /*$timeout(function () {
                     mc.desplayDbMenuList("none");
