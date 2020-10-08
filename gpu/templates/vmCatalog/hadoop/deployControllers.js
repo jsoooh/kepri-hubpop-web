@@ -132,12 +132,13 @@ angular.module('gpu.controllers')
 
         ct.fn.selectMasterSpec = function(sltSpec) {
             console.log("selectMasterSpec!!!")
-
             if (!ct.masterSpecDisabledAllSetting || sltSpec.disabled) return;
             if (sltSpec && sltSpec.uuid) {
                 ct.sltMasterSpec = angular.copy(sltSpec);
                 ct.data.masterFlavor = ct.sltMasterSpec.name;
                 ct.sltMasterSpecUuid = ct.sltMasterSpec.uuid;
+                ct.master_flavor_volume_size = ct.sltMasterSpec.disk;
+                console.log("master_flavor_volume_size>>>>>>>>"+ct.master_flavor_volume_size);
                 ct.fn.setWorkerSpecMinDisabled();
             } else {
                 ct.sltMasterSpec = {};
@@ -202,6 +203,8 @@ angular.module('gpu.controllers')
                 ct.sltWorkerSpec = angular.copy(sltSpec);
                 ct.data.workerFlavor = ct.sltWorkerSpec.name;
                 ct.sltWorkerSpecUuid = ct.sltWorkerSpec.uuid;
+                ct.worker_flavor_volume_size = ct.sltWorkerSpec.disk;
+                console.log("worker_flavor_volume_size>>>>>>>>"+ct.worker_flavor_volume_size);
                 ct.fn.setWorkerSpecMinDisabled();
             } else {
                 ct.sltWorkerSpec = {};
@@ -303,7 +306,7 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.workerUse = false;
                 vmCatalogDeploy.deployTemplates = "standalone";
                 vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
-
+                vmCatalogDeploy.parameters.master_flavor_volume_size = ct.master_flavor_volume_size;
             }else if(ct.data.nodeType == 'cluster') {
                 vmCatalogDeploy.workerUse = true;
                 vmCatalogDeploy.parameters.worker_cnt = ct.data.workerCnt;
@@ -312,6 +315,8 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.parameters.master_flavor = ct.data.masterFlavor;
                 vmCatalogDeploy.context.workerCnt = ct.data.workerCnt;
                 vmCatalogDeploy.context.masterCnt = ct.data.masterCnt;
+                vmCatalogDeploy.parameters.master_flavor_volume_size = ct.master_flavor_volume_size;
+                vmCatalogDeploy.parameters.worker_flavor_volume_size = ct.worker_flavor_volume_size;
                 vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
             }
 

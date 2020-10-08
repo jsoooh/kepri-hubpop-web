@@ -8,6 +8,8 @@ parameters:
   image:
     type: string
     default: CentOS76-Postgresql.raw
+  flavor_volume_size:
+    type: string
   flavor:
     type: string
   availability_zone:
@@ -479,7 +481,7 @@ resources:
       block_device_mapping_v2:
          - image: { get_param: image }
            delete_on_termination: true
-           volume_size: 40
+           volume_size: { get_param: flavor_volume_size }
            boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
@@ -498,7 +500,7 @@ resources:
       block_device_mapping_v2:
          - image: { get_param: image }
            delete_on_termination: true
-           volume_size: 40
+           volume_size: { get_param: flavor_volume_size }
            boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
@@ -517,7 +519,7 @@ resources:
       block_device_mapping_v2:
          - image: { get_param: image }
            delete_on_termination: true
-           volume_size: 40
+           volume_size: { get_param: flavor_volume_size }
            boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
