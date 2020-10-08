@@ -398,7 +398,6 @@
 <!-- cBox -->
 <div class="cBox type2 appCnt-vol strgList">
 	<div class="cBox-hd">
-		<!-- <h4 class="c-tit">디스크 연결 정보 <em class="point1">({{contents.instanceVolList.length}})</em></h4> -->
 		<h4 class="c-tit">볼륨 연결 정보 <em class="point1">({{contents.instanceVolList.length}})</em></h4>
 	</div>
 
@@ -415,7 +414,7 @@
 							</div>
 							<p class="progress-txt">{{volume.size}}GB</p>
 						</div>
-						<div class="dropdown">
+						<div class="dropdown" ng-show="!volume.bootAble">
 							<button type="button" class="txt2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="연결해제">
 								<span class="ico">연결해제</span>
 							</button>
