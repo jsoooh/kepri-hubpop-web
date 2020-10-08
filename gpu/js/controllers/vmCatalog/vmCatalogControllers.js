@@ -444,6 +444,7 @@ angular.module('gpu.controllers')
         if (sltSpec && sltSpec.uuid) {
             ct.sltSpec = angular.copy(sltSpec);
             ct.data.flavor = ct.sltSpec.name;
+            ct.data.flavor_volume_size = ct.sltSpec.disk;
             ct.sltSpecUuid = ct.sltSpec.uuid;
         } else {
             ct.sltSpec = {};
@@ -615,6 +616,7 @@ angular.module('gpu.controllers')
         vmCatalogDeploy.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.createUser = ct.data.createUser;
+        vmCatalogDeploy.parameters.flavor_volume_size = ct.data.flavor_volume_size;
         if (ct.data.deployType == "cluster") {
             vmCatalogDeploy.deployServerCount = ct.data.clusterCnt;
             vmCatalogDeploy.octaviaLbUse = ct.data.octaviaLbUse;
