@@ -6,6 +6,7 @@ parameter_groups:
 - parameters:
   - image
   - master_flavor
+  - master_flavor_volume_size
   - availability_zone
   - key_name
   - provider_net
@@ -29,6 +30,9 @@ parameters:
     default: CentOS76-Hadoop.raw
   availability_zone:
     type: string
+  master_flavor_volume_size:
+    type: string
+    default: 30
   master_flavor:
     type: string
   key_name:
@@ -281,7 +285,12 @@ resources:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: master_flavor }
-      image: { get_param: image }
+#      image: { get_param: image }
+      block_device_mapping_v2:
+         - image: { get_param: image }
+           delete_on_termination: true
+           volume_size: { get_param: master_flavor_volume_size }
+           boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
         - port: { get_resource: server1_port }
