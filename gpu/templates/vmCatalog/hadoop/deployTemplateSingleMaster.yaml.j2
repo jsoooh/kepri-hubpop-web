@@ -6,7 +6,9 @@ parameter_groups:
 - parameters:
   - image
   - master_flavor
+  - master_flavor_volume_size
   - worker_flavor
+  - worker_flavor_volume_size
   - master_cnt
   - worker_cnt
   - availability_zone
@@ -32,11 +34,15 @@ parameters:
   availability_zone:
     label: "가용구역"
     type: string
+  master_flavor_volume_size:
+    type: string
   master_flavor:
     type: string
   master_cnt:
     type: string
   worker_cnt:
+    type: string
+  worker_flavor_volume_size:
     type: string
   worker_flavor:
     type: string
@@ -813,7 +819,7 @@ resources:
       block_device_mapping_v2:
          - image: { get_param: image }
            delete_on_termination: true
-           volume_size: 40
+           volume_size: { get_param: master_flavor_volume_size }
            boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
@@ -832,7 +838,7 @@ resources:
       block_device_mapping_v2:
          - image: { get_param: image }
            delete_on_termination: true
-           volume_size: 40
+           volume_size: { get_param: worker_flavor_volume_size }
            boot_index: 0
       availability_zone: { get_param: availability_zone }
       networks:
