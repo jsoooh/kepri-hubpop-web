@@ -13,9 +13,9 @@ angular.module('gpu.controllers')
         ct.masterSpecList = [];
         ct.workerSpecList = [];
         ct.types = [
-            {key: "core", value: "Core Hadoop : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1)"},
-            {key: "hbase", value: "HBase : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), HBase(1.1.2)"},
-            {key: "spark", value: "Spark : HDFS(2.7.3), YARN(2.7.3), HIVE(1.2.1), spark(1.6.3)"}
+            {key: "core", value: "Core Hadoop : HDFS(2.7.9), YARN(2.7.9), HIVE(2.3.7)"},
+            {key: "hbase", value: "HBase : HDFS(2.7.9), YARN(2.7.9), HIVE(2.3.7), HBase(1.6.0)"},
+            {key: "spark", value: "Spark : HDFS(2.7.9), YARN(2.7.9), HIVE(2.3.7), spark(2.3.7)"}
         ];
         ct.masterCnts = [{key: 1, value: "단일 구성(1)"}, {key: 2, value: "이중화 구성(2)"}];
         ct.workerCnts = [{key: 1, value: "1개"}, {key: 2, value: "2개"},{key: 3, value: "3개"}, {key: 4, value: "4개"},{key: 5, value: "5개"}, {key: 6, value: "6개"},{key: 7, value: "7개"}, {key: 8, value: "8개"},{key: 9, value: "9개"}, {key: 10, value: "10개"},
