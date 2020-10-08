@@ -68,7 +68,7 @@ angular.module('gpu.controllers')
                 ct.isWorkerSpecLoad = true;
                 ct.fn.setMasterSpecMinDisabled();
                 ct.fn.setWorkerSpecMinDisabled();
-                ct.fn.chackSpecMaxOver();
+                ct.fn.checkSpecMaxOver();
                 if (specListDefer) specListDefer.resolve(data);
             });
             returnPromise.error(function (data, status, headers) {
@@ -101,7 +101,7 @@ angular.module('gpu.controllers')
         };
 
         ct.isMaxSpecOver = false;
-        ct.fn.chackSpecMaxOver = function () {
+        ct.fn.checkSpecMaxOver = function () {
             if (ct.isMasterSpecLoad && ct.isWorkerSpecLoad && ct.tenantResource && ct.tenantResource.maxResource && ct.tenantResource.usedResource) {
                 if ((ct.sltMasterSpec.vcpus * ct.data.masterCnt + ct.sltWorkerSpec.vcpus * ct.data.workerCnt) > ct.tenantResource.available.cores
                     || (ct.sltMasterSpec.ram * ct.data.masterCnt + ct.sltWorkerSpec.ram * ct.data.workerCnt) > ct.tenantResource.available.ramSize
@@ -149,7 +149,7 @@ angular.module('gpu.controllers')
 
         ct.fn.changeMasterCnt = function() {
             if (!ct.masterSpecDisabledAllSetting) return;
-            ct.fn.chackSpecMaxOver();
+            ct.fn.checkSpecMaxOver();
         };
 
         ct.isWorkerMinSpecDisabled = false;
@@ -217,13 +217,13 @@ angular.module('gpu.controllers')
         ct.fn.changeMasterCnt = function(masterCnt) {
             ct.data.masterCnt = masterCnt;
             if (!ct.masterSpecDisabledAllSetting) return;
-            ct.fn.chackSpecMaxOver();
+            ct.fn.checkSpecMaxOver();
         };
 
         ct.fn.changeWorkerCnt = function(workerCnt) {
             ct.data.workerCnt = workerCnt;
             if (!ct.workerSpecDisabledAllSetting) return;
-            ct.fn.chackSpecMaxOver();
+            ct.fn.checkSpecMaxOver();
         };
 
         ct.fn.changeNodeType = function (nodeType) {
