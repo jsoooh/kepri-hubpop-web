@@ -416,13 +416,14 @@ angular.module('gpu.controllers')
                 param.bucket = ct.data.bucketName;
                 param.key = ct.objectStorageObjectList.currentPath;
                 param.files = [];
+                console.log("files.length >>>>> "+uploadFiles.files.length);
                 for (var i=0; i< uploadFiles.files.length; i++) {
-                    if (uploadFiles.files[i].size/1024 < 1024*1024) {
+                    if (uploadFiles.files[i].size/500 < 1024*1024) {
                         console.log("file size >>>>> "+uploadFiles.files[i].size/1024+"KB");
                         param.files.push(uploadFiles.files[i]);
                     } else {
-                        console.log("1GB 이하만 업로드 가능합니다. size >>>>> "+uploadFiles.files[i].size/1024+"KB");
-                        common.showAlertError("파일명: "+uploadFiles.files[i].name+"(1GB 이하만 업로드 가능합니다.)");
+                        console.log("500MB 이하만 업로드 가능합니다. size >>>>> "+uploadFiles.files[i].size/1024+"KB");
+                        common.showAlertError("파일명: "+uploadFiles.files[i].name+"(500MB 이하만 업로드 가능합니다.)");
                         $scope.main.loadingMainBody = false;
                         //$state.reload();
                     }
@@ -430,15 +431,18 @@ angular.module('gpu.controllers')
                 // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
                 var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
                 returnPromise.success(function (data, status, headers) {
+                    //common.showAlertError('date='+new Date());
                     $scope.main.loadingMainBody = false;
                     ct.fn.refreshObjectStorage();
-                    $state.reload();
+                    $scope.main.loadingMain = false;
+                    //$state.reload();
                 });
                 returnPromise.error(function (data, status, headers) {
                     $scope.main.loadingMainBody = false;
-                    $state.reload();
+                    $scope.main.loadingMain = false;
+                    console.log("status="+status);
+                    console.log("error==> "+data.message);
                     common.showAlertError(data.message);
-
                 });
                 returnPromise.finally(function (data, status, headers) {
                     // $scope.main.loadingMainBody = false;
