@@ -128,3 +128,5 @@ md-dialog .modal-body{max-height: 600px; overflow-y: auto;}
 
 /*팝업 타이틀 스타일 추가*/
 .pop_tit .p_stit {display:inline-block; font-size:15px; line-heigt:15px; vertical-align:middle; padding-right:10px;}
+
+md-dialog {width:500px;}
