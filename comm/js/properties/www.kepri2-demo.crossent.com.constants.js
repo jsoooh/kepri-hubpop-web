@@ -396,7 +396,7 @@ angular.module('app')
                     "TITLE":"서버가상화 재오픈 알림",
                     "POP_YN":"Y",
                     "START_DT":"2020-10-13",
-                    "END_DT":"2020-10-23",
+                    "END_DT":"2020-10-14",
                     "CONTENTS":"<p>안녕하세요.</p><p>HUB-PoP 플랫폼 관리자입니다.</p><p>&nbsp;</p><p>서버가상화 재오픈되었습니다.&nbsp;</p><p>서버생성이 필요한 경우 쿼터 변경 신청 후 담당자에게 메일주시면 승인 후 사용가능합니다.</p><p>담당자 : &nbsp;임정선 (jeongseon_im@kepco.co.kr, 042-865-5239)</p>",
                     "ATTACH_FILE":"",
                     "COMMON_CD":"CD0024",
