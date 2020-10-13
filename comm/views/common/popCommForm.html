@@ -1,5 +1,5 @@
-<md-dialog draggable drag-handle=".modal-header" aria-label="{{ dialogOptions.title }}" class="bs-example-modal"><!-- .modal-dialog 중복 클래스 주석처리 201013 {{ dialogOptions.dialogClassName }}  -->
-	<div class="modal-content">
+<md-dialog draggable drag-handle=".modal-header" aria-label="{{ dialogOptions.title }}" >
+	<div class="modal-content {{ dialogOptions.dialogClassName }}"">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="popCancel()">
 				<span aria-hidden="true">×</span>
