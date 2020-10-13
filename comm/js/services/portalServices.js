@@ -236,13 +236,15 @@ angular.module('portal.services', [])
                 }
 
             });
-            $("#noticeDiv").html(noticeHtml);
-            angular.forEach(noticeList, function (noticeItem) {
-                $("#popNotice" + noticeItem.NOTICE_NO).draggable({
-                    cursor: "pointer", // 커서 모양
-                    cancel: ".modal-body"
+            if (noticeHtml != "") {
+                $("#noticeDiv").html(noticeHtml);
+                angular.forEach(noticeList, function (noticeItem) {
+                    $("#popNotice" + noticeItem.NOTICE_NO).draggable({
+                        cursor: "pointer", // 커서 모양
+                        cancel: ".modal-body"
+                    });
                 });
-            });
+            }
         };
 
         //////////////////////////////// 대시보드 관련 API 호출 2018.10.16   Start  ///////////////////////////////////
