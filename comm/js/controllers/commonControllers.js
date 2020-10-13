@@ -324,7 +324,7 @@ angular.module('common.controllers', [])
         };
 
         // 자원 삭제시 이름 체크 팝업창 (titleName : 팝업타이틀 제목, resourceName : 삭제할 자원의 이름, deleteFunciton : 삭제 함수, deleteFunctionParams : 삭제 함수의 파라미터)
-        mc.popDeleteCheckName = function ($event, titleName, resourceName, deleteFunction, ...deleteFunctionParams) {
+        /*mc.popDeleteCheckName = function ($event, titleName, resourceName, deleteFunction, ...deleteFunctionParams) {
             if (!resourceName) {
                 return common.showAlertWarning('삭제할 이름이 없습니다.');
             } else if (!angular.isFunction(deleteFunction)) {
@@ -367,7 +367,7 @@ angular.module('common.controllers', [])
                     return {isValid : false, message : '삭제할 항목의 이름과 일치하지 않습니다.'};
                 }
             };
-        };
+        };*/
 
         // 페이지 이동
         mc.goToPage = function (path) {
