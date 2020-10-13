@@ -190,22 +190,22 @@ angular.module('portal.services', [])
             var noticeList = mc.noticeList;
             var noticeHtml = "";
             angular.forEach(noticeList, function (noticeItem) {
-                if ($("#popNotice" + noticeItem.NOTICE_NO).length > 0) return;
-                noticeHtml += "<div name='notice' id='popNotice" + noticeItem.NOTICE_NO + "' style='position:absolute; top:" + noticeItem.top + "px; left:" + noticeItem.left + "px; z-index: 10;'>\n" +
-                    "    <div class='notice_pop'>\n" +
-                    "        <div class='modal-content'>\n" +
-                    "            <div class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
-                    "                <button type='button' class='close' data-dismiss='modal' aria-label='Close' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></button>\n" +
-                    "                <h1 class='modal-title'>공지사항 </h1>\n" +
-                    "            </div>\n" +
-                    "            <div class='modal-body'>\n" +
-                    "                <div class='pop_tit'><h5>" + noticeItem.TITLE + "</h5></div>\n" +
-                    "                <div class='noti_cont_area'>\n" +
-                    "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
-                    "                </div>\n";
-                if (!!noticeItem.ATTACH_FILE && !!noticeItem.ATTACH_FILES && noticeItem.ATTACH_FILES.length > 0) {
+                if ($("#popNotice" + noticeItem.NOTICE_NO).length == 0) {
+                    noticeHtml += "<div name='notice' id='popNotice" + noticeItem.NOTICE_NO + "' style='position:absolute; top:" + noticeItem.top + "px; left:" + noticeItem.left + "px; z-index: 10;'>\n" +
+                        "    <div class='notice_pop'>\n" +
+                        "        <div class='modal-content'>\n" +
+                        "            <div class='modal-header' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
+                        "                <button type='button' class='close' data-dismiss='modal' aria-label='Close' onclick='popNoticeClose(" + noticeItem.NOTICE_NO + ");'><span aria-hidden='true'>×</span></button>\n" +
+                        "                <h1 class='modal-title'>공지사항 </h1>\n" +
+                        "            </div>\n" +
+                        "            <div class='modal-body'>\n" +
+                        "                <div class='pop_tit'><h5>" + noticeItem.TITLE + "</h5></div>\n" +
+                        "                <div class='noti_cont_area'>\n" +
+                        "                    <pre>" + noticeItem.CONTENTS + "</pre>\n" +
+                        "                </div>\n";
+                    if (!!noticeItem.ATTACH_FILE && !!noticeItem.ATTACH_FILES && noticeItem.ATTACH_FILES.length > 0) {
                         noticeHtml += "  <div class='tbw type1'>\n" +
-                        "                        <table class='table'>\n" +
+                            "                        <table class='table'>\n" +
                             "                        <colgroup>\n" +
                             "                            <col style='width:23%;'>\n" +
                             "                            <col style='width:77%;'>\n" +
@@ -214,25 +214,26 @@ angular.module('portal.services', [])
                             "                           <tr>\n" +
                             "                             <th><span class='ico_link_file'>첨부파일 </span></th>\n" +
                             "                             <td>\n";
-                    for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
-                        noticeHtml += "                    <a href='/hsvc/comn-api/api/downloadNoticeAttachFile/" + noticeItem.ATTACH_FILES[i].FILE_NO + "'>" + noticeItem.ATTACH_FILES[i].FILE_NAME + "</a>\n"
-                    }
+                        for (var i = 0; i < noticeItem.ATTACH_FILES.length; i++) {
+                            noticeHtml += "                    <a href='/hsvc/comn-api/api/downloadNoticeAttachFile/" + noticeItem.ATTACH_FILES[i].FILE_NO + "'>" + noticeItem.ATTACH_FILES[i].FILE_NAME + "</a>\n"
+                        }
                         noticeHtml += "               </td>\n" +
-                        "                               </tr>\n" +
-                        "                           </tbody>\n" +
-                        "                       </table>\n" +
-                        "                </div>\n";
+                            "                               </tr>\n" +
+                            "                           </tbody>\n" +
+                            "                       </table>\n" +
+                            "                </div>\n";
+                    }
+                    noticeHtml += "            </div>\n" +
+                        "            <div class='modal-footer' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
+                        "                <div class='checkbox checkbox-inline'>\n" +
+                        "                    <input type='checkbox' id='check-id" + noticeItem.NOTICE_NO + "' onclick='setNotifyCookie(" + noticeItem.NOTICE_NO + ");'>\n" +
+                        "                    <label for='check-id" + noticeItem.NOTICE_NO + "' class='label-txt'>오늘 하루 이 창을 띄우지 않음</label>\n" +
+                        "                </div>\n" +
+                        "            </div>\n" +
+                        "        </div>\n" +
+                        "    </div>\n" +
+                        "</div>";
                 }
-                noticeHtml += "            </div>\n" +
-                    "            <div class='modal-footer' onclick='popNoticeSetZindex(" + noticeItem.NOTICE_NO + ")'>\n" +
-                    "                <div class='checkbox checkbox-inline'>\n" +
-                    "                    <input type='checkbox' id='check-id" + noticeItem.NOTICE_NO + "' onclick='setNotifyCookie(" + noticeItem.NOTICE_NO + ");'>\n" +
-                    "                    <label for='check-id" + noticeItem.NOTICE_NO + "' class='label-txt'>오늘 하루 이 창을 띄우지 않음</label>\n" +
-                    "                </div>\n" +
-                    "            </div>\n" +
-                    "        </div>\n" +
-                    "    </div>\n" +
-                    "</div>";
 
             });
             $("#noticeDiv").html(noticeHtml);
