@@ -326,6 +326,7 @@ function depth3Leave (){
 /*공지사항 팝업 닫기*/
 function popNoticeClose(id) {
     $("#popNotice" + id).hide();
+    $("#popNotice" + id).remove();
 }
 
 /*공지사항 오늘 하루 이 창을 열지 않기*/
