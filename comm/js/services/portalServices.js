@@ -190,6 +190,7 @@ angular.module('portal.services', [])
             var noticeList = mc.noticeList;
             var noticeHtml = "";
             angular.forEach(noticeList, function (noticeItem) {
+                if ($("#popNotice" + noticeItem.NOTICE_NO).length > 0) return;
                 noticeHtml += "<div name='notice' id='popNotice" + noticeItem.NOTICE_NO + "' style='position:absolute; top:" + noticeItem.top + "px; left:" + noticeItem.left + "px; z-index: 10;'>\n" +
                     "    <div class='notice_pop'>\n" +
                     "        <div class='modal-content'>\n" +
