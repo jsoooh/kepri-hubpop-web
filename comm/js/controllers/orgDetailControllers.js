@@ -1488,7 +1488,6 @@ angular.module('portal.controllers')
             var dialogOptions = {
                 title : '프로젝트 이미지 변경',
                 formName : 'popThumModifyForm',
-                dialogClassName : 'modal-dialog-popThumModify',
                 templateUrl : _COMM_VIEWS_ + '/org/popOrgIcon.html' + _VersionTail(),
                 okName : '업로드'
             };
