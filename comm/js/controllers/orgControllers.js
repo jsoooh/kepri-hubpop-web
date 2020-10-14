@@ -762,20 +762,43 @@ angular.module('portal.controllers')
         pop.data = angular.copy($scope.dialogOptions.org);
 
         pop.formName = "changeNameForm";
+        pop.validationService   = new ValidationService({controllerAs: pop});
         $scope.dialogOptions.formName = pop.formName;
         $scope.dialogOptions.validDisabled = true;
-        $scope.dialogOptions.dialogClassName = "modal-md";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectChangeNameForm.html" + _VersionTail();
         $scope.dialogOptions.title = "프로젝트명 변경";
         pop.method = "PUT";
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
+            if(!pop.validationService.checkFormValidity(pop[pop.formName])) {
+                return common.showAlertWarning("잘못된 프로젝트 이름 형식입니다.");
+            }
             pop.fn.createOrgProjectNameAction();
         };
 
         $scope.popCancel = function () {
             $scope.popHide();
+        };
+
+        // 프로젝트 이름 유효성 검사
+        pop.fn.orgNameCustomValidationCheck = function (orgName) {
+            var regexp = /[ㄱ-ㅎ가-힣0-9a-zA-Z.\-_]/;    //한글,숫자,영문
+            var bInValid = false;
+            var text = orgName;
+            var orgNameErrorString = "";             //문제되는 문자
+            if (!text) return;
+            for (var i=0; i<text.length; i++) {
+                if (text.charAt(i) != " " && regexp.test(text.charAt(i)) == false) {
+                    bInValid = true;
+                    orgNameErrorString += text.charAt(i);
+                }
+            }
+            if (bInValid) {
+                return {isValid : false, message: orgNameErrorString + "는 입력 불가능한 문자입니다."};
+            } else {
+                return {isValid : true};
+            }
         };
 
         /* 20.04.01 - 프로젝트명 변경 액션 by ksw */
