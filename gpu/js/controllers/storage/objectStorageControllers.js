@@ -408,6 +408,14 @@ angular.module('gpu.controllers')
             ct.fn.changeCheckedState(ct.data.allChecked);
         };
 
+        ct.fn.informationOpenClick = function (information) {
+            if (ct.data.information) {
+                ct.data.information = false;
+            } else {
+                ct.data.information = true;
+            }
+        };
+
         ct.fn.uploadFiles = function (uploadFiles) {
             $scope.main.loadingMain = true;
             if (uploadFiles && uploadFiles.files.length > 0) {
@@ -417,12 +425,12 @@ angular.module('gpu.controllers')
                 param.key = ct.objectStorageObjectList.currentPath;
                 param.files = [];
                 for (var i=0; i< uploadFiles.files.length; i++) {
-                    if (uploadFiles.files[i].size/1024 < 1024*1024) {
+                    if (uploadFiles.files[i].size/1024 < 1024*1024*2) {
                         console.log("file size >>>>> "+uploadFiles.files[i].size/1024+"KB");
                         param.files.push(uploadFiles.files[i]);
                     } else {
-                        console.log("1GB 이하만 업로드 가능합니다. size >>>>> "+uploadFiles.files[i].size/1024+"KB");
-                        common.showAlertError("파일명: "+uploadFiles.files[i].name+"(1GB 이하만 업로드 가능합니다.)");
+                        console.log("2GB 이하만 업로드 가능합니다. size >>>>> "+uploadFiles.files[i].size/1024+"KB");
+                        common.showAlertError("파일명: "+uploadFiles.files[i].name+"(2GB 이하만 업로드 가능합니다.)");
                         $scope.main.loadingMainBody = false;
                         //$state.reload();
                     }
