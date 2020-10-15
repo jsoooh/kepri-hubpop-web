@@ -715,6 +715,7 @@ angular.module('common.controllers', [])
                     $scope.main.urlCheck();
                 }, 100);*/
                 common.setPortalOrgKey(portalOrg.id);
+                common.setTeamCode(portalOrg.orgId);
                 mc.sltPortalOrg = portalOrg;
                 mc.sltPortalOrgId = portalOrg.id;
                 mc.sltPortalOrgIsActive = portalOrg.isActive;
