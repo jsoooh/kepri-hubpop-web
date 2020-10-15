@@ -70,7 +70,7 @@ angular.module('app')
             port : "20025"
         },
         iaasDef : {
-            insMaxDiskSize: 2048
+            insMaxDiskSize: 500
         },
         loadingProgressBar : {
         	top : 80,
