@@ -1201,8 +1201,8 @@ button {
   font-size: inherit;
   font-size: 16px;
 }
-.btn .feather-icon {
-  font-size: 16px;
+.btn .feather-icon svg {
+  vertical-align: middle;
 }
 .btn .fa {
   margin-right:5px;
@@ -2009,6 +2009,9 @@ span.btn.btn-danger:focus {
   font-size:14px;
   padding: 3px 5px !important;
 }
+.label i {
+  vertical-align: middle;
+}
 .badge {
   margin-left: 5px;
   vertical-align: text-bottom;
@@ -2687,10 +2690,11 @@ span.btn.btn-danger:focus {
   color: #515151;
 }
 .panel .panel-heading b.panel-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  color: #515151;
+  color: #000000;
   padding: 0;
+  margin-bottom:5px;
 }
 .panel .panel-heading div.panel-title {
   font-size: 14px;
@@ -2700,9 +2704,10 @@ span.btn.btn-danger:focus {
   margin-bottom: 10px;
 }
 .panel .panel-heading .panel-title-type2 {
-  font-size: 18px;
+  font-size: 16px;
   color: #202020;
   font-weight: 600;
+  margin-bottom:5px;
 }
 .panel .panel-heading .panel-title-type2 .sub-title2 {
   font-size: 13px;
@@ -2714,7 +2719,7 @@ span.btn.btn-danger:focus {
   font-weight: 400;
 }
 .panel .panel-heading .panel-heading-right {
-  padding: 20px 30px 0;
+  padding: 12px 20px 0;
 }
 .panel .panel-heading .title-primary {
   color: #3159a1;
@@ -2966,10 +2971,11 @@ span.btn.btn-danger:focus {
   padding: 40px 20px;
 }
 .modal-alert .alert-title {
-  font-size: 24px;
+  font-size: 20px;
   color: #3f3f3f;
   font-weight: 600;
   margin-bottom: 10px;
+  margin-top:15px;
 }
 .modal-alert p {
   font-size: 13px;
@@ -7614,7 +7620,7 @@ table.dataTable tbody > tr > .selected {
 }
 /* blank page 빈페이지 */
 .blank-page {
-  margin: 150px 0;  
+  padding: 150px 0;  
 }
 .blank-page .cont {
   margin-top:25px;	
@@ -7622,12 +7628,11 @@ table.dataTable tbody > tr > .selected {
 }
 .blank-page .cont p {
   margin-bottom:5px;	
-  font-size:13px;
+  font-size:14px;
 }
 .blank-page .cont p .point {
   color: #3159a1;
   font-weight: 600;
-  font-size:14px;
 }
 /* sample21 */
 .arr-desc-text {
@@ -7708,7 +7713,7 @@ table.dataTable tbody > tr > .selected {
   border: 1px solid #bcdffb;
 }
 .input-card-type .card-input-element:checked + .card-input .img {
-  border: 1px solid #bcdffb;
+  border: 1px solid #7285a7;
 }
 .input-card-type.input-card-type-inline {
   text-align: center;
@@ -8690,7 +8695,15 @@ table.dataTable tbody > tr > .selected {
     left: 10px;
     margin-top: 0;
   }
+  
+  .table.table-bordered {
+	  border-collapse:collapse;border-spacing:0;
+  }
+  
+  
+  
+  
+  
+  
 } 
-
-
 

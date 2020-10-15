@@ -431,9 +431,21 @@ angular.module('iaas.controllers')
                         var serverStates = data.content.instances;
                         var isServerStatusCheck = false;
                         // var isReplaceServerInfo = false;
+
+                        // 서버 리스트 삭제된 항목 제거
                         if (ct.serverMainList.length > serverStates.length) {
-                            ct.serverMainList.splice(serverStates.length, ct.serverMainList.length - serverStates.length);
+                            var newServerMainList = new Array();
+                            angular.forEach(ct.serverMainList, function (server) {
+                                for (var i = 0; i < serverStates.length; i++) {
+                                    if (server.id == serverStates[i].id) {
+                                        newServerMainList.push(server);
+                                        break;
+                                    }
+                                }
+                            });
+                            ct.serverMainList = newServerMainList;
                         }
+
                         var serverMainList = angular.copy(ct.serverMainList);
                         ct.fnGetInstancesData(serverStates);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
