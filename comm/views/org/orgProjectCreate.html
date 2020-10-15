@@ -97,7 +97,7 @@
 							</div>
 							<div class="col-md-9">
 								<div class="form-group">
-									<input type="text" class="form-control" name="orgName" ng-model="contents.orgData.orgName" maxlength="20" placeholder="프로젝트명을 입력하세요." validation="min_len:2|max_len:20|required|custom:contents.orgNameCustomValidationCheck(contents.orgData.orgName)">
+									<input type="text" class="form-control" name="orgName" ng-model="contents.orgData.orgName" minlength="2" maxlength="20" placeholder="프로젝트명을 입력하세요." validation="min_len:2|max_len:20|required|custom:contents.orgNameCustomValidationCheck(contents.orgData.orgName)">
 									<span class="text">* 2자 이상 20자 이하, 특수문자 입력 불가</span>
 								</div>
 							</div>

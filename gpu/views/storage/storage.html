@@ -92,15 +92,18 @@
 							<span class="ico">실행 설정</span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="연결된 서버가 ‘정지’상태인 경우 스냅샷 생성이 가능합니다.">스냅샷 생성</a></li>
+							<li ng-if="volume.type"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="연결된 서버가 ‘정지’상태인 경우 스냅샷 생성이 가능합니다.">스냅샷 생성</a></li>
+							<li ng-if="!volume.type"><a class="disabled" href="javascript:void(0);" title="‘부트볼륨’은 스냅샷 생성이 불가능합니다.">스냅샷 생성</a></li>
 							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="볼륨 이름 변경">볼륨 이름 변경</a></li>
-							<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'description', volume);" title="볼륨 설명 변경">볼륨 설명 변경</a></li>
-							<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="볼륨 크기 변경">볼륨 크기 변경</a></li>
-							<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="볼륨 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">볼륨 크기 변경</a></li>
+							<li ng-if="volume.type"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'description', volume);" title="볼륨 설명 변경">볼륨 설명 변경</a></li>
+							<li ng-if="volume.type && volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="볼륨 크기 변경">볼륨 크기 변경</a></li>
+							<li ng-if="volume.type && volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="볼륨 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">볼륨 크기 변경</a></li>
+							<li ng-if="!volume.type"><a href="javascript:void(0);" class="disabled" title="‘부트볼륨’은 크기를 변경할 수 없습니다..">볼륨 크기 변경</a></li>
 							<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
-							<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="볼륨 삭제">볼륨 삭제</a></li>
-							<li ng-if="volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="볼륨에 스냅샷이 존재하여 삭제할수 없습니다.">볼륨 삭제</a></li>
-							<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="볼륨 상태가 ‘사용가능’인 경우 삭제 가능합니다.">볼륨 삭제</a></li>
+							<li ng-if="volume.type && volume.status =='available' && !volume.backupImageCount" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="볼륨 삭제">볼륨 삭제</a></li>
+							<li ng-if="volume.type && volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="볼륨에 스냅샷이 존재하여 삭제할수 없습니다.">볼륨 삭제</a></li>
+							<li ng-if="volume.type && volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="볼륨 상태가 ‘사용가능’인 경우 삭제 가능합니다.">볼륨 삭제</a></li>
+							<li ng-if="!volume.type"><a class="disabled" href="javascript:void(0);" title="‘부트볼륨’은 삭제할 수 없습니다.">볼륨 삭제</a></li>
 						</ul>
 					</div>
 				</td>
@@ -126,7 +129,8 @@
 								<span class="ico">실행 설정</span>
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="연결된 인스턴스가 ‘정지’상태인 경우 스냅샷 생성이 가능합니다.">스냅샷 생성</a></li>
+								<li ng-if="volume.type"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="연결된 인스턴스가 ‘정지’상태인 경우 스냅샷 생성이 가능합니다.">스냅샷 생성</a></li>
+								<li ng-if="!volume.type"><a class="disabled" href="javascript:void(0);" title="‘부트볼륨’은 스냅샷 생성이 불가능합니다.">스냅샷 생성</a></li>
 								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="볼륨 이름 변경">볼륨 이름 변경</a></li>
 								<li ng-if="volume.type && volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="볼륨 크기 변경">볼륨 크기 변경</a></li>
 								<li ng-if="volume.type && volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="볼륨 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">볼륨 크기 변경</a></li>

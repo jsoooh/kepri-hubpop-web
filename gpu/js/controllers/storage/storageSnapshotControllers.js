@@ -259,13 +259,13 @@ angular.module('gpu.controllers')
             });
         };
 
-        ct.checkClickBtn = false;
         ct.fn.snapshotAndCreateStorage = function () {
-            if (ct.checkClickBtn) return;
-            ct.checkClickBtn = true;
             if (!new ValidationService().checkFormValidity($scope[ct.formName])) {
-                ct.checkClickBtn = false;
                 return;
+            }
+
+            if (ct.tenantResource.available.volumeGigabytes <= 0 || ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
+                return common.showAlert("볼륨용량 제한으로 생성할 수 없습니다.");
             }
 
             ct.fn.createStorageVolumeAction();

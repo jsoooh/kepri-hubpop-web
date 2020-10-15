@@ -243,7 +243,13 @@ angular.module('gpu.controllers')
     };
 
     ct.fn.changeSetResourceMax = function() {
-        var volumeMaxCeil = ct.tenantResource.available.volumeGigabytes / ct.data.serverCnt;
+        var volumeMaxCeil = 0;
+        if (ct.data.volumeType == 'SSD') {
+            volumeMaxCeil = ct.tenantResource.available.ssdVolumeGigabytes / ct.data.serverCnt;
+        } else {
+            volumeMaxCeil = (ct.tenantResource.available.hddVolumeGigabytes - (ct.sltSpec.disk * ct.data.serverCnt))/ ct.data.serverCnt;
+        }
+
         if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (volumeMaxCeil > CONSTANTS.iaasDef.insMaxDiskSize)) {
             ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize;
         } else {
@@ -261,8 +267,9 @@ angular.module('gpu.controllers')
                 ct.tenantResource.available.floatingIps = ct.tenantResource.maxResource.floatingIps - ct.tenantResource.usedResource.floatingIps;
                 ct.tenantResource.available.cores = ct.tenantResource.maxResource.cores - ct.tenantResource.usedResource.cores;
                 ct.tenantResource.available.ramSize = ct.tenantResource.maxResource.ramSize - ct.tenantResource.usedResource.ramSize;
-                ct.tenantResource.available.instanceDiskGigabytes = ct.tenantResource.maxResource.instanceDiskGigabytes - ct.tenantResource.usedResource.instanceDiskGigabytes;
-                ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
+                // 변경
+                ct.tenantResource.available.hddVolumeGigabytes = ct.tenantResource.maxResource.hddVolumeGigabytes - ct.tenantResource.usedResource.hddVolumeGigabytes;
+                ct.tenantResource.available.ssdVolumeGigabytes = ct.tenantResource.maxResource.ssdVolumeGigabytes - ct.tenantResource.usedResource.ssdVolumeGigabytes;
                 ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
             }
             if (resourceDefer) resourceDefer.resolve(data);
@@ -402,7 +409,7 @@ angular.module('gpu.controllers')
             angular.forEach(ct.specList, function (spec) {
                 if ((spec.vcpus  * ct.data.serverCnt) > ct.tenantResource.available.cores
                     || (spec.ram  * ct.data.serverCnt) > ct.tenantResource.available.ramSize
-                    || (spec.disk  * ct.data.serverCnt) > ct.tenantResource.available.instanceDiskGigabytes) {
+                    || (spec.disk  * ct.data.serverCnt) > ct.tenantResource.available.hddVolumeGigabytes) {
                     spec.disabled = true;
                     ct.isMaxSpecDisabled = true;
                 }
@@ -447,10 +454,26 @@ angular.module('gpu.controllers')
             ct.flavor_volume_size = ct.sltSpec.disk;
             console.log("flavor_volume_size>>>>>>>>"+ct.flavor_volume_size);
             ct.sltSpecUuid = ct.sltSpec.uuid;
+            if (ct.data.volumeUse == true){
+                ct.fn.selectVolumeType();
+            }
         } else {
             ct.sltSpec = {};
             ct.data.flavor = "";
             ct.sltSpecUuid = "";
+        }
+    };
+
+    // volume 선택
+    ct.fn.selectVolumeType = function() {
+        if (ct.data.volumeUse == false) {
+            ct.volumeSliderOptions.ceil = 0;
+        } else if (ct.data.volumeUse == true && ct.data.volumeType == 'HDD') {
+            ct.volumeSliderOptions.ceil = (ct.tenantResource.available.hddVolumeGigabytes - (ct.sltSpec.disk * ct.data.serverCnt))/ ct.data.serverCnt;
+        } else if (ct.data.volumeUse == true && ct.data.volumeType == 'SSD') {
+            ct.volumeSliderOptions.ceil = ct.tenantResource.available.ssdVolumeGigabytes / ct.data.serverCnt;
+        } else {
+            ct.volumeSliderOptions.ceil = 0;
         }
     };
 
@@ -495,8 +518,8 @@ angular.module('gpu.controllers')
            ct.data.serverCnt = 1;
         }
         ct.data.deployType = deployType;
-        ct.fn.changeSetResourceMax();
         ct.fn.setSpecMaxDisabled();
+        ct.fn.changeSetResourceMax();
     };
 
     ct.fn.validationDeployName = function (deployName) {

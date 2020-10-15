@@ -323,8 +323,8 @@ angular.module('common.controllers', [])
             }
         };
 
-        // 자원 삭제시 이름 체크 팝업창 (titleName : 팝업타이틀 제목, resourceName : 삭제할 자원의 이름, deleteFunciton : 삭제 함수, deleteFunctionParams : 삭제 함수의 파라미터)
-        mc.popDeleteCheckName = function ($event, titleName, resourceName, deleteFunction, ...deleteFunctionParams) {
+        // 자원 삭제시 이름 체크 팝업창 (titleName : 팝업타이틀 제목, resourceName : 삭제할 자원의 이름, deleteFunciton : 삭제 함수, deleteFunctionParam1,2 : 삭제 함수의 파라미터)
+        mc.popDeleteCheckName = function ($event, titleName, resourceName, deleteFunction, deleteFunctionParam1, deleteFunctionParam2) {
             if (!resourceName) {
                 return common.showAlertWarning('삭제할 이름이 없습니다.');
             } else if (!angular.isFunction(deleteFunction)) {
@@ -346,7 +346,7 @@ angular.module('common.controllers', [])
             // 삭제 함수 실행
             $scope.popDialogOk = function () {
                 $scope.popHide();
-                deleteFunction(...deleteFunctionParams);
+                deleteFunction(deleteFunctionParam1, deleteFunctionParam2);
             };
 
             // 엔터키 입력
@@ -715,6 +715,7 @@ angular.module('common.controllers', [])
                     $scope.main.urlCheck();
                 }, 100);*/
                 common.setPortalOrgKey(portalOrg.id);
+                common.setTeamCode(portalOrg.orgId);
                 mc.sltPortalOrg = portalOrg;
                 mc.sltPortalOrgId = portalOrg.id;
                 mc.sltPortalOrgIsActive = portalOrg.isActive;

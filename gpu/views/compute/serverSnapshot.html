@@ -225,9 +225,9 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<!--<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>-->
-											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">볼륨 생성</a></li>
-											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="스냅샷이‘사용가능’상태인 경우에만 '인스턴스 생성'이 가능합니다.">볼륨 생성</a></li>
+											<li ng-if="storageSnapshot.type && storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">볼륨 생성</a></li>
+											<li ng-if="storageSnapshot.type && storageSnapshot.status != 'available'" ><a href="" class="disabled" title="스냅샷이‘사용가능’상태인 경우에만 '인스턴스 생성'이 가능합니다.">볼륨 생성</a></li>
+											<li ng-if="!storageSnapshot.type" ><a href="" class="disabled" title="‘부트볼륨’은 볼륨 생성이 불가능합니다.">볼륨 생성</a></li>
 											<li><a href="" ng-click="contents.fn.descriptionFormOpen($event, storageSnapshot, 'storage');">스냅샷 설명 변경</a></li>
 											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">스냅샷 삭제</a></li>
 										</ul>
@@ -253,9 +253,9 @@
 											<span class="ico">실행 설정</span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-											<!--<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/iaas/snapshot/storageCreate/' + storageSnapshot.snapshotId);">디스크 생성</a></li>-->
-											<li ng-if="storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">볼륨 생성</a></li>
-											<li ng-if="storageSnapshot.status != 'available'" ><a href="" class="disabled" title="스냅샷이‘사용가능’상태인 경우에만 '인스턴스 생성'이 가능합니다.">볼륨 생성</a></li>
+											<li ng-if="storageSnapshot.type && storageSnapshot.status == 'available'" ><a href="" ng-click="main.goToPage('/gpu/snapshot/storageCreate/' + storageSnapshot.snapshotId);">볼륨 생성</a></li>
+											<li ng-if="storageSnapshot.type && storageSnapshot.status != 'available'" ><a href="" class="disabled" title="스냅샷이‘사용가능’상태인 경우에만 '인스턴스 생성'이 가능합니다.">볼륨 생성</a></li>
+											<li ng-if="!storageSnapshot.type" ><a href="" class="disabled" title="‘부트볼륨’은 볼륨 생성이 불가능합니다.">볼륨 생성</a></li>
 											<li><a href="" class="delete" ng-click="contents.fn.deleteStorageSnapshot(storageSnapshot);">스냅샷 삭제</a></li>
 										</ul>
 									</div>

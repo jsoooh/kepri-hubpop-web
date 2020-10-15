@@ -70,7 +70,7 @@ angular.module('app')
             port : "20025"
         },
         iaasDef : {
-            insMaxDiskSize: 2048
+            insMaxDiskSize: 500
         },
         loadingProgressBar : {
         	top : 80,
@@ -341,6 +341,68 @@ angular.module('app')
         ],
         alarmBell: 1000*60*1,
         timeRangeFormat: 'YYYY-MM-DD HH:mm',
+        tempNoticeData : {
+            "data":[
+                {
+                    "NOTICE_NO":6,
+                    "TITLE":"패키지 미러 서버(http://mirror.kepco.co.kr) 오픈 알림",
+                    "POP_YN":"Y",
+                    "START_DT":"2020-03-02",
+                    "END_DT":"2020-05-12",
+                    "CONTENTS":"<p>안녕하세요.</p><p>플랫폼 관리자입니다.</p><p>사내망에서 활용할 수 있는 패키지 미러링 서버를 아래의 URL로 구축하였습니다.</p><p>&nbsp;</p><p><a href=\"http://mirror.kepco.co.kr\">http://mirror.kepco.co.kr</a></p><p>&nbsp;</p><p>제공하는 패키지는 CentOS, Ubuntu, Python, R 등이며, </p><p>첨부의 매뉴얼을 참고하시어 활용하시기 바랍니다.</p><p>감사합니다.</p>",
+                    "ATTACH_FILE":"239|05. Jupyterlab 실행방법.txt,240|02. Ubuntu GPU 가상서버 설정 방법-2.txt,241|01. CentOS GPU 가상서버 설정 방법.txt,242|02. Ubuntu GPU 가상서버 설정 방법-2.txt,243|03. Python3.6 및 Jupyterlab 설치 방법.txt,244|04. GPU 가상서버 접속방법.txt",
+                    "COMMON_CD":"CD0021",
+                    "COMMON_NM":"공통",
+                    "REG_USER_ID":"hubpop",
+                    "REG_USER_NM":"허브팝",
+                    "REG_DT":"2019-05-30",
+                    "UPT_USER_ID":"hubpop",
+                    "UPT_USER_NM":"허브팝",
+                    "UPT_DT":"2019-05-30",
+                    "DELETE_YN":"N"
+                },
+                {
+                    "NOTICE_NO":7,
+                    "TITLE":"공지사항2222222222",
+                    "POP_YN":"Y",
+                    "START_DT":"2020-03-02",
+                    "END_DT":"2020-05-12",
+                    "CONTENTS":"<p>(서울=연합뉴스) 이상헌 임형섭 박경준 기자 = 청와대는 24일 러시아 군용기의 독도 영공 침범과 관련해 <a href=\"http://www.naver.com\">http://www.naver.com</a>를 긴급 발진하면서 독도를 일본 땅이라는 억지를 부린 데 대해 '일본은 &quot;일본방공식별구역(JADIZ)&quot;에 대한 부분만 갖고 입장을 내면 될 것 같다'는 반박 입장을 밝혔다.</p>\n<p>청와대 관계자는 이날 기자들을 만나 이같이 언급한 뒤 '우리 영공에 대한 문제는 우리가 답할 부분'이라고 말했다.</p><p>(서울=연합뉴스) 이상헌 임형섭 박경준 기자 = 청와대는 24일 러시아 군용기의 독도 영공 침범과 관련해 일본 정부가 자위대 군용기를 긴급 발진하면서 독도를 일본 땅이라는 억지를 부린 데 대해 '일본은 일본방공식별구역(JADIZ)에 대한 부분만 갖고 입장을 내면 될 것 같다'는 반박 입장을 밝혔다.<br>청와대 관계자는 이날 기자들을 만나 이같이 언급한 뒤 '우리 영공에 대한 문제는 우리가 답할 부분'이라고 말했다.</p>",
+                    "ATTACH_FILE":"219|hubpop-rootca.crt,220|인증서등록방법.pdf",
+                    "COMMON_CD":"CD0021",
+                    "COMMON_NM":"공통",
+                    "REG_USER_ID":"hubpop",
+                    "REG_USER_NM":"허브팝",
+                    "REG_DT":"2019-05-30",
+                    "UPT_USER_ID":"hubpop",
+                    "UPT_USER_NM":"허브팝",
+                    "UPT_DT":"2019-05-30",
+                    "DELETE_YN":"N"
+                },
+                {
+                    "NOTICE_NO":37,
+                    "TITLE":"서버가상화 재오픈 알림",
+                    "POP_YN":"Y",
+                    "START_DT":"2020-10-13",
+                    "END_DT":"2020-10-23",
+                    "CONTENTS":"<p>안녕하세요.</p><p>HUB-PoP 플랫폼 관리자입니다.</p><p>&nbsp;</p><p>서버가상화 재오픈되었습니다.&nbsp;</p><p>서버생성이 필요한 경우 쿼터 변경 신청 후 담당자에게 메일주시면 승인 후 사용가능합니다.</p><p>담당자 : &nbsp;임정선 (jeongseon_im@kepco.co.kr, 042-865-5239)</p>",
+                    "ATTACH_FILE":"",
+                    "COMMON_CD":"CD0024",
+                    "COMMON_NM":"공통",
+                    "REG_USER_ID":"hubpop",
+                    "REG_USER_NM":"허브팝",
+                    "REG_DT":"2020-10-13",
+                    "UPT_USER_ID":"hubpop",
+                    "UPT_USER_NM":"허브팝",
+                    "UPT_DT":"2020-10-13",
+                    "DELETE_YN":"N"
+                }
+            ],
+            "status":{
+                "code":200,
+                "name":"OK"
+            }
+        },
         //neutron lbaas.loadbalancer/pool : 10
         lbaasPortLimit : 10,
         ckeditorConfig: {

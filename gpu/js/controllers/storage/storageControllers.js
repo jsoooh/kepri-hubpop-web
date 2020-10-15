@@ -383,7 +383,7 @@ angular.module('gpu.controllers')
                 return common.showAlert("볼륨타입을 선택해주세요.");
             }
 
-            if (ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
+            if (ct.tenantResource.available.volumeGigabytes <= 0 || ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
                 return common.showAlert("볼륨용량 제한으로 생성할 수 없습니다.");
             }
             ct.fn.createStorageVolumeAction();

@@ -9,7 +9,7 @@
 			<tr>
 				<th scope="row">프로젝트명</th>
 				<td>
-					<input type="text" ng-model="pop.data.orgName" name="orgName" class="form-control form-control-sm" value="" maxlength="50" placeholder="프로젝트명을 입력해 주세요.">
+					<input type="text" class="form-control form-control-sm" name="orgName" ng-model="pop.data.orgName" minlength="2" maxlength="20" placeholder="프로젝트명을 입력해 주세요." validation="min_len:2|max_len:20|required|custom:pop.fn.orgNameCustomValidationCheck(pop.data.orgName)">
 				</td>
 			</tr>
 		</tbody>
