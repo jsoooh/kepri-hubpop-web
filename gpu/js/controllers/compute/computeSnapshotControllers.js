@@ -1,27 +1,6 @@
 'use strict';
 
 angular.module('gpu.controllers')
-    // Spec 타입에 맞는 Spec만 표시. by hrit 200923.
-    .filter('filterSpecList', function () {
-        return function (items, specType, gpuCard) {
-            var out = [];
-            if (angular.isArray(items)) {
-                items.forEach(function (item) {
-                    if (item.type == specType) {
-                        if (specType == "GPU") {
-                            if (item.gpuCardInfo && item.gpuCardInfo.model == gpuCard.model) {
-                                out.push(item);
-                            }
-                        }
-                        else
-                            out.push(item);
-                    }
-                });
-                return out;
-            }
-            return out;
-        }
-    })
     .controller('gpuServerSnapshotCtrl', function ($scope, $location, $state, $stateParams, $mdDialog, $q, $filter, $timeout, user,paging, common, CONSTANTS) {
         _DebugConsoleLog("computeSnapshotControllers.js : gpuServerSnapshotCtrl", 1);
 
@@ -254,6 +233,12 @@ angular.module('gpu.controllers')
         ct.snapshotInfo = {};
         ct.networks = [];
 
+        ct.selectedSpecType = "";
+
+        ct.gpuCardList  = [];
+        ct.selectedGpuCard = {};
+        ct.selectedGpuCardId = "";
+
         ct.volume            = {};
 
         ct.data.tenantId = $scope.main.userTenantGpuId;
@@ -297,7 +282,6 @@ angular.module('gpu.controllers')
                         }
                     });
                     rp.error(function (result) {
-                        console.log(result)
                         common.showAlertWarning('네트워크ID 가 설정되지 않았습니다. >>> ' + result.exception);
                     });
                 }
@@ -394,15 +378,22 @@ angular.module('gpu.controllers')
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
                     ct.specList = data.content.specs;
                     // Spec 타입 체크를 위한 스냅샷 스펙 정보 저장 by hrit, 200923
-                    angular.forEach(ct.specList, function (spec) {
+                    for (var i = 0; i < ct.specList.length; i++) {
+                        var spec = ct.specList[i];
                         if (spec.uuid == ct.snapshotInfo.specId) {
-                            ct.spec = spec;
+                            ct.data.spec = spec;
+                            // GPU 인스턴스의 스냅샷인지 체크하고 GPU 카드 선택할 수 있도록 변경. by hrit, 201015
+                            if (ct.data.spec.type == 'GPU') {
+                                ct.selectedSpecType = ct.data.spec.type;
+                                ct.fn.getGpuCardList();
+                            }
+                            break;
                         }
-                    });
+                    }
                 }
-                ct.isSpecLoad = true;
-                ct.fn.setSpecMinDisabled();
-                ct.fn.setSpecMaxDisabled();
+                // ct.isSpecLoad = true;
+                // ct.fn.setSpecMinDisabled();
+                // ct.fn.setSpecMaxDisabled();
             });
             returnPromise.error(function (data, status, headers) {
                 ct.isSpecLoad = true;
@@ -435,10 +426,14 @@ angular.module('gpu.controllers')
         // spec loading 체크
         ct.specMaxDisabledSetting = false;
         ct.fn.setSpecMaxDisabled = function () {
+            console.log('setSpecMaxDisabled')
             ct.isMaxSpecDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
-                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.hddVolumeGigabytes) {
+                    if (spec.vcpus > ct.tenantResource.available.cores
+                        || spec.ram > ct.tenantResource.available.ramSize 
+                        || spec.disk > ct.tenantResource.available.hddVolumeGigabytes
+                        || (ct.selectedSpecType == 'GPU' && spec.gpu > ct.selectedGpuCard.availableCount)) {
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
@@ -451,19 +446,18 @@ angular.module('gpu.controllers')
         // spec loading 체크
         ct.specDisabledAllSetting = false;
         ct.fn.defaultSelectSpec = function() {
+            console.log('defaultSelectSpec')
             if (ct.specMinDisabledSetting && ct.specMaxDisabledSetting) {
                 ct.specDisabledAllSetting = true;
-                var sltSpec = null;
-                var specList = $filter('filterSpecList')(ct.specList, ct.spec.type, ct.spec.gpuCardInfo);
+                var sltSpec = {};
+                var specList = $filter('filterSpecList')(ct.specList, ct.selectedSpecType, ct.selectedGpuCard);
                 for (var i=0; i<specList.length; i++) {
                     if (!specList[i].disabled) {
                         sltSpec = specList[i];
                         break;
                     }
                 }
-                if (sltSpec) {
-                    ct.fn.selectSpec(sltSpec);
-                }
+                ct.fn.selectSpec(sltSpec);
             }
         };
 
@@ -482,6 +476,15 @@ angular.module('gpu.controllers')
             } else {
                 ct.data.spec = {};
                 ct.specUuid = "";
+            }
+            // GPU 인스턴스는 프로젝트 자원 계획에 카드의 사용쿼터를 표시하므로 스펙 선택 시 GPU 사용량 표시 by hrit, 201015
+            if (ct.selectedSpecType == 'GPU' && ct.selectedGpuCardId) {
+                ct.gpuCardList.forEach(function (gpuCard) {
+                    gpuCard.selected = 0;
+                    if (gpuCard.id == ct.selectedGpuCardId) {
+                        gpuCard.selected = sltSpec.gpu;
+                    }
+                })
             }
         };
 
@@ -635,6 +638,84 @@ angular.module('gpu.controllers')
             ct.inputVolumeSize = ct.volumeSize;
         };
 
+        ct.fn.getGpuCardList = function() {
+            $scope.main.loadingMainBody = true;
+
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/gpu/card', 'GET');
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.gpuCardList = data.content;
+                    var rp = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/gpuUsed', 'GET', {tenantId: ct.data.tenantId});
+                    rp.success(function (data2) {
+                        var gpuCardResources = data2.content;
+                        gpuCardResources.forEach(function (resource) {
+                            for (var i = 0; i < ct.gpuCardList.length; i++) {
+                                var gpuCard = ct.gpuCardList[i];
+                                if (resource.gpuId == gpuCard.itemCode) {
+                                    gpuCard.quatorCount = resource.total;
+                                    gpuCard.quatorUsedCount = resource.used;
+                                    var quator = resource.total - resource.used;
+                                    var portal = gpuCard.count - gpuCard.usedCount;
+                                    gpuCard.availableCount = quator <= portal ? quator: portal;
+                                    console.log(gpuCard.name, gpuCard.availableCount)
+                                    if (gpuCard.availableCount == undefined) gpuCard.availableCount = 0;
+                                }
+                            }
+                        });
+                        for (var i = 0; i < ct.gpuCardList.length; i++) {
+                            var gpuCard = ct.gpuCardList[i];
+                            if (gpuCard.id == ct.data.spec.gpuCardInfo.id) {
+                                ct.selectedGpuCard = gpuCard;
+                                ct.selectedGpuCardId = gpuCard.id;
+                                ct.fn.onchangeGpuCard(ct.selectedGpuCardId);
+                            }
+                        }
+
+                        ct.isSpecLoad = true;
+                        ct.fn.setSpecMinDisabled();
+                        ct.fn.setSpecMaxDisabled();
+                    });
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
+
+            ct.selectedGpuCard = {};
+            if (selectedGpuCardId) {
+                var index;
+                for (index = 0; index < ct.gpuCardList.length; index++) {
+                    if (selectedGpuCardId == ct.gpuCardList[index].id) {
+                        ct.selectedGpuCard = ct.gpuCardList[index];
+                        ct.fn.defaultSelectSpec();
+                        break;
+                    }
+                }
+                ct.fn.setSpecMaxDisabled(); // GpuCard 변경시 스펙 Disabled 여부 변경 by hrit, 201015
+            }
+
+        };
+
+        ct.fn.checkGpu = function () {
+            if (ct.selectedSpecType == 'GPU') {
+                return ct.selectedGpuCardId != undefined && ct.selectedGpuCardId != '';
+            } else {
+                return true;
+            }
+        };
+
+        ct.fn.filterGpuCard = function () {
+            return function (item) {
+                return item.availableCount > 0;
+            }
+        };
+
         if (ct.data.tenantId && ct.snapshotId) {
             $scope.main.loadingMainBody = true;
             ct.fn.getTenantResource();
@@ -644,6 +725,7 @@ angular.module('gpu.controllers')
             ct.fn.getSecurityPolicy();
             ct.fn.getSpecList();
             ct.fn.getVolumeTypeList();
+            $scope.main.panelToggleChange({currentTarget: $('#btn_quota_plan_toggle')})
         }
     })
     // .controller('iaasComputeRestoreCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {

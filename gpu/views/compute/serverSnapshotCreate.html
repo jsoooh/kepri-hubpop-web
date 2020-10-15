@@ -48,6 +48,18 @@
 									<div class="cnt_msg_box msg-info">윈도우 인스턴스는 사용자가 구성한 도메인을 통해서만 접속이 가능합니다. IP를 사용한 접근은 허용되지 않습니다.</div>
 								</div>
 							</li>
+							<li ng-if="contents.selectedSpecType=='GPU'">
+								<div class="pnb_tit">
+									<i class="i_star"></i> <span class="pnb_t_txt">GPU 모델 선택</span>
+								</div>
+								<select class="form-control" name="selectedGpuCardId" 
+									ng-model="contents.selectedGpuCardId"
+									ng-options="gpuCard.id as (gpuCard.name + ' ' + gpuCard.type + ' (사용가능: ' + gpuCard.availableCount + '개)' + '(전체: ' + gpuCard.usedCount + '/' + gpuCard.count + ')' | translate) for gpuCard in contents.gpuCardList | filter: contents.fn.filterGpuCard()"
+									ng-change="contents.fn.onchangeGpuCard(contents.selectedGpuCardId);"
+									validation="custom:contents.fn.checkGpu();">
+									<option value="" ng-selected="$first">{{ 'label.select' | translate }}</option>
+								</select>
+							</li>
 							<li>
 								<div class="pnb_tit">
 									<i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span>
@@ -56,23 +68,27 @@
 								<div class="tbl type1">
 									<table class="table">
 										<colgroup>
-											<col style="width:10%;">
+											<col style="width:5%;">
+											<col style="width:auto;">
+											<col ng-if="contents.selectedSpecType=='GPU'" style="width:15%;">
+											<col ng-if="contents.selectedSpecType=='GPU'" style="width:15%;">
 											<col style="width:15%;">
-											<col style="width:20%;">
-											<col style="width:20%;">
+											<col style="width:15%;">
 											<col style="width:20%;">
 										</colgroup>
 										<thead>
 											<tr>
 												<th scope="col"></th>
 												<th scope="col">종류</th>
+												<th ng-if="contents.selectedSpecType=='GPU'" scope="col">GPU</th>
+												<th ng-if="contents.selectedSpecType=='GPU'" scope="col">GPU 메모리</th>
 												<th scope="col">vCPU</th>
 												<th scope="col">메모리</th>
 												<th scope="col">OS디스크</th>
 											</tr>
 										</thead>
 										<tbody>
-										<tr ng-repeat="(key, spec) in contents.specList | filterSpecList: contents.spec.type: contents.spec.gpuCardInfo"
+										<tr ng-repeat="(key, spec) in contents.specList | filterSpecList: contents.data.spec.type: contents.data.spec.gpuCardInfo"
 											ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': (spec.uuid == contents.specUuid)}"
 											ng-click="contents.fn.selectSpec(spec);">
 											<td>
@@ -87,6 +103,8 @@
 												</div>
 											</td>
 											<td>{{spec.name}}</td>
+											<td ng-if="contents.selectedSpecType=='GPU'">{{spec.gpu}}</td>
+											<td ng-if="contents.selectedSpecType=='GPU'">{{spec.gpuCardInfo.memory}}</td>
 											<td>{{spec.vcpus}} Core</td>
 											<td>{{spec.ram | displayVolume:'MB'}}</td>
 											<td>{{spec.disk | displayVolume:'GB'}}</td>
@@ -217,7 +235,7 @@
 				<div class="pn-Toggle">
 					<div class="pn_head brdt">
 						<h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
-						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+						<button type="button" name="button" id="btn_quota_plan_toggle" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
 					</div>
 					<div class="pn_body">
 						<div class="s_cont_box">
@@ -246,7 +264,7 @@
 										<span class="txt_count">({{(contents.tenantResource.usedResource.ramSize + contents.data.spec.ram) | displayVolume:'MB'}} / {{contents.tenantResource.maxResource.ramSize | displayVolume:'MB'}})</span>
 									</li>
 									<li>
-										<span class="tit_txt">디스크</span>
+										<span class="tit_txt">HDD</span>
 										<div class="progressWrap type2">
 											<div class="progress">
 											  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.hddVolumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.hddVolumeGigabytes)*100|number:0}}" class="progress">
@@ -255,6 +273,28 @@
 											</div>
 										</div>
 										<span class="txt_count">({{(contents.tenantResource.usedResource.hddVolumeGigabytes + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.hddVolumeGigabytes | displayVolume:'GB'}})</span>
+									</li>
+									<li>
+										<span class="tit_txt">SSD</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+											  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.ssdVolumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.ssdVolumeGigabytes)*100|number:0}}" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.ssdVolumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.ssdVolumeGigabytes)*100|number:0}}%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">({{(contents.tenantResource.usedResource.ssdVolumeGigabytes + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.ssdVolumeGigabytes | displayVolume:'GB'}})</span>
+									</li>
+									<li ng-repeat="gpuCard in contents.gpuCardList" ng-if="gpuCard.quatorCount >= 0 && gpuCard.quatorUsedCount >= 0">
+										<span class="tit_txt">{{gpuCard.name}}</span>
+										<div class="progressWrap type2">
+											<div class="progress">
+												<div percent-progress-bar-animate bar-type="width" percent="{{((gpuCard.quatorUsedCount + gpuCard.selected)/gpuCard.quatorCount)*100|number:0}}" class="progress">
+													<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((gpuCard.quatorUsedCount + gpuCard.selected)/gpuCard.quatorCount)*100|number:0}}%"></div>
+												</div>
+											</div>
+										</div>
+										<span class="txt_count">({{gpuCard.quatorUsedCount + gpuCard.selected}}개 / {{gpuCard.quatorCount}}개)</span>
 									</li>
 								</ul>
 							</div>

@@ -1,8 +1,6 @@
 'use strict';
 
-//angular.module('iaas.controllers')
 angular.module('gpu.controllers')
-    // .controller('iaasComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $interval, $window, $mdDialog, $filter, $bytes, $translate, $log, $exceptionHandler, common, cookies, ValidationService, CONSTANTS, computeDetailService, tenantChartConfig, tenantNetChartConfig) {
     .controller('gpuComputeDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $interval, $window, $mdDialog, $filter, $bytes, $translate, $log, $exceptionHandler, common, cookies, ValidationService, CONSTANTS, computeDetailService, tenantChartConfig, tenantNetChartConfig) {
         _DebugConsoleLog("computeDetailControllers.js : gpuComputeDetailCtrl", 1);
 
@@ -24,15 +22,11 @@ angular.module('gpu.controllers')
         ct.consoleLogLimit = 50;
         ct.actionLogLimit = 5;
         // 공통 레프트 메뉴의 userTenantId
-        // ct.data.tenantId = $scope.main.userTenantId;
-        // ct.data.tenantName = $scope.main.userTenant.korName;
-
         ct.data.tenantId = $scope.main.userTenantGpu.id;
         ct.data.tenantName = $scope.main.userTenantGpu.tenantKorName;
 
         ct.data.instanceId = $stateParams.instanceId;
         ct.viewType = 'instance';
-        // if ($scope.main.stateKey == "iaasDeployServerComputeDetail") {
         if ($scope.main.stateKey == "gpuDeployServerComputeDetail") {
             ct.viewType = 'deploy';
         }
@@ -48,11 +42,9 @@ angular.module('gpu.controllers')
 
         ct.computeEditFormOpen = function ($event, instance){
             var dialogOptions =  {
-                // controller       : "iaasComputeEditFormCtrl" ,
                 controller       : "gpuComputeEditFormCtrl" ,
                 formName         : 'computeEditForm',
                 instance         : angular.copy(instance)
-                /*callBackFunction : ct.reNamePopServerCallBackFunction*/
             };
 
             $scope.actionBtnHied = false;
@@ -60,18 +52,13 @@ angular.module('gpu.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-        /*ct.reNamePopServerCallBackFunction = function () {
-            ct.fnGetServerMainList();
-        };*/
-
         //20181120 sg0730  서버사양변경 PopUp 추가
         ct.computePopEditServerForm = function ($event) {
         	 var dialogOptions = {
-                     // controller : "iaasComputePopEditServerCtrl" ,
-                     // formName   : 'iaasComputePopEditServerForm',
                      controller : "gpuComputePopEditServerCtrl" ,
                      formName   : 'gpuComputePopEditServerForm',
                      instance : angular.copy(ct.instance),
+                     dialogClassName: "modal-lg",
                      callBackFunction : ct.reflashCallBackFunction
                  };
                  $scope.actionBtnHied = false;
@@ -1582,9 +1569,7 @@ angular.module('gpu.controllers')
             computeDetailService.setMonitoringYn(instance);
         };
     })
-    // .controller('iaasComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
     .controller('gpuComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
-        // _DebugConsoleLog("computeDetailControllers.js : iaasComputeSystemDetailCtrl", 1);
         _DebugConsoleLog("computeDetailControllers.js : gpuComputeSystemDetailCtrl", 1);
         
         $scope.actionBtnHied = true;
@@ -2812,9 +2797,7 @@ angular.module('gpu.controllers')
             ct.fn.changeSltInfoTab();
         }
     }) 
-    // .controller('iaasComputeEditFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
     .controller('gpuComputeEditFormCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $bytes,ValidationService, user, common, CONSTANTS) {
-        // _DebugConsoleLog("computeDetailControllers.js : iaasComputeEditFormCtrl", 1);
         _DebugConsoleLog("computeDetailControllers.js : gpuComputeEditFormCtrl", 1);
         
         var pop = this;
@@ -3136,9 +3119,7 @@ angular.module('gpu.controllers')
         pop.fn.getVolumeList();
 
     })
-    // .controller('iaasComputePublicIpSearchFormCtrl', function ($scope, $location, $state, $sce,$q,$translate, $stateParams, $mdDialog, $filter, user, common, ValidationService, CONSTANTS) {
     .controller('gpuComputePublicIpSearchFormCtrl', function ($scope, $location, $state, $sce,$q,$translate, $stateParams, $mdDialog, $filter, user, common, ValidationService, CONSTANTS) {
-        // _DebugConsoleLog("deployServerControllers.js : iaasComputePublicIpSearchFormCtrl", 1);
         _DebugConsoleLog("deployServerControllers.js : gpuComputePublicIpSearchFormCtrl", 1);
 
         var pop = this;
@@ -3274,9 +3255,7 @@ angular.module('gpu.controllers')
     //////////////////////////////////////////////////////////////
     /////////20181120 sg0730 서버유형 변경 Pop 추가   ////////////////////
     //////////////////////////////////////////////////////////////
-    // .controller('iaasComputePopEditServerCtrl', function ($scope, $location, $state, $sce, $timeout, $stateParams,$filter,$q,$translate, $bytes, ValidationService, user, common, CONSTANTS) {
     .controller('gpuComputePopEditServerCtrl', function ($scope, $location, $state, $sce, $timeout, $stateParams,$filter,$q,$translate, $bytes, ValidationService, user, common, CONSTANTS) {
-        // _DebugConsoleLog("computePopEditServerCtrl.js : iaasComputePopEditServerCtrl", 1);
         _DebugConsoleLog("computePopEditServerCtrl.js : gpuComputePopEditServerCtrl", 1);
         
         var pop = this;
@@ -3290,14 +3269,14 @@ angular.module('gpu.controllers')
         pop.tenantId 					= pop.instance.tenantId;
 
         if (!pop.tenantId) {
-            // pop.tenantId = $scope.main.userTenantId;
             pop.tenantId = $scope.main.userTenantGpuId;
         }
+
+        pop.colspan = pop.instance.spec.type == 'GPU' ? 7: 5;
 
         $scope.dialogOptions.title 		= "인스턴스 사양 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
-        // $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/computePopEditServerForm.html" + _VersionTail();
         $scope.dialogOptions.templateUrl = _GPU_VIEWS_ + "/compute/computePopEditServerForm.html" + _VersionTail();
 
 
@@ -3307,7 +3286,6 @@ angular.module('gpu.controllers')
         pop.spec 						= {};
         $scope.dialogOptions.authenticate = true;
 
-        //스펙그룹의 스펙 리스트 조회
         pop.isSpecLoad = false;
         //스펙그룹의 스펙 리스트 조회
         pop.getSpecList = function() {
@@ -3317,7 +3295,6 @@ angular.module('gpu.controllers')
                 type: pop.instance.spec.type
             };
 
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/spec', 'GET');
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/spec', 'GET', params);
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
@@ -3353,19 +3330,19 @@ angular.module('gpu.controllers')
             var params = {
                 tenantId : pop.tenantId
             };
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/resource/used', 'GET', params);
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/used', 'GET', params);
 
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.length > 0) {
                     pop.tenantResource = data.content[0];
                     pop.tenantResource.available = {};
-                    pop.tenantResource.available.instances = pop.tenantResource.maxResource.instances - pop.tenantResource.usedResource.instances;
-                    pop.tenantResource.available.floatingIps = pop.tenantResource.maxResource.floatingIps - pop.tenantResource.usedResource.floatingIps;
                     pop.tenantResource.available.cores = pop.tenantResource.maxResource.cores - pop.tenantResource.usedResource.cores;
                     pop.tenantResource.available.ramSize = pop.tenantResource.maxResource.ramSize - pop.tenantResource.usedResource.ramSize;
-                    pop.tenantResource.available.instanceDiskGigabytes = pop.tenantResource.maxResource.instanceDiskGigabytes - pop.tenantResource.usedResource.instanceDiskGigabytes;
+                    pop.tenantResource.maxResource.volumeGigabytes = (pop.tenantResource.maxResource.hddVolumeGigabytes + pop.tenantResource.maxResource.ssdVolumeGigabytes);
+                    pop.tenantResource.usedResource.volumeGigabytes = (pop.tenantResource.usedResource.hddVolumeGigabytes + pop.tenantResource.usedResource.ssdVolumeGigabytes);
                     pop.tenantResource.available.volumeGigabytes = pop.tenantResource.maxResource.volumeGigabytes - pop.tenantResource.usedResource.volumeGigabytes;
+                    pop.tenantResource.available.hddVolumeGigabytes = pop.tenantResource.maxResource.hddVolumeGigabytes - pop.tenantResource.usedResource.hddVolumeGigabytes;
+                    pop.tenantResource.available.ssdVolumeGigabytes = pop.tenantResource.maxResource.ssdVolumeGigabytes - pop.tenantResource.usedResource.ssdVolumeGigabytes;
                     pop.tenantResource.available.objectStorageGigaByte = pop.tenantResource.maxResource.objectStorageGigaByte - pop.tenantResource.usedResource.objectStorageGigaByte;
                     pop.setSpecMaxDisabled();
                 }
@@ -3408,7 +3385,7 @@ angular.module('gpu.controllers')
         pop.setSpecMaxDisabled = function () {
             if (pop.isSpecLoad && pop.tenantResource && pop.tenantResource.maxResource &&  pop.tenantResource.usedResource) {
                 angular.forEach(pop.specList, function (spec) {
-                    if (spec.vcpus > pop.tenantResource.available.cores || spec.ram > pop.tenantResource.available.ramSize || spec.disk > pop.tenantResource.available.instanceDiskGigabytes) {
+                    if (spec.vcpus > pop.tenantResource.available.cores || spec.ram > pop.tenantResource.available.ramSize || spec.disk > pop.tenantResource.available.hddVolumeGigabytes) {
                         spec.disabled = true;
                         pop.isMaxSpecDisabled = true;
                     }
@@ -3457,7 +3434,6 @@ angular.module('gpu.controllers')
             };
             common.mdDialogHide();
             $scope.main.loadingMain = true;
-            // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance/resize', 'POST', param );
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/resize', 'POST', param );
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMain = false;
