@@ -12,16 +12,16 @@ angular.module('gpu.controllers')
 
         ct.data.clusterCnt = 3;
         ct.data.servicePort = 27017;
-        ct.data.checkPort = 9994;
+        ct.data.checkPort = ct.prodPortBand + 9994;
         ct.data.mongoPort1 = 27020;
         ct.data.mongoPort2 = 27030;
         ct.data.mongoPort3 = 27040;
         ct.data.configPort = 27011;
 
-        ct.usingPorts.cluster.push(27020);
-        ct.usingPorts.cluster.push(27030);
-        ct.usingPorts.cluster.push(27040);
-        ct.usingPorts.cluster.push(27011);
+        ct.usingPorts.cluster.push(ct.data.mongoPort1);
+        ct.usingPorts.cluster.push(ct.data.mongoPort2);
+        ct.usingPorts.cluster.push(ct.data.mongoPort3);
+        ct.usingPorts.cluster.push(ct.data.configPort);
 
         ct.data.deployType = "single";
         ct.data.adminId = "admin";
