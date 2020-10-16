@@ -408,6 +408,14 @@ angular.module('gpu.controllers')
             ct.fn.changeCheckedState(ct.data.allChecked);
         };
 
+        ct.fn.informationOpenClick = function (information) {
+            if (ct.data.information) {
+                ct.data.information = false;
+            } else {
+                ct.data.information = true;
+            }
+        };
+
         ct.fn.uploadFiles = function (uploadFiles) {
             $scope.main.loadingMain = true;
             if (uploadFiles && uploadFiles.files.length > 0) {

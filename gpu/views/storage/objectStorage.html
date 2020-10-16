@@ -48,7 +48,12 @@
 	<div class="col-md-8">
 		<section class="panel panel-bordered">
 			<div class="panel-heading">
-				<h3 class="panel-title">접속 정보</h3>
+				<button type="button" class="btn-dropdown" name="information" ng-model="contents.data.information" ng-click="contents.fn.informationOpenClick(contents.data.information)">
+					<h3 class="panel-title">접속 정보 &nbsp;&nbsp;&nbsp;
+						<Strong class="btn-dropdown-depth active" ng-show="!contents.data.information"> +</Strong>
+						<Strong class="btn-dropdown-depth " ng-show="!!contents.data.information"> - </Strong>
+					</h3>
+				</button>
 			</div>
 			<div class="panel-body padding-0" style="height:167px;">
 				<table class="table">
@@ -56,7 +61,7 @@
 						<col style="width: 30%">
 						<col>
 					</colgroup>
-					<tbody>
+					<tbody ng-show="contents.data.information">
 					<tr>
 						<td>
 								<span class="label label-pill label-round label-success label-ico">
