@@ -1,10 +1,7 @@
 'use strict';
 
-// angular.module('iaas.controllers')
 angular.module('gpu.controllers')
-    // .controller('iaasStorageCtrl', function ($scope, $location, $state,$translate,$filter, $stateParams, user, $q,paging, common, ValidationService, CONSTANTS) {
     .controller('gpuStorageCtrl', function ($scope, $location, $state,$translate,$filter, $stateParams, user, $q,paging, common, ValidationService, CONSTANTS) {
-        // _DebugConsoleLog("storageControllers.js : iaasStorageCtrl", 1);
         _DebugConsoleLog("storageControllers.js : gpuStorageCtrl", 1);
 
         var ct = this;
@@ -31,8 +28,6 @@ angular.module('gpu.controllers')
         };
         
         // 공통 레프트 메뉴의 userTenantId
-        // ct.data.tenantId = $scope.main.userTenantId;
-        // ct.data.tenantName = $scope.main.userTenant.korName;
         ct.data.tenantId = $scope.main.userTenantGpuId;
         ct.data.tenantName = $scope.main.userTenantGpu.korName;
 
@@ -42,6 +37,7 @@ angular.module('gpu.controllers')
             ct.data.tenantName = status.korName;
             ct.fn.getStorageList();
         });
+
         var conditionValue = $stateParams.volumeName;
         if (conditionValue) {
             ct.conditionKey = 'name';
@@ -61,7 +57,6 @@ angular.module('gpu.controllers')
 
             param.size = 0;
             
-            // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'GET', param));
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'GET', param));
             returnPromise.success(function (data, status, headers) {
                 var volumes = [];
@@ -70,6 +65,16 @@ angular.module('gpu.controllers')
                     if (data.totalElements != 0) {
                         ct.isStorageMainListLoad = true;
                     }
+                    // 미생성 Bootable 볼륨 체크 by hrit, 201016
+                    var rp = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume/bootable', 'GET', param));
+                    rp.success(function (data2, status, headers) {
+                        if (data2.content.volumes.length > 0) {
+                            console.log(volumes.length, data2.content.volumes)
+                            volumes = volumes.concat(data2.content.volumes);
+                            console.log(volumes.length, volumes)
+                            common.objectOrArrayMergeData(ct.storageMainList, volumes);
+                        }
+                    });
                 }
                 common.objectOrArrayMergeData(ct.storageMainList, volumes);
                 $scope.main.loadingMainBody = false;
