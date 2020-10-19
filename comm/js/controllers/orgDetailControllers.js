@@ -1996,7 +1996,7 @@ angular.module('portal.controllers')
 
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
         $scope.dialogOptions.title = "조회 등록";
-        $scope.dialogOptions.okName = "생성";
+        $scope.dialogOptions.okName = "등록";
         $scope.dialogOptions.closeName = "취소";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectSchAddUsersForm.html" + _VersionTail();
 
@@ -2228,7 +2228,7 @@ angular.module('portal.controllers')
 
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
         $scope.dialogOptions.title = "직접 등록";
-        $scope.dialogOptions.okName = "생성";
+        $scope.dialogOptions.okName = "등록";
         $scope.dialogOptions.closeName = "취소";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectNewAddUsersForm.html" + _VersionTail();
 
