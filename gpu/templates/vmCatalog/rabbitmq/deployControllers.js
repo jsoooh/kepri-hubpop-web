@@ -10,15 +10,15 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.servicePort = 5672;
+        ct.data.servicePort = ct.prodPortBand + 5672;
         ct.data.managementPort = 15672;
-        ct.data.epmdPort = 4369;
+        ct.data.epmdPort = ct.prodPortBand + 4369;
         ct.data.erlangPort = 25672;
-        ct.data.ncCheckPort = 4444;
+        ct.data.ncCheckPort = ct.prodPortBand + 4444;
 
-        ct.usingPorts.cluster.push(4369);
-        ct.usingPorts.cluster.push(15672);
-        ct.usingPorts.cluster.push(25672);
+        ct.usingPorts.cluster.push(ct.data.epmdPort);
+        ct.usingPorts.cluster.push(ct.data.managementPort);
+        ct.usingPorts.cluster.push(ct.data.erlangPort);
 
         // 테스트 입력값
         if(ct.testInput) {

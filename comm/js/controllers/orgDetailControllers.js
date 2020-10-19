@@ -1488,17 +1488,18 @@ angular.module('portal.controllers')
             var dialogOptions = {
                 title : '프로젝트 이미지 변경',
                 formName : 'popThumModifyForm',
-                dialogClassName : 'modal-dialog-popThumModify',
                 templateUrl : _COMM_VIEWS_ + '/org/popOrgIcon.html' + _VersionTail(),
                 okName : '업로드'
             };
             common.showDialog($scope, $event, dialogOptions);
 
-            ct.uploadedNoticeFile = [];
             ct.uploader = common.setDefaultFileUploader($scope);
             ct.uploader.onAfterAddingFile = function(fileItem) {
-                ct.uploadedNoticeFile.push(fileItem._file);
                 $('#userfile').val(fileItem._file.name);
+                ct.uploadedNoticeFile = null;
+                $timeout(function () {
+                    ct.uploadedNoticeFile = fileItem;
+                }, 0);
             };
 
             $scope.popDialogOk = function() {
@@ -1513,13 +1514,13 @@ angular.module('portal.controllers')
 
         // 이미지 변경 액션
         ct.createOrgProjectIconAction = function () {
-            if (!ct.uploadedNoticeFile[ct.uploadedNoticeFile.length - 1]) {
+            if (!ct.uploadedNoticeFile || !ct.uploadedNoticeFile._file) {
                 common.showAlertWarning('프로젝트 로고를 선택하십시오.');
                 return;
             }
 
             var body = {};
-            body.iconFile = ct.uploadedNoticeFile[ct.uploadedNoticeFile.length - 1];
+            body.iconFile = ct.uploadedNoticeFile._file;
 
             $scope.main.loadingMain = true;
             var promise = orgService.createOrgIcon(ct.paramId, body);
@@ -1995,7 +1996,7 @@ angular.module('portal.controllers')
 
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
         $scope.dialogOptions.title = "조회 등록";
-        $scope.dialogOptions.okName = "생성";
+        $scope.dialogOptions.okName = "등록";
         $scope.dialogOptions.closeName = "취소";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectSchAddUsersForm.html" + _VersionTail();
 
@@ -2227,7 +2228,7 @@ angular.module('portal.controllers')
 
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
         $scope.dialogOptions.title = "직접 등록";
-        $scope.dialogOptions.okName = "생성";
+        $scope.dialogOptions.okName = "등록";
         $scope.dialogOptions.closeName = "취소";
         $scope.dialogOptions.templateUrl = _COMM_VIEWS_ + "/org/popOrgProjectNewAddUsersForm.html" + _VersionTail();
 

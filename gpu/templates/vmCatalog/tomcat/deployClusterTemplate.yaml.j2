@@ -99,6 +99,7 @@ resources:
             #!/bin/sh
             echo "tomcat setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            sed -i 's/<Connector port="8080"/<Connector port="$service_port"/' /usr/local/tomcat/conf/server.xml
             systemctl start tomcat
             systemctl enable tomcat
             echo "tomcat setting end"
@@ -119,6 +120,7 @@ resources:
             #!/bin/sh
             echo "tomcat setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            sed -i 's/<Connector port="8080"/<Connector port="$service_port"/' /usr/local/tomcat/conf/server.xml
             systemctl start tomcat
             systemctl enable tomcat
             echo "tomcat setting end"
@@ -141,6 +143,7 @@ resources:
             #!/bin/sh
             echo "tomcat setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            sed -i 's/<Connector port="8080"/<Connector port="$service_port"/' /usr/local/tomcat/conf/server.xml
             systemctl start tomcat
             systemctl enable tomcat
             server1Run=1

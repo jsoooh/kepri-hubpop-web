@@ -61,7 +61,7 @@ angular.module('common.services', ['LocalStorageModule'])
 
         common.setPortalOrgKey = function (portalOrgId) {
             cookies.setPortalOrgKey(portalOrgId);
-            common.setTeamCode(common.getProjectKey() + "-" + portalOrgId);
+            //common.setTeamCode(portalOrgId);
         };
 
         common.clearPortalOrgKey = function () {

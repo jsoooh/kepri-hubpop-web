@@ -149,7 +149,7 @@ angular.module('common.controllers')
                 $scope.main.loadingMainBody = false;
                 $scope.main.commonOrgUserLogin = false;
             });
-        }
+        };
 
         // ORG 공용 계정 자동로그인
         if (common.getOrgAuthToken()) {

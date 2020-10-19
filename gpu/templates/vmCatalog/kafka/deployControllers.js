@@ -8,8 +8,8 @@ angular.module('gpu.controllers')
         var ct = $scope.$parent.$parent.contents;
         ct.vs = new ValidationService({controllerAs: $scope.subPage});
 
-        ct.data.servicePort = 9092;
-        ct.data.zookeeperPort = 2181;
+        ct.data.servicePort = ct.prodPortBand + 9092;
+        ct.data.zookeeperPort = ct.prodPortBand + 2181;
 
         ct.usingPorts.cluster.push(2888);
         ct.usingPorts.cluster.push(3888);

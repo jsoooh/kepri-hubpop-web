@@ -70,7 +70,7 @@ angular.module('app')
             port : "20025"
         },
         iaasDef : {
-            insMaxDiskSize: 2048
+            insMaxDiskSize: 500
         },
         loadingProgressBar : {
         	top : 80,
@@ -380,21 +380,21 @@ angular.module('app')
                     "DELETE_YN":"N"
                 },
                 {
-                    "NOTICE_NO":9,
-                    "TITLE":"공지사항333333333",
+                    "NOTICE_NO":37,
+                    "TITLE":"서버가상화 재오픈 알림",
                     "POP_YN":"Y",
-                    "START_DT":"2020-03-02",
-                    "END_DT":"2020-05-12",
-                    "CONTENTS":"<p><strong data-translation='' style='display:block;position:relative;padding-left:14px;margin:-4px 0px 29px;font-weight:normal;line-height:1.5;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;letter-spacing:-0.7px;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'>'군용기 발진' 日 독도영유권 주장에 반박..'우리 영공 문제는 우리가 답해'<br>시간별 靑 조치 상세소개..<a href='http://www.naver.com'>NSC 미개최 지적</a>엔 '실효조치 중요, 본질 정확히 봐야'<br>러시아 차석무관 '기기 오작동, 침범의도 없었다'..한국에 위치좌표 등 자료요청</strong></p><div data-translation-body='' style='margin:0px;padding:0px 0px 0px 14px;overflow:hidden;line-height:1.625;letter-spacing:-0.02em;color:rgb(51, 51, 51);font-family:AppleSDGothicNeo-Regular, &quot;font-size:17px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:400;orphans:2;text-align:start;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);text-decoration-style:initial;text-decoration-color:initial;'><section dmcf-sid='NbJ7TC07fN'><figure dmcf-pid='N500st49KD' dmcf-ptype='figure' style='position:relative;margin:0px auto 30px;display:table;padding:0px;clear:left;max-width:100%;'><p style='margin:0px;padding:0px;display:block;position:relative;'><img alt='러시아 군용기, 한국방공식별구역(KADIZ) 침범 (PG) [정연주 제작] 일러스트' dmcf-mid='NnFZAq8SAy' dmcf-mtype='image' height='262' src='https://t1.daumcdn.net/news/201907/24/yonhap/20190724140019985rrea.jpg' width='500' style='border:0px none;display:block;max-width:100%;height:auto;margin:0px auto;'></p><figcaption style='margin:11px auto 0px;font-size:13px;line-height:18px;color:rgb(145, 145, 145);max-width:100%;display:table-caption;caption-side:bottom;word-break:break-word;'>러시아 군용기, 한국방공식별구역(KADIZ) 침범 (PG) [정연주 제작] 일러스트</figcaption></figure></section></div>",
+                    "START_DT":"2020-10-13",
+                    "END_DT":"2020-10-14",
+                    "CONTENTS":"<p>안녕하세요.</p><p>HUB-PoP 플랫폼 관리자입니다.</p><p>&nbsp;</p><p>서버가상화 재오픈되었습니다.&nbsp;</p><p>서버생성이 필요한 경우 쿼터 변경 신청 후 담당자에게 메일주시면 승인 후 사용가능합니다.</p><p>담당자 : &nbsp;임정선 (jeongseon_im@kepco.co.kr, 042-865-5239)</p>",
                     "ATTACH_FILE":"",
-                    "COMMON_CD":"CD0021",
+                    "COMMON_CD":"CD0024",
                     "COMMON_NM":"공통",
                     "REG_USER_ID":"hubpop",
                     "REG_USER_NM":"허브팝",
-                    "REG_DT":"2019-05-30",
+                    "REG_DT":"2020-10-13",
                     "UPT_USER_ID":"hubpop",
                     "UPT_USER_NM":"허브팝",
-                    "UPT_DT":"2019-05-30",
+                    "UPT_DT":"2020-10-13",
                     "DELETE_YN":"N"
                 }
             ],
