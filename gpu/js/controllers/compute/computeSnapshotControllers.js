@@ -382,18 +382,19 @@ angular.module('gpu.controllers')
                         var spec = ct.specList[i];
                         if (spec.uuid == ct.snapshotInfo.specId) {
                             ct.data.spec = spec;
+                            ct.selectedSpecType = ct.data.spec.type;
                             // GPU 인스턴스의 스냅샷인지 체크하고 GPU 카드 선택할 수 있도록 변경. by hrit, 201015
                             if (ct.data.spec.type == 'GPU') {
-                                ct.selectedSpecType = ct.data.spec.type;
                                 ct.fn.getGpuCardList();
+                            } else {
+                                ct.isSpecLoad = true;
+                                ct.fn.setSpecMinDisabled();
+                                ct.fn.setSpecMaxDisabled();
                             }
                             break;
                         }
                     }
                 }
-                // ct.isSpecLoad = true;
-                // ct.fn.setSpecMinDisabled();
-                // ct.fn.setSpecMaxDisabled();
             });
             returnPromise.error(function (data, status, headers) {
                 ct.isSpecLoad = true;
@@ -426,7 +427,6 @@ angular.module('gpu.controllers')
         // spec loading 체크
         ct.specMaxDisabledSetting = false;
         ct.fn.setSpecMaxDisabled = function () {
-            console.log('setSpecMaxDisabled')
             ct.isMaxSpecDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
@@ -446,7 +446,6 @@ angular.module('gpu.controllers')
         // spec loading 체크
         ct.specDisabledAllSetting = false;
         ct.fn.defaultSelectSpec = function() {
-            console.log('defaultSelectSpec')
             if (ct.specMinDisabledSetting && ct.specMaxDisabledSetting) {
                 ct.specDisabledAllSetting = true;
                 var sltSpec = {};
