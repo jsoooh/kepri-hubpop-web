@@ -71,7 +71,7 @@ angular.module('gpu.controllers')
     ct.bucketNames              = [];
     ct.usingPorts               = {};
     // 기본 port가 10000이하인 경우에 prodPortBand를 더함.
-    ct.prodPortBand         = 50000;
+    ct.prodPortBand         = 0;
     // vm 생성시 기본적으로 사용하는 port
     ct.usingPorts.single        = [9100];
     ct.usingPorts.replica       = [9100];
