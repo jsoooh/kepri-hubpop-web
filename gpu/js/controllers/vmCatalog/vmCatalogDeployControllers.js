@@ -71,11 +71,34 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
+                if (vmCatalogDeploy.bucketName != null) {
+                ct.fn.deleteBucket(vmCatalogDeploy);
+                }
                 ct.fn.loadPage();
             });
             promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
+        });
+    };
+
+    ct.fn.deleteBucket = function(vmCatalogDeploy) {
+        var param = {
+            tenantId: vmCatalogDeploy.tenantId,
+            bucket: vmCatalogDeploy.parameters.s3_bucket_name
+        };
+        console.log("tenantId >>>>>>>>>>>>" + vmCatalogDeploy.tenantId);
+        console.log("삭제할 버킷 네임  >>>>>>>>>>>>" + vmCatalogDeploy.parameters.s3_bucket_name);
+        var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket', 'DELETE', param);
+        returnPromise.success(function (data, status, headers) {
+            console.log("deleteObjectBucket DELETE!!!!!!!!!!!!!");
+            if (status == 200 && data) {
+                common.showAlertSuccess('삭제되었습니다.');
+                ct.fn.getObjectStorageList();
+            } else {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError('오류가 발생하였습니다.');
+            }
         });
     };
 
@@ -239,11 +262,37 @@ angular.module('gpu.controllers')
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.fn.getVmCatalogDeployStatus(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
+                if (vmCatalogDeploy.bucketName != null) {
+                    ct.fn.deleteBucket(vmCatalogDeploy);
+                }
             });
             promise.error(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         });
+    };
+
+    ct.fn.deleteBucket = function(vmCatalogDeploy) {
+        var param = {
+            tenantId : vmCatalogDeploy.tenantId,
+            bucket : ct.vmCatalogDeployInfo.parameters.s3_bucket_name
+        };
+        console.log("tenantId >>>>>>>>>>>>"+ vmCatalogDeploy.tenantId);
+        console.log("삭제할 버킷 네임  >>>>>>>>>>>>"+ ct.vmCatalogDeployInfo.parameters.s3_bucket_name);
+        var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket', 'DELETE', param);
+        returnPromise.success(function (data, status, headers) {
+            console.log("deleteObjectBucket DELETE!!!!!!!!!!!!!");
+            if (status == 200 && data) {
+                common.showAlertSuccess('삭제되었습니다.');
+                ct.fn.getObjectStorageList();
+            } else {
+                $scope.main.loadingMainBody = false;
+                common.showAlertError('오류가 발생하였습니다.');
+            }
+        });
+        returnPromise.error(function (data, status, headers) {
+            $scope.main.loadingMainBody = false;
+            common.showAlertError(data.message);});
     };
 
     ct.fn.copyConnectInfoToClipboard = function (ipAddress) {

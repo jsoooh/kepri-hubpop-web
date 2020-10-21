@@ -100,6 +100,7 @@ angular.module('iaas.controllers')
         ct.data              = {};
         ct.data.tenantId     = $scope.main.userTenantId;
         ct.data.tenantName   = $scope.main.userTenant.korName;
+        ct.maxSingleDiskSize = CONSTANTS.iaasDef.insMaxDiskSize;
         ct.fn                = {};
         ct.volume            = {};
         ct.instances         = [];
@@ -206,8 +207,8 @@ angular.module('iaas.controllers')
 
                     // 볼륨 크기 최대 제한
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    if (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
-                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                    if (ct.volumeSliderOptions.ceil > ct.maxSingleDiskSize) {
+                        ct.volumeSliderOptions.ceil = ct.maxSingleDiskSize;
                     }
                 }
             });

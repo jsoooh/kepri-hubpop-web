@@ -1,6 +1,5 @@
 'use strict';
 
-// angular.module('iaas.controllers')
 angular.module('gpu.controllers')
     .filter('filterSpecList', function () {
         return function (items, specType, gpuCard) {
@@ -16,7 +15,7 @@ angular.module('gpu.controllers')
                         else
                             out.push(item);
                     }
-                });
+                }); 
                 return out;
             }
             return out;
@@ -91,6 +90,7 @@ angular.module('gpu.controllers')
             var dialogOptions = {
                 controller : "gpuComputePopEditServerCtrl" ,
                 formName   : 'gpuComputePopEditServerForm',
+                dialogClassName: "modal-lg",
                 instance : angular.copy(instance),
                 callBackFunction : ct.reflashCallBackFunction
             };
@@ -1379,7 +1379,10 @@ angular.module('gpu.controllers')
             ct.isMaxSpecDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
-                    if (spec.vcpus > ct.tenantResource.available.cores || spec.ram > ct.tenantResource.available.ramSize || spec.disk > ct.tenantResource.available.hddVolumeGigabytes) { // 내부디스크 체크 제거
+                    if (spec.vcpus > ct.tenantResource.available.cores 
+                        || spec.ram > ct.tenantResource.available.ramSize 
+                        || spec.disk > ct.tenantResource.available.hddVolumeGigabytes
+                        || (ct.selectedSpecType == 'GPU' && spec.gpu > ct.selectedGpuCard.availableCount)) { 
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
@@ -1402,7 +1405,7 @@ angular.module('gpu.controllers')
         ct.fn.defaultSelectSpec = function() {
             if (ct.specMinDisabledSetting && ct.specMaxDisabledSetting) {
                 ct.specDisabledAllSetting = true;
-                var sltSpec = null;
+                var sltSpec = {};
                 var specList = $filter('filterSpecList')(ct.specList, ct.selectedSpecType, ct.selectedGpuCard);
                 for (var i=0; i<specList.length; i++) {
                     if (!specList[i].disabled) {
@@ -1410,9 +1413,8 @@ angular.module('gpu.controllers')
                         break;
                     }
                 }
-                if (sltSpec) {
-                    ct.fn.selectSpec(sltSpec);
-                }
+                // sltSpec 값이 없는경우, 필터링되어 해당 사양이 없는 경우(GPU의 경우 생김) 사양 선택이 취소되도록 변경. by hrit, 201015
+                ct.fn.selectSpec(sltSpec);
             }
         };
 
@@ -1432,6 +1434,15 @@ angular.module('gpu.controllers')
             } else {
                 ct.data.spec = {};
                 ct.specUuid = "";
+            }
+            // GPU 인스턴스는 프로젝트 자원 계획에 카드의 사용쿼터를 표시하므로 스펙 선택 시 GPU 사용량 표시 by hrit, 201015
+            if (ct.selectedSpecType == 'GPU' && ct.selectedGpuCardId) {
+                ct.gpuCardList.forEach(function (gpuCard) {
+                    gpuCard.selected = 0;
+                    if (gpuCard.id == ct.selectedGpuCardId) {
+                        gpuCard.selected = sltSpec.gpu;
+                    }
+                })
             }
         };
 
@@ -1550,6 +1561,23 @@ angular.module('gpu.controllers')
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content) {
                     ct.gpuCardList = data.content;
+                    var rp = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/resource/gpuUsed', 'GET', {tenantId: ct.data.tenantId});
+                    rp.success(function (data2) {
+                        var gpuCardResources = data2.content;
+                        gpuCardResources.forEach(function (resource) {
+                            for (var i = 0; i < ct.gpuCardList.length; i++) {
+                                var gpuCard = ct.gpuCardList[i];
+                                if (resource.gpuId == gpuCard.itemCode) {
+                                    gpuCard.quatorCount = resource.total;
+                                    gpuCard.quatorUsedCount = resource.used;
+                                    var quator = resource.total - resource.used;
+                                    var portal = gpuCard.count - gpuCard.usedCount;
+                                    gpuCard.availableCount = quator <= portal ? quator: portal;
+                                    break;
+                                }
+                            }
+                        });
+                    });
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -1573,6 +1601,7 @@ angular.module('gpu.controllers')
                     }
                 }
                 ct.fn.getAvailabilityZoneList(selectedGpuCardId);
+                ct.fn.setSpecMaxDisabled(); // GpuCard 변경시 스펙 Disabled 여부 변경 by hrit, 201015
             }
             else
                 ct.fn.getAvailabilityZoneList();
@@ -1923,6 +1952,8 @@ angular.module('gpu.controllers')
             ct.fn.getKeypairList();
 
             ct.fn.getVolumeTypeList();
+
+            $scope.main.panelToggleChange({currentTarget: $('#btn_quota_plan_toggle')})
         }
 
     })

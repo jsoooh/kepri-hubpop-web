@@ -283,6 +283,7 @@ angular.module('iaas.controllers')
         ct.sltInstance       = {};
         ct.data.tenantId     = $scope.main.userTenantId;
         ct.data.tenantName   = $scope.main.userTenant.korName;
+        ct.maxSingleDiskSize = CONSTANTS.iaasDef.insMaxDiskSize;
         ct.formName          = "storageForm";
         ct.validDisabled = true;
 
@@ -385,8 +386,8 @@ angular.module('iaas.controllers')
 
                     // 디스크 크기 최대 제한
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    if (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
-                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                    if (ct.volumeSliderOptions.ceil > ct.maxSingleDiskSize ) {
+                        ct.volumeSliderOptions.ceil = ct.maxSingleDiskSize;
                     }
                     // 로딩되고나서 디스크 크기 최소로 자동설정
                     ct.inputVolumeSize = ct.volumeSliderOptions.minLimit;
@@ -1048,6 +1049,7 @@ angular.module('iaas.controllers')
     	pop.fn 							= {};
     	pop.data						= {};
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
+        pop.maxSingleDiskSize           = CONSTANTS.iaasDef.insMaxDiskSize;
     	
     	$scope.dialogOptions.title 		= "디스크 크기 변경";
     	$scope.dialogOptions.okName 	= "변경";
@@ -1125,8 +1127,8 @@ angular.module('iaas.controllers')
                     pop.tenantResource.available.volumeGigabytes = pop.tenantResource.maxResource.volumeGigabytes - pop.tenantResource.usedResource.volumeGigabytes;
 
                     pop.reSizeSliderOptions.ceil = pop.tenantResource.available.volumeGigabytes;
-                    if (pop.reSizeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize) {
-                        pop.reSizeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize
+                    if (pop.reSizeSliderOptions.ceil > pop.maxSingleDiskSize ) {
+                        pop.reSizeSliderOptions.ceil = pop.maxSingleDiskSize;
                     }
                 }
             });

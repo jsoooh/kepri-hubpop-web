@@ -10,8 +10,8 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.pgPort = 5432;
-        ct.data.kongaPort = 1337;
+        ct.data.pgPort = ct.prodPortBand + 5432;
+        ct.data.kongaPort = ct.prodPortBand + 1337;
         ct.data.kongUserId = "kong";
         ct.data.kongDbName = "kong";
         ct.data.kongaUserId = "konga";

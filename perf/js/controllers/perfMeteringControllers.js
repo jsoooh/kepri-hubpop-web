@@ -74,9 +74,11 @@ angular.module('perf.controllers')
                     if (angular.isUndefined(ct.data.maxRow) || ct.data.maxRow == "") {
                         ct.data.maxRow = perfCommService.findMaxRow(data);
                     }
-                    for (var itemGroup of ct.meteringItemGroups) {
+                    for (var i in ct.meteringItemGroups) {
+                        var itemGroup = ct.meteringItemGroups[i];
                         var exist = false;
-                        for (var meteringMonthly of ct.orgMeteringMonthlyLists) {
+                        for (var j in ct.orgMeteringMonthlyLists) {
+                            var meteringMonthly = ct.orgMeteringMonthlyLists[j];
                             if (itemGroup.exist == true) break;
                             if (itemGroup.itemGroupCode == meteringMonthly.itemGroupCode) {
                                 exist = true;
