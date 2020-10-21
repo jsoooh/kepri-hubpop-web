@@ -1052,6 +1052,7 @@ angular.module('iaas.controllers')
         ct.ipFlag            = true;
         ct.data.tenantId     = $scope.main.userTenant.id;
         ct.data.tenantName   = $scope.main.userTenant.korName;
+        ct.maxSingleDiskSize = CONSTANTS.iaasDef.insMaxDiskSize;
         ct.formName          = "computeCreateForm";
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
@@ -1396,8 +1397,8 @@ angular.module('iaas.controllers')
                     ct.tenantResource.available.volumeGigabytes = ct.tenantResource.maxResource.volumeGigabytes - ct.tenantResource.usedResource.volumeGigabytes;
                     ct.tenantResource.available.licenseWindows = ct.tenantResource.maxResource.licenseWindows - ct.tenantResource.usedResource.licenseWindows;
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
-                    if (CONSTANTS.iaasDef && CONSTANTS.iaasDef.insMaxDiskSize && (ct.volumeSliderOptions.ceil > CONSTANTS.iaasDef.insMaxDiskSize)) {
-                        ct.volumeSliderOptions.ceil = CONSTANTS.iaasDef.insMaxDiskSize;
+                    if (ct.volumeSliderOptions.ceil > ct.maxSingleDiskSize) {
+                        ct.volumeSliderOptions.ceil = ct.maxSingleDiskSize;
                     }
                     ct.fn.setSpecMaxDisabled();
                 }
