@@ -347,7 +347,7 @@ resources:
 
             echo "SET SLAVE"
             mysql -u root -p$root_password <<EOF
-                CHANGE MASTER TO MASTER_HOST='$server1_ip_address', MASTER_USER='$repl_user_id', MASTER_PASSWORD='$repl_user_password', MASTER_LOG_FILE='$FileName', MASTER_LOG_POS=$POS;
+                CHANGE MASTER TO MASTER_HOST='$server1_ip_address', MASTER_PORT='$service_port', MASTER_USER='$repl_user_id', MASTER_PASSWORD='$repl_user_password', MASTER_LOG_FILE='$FileName', MASTER_LOG_POS=$POS;
                 START SLAVE;
                 SET GLOBAL read_only = ON;
                 SET GLOBAL super_read_only = ON;
