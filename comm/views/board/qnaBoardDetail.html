@@ -59,8 +59,8 @@
 										<!-- <a href="#" class="td-attach">file.jpg</a> -->
 										<ul>
 											<li ng-repeat="f in contents.boardData.attachFile" ng-hide="f.isDel">
-												<a href="{{f.storagePath}}" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>
-												<!--<a href="/comm-api/api/portal/v1/files/{{f.id}}/download" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>-->
+												<!--<a href="{{f.storagePath}}" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>-->
+												<a href="/comm-api/api/portal/v1/files/{{f.id}}/download" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>
 												<button type="button" class="btn button_img" ng-click="contents.delFile(f);" ng-show="contents.mode=='U'" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.del' | translate }}"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}"></button>
 											</li>
 										</ul>
