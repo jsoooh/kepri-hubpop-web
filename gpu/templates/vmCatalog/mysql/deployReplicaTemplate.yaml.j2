@@ -340,9 +340,9 @@ resources:
 
 
             echo "Get Master Status"
-            # POS=`mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" -e"SHOW MASTER STATUS \G" |grep "Position" |cut -d ":" -f2`
-            FileName=$(mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $1}')
-            POS=$(mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $2}')
+            # POS=`mysql -h $server1_ip_address --port=$service_port -u $repl_user_id -p"$repl_user_password" -e"SHOW MASTER STATUS \G" |grep "Position" |cut -d ":" -f2`
+            FileName=$(mysql -h $server1_ip_address --port=$service_port -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $1}')
+            POS=$(mysql -h $server1_ip_address --port=$service_port -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $2}')
 
 
             echo "SET SLAVE"
