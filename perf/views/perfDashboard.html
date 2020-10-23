@@ -33,7 +33,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<section class="panel panel-bordered dashboard-panel dashboard-panel-type1">
-						<div class="panel-body">
+						<div class="panel-body" style="height:384px;">
 							<div class="clearfix"> 
 								<h3 class="heading h3 margin-bottom-25">전체 사용 금액</h3>
 							</div>
@@ -49,9 +49,12 @@
 											<p class="font-size-14 margin-bottom-5" ng-if="!contents.isToday">{{ contents.data.sltMonth }}월 사용 금액</p>
 											<div class="count-lg font-size-30 margin-bottom-15">
 												<div class="amountTxt">
-													<span class="amount" ng-if="!contents.dailyChart.loading">{{ contents.data.sltSumPerfAmt | number }}</span>
-													<img class="barLoadingImg" ng-if="contents.dailyChart.loading" src="images/loading/lg.equalizer-bars-loader.gif">
-													<span class="won"> 원</span>
+													<div class="inline-block" ng-if="!contents.dailyChart.loading">
+														<span class="amount">{{ contents.data.sltSumPerfAmt | number }}</span><span class="won"> 원</span>
+													</div>
+													<div class="spinner-border spinner-border-sm spinner-primary" role="status" ng-if="contents.dailyChart.loading">
+														<span class="sr-only">Loading...</span>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -65,9 +68,12 @@
 										<p class="font-size-14 margin-bottom-5" ng-if="!contents.isToday">{{ contents.data.lastMonth }}월 사용 금액</p>
 										<div class="count-lg margin-bottom-15" style="border-left:0;">
 											<div class="amountTxt">
-												<span class="amount font-size-30" ng-if="!contents.lastSumLoading">{{ contents.data.lastSumPerfAmt | number }}</span>
-												<img class="barLoadingImg" ng-if="contents.lastSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
-												<span class="won font-size-24"> 원</span>
+												<div class="inline-block" ng-if="!contents.lastSumLoading">
+													<span class="amount font-size-30">{{ contents.data.lastSumPerfAmt | number }}</span><span class="won font-size-24"> 원</span>
+												</div>
+												<div class="spinner-border spinner-border-sm spinner-primary" role="status" ng-if="contents.lastSumLoading">
+													<span class="sr-only">Loading...</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -78,9 +84,12 @@
 										<p class="font-size-14 margin-bottom-5" ng-if="!contents.isToday">{{ contents.data.nextMonth }}월 사용 금액</p>
 										<div class="count-lg margin-bottom-15">
 											<div class="amountTxt">
-												<span class="amount font-size-30" ng-if="!contents.nextSumLoading">{{ contents.data.nextSumPerfAmt | number : 0 }}</span>
-												<img class="barLoadingImg" ng-if="contents.nextSumLoading" src="images/loading/lg.equalizer-bars-loader.gif">
-												<span class="won font-size-24">원</span>
+												<div class="inline-block" ng-if="!contents.nextSumLoading">
+													<span class="amount font-size-30">{{ contents.data.nextSumPerfAmt | number : 0 }}</span><span class="won font-size-24">원</span>
+												</div>
+												<div class="spinner-border spinner-border-sm spinner-primary" role="status" ng-if="contents.nextSumLoading">
+													<span class="sr-only">Loading...</span>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -101,7 +110,11 @@
 					<h3 class="heading h3">서비스별 사용 금액</h3>
 					<div class="dashboard_chart_wrap" style="overflow:hidden;">
 						<div id="itemGroup-anls-chart"></div>
-						<div class="mainLoading" ng-if="contents.itemGroupChart.loading"></div>
+						<div class="spinnerWrap" ng-if="contents.itemGroupChart.loading" style="height:299px;">
+							<div class="spinner-border spinner-primary" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
+						</div>
 						<!-- <div class="chartWarningImg" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1"></div> -->
 						<div class="chartWarningImg" ng-if="!contents.itemGroupChart.loading && contents.itemGroupChart.data.series.length < 1">사용량 없음</div>
 					</div>
@@ -128,7 +141,11 @@
 					</div>
 					<div class="dashboard_chart_wrap" style="overflow:hidden;">
 						<div id="item-anls-chart"></div>
-						<div class="mainLoading" ng-if="contents.itemChart.loading"></div>
+						<div class="spinnerWrap" ng-if="contents.itemChart.loading" style="height:299px;">
+							<div class="spinner-border spinner-primary" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
+						</div>
 						<div class="chartWarningImg" ng-if="!contents.itemChart.loading && contents.itemChart.data.series.length < 1">사용량 없음</div>
 					</div>
 				</div>
@@ -156,7 +173,11 @@
 		<div class="dashboard_chart_wrap margin-top-30" style="overflow:hidden;">
 			<div ng-show="contents.data.sltColumnOption == 'daily'" id="daily-anls-chart"></div>
 			<div ng-show="contents.data.sltColumnOption == 'monthly'" id="monthly-anls-chart"></div>
-			<div class="mainLoading" ng-if="contents.dailyChart.loading"></div>
+			<div class="spinnerWrap" ng-if="contents.dailyChart.loading" style="height:500px;">
+				<div class="spinner-border spinner-primary" role="status">
+					<span class="sr-only">Loading...</span>
+				</div>
+			</div>
 			<div class="chartWarningImg" ng-if="contents.data.sltColumnOption == 'daily' && !contents.dailyChart.loading && contents.data.sltSumPerfAmt == 0">사용량 없음</div>
 			<div class="chartWarningImg"  ng-if="contents.data.sltColumnOption == 'monthly' && !contents.dailyChart.loading && contents.data.sltMonthlySumPerfAmt == 0">사용량 없음</div>
 		</div>
