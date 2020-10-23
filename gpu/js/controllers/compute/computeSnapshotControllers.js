@@ -570,7 +570,7 @@ angular.module('gpu.controllers')
             params.instance                  = {};
             params.instance.name             = ct.data.name;
             params.instance.tenantId         = ct.data.tenantId;
-            params.instance.networks         = [{ id: ct.networkId }];
+            params.instance.networks = [{ id: ct.selectedAvailabilityZone.publicNetworkSubnet.networkId} ];
             params.instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
             params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
@@ -696,10 +696,45 @@ angular.module('gpu.controllers')
                         break;
                     }
                 }
+                ct.fn.getAvailabilityZoneList(selectedGpuCardId);
                 ct.fn.setSpecMaxDisabled(); // GpuCard 변경시 스펙 Disabled 여부 변경 by hrit, 201015
             }
-
+            else
+                ct.fn.getAvailabilityZoneList();
         };
+
+        ct.fn.getAvailabilityZoneList = function(id) {
+            var param = {
+                gpuCardId : id
+            };
+            ct.availabilityZoneList  = [];
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+                if (data && data.content) {
+                    ct.availabilityZoneList = data.content;
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.onchangeAvailabilityZone = function(availabilityZoneId) {
+            ct.selectedAvailabilityZone = {};
+            if (availabilityZoneId) {
+                var index;
+                for (index = 0; index < ct.availabilityZoneList.length; index++) {
+                    if (availabilityZoneId == ct.availabilityZoneList[index].id) {
+                        ct.selectedAvailabilityZone = ct.availabilityZoneList[index];
+                        break;
+                    }
+                }
+            }
+        };
+
 
         ct.fn.checkGpu = function () {
             if (ct.selectedSpecType == 'GPU') {
@@ -724,6 +759,8 @@ angular.module('gpu.controllers')
             ct.fn.getSecurityPolicy();
             ct.fn.getSpecList();
             ct.fn.getVolumeTypeList();
+            ct.fn.getAvailabilityZoneList();
+
             $scope.main.panelToggleChange({currentTarget: $('#btn_quota_plan_toggle')})
         }
     })

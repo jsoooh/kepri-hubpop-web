@@ -340,14 +340,14 @@ resources:
 
 
             echo "Get Master Status"
-            # POS=`mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" -e"SHOW MASTER STATUS \G" |grep "Position" |cut -d ":" -f2`
-            FileName=$(mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $1}')
-            POS=$(mysql -h $server1_ip_address -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $2}')
+            # POS=`mysql -h $server1_ip_address --port=$service_port -u $repl_user_id -p"$repl_user_password" -e"SHOW MASTER STATUS \G" |grep "Position" |cut -d ":" -f2`
+            FileName=$(mysql -h $server1_ip_address --port=$service_port -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $1}')
+            POS=$(mysql -h $server1_ip_address --port=$service_port -u $repl_user_id -p"$repl_user_password" --skip-column-names -e"SHOW MASTER STATUS;" |awk '{print $2}')
 
 
             echo "SET SLAVE"
             mysql -u root -p$root_password <<EOF
-                CHANGE MASTER TO MASTER_HOST='$server1_ip_address', MASTER_USER='$repl_user_id', MASTER_PASSWORD='$repl_user_password', MASTER_LOG_FILE='$FileName', MASTER_LOG_POS=$POS;
+                CHANGE MASTER TO MASTER_HOST='$server1_ip_address', MASTER_PORT='$service_port', MASTER_USER='$repl_user_id', MASTER_PASSWORD='$repl_user_password', MASTER_LOG_FILE='$FileName', MASTER_LOG_POS=$POS;
                 START SLAVE;
                 SET GLOBAL read_only = ON;
                 SET GLOBAL super_read_only = ON;
