@@ -377,9 +377,13 @@ http://hubpop.kepco.co.kr
     ```
     http://hubpop.kepco.co.kr/#/comm/memberEdit/signout
     ```
+- 로그아웃
+    ```
+    http://hubpop.kepco.co.kr/#/comm/projects/logout
+    ```
 
 #### 3. 관리자포탈 API
-##### 3-1. 관리자포탈 메뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
+##### 3-1. 관리자포탈 메로뉴 목록 조회 : 임시 url임, 추후 kdn api 호출
 - 호출
     ```
     $ curl -X GET --header 'Accept: application/json' 'http://hubpop.kepco.co.kr/comm-api/api/hubpop/v1/adminMenus/temp'
