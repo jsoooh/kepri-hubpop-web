@@ -99,6 +99,7 @@ resources:
             #!/bin/sh
             echo "nginx setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            sed -i 's/listen       80;/listen       $service_port;/' /etc/nginx/conf.d/default.conf
             systemctl start nginx
             systemctl enable nginx
             echo "nginx setting end"
@@ -119,6 +120,7 @@ resources:
             #!/bin/sh
             echo "nginx setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            sed -i 's/listen       80;/listen       $service_port;/' /etc/nginx/conf.d/default.conf
             systemctl start nginx
             systemctl enable nginx
             echo "nginx setting end"
@@ -141,6 +143,7 @@ resources:
             #!/bin/sh
             echo "nginx setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            sed -i 's/listen       80;/listen       $service_port;/' /etc/nginx/conf.d/default.conf
             systemctl start nginx
             systemctl enable nginx
             server1Run=1
