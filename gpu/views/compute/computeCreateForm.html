@@ -323,23 +323,23 @@
 											<span class="tit_txt">HDD</span>
 											<div class="progressWrap type2">
 												<div class="progress">
-												  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.hddVolumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.hddVolumeGigabytes)*100|number:0}}" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.hddVolumeGigabytes + contents.data.spec.disk)/contents.tenantResource.maxResource.hddVolumeGigabytes)*100|number:0}}%"></div>
+												  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.hddVolumeGigabytes + contents.hddSize + contents.data.spec.disk)/contents.tenantResource.maxResource.hddVolumeGigabytes)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.hddVolumeGigabytes + contents.hddSize + contents.data.spec.disk)/contents.tenantResource.maxResource.hddVolumeGigabytes)*100|number:0}}%"></div>
 													</div>
 												</div>
 											</div>
-											<span class="txt_count">({{(contents.tenantResource.usedResource.hddVolumeGigabytes + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.hddVolumeGigabytes | displayVolume:'GB'}})</span>
+											<span class="txt_count">({{(contents.tenantResource.usedResource.hddVolumeGigabytes + contents.hddSize + contents.data.spec.disk) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.hddVolumeGigabytes | displayVolume:'GB'}})</span>
 										</li>
 										<li>
 											<span class="tit_txt">SSD</span>
 											<div class="progressWrap type2">
 												<div class="progress">
-												  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.ssdVolumeGigabytes)/contents.tenantResource.maxResource.ssdVolumeGigabytes)*100|number:0}}" class="progress">
-														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.ssdVolumeGigabytes)/contents.tenantResource.maxResource.ssdVolumeGigabytes)*100|number:0}}%"></div>
+												  <div percent-progress-bar-animate bar-type="width" percent="{{((contents.tenantResource.usedResource.ssdVolumeGigabytes + contents.ssdSize)/contents.tenantResource.maxResource.ssdVolumeGigabytes)*100|number:0}}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{((contents.tenantResource.usedResource.ssdVolumeGigabytes + contents.ssdSize)/contents.tenantResource.maxResource.ssdVolumeGigabytes)*100|number:0}}%"></div>
 													</div>
 												</div>
 											</div>
-											<span class="txt_count">({{(contents.tenantResource.usedResource.ssdVolumeGigabytes) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.ssdVolumeGigabytes | displayVolume:'GB'}})</span>
+											<span class="txt_count">({{(contents.tenantResource.usedResource.ssdVolumeGigabytes + contents.ssdSize) | displayVolume:'GB'}} / {{contents.tenantResource.maxResource.ssdVolumeGigabytes | displayVolume:'GB'}})</span>
 										</li>
 										<li ng-repeat="gpuCard in contents.gpuCardList" ng-if="gpuCard.quatorCount >= 0 && gpuCard.quatorUsedCount >= 0">
 											<span class="tit_txt">{{gpuCard.name}}</span>

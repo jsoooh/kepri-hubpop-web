@@ -1799,6 +1799,7 @@ angular.module('gpu.controllers')
             if (volumeSize >= ct.volumeSliderOptions.minLimit && volumeSize <= ct.volumeSliderOptions.ceil) {
                 ct.volumeSize = ct.inputVolumeSize;
             }
+            ct.setVolumeSize(ct.inputVolumeSize);
         };
 
         ct.inputVolumeSizeBlur = function () {
@@ -1809,6 +1810,7 @@ angular.module('gpu.controllers')
                 ct.inputVolumeSize = volumeSize;
                 ct.volumeSize = volumeSize;
             }
+            ct.setVolumeSize(ct.inputVolumeSize);
         };
 
         // 디스크생성 변수
@@ -1822,7 +1824,16 @@ angular.module('gpu.controllers')
             step: 1,
             onChange : function () {
                 ct.inputVolumeSize = ct.volumeSize;
+                ct.setVolumeSize(ct.inputVolumeSize);
             }
+        };
+
+        ct.setVolumeSize = function (volumeSize) {
+            volumeSize = parseInt(volumeSize);
+            if (ct.volume.type == 'HDD')
+                ct.hddSize = volumeSize;
+            else if (ct.volume.type == 'SSD')
+                ct.ssdSize = volumeSize;
         };
 
         //서버 생성
@@ -1914,6 +1925,8 @@ angular.module('gpu.controllers')
                 ct.volumeTypes = data.content.volumeTypes;
             });
         };
+
+        ct.hddSize = ct.ssdSize = 0;
         // 볼륨 타입 변경
         ct.fn.volumeChange = function () {
             if (ct.volume.type == 'HDD') {
@@ -1925,6 +1938,17 @@ angular.module('gpu.controllers')
             }
             ct.volumeSize = ct.volumeSize > ct.volumeSliderOptions.ceil ? ct.volumeSliderOptions.ceil : ct.volumeSize;
             ct.inputVolumeSize = ct.volumeSize;
+            
+            if (ct.volume.type == 'HDD') {
+                ct.hddSize = ct.inputVolumeSize;
+                ct.ssdSize = 0;
+            } else if (ct.volume.type == 'SSD') {
+                ct.ssdSize = ct.inputVolumeSize;
+                ct.hddSize = 0;
+            } else {
+                ct.hddSize = 0;
+                ct.ssdSize = 0;
+            }
         };
 
         ct.fn.checkGpu = function () {

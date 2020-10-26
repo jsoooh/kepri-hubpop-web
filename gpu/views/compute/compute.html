@@ -181,7 +181,8 @@
                                     <li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="볼륨 연결">볼륨 연결</a></li>
                                     <li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
                                     <li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링 <span ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">비활성화</span></a></li>
-                                    <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
+                                    <li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
+                                    <li ng-if="instance.instanceSnapshotList.length > 0"><a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
                                     <!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
                                     <!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
                                     <!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업 이미지</a></li> -->
@@ -248,7 +249,8 @@
                                         <li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="볼륨 연결">볼륨 연결</a></li>
                                         <li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
                                         <li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링 <span ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">비활성화</span></a></li>
-                                        <li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
+                                        <li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
+                                        <li ng-if="instance.instanceSnapshotList.length > 0"><a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
                                         <!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
                                         <!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
                                         <!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업 이미지</a></li> -->
