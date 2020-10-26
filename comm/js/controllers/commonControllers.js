@@ -647,6 +647,44 @@ angular.module('common.controllers', [])
                 mc.dbMenuList = response.data.items;
                 //mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
                 //console.log("mc.dbMenuList : ", mc.dbMenuList);
+
+                mc.initSltMenu(mc.dbMenuList);
+            }
+        };
+
+        // 좌측메뉴 선택 초기 설정
+        mc.initSltMenu = function (menuList) {
+            // 그룹 메뉴 찾는 재귀함수
+            var findGroupMenu = function(menuList, sltMenu) {
+                if (!menuList || menuList.length == 0 || !sltMenu || !sltMenu.parentId) return null;
+                var menu = common.objectsFindCopyByField(menuList, 'id', sltMenu.parentId);
+                // 그룹 메뉴(level 1) 를 찾았다면
+                if (menu && menu.level == 1) {
+                    return menu;
+                } else {
+                    return common.objectsFindCopyByField(menuList, 'id', menu.parentId);
+                }
+            };
+
+            if (!menuList || menuList.length == 0) return;
+            var currentUrl = "/#" + $location.url();   // 현재 위치한 페이지 주소
+            var sltMenu = null;
+            angular.forEach(menuList, function(menu) {
+                if (menu.urlPath == currentUrl) {
+                    if (sltMenu && sltMenu.level < menu.level) {    // 하위 메뉴를 우선시함
+                        sltMenu = menu;
+                    } else if(!sltMenu) {
+                        sltMenu = menu;
+                    }
+                }
+            });
+            // 메뉴를 찾앗다면 그룹 메뉴를 찾음
+            if (sltMenu) {
+                var groupMenu = findGroupMenu(menuList, sltMenu);
+                if (groupMenu) {
+                    mc.setGroupMenu(groupMenu); // 좌측 대메뉴 선택
+                    mc.sltMenu = sltMenu;       // 좌측 메뉴 설정
+                }
             }
         };
 
