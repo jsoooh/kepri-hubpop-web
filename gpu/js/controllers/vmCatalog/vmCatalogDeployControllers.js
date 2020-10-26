@@ -71,8 +71,8 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                if (vmCatalogDeploy.bucketName != null) {
-                ct.fn.deleteBucket(vmCatalogDeploy);
+                if (vmCatalogDeploy.parameters.s3_bucket_name != null) {
+                    ct.fn.deleteBucket(vmCatalogDeploy);
                 }
                 ct.fn.loadPage();
             });
@@ -262,7 +262,7 @@ angular.module('gpu.controllers')
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.fn.getVmCatalogDeployStatus(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
-                if (vmCatalogDeploy.bucketName != null) {
+                if (vmCatalogDeploy.parameters.s3_bucket_name != null) {
                     ct.fn.deleteBucket(vmCatalogDeploy);
                 }
             });
