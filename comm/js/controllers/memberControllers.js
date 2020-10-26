@@ -28,7 +28,7 @@ angular.module('portal.controllers')
             ct.userAuthNm = '프로젝트 사용자';
         }
 
-        if(common.getUser() == null){
+        if (common.getUser() == null) {
             common.logout();
             return;
         }
@@ -43,11 +43,10 @@ angular.module('portal.controllers')
         // 처음 User 정보 조회
         ct.getUserInfo = function() {
             // 사용자 정보가 없으면 로그인 페이지로 이동
-            if (!common.getUser() || !common.getUser().user_id){
+            if (!common.getUser() || !common.getUser().user_id) {
                 common.logout();
                 return;
             }
-
             $scope.main.loadingMainBody = true;
             var memberPromise = memberService.getUserInfo($scope.main.userInfo.user_id);
             memberPromise.success(function(data, status, headers){

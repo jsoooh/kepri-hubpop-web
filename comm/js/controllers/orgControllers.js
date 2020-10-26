@@ -8,13 +8,20 @@ angular.module('portal.controllers')
         ct.orgProjects = [];
         ct.selectItemKey = 0;
         ct.userAuth = $scope.main.userAuth;
-        ct.popup = $stateParams.popup;      //프로젝트 생성 팝업 여부
+        ct.popup = $stateParams.popup;      //프로젝트생성팝업여부/로그아웃
         ct.schFilterText = "";
         ct.listType = "image";          //프로젝트 리스트 타입
 
+        if (ct.popup == "logout") {
+            $scope.main.loadingMainBody = true;
+            common.logout();
+            $scope.main.loadingMainBody = false;
+            return;
+        }
+
         ct.extendItem = function(evt) {
             //console.log('extendItem', evt);
-            if($(evt.target).closest('.NotCloseFirstOrgProjecItem').length == 0) {
+            if ($(evt.target).closest('.NotCloseFirstOrgProjecItem').length == 0) {
                 ct.selectItemKey = 0;
             }
         };
