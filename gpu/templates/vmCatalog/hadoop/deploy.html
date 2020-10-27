@@ -117,6 +117,7 @@
                             </div>
 
                         </li>
+                        <li ng-if="contents.data.nodeType == 'cluster'" ng-include="contents.htmlUrls.octaviaLbUse"></li>
                         <li ng-if="contents.data.nodeType == 'cluster'">
                             <div class="pnb_tit">
                                 <i class="i_star"></i> <span class="pnb_t_txt">다중노드 구성</span>

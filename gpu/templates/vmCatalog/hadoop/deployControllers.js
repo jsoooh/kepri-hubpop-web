@@ -35,6 +35,7 @@ angular.module('gpu.controllers')
             ct.data.mysqlRootConfirmPassword = "Crossent!234";
             ct.data.mysqlHivePassword = "Hive!234";
             ct.data.mysqlHiveConfirmPassword = "Hive!234";
+            ct.data.lbSvcPort = ct.prodPortBand+ 58070;
             //ct.data.endPoint = "s3EndPoint";
             //ct.data.accessKey = "s3AccessKey";
             //ct.data.secretKey = "s3SecretKey";
@@ -318,8 +319,22 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.parameters.master_flavor_volume_size = ct.master_flavor_volume_size;
                 vmCatalogDeploy.parameters.worker_flavor_volume_size = ct.worker_flavor_volume_size;
                 vmCatalogDeploy.parameters.private_key = "set"; // keypair private_key api에서 추가 하라는 의미
+                vmCatalogDeploy.octaviaLbUse = ct.data.octaviaLbUse;
+                vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
             }
-
+            if (vmCatalogDeploy.octaviaLbUse) {
+                vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
+                vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
+                vmCatalogDeploy.parameters.lb_svc_connection_limit = 2000;
+                vmCatalogDeploy.parameters.lb_svc_monitor_delay = 3;
+                vmCatalogDeploy.parameters.lb_svc_monitor_max_retries = 5;
+                vmCatalogDeploy.parameters.lb_svc_monitor_timeout = 5;
+                vmCatalogDeploy.parameters.lb_description = "vmCatalog " + ct.data.stackName + " lb";
+                vmCatalogDeploy.context.monitorUrlPathUse = true;
+                vmCatalogDeploy.parameters.lb_svc_protocol = "HTTP";
+                vmCatalogDeploy.parameters.lb_svc_monitor_type = "HTTP";
+                vmCatalogDeploy.parameters.lb_svc_monitor_url_path = "/";
+            }
 
             return vmCatalogDeploy;
         };

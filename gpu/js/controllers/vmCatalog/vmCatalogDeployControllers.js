@@ -94,7 +94,6 @@ angular.module('gpu.controllers')
             console.log("deleteObjectBucket DELETE!!!!!!!!!!!!!");
             if (status == 200 && data) {
                 common.showAlertSuccess('삭제되었습니다.');
-                ct.fn.getObjectStorageList();
             } else {
                 $scope.main.loadingMainBody = false;
                 common.showAlertError('오류가 발생하였습니다.');
@@ -284,7 +283,6 @@ angular.module('gpu.controllers')
             console.log("deleteObjectBucket DELETE!!!!!!!!!!!!!");
             if (status == 200 && data) {
                 common.showAlertSuccess('삭제되었습니다.');
-                ct.fn.getObjectStorageList();
             } else {
                 $scope.main.loadingMainBody = false;
                 common.showAlertError('오류가 발생하였습니다.');
