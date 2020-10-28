@@ -1847,6 +1847,7 @@ angular.module('gpu.controllers')
             params.instance.name = ct.data.name;
             params.instance.tenantId = ct.data.tenantId;
             params.instance.networks = [{ id: ct.selectedAvailabilityZone.publicNetworkSubnet.networkId} ];
+            params.instance.networkName = ct.selectedAvailabilityZone.publicNetworkSubnet.name;
             params.instance.image = {id: ct.data.image.id};
             params.instance.keypair = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);
