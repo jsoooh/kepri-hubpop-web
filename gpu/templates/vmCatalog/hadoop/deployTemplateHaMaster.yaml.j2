@@ -85,6 +85,39 @@ parameters:
     type: string
   s3_bucket_name:
     type: string
+{% if octaviaLbUse %}
+  lb_description:
+    type: string
+    default: "vmCatalog Tomcat cluster lb"
+  lb_svc_port:
+    type: string
+  lb_svc_protocol:
+    type: string
+    default: TCP
+  lb_algorithm:
+    type: string
+    default: ROUND_ROBIN
+  lb_svc_connection_limit:
+    type: string
+    default: 2000
+  lb_svc_monitor_type:
+    type: string
+    default: TCP
+  lb_svc_monitor_delay:
+    type: string
+    default: 3
+  lb_svc_monitor_max_retries:
+    type: string
+    default: 5
+  lb_svc_monitor_timeout:
+    type: string
+    default: 5
+{% if monitorUrlPathUse %}
+  lb_svc_monitor_url_path:
+    type: string
+    default: /
+{% endif %}
+{% endif %}
 
 resources:
 
@@ -959,6 +992,49 @@ resources:
         get_resource: init_config{{server}}
   {%- endfor %}
 
+{% if octaviaLbUse %}
+  octavia_lb:
+    type: OS::Octavia::LoadBalancer
+    properties:
+      vip_subnet: { get_param: provider_subnet }
+      description: { get_param: lb_description }
+
+  octavia_lb_svc_listener:
+    type: OS::Octavia::Listener
+    properties:
+      loadbalancer: { get_resource: octavia_lb }
+      connection_limit: { get_param: lb_svc_connection_limit }
+      protocol: { get_param: lb_svc_protocol }
+      protocol_port: { get_param: lb_svc_port }
+
+  octavia_lb_svc_pool:
+    type: OS::Octavia::Pool
+    properties:
+      listener: { get_resource: octavia_lb_svc_listener }
+      lb_algorithm: { get_param: lb_algorithm }
+      protocol: { get_param: lb_svc_protocol }
+
+  octavia_lb_svc_monitor:
+    type: OS::Octavia::HealthMonitor
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      type: { get_param: lb_svc_monitor_type }
+      delay: { get_param: lb_svc_monitor_delay }
+      max_retries: { get_param: lb_svc_monitor_max_retries }
+      timeout: { get_param: lb_svc_monitor_timeout }
+{% if monitorUrlPathUse %}
+      url_path: { get_param: lb_svc_monitor_url_path }
+{% endif %}
+  {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+  lb_svc_pool_member{{worker}}:
+    type: OS::Octavia::PoolMember
+    properties:
+      pool: { get_resource: octavia_lb_svc_pool }
+      address: { get_attr: [server{{worker}}_port, fixed_ips, 0, ip_address] }
+      protocol_port: { get_param: lb_svc_port }
+  {%- endfor %}
+{% endif %}
+
 outputs:
   servers:
     value:
@@ -968,3 +1044,16 @@ outputs:
       - instance: { get_attr: [ server{{server}}, show ] }
         instancePort: { get_attr: [ server{{server}}_port, show ] }
       {%- endfor %}
+{% if octaviaLbUse %}
+  octaviaLb:
+    value:
+      loadBalancer: { get_attr: [ octavia_lb, show ] }
+      listeners:
+        - listener: { get_attr: [ octavia_lb_svc_listener, show ] }
+          pool: { get_attr: [ octavia_lb_svc_pool, show ] }
+          monitor: { get_attr: [ octavia_lb_svc_monitor, show ] }
+          poolMembers:
+            {%- for worker in range(1,pworker) %} {% set server = worker + 1 %}
+            - { get_attr: [ lb_svc_pool_member{{worker}}, show ] }
+            {%- endfor %}
+{% endif %}

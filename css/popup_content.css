@@ -5,8 +5,6 @@
 .modal-content.modal-sm{width: 400px;margin:0 auto;}/*180404 width 300>400*/
 .modal-content.modal-sm .modal-header{padding:15px 20px; cursor:move;}/*180404 스타일 변경 padding 값 조정 : 10 28 > 15 20*/
 
-
-
 .modal-content.modal-sm .modal-body{padding:20px 20px 5px; text-align: center;}
 .modal-content.modal-sm .modal-body{font-size:17px;text-align: left;}/*180404 스타일 갱신*/
 .modal-content.modal-sm .modal-footer{padding:10px 10px 20px;}
@@ -73,10 +71,10 @@
 .bs-example-modal .modal-dialog { left: auto; margin-top: 30px; margin-right: auto; margin-left: auto;}
 
 /* 개발 팝업 */
-.md-dialog-container{min-height: 600px; overflow: auto;}
+/* .md-dialog-container{min-height: 600px; overflow: auto;}
 md-dialog.md-default-theme, md-dialog{background-color: inherit;}
 md-dialog{overflow: hidden;}
-md-dialog .modal-body{max-height: 600px; overflow-y: auto;}
+md-dialog .modal-body{max-height: 600px; overflow-y: auto;} */
 
 /*180726 공통팝업(알림, 경고) 스타일 추가*/
 .modal-body .alertWrap {position:relative;}
@@ -132,6 +130,15 @@ md-dialog .modal-body{max-height: 600px; overflow-y: auto;}
 .pop_tit .p_stit {display:inline-block; font-size:15px; line-heigt:15px; vertical-align:middle; padding-right:10px;}
 
 /* md-dialog {width:500px;} */
-.modal-dialog {margin:0 auto;}
-.modal-content {border:0;}
 .modal-footer .checkbox {padding-left:20px;}
+
+/*modal*/
+.md-dialog-is-showing {overflow:hidden;}
+.md-dialog-is-showing .modal {display:block;}
+.md-dialog-is-showing .modal {overflow-x: hidden; overflow-y: auto;}
+.md-scroll-mask {position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1600; background-color: #000;}
+.md-scroll-mask {opacity: 0.2;  filter: alpha(opacity=20);}
+
+.modal-header .close {color: #808080; opacity: 1;}
+.modal-content {border:0;}
+.modal-alert-info .modal-body {border-bottom:0;}

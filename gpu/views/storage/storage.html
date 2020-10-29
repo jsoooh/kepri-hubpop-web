@@ -144,7 +144,7 @@
 						</div>
 					</div>
 					<!-- <div class="panel_body" ng-if="volume.status != 'creating'" ng-click="main.goToPage('/iaas/storage/detail/'+volume.volumeId)"> -->
-					<div class="panel_body" >
+					<div class="panel_body" style="height:260px;">
 						<div class="ul-in">
 
 							<div class="cnt_wrap">
@@ -168,7 +168,7 @@
 										<dt>연결서버</dt>
 										<dd ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/gpu/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></dd>
 										<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd>
-										<dt>스냅샷 개수 :</dt><dd>{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</dd>
+										<dt>스냅샷 개수 :</dt><dd class="mt10">{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</dd>
 										<!-- <dd ng-if="volume.status == 'in-use'">{{volume.volumeAttachment.device}}</dd>
 										<dd ng-if="volume.status != 'in-use'">연결 정보 없음</dd> -->
 									</dl>
