@@ -71,8 +71,8 @@ angular.module('gpu.controllers')
             var promise = vmCatalogService.deleteVmCatalogDeploy(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
-                if (vmCatalogDeploy.bucketName != null) {
-                ct.fn.deleteBucket(vmCatalogDeploy);
+                if (vmCatalogDeploy.parameters.s3_bucket_name != null) {
+                    ct.fn.deleteBucket(vmCatalogDeploy);
                 }
                 ct.fn.loadPage();
             });
@@ -94,7 +94,6 @@ angular.module('gpu.controllers')
             console.log("deleteObjectBucket DELETE!!!!!!!!!!!!!");
             if (status == 200 && data) {
                 common.showAlertSuccess('삭제되었습니다.');
-                ct.fn.getObjectStorageList();
             } else {
                 $scope.main.loadingMainBody = false;
                 common.showAlertError('오류가 발생하였습니다.');
@@ -262,7 +261,7 @@ angular.module('gpu.controllers')
             promise.success(function (data) {
                 $scope.main.loadingMainBody = false;
                 ct.fn.getVmCatalogDeployStatus(vmCatalogDeploy.tenantId, vmCatalogDeploy.id);
-                if (vmCatalogDeploy.bucketName != null) {
+                if (vmCatalogDeploy.parameters.s3_bucket_name != null) {
                     ct.fn.deleteBucket(vmCatalogDeploy);
                 }
             });
@@ -284,7 +283,6 @@ angular.module('gpu.controllers')
             console.log("deleteObjectBucket DELETE!!!!!!!!!!!!!");
             if (status == 200 && data) {
                 common.showAlertSuccess('삭제되었습니다.');
-                ct.fn.getObjectStorageList();
             } else {
                 $scope.main.loadingMainBody = false;
                 common.showAlertError('오류가 발생하였습니다.');

@@ -1,57 +1,61 @@
 <md-dialog draggable drag-handle=".modal-header" aria-label="{{ dialogOptions.title }}" >
-	<div class="modal-content {{ dialogOptions.dialogClassName }}"">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="popCancel()">
-				<span aria-hidden="true">×</span>
-			</button>
-			<h4 class="modal-title">{{dialogOptions.title}}</h4>
-		</div>
-		<div class="modal-body">
-			<div ng-show="dialogClose" class="alert alert-error">
-				<div class="well loading-well">
-					<h3 class="text-center">CLOSE</h3>
-					<h5 class="text-center">Dialog Close</h5>
-					<div spin="defaultSpinnerConfig" spin-if="dialogClose"></div>
+	<div class="modal in">
+		<div class="modal-dialog {{ dialogOptions.dialogClassName }}">
+			<div class="modal-content"">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="popCancel()">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title">{{dialogOptions.title}}</h4>
 				</div>
-			</div>
-			<div ng-show="actionLoading">
-				<div class="well loading-well">
-					<div>
-						<md-progress-circular class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
-						<div spin="defaultSpinnerConfig" spin-if="authenticating"></div>
+				<div class="modal-body">
+					<div ng-show="dialogClose" class="alert alert-error">
+						<div class="well loading-well">
+							<h3 class="text-center">CLOSE</h3>
+							<h5 class="text-center">Dialog Close</h5>
+							<div spin="defaultSpinnerConfig" spin-if="dialogClose"></div>
+						</div>
 					</div>
-					<div>
-						<!--<h3>Hold on...</h3>
-						<h5>We are validating your request!</h5>-->
-						<h5>{{ 'message.mi_please_wait' | translate  }}</h5>
-						<!--	<md-progress-circular md-diameter="96"></md-progress-circular>	-->
+					<div ng-show="actionLoading">
+						<div class="well loading-well">
+							<div>
+								<md-progress-circular class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
+								<div spin="defaultSpinnerConfig" spin-if="authenticating"></div>
+							</div>
+							<div>
+								<!--<h3>Hold on...</h3>
+								<h5>We are validating your request!</h5>-->
+								<h5>{{ 'message.mi_please_wait' | translate  }}</h5>
+								<!--	<md-progress-circular md-diameter="96"></md-progress-circular>	-->
+							</div>
+						</div>
+					</div>
+					<div ng-show="success" class="alert alert-success">
+						<div class="well loading-well">
+							<h3 class="text-center">SUCCESS</h3>
+							<h5 class="text-center" ng-bind-html="success"></h5>
+							<div spin="defaultSpinnerConfig" spin-if="success"></div>
+						</div>
+					</div>
+					<div ng-show="error" class="alert alert-error">
+						<div class="well loading-well">
+							<h3 class="text-center">ERROR</h3>
+							<h5 class="text-center" ng-bind-html="error"></h5>
+							<div spin="defaultSpinnerConfig" spin-if="error"></div>
+						</div>
+					</div>
+					<form ng-if="!dialogOptions.notForm" name="{{dialogOptions.controllerAs}}.{{ dialogOptions.formName }}" novalidate>
+						<div ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl">
+						</div>
+					</form>
+					<div ng-if="dialogOptions.notForm" ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl">
 					</div>
 				</div>
-			</div>
-			<div ng-show="success" class="alert alert-success">
-				<div class="well loading-well">
-					<h3 class="text-center">SUCCESS</h3>
-					<h5 class="text-center" ng-bind-html="success"></h5>
-					<div spin="defaultSpinnerConfig" spin-if="success"></div>
+				<div class="modal-footer" ng-show="!actionLoading && dialogOptions.btnTemplateUrl" ng-include="dialogOptions.btnTemplateUrl">
+				</div>
+				<div class="modal-footer" ng-show="!actionLoading && dialogOptions.btnTemplate" dynamic-template="dialogOptions.btnTemplate">
 				</div>
 			</div>
-			<div ng-show="error" class="alert alert-error">
-				<div class="well loading-well">
-					<h3 class="text-center">ERROR</h3>
-					<h5 class="text-center" ng-bind-html="error"></h5>
-					<div spin="defaultSpinnerConfig" spin-if="error"></div>
-				</div>
-			</div>
-			<form ng-if="!dialogOptions.notForm" name="{{dialogOptions.controllerAs}}.{{ dialogOptions.formName }}" novalidate>
-				<div ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl">
-				</div>
-			</form>
-			<div ng-if="dialogOptions.notForm" ng-hide="dialogClose || actionLoading || error || success" ng-include="dialogOptions.templateUrl">
-			</div>
-		</div>
-		<div class="modal-footer" ng-show="!actionLoading && dialogOptions.btnTemplateUrl" ng-include="dialogOptions.btnTemplateUrl">
-		</div>
-		<div class="modal-footer" ng-show="!actionLoading && dialogOptions.btnTemplate" dynamic-template="dialogOptions.btnTemplate">
 		</div>
 	</div>
 </md-dialog>

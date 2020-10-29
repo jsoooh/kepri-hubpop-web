@@ -19,6 +19,15 @@
                 <span ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='true'" class="txt"></span>
             </li>
 
+            <li ng-if="contents.octaviaLbUse">
+                <strong class="txt">[접속 IP]</strong>
+                <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+            </li>
+            <li ng-if="contents.octaviaLbUse">
+                <strong class="txt">[접속 포트]</strong>
+                <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
+            </li>
+
             <li>
                 <strong class="txt">[Hadoop admin UI]</strong> &nbsp;&nbsp;
                 <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070">

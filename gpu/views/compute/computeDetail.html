@@ -172,7 +172,8 @@
 					<li ng-if="contents.instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '스냅샷 생성'이 가능합니다.">스냅샷 생성</a></li>
 					<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">볼륨 연결</a></li>
 					<li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(contents.instance);">모니터링 <span ng-if="(contents.instance.spec.type == 'GPU' && contents.instance.gpuMonitoringYn == 'N') || contents.instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="!((contents.instance.spec.type == 'GPU' && contents.instance.gpuMonitoringYn == 'N') || contents.instance.vmMonitoringYn == 'N')">비활성화</span></a></li>
-					<li><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);">인스턴스 삭제</a></li>
+					<li ng-if="contents.instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(contents.instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
+					<li ng-if="contents.instance.instanceSnapshotList.length > 0"><a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
 					<!--<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>-->
 					<!--<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>-->
 					<!--<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>-->

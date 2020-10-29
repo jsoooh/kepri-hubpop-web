@@ -1,20 +1,24 @@
 <md-dialog draggable drag-handle=".modal-header" aria-label="{{ dialog.ariaLabel }}">
-	<div class="modal-content modal-alert modal-alert-info modal-dialog">
-		<div class="modal-body text-center">
-			<img src="assets/img/icon/modal_alert_{{dialog.alertType}}.jpg" alt="{{ dialog.alertType }}">
-			<div class="alert-title"> {{ dialog.title }}</div>
-			
-			<div class="alertContent">
-				<h2 class="md-title" ng-if="false">{{ dialog.title }}</h2>
-				<div ng-if="::dialog.mdHtmlContent" class="md-dialog-content-body only-text" ng-bind-html="::dialog.mdHtmlContent"></div>
-				<div ng-if="::!dialog.mdHtmlContent" class="md-dialog-content-body only-text"><p>{{::dialog.mdTextContent}}</p></div>
-				<md-input-container md-no-float ng-if="::dialog.$type == 'prompt'" class="md-prompt-input-container">
-					<input ng-keypress="dialog.keypress($event)" md-autofocus ng-model="dialog.result" placeholder="{{::dialog.placeholder}}">
-				</md-input-container>
-			</div>
-			<div class="margin-top-20">
-				<button type="button" class="btn btn-primary" ng-click="dialog.hide()" md-autofocus="dialog.$type==='alert'" >{{ dialog.ok }}</button>
-				<button type="button" name="button" class="btn btn-default" ng-if="dialog.$type === 'confirm' || dialog.$type === 'prompt'" ng-click="dialog.abort()" data-dismiss="modal">{{ dialog.cancel }}</button>
+	<div class="modal in">
+		<div class="modal-dialog">
+			<div class="modal-content modal-alert modal-alert-info">
+				<div class="modal-body text-center">
+					<img src="assets/img/icon/modal_alert_{{dialog.alertType}}.jpg" alt="{{ dialog.alertType }}">
+					<div class="alert-title"> {{ dialog.title }}</div>
+					
+					<div class="alertContent">
+						<h2 class="md-title" ng-if="false">{{ dialog.title }}</h2>
+						<div ng-if="::dialog.mdHtmlContent" class="md-dialog-content-body only-text" ng-bind-html="::dialog.mdHtmlContent"></div>
+						<div ng-if="::!dialog.mdHtmlContent" class="md-dialog-content-body only-text"><p>{{::dialog.mdTextContent}}</p></div>
+						<md-input-container md-no-float ng-if="::dialog.$type == 'prompt'" class="md-prompt-input-container">
+							<input ng-keypress="dialog.keypress($event)" md-autofocus ng-model="dialog.result" placeholder="{{::dialog.placeholder}}">
+						</md-input-container>
+					</div>
+					<div class="margin-top-20">
+						<button type="button" class="btn btn-primary" ng-click="dialog.hide()" md-autofocus="dialog.$type==='alert'" >{{ dialog.ok }}</button>
+						<button type="button" name="button" class="btn btn-default" ng-if="dialog.$type === 'confirm' || dialog.$type === 'prompt'" ng-click="dialog.abort()" data-dismiss="modal">{{ dialog.cancel }}</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

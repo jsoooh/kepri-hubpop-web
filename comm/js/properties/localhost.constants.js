@@ -396,6 +396,24 @@ angular.module('app')
                     "UPT_USER_NM":"허브팝",
                     "UPT_DT":"2020-10-13",
                     "DELETE_YN":"N"
+                },
+                {
+                    "NOTICE_NO":38,
+                    "TITLE":"SW개발플랫폼 소스코드 저장소 URL 변경 알림",
+                    "POP_YN":"Y",
+                    "START_DT":"2020-10-26",
+                    "END_DT":"2020-10-30",
+                    "CONTENTS":"<p>안녕하세요.</p><p>HUB-PoP 플랫폼 운영자입니다.</p><p>HUB-PoP 플램폼의 소스코드 저장소에서 제공하는 SVN과 Git의 URL이 다음과 같이 변경되었습니다.&nbsp;</p><p>SVN : <a href='http://100.216.232.24:39080'>http://100.216.232.24:39080</a> &nbsp;</p><p>Git : <a href='100.216.232.124:38085'>http://100.216.232.124:38085</a>&nbsp;</p><p>&nbsp;</p><p>감사합니다.</p>",
+                    "ATTACH_FILE":"",
+                    "COMMON_CD":"CD0025",
+                    "COMMON_NM":"공통",
+                    "REG_USER_ID":"hubpop",
+                    "REG_USER_NM":"허브팝",
+                    "REG_DT":"2020-10-26",
+                    "UPT_USER_ID":"hubpop",
+                    "UPT_USER_NM":"허브팝",
+                    "UPT_DT":"2020-10-26",
+                    "DELETE_YN":"N"
                 }
             ],
                 "status":{

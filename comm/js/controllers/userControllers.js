@@ -245,7 +245,7 @@ angular.module('common.controllers')
             promise.error(function (data, status, headers) {
             });
             promise.finally(function() {
-                //ct.tempNotices = CONSTANTS.tempNoticeData.data;
+                // ct.tempNotices = CONSTANTS.tempNoticeData.data;
                 if (ct.tempNotices.length > 0) {
                     setPopNoties();
                 }
