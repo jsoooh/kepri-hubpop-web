@@ -476,15 +476,8 @@ angular.module('gpu.controllers')
                 ct.data.spec = {};
                 ct.specUuid = "";
             }
-            // GPU 인스턴스는 프로젝트 자원 계획에 카드의 사용쿼터를 표시하므로 스펙 선택 시 GPU 사용량 표시 by hrit, 201015
-            if (ct.selectedSpecType == 'GPU' && ct.selectedGpuCardId) {
-                ct.gpuCardList.forEach(function (gpuCard) {
-                    gpuCard.selected = 0;
-                    if (gpuCard.id == ct.selectedGpuCardId) {
-                        gpuCard.selected = sltSpec.gpu;
-                    }
-                })
-            }
+            
+            ct.fn.setSelectedGpuCount();
         };
 
         // 네트워크 리스트 조회
@@ -708,6 +701,7 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
+            console.log(222)
 
             ct.selectedGpuCard = {};
             if (selectedGpuCardId) {
@@ -724,7 +718,22 @@ angular.module('gpu.controllers')
             }
             else
                 ct.fn.getAvailabilityZoneList();
+                
+            console.log(111)
+            ct.fn.setSelectedGpuCount();
         };
+
+        ct.fn.setSelectedGpuCount = function () {
+
+            console.log(ct.gpuCardList)
+            // GPU 인스턴스는 프로젝트 자원 계획에 카드의 사용쿼터를 표시하므로 스펙 선택 시 GPU 사용량 표시 by hrit, 201015
+            ct.gpuCardList.forEach(function (gpuCard) {
+                gpuCard.selected = 0;
+                if (gpuCard.id == ct.selectedGpuCardId) 
+                    gpuCard.selected = ct.data.spec.gpu ? ct.data.spec.gpu: 0;
+            });
+        }
+
 
         ct.fn.getAvailabilityZoneList = function(id) {
             var param = {

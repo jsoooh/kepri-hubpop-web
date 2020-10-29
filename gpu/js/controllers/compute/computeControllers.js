@@ -1435,15 +1435,8 @@ angular.module('gpu.controllers')
                 ct.data.spec = {};
                 ct.specUuid = "";
             }
-            // GPU 인스턴스는 프로젝트 자원 계획에 카드의 사용쿼터를 표시하므로 스펙 선택 시 GPU 사용량 표시 by hrit, 201015
-            if (ct.selectedSpecType == 'GPU' && ct.selectedGpuCardId) {
-                ct.gpuCardList.forEach(function (gpuCard) {
-                    gpuCard.selected = 0;
-                    if (gpuCard.id == ct.selectedGpuCardId) {
-                        gpuCard.selected = sltSpec.gpu;
-                    }
-                })
-            }
+
+            ct.fn.setSelectedGpuCount();
         };
 
         ct.fn.imageTypeListSearch = function() {
@@ -1605,6 +1598,18 @@ angular.module('gpu.controllers')
             }
             else
                 ct.fn.getAvailabilityZoneList();
+
+            ct.fn.setSelectedGpuCount();
+        };
+
+        ct.fn.setSelectedGpuCount = function () {
+
+            // GPU 인스턴스는 프로젝트 자원 계획에 카드의 사용쿼터를 표시하므로 스펙 선택 시 GPU 사용량 표시 by hrit, 201015
+            ct.gpuCardList.forEach(function (gpuCard) {
+                gpuCard.selected = 0;
+                if (gpuCard.id == ct.selectedGpuCardId) 
+                    gpuCard.selected = ct.data.spec.gpu ? ct.data.spec.gpu: 0;
+            });
         };
 
         ct.fn.getAvailabilityZoneList = function(id) {
