@@ -1,7 +1,7 @@
 <!-- //Nav tabs -->
 <ul class="nav nav-tabs nav-tabs-btn nav-tabs-lg">
-	<li ng-class="{'active':contents.sltInfoTab == 'dashboard'}">	<a href="" ng-click="contents.changeSltInfoTab('dashboard');">대시보드</a></li>
-	<li ng-class="{'active':contents.sltInfoTab == 'info'}">	<a href=""  ng-click="contents.changeSltInfoTab('info');">프로젝트 개요</a>	</li>
+	<li ng-class="{'active':contents.sltInfoTab == 'dashboard'}"><a href="" ng-click="contents.changeSltInfoTab('dashboard');">대시보드</a></li>
+	<li ng-class="{'active':contents.sltInfoTab == 'info'}"><a href=""  ng-click="contents.changeSltInfoTab('info');">프로젝트 개요</a>	</li>
 	<li ng-class="{'active':contents.sltInfoTab == 'member'}"><a href=""  ng-click="contents.changeSltInfoTab('member');">프로젝트 구성원</a></li>
 	<li ng-class="{'active':contents.sltInfoTab == 'resource'}"><a href=""  ng-click="contents.changeSltInfoTab('resource');">프로젝트 자원</a></li>
 </ul>
@@ -1464,26 +1464,26 @@
 		
 		<div class="card-input-wrap">
 			<div class="ciw-tit">
-				<b class="tit">자원쿼터 <span class="sub-tit">({{ contents.orgQuotaItemGroups.length }})</span></b>
+				<b class="tit">자원쿼터 <span class="sub-tit">({{ contents.orgQuotaGroups.length }})</span></b>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-3" ng-repeat="itemGroup in contents.orgQuotaItemGroups | orderBy: 'code'">
+			<div class="col-md-3" ng-repeat="itemGroup in contents.orgQuotaGroups">
 				<div class="panel panel-bordered">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							{{ itemGroup.name }}
+							{{ itemGroup.item_group_name }}
 						</h3>
 					</div>
 					<div class="panel-body padding-0">
 						<div class="scroll-content" style="height: 250px">
 							<ul class="list-striped">
-								<li ng-repeat="quotaValue in contents.orgQuotaValues | filter:{ orgQuotaItemGroupCode: itemGroup.code }">
+								<li ng-repeat="quota in contents.orgQuotas | filter:{ item_group_code: itemGroup.item_group_code }">
 									<div class="pull-left">
-										{{ quotaValue.orgQuotaItem.name }}
+										{{ quota.item_name }}
 									</div>
 									<div class="pull-right">
-										{{ quotaValue.value }} {{ quotaValue.orgQuotaItem.unit }}
+										{{ quota.metering_value }} / {{ quota.quota_value }} {{ quota.item_unit }}
 									</div>
 								</li>
 							</ul>

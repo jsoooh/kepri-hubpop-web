@@ -1825,8 +1825,8 @@ angular.module('portal.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-        /*org_quota_value 조회*/
-        ct.listOrgQuotaValues = function () {
+        /*org_quota_value 조회 : 사용하지 않음*/
+        /*ct.listOrgQuotaValues = function () {
             $scope.main.loadingMainBody = true;
             var promise = quotaService.listOrgQuotaValues(ct.selOrgProject.id);
             promise.success(function (data) {
@@ -1841,46 +1841,46 @@ angular.module('portal.controllers')
             promise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        };
+        };*/
 
         /*orgQuotaItemGroup 발췌*/
         function setOrgQuotaItemGroups() {
-            ct.orgQuotaItemGroups = [];
-            angular.forEach(ct.orgQuotaValues, function(value, key) {
-                if (value.orgQuotaItem && value.orgQuotaItem.orgQuotaItemGroup) {
-                    if (common.objectsFindCopyByField(ct.orgQuotaItemGroups, "code", value.orgQuotaItem.orgQuotaItemGroup.code) == null) {
-                        ct.orgQuotaItemGroups.push(value.orgQuotaItem.orgQuotaItemGroup);
+            ct.orgQuotaGroups = [];
+            angular.forEach(ct.orgQuotas, function(value, key) {
+                if (value.item_group_code) {
+                    if (common.objectsFindCopyByField(ct.orgQuotaGroups, "item_group_code", value.item_group_code) == null) {
+                        ct.orgQuotaGroups.push(value);
                     }
                 }
             });
-            //console.log("ct.orgQuotaItemGroups : ", ct.orgQuotaItemGroups);
+            //console.log("ct.orgQuotaGroups : ", ct.orgQuotaGroups);
             //console.log("ct.selOrgProject : ", ct.selOrgProject);
         }
 
-        /*orgQuotaValue 에 paas 추가*/
-        function setOrgQuotaValuePaas() {
+        /*orgQuotaValue 에 paas 추가 : 사용하지 않음*/
+        /*function setOrgQuotaValuePaas() {
             if (ct.selOrgProject && !!ct.selOrgProject.paasQuotaGuid) {
                 getPaasQuota(ct.selOrgProject.paasQuotaGuid);
             } else {
                 setOrgQuotaValues(ct.orgQuotaValues);
             }
-        }
+        }*/
 
-        /*paas 프로젝트 쿼터 조회*/
-        function getPaasQuota(guid) {
+        /*paas 프로젝트 쿼터 조회 : 사용하지 않음*/
+        /*function getPaasQuota(guid) {
             ct.paasQuota = {};
             ct.paasQuota = common.objectsFindByField(ct.paasQuotas, 'guid', guid);
             //if (!ct.paasQuota) return;
 
-            /*console.log("ct.paasQuota : ", ct.paasQuota);
+            /!*console.log("ct.paasQuota : ", ct.paasQuota);
             console.log("ct.orgQuotaValues : ", ct.orgQuotaValues);
-            console.log("ct.orgQuotaItemGroups : ", ct.orgQuotaItemGroups);*/
+            console.log("ct.orgQuotaItemGroups : ", ct.orgQuotaItemGroups);*!/
             ct.orgQuotaItemGroup = {};
             ct.orgQuotaItemGroup.code = "000";
             ct.orgQuotaItemGroup.name = "PaaS";
             ct.orgQuotaItemGroups.push(ct.orgQuotaItemGroup);
 
-            /*ct.orgQuotaValue = {};
+            /!*ct.orgQuotaValue = {};
             ct.orgQuotaValue.orgQuotaItem = {};
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup = {};
             ct.orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.code = "000";
@@ -1898,7 +1898,7 @@ angular.module('portal.controllers')
             ct.orgQuotaValue.orgQuotaItem.name = "라우트";
             ct.orgQuotaValue.orgQuotaItem.unit = "";
             ct.orgQuotaValue.value = (ct.paasQuota && ct.paasQuota.totalRoutes) ? ct.paasQuota.totalRoutes : 0;
-            ct.orgQuotaValues.push(ct.orgQuotaValue);*/
+            ct.orgQuotaValues.push(ct.orgQuotaValue);*!/
 
             ct.orgQuotaValue = {};
             ct.orgQuotaValue.orgQuotaItem = {};
@@ -1928,7 +1928,24 @@ angular.module('portal.controllers')
                 orgQuotaValue.orgQuotaItemGroupCode = orgQuotaValue.orgQuotaItem.orgQuotaItemGroup.code;
             });
             //console.log("orgQuotaValues : ", orgQuotaValues);
-        }
+        }*/
+
+        /*org_quotas 조회 : 쿼터/미터링값 함께 조회*/
+        ct.listOrgQuotas = function () {
+            $scope.main.loadingMainBody = true;
+            var promise = quotaService.listOrgQuotas(ct.selOrgProject.id);
+            promise.success(function (data) {
+                ct.orgQuotas = data.result.orgQuotas;
+                //console.log("ct.orgQuotas : ", ct.orgQuotas);
+                setOrgQuotaItemGroups();
+            });
+            promise.error(function (data) {
+                ct.orgQuotaValues = [];
+            });
+            promise.finally(function (data, status, headers) {
+                $scope.main.loadingMainBody = false;
+            });
+        };
 
         /*paas 프로젝트 쿼터 조회*/
         ct.listPaasQuotas = function (currentPage) {
@@ -1952,7 +1969,8 @@ angular.module('portal.controllers')
             returnPromise.finally(function (data, status, headers) {
                 //$scope.main.loadingMainBody = false;
                 ct.listQuotaHistories();
-                ct.listOrgQuotaValues();
+                //ct.listOrgQuotaValues();
+                ct.listOrgQuotas(); //org_quotas 조회 : 쿼터/미터링값 함께 조회
             });
         };
 
@@ -2811,5 +2829,4 @@ angular.module('portal.controllers')
         };
 
         pop.fn.listAllOrgMembers();
-    })
-;
+    });

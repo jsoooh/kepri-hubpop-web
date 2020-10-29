@@ -127,6 +127,11 @@ angular.module('portal.services')
         return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_values/' + orgId, 'GET'));
     };
 
+	/*org_quotas 조회 : 쿼터/미터링값 함께 조회*/
+	quotaService.listOrgQuotas = function (orgId) {
+		return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + orgId + "/quotas", 'GET'));
+	};
+
     /*org_quota_history 등록*/
     quotaService.quotaHistoryCreate = function (params) {
         return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_quota_histories', 'POST', params));
