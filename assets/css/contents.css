@@ -34,7 +34,7 @@
 
 .blank-page.no-project {width:800px; margin:0 auto;}
 .ink {background-color: transparent; border-color: transparent; color: #3159a1; text-decoration: underline; text-underline-position: under; font-weight: 600;}
-.link:hover, .link:focus {color: #5c7dd0; text-decoration: underline; background-color: transparent;}
+.link:hover, .link:focus {color: #5c7dd0; background-color: transparent;}
 
 /*목록 돌아가기 버튼*/
 #contentWrap .page-title #spot .btn-back-list  {display: block; width: 32px; height: 32px; border-radius: 50%; position: absolute; top: 32px; right: 80px; background: #fff; z-index: 1;}
