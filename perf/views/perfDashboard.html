@@ -52,8 +52,11 @@
 													<div class="inline-block" ng-if="!contents.dailyChart.loading">
 														<span class="amount">{{ contents.data.sltSumPerfAmt | number }}</span><span class="won"> 원</span>
 													</div>
-													<div class="spinner-border spinner-border-sm spinner-primary" role="status" ng-if="contents.dailyChart.loading">
-														<span class="sr-only">Loading...</span>
+
+													<div ng-if="contents.dailyChart.loading">
+														<div class="spinner-border spinner-border-sm spinner-primary" role="status">
+															<span class="sr-only">Loading...</span>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -71,8 +74,10 @@
 												<div class="inline-block" ng-if="!contents.lastSumLoading">
 													<span class="amount font-size-30">{{ contents.data.lastSumPerfAmt | number }}</span><span class="won font-size-24"> 원</span>
 												</div>
-												<div class="spinner-border spinner-border-sm spinner-primary" role="status" ng-if="contents.lastSumLoading">
-													<span class="sr-only">Loading...</span>
+												<div ng-if="contents.lastSumLoading">
+													<div class="spinner-border spinner-border-sm spinner-primary" role="status">
+														<span class="sr-only">Loading...</span>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -87,8 +92,10 @@
 												<div class="inline-block" ng-if="!contents.nextSumLoading">
 													<span class="amount font-size-30">{{ contents.data.nextSumPerfAmt | number : 0 }}</span><span class="won font-size-24">원</span>
 												</div>
-												<div class="spinner-border spinner-border-sm spinner-primary" role="status" ng-if="contents.nextSumLoading">
-													<span class="sr-only">Loading...</span>
+												<div  ng-if="contents.nextSumLoading">
+													<div class="spinner-border spinner-border-sm spinner-primary" role="status">
+														<span class="sr-only">Loading...</span>
+													</div>
 												</div>
 											</div>
 										</div>
