@@ -17,11 +17,11 @@ angular.module('portal.controllers')
             ct.sltInfoTab = 'member';
         } else {
             ct.sltInfoTab = 'dashboard';
-            /* 20.05.28 - 이영민 수석님 요청으로 block 처리 by ksw */
-            // ct.sltInfoTab = 'actEvent';
         }
 
         ct.isQuotaChange = true;    //쿼터변경요청 가능 여부, 첫건이 '요청'상태일 때 요청불가
+        ct.loadQuotaHistory = false;    //쿼터변경요청 조회여부
+        ct.loadOrgQuotas = false;       //쿼터값(미터링포함) 조회여부
 
         // 탭 변경
         ct.changeSltInfoTab = function (sltInfoTab) {
@@ -1724,10 +1724,10 @@ angular.module('portal.controllers')
                 setQuotaHistoriesPaaS();
                 //이전값/변경값에 같은 항목 체크
                 setQuotaHistoriesSameValueDetails();
+                ct.loadQuotaHistory = true;    //쿼터변경요청 조회여부
+                getCheckLoadQuotas();   //프로젝트 자원탭 조회여부에 따라 loading bar false 처리
             });
             promise.error(function (data) {
-            });
-            promise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -1787,6 +1787,13 @@ angular.module('portal.controllers')
                 });
             });
             //console.log("ct.quotaHistories : ", ct.quotaHistories);
+        }
+
+        //프로젝트 자원탭 조회여부에 따라 loading bar false 처리
+        function getCheckLoadQuotas () {
+            if (ct.loadQuotaHistory && ct.loadOrgQuotas) {
+                $scope.main.loadingMainBody = false;
+            }
         }
 
         /*책임자 변경 화면 오픈*/
@@ -1938,11 +1945,11 @@ angular.module('portal.controllers')
                 ct.orgQuotas = data.result.orgQuotas;
                 //console.log("ct.orgQuotas : ", ct.orgQuotas);
                 setOrgQuotaItemGroups();
+                ct.loadOrgQuotas = true;       //쿼터값(미터링포함) 조회여부
+                getCheckLoadQuotas();   //프로젝트 자원탭 조회여부에 따라 loading bar false 처리
             });
             promise.error(function (data) {
                 ct.orgQuotaValues = [];
-            });
-            promise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
         };
@@ -1965,9 +1972,10 @@ angular.module('portal.controllers')
             });
             returnPromise.error(function (data) {
                 ct.paasQuotas = [];
+                $scope.main.loadingMainBody = false;
             });
             returnPromise.finally(function (data, status, headers) {
-                //$scope.main.loadingMainBody = false;
+                //$scope.main.loadingMainBody = true;
                 ct.listQuotaHistories();
                 //ct.listOrgQuotaValues();
                 ct.listOrgQuotas(); //org_quotas 조회 : 쿼터/미터링값 함께 조회
