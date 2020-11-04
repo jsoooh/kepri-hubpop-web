@@ -835,7 +835,7 @@ angular.module('gpu.controllers')
                                 var iaasLbMembers = ct.lbServiceLists[i].iaasLbPortMembers;
                                 if (iaasLbMembers != null) {
                                     for (var j = 0; j < iaasLbMembers.length; j++) {
-                                        if (iaasLbPort.protocolPort == iaasLbMembers[j].protocolPort && iaasLbMembers[j].operatingStatus == 'ONLINE') {
+                                        if (iaasLbPort.id == iaasLbMembers[j].iaasLbPort.id && iaasLbMembers[j].operatingStatus == 'ONLINE') {
                                             ct.lbServiceLists[i].iaasLbPorts[e].activeCnt++;
                                         }
                                     }

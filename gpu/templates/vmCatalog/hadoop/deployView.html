@@ -23,7 +23,7 @@
                 <strong class="txt">[접속 IP]</strong>
                 <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
             </li>
-            <li ng-if="contents.octaviaLbUse">
+            <li  ng-if="contents.octaviaLbUse">
                 <strong class="txt">[접속 포트]</strong>
                 <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
             </li>

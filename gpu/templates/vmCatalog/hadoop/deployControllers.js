@@ -35,7 +35,8 @@ angular.module('gpu.controllers')
             ct.data.mysqlRootConfirmPassword = "Crossent!234";
             ct.data.mysqlHivePassword = "Hive!234";
             ct.data.mysqlHiveConfirmPassword = "Hive!234";
-            ct.data.lbSvcPort = ct.prodPortBand+ 58070;
+            ct.data.lbSvcPort = ct.prodPortBand+ 9000;
+            ct.data.servicePort = ct.prodPortBand+ 50070;
             //ct.data.endPoint = "s3EndPoint";
             //ct.data.accessKey = "s3AccessKey";
             //ct.data.secretKey = "s3SecretKey";
@@ -323,6 +324,7 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
             }
             if (vmCatalogDeploy.octaviaLbUse) {
+                vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
                 vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
                 vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
                 vmCatalogDeploy.parameters.lb_svc_connection_limit = 2000;
@@ -331,7 +333,7 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.parameters.lb_svc_monitor_timeout = 5;
                 vmCatalogDeploy.parameters.lb_description = "vmCatalog " + ct.data.stackName + " lb";
                 vmCatalogDeploy.context.monitorUrlPathUse = true;
-                vmCatalogDeploy.parameters.lb_svc_protocol = "HTTP";
+                vmCatalogDeploy.parameters.lb_svc_protocol = "TCP";
                 vmCatalogDeploy.parameters.lb_svc_monitor_type = "HTTP";
                 vmCatalogDeploy.parameters.lb_svc_monitor_url_path = "/";
             }
