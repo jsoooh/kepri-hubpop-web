@@ -1,104 +1,143 @@
-<!-- 목록 이미지형/리스트형 선택 버튼 -->
-<div ng-if="!!main.userTenantGpuId" class="btnArea text-right">
-    <!-- 선택 된 class="on" 추가 -->
-    <button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
-    <button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트형</button>
+<!-- 검색 및 목록 타입 선택 -->
+<div class="card-input-wrap" ng-if="!!main.userTenantGpuId">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="font-size-18 padding-top-5">
+				<b>전체 카탈로그 <span class="color-primary">({{ (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length }})</span></b>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="text-right">
+				<!-- 검색 -->
+				<div class="form-group inline-block margin-bottom-0">
+					<div class="input-icon-type2 icon-right">
+						<input type="text" class="form-control form-control-md" placeholder="카탈로그명 검색" style="width:300px;" ng-model="contents.schFilterText">
+						<span class="input-icon-addon" ng-click="contents.schFilterText = ''">
+							<i class="xi-close"></i>
+						</span>
+					</div>
+				</div>
+				<!-- //검색 -->
+				<!-- 목록 카드형/리스트형 선택 버튼 -->
+				<button type="button" class="btn btn-default" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}">
+					<div class="feather-icon">
+						<i data-feather="grid" class="feather-directive"></i>
+					</div>
+					<span class="sr-only">카드형</span>
+				</button>
+				<button type="button" class="btn btn-default" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}">
+					<div class="feather-icon">
+						<i data-feather="list"></i>
+					</div>
+					<span class="sr-only">리스트형</span>
+				</button>
+				<!-- //목록 카드형/리스트형 선택 버튼 -->
+			</div>
+		</div>
+	</div>
 </div>
-<!-- //목록 이미지형/리스트형 선택 버튼 -->
-<!-- 프로젝트 정보 -->
-<div ng-if="!!main.userTenantGpuId" class="cBox type0 projt-mana mt30">
-    <div class="pull-left">
-        <h4 class="c-tit">전체 카탈로그 <em class="point1">({{ (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length }})</em></h4>
-    </div>
-    <div class="pull-right">
-        <!-- 검색 -->
-        <div class="searchBox type2">
-            <div class="form-group">
-                <input type="text" placeholder="카탈로그명 검색" style="width:300px;" ng-model="contents.schFilterText">
-            </div>
-            <button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
-        </div>
-        <!-- //검색 -->
-    </div>
-</div>
-<!-- //프로젝트 정보 -->
+<!-- //검색 및 목록 타입 선택 -->
 
-<ul ng-show="!!main.userTenantGpuId && (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length > 0 && contents.listType == 'image'" class="ul-panel thum_style">
-    <li ng-repeat="(key, vmCatalog) in (contents.vmCatalogs | filter: { catalogName : contents.searchText })">
-        <div class="panelWrap">
-            <div class="panel type6">
-                <div class="panel_head">
-                    <div class="logo radius0">
-                        <img ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalog.templatePath + '/logo.png' }}" >
-                    </div>
-                    <p class="tit" title="{{ vmCatalog.catalogName }}">{{ vmCatalog.catalogName }}</p>
-                    <p class="txt">Version: {{ vmCatalog.version }} </p>
-                </div>
-                <div class="panel_body">
-                    <div class="txt_info_wrap">
-                        <p class="t_info text-left">{{ vmCatalog.description }}</p>
-                        <div class="btnArea">
-                            <button type="button" name="button" class="btn btn-md btn-color3" ng-click="main.goToPage('/gpu/vmCatalog/deploy/' + vmCatalog.id)">만들기</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </li>
-</ul>
-<div ng-if="!!main.userTenantGpuId && (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length > 0 && contents.listType == 'list'" class="tbl type1">
-    <table class="table">
-        <colgroup>
-            <col style="width: 10%;">
-            <col style="width: 10%;">
-            <col style="width:">
-            <col style="width: 10%;">
-            <col style="width: 10%;">
-            <col style="width: 10%;">
-        </colgroup>
-        <thead>
-        <tr>
-            <th scope="col">카탈로그 이름</th>
-            <th scope="col">서비스 버전</th>
-            <th scope="col">설 명</th>
-            <th scope="col">레플리카 지원</th>
-            <th scope="col">클러스터 지원</th>
-            <th scope="col">만들기</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="(key, vmCatalog) in (contents.vmCatalogs | filter: { catalogName : contents.searchText })">
-            <td>{{ vmCatalog.catalogName }}</td>
-            <td>{{ vmCatalog.version }}</td>
-            <td class="text-left">{{ vmCatalog.description }}</td>
-            <td>{{ vmCatalog.replicaSupport ? "지원" : "미지원" }}</td>
-            <td>{{ vmCatalog.clusterSupport ? "지원" : "미지원" }}</td>
-            <td>
-                <button type="button" name="button" class="btn btn-md btn-color3" ng-click="main.goToPage('/gpu/vmCatalog/deploy/' + vmCatalog.id)">만들기</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<!-- 카탈로그 목록(카드형) -->
+<div class="card-list-wrap">
+	<div class="row" ng-show="!!main.userTenantGpuId && (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length > 0 && contents.listType == 'image'" class="ul-panel thum_style">
+		<div class="col-md-4" ng-repeat="(key, vmCatalog) in (contents.vmCatalogs | filter: { catalogName : contents.searchText })">
+			<div class="card card-type1">
+				<div class="card-header">
+					<div class="card-info-area">
+						<div class="img-size50">
+							<img ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalog.templatePath + '/logo.png' }}" >
+						</div>
+						<div class="text-box">
+							<div class="top">
+								<a href="" class="title">
+									<b>{{ vmCatalog.catalogName }}</b>
+								</a>
+								<div class="clearfix">
+									<span class="date">Version: {{ vmCatalog.version }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<p class="text-ellipsis3">
+						{{ vmCatalog.description }}
+					</p>
+					<div class="text-center margin-top-30">
+						<a href="" class="btn btn-default" ng-click="main.goToPage('/gpu/vmCatalog/deploy/' + vmCatalog.id)">만들기</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div ng-show="!!main.userTenantGpuId && (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length == 0" class="proj_list_area">
-    <ul class="ul-panel dash_list no_data">
-        <li><p class="no_data_txt pd0">생성된 카탈로그가 없습니다.</p></li>
-    </ul>
-</div>
+<!-- //카탈로그 목록(카드형) -->
 
-<!-- 테넌트 생성 전인 경우 -->
-<div ng-if="!main.userTenantGpuId" class="proj_main_cont">
-    <div class="p_main_top">
-        <div class="top_txt">
-            <span class="s_txt">GPU 서버 가상화에서는 Deep Learning 고속처리를 지원하는 GPU가 포함된 가상서버를 생성하여 사용할 수 있습니다.</span>
-            <span class="l_txt"><span class="c_blue">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</span>
-        </div>
-        <div class="top_btn">
-            <a href="" ng-click="main.createPortalOrgSystem('gpu');">
-                <span>서비스 시작하기</span>
-            </a>
-        </div>
-    </div>
-</div>
-<!-- //테넌트 생성 전인 경우 -->
+<!-- 카탈로그 목록(테이블형) -->
+<section class="panel panel-bordered" ng-if="!!main.userTenantGpuId && (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length > 0 && contents.listType == 'list'">
+	<div class="panel-body padding-0">
+		<div class="table-wrap border-0">
+			<table class="table table-hover border-bottom-0" cellspacing="0" width="100%">
+				<colgroup>
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width:">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+				</colgroup>
+				<thead class="text-center">
+					<tr>
+						<th scope="col">카탈로그 이름</th>
+						<th scope="col">서비스 버전</th>
+						<th scope="col">설 명</th>
+						<th scope="col">레플리카 지원</th>
+						<th scope="col">클러스터 지원</th>
+						<th scope="col">만들기</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(key, vmCatalog) in (contents.vmCatalogs | filter: { catalogName : contents.searchText })">
+						<td class="text-center">{{ vmCatalog.catalogName }}</td>
+						<td class="text-center">{{ vmCatalog.version }}</td>
+						<td class="text-left">{{ vmCatalog.description }}</td>
+						<td class="text-center">{{ vmCatalog.replicaSupport ? "지원" : "미지원" }}</td>
+						<td class="text-center">{{ vmCatalog.clusterSupport ? "지원" : "미지원" }}</td>
+						<td class="text-center">
+							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="main.goToPage('/gpu/vmCatalog/deploy/' + vmCatalog.id)">만들기</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
+<!-- //카탈로그 목록((테이블형) -->
 
+
+<!-- 검색결과 없음 -->
+<div class="text-center blank-page" ng-show="!!main.userTenantGpuId && (contents.vmCatalogs | filter: { catalogName : contents.searchText }).length == 0">
+	<div class="img">
+		<img src="../assets/img/icon/resume-gray.png">
+	</div>
+	<div class="cont">
+		<p>생성된 카탈로그가 없습니다.</p>
+	</div>
+</div>
+<!-- //검색결과 없음 -->
+
+<!-- 테넌트 생성 전인 경우(new) -->
+<div class="welcome_layer" ng-if="!main.userTenantGpuId">
+	<div class="text-center blank-page">
+		<div class="img">
+			<img src="../assets/img/icon/data-center.png" alt="data-center">
+		</div>
+		<div class="cont">
+			<p>GPU 서버 가상화에서는 Deep Learning 고속처리를 지원하는 GPU가 포함된 가상서버를 생성하여 사용할 수 있습니다.</p>
+			<p><span class="point">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</p>
+		</div>
+		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('gpu');">서비스 시작하기</button>
+	</div>
+</div>
+<!-- //테넌트 생성 전인 경우(new) -->

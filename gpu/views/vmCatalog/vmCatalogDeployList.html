@@ -1,196 +1,244 @@
-<!-- 목록 이미지형/리스트형 선택 버튼 -->
-<div ng-if="!!main.userTenantGpuId" class="btnArea text-right">
-    <!-- 선택 된 class="on" 추가 -->
-    <button type="button" name="button" class="btn btn-list type1 on" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}"><span class="ico"></span><a href="">이미지형</a></button>
-    <button type="button" name="button" class="btn btn-list type2" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}"><span class="ico"></span>리스트형</button>
+<!-- 검색 및 목록 타입 선택 -->
+<div class="card-input-wrap" ng-if="!!main.userTenantGpuId">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="font-size-18 padding-top-5">
+				<b>전체 서비스 <span class="color-primary">({{ (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length }})</span></b>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="text-right">
+				<!-- 검색 -->
+				<div class="form-group inline-block margin-bottom-0">
+					<div class="input-icon-type2 icon-right">
+						<input type="text" class="form-control form-control-md" placeholder="서비스명 검색" style="width:300px;" ng-model="contents.schFilterText">
+						<span class="input-icon-addon" ng-click="contents.schFilterText = ''">
+							<i class="xi-close"></i>
+						</span>
+					</div>
+				</div>
+				<!-- //검색 -->
+				<!-- 목록 카드형/리스트형 선택 버튼 -->
+				<button type="button" class="btn btn-default" title="이미지형" ng-click="contents.listType = 'image'" ng-class="{ on : contents.listType == 'image'}">
+					<div class="feather-icon">
+						<i data-feather="grid" class="feather-directive"></i>
+					</div>
+					<span class="sr-only">카드형</span>
+				</button>
+				<button type="button" class="btn btn-default" title="리스트형" ng-click="contents.listType = 'list'" ng-class="{ on : contents.listType == 'list'}">
+					<div class="feather-icon">
+						<i data-feather="list"></i>
+					</div>
+					<span class="sr-only">리스트형</span>
+				</button>
+				<!-- //목록 카드형/리스트형 선택 버튼 -->
+			</div>
+		</div>
+	</div>
 </div>
-<!-- //목록 이미지형/리스트형 선택 버튼 -->
-<!-- 프로젝트 정보 -->
-<div ng-if="!!main.userTenantGpuId" class="cBox type0 projt-mana mt30">
-    <div class="pull-left">
-        <h4 class="c-tit">전체 서비스 <em class="point1">({{ (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length }})</em></h4>
-    </div>
-    <div class="pull-right">
-        <!-- 검색 -->
-        <div class="searchBox type2">
-            <div class="form-group">
-                <input type="text" placeholder="서비스명 검색" style="width:300px;" ng-model="contents.schFilterText">
-            </div>
-            <button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button>
-        </div>
-        <!-- //검색 -->
-    </div>
-</div>
-<!-- //프로젝트 정보 -->
-<ul ng-show="!!main.userTenantGpuId && (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'image'" class="ul-panel thum_style">
-    <li ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
-        <div class="panelWrap">
-            <div class="panel type6 serv_list">
-                <div class="panel_head">
-                    <div class="logo radius0">
-                        <img ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalogDeploy.vmCatalogInfo.templatePath + '/logo.png' }}" >
-                    </div>
-                    <p class="tit" title="{{ vmCatalogDeploy.deployName }}">
-                        <a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
-                    </p>
-                    <p class="txt mb10">
-                        <a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a>
-                    </p>
-                    <p class="txt mb10">{{ vmCatalogDeploy.vmCatalogInfo.catalogName }} ( version {{ vmCatalogDeploy.vmCatalogInfo.version }} ) </p>
-                    <div class="dropdown btn-option">
-                        <button type="button" class="btn only-ico ico-dot_h" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-                            <span class="ico">실행 설정</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-                            <li><a href="" ng-click="contents.fn.openVmCatalogDeployRenameForm($event, vmCatalogDeploy)">이름 변경</a></li>
-                            <li><a href="" ng-click="contents.fn.deleteVmCatalogDeploy(vmCatalogDeploy)" class="delete">서비스 제거</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="panel_body">
-                    <div class="img_info_wrap">
-                        <div ng-if="vmCatalogDeploy.deployStatus != 'DEPLOY_COMPLETE' || vmCatalogDeploy.stackStatus != 'CREATE_COMPLETE'" class="cBox-cnt">
-                            <div class="text-center pt30 pb30">
-                                <div ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
-                                    <img ng-src="images/loading/loading_cloud.gif" height="160">
-                                    <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>서버 생성 중</p>
-                                    </div>
-                                </div>
-                                <div ng-if="vmCatalogDeploy.stackStatus == 'CREATE_FAILED'" class="ul-in2 spinner_area">
-                                    <img ng-src="images/loading/614369-cloud_error-512.png" height="160">
-                                    <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>서버 생성 실패</p>
-                                    </div>
-                                </div>
-                                <div ng-if="vmCatalogDeploy.deployStatus != 'DEPLOY_TIME_OUT' && ((vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS' && vmCatalogDeploy.stackStatus != 'CREATE_FAILED') || (vmCatalogDeploy.deployStatus != 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE') || (vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'))" class="ul-in2 spinner_area">
-                                    <img ng-src="images/loading/lg.triple-gears-loading-icon.gif" height="160">
-                                    <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>서비스 배포 중</p>
-                                    </div>
-                                </div>
-                                <div ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_TIME_OUT' || (vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE' && vmCatalogDeploy.deployStatus == 'DEPLOY_FAILED')" class="ul-in2 spinner_area">
-                                    <img ng-src="images/loading/614369-cloud_error-512.png" height="160">
-                                    <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>서비스 배포 실패</p>
-                                    </div>
-                                </div>
-                                <div ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" class="ul-in2 spinner_area">
-                                    <img ng-src="images/loading/funny-trash-playing.gif" height="160">
-                                    <div class="text-center">
-                                        <p class="txt"><span class="ico ico-timer"></span>서버 삭제 중</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <ul ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="img_count" ng-class="{ 'imgType1': vmCatalogDeploy.deployServerCount == 1,  'imgType2': vmCatalogDeploy.deployServerCount == 2,  'imgType3': vmCatalogDeploy.deployServerCount == 3 }">
-<!--                            <li ng-repeat="(key, server) in ( vmCatalogDeploy.servers | filter: { instance : '!null' } )">-->
-                            <li>
-                                <img ng-src="images/thum/im_thum_centos_300.png" >
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </li>
-    <!-- //panel -->
-</ul>
-<div ng-if="!!main.userTenantGpuId && (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'list'" class="tbl type1">
-    <table class="table">
-        <colgroup>
-            <col style="width: 12%;">
-            <col style="width: 12%;">
-            <col style="width: 12%;">
-            <col style="width: 12%;">
-            <col style="width: 12%;">
-            <col style="width: 12%;">
-            <col style="width: 12%;">
-            <col style="width: 12%;">
-        </colgroup>
-        <thead>
-        <tr>
-            <th scope="col">서비스 이름</th>
-            <th scope="col">서비스 영문 이름</th>
-            <th scope="col">카탈로그 이름</th>
-            <th scope="col">배포 버전</th>
-            <th scope="col">배포 유형</th>
-            <th scope="col">로드 밸런스</th>
-            <th scope="col">서버 수</th>
-            <th scope="col">상태</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
-            <td>
-                <a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a>
-            </td>
-            <td>
-                <a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a>
-            </td>
-            <td>{{ vmCatalogDeploy.vmCatalogInfo.catalogName }}</td>
-            <td>{{ vmCatalogDeploy.version }}</td>
-            <td ng-if="vmCatalogDeploy.deployType == 'single'">싱글</td>
-            <td ng-if="vmCatalogDeploy.deployType == 'replica'">클러스터</td>
-            <td ng-if="vmCatalogDeploy.deployType == 'cluster'">클러스터</td>
-            <td>{{ vmCatalogDeploy.octaviaLbUse ? '사용' : '미사용' }}</td>
-            <td>{{ vmCatalogDeploy.deployServerCount }}</td>
-            <td>
-                <span ng-if="vmCatalogDeploy.deployStatus == 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.stackStatus" class="stateWrap">
-                    <span ng-switch-when="CREATE_IN_PROGRESS" class="stateMark type1"></span>
-                    <span ng-switch-when="CREATE_COMPLETE" class="stateMark type5"></span>
-                    <span ng-switch-when="CREATE_FAILED" class="stateMark type2"></span>
-                    <span ng-switch-default class="stateMark type03"></span>
-                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'" class="state-txt">서버 생성 중</span>
-                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="state-txt">서비스 배포 중</span>
-                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_FAILED'" class="state-txt">서버 생성 실패</span>
-                </span>
-                <span ng-if="vmCatalogDeploy.deployStatus != 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.deployStatus" class="stateWrap">
-                    <span ng-switch-when="CREATE_IN_PROGRESS" class="stateMark type4"></span>
-                    <span ng-switch-when="DEPLOY_COMPLETE" class="stateMark type01"></span>
-                    <span ng-switch-when="DELETE_IN_PROGRESS" class="stateMark type3"></span>
-                    <span ng-switch-when="DEPLOY_FAILED" class="stateMark type2"></span>
-                    <span ng-switch-when="DEPLOY_TIME_OUT" class="stateMark type2"></span>
-                    <span ng-switch-default class="stateMark type03"></span>
-                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS' || (vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS')" class="state-txt">배포 및 설정 중</span>
-                    <span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE'" class="state-txt">서비스 배포 완료</span>
-                    <span ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'" class="state-txt">서버 삭제 중</span>
-                    <span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE' && (vmCatalogDeploy.deployStatus == 'DEPLOY_FAILED' || vmCatalogDeploy.deployStatus == 'DEPLOY_TIME_OUT')" class="state-txt">서비스 배포 실패</span>
-                </span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<!-- //검색 및 목록 타입 선택 -->
 
-<div ng-show="!!main.userTenantGpuId && contents.vmCatalogDeployList.length == 0" class="welcome_layer">
-    <div class="text-center blank-page">
-        <!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
-        <div class="text-center" ng-if="main.checkUseYnGpu == 'N' && main.userTenantGpuId">
-            <div class="img">
-                <img src="../assets/img/icon/data-center.png">
-            </div>
-            <div class="cont">
-                <p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
-            </div>
-            <button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
-        </div>
-        <!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
-    </div>
+<!-- 서비스 목록(카드형) -->
+<div class="card-list-wrap">
+	<div class="row" ng-show="!!main.userTenantGpuId && (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'image'" class="ul-panel thum_style">
+		<div class="col-md-4" ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
+			<div class="card card-type1">
+				<div class="card-header">
+					<div class="card-info-area">
+						<div class="square-mark">
+							<img ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalogDeploy.vmCatalogInfo.templatePath + '/logo.png' }}" >
+						</div>
+						<div class="text-box">
+							<div class="top">
+								<div class="row">
+									<div class="col-xs-10">
+										<a href="" class="title">
+											<b ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</b>
+										</a>
+									</div>
+									<div class="col-xs-2">
+										<div class="dropdown pull-right">
+											<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+												<div class="feather-icon"><i data-feather="more-horizontal" class="feather-directive"></i></div>
+											</button>
+											<ul class="dropdown-menu" role="btn-optionn" aria-labelledby="btn-option">
+												<li><a href="" ng-click="contents.fn.openVmCatalogDeployRenameForm($event, vmCatalogDeploy)">이름 변경</a></li>
+												<li><a href="" ng-click="contents.fn.deleteVmCatalogDeploy(vmCatalogDeploy)" class="delete">서비스 제거</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix">
+									<a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a>
+									<span class="sub-title">
+										{{ vmCatalogDeploy.vmCatalogInfo.catalogName }} ( version {{ vmCatalogDeploy.vmCatalogInfo.version }} )
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body" style="height:217px;">
+					<div ng-if="vmCatalogDeploy.deployStatus != 'DEPLOY_COMPLETE' || vmCatalogDeploy.stackStatus != 'CREATE_COMPLETE'">
+						<!-- 서버생성중 -->
+						<div class="text-center padding-vertical-50" ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'">
+							<div class="spinner-border spinner-primary" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
+							<div class="margin-top-20">서버 생성 중</div>
+						</div>
+						<!-- //서버생성중 -->
+						
+						<!-- 서버 생성 실패 -->
+						<div class="text-center padding-vertical-30" ng-if="vmCatalogDeploy.stackStatus == 'CREATE_FAILED'">
+							<img src="assets/img/icon/modal_alert_error.jpg">
+							<div class="margin-top-20">서버 생성 실패</div>
+						</div>
+						<!-- //서버 생성 실패 -->
+						
+						<!-- 서비스 배포 중 -->
+						<div class="text-center padding-vertical-50" 
+							ng-if="vmCatalogDeploy.deployStatus != 'DEPLOY_TIME_OUT' && ((vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS' && vmCatalogDeploy.stackStatus != 'CREATE_FAILED') || (vmCatalogDeploy.deployStatus != 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE') || (vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'))" >
+							<div class="spinner-border spinner-primary" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
+							<div class="margin-top-20">서비스 배포 중</div>
+						</div>
+						<!-- //서비스 배포 중 -->
+						
+						<!-- 서비스 배포 실패 -->
+						<div class="text-center padding-vertical-30" ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_TIME_OUT' || (vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE' && vmCatalogDeploy.deployStatus == 'DEPLOY_FAILED')">
+							<img src="assets/img/icon/modal_alert_error.jpg">
+							<div class="margin-top-20">서비스 배포 실패</div>
+						</div>
+						<!-- //서비스 배포 실패 -->
+						
+						<!-- 서버 삭제 중 -->
+						<div class="text-center padding-vertical-50" ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'">
+							<div class="spinner-border spinner-danger" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
+							<div class="margin-top-20">서버 삭제 중</div>
+						</div>
+						<!-- //서버 삭제 중 -->
+					</div>
+					<div class="img_info_wrap">
+					<ul ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="img_count" ng-class="{ 'imgType1': vmCatalogDeploy.deployServerCount == 1,  'imgType2': vmCatalogDeploy.deployServerCount == 2,  'imgType3': vmCatalogDeploy.deployServerCount == 3 }">
+							<!-- <li ng-repeat="(key, server) in ( vmCatalogDeploy.servers | filter: { instance : '!null' } )"> -->
+							<li>
+								<img ng-src="images/thum/im_thum_centos_300.png">
+							</li>
+						</ul>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+<!-- //서비스 목록(카드형) -->
 
-<!-- 테넌트 생성 전인 경우 -->
-<div ng-if="!main.userTenantGpuId" class="proj_main_cont">
-    <div class="p_main_top">
-        <div class="top_txt">
-            <span class="s_txt">GPU 서버 가상화에서는 Deep Learning 고속처리를 지원하는 GPU가 포함된 가상서버를 생성하여 사용할 수 있습니다.</span>
-            <span class="l_txt"><span class="c_blue">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</span>
-        </div>
-        <div class="top_btn">
-            <a href="" ng-click="main.createPortalOrgSystem('gpu');">
-                <span>서비스 시작하기</span>
-            </a>
-        </div>
-    </div>
+<!-- 서비스 목록(테이블형) -->
+<section class="panel panel-bordered" ng-if="!!main.userTenantGpuId && (contents.vmCatalogDeployList | filter: { deployName : contents.searchText }).length > 0 && contents.listType == 'list'">
+	<div class="panel-body padding-0">
+		<div class="table-wrap border-0">
+			<table class="table table-hover border-bottom-0" cellspacing="0" width="100%">
+				<colgroup>
+					<col style="width: 12%;">
+					<col style="width: 12%;">
+					<col style="width: 12%;">
+					<col style="width: 12%;">
+					<col style="width: 12%;">
+					<col style="width: 12%;">
+					<col style="width: 12%;">
+					<col style="width: 12%;">
+				</colgroup>
+				<thead class="text-center">
+					<tr>
+						<th scope="col">서비스 이름</th>
+						<th scope="col">서비스 영문 이름</th>
+						<th scope="col">카탈로그 이름</th>
+						<th scope="col">배포 버전</th>
+						<th scope="col">배포 유형</th>
+						<th scope="col">로드 밸런스</th>
+						<th scope="col">서버 수</th>
+						<th scope="col">상태</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
+						<td class="text-center"><a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a></td>
+						<td class="text-center"><a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a></td>
+						<td class="text-center">{{ vmCatalogDeploy.vmCatalogInfo.catalogName }}</td>
+						<td class="text-center">{{ vmCatalogDeploy.version }}</td>
+						<td class="text-center">
+							<span ng-if="vmCatalogDeploy.deployType == 'single'">싱글</span>
+							<span ng-if="vmCatalogDeploy.deployType == 'replica'">클러스터</span>
+							<span ng-if="vmCatalogDeploy.deployType == 'cluster'">클러스터</span>
+						</td>
+						<td class="text-center">{{ vmCatalogDeploy.octaviaLbUse ? '사용' : '미사용' }}</td>
+						<td class="text-center">{{ vmCatalogDeploy.deployServerCount }}</td>
+						<td class="text-center">
+							<span ng-if="vmCatalogDeploy.deployStatus == 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.stackStatus" class="state">
+								<span ng-switch-when="CREATE_IN_PROGRESS" class="state-circle state-start"></span>
+								<span ng-switch-when="CREATE_COMPLETE" class="state-circle state-completion"></span>
+								<span ng-switch-when="CREATE_FAILED" class="state-circle state-danger"></span>
+								<span ng-switch-default class="state-circle state-total"></span>
+								<span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'">서버 생성 중</span>
+								<span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'">서비스 배포 중</span>
+								<span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_FAILED'">서버 생성 실패</span>
+							</span>
+							<span ng-if="vmCatalogDeploy.deployStatus != 'CREATE_IN_PROGRESS'" ng-switch="vmCatalogDeploy.deployStatus" class="state">
+								<span ng-switch-when="CREATE_IN_PROGRESS" class="state-circle state-setting"></span>
+								<span ng-switch-when="DEPLOY_COMPLETE" class="state-circle state-completion"></span>
+								<span ng-switch-when="DELETE_IN_PROGRESS" class="state-circle state-danger"></span>
+								<span ng-switch-when="DEPLOY_FAILED" class="state-circle state-danger"></span>
+								<span ng-switch-when="DEPLOY_TIME_OUT" class="state-circle state-danger"></span>
+								<span ng-switch-default class="state-circle state-total"></span>
+								<span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_IN_PROGRESS' || (vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS')">배포 및 설정 중</span>
+								<span ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE'">서비스 배포 완료</span>
+								<span ng-if="vmCatalogDeploy.deployStatus == 'DELETE_IN_PROGRESS'">서버 삭제 중</span>
+								<span ng-if="vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE' && (vmCatalogDeploy.deployStatus == 'DEPLOY_FAILED' || vmCatalogDeploy.deployStatus == 'DEPLOY_TIME_OUT')" class="">서비스 배포 실패</span>
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
+<!-- //서비스 목록((테이블형) -->
+
+<!-- 생성된 부하분산 서버 없을 경우 -->
+<div class="welcome_layer" ng-show="!!main.userTenantGpuId && contents.vmCatalogDeployList.length == 0">
+	<div class="text-center blank-page">
+		<div class="img">
+			<img src="../assets/img/icon/big-data2.png">
+		</div>
+		<!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+		<div class="text-center" ng-if="main.checkUseYnGpu == 'N' && main.userTenantGpuId">
+			<div class="cont">
+				<p>현재 생성된 <span class="point">자원</span>이 없습니다. <span class="point">서비스 삭제</span> 후에 <span class="point">프로젝트 삭제</span>가 가능합니다.</p>
+			</div>
+			<button type="button" class="btn btn-default btn-lg" ng-click="main.deletePortalOrgSystem('gpu');" ng-disabled="!main.checkResourceUserRole()">서비스 삭제하기</button>
+		</div>
+		<!-- //자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
+	</div>
 </div>
-<!-- //테넌트 생성 전인 경우 -->
+<!-- //생성된 부하분산 서버 없을 경우 -->
+		
+		
+<!-- 테넌트 생성 전인 경우(new) -->
+<div class="welcome_layer" ng-if="!main.userTenantGpuId">
+	<div class="text-center blank-page">
+		<div class="img">
+			<img src="../assets/img/icon/data-center.png" alt="data-center">
+		</div>
+		<div class="cont">
+			<p>GPU 서버 가상화에서는 Deep Learning 고속처리를 지원하는 GPU가 포함된 가상서버를 생성하여 사용할 수 있습니다.</p>
+			<p><span class="point">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</p>
+		</div>
+		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('gpu');">서비스 시작하기</button>
+	</div>
+</div>
+<!-- //테넌트 생성 전인 경우(new) -->

@@ -543,14 +543,27 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .hardProg{height:57px; padding:12px 0 0 100px; margin-top: 20px; background: url("../images/ico_hard2.png") no-repeat 0;}
 
 /*vm서비스 카탈로그 > 서비스 목록 > OS이미지*/
-.panel.type6 .img_info_wrap ul.img_count {text-align:center; padding:20px;}
+.img_info_wrap ul.img_count {text-align:center; padding:20px;}
+.img_info_wrap ul.img_count li {display:inline-block; width:32%; padding:10px; border-left:1px solid #ececec;}
+.img_info_wrap ul.img_count li:first-child {border:0;}
+.img_info_wrap ul.img_count li img {width:100px; height:100px;}
+
+/*기존소스*/
+/* .panel.type6 .img_info_wrap ul.img_count {text-align:center; padding:20px;}
 .panel.type6 .img_info_wrap ul.img_count li {display:inline-block; width:32%; padding:10px; }
 .panel.type6 .img_info_wrap ul.img_count.imgType1 li {width:65%; height:210px;}
 .panel.type6 .img_info_wrap ul.img_count.imgType1 li img {max-width:100%; height:100%;}
 .panel.type6 .img_info_wrap ul.img_count.imgType2 {padding:45px 20px;}
 .panel.type6 .img_info_wrap ul.img_count.imgType2 li {width:49%; height:160px;}
 .panel.type6 .img_info_wrap ul.img_count.imgType3 {padding-top:70px;}
-.panel.type6 .img_info_wrap ul.img_count li img {max-width:100%; height:auto;}
+.panel.type6 .img_info_wrap ul.img_count li img {max-width:100%; height:auto;} */
+
+/* .img_info_wrap ul.img_count.imgType1 li {width:65%; height:210px;}
+.img_info_wrap ul.img_count.imgType1 li img {max-width:100%; height:100%;}
+.img_info_wrap ul.img_count.imgType2 {padding:45px 20px;}
+.img_info_wrap ul.img_count.imgType2 li {width:49%; height:160px;}
+.img_info_wrap ul.img_count.imgType3 {padding-top:70px;} */
+/* .img_info_wrap ul.img_count li img {max-width:100%; height:auto;} */
 
 
 /* progress */

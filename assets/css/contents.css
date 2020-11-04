@@ -2,6 +2,12 @@
 
 /*-----  [공통] 로그인  -----*/
 .full-layout #container {margin:0 auto;}
+.border-0 {border:0px !important;}
+.border-top-0 {border-top:0px !important;}
+.border-left-0 {border-left:0px !important;}
+.border-right-0 {border-right:0px !important;}
+.border-bottom-0 {border-bottom:0px !important;}
+
 .login-wrap h2 {font-weight:700; text-align:center; margin-bottom:30px;}
 .login-wrap .login-img {margin-bottom:0;}
 
@@ -233,6 +239,7 @@
 .welcome_layer .guide_fnt::before {display:inline-block; content:''; width:34px; height:28px; background:url("../../images/bg_arrow.png") no-repeat; margin-right:10px;}
 .welcome_layer .guide_fnt.arrw_btm::before {background-position:left top;}
 .welcome_layer .guide_fnt.arrw_top::before {background-position:-48px center;}
+.welcome_layer.type-gpu .guide_fnt.arrw_top {left: 380px;}
 
 /*부하분산 리스트*/
 .tbl_cont .table .tbl_cont_state {line-height:1.3;} 
