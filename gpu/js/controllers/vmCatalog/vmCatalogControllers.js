@@ -580,7 +580,7 @@ angular.module('gpu.controllers')
     };
 
     ct.fn.checkPasswordValidation = function(password) {
-        var regExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/;
+        var regExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&/]).{8,20}$/;
         if(!regExp.test(password)) {
             return {isValid: false, message: "비밀번호는 숫자, 영소문자, 영대문자, 특수문자 혼합 및 8자리 이상 20자 이하 입니다."};
         }
