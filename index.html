@@ -317,7 +317,7 @@
 	document.writeln('<div growl></div>');
 	
 	//신규 로딩
-	document.writeln('<div class="loading-wrap" id="newLoading" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'"></div>'); //로딩바 영역
+	document.writeln('<div class="loading-wrap" id="newLoading" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'">'); //로딩바 영역
 	document.writeln('	<div class="loading-box" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
 	document.writeln('		<div class="img"><img src="assets/img/common/loading.png" alt="" /></div>'); 
 	document.writeln('		<ul class="dot-pulse">'); 
