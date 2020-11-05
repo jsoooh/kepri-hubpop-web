@@ -29,14 +29,14 @@ angular.module('gpu.controllers')
         // 테스트
         ct.testInput = true;
         if (ct.testInput) {
-            ct.data.deployName = "하둡";
-            ct.data.stackName = "hadoop";
-            ct.data.mysqlRootPassword = "Crossent!234";
-            ct.data.mysqlRootConfirmPassword = "Crossent!234";
-            ct.data.mysqlHivePassword = "Hive!234";
-            ct.data.mysqlHiveConfirmPassword = "Hive!234";
             ct.data.lbSvcPort = ct.prodPortBand+ 9000;
             ct.data.servicePort = ct.prodPortBand+ 50070;
+            // ct.data.deployName = "하둡";
+            // ct.data.stackName = "hadoop";
+            // ct.data.mysqlRootPassword = "Crossent!234";
+            // ct.data.mysqlRootConfirmPassword = "Crossent!234";
+            // ct.data.mysqlHivePassword = "Hive!234";
+            // ct.data.mysqlHiveConfirmPassword = "Hive!234";
             //ct.data.endPoint = "s3EndPoint";
             //ct.data.accessKey = "s3AccessKey";
             //ct.data.secretKey = "s3SecretKey";
@@ -237,10 +237,11 @@ angular.module('gpu.controllers')
         };
 
         // 하둡 오브젝트 스토리지 버킷 생성
-        ct.fn.createBucket = function(bucketName) {
+        ct.fn.createBucket = function() {
             console.log('create Bucket start!!! ');
             // 페이지 로드
             let promise2;
+            var bucketName = "Bucket_"+ct.data.stackName;
             promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
                 //callBackFuncion(data);
@@ -302,7 +303,7 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.s3_endpoint = ct.data.s3EndPoint;
             vmCatalogDeploy.parameters.s3_accessKey = ct.data.s3AccessKey;
             vmCatalogDeploy.parameters.s3_secretKey = ct.data.s3SecretKey;
-            vmCatalogDeploy.parameters.s3_bucket_name = ct.data.bucketName;
+            vmCatalogDeploy.parameters.s3_bucket_name = "Bucket_"+ct.data.stackName;
 
             if(ct.data.nodeType == 'single') {
                 vmCatalogDeploy.workerUse = false;
@@ -324,8 +325,8 @@ angular.module('gpu.controllers')
                 vmCatalogDeploy.context.octaviaLbUse = ct.data.octaviaLbUse;
             }
             if (vmCatalogDeploy.octaviaLbUse) {
-                vmCatalogDeploy.parameters.service_port = ct.data.servicePort;
-                vmCatalogDeploy.parameters.lb_svc_port = ct.data.lbSvcPort;
+                vmCatalogDeploy.parameters.service_port =  ct.data.servicePort;
+                vmCatalogDeploy.parameters.lb_svc_port =  ct.data.lbSvcPort;
                 vmCatalogDeploy.parameters.lb_algorithm = ct.data.lbAlgorithm;
                 vmCatalogDeploy.parameters.lb_svc_connection_limit = 2000;
                 vmCatalogDeploy.parameters.lb_svc_monitor_delay = 3;
