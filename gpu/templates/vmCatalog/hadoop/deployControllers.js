@@ -303,7 +303,7 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.s3_endpoint = ct.data.s3EndPoint;
             vmCatalogDeploy.parameters.s3_accessKey = ct.data.s3AccessKey;
             vmCatalogDeploy.parameters.s3_secretKey = ct.data.s3SecretKey;
-            vmCatalogDeploy.parameters.s3_bucket_name = "bucket_"+ct.data.stackName;
+            vmCatalogDeploy.parameters.s3_bucket_name = "bucket-"+ct.data.stackName;
 
             if(ct.data.nodeType == 'single') {
                 vmCatalogDeploy.workerUse = false;
