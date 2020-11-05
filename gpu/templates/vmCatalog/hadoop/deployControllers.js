@@ -240,8 +240,8 @@ angular.module('gpu.controllers')
         ct.fn.createBucket = function() {
             console.log('create Bucket start!!! ');
             // 페이지 로드
+            var bucketName = "bucket-"+ct.data.stackName;
             let promise2;
-            var bucketName = "bucket_"+ct.data.stackName;
             promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
                 //callBackFuncion(data);
@@ -348,7 +348,8 @@ angular.module('gpu.controllers')
 
         ct.fn.createVmCatalogDeploy = function () {
             let promise2;
-            promise2 = vmCatalogService.createBucket(ct.tenantId, ct.data.bucketName);
+            var bucketName = "bucket-"+ct.data.stackName;
+            promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
                 //callBackFuncion(data);
                 console.log('create Bucket success  !!! ');
