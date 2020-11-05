@@ -241,7 +241,7 @@ angular.module('gpu.controllers')
             console.log('create Bucket start!!! ');
             // 페이지 로드
             let promise2;
-            var bucketName = "Bucket_"+ct.data.stackName;
+            var bucketName = "bucket_"+ct.data.stackName;
             promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
                 //callBackFuncion(data);
@@ -303,7 +303,7 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.s3_endpoint = ct.data.s3EndPoint;
             vmCatalogDeploy.parameters.s3_accessKey = ct.data.s3AccessKey;
             vmCatalogDeploy.parameters.s3_secretKey = ct.data.s3SecretKey;
-            vmCatalogDeploy.parameters.s3_bucket_name = "Bucket_"+ct.data.stackName;
+            vmCatalogDeploy.parameters.s3_bucket_name = "bucket_"+ct.data.stackName;
 
             if(ct.data.nodeType == 'single') {
                 vmCatalogDeploy.workerUse = false;
