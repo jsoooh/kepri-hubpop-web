@@ -8,6 +8,14 @@
 .border-right-0 {border-right:0px !important;}
 .border-bottom-0 {border-bottom:0px !important;}
 
+/*페이지네이션 아이콘 추가*/
+.pagination > li {margin-right:5px;}
+.pagination > li a::before {display:inline-block; font-family: "Font Awesome 5 Free"; font-style: normal; font-weight:900;}
+.pagination > li a.prevPage::before {content:"\f104";}
+.pagination > li a.firstPage::before {content:"\f100";}
+.pagination > li a.nextPage::before {content:"\f105";}
+.pagination > li a.lastPage::before {content:"\f101";}
+
 .login-wrap h2 {font-weight:700; text-align:center; margin-bottom:30px;}
 .login-wrap .login-img {margin-bottom:0;}
 

@@ -108,7 +108,7 @@
 											<div class="text-box margin-top-20">
 												<ul class="list-dot font-size-13">
 													<li>
-														<b>원본 서버1231  </b>
+														<b>원본 서버 </b><!-- 원본 서버1231 -->
 														<span class="txt_long" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</span>
 														<span class="txt_long" title="{{instanceSnapshot.instanceName}}" ng-if="!instanceSnapshot.beInstance" ng-click="contents.fn.showErrorAlert()">{{instanceSnapshot.instanceName}}</span>
 													</li>
@@ -153,13 +153,15 @@
 								<col style="width: 8%;">
 							</colgroup>
 							<thead class="black white-text text-center">
-								<th scope="col">이름</th>
-								<th scope="col">원본서버</th>
-								<th scope="col">OS이미지</th>
-								<th scope="col">설명</th>
-								<th scope="col">상태</th>
-								<th scope="col">생성일</th>
-								<th scope="col">관리</th>
+								<tr>
+									<th scope="col">이름</th>
+									<th scope="col">원본서버</th>
+									<th scope="col">OS이미지</th>
+									<th scope="col">설명</th>
+									<th scope="col">상태</th>
+									<th scope="col">생성일</th>
+									<th scope="col">관리</th>
+								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }">
@@ -328,13 +330,15 @@
 								<col style="width: 8%;">
 							</colgroup>
 							<thead class="black white-text text-center">
-								<th scope="col">이름</th>
-								<th scope="col">원본디스크</th>
-								<th scope="col">크기(GB)</th>
-								<th scope="col">설명</th>
-								<th scope="col">상태</th>
-								<th scope="col">생성일</th>
-								<th scope="col">관리</th>
+								<tr>
+									<th scope="col">이름</th>
+									<th scope="col">원본디스크</th>
+									<th scope="col">크기(GB)</th>
+									<th scope="col">설명</th>
+									<th scope="col">상태</th>
+									<th scope="col">생성일</th>
+									<th scope="col">관리</th>
+								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }">
