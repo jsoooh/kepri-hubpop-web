@@ -16,7 +16,7 @@
                     <div class="ctlog_cntWrap">
                         <div class="ctlog-cnt">
                             <div class="logoBox">
-                                <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
+                                <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS' && contents.vmCatalogDeployInfo.deployStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
                                     <img ng-src="images/loading/loading_cloud.gif" height="160">
                                     <div class="text-center">
                                         <p class="txt"><span class="ico ico-timer"></span>서버 생성 중</p>
