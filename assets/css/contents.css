@@ -62,6 +62,26 @@
 /*테이블 보더 0 설정*/
 .table-wrap.border-0 .table > colgroup + thead > tr:first-child > th {border-top:0px !important;}
 
+/*테이블 보더(패널안에 있을때)*/
+.panel .table-border > thead > tr > th, 
+.panel .table-border > tbody > tr > th, 
+.panel .table-border > tfoot > tr > th, 
+.panel .table-border > thead > tr > td, 
+.panel .table-border > tbody > tr > td, 
+.panel .table-border > tfoot > tr > td 
+{border-right: 1px solid #eeeeee;}
+
+.panel .table-border > thead > tr > th:last-child, 
+.panel .table-border > tbody > tr > th:last-child, 
+.panel .table-border > tfoot > tr > th:last-child, 
+.panel .table-border > thead > tr > td:last-child, 
+.panel .table-border > tbody > tr > td:last-child, 
+.panel .table-border > tfoot > tr > td:last-child 
+{border-right: 0;}
+
+/*테이블 th두줄일때 헤더구분선*/
+.table thead tr:first-child th[scope="row"] {border-bottom: 1px solid #c3c3c3;}
+
 /*---- 프로젝트 만들기 ----*/
 /*OS 선택*/
 .pj_paas_volume .ul-list1{display: table; font-size:0; margin-left: -18px;}
