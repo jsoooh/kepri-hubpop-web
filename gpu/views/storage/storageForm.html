@@ -1,95 +1,114 @@
-
-<div class="message_area">
-	<div class="msg_bg"></div>
-	<div class="msg_txt"><span>‘볼륨 만들기’를 통해 인스턴스에 추가적인 저장공간을 할당할 수 있습니다.</span></div>
-</div>
-
-<div class="panel_area">
-	<ul class="pn_list_style">
-		<li>
-			<form name="{{contents.formName}}" novalidate>
-			<div class="panel_box pn_l">
-				<div class="pn_head">
-					<h4 class="pnh_tit">볼륨 만들기</h4>
+<!-- 신규소스 -->
+<div class="write_wrap">
+	<div class="alert alert-primary" role="alert">
+		<i data-feather="file-text" class="feather-directive"></i>
+		<div class="text-area">‘볼륨 만들기’를 통해 인스턴스에 추가적인 저장공간을 할당할 수 있습니다.</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-8">
+			<section class="panel panel-bordered">
+				<!-- panel-heading -->
+				<div class="panel-heading">
+					<h3 class="panel-title">볼륨 만들기</h3>
 				</div>
-				<div class="pn_body">
-					<span class="sm_txt">* 는 필수입력 사항입니다.</span>
-					<ul class="form_list">
-						<li>
-							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">볼륨 이름</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
+				<!-- // panel-heading -->
+				
+				<!-- panel-body -->
+				<div class="panel-body">
+					<form name="{{contents.formName}}" novalidate>
+						<div class="form_list">
+							<div class="text-right add-txt">
+								<span><b class="caution-star">*</b> 는 필수입력 사항입니다</span>
 							</div>
-							<input type="text" ng-model="contents.volume.name" name="volumeName" validation="required|custom:contents.fn.storageNameCustomValidationCheck(contents.volume.name)" class="form-control" maxlength="50" placeholder="볼륨 이름을 입력하세요." >
-						</li>
-						<li>
-							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">볼륨 타입 선택</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'원하는 타입의 볼륨을 생성할 수 있습니다.'"><span class="ico_info"></span></button></div>
+							
+							<!-- 볼륨 이름 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> 볼륨 이름
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'영문, 숫자, ‘-’만 포함할 수 있으며, 최대 20자까지 입력할 수 있습니다.'">	i</a></div>
 							</div>
-							<div>
+							<div class="form-group">
+								<input type="text" class="form-control" ng-model="contents.volume.name" name="volumeName" validation="required|custom:contents.fn.storageNameCustomValidationCheck(contents.volume.name)"  maxlength="50" placeholder="볼륨 이름을 입력하세요." >
+							</div>
+							<!-- //볼륨 이름 -->
+
+							<!-- 볼륨 타입 선택 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> 볼륨 타입 선택
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'원하는 타입의 볼륨을 생성할 수 있습니다.'">	i</a></div>
+							</div>
+							<div class="form-group">
 								<select class="form-control" name="volume_type" ng-model="contents.volume.type" ng-change="contents.fn.changeVolumeType();" validation="required">
 									<option value="">볼륨 타입 선택</option>
 									<option ng-repeat="volumeType in contents.volumeTypes" value="{{volumeType.volumeType}}">{{volumeType.volumeType}}</option>
 								</select>
 							</div>
-						</li>
-						<li>
-							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">볼륨 크기</span>
-								<div class="t_tip_bx">
-									<button type="button" tooltip-placement="top" uib-tooltip-html="'추가하는 볼륨의 크기(Size)를 설정할 수 있습니다. 프로젝트에 할당된 볼륨 쿼터(최대 크기) 내에서 자유롭게 설정이 가능합니다.'"><span class="ico_info"></span></button>
+							<!-- //볼륨 타입 선택 -->
+							
+							<!-- 볼륨 크기 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> 볼륨 크기
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'추가하는 볼륨의 크기(Size)를 설정할 수 있습니다. 프로젝트에 할당된 볼륨 쿼터(최대 크기) 내에서 자유롭게 설정이 가능합니다.'">	i</a>
 									<img ng-if="!contents.isTenantResourceLoad" src="images/loading_sm.gif">
 								</div>
 							</div>
-							<div ng-if="contents.isTenantResourceLoad" class="pnb_box cToggle">
-								<div class="pnb_bx_hd">
-									<span class="hd_tit">프로젝트 사용가능 볼륨 정보</span>
-									<button type="button" name="button" class="btn btn-toggle" title="열고/닫기" ng-click="main.pnbBoxToggleChange($event);"><span class="ico_arw">열고/닫기</span></button>
-								</div>
-								<div class="pnb_bx_cnt">
-									<div class="p_cnt_top">
-										<span>볼륨 사용량</span>
-										<div class="txt_top">
-											<span class="sty01">전체 볼륨 공간</span>
-											<span class="sty02">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB': {viewType:'val'} }}</span>
-											<span class="sty03">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB': {viewType:'unit'} }}</span>
+							<!-- //볼륨 크기 -->
+							
+							<!-- 프로젝트 사용가능 볼륨 정보 -->
+							<div class="panel-inner-collapse" ng-if="contents.isTenantResourceLoad">
+								<div class="panel-group margin-top-30">
+									<section class="panel panel-bordered">
+										<div class="panel-heading">
+											<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse1" aria-expanded="false" ng-click="main.pnbBoxToggleChange($event);">
+												<h3>프로젝트 사용가능 볼륨 정보</h3>
+												
+											</a>
 										</div>
-									</div>
-									<div class="p_cnt_mid">
-										<span class="txt fl_l">0</span>
-										<span class="txt fl_r">100</span>
-										<div class="cnt_usage">
-											<div class="use_left" ng-style="{ width: contents.tenantResource.usedResource.volumePercent + '%'}">
-												<span>{{contents.tenantResource.usedResource.volumePercent | number:1}}%</span>
-											</div>
-											<div class="use_right" ng-style="{ width: contents.tenantResource.available.volumePercent + '%'}">
-												<span>{{contents.tenantResource.available.volumePercent | number:1}}%</span>
+										<!-- // panel-heading -->
+										<div class="panel-collapse collapse" id="basicCollapse1">
+											<div class="panel-body disk-use-info font-weight-600">
+												<div class="clearfix"><b>- 볼륨 사용량</b></div>
+												<div class="clearfix text-center">
+													<span class="font-size-35 blue-600">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB': {viewType:'val'} }}</span>
+													<span class="font-size-20 grey-600">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB': {viewType:'unit'} }}</span>
+												</div>
+												<div class="clearfix text-center grey-400 margin-top-5">전체 볼륨 공간</div>
+												<div class="clearfix">
+													<div class="disk_cnt_mid">
+														<span class="txt fl_l">0</span>
+														<span class="txt fl_r">100</span>
+														<div class="cnt_usage">
+															<div class="use_left" ng-style="{ width: contents.tenantResource.usedResource.volumePercent + '%'}">
+																<span>{{contents.tenantResource.usedResource.volumePercent | number:1}}%</span>
+															</div>
+															<div class="use_right" ng-style="{ width: contents.tenantResource.available.volumePercent + '%'}">
+																<span>{{contents.tenantResource.available.volumePercent | number:1}}%</span>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="clearfix text-center margin-top-30">
+													<div class="btm_use_left">
+														<span class="txt_tit">사용중</span>
+														<span class="txt_val grey-600">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB':{viewType:'val'} }}<span class="txt_sm grey-500">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB':{viewType:'unit'} }}</span></span>
+													</div>
+													<div class="btm_use_right margin-left-40">
+														<span class="txt_tit">남은 공간</span>
+														<span class="txt_val grey-600">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB':{viewType:'val'} }}<span class="txt_sm grey-500">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB':{viewType:'unit'} }}</span></span>
+													</div>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="p_cnt_btm">
-										<ul>
-											<li class="btm_use_left">
-												<div>
-													<span class="txt_tit">사용중</span>
-													<span class="txt_val">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB':{viewType:'val'} }}<span class="txt_sm">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB':{viewType:'unit'} }}</span></span>
-												</div>
-											</li>
-											<li class="btm_use_right">
-												<div>
-													<span class="txt_tit">남은 공간</span>
-													<span class="txt_val">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB':{viewType:'val'} }}<span class="txt_sm">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB':{viewType:'unit'} }}</span></span>
-												</div>
-											</li>
-										</ul>
-									</div>
+									</section>
 								</div>
 							</div>
+							<!-- //프로젝트 사용가능 볼륨 정보 -->
+							
+							<!-- 볼륨 추가 -->
 							<div ng-if="contents.isTenantResourceLoad && contents.volume.type" class="disk_area">
-								<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil | displayVolume:'GB'}}</div>
-								<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
+								<p>마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
 								<div class="disk_box">
+									<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil | displayVolume:'GB'}}</div>
 									<div class="rangeWrap type2">
 										<div class="range_box rb_l">
 											<rzslider rz-slider-model="contents.volumeSize" rz-slider-options="contents.volumeSliderOptions"></rzslider>
@@ -103,54 +122,73 @@
 									</div>
 								</div>
 							</div>
-							<div class="cnt_msg_box msg-info">볼륨 크기는 최대 2TB까지 설정이 가능합니다.</div>
-						</li>
-						<li class="pn-Toggle">
-							<div class="pnb_tit">
-								<span class="pnb_t_txt">설명</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'추가할 볼륨에 대한 설명을 100자 내외로 입력할 수 있습니다.'"><span class="ico_info"></span></button></div>
-								<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+							<div class="alert alert-primary margin-top-30" role="alert">
+								<i data-feather="file-text" class="feather-directive"></i>
+								<div class="text-area">볼륨 크기는 최대 2TB까지 설정이 가능합니다.</div>
 							</div>
-							<div class="s_cont_box">
-								<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
-								<!--<span class="txt_limit"><em ng-class="{'red' : (contents.volume.description.length > 100)}">{{contents.volume.description.length}}</em>/100자</span>-->
+							<!-- //볼륨 추가 -->
+							
+							<!-- 설명 -->
+							<div class="panel-inner-collapse">
+								<div class="panel-group margin-top-30">
+									<section class="panel panel-bordered">
+										<div class="panel-heading">
+											<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse2" aria-expanded="false" ng-click="main.panelToggleChange($event);">
+												<h3>
+													 설명
+													<div class="t_tip_bx">
+														<div class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'추가할 볼륨에 대한 설명을 100자 내외로 입력할 수 있습니다.'">	i</div>
+													</div>
+												</h3>
+											</a>
+										</div>
+										<!-- // panel-heading -->
+										<div class="panel-collapse collapse" id="basicCollapse2">
+											<div class="panel-body">
+												<div class="form-gruop">
+													<textarea rows="5" cols="" id="volumeDescription" name="volumeDescription" style="height:150px;" ng-model="contents.volume.description" class="form-control"  placeholder="설명을 입력해 주세요." validation="max_len:100"></textarea>
+													<!-- <span class="txt_limit"><em ng-class="{'red' : (contents.volume.description.length > 100)}">{{contents.volume.description.length}}</em>/100자</span> -->
+												</div>
+											</div>
+										</div>
+									</section>
+								</div>
 							</div>
-						</li>
-						<li>
-							<div class="pnb_tit">
-								<i class="i_star"></i> <span class="pnb_t_txt">인스턴스와 연결</span>
-								<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'원하는 인스턴스를 선택하여 추가되는 볼륨과 연결할 수 있습니다. 볼륨을 생성하고 선택된 인스턴스와 연결하는 작업을 진행합니다.'"><span class="ico_info"></span></button></div>
+							<!-- //설명 -->
+							
+							<!-- 가상서버와 연결 -->
+							<div class="write-sub-title">
+								인스턴스와 연결
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'원하는 인스턴스를 선택하여 추가되는 볼륨과 연결할 수 있습니다. 볼륨을 생성하고 선택된 인스턴스와 연결하는 작업을 진행합니다.'">	i</a>
+									<img ng-if="!contents.isServerListLoad" src="images/loading_sm.gif" />
+								</div>
 							</div>
-							<div>
+							<div class="form-group" ng-if="contents.isServerListLoad">
 								<select class="form-control" ng-model="contents.sltInstanceId" ng-change="contents.fn.sltInstanceChange(contents.sltInstanceId);">
 									<option value="">연결 할 인스턴스 선택</option>
 									<option ng-repeat="instance in contents.instances" value="{{instance.id}}">{{instance.name}}</option>
 								</select>
 							</div>
-						</li>
-					</ul>
-	<!--
-					<div class="btn_add_area">
-						<span>추가기능 설정하기</span>
-						<button type="button" class="btn_add"></button>
+							<!-- //가상서버와 연결 -->
+							
+						</div>
+					</form>
+				</div>
+			</section>
+		</div>
+		<div class="col-md-4">
+			<section class="panel panel-bordered">
+				<!-- panel-heading -->
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-sm-12">
+							<h3 class="panel-title">볼륨 기본정보</h3>
+						</div>
 					</div>
-	-->
 				</div>
-				<div class="pn_footer">
-					<div class="btn-btm mgt0">
-						<button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.checkVal();">볼륨 만들기</button>
-						<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="main.goToHistoryBack()">취소</button>
-					</div>
-				</div>
-			</div>
-			</form>
-		</li>
-		<li>
-			<div class="panel_box pn_r">
-				<div class="pn_head">
-					<h4 class="pnh_tit ico02">볼륨 기본정보</h4>
-				</div>
-				<div class="pn_body">
+				<!-- // panel-heading -->
+				<!-- panel-body -->
+				<div class="panel-body">
 					<div class="s_cont_box">
 						<ul>
 							<li>
@@ -180,93 +218,104 @@
 						</ul>
 					</div>
 				</div>
-				
-				<div ng-if="contents.sltInstance.id" class="pn-Toggle brd0">
-					<div class="pn_head brdt">
-						<h4 class="pnh_tit ico01">연결대상 인스턴스 정보</h4>
-						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange1($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-					</div>
-					<div class="pn_body">
-						<div class="s_cont_box" style="display:block;">
-							<ul>
-								<li>
-									<span class="s_tit">인스턴스 이름</span>
-									<span class="s_txt">{{contents.sltInstance.name}}</span>
-								</li>
-								<li>
-									<span class="s_tit">인스턴스 OS</span>
-									<span class="s_txt">{{contents.sltInstance.image.serviceName}}</span>
-								</li>
-								<!-- 2018.12.07 sg0730 차후 윈도우OS 리눅스OS에 따른 분기처리 필요. 접속도메인과 접속IP로 분기. -->
-								<li>
-									<span class="s_tit">인스턴스 접속IP</span>
-									<span class="s_txt">{{contents.sltInstance.floatingIp}}</span>
-								</li>
-								<li>
-									<span class="s_tit">인스턴스 사양</span>
-									<span class="s_txt">소형</span>
-									<div class="s_inner_cont">
-										<div class="innr_tbl">
-											<table>
-												<colgroup>
-													<col width="30" />
-													<col width="30" />
-													<col width="30" />
-												</colgroup>
-												<thead>
-												<tr>
-													<th>vCPU</th>
-													<th>메모리</th>
-													<th>디스크</th>
-												</tr>
-												</thead>
-												<tbody>
-												<tr>
-													<td>{{contents.sltInstance.spec.vcpus}} Core</td>
-													<td>{{contents.sltInstance.spec.ram | displayVolume:'MB'}}</td>
-													<td>{{contents.sltInstance.spec.disk | displayVolume:'GB'}}</td>
-												</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+				<!-- //panel-body -->
+			</section>
 			
-				<!-- 2019-01-04 [좌측 컨텐츠와 중복된 내용으로 임시 주석처리함] -->
-				<!-- <div class="pn-Toggle">
-					<div class="pn_head brdt">
-						<h4 class="pnh_tit ico03">프로젝트 사용가능 디스크 정보</h4>
-						<button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
+			<div class="panel-group" ng-if="contents.sltInstance.id">
+				<section class="panel panel-bordered">
+					<div class="panel-heading">
+						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse3" aria-expanded="false" ng-click="main.panelToggleChange1($event);"><h3>연결대상 인스턴스 정보</h3></a>
 					</div>
-					<div class="pn_body">
-						<div class="s_cont_box">
-							<ul>
-								<li>
-									<span class="s_tit">전체 쿼터</span>
-									<span class="s_txt">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB' }}</span>
-								</li>
-								<li>
-									<span class="s_tit">현재 사용량</span>
-									<span class="s_txt">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB' }}</span>
-								</li>
-								<li>
-									<span class="s_tit">잔여 용량</span>
-									<span class="s_txt">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB' }}</span>
-								</li>
-							</ul>
+					<!-- // panel-heading -->
+					<div class="panel-collapse collapse" id="basicCollapse3">
+						<div class="panel-body">
+							<div class="s_cont_box">
+								<ul>
+									<li>
+										<span class="s_tit">인스턴스 이름</span>
+										<span class="s_txt">{{contents.sltInstance.name}}</span>
+									</li>
+									<li>
+										<span class="s_tit">인스턴스 OS</span>
+										<span class="s_txt">{{contents.sltInstance.image.serviceName}}</span>
+									</li>
+									<!-- 2018.12.07 sg0730 차후 윈도우OS 리눅스OS에 따른 분기처리 필요. 접속도메인과 접속IP로 분기. -->
+									<li>
+										<span class="s_tit">인스턴스 접속IP</span>
+										<span class="s_txt">{{contents.sltInstance.floatingIp}}</span>
+									</li>
+									<li>
+										<span class="s_tit">인스턴스 사양</span>
+										<span class="s_txt">소형</span>
+										<div class="s_inner_cont">
+											<div class="innr_tbl">
+												<table>
+													<colgroup>
+														<col width="30" />
+														<col width="30" />
+														<col width="30" />
+													</colgroup>
+													<thead>
+													<tr>
+														<th>vCPU</th>
+														<th>메모리</th>
+														<th>디스크</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr>
+														<td>{{contents.sltInstance.spec.vcpus}} Core</td>
+														<td>{{contents.sltInstance.spec.ram | displayVolume:'MB'}}</td>
+														<td>{{contents.sltInstance.spec.disk | displayVolume:'GB'}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div> -->
-				
-				<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
-				<!-- <div class="btn-btm">
-					<button type="button" name="button" class="btn_tutorial" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button>
-				</div> -->
+				</section>
 			</div>
-		</li>
-	</ul>
+			
+			<!-- 2019-01-04 [좌측 컨텐츠와 중복된 내용으로 임시 주석처리함] -->
+			<!-- <div class="panel-group">
+				<section class="panel panel-bordered">
+					<div class="panel-heading">
+						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse4" aria-expanded="false" ng-click="main.panelToggleChange($event);"><h3>프로젝트 사용가능 디스크 정보</h3></a>
+					</div>
+					// panel-heading
+					<div class="panel-collapse collapse" id="basicCollapse4">
+						<div class="panel-body">
+							<div class="s_cont_box">
+								<ul>
+									<li>
+										<span class="s_tit">전체 쿼터</span>
+										<span class="s_txt">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB' }}</span>
+									</li>
+									<li>
+										<span class="s_tit">현재 사용량</span>
+										<span class="s_txt">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB' }}</span>
+									</li>
+									<li>
+										<span class="s_tit">잔여 용량</span>
+										<span class="s_txt">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB' }}</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div> -->
+		</div>
+	</div>
+	
+	<div class="text-right">
+		<button class="btn btn-lg btn-primary" ng-click="contents.checkVal();">볼륨 만들기</button>
+		<button class="btn btn-lg btn-default" ng-click="main.goToHistoryBack()">취소</button>
+		<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
+		<!-- <button class="btn btn-lg btn-success" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button>-->
+	</div>
 </div>
