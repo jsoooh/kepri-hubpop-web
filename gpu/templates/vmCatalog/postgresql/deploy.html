@@ -29,9 +29,9 @@
                                     <tbody>
                                     <tr>
                                         <th><i class="i_star"></i> 비밀번호</th>
-                                        <td><input type="password" name="postgresPassword" class="form-control" maxlength="50" ng-model="contents.data.postgresPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
+                                        <td><input type="password" name="postgresPassword" class="form-control" maxlength="50" ng-model="contents.data.postgresPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.postgresPassword)" placeholder="비밀번호를 입력하세요." ></td>
                                         <th><i class="i_star"></i> 비밀번호 확인</th>
-                                        <td><input type="password" name="postgresConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.postgresConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.postgresPassword, contents.data.postgresConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                        <td><input type="password" name="postgresConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.postgresConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.postgresPassword, contents.data.postgresConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
                                     </tr>
                                     </tbody>
                                 </table>
