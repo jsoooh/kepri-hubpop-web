@@ -49,11 +49,11 @@
 					</div> -->
 					<div class="txt">
 						<span class="state">
-							<span class="state-round rgba-green-strong"></span>
-							<span class="state-round rgba-brown-strong" ng-if="contents.instance.vmState == 'error'"></span>
-							<span class="state-round rgba-blue-grey-strong" ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized'"></span>
-							<span class="state-round rgba-black-strong" ng-if="contents.instance.vmState == 'stopped'"></span>
-							<span class="state-txt">활성</span>
+							<span class="state-circle state-start"></span>
+							<span class="state-circle state-warning" ng-if="contents.instance.vmState == 'error'"></span>
+							<span class="state-circle state-stop" ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized'"></span>
+							<span class="state-circle state-stop" ng-if="contents.instance.vmState == 'stopped'"></span>
+							<span>활성</span>
 						</span>
 					</div>
 				</li>
@@ -100,8 +100,8 @@
 						<div class="text-area">부하분산 포트의 사용현황을 표시합니다.</div>
 					</div>
 					<div><!--  class=" scroll-content" style="height:270px;" -->
-						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
-							<table class="table table-hover">
+						<div class="table-wrap margin-top-20 padding-bottom-70" >
+							<table class="table table-outline text-center">
 								<colgroup>
 									<col style="width:10%;">
 									<col style="width:;">
@@ -111,14 +111,14 @@
 									<col style="width:30%;">
 									<col style="width:10%;">
 								</colgroup>
-								<thead class="text-center black white-text">
+								<thead class="bg-blue-grey-100">
 									<tr>
 										<th scope="col">NO.</th>
-										<th scope="col" class="text-left">이름</th>
+										<th scope="col">이름</th>
 										<th scope="col">포트</th>
 										<th scope="col">프로토콜</th>
 										<th scope="col">로드 밸런스 유형<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 로드밸런스 유형<br/> 1. 라운드로빈: 세션을 순차적으로 맺어주는 방식<br/>2. 소스: 사용자의 IP를 Hashing하여 분배하는 방식으로 특정 client는 특정 server로만 접속<br/>3. 최소연결: 연결 개수가 가장 적은 서버를 선택하는 방식'"><span class="ico_info"></span></button></div></th>
-										<th scope="col" class="text-left">연결서버</th>
+										<th scope="col">연결서버</th>
 										<th scope="col">헬스체크유형</th>
 									</tr>
 								</thead>
@@ -132,7 +132,7 @@
 										<td>
 											<div class="table-state">
 												<div ng-if="iaasLbPort.connType" class="state">
-													<ul ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers" style="text-align: left;">
+													<ul ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
 														<!-- 포트 상관없이 LB안에 연결서버 리스트가 다 들어가 있기 때문에 LBPort의 id가 같은 경우에만 해당하는 연결서버 목록이 나오도록-->
 														<li ng-if="iaaslbportMember.iaasLbPort.id == iaasLbPort.id">
 															<!--서버 상태 표시 -->
@@ -344,13 +344,13 @@
 										<div class="col-md-6">
 											<h3 class="title-type1 title-border">연결서버 정보 상세</h3>
 											<div class="table-wrap border-0">
-												<table class="table table-hover">
+												<table class="table table-outline text-center">
 													<colgroup>
 														<col style="width:auto;">
 														<col style="width:20%;">
 														<col style="width:20%;">
 													</colgroup>
-													<thead class="text-center grey">
+													<thead class="bg-blue-grey-100">
 														<tr>
 															<th scope="col">서버이름</th>
 															<th scope="col">내부 IP</th>
@@ -401,13 +401,13 @@
 										<div class="col-md-6">
 											<h3 class="title-type1 title-border">연결서버 정보 상세</h3>
 											<div class="table-wrap border-0">
-												<table class="table table-hover">
+												<table class="table table-outline text-center">
 													<colgroup>
 														<col style="width:auto;">
 														<col style="width:20%;">
 														<col style="width:20%;">
 													</colgroup>
-													<thead class="text-center grey">
+													<thead class="bg-blue-grey-100">
 														<tr>
 															<th scope="col">서버이름</th>
 															<th scope="col">내부 IP</th>
