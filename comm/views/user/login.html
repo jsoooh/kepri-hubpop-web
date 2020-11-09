@@ -13,11 +13,11 @@
 				<div ng-show="!(main.ssoUserLogin || main.ssoUserLoginChecking || main.commonOrgUserLogin) && !contents.ssoUserJoin">
 					<div class="form-group default-label margin-bottom-20">
 						<input type="text" id="email" name="email" maxlength="30" placeholder="{{ 'message.mi_type_id_email' | translate }}" ng-model="credentials.email" required ng-blur="blurEmail=true;" class="form-control"/>
-						<label for="formId">ID</label>
+						<label for="email">ID</label>
 					</div>
 					<div class="form-group default-label margin-bottom-20 password-area">
-						<input type="password" name="password" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="credentials.password" ng-keypress="contents.loginEnter($event);" required class="form-control"/>
-						<label for="formPw">Password</label>
+						<input type="password" id="password" name="password" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="credentials.password" required class="form-control"/>
+						<label for="password">Password</label>
 						<a href="" class="forgot-password color-primary"><small>비밀번호를 잊으셨나요?</small></a>
 					</div>
 				</div>
@@ -30,15 +30,15 @@
 					</p>
 					<div class="form-group default-label margin-bottom-20">
 						<input type="text" id="sso_email" name="sso_email" maxlength="30" placeholder="{{ 'message.mi_type_id_email' | translate }}" ng-model="contents.ssoUser.email" disabled="disabled" required ng-blur="blurEmail=true;" class="form-control"/>
-						<label for="formId">ID</label>
+						<label for="sso_email">ID</label>
 					</div>
 					<div class="form-group default-label margin-bottom-20 password-area">
 						<input type="password" id="sso_password" name="sso_password" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd' | translate }}" ng-model="contents.ssoUser.password" required class="form-control" ng-disabled="contents.ssoUserJoinDisabled"/>
-						<label for="formPw">Password</label>
+						<label for="sso_password">Password</label>
 					</div>
 					<div class="form-group default-label margin-bottom-20 password-area">
-						<input type="password" name="password_valid" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd_again' | translate }}" ng-model="contents.ssoUser.password_valid" required class="form-control" ng-keypress="contents.ssoLoginEnter($event);" ng-disabled="contents.ssoUserJoinDisabled"/>
-						<label for="formPw">Password</label>
+						<input type="password" id="password_valid" name="password_valid" autocomplete="off" maxlength="20" placeholder="{{ 'message.mi_type_pwd_again' | translate }}" ng-model="contents.ssoUser.password_valid" required class="form-control" ng-keypress="contents.ssoLoginEnter($event);" ng-disabled="contents.ssoUserJoinDisabled"/>
+						<label for="password_valid">Password</label>
 					</div>
 				</div>
 				<!-- //user 분기처리 -->
@@ -71,7 +71,7 @@
 					</div>
 					<div class="col-sm-6">
 						<div ng-show="!main.ssoUserLogin && !main.ssoUserLoginChecking && !contents.ssoUserJoin">
-							<button type="submit" class="btn btn-info pull-right"  ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
+							<button type="submit" class="btn btn-info pull-right" ng-click="login($event)" ng-disabled="authenticate || loginForm.px_email.$invalid || loginForm.px_password.$invalid">로그인</button>
 						</div>
 						<div ng-show="!main.ssoUserLoginChecking && contents.ssoUserJoin">
 							<button type="submit" class="btn btn-info pull-right" name="sso_button" ng-click="contents.ssoLogin(true)" ng-disabled="contents.ssoUserJoinDisabled">{{contents.LoginBtnLabel}}</button>
