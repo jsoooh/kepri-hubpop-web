@@ -1,5 +1,5 @@
 <!-- table -->
-<div class="tbw type1">
+<div class="board-warp board-write-wrap">
 	<table class="table">
 		<colgroup>
 			<col style="width: 25%;">
@@ -8,11 +8,11 @@
 		<tbody>
 			<tr>
 				<th scope="row">볼륨 이름<!--<em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="툴팁이 필요"></em>--></th>
-				<td><input type="text" name="volumeName" class="form-control" value="{{pop.volume.name}}" disabled></td>
+				<td><input type="text" name="volumeName" class="form-control form-control-sm" value="{{pop.volume.name}}" disabled></td>
 			</tr>
 			<tr>
 				<th scope="row">스냅샷 이름<!--<em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="백업 이미지 툴팁이 필요"></em>--></th>
-				<td><input type="text" name="snapshotName" maxlength="50" class="form-control" placeholder="스냅샷 이름(영문)을 입력하세요." ng-model="pop.data.snapshotName" validation="alpha_dash|required"></td>
+				<td><input type="text" name="snapshotName" maxlength="50" class="form-control form-control-sm" placeholder="스냅샷 이름(영문)을 입력하세요." ng-model="pop.data.snapshotName" validation="alpha_dash|required"></td>
 			</tr>
 			<tr>
 				<th scope="row">스냅샷 설명</th>
