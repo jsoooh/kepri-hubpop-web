@@ -81,7 +81,7 @@
 				<div class="card-body" style="height:217px;">
 					<div ng-if="vmCatalogDeploy.deployStatus != 'DEPLOY_COMPLETE' || vmCatalogDeploy.stackStatus != 'CREATE_COMPLETE'">
 						<!-- 서버생성중 -->
-						<div class="text-center padding-vertical-50" ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS'">
+						<div class="text-center padding-vertical-50" ng-if="vmCatalogDeploy.stackStatus == 'CREATE_IN_PROGRESS' && vmCatalogDeploy.deployStatus == 'CREATE_IN_PROGRESS'">
 							<div class="spinner-border spinner-primary" role="status">
 								<span class="sr-only">Loading...</span>
 							</div>
