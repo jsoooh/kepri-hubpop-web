@@ -30,9 +30,9 @@
         </tr>
         <tr>
             <th><i class="i_star"></i> 계정 비밀번호</th>
-            <td><input type="password" name="createUserPassword" class="form-control" maxlength="50" ng-model="contents.data.createUserPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
+            <td><input type="password" name="createUserPassword" class="form-control" maxlength="50" ng-model="contents.data.createUserPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.createUserPassword)" placeholder="비밀번호를 입력하세요." ></td>
             <th><i class="i_star"></i> 계정 비밀번호 확인</th>
-            <td><input type="password" name="createUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.createUserConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.createUserPassword, contents.data.createUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+            <td><input type="password" name="createUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.createUserConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.createUserPassword, contents.data.createUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
         </tr>
         </tbody>
     </table>

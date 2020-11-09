@@ -187,61 +187,151 @@ angular.module('portal.controllers')
             })
         };
 
-        /*프로젝트 삭제 전 체크 : useYnCheck --> 테넌트/org 여부 확인으로 대체*/
+        // 프로젝트 삭제전 체크
         ct.checkDeleteOrgProject = function ($event, orgItem) {
-            var params = {
-                "orgCode" : $scope.main.sltProjectId.toString(),
-                "teamCode" : orgItem.orgId
-            };
-            var iaasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', params, 'application/x-www-form-urlencoded'));
+            if (!orgItem || ! orgItem.id || !orgItem.orgId) {
+                common.showAlertWarning("조직 정보를 찾을 수 없습니다.");
+                return;
+            }
+            // 프로젝트 서비스 조회
+            var serviceList = ct.checkOrgProjectService(orgItem.id, orgItem.orgId);
+            if (!serviceList) {
+                return;
+            }
 
-            params = {
-                "orgCode" : $scope.main.sltProjectId.toString(),
-                "teamCode" : orgItem.orgId
-            };
-            var gpuPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/org/one', 'GET', params, 'application/x-www-form-urlencoded'));
+            // 프로젝트 서비스 api promise 세팅
+            var promiseArr = new Array();
+            angular.forEach(serviceList, function (service) {
+                if (service.promise)
+                    promiseArr.push(service.promise);
+            });
 
-            params = {
-                urlPaths : {
-                    "name" : orgItem.orgId
-                },
-                "depth" : 0
-            };
-            var paasPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', params));
-            ct.iaasUseYn = "N";
-            ct.gpuUseYn = "N";
-            ct.paasAppCnt = 0;
-            ct.useServices = "";
             $scope.main.loadingMainBody = true;
-            $q.all([iaasPromise, gpuPromise, paasPromise]).then(function (results) {
+            $q.all(promiseArr).then(function() {
+                var showAlertBoolean = false;
+                for (var i = 0; i < serviceList.length; i++) {
+                    if (serviceList[i].useYn != 'N') {
+                        showAlertBoolean = true;
+                        break;
+                    }
+                }
+                if (showAlertBoolean) {
+                    // 프로젝트 서비스 사용중 알람창
+                    common.showDialogAlertHtml('알림', setDialogAlertHtml('success', serviceList), 'warning');
+                } else {
+                    // 프로젝트 삭제전 이름체크 및 삭제
+                    $scope.main.popDeleteCheckName($event, '프로젝트', orgItem.orgName, ct.deleteOrgProjectAction, orgItem);
+                }
+            }).catch(function() {
+                // 프로젝트 서비스 호출 오류 알림창
+                common.showDialogAlertHtml('알림', setDialogAlertHtml('error', serviceList), 'warning');
+            }).finally(function () {
                 $scope.main.loadingMainBody = false;
-                var userTenant = results[0].data.content;
-                var userTenant2 = results[1].data.content;
-                var organization = results[2].data;
-                if (userTenant && userTenant.pk && !!userTenant.pk.teamCode) {
-                    ct.useServices += "서버 가상화";
+            });
+
+            // 알람 팝업창 html 세팅
+            var setDialogAlertHtml = function (functionSuccess, serviceList) {
+                var dialogAlertHtml = "";
+                if (functionSuccess == 'success') {
+                    dialogAlertHtml += '아래와 같이 사용 중인 서비스가 있습니다.';
+                    dialogAlertHtml += '<br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br>';
+                } else {
+                    dialogAlertHtml = '아래 서비스 확인 중 에러가 있습니다.';
+                    dialogAlertHtml += '<br>확인 후 진행해 주세요.<br><br>';
                 }
-                if (userTenant2 && userTenant2.pk && !!userTenant2.pk.teamCode) {
-                    if (ct.useServices != "") ct.useServices += ", ";
-                    ct.useServices += "GPU 서버 가상화";
+                var serviceNameArr = new Array();
+                angular.forEach(serviceList, function (service) {
+                   if (functionSuccess == 'success' && service.useYn == 'Y') {
+                       serviceNameArr.push(service.serviceName);
+                   } else if (functionSuccess == 'error' && service.useYn == 'E') {
+                        serviceNameArr.push(service.serviceName);
+                   }
+                });
+                if (serviceNameArr.length > 0) {
+                    for (let i = 0; i < serviceNameArr.length; i++) {
+                        dialogAlertHtml += '<b>' + serviceNameArr[i] + '</b>';
+                        if (i != serviceNameArr.length - 1) {
+                            dialogAlertHtml += ', ';
+                        }
+                    }
                 }
-                if (!!organization.guid) {
-                    if (ct.useServices != "") ct.useServices += ", ";
-                    ct.useServices += "App 실행 서비스";
-                }
-                // 사용중인 서비스가 있을 때 리턴
-                if (ct.useServices != "") {
-                    common.showDialogAlertHtml('알림','아래와 같이 사용 중인 서비스가 있습니다. <br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br><b>'+ ct.useServices +'</b>', 'warning');
+                return dialogAlertHtml;
+            };
+        };
+
+        // 프로젝트 서비스 조회
+        ct.checkOrgProjectService = function (id, orgId) {
+            var serviceList = [
+                {serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N'},
+                {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N'},
+                {serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N'},
+                {serviceCode : 'gis', serviceName : 'HUB-PoP GIS', useYn : 'N'},
+                {serviceCode : 'vru', serviceName : 'AR/VR 공유서비스', useYn : 'N'},
+                {serviceCode : 'hwu', serviceName : 'HiveBroker 서비스', useYn : 'N'},
+                {serviceCode : 'aau', serviceName : 'AI-API 서비스', useYn : 'N'}
+            ];
+
+            // 서비스 항목에 usedYn, promise 세팅
+            var setServiceUseYn = function(serviceCode, promise) {
+                var service = common.objectsFindByField(serviceList, 'serviceCode', serviceCode);
+                if (!promise || !service) {
                     return;
                 }
-                // 프로젝트 삭제전 이름체크 및 삭제
-                $scope.main.popDeleteCheckName($event, '프로젝트', orgItem.orgName, ct.deleteOrgProjectAction, orgItem)
-            }).catch(function(reject) {
-                $scope.main.loadingMainBody = false;
-                common.showDialogAlertHtml('알림','아래 서비스 확인 중 에러가 있습니다. <br>확인 후 진행해 주세요. <br><br>' + reject.config.url, 'warning');
-                console.log("프로젝트 삭제 전 체크 에러 :", reject);
-                return;
-            });
+                service.promise = promise;
+                promise.success(function (data) {
+                    if (serviceCode == 'iaas' || serviceCode == 'gpu') {    // 서버가상화, GPU 서버가상화
+                        if (data && data.content && data.content.pk && data.content.pk.teamCode) {
+                            service.useYn = 'Y';
+                        }
+                    } else if (serviceCode == 'paas') { // App 실행 서비스
+                        if (data && data.guid) {
+                            service.useYn = 'Y';
+                        }
+                    } else {    // 타사업자 서비스
+                        if (data == 'Y') {
+                            service.useYn = 'Y';
+                        }
+                    }
+                });
+                promise.error(function () {
+                    service.useYn = 'E';
+                });
+            };
+
+            // 서버 가상화
+            var iaasAndGpuParams = {
+                "orgCode" : $scope.main.sltProjectId.toString(),
+                "teamCode" : orgId
+            };
+            setServiceUseYn('iaas', common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', iaasAndGpuParams, 'application/x-www-form-urlencoded')));
+
+            // Gpu 서버 가상화
+            setServiceUseYn('gpu', common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/org/one', 'GET', iaasAndGpuParams, 'application/x-www-form-urlencoded')));
+
+            // App 실행 서비스
+            var paasParams = {
+                urlPaths : {"name" : orgId},
+                "depth" : 0
+            };
+            setServiceUseYn('paas', common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', paasParams)));
+
+            // 타사업자 파라미터
+            var otherParam = {
+                "PROJECT-ID" : id
+            };
+            // HUB-PoP GIS
+            // setServiceUseYn('gis', common.retrieveResource(common.resourcePromise('/gis/confirmDeleteOrNot.do', 'GET', otherParam)));
+
+            // AR/VR 공유서비스
+            // setServiceUseYn('vru', common.retrieveResource(common.resourcePromise('/vru/confirmDeleteOrNot.do', 'GET', otherParam)));
+
+            // HiveBroker 서비스
+            // setServiceUseYn('hwu', common.retrieveResource(common.resourcePromise('/hwu/confirmDeleteOrNot.do', 'GET', otherParam)));
+
+            // AI-API 서비스
+            // setServiceUseYn('aau', common.retrieveResource(common.resourcePromise('/aau/confirmDeleteOrNot.do', 'GET', otherParam)));
+
+            return serviceList;
         };
 
         // 조직 삭제 액션

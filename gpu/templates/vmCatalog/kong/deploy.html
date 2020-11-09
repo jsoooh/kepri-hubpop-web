@@ -38,9 +38,9 @@
                                     </tr>
                                     <tr>
                                         <th><i class="i_star"></i> 관리 비밀번호</th>
-                                        <td><input type="password" name="pgPassword" class="form-control" maxlength="50" ng-model="contents.data.pgPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
+                                        <td><input type="password" name="pgPassword" class="form-control" maxlength="50" ng-model="contents.data.pgPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.pgPassword)" placeholder="비밀번호를 입력하세요." ></td>
                                         <th><i class="i_star"></i> 관리 비밀번호 확인</th>
-                                        <td><input type="password" name="pgConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.pgConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.pgPassword, contents.data.pgConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                        <td><input type="password" name="pgConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.pgConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.pgPassword, contents.data.pgConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -68,9 +68,9 @@
                                     </tr>
                                     <tr>
                                         <th><i class="i_star"></i> 계정 비밀번호</th>
-                                        <td><input type="password" name="kongUserPassword" class="form-control" maxlength="50" ng-model="contents.data.kongUserPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
+                                        <td><input type="password" name="kongUserPassword" class="form-control" maxlength="50" ng-model="contents.data.kongUserPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.kongUserPassword)" placeholder="비밀번호를 입력하세요." ></td>
                                         <th><i class="i_star"></i> 계정 비밀번호 확인</th>
-                                        <td><input type="password" name="kongUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.kongUserConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.kongUserPassword, contents.data.kongUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                        <td><input type="password" name="kongUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.kongUserConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.kongUserPassword, contents.data.kongUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -98,9 +98,9 @@
                                     </tr>
                                     <tr>
                                         <th><i class="i_star"></i> 계정 비밀번호</th>
-                                        <td><input type="password" name="kongaUserPassword" class="form-control" maxlength="50" ng-model="contents.data.kongaUserPassword" validation="min:6|max:20|required" placeholder="비밀번호를 입력하세요." ></td>
+                                        <td><input type="password" name="kongaUserPassword" class="form-control" maxlength="50" ng-model="contents.data.kongaUserPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.kongaUserPassword)" placeholder="비밀번호를 입력하세요." ></td>
                                         <th><i class="i_star"></i> 계정 비밀번호 확인</th>
-                                        <td><input type="password" name="kongaUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.kongaUserConfirmPassword" validation="min:6|max:20|required|custom:contents.fn.checkPasswordValidation(contents.data.kongaUserPassword, contents.data.kongaUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
+                                        <td><input type="password" name="kongaUserConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.kongaUserConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.kongaUserPassword, contents.data.kongaUserConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
                                     </tr>
                                     </tbody>
                                 </table>
