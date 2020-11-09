@@ -40,8 +40,8 @@
 						<tr ng-repeat="(key, user) in pop.orgNotUsers" ng-if="(key >= (pop.pageOptions.pageSize * (pop.pageOptions.currentPage-1))) && (key < (pop.pageOptions.pageSize * (pop.pageOptions.currentPage)))">
 							<td>
 								<div class="checkbox-group">
-									<input type="checkbox" id="checkbox01" class="checkbox-input" ng-model="user.checked" value="true"> 
-									<label for="checkbox01" class="checkbox-item">
+									<input type="checkbox" id="checkbox{{key+1}}" class="checkbox-input" ng-model="user.checked" value="true">
+									<label for="checkbox{{key+1}}" class="checkbox-item">
 										<div class="checkbox">
 											<div class="checked-icon">
 												<i class="xi-check"></i>
@@ -114,8 +114,8 @@
 						<tr ng-repeat="(key, orgUser) in pop.schAddOrgUsers">
 							<td>
 								<div class="checkbox-group">
-									<input type="checkbox" id="checkbox02" class="checkbox-input" ng-model="orgUser.checked" value="true"> 
-									<label for="checkbox02" class="checkbox-item">
+									<input type="checkbox" id="checkbox2_{{key+1}}" class="checkbox-input" ng-model="orgUser.checked" value="true">
+									<label for="checkbox2_{{key+1}}" class="checkbox-item">
 										<div class="checkbox">
 											<div class="checked-icon">
 												<i class="xi-check"></i>
