@@ -39,9 +39,15 @@
 					<tbody>
 						<tr ng-repeat="(key, user) in pop.orgNotUsers" ng-if="(key >= (pop.pageOptions.pageSize * (pop.pageOptions.currentPage-1))) && (key < (pop.pageOptions.pageSize * (pop.pageOptions.currentPage)))">
 							<td>
-								<div class="checkbox checkbox-only padding-left-20">
-									<input class="checkSel" type="checkbox" ng-model="user.checked" value="true">
-									<label></label>
+								<div class="checkbox-group">
+									<input type="checkbox" id="checkbox01" class="checkbox-input" ng-model="user.checked" value="true"> 
+									<label for="checkbox01" class="checkbox-item">
+										<div class="checkbox">
+											<div class="checked-icon">
+												<i class="xi-check"></i>
+											</div>
+										</div>
+									</label>
 								</div>
 							</td>
 							<td>{{key + 1}}</td>
@@ -56,20 +62,22 @@
 					</tbody>
 				</table>
 			</div>
-			<nav class="pagiWrap">
-				<paging
+			<div class="table-bottom-wrap text-center">
+				<div class="paginationWrap">
+					<paging
 						page="pop.pageOptions.currentPage"
 						page-size="pop.pageOptions.pageSize"
 						total="pop.pageOptions.total"
 						show-prev-next="true"
 						show-first-last="true"
 						paging-action=""
-						text-first-class="first"
-						text-last-class="end"
-						text-next-class="next"
-						text-prev-class="prev">
+						text-first-class="firstPage"
+						text-last-class="lastPage"
+						text-next-class="nextPage"
+						text-prev-class="prevPage">
 				</paging>
-			</nav>
+				</div>
+			</div>
 		</div>
 		<div class="style-td" style="width:10%; vertical-align:middle;">
 			<div class="text-center">
@@ -105,9 +113,15 @@
 					<tbody>
 						<tr ng-repeat="(key, orgUser) in pop.schAddOrgUsers">
 							<td>
-								<div class="checkbox checkbox-only padding-left-20">
-									<input class="checkSel" type="checkbox" ng-model="orgUser.checked" value="true">
-									<label></label>
+								<div class="checkbox-group">
+									<input type="checkbox" id="checkbox02" class="checkbox-input" ng-model="orgUser.checked" value="true"> 
+									<label for="checkbox02" class="checkbox-item">
+										<div class="checkbox">
+											<div class="checked-icon">
+												<i class="xi-check"></i>
+											</div>
+										</div>
+									</label>
 								</div>
 							</td>
 							<td>{{key + 1}}</td>
