@@ -91,6 +91,13 @@ angular.module('common.controllers', [])
             common.locationHref(menuItem.urlPath);
         };
 
+        //좌측 메뉴 선택 초기화
+        mc.resetMenu = function () {
+            mc.sltGroupMenu = '';
+            mc.sltGroupMenuIconId = '';
+            mc.sltMenu = '';
+        };
+
         //전체 메뉴 오픈 여부
         mc.allMenuOpenClick = function () {
             if (mc.allMenuOpen) {
