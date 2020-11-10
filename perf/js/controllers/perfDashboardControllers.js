@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('perf.controllers')
-    .controller('perfDashboardCtrl', function ($scope, $location, $state, $stateParams, $translate, $q, $timeout, $interval, $filter, common, perfMeteringService, perfAnlsService, perfCommService, CONSTANTS) {
+    .controller('perfDashboardCtrl', function ($scope, $location, $state, $stateParams, $translate, $window, $q, $timeout, $interval, $filter, common, perfMeteringService, perfAnlsService, perfCommService, CONSTANTS) {
         _DebugConsoleLog("perfDashboardControllers.js : perfDashboardCtrl", 1);
 
         var ct = this;
@@ -130,6 +130,9 @@ angular.module('perf.controllers')
                 instance: null
             };
 
+            let contentWrapWidth = $window.innerWidth - 400; // - leftMenuWidth;
+            let contentWrapHeight = $window.innerHeight;
+
             // Daily
             ct.dailyChart = {
                 container: document.getElementById('daily-anls-chart'),
@@ -139,8 +142,8 @@ angular.module('perf.controllers')
                 },
                 option: {
                     chart: {
-                        width: 1450,
-                        height: 500,
+                        width: contentWrapWidth,
+                        height: contentWrapHeight/2,
                         format: '1,000',
                         title: 'Daily Performance'
                     },
@@ -168,8 +171,8 @@ angular.module('perf.controllers')
                 },
                 option: {
                     chart: {
-                        width: 1450,
-                        height: 500,
+                        width: contentWrapWidth,
+                        height: contentWrapHeight/2,
                         format: '1,000',
                         title: 'Monthly Performance'
                     },
@@ -192,6 +195,22 @@ angular.module('perf.controllers')
             ct.monthlyChart.instance = tui.chart.columnChart(ct.monthlyChart.container, ct.monthlyChart.data, ct.monthlyChart.option);
             ct.itemGroupChart.instance = tui.chart.pieChart(ct.itemGroupChart.container, ct.itemGroupChart.data, ct.itemGroupChart.option);
             ct.itemChart.instance = tui.chart.pieChart(ct.itemChart.container, ct.itemChart.data, ct.itemChart.option);
+
+            window.addEventListener("resize", function (e) {
+                //var leftMenuWidth = document.querySelector('.left-wrap');
+                let contentWrapWidth = $window.innerWidth - 400; // - leftMenuWidth;
+                let contentWrapHeight = $window.innerHeight;
+
+                ct.dailyChart.instance.resize({
+                    width: contentWrapWidth ,
+                    height: contentWrapHeight/2
+                });
+
+                ct.monthlyChart.instance.resize({
+                    width: contentWrapWidth ,
+                    height: contentWrapHeight/2
+                });
+            })
         };
 
         /* 전체 사용 금액 */

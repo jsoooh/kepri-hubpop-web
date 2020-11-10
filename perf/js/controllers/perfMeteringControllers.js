@@ -116,7 +116,7 @@ angular.module('perf.controllers')
         ct.fn.listAllMeteringGroupItems();
         ct.fn.listAllMeteringYears();
     })
-    .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $q, $interval, $filter, common, perfMeteringService, CONSTANTS, perfCommService) {
+    .controller('perfItemsMeteringCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $window, $q, $interval, $filter, common, perfMeteringService, CONSTANTS, perfCommService) {
         _DebugConsoleLog("perfMeteringControllers.js : perfItemsMeteringCtrl", 3);
 
         var ct = this;
@@ -169,8 +169,8 @@ angular.module('perf.controllers')
         // 숫자 필터 처리를 위한 작업
         ct.data.numUnit = 1;
 
-        ct.data.chartWidth = 1450;
-        ct.data.chartHeight = 500;
+        // ct.data.chartWidth = 1450;
+        // ct.data.chartHeight = 500;
 
         // chart
         ct.monthlyChart = {};
@@ -180,6 +180,9 @@ angular.module('perf.controllers')
         ct.fn.initDraw = function () {
             // Monthly Chart
             // variables for monthly Chart
+            let contentWrapWidth = $window.innerWidth - 400; // - leftMenuWidth;
+            let contentWrapHeight = $window.innerHeight;
+
             ct.monthlyChart = {
                 container: document.getElementById('monthly-metering-chart'),
                 data: {
@@ -188,8 +191,8 @@ angular.module('perf.controllers')
                 },
                 option: {
                     chart: {
-                        width: ct.data.chartWidth,
-                        height: ct.data.chartHeight,
+                        width: contentWrapWidth,
+                        height: contentWrapHeight/2,
                         title: 'Monthly Performance',
                         format: '1,000'
                     },
@@ -217,8 +220,8 @@ angular.module('perf.controllers')
                 },
                 option: {
                     chart: {
-                        width: ct.data.chartWidth,
-                        height: ct.data.chartHeight,
+                        width: contentWrapWidth,
+                        height: contentWrapHeight/2,
                         title: 'Daily Performance',
                         format: '1,000'
                     },
@@ -239,6 +242,22 @@ angular.module('perf.controllers')
 
             ct.dailyChart.instance = tui.chart.columnChart(ct.dailyChart.container, ct.dailyChart.data, ct.dailyChart.option);
             ct.monthlyChart.instance = tui.chart.columnChart(ct.monthlyChart.container, ct.monthlyChart.data, ct.monthlyChart.option);
+
+            window.addEventListener("resize", function (e) {
+                //var leftMenuWidth = document.querySelector('.left-wrap');
+                let contentWrapWidth = $window.innerWidth - 400; // - leftMenuWidth;
+                let contentWrapHeight = $window.innerHeight;
+
+                ct.dailyChart.instance.resize({
+                    width: contentWrapWidth ,
+                    height: contentWrapHeight/2
+                });
+
+                ct.monthlyChart.instance.resize({
+                    width: contentWrapWidth ,
+                    height: contentWrapHeight/2
+                });
+            })
         }
 
         // GET meteringItemGroup

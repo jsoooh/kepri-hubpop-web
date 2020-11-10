@@ -86,6 +86,7 @@ md-dialog .modal-body{max-height: 600px; overflow-y: auto;} */
 /*================== 신규팝업 CSS(2018-10 ~) 작성자:김보람 =================*/
 
 .modal-content.modal-xlg {width:1200px;}
+.modal-dialog.modal-xlg {width:1200px;}
 
 .modal-type-proj .modal-header {position:relative; height:auto; padding:20px; background:#fff; cursor:move;}
 .modal-type-proj .modal-header.brdb0 {border-bottom:0;}

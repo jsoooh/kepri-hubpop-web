@@ -21,9 +21,13 @@
         </ul>
         <ul>
             <li>
-                <strong class="tit">Konga 포트</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_port }}</span>
+                <strong class="tit">Konga 접속</strong>
+                <!-- span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_port }}</span-->
+                <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:{{ contents.vmCatalogDeployInfo.parameters.konga_port }}">
+                    <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:{{ contents.vmCatalogDeployInfo.parameters.konga_port }}</span>
+                </a>
             </li>
+
             <li>
                 <strong class="tit">DB Port</strong>
                 <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.pg_port }}</span>

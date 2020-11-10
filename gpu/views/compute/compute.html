@@ -165,10 +165,12 @@
 													<b>설명</b>
 													<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instance, 'server');">i</a></div>
 												</li>
-												<li>
-													<b><a class="link" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {fixedIp : instance.fixedIp, osType:instance.image.osType, gpuYn : true});">접속방법 가이드<span class="feather-icon blue-600 margin-left-5"><i data-feather="file-text" class="feather-directive"></i></span></a></b>
-												</li>
 											</ul>
+											<div class="row margin-top-30">
+												<div class="col-sm-6">
+													<button type="button" class="btn btn-primary btn-sm btn-block" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {fixedIp : instance.fixedIp, osType:instance.image.osType, gpuYn : true});"><i class="xi-paper margin-right-5"></i>접속방법가이드</button>
+												</div>
+											</div>
 
 										</div>
 										<!-- //ubuntu  -->

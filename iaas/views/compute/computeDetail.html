@@ -262,15 +262,15 @@
 							<img src="images/loading_sm.gif">
 						</span>
 						<span ng-if="contents.instance.alarmStatus" class="state">
-							<span class="state-round rgba-green-strong" ng-if="!contents.instance.alarmOccur && contents.instance.vmState == 'active'"></span>
-							<span class="state-round rgba-brown-strong" ng-if="contents.instance.vmState == 'error'"></span>
-							<span class="state-round rgba-blue-grey-strong" ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'shelved_offloaded'"></span>
-							<span class="state-round rgba-black-strong" ng-if="contents.instance.vmState == 'stopped'"></span>
-							<span class="state-round rgba-orange-strong" ng-if="contents.instance.alarmStatus == 'minor'"></span>
-							<span class="state-round rgba-pink-strong" ng-if="contents.instance.alarmStatus == 'warning'"></span>
-							<span class="state-round rgba-red-strong" ng-if="contents.instance.alarmStatus == 'critical'"></span>
-							<span class="state-txt" ng-if="!contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
-							<span class="state-txt" ng-if="contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.alarmStatus | translate }}</span>
+							<span class="state-circle state-start" ng-if="!contents.instance.alarmOccur && contents.instance.vmState == 'active'"></span><!-- 활성 -->
+							<span class="state-circle state-warning" ng-if="contents.instance.vmState == 'error'"></span><!-- 오류 -->
+							<span class="state-circle state-stop" ng-if="contents.instance.vmState == 'paused' || contents.instance.vmState == 'resized' || contents.instance.vmState == 'shelved_offloaded'"></span><!-- 대기 -->
+							<span class="state-circle state-stop" ng-if="contents.instance.vmState == 'stopped'"></span><!-- 중지 -->
+							<span class="state-circle state-care" ng-if="contents.instance.alarmStatus == 'minor'"></span><!-- 주의 -->
+							<span class="state-circle state-warning" ng-if="contents.instance.alarmStatus == 'warning'"></span><!-- 경고 -->
+							<span class="state-circle state-danger" ng-if="contents.instance.alarmStatus == 'critical'"></span><!-- 위험 -->
+							<span ng-if="!contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.vmState | translate }}</span>
+							<span ng-if="contents.instance.alarmOccur">{{ 'iaas.label.instance_' + contents.instance.alarmStatus | translate }}</span>
 						</span>
 					</div>
 				</li>
@@ -456,14 +456,14 @@
 					</div>
 					<div class=" scroll-content" style="height:270px;">
 						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
-							<table class="table table-hover">
+							<table class="table table-hover table-outline text-center">
 								<colgroup>
 									<col style="width:30%;">
 									<col style="width:25%;">
 									<col style="width:25%;">
 									<col style="width:20%;">
 								</colgroup>
-								<thead class="text-center black white-text">
+								<thead class="bg-blue-grey-100">
 								<tr>
 									<th scope="col">도메인</th>
 									<th scope="col" class="text-left">프로토콜 타입</th>
@@ -534,13 +534,13 @@
 					</div>
 					<div class=" scroll-content" style="height:270px;">
 						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
-							<table class="table table-hover">
+							<table class="table table-hover table-outline text-center">
 								<colgroup>
 									<col style="width:40%;">
 									<col style="width:30%;">
 									<col style="width:30%;">
 								</colgroup>
-								<thead class="text-center black white-text">
+								<thead class="bg-blue-grey-100">
 								<tr>
 									<th scope="col">접속정보</th>
 									<th scope="col">포트</th>
@@ -606,13 +606,13 @@
 					</div>
 					<div class=" scroll-content" style="height:270px;">
 						<div class="table-wrap border-0 margin-top-20" >
-							<table class="table table-hover">
+							<table class="table table-hover table-outline text-center">
 								<colgroup>
 									<col style="width:30%;">
 									<col style="width:30%;">
 									<col style="width:40%;">
 								</colgroup>
-								<thead class="text-center black white-text">
+								<thead class="bg-blue-grey-100">
 									<tr>
 										<th scope="col">사용자</th>
 										<th scope="col">동작</th>
@@ -730,14 +730,14 @@
 					<div class=" scroll-content" style="height:270px;">
 						<div class="table-wrap border-0 margin-top-20" >
 							<div class="log-row list">
-								<table class="table table-hover logs">
+								<table class="table table-hover table-outline text-center logs">
 									<colgroup>
 										<col style="width:12%;" />
 										<col style="width:12%;" />
 										<col style="width:12%;" />
 										<col />
 									</colgroup>
-									<thead class="text-center black white-text">
+									<thead class="bg-blue-grey-100">
 										<tr>
 											<th>{{ 'iaas.label.server_name' | translate }}</th>
 											<th>{{ 'iaas.label.program' | translate }}</th>
@@ -1071,7 +1071,7 @@
 					<div class=" scroll-content" style="height:270px;">
 						<div class="table-wrap border-0 margin-top-20" >
 							<div class="log-row list">
-								<table class="table table-hover logs">
+								<table class="table table-hover table-outline text-center logs">
 									<colgroup>
 										<col style="width:12%" />
 										<col style="width:8%" />
@@ -1081,7 +1081,7 @@
 										<col/>
 										<col style="width:12%" />
 									</colgroup>
-									<thead class="text-center black white-text">
+									<thead class="bg-blue-grey-100">
 									<tr>
 										<th>{{ 'iaas.label.alarm_dt' | translate }}</th>
 										<th>{{ 'iaas.label.alarm_type' | translate }}</th>

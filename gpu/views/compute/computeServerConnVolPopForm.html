@@ -13,11 +13,15 @@
 			ng-class="{'tbl_selected': volume.volumeId == pop.sltVolumeId, 'tbl_disabled': (volume.volumeAttachment && volume.volumeAttachment.instanceId)}"
 			ng-click="pop.fn.setInstanceVolume(volume)">
 			<td>
-				<div class="radio radio-only">
+				<div class="radio-group">
 					<input type="radio" name="volumeRadio" ng-model="pop.sltVolumeId" value="{{volume.volumeId}}"
-						id="volume-{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)"
+						id="volume-{{volume.volumeId}}" class="radio-input" ng-click="pop.fn.setInstanceVolume(volume)"
 						ng-disabled="volume.volumeAttachment && volume.volumeAttachment.instanceId">
-					<label for="volume-{{volume.volumeId}}"></label>
+					<label for="volume-{{volume.volumeId}}" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+					</label>
 				</div>
 			</td>
 			<td>{{volume.name}}</td>

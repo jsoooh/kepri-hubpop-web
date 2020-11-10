@@ -19,12 +19,12 @@
 			</div>
 			<button type="button" class="btn btn-primary" title="검색" ng-click="pop.setOrgNotUsers();"><i class="xi-search"></i></button>
 			<div class="table-wrap margin-top-10">
-				<table class="table table-outline">
+				<table class="table table-outline table-bordered">
 					<colgroup>
 						<col style="width:13%;">
 						<col style="width:13%;">
 						<col style="width:26%;">
-						<col style="width:20%;">
+						<col style="width:;">
 						<col style="width:30%;">
 					</colgroup>
 					<thead class="grey text-center">
@@ -38,14 +38,20 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="(key, user) in pop.orgNotUsers" ng-if="(key >= (pop.pageOptions.pageSize * (pop.pageOptions.currentPage-1))) && (key < (pop.pageOptions.pageSize * (pop.pageOptions.currentPage)))">
-							<td>
-								<div class="checkbox checkbox-only padding-left-20">
-									<input class="checkSel" type="checkbox" ng-model="user.checked" value="true">
-									<label></label>
+							<td class="text-center">
+								<div class="checkbox-group">
+									<input type="checkbox" id="checkbox{{key+1}}" class="checkbox-input" ng-model="user.checked" value="true">
+									<label for="checkbox{{key+1}}" class="checkbox-item">
+										<div class="checkbox">
+											<div class="checked-icon">
+												<i class="xi-check"></i>
+											</div>
+										</div>
+									</label>
 								</div>
 							</td>
-							<td>{{key + 1}}</td>
-							<td style="text-align:left">{{user.email}}</td>
+							<td class="text-center">{{key + 1}}</td>
+							<td>{{user.email}}</td>
 							<td>{{user.name}}</td>
 							<td>{{user.position}}</td>
 						</tr>
@@ -56,24 +62,27 @@
 					</tbody>
 				</table>
 			</div>
-			<nav class="pagiWrap">
-				<paging
+			<div class="table-bottom-wrap text-center">
+				<div class="paginationWrap">
+					<paging
 						page="pop.pageOptions.currentPage"
 						page-size="pop.pageOptions.pageSize"
 						total="pop.pageOptions.total"
+						adjacent="1"
 						show-prev-next="true"
 						show-first-last="true"
 						paging-action=""
-						text-first-class="first"
-						text-last-class="end"
-						text-next-class="next"
-						text-prev-class="prev">
+						text-first-class="firstPage"
+						text-last-class="lastPage"
+						text-next-class="nextPage"
+						text-prev-class="prevPage">
 				</paging>
-			</nav>
+				</div>
+			</div>
 		</div>
 		<div class="style-td" style="width:10%; vertical-align:middle;">
 			<div class="text-center">
-				<button type="button" class="btn btn-primary" ng-click="pop.sltUserMove();">추가</button>
+				<button type="button" class="btn btn-primary" ng-click="pop.sltUserMove();">추가<i class="xi-angle-right-min"></i></button>
 			</div>
 		</div>
 		<div class="style-td" style="width:45%;">
@@ -84,14 +93,13 @@
 				<button type="button" class="btn btn-primary" ng-click="pop.sltOrgUserClear()">선택 삭제</button>
 			</div>
 			<div class="table-wrap margin-top-10">
-				<table class="table table-outline">
+				<table class="table table-outline table-bordered">
 					<colgroup>
-						<colgroup>
 						<col style="width:13%;">
 						<col style="width:13%;">
 						<col style="width:26%;">
-						<col style="width:20%;">
-						<col style="width:30%;">
+						<col style="width:;">
+						<col style="width:14%;">
 					</colgroup>
 					<thead class="grey text-center">
 						<tr>
@@ -104,16 +112,22 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="(key, orgUser) in pop.schAddOrgUsers">
-							<td>
-								<div class="checkbox checkbox-only padding-left-20">
-									<input class="checkSel" type="checkbox" ng-model="orgUser.checked" value="true">
-									<label></label>
+							<td class="text-center">
+								<div class="checkbox-group">
+									<input type="checkbox" id="checkbox2_{{key+1}}" class="checkbox-input" ng-model="orgUser.checked" value="true">
+									<label for="checkbox2_{{key+1}}" class="checkbox-item">
+										<div class="checkbox">
+											<div class="checked-icon">
+												<i class="xi-check"></i>
+											</div>
+										</div>
+									</label>
 								</div>
 							</td>
-							<td>{{key + 1}}</td>
-							<td style="text-align:left">{{orgUser.email}}</td>
+							<td class="text-center">{{key + 1}}</td>
+							<td>{{orgUser.email}}</td>
 							<td>{{orgUser.name}}</td>
-							<td>
+							<td class="text-center">
 								<select ng-model="orgUser.roleName">
 									<option value="{{ pop.orgRoleNames.user }}">사용자</option>
 									<option value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>

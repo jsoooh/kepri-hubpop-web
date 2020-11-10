@@ -1,5 +1,4 @@
-<!-- table -->
-<div class="tbw type1">
+<div class="board-warp board-write-wrap">
 	<table class="table">
 		<colgroup>
 			<col style="width: 30%;">
@@ -8,17 +7,18 @@
 		<tbody>
 			<tr>
 				<th scope="row">이름(변경 전)<!-- <em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="툴팁이 필요"></em> --></th>
-				<td><input type="text" name="" value="" class="form-control" placeholder="{{pop.sltLoadBalancer.name}}" disabled></td>
+				<td><input type="text" name="" value="" class="form-control form-control-sm" placeholder="{{pop.sltLoadBalancer.name}}" disabled></td>
 			</tr>
 			<tr>
 				<th scope="row">이름(변경 후) <!-- <em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="백업 이미지 툴팁이 필요"></em> --></th>
-				<td><input type="text" name="LoadBalancerName" ng-model="pop.newLbNm" name="newLbNm" class="form-control" placeholder="변경할 이름(영문)을 입력하세요."></td>
+				<td><input type="text" name="LoadBalancerName" ng-model="pop.newLbNm" name="newLbNm" class="form-control form-control-sm" placeholder="변경할 이름(영문)을 입력하세요."></td>
 			</tr>
 			<tr>
 				<th scope="row">설명(변경 후) <!-- <em class="ico-info1 ico" data-toggle="tooltip" title="" data-original-title="백업 이미지 툴팁이 필요"></em> --></th>
-				<td><textarea type="text" name="LoadBalancerDescription" ng-model="pop.sltLoadBalancer.description" name="newLbDs" class="form-control volTxt"></textarea></td>
+				<td>
+					<textarea type="text" name="LoadBalancerDescription" ng-model="pop.sltLoadBalancer.description" name="newLbDs" class="form-control volTxt"></textarea>
+				</td>
 			</tr>
 		</tbody>
 	</table>
 </div>
-<!-- //table -->
