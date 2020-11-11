@@ -1,13 +1,13 @@
 <div class="alert alert-primary" role="alert">
 	<i data-feather="file-text" class="feather-directive"></i>
-	<div class="text-area">다른 프로젝트에서 생성한 백업 이미지로부터 현재 프로젝트에 새로운 서버를 생성합니다.</div>
+	<div class="text-area">다른 프로젝트에서 생성한 스냅샷으로부터 현재 프로젝트에 새로운 인스턴스를 생성합니다.</div>
 </div>
 
 <div class="card-input-wrap">
 	<div class="row">
 		<div class="col-md-6">
 			<div class="ciw-tit">
-				<b class="tit">다른 프로젝트의 서버 복사</b>
+				<b class="tit">다른 프로젝트의 인스턴스 복사</b>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -19,7 +19,7 @@
 					</select>
 				</div>
 				<div class="form-group inline-block margin-bottom-0">
-					<input type="text" class="form-control" placeholder="백업 이미지 이름을 입력해 주세요." ng-model="contents.schFilterText" style="width: 400px;">
+					<input type="text" class="form-control" placeholder="스냅샷 이름을 입력해 주세요." ng-model="contents.schFilterText" style="width: 400px;">
 				</div>
 				<button type="button" class="btn btn-primary">
 					<div class="feather-icon">
@@ -37,27 +37,27 @@
 			<table class="table table-hover table-border" cellspacing="0" width="100%">
 				<colgroup>
 					<col width="5%"><!--번호-->
-					<col width="16%"><!--프로젝트-->
-					<col width="16%"><!--서버명-->
+					<col width="15%"><!--프로젝트-->
+					<col width="15%"><!--인스턴스명-->
 					<col width="10%"><!--OS이미지-->
-					<col width="4%"><!--CPU-->
-					<col width="8%"><!--메모리-->
-					<col width="16%"><!--이름-->
+					<col width="3%"><!--CPU-->
+					<col width="5%"><!--메모리-->
+					<col width="19%"><!--이름-->
 					<col width="5%"><!--크기-->
 					<col width="5%"><!--설명-->
-					<col width="8%"><!--생성일시-->
-					<col width="7%"><!--서버 복사-->
+					<col width="12%"><!--생성일시-->
+					<col width="6%"><!--인스턴스 복사-->
 				</colgroup>
 				<thead class="text-center">
 					<tr>
 						<th scope="row" rowspan="2">번호</th>
 						<th scope="row" rowspan="2">프로젝트</th>
-						<th scope="col" colspan="4">원본서버</th>
-						<th scope="col" colspan="4">백업 이미지</th>
-						<th scope="row" rowspan="2">서버 복사</th>
+						<th scope="col" colspan="4">원본인스턴스</th>
+						<th scope="col" colspan="4">스냅샷</th>
+						<th scope="row" rowspan="2">인스턴스 복사</th>
 					</tr>
 					<tr>
-						<th>서버명</th>
+						<th>인스턴스명</th>
 						<th>OS 이미지</th>
 						<th>CPU</th>
 						<th>메모리</th>
@@ -80,7 +80,7 @@
 						<td class="text-center"><a class="info-icon-tooltip" tooltip-placement="bottom" uib-tooltip="{{ instanceSnapshot.description }}">	i</a></td>
 						<td class="text-center">{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
 						<td class="text-center">
-							<a href="" class="btn btn-sm btn-nostyle" title="서버 복사" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/' + instanceSnapshot.tenantId)"><i class="fa fa-clone"></i></a>
+							<a href="" class="btn btn-sm btn-nostyle" title="인스턴스 복사" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/' + instanceSnapshot.tenantId)"><i class="fa fa-clone"></i></a>
 						</td>
 					</tr>
 					<tr ng-if="(contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length == 0">

@@ -3,14 +3,14 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="font-size-18 padding-top-5">
-				<b>전체 디스크 <span class="color-primary" ng-if="!!main.userTenantId">({{(contents.storageMainList | filter:{ status: '!deleting' }).length}})</span></b>
+				<b>전체 볼륨 <span class="color-primary" ng-if="!!main.userTenantId">({{(contents.storageMainList | filter:{ status: '!deleting' }).length}})</span></b>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="text-right">
 				<!-- 검색 -->
 				<div class="form-group inline-block margin-bottom-0">
-					<input type="text" class="form-control form-control-md" placeholder="디스크 검색" style="width:300px;" ng-model="contents.schFilterText">
+					<input type="text" class="form-control form-control-md" placeholder="볼륨 검색" style="width:300px;" ng-model="contents.schFilterText">
 				</div>
 				<!-- <button type="button" name="button" class="btn btn-sch" title="지우기" ng-click="contents.schFilterText = ''"><span class="ico">지우기</span></button> -->
 				<!-- //검색 -->
@@ -38,12 +38,12 @@
 <!-- button area Start-->
 <div class="margin-bottom-20" ng-if="!!main.userTenantId">
 	<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="main.goToPage('/iaas/storage/create')" ng-disabled="!main.checkResourceUserRole()">
-		<div class="feather-icon color-primary"><i data-feather="hard-drive" class="feather-directive"></i></div> <b>디스크 만들기</b>
+		<div class="feather-icon color-primary"><i data-feather="hard-drive" class="feather-directive"></i></div> <b>볼륨 만들기</b>
 	</button>
 </div>
 <!-- button area end-->
 
-<!-- 디스크 관리 리스트(카드형) -->
+<!-- 볼륨 관리 리스트(카드형) -->
 <div class="card-list-wrap" ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length > 0 && contents.listType == 'image'">
 	<div class="row">
 		<div class="col-md-4" ng-repeat="volume in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }">
@@ -57,7 +57,7 @@
 										<b class="title" title="{{volume.name}}">{{volume.name}}</b>
 									</div>
 									<div class="col-xs-2">
-										<!-- 20181122 디스크과 인스턴스 연결된 것이 있으면 링크 이미지 표현. 차후 구현시 참조. -->
+										<!-- 20181122 볼륨과 인스턴스 연결된 것이 있으면 링크 이미지 표현. 차후 구현시 참조. -->
 										<!--<span class="link_info" ng-if="volume.volumeAttachment.instanceId"></span>-->
 										<div class="pull-right dropdown btn-option">
 											<button type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
@@ -66,20 +66,20 @@
 												</div>
 											</button>
 											<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-												<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="백업 이미지 생성">백업 이미지 생성</a></li>
-												<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="디스크 이름 변경">디스크 이름 변경</a></li>
-												<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="디스크 크기 변경">디스크 크기 변경</a></li>
-												<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
-												<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
-												<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="main.popDeleteCheckName($event, '디스크', volume.name, contents.deleteVolumesJob, volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 삭제">디스크 삭제</a></li>
-												<li ng-if="volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="디스크에 백업이미지가 존재하여 삭제할수 없습니다.">디스크 삭제</a></li>
-												<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
+												<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="스냅샷 생성">스냅샷 생성</a></li>
+												<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="볼륨 이름 변경">볼륨 이름 변경</a></li>
+												<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="볼륨 크기 변경">볼륨 크기 변경</a></li>
+												<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="볼륨 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">볼륨 크기 변경</a></li>
+												<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="인스턴스 연결 해제" >인스턴스 연결 해제</a></li>-->
+												<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="main.popDeleteCheckName($event, '볼륨', volume.name, contents.deleteVolumesJob, volume.volumeId)"><a class="delete" href="javascript:void(0);" title="볼륨 삭제">볼륨 삭제</a></li>
+												<li ng-if="volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="볼륨에 스냅샷이 존재하여 삭제할수 없습니다.">볼륨 삭제</a></li>
+												<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="볼륨 상태가 ‘사용가능’인 경우 삭제 가능합니다.">볼륨 삭제</a></li>
 											</ul>
 										</div>
 									</div>
 								</div>
 								<div class="clearfix">
-									<span class="lagn">디스크스토리지</span>
+									<span class="lagn">볼륨스토리지</span>
 								</div>
 							</div>
 						</div>
@@ -101,12 +101,12 @@
 								<div class="text-box margin-top-20">
 									<ul class="list-dot font-size-13">
 										<li>
-											<b>연결서버  </b>
+											<b>연결인스턴스  </b>
 											<span class="txt_long" ng-if="volume.status == 'in-use'" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/iaas/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</span>
 											<span ng-if="volume.status != 'in-use'">연결 정보 없음</span>
 										</li>
 										<li>
-											<b>백업 이미지 개수  </b>
+											<b>스냅샷 개수  </b>
 											<span>{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</span>
 										</li>
 										<li>
@@ -114,7 +114,7 @@
 											<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{volume.description | enterByNbr}}'" ng-click="!main.checkResourceUserRole() ||contents.fn.formOpen($event, 'description', volume);">i</a></div>
 										</li>
 										<li>
-											<b><a class="link" ng-click="main.showRightSliderContents($event, '디스크 연결 가이드', '/guideInfo/accessGuideInfoDiskConnect.html', {volume : volume});">디스크 연결 가이드<span class="feather-icon blue-600 margin-left-5"><i data-feather="file-text" class="feather-directive"></i></span></a></b>
+											<b><a class="link" ng-click="main.showRightSliderContents($event, '볼륨 연결 가이드', '/guideInfo/accessGuideInfoDiskConnect.html', {volume : volume});">볼륨 연결 가이드<span class="feather-icon blue-600 margin-left-5"><i data-feather="file-text" class="feather-directive"></i></span></a></b>
 										</li>
 									</ul>
 								</div>
@@ -135,9 +135,9 @@
 		</div>
 	</div>
 </div>
-<!-- //디스크 관리 리스트(카드형) -->
+<!-- //볼륨 관리 리스트(카드형) -->
 
-<!-- 디스크 관리 리스트(테이블형) -->
+<!-- 볼륨 관리 리스트(테이블형) -->
 <section class="panel panel-bordered" ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length > 0 && contents.listType == 'list'">
 	<div class="panel-body padding-0">
 		<div class="table-wrap border-0">
@@ -154,11 +154,11 @@
 			</colgroup>
 			<thead class="black white-text text-center">
 				<tr>
-					<th scope="col">디스크명</th>
+					<th scope="col">볼륨명</th>
 					<th scope="col">크기(GB)</th>
 					<th scope="col">설명</th>
-					<th scope="col">연결서버</th>
-					<th scope="col">백업이미지개수</th>
+					<th scope="col">연결인스턴스</th>
+					<th scope="col">스냅샷 개수</th>
 					<th scope="col">상태</th>
 					<!-- 20.04.29 - 추후 요청 들어올시 진행 by ksw -->
 					<!--<th scope="col">생성일</th>-->
@@ -194,15 +194,15 @@
 								</div>
 							</button>
 							<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="백업 이미지 생성">백업 이미지 생성</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="디스크 이름 변경">디스크 이름 변경</a></li>
-								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'description', volume);" title="디스크 설명 변경">디스크 설명 변경</a></li>
-								<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="디스크 크기 변경">디스크 크기 변경</a></li>
-								<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="디스크 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">디스크 크기 변경</a></li>
-								<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
-								<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="main.popDeleteCheckName($event, '디스크', volume.name, contents.deleteVolumesJob, volume.volumeId)"><a class="delete" href="javascript:void(0);" title="디스크 삭제">디스크 삭제</a></li>
-								<li ng-if="volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="디스크에 백업이미지가 존재하여 삭제할수 없습니다.">디스크 삭제</a></li>
-								<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="디스크 상태가 ‘사용가능’인 경우 삭제 가능합니다.">디스크 삭제</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'snapshot', volume);" title="스냅샷 생성">스냅샷 생성</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'rename', volume);" title="볼륨 이름 변경">볼륨 이름 변경</a></li>
+								<li><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'description', volume);" title="볼륨 설명 변경">볼륨 설명 변경</a></li>
+								<li ng-if="volume.status =='available'"><a href="javascript:void(0);" ng-click="contents.fn.formOpen($event, 'resize', volume);" title="볼륨 크기 변경">볼륨 크기 변경</a></li>
+								<li ng-if="volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="볼륨 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">볼륨 크기 변경</a></li>
+								<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="인스턴스 연결 해제" >인스턴스 연결 해제</a></li>-->
+								<li ng-if="volume.status =='available' && !volume.backupImageCount" ng-click="main.popDeleteCheckName($event, '볼륨', volume.name, contents.deleteVolumesJob, volume.volumeId)"><a class="delete" href="javascript:void(0);" title="볼륨 삭제">볼륨 삭제</a></li>
+								<li ng-if="volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="볼륨에 스냅샷이 존재하여 삭제할수 없습니다.">볼륨 삭제</a></li>
+								<li ng-if="volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="볼륨 상태가 ‘사용가능’인 경우 삭제 가능합니다.">볼륨 삭제</a></li>
 							</ul>
 						</div>
 					</td>
@@ -212,7 +212,7 @@
 		</div>
 	</div>
 </section>
-<!-- 디스크 관리 리스트(테이블형) -->
+<!-- 볼륨 관리 리스트(테이블형) -->
 
 <!-- 검색결과 없음 -->
 <div class="text-center blank-page" ng-if="contents.isStorageMainListLoad && (contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length == 0">
@@ -225,17 +225,17 @@
 </div>
 <!-- //검색결과 없음 -->
 
-<!-- 생성된 디스크 없을 경우 -->
+<!-- 생성된 볼륨 없을 경우 -->
 <div class="welcome_layer" ng-if="!!main.userTenantId && !contents.isStorageMainListLoad && (contents.storageMainList | filter:{ taskState : '!deleting' }).length == 0">
-	<div class="guide_fnt arrw_btm">신규 디스크를 만들고 가상서버와 연결하세요.</div>
+	<div class="guide_fnt arrw_btm">신규 볼륨을 만들고 인스턴스와 연결하세요.</div>
 	<div class="text-center blank-page">
 		<div class="img">
 			<img src="../assets/img/icon/data-center.png">
 		</div>
 		<div class="cont">
-			<p>디스크 관리는<span class="point">Block Storage 기반의 데이터 저장공간 서비스를 제공</span>합니다.</p>
-			<p>할당된 클라우드 자원 용량 내에서 사용자 스스로 필요한 만큼 디스크를 만들고, 생성된 가상 서버와 연결하는 방식으로 디스크를 수평적으로 확장할 수 있습니다.</p>
-			<p><span class="point">‘디스크 만들기’</span>를 통해 서비스를 시작해 보세요.</p>
+			<p>볼륨 관리는<span class="point">Block Storage 기반의 데이터 저장공간 서비스를 제공</span>합니다.</p>
+			<p>할당된 클라우드 자원 용량 내에서 사용자 스스로 필요한 만큼 볼륨을 만들고, 생성된 인스턴스와 연결하는 방식으로 볼륨를 수평적으로 확장할 수 있습니다.</p>
+			<p><span class="point">‘볼륨 만들기’</span>를 통해 서비스를 시작해 보세요.</p>
 		</div>
 		<!-- 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화 -->
 		<div class="text-center" ng-if="main.checkUseYnIaas=='N'">
@@ -248,7 +248,7 @@
 	</div>
 </div>
 
-<!-- //생성된 디스크 없을 경우 -->
+<!-- //생성된 볼륨 없을 경우 -->
 
 <!-- 테넌트 생성 전인 경우(new) -->
 <div class="welcome_layer" ng-if="!main.userTenantId">
@@ -257,7 +257,7 @@
 			<img src="../assets/img/icon/data-center.png" alt="data-center">
 		</div>
 		<div class="cont">
-			<p>서버가상화 서비스에서는 리눅스(Linux) 또는 윈도우(Windows) 운영체제가 포함된 가상서버를 생성하여 사용할 수 있습니다.</p>
+			<p>서버가상화 서비스에서는 리눅스(Linux) 또는 윈도우(Windows) 운영체제가 포함된 인스턴스를 생성하여 사용할 수 있습니다.</p>
 			<p><span class="point">'서비스 시작하기'</span>를 통해 서비스를 시작해 보세요.</p>
 		</div>
 		<button type="button" class="btn btn-default btn-lg" ng-click="main.createPortalOrgSystem('iaas');" ng-disabled="!main.checkResourceUserRole()">서비스 시작하기</button>
