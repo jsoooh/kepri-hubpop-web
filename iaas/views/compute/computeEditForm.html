@@ -6,11 +6,11 @@
 		</colgroup>
 		<tbody>
 			<tr>
-				<th scope="row">서버 이름(변경 전)</th>
+				<th scope="row">인스턴스 이름(변경 전)</th>
 				<td><input type="text" name="" value="" class="form-control form-control-sm" placeholder="{{pop.instance.name}}" disabled></td>
 			</tr>
 			<tr>
-				<th scope="row">서버 이름(변경 후)</th>
+				<th scope="row">인스턴스 이름(변경 후)</th>
 				<td><input type="text" name="changeName" class="form-control form-control-sm" ng-model="pop.newInstanceName" value="" maxlength="50" ng-keypress="pop.fn.inputEnter($event)" placeholder="이름을 입력해 주세요." validation="required|custom:pop.fn.serverNameCustomValidationCheck(pop.newInstanceName)"></td>
 			</tr>
 		</tbody>

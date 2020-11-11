@@ -32,7 +32,7 @@ angular.module('iaas.controllers')
         ct.tabIndex = 0;
         ct.lbPortCnt = 0;   //테넌트의 전체 lbPort 갯수
 
-        // 부하분산 서버관리 디테일 페이지에서 리스트 페이지로 넘어올때 필요하여 추가
+        // 부하분산 인스턴스 관리 디테일 페이지에서 리스트 페이지로 넘어올때 필요하여 추가
         if ($location.$$search.tabIndex) {
             ct.tabIndex = $location.$$search.tabIndex;
         }
@@ -71,7 +71,7 @@ angular.module('iaas.controllers')
             ct.fnGetServerMainList();
         };*/
 
-        //20181120 sg0730  서버사양변경 PopUp 추가
+        //20181120 sg0730  인스턴스 사양변경 PopUp 추가
         ct.computePopEditServerForm = function (instance, $event, $index) {
         	 var dialogOptions = {
                  controller : "iaasComputePopEditServerCtrl" ,
@@ -174,7 +174,7 @@ angular.module('iaas.controllers')
         ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'shelved_offloaded', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
-        // 서버메인 tenant list 함수
+        // 인스턴스 메인 tenant list 함수
         ct.fnGetServerMainList = function() {
             if (!ct.data || !ct.data.tenantId) {
                 common.showAlertWarning('테넌트 정보가 없습니다.');
@@ -198,7 +198,7 @@ angular.module('iaas.controllers')
                         ct.loadingServerList = true;
                     }
                 }
-                //서버 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                //인스턴스 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
                 if (!ct.loadingServerList) {
                     $scope.main.checkUseYnPortalOrgSystem("iaas");
                 }
@@ -208,7 +208,7 @@ angular.module('iaas.controllers')
                 var nowDate = new Date();
                 angular.forEach(ct.serverMainList, function (serverMain) {
                     ct.fn.setProcState(serverMain);
-                    // 서버 생성중, 변경 상태가 있다면 true
+                    // 인스턴스 생성중, 변경 상태가 있다면 true
                     if (serverMain.procState != 'end') {
                         isServerStatusCheck = true;
                     }
@@ -326,9 +326,9 @@ angular.module('iaas.controllers')
                             ct.fn.setRdpConnectDomain(serverItem);
                             // VM 생성시 1시간 초과하여 미생성시 자동 삭제 처리
                             if (newItem && serverItem.floatingIp == "") {
-                                common.showAlertInfo('"' + serverItem.name + '" 서버가 생성한지 1시간이 지나 삭제되었습니다.');
+                                common.showAlertInfo('"' + serverItem.name + '" 인스턴스가 생성한지 1시간이 지나 삭제되었습니다.');
                             } else if (newItem) {
-                                common.showAlertSuccess('"' + serverItem.name + '" 서버가 생성 되었습니다.');
+                                common.showAlertSuccess('"' + serverItem.name + '" 인스턴스가 생성 되었습니다.');
                                 serverItem.newCreated = true;
                                 $timeout(function () {
                                     serverItem.newCreated = false;
@@ -336,23 +336,23 @@ angular.module('iaas.controllers')
                             } else {
                                 var message = '"' + serverItem.name + '" ';
                                 if (beforUiTask == "starting") {
-                                    message += '서버가 시작 되었습니다.'
+                                    message += '인스턴스가 시작 되었습니다.'
                                 } else if (beforUiTask == "stopping")  {
-                                    message += '서버가 정지 되었습니다.'
+                                    message += '인스턴스가 정지 되었습니다.'
                                 } else if (beforUiTask == "pausing")  {
-                                    message += '서버가 일시정지 되었습니다.'
+                                    message += '인스턴스가 일시정지 되었습니다.'
                                 } else if (beforUiTask == "unpausing")  {
-                                    message += '서버가 정지해제 되었습니다.'
+                                    message += '인스턴스가 정지해제 되었습니다.'
                                 } else if (beforUiTask == "rebooting")  {
-                                    message += '서버가 재시작 되었습니다.'
+                                    message += '인스턴스가 재시작 되었습니다.'
                                 } else if (beforUiTask == "shelved")  {
-                                    message += '서버가 비활성화 되었습니다.'
+                                    message += '인스턴스가 비활성화 되었습니다.'
                                 } else if (beforUiTask == "shelved_offloaded")  {
-                                    message += '서버가 활성화 되었습니다.'
+                                    message += '인스턴스가 활성화 되었습니다.'
                                 } else if (beforUiTask == "resized")  {
-                                    message += '서버의 사양이 되었습니다.'
+                                    message += '인스턴스의 사양이 되었습니다.'
                                 } else {
-                                    message += '서버에 적용 되었습니다.'
+                                    message += '인스턴스에 적용 되었습니다.'
                                 }
                                 common.showAlertSuccess(message);
                             }
@@ -382,7 +382,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 서버 상태
+        // 인스턴스 상태
         ct.fn.checkServerState = function(instanceId) {
             var param = {
                 tenantId : ct.data.tenantId
@@ -432,7 +432,7 @@ angular.module('iaas.controllers')
                         var isServerStatusCheck = false;
                         // var isReplaceServerInfo = false;
 
-                        // 서버 리스트 삭제된 항목 제거
+                        // 인스턴스 리스트 삭제된 항목 제거
                         if (ct.serverMainList.length > serverStates.length) {
                             var newServerMainList = new Array();
                             angular.forEach(ct.serverMainList, function (server) {
@@ -519,7 +519,7 @@ angular.module('iaas.controllers')
         };*/
 
         //추가 E
-        // 서버삭제
+        // 인스턴스 삭제
         ct.deleteInstanceJob = function(id) {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -546,31 +546,31 @@ angular.module('iaas.controllers')
         ct.selectedValues = {};
         ct.fnServerConfirm = function(action,instance,index,$event) {
             if (action == "START") {
-                common.showConfirm('시작',instance.name +' 서버를 시작하시겠습니까?').then(function(){
+                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "STOP") {
-                common.showConfirm('정지',instance.name +' 서버를 정지하시겠습니까?').then(function(){
+                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "PAUSE") {
-                common.showConfirm('일시정지', instance.name +' 서버를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "UNPAUSE") {
-                common.showConfirm('정지해제', instance.name +' 서버를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "REBOOT") {
-                common.showConfirm('재시작',instance.name +' 서버를 재시작하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "SHELVE") {
-                common.showConfirm('비활성화', instance.name + ' 서버를 비활성화 하시겠습니까?').then(function () {
+                common.showConfirm('비활성화', instance.name + ' 인스턴스를 비활성화 하시겠습니까?').then(function () {
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if (action == "UNSHELVE") {
-                common.showConfirm('비활성화 해제',instance.name +' 서버를 활성화 하시겠습니까?').then(function(){
+                common.showConfirm('비활성화 해제',instance.name +' 인스턴스를 활성화 하시겠습니까?').then(function(){
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "DELETE") {
@@ -632,11 +632,11 @@ angular.module('iaas.controllers')
         };
 
         // SnapShot 생성
-        //20181120 sg0730  백업 이미지 생성 PopUp 추가
+        //20181120 sg0730  스냅샷 생성 PopUp 추가
         ct.fn.createPopSnapshot = function($event,instance) {
         	var dialogOptions = {};
         	if (instance.vmState != 'stopped') {
-                common.showAlertWarning('서버를 정지 후 생성가능합니다.');
+                common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
             	dialogOptions = {
             			controller : "iaasCreatePopSnapshotCtrl" ,
@@ -651,7 +651,7 @@ angular.module('iaas.controllers')
             }
         }; 
         
-        // sg0730 차후 서버 이미지 생성 후 페이지 이동.
+        // sg0730 차후 인스턴스 이미지 생성 후 페이지 이동.
         ct.reflashSnapShotCallBackFunction = function () {
         	 $scope.main.goToPage('/iaas/compute');
         };
@@ -676,7 +676,7 @@ angular.module('iaas.controllers')
              });
         };
 
-        //인스턴스 디스크 생성 팝업
+        //인스턴스 볼륨 생성 팝업
        /* ct.fn.createInstanceVolumePop = function(instance) {
             ct.selectInstance = instance;
             $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeVolumeForm.html" + _VersionTail();
@@ -684,7 +684,7 @@ angular.module('iaas.controllers')
             $("#aside-aside1").stop().animate({"right":"0"}, 500);
         };*/
         
-        //인스턴스 디스크 생성 팝업
+        //인스턴스 볼륨 생성 팝업
         ct.fn.createInstanceVolumePop = function($event,instance) {
         	var dialogOptions =  {
 			            			controller : "iaasComputeVolumeFormCtrl" ,
@@ -697,7 +697,7 @@ angular.module('iaas.controllers')
             $scope.actionLoading = true; // action loading
         };
 
-        // sg0730 인스턴스 디스크 생성 팝업
+        // sg0730 인스턴스 볼륨 생성 팝업
         ct.creInsVolPopCallBackFunction = function () {
         	 $scope.main.goToPage('/iaas/compute');
         };
@@ -714,7 +714,7 @@ angular.module('iaas.controllers')
 
         // 공인 IP 연결 해제 펑션
         ct.fn.ipConnectionSet = function(instance,type,index) {
-            common.showConfirm('메세지',instance.name +' 서버의 접속 IP를 해제하시겠습니까?').then(function(){
+            common.showConfirm('메세지',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function(){
                 var param = {
                     tenantId : ct.data.tenantId,
                     instanceId : instance.id
@@ -916,10 +916,10 @@ angular.module('iaas.controllers')
 
         /*[20190621.HYG] It's a func to bind Instance monitoring data
         Dev History
-        테넌트 전체 서버 모니터링 데이터 호출 API 는 사용안함
-        - 서버상태변경(정지->시작) 후 API 호출 할 때 서버의 모니터링 데이터가 0 응답함
-        - 서버 시작 후 일정 시간 후에 정상데이터 호출 되는데 그 시점을 핸들링 할 수 없음.
-        - 서버 정보 세팅하는 경우 1개 인스턴스의 모니터링 데이터를 호출하는 방식으로 변경.
+        테넌트 전체 인스턴스 모니터링 데이터 호출 API 는 사용안함
+        - 인스턴스상태변경(정지->시작) 후 API 호출 할 때 인스턴스의 모니터링 데이터가 0 응답함
+        - 인스턴스 시작 후 일정 시간 후에 정상데이터 호출 되는데 그 시점을 핸들링 할 수 없음.
+        - 인스턴스 정보 세팅하는 경우 1개 인스턴스의 모니터링 데이터를 호출하는 방식으로 변경.
         fnGetInstancesData 메서드의 응답에 필요 데이터가 존재하므로 조회 된 데이터를 바인드하는 기능으로 변경. 2019.11.11
         ct.fnSetInstanceUseRate = function (instance) {
             if (instance.uiTask && instance.uiTask == 'active') {
@@ -951,7 +951,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 서버 알람 상태 체크
+        // 인스턴스 알람 상태 체크
         ct.fnSetInstanceState = function (server, instance) {
             server.alarmStatus = instance.alarmStatus;
             if (server.vmState == 'active' && (instance.alarmStatus == 'minor' || instance.alarmStatus == 'warning' || instance.alarmStatus == 'critical')) {
@@ -959,7 +959,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 서버 알람 상태 조회
+        // 인스턴스 알람 상태 조회
         ct.fnGetInstancesData = function (server) {
             var params = {
                 limit: 1000 
@@ -1061,9 +1061,9 @@ angular.module('iaas.controllers')
         ct.data.baseDomainName = ct.rdpBaseDomain;
         ct.data.subDomainName = "";
 
-        ct.data.name = 'server-01';
+        ct.data.name = 'instance-01';
 
-        // 서버 이름 중복 검사
+        // 인스턴스 이름 중복 검사
         ct.fn.serverNameCustomValidationCheck = function(name) {
             if (ct.serverNameList.indexOf(name) > -1) {
                 return {isValid : false, message : "이미 사용중인 이름입니다."};
@@ -1380,8 +1380,8 @@ angular.module('iaas.controllers')
             }
         };
         
-        // 디스크 생성 부분 추가 2018.11.13 sg0730
-        // 서버만들기 - 사양선택 관련 속도개선 api로 변경
+        // 볼륨 생성 부분 추가 2018.11.13 sg0730
+        // 인스턴스 만들기 - 사양선택 관련 속도개선 api로 변경
         ct.fn.getTenantResource = function()  {
             var params = {
                 tenantId : ct.data.tenantId
@@ -1508,7 +1508,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        //디스크생성 변수
+        //볼륨 생성 변수
         ct.volumeSize = 0;
         ct.inputVolumeSize = ct.volumeSize;
         ct.volumeSliderOptions = {
@@ -1522,7 +1522,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        //서버 생성
+        //인스턴스 생성
         var clickCheck = false;
         ct.fn.createServer = function()  {
             if(clickCheck) return;
@@ -1567,7 +1567,7 @@ angular.module('iaas.controllers')
                 $timeout(function () {
                     clickCheck = false;
                     $scope.main.loadingMainBody = false;
-                    common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                    common.showAlertSuccess(ct.data.name+" 인스턴스 생성이 시작 되었습니다.");
                     // 페이지 이동으로 바꿔야 하고
                     $scope.main.goToPage("/iaas/compute");
                 }, 5000);

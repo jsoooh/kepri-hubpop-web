@@ -61,7 +61,7 @@ angular.module('iaas.controllers')
                     if (data.totalElements != 0) {
                         ct.isStorageMainListLoad = true;
                     }
-                    //디스크 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                    //볼륨 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
                     if (volumes.length == 0) {
                         $scope.main.checkUseYnPortalOrgSystem("iaas");
                     }
@@ -79,7 +79,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        //추가 전체 디스크 크기E
+        //추가 전체 볼륨 크기E
         $scope.actionLoading = false; // action loading
         $scope.authenticating = false; // action loading massage contents
         $scope.actionBtnHied = false; // btn enabled
@@ -170,7 +170,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','백업 이미지을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
             }
         };
 
@@ -219,7 +219,7 @@ angular.module('iaas.controllers')
             ct.fn.getStorageList();
         };
 
-        // 디스크 설명 수정
+        // 볼륨 설명 수정
         ct.fn.modifyDescription = function($event,volume) {
 
             var dialogOptions =  {
@@ -243,7 +243,7 @@ angular.module('iaas.controllers')
         };
 
         //////////////////////////////////////////////////////////////////////////
-        //////////       2018.11.29 디스크 사이즈 변경 팝업      sg0730       ////////////////
+        //////////       2018.11.29 볼륨 사이즈 변경 팝업      sg0730       ////////////////
         //////////////////////////////////////////////////////////////////////////
         ct.fn.reSizePopStorage = function($event,volume) {
 
@@ -287,10 +287,10 @@ angular.module('iaas.controllers')
         ct.formName          = "storageForm";
         ct.validDisabled = true;
 
-        ct.volume.name      = 'disk-01';
+        ct.volume.name      = 'volume-01';
         ct.storageNameList  = [];
 
-        //디스크생성 변수
+        //볼륨 생성 변수
         ct.volumeSize = 100;
         ct.volumeSliderOptions = {
             showSelectionBar : true,
@@ -326,7 +326,7 @@ angular.module('iaas.controllers')
                 common.showAlertError("항목", "잘못된 값이 있거나 필수사항을 입력하지 않았습니다.");
                 return;
             } else if (ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
-                return common.showAlert("디스크 용량이 부족합니다.")
+                return common.showAlert("볼륨 용량이 부족합니다.")
             }
             ct.fn.createVolume();
         };
@@ -353,7 +353,7 @@ angular.module('iaas.controllers')
 
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'POST', params);
             returnPromise.success(function (data, status, headers) {
-                common.showAlertSuccess(ct.volume.name+" 디스크 생성이 시작 되었습니다.");
+                common.showAlertSuccess(ct.volume.name+" 볼륨 생성이 시작 되었습니다.");
                 $scope.main.goToPage("/iaas/storage");
             });
             returnPromise.error(function (data, status, headers) {
@@ -384,12 +384,12 @@ angular.module('iaas.controllers')
                     ct.tenantResource.usedResource.volumePercent = (ct.tenantResource.usedResource.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
                     ct.tenantResource.available.volumePercent = (ct.tenantResource.available.volumeGigabytes/ct.tenantResource.maxResource.volumeGigabytes)*100;
 
-                    // 디스크 크기 최대 제한
+                    // 볼륨 크기 최대 제한
                     ct.volumeSliderOptions.ceil = ct.tenantResource.available.volumeGigabytes;
                     if (ct.volumeSliderOptions.ceil > ct.maxSingleDiskSize ) {
                         ct.volumeSliderOptions.ceil = ct.maxSingleDiskSize;
                     }
-                    // 로딩되고나서 디스크 크기 최소로 자동설정
+                    // 로딩되고나서 볼륨 크기 최소로 자동설정
                     ct.inputVolumeSize = ct.volumeSliderOptions.minLimit;
                     ct.volumeSize = ct.volumeSliderOptions.minLimit;
                 }
@@ -660,7 +660,7 @@ angular.module('iaas.controllers')
                     ct.fn.createSnapshotPop($event,volume);
                 }
             } else {
-                common.showAlert('메세지','백업 이미지을 생성할 수 있는 상태가 아닙니다.');
+                common.showAlert('메세지','스냅샷을 생성할 수 있는 상태가 아닙니다.');
             }
         };
         
@@ -699,7 +699,7 @@ angular.module('iaas.controllers')
         pop.formName = "snapshotEditForm";
         pop.validDisabled = true;
         pop.dialogClassName = "modal-lg";
-        pop.title = "디스크 수정";
+        pop.title = "볼륨 수정";
 
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/subMenus/storageEditForm.html" + _VersionTail();
 
@@ -770,16 +770,16 @@ angular.module('iaas.controllers')
             if (isNaN(Number(pop.expandVolumeSize))) return;
             var checkByte = $bytes.lengthInUtf8Bytes(pop.volume.description);
         	if (checkByte > 255) {
-                common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("볼륨 설명이 255Byte를 초과하였습니다.");
         		return;
         	}
             if (Number(pop.expandVolumeSize) < pop.volume.size) {
-                common.showAlertWarning("디스크 크기는 size up만 가능 합니다. 디스크 크기 최소값 : " + pop.volume.size + ", 입력값 : " + pop.expandVolumeSize);
+                common.showAlertWarning("볼륨 크기는 size up만 가능 합니다. 볼륨 크기 최소값 : " + pop.volume.size + ", 입력값 : " + pop.expandVolumeSize);
                 pop.expandVolumeSize = pop.volume.size;
                 return;
             }
             if (Number(pop.expandVolumeSize) > (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes)) {
-                common.showAlertWarning("디스크 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.expandVolumeSize );
+                common.showAlertWarning("볼륨 크기가 쿼터를 초과 하였습니다. 쿼터 크기 : " + (pop.resource.maxResource.volumeGigabytes - pop.resource.usedResource.volumeGigabytes) + ", 입력값 : " + pop.expandVolumeSize );
                 pop.expandVolumeSize = pop.volume.size;
                 return;
             }
@@ -823,7 +823,7 @@ angular.module('iaas.controllers')
         }
     })
     //////////////////////////////////////////////////////////////////////////
-    //////////////       2018.11.21 디스크 생성 폼      sg0730       //////////////////
+    //////////////       2018.11.21 볼륨 생성 폼      sg0730       //////////////////
     //////////////////////////////////////////////////////////////////////////
     .controller('iaasCreateStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasCreateStorageSnapshotFormCtrl", 1);
@@ -840,7 +840,7 @@ angular.module('iaas.controllers')
         pop.formName = "createSnapshotForm";
         pop.validDisabled = true;
         pop.dialogClassName = "modal-lg";
-        pop.title = "디스크 백업 이미지 생성";
+        pop.title = "볼륨 스냅샷 생성";
 
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/createSnapshotForm.html" + _VersionTail();
 
@@ -884,7 +884,7 @@ angular.module('iaas.controllers')
         }
     })
     //////////////////////////////////////////////////////////////////////////
-    //////////////       2018.11.22 디스크 백업 이미지 생성 팝업      sg0730 ///////////////
+    //////////////       2018.11.22 볼륨 스냅샷 생성 팝업      sg0730 ///////////////
     //////////////////////////////////////////////////////////////////////////    
      .controller('iaasCreateStorageSnapshotPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : iaasCreateStorageSnapshotPopFormCtrl", 1);
@@ -898,7 +898,7 @@ angular.module('iaas.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         
-        $scope.dialogOptions.title 		= "백업 이미지  생성";
+        $scope.dialogOptions.title 		= "볼륨 스냅샷 생성";
         $scope.dialogOptions.okName 	= "생성";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageCreatePopSnapshotForm.html" + _VersionTail();
@@ -946,7 +946,7 @@ angular.module('iaas.controllers')
         }
     })
     //////////////////////////////////////////////////////////////////////////
-    //////////       2018.11.21 디스크 이름 변경 팝업      sg0730       ////////////////
+    //////////       2018.11.21 볼륨 이름 변경 팝업      sg0730       ////////////////
     //////////////////////////////////////////////////////////////////////////    
     .controller('iaasReNamePopStorageCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
     	_DebugConsoleLog("storageControllers.js : iaasReNamePopStorageCtrl", 1);
@@ -963,7 +963,7 @@ angular.module('iaas.controllers')
     	pop.storageNameList             = [];
         pop.newVolNm                    = "";
     	
-    	$scope.dialogOptions.title 		= "디스크 이름 변경";
+    	$scope.dialogOptions.title 		= "볼륨 이름 변경";
     	$scope.dialogOptions.okName 	= "변경";
     	$scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.authenticate = true;
@@ -1021,7 +1021,7 @@ angular.module('iaas.controllers')
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		returnPromise.success(function (data, status, headers) {
                 common.mdDialogHide();
-    			common.showAlertSuccess("디스크 이름이 변경 되었습니다.");
+    			common.showAlertSuccess("볼륨 이름이 변경 되었습니다.");
     			if (angular.isFunction(pop.callBackFunction)) {
     				pop.callBackFunction();
     			}
@@ -1036,7 +1036,7 @@ angular.module('iaas.controllers')
     	}
     })
     //////////////////////////////////////////////////////////////////////////
-    //////////       2018.11.21 디스크 사이즈 변경 팝업      sg0730       ////////////////
+    //////////       2018.11.21 볼륨 사이즈 변경 팝업      sg0730       ////////////////
     //////////////////////////////////////////////////////////////////////////    
     .controller('iaasReSizePopStorageCtrl', function ($scope, $location, $state, $translate, $stateParams, $bytes, $timeout, $interval, user, common, ValidationService, CONSTANTS ) {
     	_DebugConsoleLog("storageControllers.js : iaasReSizePopStorageCtrl", 1);
@@ -1051,7 +1051,7 @@ angular.module('iaas.controllers')
     	pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
         pop.maxSingleDiskSize           = CONSTANTS.iaasDef.insMaxDiskSize;
     	
-    	$scope.dialogOptions.title 		= "디스크 크기 변경";
+    	$scope.dialogOptions.title 		= "볼륨 크기 변경";
     	$scope.dialogOptions.okName 	= "변경";
     	$scope.dialogOptions.closeName 	= "닫기";
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
@@ -1060,7 +1060,7 @@ angular.module('iaas.controllers')
     	pop.volumeSize 					= 0;
     	pop.inputVolumeSize             = 0;
 
-        // 디스크 크기 제한 설정
+        // 볼륨 크기 제한 설정
         pop.reSizeSliderOptions = {
             showSelectionBar : true,
             minLimit : 10,
@@ -1150,10 +1150,10 @@ angular.module('iaas.controllers')
 
     		if (pop.volumeSize == pop.volume.size) {
     		    $scope.actionBtnHied = false;
-    		    return common.showAlert("디스크 크기가 변경되지 않았습니다.");
+    		    return common.showAlert("볼륨 크기가 변경되지 않았습니다.");
             } else if (pop.volumeSize < pop.volumeSize) {
                 $scope.actionBtnHied = false;
-                return common.showAlert("디스크 크기가 기존보다 작습니다.")
+                return common.showAlert("볼륨 크기가 기존보다 작습니다.")
             }
     		pop.fn.reSizeStor();
     	};
@@ -1174,7 +1174,7 @@ angular.module('iaas.controllers')
     		var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
     		returnPromise.success(function (data, status, headers) {
                 common.mdDialogHide();
-    			common.showAlertSuccess("디스크 크키가 변경 되었습니다.");
+    			common.showAlertSuccess("볼륨 크키가 변경 되었습니다.");
     			if ( angular.isFunction(pop.callBackFunction) ) {
     				pop.callBackFunction();
     			}
@@ -1211,7 +1211,7 @@ angular.module('iaas.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "디스크 설명 변경";
+        $scope.dialogOptions.title 		= "볼륨 설명 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/storageDescriptionPopForm.html" + _VersionTail();
@@ -1230,7 +1230,7 @@ angular.module('iaas.controllers')
 
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newVolDesc);
             if (checkByte > 255) {
-                common.showAlertWarning("디스크 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("볼륨 설명이 255Byte를 초과하였습니다.");
                 $scope.actionBtnHied = false;
                 return;
             }
@@ -1254,7 +1254,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume', 'PUT', {volume : param});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("디스크 설명이 변경 되었습니다.");
+                common.showAlertSuccess("볼륨 설명이 변경 되었습니다.");
 
                 /* 20.04.29 - 리스트형 추가로 이미지형일때와 리스트형일때 callbackFunction 분기 by ksw*/
                 if ($scope.contents.listType == 'image') {

@@ -1,16 +1,16 @@
 <div class="pop_tit">
-	<span class="p_stit">- 연결서버 유형 : </span>
+	<span class="p_stit">- 연결 인스턴스 유형 : </span>
 	<div class="radio radio-inline">
 		<input type="radio" name="pushType" id="app-radio1-1" value="SERVER" ng-checked="pop.port.connType == 'server'" ng-disabled="pop.port.connType == 'image'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-		<label for="app-radio1-1" class="label">서버</label>
+		<label for="app-radio1-1" class="label">인스턴스</label>
 	</div>
 	<div class="radio radio-inline">
 		<input type="radio" name="pushType" id="app-radio1-2" value="IMAGE" ng-checked="pop.port.connType == 'image'" ng-disabled="pop.port.connType == 'server'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
-		<label for="app-radio1-2" class="label">이미지</label>
+		<label for="app-radio1-2" class="label">스냅샷</label>
 	</div>
 </div>
 
-<!-- 대상서버선택(서버) -->
+<!-- 대상 인스턴스 선택(인스턴스) -->
 <div class="tbw type1 mt20" ng-if="pop.port.connType == 'server'">
 	<table class="table">
 		<colgroup>
@@ -21,7 +21,7 @@
 		<thead>
 		<tr>
 			<th scope="col">선택</th>
-			<th scope="col">서버이름</th>
+			<th scope="col">인스턴스 이름</th>
 			<th scope="col">내부 IP</th>
 		</tr>
 		</thead>
@@ -39,9 +39,9 @@
 		</tbody>
 	</table>
 </div>
-<!-- 대상서버선택(서버) -->
+<!-- 대상 인스턴스 선택(인스턴스) -->
 
-<!-- 대상서버선택(이미지) -->
+<!-- 대상 인스턴스 선택(스냅샷) -->
 <div class="tbw type1 mt20" ng-if="pop.port.connType == 'image'">
 	<table class="table">
 		<colgroup>
@@ -50,20 +50,20 @@
 		</colgroup>
 		<tbody>
 		<tr>
-			<th>대상 백업 이미지</th>
+			<th>대상 스냅샷</th>
 			<td>
                 <input type="text" class="form-control" ng-model="pop.instanceSnapshotName" ng-disabled="pop.instanceSnapshotName">
 			</td>
 		</tr>
 		<tr>
-			<th>서버 이름</th>
-			<td><input type="text" class="form-control" name="serverName" ng-model="pop.port.connImageName" ng-disabled="pop.port.connImageName" maxlength="50" placeholder="서버 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+			<th>인스턴스 이름</th>
+			<td><input type="text" class="form-control" name="serverName" ng-model="pop.port.connImageName" ng-disabled="pop.port.connImageName" maxlength="50" placeholder="인스턴스 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
 		</tr>
 		<tr>
-			<th>서버 수</th>
-			<td><input type="text" class="form-control" name="serverCount" ng-model="pop.port.connImageCount" maxlength="50" placeholder="서버 수를 입력하세요." validation="alpha_dash|required"></td>
+			<th>인스턴스 수</th>
+			<td><input type="text" class="form-control" name="serverCount" ng-model="pop.port.connImageCount" maxlength="50" placeholder="인스턴스 수를 입력하세요." validation="alpha_dash|required"></td>
 		</tr>
 		</tbody>
 	</table>
 </div>
-<!-- //대상서버선택(이미지) -->
+<!-- //대상 인스턴스 선택(스냅샷) -->

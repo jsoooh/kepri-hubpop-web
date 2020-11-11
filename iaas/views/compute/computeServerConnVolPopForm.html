@@ -5,8 +5,8 @@
 			<thead class="grey">
 				<tr>
 					<th style="width:20%;">선택</th>
-					<th style="width:auto;">디스크명</th>
-					<th style="width:25%;">디스크 크기</th>
+					<th style="width:auto;">볼륨명</th>
+					<th style="width:25%;">볼륨 크기</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,38 +32,3 @@
 		</table>
 	</div>
 </scrollable-table>
-<!--
-<div class="tbl type1">
-	<table class="table">
-		<colgroup>
-			<col style="width:20%" />
-			<col style="width:auto" />
-			<col style="width:20%" />
-			<col style="width:25%" />
-		</colgroup>
-		<thead>
-			<th>선택</th>
-			<th>디스크명</th>
-			<th>부팅디스크</th>
-			<th>SIZE</th>
-		</thead>
-		<tbody>
-			<tr ng-repeat="volume in pop.volumeList">
-				<td>
-					<div class="radio radio-only">
-						<input type="radio" name="volumeRadio" id="{{volume.volumeId}}" ng-click="pop.fn.setInstanceVolume(volume)">
-						<label for="{{volume.volumeId}}"></label>
-					</div>
-				</td>
-				<td>{{volume.name}}</td>
-				<td>{{volume.volumeAttachment.bootAble?"Y":"N"}}</td>
-				<td>{{volume.size}}GB</td>
-			</tr>
-			<tr ng-if="pop.volumeList == 0">
-				<td colspan="4">{{ 'message.mi_dont_exist_list' | translate }}</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
--->
-<!-- //table -->

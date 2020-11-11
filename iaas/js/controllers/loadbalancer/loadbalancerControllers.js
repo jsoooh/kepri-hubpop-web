@@ -17,8 +17,8 @@ angular.module('iaas.controllers')
         ct.sltConnType = '';
         ct.serverMainList = [];
         ct.instanceSnapshots = [];
-        ct.data.iaasLbInfo.name = "lb-server-01";
-        ct.serverMainListCnt = 0;   //선택된 서버목록 갯수
+        ct.data.iaasLbInfo.name = "lb-instance-01";
+        ct.serverMainListCnt = 0;   //선택된 인스턴스목록 갯수
 
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenant.id;
@@ -38,7 +38,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 연결서버 유형: 서버 선택 시 서버 목록 불러옴
+        // 연결 인스턴스 유형: 인스턴스 선택 시 인스턴스 목록 불러옴
         ct.fn.GetServerMainList = function() {
             $scope.main.loadingMainBody = false;
             var param = {
@@ -62,7 +62,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 연결서버 유형: 이미지 선택시 백업 이미지 목록 불러옴
+        // 연결 인스턴스 유형: 스냅샷 선택시 스냅샷 목록 불러옴
         ct.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = false;
             var param = {
@@ -84,7 +84,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 부하분산 기본정보 - 연결서버 유형(이미지)선택시 대상 백업 이미지 이름을 동적으로 변화시킴
+        // 부하분산 기본정보 - 연결 인스턴스 유형(스냅샷)선택시 대상 스냅샷 이름을 동적으로 변화시킴
         ct.fn.sltInstanceSnapshotChange = function (sltInstanceSnapshotId) {
             var sltInstanceSnapshot = null;
             if (sltInstanceSnapshotId) {
@@ -99,7 +99,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 연결서버 유형 선택 버튼
+        // 연결 인스턴스 유형 선택 버튼
         ct.fn.choiceConnType = function(sltConnType) {
             if (sltConnType == "server") {
                 ct.data.iaasLbPort.connType = sltConnType;
@@ -110,7 +110,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        // LB생성(서버)
+        // LB생성(인스턴스)
         ct.fn.loadBalancerCreateServer = function() {
             var param = {};
             param.iaasLbInfo = {
@@ -147,7 +147,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // LB생성(이미지)
+        // LB생성(스냅샷)
         ct.fn.loadBalancerCreateImage = function() {
             var param = {
                 iaasLbInfo: {
@@ -178,7 +178,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        //연결서버 유형 : 서버인 목록 체크 갯수
+        //연결 인스턴스 유형 : 인스턴스인 목록 체크 갯수
         ct.fn.changeCheckCnt = function() {
             var cnt = 0;
             angular.forEach(ct.serverMainList, function(serverItem){
@@ -186,7 +186,7 @@ angular.module('iaas.controllers')
                     cnt ++;
                 }
             });
-            ct.serverMainListCnt = cnt;   //선택된 서버목록 갯수
+            ct.serverMainListCnt = cnt;   //선택된 인스턴스목록 갯수
         };
 
         // 이름 체크

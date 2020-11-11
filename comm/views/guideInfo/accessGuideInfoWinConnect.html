@@ -1,10 +1,10 @@
 <div class="accss_guideWrap">
-	<h2>Windows 서버 접속방법 안내</h2>
+	<h2>Windows 인스턴스 접속방법 안내</h2>
 	<h3>1. 사전 준비사항</h3>
-	<p class="txt_level1 pdb0">가상 윈도우 서버에 접속하기 위해 필요한 사전 준비사항을 안내합니다.</p>
+	<p class="txt_level1 pdb0">윈도우 인스턴스에 접속하기 위해 필요한 사전 준비사항을 안내합니다.</p>
 	
 	<h4>1) 접속 도구 확인</h4>
-	<p class="txt_level1 blt_none">접속 도구는 일반적인 윈도우 서버에 접속하는 것처럼 ‘원격 데스크톱 연결’ 을 사용합니다. </p>
+	<p class="txt_level1 blt_none">접속 도구는 일반적인 윈도우 인스턴스에 접속하는 것처럼 ‘원격 데스크톱 연결’ 을 사용합니다. </p>
 	<div class="imgWrap">
 		<img alt="" src="images/access_guide/access_guide_window_img01.png" alt="">
 	</div>
@@ -36,7 +36,7 @@
 
 	<div ng-if="!spop.data.rdpDomain">
 	<h4 class="pt80">3) DNS 설정</h4>
-	<p class="txt_level1 blt_none">윈도우 VM은 가상 네트워크 상에 존재하는 서버로서 사용자가 직접 접속할 수 없습니다. 가상네트워크 상의 윈도우VM으로 접속하기 위해서는 “Hosts 파일을 수정＂하거나 “DNS 서버를 추가” 하여야 합니다.</p>
+	<p class="txt_level1 blt_none">윈도우 VM은 가상 네트워크 상에 존재하는 인스턴스로서 사용자가 직접 접속할 수 없습니다. 가상네트워크 상의 윈도우VM으로 접속하기 위해서는 “Hosts 파일을 수정＂하거나 “DNS 서버를 추가” 하여야 합니다.</p>
 	<p class="txt_level4"><em>※</em>현재(2019.3.11) Hosts 파일 수정을 통한 접속방법을 사용하시기를 권장합니다.</p>
 	
 	<h5>Hosts 파일 수정</h5>
@@ -69,7 +69,7 @@
 	</div>
 
 	<h3 class="pt80">2. 접속 방법</h3>
-	<p class="txt_level1 pdb0">접속도구를 통해 생성된 가상 윈도우 서버에 접속하는 방법을 안내합니다.</p>
+	<p class="txt_level1 pdb0">접속도구를 통해 생성된 윈도우 인스턴스에 접속하는 방법을 안내합니다.</p>
 	
 	<h4>1) 접속 도구 실행</h4>
 	<div class="imgWrap">
@@ -77,26 +77,26 @@
 	</div>
 	<p class="txt_level2 pdb0">사용자PC에서 원격데스크톱 도구를 실행합니다.</p>
 	
-	<h4 class="pt80">2) 서버 접속</h4>
+	<h4 class="pt80">2) 인스턴스 접속</h4>
 	<div class="imgWrap">
 		<img alt="" src="images/access_guide/access_guide_window_img05.png" alt="">
 	</div>
-	<p class="txt_level1 blt_none" ng-if="!spop.data.rdpDomain">①  생성한 서버의 접속정보 를 참조하여 ‘접속 도메인’, ‘접속 계정’, ‘접속 비밀번호’를 입력하고 ‘확인’ 버튼을 클릭합니다.</p>
-	<p class="txt_level1 blt_none" ng-if="!!spop.data.rdpDomain">①  생성한 서버의 접속정보 를 참조하여 ‘접속 주소’, ‘접속 계정’, ‘접속 비밀번호’를 입력하고 ‘확인’ 버튼을 클릭합니다.</p>
+	<p class="txt_level1 blt_none" ng-if="!spop.data.rdpDomain">①  생성한 인스턴스의 접속정보 를 참조하여 ‘접속 도메인’, ‘접속 계정’, ‘접속 비밀번호’를 입력하고 ‘확인’ 버튼을 클릭합니다.</p>
+	<p class="txt_level1 blt_none" ng-if="!!spop.data.rdpDomain">①  생성한 인스턴스의 접속정보 를 참조하여 ‘접속 주소’, ‘접속 계정’, ‘접속 비밀번호’를 입력하고 ‘확인’ 버튼을 클릭합니다.</p>
 	<div class="txt_level_list">
-		<p class="txt_level3 type2">서버 접속 정보</p>
+		<p class="txt_level3 type2">인스턴스 접속 정보</p>
 		<dl>
 			<dt ng-if="!spop.data.rdpDomain">- 접속 도메인 :</dt><dt ng-if="!!spop.data.rdpDomain">- 접속 주소 :</dt><dd>{{spop.data.rdpConnectUrl}} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="main.copyToClipboard(spop.data.rdpConnectUrl, '클립보드에 복사 되었습니다.')"><span class="ico_sm ico_copy"></span></button></dd>
 			<dt>- 접속 계정 :</dt><dd>administrator</dd>
 			<dt>- 접속 비밀번호 :</dt><dd>kepri!234</dd>
 		</dl>
-		<p class="txt_level4"><em>*</em>분석용 서버의 경우 다음 계정과 비번을 사용하세요. 계정: kepco, 비밀번호: kepco123456/</p>
+		<p class="txt_level4"><em>*</em>분석용 인스턴스의 경우 다음 계정과 비번을 사용하세요. 계정: kepco, 비밀번호: kepco123456/</p>
 	</div>
 	
-	<div class="cnt_msg_box msg-warnning mt30">접속 계정과 비밀번호는 초기에 자동으로 설정됩니다. 보안상 비밀번호는 서버 접속 후에 반드시 변경하시기 바랍니다.</div>
+	<div class="cnt_msg_box msg-warnning mt30">접속 계정과 비밀번호는 초기에 자동으로 설정됩니다. 보안상 비밀번호는 인스턴스 접속 후에 반드시 변경하시기 바랍니다.</div>
 	
 	<div class="imgWrap">
 		<img alt="" src="images/access_guide/access_guide_window_img06.png" alt="">
 	</div>
-	<p class="txt_level1 blt_none">②  ‘서버 접속 인증서 확인 화면’에서 ‘예(Y)’를 클릭하고 원격 데스크톱 창을 통해 서버에 접속합니다.</p>
+	<p class="txt_level1 blt_none">②  ‘인스턴스 접속 인증서 확인 화면’에서 ‘예(Y)’를 클릭하고 원격 데스크톱 창을 통해 인스턴스에 접속합니다.</p>
 </div>

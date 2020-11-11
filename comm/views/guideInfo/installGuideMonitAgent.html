@@ -1,7 +1,7 @@
 <div class="accss_guideWrap">
 	<h2>HubPop 모니터링 Agent({{spop.data.osType}}) 설치</h2>
 	<h3>1. 설치 대상</h3>
-	<p class="txt_level1">본 가이드의 Agent 설치 가이드 대상은 모니터링 Agent가 설치되지 않은 HubPop 가상서버를 대상으로 한다.</p>
+	<p class="txt_level1">본 가이드의 Agent 설치 가이드 대상은 모니터링 Agent가 설치되지 않은 HubPop 인스턴스를 대상으로 한다.</p>
 	<div class="tbl type1">
 		<table class="table">
 			<colgroup>
@@ -20,21 +20,21 @@
 				<tr ng-show="spop.data.osType == 'centos' || spop.data.osType == 'ubuntu'">
 					<td>agentInstallerDist</td>
 					<td class="text-left">
-						가상 서버의 모니터링 Agent 설치파일입니다.
+						인스턴스버의 모니터링 Agent 설치파일입니다.
 					</td>
 					<td><a href="/download/agentInstallerDist.tar">agentInstallerDist.tar</a></td>
 				</tr>
 				<tr ng-show="spop.data.osType == 'windows'">
 					<td>agentInstallerDist</td>
 					<td class="text-left">
-						가상 서버의 모니터링 Agent 설치파일입니다.
+						인스턴스의 모니터링 Agent 설치파일입니다.
 					</td>
 					<td><a href="/download/agentInstallerDist.zip">agentInstallerDist.zip</a></td>
 				</tr>
 				<tr ng-show="spop.data.osType == 'windows'">
 					<td>agentInstallerDist</td>
 					<td class="text-left">
-						가상 서버의 모니터링 Agent 설정파일입니다.<br/>
+						인스턴스의 모니터링 Agent 설정파일입니다.<br/>
 						<font color="red">
 							* <strong>telegraf.conf</strong> 설정파일은 다운받는 VM의 정보를 이용하여 생성되므로 반드시 해당 VM에서 다운로드 받으셔야합니다 <br/>
 							<strong>(다른 VM에서는 사용 불가능합니다)</strong>
@@ -48,7 +48,7 @@
 	<div ng-show="spop.data.osType == 'centos' || spop.data.osType == 'ubuntu'">
 		<h3>2. 모니터링 Agent 설치 파일 Upload</h3>
 		<p class="txt_level1">
-			다운로드 받은 설치 자동화 파일인 agentInstallerDist.tar를 HubPop 가상서버에 Upload한다.<br>
+			다운로드 받은 설치 자동화 파일인 agentInstallerDist.tar를 HubPop 인스턴스에 Upload한다.<br>
 			HubPop에서 제공하는 SSH Client Tool인 bitvise를 활용하여 agentInstallerDist.tar파일을 upload한다.
 		</p>
 		<h4>2.1 Bitvise SSH Client Login</h4>
@@ -68,7 +68,7 @@
 			<img src="images/install_guide/install_guide_monit_agent_13.png">
 		</div>
 		<p class="txt_level2">
-			2) Sftp 화면이 다운로드 받은 agentInstallerDist.tar 파일을 서버에 Upload 한다.
+			2) Sftp 화면이 다운로드 받은 agentInstallerDist.tar 파일을 인스턴스에 Upload 한다.
 		</p>
 		<div class="imgWrap mgt0">
 			<img src="images/install_guide/install_guide_monit_agent_14.png">
@@ -157,7 +157,7 @@
 	<h3>5. 모니터링 화면 확인</h3>
 	<p class="txt_level1">
 		1) Agent가 설치 되어 모니터링 화면에서 시스템 상태를 조회 할 수 있다.<br>
-		2) HubPop 서버가상화 > [서버관리] 메뉴로 이동하여 서버를 선택하여 [상세 페이지]로 이동한다.<br>
+		2) HubPop 서버가상화 > [인스턴스] 메뉴로 이동하여 인스턴스를 선택하여 [상세 페이지]로 이동한다.<br>
 		3) 화면 하단 탭 중 [가상화 모니터링], [시스템로그]를 선택하여 시스템 상태를 확인 할 수 있다. (Agent 설치 후 3~5분 )
 	</p>
 	<div class="imgWrap mt30">

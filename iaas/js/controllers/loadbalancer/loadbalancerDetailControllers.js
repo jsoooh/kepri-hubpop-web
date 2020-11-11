@@ -21,7 +21,7 @@ angular.module('iaas.controllers')
         ct.data.instanceId = $stateParams.instanceId;
         ct.instanceDomainLinkInfos = [];
         ct.instance             = {};
-        ct.popServerMode        = "server"; //연결서버 추가 시 유형 : server/image
+        ct.popServerMode        = "server"; //연결 인스턴스 추가 시 유형 : server/image
 
         ct.fn.formOpen = function($event, state, data){
             ct.formType = state;
@@ -78,7 +78,7 @@ angular.module('iaas.controllers')
             ct.getLb();
         };
 
-        // 연결서버 - 수정
+        // 연결 인스턴스 - 수정
         ct.fn.editPopServer = function($event, lbservice) {
             var dialogOptions =  {
                 controller       : "iaasEditServerPopFormCtrl" ,
@@ -98,7 +98,7 @@ angular.module('iaas.controllers')
             }, 4000);
         };
 
-        // 연결서버 - 추가
+        // 연결 인스턴스 - 추가
         ct.fn.createPopServer = function($event, lbservice) {
             var dialogOptions =  {
                 controller       : "iaasCreateServerPopFormCtrl" ,
@@ -156,7 +156,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 연결서버 마우스 오버시 - OS 유형 정보 나타내기 위함.
+        // 연결 인스턴스 마우스 오버시 - OS 유형 정보 나타내기 위함.
         ct.GetServerMainList = function() {
             $scope.main.loadingMainBody = false;
             var param = {
@@ -226,7 +226,7 @@ angular.module('iaas.controllers')
                             ct.fn.checkLbState(lbLists.iaasLbInfo.id);
                         }, 2000);
                     } else {
-                        ct.GetServerMainList(); //서버 목록 조회
+                        ct.GetServerMainList(); //인스턴스 목록 조회
                     }
                     ct.loadbalancer = data.content;
                     ct.loadbalancer.iaasLbPorts = data.content.iaasLbPorts;
@@ -298,7 +298,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 포트 선택시 포트관리 및 연결 서버 탭
+        // 포트 선택시 포트관리 및 연결 인스턴스 탭
         ct.showPortDetail = function (iaasLbPort) {
             ct.hidePortDetails();
             $timeout(function () {
@@ -640,7 +640,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 부하분산 서버 이름/설명 변경
+        // 부하분산 인스턴스 이름/설명 변경
         pop.fn.reNmLb = function () {
             $scope.main.loadingMainBody = true;
 
@@ -656,7 +656,7 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.replacePage();
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("부하분산 서버 이름/설명이 변경 되었습니다.");
+                common.showAlertSuccess("부하분산 인스턴스 이름/설명이 변경 되었습니다.");
 
                 if (angular.isFunction(pop.callBackFunction)) {
                     pop.callBackFunction();
@@ -688,7 +688,7 @@ angular.module('iaas.controllers')
         pop.data = {};
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "부하 분산 서버 포트 만들기";
+        $scope.dialogOptions.title 		= "부하 분산 인스턴스 포트 만들기";
         $scope.dialogOptions.okName     = "생성";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerCreatePopPortForm.html" + _VersionTail();
@@ -752,7 +752,7 @@ angular.module('iaas.controllers')
         pop.data = {};
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "부하 분산 서버 포트 수정";
+        $scope.dialogOptions.title 		= "부하 분산 인스턴스 포트 수정";
         $scope.dialogOptions.okName     = "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerEditPopPortForm.html" + _VersionTail();
@@ -806,7 +806,7 @@ angular.module('iaas.controllers')
             });
         }
     })
-    // 연결서버 - 수정 버튼 팝업 컨트롤러
+    // 연결 인스턴스 - 수정 버튼 팝업 컨트롤러
     .controller('iaasEditServerPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasEditServerPopFormCtrl", 1);
 
@@ -824,7 +824,7 @@ angular.module('iaas.controllers')
         pop.instanceSnapshots = [];
         pop.instanceSnapshotName = "";
 
-        $scope.dialogOptions.title 		= "연결 서버 수정";
+        $scope.dialogOptions.title 		= "연결 인스턴스 수정";
         $scope.dialogOptions.okName     = "수정";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerEditPopServerForm.html" + _VersionTail();
@@ -850,7 +850,7 @@ angular.module('iaas.controllers')
             common.mdDialogCancel();
         };
 
-        // 연결서버 유형: 서버 선택시 서버 목록 불러옴
+        // 연결 인스턴스 유형: 인스턴스 선택시 인스턴스 목록 불러옴
         pop.fn.GetServerMainList = function() {
             $scope.main.loadingMainBody = false;
             var param = {
@@ -881,7 +881,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 연결서버 유형: 이미지 선택시 백업 이미지 목록 불러옴
+        // 연결 인스턴스 유형: 스냅샷 선택시 스냅샷 목록 불러옴
         pop.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = true;
             var param = {
@@ -908,7 +908,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 연결서버 유형이 server인 경우 연결서버 수정
+        // 연결 인스턴스 유형이 인스턴스인 경우 연결 인스턴스 수정
         pop.fn.editConnectServer = function() {
             $scope.main.loadingMainBody = true;
             var params = [];
@@ -940,7 +940,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 연결서버 유형이 image인 경우 연결서버 수정
+        // 연결 인스턴스 유형이 스냅샷인 경우 연결 인스턴스 수정
         pop.fn.editConnectImage = function() {
             $scope.main.loadingMainBody = true;
             var params = {
@@ -969,7 +969,7 @@ angular.module('iaas.controllers')
         pop.fn.GetServerMainList();
         pop.fn.getInstanceSnapshotList();
     })
-    // 연결서버 - 추가 버튼 팝업 컨트롤러
+    // 연결 인스턴스 - 추가 버튼 팝업 컨트롤러
     .controller('iaasCreateServerPopFormCtrl', function ($scope, $location, $state,$translate, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("loadbalancerDetailControllers.js : iaasCreateServerPopFormCtrl", 1);
 
@@ -984,7 +984,7 @@ angular.module('iaas.controllers')
         pop.serverMainList = [];
         pop.instanceSnapshots = [];
 
-        $scope.dialogOptions.title 		= "연결 서버 추가";
+        $scope.dialogOptions.title 		= "연결 인스턴스 추가";
         $scope.dialogOptions.okName    	= "추가";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerCreatePopServerForm.html" + _VersionTail();
@@ -1010,7 +1010,7 @@ angular.module('iaas.controllers')
             common.mdDialogCancel();
         };
 
-        // 연결서버 유형 선택 버튼
+        // 연결 인스턴스 유형 선택 버튼
         pop.fn.choiceConnType = function(sltConnType) {
             if (sltConnType == "server") {
                 pop.sltConnType = sltConnType;
@@ -1023,7 +1023,7 @@ angular.module('iaas.controllers')
             }
         };
 
-        // 연결서버 유형: 서버 선택시 서버 목록 불러옴
+        // 연결 인스턴스 유형: 인스턴스 선택시 인스턴스 목록 불러옴
         pop.fn.GetServerMainList = function() {
             $scope.main.loadingMainBody = false;
             var param = {
@@ -1047,7 +1047,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 연결서버 유형: 이미지 선택시 백업 이미지 목록 불러옴
+        // 연결 인스턴스 유형: 스냅샷 선택시 스냅샷 목록 불러옴
         pop.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = false;
             var param = {
@@ -1069,7 +1069,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 연결서버 유형이 server인 경우 연결서버 추가
+        // 연결 인스턴스 유형이 server인 경우 연결 인스턴스 추가
         pop.fn.createConnectServer = function() {
             $scope.main.loadingMainBody = true;
             var params = [];
@@ -1101,7 +1101,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 연결서버 유형이 image인 경우 연결서버 추가
+        // 연결 인스턴스 유형이 스냅샷 인 경우 연결 인스턴스 추가
         pop.fn.createConnectImage = function() {
             $scope.main.loadingMainBody = true;
             var params = {
@@ -1196,7 +1196,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/network/loadbalancer', 'PUT', params);
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("부하분산 서버 이름/설명이 변경 되었습니다.");
+                common.showAlertSuccess("부하분산 인스턴스 이름/설명이 변경 되었습니다.");
 
                 if (angular.isFunction(pop.callBackFunction)) {
                     pop.callBackFunction();

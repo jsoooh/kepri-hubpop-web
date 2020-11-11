@@ -1,7 +1,7 @@
 <div class="accss_guideWrap">
-	<h2>Linux(CentOS, Ubuntu)서버 접속방법 안내</h2>
+	<h2>Linux(CentOS, Ubuntu)인스턴스 접속방법 안내</h2>
 	<h3>1. 사전 준비사항</h3>
-	<p class="txt_level1">가상서버에 접속하기 위해 필요한 클라이언트 도구(client tools)를 다운로드 합니다.</p>
+	<p class="txt_level1">인스턴스에 접속하기 위해 필요한 클라이언트 도구(client tools)를 다운로드 합니다.</p>
 	<div class="tbl type1">
 		<table class="table">
 			<colgroup>
@@ -20,8 +20,8 @@
 				<tr>
 					<td>Bitvise SSH Client(v8.19)</td>
 					<td class="text-left">
-						가상 서버에 접속하기위한 윈도우PC Client Tool 입니다.<br>
-						Linux 서버에 접속할 수 있는 기능을 통합적으로 제공합니다.<br>
+						인스턴스에 접속하기위한 윈도우PC Client Tool 입니다.<br>
+						Linux 인스턴스에 접속할 수 있는 기능을 통합적으로 제공합니다.<br>
 						(지원 프로토콜 : ssh, rdp, sftp, etc,..)
 					</td>
 					<td><a href="/download/Bitvise_SSH_Client.zip">Bitvise SSH Client.zip</a></td>
@@ -31,17 +31,17 @@
 	</div>
 	<div class="cnt_msg_box msg-info">다운로드 받은 파일은 사용자PC에서 원하는 위치에 압축해제 하시기 바랍니다.</div>
 	
-	<p class="txt_level1 mt30">가상서버(CentOS, Ubuntu 서버인 경우만 해당)에 접속하기 위한 인증 키 파일을 다운로드 합니다. </p>
+	<p class="txt_level1 mt30">인스턴스(CentOS, Ubuntu 인스턴스인 경우만 해당)에 접속하기 위한 인증 키 파일을 다운로드 합니다. </p>
 	<div class="imgWrap mgt0">
 		<img alt="" src="images/access_guide/access_guide_linux_img01.png" alt="">
 	</div>
 	<p class="txt_level2">‘접속 인증키(KEY)’ 항목의<em class="ico_dw">다운로드 아이콘</em>다운로드 아이콘을 클릭하여 사용자PC에 인증키 파일(.pem)을 저장합니다.</p>
-	<div class="cnt_msg_box msg-warnning">접속 인증키 파일은 가상서버에 접속하는 사용자 인증을 위한 유일한 수단입니다. 분실 시 생성한 서버에 접속할 수 없으니 안전하게 보관하시기바랍니다.</div>
+	<div class="cnt_msg_box msg-warnning">접속 인증키 파일은 인스턴스에 접속하는 사용자 인증을 위한 유일한 수단입니다. 분실 시 생성한 인스턴스에 접속할 수 없으니 안전하게 보관하시기바랍니다.</div>
 	
 	<h3>2. 접속방법</h3>
-	<p class="txt_level1 pdb0">접속도구를 통해 생성된 가상서버에 접속하는 방법을 안내합니다.</p>
+	<p class="txt_level1 pdb0">접속도구를 통해 생성된 인스턴스에 접속하는 방법을 안내합니다.</p>
 	<!-- <p class="txt_level2 pdb0">접속 도구 : <strong>Bitvise SSH Client v8.19</strong></p>
-	<p class="txt_level3">bitvise ssh client 도구를 사용하여 SSH 프로토콜(Protocol) 기반으로 사용자가 생성한 서버에 접속하는 방법을 안내합니다.</p> -->
+	<p class="txt_level3">bitvise ssh client 도구를 사용하여 SSH 프로토콜(Protocol) 기반으로 사용자가 생성한 인스턴스에 접속하는 방법을 안내합니다.</p> -->
 	
 	<h4>1) 접속도구 실행</h4>
 	<p class="txt_level2 pdb0">사용자PC에 다운로드 받은 bitvise 디렉토리에서<em class="ico_BvSsh">BvSsh 실행파일 아이콘</em>파일을 실행합니다.</p>
@@ -52,14 +52,14 @@
 	</div>
 	<p class="txt_level1 pdb0">①  아래의 접속정보를 참조하여 ‘접속 IP’와 ‘접속 계정’ 정보를 입력합니다.</p>
 	<div class="txt_level_list" ng-if="!spop.data.gpuYn">
-		<p class="txt_level3 type2">서버 접속 정보</p>
+		<p class="txt_level3 type2">인스턴스 접속 정보</p>
 		<dl>
 			<dt>- 접속 IP :</dt><dd>{{spop.data.floatingIp}}</dd>
 			<dt>- 접속 계정 :</dt><dd>{{spop.data.osType}}</dd>
 		</dl>
 	</div>
 	<div class="txt_level_list" ng-if="spop.data.gpuYn">
-		<p class="txt_level3 type2">서버 접속 정보</p>
+		<p class="txt_level3 type2">인스턴스 접속 정보</p>
 		<dl>
 			<dt>- 접속 IP :</dt><dd>{{spop.data.fixedIp}}</dd>
 			<dt>- 접속 계정 :</dt><dd>{{spop.data.osType}}</dd>
@@ -69,33 +69,33 @@
 	<div class="imgWrap">
 		<img alt="" src="images/access_guide/access_guide_linux_img03.png" alt="">
 	</div>
-	<p class="txt_level1 blt_none">②  ‘서버 접속정보 설정 화면’에서 ‘Client key manager’ 버튼을 클릭합니다.</p>
+	<p class="txt_level1 blt_none">②  ‘인스턴스 접속정보 설정 화면’에서 ‘Client key manager’ 버튼을 클릭합니다.</p>
 	
 	<div class="imgWrap">
 		<img alt="" src="images/access_guide/access_guide_linux_img04.png" alt="">
 	</div>
 	<p class="txt_level1 blt_none">③  ‘인증키 관리 화면’에서 ‘Import’ 버튼을 클릭하여 미리 다운로드 받은 사용자 인증 키 파일(.pem)을 업로드 합니다.</p>
-	<p class="txt_level1 blt_none">④  ‘서버 접속정보 설정 화면’ 하단의 ‘Log in’ 버튼을 클릭합니다.</p>
+	<p class="txt_level1 blt_none">④  ‘인스턴스 접속정보 설정 화면’ 하단의 ‘Log in’ 버튼을 클릭합니다.</p>
 	
-	<h4 class="pt60">3) 서버 접속</h4>
+	<h4 class="pt60">3) 인스턴스 접속</h4>
 	<div class="imgWrap">
 		<img alt="" src="images/access_guide/access_guide_linux_img05.png" alt="">
 	</div>
-	<p class="txt_level2">‘호스트키 수락 화면’에서 ‘Accept and Save’ 버튼을 클릭하여 서버에 접속합니다.</p>
+	<p class="txt_level2">‘호스트키 수락 화면’에서 ‘Accept and Save’ 버튼을 클릭하여 인스턴스에 접속합니다.</p>
 	
 	<h3>3. 기타</h3>
-	<h4>1) 서버 접속정보(Profile) 저장</h4>
+	<h4>1) 인스턴스 접속정보(Profile) 저장</h4>
 	<div class="imgWrap">
 		<img alt="" src="images/access_guide/access_guide_linux_img06.png" alt="">
 	</div>
-	<p class="txt_level2 pdb0">‘서버 접속정보 설정 화면’ 좌측 ‘Save profile as’ 버튼을 클릭하여 현재 설정된 서버 접속정보를 사용자PC에 저장합니다.</p>
+	<p class="txt_level2 pdb0">‘인스턴스 접속정보 설정 화면’ 좌측 ‘Save profile as’ 버튼을 클릭하여 현재 설정된 인스턴스 접속정보를 사용자PC에 저장합니다.</p>
 	<p class="txt_level4"><em>*</em>저장된 접속정보는 ‘Load profile’ 버튼을 통해 언제든지 다시 불러올 수 있습니다.</p>
 	
 	<h4 ng-if="!spop.data.gpuYn">2) 접속에 실패한 경우 확인 사항</h4>
 	<div class="imgWrap" ng-if="!spop.data.gpuYn">
 		<img alt="" src="images/access_guide/access_guide_linux_img07.png" alt="">
 	</div>
-	<p class="txt_level1 pdb0" ng-if="!spop.data.gpuYn">①  ‘서버 접속정보 설정 화면’에서 ‘Proxy settings’ 버튼을 클릭합니다.</p>
+	<p class="txt_level1 pdb0" ng-if="!spop.data.gpuYn">①  ‘인스턴스 접속정보 설정 화면’에서 ‘Proxy settings’ 버튼을 클릭합니다.</p>
 	<p class="txt_level1 pdb0" ng-if="!spop.data.gpuYn">②  ‘프록시(Proxy)서버 설정 화면’에서 아래 정보가 정확하게 설정되어 있는지 확인합니다.</p>
 	<div class="txt_level_list" ng-if="!spop.data.gpuYn">
 		<p class="txt_level3 type2">프록시 서버 접속 정보</p>
@@ -105,5 +105,5 @@
 			<dt>- Port :</dt><dd>20022</dd>
 		</dl>
 	</div>
-	<div class="cnt_msg_box msg-info mt40" ng-if="!spop.data.gpuYn">프록시 설정 확인후에도 서버 접속에 실패하는 경우 허브팝(HuB-PoP) 관리자에게 연락바랍니다.</div>
+	<div class="cnt_msg_box msg-info mt40" ng-if="!spop.data.gpuYn">프록시 설정 확인후에도 인스턴스 접속에 실패하는 경우 허브팝(HuB-PoP) 관리자에게 연락바랍니다.</div>
 </div>

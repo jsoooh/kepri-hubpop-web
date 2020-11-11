@@ -6,7 +6,7 @@
 		</colgroup>
 		<tbody>
 			<tr>
-				<th scope="row">디스크 크기(변경 전)<!-- <button type="button" tooltip-placement="right" uib-tooltip="툴팁"><span class="ico-info1 ico"></span></button> --></th>
+				<th scope="row">볼륨 크기(변경 전)<!-- <button type="button" tooltip-placement="right" uib-tooltip="툴팁"><span class="ico-info1 ico"></span></button> --></th>
 				<td>
 				<!-- <input type="text" name="" value="" class="form-control form-control-sm" placeholder="{{pop.volume.size}}" disabled> <span class="app-tit">GB</span> -->
 					<div class="style-table">
@@ -20,7 +20,7 @@
 				</td>
 			</tr>
 			<tr>
-				<th scope="row">디스크 크기(변경 후)</th>
+				<th scope="row">볼륨 크기(변경 후)</th>
 				<td>
 					<div class="style-table">
 						<div class="style-td padding-right-10" style="width:90%;">
@@ -36,9 +36,9 @@
 	</table>
 </div>
 
-<!-- 디스크 추가 -->
+<!-- 볼륨 추가 -->
 <div class="disk_area">
-	<p class="font-size-13">마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
+	<p class="font-size-13">마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
 	<div class="disk_box margin-top-20">
 		<div class="disk_info" style="top:0;">최대 {{pop.reSizeSliderOptions.ceil | displayVolume : 'GB'}}</div>
 		<div class="rangeWrap type2">
@@ -50,6 +50,6 @@
 </div>
 <div class="alert alert-primary margin-top-20" role="alert">
 	<i data-feather="file-text" class="feather-directive"></i>
-	<div class="text-area">디스크 크기는 최대 {{pop.maxSingleDiskSize | displayVolume:'GB'}}까지 설정이 가능합니다. <br>단, {{pop.maxSingleDiskSize | displayVolume:'GB'}} 이하로 용량이 남아 있는 경우 잔여 용량이 디스크 최대값이 됩니다</div>
+	<div class="text-area">볼륨 크기는 최대 {{pop.maxSingleDiskSize | displayVolume:'GB'}}까지 설정이 가능합니다. <br>단, {{pop.maxSingleDiskSize | displayVolume:'GB'}} 이하로 용량이 남아 있는 경우 잔여 용량이 볼륨 최대값이 됩니다</div>
 </div>
-<!-- //디스크 추가 -->
+<!-- //볼륨 추가 -->

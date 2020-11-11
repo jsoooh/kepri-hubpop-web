@@ -50,7 +50,7 @@ angular.module('iaas.controllers')
                     if (data.content.length != 0) {
                         ct.loadingInstanceSnapshotList = true;
                     }
-                    //백업이미지 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
+                    //스냅샷 목록이 없을 때 자원사용여부 확인 후 사용하지 않을 때 [서비스 삭제하기] 활성화
                     if (instanceSnapshots.length == 0) {
                         $scope.main.checkUseYnPortalOrgSystem("iaas");
                     }
@@ -133,7 +133,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 백업 이미지 설명 팝업
+        // 스냅샷 설명 팝업
         ct.fn.descriptionFormOpen = function($event, snapShot, state){
     		if (state == 'server') {
     			ct.fn.modifyServerSnapShotDesc($event, snapShot);
@@ -142,7 +142,7 @@ angular.module('iaas.controllers')
     		}
         };
 
-        // 서버 백업 이미지 설명 수정
+        // 인스턴스 스냅샷 설명 수정
         ct.fn.modifyServerSnapShotDesc = function($event, snapshot) {
 
             var dialogOptions =  {
@@ -162,7 +162,7 @@ angular.module('iaas.controllers')
              $scope.main.replacePage();
         };
 
-        // 디스크 백업 이미지 설명 수정
+        // 볼륨 스냅샷 설명 수정
         ct.fn.modifyStorageSnapShotDesc = function($event, snapshot) {
 
             var dialogOptions =  {
@@ -190,7 +190,7 @@ angular.module('iaas.controllers')
             ct.fn.getInstanceSnapshotList();
             ct.fn.getStorageSnapshotList(1);
 
-            // 서버백업, 디스크 백업 데이터 로딩창
+            // 인스턴스 스냅샷, 볼륨 스냅샷 데이터 로딩창
             if (ct.promiseList && ct.promiseList.length > 0) {
                 $scope.main.loadingMainBody = true;
                 $q.all(ct.promiseList).finally(function () {
@@ -226,7 +226,7 @@ angular.module('iaas.controllers')
         ct.maxSingleDiskSize = CONSTANTS.iaasDef.insMaxDiskSize;
 
         ct.formName = "computeCreateForm";
-        ct.data.name = 'server-01';
+        ct.data.name = 'instance-01';
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
@@ -237,7 +237,7 @@ angular.module('iaas.controllers')
         ct.snapshotId = $stateParams.snapshotId;
         ct.paramTenantId = !!$stateParams.tenantId ? $stateParams.tenantId : ct.data.tenantId;
 
-        // 서버 이름 중복 검사
+        // 인스턴스 이름 중복 검사
         ct.fn.serverNameCustomValidationCheck = function(name) {
             if (ct.serverNameList.indexOf(name) > -1) {
                 return {isValid : false, message : "이미 사용중인 이름입니다."};
@@ -334,7 +334,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        // 서버만들기 - 사양선택 관련 속도개선 api로 변경
+        // 인스턴스 만들기 - 사양선택 관련 속도개선 api로 변경
         ct.fn.getTenantResource = function() {
             var params = {
                 tenantId : ct.data.tenantId
@@ -494,7 +494,7 @@ angular.module('iaas.controllers')
             });
         };
 
-        //디스크생성 변수
+        //볼륨 생성 변수
         ct.volumeSize = 0;
         ct.inputVolumeSize = ct.volumeSize;
         ct.volumeSliderOptions = {
@@ -566,7 +566,7 @@ angular.module('iaas.controllers')
                 $timeout(function () {
                     clickCheck = false;
                     $scope.main.loadingMainBody = false;
-                    common.showAlertSuccess(ct.data.name+" 서버 생성이 시작 되었습니다.");
+                    common.showAlertSuccess(ct.data.name+" 인스턴스 생성이 시작 되었습니다.");
                     // 페이지 이동으로 바꿔야 하고
                     $scope.main.goToPage("/iaas/compute");
                 }, 5000);
@@ -931,7 +931,7 @@ angular.module('iaas.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "백업 이미지 설명 변경";
+        $scope.dialogOptions.title 		= "인스턴스 스냅샷 설명 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/serverSnapshotDescriptionPopForm.html" + _VersionTail();
@@ -951,7 +951,7 @@ angular.module('iaas.controllers')
 
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newSnapshotDesc);
             if (checkByte > 255) {
-                common.showAlertWarning("백업 이미지 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("스냅샷 설명이 255Byte를 초과하였습니다.");
                 $scope.actionBtnHied = false;
                 return;
             }
@@ -979,7 +979,7 @@ angular.module('iaas.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/snapshot', 'PUT', {instanceSnapShot : param});
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
+                common.showAlertSuccess("스냅샷 설명이 변경 되었습니다.");
 
                 /* 20.04.29 - 리스트형 추가로 이미지형일때와 리스트형일때 callbackFunction 분기 by ksw*/
                 if ( angular.isFunction(pop.callBackFunction) ) {
@@ -1013,7 +1013,7 @@ angular.module('iaas.controllers')
         pop.data						= {};
         pop.callBackFunction 			= $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "백업 이미지 설명 변경";
+        $scope.dialogOptions.title 		= "볼륨 스냅샷 설명 변경";
         $scope.dialogOptions.okName 	= "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/compute/storageSnapshotDescriptionPopForm.html" + _VersionTail();
@@ -1033,7 +1033,7 @@ angular.module('iaas.controllers')
 
             var checkByte = $bytes.lengthInUtf8Bytes(pop.newSnapshotDesc);
             if (checkByte > 255) {
-                common.showAlertWarning("백업 이미지 설명이 255Byte를 초과하였습니다.");
+                common.showAlertWarning("스냅샷 설명이 255Byte를 초과하였습니다.");
                 $scope.actionBtnHied = false;
                 return;
             }
@@ -1062,7 +1062,7 @@ angular.module('iaas.controllers')
             returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/volume/snapshot', 'PUT', {volumeSnapShot : param});
             returnPromise.success(function (data, status, headers){
                 $scope.main.loadingMainBody = false;
-                common.showAlertSuccess("백업 이미지 설명이 변경 되었습니다.");
+                common.showAlertSuccess("스냅샷 설명이 변경 되었습니다.");
 
                 /* 20.04.29 - 리스트형 추가로 이미지형일때와 리스트형일때 callbackFunction 분기 by ksw*/
                 if ( angular.isFunction(pop.callBackFunction) ) {
