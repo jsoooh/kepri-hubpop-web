@@ -240,13 +240,13 @@ angular.module('gpu.controllers')
         ct.fn.createBucket = function() {
             console.log('create Bucket start!!! ');
             // 페이지 로드
-            var bucketName = "bucket-"+ct.data.stackName;
+            var bucketName = "bucket-"+ct.data.stackName.toLowerCase();
             let promise2;
             promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
                 //callBackFuncion(data);
                 console.log('create Bucket success  !!! ');
-                common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
+                //common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
                 return true;
             });
             promise2.error(function (data, status, headers) {
@@ -303,7 +303,7 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.s3_endpoint = ct.data.s3EndPoint;
             vmCatalogDeploy.parameters.s3_accessKey = ct.data.s3AccessKey;
             vmCatalogDeploy.parameters.s3_secretKey = ct.data.s3SecretKey;
-            vmCatalogDeploy.parameters.s3_bucket_name = "bucket-"+ct.data.stackName;
+            vmCatalogDeploy.parameters.s3_bucket_name = "bucket-"+ct.data.stackName.toLowerCase();
 
             if(ct.data.nodeType == 'single') {
                 vmCatalogDeploy.workerUse = false;
@@ -348,12 +348,12 @@ angular.module('gpu.controllers')
 
         ct.fn.createVmCatalogDeploy = function () {
             let promise2;
-            var bucketName = "bucket-"+ct.data.stackName;
+            var bucketName = "bucket-"+ct.data.stackName.toLowerCase();
             promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
                 //callBackFuncion(data);
                 console.log('create Bucket success  !!! ');
-                common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
+                //common.showAlertSuccessHtml("버킷이 생성 되었습니다.");
             });
             promise2.error(function (data, status, headers) {
                 console.log('create Bucket error  !!! ');

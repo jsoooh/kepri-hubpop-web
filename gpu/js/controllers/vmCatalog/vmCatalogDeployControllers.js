@@ -93,10 +93,10 @@ angular.module('gpu.controllers')
         returnPromise.success(function (data, status, headers) {
             console.log("deleteObjectBucket DELETE!!!!!!!!!!!!!");
             if (status == 200 && data) {
-                common.showAlertSuccess('삭제되었습니다.');
+                //common.showAlertSuccess('삭제되었습니다.');
             } else {
                 $scope.main.loadingMainBody = false;
-                common.showAlertError('오류가 발생하였습니다.');
+                common.showAlertError('버킷 삭제 오류가 발생하였습니다.');
             }
         });
     };
@@ -282,10 +282,10 @@ angular.module('gpu.controllers')
         returnPromise.success(function (data, status, headers) {
             console.log("deleteObjectBucket DELETE!!!!!!!!!!!!!");
             if (status == 200 && data) {
-                common.showAlertSuccess('삭제되었습니다.');
+                //common.showAlertSuccess('삭제되었습니다.');
             } else {
                 $scope.main.loadingMainBody = false;
-                common.showAlertError('오류가 발생하였습니다.');
+                common.showAlertError('버킷 삭제 오류가 발생하였습니다.');
             }
         });
         returnPromise.error(function (data, status, headers) {
