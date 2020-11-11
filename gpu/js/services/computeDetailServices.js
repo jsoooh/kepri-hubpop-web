@@ -347,7 +347,8 @@ angular.module('gpu.services')
                     tenantId: instance.tenantId,
                     orgCode: instance.orgCode,
                     name: instance.name,
-                    fixedIp: instance.fixedIp
+                    fixedIp: instance.fixedIp,
+                    vmType: instance.image.osType
                 };
                 url = CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/' + type + '/enable';
                 message = type.toUpperCase() + '모니터링 활성화 성공';
@@ -375,7 +376,7 @@ angular.module('gpu.services')
         };
 
         //모니터링 (비)활성화 세팅
-        computeDetailService.setMonitoringYn = function (instance) {
+        computeDetailService.setMonitoringYn = function (instance, fnCallback) {
             var isActive = (instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'; // 활성화 명령 여부
             var confirmMsg = isActive ? '모니터링 기능을 활성화 하시겠습니까?': '모니터링 기능을 비활성화 하시겠습니까?';
             common.showConfirm('확인', confirmMsg).then(function() {
@@ -383,19 +384,19 @@ angular.module('gpu.services')
                     // 활성화 명령
                     if (instance.spec.type == 'GPU') {
                         // GPU, VM 모니터링
-                        computeDetailService.callMonitoringYn('post', 'gpu', instance, function () { computeDetailService.callMonitoringYn('post', 'vm', instance); });
+                        computeDetailService.callMonitoringYn('post', 'gpu', instance, function () { computeDetailService.callMonitoringYn('post', 'vm', instance, fnCallback); });
                     } else {
                         // VM 모니터링
-                        computeDetailService.callMonitoringYn('post', 'vm', instance);
+                        computeDetailService.callMonitoringYn('post', 'vm', instance, fnCallback);
                     }
                 } else {
                     // 비활성화 명령
                     if (instance.spec.type == 'GPU') {
                         // GPU, VM 모니터링
-                        computeDetailService.callMonitoringYn('delete', 'gpu', instance, function () { computeDetailService.callMonitoringYn('delete', 'vm', instance); });
+                        computeDetailService.callMonitoringYn('delete', 'gpu', instance, function () { computeDetailService.callMonitoringYn('delete', 'vm', instance, fnCallback); });
                     } else {
                         // VM 모니터링
-                        computeDetailService.callMonitoringYn('delete', 'vm', instance)
+                        computeDetailService.callMonitoringYn('delete', 'vm', instance, fnCallback)
                     }
                 }
             });
