@@ -47,7 +47,6 @@ angular.module('common.controllers', [])
         mc.sltMenu = {};                    //좌측 메뉴 선택
         mc.dashboardFull = false;           //대시보드 화면 전체보기
         mc.myServiceOpen = true;            //메뉴 즐겨찾기 dropdown
-        //mc.hideTitle = true;              //title 감추기
         mc.checkUseYnIaas = "";
         mc.checkUseYnGpu = "";
         mc.checkUseYnPaas = "";
@@ -708,9 +707,8 @@ angular.module('common.controllers', [])
                 common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
                 return;
             }
-            //mc.hideTitle = true;
+            mc.sltMenu = {};
             mc.goToPage("/comm/projects/projectDetail/" + portalOrg.id);
-            //mc.hideTitle = false;
         };
 
         //메뉴 즐겨찾기 조회
