@@ -1,5 +1,9 @@
-<div class="pnb_tit">
-    <i class="i_star"></i> <span class="pnb_t_txt">포트</span>
-    <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'해당 서비스의 Listen 포트'"><span class="ico_info"></span></button></div>
+<!-- 포트 -->
+<div class="write-sub-title">
+	<b class="caution-star">*</b>포트
+	<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'해당 서비스의 Listen 포트'">	i</a></div>
 </div>
-<input type="text" name="servicePort" class="form-control" maxlength="5" ng-model="contents.data.servicePort" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck(contents.data.deployType, contents.data.servicePort)" placeholder="서비스 포트를 입력하세요." >
+<div class="form-group">
+	<input type="text" name="servicePort" class="form-control" maxlength="5" ng-model="contents.data.servicePort" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck(contents.data.deployType, contents.data.servicePort)" placeholder="서비스 포트를 입력하세요." >
+</div>
+<!-- //포트 -->
