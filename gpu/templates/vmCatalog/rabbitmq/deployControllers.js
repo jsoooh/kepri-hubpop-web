@@ -21,9 +21,12 @@ angular.module('gpu.controllers')
         ct.usingPorts.cluster.push(ct.data.erlangPort);
 
         // 테스트 입력값
+        ct.testInput = true;
         if(ct.testInput) {
             ct.data.deployName = "래빗엠큐";
-            ct.data.stackName = "rabbitmq";
+            ct.data.stackName = "rabbitmqView";
+
+            ct.data.deployType = "cluster";
             ct.data.adminPassword = "Crossent!234";
             ct.data.adminConfirmPassword = "Crossent!234";
         }

@@ -19,9 +19,13 @@ angular.module('gpu.controllers')
         ct.data.deployType = "single";
 
         // 테스트 입력값
+        ct.testInput = true;
         if(ct.testInput) {
             ct.data.deployName = "레디스";
-            ct.data.stackName = "Redis";
+            ct.data.stackName = "redisView";
+
+            ct.data.deployType = "cluster";
+
             ct.data.redisPassword = "Crossent!234";
             ct.data.redisConfirmPassword = "Crossent!234";
         }

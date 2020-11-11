@@ -27,17 +27,23 @@ angular.module('gpu.controllers')
         ct.data.adminId = "admin";
         ct.data.volumeUse = false;
 
+        ct.testInput = true;
         if (ct.testInput) {
+            /*
             ct.data.deployName = "몽고DB";
             ct.data.stackName = "MongoDB";
             ct.data.adminPassword = "Crossent!234";
             ct.data.adminConfirmPassword = "Crossent!234";
-            /*
-            ct.data.deployName = "몽고DB클러스터";
-            ct.data.stackName = "MongoDBCluster";
-            ct.data.deployType = "cluster";
-            ct.data.volumeUse = true;
             */
+
+            ct.data.deployName = "몽고DB클러스터";
+            ct.data.stackName = "mongoDBView";
+            ct.data.deployType = "cluster";
+
+            ct.data.adminPassword = "Crossent!234";
+            ct.data.adminConfirmPassword = "Crossent!234";
+
+            ct.data.volumeUse = false;
         }
 
         // 추가 셋팅

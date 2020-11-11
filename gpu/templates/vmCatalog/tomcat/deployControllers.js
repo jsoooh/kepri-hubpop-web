@@ -21,11 +21,13 @@ angular.module('gpu.controllers')
         ct.usingPorts.cluster.push(8009);
 
         // 테스트
+        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "톰캣";
-            ct.data.stackName = "tomcat";
-            ct.data.deployType = "single";
-            ct.data.octaviaLbUse = false;
+            ct.data.stackName = "tomcatView";
+
+            ct.data.deployType = "cluster";
+            ct.data.octaviaLbUse = true;
         }
 
         // 추가 셋팅

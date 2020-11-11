@@ -22,10 +22,11 @@ angular.module('gpu.controllers')
         ct.usingPorts.single.push(8000);
         ct.usingPorts.single.push(8001);
 
+        ct.testInput = true;
         // 테스트
         if (ct.testInput) {
-            ct.data.deployName = "API 게이트웨이 콩";
-            ct.data.stackName = "kong";
+            ct.data.deployName = "게이트웨이";
+            ct.data.stackName = "kongView";
 
             ct.data.pgPassword = "Crossent!234";
             ct.data.pgConfirmPassword = "Crossent!234";

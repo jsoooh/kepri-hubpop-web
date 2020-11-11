@@ -14,11 +14,12 @@ angular.module('gpu.controllers')
         ct.data.servicePort = ct.prodPortBand + 80;
 
         // 테스트
+        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "엔진엑스";
-            ct.data.stackName = "nginx";
-            ct.data.deployType = "single";
-            ct.data.octaviaLbUse = false;
+            ct.data.stackName = "nginxView";
+            ct.data.deployType = "cluster";
+            ct.data.octaviaLbUse = true;
         }
 
         // 추가 셋팅

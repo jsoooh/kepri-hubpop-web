@@ -18,14 +18,13 @@ angular.module('gpu.controllers')
 
 
         // 테스트
+        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "마리아디비";
-            ct.data.stackName = "Mariadb-Cluster";
+            ct.data.stackName = "mariadbView";
 
             ct.data.deployType = "cluster";
             ct.data.octaviaLbUse = true;
-            ct.data.volumeUse = true;
-
             ct.data.rootPassword = "Crossent!234";
             ct.data.rootConfirmPassword = "Crossent!234";
             ct.data.createUser = true;
@@ -33,6 +32,7 @@ angular.module('gpu.controllers')
             ct.data.createDbName = "kepri";
             ct.data.createUserPassword = "Kepri!234";
             ct.data.createUserConfirmPassword = "Kepri!234";
+            ct.data.volumeUse = false;
         }
 
         // 추가 셋팅
