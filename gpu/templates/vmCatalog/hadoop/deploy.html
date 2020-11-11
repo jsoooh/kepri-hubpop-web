@@ -1,385 +1,463 @@
-<ul class="pn_list_style">
-    <li>
-        <div class="panel_box pn_l">
-            <div class="pn_head">
-                <h4 class="pnh_tit">{{ contents.vmCatalogInfo.catalogName }} 서비스 만들기</h4>
-            </div>
-            <form name="subPage.deployForm" novalidate>
-                <input type="password" style="display: block; width:0px; height:0px; border: 0;"><!-- 아이디 패스워드 자동 입력 방지 -->
-                <div class="pn_body">
-                    <span class="sm_txt">* 는 필수입력 사항입니다.</span>
-                    <ul class="form_list">
-                        <li ng-include="contents.htmlUrls.deployName"></li>
-                        <li ng-include="contents.htmlUrls.stackName"></li>
-                        <li>
-                            <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt">배포 구성</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포 구성을 선택한다 .<br/>선택한 배포 구성으로 배포가 된다.'">
-                                    <span class="ico_info"></span></button><img ng-if="!contents.isAvailabilityZoneLoad" src="images/loading_sm.gif" /></div>
-                            </div>
-                            <div class="pl10 mt10">
-                                <select name="type" ng-options="type.key as type.value for type in contents.types" ng-model="contents.data.type" style="width:100%;"></select>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt">Mysql 비밀번호</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'최소 6자 이상이어야 합니다. 필수 입력값입니다.'"><span class="ico_info"></span></button></div>
-                            </div>
-                            <div class="tbw type1 mt20">
-                                <table class="table">
-                                    <colgroup>
-                                        <col style="width:20%;">
-                                        <col style="width:">
-                                        <col style="width:20%;">
-                                        <col style="width:;">
-                                    </colgroup>
-                                    <tbody>
-                                        <tr>
-                                            <th><i class="i_star"></i> root 비밀번호</th>
-                                            <td><input type="password" name="mysqlRootPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlRootPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.mysqlRootPassword)" placeholder="비밀번호를 입력하세요." ></td>
-                                            <th><i class="i_star"></i> root 비밀번호 확인</th>
-                                            <td><input type="password" name="mysqlRootConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlRootConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.mysqlRootPassword, contents.data.mysqlRootConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
-                                        </tr>
-                                        <tr>
-                                            <th><i class="i_star"></i> hive 비밀번호</th>
-                                            <td><input type="password" name="mysqlHivePassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlHivePassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.mysqlHivePassword)" placeholder="비밀번호를 입력하세요." ></td>
-                                            <th><i class="i_star"></i> hive 비밀번호 확인</th>
-                                            <td><input type="password" name="mysqlHiveConfirmPassword" class="form-control" maxlength="50" ng-model="contents.data.mysqlHiveConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.mysqlHivePassword, contents.data.mysqlHiveConfirmPassword)" placeholder="비밀번호를 확인하세요." ></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt">오브젝트 스토리지 선택</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'오브젝트 스토리지를 선택한다.<br/>'"><span class="ico_info"></span></button></div>
-                            </div>
-                            <!--<div class="pl10 mt10">
-                                <span class="pnb_stit">- 유형  : </span>
-                                <div class="radio radio-inline">
-                                    <input type="radio" name="bucketType" id="defined_bucket" value="server" ng-model="contents.data.bucketType" ng-value="'defined'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" ng-checked="'defined'">
-                                    <label for="defined_bucket" class="label">정의된 버킷</label>
-                                </div>
-                                &lt;!&ndash;<div class="radio radio-inline">
-                                    <input type="radio" name="bucketType" id="customized_bucket" value="image" ng-model="contents.data.bucketType" ng-value="'customized'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" ng-checked="'customized'">
-                                    <label for="customized_bucket" class="label">사용자 정의</label>
-                                </div>&ndash;&gt;
-                            </div>-->
-                            <div class="tbw type1 mt20">
-                                <table class="table">
-                                    <colgroup>
-                                        <col style="width:20%;">
-                                        <col style="width:">
-                                        <col style="width:20%;">
-                                        <col style="width:;">
-                                    </colgroup>
-                                    <tbody>
-                                    <tr>
-                                        <th><i class="i_star"></i> S3 endpoint</th>
-                                        <td><input type="hidden" name="s3EndPoint" class="form-control" maxlength="50" ng-model="contents.data.s3EndPoint" validation="" value="{{contents.sendSecretInfoList.s3RadosEndPoint}}" > {{contents.sendSecretInfoList.s3RadosEndPoint}}</td>
-                                        <th><i class="i_star"></i> S3 access key</th>
-                                        <td><input type="hidden" name="s3AccessKey" class="form-control" maxlength="50" ng-model="contents.data.s3AccessKey" validation="" value="{{contents.sendSecretInfoList.s3AccessKey}}" >{{contents.sendSecretInfoList.s3AccessKey}}</td>
-                                    </tr>
-                                    <tr >
-                                        <th><i class="i_star"></i> S3 secret key</th>
-                                        <td><input type="hidden" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.s3SecretKey" validation="" value="{{contents.sendSecretInfoList.s3SecreteAccessKey}}" >{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
-<!--                                        <th><i class="i_star"></i> 버킷명</th>-->
-<!--                                        <td><input type="text" name="bucketName" class="form-control" maxlength="50" ng-model="contents.data.bucketName" validation="min:2|max:20|required|custom:contents.fn.validationBucketName(contents.data.bucketName)" placeholder="버킷명을 입력하세요." ></td>-->
-                                    </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr class="bucket_list">
-<!--                                        <td colspan="4" style="text-align: right;"><button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.getObjectStorageObject(contents.data.bucketName)" ng-disabled="" >버킷 조회하기</button></td>-->
-<!--                                        <td colspan="4" style="text-align: right;"><button type="button" name="button" class="btn btn-color1 btn-md" ng-click="contents.fn.createBucket(contents.data.bucketName)" ng-disabled="">버킷 생성하기</button></td>-->
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </li>
-                        <li ng-include="contents.htmlUrls.zoneSelect"></li>
-                        <li>
-                            <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt">노드 구성 선택</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 서비스의 노드 구성 선택<br/>1. 단일 구성: 1개의 서버로 구성<br/>2. 다중 구성: Master, Worker로 구성'"><span class="ico_info"></span></button></div>
-                            </div>
-                            <div class="pl10 mt10">
-                                <span class="pnb_stit">- 노드 구성  : </span>
-                                <div class="radio radio-inline">
-                                    <input type="radio" name="nodeType" id="deploy-type-single" value="server" ng-model="contents.data.nodeType" ng-value="'single'" ng-change="contents.fn.changeNodeType(contents.data.nodeType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-                                    <label for="deploy-type-single" class="label">단일노드</label>
-                                </div>
-                                <div class="radio radio-inline">
-                                    <input type="radio" name="nodeType" id="deploy-type-cluster" value="image" ng-model="contents.data.nodeType" ng-value="'cluster'" ng-change="contents.fn.changeNodeType(contents.data.nodeType)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-                                    <label for="deploy-type-cluster" class="label">다중노드</label>
-                                </div>
-                            </div>
-
-                        </li>
-                        <li ng-if="contents.data.nodeType == 'cluster'">
-                            <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt">다중노드 구성</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'배포될 마스터 및 워커 노드 수를 정한다.'"><span class="ico_info"></span></button></div>
-                            </div>
-                            <div class="tbw type1 mt20">
-                                <table class="table">
-                                    <colgroup>
-                                        <col style="width:20%;">
-                                        <col style="width:">
-                                        <col style="width:20%;">
-                                        <col style="width:;">
-                                    </colgroup>
-                                    <tbody>
-                                    <tr>
-                                        <th><i class="i_star"></i> 마스터 노드 수</th>
-                                        <td>
-                                            <select name="masterCnt" ng-options="masterCnt.key as masterCnt.value for masterCnt in contents.masterCnts" ng-model="contents.data.masterCnt" ng-change="contents.fn.changeMasterCnt(contents.data.masterCnt);" style="width:100%;"></select>
-                                        </td>
-                                        <th><i class="i_star"></i> 워커 노드 수</th>
-                                        <td>
-                                            <select name="workerCnt" ng-options="workerCnt.key as workerCnt.value for workerCnt in contents.workerCnts" ng-model="contents.data.workerCnt" ng-change="contents.fn.changeWorkerCnt(contents.data.workerCnt);" style="width:100%;"></select>
-<!--                                            <input type="text" name="workerCnt" class="form-control" maxlength="50" ng-model="contents.data.workerCnt" validation="number|min:1|max:20|required" placeholder="워커 노드 수를 입력하세요." ng-change="contents.fn.changeWorkerCnt(contents.data.workerCnt);">-->
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </li>
-                        <li ng-if="contents.data.masterCnt == 2 && contents.data.nodeType == 'cluster'" ng-include="contents.htmlUrls.octaviaLbUse"></li>
-                        <li>
-                            <div class="pnb_tit">
-                                <i class="i_star"></i>
-                                <span ng-if="contents.data.nodeType == 'single'" class="pnb_t_txt"> 노드 사양 선택</span>
-                                <span ng-if="contents.data.nodeType == 'cluster'" class="pnb_t_txt"> 마스터 노드 사양 선택</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'생성 할 마스터 노드의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.isMasterSpecLoad" src="images/loading_sm.gif" /></div>
-                            </div>
-
-                            <div class="tbl type1">
-                                <table class="table">
-                                    <colgroup>
-                                        <col style="width:10%;">
-                                        <col style="width:;">
-                                        <col style="width:20%;">
-                                        <col style="width:20%;">
-                                        <col style="width:20%;">
-                                    </colgroup>
-                                    <thead>
-                                    <tr>
-                                        <th scope="col"></th>
-                                        <th scope="col">종류</th>
-                                        <th scope="col">vCPU</th>
-                                        <th scope="col">메모리</th>
-                                        <th scope="col">OS디스크</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="(key, spec) in contents.masterSpecList" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltMasterSpecUuid)}" ng-click="contents.fn.selectMasterSpec(spec);">
-                                        <td>
-                                            <div class="radio radio-only" >
-                                                <input type="radio"
-                                                       name="master_spec_radio"
-                                                       ng-model="contents.sltMasterSpecUuid"
-                                                       id="master_spec_radio_{{key}}"
-                                                       value="{{spec.uuid}}" ng-disabled="spec.disabled">
-                                                <label for="master_spec_radio_{{key}}"></label>
-                                            </div>
-                                        </td>
-                                        <td>{{spec.name}}</td>
-                                        <td>{{spec.vcpus}} Core</td>
-                                        <td>{{spec.ram | displayVolume : 'MB'}}</td>
-                                        <td>{{spec.disk | displayVolume : 'GB'}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div ng-if="contents.isMasterMinSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
-                        </li>
-                        <li ng-if="contents.data.nodeType == 'cluster'">
-                            <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt"> 워커 노드 사양 선택</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'워커노드의 가상 서버 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.isWorkerSpecLoad" src="images/loading_sm.gif" /></div>
-                            </div>
-
-                            <div class="tbl type1">
-                                <table class="table">
-                                    <colgroup>
-                                        <col style="width:10%;">
-                                        <col style="width:;">
-                                        <col style="width:20%;">
-                                        <col style="width:20%;">
-                                        <col style="width:20%;">
-                                    </colgroup>
-                                    <thead>
-                                    <tr>
-                                        <th scope="col"></th>
-                                        <th scope="col">종류</th>
-                                        <th scope="col">vCPU</th>
-                                        <th scope="col">메모리</th>
-                                        <th scope="col">OS디스크</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="(key, spec) in contents.workerSpecList" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltWorkerSpecUuid)}" ng-click="contents.fn.selectWorkerSpec(spec);">
-                                        <td>
-                                            <div class="radio radio-only" >
-                                                <input type="radio"
-                                                       name="worker_spec_radio"
-                                                       ng-model="contents.sltWorkerSpecUuid"
-                                                       id="worker_spec_radio_{{key}}"
-                                                       value="{{spec.uuid}}" ng-disabled="spec.disabled">
-                                                <label for="worker_spec_radio_{{key}}"></label>
-                                            </div>
-                                        </td>
-                                        <td>{{spec.name}}</td>
-                                        <td>{{spec.vcpus}} Core</td>
-                                        <td>{{spec.ram | displayVolume : 'MB'}}</td>
-                                        <td>{{spec.disk | displayVolume : 'GB'}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div ng-if="contents.isWorkerMinSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
-                        </li>
-                        <li>
-                            <div ng-if="contents.isMaxSpecOver" class="cnt_msg_box msg-info">리소스가 부족 합니다. 가능 하도록 서버수나 노드 사양을 조정 하십시오.</div>
-                        </li>
-                    </ul>
-                </div>
-            </form>
-            <div class="pn_footer" ng-include="contents.htmlUrls.createDeployBtn"></div>
-        </div>
-    </li>
-    <li>
-        <div class="panel_box pn_r">
-            <div class="pn_head">
-                <h4 class="pnh_tit ico01">서비스 기본정보</h4>
-            </div>
-            <div class="pn_body">
-                <div class="s_cont_box">
-                    <ul>
-                        <li>
-                            <span class="s_tit">서비스 이름</span>
-                            <span class="s_txt">{{ contents.data.deployName }}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">카탈로그 이름</span>
-                            <span class="s_txt">{{ contents.vmCatalogInfo.catalogName }}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">버전</span>
-                            <span class="s_txt">{{ contents.vmCatalogInfo.version }}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">마스터/워커 노드 수</span>
-                            <span class="s_txt">{{ contents.data.masterCnt }} / {{ contents.data.workerCnt }}</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">서버 OS</span>
-                            <span class="s_txt">CentOS 7</span>
-                        </li>
-                        <li>
-                            <span class="s_tit">서버 사양</span>
-                            <span class="s_txt" >{{ contents.data.spec.name }}</span>
-                            <div class="s_inner_cont">
-                                <div class="innr_tbl">
-                                    <table>
-                                        <colgroup>
-                                            <col width="10" />
-                                            <col width="30" />
-                                            <col width="30" />
-                                            <col width="30" />
-                                        </colgroup>
-                                        <thead>
-                                        <tr>
-                                            <th>NODE</th>
-                                            <th>vCPU</th>
-                                            <th>메모리</th>
-                                            <th>디스크</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr ng-show="contents.data.masterCnt == 1">
-                                            <td>M</td>
-                                            <td>{{ contents.sltMasterSpec.vcpus }} Core</td>
-                                            <td>{{ contents.sltMasterSpec.ram | displayVolume : 'MB' }}</td>
-                                            <td>{{ contents.sltMasterSpec.disk | displayVolume : 'GB' }}</td>
-                                        </tr>
-                                        <tr ng-show="contents.data.nodeType == 'cluster' && contents.data.masterCnt > 1">
-                                            <td>M</td>
-                                            <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.vcpus }} Core</td>
-                                            <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.ram | displayVolume : 'MB' }}</td>
-                                            <td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.disk | displayVolume : 'GB' }}</td>
-                                        </tr>
-                                        <tr ng-show="contents.data.nodeType == 'cluster' && contents.data.workerCnt == 1">
-                                            <td>W</td>
-                                            <td>{{ contents.sltWorkerSpec.vcpus }} Core</td>
-                                            <td>{{ contents.sltWorkerSpec.ram | displayVolume : 'MB' }}</td>
-                                            <td>{{ contents.sltWorkerSpec.disk | displayVolume : 'GB' }}</td>
-                                        </tr>
-                                        <tr ng-show="contents.data.nodeType == 'cluster' && contents.data.workerCnt > 1">
-                                            <td>W</td>
-                                            <td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.vcpus }} Core</td>
-                                            <td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.ram | displayVolume : 'MB' }}</td>
-                                            <td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.disk | displayVolume : 'GB' }}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <span class="info_txt">*  ‘디스크’ 크기는 OS 설치에 필요한 디스크 공간을 포함한 수치입니다.</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pn-Toggle">
-                <div class="pn_head brdt">
-                    <h4 class="pnh_tit ico09">프로젝트 자원 계획(Resource Quota Plan)</h4>
-                    <button type="button" name="button" class="btn_add_toggle" title="열고/닫기" ng-click="main.panelToggleChange($event);"><span class="ico_arw_sm_gray">열고/닫기</span></button>
-                </div>
-                <div class="pn_body">
-                    <div class="s_cont_box">
-                        <div class="s_progress_box wd_tit">
-                            <ul>
-                                <li>
-                                    <span class="tit_txt">vcpu</span>
-                                    <div class="progressWrap type2">
-                                        <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt) }} 개 / {{ contents.tenantResource.maxResource.cores }} 개)</span>
-                                </li>
-                                <li>
-                                    <span class="tit_txt">메모리</span>
-                                    <div class="progressWrap type2">
-                                        <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt) | displayVolume:'MB' }} / {{ contents.tenantResource.maxResource.ramSize | displayVolume:'MB' }})</span>
-                                </li>
-                                <li>
-                                    <span class="tit_txt">디스크</span>
-                                    <div class="progressWrap type2">
-                                        <div class="progress">
-                                            <div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}" class="progress">
-                                                <div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="txt_count">({{ (contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt) | displayVolume:'GB' }} / {{ contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB' }})</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </li>
-</ul>
+<div class="write_wrap">
+	<div class="row">
+		<div class="col-md-8">
+			<section class="panel panel-bordered">
+				<!-- panel-heading -->
+				<div class="panel-heading">
+					<h3 class="panel-title">{{ contents.vmCatalogInfo.catalogName }} 서비스 만들기</h3>
+				</div>
+				<!-- // panel-heading -->
+				<!-- panel-body -->
+				<div class="panel-body">
+					<form name="subPage.deployForm" novalidate>
+					<input type="password" style="display: block; width:0px; height:0px; border: 0;"><!-- 아이디 패스워드 자동 입력 방지 -->
+						<div class="form_list">
+							<div class="text-right add-txt">
+								<span><b class="caution-star">*</b> 는 필수입력 사항입니다</span>
+							</div>
+							
+							<!-- 서비스 이름 -->
+							<div ng-include="contents.htmlUrls.deployName"></div>
+							<!-- //서비스 이름 -->
+							
+							<!-- 서비스 영문 이름 -->
+							<div class="margin-top-30" ng-include="contents.htmlUrls.stackName"></div>
+							<!-- //서비스 영문 이름 -->
+							
+							<!-- 배포 구성 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> 배포 구성
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'배포 구성을 선택한다 .<br/>선택한 배포 구성으로 배포가 된다.'">	i</a><img ng-if="!contents.isAvailabilityZoneLoad" src="images/loading_sm.gif" /></div>
+							</div>
+							<div class="form-group">
+								<select name="type" class="form-control" ng-options="type.key as type.value for type in contents.types" ng-model="contents.data.type"></select>
+							</div>
+							<!-- //배포 구성 -->
+	
+							<!-- Mysql 비밀번호 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> Mysql 비밀번호
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'비밀번호는 숫자, 영소문자, 영대문자, 특수문자[&nbsp&nbsp#$^+=!*()@%&/&nbsp&nbsp] 혼합 및 8자리 이상 20자 이하 입니다.'">	i</a></div>
+							</div>
+							<div class="board-warp board-write-wrap">
+								<table class="table">
+									<colgroup>
+										<col style="width: 20%;">
+										<col style="width:">
+										<col style="width: 20%;">
+										<col style="width:;">
+									</colgroup>
+									<tbody>
+										<tr>
+											<th><b class="caution-star">*</b> root 비밀번호</th>
+											<td>
+												<input type="password" name="mysqlRootPassword" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.mysqlRootPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.mysqlRootPassword)" placeholder="비밀번호를 입력하세요.">
+											</td>
+											<th><b class="caution-star">*</b> root 비밀번호 확인</th>
+											<td>
+												<input type="password" name="mysqlRootConfirmPassword" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.mysqlRootConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.mysqlRootPassword, contents.data.mysqlRootConfirmPassword)" placeholder="비밀번호를 확인하세요.">
+											</td>
+										</tr>
+										<tr>
+											<th><b class="caution-star">*</b> hive 비밀번호</th>
+											<td>
+												<input type="password" name="mysqlHivePassword" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.mysqlHivePassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.mysqlHivePassword)" placeholder="비밀번호를 입력하세요.">
+											</td>
+											<th><b class="caution-star">*</b> hive 비밀번호 확인</th>
+											<td>
+												<input type="password" name="mysqlHiveConfirmPassword" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.mysqlHiveConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.mysqlHivePassword, contents.data.mysqlHiveConfirmPassword)" placeholder="비밀번호를 확인하세요.">
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- //Mysql 비밀번호 -->
+	
+							<!-- 오브젝트 스토리지 선택 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> 오브젝트 스토리지 선택
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'오브젝트 스토리지를 선택한다.'">	i</a></div>
+							</div>
+							<!-- <ul class="list-inline margin-top-20">
+								<li>
+									<div class="radio-group">
+										<input type="radio" name="bucketType" id="defined_bucket" class="radio-input" value="server" ng-model="contents.data.bucketType" ng-value="'defined'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" aria-invalid="false" ng-checked="'defined'">
+										<label for="defined_bucket" class="radio-item">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text"> 정의된 버킷 </span>
+										</label>
+									</div>
+								</li>
+								<li>
+									<div class="radio-group">
+										<input type="radio" name="bucketType" id="customized_bucket" class="radio-input" value="image" ng-model="contents.data.bucketType" ng-value="'customized'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" aria-invalid="false" ng-checked="'customized'">
+										<label for="customized_bucket" class="radio-item">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text"> 사용자 정의 </span>
+										</label>
+									</div>
+								</li>
+							</ul> -->
+							<div class="board-warp board-write-wrap margin-top-20">
+								<table class="table">
+									<colgroup>
+										<col style="width: 20%;">
+										<col style="width:">
+										<col style="width: 20%;">
+										<col style="width:;">
+									</colgroup>
+									<tbody>
+										<tr>
+											<th><b class="caution-star">*</b> S3 endpoint</th>
+											<td><input type="hidden" name="s3EndPoint" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.s3EndPoint" validation="" value="{{contents.sendSecretInfoList.s3RadosEndPoint}}"> {{contents.sendSecretInfoList.s3RadosEndPoint}}</td>
+											<th><b class="caution-star">*</b> S3 access key</th>
+											<td><input type="hidden" name="s3AccessKey" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.s3AccessKey" validation="" value="{{contents.sendSecretInfoList.s3AccessKey}}">{{contents.sendSecretInfoList.s3AccessKey}}</td>
+										</tr>
+										<tr>
+											<th><b class="caution-star">*</b> S3 secret key</th>
+											<td colspan="3"><input type="hidden" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.s3SecretKey" validation="" value="{{contents.sendSecretInfoList.s3SecreteAccessKey}}">{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
+	<!-- 										<th><i class="i_star"></i> 버킷명</th> -->
+	<!-- 										<td><input type="text" name="bucketName" class="form-control" maxlength="50" ng-model="contents.data.bucketName" validation="min:2|max:20|required|custom:contents.fn.validationBucketName(contents.data.bucketName)" placeholder="버킷명을 입력하세요."></td> -->
+										</tr>
+									</tbody>
+								</table>
+								<!-- <div class="text-right margin-top-10">
+									<button type="button" name="button" class="btn btn-default" ng-click="contents.fn.getObjectStorageObject(contents.data.bucketName)" ng-disabled="" >버킷 조회하기</button>
+									<button type="button" name="button" class="btn btn-primary" ng-click="contents.fn.createBucket(contents.data.bucketName)" ng-disabled="">버킷 생성하기</button>
+								</div> -->
+							</div>
+							<!-- //오브젝트 스토리지 선택 -->
+							
+							<!-- 존 선택 -->
+							<div ng-include="contents.htmlUrls.zoneSelect"></div>
+							<!-- //존 선택 -->
+							
+							<!-- 노드 구성 선택 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> 노드 구성 선택
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'- 서비스의 노드 구성 선택<br/>1. 단일 구성: 1개의 서버로 구성<br/>2. 다중 구성: Master, Worker로 구성'">	i</a></div>
+							</div>
+							<ul class="list-inline margin-top-20">
+								<li>
+									<div class="radio-group">
+										<input type="radio" name="nodeType" id="deploy-type-single" class="radio-input" value="server" ng-model="contents.data.nodeType" ng-value="'single'" ng-change="contents.fn.changeNodeType(contents.data.nodeType)" aria-invalid="false">
+										<label for="deploy-type-single" class="radio-item">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text"> 단일노드 </span>
+										</label>
+									</div>
+								</li>
+								<li>
+									<div class="radio-group">
+										<input type="radio" name="nodeType" id="deploy-type-cluster" class="radio-input" value="image" ng-model="contents.data.nodeType" ng-value="'cluster'" ng-change="contents.fn.changeNodeType(contents.data.nodeType)" aria-invalid="false">
+										<label for="deploy-type-cluster" class="radio-item">
+											<div class="radio">
+												<div class="checked-icon"></div>
+											</div>
+											<span class="text"> 다중노드 </span>
+										</label>
+									</div>
+								</li>
+							</ul>
+							<!-- //노드 구성 선택 -->
+							
+							<!-- 다중노드 구성 -->
+							<div class="margin-top-30" ng-if="contents.data.nodeType == 'cluster'">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 다중노드 구성
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'배포될 마스터 및 워커 노드 수를 정한다.'">	i</a></div>
+								</div>
+								<div class="board-warp board-write-wrap margin-top-20">
+									<table class="table">
+										<colgroup>
+											<col style="width: 20%;">
+											<col style="width:">
+											<col style="width: 20%;">
+											<col style="width:;">
+										</colgroup>
+										<tbody>
+											<tr>
+												<th><b class="caution-star">*</b> 마스터 노드 수</th>
+												<td><select name="masterCnt" class="form-control form-control-sm" ng-options="masterCnt.key as masterCnt.value for masterCnt in contents.masterCnts" ng-model="contents.data.masterCnt" ng-change="contents.fn.changeMasterCnt(contents.data.masterCnt);"></select></td>
+												<th><b class="caution-star">*</b> 워커 노드 수</th>
+												<td><select name="workerCnt" class="form-control form-control-sm" ng-options="workerCnt.key as workerCnt.value for workerCnt in contents.workerCnts" ng-model="contents.data.workerCnt" ng-change="contents.fn.changeWorkerCnt(contents.data.workerCnt);"></select>
+												 <!--<input type="text" name="workerCnt" class="form-control" maxlength="50" ng-model="contents.data.workerCnt" validation="number|min:1|max:20|required" placeholder="워커 노드 수를 입력하세요." ng-change="contents.fn.changeWorkerCnt(contents.data.workerCnt);">-->
+												 </td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- //다중노드 구성 -->
+							
+							<!-- Octavia LB 사용여부 -->
+							<div ng-if="contents.data.masterCnt == 2 && contents.data.nodeType == 'cluster'" ng-include="contents.htmlUrls.octaviaLbUse"></div>
+							<!-- //Octavia LB 사용여부 -->
+							
+							<!-- 노드 사양 선택 -->
+							<div class="write-sub-title">
+								<span ng-if="contents.data.nodeType == 'single'"> <b class="caution-star">*</b> 노드 사양 선택</span>
+								<span ng-if="contents.data.nodeType == 'cluster'"> <b class="caution-star">*</b> 마스터 노드 사양 선택</span>
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'생성 할 마스터 노드의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'">	i</a><img ng-if="!contents.isMasterSpecLoad" src="images/loading_sm.gif" /></div>
+							</div>
+							<div class="table-wrap margin-top-20">
+								<table class="table table-outline table-hover text-center">
+									<colgroup>
+										<col style="width: 10%;">
+										<col style="width:;">
+										<col style="width: 20%;">
+										<col style="width: 20%;">
+										<col style="width: 20%;">
+									</colgroup>
+									<thead class="bg-blue-grey-100">
+										<tr>
+											<th scope="col"></th>
+											<th scope="col">종류</th>
+											<th scope="col">vCPU</th>
+											<th scope="col">메모리</th>
+											<th scope="col">OS디스크</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="(key, spec) in contents.masterSpecList" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltMasterSpecUuid)}" ng-click="contents.fn.selectMasterSpec(spec);">
+											<td>
+												<div class="radio-group">
+													<input type="radio" name="master_spec_radio" ng-model="contents.sltMasterSpecUuid" id="master_spec_radio_{{key}}" class="radio-input" value="{{spec.uuid}}" ng-disabled="spec.disabled">
+													<label for="master_spec_radio_{{key}}" class="radio-item">
+														<div class="radio">
+															<div class="checked-icon"></div>
+														</div>
+													</label>
+												</div>
+											</td>
+											<td>{{spec.name}}</td>
+											<td>{{spec.vcpus}} Core</td>
+											<td>{{spec.ram | displayVolume : 'MB'}}</td>
+											<td>{{spec.disk | displayVolume : 'GB'}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="alert alert-danger alert-dismissible" role="alert" ng-if="contents.isMasterMinSpecDisabled">
+								<i data-feather="alert-triangle" class="feather-directive"></i>
+								<span>선택한 이미지 보다 큰 사양만 선택 가능 합니다.</span>
+							</div>
+							<!-- //노드 사양 선택 -->
+	
+							<!-- 워커 노드 사양 선택 -->
+							<div class="margin-top-30" ng-if="contents.data.nodeType == 'cluster'">
+								<div class="write-sub-title">
+									<b class="caution-star">*</b> 워커 노드 사양 선택
+									<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'워커노드의 가상 서버 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'">	i</a><img ng-if="!contents.isWorkerSpecLoad" src="images/loading_sm.gif" /></div>
+								</div>
+								<div class="table-wrap margin-top-20">
+									<table class="table table-outline table-hover text-center">
+										<colgroup>
+											<col style="width: 10%;">
+											<col style="width:;">
+											<col style="width: 20%;">
+											<col style="width: 20%;">
+											<col style="width: 20%;">
+										</colgroup>
+										<thead class="bg-blue-grey-100">
+											<tr>
+												<th scope="col"></th>
+												<th scope="col">종류</th>
+												<th scope="col">vCPU</th>
+												<th scope="col">메모리</th>
+												<th scope="col">OS디스크</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="(key, spec) in contents.workerSpecList" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltWorkerSpecUuid)}" ng-click="contents.fn.selectWorkerSpec(spec);">
+												<td>
+													<div class="radio-group">
+														<input type="radio" name="worker_spec_radio" ng-model="contents.sltWorkerSpecUuid" id="worker_spec_radio_{{key}}" class="radio-input" value="{{spec.uuid}}" ng-disabled="spec.disabled">
+														<label for="worker_spec_radio_{{key}}" class="radio-item">
+																<div class="radio">
+																	<div class="checked-icon"></div>
+																</div>
+														</label>
+													</div>
+												</td>
+												<td>{{spec.name}}</td>
+												<td>{{spec.vcpus}} Core</td>
+												<td>{{spec.ram | displayVolume : 'MB'}}</td>
+												<td>{{spec.disk | displayVolume : 'GB'}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="alert alert-danger alert-dismissible" role="alert" ng-if="contents.isWorkerMinSpecDisabled">
+									<i data-feather="alert-triangle" class="feather-directive"></i>
+									<span>선택한 이미지 보다 큰 사양만 선택 가능 합니다.</span>
+								</div>
+							</div>
+							<!-- //워커 노드 사양 선택 -->
+							
+							<!-- 메세지 -->
+							<div class="alert alert-danger alert-dismissible" role="alert" ng-if="contents.isMaxSpecOver">
+								<i data-feather="alert-triangle" class="feather-directive"></i>
+								<span>리소스가 부족 합니다. 가능 하도록 서버수나 노드 사양을 조정 하십시오.</span>
+							</div>
+							<!-- //메세지 -->
+						</div>
+					</form>
+				</div>
+			</section>
+		</div>
+		<div class="col-md-4">
+			<section class="panel panel-bordered">
+				<!-- panel-heading -->
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-sm-12">
+							<h3 class="panel-title">서비스 기본정보</h3>
+						</div>
+					</div>
+				</div>
+				<!-- // panel-heading -->
+				<!-- panel-body -->
+				<div class="panel-body">
+					<div class="s_cont_box">
+						<ul>
+							<li>
+								<span class="s_tit">서비스 이름</span> 
+								<span class="s_txt">{{ contents.data.deployName }}</span>
+							</li>
+							<li>
+								<span class="s_tit">카탈로그 이름</span> 
+								<span class="s_txt">{{ contents.vmCatalogInfo.catalogName }}</span>
+							</li>
+							<li>
+								<span class="s_tit">버전</span> 
+								<span class="s_txt">{{ contents.vmCatalogInfo.version }}</span>
+							</li>
+							<li>
+								<span class="s_tit">마스터/워커 노드 수</span> 
+								<span class="s_txt">{{ contents.data.masterCnt }} / {{ contents.data.workerCnt }}</span>
+							</li>
+							<li>
+								<span class="s_tit">서버 OS</span> 
+								<span class="s_txt">CentOS 7</span>
+							</li>
+							<li>
+								<span class="s_tit">서버 사양</span> 
+								<span class="s_txt">{{ contents.data.spec.name }}</span>
+								<div class="s_inner_cont">
+									<div class="table-wrap">
+										<table class="table table-outline">
+											<colgroup>
+												<col width="10" />
+												<col width="30" />
+												<col width="30" />
+												<col width="30" />
+											</colgroup>
+											<thead class="text-center bg-grey-200">
+												<tr>
+													<th>NODE</th>
+													<th>vCPU</th>
+													<th>메모리</th>
+													<th>디스크</th>
+												</tr>
+											</thead>
+											<tbody class="text-center">
+												<tr ng-show="contents.data.masterCnt == 1">
+													<td>M</td>
+													<td>{{ contents.sltMasterSpec.vcpus }} Core</td>
+													<td>{{ contents.sltMasterSpec.ram | displayVolume : 'MB' }}</td>
+													<td>{{ contents.sltMasterSpec.disk | displayVolume : 'GB' }}</td>
+												</tr>
+												<tr ng-show="contents.data.nodeType == 'cluster' && contents.data.masterCnt > 1">
+													<td>M</td>
+													<td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.vcpus }} Core</td>
+													<td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.ram | displayVolume : 'MB' }}</td>
+													<td>{{ contents.data.masterCnt }} X {{ contents.sltMasterSpec.disk | displayVolume : 'GB' }}</td>
+												</tr>
+												<tr ng-show="contents.data.nodeType == 'cluster' && contents.data.workerCnt == 1">
+													<td>W</td>
+													<td>{{ contents.sltWorkerSpec.vcpus }} Core</td>
+													<td>{{ contents.sltWorkerSpec.ram | displayVolume : 'MB' }}</td>
+													<td>{{ contents.sltWorkerSpec.disk | displayVolume : 'GB' }}</td>
+												</tr>
+												<tr ng-show="contents.data.nodeType == 'cluster' && contents.data.workerCnt > 1">
+													<td>W</td>
+													<td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.vcpus }} Core</td>
+													<td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.ram | displayVolume : 'MB' }}</td>
+													<td>{{ contents.data.workerCnt }} X {{ contents.sltWorkerSpec.disk | displayVolume : 'GB' }}</td>
+												</tr>
+											</tbody>
+										</table>
+										<span class="info_txt">* ‘디스크’ 크기는 OS 설치에 필요한 디스크 공간을 포함한 수치입니다.</span>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- //panel-body -->
+			</section>
+			
+			<div class="panel-group">
+				<section class="panel panel-bordered">
+					<div class="panel-heading">
+						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse3" href="" aria-expanded="false" ng-click="main.panelToggleChange($event);"><h3>프로젝트 자원 계획(Resource Quota Plan)</h3></a>
+					</div>
+					<!-- // panel-heading -->
+					<div class="panel-collapse collapse" id="basicCollapse3">
+						<div class="panel-body">
+							<div class="s_cont_box">
+								<div class="s_progress_box wd_tit">
+									<ul>
+										<li>
+											<span class="tit_txt">vcpu</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt)/contents.tenantResource.maxResource.cores)*100|number:0 }}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{ (contents.tenantResource.usedResource.cores + contents.sltMasterSpec.vcpus*contents.data.masterCnt + contents.sltWorkerSpec.vcpus*contents.data.workerCnt) }} 개 / {{ contents.tenantResource.maxResource.cores }} 개)</span>
+										</li>
+										<li>
+											<span class="tit_txt">메모리</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt)/contents.tenantResource.maxResource.ramSize)*100|number:0 }}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{ (contents.tenantResource.usedResource.ramSize + contents.sltMasterSpec.ram*contents.data.masterCnt + contents.sltWorkerSpec.ram*contents.data.workerCnt) | displayVolume:'MB' }} / {{ contents.tenantResource.maxResource.ramSize | displayVolume:'MB' }})</span>
+										</li>
+										<li>
+											<span class="tit_txt">디스크</span>
+											<div class="progressWrap type2">
+												<div class="progress">
+													<div percent-progress-bar-animate bar-type="width" percent="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}" class="progress">
+														<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="{{ ((contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt)/contents.tenantResource.maxResource.instanceDiskGigabytes)*100|number:0 }}%"></div>
+													</div>
+												</div>
+											</div>
+											<span class="txt_count">({{ (contents.tenantResource.usedResource.instanceDiskGigabytes + contents.sltMasterSpec.disk*contents.data.masterCnt + contents.sltWorkerSpec.disk*contents.data.workerCnt) | displayVolume:'GB' }} / {{ contents.tenantResource.maxResource.instanceDiskGigabytes | displayVolume:'GB' }})</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- 버튼 -->
+	<div ng-include="contents.htmlUrls.createDeployBtn"></div>
+	<!-- //버튼 -->
+</div>

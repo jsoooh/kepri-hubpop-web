@@ -314,14 +314,14 @@
 								<span class="s_tit">인스턴스 사양</span>
 								<span class="s_txt" >{{contents.data.spec.name}}</span>
 								<div class="s_inner_cont">
-									<div class="innr_tbl">
-										<table>
+									<div class="table-wrap">
+										<table class="table table-outline">
 											<colgroup>
 												<col width="30" />
 												<col width="30" />
 												<col width="30" />
 											</colgroup>
-											<thead>
+											<thead class="text-center bg-grey-200">
 												<tr>
 													<th>vCPU</th>
 													<th>메모리</th>
@@ -330,9 +330,9 @@
 											</thead>
 											<tbody>
 												<tr>
-													<td>{{contents.data.spec.vcpus}} Core</td>
-													<td>{{contents.data.spec.ram | displayVolume : 'MB'}}</td>
-													<td>{{contents.data.spec.disk | displayVolume : 'GB'}}</td>
+													<td class="text-center">{{contents.data.spec.vcpus}} Core</td>
+													<td class="text-center">{{contents.data.spec.ram | displayVolume : 'MB'}}</td>
+													<td class="text-center">{{contents.data.spec.disk | displayVolume : 'GB'}}</td>
 												</tr>
 											</tbody>
 										</table>

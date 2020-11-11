@@ -17,6 +17,7 @@ angular.module('iaas.controllers')
 
         ct.instanceSnapshotList = [];
         ct.storageSnapshotList = [];
+        ct.promiseList = [];
 
         ct.schInstanceFilterText = "";
         ct.schStorageFilterText = "";
@@ -38,7 +39,6 @@ angular.module('iaas.controllers')
         
         // Snapshot List
         ct.fn.getInstanceSnapshotList = function() {
-            $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId
             };
@@ -56,17 +56,13 @@ angular.module('iaas.controllers')
                     }
                 }
                 common.objectOrArrayMergeData(ct.instanceSnapshotList, instanceSnapshots);
-                $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 if (status != 307) {
                     common.showAlertError(data.message);
                 }
             });
-            returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
-            });
+            ct.promiseList.push(returnPromise);
         };
 
         ct.fn.deleteInstanceSnapshot = function(instanceSnapshot) {
@@ -96,7 +92,6 @@ angular.module('iaas.controllers')
 
         // Script list
         ct.fn.getStorageSnapshotList = function() {
-            $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId
             };
@@ -111,16 +106,13 @@ angular.module('iaas.controllers')
                     }
                 }
                 common.objectOrArrayMergeData(ct.storageSnapshotList, volumeSnapShots);
-                $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 if (status != 307) {
                     common.showAlertError(data.message);
                 }
             });
-            returnPromise.finally(function (data, status, headers) {
-            });
+            ct.promiseList.push(returnPromise);
         };
 
         ct.fn.deleteStorageSnapshot = function(storageSnapshot) {
@@ -197,6 +189,14 @@ angular.module('iaas.controllers')
         if (ct.data.tenantId) {
             ct.fn.getInstanceSnapshotList();
             ct.fn.getStorageSnapshotList(1);
+
+            // 서버백업, 디스크 백업 데이터 로딩창
+            if (ct.promiseList && ct.promiseList.length > 0) {
+                $scope.main.loadingMainBody = true;
+                $q.all(ct.promiseList).finally(function () {
+                    $scope.main.loadingMainBody = false;
+                });
+            }
         }
     })
     .controller('iaasServerSnapshotCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {

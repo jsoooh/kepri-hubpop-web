@@ -417,7 +417,7 @@ angular.module('app')
                 ['Table', 'SpecialChar', 'Link', 'Unlink']
             ]
         },
-        monitoringUrl: 'http://192.168.0.7:3000/d/hb7fSE0tab/user_project_detail'
+        monitoringUrl: 'http://192.168.0.7:3000/d/hb7fSE0taa/tenant_linux_detail'
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},

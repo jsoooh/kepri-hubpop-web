@@ -1,33 +1,48 @@
-<div class="pnb_tit">
-    <i class="i_star"></i> <span class="pnb_t_txt">Octavia LB 사용여부</span>
-    <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'Octavia LB 사용 여부로 사용할 경우 자동으로 로드벨런서가 구성된다.<br/> 알고리즘을 \'ROUND_ROBIN\'을 기본으로 하고, 접속포트는 LB의 Listener 포트이다.'"><span class="ico_info"></span></button></div>
+<!-- Octavia LB 사용여부 -->
+<div class="write-sub-title">
+	<b class="caution-star">*</b> Octavia LB 사용여부
+	<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'Octavia LB 사용 여부로 사용할 경우 자동으로 로드벨런서가 구성된다.<br/> 알고리즘을 \'ROUND_ROBIN\'을 기본으로 하고, 접속포트는 LB의 Listener 포트이다.'">	i</a></div>
 </div>
-<div class="pl10 mt10">
-    <span class="pnb_stit">- 배포 여부 선택  : </span>
-    <div class="radio radio-inline">
-        <input type="radio" name="octavia_lb_use" id="octavia-lb-use-true" ng-model="contents.data.octaviaLbUse" ng-value=true class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-        <label for="octavia-lb-use-true" class="label">예</label>
-    </div>
-    <div class="radio radio-inline">
-        <input type="radio" name="octavia_lb_use" id="octavia-lb-use-false" ng-model="contents.data.octaviaLbUse" ng-value=false class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-        <label for="octavia-lb-use-false" class="label">아니오</label>
-    </div>
+<ul class="list-inline margin-top-20">
+	<li>
+		<div class="radio-group">
+			<input type="radio" name="octavia_lb_use" id="octavia-lb-use-true" class="radio-input" ng-model="contents.data.octaviaLbUse" ng-value=true aria-invalid="false">
+			<label for="octavia-lb-use-true" class="radio-item">
+				<div class="radio">
+					<div class="checked-icon"></div>
+				</div>
+				<span class="text"> 예 </span>
+			</label>
+		</div>
+	</li>
+	<li>
+		<div class="radio-group">
+			<input type="radio" name="octavia_lb_use" id="octavia-lb-use-false" class="radio-input" ng-model="contents.data.octaviaLbUse" ng-value=false  aria-invalid="false">
+			<label for="octavia-lb-use-false" class="radio-item">
+				<div class="radio">
+					<div class="checked-icon"></div>
+				</div>
+				<span class="text"> 아니오 </span>
+			</label>
+		</div>
+	</li>
+</ul>
+<div class="board-warp board-write-wrap margin-top-20" ng-if="contents.data.octaviaLbUse">
+	<table class="table">
+		<colgroup>
+			<col style="width: 20%;">
+			<col style="width:">
+			<col style="width: 20%;">
+			<col style="width:;">
+		</colgroup>
+		<tbody>
+			<tr>
+				<th><b class="caution-star">*</b> 알고리즘</th>
+				<td><input type="text" name="lbAlgorithm" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.lbAlgorithm" disabled="disabled"></td>
+				<th><b class="caution-star">*</b> 접속포트(LB)</th>
+				<td><input type="text" name="lbSvcPort" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.lbSvcPort" validation="number|required|custom:contents.fn.systemLbPortCustomValidationCheck(contents.data.lbSvcPort)"></td>
+			</tr>
+		</tbody>
+	</table>
 </div>
-<div ng-if="contents.data.octaviaLbUse" class="tbw type1 mt20">
-    <table class="table">
-        <colgroup>
-            <col style="width:20%;">
-            <col style="width:">
-            <col style="width:20%;">
-            <col style="width:;">
-        </colgroup>
-        <tbody>
-        <tr>
-            <th><i class="i_star"></i> 알고리즘</th>
-            <td><input type="text" name="lbAlgorithm" class="form-control" maxlength="50" ng-model="contents.data.lbAlgorithm" disabled="disabled"></td>
-            <th><i class="i_star"></i> 접속포트(LB)</th>
-            <td><input type="text" name="lbSvcPort" class="form-control" maxlength="50" ng-model="contents.data.lbSvcPort" validation="number|required|custom:contents.fn.systemLbPortCustomValidationCheck(contents.data.lbSvcPort)"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<!-- //Octavia LB 사용여부 -->

@@ -233,8 +233,7 @@ angular.module('gpu.controllers')
                         var createdDate = new Date(serverMain.created);
                         serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                     }
-                    // 20.9.1 by hrit, 모니터링 링크 세팅
-                    serverMain.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + serverMain.name;
+                    ct.fn.setMonitoringLink(serverMain);
                 });
                 if (isServerStatusCheck) {
                     if ($scope.main.reloadTimmer['instanceServerStateList']) {
@@ -344,6 +343,7 @@ angular.module('gpu.controllers')
                             ct.fn.mergeServerInfo(serverItem, instance);
                             ct.fn.setProcState(serverItem);
                             ct.fn.setRdpConnectDomain(serverItem);
+                            ct.fn.setMonitoringLink(serverItem);
                             // VM 생성시 1시간 초과하여 미생성시 자동 삭제 처리
                             if (newItem && serverItem.fixedIp == "") {
                                 common.showAlertInfo('"' + serverItem.name + '" 인스턴스가 생성한지 1시간이 지나 삭제되었습니다.');
@@ -387,11 +387,13 @@ angular.module('gpu.controllers')
                                 ct.fn.setProcState(ct.serverMainList[inKey]);
                                 ct.fn.setRdpConnectDomain(ct.serverMainList[inKey]);
                                 ct.fnGetInstancesData(instance);
+                                ct.fn.setMonitoringLink(ct.serverMainList[inKey]);
                             } else {
                                 ct.fn.setProcState(instance);
                                 ct.fn.setRdpConnectDomain(instance);
                                 ct.serverMainList.push(instance);
                                 ct.fnGetInstancesData(instance);
+                                ct.fn.setMonitoringLink(instance);
                             }
                         });
                     }
@@ -1103,6 +1105,11 @@ angular.module('gpu.controllers')
         ct.fn.setMonitoringYn = function (instance) {
             computeDetailService.setMonitoringYn(instance);
         };
+
+        // 20.9.1 by hrit, 모니터링 링크 세팅
+        ct.fn.setMonitoringLink = function (instance) {
+            instance.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + instance.name;
+        }
 
         $interval(function () {
             // ct.fnGetInstancesData(); // yminlee: gpu는 alarm 제외

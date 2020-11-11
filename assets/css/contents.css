@@ -108,9 +108,9 @@
 .s_cont_box ul > li:first-child {padding-top:0;}
 .s_cont_box ul > li:last-child {border-bottom:0;}
 .s_cont_box ul > li span {display:inline-block;}
-.s_cont_box ul > li .s_tit {position:relative; height:28px; line-height:28px; font-size:13px; font-weight:500; color:#777; vertical-align:middle; padding:2px 0 1px 0;}
-.s_cont_box ul > li .s_txt {font-size:15px; font-weight:500; color:#333; float:right;}
-.s_cont_box ul > li .s_inner_cont {width:100%; background:#f4f4f4; line-height:24px; padding:20px; margin:10px 0 0 0;}
+.s_cont_box ul > li .s_tit {position:relative; height:28px; line-height:28px; font-size:13px; font-weight:600; color:#777; vertical-align:middle; padding:2px 0 1px 0;}
+.s_cont_box ul > li .s_txt {font-size:13px; font-weight:500; color:#333; float:right;}
+.s_cont_box ul > li .s_inner_cont {width:100%; background:#fff; /* background:#f4f4f4; */ line-height:24px; padding:0; /* padding:20px; */ margin:20px 0 0 0;}
 .s_cont_box ul > li .s_inner_cont pre {display:block; width:100%; max-height:180px; font-family:'Noto Sans KR', 'Montserrat','Apple SD Gothic Neo', sans-serif; font-size:14px; color:#333; line-height:1.42857143; word-break:break-all; word-wrap:break-word; white-space:pre-line; overflow-y:auto; background:none; border:0; border-radius:0px; padding:0px; margin:0;}
 .s_cont_box ul > li .innr_tbl table {width:100%;}
 .s_cont_box ul > li .innr_tbl table thead th {font-size:13px; color:#fff; border-right:1px solid #fff; background:#878889; text-align:center; padding:0 5px;}
@@ -264,7 +264,7 @@
 .welcome_layer .guide_fnt {display:inline-block; font-family:'NanumPen'; font-size:27px;}
 .welcome_layer .guide_fnt.arrw_btm {position:absolute; top:0; left: 110px;}
 .welcome_layer .guide_fnt.arrw_top {position:absolute ;top:-77px; left: 350px;}
-.welcome_layer .guide_fnt::before {display:inline-block; content:''; width:34px; height:28px; background:url("../../images/bg_arrow.png") no-repeat; margin-right:10px;}
+.welcome_layer .guide_fnt::before {display:inline-block; content:''; width:40px; height:28px; background:url("../../images/bg_arrow.png") no-repeat; margin-right:10px;}
 .welcome_layer .guide_fnt.arrw_btm::before {background-position:left top;}
 .welcome_layer .guide_fnt.arrw_top::before {background-position:-48px center;}
 .welcome_layer.type-gpu .guide_fnt.arrw_top {left: 380px;}

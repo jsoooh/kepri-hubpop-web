@@ -3,7 +3,7 @@
 
 	<div class="alert alert-primary" role="alert">
 		<i data-feather="file-text" class="feather-directive"></i>
-		<div class="text-area">원본 백업 이미지로부터 새로운 디스크를 생성합니다.</div>
+		<div class="text-area">원본 스냅샷으로부터 새로운 볼륨를 생성합니다.</div>
 	</div>
 	
 	<div class="row">
@@ -11,7 +11,7 @@
 			<section class="panel panel-bordered">
 				<!-- panel-heading -->
 				<div class="panel-heading">
-					<h3 class="panel-title">백업 이미지로 부터 신규 디스크 만들기</h3>
+					<h3 class="panel-title">스냅샷로 부터 신규 볼륨 만들기</h3>
 				</div>
 				<!-- // panel-heading -->
 				
@@ -23,54 +23,54 @@
 								<span><b class="caution-star">*</b> 는 필수입력 사항입니다</span>
 							</div>
 							
-							<!-- 백업 이미지 이름 -->
+							<!-- 스냅샷 이름 -->
 							<div class="write-sub-title">
-								</b> 백업 이미지 이름
+								</b> 스냅샷 이름
 							</div>
 							<div class="form-group">
 								<input type="text" class="form-control" ng-value="contents.snapshotVolume.volumeName" disabled>
 							</div>
-							<!-- // 백업 이미지 이름 -->
+							<!-- // 스냅샷 이름 -->
 							
-							<!-- 디스크 이름 -->
+							<!-- 볼륨 이름 -->
 							<div class="write-sub-title">
-								<b class="caution-star">*</b> 디스크 이름
-								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'백업된 디스크 이미지로부터 신규 생성되는 디스크 이름을 입력합니다. 최대 20자까지 입력할 수 있습니다.'">	i</a><img ng-if="!contents.isStorageListLoad" src="images/loading_sm.gif" /></div>
+								<b class="caution-star">*</b> 볼륨 이름
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'스냅샷으로부터 신규 생성되는 볼륨 이름을 입력합니다. 최대 20자까지 입력할 수 있습니다.'">	i</a><img ng-if="!contents.isStorageListLoad" src="images/loading_sm.gif" /></div>
 							</div>
 							<div class="form-group">
-								<input type="text" ng-model="contents.volume.name" name="volumeName" validation="required|custom:contents.fn.storageNameCustomValidationCheck(contents.volume.name)" class="form-control" maxlength="50" placeholder="디스크 이름을 입력하세요." >
+								<input type="text" ng-model="contents.volume.name" name="volumeName" validation="required|custom:contents.fn.storageNameCustomValidationCheck(contents.volume.name)" class="form-control" maxlength="50" placeholder="볼륨 이름을 입력하세요." >
 							</div>
-							<!-- //디스크 이름 -->
+							<!-- //볼륨 이름 -->
 							
-							<!-- 디스크 크기 -->
+							<!-- 볼륨 크기 -->
 							<div class="write-sub-title">
-								<b class="caution-star">*</b> 디스크 크기
+								<b class="caution-star">*</b> 볼륨 크기
 								<div class="t_tip_bx">
-									<a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'신규 생성하는 디스크의 크기(size)를 설정할수 있습니다. 프로젝트에 할당된 디스크 쿼터(최대크기) 내에서 자유롭게 설정할수 있습니다.'">	i</a>
+									<a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'신규 생성하는 볼륨의 크기(size)를 설정할수 있습니다. 프로젝트에 할당된 볼륨 쿼터(최대크기) 내에서 자유롭게 설정할수 있습니다.'">	i</a>
 									<img ng-if="!contents.isTenantResourceLoad" src="images/loading_sm.gif">
 								</div>
 							</div>
-							<!-- //디스크 크기 -->
+							<!-- //볼륨 크기 -->
 							
-							<!-- 프로젝트 사용가능 디스크 정보 -->
+							<!-- 프로젝트 사용가능 볼륨 정보 -->
 							<div class="panel-inner-collapse">
 								<div class="panel-group margin-top-30">
 									<section class="panel panel-bordered"  ng-if="contents.isTenantResourceLoad">
 										<div class="panel-heading">
 											<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse1" aria-expanded="false" ng-click="main.pnbBoxToggleChange($event);">
-												<h3>프로젝트 사용가능 디스크 정보</h3>
+												<h3>프로젝트 사용가능 볼륨 정보</h3>
 												
 											</a>
 										</div>
 										<!-- // panel-heading -->
 										<div class="panel-collapse collapse" id="basicCollapse1">
 											<div class="panel-body disk-use-info font-weight-600">
-												<div class="clearfix"><b>- 디스크 사용량</b></div>
+												<div class="clearfix"><b>- 볼륨 사용량</b></div>
 												<div class="clearfix text-center">
 													<span class="font-size-35 blue-600">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB':{viewType:'val'} }}</span>
 													<span class="font-size-20 grey-600">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB':{viewType:'unit'} }}</span>
 												</div>
-												<div class="clearfix text-center grey-400 margin-top-5">전체 디스크 공간</div>
+												<div class="clearfix text-center grey-400 margin-top-5">전체 볼륨 공간</div>
 												<div class="clearfix">
 													<div class="disk_cnt_mid">
 														<span class="txt fl_l">0</span>
@@ -100,11 +100,11 @@
 									</section>
 								</div>
 							</div>
-							<!-- //프로젝트 사용가능 디스크 정보 -->
+							<!-- //프로젝트 사용가능 볼륨 정보 -->
 							
-							<!-- 디스크 추가 -->
+							<!-- 볼륨 추가 -->
 							<div ng-if="contents.isTenantResourceLoad" class="disk_area">
-								<p>마우스를 움직여 생성하실 디스크의 크기를 설정 해주세요.</p>
+								<p>마우스를 움직여 생성하실 볼륨의 크기를 설정 해주세요.</p>
 								<div class="disk_box">
 									<div class="disk_info">최대 {{contents.volumeSliderOptions.ceil | displayVolume:'GB'}}</div>
 									<div class="rangeWrap type2">
@@ -122,9 +122,9 @@
 							</div>
 							<div class="alert alert-primary margin-top-30" role="alert">
 								<i data-feather="file-text" class="feather-directive"></i>
-								<div class="text-area">디스크 크기는 최대 {{contents.maxSingleDiskSize | displayVolume:'GB'}}까지 설정이 가능합니다. 단, {{contents.maxSingleDiskSize | displayVolume:'GB'}} 이하로 용량이 남아 있는 경우 잔여 용량이 디스크 최대값이 됩니다</div>
+								<div class="text-area">볼륨 크기는 최대 {{contents.maxSingleDiskSize | displayVolume:'GB'}}까지 설정이 가능합니다. 단, {{contents.maxSingleDiskSize | displayVolume:'GB'}} 이하로 용량이 남아 있는 경우 잔여 용량이 볼륨 최대값이 됩니다</div>
 							</div>
-							<!-- //디스크 추가 -->
+							<!-- //볼륨 추가 -->
 							
 							<!-- 설명 -->
 							<div class="panel-inner-collapse">
@@ -134,7 +134,7 @@
 											<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse2" aria-expanded="false" ng-click="main.panelToggleChange($event);">
 												<h3>
 													 설명
-													<div class="t_tip_bx"><div class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'추가할 디스크에 대한 설명을 100자 내외로 입력할 수 있습니다.'">	i</div></div>		
+													<div class="t_tip_bx"><div class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'추가할 볼륨에 대한 설명을 100자 내외로 입력할 수 있습니다.'">	i</div></div>
 												</h3>
 											</a>
 										</div>
@@ -152,20 +152,20 @@
 							</div>
 							<!-- //설명 -->
 							
-							<!-- 가상서버와 연결 -->
+							<!-- 인스턴스와 연결 -->
 							<div class="write-sub-title">
-								가상서버와 연결
-								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'디스크 생성시 기존에 생성된 가상서버와 바로 연결할수 있습니다.'">	i</a>
+								인스턴스와 연결
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'볼륨 생성시 기존에 생성된 인스턴스와 바로 연결할수 있습니다.'">	i</a>
 									<img ng-if="!contents.isServerListLoad" src="images/loading_sm.gif" />
 								</div>
 							</div>
 							<div class="form-group" ng-if="contents.isServerListLoad">
 								<select class="form-control" ng-model="contents.sltInstanceId" ng-change="contents.fn.sltInstanceChange(contents.sltInstanceId);">
-									<option value="">연결 할 가상서버 선택</option>
+									<option value="">연결 할 인스턴스 선택</option>
 									<option ng-repeat="instance in contents.instances" value="{{instance.id}}">{{instance.name}}</option>
 								</select>
 							</div>
-							<!-- //가상서버와 연결 -->
+							<!-- //인스턴스와 연결 -->
 						</div>
 					</form>
 				</div>
@@ -179,7 +179,7 @@
 				<div class="panel-heading">
 					<div class="row">
 						<div class="col-sm-12">
-							<h3 class="panel-title">디스크 기본정보</h3>
+							<h3 class="panel-title">볼륨 기본정보</h3>
 						</div>
 					</div>
 				</div>
@@ -189,20 +189,20 @@
 					<div class="s_cont_box">
 						<ul>
 							<li>
-								<span class="s_tit">디스크 이름</span>
+								<span class="s_tit">볼륨 이름</span>
 								<span class="s_txt">{{contents.volume.name}}</span>
 							</li>
 							<li>
-								<span class="s_tit">디스크 크기</span>
+								<span class="s_tit">볼륨 크기</span>
 								<span class="s_txt">{{contents.volumeSize | displayVolume:'GB'}}</span>
 							</li>
 							<li>
-								<span class="s_tit">디스크 유형</span>
+								<span class="s_tit">볼륨 유형</span>
 								<!-- <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'툴팁내용입력'"><span class="ico_info"></span></button></div> -->
 								<span class="s_txt">Volume Storage</span>
 							</li>
 							<li>
-								<span class="s_tit">디스크 설명</span>
+								<span class="s_tit">볼륨 설명</span>
 								<!-- <span class="s_txt">text-area</span> -->
 								<div class="s_inner_cont">
 									<pre>{{contents.volume.description}}</pre>
@@ -217,7 +217,7 @@
 			<div class="panel-group">
 				<section class="panel panel-bordered">
 					<div class="panel-heading">
-						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse3" aria-expanded="false" ng-click="main.panelToggleChange1($event);"><h3>연결대상 가상서버 정보</h3></a>
+						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse3" aria-expanded="false" ng-click="main.panelToggleChange1($event);"><h3>연결 대상 인스턴스 정보</h3></a>
 					</div>
 					<!-- // panel-heading -->
 					<div class="panel-collapse collapse" id="basicCollapse3">
@@ -225,19 +225,19 @@
 							<div class="s_cont_box">
 								<ul>
 									<li>
-										<span class="s_tit">서버 이름</span> 
+										<span class="s_tit">인스턴스 이름</span>
 										<span class="s_txt">{{contents.sltInstance.name}}</span>
 									</li>
 									<li>
-										<span class="s_tit">서버 OS</span> 
+										<span class="s_tit">인스턴스 OS</span>
 										<span class="s_txt">{{contents.sltInstance.image.serviceName}}</span>
 									</li>
 									<li>
-										<span class="s_tit">서버 접속IP</span> 
+										<span class="s_tit">인스턴스 접속IP</span>
 										<span class="s_txt">{{contents.sltInstance.floatingIp}}</span>
 									</li>
 									<li>
-										<span class="s_tit">서버 사양</span> <span class="s_txt">소형</span>
+										<span class="s_tit">인스턴스 사양</span> <span class="s_txt">소형</span>
 										<div class="s_inner_cont">
 											<div class="innr_tbl">
 												<table>
@@ -250,7 +250,7 @@
 														<tr>
 															<th>vCPU</th>
 															<th>메모리</th>
-															<th>OS디스크</th>
+															<th>OS 디스크</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -270,39 +270,10 @@
 					</div>
 				</section>
 			</div>
-			<!-- 2019-01-04 [좌측 컨텐츠와 중복된 내용으로 임시 주석처리함] -->
-			<!-- <div class="panel-group">
-				<section class="panel panel-bordered">
-					<div class="panel-heading">
-						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse4" aria-expanded="false" ng-click="main.panelToggleChange($event);"><h3>프로젝트 사용가능 디스크 정보</h3></a>
-					</div>
-					// panel-heading
-					<div class="panel-collapse collapse" id="basicCollapse4">
-						<div class="panel-body">
-							<div class="s_cont_box">
-								<ul>
-									<li>
-										<span class="s_tit">전체 쿼터</span>
-										<span class="s_txt">{{ contents.tenantResource.maxResource.volumeGigabytes | displayVolume:'GB' }}</span>
-									</li>
-									<li>
-										<span class="s_tit">현재 사용량</span>
-										<span class="s_txt">{{ contents.tenantResource.usedResource.volumeGigabytes | displayVolume:'GB' }}</span>
-									</li>
-									<li>
-										<span class="s_tit">잔여 용량</span>
-										<span class="s_txt">{{ contents.tenantResource.available.volumeGigabytes | displayVolume:'GB' }}</span>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div> -->
 		</div>
 	</div>
 	<div class="text-right">
-		<button class="btn btn-lg btn-primary" ng-click="contents.fn.createVolumeCheck();" ng-disabled="!main.checkResourceUserRole()">디스크 만들기</button>
+		<button class="btn btn-lg btn-primary" ng-click="contents.fn.createVolumeCheck();" ng-disabled="!main.checkResourceUserRole()">볼륨 만들기</button>
 		<button class="btn btn-lg btn-default" ng-click="main.goToHistoryBack();">취소</button>
 		<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
 		<!-- <button class="btn btn-lg btn-success"  onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button>-->

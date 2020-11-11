@@ -1,46 +1,56 @@
-<div class="pnb_tit">
-    <i class="i_star"></i> <span class="pnb_t_txt">사양 선택</span>
-    <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'"><span class="ico_info"></span></button><img ng-if="!contents.isSpecLoad" src="images/loading_sm.gif" /></div>
+<!-- 사양 선택 -->
+<div class="write-sub-title">
+	<b class="caution-star">*</b> 사양 선택
+	<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'가상 서버의 사양을 선택할 수 있습니다. <br>선택하는 사양에 따라 가상 서버가 운용 가능한 컴퓨팅 자원(CPU, Memory, Disk)이 달라집니다.'">	i</a><img ng-if="!contents.isSpecLoad" src="images/loading_sm.gif" /></div>
 </div>
-
-<div class="tbl type1">
-    <table class="table">
-        <colgroup>
-            <col style="width:10%;">
-            <col style="width:;">
-            <col style="width:20%;">
-            <col style="width:20%;">
-            <col style="width:20%;">
-        </colgroup>
-        <thead>
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">종류</th>
-            <th scope="col">vCPU</th>
-            <th scope="col">메모리</th>
-            <th scope="col">OS디스크</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltSpecUuid)}" ng-click="contents.fn.selectSpec(spec);">
-            <td>
-                <div class="radio radio-only" >
-                    <input type="radio"
-                           name="spec_radio"
-                           ng-model="contents.sltSpecUuid"
-                           id="spec_radio_{{key}}"
-                           value="{{spec.uuid}}" ng-disabled="spec.disabled">
-                    <label for="spec_radio_{{key}}"></label>
-                </div>
-            </td>
-            <td>{{spec.name}}</td>
-            <td>{{spec.vcpus}} Core</td>
-            <td>{{spec.ram | displayVolume : 'MB'}}</td>
-            <td>{{spec.disk | displayVolume : 'GB'}}</td>
-        </tr>
-        </tbody>
-    </table>
+<div class="table-wrap margin-top-20">
+	<table class="table table-outline table-hover text-center">
+		<colgroup>
+			<col style="width: 10%;">
+			<col style="width:;">
+			<col style="width: 20%;">
+			<col style="width: 20%;">
+			<col style="width: 20%;">
+		</colgroup>
+		<thead class="bg-blue-grey-100">
+			<tr>
+				<th scope="col"></th>
+				<th scope="col">종류</th>
+				<th scope="col">vCPU</th>
+				<th scope="col">메모리</th>
+				<th scope="col">OS디스크</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m', type:'general'}" ng-class="{'tbl_disabled': spec.disabled, 'tbl_selected': (spec.uuid == contents.sltSpecUuid)}" ng-click="contents.fn.selectSpec(spec);">
+				<td>
+					<div class="radio-group">
+						<input type="radio" name="spec_radio" ng-model="contents.sltSpecUuid" id="spec_radio_{{key}}" class="radio-input" value="{{spec.uuid}}" ng-disabled="spec.disabled"> 
+						<label for="spec_radio_{{key}}" class="radio-item">
+								<div class="radio">
+									<div class="checked-icon"></div>
+								</div>
+						</label>
+					</div>
+				</td>
+				<td>{{spec.name}}</td>
+				<td>{{spec.vcpus}} Core</td>
+				<td>{{spec.ram | displayVolume : 'MB'}}</td>
+				<td>{{spec.disk | displayVolume : 'GB'}}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
-<div ng-if="contents.isMinSpecDisabled && !contents.isMaxSpecDisabled" class="cnt_msg_box msg-info">선택한 이미지 보다 큰 사양만 선택 가능 합니다.</div>
-<div ng-if="!contents.isMinSpecDisabled && contents.isMaxSpecDisabled" class="cnt_msg_box msg-warnning">프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
-<div ng-if="contents.isMinSpecDisabled && contents.isMaxSpecDisabled" class="cnt_msg_box msg-warnning">선택한 이미지 보다 큰 사양만 선택 가능하고, 프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</div>
+<div class="alert alert-primary" role="alert" ng-if="contents.isMinSpecDisabled && !contents.isMaxSpecDisabled">
+	<i data-feather="file-text" class="feather-directive"></i>
+	<span>선택한 이미지 보다 큰 사양만 선택 가능 합니다.</span>
+</div>
+<div class="alert alert-danger alert-dismissible" role="alert" ng-if="!contents.isMinSpecDisabled && contents.isMaxSpecDisabled">
+	<i data-feather="alert-triangle" class="feather-directive"></i>
+	<span>프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</span>
+</div>
+<div class="alert alert-danger alert-dismissible" role="alert" ng-if="contents.isMinSpecDisabled && contents.isMaxSpecDisabled">
+	<i data-feather="alert-triangle" class="feather-directive"></i>
+	<span>선택한 이미지 보다 큰 사양만 선택 가능하고, 프로젝트에 할당된 자원이 부족하여 일부 사양은 선택 할 수 없습니다.</span>
+</div>
+<!-- //사양 선택 -->

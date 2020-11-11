@@ -1,35 +1,69 @@
-<ul class="pn_list_style">
-    <li>
-        <div class="panel_box pn_l">
-            <div class="pn_head">
-                <h4 class="pnh_tit">{{ contents.vmCatalogInfo.catalogName }} 서비스 만들기</h4>
-            </div>
-            <form name="subPage.deployForm" novalidate>
-                <input type="password" style="display: block; width:0px; height:0px; border: 0;"><!-- 아이디 패스워드 자동 입력 방지 -->
-                <div class="pn_body">
-                    <span class="sm_txt">* 는 필수입력 사항입니다.</span>
-                    <ul class="form_list">
-                        <li ng-include="contents.htmlUrls.deployName"></li>
-                        <li ng-include="contents.htmlUrls.stackName"></li>
-                        <li ng-include="contents.htmlUrls.deployTypeRadio"></li>
-                        <li ng-include="contents.htmlUrls.servicePort"></li>
-                        <li>
-                            <div class="pnb_tit">
-                                <i class="i_star"></i> <span class="pnb_t_txt">zookeper 포트</span>
-                                <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'zookeeper 포트'"><span class="ico_info"></span></button></div>
-                            </div>
-                            <input type="text" name="zookeeperPort" class="form-control" maxlength="50" ng-model="contents.data.zookeeperPort" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck(contents.data.deployType, contents.data.zookeeperPort)|custom:contents.fn.kafkaPortCustomValidationCheck(contents.data.zookeeperPort, 'zookeeper')" placeholder="zookeeper 포트를 입력하세요." >
+<div class="write_wrap">
+	<div class="row">
+		<div class="col-md-8">
+			<section class="panel panel-bordered">
+				<!-- panel-heading -->
+				<div class="panel-heading">
+					<h3 class="panel-title">{{ contents.vmCatalogInfo.catalogName }} 서비스 만들기</h3>
+				</div>
+				<!-- // panel-heading -->
+				<!-- panel-body -->
+				<div class="panel-body">
+					<form name="subPage.deployForm" novalidate>
+						<input type="password" style="display: block; width:0px; height:0px; border: 0;"><!-- 아이디 패스워드 자동 입력 방지 -->
+						<div class="form_list">
+							<div class="text-right add-txt">
+								<span><b class="caution-star">*</b> 는 필수입력 사항입니다</span>
+							</div>
+							<!-- 서비스이름 -->
+							<div ng-include="contents.htmlUrls.deployName"></div>
+							<!-- //서비스이름 -->
+							
+							<!-- 서비스 영문 이름 -->
+							<div class="margin-top-30" ng-include="contents.htmlUrls.stackName"></div>
+							<!-- //서비스 영문 이름 -->
+							
+							<!-- 배포 유형 선택 -->
+							<div class="margin-top-30" ng-include="contents.htmlUrls.deployTypeRadio"></div>
+							<!-- //배포 유형 선택 -->
+							
+							<!-- 포트 -->
+							<div  class="margin-top-30" ng-include="contents.htmlUrls.servicePort"></div>
+							<!-- //포트 -->
 
-                        </li>
-                        <li ng-include="contents.htmlUrls.zoneSelect"></li>
-                        <li ng-include="contents.htmlUrls.specSelect"></li>
-                    </ul>
-                </div>
-            </form>
-            <div class="pn_footer" ng-include="contents.htmlUrls.createDeployBtn"></div>
-        </div>
-    </li>
-    <li>
-        <div class="panel_box pn_r" ng-include="contents.htmlUrls.createDeployInfo"></div>
-    </li>
-</ul>
+							<!-- zookeper 포트 -->
+							<div class="write-sub-title">
+								<b class="caution-star">*</b> zookeper 포트
+								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'zookeeper 포트'">	i</a></div>
+							</div>
+							<div class="form-group">
+								<input type="text" 
+										name="zookeeperPort" 
+										class="form-control" 
+										maxlength="50" 
+										ng-model="contents.data.zookeeperPort" 
+										validation="number|required|custom:contents.fn.systemPortCustomValidationCheck(contents.data.deployType, contents.data.zookeeperPort)|custom:contents.fn.kafkaPortCustomValidationCheck(contents.data.zookeeperPort, 'zookeeper')" 
+										placeholder="zookeeper 포트를 입력하세요." >
+							</div>
+							<!-- //zookeper 포트 -->
+
+							<!-- 존 선택 -->
+							<div class="margin-top-30" ng-include="contents.htmlUrls.zoneSelect"></div>
+							<!-- //존 선택 -->
+							
+							<!-- 사양 선택 -->
+							<div  class="margin-top-30" ng-include="contents.htmlUrls.specSelect"></div>
+							<!-- //사양 선택 -->
+						</div>
+					</form>
+				</div>
+			</section>
+		</div>
+		<div class="col-md-4">
+			<div ng-include="contents.htmlUrls.createDeployInfo"></div>
+		</div>
+	</div>
+	<!-- 버튼 -->
+	<div ng-include="contents.htmlUrls.createDeployBtn"></div>
+	<!-- //버튼 -->
+</div>

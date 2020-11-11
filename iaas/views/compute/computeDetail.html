@@ -145,7 +145,7 @@
 	}
 </style>
 
-<!-- 서버 정보 -->
+<!-- 인스턴스 정보 -->
 <section class="panel panel-bordered app-info-area">
 	<div class="panel-heading">
 		<div class="row">
@@ -192,15 +192,15 @@
 							<li ng-if="contents.instance.vmState != 'fail' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.computeEditFormOpen($event, contents.instance);">이름 변경</a></li>
 							<li ng-if="contents.instance.vmState != 'fail' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">이름 변경</a></li>
 							<li ng-if="contents.instance.vmState == 'active' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.serverActionConfirm('REBOOT',contents.instance);" title="재시작">재시작</a></li>
-							<li ng-if="contents.instance.vmState != 'active' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
-							<li ng-if="contents.instance.vmState == 'stopped' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="서버 사양 변경">서버 사양 변경</a></li>
-							<li ng-if="contents.instance.vmState != 'stopped' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '서버 사양 변경'이 가능합니다.">서버 사양 변경</a></li>
-							<li ng-if="contents.instance.vmState == 'stopped' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="백업 이미지 생성">백업 이미지 생성</a></li>
-							<li ng-if="contents.instance.vmState != 'stopped' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="서버가 ‘정지’상태인 경우에만 '백업 이미지 생성'이 가능합니다.">백업 이미지 생성</a></li>
-							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">디스크 연결</a></li>
-							<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">디스크 연결</a></li>
-							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '서버', contents.instance.name, contents.deleteInstanceJob, contents.instance.id);">서버 삭제</a></li>
-							<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">서버 삭제</a></li>
+							<li ng-if="contents.instance.vmState != 'active' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
+							<li ng-if="contents.instance.vmState == 'stopped' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm($event);" title="인스턴스 사양 변경">인스턴스 사양 변경</a></li>
+							<li ng-if="contents.instance.vmState != 'stopped' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '인스턴스 사양 변경'이 가능합니다.">인스턴스 사양 변경</a></li>
+							<li ng-if="contents.instance.vmState == 'stopped' && main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createPopSnapshot($event,contents.instance);" title="스냅샷 생성">스냅샷 생성</a></li>
+							<li ng-if="contents.instance.vmState != 'stopped' && !main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '스냅샷 생성'이 가능합니다.">스냅샷 생성</a></li>
+							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,contents.instance);">볼륨 연결</a></li>
+							<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">볼륨 연결</a></li>
+							<li ng-if="main.checkResourceUserRole()"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '인스턴스', contents.instance.name, contents.deleteInstanceJob, contents.instance.id);">인스턴스 삭제</a></li>
+							<li ng-if="!main.checkResourceUserRole()"><a href="javascript:void(0);" class="disabled">인스턴스 삭제</a></li>
 							<!--<li><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')">키페어 다운로드</a></li>-->
 							<!--<li ng-if="contents.instance.floatingIp == ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPCONNECT',contents.instance);">접속IP설정</a></li>-->
 							<!--<li ng-if="contents.instance.floatingIp != ''"><a href="" ng-click="contents.fn.serverActionConfirm('IPDISCONNECT',contents.instance);">접속IP해제</a></li>-->
@@ -231,12 +231,12 @@
 					<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
 				</li>
 				<li>
-					<b>가상 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'다른 프로젝트에서 생성된 가상서버와 통신할 때 사용하는 IP'">i</a></div></b>
+					<b>가상 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'다른 프로젝트에서 생성된 인스턴스와 통신할 때 사용하는 IP'">i</a></div></b>
 					<span>{{contents.instance.floatingIp}}</span>
 					<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
 				</li>
 				<li>
-					<b>내부 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를 사용할 수 있습니다.'">i</a></div></b>
+					<b>내부 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'인스턴스 간 통신 시 내부 IP를 사용할 수 있습니다.'">i</a></div></b>
 					<span>{{contents.instance.fixedIp}}</span>
 				</li>
 				<li ng-if="contents.instance.image.osType != 'windows'">
@@ -339,7 +339,7 @@
 				<!-- app 챠트 정보 -->
 				<div class="col info-chart type2 text-center">
 					<div class="chartWrap" style="height:270px;width:180px;"><!-- 인라인 border를 속성과 내용을 지우고 챠트를 삽입하세요. -->
-						<p class="font-size-20 margin-bottom-10"><b>디스크</b></p>
+						<p class="font-size-20 margin-bottom-10"><b>OS 디스크</b></p>
 						<p class="margin-bottom-20">{{contents.instance.spec.disk}} GB</p>
 						<canvas id="doughnutDisk" class="chart chart-doughnut chart-xs" height="180" width="180"
 								chart-data="contents.doughnut.data.disk"
@@ -361,15 +361,15 @@
 		</div>
 	</div>
 </section>
-<!-- //서버 정보 -->
+<!-- //인스턴스 정보 -->
 
-<!-- 디스크 연결 정보 -->
+<!-- 볼륨 연결 정보 -->
 <section class="panel panel-bordered">
 	<div class="panel-heading">
 		<div class="row">
 			<div class="col-sm-12">
 				<h3 class="panel-title">
-					<b class="tit">디스크 연결 정보<span class="color-primary">({{contents.instanceVolList.length}})</span></b>
+					<b class="tit">볼륨 연결 정보<span class="color-primary">({{contents.instanceVolList.length}})</span></b>
 					<img ng-if="!contents.isSearchInstanceVolumeListLoad" src="images/loading_sm.gif">
 				</h3>
 			</div>
@@ -404,20 +404,20 @@
 				</div>
 			</div>
 			<p class="padding-vertical-20" ng-if="contents.isSearchInstanceVolumeListLoad && contents.instanceVolList.length == 0">
-				연결 디스크 정보가 없습니다.
+				연결 볼륨 정보가 없습니다.
 			</p>
 		</div>
 	</div>
 </section>
-<!-- //디스크 연결 정보 -->
+<!-- //볼륨 연결 정보 -->
 
 <!-- 탭영역 -->
 <!-- //Nav tabs -->
 <ul class="nav nav-tabs nav-tabs-btn nav-tabs-lg">
 	<li ng-class="{'active':contents.sltInfoTab == 'domain'}"><a href="" ng-click="contents.fn.changeSltInfoTab('domain');">서비스 도메인</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'portForwarding'}"><a href="" ng-click="contents.fn.changeSltInfoTab('portForwarding');">포트포워딩</a></li>
-		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">서버 이벤트</a></li>
-		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">서버 부트 로그</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'actEvent'}"><a href="" ng-click="contents.fn.changeSltInfoTab('actEvent');">인스턴스 이벤트</a></li>
+		<li ng-class="{'active':contents.sltInfoTab == 'bootLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('bootLog');">인스턴스 부트 로그</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'systemLog'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('systemLog');">시스템 로그</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'virtualMonit'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('virtualMonit');">가상머신 모니터링</a></li>
 		<li ng-class="{'active':contents.sltInfoTab == 'alarmEvent'}" ><a href="" ng-click="contents.fn.changeSltInfoTab('alarmEvent');">알람 이벤트</a></li>
@@ -452,7 +452,7 @@
 				<div id="action_domain_panel" class="in"><!--  scroll-pane scroll-config="{ contentWidth: '0px' }"  -->
 					<div class="alert alert-primary" role="alert">
 						<i class="xi-info font-size-20"></i>
-						<div class="text-area">서버에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</div>
+						<div class="text-area">인스턴스에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</div>
 					</div>
 					<div class=" scroll-content" style="height:270px;">
 						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
@@ -530,7 +530,7 @@
 				<div scroll-pane scroll-config="{ contentWidth: '0px' }" class="in">
 					<div class="alert alert-primary" role="alert">
 						<i class="xi-info font-size-20"></i>
-						<div class="text-area">서버에서 실행되는 외부 공개 서비스(DB 서비스 등)에 대한 접근 정보를 구성합니다.</div>
+						<div class="text-area">인스턴스에서 실행되는 외부 공개 서비스(DB 서비스 등)에 대한 접근 정보를 구성합니다.</div>
 					</div>
 					<div class=" scroll-content" style="height:270px;">
 						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
@@ -586,7 +586,7 @@
 				<div class="row">
 					<div class="col-md-6">
 						<h3 class="panel-title">
-							<b class="tit">서버 이벤트</b>
+							<b class="tit">인스턴스 이벤트</b>
 						</h3>
 					</div>
 					<div class="col-md-6 text-right">
@@ -602,7 +602,7 @@
 				<div id="action_event_panel"  class="in"><!-- scroll-pane scroll-config="{ contentWidth: '0px' }" -->
 					<div class="alert alert-primary" role="alert">
 						<i class="xi-info font-size-20"></i>
-						<div class="text-area">사용자가 서버에 명령하는 시작, 중지 등의 액션에 대한 실행 이력을 표시합니다.</div>
+						<div class="text-area">사용자가 인스턴스에 명령하는 시작, 중지 등의 액션에 대한 실행 이력을 표시합니다.</div>
 					</div>
 					<div class=" scroll-content" style="height:270px;">
 						<div class="table-wrap border-0 margin-top-20" >
@@ -646,7 +646,7 @@
 				<div class="row">
 					<div class="col-md-6">
 						<h3 class="panel-title">
-							<b class="tit">서버 부트 로그</b>
+							<b class="tit">인스턴스 부트 로그</b>
 						</h3>
 					</div>
 					<div class="col-md-6 text-right">
@@ -661,7 +661,7 @@
 			<div class="panel-body" style="height:450px;">
 				<div class="alert alert-primary" role="alert">
 					<i class="xi-info font-size-20"></i>
-					<div class="text-area">서버가 시작될 때 기록되는 Booting Log를 표시합니다.</div>
+					<div class="text-area">인스턴스가 시작될 때 기록되는 Booting Log를 표시합니다.</div>
 				</div>
 				<div id="boot_log_terminal_panel" class="in">
 					<div id="boot_log_terminal"></div>

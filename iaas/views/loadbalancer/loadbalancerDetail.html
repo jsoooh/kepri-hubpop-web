@@ -20,7 +20,7 @@
 					</button>
 					<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.formOpen($event, 'rename', contents.loadbalancer);">이름/설명 변경</a></li>
-						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '부하분산 서버', contents.loadbalancer.iaasLbInfo.name, contents.deleteLb, contents.loadbalancer.iaasLbInfo.id);">삭제</a></li>
+						<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || main.popDeleteCheckName($event, '부하 분산 인스턴스', contents.loadbalancer.iaasLbInfo.name, contents.deleteLb, contents.loadbalancer.iaasLbInfo.id);">삭제</a></li>
 					</ul>
 				</div>
 			</div>
@@ -39,7 +39,7 @@
 					<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.loadbalancer.iaasLbInfo)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
 				</li>
 				<li>
-					<b>내부 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를 사용할 수 있습니다.'">i</a></div></b>
+					<b>내부 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'인스턴스 간 통신 시 내부 IP를 사용할 수 있습니다.'">i</a></div></b>
 					<span>{{ contents.loadbalancer.iaasLbInfo.ipAddress }}</span>
 				</li>
 				<li>
@@ -117,8 +117,8 @@
 										<th scope="col">이름</th>
 										<th scope="col">포트</th>
 										<th scope="col">프로토콜</th>
-										<th scope="col">로드 밸런스 유형<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 로드밸런스 유형<br/> 1. 라운드로빈: 세션을 순차적으로 맺어주는 방식<br/>2. 소스: 사용자의 IP를 Hashing하여 분배하는 방식으로 특정 client는 특정 server로만 접속<br/>3. 최소연결: 연결 개수가 가장 적은 서버를 선택하는 방식'"><span class="ico_info"></span></button></div></th>
-										<th scope="col">연결서버</th>
+										<th scope="col">로드 밸런스 유형<div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'- 로드밸런스 유형<br/> 1. 라운드로빈: 세션을 순차적으로 맺어주는 방식<br/>2. 소스: 사용자의 IP를 Hashing하여 분배하는 방식으로 특정 client는 특정 인스턴스로만 접속<br/>3. 최소연결: 연결 개수가 가장 적은 인스턴스를 선택하는 방식'"><span class="ico_info"></span></button></div></th>
+										<th scope="col">연결 인스턴스</th>
 										<th scope="col">헬스체크유형</th>
 									</tr>
 								</thead>
@@ -133,12 +133,12 @@
 											<div class="table-state">
 												<div ng-if="iaasLbPort.connType" class="state">
 													<ul ng-repeat="iaaslbportMember in contents.loadbalancer.iaasLbPortMembers">
-														<!-- 포트 상관없이 LB안에 연결서버 리스트가 다 들어가 있기 때문에 LBPort의 id가 같은 경우에만 해당하는 연결서버 목록이 나오도록-->
+														<!-- 포트 상관없이 LB안에 연결 인스턴스 리스트가 다 들어가 있기 때문에 LBPort의 id가 같은 경우에만 해당하는 연결 인스턴스 목록이 나오도록-->
 														<li ng-if="iaaslbportMember.iaasLbPort.id == iaasLbPort.id">
-															<!--서버 상태 표시 -->
+															<!--인스턴스 상태 표시 -->
 															<span class="state-round rgba-green-strong"></span>
 															<span ng-mouseover="server_con_detail=true" ng-mouseleave="server_con_detail=false">{{ iaaslbportMember.name }}</span><!-- .state-txt 마우스 오버 시 .server_con_detail 노출 -->
-															<!-- 서버스펙상세 -->
+															<!-- 인스턴스 스펙 상세 -->
 															<div class="server_con_detail" ng-show="server_con_detail">
 																<ul>
 																	<li><strong>- OS 유형 : </strong>{{ iaaslbportMember.instanceOsType }}</li>
@@ -147,7 +147,7 @@
 																	<li><strong>- 생성일시 : </strong>{{ iaaslbportMember.instanceCreated | date : 'yyyy-MM-dd HH:mm:ss'}}</li>
 																</ul>
 															</div>
-															<!-- //서버스펙상세 -->
+															<!-- //인스턴스 스펙 상세 -->
 														</li>
 													</ul>
 												</div>
@@ -170,7 +170,7 @@
 						<div class="panel-heading">
 							<ul class="nav nav-tabs nav-tabs-line">
 								<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">포트관리<span></span></a></li>
-								<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">연결 서버<span></span></a></li>
+								<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">연결 인스턴스<span></span></a></li>
 							</ul>
 						</div>
 						<div class="panel-body">
@@ -228,7 +228,7 @@
 													</colgroup>
 													<tbody>
 													<tr>
-														<th>연결포트</th>
+														<th>연결 포트</th>
 														<td>{{ contents.iaasLbPorts.connectionPort }}</td>
 													</tr>
 													<tr>
@@ -261,7 +261,7 @@
 								<div class="tab-pane"  id="tab2" ng-class="{'active' : contents.tabIndex == 1}">
 									<!-- 이너컨텐츠 -->
 									<h3 class="title-type1 title-border">
-										<span>연결 서버</span>
+										<span>연결 인스턴스</span>
 										<div class="pull-right">
 											<button type="button" title="수정" ng-if="contents.iaasLbPorts.connType == 'server' || contents.iaasLbPorts.connType == 'image'" ng-click="contents.fn.formOpen($event, 'editserver', contents.loadbalancer);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-pen font-size-20 grey-600"></i></button>
 											<button type="button" title="추가" ng-if="contents.iaasLbPorts.connType == null" ng-click="contents.fn.formOpen($event, 'createserver', contents.loadbalancer);" ng-disabled="!main.checkResourceUserRole()"><i class="xi-plus-circle font-size-20 grey-600"></i></button>
@@ -271,17 +271,17 @@
 									<!-- 메세지영역 -->
 									<div class="alert alert-primary" role="alert">
 										<i class="xi-info font-size-20"></i>
-										<div class="text-area">연결서버의 상세정보를 안내합니다</div>
+										<div class="text-area">연결 인스턴스의 상세정보를 안내합니다</div>
 									</div>
 									<!-- //메세지영역 -->
 									
-									<!-- 연결서버 정보가 없는 경우-->
+									<!-- 연결 인스턴스 정보가 없는 경우-->
 									<div class="text-center mt50" ng-if="contents.iaasLbPorts.connType == null">
 										<p>데이터가 없습니다.</p>
 									</div>
-									<!-- 연결서버 정보가 없는 경우-->
+									<!-- 연결 인스턴스 정보가 없는 경우-->
 									
-									<!-- 연결서버 이미지일 때 상태 프로그래스 -->
+									<!-- 연결 인스턴스 이미지일 때 상태 프로그래스 -->
 									<div class="cont_progress_div" ng-if="contents.loadbalancer.iaasLbInfo.checkStatus.indexOf('ing') > -1 && false">
 										<div class="pnb_progress_wrap">
 											<div class="progress_box">
@@ -291,7 +291,7 @@
 														<div class="state_box">
 															<span class="state_ico"><span>1</span></span>
 														</div>
-														<div class="state_txt"><span>서버 생성</span></div>
+														<div class="state_txt"><span>인스턴스 생성</span></div>
 													</li>
 													<li ng-class="{'standby' : (instance.uiTask == 'creating'), 'creating' : (instance.uiTask == 'networking'), 'complete' : (instance.uiTask == 'block_device_mapping' || instance.uiTask == 'created_complete')}" class="creating" style="">
 														<div class="state_box">
@@ -320,12 +320,12 @@
 											</div>
 										</div>
 									</div>
-									<!-- //연결서버 이미지일 때 상태 프로그래스 -->
+									<!-- //연결 인스턴스 이미지일 때 상태 프로그래스 -->
 									
-									<!-- 연결서버유형(서버) -->
+									<!-- 연결 인스턴스유형(인스턴스) -->
 									<div class="row" ng-if="contents.iaasLbPorts.connType == 'server'">
 										<div class="col-md-6">
-											<h3 class="title-type1 title-border">연결서버 정보</h3>
+											<h3 class="title-type1 title-border">연결 인스턴스 정보</h3>
 											<div class="board-warp board-write-wrap">
 												<table class="table">
 													<colgroup>
@@ -334,15 +334,15 @@
 													</colgroup>
 													<tbody>
 														<tr>
-															<th>연결서버 유형</th>
-															<td>서버</td>
+															<th>연결 인스턴스 유형</th>
+															<td>인스턴스</td>
 														</tr>
 													</tbody>
 												</table>
 											</div>
 										</div>
 										<div class="col-md-6">
-											<h3 class="title-type1 title-border">연결서버 정보 상세</h3>
+											<h3 class="title-type1 title-border">연결 인스턴스 정보 상세</h3>
 											<div class="table-wrap border-0">
 												<table class="table table-outline table-hover text-center">
 													<colgroup>
@@ -352,7 +352,7 @@
 													</colgroup>
 													<thead class="bg-blue-grey-100">
 														<tr>
-															<th scope="col">서버이름</th>
+															<th scope="col">인스턴스 이름</th>
 															<th scope="col">내부 IP</th>
 															<th scope="col">상태</th>
 														</tr>
@@ -368,13 +368,13 @@
 											</div>
 										</div>
 									</div>
-									<!-- //연결서버유형(서버) -->
+									<!-- //연결 인스턴스 유형(인스턴스) -->
 									
-									<!-- 연결서버유형(이미지) -->
+									<!-- 연결 인스턴스 유형(스냅샷) -->
 									<!-- <div class="row" ng-if="contents.iaasLbPorts.connType == 'image' && contents.loadbalancer.iaasLbInfo.checkStatus.indexOf('ing')==-1"> -->
 									<div class="row" ng-if="contents.iaasLbPorts.connType == 'image'">
 										<div class="col-md-6">
-											<h3 class="title-type1 title-border">연결서버 정보</h3>
+											<h3 class="title-type1 title-border">연결 인스턴스 정보</h3>
 											<div class="board-warp board-write-wrap">
 												<table class="table">
 													<colgroup>
@@ -383,15 +383,15 @@
 													</colgroup>
 													<tbody>
 														<tr>
-															<th>연결서버 유형</th>
-															<td>이미지</td>
+															<th>연결 인스턴스 유형</th>
+															<td>스냅샷</td>
 														</tr>
 														<tr>
-															<th>서버 이름</th>
+															<th>인스턴스 이름</th>
 															<td>{{ contents.iaasLbPorts.connImageName }}</td>
 														</tr>
 														<tr>
-															<th>서버 수</th>
+															<th>인스턴스 수</th>
 															<td>{{ contents.iaasLbPorts.connImageCount }}</td>
 														</tr>
 													</tbody>
@@ -399,7 +399,7 @@
 											</div>
 										</div>
 										<div class="col-md-6">
-											<h3 class="title-type1 title-border">연결서버 정보 상세</h3>
+											<h3 class="title-type1 title-border">연결 인스턴스 정보 상세</h3>
 											<div class="table-wrap border-0">
 												<table class="table table-outline table-hover text-center">
 													<colgroup>
@@ -409,7 +409,7 @@
 													</colgroup>
 													<thead class="bg-blue-grey-100">
 														<tr>
-															<th scope="col">서버이름</th>
+															<th scope="col">인스턴스 이름</th>
 															<th scope="col">내부 IP</th>
 															<th scope="col">상태</th>
 														</tr>
@@ -425,7 +425,7 @@
 											</div>
 										</div>
 									</div>
-									<!-- //연결서버유형(이미지) -->
+									<!-- //연결 인스턴스 유형(스냅샷) -->
 								</div>
 							</div>
 						</div>
@@ -471,7 +471,7 @@
 					<!--  scroll-pane scroll-config="{ contentWidth: '0px' }"  -->
 					<div class="alert alert-primary" role="alert">
 						<i class="xi-info font-size-20"></i>
-						<div class="text-area">서버에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</div>
+						<div class="text-area">인스턴스에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</div>
 					</div>
 					<div>
 						<!--  class=" scroll-content" style="height:270px;" -->
@@ -553,7 +553,7 @@
 					<!--  scroll-pane scroll-config="{ contentWidth: '0px' }"  -->
 					<div class="alert alert-primary" role="alert">
 						<i class="xi-info font-size-20"></i>
-						<div class="text-area">서버에서 실행되는 외부 공개 서비스(DB 서비스 등)에 대한 접근 정보를 구성합니다.</div>
+						<div class="text-area">인스턴스에서 실행되는 외부 공개 서비스(DB 서비스 등)에 대한 접근 정보를 구성합니다.</div>
 					</div>
 					<div>
 						<!--  class=" scroll-content" style="height:270px;" -->
@@ -604,7 +604,7 @@
 </div>
 <!-- //Tab panes -->
 	
-<!-- 연결서버 이미지일 때 상태 프로그래스 -->
+<!-- 연결 인스턴스 스냅샷일 때 상태 프로그래스 -->
 <div class="margin-top-30" ng-if="contents.loadbalancer.iaasLbInfo.checkStatus.indexOf('ing') > -1">
 	<!-- panel -->
 	<section class="panel panel-bordered">
@@ -625,13 +625,13 @@
 								<div class="state_box">
 									<span class="state_ico"><span>2</span></span>
 								</div>
-								<div class="state_txt"><span>서버 생성</span></div>
+								<div class="state_txt"><span>인스턴스 생성</span></div>
 							</li>
 							<li ng-class="{'standby' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'lb_creating' || contents.loadbalancer.iaasLbInfo.checkStatus == 'server_creating'), 'creating' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'server_connecting'), 'complete' : (contents.loadbalancer.iaasLbInfo.checkStatus == 'error' || contents.loadbalancer.iaasLbInfo.checkStatus == 'done')}">
 								<div class="state_box">
 									<span class="state_ico"><span>{{ contents.loadbalancer.iaasLbInfo.checkConnType == 'image' ? "3" : "2" }}</span></span>
 								</div>
-								<div class="state_txt"><span>서버 연결</span></div>
+								<div class="state_txt"><span>인스턴스 연결</span></div>
 							</li>
 						</ul>
 						<div class="progress_txt">
@@ -644,6 +644,6 @@
 		</div>
 	</section>
 </div>
-<!-- //연결서버 이미지일 때 상태 프로그래스 -->
+<!-- //연결 인스턴스 스냅샷일 때 상태 프로그래스 -->
 
 

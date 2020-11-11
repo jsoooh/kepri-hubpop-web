@@ -258,6 +258,13 @@
 					<span>{{contents.instance.securityPolicies | join:' ,':'name'}}</span>
 				</li>-->
 				<li>
+					<b>모니터링</b>
+					<span ng-show="((contents.instance.spec.type == 'GPU' && contents.instance.gpuMonitoringYn == 'N') || contents.instance.vmMonitoringYn == 'N')">-</span>
+					<span ng-show="!((contents.instance.spec.type == 'GPU' && contents.instance.gpuMonitoringYn == 'N') || contents.instance.vmMonitoringYn == 'N')">
+						<a href="{{ contents.instance.monitoringLink }}" class="ext_link txt" target="_blank">모니터링 바로가기</a>
+					</span>
+				</li>
+				<li>
 					<b>기간(Age)</b>
 					<span ng-if="contents.instance.elapsed.year == 0 && contents.instance.elapsed.month == 0 && contents.instance.elapsed.day == 0 && contents.instance.elapsed.week == 0 && contents.instance.elapsed.hour == 0">
 						{{contents.instance.elapsed.minute}}분
