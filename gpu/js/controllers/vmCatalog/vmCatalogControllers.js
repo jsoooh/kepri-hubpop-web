@@ -187,12 +187,12 @@ angular.module('gpu.controllers')
         var promise = vmCatalogService.getVmCatalogDeployTemplateFile(deployHtmlFilePath);
 
         promise.success(function (data) {
-            $templateCache.put("deployFormTemplate", "<div class=\"panel_area\" id=\"vmCatalogDeploy\"" + controllerTag + ">\n" + data + "\n</div>");
+            $templateCache.put("deployFormTemplate", "<div id=\"vmCatalogDeploy\"" + controllerTag + ">\n" + data + "\n</div>");
             ct.vmCatalogTemplateUrl = "deployFormTemplate";
             $scope.main.loadingMainBody = false;
         });
         promise.error(function (data, status, headers) {
-            $templateCache.put("deployFormTemplateFail", "<div class=\"panel_area\" id=\"vmCatalogDeploy\"" + controllerTag + ">\nNot Found: " + deployHtmlFilePath + "\n</div>");
+            $templateCache.put("deployFormTemplateFail", "<div id=\"vmCatalogDeploy\"" + controllerTag + ">\nNot Found: " + deployHtmlFilePath + "\n</div>");
             ct.vmCatalogTemplateUrl = "deployFormTemplateFail";
             $scope.main.loadingMainBody = false;
         });

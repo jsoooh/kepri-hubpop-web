@@ -1,7 +1,9 @@
-<div class="pnb_tit">
-    <i class="i_star"></i> <span class="pnb_t_txt">존 선택</span>
-    <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'가상 서버를 생성할 존은 선택하다.<br/>선택한 존에 따라 네트워크가 결정된다.'"><span class="ico_info"></span></button><img ng-if="!contents.isAvailabilityZoneLoad" src="images/loading_sm.gif" /></div>
+<!-- 존 선택 -->
+<div class="write-sub-title">
+	<b class="caution-star">*</b> 존 선택
+	<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'가상 서버를 생성할 존은 선택하다.<br/>선택한 존에 따라 네트워크가 결정된다.'">	i</a><img ng-if="!contents.isAvailabilityZoneLoad" src="images/loading_sm.gif" /></div>
 </div>
-<div class="pl10 mt10">
-    <select name="availabilityZone" ng-options="(availabilityZone.availabilityZone + ' [' + availabilityZone.publicNetworkSubnet.cidr + '] 생성 가능한 인스턴스: ' + availabilityZone.publicNetworkSubnet.available + '개') disable when availabilityZone.disabled for availabilityZone in contents.availabilityZones" ng-model="contents.sltAvailabilityZone" style="width:100%;"></select>
+<div class="form-group">
+    <select name="availabilityZone" class="form-control" ng-options="(availabilityZone.availabilityZone + ' [' + availabilityZone.publicNetworkSubnet.cidr + '] 생성 가능한 인스턴스: ' + availabilityZone.publicNetworkSubnet.available + '개') disable when availabilityZone.disabled for availabilityZone in contents.availabilityZones" ng-model="contents.sltAvailabilityZone"></select>
 </div>
+<!-- //존 선택 -->
