@@ -16,13 +16,13 @@ angular.module('gpu.controllers')
 
         ct.data.deployType = "single";
 
-        // single 테스트
+        ct.testInput = true;
+        // cluster 테스트
         if (ct.testInput) {
-            ct.data.deployName = "DB 카프카";
-            ct.data.stackName = "kafka-single";
-            /*
+            ct.data.deployName = "카프카";
+            ct.data.stackName = "kafkaView";
             ct.data.deployType = "cluster";
-             */
+
         }
 
         ct.fn.kafkaPortCustomValidationCheck = function(port, type) {

@@ -21,11 +21,16 @@ angular.module('gpu.controllers')
         ct.data.createUser = true;
 
         // 테스트 입력값
+        ct.testInput = true;
         if(ct.testInput) {
             ct.data.deployName = "마이에스큐엘";
-            ct.data.stackName = "Mysql";
+            ct.data.stackName = "mysqlView";
+            ct.data.deployType = "cluster";
+
             ct.data.rootPassword = "Crossent!234";
             ct.data.rootConfirmPassword = "Crossent!234";
+
+            ct.data.createUser = true;
             ct.data.createUserId = "kepri";
             ct.data.createDbName = "kepri";
             ct.data.createUserPassword = "Kepri!234";

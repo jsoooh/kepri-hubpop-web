@@ -22,11 +22,15 @@ angular.module('gpu.controllers')
         ct.data.createUser = true;
 
         // 테스트
+        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "포스트그래스SQL";
-            ct.data.stackName = "PostgresSql";
+            ct.data.stackName = "postgresSqlView";
+            ct.data.deployType = "replica";
             ct.data.postgresPassword = "Crossent!234";
             ct.data.postgresConfirmPassword = "Crossent!234";
+
+            ct.data.createUser = true;
             ct.data.createUserId = "kepri";
             ct.data.createDbName = "kepri";
             ct.data.createUserPassword = "Kepri!234";
