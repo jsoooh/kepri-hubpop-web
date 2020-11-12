@@ -437,7 +437,25 @@ angular.module('app')
         },
         startYear: 2019,
         startMonth: 12,
-        monitoringUrl: 'http://192.168.0.7:3000/d/hb7fSE0taa/tenant_linux_detail'
+        monitoringUrl: 'http://192.168.0.7:3000/d/hb7fSE0taa/tenant_linux_detail',
+        vmCatalog: {
+            monCollectHostBeat: '100.216.222.84',
+            monCollectPortBeat: '9201',
+            imageId: {
+                hadoop: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                haproxy: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                kafka: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                kong: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                mariadb: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                mongodb: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                mysql: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                nginx: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                postgresql: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                rabbitmq: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                redis: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+                tomcat: 'c5c6af6c-3cfc-43ff-a3cf-199ffff646b1',
+            }
+        }
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},

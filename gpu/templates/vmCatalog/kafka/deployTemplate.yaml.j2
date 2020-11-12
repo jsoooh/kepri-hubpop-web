@@ -28,6 +28,12 @@ parameters:
   service_port:
     type: string
     default: 9092
+  mon_collect_host_beat:
+    type: string
+  mon_collect_port_beat:
+    type: string
+  image_id:
+    type: string
 
 resources:
 
@@ -79,6 +85,10 @@ resources:
   server:
     type: OS::Nova::Server
     properties:
+      metadata:
+        mon_collect_host_beat: { get_param: mon_collect_host_beat }
+        mon_collect_port_beat: { get_param: mon_collect_port_beat }
+        iaas_image_id: { get_param: image_id }
       flavor: { get_param: flavor }
 #      image: { get_param: image }
       block_device_mapping_v2:

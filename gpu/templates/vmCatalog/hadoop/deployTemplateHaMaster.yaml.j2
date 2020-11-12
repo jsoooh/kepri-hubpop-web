@@ -26,8 +26,17 @@ parameter_groups:
   - s3_accessKey
   - s3_secretKey
   - s3_bucket_name
+  - mon_collect_host_beat
+  - mon_collect_port_beat
+  - image_id
 
 parameters:
+  mon_collect_host_beat:
+    type: string
+  mon_collect_port_beat:
+    type: string
+  image_id:
+    type: string
   image:
     label: "이미지"
     type: string
@@ -977,6 +986,10 @@ resources:
   server1:
     type: OS::Nova::Server
     properties:
+      metadata:
+        mon_collect_host_beat: { get_param: mon_collect_host_beat }
+        mon_collect_port_beat: { get_param: mon_collect_port_beat }
+        iaas_image_id: { get_param: image_id }
       flavor: { get_param: master_flavor }
 #      image: { get_param: image }
       block_device_mapping_v2:
@@ -996,6 +1009,10 @@ resources:
   server{{server}}:
     type: OS::Nova::Server
     properties:
+      metadata:
+        mon_collect_host_beat: { get_param: mon_collect_host_beat }
+        mon_collect_port_beat: { get_param: mon_collect_port_beat }
+        iaas_image_id: { get_param: image_id }
       flavor: { get_param: worker_flavor }
 #      image: { get_param: image }
       block_device_mapping_v2:
