@@ -433,7 +433,7 @@ angular.module('gpu.controllers')
                     if (spec.vcpus > ct.tenantResource.available.cores
                         || spec.ram > ct.tenantResource.available.ramSize 
                         || spec.disk > ct.tenantResource.available.hddVolumeGigabytes
-                        || (ct.selectedSpecType == 'GPU' && spec.gpu > ct.selectedGpuCard.availableCount)) {
+                        || (ct.selectedSpecType == 'GPU' && ct.gpuCardInfo && ct.selectGpuCardId == spec.gpuCardInfo.id && spec.gpu > ct.selectedGpuCard.availableCount)) {
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
@@ -679,7 +679,7 @@ angular.module('gpu.controllers')
                         });
                         for (var i = 0; i < ct.gpuCardList.length; i++) {
                             var gpuCard = ct.gpuCardList[i];
-                            if (gpuCard.id == ct.data.spec.gpuCardInfo.id) {
+                            if (gpuCard.id == ct.data.spec.gpuCardInfo.id && gpuCard.availableCount > 0) {
                                 ct.selectedGpuCard = gpuCard;
                                 ct.selectedGpuCardId = gpuCard.id;
                                 ct.fn.onchangeGpuCard(ct.selectedGpuCardId);

@@ -161,7 +161,7 @@
 						</div>
 						<div class="table-wrap">
 							<div class="table-head-area">
-								<table class="table table-outline text-center">
+								<table class="table">
 									<colgroup>
 										<col style="width: 5%;">
 										<col style="width: auto;">
@@ -187,10 +187,12 @@
 							<div class="table-body-area scroll-content">
 								<table class="table table-hover">
 									<colgroup>
-										<col style="width:10%;">
+										<col style="width:5%;">
+										<col style="width:auto;">
+										<col ng-if="contents.selectedSpecType=='GPU'" style="width:15%;">
+										<col ng-if="contents.selectedSpecType=='GPU'" style="width:15%;">
 										<col style="width:15%;">
-										<col style="width:20%;">
-										<col style="width:20%;">
+										<col style="width:15%;">
 										<col style="width:20%;">
 									</colgroup>
 									<tbody>

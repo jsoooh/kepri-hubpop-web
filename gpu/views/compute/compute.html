@@ -55,8 +55,8 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-tabs-btn nav-tabs-lg" role="tablist" ng-if="!!main.userTenantGpuId">
-	<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.tabIndex = 0">인스턴스 관리<span>({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</span></a></li>
-	<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">부하분산 인스턴스 관리<span>({{(contents.lbServiceLists).length}})</span></a></li>
+	<li role="presentation" ng-class="{'active' : contents.tabIndex == 0}"><a href="" ng-click="contents.clickTab(0);">인스턴스 관리<span>({{(contents.serverMainList | filter:{ taskState : '!deleting'}).length}})</span></a></li>
+	<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.clickTab(1)">부하분산 인스턴스 관리<span>({{(contents.lbServiceLists).length}})</span></a></li>
 </ul>
 <!-- //Nav tabs -->
 
@@ -101,7 +101,7 @@
 										<div class="row">
 											<div class="col-xs-10">
 												<a class="title">
-													<b ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</b>
+													<b ng-if="instance.procState != 'end'" title="{{instance.name}}">{{instance.name}}</b>
 													<b ng-if="instance.procState == 'end'" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</b>
 												</a>
 											</div>
