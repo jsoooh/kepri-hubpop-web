@@ -26,17 +26,19 @@ angular.module('gpu.controllers')
         ct.data.workerCnt = 2; // default
         ct.data.type = "core";
 
+        ct.data.lbSvcPort = ct.prodPortBand+ 9000;
+        ct.data.servicePort = ct.prodPortBand+ 50070;
         // 테스트
         ct.testInput = true;
         if (ct.testInput) {
-            ct.data.lbSvcPort = ct.prodPortBand+ 9000;
-            ct.data.servicePort = ct.prodPortBand+ 50070;
-            // ct.data.deployName = "하둡";
-            // ct.data.stackName = "hadoop";
-            // ct.data.mysqlRootPassword = "Crossent!234";
-            // ct.data.mysqlRootConfirmPassword = "Crossent!234";
-            // ct.data.mysqlHivePassword = "Hive!234";
-            // ct.data.mysqlHiveConfirmPassword = "Hive!234";
+            ct.data.deployName = "하둡";
+            ct.data.stackName = "hadoopView";
+            ct.data.mysqlRootPassword = "Crossent!234";
+            ct.data.mysqlRootConfirmPassword = "Crossent!234";
+            ct.data.mysqlHivePassword = "Hive!234";
+            ct.data.mysqlHiveConfirmPassword = "Hive!234";
+
+            // 변경된 화면에서 사용하지 않는 데이터
             //ct.data.endPoint = "s3EndPoint";
             //ct.data.accessKey = "s3AccessKey";
             //ct.data.secretKey = "s3SecretKey";
