@@ -108,19 +108,21 @@ angular.module('app')
                             loadMyServices: [],
                             loadMyControllers: [_IAAS_JS_+'/controllers/storage/storageControllers.js'],
                             loadMyDirectives: []
-                        }
-                    },
-                    storageCreate: {
-                        name: 'storage_create',
-                        stateKey: 'iaasStorgeCreate',
-                        url: '/iaas/storage/create',
-                        controller: 'iaasStorageFormCtrl',
-                        templateUrl: _IAAS_VIEWS_+'/storage/storageForm.html',
-                        loadMyFile: {
-                            loadMyScripts: [],
-                            loadMyServices: [],
-                            loadMyControllers: [_IAAS_JS_+'/controllers/storage/storageControllers.js'],
-                            loadMyDirectives: []
+                        },
+                        subPages: {
+                            storageCreate: {
+                                name: 'storage_create',
+                                stateKey: 'iaasStorgeCreate',
+                                url: '/iaas/storage/create',
+                                controller: 'iaasStorageFormCtrl',
+                                templateUrl: _IAAS_VIEWS_+'/storage/storageForm.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [],
+                                    loadMyControllers: [_IAAS_JS_+'/controllers/storage/storageControllers.js'],
+                                    loadMyDirectives: []
+                                }
+                            }
                         }
                     },
                     object_storage: {
