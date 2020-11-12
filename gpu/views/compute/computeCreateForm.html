@@ -171,7 +171,7 @@
 										<col style="width: 15%;">
 										<col style="width: 20%;">
 									</colgroup>
-									<thead class="bg-blue-grey-100">
+									<thead class="bg-blue-grey-100 text-center">
 										<tr>
 											<th scope="col"></th>
 											<th scope="col">종류</th>
@@ -200,7 +200,7 @@
 											ng-repeat="(key, spec) in contents.specList | filterSpecList: contents.selectedSpecType: contents.selectedGpuCard" 
 											ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': (spec.uuid == contents.specUuid)}"
 											ng-click="contents.fn.selectSpec(spec);">
-											<td>
+											<td class="text-center">
 												<div class="radio-group">
 													<input type="radio" name="spec_radio" id="spec_radio_{{key}}" class="radio-input" ng-model="contents.specUuid" value="{{spec.uuid}}" ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)">
 													<label for="spec_radio_{{key}}" class="radio-item">
