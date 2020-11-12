@@ -151,11 +151,6 @@
 												</div>
 											</td>
 											<td class="text-center">{{spec.name}}</td>
-											<td class="text-center">{{spec.vcpus}} Core</td>
-											<td class="text-center">{{spec.ram | displayVolume:'MB'}}</td>
-											<td class="text-center">{{spec.disk | displayVolume:'GB'}}</td>
-											
-											<td class="text-center">{{spec.name}}</td>
 											<td class="text-center" ng-if="contents.selectedSpecType=='GPU'">{{spec.gpu}}</td>
 											<td class="text-center" ng-if="contents.selectedSpecType=='GPU'">{{spec.gpuCardInfo.memory}}</td>
 											<td class="text-center">{{spec.vcpus}} Core</td>

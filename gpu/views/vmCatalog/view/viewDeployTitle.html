@@ -1,17 +1,33 @@
-<h4 class="c-tit">
-    <div class="logoBox">
-        <img ng-if="contents.vmCatalogInfo.templatePath" ng-src="{{ main.gpuVmCatalogTemplatePath + contents.vmCatalogInfo.templatePath + '/logo.png' }}">
-    </div>
-    <p class="txt_tit">{{ contents.vmCatalogDeployInfo.deployName }} ({{ contents.vmCatalogDeployInfo.stackName }})</p>
-    <p class="txt_s"><strong>{{ contents.vmCatalogInfo.catalogName }}</strong><span>{{ contents.vmCatalogInfo.version }}</span></p>
-    <p class="txt_description">{{ contents.vmCatalogInfo.description }}</p>
-</h4>
-<div class="dropdown btn-option">
-    <button id="btn-option" type="button" class="btn only-ico ico-dot" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
-        <span class="ico">실행 설정</span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
-        <li><a href="" ng-click="contents.fn.openVmCatalogDeployRenameForm($event, contents.vmCatalogDeployInfo)">이름 변경</a></li>
-        <li><a href="" ng-click="contents.fn.deleteVmCatalogDeploy(contents.vmCatalogDeployInfo)" class="delete">서비스 제거</a></li>
-    </ul>
-</div>
+<span class="panel-title">
+	<div class="clearfix">
+		<div class="pull-left">
+			<div class="img-size50">
+				<img ng-if="contents.vmCatalogInfo.templatePath" ng-src="{{ main.gpuVmCatalogTemplatePath + contents.vmCatalogInfo.templatePath + '/logo.png' }}">
+			</div>
+			<div class="text-box" style="width:auto;">
+				<div class="top">
+					<b>{{ contents.vmCatalogDeployInfo.deployName }} ({{ contents.vmCatalogDeployInfo.stackName }})</b>
+				</div>
+				<div class="text margin-top-5">
+					<strong>{{ contents.vmCatalogInfo.catalogName }}</strong> <span>{{ contents.vmCatalogInfo.version }}</span>
+				</div>
+				<div class="text ">
+					{{ contents.vmCatalogInfo.description }}
+				</div>
+			</div>
+		</div>
+		<div class="pull-right">
+			<div class="dropdown">
+				<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+					<div class="feather-icon">
+						<i data-feather="more-horizontal" class="feather-directive"></i>
+					</div>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
+					<li><a href="" ng-click="contents.fn.openVmCatalogDeployRenameForm($event, contents.vmCatalogDeployInfo)">이름 변경</a></li>
+					<li><a href="" ng-click="contents.fn.deleteVmCatalogDeploy(contents.vmCatalogDeployInfo)" class="delete">서비스 제거</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</span>

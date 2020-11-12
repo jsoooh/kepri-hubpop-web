@@ -1,39 +1,36 @@
-<div class="ctlog_cntWrap">
-    <div class="ctlog-cnt">
-        <h5>서비스 접속정보</h5>
-        <ul>
-            <li>
-                <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
-            </li>
-            <li>
-                <strong class="tit">관리자 계정</strong>
-                <span class="txt">admin</span>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <strong class="tit">접속포트</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.amqp_port }}</span>
-            </li>
-            <li>
-                <strong class="tit">플러그인포트</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.management_port }}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="ctlog-cnt">
-        <h5> 서비스 환경 설정 파일 경로</h5>
-        <ul>
-            <li>
-                <strong class="tit">rabbitmq-env path: </strong>
-                <span class="txt">/usr/lib/rabbitmq/bin/rabbitmq-env</span>
-            </li>
-            <li>
-                <strong class="tit">node data dir: </strong>
-                <span class="txt">/var/lib/rabbitmq/mnesia/$NODENAME <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'$NODENAME은 rabbit@$HOSTNAME 입니다.'"><span class="ico_info"></span></button></div></span>
-            </li>
-        </ul>
-    </div>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 접속정보</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>접속 IP</b> 
+			<span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span> 
+			<span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">각 서버로 접속</span>
+		</li>
+		<li>
+			<b>관리자 계정</b> 
+			<span>admin</span>
+		</li>
+		<li>
+			<b>접속포트</b> 
+			<span>{{ contents.vmCatalogDeployInfo.parameters.amqp_port }}</span>
+		</li>
+		<li>
+			<b>플러그인포트</b> 
+			<span>{{ contents.vmCatalogDeployInfo.parameters.management_port }}</span>
+		</li>
+	</ul>
+</div>
+
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 환경 설정 파일 경로</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>rabbitmq-env path: </b> 
+			<span>/usr/lib/rabbitmq/bin/rabbitmq-env</span>
+		</li>
+		<li>
+			<b>node data dir <div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'$NODENAME은 rabbit@$HOSTNAME 입니다.'">i</a></div> </b> 
+			<span class="margin-left-30">/var/lib/rabbitmq/mnesia/$NODENAME</span>
+		</li>
+	</ul>
 </div>

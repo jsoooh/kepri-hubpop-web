@@ -273,6 +273,7 @@ resources:
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
             $root_password: { get_param: root_password }
+            $service_port: { get_param: service_port }
             $galera_port: { get_param: galera_port }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server2_ip_address: { get_attr: [server2_port, fixed_ips, 0, ip_address] }
@@ -320,6 +321,7 @@ resources:
             cp /etc/my.cnf /etc/my.cnf.backup
             cat <<EOF> /etc/my.cnf
             [mysqld]
+            port=$service_port
             datadir=/var/lib/mysql
             socket=/var/lib/mysql/mysql.sock
             user=mysql
@@ -376,6 +378,7 @@ resources:
             $volume_mount_path: { get_param: volume_mount_path }
 {% endif %}
             $root_password: { get_param: root_password }
+            $service_port: { get_param: service_port }
             $galera_port: { get_param: galera_port }
             $server1_ip_address: { get_attr: [server1_port, fixed_ips, 0, ip_address] }
             $server3_ip_address: { get_attr: [server3_port, fixed_ips, 0, ip_address] }
@@ -423,6 +426,7 @@ resources:
             cp /etc/my.cnf /etc/my.cnf.backup
             cat <<EOF> /etc/my.cnf
             [mysqld]
+            port=$service_port
             datadir=/var/lib/mysql
             socket=/var/lib/mysql/mysql.sock
             user=mysql

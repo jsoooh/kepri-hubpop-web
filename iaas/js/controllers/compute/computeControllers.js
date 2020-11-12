@@ -1097,7 +1097,7 @@ angular.module('iaas.controllers')
         };
 
         // 네트워크 셀렉트박스 조회
-        ct.fn.networkListSearch = function() {
+        /*ct.fn.networkListSearch = function() {
             var param = {
                 tenantId : ct.data.tenantId,
                 isExternal : false
@@ -1112,7 +1112,7 @@ angular.module('iaas.controllers')
                 common.showAlertError(data.message);
                 $scope.main.loadingMainBody = false;
             });
-        };
+        };*/
 
         //보안정책 조회
         ct.fn.getSecurityPolicy = function() {

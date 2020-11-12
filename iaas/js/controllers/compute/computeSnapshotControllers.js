@@ -540,7 +540,7 @@ angular.module('iaas.controllers')
             params.instance                  = {};
             params.instance.name             = ct.data.name;
             params.instance.tenantId         = ct.data.tenantId;
-            params.instance.networks         = [{ id: ct.data.networks[0].id }];
+            params.instance.networks         = [{ id: (ct.data.networks && angular.isArray(ct.data.networks) && ct.data.networks[0] && ct.data.networks[0].id)?ct.data.networks[0].id:0 }];
             params.instance.image            = {id: ct.snapshotInfo.id, type: 'snapshot'};
             params.instance.keypair          = { keypairName: ct.data.keypair.keypairName };
             params.instance.securityPolicies = angular.copy(ct.data.securityPolicys);

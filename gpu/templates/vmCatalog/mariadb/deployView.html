@@ -1,67 +1,58 @@
-<div class="ctlog_cntWrap">
-    <div class="ctlog-cnt">
-        <h5>서비스 접속정보</h5>
-        <ul>
-            <li>
-                <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
-                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
-            </li>
-            <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_id">
-                <strong class="tit">사용자계정</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_id }}</span>
-            </li>
-<!--
-            <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_password">
-                <strong class="tit">사용자 PW </strong>
-                <span class="txt"><span class="point_txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_password }}</span></span>
-            </li>
--->
-        </ul>
-        <ul>
-            <li>
-                <strong class="tit">접속포트</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}<!--{{ contents.vmCatalogDeployInfo.parameters.service_port }}--></span>
-                <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
-            </li>
-<!--
-            <li>
-                <strong class="tit">관리자계정</strong>
-                <span class="txt">root</span>
-            </li>
--->
-<!--
-            <li>
-                <strong class="tit">관리자 PW</strong>
-                <span class="txt"><span class="point_txt">{{ contents.vmCatalogDeployInfo.parameters.root_password }}</span></span>
-            </li>
--->
-            <li ng-if="contents.vmCatalogDeployInfo.parameters.create_db_name">
-                <strong class="tit">사용자 DB명</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.create_db_name }}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="ctlog-cnt">
-        <h5> 서비스 환경 설정 파일 경로</h5>
-        <ul>
-            <li>
-                <strong class="tit">my.cnf path: </strong>
-                <span class="txt">/etc/my.cnf</span>
-            </li>
-            <li>
-                <strong class="tit">service.cnf path: </strong>
-                <span class="txt">/etc/my.cnf.d/server.cnf</span>
-            </li>
-            <li>
-                <strong class="tit">mysql-clients.cnf path: </strong>
-                <span class="txt">/etc/my.cnf.d/mysql-clients.cnf</span>
-            </li>
-            <li>
-                <strong class="tit">data path: </strong>
-                <span class="txt">/var/lib/mysql</span>
-            </li>
-        </ul>
-    </div>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 접속정보</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>접속 IP : </b>
+			<span ng-if="contents.octaviaLbUse">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+			<span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+			<span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'">각 서버로 접속</span>
+		</li>
+		<li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_id">
+			<b>사용자계정 : </b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.create_user_id }}</span> 
+		</li>
+		<!-- <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_password">
+			<b>사용자 PW : </b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.create_user_password }}</span> 
+		</li> -->
+		<li>
+			<b>접속포트 : </b>
+			<span ng-if="contents.octaviaLbUse">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}<!--{{ contents.vmCatalogDeployInfo.parameters.service_port }}--></span>
+			<span ng-if="!contents.octaviaLbUse">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+		</li>
+		<!-- <li>
+			<b>관리자계정 :</b>
+			<span>root</span>
+		</li>
+		<li>
+			<b>관리자 PW :</b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.root_password }}</span>
+		</li> -->
+		<li ng-if="contents.vmCatalogDeployInfo.parameters.create_db_name">
+			<b>사용자 DB명 :</b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.create_db_name }}</span>
+		</li>
+	</ul>
+</div>
+
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 환경 설정 파일 경로</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>my.cnf path : </b> 
+			<span>/etc/my.cnf</span>
+		</li>
+		<li>
+			<b>service.cnf path : </b> 
+			<span>/etc/my.cnf.d/server.cnf</span>
+		</li>
+		<li>
+			<b>mysql-clients.cnf path : </b> 
+			<span>/etc/my.cnf.d/mysql-clients.cnf</span>
+		</li>
+		<li>
+			<b>data path : </b> 
+			<span>/var/lib/mysql</span>
+		</li>
+	</ul>
 </div>

@@ -1,62 +1,55 @@
-<div class="ctlog_cntWrap">
-    <div class="ctlog-cnt">
-        <h5>서비스 접속정보</h5>
-        <ul>
-            <li>
-                <strong class="tit">접속 IP</strong>
-                <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-            </li>
-            <li>
-                <strong class="tit">Konga 계정</strong>
-                <span class="txt">Konga 접속 하여 생성</span>
-            </li>
-            <li>
-                <strong class="tit">Kong DB 계정</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.kong_user_id }}</span>
-            </li>
-            <li>
-                <strong class="tit">Konga DB 계정</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_user_id }}</span>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <strong class="tit">Konga 접속</strong>
-                <!-- span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_port }}</span-->
-                <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:{{ contents.vmCatalogDeployInfo.parameters.konga_port }}">
-                    <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:{{ contents.vmCatalogDeployInfo.parameters.konga_port }}</span>
-                </a>
-            </li>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 접속정보</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>접속 IP</b>
+			<span>{{contents.instance.image.osType | firstUpperCase}}</span>
+		</li>
+		<li>
+			<b>Konga 계정</b>
+			<span>Konga 접속 하여 생성</span>
+		</li>
+		<li>
+			<b>Kong DB 계정</b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.kong_user_id }}</span>
+		</li>
+		<li>
+			<b>Konga 접속</b>
+			<span>
+				<a class="link blue-600" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:{{ contents.vmCatalogDeployInfo.parameters.konga_port }}" target="_blank">
+					{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:{{ contents.vmCatalogDeployInfo.parameters.konga_port }} <i data-feather="external-link" class="feather-directive"></i>
+				</a>
+			</span>
+		</li>
+		<li>
+			<b>DB Port</b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.pg_port }}</span>
+		</li>
+		<li>
+			<b>Kong DB 명</b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.kong_db_name }}</span>
+		</li>
+		<li>
+			<b>Konga DB 명</b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.konga_user_id }}</span>
+		</li>
+	</ul>
+</div>
 
-            <li>
-                <strong class="tit">DB Port</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.pg_port }}</span>
-            </li>
-            <li>
-                <strong class="tit">Kong DB 명</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.kong_db_name }}</span>
-            </li>
-            <li>
-                <strong class="tit">Konga DB 명</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.konga_user_id }}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="ctlog-cnt">
-        <h5> 서비스 환경 설정 파일 경로</h5>
-        <ul>
-            <li>
-                <strong class="tit">postgresql data path: </strong>
-                <span class="txt">/var/lib/pgsql/11/data</span>
-            </li>
-            <li>
-                <strong class="tit">kong.conf path: </strong>
-                <span class="txt">/etc/kong/kong.conf</span>
-            </li>
-            <li>
-                <strong class="tit">Konga Home path: </strong>
-                <span class="txt">/home/centos/konga-0.14.7</span>
-            </li>
-        </ul>
-    </div>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 환경 설정 파일 경로</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>postgresql data path: </b>
+			<span>/var/lib/pgsql/11/data</span>
+		</li>
+		<li>
+			<b>kong.conf path: </b>
+			<span>/etc/kong/kong.conf</span>
+		</li>
+		<li>
+			<b>Konga Home path: </b>
+			<span>/home/centos/konga-0.14.7</span>
+		</li>
+	</ul>
 </div>

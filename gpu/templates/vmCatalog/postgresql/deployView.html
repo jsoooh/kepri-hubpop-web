@@ -1,42 +1,39 @@
-<div class="ctlog_cntWrap">
-    <div class="ctlog-cnt">
-        <h5>서비스 접속정보</h5>
-        <ul>
-            <li>
-                <strong class="tit">접속 IP</strong>
-                <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-            </li>
-            <li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_id">
-                <strong class="tit">사용자계정</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.create_user_id }}</span>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <strong class="tit">접속포트</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
-            </li>
-            <li ng-if="contents.vmCatalogDeployInfo.parameters.create_db_name">
-                <strong class="tit">사용자 DB명</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.create_db_name }}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="ctlog-cnt">
-        <h5> 서비스 환경 설정 파일 경로</h5>
-        <ul>
-            <li>
-                <strong class="tit">postgresql.cnf path: </strong>
-                <span class="txt">/var/lib/pgsql/11/data/postgresql.conf</span>
-            </li>
-            <li>
-                <strong class="tit">pg_hba.cnf path: </strong>
-                <span class="txt">/var/lib/pgsql/11/data/pg_hba.conf</span>
-            </li>
-            <li>
-                <strong class="tit">data path: </strong>
-                <span class="txt">/var/lib/pgsql/11/data</span>
-            </li>
-        </ul>
-    </div>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 접속정보</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>접속 IP : </b>
+			<span>{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
+		</li>
+		<li ng-if="contents.vmCatalogDeployInfo.parameters.create_user_id">
+			<b>사용자계정</b> 
+			<span>{{ contents.vmCatalogDeployInfo.parameters.create_user_id }}</span>
+		</li>
+		<li>
+			<b>접속포트</b> 
+			<span>{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+		</li>
+		<li ng-if="contents.vmCatalogDeployInfo.parameters.create_db_name">
+			<b>사용자 DB명</b> 
+			<span>{{ contents.vmCatalogDeployInfo.parameters.create_db_name }}</span>
+		</li>
+	</ul>
+</div>
+
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 환경 설정 파일 경로</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>postgresql.cnf path: </b> 
+			<span>/var/lib/pgsql/11/data/postgresql.conf</span>
+		</li>
+		<li>
+			<b>pg_hba.cnf path: </b>
+			<span>/var/lib/pgsql/11/data/pg_hba.conf</span>
+		</li>
+		<li>
+			<b>data path: </b>
+			<span>/var/lib/pgsql/11/data</span>
+		</li>
+	</ul>
 </div>

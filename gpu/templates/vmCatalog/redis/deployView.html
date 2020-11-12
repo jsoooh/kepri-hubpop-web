@@ -1,31 +1,28 @@
-<div class="ctlog_cntWrap">
-    <div class="ctlog-cnt">
-        <h5>서비스 접속정보</h5>
-        <ul>
-            <li>
-                <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <strong class="tit">접속포트</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="ctlog-cnt">
-        <h5> 서비스 환경 설정 파일 경로</h5>
-        <ul>
-            <li>
-                <strong class="tit">redis.conf path: </strong>
-                <span class="txt">/etc/redis.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우 파일명은 redis_포트번호.conf 입니다.'"><span class="ico_info"></span></button></div></span>
-            </li>
-            <li ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">
-                <strong class="tit">nodes.conf path: </strong>
-                <span class="txt">/var/lib/redis/nodes.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성되며 파일명은 nodes-포트번호.conf 입니다.'"><span class="ico_info"></span></button></div></span>
-            </li>
-        </ul>
-    </div>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 접속정보</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>접속 IP :</b> 
+			<span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span> 
+			<span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">각 서버로 접속</span>
+		</li>
+		<li>
+			<b>접속포트</b> 
+			<span>{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+		</li>
+	</ul>
+</div>
+
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 환경 설정 파일 경로</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>redis.conf path <div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우 파일명은 redis_포트번호.conf 입니다.'">i</a></div></b> 
+			<span class="margin-left-30">/etc/redis.conf</span>
+		</li>
+		<li ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">
+			<b>nodes.conf path <div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성되며 파일명은 nodes-포트번호.conf 입니다.'">i</a></div></b> 
+			<span class="margin-left-30">/var/lib/redis/nodes.conf</span>
+		</li>
+	</ul>
 </div>

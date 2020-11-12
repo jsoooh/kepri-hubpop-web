@@ -74,11 +74,11 @@
 							<!-- //Mysql 비밀번호 -->
 	
 							<!-- 오브젝트 스토리지 선택 -->
-							<div class="write-sub-title">
+							<!-- <div class="write-sub-title">
 								<b class="caution-star">*</b> 오브젝트 스토리지 선택
 								<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'오브젝트 스토리지를 선택한다.'">	i</a></div>
 							</div>
-							<!-- <ul class="list-inline margin-top-20">
+							<ul class="list-inline margin-top-20">
 								<li>
 									<div class="radio-group">
 										<input type="radio" name="bucketType" id="defined_bucket" class="radio-input" value="server" ng-model="contents.data.bucketType" ng-value="'defined'" ng-change="contents.fn.changeBucketType(contents.data.bucketType)" aria-invalid="false" ng-checked="'defined'">
@@ -110,7 +110,10 @@
 										<col style="width: 20%;">
 										<col style="width:;">
 									</colgroup>
-									<tbody>
+									<input type="hidden" name="s3EndPoint" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.s3EndPoint" validation="" value="{{contents.sendSecretInfoList.s3RadosEndPoint}}">
+									<input type="hidden" name="s3AccessKey" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.s3AccessKey" validation="" value="{{contents.sendSecretInfoList.s3AccessKey}}">
+									<input type="hidden" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.s3SecretKey" validation="" value="{{contents.sendSecretInfoList.s3SecreteAccessKey}}">
+									<!--<tbody>
 										<tr>
 											<th><b class="caution-star">*</b> S3 endpoint</th>
 											<td><input type="hidden" name="s3EndPoint" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.s3EndPoint" validation="" value="{{contents.sendSecretInfoList.s3RadosEndPoint}}"> {{contents.sendSecretInfoList.s3RadosEndPoint}}</td>
@@ -120,10 +123,10 @@
 										<tr>
 											<th><b class="caution-star">*</b> S3 secret key</th>
 											<td colspan="3"><input type="hidden" name="s3SecretKey" class="form-control" maxlength="50" ng-model="contents.data.s3SecretKey" validation="" value="{{contents.sendSecretInfoList.s3SecreteAccessKey}}">{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
-	<!-- 										<th><i class="i_star"></i> 버킷명</th> -->
-	<!-- 										<td><input type="text" name="bucketName" class="form-control" maxlength="50" ng-model="contents.data.bucketName" validation="min:2|max:20|required|custom:contents.fn.validationBucketName(contents.data.bucketName)" placeholder="버킷명을 입력하세요."></td> -->
+	&lt;!&ndash; 										<th><i class="i_star"></i> 버킷명</th> &ndash;&gt;
+	&lt;!&ndash; 										<td><input type="text" name="bucketName" class="form-control" maxlength="50" ng-model="contents.data.bucketName" validation="min:2|max:20|required|custom:contents.fn.validationBucketName(contents.data.bucketName)" placeholder="버킷명을 입력하세요."></td> &ndash;&gt;
 										</tr>
-									</tbody>
+									</tbody>-->
 								</table>
 								<!-- <div class="text-right margin-top-10">
 									<button type="button" name="button" class="btn btn-default" ng-click="contents.fn.getObjectStorageObject(contents.data.bucketName)" ng-disabled="" >버킷 조회하기</button>

@@ -244,7 +244,7 @@
 .dashboard-body .chartWrap .bar_chart_data .cht_val span:last-child {right:0px;}
 
 .app-info-area .panel-heading {padding:10px 20px;}
-.app-info-area .round-img {width: 45px; height: 45px; line-height:44px; color:#fff; background:#99b7c1; border-radius: 50%; overflow: hidden; margin-top:10px; margin-right: 10px;}
+.app-info-area .round-img {width: 45px; height: 45px; line-height:44px; color:#fff; background:#99b7c1; border-radius: 50%; overflow: hidden; margin-top:5px; margin-right: 10px;}
 .app-info-area .round-img img {display: block; margin: 0 auto; min-width: 100%; min-height: 100%;}
 /* .app-info-area .thum_box {display:block; width:45px; height:45px; color:#fff; border-radius:50%; background:#99b7c1; overflow:hidden; line-height:44px;} */
 .app-info-area .round-img.img_line {background:none; border:1px solid #e3e3e3;}
@@ -426,6 +426,10 @@ input[name='renameSev']{position:relative; width:100%;}
 .panel .panel-heading .left-bar {padding-left: 15px; display: inline-block; font-size: 13px; position: relative;}
 .panel .panel-heading .left-bar::before {content: ''; width: 1px; height: 11px; background: #b3b7be; position: absolute; left: 6px; top: 5px;}
 .panel .panel-heading .left-bar b {margin-right: 5px;}
+
+/*카탈로그 > 서비스 목록 상세 */
+.catalog-view-info .round-img {width:140px; height:140px; line-height:100px; text-align:center; border-radius:50%; background:#f7f7f7; border:0; padding:15px;}
+.catalog-view-info .txt_tit {font-size:30px;}
 
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
