@@ -1,92 +1,87 @@
-<div class="ctlog_cntWrap">
-    <div class="ctlog-cnt">
-        <h5>서비스 접속정보</h5>
-        <ul>
-            <!-- <strong class="tit">접속 IP</strong> -->
-            <li>
-                <strong class="txt">[Deploy Type]</strong> &nbsp;&nbsp;
-                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'standalone'" class="txt">단일노드</span>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'sMaster'" class="txt">다중노드 / 단일 마스터 </span>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'dMaster'" class="txt">다중노드 / 이중 마스터 </span>
-                <br><span ng-if="contents.vmCatalogDeployInfo.deployType !== 'standalone'" class="txt">(worker node 갯수 : {{contents.vmCatalogDeployInfo.parameters.worker_cnt}})</span>
-            </li>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 접속정보</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>Deploy Type : </b> 
+			<span ng-if="contents.vmCatalogDeployInfo.deployType == 'standalone'">단일노드</span> 
+			<span ng-if="contents.vmCatalogDeployInfo.deployType == 'sMaster'">다중노드 / 단일 마스터 </span> 
+			<span ng-if="contents.vmCatalogDeployInfo.deployType == 'dMaster'">다중노드 / 이중 마스터 </span> 
+			<br> <span ng-if="contents.vmCatalogDeployInfo.deployType !== 'standalone'">(worker node 갯수 : {{contents.vmCatalogDeployInfo.parameters.worker_cnt}})</span>
+		</li>
+		<li>
+			<b>Type :</b> 
+			<span ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='false' && contents.vmCatalogDeployInfo.parameters.hbase_use=='false'">Core</span> 
+			<span ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='true'">Spark</span> 
+			<span ng-if="contents.vmCatalogDeployInfo.parameters.hbase_use=='true'">Hbase</span> 
+			<span ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='true'"></span>
+		</li>
+		<li ng-if="contents.octaviaLbUse">
+			<b>접속 IP :</b>
+			<span>{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+		</li>
+		<li ng-if="contents.octaviaLbUse">
+			<b>접속 포트 :</b>
+			<span>{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
+		</li>
+		<li>
+			<b>Hadoop admin UI :</b>
+			<span><a class="link blue-600" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070" target="_blank">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070 <i data-feather="external-link" class="feather-directive"></i></a></span>
+		</li>
+		<li>
+			<b>Yarn WEB UI :</b>
+			<span><a class="link blue-600" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088/cluster/nodes" target="_blank">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088/cluster/nodes <i data-feather="external-link" class="feather-directive"></i></a></span>
+		</li>
+		<li ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='true'">
+			<b>Spark Web UI</b>
+			<span><a class="link blue-600" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089" target="_blank">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089 <i data-feather="external-link" class="feather-directive"></i></a></span>
+		</li>
+	</ul>
+</div>
 
-            <li>
-                <strong class="txt">[Type]</strong> &nbsp;&nbsp;
-                <span ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='false' && contents.vmCatalogDeployInfo.parameters.hbase_use=='false'" class="txt">Core</span>
-                <span ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='true'" class="txt">Spark</span>
-                <span ng-if="contents.vmCatalogDeployInfo.parameters.hbase_use=='true'" class="txt">Hbase</span>
-                <span ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='true'" class="txt"></span>
-            </li>
+<div class="col-md-4">
+	<h4 class="heading h4">- 오브젝트 스토리지</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>Endpoint :</b>
+			<span>{{contents.vmCatalogDeployInfo.parameters.s3_endpoint}}</span>
+		</li>
+		<li>
+			<b>Access Key :</b>
+			<span>{{contents.vmCatalogDeployInfo.parameters.s3_accessKey}}</span>
+		</li>
+		<li>
+			<b>Secret Access Key :</b>
+			<span>{{contents.vmCatalogDeployInfo.parameters.s3_secretKey}}</span>
+		</li>
+		<li>
+			<b>Bucket Name :</b>
+			<span>{{contents.vmCatalogDeployInfo.parameters.s3_bucket_name}}</span>
+		</li>
+	</ul>
+</div>
 
-            <li ng-if="contents.octaviaLbUse">
-                <strong class="txt">[접속 IP]</strong>
-                <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
-            </li>
-            <li  ng-if="contents.octaviaLbUse">
-                <strong class="txt">[접속 포트]</strong>
-                <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
-            </li>
-
-            <li>
-                <strong class="txt">[Hadoop admin UI]</strong> &nbsp;&nbsp;
-                <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070">
-                    <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:50070</span>
-                </a>
-            </li>
-
-            <li>
-                <strong class="txt">[Yarn WEB UI]</strong> &nbsp;&nbsp;
-                <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088/cluster/nodes">
-                    <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8088/cluster/nodes</span>
-                </a>
-            </li>
-            <li ng-if="contents.vmCatalogDeployInfo.parameters.spark_use=='true'">
-                <strong class="txt">[Spark Web UI]</strong> &nbsp;&nbsp;
-                <a target="_blank" href="http://{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089">
-                    <span class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}:8089</span>
-                </a>
-            </li><br><br>
-        <h5>오브젝트 스토리지</h5>
-            <li><br>
-                <strong class="txt">Endpoint :&nbsp;&nbsp;</strong>
-                <span class="txt">{{contents.vmCatalogDeployInfo.parameters.s3_endpoint}}</span><br><br>
-                <strong class="txt">Access Key :&nbsp;&nbsp;</strong>
-                <span class="txt">{{contents.vmCatalogDeployInfo.parameters.s3_accessKey}}</span><br><br>
-                <strong class="txt">Secret Access Key :&nbsp;&nbsp;</strong>
-                <span class="txt">{{contents.vmCatalogDeployInfo.parameters.s3_secretKey}}</span><br><br>
-                <strong class="txt">Bucket Name :&nbsp;&nbsp;</strong>
-                <span class="txt">{{contents.vmCatalogDeployInfo.parameters.s3_bucket_name}}</span>
-            </li>
-        </ul>
-        <ul>
-            <li></li>
-        </ul>
-    </div>
-    <div class="ctlog-cnt">
-        <h5> 서비스 환경 설정 파일 경로</h5>
-        <ul>
-            <li>
-<!--                <strong class="tit">core: </strong>-->
-                <span class="txt">/home/centos/hadoop/etc/hadoop/core-site.xml</span>
-            </li>
-            <li>
-<!--                <strong class="tit">hdfs: </strong>-->
-                <span class="txt">/home/centos/hadoop/etc/hadoop/hdfs-site.xml</span>
-            </li>
-            <li>
-<!--                <strong class="tit">mapred: </strong>-->
-                <span class="txt">/home/centos/hadoop/etc/hadoop/mapred-site.xml</span>
-            </li>
-            <li>
-<!--                <strong class="tit">yarn: </strong>-->
-                <span class="txt">/home/centos/hadoop/etc/hadoop/yarn-site.xml</span>
-            </li>
-            <li>
-<!--                <strong class="tit">workers: &nbsp;</strong>-->
-                <span class="txt">/home/centos/hadoop/etc/hadoop/workers</span>
-            </li>
-        </ul>
-    </div>
-
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 환경 설정 파일 경로</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>core:</b>
+			<span>/home/centos/hadoop/etc/hadoop/core-site.xml</span>
+		</li>
+		<li>
+			<b>hdfs:</b>
+			<span>/home/centos/hadoop/etc/hadoop/hdfs-site.xml</span>
+		</li>
+		<li>
+			<b>mapred: </b>
+			<span>/home/centos/hadoop/etc/hadoop/mapred-site.xml</span>
+		</li>
+		<li>
+			<b>yarn:</b>
+			<span>/home/centos/hadoop/etc/hadoop/yarn-site.xml</span>
+		</li>
+		<li>
+			<b>workers:</b>
+			<span>/home/centos/hadoop/etc/hadoop/workers</span>
+		</li>
+	</ul>
 </div>

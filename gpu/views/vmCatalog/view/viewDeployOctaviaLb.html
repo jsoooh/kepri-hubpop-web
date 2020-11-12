@@ -1,75 +1,86 @@
-<div class="cont-titWrap mt50">
-    <h3 class="h-tit3">부하분산 서버정보</h3>
-</div>
-<div class="cBox type1 appCnt-info">
-    <div class="cBox-hd">
-        <div class="pull-left">
-            <h4 class="c-tit">
-                <a href="" ng-click="main.goToPage('/gpu/loadbalancer/detail/' + contents.octaviaLb.loadBalancer.id)">{{ contents.octaviaLb.loadBalancer.name }}</a>
-                <img src="images/thum/im_logo_compute.png" class="logo" alt="">
-            </h4>
-        </div>
-    </div>
-    <div ng-if="contents.vmCatalogDeployInfo.stackStatus != 'CREATE_COMPLETE'" class="cBox-cnt">
-        <div class="text-center pt30 pb30">
-            <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS' && contents.vmCatalogDeployInfo.deployStatus == 'CREATE_IN_PROGRESS'" class="ul-in2 spinner_area">
-                <img ng-src="images/loading/loading_cloud.gif" height="160">
-                <div class="text-center">
-                    <p class="txt"><span class="ico ico-timer"></span>서버 생성 중입니다.</p>
-                </div>
-            </div>
-            <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_FAILED'" class="ul-in2 spinner_area">
-                <img ng-src="images/loading/614369-cloud_error-512.png" height="160">
-                <div class="text-center">
-                    <p class="txt"><span class="ico ico-timer"></span>생성 실패입니다.</p>
-                </div>
-            </div>
-            <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'DELETE_IN_PROGRESS'" class="ul-in2 spinner_area">
-                <img ng-src="images/loading/funny-trash-playing.gif" height="160">
-                <div class="text-center">
-                    <p class="txt"><span class="ico ico-timer"></span>삭제 중입니다.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE'" class="cBox-cnt">
-        <div class="in">
-            <div class="ctlog_cntWrap">
-                <div class="ctlog-cnt">
-                    <ul>
-                        <li>
-                            <strong class="tit">접속 IP</strong>
-                            <span class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
-                            <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.octaviaLb.loadBalancer.vip_address)"><span class="ico_sm ico_copy"></span></button>
-                        </li>
-                        <li>
-                            <strong class="tit">연결포트</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
-                        </li>
-                        <li>
-                            <strong class="tit">프로토콜</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol }}</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="ctlog-cnt">
-                    <ul>
-                        <li>
-                            <strong class="tit">접속 포트</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
-                        </li>
-                        <li>
-                            <strong class="tit">로드 밸런스 유형</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].pool.lb_algorithm }}</span>
-                        </li>
-                        <li>
-                            <strong class="tit">헬스 체크 주기(초)</strong>
-                            <span class="txt">{{ contents.octaviaLb.listeners[0].monitor.timeout }}</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+ <!-- 부하분산 서버정보 -->
+ <h3 class="heading h3 margin-top-50">부하분산 서버정보</h3>
+ <section class="panel panel-bordered app-info-area">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="round-img pull-left">
+					<img src="images/thum/im_logo_compute.png" class="logo" alt="">
+				</div>
+				<div class="pull-left">
+					<h3 class="panel-title padding-left-5">
+						<a href="" ng-click="main.goToPage('/gpu/loadbalancer/detail/' + contents.octaviaLb.loadBalancer.id)">{{ contents.octaviaLb.loadBalancer.name }}</a>
+					</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel-body">
+		
+		<div ng-if="contents.vmCatalogDeployInfo.stackStatus != 'CREATE_COMPLETE'">
+			<!-- 서버생성중 -->
+			<div class="text-center padding-vertical-50" ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_IN_PROGRESS' && contents.vmCatalogDeployInfo.deployStatus == 'CREATE_IN_PROGRESS'">
+				<div class="spinner-border spinner-primary" role="status">
+					<span class="sr-only">Loading...</span>
+				</div>
+				<div class="margin-top-20">서버 생성 중입니다.</div>
+			</div>
+			<!-- //서버생성중 -->
+			
+			<!-- 서버 생성 실패 -->
+			<div class="text-center padding-vertical-30" ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_FAILED'">
+				<i class="xi-close-circle-o font-size-40 red-500"></i>
+				<div class="margin-top-20">생성 실패입니다.</div>
+			</div>
+			<!-- //서버 생성 실패 -->
+			
+			<!-- 서버 삭제 중 -->
+			<div class="text-center padding-vertical-50" ng-if="contents.vmCatalogDeployInfo.stackStatus == 'DELETE_IN_PROGRESS'">
+				<div class="spinner-border spinner-danger" role="status">
+					<span class="sr-only">Loading...</span>
+				</div>
+				<div class="margin-top-20">삭제 중입니다.</div>
+			</div>
+			<!-- //서버 삭제 중 -->
+		</div>
+		
+		<div ng-if="contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE'" >
+			<div class="clearfix">
+				<div class="col-md-4">
+					<ul class="list-dot margin-bottom-20">
+						<li>
+							<b>접속 IP :</b> 
+							<span>{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
+							<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.octaviaLb.loadBalancer.vip_address)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
+						</li>
+						<li>
+							<b>연결포트 :</b> 
+							<span>{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
+						</li>
+						<li>
+							<b>프로토콜 :</b> 
+							<span>{{ contents.octaviaLb.listeners[0].listener.protocol }}</span>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-4">
+					<ul class="list-dot margin-bottom-20">
+						<li>
+							<b>접속 포트 :</b> 
+							<span>{{ contents.octaviaLb.listeners[0].listener.protocol_port }}</span>
+						</li>
+						<li>
+							<b>로드 밸런스 유형 :</b> 
+							<span>{{ contents.octaviaLb.listeners[0].pool.lb_algorithm }}</span>
+						</li>
+						<li>
+							<b>헬스 체크 주기(초) :</b> 
+							<span>{{ contents.octaviaLb.listeners[0].monitor.timeout }}</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 <!-- //부하분산 서버정보 -->

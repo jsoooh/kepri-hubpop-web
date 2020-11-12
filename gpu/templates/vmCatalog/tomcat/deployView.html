@@ -1,37 +1,34 @@
-<div class="ctlog_cntWrap">
-    <div class="ctlog-cnt">
-        <h5>서비스 접속정보</h5>
-        <ul>
-            <li>
-                <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.loadBalancer.vip_address }}</span>
-                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <strong class="tit">접속포트</strong>
-                <span ng-if="contents.octaviaLbUse" class="txt">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}<!--{{ contents.vmCatalogDeployInfo.parameters.service_port }}--></span>
-                <span ng-if="!contents.octaviaLbUse" class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="ctlog-cnt">
-        <h5> 서비스 환경 설정 파일 경로</h5>
-        <ul>
-            <li>
-                <strong class="tit">tomcat home path: </strong>
-                <span class="txt">/usr/local/tomcat</span>
-            </li>
-            <li>
-                <strong class="tit">tomcat conf path: </strong>
-                <span class="txt">/usr/local/tomcat/conf</span>
-            </li>
-            <li>
-                <strong class="tit">web root path: </strong>
-                <span class="txt">/usr/local/tomcat/webapps/ROOT</span>
-            </li>
-        </ul>
-    </div>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 접속정보</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>접속 IP :</b> 
+			<span ng-if="contents.octaviaLbUse">{{ contents.octaviaLb.loadBalancer.vip_address }}</span> 
+			<span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType != 'cluster'">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span> 
+			<span ng-if="!contents.octaviaLbUse && contents.vmCatalogDeployInfo.deployType == 'cluster'">각 서버로 접속</span>
+		</li>
+		<li>
+			<b>접속포트 :</b> 
+			<span ng-if="contents.octaviaLbUse">{{ contents.octaviaLb.listeners[0].listener.protocol_port }}<!--{{ contents.vmCatalogDeployInfo.parameters.service_port }}--></span> 
+			<span ng-if="!contents.octaviaLbUse">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+		</li>
+	</ul>
+</div>
+
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 환경 설정 파일 경로</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>tomcat home path : </b> 
+			<span>/usr/local/tomcat</span>
+		</li>
+		<li>
+			<b>tomcat conf path : </b> 
+			<span>/usr/local/tomcat/conf</span>
+		</li>
+		<li>
+			<b>web root path : </b> 
+			<span>/usr/local/tomcat/webapps/ROOT</span>
+		</li>
+	</ul>
 </div>

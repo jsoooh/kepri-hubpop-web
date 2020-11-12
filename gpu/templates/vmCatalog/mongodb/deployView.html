@@ -1,45 +1,41 @@
-<div class="ctlog_cntWrap">
-    <div class="ctlog-cnt">
-        <h5>서비스 접속정보</h5>
-        <ul>
-            <li>
-                <strong class="tit">접속 IP</strong>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">각 서버로 접속</span>
-            </li>
-            <li>
-                <strong class="tit">관리자 계정</strong>
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.admin_id }}</span>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <strong class="tit">접속포트</strong>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 접속정보</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>접속 IP : </b>
+			<span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'">{{ contents.servers[0].instancePort.fixed_ips[0].ip_address }}</span> 
+			<span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">각 서버로 접속</span>
+		</li>
+		<li>
+			<b>관리자계정 :</b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.admin_id }}</span>
+		</li>
+		<li>
+			<b>접속포트 : </b>
+			<span>{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
+		</li>
+	</ul>
+</div>
 
-                <span class="txt">{{ contents.vmCatalogDeployInfo.parameters.service_port }}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="ctlog-cnt">
-        <h5> 서비스 환경 설정 파일 경로</h5>
-        <ul>
-            <li>
-                <strong class="tit">mongod.conf path: </strong>
-                <span class="txt">/etc/mongod.conf</span>
-            </li>
-            <li ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">
-                <strong class="tit">mongod1~3.conf path: </strong>
-                <span class="txt">/var/lib/mongo/conf/mongod1~3.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성되며 파일명에 번호가 부여됩니다.'"><span class="ico_info"></span></button></div></span>
-            </li>
-            <li ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">
-                <strong class="tit">mongos.conf path: </strong>
-                <span class="txt">/var/lib/mongo/conf/mongos.conf <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성됩니다.'"><span class="ico_info"></span></button></div></span>
-            </li>
-            <li>
-                <strong class="tit">data path: </strong>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'" class="txt">/var/lib/mongo/rs/data1~3 <div class="t_tip_bx"><button type="button" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포하는 경우 data directory에 번호가 부여됩니다.'"><span class="ico_info"></span></button></div></span>
-                <span ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'" class="txt">/var/lib/mongo</span>
-            </li>
-        </ul>
-    </div>
+<div class="col-md-4">
+	<h4 class="heading h4">- 서비스 환경 설정 파일 경로</h4>
+	<ul class="list-dot margin-bottom-20">
+		<li>
+			<b>mongod.conf path : </b> 
+			<span>/etc/mongod.conf</span>
+		</li>
+		<li ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">
+			<b>mongod1~3.conf path<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성되며 파일명에 번호가 부여됩니다.'">i</a></div> </b> 
+			<span class="margin-left-30">/var/lib/mongo/conf/mongod1~3.conf </span>
+		</li>
+		<li ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">
+			<b>mongos.conf path<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포할 경우에만 생성됩니다.'">i</a></div> </b> 
+			<span class="margin-left-30">/var/lib/mongo/conf/mongos.conf</span>
+		</li>
+		<li>
+			<b>data path<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'클러스터 구성으로 배포하는 경우 data directory에 번호가 부여됩니다.'">i</a></div> </b> 
+			<span class="margin-left-30" ng-if="contents.vmCatalogDeployInfo.deployType == 'cluster'">/var/lib/mongo/rs/data1~3</span>
+			<span class="margin-left-30" ng-if="contents.vmCatalogDeployInfo.deployType != 'cluster'">/var/lib/mongo</span>
+		</li>
+	</ul>
 </div>
