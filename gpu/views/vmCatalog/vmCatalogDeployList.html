@@ -91,7 +91,7 @@
 						
 						<!-- 서버 생성 실패 -->
 						<div class="text-center padding-vertical-30" ng-if="vmCatalogDeploy.stackStatus == 'CREATE_FAILED'">
-							<img src="assets/img/icon/modal_alert_error.jpg">
+							<i class="xi-close-circle-o font-size-40 red-500"></i>
 							<div class="margin-top-20">서버 생성 실패</div>
 						</div>
 						<!-- //서버 생성 실패 -->
@@ -108,7 +108,7 @@
 						
 						<!-- 서비스 배포 실패 -->
 						<div class="text-center padding-vertical-30" ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_TIME_OUT' || (vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE' && vmCatalogDeploy.deployStatus == 'DEPLOY_FAILED')">
-							<img src="assets/img/icon/modal_alert_error.jpg">
+							<i class="xi-close-circle-o font-size-40 red-500"></i>
 							<div class="margin-top-20">서비스 배포 실패</div>
 						</div>
 						<!-- //서비스 배포 실패 -->
