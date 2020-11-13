@@ -663,9 +663,19 @@ angular.module('gpu.controllers')
             case 3:
                 str_image_id = CONSTANTS.vmCatalog.imageId.nginx; break;
             case 4:
-                str_image_id = CONSTANTS.vmCatalog.imageId.mariadb; break;
+                if (vmCatalogDeploy.deployType == "cluster") {
+                    str_image_id = CONSTANTS.vmCatalog.imageId.galeraMariadb; break;
+                } else {
+                    str_image_id = CONSTANTS.vmCatalog.imageId.mariadb; break;
+                }
+
             case 5:
-                str_image_id = CONSTANTS.vmCatalog.imageId.mysql; break;
+                if (vmCatalogDeploy.deployType == "cluster") {
+                    str_image_id = CONSTANTS.vmCatalog.imageId.galeraMysql; break;
+                } else {
+                    str_image_id = CONSTANTS.vmCatalog.imageId.mysql; break;
+                }
+
             case 6:
                 str_image_id = CONSTANTS.vmCatalog.imageId.mongodb; break;
             case 7:
