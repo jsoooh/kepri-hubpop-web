@@ -154,6 +154,9 @@ resources:
             ln -s $volume_mount_path/postgres /var/lib/pgsql/11/data
             sleep 1
 {% endif %}
+            echo "alias psql='psql -p $service_port '" >> /etc/bashrc
+            source /etc/bashrc
+
             /usr/pgsql-11/bin/postgresql-11-setup initdb
 
             sleep 2
@@ -227,8 +230,9 @@ resources:
 
             systemctl start postgresql-11
             sleep 1
-            sudo -u postgres psql template1 -c "CREATE EXTENSION pgpool_recovery"
-            sudo -u postgres psql <<EOF
+
+            sudo -u postgres psql -p $service_port template1 -c "CREATE EXTENSION pgpool_recovery"
+            sudo -u postgres psql -p $service_port <<EOF
             ALTER USER postgres WITH PASSWORD '$postgres_password';
             CREATE ROLE repl WITH REPLICATION PASSWORD '$repluser_password' LOGIN;
             SELECT * FROM pg_create_physical_replication_slot('repl_slot_01');
@@ -382,6 +386,9 @@ resources:
             systemctl start postgresql-11
 
             systemctl enable postgresql-11
+            echo "alias psql='psql -p $service_port '" >> /etc/bashrc
+            source /etc/bashrc
+
             echo "postgresql setting end"
 
   init_config3:
@@ -477,6 +484,9 @@ resources:
             systemctl start postgresql-11
 
             systemctl enable postgresql-11
+            echo "alias psql='psql -p $service_port '" >> /etc/bashrc
+            source /etc/bashrc
+
             echo "postgresql setting end"
 
   server1:
