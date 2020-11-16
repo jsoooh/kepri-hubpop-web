@@ -72,6 +72,10 @@ resources:
             #!/bin/sh
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            sed -i 's/# listeners.tcp.default = 5672/listeners.tcp.default = $amqp_port/' /etc/rabbitmq/rabbitmq.conf
+            # sed -i 's/DEFAULT_NODE_PORT=5672/DEFAULT_NODE_PORT=$amqp_port/'  /usr/lib/rabbitmq/bin/rabbitmq-env
+            sleep 1
+
             systemctl start rabbitmq-server
             rabbitmq-plugins enable rabbitmq_management
             systemctl restart rabbitmq-server
