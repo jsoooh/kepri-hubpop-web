@@ -3,6 +3,12 @@ heat_template_version: '2018-08-31'
 description: single postgresql template
 
 parameters:
+  mon_collect_host_beat:
+    type: string
+  mon_collect_port_beat:
+    type: string
+  image_id:
+    type: string
   api_end_point:
     type: string
   image:
@@ -119,7 +125,8 @@ resources:
 
             systemctl start postgresql-11
             sleep 1
-            sudo -u postgres psql <<EOF
+
+            sudo -u postgres psql -p $service_port <<EOF
             ALTER USER postgres WITH PASSWORD '$postgres_password';
 {% if createUser %}
             CREATE USER $create_user_id PASSWORD '$create_user_password' SUPERUSER;
@@ -144,12 +151,20 @@ resources:
 
             systemctl restart postgresql-11
             systemctl enable postgresql-11
+
+            echo "alias psql='psql -p $service_port '" >> /etc/bashrc
+            source /etc/bashrc
+
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "postgresql setting end"
 
   server:
     type: OS::Nova::Server
     properties:
+      metadata:
+        mon_collect_host_beat: { get_param: mon_collect_host_beat }
+        mon_collect_port_beat: { get_param: mon_collect_port_beat }
+        iaas_image_id: { get_param: image_id }
       flavor: { get_param: flavor }
 #      image: { get_param: image }
       block_device_mapping_v2:

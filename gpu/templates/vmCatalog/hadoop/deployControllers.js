@@ -7,7 +7,7 @@ angular.module('gpu.controllers')
         subPage.fn = {};
 
         var ct = $scope.$parent.$parent.contents;
-
+        var rand = Math.floor(Math.random() * 10000);
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
         ct.masterSpecList = [];
@@ -242,7 +242,7 @@ angular.module('gpu.controllers')
         ct.fn.createBucket = function() {
             console.log('create Bucket start!!! ');
             // 페이지 로드
-            var bucketName = "bucket-"+ct.data.stackName.toLowerCase();
+            var bucketName = "bucket-"+rand+"-"+ct.data.stackName.toLowerCase();
             let promise2;
             promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
@@ -305,7 +305,7 @@ angular.module('gpu.controllers')
             vmCatalogDeploy.parameters.s3_endpoint = ct.data.s3EndPoint;
             vmCatalogDeploy.parameters.s3_accessKey = ct.data.s3AccessKey;
             vmCatalogDeploy.parameters.s3_secretKey = ct.data.s3SecretKey;
-            vmCatalogDeploy.parameters.s3_bucket_name = "bucket-"+ct.data.stackName.toLowerCase();
+            vmCatalogDeploy.parameters.s3_bucket_name = "bucket-"+rand+"-"+ct.data.stackName.toLowerCase();
 
             if(ct.data.nodeType == 'single') {
                 vmCatalogDeploy.workerUse = false;
@@ -350,7 +350,7 @@ angular.module('gpu.controllers')
 
         ct.fn.createVmCatalogDeploy = function () {
             let promise2;
-            var bucketName = "bucket-"+ct.data.stackName.toLowerCase();
+            var bucketName = "bucket-"+rand+"-"+ct.data.stackName.toLowerCase();
             promise2 = vmCatalogService.createBucket(ct.tenantId, bucketName);
             promise2.success(function () {
                 //callBackFuncion(data);

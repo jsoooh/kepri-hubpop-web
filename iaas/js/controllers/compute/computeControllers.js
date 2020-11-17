@@ -14,9 +14,9 @@ angular.module('iaas.controllers')
         ct.network 			= {};
         ct.serverMainList   = [];
         ct.lbServiceLists   = [];
+        ct.promiseList      = [];
         ct.consoleLogLimit 	= '50';
         ct.actionLogLimit 	= '10';
-        ct.pageFirstLoad 	= true;
         ct.loadingServerList 	= false;
         ct.loadingLbList 	= false;
         ct.showVal			= false;
@@ -180,7 +180,6 @@ angular.module('iaas.controllers')
                 common.showAlertWarning('테넌트 정보가 없습니다.');
                 return;
             }
-            $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId,
                 queryType : 'list'
@@ -242,8 +241,8 @@ angular.module('iaas.controllers')
             });
             returnPromise.finally(function () {
                 ct.pageFirstLoad = false;
-                $scope.main.loadingMainBody = false;
             });
+            ct.promiseList.push(returnPromise);
         };
 
         ct.fn.setProcState = function (instance) {
@@ -769,10 +768,6 @@ angular.module('iaas.controllers')
 
         // lb 전체 리스트 조회
         ct.fngetLbList = function() {
-            var pageFirstLoad = angular.copy(ct.pageFirstLoad);
-            if (!pageFirstLoad) {    // 로드밸런서는 페이지 첫 로드 때 로딩을 사용안함
-                $scope.main.loadingMainBody = true;
-            }
             var param = {
                 tenantId : ct.data.tenantId
             };
@@ -797,11 +792,7 @@ angular.module('iaas.controllers')
             returnPromise.error(function (data, status, headers) {
                 common.showAlert("message",data.message);
             });
-            returnPromise.finally(function () {
-                if (!pageFirstLoad) {   // 로드밸런서는 페이지 첫 로드 때 로딩을 사용안함
-                    $scope.main.loadingMainBody = false;
-                }
-            });
+            ct.promiseList.push(returnPromise);
         };
 
         // 부하분산 관리 - 접속 IP 복사
@@ -1016,9 +1007,18 @@ angular.module('iaas.controllers')
             */
         }, 1000 * 60);
 
-        if (ct.data.tenantId) { // 페이지 첫 로딩
+        // 페이지 데이터 로드
+        if (ct.data.tenantId) {
             ct.fnGetServerMainList();
             ct.fngetLbList();
+
+            // 페이지 로딩바
+            if (ct.promiseList && ct.promiseList.length > 0) {
+                $scope.main.loadingMainBody = true;
+                $q.all(ct.promiseList).finally(function() {
+                    $scope.main.loadingMainBody = false;
+                });
+            }
         } else {
             /*
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
@@ -1028,7 +1028,7 @@ angular.module('iaas.controllers')
             */
         }
     })
-    .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, user, common, ValidationService, CONSTANTS) {
+    .controller('iaasComputeCreateCtrl', function ($scope, $location, $state, $sce, $translate, $stateParams, $timeout, $filter, $mdDialog, $q, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeControllers.js : iaasComputeCreateCtrl start", 1);
 
         // 뒤로 가기 버튼 활성화
@@ -1046,6 +1046,7 @@ angular.module('iaas.controllers')
         ct.data.initScript   = {};
         ct.data.securityPolicys = [];
         ct.serverNameList    = [];
+        ct.promiseList       = [];
         ct.subnet            = {};
         ct.networks          = [];
         ct.volume            = {};
@@ -1094,6 +1095,7 @@ angular.module('iaas.controllers')
             returnPromise.finally(function () {
                 ct.isInstanceListLoad = true;
             });
+            ct.promiseList.push(returnPromise);
         };
 
         // 네트워크 셀렉트박스 조회
@@ -1155,7 +1157,6 @@ angular.module('iaas.controllers')
                         ct.fn.getKeypairList();
                     } else {
                         common.showAlertError(returnData.data.responseJSON.message);
-                        $scope.main.loadingMainBody = false;
                     }
                 } else {
                     for (var i = 0; i < ct.keypairList.length; i++) {
@@ -1166,14 +1167,13 @@ angular.module('iaas.controllers')
                     if (!ct.data.keypair) {
                         ct.data.keypair = ct.keypairList[0];
                     }
-                    $scope.main.loadingMainBody = false;
                     ct.fn.getSpecList();
                 }
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
-                $scope.main.loadingMainBody = false;
             });
+            ct.promiseList.push(returnPromise);
         };
 
         ct.isSpecLoad = false;
@@ -1197,6 +1197,7 @@ angular.module('iaas.controllers')
                 ct.fn.setSpecMaxDisabled();
                 common.showAlertError(data.message);
             });
+            ct.promiseList.push(returnPromise);
         };
 
         // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
@@ -1285,7 +1286,6 @@ angular.module('iaas.controllers')
         ct.imageListLoad = false;
         //이미지 리스트 조회
         ct.fn.imageListSearch = function() {
-            $scope.main.loadingMainBody = true;
             var param = {
                 tenantId : ct.data.tenantId
             };
@@ -1317,10 +1317,10 @@ angular.module('iaas.controllers')
                 ct.imageListLoad = true;
             });
             returnPromise.error(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
                 ct.imageListLoad = true;
                 common.showAlertError(data.message);
             });
+            ct.promiseList.push(returnPromise);
         };
         
         ct.fn.imageChange = function (imageId) {
@@ -1366,6 +1366,7 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
                 common.showAlertError(data.message);
             });
+            ct.promiseList.push(returnPromise);
         };
 
         //네트워크 setting
@@ -1406,6 +1407,7 @@ angular.module('iaas.controllers')
             returnPromise.error(function (data) {
                 common.showAlertError("message" ,data.message);
             });
+            ct.promiseList.push(returnPromise);
         };
         
         //ip체크
@@ -1588,6 +1590,14 @@ angular.module('iaas.controllers')
             ct.fn.getSecurityPolicy();
             ct.fn.networkListSearch();
             ct.fn.getKeypairList();
+
+            // 함수 로딩 체크
+            if (ct.promiseList && ct.promiseList.length > 0) {
+                $scope.main.loadingMainBody = true;
+                $q.all(ct.promiseList).finally(function() {
+                    $scope.main.loadingMainBody = false;
+                });
+            }
         }
 
     })
