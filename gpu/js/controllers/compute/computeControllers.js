@@ -814,7 +814,9 @@ angular.module('gpu.controllers')
 
         // lb 전체 리스트 조회
         ct.fngetLbList = function() {
-            $scope.main.loadingMainBody = true;
+            if (!ct.pageFirstLoad) {    // 로드밸런서는 페이지 첫 로드 때 로딩을 사용안함
+                $scope.main.loadingMainBody = true;
+            }
             var param = {
                 tenantId : ct.data.tenantId
             };
@@ -864,12 +866,11 @@ angular.module('gpu.controllers')
                 common.showAlert("message",data.message);
             });
             returnPromise.finally(function (data, status, headers) {
-                $scope.main.loadingMainBody = false;
+                if (!ct.pageFirstLoad) {   // 로드밸런서는 페이지 첫 로드 때 로딩을 사용안함
+                    $scope.main.loadingMainBody = false;
+                }
             });
         };
-
-
-
 
         // 부하분산 관리 - 접속 IP 복사
         ct.fn.copyConnectLbInfoToClipboard = function (loadbalancer) {
@@ -1070,7 +1071,6 @@ angular.module('gpu.controllers')
                 });
             });
             rp.finally(function () {
-                $scope.main.loadingMainBody = false;
             })
         };
 
