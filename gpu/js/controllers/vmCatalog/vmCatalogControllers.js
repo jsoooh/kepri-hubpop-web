@@ -650,49 +650,7 @@ angular.module('gpu.controllers')
         // 모니터링 서버정보
         vmCatalogDeploy.parameters.mon_collect_host_beat = CONSTANTS.vmCatalog.monCollectHostBeat;
         vmCatalogDeploy.parameters.mon_collect_port_beat = CONSTANTS.vmCatalog.monCollectPortBeat;
-
-        // 서비스에 맞는 이미지 아이디를 넣어줌
-        console.log("ct.vmCatalogInfo.id: "+ct.vmCatalogInfo.id);
-        var str_image_id = 0;
-
-        switch (ct.vmCatalogInfo.id) {
-            case 1:
-                str_image_id = CONSTANTS.vmCatalog.imageId.haproxy; break;
-            case 2:
-                str_image_id = CONSTANTS.vmCatalog.imageId.tomcat; break;
-            case 3:
-                str_image_id = CONSTANTS.vmCatalog.imageId.nginx; break;
-            case 4:
-                if (vmCatalogDeploy.deployType == "cluster") {
-                    str_image_id = CONSTANTS.vmCatalog.imageId.galeraMariadb; break;
-                } else {
-                    str_image_id = CONSTANTS.vmCatalog.imageId.mariadb; break;
-                }
-
-            case 5:
-                if (vmCatalogDeploy.deployType == "cluster") {
-                    str_image_id = CONSTANTS.vmCatalog.imageId.galeraMysql; break;
-                } else {
-                    str_image_id = CONSTANTS.vmCatalog.imageId.mysql; break;
-                }
-
-            case 6:
-                str_image_id = CONSTANTS.vmCatalog.imageId.mongodb; break;
-            case 7:
-                str_image_id = CONSTANTS.vmCatalog.imageId.postgresql; break;
-            case 8:
-                str_image_id = CONSTANTS.vmCatalog.imageId.redis; break;
-            case 9:
-                str_image_id = CONSTANTS.vmCatalog.imageId.rabbitmq; break;
-            case 10:
-                str_image_id = CONSTANTS.vmCatalog.imageId.kafka; break;
-            case 11:
-                str_image_id = CONSTANTS.vmCatalog.imageId.kong; break;
-            case 12:
-                str_image_id = CONSTANTS.vmCatalog.imageId.hadoop; break;
-        }
-
-        vmCatalogDeploy.parameters.image_id = str_image_id;
+        vmCatalogDeploy.parameters.image_id = "";
 
         vmCatalogDeploy.context.volumeUse = ct.data.volumeUse;
         vmCatalogDeploy.context.createUser = ct.data.createUser;
