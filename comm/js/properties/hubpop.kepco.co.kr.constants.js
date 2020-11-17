@@ -357,7 +357,7 @@ angular.module('app')
         },
         startYear: 2019,
         startMonth: 12,
-        monitoringUrl: 'http://192.168.0.7:3000/d/hb7fSE0taa/tenant_linux_detail'
+        monitoringUrl: 'http://train-grafana.hubpop.kepco.co.kr/d/hb7fSE0taa/rinugseu-gasangseobeo-sansehyeonhwang'
     })
     .constant('tenantChartConfig', [
         {id: 1, nodeid: 'cpu_usage', name: 'CPU 사용률',                func: 'tenantCpuUsageList',             type: 'lineChart', percent: true,  axisLabel: '%'},
