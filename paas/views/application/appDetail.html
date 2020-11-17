@@ -188,7 +188,6 @@
 </section>
 <!-- //앱정보 -->
 
-
 <!-- 인스턴스 정보 -->
 <div class="cBox appCnt-inst">
 	<section class="panel panel-bordered">
@@ -477,6 +476,10 @@
 		<!-- //panel -->
 	</div>
 	<!-- //모니터링 -->
+
+	<div class="text-right">
+		<button class="btn btn-lg btn-default" ng-if="main.selectSiteMap.subPage" ng-click="main.goToState(main.selectSiteMap.parentSiteMap.stateKey);">목록</button>
+	</div>
 
 </div>
 

@@ -84,14 +84,14 @@
 				<!-- //table -->
 
                 <!-- btm buttom -->
-				<div class="btn-btm rightSide">
-					<button type="button" name="button" class="btn btn-color1 btn-md" ng-show="contents.showBtnSave" ng-click="contents.updateBoard();">{{ 'label.save' | translate }}</button>
-					<button type="button" name="button" class="btn btn-color1 btn-md" ng-show="contents.showBtnEdit" ng-click="contents.mode='U';contents.chkBtnAuth();">{{ 'label.edit' | translate }}</button>
-					<button type="button" name="button" class="btn btn-color2 btn-md" ng-show="contents.showBtnCancel" ng-click="contents.mode='V';contents.chkBtnAuth();">{{ 'label.cancel' | translate }}</button>
-					<button type="button" name="button" class="btn btn-color2 btn-md" ng-show="contents.showBtnDelete" ng-click="contents.deleteBoard();">{{ 'label.del' | translate }}</button>
-					<button type="button" name="button" class="btn btn-color1 btn-md" ng-show="contents.showBtnReply" ng-click="contents.boardAdd($event);">{{ 'label.reply' | translate }}</button>
-					<button type="button" name="button" class="btn btn-color1 btn-md" ng-show="contents.showBtnBack" ng-click="contents.clickBack();">{{ 'label.back' | translate }}</button>
-					<button type="button" name="button" class="btn btn-color2 btn-md" ng-click="contents.clickCancel();">{{ 'label.list' | translate }}</button>
+				<div class="text-right">
+					<button type="button" class="btn btn-lg btn-default" ng-click="contents.clickCancel();">{{ 'label.list' | translate }}</button>
+					<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnReply" ng-click="contents.boardAdd($event);">{{ 'label.reply' | translate }}</button>
+					<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnSave" ng-click="contents.updateBoard();">{{ 'label.save' | translate }}</button>
+					<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnEdit" ng-click="contents.mode='U';contents.chkBtnAuth();">{{ 'label.edit' | translate }}</button>
+					<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnCancel" ng-click="contents.mode='V';contents.chkBtnAuth();">{{ 'label.cancel' | translate }}</button>
+					<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnDelete" ng-click="contents.deleteBoard();">{{ 'label.del' | translate }}</button>
+					<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnBack" ng-click="contents.clickBack();">{{ 'label.back' | translate }}</button>
 				</div>
                 <!-- //btm buttom -->
 
