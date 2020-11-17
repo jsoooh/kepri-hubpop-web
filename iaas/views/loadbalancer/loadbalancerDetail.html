@@ -173,7 +173,7 @@
 								<li role="presentation" ng-class="{'active' : contents.tabIndex == 1}"><a href="" ng-click="contents.tabIndex = 1">연결 인스턴스<span></span></a></li>
 							</ul>
 						</div>
-						<div class="panel-body">
+						<div class="panel-body" style="height: 430px;">
 							<div class="tab-content">
 								<div class="tab-pane active"  id="tab1" ng-class="{'active' : contents.tabIndex == 0}">
 									<!-- 이너컨텐츠 -->
@@ -601,6 +601,9 @@
 		</section>
 	</div>
 	<!-- //포트포워딩 -->
+	<div class="text-right padding-bottom-30">
+		<button class="btn btn-lg btn-default" ng-if="main.selectSiteMap.subPage" ng-click="main.goToState(main.selectSiteMap.parentSiteMap.stateKey);">목록</button>
+	</div>
 </div>
 <!-- //Tab panes -->
 	
