@@ -1819,7 +1819,7 @@ angular.module('portal.controllers')
 
         // 비밀번호 초기화
         ct.resetPassword = function (user) {
-            var showConfirm = common.showConfirm('비밀번호 초기화', user.name + '(' + user.email + ') 비밀번호(kepco12345) 초기화하시겠습니까?');
+            var showConfirm = common.showConfirm('비밀번호 초기화', user.name + '(' + user.email + ')의 비밀번호를 초기화(kepco12345) 하시겠습니까?');
             showConfirm.then(function() {
                 ct.resetPasswordAction(user);
             });
