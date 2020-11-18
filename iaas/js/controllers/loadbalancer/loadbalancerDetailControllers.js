@@ -488,6 +488,13 @@ angular.module('iaas.controllers')
             var returnPromise = computeDetailService.listPortForwardings(ct.loadbalancer.iaasLbInfo.id);
             returnPromise.success(function (data) {
                 ct.instance.instancePortForwardings = data.content;
+                if (ct.instance.instancePortForwardings.length > 0) {
+                    angular.forEach(ct.instance.instancePortForwardings, function(instancePort) {
+                        if (instancePort.domainPort) {
+                            instancePort.domainName = CONSTANTS.portForwardingDomainName + ':' + instancePort.domainPort;
+                        }
+                    });
+                }
                 $scope.main.loadingMainBody = false;
             });
             returnPromise.error(function (data, status, headers) {

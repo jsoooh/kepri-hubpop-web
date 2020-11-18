@@ -466,9 +466,9 @@
 								<thead class="bg-blue-grey-100">
 								<tr>
 									<th scope="col">도메인</th>
-									<th scope="col" class="text-left">프로토콜 타입</th>
-									<th scope="col" class="text-left">포트</th>
-									<th scope="col">삭제</th>
+									<th scope="col">프로토콜 타입</th>
+									<th scope="col">포트</th>
+									<th scope="col">관리</th>
 								</tr>
 								</thead>
 								<tbody>
@@ -476,7 +476,7 @@
 										<td colspan="4" class="text-center">연결된 도메인이 없습니다.</td>
 									</tr>
 									<tr ng-repeat="item in contents.instance.instanceDomainLinkInfos | filter : {isRdpDomain: false}">
-										<td>{{ item.domainInfo.domain }}</td>
+										<td class="text-left">{{ item.domainInfo.domain }}</td>
 										<td>{{ item.protocolType }}</td>
 										<td>{{ item.sourcePort }}</td>
 										<td class="text-center">
@@ -536,24 +536,27 @@
 						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
 							<table class="table table-hover table-outline text-center">
 								<colgroup>
-									<col style="width:40%;">
 									<col style="width:30%;">
 									<col style="width:30%;">
+									<col style="width:20%;">
+									<col style="width:20%;">
 								</colgroup>
 								<thead class="bg-blue-grey-100">
 								<tr>
-									<th scope="col">접속정보</th>
+									<th scope="col">도메인 접속정보</th>
+									<th scope="col">IP 접속정보</th>
 									<th scope="col">포트</th>
 									<th scope="col">관리</th>
 								</tr>
 								</thead>
 								<tbody>
 									<tr ng-if="(contents.instance.instancePortForwardings).length == 0">
-										<td colspan="3" class="text-center">연결된 포트포워딩 정보가 없습니다.</td>
+										<td colspan="4" class="text-center">연결된 포트포워딩 정보가 없습니다.</td>
 									</tr>
 									<tr ng-repeat="item in contents.instance.instancePortForwardings">
-										<td>{{ item.domainInfo }}</td>
-										<td>{{ item.targetPort }}</td>
+										<td class="text-center">{{ item.domainName }}</td>
+										<td class="text-center">{{ item.domainInfo }}</td>
+										<td class="text-center">{{ item.targetPort }}</td>
 										<td class="text-center">
 											<div class="dropdown">
 												<button type="button" id="btn-option" class="btn btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
@@ -563,7 +566,7 @@
 												</button>
 												<ul class="dropdown-menu dropdown-menu-right" role="btn-optionn" aria-labelledby="btn-option">
 													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole()}" ng-click="!main.checkResourceUserRole() || contents.fn.popModPortForwardingForm($event, item);">수정</a></li>
-													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click=" !main.checkResourceUserRole() || main.popDeleteCheckName($event, '포트 포워딩', item.domainInfo, contents.fn.deletePortForwardingAction, item);">삭제</a></li>
+													<li><a href="javascript:void(0);" ng-class="{'disabled' : !main.checkResourceUserRole(), 'delete' : main.checkResourceUserRole()}" ng-click=" !main.checkResourceUserRole() || main.popDeleteCheckName($event, '포트 포워딩', item.domainName, contents.fn.deletePortForwardingAction, item);">삭제</a></li>
 												</ul>
 											</div>
 										</td>

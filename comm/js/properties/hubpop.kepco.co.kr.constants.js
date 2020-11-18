@@ -43,6 +43,7 @@ angular.module('app')
             terminal : "terminal.ps.hubpop.io",
             autoScaler : "autoscaler.ps.hubpop.io"
         },
+        portForwardingDomainName: 'hubproxy.kepco.co.kr',
         homeUrl: '/#/',
         homePath: '/',
         commHomeState: 'commProjectMgmt',

@@ -43,6 +43,7 @@ angular.module('app')
             terminal : "terminal.kepri-dev.crossent.com",
             autoScaler : "autoscaler.ps..kepri-dev.crossent.crossent.com"
         },
+        portForwardingDomainName: 'hubproxy.kepco.co.kr',
         homeUrl: '/#/',
         homePath: '/',
         commHomeState: 'commProjectMgmt',
