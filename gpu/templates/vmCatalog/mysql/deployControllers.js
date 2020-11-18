@@ -21,7 +21,6 @@ angular.module('gpu.controllers')
         ct.data.createUser = true;
 
         // 테스트 입력값
-        ct.testInput = true;
         if(ct.testInput) {
             ct.data.deployName = "마이에스큐엘";
             ct.data.stackName = "mysqlView";

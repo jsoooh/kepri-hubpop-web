@@ -27,7 +27,6 @@ angular.module('gpu.controllers')
         ct.data.adminId = "admin";
         ct.data.volumeUse = false;
 
-        ct.testInput = true;
         if (ct.testInput) {
             /*
             ct.data.deployName = "몽고DB";

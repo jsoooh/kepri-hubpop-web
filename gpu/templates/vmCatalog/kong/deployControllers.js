@@ -22,7 +22,6 @@ angular.module('gpu.controllers')
         ct.usingPorts.single.push(8000);
         ct.usingPorts.single.push(8001);
 
-        ct.testInput = true;
         // 테스트
         if (ct.testInput) {
             ct.data.deployName = "게이트웨이";
