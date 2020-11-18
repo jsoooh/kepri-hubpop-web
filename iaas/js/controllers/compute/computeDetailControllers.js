@@ -1512,7 +1512,8 @@ angular.module('iaas.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 common.showAlertSuccess("포트포워딩이 삭제 되었습니다.");
-                ct.instance.instancePortForwardings = data.content;
+                // 포트포워딩 로드
+                ct.fn.listPortForwardings();
             });
             returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
