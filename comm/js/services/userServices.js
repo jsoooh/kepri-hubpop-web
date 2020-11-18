@@ -163,7 +163,7 @@ angular.module('common.services')
             rp.error(function (data) {
                 if (fn) fn(true);
             });
-        }
+        };
 
         user.loginIaasLink = function (params) {
             var rp = common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/login/iaasLink', 'POST', params));

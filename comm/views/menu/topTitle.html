@@ -5,10 +5,10 @@
 		<span class="home"> <i class="xi-home-o"></i> Home
 		</span> <span ng-if="!!main.sltMenu.depth1">{{ main.sltMenu.depth1 }}</span> <span ng-if="!!main.sltMenu.depth2">{{ main.sltMenu.depth2 }}</span>
 	</div>
-	<a href="" class="btn-back-list" title="목록보기" ng-if="main.selectSiteMap.subPage" ng-click="main.goToState(main.selectSiteMap.parentSiteMap.stateKey);">
+	<!--<a href="" class="btn-back-list" title="목록보기" ng-if="main.selectSiteMap.subPage" ng-click="main.goToState(main.selectSiteMap.parentSiteMap.stateKey);">
 		<i class="xi-align-justify"></i>
 		<p class="sr-only">목록보기</p>
-	</a>
+	</a>-->
 	<a href="" class="btn-refresh" title="새로고침" ng-if="main.projectType == 'org'" ng-click="main.replacePage();">
 		<i class="xi-renew"></i>
 		<p class="sr-only">새로고침</p>
