@@ -305,13 +305,5 @@ angular.module('common.controllers')
                 ct.ssoLogin();
             }
         };
-        // 20.1.22 by hrit, sso 로그인 중 계정 생성으로 변경되는 현상에 대한 조치
-        // 보안 이슈 상 단번 api 호출로 sso 로그인 구현을 위해 15초 후 강제 변경 (김성경 수석, 이명화 수석)
-        // 계정 로그인, 생성 여부 구분하여 API 한번 더 호출 하도록 변경 (이명화 수석)
-        // if ($scope.main.ssoUserLoginChecking) {
-        //     $scope.main.reloadTimmer['ssoUserCheck'] = $timeout(function () {
-        //         ct.ssoUserCreating = true;
-        //     }, 15000);
-        // }
     })
 ;
