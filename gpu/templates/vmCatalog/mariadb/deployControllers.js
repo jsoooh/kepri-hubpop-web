@@ -18,7 +18,6 @@ angular.module('gpu.controllers')
 
 
         // 테스트
-        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "마리아디비";
             ct.data.stackName = "mariadbView";

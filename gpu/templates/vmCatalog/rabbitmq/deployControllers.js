@@ -21,7 +21,6 @@ angular.module('gpu.controllers')
         ct.usingPorts.cluster.push(ct.data.erlangPort);
 
         // 테스트 입력값
-        ct.testInput = true;
         if(ct.testInput) {
             ct.data.deployName = "래빗엠큐";
             ct.data.stackName = "rabbitmqView";

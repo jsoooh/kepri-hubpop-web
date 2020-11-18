@@ -11,7 +11,6 @@ angular.module('gpu.controllers')
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
         // 테스트
-        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "로드밸런스";
             ct.data.stackName = "haproxyView";

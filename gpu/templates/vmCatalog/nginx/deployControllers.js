@@ -14,7 +14,6 @@ angular.module('gpu.controllers')
         ct.data.servicePort = ct.prodPortBand + 80;
 
         // 테스트
-        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "엔진엑스";
             ct.data.stackName = "nginxView";

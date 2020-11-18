@@ -16,7 +16,6 @@ angular.module('gpu.controllers')
 
         ct.data.deployType = "single";
 
-        ct.testInput = true;
         // cluster 테스트
         if (ct.testInput) {
             ct.data.deployName = "카프카";

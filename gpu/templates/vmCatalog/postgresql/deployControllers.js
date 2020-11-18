@@ -22,7 +22,6 @@ angular.module('gpu.controllers')
         ct.data.createUser = true;
 
         // 테스트
-        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "포스트그래스SQL";
             ct.data.stackName = "postgresSqlView";

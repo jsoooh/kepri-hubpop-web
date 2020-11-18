@@ -21,7 +21,6 @@ angular.module('gpu.controllers')
         ct.usingPorts.cluster.push(8009);
 
         // 테스트
-        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "톰캣";
             ct.data.stackName = "tomcatView";

@@ -29,7 +29,6 @@ angular.module('gpu.controllers')
         ct.data.lbSvcPort = ct.prodPortBand+ 9000;
         ct.data.servicePort = ct.prodPortBand+ 50070;
         // 테스트
-        ct.testInput = true;
         if (ct.testInput) {
             ct.data.deployName = "하둡";
             ct.data.stackName = "hadoopView";

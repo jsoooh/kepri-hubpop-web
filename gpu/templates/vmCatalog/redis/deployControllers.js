@@ -19,7 +19,6 @@ angular.module('gpu.controllers')
         ct.data.deployType = "single";
 
         // 테스트 입력값
-        ct.testInput = true;
         if(ct.testInput) {
             ct.data.deployName = "레디스";
             ct.data.stackName = "redisView";
