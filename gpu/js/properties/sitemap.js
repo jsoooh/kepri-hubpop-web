@@ -137,21 +137,22 @@ angular.module('app')
                             loadMyDirectives: []
                         },
                         subPages: {
+                            storageCreate: {
+                                name: 'storage_create',
+                                stateKey: 'gpuStorgeCreate',
+                                url: '/gpu/storage/create',
+                                controller: 'gpuStorageFormCtrl',
+                                templateUrl: _GPU_VIEWS_+'/storage/storageForm.html',
+                                loadMyFile: {
+                                    loadMyScripts: [],
+                                    loadMyServices: [],
+                                    loadMyControllers: [_GPU_JS_+'/controllers/storage/storageControllers.js'],
+                                    loadMyDirectives: []
+                                }
+                            }
                         }
                     },
-                    storageCreate: {
-                        name: 'storage_create',
-                        stateKey: 'gpuStorgeCreate',
-                        url: '/gpu/storage/create',
-                        controller: 'gpuStorageFormCtrl',
-                        templateUrl: _GPU_VIEWS_+'/storage/storageForm.html',
-                        loadMyFile: {
-                            loadMyScripts: [],
-                            loadMyServices: [],
-                            loadMyControllers: [_GPU_JS_+'/controllers/storage/storageControllers.js'],
-                            loadMyDirectives: []
-                        }
-                    },
+
                     object_storage: {
                         name: "object_storage",
                         icon: "object_storage",

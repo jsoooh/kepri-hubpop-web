@@ -313,8 +313,9 @@
 	</div>
 	
 	<div class="text-right">
+		<button class="btn btn-lg btn-default" ng-if="main.selectSiteMap.subPage" ng-click="main.goToState(main.selectSiteMap.parentSiteMap.stateKey);">목록</button>
 		<button class="btn btn-lg btn-primary" ng-click="contents.checkVal();">볼륨 만들기</button>
-		<button class="btn btn-lg btn-default" ng-click="main.goToHistoryBack()">취소</button>
+		<button class="btn btn-lg btn-danger" ng-click="main.goToHistoryBack()">취소</button>
 		<!-- '서비스 튜토리얼 바로가기' 소스 임시주석 -->
 		<!-- <button class="btn btn-lg btn-success" onclick="location.href='#/tutorial/1';">서비스 튜토리얼 바로가기</button>-->
 	</div>

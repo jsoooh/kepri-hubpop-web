@@ -450,8 +450,9 @@
 		</div>
 	</div>
 	<div class="text-right">
+		<button class="btn btn-lg btn-default" ng-if="main.selectSiteMap.subPage" ng-click="main.goToState(main.selectSiteMap.parentSiteMap.stateKey);">목록</button>
 		<button class="btn btn-lg btn-primary" ng-click="contents.fn.createServer();">인스턴스 생성</button>
-		<button class="btn btn-lg btn-default" ng-click="main.goToHistoryBack();">취소</button>
+		<button class="btn btn-lg btn-danger" ng-click="main.goToHistoryBack();">취소</button>
 	</div>
 </div>
 
