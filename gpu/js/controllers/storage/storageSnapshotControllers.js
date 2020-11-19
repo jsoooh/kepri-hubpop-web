@@ -101,14 +101,16 @@ angular.module('gpu.controllers')
         ct.data              = {};
         ct.data.tenantId     = $scope.main.userTenantGpuId;
         ct.data.tenantName   = $scope.main.userTenantGpu.korName;
+        ct.maxSingleDiskSize = CONSTANTS.iaasDef.insMaxDiskSize;
         ct.fn                = {};
         ct.volume            = {};
         ct.instances         = [];
         ct.sltInstance       = {};
         ct.formName          = "storageSnapshotForm";
         ct.isTenantResourceLoad = false;
+        ct.storageNameList  = [];
 
-        ct.volume.name      = 'disk-01';
+        ct.volume.name      = 'volume-01';
 
         ct.data.snapshotId = $stateParams.snapshotId;
 
@@ -159,6 +161,11 @@ angular.module('gpu.controllers')
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
                     // hdd, ssd 구분
                     ct.fn.changeVolumeType();
+                    // 볼륨 크기 최대 제한
+                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.instanceDiskGigabytes;
+                    if (ct.volumeSliderOptions.ceil > ct.maxSingleDiskSize) {
+                        ct.volumeSliderOptions.ceil = ct.maxSingleDiskSize;
+                    }
                 }
                 ct.isTenantResourceLoad = true;
             });
@@ -315,10 +322,51 @@ angular.module('gpu.controllers')
             ct.inputVolumeSize = ct.volumeSize;
         };
 
+        // 볼륨 리스트 조회
+        ct.fn.getStorageList = function() {
+            ct.isStorageListLoad = false;
+            var param = {
+                tenantId : ct.data.tenantId,
+                conditionKey : ct.conditionKey,
+                conditionValue : ct.conditionValue
+            };
+
+            param.size = 0;
+
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/volume', 'GET', param));
+            returnPromise.success(function (data, status, headers) {
+                var volumes = [];
+                if (data && data.content && data.content.volumes && angular.isArray(data.content.volumes)) {
+                    volumes = data.content.volumes;
+                    for (var i = 0; i < volumes.length; i++) {
+                        ct.storageNameList.push(volumes[i].name);
+                    }
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                if (status != 307) {
+                    common.showAlertError("message", data.message);
+                }
+            });
+            returnPromise.finally(function () {
+                ct.isStorageListLoad = true;
+            });
+        };
+
+        // 볼륨 이름 중복 체크
+        ct.fn.storageNameCustomValidationCheck = function(name) {
+            if (ct.storageNameList.indexOf(name) > -1) {
+                return {isValid : false, message: "이미 사용중인 이름 입니다."};
+            } else {
+                return {isValid : true};
+            }
+        };
+
         ct.fn.serverList();
         ct.fn.getTenantResource();
         ct.fn.getStorageSnapshotInfo();
         ct.fn.getVolumeTypeList();
+        ct.fn.getStorageList();
     })
     .controller('gpuStorageSnapshotFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $bytes, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("storageControllers.js : gpuStorageSnapshotFormCtrl", 1);
