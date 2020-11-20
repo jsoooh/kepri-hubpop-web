@@ -11,10 +11,10 @@
 	<!-- 프로젝트 대시보드 panel -->
 	<div ng-show="contents.sltInfoTab == 'dashboard'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'dashboard'}">
 		<!-- 미터링 대시보드(신규) -->
-		<div class="dashboard-body padding-0" ng-if="false">
+		<div class="dashboard-body padding-0" ng-if="true">
 			<div class="row">
 				<!-- 프로젝트 정보 -->
-				<div class="col-md-4">
+				<div class="col-md-4 app-info-area">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type4">
 						<div class="panel-body" style="height:278px;">
 							<h3 class="heading h3 margin-bottom-25">프로젝트 정보</h3>
@@ -116,9 +116,7 @@
 					</div>
 				</div>
 				<!-- //GPU -->
-			</div>
 			
-			<div class="row">
 				<!-- PaaS -->
 				<div class="col-md-4">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
@@ -186,7 +184,7 @@
 					</div>
 				</div>
 				<!-- //CaaS -->
-
+	
 				<!-- FaaS -->
 				<div class="col-md-4">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
@@ -216,10 +214,7 @@
 					</div>
 				</div>
 				<!-- //FaaS -->
-				
-			</div>
-			
-			<div class="row">
+					
 				<!-- DBaaS -->
 				<div class="col-md-4">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
@@ -319,9 +314,7 @@
 					</div>
 				</div>
 				<!-- //API 게이트웨이 -->
-			</div>
-			
-			<div class="row">
+				
 				<!-- 파이프라인 -->
 				<div class="col-md-4">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
@@ -353,7 +346,7 @@
 					</div>
 				</div>
 				<!-- //파이프라인 -->
-
+	
 				<!-- AR/VR 컨텐츠 공유 서비스 -->
 				<div class="col-md-4">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
@@ -377,7 +370,7 @@
 					</div>
 				</div>
 				<!-- //AR/VR 컨텐츠 공유 서비스 -->
-
+	
 				<!-- HiveBroker -->
 				<div class="col-md-4">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
@@ -457,7 +450,7 @@
 					</div>
 				</div>
 				<!-- //AI-API 서비스 -->
-
+	
 				<!-- AP 분석도구 서비스 -->
 				<div class="col-md-4">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
@@ -486,7 +479,6 @@
 				</div>
 				<!-- //AP 분석도구 서비스 -->
 			</div>
-			
 		</div>
 		<!-- //미터링 대시보드(신규) -->
 	
