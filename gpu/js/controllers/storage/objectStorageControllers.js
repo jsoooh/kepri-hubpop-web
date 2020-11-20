@@ -426,12 +426,12 @@ angular.module('gpu.controllers')
                 param.files = [];
                 console.log("files.length >>>>> "+uploadFiles.files.length);
                 for (var i=0; i< uploadFiles.files.length; i++) {
-                    if (uploadFiles.files[i].size/1024 < 1024*500) {
+                    if (uploadFiles.files[i].size/1024 < 1024*1024*2) {
                         console.log("file size >>>>> "+uploadFiles.files[i].size/1024+"KB");
                         param.files.push(uploadFiles.files[i]);
                     } else {
-                        console.log("500MB 이하만 업로드 가능합니다. size >>>>> "+uploadFiles.files[i].size/1024+"KB");
-                        common.showAlertError("파일명: "+uploadFiles.files[i].name+"(500MB 이하만 업로드 가능합니다.)");
+                        console.log("2GB 이하만 업로드 가능합니다. size >>>>> "+uploadFiles.files[i].size/1024+"KB");
+                        common.showAlertError("파일명: "+uploadFiles.files[i].name+"(2GB 이하만 업로드 가능합니다.)");
                         $scope.main.loadingMainBody = false;
                         //$state.reload();
                     }
