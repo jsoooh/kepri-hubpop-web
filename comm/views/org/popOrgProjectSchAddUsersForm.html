@@ -62,7 +62,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="table-bottom-wrap text-center">
+			<div class="text-center">
 				<div class="paginationWrap">
 					<paging
 						page="pop.pageOptions.currentPage"
@@ -128,7 +128,7 @@
 							<td>{{orgUser.email}}</td>
 							<td>{{orgUser.name}}</td>
 							<td class="text-center">
-								<select ng-model="orgUser.roleName">
+								<select ng-model="orgUser.roleName" class="form-control" style="width:80px;">
 									<option value="{{ pop.orgRoleNames.user }}">사용자</option>
 									<option value="{{ pop.orgRoleNames.admin }}" title="프로젝트 관리자">관리자</option>
 									<!-- 관리자 다수 등록 가능 요청으로 인해 수정 -->
