@@ -10,6 +10,489 @@
 <div class="tab-content padding-top-30">
 	<!-- 프로젝트 대시보드 panel -->
 	<div ng-show="contents.sltInfoTab == 'dashboard'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'dashboard'}">
+		<!-- 미터링 대시보드(신규) -->
+		<div class="dashboard-body padding-0" ng-if="false">
+			<div class="row">
+				<!-- 프로젝트 정보 -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type4">
+						<div class="panel-body" style="height:278px;">
+							<h3 class="heading h3 margin-bottom-25">프로젝트 정보</h3>
+							<div class="project-info-area">
+								<div class="clearfix margin-bottom-30">
+									<div class="round-img pull-left margin-top-0" ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image">
+										<!--<img src="../assets/img/guide/guide_user_dashboard.jpg" alt="">-->
+										<img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" alt="">
+									</div>
+									<div class="round-img pull-left margin-top-0" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image">
+										<span class="txt">{{contents.selOrgProject.orgName.substr(0, 1)}}</span>
+									</div>
+									
+									<div class="text-area pull-left">
+										<span class="tit">{{contents.selOrgProject.orgName}}</span>
+										<p class="txt">{{ contents.selOrgProject.description }}</p>
+									</div>
+								</div>
+								<ul class="list-dot font-size-13">
+									<li>
+										<b>프로젝트ID : </b> <span> {{contents.selOrgProject.orgId}} </span>
+									</li>
+									<li>
+										<b>프로젝트 생성자 : </b> <span> {{contents.selOrgProject.managerName}} </span>
+									</li>
+									<li>
+										<b>프로젝트 구성원 수 : </b> <span> {{contents.selOrgProject.orgUserCount}}명 </span>
+									</li>
+									<li>
+										<b>프로젝트 생성일자 : </b> <span> {{contents.selOrgProject.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}} </span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //프로젝트 정보 -->
+				
+				<!-- 가상서버 -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">가상서버</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="scroll-content" style="height: 202px">
+								<ul class="list-striped">
+									<li>
+										<div class="pull-left">서버 vCore</div>
+										<div class="pull-right">10개</div>
+									</li>
+									<li>
+										<div class="pull-left">서버 RAM</div>
+										<div class="pull-right">8192 MB</div>
+									</li>
+									<li>
+										<div class="pull-left">OS 디스크</div>
+										<div class="pull-right">100 GB</div>
+									</li>
+									<li>
+										<div class="pull-left"> 데이터 디스크</div>
+										<div class="pull-right">50 GB</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //가상서버 -->
+				
+				<!-- GPU -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">GPU</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="scroll-content" style="height: 202px">
+								<ul class="list-striped">
+									<li>
+										<div class="pull-left">GPU 서버 vCore</div>
+										<div class="pull-right">10개</div>
+									</li>
+									<li>
+										<div class="pull-left">GPU 서버 RAM</div>
+										<div class="pull-right">8192 MB</div>
+									</li>
+									<li>
+										<div class="pull-left">GPU 서버 HDD</div>
+										<div class="pull-right">100 GB</div>
+									</li>
+									<li>
+										<div class="pull-left"> GPU 서버 SSD</div>
+										<div class="pull-right">50 GB</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //GPU -->
+			</div>
+			
+			<div class="row">
+				<!-- PaaS -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">PaaS</h3>
+						</div>
+						<div class="panel-body padding-0" style="height: 202px">
+							<div class="row no-margin">
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">
+											13 <small> 개 </small>
+										</div>
+										<div class="caption">인스턴스</div>
+									</div>
+								</div>
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">
+											8192 <small> MB </small>
+										</div>
+										<div class="caption">메모리</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="dashboard-number-box">
+										<div class="number">
+											50 <small> GB </small>
+										</div>
+										<div class="caption">볼륨</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //PaaS -->
+				
+				<!-- CaaS -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">CaaS</h3>
+						</div>
+						<div class="panel-body padding-0" style="height: 202px">
+							<div class="row no-margin">
+								<div class="col-sm-6 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">
+											1 <small> 개 </small>
+										</div>
+										<div class="caption">CaaS POD</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="dashboard-number-box">
+										<div class="number">
+											50 <small> GB </small>
+										</div>
+										<div class="caption">CaaS 볼륨</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //CaaS -->
+
+				<!-- FaaS -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">FaaS</h3>
+						</div>
+						<div class="panel-body padding-0" style="height: 202px">
+							<div class="row no-margin">
+								<div class="col-sm-6 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">
+											3 <small> 개 </small>
+										</div>
+										<div class="caption">Function</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="dashboard-number-box">
+										<div class="number">
+											10 <small> 건 </small>
+										</div>
+										<div class="caption">Function 실행</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //FaaS -->
+				
+			</div>
+			
+			<div class="row">
+				<!-- DBaaS -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">DBaaS</h3>
+						</div>
+						<div class="panel-body padding-0" style="height: 202px">
+							<div class="row no-margin">
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">
+											50 <small> GB </small>
+										</div>
+										<div class="caption">오라클 Exa 용량</div>
+									</div>
+								</div>
+								<div class="col-sm-4 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">
+											50 <small> GB </small>
+										</div>
+										<div class="caption">오라클 SE 용량</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="dashboard-number-box">
+										<div class="number">
+											50 <small> GB </small>
+										</div>
+										<div class="caption">MS-SQL 용량</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //DBaaS -->
+				
+				<!-- 실시간 데이터 브로커 -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">실시간 데이터 브로커</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="scroll-content" style="height: 202px">
+								<ul class="list-striped">
+									<li>
+										<div class="pull-left">컨텍스트 엔티티</div>
+										<div class="pull-right">2개</div>
+									</li>
+									<li>
+										<div class="pull-left">컨텍스트 API 호출</div>
+										<div class="pull-right">8건</div>
+									</li>
+									<li>
+										<div class="pull-left">컨텍스트 MongoDB 사용량</div>
+										<div class="pull-right">20 GB</div>
+									</li>
+									<li>
+										<div class="pull-left"> 메시지 토픽</div>
+										<div class="pull-right">4개</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //실시간 데이터 브로커 -->
+				
+				<!-- API 게이트웨이 -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">API 게이트웨이</h3>
+						</div>
+						<div class="panel-body padding-0" style="height: 202px">
+							<div class="row no-margin">
+								<div class="col-sm-6 border-right">
+									<div class="dashboard-number-box">
+										<div class="number">
+											2 <small> 개 </small>
+										</div>
+										<div class="caption">API 배포</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="dashboard-number-box">
+										<div class="number">
+											4 <small> 건 </small>
+										</div>
+										<div class="caption">API 호출</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //API 게이트웨이 -->
+			</div>
+			
+			<div class="row">
+				<!-- 파이프라인 -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">파이프라인</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="scroll-content" style="height: 202px">
+								<ul class="list-striped">
+									<li>
+										<div class="pull-left">Gitlab 저장소</div>
+										<div class="pull-right">3개</div>
+									</li>
+									<li>
+										<div class="pull-left">SVN 저장소</div>
+										<div class="pull-right">2개</div>
+									</li>
+									<li>
+										<div class="pull-left">파이프라인</div>
+										<div class="pull-right">4개</div>
+									</li>
+									<li>
+										<div class="pull-left">파이프라인 실행</div>
+										<div class="pull-right">7건</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //파이프라인 -->
+
+				<!-- AR/VR 컨텐츠 공유 서비스 -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">AR/VR 컨텐츠 공유 서비스</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="scroll-content" style="height: 202px">
+								<ul class="list-striped">
+									<li>
+										<div class="pull-left">공유컨텐츠 업로드 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">공유컨텐츠 다운로드 건수</div>
+										<div class="pull-right">50건</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //AR/VR 컨텐츠 공유 서비스 -->
+
+				<!-- HiveBroker -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">HiveBroker</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="scroll-content" style="height: 202px">
+								<ul class="list-striped">
+									<li>
+										<div class="pull-left">일괄(JSON) API 호출 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">일괄(JSON) API 데이터 사용량</div>
+										<div class="pull-right">8192 MB</div>
+									</li>
+									<li>
+										<div class="pull-left">일괄(TEXT) API 호출 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">일괄(TEXT) API 데이터 사용량</div>
+										<div class="pull-right">8192 MB</div>
+									</li>
+									<li>
+										<div class="pull-left">분할(JSON) API 호출 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">분할(JSON) API 데이터 사용량</div>
+										<div class="pull-right">8192 MB</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //HiveBroker -->
+				
+				<!-- AI-API 서비스 -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">AI-API 서비스</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="scroll-content" style="height: 202px">
+								<ul class="list-striped">
+									<li>
+										<div class="pull-left">TTS API 호출 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">TTS API 데이터 사용량</div>
+										<div class="pull-right">8192 MB</div>
+									</li>
+									<li>
+										<div class="pull-left">OCR API 호출 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">OCR API 데이터 사용량</div>
+										<div class="pull-right">8192 MB</div>
+									</li>
+									<li>
+										<div class="pull-left">CustomVision API 호출 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">CustomVision API 데이터 사용량</div>
+										<div class="pull-right">8192 MB</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //AI-API 서비스 -->
+
+				<!-- AP 분석도구 서비스 -->
+				<div class="col-md-4">
+					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
+						<div class="panel-heading padding-25">
+							<h3 class="heading">AP 분석도구 서비스</h3>
+						</div>
+						<div class="panel-body padding-0">
+							<div class="scroll-content" style="height: 202px">
+								<ul class="list-striped">
+									<li>
+										<div class="pull-left">분석도구(주피터 노트북)  실행 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">분석도구(주피터 랩)  실행 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+									<li>
+										<div class="pull-left">분석도구(R Studio)  실행 건수</div>
+										<div class="pull-right">1건</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //AP 분석도구 서비스 -->
+			</div>
+			
+		</div>
+		<!-- //미터링 대시보드(신규) -->
+	
+	
+	
+	
 		<!-- 대시보드 컨텐츠 -->
 		<div class="dashboard-body padding-0">
 			<div class="row">

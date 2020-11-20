@@ -431,6 +431,10 @@ input[name='renameSev']{position:relative; width:100%;}
 .catalog-view-info .round-img {width:140px; height:140px; line-height:100px; text-align:center; border-radius:50%; background:#f7f7f7; border:0; padding:15px;}
 .catalog-view-info .txt_tit {font-size:30px;}
 
+
+/* 신규 미터링 대시보드 */
+.dashboard-number-box {height:202px; padding-top:50px;}
+
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:transparent; border:0; padding:0;}
