@@ -161,11 +161,6 @@ angular.module('gpu.controllers')
                     ct.tenantResource.available.objectStorageGigaByte = ct.tenantResource.maxResource.objectStorageGigaByte - ct.tenantResource.usedResource.objectStorageGigaByte;
                     // hdd, ssd 구분
                     ct.fn.changeVolumeType();
-                    // 볼륨 크기 최대 제한
-                    ct.volumeSliderOptions.ceil = ct.tenantResource.available.instanceDiskGigabytes;
-                    if (ct.volumeSliderOptions.ceil > ct.maxSingleDiskSize) {
-                        ct.volumeSliderOptions.ceil = ct.maxSingleDiskSize;
-                    }
                 }
                 ct.isTenantResourceLoad = true;
             });
@@ -272,7 +267,7 @@ angular.module('gpu.controllers')
             }
 
             if (ct.tenantResource.available.volumeGigabytes <= 0 || ct.volumeSize > ct.tenantResource.available.volumeGigabytes) {
-                return common.showAlert("볼륨용량 제한으로 생성할 수 없습니다.");
+                return common.showAlert("볼륨 용량이 부족합니다.");
             }
 
             ct.fn.createStorageVolumeAction();
