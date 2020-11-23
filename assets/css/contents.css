@@ -435,6 +435,8 @@ input[name='renameSev']{position:relative; width:100%;}
 /* 신규 미터링 대시보드 */
 .dashboard-number-box {height:202px; padding-top:50px;}
 
+.list-dot > li {height:20px; line-height:20px;}
+
 /*-----  [임시] 컨텐츠 깨지는부분 처리  -----*/
 
 .nav-tabs + .tab-content {background-color:transparent; border:0; padding:0;}
