@@ -22,7 +22,7 @@
 				<th scope="col">이름</th>
 				<th scope="col">소속</th>
 				<th scope="col">아이디</th>
-				<th scope="col">패스워드<div class="t_tip_bx"><a class="ico-info4 ico" tooltip-placement="top" uib-tooltip="영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오."></a></th>
+				<th scope="col">패스워드<div class="t_tip_bx"><a href="#" class="info-icon-tooltip bg-grey-600 grey-100" tooltip-placement="top" uib-tooltip="영문, 숫자를 포함한 10~20자의 비밀번호를 입력하십시오.">i</a></div></th>
 				<th scope="col">역할</th>
 				<th scope="col">추가/삭제</th>
 			</tr>
@@ -30,17 +30,10 @@
 		<tbody class="text-center" pop.newOrgUsers>
 			<tr class="bg_none" ng-repeat="(key, newOrgUser) in pop.newOrgUsers">
 				<td>{{ (key + 1) }}</td>
-				<td class="tdpd">
-					<input type="text" name="newOrgUserName_{{key}}" value="" class="form-control" placeholder="이름을 입력하세요" ng-model="newOrgUser.name" required="required">
-				</td>
-				<td class="tdpd">
-					<input type="text" name="newOrgUserPosition_{{key}}" value="" class="form-control" placeholder="소속을 입력하세요" ng-model="newOrgUser.position" required="required">
-				</td>
-				<td class="tdpd">
-					<input type="text" name="newOrgUserEmail_{{key}}" value="" class="form-control" placeholder="아이디를 입력하세요" ng-model="newOrgUser.email" required="required" ng-blur="pop.checkOrgUserDup(newOrgUser.email, key)">
-				</td>
-				<td class="tdpd">
-					<input type="text" name="newOrgUserPassword_{{key}}" value="" class="form-control" placeholder="비밀번호를 입력하세요" ng-model="newOrgUser.password" required="required" ng-blur="pop.checkPasswordPattern(newOrgUser.password)"></td>
+				<td><input type="text" name="newOrgUserName_{{key}}" value="" class="form-control form-control-sm" placeholder="이름을 입력하세요" ng-model="newOrgUser.name" required="required"></td>
+				<td><input type="text" name="newOrgUserPosition_{{key}}" value="" class="form-control form-control-sm" placeholder="소속을 입력하세요" ng-model="newOrgUser.position" required="required"></td>
+				<td><input type="text" name="newOrgUserEmail_{{key}}" value="" class="form-control form-control-sm" placeholder="아이디를 입력하세요" ng-model="newOrgUser.email" required="required" ng-blur="pop.checkOrgUserDup(newOrgUser.email, key)"></td>
+				<td><input type="text" name="newOrgUserPassword_{{key}}" value="" class="form-control form-control-sm" placeholder="비밀번호를 입력하세요" ng-model="newOrgUser.password" required="required" ng-blur="pop.checkPasswordPattern(newOrgUser.password)"></td>
 				<td>
 					<select ng-model="newOrgUser.roleName">
 						<option value="{{ pop.orgRoleNames.user }}" title="프로젝트 사용자">사용자</option>
@@ -50,13 +43,15 @@
 					</select>
 				</td>
 				<td>
-					<button ng-if="key == (pop.newOrgUsers.length - 1)" type="button" name="button" class="btn btn-ico-row_plus only-ico" title="추가" ng-click="pop.addCustomOrgUser(newOrgUser)"><span class="ico">추가</span></button>
-					<button ng-if="pop.newOrgUsers.length > 1" type="button" name="button" class="btn btn-ico-row_minus only-ico" title="삭제" ng-click="pop.deleteCustomOrgUser(key)"><span class="ico">삭제</span></button>
+					<div class="font-size-20">
+						<button ng-if="key == (pop.newOrgUsers.length - 1)" type="button" name="button" title="추가" ng-click="pop.addCustomOrgUser(newOrgUser)"><i class="xi-plus-circle blue-600"></i></button>
+						<button ng-if="pop.newOrgUsers.length > 1" type="button" name="button" title="삭제" ng-click="pop.deleteCustomOrgUser(key)"><i class="xi-minus-circle red-600"></i></button>
+					</div>
 				</td>
 			</tr>
 			<tr ng-if="pop.newOrgUsers &&  pop.newOrgUsers.length == 0">
 				<td colspan="7">프로젝트 구성원이 존재하지 않습니다.</td>
 			</tr>
-			</tbody>
+		</tbody>
 	</table>
 </div>
