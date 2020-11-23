@@ -140,6 +140,21 @@
 <!-- 볼륨 관리 리스트(테이블형) -->
 <section class="panel panel-bordered" ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length > 0 && contents.listType == 'list'">
 	<div class="panel-body padding-0">
+		<div class="table-input-wrap">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="datatable-length">
+						<span>페이지당 행 수 : </span>
+						<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="table-wrap border-0">
 			<table class="table table-hover" cellspacing="0" width="100%">
 				<colgroup>
@@ -166,7 +181,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="volume in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }">
+				<tr ng-repeat="(key, volume) in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 					<td class="text-left">{{volume.name}}</td>
 					<td class="text-center">{{volume.size}}</td>
 					<td>{{volume.description | enterByNbr}}</td>
@@ -210,12 +225,41 @@
 			</tbody>
 			</table>
 		</div>
+		<div class="table-bottom-wrap">
+			<div class="row">
+				<div class="col-sm-2">
+					<span class="dataTables_info">
+						{{ 'label.total' | translate }} {{ (contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length }}{{ 'label.count' | translate }}
+					</span>
+				</div>
+				<div class="col-sm-8">
+					<nav class="text-center">
+						<div class="paginationWrap">
+							<paging
+									page="contents.pageOptions.currentPage"
+									page-size="contents.pageOptions.pageSize"
+									total="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length"
+									pg-href=""
+									show-prev-next="true"
+									show-first-last="true"
+									paging-action=""
+									text-first-class="firstPage"
+									text-last-class="lastPage"
+									text-next-class="nextPage"
+									text-prev-class="prevPage">
+							</paging>
+						</div>
+					</nav>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+		</div>
 	</div>
 </section>
 <!-- 볼륨 관리 리스트(테이블형) -->
 
 <!-- 검색결과 없음 -->
-<div class="text-center blank-page" ng-if="contents.isStorageMainListLoad && (contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length == 0">
+<div class="text-center blank-page" ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length == 0">
 	<div class="img">
 		<img src="../assets/img/icon/approval.png">
 	</div>

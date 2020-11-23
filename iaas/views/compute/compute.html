@@ -331,6 +331,21 @@
 				<!-- 인스턴스 관리 리스트(테이블형) -->
 				<section class="panel panel-bordered" ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length > 0 && contents.listType == 'list'">
 					<div class="panel-body padding-0">
+						<div class="table-input-wrap">
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="datatable-length">
+										<span>페이지당 행 수 : </span>
+										<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions1.pageSize" ng-init="contents.pageOptions1.pageSize = '10'">
+											<option value="10">10</option>
+											<option value="25">25</option>
+											<option value="50">50</option>
+											<option value="100">100</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="table-wrap border-0">
 							<table class="table table-hover" cellspacing="0" width="100%">
 								<colgroup>
@@ -360,7 +375,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
+									<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }" ng-show="key >= (contents.pageOptions1.currentPage - 1) * contents.pageOptions1.pageSize && key < contents.pageOptions1.currentPage * contents.pageOptions1.pageSize">
 										<td class="text-left">
 											<span class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span>
 											<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
@@ -442,6 +457,35 @@
 									</tr>
 								</tbody>
 							</table>
+						</div>
+						<div class="table-bottom-wrap">
+							<div class="row">
+								<div class="col-sm-2">
+								<span class="dataTables_info">
+									{{ 'label.total' | translate }} {{ (contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting'}).length }}{{ 'label.count' | translate }}
+								</span>
+								</div>
+								<div class="col-sm-8">
+									<nav class="text-center">
+										<div class="paginationWrap">
+											<paging
+													page="contents.pageOptions1.currentPage"
+													page-size="contents.pageOptions1.pageSize"
+													total="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting'}).length"
+													pg-href=""
+													show-prev-next="true"
+													show-first-last="true"
+													paging-action=""
+													text-first-class="firstPage"
+													text-last-class="lastPage"
+													text-next-class="nextPage"
+													text-prev-class="prevPage">
+											</paging>
+										</div>
+									</nav>
+								</div>
+								<div class="col-sm-2"></div>
+							</div>
 						</div>
 					</div>
 				</section>
@@ -630,6 +674,21 @@
 				<!-- 부하분산 리스트(테이블형) -->
 				<section class="panel panel-bordered" ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0 && contents.listType == 'list'">
 					<div class="panel-body padding-0">
+						<div class="table-input-wrap">
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="datatable-length">
+										<span>페이지당 행 수 : </span>
+										<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions2.pageSize" ng-init="contents.pageOptions2.pageSize = '10'">
+											<option value="10">10</option>
+											<option value="25">25</option>
+											<option value="50">50</option>
+											<option value="100">100</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="table-wrap border-0">
 							<table class="table table-hover" cellspacing="0" width="100%">
 								<colgroup>
@@ -651,7 +710,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
+									<tr ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }" ng-show="key >= (contents.pageOptions2.currentPage - 1) * contents.pageOptions2.pageSize && key < contents.pageOptions2.currentPage * contents.pageOptions2.pageSize">
 										<td class="text-left">
 											<a class="link" ng-click="main.goToPage('/iaas/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}</a>
 										</td>
@@ -672,10 +731,38 @@
 												</ul>
 											</div>
 										</td>
-										
 									</tr>
 								</tbody>
 							</table>
+						</div>
+						<div class="table-bottom-wrap">
+							<div class="row">
+								<div class="col-sm-2">
+								<span class="dataTables_info">
+									{{ 'label.total' | translate }} {{ (contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length }}{{ 'label.count' | translate }}
+								</span>
+								</div>
+								<div class="col-sm-8">
+									<nav class="text-center">
+										<div class="paginationWrap">
+											<paging
+													page="contents.pageOptions2.currentPage"
+													page-size="contents.pageOptions2.pageSize"
+													total="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length"
+													pg-href=""
+													show-prev-next="true"
+													show-first-last="true"
+													paging-action=""
+													text-first-class="firstPage"
+													text-last-class="lastPage"
+													text-next-class="nextPage"
+													text-prev-class="prevPage">
+											</paging>
+										</div>
+									</nav>
+								</div>
+								<div class="col-sm-2"></div>
+							</div>
 						</div>
 					</div>
 				</section>

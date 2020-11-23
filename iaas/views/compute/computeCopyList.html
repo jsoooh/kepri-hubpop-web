@@ -33,7 +33,22 @@
 
 <section class="panel panel-bordered">
 	<div class="panel-body padding-0">
-		<div class="table-wrap border-0">
+		<div class="table-input-wrap">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="datatable-length">
+						<span>페이지당 행 수 : </span>
+						<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="table-wrap">
 			<table class="table table-hover table-border" cellspacing="0" width="100%">
 				<colgroup>
 					<col width="5%"><!--번호-->
@@ -67,19 +82,19 @@
 						<th>생성일시</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="text-center">
 					<tr ng-repeat="(key, instanceSnapshot) in (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText })"  ng-if="(key >= (contents.pageOptions.pageSize * (contents.pageOptions.currentPage-1))) && (key < (contents.pageOptions.pageSize * (contents.pageOptions.currentPage)))">
-						<td class="text-center">{{ (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length - key }}</td>
-						<td style="text-align:left">{{ instanceSnapshot.portalOrgName }}</td>
-						<td style="text-align:left">{{ instanceSnapshot.instanceName }}</td>
-						<td>{{ instanceSnapshot.imageName }}</td>
-						<td class="text-center">{{ instanceSnapshot.cpu }}</td>
-						<td class="text-center">{{ instanceSnapshot.ram | displayVolume:'MB' }}</td>
-						<td style="text-align:left">{{ instanceSnapshot.name }}</td>
-						<td class="text-center">{{ instanceSnapshot.disk | displayVolume:'GB' }}</td>
-						<td class="text-center"><a class="info-icon-tooltip" tooltip-placement="bottom" uib-tooltip="{{ instanceSnapshot.description }}">	i</a></td>
-						<td class="text-center">{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
-						<td class="text-center">
+						<td>{{ (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length - key }}</td>
+						<td class="text-left">{{ instanceSnapshot.portalOrgName }}</td>
+						<td class="text-left">{{ instanceSnapshot.instanceName }}</td>
+						<td class="text-left">{{ instanceSnapshot.imageName }}</td>
+						<td>{{ instanceSnapshot.cpu }}</td>
+						<td>{{ instanceSnapshot.ram | displayVolume:'MB' }}</td>
+						<td class="text-left">{{ instanceSnapshot.name }}</td>
+						<td>{{ instanceSnapshot.disk | displayVolume:'GB' }}</td>
+						<td><a class="info-icon-tooltip" tooltip-placement="bottom" uib-tooltip="{{ instanceSnapshot.description }}">	i</a></td>
+						<td>{{ instanceSnapshot.created | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+						<td>
 							<a href="" class="btn btn-sm btn-nostyle" title="인스턴스 복사" ng-click="main.goToPage('/iaas/snapshot/serverCreate/' + instanceSnapshot.id + '/' + instanceSnapshot.tenantId)"><i class="fa fa-clone"></i></a>
 						</td>
 					</tr>
@@ -89,22 +104,33 @@
 				</tbody>
 			</table>
 		</div>
-		
-		<div class="table-bottom-wrap text-center">
-			<div class="paginationWrap">
-				<paging
-					page="contents.pageOptions.currentPage"
-					page-size="contents.pageOptions.pageSize"
-					total="(contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length"
-					pg-href=""
-					paging-action=""
-					show-prev-next="true"
-					show-first-last="true"
-					text-first-class="firstPage"
-					text-last-class="lastPage"
-					text-next-class="nextPage"
-					text-prev-class="prevPage">
-			</paging>
+		<div class="table-bottom-wrap">
+			<div class="row">
+				<div class="col-sm-2">
+					<span class="dataTables_info">
+						{{ 'label.total' | translate }} {{ (contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length }}{{ 'label.count' | translate }}
+					</span>
+				</div>
+				<div class="col-sm-8">
+					<nav class="text-center">
+						<div class="paginationWrap">
+							<paging
+									page="contents.pageOptions.currentPage"
+									page-size="contents.pageOptions.pageSize"
+									total="(contents.instanceSnapshotList | filter:{ tenantId : contents.schFilterTenantId, name: contents.schFilterText }).length"
+									pg-href=""
+									show-prev-next="true"
+									show-first-last="true"
+									paging-action=""
+									text-first-class="firstPage"
+									text-last-class="lastPage"
+									text-next-class="nextPage"
+									text-prev-class="prevPage">
+							</paging>
+						</div>
+					</nav>
+				</div>
+				<div class="col-sm-2"></div>
 			</div>
 		</div>
 	</div>
