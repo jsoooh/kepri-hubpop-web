@@ -1871,6 +1871,11 @@ angular.module('gpu.controllers')
             params.instance.spec = ct.data.spec;
             params.instance.zone = ct.selectedAvailabilityZone.availabilityZone;
 
+            if (ct.data.spec.type == 'GPU') {
+                params.instance.vmType = 'gpu'
+            } else {
+                params.instance.vmType = 'vm'
+            }
 
             //windows RDP 관련 수정. domain 저장하지 않음. 2019.07.16
             /*if (ct.data.image.osType == 'windows') {

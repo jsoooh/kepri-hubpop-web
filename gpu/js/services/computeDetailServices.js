@@ -348,7 +348,7 @@ angular.module('gpu.services')
                     orgCode: instance.orgCode,
                     name: instance.name,
                     fixedIp: instance.fixedIp,
-                    vmType: instance.image.osType
+                    vmType: type
                 };
                 url = CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/' + type + '/enable';
                 message = type.toUpperCase() + '모니터링 활성화 성공';
