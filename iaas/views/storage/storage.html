@@ -259,7 +259,7 @@
 <!-- 볼륨 관리 리스트(테이블형) -->
 
 <!-- 검색결과 없음 -->
-<div class="text-center blank-page" ng-if="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length == 0">
+<div class="text-center blank-page" ng-if="!!contents.isStorageMainListLoad && (contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length == 0">
 	<div class="img">
 		<img src="../assets/img/icon/approval.png">
 	</div>
