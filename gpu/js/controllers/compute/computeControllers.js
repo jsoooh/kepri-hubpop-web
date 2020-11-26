@@ -239,6 +239,13 @@ angular.module('gpu.controllers')
                         serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                     }
                     ct.fn.setMonitoringLink(serverMain);
+
+                    if (serverMain.uiTask != 'creating' && serverMain.taskState != "deleting" && serverMain.vmMonitoringYn == 'N') {
+                        $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {ct.fn.monitYnState(serverMain);}, 1000);
+                    }
+                    if (serverMain.uiTask == 'creating') {
+                        ct.fnGetServerMainList();
+                    }
                 });
                 if (isServerStatusCheck) {
                     if ($scope.main.reloadTimmer['instanceServerStateList']) {
@@ -266,6 +273,25 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 ct.pageFirstLoad = false;
                 $scope.main.loadingMainBody = false;
+            });
+        };
+
+        ct.fn.monitYnState = function (instance) {
+            ct.vmMonitoringYn = {};
+            ct.gpuMonitoringYn = {};
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/'+ instance.id +'/monitoring/vm', 'GET'));
+            returnPromise.success(function (data, status, headers) {
+                ct.vmMonitoringYn = data.content.vmMonitoringYn;
+                ct.gpuMonitoringYn = data.content.gpuMonitoringYn;
+                if (ct.vmMonitoringYn == 'Y') {
+                    $timeout(function () {
+                        instance.vmMonitoringYn = ct.vmMonitoringYn;
+
+                    },30000);
+                    $interval.cancel($scope.main.refreshInterval['instanceMonitoringYn']);
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
             });
         };
 
@@ -1114,7 +1140,7 @@ angular.module('gpu.controllers')
         // 20.9.1 by hrit, 모니터링 링크 세팅
         ct.fn.setMonitoringLink = function (instance) {
             instance.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + instance.name;
-        }
+        };
 
         $interval(function () {
             // ct.fnGetInstancesData(); // yminlee: gpu는 alarm 제외

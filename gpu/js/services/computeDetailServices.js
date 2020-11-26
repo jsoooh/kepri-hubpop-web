@@ -358,7 +358,8 @@ angular.module('gpu.services')
                 url = CONSTANTS.gpuApiContextUrl + '/server/instance/' + instance.id + '/monitoring/' + type + '/disable';
                 message = type.toUpperCase() + '모니터링 비활성화 성공';
                 errorMessage = type.toUpperCase() + '모니터링 비활성화 실패';
-                yesOrNo = 'N';
+                yesOrNo = 'D';
+
             }
             var rp = common.resourcePromise(url, method, params);
             rp.success(function (data) {
@@ -377,7 +378,7 @@ angular.module('gpu.services')
 
         //모니터링 (비)활성화 세팅
         computeDetailService.setMonitoringYn = function (instance, fnCallback) {
-            var isActive = (instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'; // 활성화 명령 여부
+            var isActive = (instance.vmMonitoringYn == 'N' || instance.vmMonitoringYn == 'D'); // 활성화 명령 여부
             var confirmMsg = isActive ? '모니터링 기능을 활성화 하시겠습니까?': '모니터링 기능을 비활성화 하시겠습니까?';
             common.showConfirm('확인', confirmMsg).then(function() {
                 if (isActive) {

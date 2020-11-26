@@ -128,7 +128,7 @@
 														<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '스냅샷 이미지 생성'이 가능합니다.">스냅샷 이미지 생성</a></li>
 														<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="볼륨 연결">볼륨 연결</a></li>
 														<li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
-														<li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링 <span ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">비활성화</span></a></li>
+														<li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링 <span ng-if="instance.vmMonitoringYn == 'D' || instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="instance.vmMonitoringYn == 'Y'">비활성화</span></a></li>
 														<li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
 														<li ng-if="instance.instanceSnapshotList.length > 0"><a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
 														<!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
@@ -162,12 +162,13 @@
 												<li ng-show="instance.keypair.privateKeyYn == 'Y'"><b>접속 인증 키(KEY) :</b><span class="margin-right-5">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="feather-icon blue-600"><i data-feather="download" class="feather-directive"></i></span></button></li>
 												<li>
 													<b>모니터링 :</b>
-													<span ng-show="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">-</span>
-													<span ng-show="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">
+													<span ng-show="instance.vmMonitoringYn == 'N'"><img src="images/loading_sm.gif"></span>
+													<span ng-show="instance.vmMonitoringYn == 'D'">비활성화</span>
+													<span ng-show="instance.vmMonitoringYn == 'Y'">
 														<a href="{{ instance.monitoringLink }}" target="_blank" class="link">모니터링 바로가기</a>
 													</span>
 													<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" 
-														ng-show="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')"
+														ng-show="instance.vmMonitoringYn == 'Y'"
 														ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)">
 														<span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span>
 													</button>
@@ -367,11 +368,11 @@
 								</td>
 								<td ng-if="!instance.image.osType">-</td>
 
-								<td class="text-center" ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">
+								<td class="text-center" ng-if="instance.vmMonitoringYn == 'Y'">
 									<a href="{{ instance.monitoringLink }}" class="link">바로가기</a>
 									<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><i data-feather="copy" class="feather-directive blue-600 margin-left-5"></i></button>
 								</td>
-								<td class="text-center" ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">-</td>
+								<td class="text-center" ng-if="instance.vmMonitoringYn == 'N' || instance.vmMonitoringYn == 'D'">-</td>
 								<td class="text-center">{{ instance.spec.vcpus }} 개</td>
 								<td class="text-center">{{ (instance.spec.ram / 1024 | number:1).replace('.0', '') }}</td>
 								<td class="text-center">{{ instance.spec.disk }}</td>
@@ -436,8 +437,8 @@
 												<li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
 												<li>
 													<a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링 
-														<span ng-if="(instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N'">활성화</span>
-														<span ng-if="!((instance.spec.type == 'GPU' && instance.gpuMonitoringYn == 'N') || instance.vmMonitoringYn == 'N')">비활성화</span>
+														<span ng-if="instance.vmMonitoringYn == 'D' || instance.vmMonitoringYn == 'N'">활성화</span>
+														<span ng-if="!(instance.vmMonitoringYn == 'D' && instance.vmMonitoringYn == 'N') && instance.vmMonitoringYn == 'Y'">비활성화</span>
 													</a>
 												</li>
 												<li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
