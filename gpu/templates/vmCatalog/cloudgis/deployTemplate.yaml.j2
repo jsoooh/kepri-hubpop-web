@@ -1,0 +1,160 @@
+heat_template_version: '2018-08-31'
+
+description: single cloudgis template
+
+parameters:
+  api_end_point:
+    type: string
+  image:
+    type: string
+    default: CentOS76-Postgresql.raw
+  flavor_volume_size:
+    type: string
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  service_port:
+    type: string
+  pg_port:
+    type: string
+    default: 5432
+  pg_password:
+    type: string
+  mon_collect_host_beat:
+    type: string
+  mon_collect_port_beat:
+    type: string
+  image_id:
+    type: string
+
+resources:
+
+  server_port:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  init_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $pg_host: { get_attr: [server_port, fixed_ips, 0, ip_address] }
+            $service_port: { get_param: service_port }
+            $pg_port: { get_param: pg_port }
+            $pg_password: { get_param: pg_password }
+          template: |
+            #!/bin/sh
+            echo "CloudGIS setting start"
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
+            ulimit -SHn 65535
+            ulimit -s 65535
+            ulimit -u 65535
+
+            cat <<EOF>> /etc/security/limits.conf
+
+            # This is added for Open File Limit Increase
+            *               hard    nofile          65535
+            *               soft    nofile          65535
+            *               hard    stack           65535
+            *               soft    stack           65535
+
+            EOF
+
+            /usr/pgsql-11/bin/postgresql-11-setup initdb
+            sed -i 's/#port = 5432/port = $pg_port/' /var/lib/pgsql/11/data/postgresql.conf
+            sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
+
+            systemctl start postgresql-11
+            sleep 1
+            sudo -u postgres psql $pg_port <<EOF
+            ALTER USER postgres WITH PASSWORD '$pg_password';
+            EOF
+
+            cat <<EOF> /var/lib/pgsql/11/data/pg_hba.conf
+            # TYPE  DATABASE        USER            ADDRESS                 METHOD
+            # "local" is for Unix domain socket connections only
+            local   all             all                                     md5
+            # IPv4 local connections:
+            host    all             all             0.0.0.0/0               md5
+            host    all             all             127.0.0.1/32            md5
+            # IPv6 local connections:
+            host    all             all             ::1/128                 md5
+            # replication privilege.
+            local   replication     all                                     md5
+            host    replication     all             127.0.0.1/32            md5
+            host    replication     all             ::1/128                 md5
+            EOF
+
+            systemctl restart postgresql-11
+            systemctl enable postgresql-11
+
+            sleep 2
+
+            cat <<EOF> /etc/cloudgis/cloudgis.conf
+            database = postgres
+            pg_host = $pg_host
+            pg_port = $pg_port
+            pg_timeout = 5000
+            pg_user = cloudgis
+            pg_password = $pg_password
+            pg_database = cloudgis
+            pg_max_concurrent_queries = 0
+            pg_semaphore_timeout = 60000
+
+            #admin_listen = 127.0.0.1:8001 reuseport backlog=16384, 127.0.0.1:8444 http2 ssl reuseport backlog=16384
+
+            EOF
+
+            /usr/local/bin/cloudgis migrations bootstrap /etc/cloudgis/cloudgis.conf
+            /usr/local/bin/cloudgis start
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            echo "CloudGIS setting end"
+
+  server:
+    type: OS::Nova::Server
+    properties:
+      metadata:
+        mon_collect_host_beat: { get_param: mon_collect_host_beat }
+        mon_collect_port_beat: { get_param: mon_collect_port_beat }
+        iaas_image_id: { get_param: image_id }
+      flavor: { get_param: flavor }
+#      image: { get_param: image }
+      block_device_mapping_v2:
+         - image: { get_param: image }
+           delete_on_termination: true
+           volume_size: { get_param: flavor_volume_size }
+           boot_index: 0
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server_port }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config
+
+outputs:
+  servers:
+    value:
+      - instance: { get_attr: [ server, show ] }
+        instancePort: { get_attr: [ server_port, show ] }
