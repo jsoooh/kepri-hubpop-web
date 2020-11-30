@@ -696,7 +696,7 @@ angular.module('iaas.controllers')
         pop.data = {};
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "부하 분산 인스턴스 포트 만들기";
+        $scope.dialogOptions.title 		= "부하분산 포트 만들기";
         $scope.dialogOptions.okName     = "생성";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerCreatePopPortForm.html" + _VersionTail();
@@ -760,7 +760,7 @@ angular.module('iaas.controllers')
         pop.data = {};
         pop.callBackFunction = $scope.dialogOptions.callBackFunction;
 
-        $scope.dialogOptions.title 		= "부하 분산 인스턴스 포트 수정";
+        $scope.dialogOptions.title 		= "부하분산 포트 수정";
         $scope.dialogOptions.okName     = "변경";
         $scope.dialogOptions.closeName 	= "닫기";
         $scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/loadbalancer/loadbalancerEditPopPortForm.html" + _VersionTail();
