@@ -1,69 +1,93 @@
-<div class="pop_tit">
-	<span class="p_stit">- 연결 인스턴스 유형 : </span>
-	<div class="radio radio-inline">
-		<input type="radio" name="pushType" id="app-radio1-1" value="SERVER" ng-checked="pop.port.connType == 'server'" ng-disabled="pop.port.connType == 'image'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-		<label for="app-radio1-1" class="label">인스턴스</label>
+<div class="board-warp board-write-wrap">
+	<!-- 연결 인스턴스 유형 -->
+	<div>
+		<div class="radio-group inline-block margin-right-5">
+			<input type="radio" id="app-radio1-1" class="radio-input" value="SERVER" name="pushType" ng-checked="pop.port.connType == 'server'" ng-disabled="pop.port.connType == 'image'">
+			<label for="app-radio1-1" class="radio-item">
+				<div class="radio">
+					<div class="checked-icon"></div>
+				</div>
+				<span class="text">
+					인스턴스
+				</span>
+			</label>
+		</div>
+		<div class="radio-group inline-block margin-right-5">
+			<input type="radio" id="app-radio1-2" class="radio-input" value="IMAGE" name="pushType" ng-checked="pop.port.connType == 'image'" ng-disabled="pop.port.connType == 'server'">
+			<label for="app-radio1-2" class="radio-item">
+				<div class="radio">
+					<div class="checked-icon"></div>
+				</div>
+				<span class="text">
+					스냅샷
+				</span>
+			</label>
+		</div>
 	</div>
-	<div class="radio radio-inline">
-		<input type="radio" name="pushType" id="app-radio1-2" value="IMAGE" ng-checked="pop.port.connType == 'image'" ng-disabled="pop.port.connType == 'server'" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"> <!-- 2018.12.13 disabled 처리  -->
-		<label for="app-radio1-2" class="label">스냅샷</label>
-	</div>
-</div>
+	<!-- 연결 인스턴스 유형 -->
 
-<!-- 대상 인스턴스 선택(인스턴스) -->
-<div class="tbw type1 mt20" ng-if="pop.port.connType == 'server'">
-	<table class="table">
-		<colgroup>
-			<col style="width:10%;">
-			<col style="width:45%;">
-			<col style="	width:45%;">
-		</colgroup>
-		<thead>
-		<tr>
-			<th scope="col">선택</th>
-			<th scope="col">인스턴스 이름</th>
-			<th scope="col">내부 IP</th>
-		</tr>
-		</thead>
-		<tbody>
+	<!-- 대상 인스턴스 선택(인스턴스) -->
+	<div class="table-wrap margin-top-20" ng-if="pop.port.connType == 'server'">
+		<table class="table">
+			<colgroup>
+				<col width="15%;">
+				<col width="45%;">
+				<col width="40%;">
+			</colgroup>
+			<thead>
+			<tr>
+				<th>선택</th>
+				<th class="text-center">인스턴스 이름</th>
+				<th class="text-center">내부 IP</th>
+			</tr>
+			</thead>
+			<tbody class="text-center">
 			<tr ng-repeat="(key, portMember) in pop.serverMainList"><!-- 선택 된 row -->
 				<td>
-					<div class="checkbox">
-						<input type="checkbox" id={{portMember.id}} ng-model="portMember.checked" value="true">
-						<label for={{portMember.id}}></label>
+					<div class="checkbox-group">
+						<input type="checkbox" id={{portMember.id}} class="checkbox-input" ng-model="portMember.checked" value="true">
+						<label for="{{portMember.id}}" class="checkbox-item">
+							<div class="checkbox">
+								<div class="checked-icon">
+									<i class="xi-check"></i>
+								</div>
+							</div>
+						</label>
 					</div>
 				</td>
 				<td>{{ portMember.name }}</td>
 				<td>{{ portMember.fixedIp }}</td>
 			</tr>
-		</tbody>
-	</table>
-</div>
-<!-- 대상 인스턴스 선택(인스턴스) -->
+			<tr ng-if="!contents.serverMainList || contents.serverMainList.length == 0">
+				<td colspan="3" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- 대상 인스턴스 선택(인스턴스) -->
 
-<!-- 대상 인스턴스 선택(스냅샷) -->
-<div class="tbw type1 mt20" ng-if="pop.port.connType == 'image'">
-	<table class="table">
-		<colgroup>
-			<col style="width:25%;">
-			<col style="width:auto;">
-		</colgroup>
-		<tbody>
-		<tr>
-			<th>대상 스냅샷</th>
-			<td>
-                <input type="text" class="form-control" ng-model="pop.instanceSnapshotName" ng-disabled="pop.instanceSnapshotName">
-			</td>
-		</tr>
-		<tr>
-			<th>인스턴스 이름</th>
-			<td><input type="text" class="form-control" name="serverName" ng-model="pop.port.connImageName" ng-disabled="pop.port.connImageName" maxlength="50" placeholder="인스턴스 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
-		</tr>
-		<tr>
-			<th>인스턴스 수</th>
-			<td><input type="text" class="form-control" name="serverCount" ng-model="pop.port.connImageCount" maxlength="50" placeholder="인스턴스 수를 입력하세요." validation="alpha_dash|required"></td>
-		</tr>
-		</tbody>
-	</table>
+	<!-- 대상 인스턴스 선택(스냅샷) -->
+	<div class="table-wrap margin-top-20" ng-if="pop.port.connType == 'image'">
+		<table class="table">
+			<colgroup>
+				<col style="width:30%;">
+				<col style="width:auto;">
+			</colgroup>
+			<tbody>
+			<tr>
+				<th>대상 스냅샷</th>
+				<td><input type="text" class="form-control form-control-sm" ng-model="pop.instanceSnapshotName" ng-disabled="pop.instanceSnapshotName"></td>
+			</tr>
+			<tr>
+				<th>인스턴스 이름</th>
+				<td><input type="text" class="form-control form-control-sm" name="serverName" ng-model="pop.port.connImageName" ng-disabled="pop.port.connImageName" maxlength="50" placeholder="인스턴스 이름(영문)을 입력하세요." validation="alpha_dash|required"></td>
+			</tr>
+			<tr>
+				<th>인스턴스 수</th>
+				<td><input type="number" class="form-control form-control-sm" name="serverCount" ng-model="pop.port.connImageCount" maxlength="50" placeholder="인스턴스 수를 입력하세요." validation="required"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- 대상 인스턴스 선택(스냅샷) -->
 </div>
-<!-- //대상 인스턴스 선택(스냅샷) -->

@@ -1,104 +1,170 @@
-<!-- table -->
-<h4 class="tit_pop">포트 정보</h4>
-<div class="tbw type1">
+<div class="board-warp board-write-wrap">
+	<!-- 포트 정보 -->
+	<h4 class="tit_pop">포트 정보</h4>
 	<table class="table">
 		<colgroup>
-			<col style="width: 30%;">
-			<col style="width: auto;">
+			<col style="width:35%;">
+			<col style="width:auto;">
 		</colgroup>
 		<tbody>
 			<tr>
 				<th scope="row">포트이름</th>
-				<td><input type="text" name="portName" class="form-control" ng-model="pop.port.name" placeholder="포트 이름을 입력하세요."></td>
+				<td><input type="text" name="portName" class="form-control form-control-sm" ng-model="pop.port.name" placeholder="포트 이름을 입력하세요."></td>
 			</tr>
-			<tr class="ng-scope tbl_disabled">
+			<tr>
 				<th>프로토콜</th>
 				<td>
-					<div class="radio radio-only">
-						<input type="radio" name="protocolRadio" id="protocolHTTP" ng-click="pop.port.protocol = 'HTTP'" ng-checked="pop.port.protocol == 'HTTP'" disabled>
-						<label for="protocolHTTP" class="label">HTTP</label>
+					<div class="radio-group inline-block margin-right-5">
+						<input type="radio" id="protocolHTTP" class="radio-input" value="HTTP" name="protocolRadio" ng-click="pop.port.protocol = 'HTTP'" ng-checked="pop.port.protocol == 'HTTP'" disabled>
+						<label for="protocolHTTP" class="radio-item">
+							<div class="radio">
+								<div class="checked-icon"></div>
+							</div>
+							<span class="text">
+								HTTP
+							</span>
+						</label>
 					</div>
-					<div class="radio radio-only">
-						<input type="radio" name="protocolRadio" id="protocolHTTPS" ng-click="pop.port.protocol = 'HTTPS'" ng-checked="pop.port.protocol == 'HTTPS'" disabled>
-						<label for="protocolHTTPS" class="label">HTTPS</label>
+					<div class="radio-group inline-block margin-right-5">
+						<input type="radio" id="protocolHTTPS" class="radio-input" value="HTTPS" name="protocolRadio" ng-click="pop.port.protocol = 'HTTPS'" ng-checked="pop.port.protocol == 'HTTPS'" disabled>
+						<label for="protocolHTTPS" class="radio-item">
+							<div class="radio">
+								<div class="checked-icon"></div>
+							</div>
+							<span class="text">
+								HTTPS
+							</span>
+						</label>
 					</div>
-					<div class="radio radio-only">
-						<input type="radio" name="protocolRadio" id="protocolTCP" ng-click="pop.port.protocol = 'TCP'" ng-checked="pop.port.protocol == 'TCP'" disabled>
-						<label for="protocolTCP" class="label">TCP</label>
+					<div class="radio-group inline-block margin-right-5">
+						<input type="radio" id="protocolTCP" class="radio-input" value="TCP" name="protocolRadio" ng-click="pop.port.protocol = 'TCP'" ng-checked="pop.port.protocol == 'TCP'" disabled>
+						<label for="protocolTCP" class="radio-item">
+							<div class="radio">
+								<div class="checked-icon"></div>
+							</div>
+							<span class="text">
+								TCP
+							</span>
+						</label>
 					</div>
 				</td>
 			</tr>
-			<tr>
-				<th scope="row">포트</th>
-				<td><input type="text" name="protocolPort" class="form-control" ng-model="pop.port.protocolPort" disabled></td>
-			</tr>
 		</tbody>
 	</table>
-</div>
+	<!-- 포트 정보 -->
 
-<h4 class="tit_pop pt20">연결 정보</h4>
-<div class="tbw type1">
+	<!-- 연결 정보 -->
+	<h4 class="tit_pop pt20">연결 정보</h4>
 	<table class="table">
 		<colgroup>
-			<col style="width: 30%;">
-			<col style="width: auto;">
+			<col style="width:35%;">
+			<col style="width:auto;">
 		</colgroup>
 		<tbody>
 		<tr>
-			<th scope="row">연결포트</th>
-			<td><input type="text" name="protocolPort" class="form-control" ng-model="pop.port.connectionPort" disabled></td>
+			<th scope="row">연결 포트</th>
+			<td><input type="number" name="protocolPort" class="form-control form-control-sm" ng-model="pop.port.connectionPort" disabled></td>
 		</tr>
 		<tr>
 			<th>로드 밸런스 유형</th>
 			<td>
-				<div class="radio radio-only">
-					<input type="radio" name="loadBalancerRadio" id="ROUND_ROBIN" ng-click="pop.port.lbAlgorithm = 'ROUND_ROBIN'" ng-checked="pop.port.lbAlgorithm=='ROUND_ROBIN'">
-					<label for="ROUND_ROBIN" class="label">라운드로빈</label>
+				<div class="radio-group inline-block margin-right-5">
+					<input type="radio" id="ROUND_ROBIN" class="radio-input" value="ROUND_ROBIN" name="loadBalancerRadio" ng-click="pop.port.lbAlgorithm = 'ROUND_ROBIN'" ng-checked="pop.port.lbAlgorithm=='ROUND_ROBIN'" disabled>
+					<label for="ROUND_ROBIN" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+						<span class="text">
+							라운드로빈
+						</span>
+					</label>
 				</div>
-                <div class="radio radio-only">
-                    <input type="radio" name="loadBalancerRadio" id="SOURCE_IP" ng-click="pop.port.lbAlgorithm = 'SOURCE_IP'" ng-checked="pop.port.lbAlgorithm == 'SOURCE_IP'">
-                    <label for="SOURCE_IP" class="label">소스</label>
-                </div>
-				<div class="radio radio-only">
-					<input type="radio" name="loadBalancerRadio" id="LEAST_CONNECTIONS" ng-click="pop.port.lbAlgorithm = 'LEAST_CONNECTIONS'" ng-checked="pop.port.lbAlgorithm=='LEAST_CONNECTIONS'">
-					<label for="LEAST_CONNECTIONS" class="label">최소연결</label>
+				<div class="radio-group inline-block margin-right-5">
+					<input type="radio" id="SOURCE_IP" class="radio-input" value="SOURCE_IP" name="loadBalancerRadio" ng-click="pop.port.lbAlgorithm = 'SOURCE_IP'" ng-checked="pop.port.lbAlgorithm == 'SOURCE_IP'" disabled>
+					<label for="SOURCE_IP" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+						<span class="text">
+							소스
+						</span>
+					</label>
+				</div>
+				<div class="radio-group inline-block margin-right-5">
+					<input type="radio" id="LEAST_CONNECTIONS" class="radio-input" value="LEAST_CONNECTIONS" name="loadBalancerRadio" ng-click="pop.port.lbAlgorithm = 'LEAST_CONNECTIONS'" ng-checked="pop.port.lbAlgorithm=='LEAST_CONNECTIONS'" disabled>
+					<label for="LEAST_CONNECTIONS" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+						<span class="text">
+							최소연결
+						</span>
+					</label>
 				</div>
 			</td>
 		</tr>
-		<tr class="ng-scope tbl_disabled">
-			<th>헬스 체크 유형</th>
+		<tr>
+			<th>로드 밸런스 유형</th>
 			<td>
-				<div class="radio radio-only">
-					<input type="radio" name="healthCheck" id="healthCheckHTTP" ng-click="pop.port.healthType = 'HTTP'" ng-checked="pop.port.healthType == 'HTTP'" disabled>
-					<label for="healthCheckHTTP" class="label">HTTP</label>
+				<div class="radio-group inline-block margin-right-5">
+					<input type="radio" id="healthCheckHTTP" class="radio-input" value="HTTP" name="healthCheck" ng-click="pop.port.healthType = 'HTTP'" ng-checked="pop.port.healthType = 'HTTP'" disabled>
+					<label for="healthCheckHTTP" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+						<span class="text">
+							HTTP
+						</span>
+					</label>
 				</div>
-				<div class="radio radio-only">
-					<input type="radio" name="healthCheck" id="healthCheckHTTPS" ng-click="pop.port.healthType = 'HTTPS'" ng-checked="pop.port.healthType == 'HTTPS'" disabled>
-					<label for="healthCheckHTTPS" class="label">HTTPS</label>
+				<div class="radio-group inline-block margin-right-5">
+					<input type="radio" id="healthCheckHTTPS" class="radio-input" value="HTTPS" name="healthCheck" ng-click="pop.port.healthType = 'HTTPS'" ng-checked="pop.port.healthType = 'HTTPS'" disabled>
+					<label for="healthCheckHTTPS" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+						<span class="text">
+							HTTPS
+						</span>
+					</label>
 				</div>
-				<div class="radio radio-only">
-					<input type="radio" name="healthCheck" id="healthCheckTCP" ng-click="pop.port.healthType = 'TCP'" ng-checked="pop.port.healthType == 'TCP'" disabled>
-					<label for="healthCheckTCP" class="label">TCP</label>
+				<div class="radio-group inline-block margin-right-5">
+					<input type="radio" id="healthCheckTCP" class="radio-input" value="TCP" name="healthCheck" ng-click="pop.port.healthType = 'TCP'" ng-checked="pop.port.healthType = 'TCP'" disabled>
+					<label for="healthCheckTCP" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+						<span class="text">
+							TCP
+						</span>
+					</label>
 				</div>
-				<div class="radio radio-only">
-					<input type="radio" name="healthCheck" id="healthCheckPING" ng-click="pop.port.healthType = 'PING'" ng-checked="pop.port.healthType == 'PING'" disabled>
-					<label for="healthCheckPING" class="label">PING</label>
+				<div class="radio-group inline-block margin-right-5">
+					<input type="radio" id="healthCheckPING" class="radio-input" value="PING" name="healthCheck" ng-click="pop.port.healthType = 'PING'" ng-checked="pop.port.healthType = 'PING'" disabled>
+					<label for="healthCheckPING" class="radio-item">
+						<div class="radio">
+							<div class="checked-icon"></div>
+						</div>
+						<span class="text">
+							PING
+						</span>
+					</label>
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<th scope="row">최대 연결 개수</th>
-			<td><input type="text" name="connectionLimit" class="form-control" ng-model="pop.port.connectionLimit"></td>
+			<td><input type="number" name="connectionLimit" class="form-control form-control-sm" ng-model="pop.port.connectionLimit"></td>
 		</tr>
 		<tr>
 			<th scope="row">헬스 체크 주기(초)</th>
-			<td><input type="text" name="healthDelay" class="form-control" ng-model="pop.port.healthDelay"></td>
+			<td><input type="number" name="healthDelay" class="form-control form-control-sm" ng-model="pop.port.healthDelay"></td>
 		</tr>
 		<tr ng-if="pop.port.healthType == 'HTTP' || pop.port.healthType == 'HTTPS'">
 			<th scope="row">헬스 체크 URL</th>
-			<td><input type="text" name="healthUrlPath" class="form-control" ng-model="pop.port.healthUrlPath"></td>
+			<td><input type="text" name="healthUrlPath" class="form-control form-control-sm" ng-model="pop.port.healthUrlPath"></td>
 		</tr>
 		</tbody>
 	</table>
+	<!-- 연결 정보 -->
 </div>
-<!-- //table -->
