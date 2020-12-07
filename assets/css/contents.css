@@ -82,6 +82,20 @@
 /*테이블 th두줄일때 헤더구분선*/
 .table thead tr:first-child th[scope="row"] {border-bottom: 1px solid #c3c3c3;}
 
+.table-wrap tfoot.double-line {border-top-style:double; border-color:#ccc; }
+.table-wrap .table a {text-decoration:underline; cursor:pointer;}
+.table-wrap .table a > button {text-decoration:none;}
+
+.table-wrap .table.double-th thead.doubleRow tr th {font-size:13px; border-bottom: 1px solid #c3c3c3 !important;}
+
+/*테이블 추가*/
+.table thead.th-row-2 th {border-right:1px solid #ddd;}
+.table thead.th-row-2 th:last-child {border-right:0;}
+.table thead.th-row-2 .th-border-bottom {border-bottom: 1px solid #c3c3c3 !important;}
+.table thead.th-row-2 + tbody tr:first-child td {border-top: 1px solid #c3c3c3;}
+.table thead.th-row-2.doubleRow tr:first-child th {border-bottom: 1px solid #c3c3c3;}
+.table thead.th-row-2.doubleRow > tr > th {border-color:#e4e4e4;}
+
 /*---- 프로젝트 만들기 ----*/
 /*OS 선택*/
 .pj_paas_volume .ul-list1{display: table; font-size:0; margin-left: -18px;}

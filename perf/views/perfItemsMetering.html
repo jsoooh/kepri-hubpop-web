@@ -45,7 +45,7 @@
 		</div>
 		<h3 class="heading h3 margin-top-30">현황<em class="font-size-13 grey-500 padding-left-10">(단위: {{contents.sltItem.itemUnit}})</em></h3>
 		<div class="table-wrap border-0 margin-top-20">
-			<table class="table table-hover table-bordered">
+			<table class="table table-hover table-bordered double-th">
 				<colgroup>
 					<col style="width:;" /><!-- 1월 -->
 					<col style="width:;" /><!-- 2월 -->
@@ -61,7 +61,7 @@
 					<col style="width:;" /><!-- 12월 -->
 					<col style="width:15%;" /><!-- 합계 -->
 				</colgroup>
-				<thead class="text-center black white-text">
+				<thead class="bg-blue-grey-100 text-center th-row-2 doubleRow">
 					<tr>
 						<th colspan="12">월별현황</th>
 						<th rowspan="2">합계</th>
@@ -108,7 +108,7 @@
 		</div>
 		<h3 class="heading h3 margin-top-30">현황<em class="font-size-13 grey-500 padding-left-10">(단위: {{contents.sltItem.itemUnit}})</em></h3>
 		<div class="table-wrap border-0 margin-top-20">
-			<table class="table table-hover table-bordered">
+			<table class="table table-hover table-bordered double-th">
 				<colgroup>
 					<col style="width:;" /><!-- 1일 -->
 					<col style="width:;" /><!-- 2일 -->
@@ -127,7 +127,7 @@
 					<col style="width:;" /><!-- 15일 -->
 					<col style="width:;" /><!-- 16일 -->
 				</colgroup>
-				<thead class="text-center black white-text">
+				<thead class="bg-blue-grey-100 text-center th-row-2 doubleRow">
 					<tr>
 						<th ng-repeat="day in contents.meteringDays| limitTo : 15 track by $index">{{day}}일</th>
 						<!--th ng-repeat="blank in [].constructor(15) track by $index">{{contents.meteringDays[$index]}}일</th-->
@@ -143,7 +143,7 @@
 						<td class="text-center" ng-if="!contents.perfMeteringDailyByOrgAndItemSum"> 0 </td>
 					</tr>
 				</tbody>
-				<thead class="text-center black white-text">
+				<thead class="bg-blue-grey-100 text-center th-row-2 doubleRow">
 					<tr>
 						<!-- limitTo : 갯수: 시작 index-->
 						<th ng-repeat="day in contents.meteringDays| limitTo : 16: 15 track by $index">{{day}}일</th>
