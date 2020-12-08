@@ -1,16 +1,18 @@
-<div class="tbw type1">
+<!-- table -->
+<div class="board-warp board-write-wrap">
 	<table class="table">
 		<colgroup>
-			<col style="width: 25%;">
+			<col style="width: 30%;">
 			<col style="width: auto;">
 		</colgroup>
 		<tbody>
 			<tr>
-				<th scope="row" rowspan="2">접속 포트</th>
+				<th scope="row">접속 포트</th>
 				<td>
-					<input type="number" class="form-control" name="targetPort" ng-model="pop.portForwarding.targetPort" min="1" max="99999" max-number-length="5" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.portForwarding.targetPort)|custom:pop.fn.portForwardingValidationCheck(pop.portForwarding.targetPort, pop.portForwarding.id)">
+					<input type="number" class="form-control form-control-sm" name="targetPort" ng-model="pop.portForwarding.targetPort" min="1" max="99999" max-number-length="5" min="1" max="49151" max-number-length="5" validation="numeric|required|custom:pop.fn.systemPortCustomValidationCheck(pop.portForwarding.targetPort)|custom:pop.fn.portForwardingValidationCheck(pop.portForwarding.targetPort, pop.portForwarding.id)">
 				</td>
 			</tr>
 		</tbody>
 	</table>
 </div>
+<!-- //table -->
