@@ -368,21 +368,21 @@
 								<ul>
 									<li>
 										<div class="s_inner_cont">
-											<div class="innr_tbl table-wrap">
-												<table class="table-bordered">
+											<div class="table-wrap">
+												<table class="table table-outline">
 													<colgroup>
 														<col width="30" />
 														<col width="30" />
 														<col width="30" />
 													</colgroup>
-													<thead>
+													<thead class="bg-blue-grey-100 text-center">
 														<tr>
 															<th>인스턴스 수</th>
 															<th>전체 메모리</th>
 															<th>전체 디스크</th>
 														</tr>
 													</thead>
-													<tbody>
+													<tbody class="text-center">
 														<tr>
 															<td>{{contents.defaultSet.instances}} 개</td>
 															<td>{{(contents.defaultSet.memory * contents.defaultSet.instances) | displayVolume:'MB' }}</td>

@@ -252,26 +252,26 @@
 									<li>
 										<span class="s_tit">인스턴스 사양</span> <span class="s_txt">소형</span>
 										<div class="s_inner_cont">
-											<div class="innr_tbl table-wrap">
-												<table class="table-bordered">
+											<div class="table-wrap">
+												<table class="table table-outline">
 													<colgroup>
 														<col width="30" />
 														<col width="30" />
 														<col width="30" />
 													</colgroup>
-													<thead>
-													<tr>
-														<th>vCPU</th>
-														<th>메모리</th>
-														<th>OS 디스크</th>
-													</tr>
+													<thead class="bg-blue-grey-100 text-center">
+														<tr>
+															<th>vCPU</th>
+															<th>메모리</th>
+															<th>OS 디스크</th>
+														</tr>
 													</thead>
-													<tbody>
-													<tr>
-														<td>{{contents.sltInstance.spec.vcpus}} Core</td>
-														<td>{{contents.sltInstance.spec.ram | displayVolume:'MB'}}</td>
-														<td>{{contents.sltInstance.spec.disk | displayVolume:'GB'}}</td>
-													</tr>
+													<tbody class="text-center">
+														<tr>
+															<td>{{contents.sltInstance.spec.vcpus}} Core</td>
+															<td>{{contents.sltInstance.spec.ram | displayVolume:'MB'}}</td>
+															<td>{{contents.sltInstance.spec.disk | displayVolume:'GB'}}</td>
+														</tr>
 													</tbody>
 												</table>
 											</div>
