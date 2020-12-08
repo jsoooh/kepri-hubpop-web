@@ -26,15 +26,15 @@
 			<div class="text-area">APP에 대한 사용자 제어(시작, 중지, 재시작 등) 이벤트 로그를 실시간으로 표시 합니다.</div>
 		</div>
 		<div class=" scroll-content" style="height:270px;">
-			<div id="tabAppEventsTable" class="table-wrap border-0 margin-top-20 padding-bottom-70">
-				<table class="table table-hover">
+			<div id="tabAppEventsTable" class="table-wrap margin-top-20 padding-bottom-70">
+				<table class="table table-hover scroll-line">
 					<colgroup>
 						<col style="width: 10%;">
 						<col style="width: 20%;">
 						<col style="width: 25%;">
 						<col style="width: 35%;">
 					</colgroup>
-					<thead class="text-center black white-text">
+					<thead class="bg-blue-grey-100 text-center">
 						<tr>
 							<th>{{ 'label.no' | translate }}</th>
 							<th class="text-left">{{ 'label.event_dt' | translate }}</th>
@@ -42,7 +42,7 @@
 							<th class="text-left">{{ 'label.event' | translate }}</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="text-center">
 						<tr ng-repeat="(k, eventItem) in tab.appEvents.content">
 							<!--<td class="text-center">{{ (k + 1) }}</td>-->
 							<td class="text-center">{{ (tab.appEvents.content.length - 1) - k + 1 }}</td>
