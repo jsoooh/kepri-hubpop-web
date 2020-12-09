@@ -54,12 +54,23 @@
                                 </li>
                                 <li ng-show="contents.deployTypeClusterSupport">
                                     <div class="radio-group">
-                                        <input type="radio" name="deploy_type" id="deploy-type-cluster" class="radio-input" value="image" ng-model="contents.data.deployType" ng-value="'cluster'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" aria-invalid="false">
-                                        <label for="deploy-type-cluster" class="radio-item">
+                                        <input type="radio" name="deploy_type" id="deploy-type-cluster1" class="radio-input" value="image" ng-model="contents.data.deployType" ng-value="'cluster1'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" aria-invalid="false">
+                                        <label for="deploy-type-cluster1" class="radio-item">
                                             <div class="radio">
                                                 <div class="checked-icon"></div>
                                             </div>
-                                            <span class="text"> 클러스터 구성 ( 서버: {{ contents.data.clusterCnt }} ) </span>
+                                            <span class="text"> 클러스터 구성 ( 서버: 3 ) </span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li ng-show="contents.deployTypeClusterSupport">
+                                    <div class="radio-group">
+                                        <input type="radio" name="deploy_type" id="deploy-type-cluster2" class="radio-input" value="image" ng-model="contents.data.deployType" ng-value="'cluster2'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" aria-invalid="false">
+                                        <label for="deploy-type-cluster2" class="radio-item">
+                                            <div class="radio">
+                                                <div class="checked-icon"></div>
+                                            </div>
+                                            <span class="text"> 클러스터 구성 ( 서버: 5 ) </span>
                                         </label>
                                     </div>
                                 </li>
@@ -106,12 +117,14 @@
                                             <input type="text" name="pgPort" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.pgPort" placeholder="포트" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck('single', contents.data.pgPort)|custom:contents.fn.cloudGISPortCustomValidationCheck(contents.data.pgPort, 'pg')" placeholder="DB 포트를 입력하세요.">
                                         </td>
                                     </tr>
+                                    <!--
                                     <tr>
                                         <th><b class="caution-star">*</b> 관리 비밀번호</th>
                                         <td><input type="password" name="pgPassword" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.pgPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.pgPassword)" placeholder="비밀번호를 입력하세요."></td>
                                         <th><b class="caution-star">*</b> 관리 비밀번호 확인</th>
                                         <td><input type="password" name="pgConfirmPassword" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.pgConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.pgPassword, contents.data.pgConfirmPassword)" placeholder="비밀번호를 확인하세요."></td>
                                     </tr>
+                                    -->
                                     </tbody>
                                 </table>
                             </div>
@@ -125,9 +138,9 @@
                             <div  class="margin-top-30" ng-include="contents.htmlUrls.specSelect"></div>
                             <!-- //사양 선택 -->
 
-                            <!-- 데이터 디스크 사용 -->
+                            <!-- 데이터 디스크 사용
                             <div class="margin-top-30" ng-include="contents.htmlUrls.volumeSelect"></div>
-                            <!-- //데이터 디스크 사용 -->
+                             //데이터 디스크 사용 -->
 
                         </div>
                     </form>

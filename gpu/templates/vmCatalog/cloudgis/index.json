@@ -8,12 +8,13 @@
   "deployViewHtmlFile": "deployView.html",
   "deployTemplates": {
     "single": "deployTemplate.yaml.j2",
-    "replica": "deployReplicaTemplate.yaml.j2",
-    "cluster": "deployClusterTemplate.yaml.j2"
+    "replica": "deployTemplate.yaml.j2",
+    "cluster1": "deployTemplate.yaml.j2",
+    "cluster2": "deployTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS76-Postgresql.raw",
-    "replica": "CentOS76-Cloudgis.raw",
-    "cluster": "CentOS76-Cloudgis.raw"
+    "single": "gis-img",
+    "replica": "gis-img",
+    "cluster": "gis-img"
   }
 }
