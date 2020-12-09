@@ -22,8 +22,6 @@ parameters:
     type: string
   provider_subnet:
     type: string
-  pg_password:
-    type: string
   mon_collect_host_beat:
     type: string
   mon_collect_port_beat:
@@ -70,7 +68,6 @@ resources:
             $project_id: { get_param: 'OS::project_id' }
             $stack_id: { get_param: 'OS::stack_id' }
             $stack_name: { get_param: 'OS::stack_name' }
-            $pg_password: { get_param: pg_password }
             $CGIS_PORT_WEB: { get_param: CGIS_PORT_WEB }
             $CGIS_PORT_POSTGRES: { get_param: CGIS_PORT_POSTGRES }
             $CGIS_DIST_TYPE: { get_param: CGIS_DIST_TYPE }
