@@ -86,7 +86,7 @@
 					<div class="row">
 						<div class="col-md-4" ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
 							<div class="card card-type1" ng-class="{'new-create' : instance.newCreated}">
-								<div class="card-header">
+								<div class="card-header" style="height:86px;">
 									<div class="card-info-area">
 										<div class="img-size50" ng-if="instance.procState != 'end'">
 											<img ng-if="instance.image.icon" ng-src="data:{{ instance.image.contentType }}; base64, {{ instance.image.icon }}" >
@@ -149,7 +149,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="card-body">
+								<div class="card-body" style="height:340px;">
 									<div class="row">
 										<div class="card-body-info" ng-show="instance.showVal">
 											<div class="info-head padding-vertical-20">
@@ -307,7 +307,7 @@
 										
 										<!-- 로딩스피너 -->
 										<div class="ul-in spinner_area text-center" style="height:285px;" ng-if="instance.procState == 'ing'">
-											<div class="info-chart padding-top-60">
+											<div class="info-chart padding-top-80">
 												<!-- <img src="images/loading/loading_cloud.gif" width="140" height="90"> -->
 												<div class="spinner-border spinner-primary" role="status">
 													<span class="sr-only">Loading...</span>
