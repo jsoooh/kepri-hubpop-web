@@ -425,16 +425,30 @@ angular.module('gpu.controllers')
                 param.key = ct.objectStorageObjectList.currentPath;
                 param.files = [];
                 console.log("files.length >>>>> "+uploadFiles.files.length);
-                for (var i=0; i< uploadFiles.files.length; i++) {
-                    if (uploadFiles.files[i].size/1024 < 1024*1024*2) {
-                        console.log("file size >>>>> "+uploadFiles.files[i].size/1024+"KB");
-                        param.files.push(uploadFiles.files[i]);
-                    } else {
-                        console.log("2GB 이하만 업로드 가능합니다. size >>>>> "+uploadFiles.files[i].size/1024+"KB");
-                        common.showAlertError("파일명: "+uploadFiles.files[i].name+"(2GB 이하만 업로드 가능합니다.)");
-                        $scope.main.loadingMainBody = false;
-                        //$state.reload();
-                    }
+                if (uploadFiles && uploadFiles.files && uploadFiles.files.length > 0) {
+                    angular.forEach(uploadFiles.files, function(file) {
+                        if (file.name && ct.objectStorageObjectList) {
+                            var objectStorageObject = common.objectsFindByField(ct.objectStorageObjectList.fileList, 'name', file.name);
+                            if (file.size && file.size/1024 > 1024*1024*2) {
+                                console.log("file size >>>>> "+ file.size/1024 +"KB");
+                                common.showAlertError("파일명: "+file.name+"(2GB 이하만 업로드 가능합니다.)");
+                                $scope.main.loadingMainBody = false;
+                                ct.fn.refreshObjectStorage();
+                                $scope.main.loadingMain = false;
+                            } else if (objectStorageObject) {
+                                console.log(file.name + "와 같은 파일명이 존재합니다.");
+                                common.showAlertError("중복된 파일명이 존재합니다.");
+                                $scope.main.loadingMainBody = false;
+                                ct.fn.refreshObjectStorage();
+                                $scope.main.loadingMain = false;
+                            } else {
+                                param.files.push(file);
+                                console.log("업로드 되는 파일명: " + file.name);
+                                $scope.main.loadingMainBody = true;
+                                $scope.main.loadingMain = true;
+                            }
+                        }
+                    });
                 }
                 // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
                 var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
