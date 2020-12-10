@@ -454,9 +454,9 @@
 						<i class="xi-info font-size-20"></i>
 						<div class="text-area">인스턴스에서 실행되는 외부 공개 서비스(웹 서비스 등)에 대한 접근 도메인을 구성합니다.</div>
 					</div>
-					<div class=" scroll-content" style="height:270px;">
-						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
-							<table class="table table-hover table-outline text-center">
+					<div class="scroll-content" style="height:270px;">
+						<div class="table-wrap margin-top-20 padding-bottom-70" >
+							<table class="table table-hover text-center scroll-line">
 								<colgroup>
 									<col style="width:30%;">
 									<col style="width:25%;">
@@ -532,16 +532,16 @@
 						<i class="xi-info font-size-20"></i>
 						<div class="text-area">인스턴스에서 실행되는 외부 공개 서비스(DB 서비스 등)에 대한 접근 정보를 구성합니다.</div>
 					</div>
-					<div class=" scroll-content" style="height:270px;">
-						<div class="table-wrap border-0 margin-top-20 padding-bottom-70" >
-							<table class="table table-hover table-outline text-center">
+					<div class="scroll-content" style="height:270px;">
+						<div class="table-wrap margin-top-20 padding-bottom-70" >
+							<table class="table table-hover text-center scroll-line">
 								<colgroup>
 									<col style="width:30%;">
 									<col style="width:30%;">
 									<col style="width:20%;">
 									<col style="width:20%;">
 								</colgroup>
-								<thead class="bg-blue-grey-100">
+								<thead class="bg-blue-grey-100 text-center">
 								<tr>
 									<th scope="col">도메인 접속정보</th>
 									<th scope="col">IP 접속정보</th>
@@ -607,15 +607,15 @@
 						<i class="xi-info font-size-20"></i>
 						<div class="text-area">사용자가 인스턴스에 명령하는 시작, 중지 등의 액션에 대한 실행 이력을 표시합니다.</div>
 					</div>
-					<div class=" scroll-content" style="height:270px;">
-						<div class="table-wrap border-0 margin-top-20" >
-							<table class="table table-hover table-outline text-center">
+					<div class="scroll-content" style="height:270px;">
+						<div class="table-wrap margin-top-20 padding-bottom-70" >
+							<table class="table table-hover text-center scroll-line">
 								<colgroup>
 									<col style="width:30%;">
 									<col style="width:30%;">
 									<col style="width:40%;">
 								</colgroup>
-								<thead class="bg-blue-grey-100">
+								<thead class="bg-blue-grey-100 text-center">
 									<tr>
 										<th scope="col">사용자</th>
 										<th scope="col">동작</th>
@@ -699,7 +699,7 @@
 					<div class="table-input-wrap">
 						<div class="row">
 							<form name="searchForm">
-								<div class="form-inline text-left">
+								<div class="form-inline text-right">
 									<div class="form-group datepicker-div" ng-class="contents.fn.setPosition()">
 										<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 											<input type="text" id="startDatetime" aria-label="Date-Time">
@@ -730,8 +730,8 @@
 							</form>
 						</div>
 					</div>
-					<div class=" scroll-content" style="height:270px;">
-						<div class="table-wrap border-0 margin-top-20" >
+					<div class="scroll-content margin-top-20" style="height:270px;">
+						<div class="table-wrap scroll-line">
 							<div class="log-row list">
 								<table class="table table-hover table-outline text-center logs">
 									<colgroup>
@@ -740,7 +740,7 @@
 										<col style="width:12%;" />
 										<col />
 									</colgroup>
-									<thead class="bg-blue-grey-100">
+									<thead class="bg-blue-grey-100 text-center">
 										<tr>
 											<th>인스턴스 명</th>
 											<th>{{ 'iaas.label.program' | translate }}</th>
@@ -762,25 +762,35 @@
 								</table>
 							</div>
 						</div>
-						<div class="paginationWrap">
-							<div class="totalWrap">
-								{{ 'label.total' | translate }} {{ pageOptions.total }} {{ 'label.count' | translate }}
+						<div class="table-bottom-wrap">
+							<div class="row">
+								<div class="col-sm-2">
+									<span class="dataTables_info">
+										{{ 'label.total' | translate }} {{ pageOptions.total }} {{ 'label.count' | translate }}
+									</span>
+								</div>
+								<div class="col-sm-8">										
+									<nav class="text-center">
+										<div class="paginationWrap">
+											<paging-custom
+												page="pageOptions.currentPage"
+												page-size="pageOptions.pageSize"
+												total="pageOptions.total"
+												pg-href=""
+												show-prev-next="true"
+												show-first-last="true"
+												paging-action="contents.fn.selectLogs(page)"
+												text-first-class="firstPage"
+												text-last-class="lastPage"
+												text-next-class="nextPage"
+												text-prev-class="prevPage">
+										</paging-custom>
+										</div>
+									</nav>
+								</div>
+								<div class="col-sm-2">
+								</div>
 							</div>
-							<nav class="pagiWrap" style="margin-top: 0;">
-								<paging-custom
-										page="pageOptions.currentPage"
-										page-size="pageOptions.pageSize"
-										total="pageOptions.total"
-										pg-href=""
-										show-prev-next="true"
-										show-first-last="true"
-										paging-action="contents.fn.selectLogs(page)"
-										text-first-class="firstPage"
-										text-last-class="lastPage"
-										text-next-class="nextPage"
-										text-prev-class="prevPage">
-								</paging-custom>
-							</nav>
 						</div>
 					</div>
 				</div>
@@ -827,7 +837,7 @@
 					<div class="table-input-wrap">
 						<div class="row">
 							<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required">
-								<div class="form-inline text-left">
+								<div class="form-inline text-right">
 									<div class="radio-group">
 										<input type="radio" id="timeRangeType01_00" name="radioTimeRange" ng-model="contents.selCTimeRange" ng-change="contents.fn.selectGroupBy()" value="1h" class="radio-input ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
 										<label for="timeRangeType01_00" class="radio-item ng-binding">
@@ -1017,21 +1027,21 @@
 						<div class="row">
 							<form name="searchForm" novalidate="" class="ng-pristine ng-valid ng-valid-required">
 								<div class="row">
-									<div class="col-md-6">
-										<div class="form-inline text-left">
-											<div class="form-group">
+									<div class="col-md-12">
+										<div class="form-inline">
+											<div class="form-group margin-right-5">
 												<select id="sch_alarm_type" class="form-control select2"
 													ng-options="alarmType.value as ( alarmType.name | translate ) for alarmType in contents.options.alarmType" 
 													ng-model="contents.sch_condition.alarmType">
 												</select>
 											</div>
-											<div class="form-group">
+											<div class="form-group margin-right-5">
 												<select id="sch_alarm_level" class="form-control select2"
 													ng-options="alarmLevel.value as ( alarmLevel.name | translate ) for alarmLevel in contents.options.alarmLevel" 
 													ng-model="contents.sch_condition.alarmLevel">
 												</select>
 											</div>
-											<div class="form-group">
+											<div class="form-group margin-right-5">
 												<select id="sch_resolve_status" class="form-control select2"
 													ng-options="resolveStatus.value as ( resolveStatus.name | translate ) for resolveStatus in contents.options.resolveStatus" 
 													ng-model="contents.sch_condition.resolveStatus">
@@ -1040,11 +1050,7 @@
 											<button type="button" class="btn btn-primary" ng-click="contents.fn.selectAlarmList();">
 												<div class="feather-icon"><i data-feather="search" class="feather-directive"></i></div><span class="sr-only">검색</span>
 											</button>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-inline text-right">
-											<div class="form-group">
+											<div class="form-group margin-right-5">
 												<span class="text">{{ 'label.search_period' | translate }}</span>
 												<select id="timeRange" class="form-control select2" 
 													ng-options="timeRange.value+(timeRange.name | translate) for timeRange in contents.timeRanges" 
@@ -1066,13 +1072,10 @@
 									</div>
 								</div>
 							</form>
-							
-							
-							
 						</div>
 					</div>
-					<div class=" scroll-content" style="height:270px;">
-						<div class="table-wrap border-0 margin-top-20" >
+					<div class="scroll-content margin-top-20" style="height:270px;">
+						<div class="table-wrap scroll-line">
 							<div class="log-row list">
 								<table class="table table-hover table-outline text-center logs">
 									<colgroup>
@@ -1084,7 +1087,7 @@
 										<col/>
 										<col style="width:12%" />
 									</colgroup>
-									<thead class="bg-blue-grey-100">
+									<thead class="bg-blue-grey-100 text-center">
 									<tr>
 										<th>{{ 'iaas.label.alarm_dt' | translate }}</th>
 										<th>{{ 'iaas.label.alarm_type' | translate }}</th>
@@ -1112,25 +1115,35 @@
 								</table>
 							</div>
 						</div>
-						<div class="paginationWrap" style="margin-top: 15px;">
-							<div class="totalWrap">
-								{{ 'label.total' | translate }} {{ alarmPageOptions.total }} {{ 'label.count' | translate }}
+						<div class="table-bottom-wrap">
+							<div class="row">
+								<div class="col-sm-2">
+									<span class="dataTables_info">
+										{{ 'label.total' | translate }} {{ alarmPageOptions.total }} {{ 'label.count' | translate }}
+									</span>
+								</div>
+								<div class="col-sm-8">										
+									<nav class="text-center">
+										<div class="paginationWrap">
+											<paging-custom
+												page="alarmPageOptions.currentPage"
+												page-size="alarmPageOptions.pageSize"
+												total="alarmPageOptions.total"
+												pg-href=""
+												show-prev-next="true"
+												show-first-last="true"
+												paging-action="contents.fn.selectAlarmList(page)"
+												text-first-class="firstPage"
+												text-last-class="lastPage"
+												text-next-class="nextPage"
+												text-prev-class="prevPage">
+											</paging-custom>
+										</div>
+									</nav>
+								</div>
+								<div class="col-sm-2">
+								</div>
 							</div>
-							<nav class="pagiWrap" style="margin-top: 0;">
-								<paging-custom
-										page="alarmPageOptions.currentPage"
-										page-size="alarmPageOptions.pageSize"
-										total="alarmPageOptions.total"
-										pg-href=""
-										show-prev-next="true"
-										show-first-last="true"
-										paging-action="contents.fn.selectAlarmList(page)"
-										text-first-class="firstPage"
-										text-last-class="lastPage"
-										text-next-class="nextPage"
-										text-prev-class="prevPage">
-								</paging-custom>
-							</nav>
 						</div>
 					</div>
 				</div>

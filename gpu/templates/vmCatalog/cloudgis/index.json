@@ -1,0 +1,20 @@
+{
+  "version": "",
+  "deployControllerFile": "deployControllers.js",
+  "deployControllerName": "cloudgisDeployCtrl",
+  "deployHtmlFile": "deploy.html",
+  "deployViewControllerFile": "deployViewControllers.js",
+  "deployViewControllerName": "cloudgisDeployViewCtrl",
+  "deployViewHtmlFile": "deployView.html",
+  "deployTemplates": {
+    "single": "deployTemplate.yaml.j2",
+    "replica": "deployTemplate.yaml.j2",
+    "cluster1": "deployTemplate.yaml.j2",
+    "cluster2": "deployTemplate.yaml.j2"
+  },
+  "images": {
+    "single": "gis-img",
+    "replica": "gis-img",
+    "cluster": "gis-img"
+  }
+}

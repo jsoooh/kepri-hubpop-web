@@ -1,16 +1,22 @@
-<span class="fileSelTit">파일</span>
-<div class="fileUploadWrap" style="width:80%;">
-  <input id="fileInput" filestyle="" type="file" data-class-button="btn btn-default" data-class-input="form-control" data-button-text="" data-icon-name="fa fa-upload" tabindex="-1" style="position: absolute; clip: rect(0px 0px 0px 0px);" file-input="contents.uploadedNoticeFile" multiple nv-file-select="" uploader="contents.uploader">
-  <div class="bootstrap-filestyle input-group">
-	<input type="text" id="userfile" class="form-control reductHeight" name="userfile" disabled="" placeholder="선택된 파일 없음">
-	<span class="group-span-filestyle input-group-btn" tabindex="0">
-	  <label for="fileInput" class="btn btn-default ">
-		<span class="btn btn-md btn-color1">파일찾기</span>
-	  </label>
-	</span>
-  </div>
+<div class="board-warp board-write-wrap">
+	<table class="table">
+		<colgroup>
+			<col style="width: 20%;">
+			<col style="width: auto;">
+		</colgroup>
+		<tbody>
+			<th scope="row">파일</th>
+				<td>
+					<input id="fileInput" filestyle="" type="file" data-class-button="btn btn-default" data-class-input="form-control" data-button-text="" data-icon-name="fa fa-upload" tabindex="-1" style="display:none; position: absolute; clip: rect(0px 0px 0px 0px);" file-input="contents.uploadedNoticeFile" multiple nv-file-select="" uploader="contents.uploader">
+					<label for="fileInput"
+						<button type="button" class="btn btn-default btn-sm">파일찾기</button>
+					</label>
+					<div class="margin-top-10">
+						<input type="text" id="userfile" class="form-control form-control-sm" name="userfile" disabled="" placeholder="선택된 파일 없음">
+					</div>
+					<p class="margin-top-10">※ 이미지는 최대 100MB까지 업로드 가능합니다.(jpg, png)</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
-
-<p class="addfileGuidetxt">
-  ※ 이미지는 최대 100MB까지 업로드 가능합니다.(jpg, png)
-</p>

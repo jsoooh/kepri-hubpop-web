@@ -35,7 +35,7 @@
 					<col style="width:;" /><!-- 당월합계 -->
 					<col style="width:;" /><!-- 과금정책 -->
 				</colgroup>
-				<thead class="text-center black white-text">
+				<thead class="bg-blue-grey-100 text-center">
 					<tr>
 						<th>서비스</th>
 						<th>항목</th>
@@ -89,8 +89,8 @@
 						<td><a style="text-decoration: underline" ng-click="contents.fn.showPerfRefAmt(meteringItemGroup.itemGroupCode)">상세보기</a></td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr class="dark">
+				<tfoot class="double-line">
+					<tr>
 						<th colspan="6" class="text-center">합계</th>
 						<td class="text-right">{{contents.data.lastTotalPerfAnls | number}} 원</td>
 						<td class="text-right">{{contents.data.totalPerfAnls | number}} 원</td>

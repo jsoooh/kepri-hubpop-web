@@ -82,6 +82,20 @@
 /*테이블 th두줄일때 헤더구분선*/
 .table thead tr:first-child th[scope="row"] {border-bottom: 1px solid #c3c3c3;}
 
+.table-wrap tfoot.double-line {border-top-style:double; border-color:#ccc; }
+.table-wrap .table a {text-decoration:underline; cursor:pointer;}
+.table-wrap .table a > button {text-decoration:none;}
+
+.table-wrap .table.double-th thead.doubleRow tr th {font-size:13px; border-bottom: 1px solid #c3c3c3 !important;}
+
+/*테이블 추가*/
+.table thead.th-row-2 th {border-right:1px solid #ddd;}
+.table thead.th-row-2 th:last-child {border-right:0;}
+.table thead.th-row-2 .th-border-bottom {border-bottom: 1px solid #c3c3c3 !important;}
+.table thead.th-row-2 + tbody tr:first-child td {border-top: 1px solid #c3c3c3;}
+.table thead.th-row-2.doubleRow tr:first-child th {border-bottom: 1px solid #c3c3c3;}
+.table thead.th-row-2.doubleRow > tr > th {border-color:#e4e4e4;}
+
 /*---- 프로젝트 만들기 ----*/
 /*OS 선택*/
 .pj_paas_volume .ul-list1{display: table; font-size:0; margin-left: -18px;}
@@ -119,9 +133,10 @@
 .s_cont_box ul > li .innr_tbl table tbody td:last-child {border-right:0px;}
 .s_cont_box ul > li .s_inner_cont p.txt {font-size:14px; font-weight:500; color:#333;}
 .s_cont_box ul > li .s_inner_cont p.txt::before {display:inline-block; content:''; width:3px; height:3px; background:#707070; vertical-align:middle; margin-right:4px;}
-.s_cont_box ul > li .s_inner_cont dt {display:inline-block; font-size:14px; font-weight:500; color:#333; padding:2px 0;}
+.s_cont_box ul > li .s_inner_cont dt {font-size:14px; font-weight:700; color:#333; padding:2px 0; margin-top:8px;}
+.s_cont_box ul > li .s_inner_cont dt:first-child { margin-top:0px;}
 .s_cont_box ul > li .s_inner_cont dt::before {display:inline-block; content:''; width:3px; height:3px; background:#707070; vertical-align:middle; margin-right:4px;}
-.s_cont_box ul > li .s_inner_cont dd {display:inline-block; width:330px; font-size:14px; color:#777; padding:2px 0;}
+.s_cont_box ul > li .s_inner_cont dd {font-size:14px; color:#777; padding:2px 0;}
 .s_cont_box ul > li .s_inner_cont dd.dd_row {display:block; width:100%; line-height:18px; word-break:break-all; padding:0 0 0 8px;}
 .s_cont_box ul > li .s_inner_cont dd.dd_row + dt {padding-top:5px;}
 .s_cont_box ul > li .s_inner_cont dd.dd_row::before {display:inline-block; content:''; width:4px; height:1px; background:#777; vertical-align:middle; margin-right:3px;}

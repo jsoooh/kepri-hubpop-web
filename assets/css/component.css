@@ -1191,10 +1191,14 @@ button {
   height: 30px;
 }
 .btn.btn-lg {
-  font-size: 16px;
+  font-size: 14px;
   padding: 11px 23px;
   height: 45px;
   font-weight: 600;
+}
+.btn.btn-lg .feather-icon {
+  margin-top: -3px;
+  margin-right:2px;
 }
 .btn i[class^="xi-"] {
   vertical-align: text-bottom;

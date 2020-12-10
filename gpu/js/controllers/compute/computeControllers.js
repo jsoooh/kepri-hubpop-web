@@ -44,7 +44,8 @@ angular.module('gpu.controllers')
         ct.schLbFilterText    = "";
         ct.listType = "image";          //리스트 타입
         ct.data.tenantId = $scope.main.userTenantGpu.id;
-        ct.data.tenantName = $scope.main.userTenantGpu.tenantKorName;
+        ct.data.tenantKorName = $scope.main.userTenantGpu.tenantKorName;
+        ct.data.tenantName = $scope.main.userTenantGpu.tenantName;
 
         ct.rdpBaseDomain = CONSTANTS.rdpConnect.baseDomain;
         ct.rdpConnectPort = CONSTANTS.rdpConnect.port;
@@ -118,7 +119,7 @@ angular.module('gpu.controllers')
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantGpuChanged',function(event,status) {
             ct.data.tenantId = status.id;
-            ct.data.tenantName = status.korName;
+            ct.data.tenantKorName = status.korName;
             ct.networks = [{id:"",name:'',description:"네트워크 선택"}];
             ct.network = ct.networks[0];
             ct.fnGetServerMainList();
@@ -276,6 +277,7 @@ angular.module('gpu.controllers')
             });
         };
 
+        // 모니터링 활성화 여부 조회
         ct.fn.monitYnState = function (instance) {
             ct.vmMonitoringYn = {};
             ct.gpuMonitoringYn = {};

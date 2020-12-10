@@ -214,7 +214,7 @@
 				<!-- //panel-body -->
 			</section>
 			
-			<div class="panel-group">
+			<div class="panel-group" ng-if="contents.sltInstance.id">
 				<section class="panel panel-bordered">
 					<div class="panel-heading">
 						<a class="panel-title" data-toggle="collapse" data-target="#basicCollapse3" aria-expanded="false" ng-click="main.panelToggleChange1($event);"><h3>연결 대상 인스턴스 정보</h3></a>
@@ -239,21 +239,21 @@
 									<li>
 										<span class="s_tit">인스턴스 사양</span> <span class="s_txt">소형</span>
 										<div class="s_inner_cont">
-											<div class="innr_tbl">
-												<table>
+											<div class="table-wrap">
+												<table class="table table-outline">
 													<colgroup>
 														<col width="30" />
 														<col width="30" />
 														<col width="30" />
 													</colgroup>
-													<thead>
+													<thead class="bg-blue-grey-100 text-center">
 														<tr>
 															<th>vCPU</th>
 															<th>메모리</th>
 															<th>OS 디스크</th>
 														</tr>
 													</thead>
-													<tbody>
+													<tbody class="text-center">
 														<tr>
 															<td>{{contents.sltInstance.spec.vcpus}} Core</td>
 															<td>{{contents.sltInstance.spec.ram | displayVolume:'MB'}}</td>

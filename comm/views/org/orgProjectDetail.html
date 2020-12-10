@@ -522,8 +522,8 @@
 					</li>
 				</ul>
 				<h4 class="heading h4 margin-top-30">프로젝트 참여자</h4>
-				<div class="table-wrap border-0 margin-top-20">
-					<table class="table table-hover">
+				<div class="table-wrap margin-top-20">
+					<table class="table table-outline table-hover">
 						<colgroup>
 							<col style="width: 10%;">
 							<col style="width: 15%;">
@@ -531,7 +531,7 @@
 							<col style="width: 15%;">
 							<col style="width: 30%;">
 						</colgroup>
-						<thead class="text-center black white-text">
+						<thead class="bg-blue-grey-100 text-center">
 							<tr>
 								<th scope="col">No.</th>
 								<th scope="col">이름</th>
@@ -564,15 +564,28 @@
 	<!-- 프로젝트 구성원 panel -->
 	<div ng-if="contents.sltInfoTab == 'member'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'member'}">
 		<!-- table -->
-		<div class="margin-bottom-20 text-right">
-			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole() || contents.selOrgProject.isPersonal" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
-			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole()" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
-			<button type="button" name="button" class="btn btn-primary" ng-disabled="!main.checkOrgUserRole()" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
-		</div>
+		<button type="button" name="button" class="btn btn-lg btn-primary" ng-disabled="!main.checkOrgUserRole() || contents.selOrgProject.isPersonal" title="책임자 변경" ng-click="contents.changeManagerForm($event);">책임자 변경</button>
+		<button type="button" name="button" class="btn btn-lg btn-primary" ng-disabled="!main.checkOrgUserRole()" title="조회등록" ng-click="contents.popOrgProjectSchAddUsersOpen($event);">조회등록</button>
+		<button type="button" name="button" class="btn btn-lg btn-primary" ng-disabled="!main.checkOrgUserRole()" title="직접등록" ng-click="contents.popOrgProjectNewAddUsersOpen($event);">직접등록</button>
 		
 		<section class="panel panel-bordered">
 			<div class="panel-body padding-0">
-				<div class="table-wrap border-0">
+				<div class="table-input-wrap">
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="datatable-length">
+								<span>페이지당 행 수 : </span>
+								<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageSize" ng-init="contents.pageSize = '10'" ng-change="contents.fn.getNetworkList(contents.pageOptions.currentPage)">
+									<option value="10">10</option>
+									<option value="25">25</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="table-wrap">
 					<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
 							<col style="width: 15%;">
@@ -582,7 +595,7 @@
 							<col style="width: 15%;">
 							<col style="width: 15%;">
 						</colgroup>
-						<thead class="black white-text text-center">
+						<thead class="text-center">
 							<tr>
 								<th scope="col">No.</th>
 								<th scope="col">이름</th>
@@ -592,7 +605,7 @@
 								<th scope="col">관리</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody class="text-center">
 							<tr ng-repeat="orgUser in contents.orgUsers | orderBy: '-createDate.time'">
 								<td class="text-center">{{ $index + 1 }}</td>
 								<td class="text-center">{{ orgUser.usersInfo.name }}</td>
@@ -626,6 +639,36 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+				<div class="table-bottom-wrap">
+					<div class="row">
+						<div class="col-sm-2">
+							<span class="dataTables_info">
+								{{ 'label.total' | translate }} {{ contents.pageOptions.total }}{{ 'label.count' | translate }}
+							</span>
+						</div>
+						<div class="col-sm-8">										
+							<nav class="text-center">
+								<div class="paginationWrap">
+									<paging 
+										page="contents.pageOptions.currentPage" 
+										page-size="contents.pageOptions.pageSize" 
+										total="contents.pageOptions.total" 
+										pg-href="" 
+										show-prev-next="true" 
+										show-first-last="true" 
+										paging-action="contents.listAdminUsers(page)" 
+										text-first-class="firstPage" 
+										text-last-class="lastPage"
+										text-next-class="nextPage" 
+										text-prev-class="prevPage"> 
+									</paging>
+								</div>
+							</nav>
+						</div>
+						<div class="col-sm-2">
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -674,19 +717,33 @@
 						<b class="tit">쿼터변경요청 <span class="sub-tit">({{ contents.quotaHistories.length }})</span></b>
 					</div>
 				</div>
-				<div class="col-md-6">
-					<div class="text-right">
-						<button type="button" name="button" class="btn btn-primary" data-user="aside" data-username="#aside-quota-req" ng-disabled="!main.checkOrgUserRole() || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">쿼터변경요청</button>
-						<!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
-			                 <span class="ico">추가(기존)</span>
-			             </button>-->
-					</div>
-				</div>
+				<div class="col-md-6"></div>
 			</div>
 		</div>
+		
+		<button type="button" name="button" class="btn btn-lg btn-primary" data-user="aside" data-username="#aside-quota-req" ng-disabled="!main.checkOrgUserRole() || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">쿼터변경요청</button>
+		<!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
+                <span class="ico">추가(기존)</span>
+            </button>-->
+		
 		<section class="panel panel-bordered">
 			<div class="panel-body padding-0">
-				<div class="table-wrap border-0">
+				<div class="table-input-wrap">
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="datatable-length">
+								<span>페이지당 행 수 : </span>
+								<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageSize" ng-init="contents.pageSize = '10'" ng-change="contents.fn.getNetworkList(contents.pageOptions.currentPage)">
+									<option value="10">10</option>
+									<option value="25">25</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="table-wrap">
 					<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
 							<col style="width: 5%;">
@@ -699,7 +756,7 @@
 							<col style="width: 5%;">
 							<col style="width: 5%;">
 						</colgroup>
-						<thead class="black white-text text-center">
+						<thead class="text-center">
 							<tr>
 								<th scope="col">번호</th>
 								<th scope="col">신청사유</th>
@@ -746,9 +803,38 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="table-bottom-wrap">
+					<div class="row">
+						<div class="col-sm-2">
+							<span class="dataTables_info">
+								{{ 'label.total' | translate }} {{ contents.pageOptions.total }}{{ 'label.count' | translate }}
+							</span>
+						</div>
+						<div class="col-sm-8">										
+							<nav class="text-center">
+								<div class="paginationWrap">
+									<paging 
+										page="contents.pageOptions.currentPage" 
+										page-size="contents.pageOptions.pageSize" 
+										total="contents.pageOptions.total" 
+										pg-href="" 
+										show-prev-next="true" 
+										show-first-last="true" 
+										paging-action="contents.listAdminUsers(page)" 
+										text-first-class="firstPage" 
+										text-last-class="lastPage"
+										text-next-class="nextPage" 
+										text-prev-class="prevPage"> 
+									</paging>
+								</div>
+							</nav>
+						</div>
+						<div class="col-sm-2">
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
-
 	</div>
 	<!-- //프로젝트 자원 panel -->
 </div>

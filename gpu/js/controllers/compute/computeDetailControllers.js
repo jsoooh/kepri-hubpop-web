@@ -23,7 +23,7 @@ angular.module('gpu.controllers')
         ct.actionLogLimit = 5;
         // 공통 레프트 메뉴의 userTenantId
         ct.data.tenantId = $scope.main.userTenantGpu.id;
-        ct.data.tenantName = $scope.main.userTenantGpu.tenantKorName;
+        ct.data.tenantName = $scope.main.userTenantGpu.tenantName;
 
         ct.data.instanceId = $stateParams.instanceId;
         ct.viewType = 'instance';
@@ -507,6 +507,10 @@ angular.module('gpu.controllers')
                     // 20.9.1 by hrit, 모니터링 링크 세팅
                     ct.instance.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + ct.instance.name;
 
+                    if (ct.instance.uiTask != 'creating' && ct.instance.taskState != "deleting" && ct.instance.vmMonitoringYn == 'N') {
+                        $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {ct.fn.monitYnState(ct.instance);}, 1000);
+                    }
+
                     $timeout(function () {
                         $('#action_event_panel.scroll-pane').jScrollPane({});
                     }, 100);
@@ -521,6 +525,26 @@ angular.module('gpu.controllers')
             });
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
+            });
+        };
+
+        // 모니터링 활성화 여부 조회
+        ct.fn.monitYnState = function (instance) {
+            ct.vmMonitoringYn = {};
+            ct.gpuMonitoringYn = {};
+            var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/'+ instance.id +'/monitoring/vm', 'GET'));
+            returnPromise.success(function (data, status, headers) {
+                ct.vmMonitoringYn = data.content.vmMonitoringYn;
+                ct.gpuMonitoringYn = data.content.gpuMonitoringYn;
+                if (ct.vmMonitoringYn == 'Y') {
+                    $timeout(function () {
+                        ct.instance.vmMonitoringYn = ct.vmMonitoringYn;
+
+                    },30000);
+                    $interval.cancel($scope.main.refreshInterval['instanceMonitoringYn']);
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
             });
         };
 

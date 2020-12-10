@@ -356,22 +356,22 @@
 											<span class="s_tit">상세쿼터</span>
 											<span class="s_txt" ></span>
 											<div class="s_inner_cont">
-												<div class="innr_tbl">
-													<table>
+												<div class="table-wrap">
+													<table class="table table-outline">
 														<colgroup>
 															<col style="width:25%;" />
 															<col style="width:45%;" />
 															<col style="width:15%;" />
 															<col style="width:15%;" />
 														</colgroup>
-														<thead>
+														<thead class="bg-blue-grey-100 text-center">
 															<tr>
 																<th colspan="2">항목</th>
 																<th>값</th>
 																<th>단위</th>
 															</tr>
 														</thead>
-														<tbody>
+														<tbody class="text-center">
 															<tr ng-repeat="paasItem in contents.paasQuotas | filter:{guid: contents.orgData.paasQuotaGuid}" ng-if="!!contents.orgData.paasQuotaGuid">
 																<td>PaaS</td>
 																<td class="text-left">{{ 'label.service' | translate }}</td>

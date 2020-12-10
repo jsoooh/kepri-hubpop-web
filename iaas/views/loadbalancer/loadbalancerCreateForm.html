@@ -252,21 +252,21 @@
 							<li>
 								<span class="s_tit">포트 관리</span>
 								<div class="s_inner_cont">
-									<div class="innr_tbl">
-										<table>
+									<div class="table-wrap">
+										<table class="table table-outline">
 											<colgroup>
 												<col width="30" />
 												<col width="30" />
 												<col width="30" />
 											</colgroup>
-											<thead>
+											<thead class="bg-blue-grey-100 text-center">
 												<tr>
 													<th>포트이름</th>
 													<th>프로토콜</th>
 													<th>포트</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody class="text-center">
 												<tr>
 													<td>{{ contents.data.iaasLbPort.name }}</td>
 													<td>{{ contents.data.iaasLbPort.protocol }}</td>
@@ -281,47 +281,47 @@
 								<span class="s_tit">대상 인스턴스 선택</span>
 								<span class="s_txt" ng-if="contents.data.iaasLbPort.connType == 'server'">인스턴스</span>
 								<div class="s_inner_cont" ng-if="contents.data.iaasLbPort.connType == 'server'">
-									<div class="innr_tbl">
-										<table>
+									<div class="table-wrap">
+										<table class="table table-outline">
 											<colgroup>
 												<col width="30" />
 												<col width="30" />
 											</colgroup>
-											<thead>
+											<thead class="bg-blue-grey-100 text-center">
 											<tr>
 												<th>인스턴스 이름</th>
 												<th>내부 IP</th>
 											</tr>
 											</thead>
-											<tbody>
-											<tr ng-repeat="server in contents.serverMainList">
-												<td ng-if="server.checked">{{ server.name }}</td>
-												<td ng-if="server.checked">{{ server.fixedIp }}</td>
-											</tr>
-											<tr ng-if="contents.serverMainListCnt == 0">
-												<td colspan="2"> - </td>
-											</tr>
+											<tbody class="text-center">
+												<tr ng-repeat="server in contents.serverMainList">
+													<td ng-if="server.checked">{{ server.name }}</td>
+													<td ng-if="server.checked">{{ server.fixedIp }}</td>
+												</tr>
+												<tr ng-if="contents.serverMainListCnt == 0">
+													<td colspan="2"> - </td>
+												</tr>
 											</tbody>
 										</table>
 									</div>
 								</div>
 								<span class="s_txt" ng-if="contents.data.iaasLbPort.connType == 'image'">스냅샷</span>
 								<div class="s_inner_cont" ng-if="contents.data.iaasLbPort.connType == 'image'">
-									<div class="innr_tbl">
-										<table>
+									<div class="table-wrap">
+										<table class="table table-outline">
 											<colgroup>
 												<col width="30" />
 												<col width="30" />
 												<col width="30" />
 											</colgroup>
-											<thead>
+											<thead class="bg-blue-grey-100 text-center">
 											<tr>
 												<th>대상 스냅샷</th>
 												<th>인스턴스 이름</th>
 												<th>인스턴스 수</th>
 											</tr>
 											</thead>
-											<tbody>
+											<tbody class="text-center">
 											<tr>
 												<td>{{ contents.sltInstanceSnapshot.name }}</td>
 												<td>{{ contents.data.iaasLbPort.connImageName }}</td>

@@ -1,0 +1,157 @@
+<div class="write_wrap">
+    <div class="row">
+        <div class="col-md-8">
+            <section class="panel panel-bordered">
+                <!-- panel-heading -->
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ contents.vmCatalogInfo.catalogName }} 서비스 만들기</h3>
+                </div>
+                <!-- // panel-heading -->
+                <!-- panel-body -->
+                <div class="panel-body">
+                    <form name="subPage.deployForm" novalidate>
+                        <input type="password" style="display: block; width:0px; height:0px; border: 0;"><!-- 아이디 패스워드 자동 입력 방지 -->
+                        <div class="form_list">
+                            <div class="text-right add-txt">
+                                <span><b class="caution-star">*</b> 는 필수입력 사항입니다</span>
+                            </div>
+
+                            <!-- 서비스이름 -->
+                            <div ng-include="contents.htmlUrls.deployName"></div>
+                            <!-- //서비스이름 -->
+
+                            <!-- 서비스 영문 이름 -->
+                            <div class="margin-top-30" ng-include="contents.htmlUrls.stackName"></div>
+                            <!-- //서비스 영문 이름 -->
+
+                            <!-- 배포 유형 선택 -->
+                            <div class="write-sub-title">
+                                <b class="caution-star">*</b> 배포 유형 선택
+                                <div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'- 서비스의 배포 유형 선택<br/>1. 단일 구성: 1개의 서버로 구성<br/>2. 레플리카 구성: Master, Slave로 구성<br/>3. 클러스터 구성: 3대의 클러스터로 구성'">	i</a></div>
+                            </div>
+                            <ul class="list-inline margin-top-20">
+                                <li>
+                                    <div class="radio-group">
+                                        <input type="radio" name="deploy_type" id="deploy-type-single" class="radio-input" value="server" ng-model="contents.data.deployType" ng-value="'single'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" aria-invalid="false">
+                                        <label for="deploy-type-single" class="radio-item">
+                                            <div class="radio">
+                                                <div class="checked-icon"></div>
+                                            </div>
+                                            <span class="text"> 단일 구성 </span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li ng-show="contents.deployTypeReplicaSupport">
+                                    <div class="radio-group">
+                                        <input type="radio" name="deploy_type" id="deploy-type-replica" class="radio-input" value="image" ng-model="contents.data.deployType" ng-value="'replica'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" aria-invalid="false">
+                                        <label for="deploy-type-replica" class="radio-item">
+                                            <div class="radio">
+                                                <div class="checked-icon"></div>
+                                            </div>
+                                            <span class="text"> 레플리카 구성 ( 서버: {{ contents.data.replicaCnt }} ) </span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li ng-show="contents.deployTypeClusterSupport">
+                                    <div class="radio-group">
+                                        <input type="radio" name="deploy_type" id="deploy-type-cluster1" class="radio-input" value="image" ng-model="contents.data.deployType" ng-value="'cluster1'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" aria-invalid="false">
+                                        <label for="deploy-type-cluster1" class="radio-item">
+                                            <div class="radio">
+                                                <div class="checked-icon"></div>
+                                            </div>
+                                            <span class="text"> 클러스터 구성 ( 서버: 3 ) </span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li ng-show="contents.deployTypeClusterSupport">
+                                    <div class="radio-group">
+                                        <input type="radio" name="deploy_type" id="deploy-type-cluster2" class="radio-input" value="image" ng-model="contents.data.deployType" ng-value="'cluster2'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" aria-invalid="false">
+                                        <label for="deploy-type-cluster2" class="radio-item">
+                                            <div class="radio">
+                                                <div class="checked-icon"></div>
+                                            </div>
+                                            <span class="text"> 클러스터 구성 ( 서버: 5 ) </span>
+                                        </label>
+                                    </div>
+                                </li>
+<!--                                <li ng-show="contents.deployTypeClusterSupport">-->
+<!--                                    <div class="radio-group">-->
+<!--                                        <input type="radio" name="deploy_type" id="deploy-type-cluster2" class="radio-input" value="image" ng-model="contents.data.deployType" ng-value="'cluster2'" ng-change="contents.fn.changeDeployType(contents.data.deployType)" aria-invalid="false">-->
+<!--                                        <label for="deploy-type-cluster2" class="radio-item">-->
+<!--                                            <div class="radio">-->
+<!--                                                <div class="checked-icon"></div>-->
+<!--                                            </div>-->
+<!--                                            <span class="text"> 클러스터 구성 ( 서버: {{ contents.data.cluster2Cnt }} ) </span>-->
+<!--                                        </label>-->
+<!--                                    </div>-->
+<!--                                </li>-->
+                            </ul>
+
+                            <!-- 포트 -->
+                            <div class="write-sub-title">
+                                <b class="caution-star">*</b> CloudGIS 웹 서비스 포트(kepler.gl, GeoServer)
+                                <div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'해당 서비스의 Listen 포트'">	i</a></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="servicePort" class="form-control" maxlength="5" ng-model="contents.data.servicePort" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck(contents.data.deployType, contents.data.servicePort)" placeholder="서비스 포트를 입력하세요." >
+                            </div>
+                            <!-- //포트 -->
+
+                            <!-- DB(Postgresql) 정보 -->
+                            <div class="write-sub-title">
+                                <b class="caution-star">*</b> DB(Postgresql) 정보
+                                <div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'CloudGIS 웹 서비스에서 사용 할 Postgresql DB를 생성하기 위한 정보 입니다.'">	i</a></div>
+                            </div>
+                            <div class="board-warp board-write-wrap">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width: 20%;">
+                                        <col style="width:">
+                                        <col style="width: 20%;">
+                                        <col style="width:;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th><b class="caution-star">*</b> DB Port</th>
+                                        <td colspan="3">
+                                            <input type="text" name="pgPort" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.pgPort" placeholder="포트" validation="number|required|custom:contents.fn.systemPortCustomValidationCheck('single', contents.data.pgPort)|custom:contents.fn.cloudGISPortCustomValidationCheck(contents.data.pgPort, 'pg')" placeholder="DB 포트를 입력하세요.">
+                                        </td>
+                                    </tr>
+                                    <!--
+                                    <tr>
+                                        <th><b class="caution-star">*</b> 관리 비밀번호</th>
+                                        <td><input type="password" name="pgPassword" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.pgPassword" validation="required|custom:contents.fn.checkPasswordValidation(contents.data.pgPassword)" placeholder="비밀번호를 입력하세요."></td>
+                                        <th><b class="caution-star">*</b> 관리 비밀번호 확인</th>
+                                        <td><input type="password" name="pgConfirmPassword" class="form-control form-control-sm" maxlength="50" ng-model="contents.data.pgConfirmPassword" validation="required|custom:contents.fn.checkConfirmPasswordValidation(contents.data.pgPassword, contents.data.pgConfirmPassword)" placeholder="비밀번호를 확인하세요."></td>
+                                    </tr>
+                                    -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- //DB(Postgresql) 정보 -->
+
+                            <!-- 존 선택 -->
+                            <div class="margin-top-30" ng-include="contents.htmlUrls.zoneSelect"></div>
+                            <!-- //존 선택 -->
+
+                            <!-- 사양 선택 -->
+                            <div  class="margin-top-30" ng-include="contents.htmlUrls.specSelect"></div>
+                            <!-- //사양 선택 -->
+
+                            <!-- 데이터 디스크 사용
+                            <div class="margin-top-30" ng-include="contents.htmlUrls.volumeSelect"></div>
+                             //데이터 디스크 사용 -->
+
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-4">
+            <div ng-include="contents.htmlUrls.createDeployInfo"></div>
+        </div>
+    </div>
+    <!-- 버튼 -->
+    <div ng-include="contents.htmlUrls.createDeployBtn"></div>
+    <!-- //버튼 -->
+</div>

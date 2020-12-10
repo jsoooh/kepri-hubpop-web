@@ -1,0 +1,341 @@
+heat_template_version: '2018-08-31'
+
+description: single cloudgis template
+
+parameters:
+  api_end_point:
+    type: string
+  image:
+    type: string
+    default: gis-img
+  flavor_volume_size:
+    type: string
+  flavor:
+    type: string
+  availability_zone:
+    type: string
+  key_name:
+    type: string
+  security_group:
+    type: string
+  provider_net:
+    type: string
+  provider_subnet:
+    type: string
+  mon_collect_host_beat:
+    type: string
+  mon_collect_port_beat:
+    type: string
+  image_id:
+    type: string
+  CGIS_PORT_WEB:
+    type: string
+    default: 80
+  CGIS_PORT_POSTGRES:
+    type: string
+    default: 5432
+  CGIS_DIST_TYPE:
+    type: string
+    default: {{CgisDistType}}
+  CGIS_SVR_NAME:
+    type: string
+    default: S01
+
+
+resources:
+{% set cnt = 1 %}
+{% if CgisDistType == 'D01' %} {% set cnt = 1 %} {% endif %}
+{% if CgisDistType == 'D02' %} {% set cnt = 2 %} {% endif %}
+{% if CgisDistType == 'D03' %} {% set cnt = 3 %} {% endif %}
+{% if CgisDistType == 'D05' %} {% set cnt = 5 %} {% endif %}
+
+  {%- for server in range(cnt|int) %}
+  server_port{{server}}:
+    type: OS::Neutron::Port
+    properties:
+      fixed_ips: [{ subnet_id: { get_param: provider_subnet } }]
+      network: { get_param: provider_net }
+      security_groups: [{ get_param: security_group }]
+
+  init_config{{server}}:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          params:
+            $api_end_point: { get_param: api_end_point }
+            $project_id: { get_param: 'OS::project_id' }
+            $stack_id: { get_param: 'OS::stack_id' }
+            $stack_name: { get_param: 'OS::stack_name' }
+            $CGIS_PORT_WEB: { get_param: CGIS_PORT_WEB }
+            $CGIS_PORT_POSTGRES: { get_param: CGIS_PORT_POSTGRES }
+            $CGIS_DIST_TYPE: { get_param: CGIS_DIST_TYPE }
+            $CGIS_SVR_NAME: "S0{{server|int + 1}}"
+            {%- for i in range(cnt|int) %}
+            $CGIS_S0{{i|int + 1}}_IP: { get_attr: [server_port{{i}}, fixed_ips, 0, ip_address] }
+            {%- endfor %}
+          template: |
+            #!/bin/sh
+            echo "CloudGIS setting start"
+
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+
+
+            echo "CloudGIS script start !!! "
+            ## start start !!###############################################
+            #: <<'END'
+            BIN=$(readlink -f "$0")
+            BIN_NM=$(basename -s .sh "${BIN}")
+            BIN_PATH=$(dirname "${BIN}")
+            LOG="${BIN_PATH}/logs/cgis-dist.log"
+            LOG_PATH="${BIN_PATH}/logs"
+
+            IS_ERR="N"
+
+            if [ ! -d "${LOG_PATH}" ]; then
+              mkdir -p "${LOG_PATH}"
+            fi
+            echo "" | tee "${LOG}"
+            echo "Generate logs to: ${LOG}" | tee -a "${LOG}"
+
+            fn_check_s01() {
+              if [ -z "$CGIS_S01_IP" ]; then
+                echo "CGIS_S01_IP not set..." | tee -a "${LOG}"
+                IS_ERR="Y"
+              else
+                echo "set to CGIS_S01_IP: $CGIS_S01_IP" | tee -a "${LOG}"
+              fi
+            }
+
+            fn_check_s02() {
+              if [ -z "$CGIS_S02_IP" ]; then
+                echo "CGIS_S02_IP not set..." | tee -a "${LOG}"
+                IS_ERR="Y"
+              else
+                echo "set to CGIS_S02_IP: $CGIS_S02_IP" | tee -a "${LOG}"
+              fi
+            }
+
+            fn_check_s03() {
+              if [ -z "$CGIS_S03_IP" ]; then
+                echo "CGIS_S03_IP not set..." | tee -a "${LOG}"
+                IS_ERR="Y"
+              else
+                echo "set to CGIS_S03_IP: $CGIS_S03_IP" | tee -a "${LOG}"
+              fi
+            }
+
+            fn_check_s04() {
+              if [ -z "$CGIS_S04_IP" ]; then
+                echo "CGIS_S04_IP not set..." | tee -a "${LOG}"
+                IS_ERR="Y"
+              else
+                echo "set to CGIS_S04_IP: $CGIS_S04_IP" | tee -a "${LOG}"
+              fi
+            }
+
+            fn_check_s05() {
+              if [ -z "$CGIS_S05_IP" ]; then
+                echo "CGIS_S05_IP not set..." | tee -a "${LOG}"
+                IS_ERR="Y"
+              else
+                echo "set to CGIS_S05_IP: $CGIS_S05_IP" | tee -a "${LOG}"
+              fi
+            }
+
+            fn_dump() {
+              echo "=================================================================" | tee -a "${LOG}"
+              echo "BIN=${BIN}" | tee -a "${LOG}"
+              echo "BIN_PATH=${BIN_PATH}" | tee -a "${LOG}"
+              echo "LOG=${LOG}" | tee -a "${LOG}"
+              echo "LOG_PATH=${LOG_PATH}" | tee -a "${LOG}"
+
+              echo "CGIS_DIST_TYPE=$CGIS_DIST_TYPE" | tee -a "${LOG}"
+
+              echo "CGIS_SVR_NAME=$CGIS_SVR_NAME" | tee -a "${LOG}"
+
+              echo "CGIS_S01_IP=$CGIS_S01_IP" | tee -a "${LOG}"
+              echo "CGIS_S02_IP=$CGIS_S02_IP" | tee -a "${LOG}"
+              echo "CGIS_S03_IP=$CGIS_S03_IP" | tee -a "${LOG}"
+              echo "CGIS_S04_IP=$CGIS_S04_IP" | tee -a "${LOG}"
+              echo "CGIS_S05_IP=$CGIS_S05_IP" | tee -a "${LOG}"
+
+              echo "MY_IP=${MY_IP}" | tee -a "${LOG}"
+
+              echo "CGIS_PORT_WEB=$CGIS_PORT_WEB" | tee -a "${LOG}"
+              echo "CGIS_PORT_POSTGRES=$CGIS_PORT_POSTGRES" | tee -a "${LOG}"
+              echo "All Arguments: $@" | tee -a "${LOG}"
+              echo "-----------------------------------------------------------------" >> "${LOG}"
+              set >> "${LOG}"
+              echo "=================================================================" | tee -a "${LOG}"
+            }
+
+            # VM배포종류(CGIS_DIST_TYPE): D01, D02, D03, D05
+            if [ -z "$CGIS_DIST_TYPE" ]; then
+              echo "set to CGIS_DIST_TYPE: D01(default)" | tee -a "${LOG}"
+              export CGIS_DIST_TYPE="D01"
+            fi
+
+            # VM배포종류 및 서버별 IP확인
+            if [ "$CGIS_DIST_TYPE" = "D01" ]; then
+              echo "set to CGIS_DIST_TYPE: D01" | tee -a "${LOG}"
+              fn_check_s01
+            elif [ "$CGIS_DIST_TYPE" = "D02" ]; then
+              echo "set to CGIS_DIST_TYPE: D02" | tee -a "${LOG}"
+              fn_check_s01
+              fn_check_s02
+            elif [ "$CGIS_DIST_TYPE" = "D03" ]; then
+              echo "set to CGIS_DIST_TYPE: D03" | tee -a "${LOG}"
+              fn_check_s01
+              fn_check_s02
+              fn_check_s03
+            elif [ "$CGIS_DIST_TYPE" = "D05" ]; then
+              echo "set to CGIS_DIST_TYPE: D05" | tee -a "${LOG}"
+              fn_check_s01
+              fn_check_s02
+              fn_check_s03
+              fn_check_s04
+              fn_check_s05
+            else
+              echo "Unkown CGIS_DIST_TYPE value: $CGIS_DIST_TYPE" | tee -a "${LOG}"
+              echo "Available CGIS_DIST_TYPE value: D01|D02|D03|D05" | tee -a "${LOG}"
+              IS_ERR="Y"
+            fi
+
+            echo "set to $CGIS_SVR_NAME after !!!!!!!!!!!!!!!!!!!!! "
+
+            # 서버이름확인(CGIS_SVR_NAME): S01, S02, S03, S04, S05
+            if [ -z "$CGIS_SVR_NAME" ]; then
+              echo "CGIS_SVR_NAME not set..." | tee -a "${LOG}"
+              IS_ERR="Y"
+            fi
+
+            echo "set to $CGIS_SVR_NAME 444 after !!!!!!!!!!!!!!!!!!!!! "
+
+            if [ "$CGIS_SVR_NAME" = "S01" ]; then
+              echo "set to $CGIS_SVR_NAME = S01 "
+              if [ "$CGIS_DIST_TYPE" = "D01"  -o "$CGIS_DIST_TYPE" = "D02" -o "$CGIS_DIST_TYPE" = "D03" -o "$CGIS_DIST_TYPE" = "D05" ]; then
+                echo "set to CGIS_SVR_NAME: $CGIS_SVR_NAME" | tee -a "${LOG}"
+              else
+                echo "Invalid CGIS_SVR_NAME value: $CGIS_SVR_NAME" | tee -a "${LOG}"
+                IS_ERR="Y"
+              fi
+              MY_IP="$CGIS_S01_IP"
+
+            elif [ "$CGIS_SVR_NAME" = "S02" ]; then
+              if [ "$CGIS_DIST_TYPE" = "D02" -o "$CGIS_DIST_TYPE" = "D03" -o "$CGIS_DIST_TYPE" = "D05" ]; then
+                echo "set to CGIS_SVR_NAME: $CGIS_SVR_NAME" | tee -a "${LOG}"
+              else
+                echo "Invalid CGIS_SVR_NAME value: $CGIS_SVR_NAME" | tee -a "${LOG}"
+                IS_ERR="Y"
+              fi
+              MY_IP="$CGIS_S02_IP"
+
+            elif [ "$CGIS_SVR_NAME" = "S03" ]; then
+              if [ "$CGIS_DIST_TYPE" = "D03" -o "$GIS_DIST_TYPE" = "D05" ]; then
+                echo "set to CGIS_SVR_NAME: $CGIS_SVR_NAME" | tee -a "${LOG}"
+              else
+                echo "Invalid CGIS_SVR_NAME value: $CGIS_SVR_NAME" | tee -a "${LOG}"
+                IS_ERR="Y"
+              fi
+              MY_IP="$CGIS_S03_IP"
+
+            elif [ "$CGIS_SVR_NAME" = "S04" ]; then
+              if [ "$CGIS_DIST_TYPE" = "D05" ]; then
+                echo "set to CGIS_SVR_NAME: $CGIS_SVR_NAME" | tee -a "${LOG}"
+              else
+                echo "Invalid CGIS_SVR_NAME value: $CGIS_SVR_NAME" | tee -a "${LOG}"
+                IS_ERR="Y"
+              fi
+              MY_IP="$CGIS_S04_IP"
+
+            elif [ "$CGIS_SVR_NAME" = "S05" ]; then
+              if [ "$CGIS_DIST_TYPE" = "D05" ]; then
+                echo "set to CGIS_SVR_NAME: $CGIS_SVR_NAME" | tee -a "${LOG}"
+              else
+                echo "Invalid CGIS_SVR_NAME value: $CGIS_SVR_NAME" | tee -a "${LOG}"
+                IS_ERR="Y"
+              fi
+              MY_IP="$CGIS_S05_IP"
+
+            else
+              echo "Unknown CGIS_SVR_NAME value: $CGIS_SVR_NAME" | tee -a "${LOG}"
+              echo "Available CGIS_SVR_NAME value: S01|S02|S03|S04|S05" | tee -a "${LOG}"
+              IS_ERR="Y"
+            fi
+
+            # WEB port 확인
+            if [ -z "$CGIS_PORT_WEB" ]; then
+              echo "set to CGIS_PORT_WEB: 80(default)" | tee -a "${LOG}"
+              export CGIS_PORT_WEB="80"
+            else
+              echo "set to CGIS_PORT_WEB: $CGIS_PORT_WEB" | tee -a "${LOG}"
+            fi
+
+            # PostgreSQL port 확인
+            if [ -z "$CGIS_PORT_POSTGRES" ]; then
+              echo "set to CGIS_PORT_POSTGRES: 5432(default)" | tee -a "${LOG}"
+              export CGIS_PORT_POSTGRES="5432"
+            else
+              echo "set to CGIS_PORT_POSTGRES: $CGIS_PORT_POSTGRES" | tee -a "${LOG}"
+            fi
+
+            fn_dump "$@"
+            if [ "${IS_ERR}" = "Y" ]; then
+              echo "exit with error..." | tee -a "${LOG}" && exit -1
+            else
+              echo "export CGIS_PORT_WEB=$CGIS_PORT_WEB"            > /data/cgis/cgis-haproxy/cgis-haproxy.env
+              echo "export CGIS_PORT_POSTGRES=$CGIS_PORT_POSTGRES"  > /data/cgis/cgis-postgresql/cgis-postgresql.env
+              echo "export CGIS_DIST_TYPE=$CGIS_DIST_TYPE"         >> /data/cgis/cgis-postgresql/cgis-postgresql.env
+              echo "export CGIS_SVR_NAME=$CGIS_SVR_NAME"           >> /data/cgis/cgis-postgresql/cgis-postgresql.env
+              echo "export CGIS_S01_IP=$CGIS_S01_IP"               >> /data/cgis/cgis-postgresql/cgis-postgresql.env
+              echo "export CGIS_S02_IP=$CGIS_S02_IP"               >> /data/cgis/cgis-postgresql/cgis-postgresql.env
+              echo "export CGIS_S03_IP=$CGIS_S03_IP"               >> /data/cgis/cgis-postgresql/cgis-postgresql.env
+              echo "export CGIS_S04_IP=$CGIS_S04_IP"               >> /data/cgis/cgis-postgresql/cgis-postgresql.env
+              echo "export CGIS_S05_IP=$CGIS_S05_IP"               >> /data/cgis/cgis-postgresql/cgis-postgresql.env
+              echo "export MY_IP=${MY_IP}"                           >> /data/cgis/cgis-postgresql/cgis-postgresql.env
+              #exit 0
+            fi
+
+            #END
+
+            echo "CloudGIS script end !!! "
+            ## script end !!! ##############################################
+            {% if server==0 %}
+            curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
+            {% endif %}
+
+            echo "CloudGIS setting end"
+
+  server{{server}}:
+    type: OS::Nova::Server
+    properties:
+      metadata:
+        mon_collect_host_beat: { get_param: mon_collect_host_beat }
+        mon_collect_port_beat: { get_param: mon_collect_port_beat }
+        iaas_image_id: { get_param: image_id }
+      flavor: { get_param: flavor }
+      block_device_mapping_v2:
+         - image: { get_param: image }
+           delete_on_termination: true
+           volume_size: { get_param: flavor_volume_size }
+           boot_index: 0
+      availability_zone: { get_param: availability_zone }
+      networks:
+        - port: { get_resource: server_port{{server}} }
+      key_name: { get_param: key_name }
+      user_data_update_policy: IGNORE
+      user_data_format: RAW
+      user_data:
+        get_resource: init_config{{server}}
+
+ {%- endfor %}
+
+outputs:
+  servers:
+    value:
+      {%- for server in range(cnt|int) %}
+      - instance: { get_attr: [ server{{server}}, show ] }
+        instancePort: { get_attr: [ server_port{{server}}, show ] }
+      {%- endfor %}

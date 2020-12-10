@@ -28,39 +28,39 @@
 		</div>
 		
 		<div class=" scroll-content" style="height:270px;">
-			<div class="write-sub-title">{{ 'label.user_define' | translate }}</div><!-- 사용자 정의 -->
-			<div id="tabAppEnvVarTable" class="table-wrap border-0 margin-top-20 padding-bottom-70">
-				<table class="table table-hover">
-					<colgroup>
-						<col style="width: 15%;">
-						<col style="width: 25%;">
-						<col style="width: auto;">
-						<col style="width: 25%;">
-					</colgroup>
-					<thead class="text-center black white-text">
-						<tr>
-							<th>{{ 'label.no' | translate }}</th>
-							<th>{{ 'label.variable_name' | translate }}</th><!-- 변수 이름 -->
-							<th>{{ 'label.variable_value' | translate }}</th><!-- 변수 값 -->
-							<th>{{ 'label.set' | translate }}</th><!-- 설정 -->
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="(key, envItem) in tab.appUserEnvVars">
-							<td class="text-center">{{ key + 1 }}</td>
-							<td class="text-center">{{ envItem.key }}</td>
-							<td class="text-center">{{ envItem.val }}</td>
-							<td class="text-center">
-								<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.edit' | translate }}" ng-click="tab.updateAppEnvironment($event, envItem);" ng-disabled="!main.checkResourceUserRole()"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.edit' | translate }}" /></button>
-								<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="main.popDeleteCheckName($event, '환경변수', envItem.key, tab.deleteAppEnvironmentAction, envItem.key)" ng-disabled="!main.checkResourceUserRole()"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button>
-							</td>
-						</tr>
-						<tr ng-if="tab.appUserEnvVars.length == 0">
-							<td colspan="4" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			<div class="write-sub-title margin-top-20">{{ 'label.user_define' | translate }}</div><!-- 사용자 정의 -->
+				<div id="tabAppEnvVarTable" class="table-wrap">
+					<table class="table table-hover scroll-line">
+						<colgroup>
+							<col style="width: 15%;">
+							<col style="width: 25%;">
+							<col style="width: auto;">
+							<col style="width: 25%;">
+						</colgroup>
+						<thead class="bg-blue-grey-100 text-center">
+							<tr>
+								<th>{{ 'label.no' | translate }}</th>
+								<th>{{ 'label.variable_name' | translate }}</th><!-- 변수 이름 -->
+								<th>{{ 'label.variable_value' | translate }}</th><!-- 변수 값 -->
+								<th>{{ 'label.set' | translate }}</th><!-- 설정 -->
+							</tr>
+						</thead>
+						<tbody class="text-center">
+							<tr ng-repeat="(key, envItem) in tab.appUserEnvVars">
+								<td class="text-center">{{ key + 1 }}</td>
+								<td class="text-center">{{ envItem.key }}</td>
+								<td class="text-center">{{ envItem.val }}</td>
+								<td class="text-center">
+									<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.edit' | translate }}" ng-click="tab.updateAppEnvironment($event, envItem);" ng-disabled="!main.checkResourceUserRole()"><img src="img/ico_edit.png" width="16" height="16" alt="{{ 'label.edit' | translate }}" /></button>
+									<button type="button" class="btn button_img" tooltip-placement="bottom" uib-tooltip="{{ 'label.del' | translate }}" ng-click="main.popDeleteCheckName($event, '환경변수', envItem.key, tab.deleteAppEnvironmentAction, envItem.key)" ng-disabled="!main.checkResourceUserRole()"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}" /></button>
+								</td>
+							</tr>
+							<tr ng-if="tab.appUserEnvVars.length == 0">
+								<td colspan="4" class="text-center">{{ 'message.mi_dont_exist_list' | translate }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			<div class="write-sub-title">{{ 'label.system_provide' | translate }}</div><!-- 시스템 제공 -->
 		<!--<ul>
               <li ng-hide="tab.systemEnv">
