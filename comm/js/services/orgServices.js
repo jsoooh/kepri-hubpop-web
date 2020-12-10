@@ -116,10 +116,10 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + id + '/orgUser', 'DELETE', param));
         };
 
-        /*기업 사용자 조회*/
-        orgService.listCompUsers = function () {
+        /*기업 사용자 조회 : 사용안함*/
+        /*orgService.listCompUsers = function () {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/getCompanyUsers', 'GET'));
-        };
+        };*/
 
         /*PaaS 앱 인스턴스 조회*/
         orgService.listPaasApps = function () {
@@ -131,25 +131,25 @@ angular.module('portal.services')
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/iaasAll', 'GET'));
         };
 
-        /*IaaS 필수 Products 조회*/
-        orgService.getIaasDefaults = function () {
+        /*IaaS 필수 Products 조회:사용안함*/
+        /*orgService.getIaasDefaults = function () {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/getIaasDefaults', 'GET'));
-        };
+        };*/
 
-        /*Wide 조회*/
-        orgService.listWide = function () {
+        /*Wide 조회:사용안함*/
+        /*orgService.listWide = function () {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/wideAll', 'GET'));
         };
 
-        /*Ci 조회*/
+        /!*Ci 조회*!/
         orgService.listCi = function () {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/ciAll', 'GET'));
         };
 
-        /*Git 조회*/
+        /!*Git 조회*!/
         orgService.listGit = function () {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/gitAll', 'GET'));
-        };
+        };*/
 
         /*paas 조직정보 조회*/
         orgService.getOrganizationByName = function (name, depth) {
@@ -189,6 +189,11 @@ angular.module('portal.services')
         /* 즐겨찾기 삭제 */
         orgService.orgBookmarkDelete = function (id) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/org_bookmark/' + id, 'DELETE'));
+        };
+
+        /*사용자포탈 프로젝트 대시보드 미터링값*/
+        orgService.getMeteringHourlys = function (orgId) {
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/orgs/' + orgId + '/meteringHourly', 'GET'));
         };
 
 		return orgService;

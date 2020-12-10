@@ -378,7 +378,6 @@ angular.module('portal.services', [])
             var getParams = {
                 prjcCd : prjcCd
             };
-            // return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/gis/api/projectInfo.do', 'GET', getParams));
             return common.retrieveResource(common.resourcePromise('/gis/api/projectInfo.do', 'GET', getParams));
         };
 
@@ -404,7 +403,6 @@ angular.module('portal.services', [])
         };
 
         portal.dashboard.getPdaDashBoardInfo = function () {
-            // return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/DeePoP/rest/getDataAlgorithmInfo.do', 'GET'));
             return common.retrieveResource(common.resourcePromise('/DeePoP/rest/getDataAlgorithmInfo.do', 'GET'));
         };
 
@@ -414,7 +412,6 @@ angular.module('portal.services', [])
                 org_guid : org_guid,
                 vt : vt
             };
-            // return common.retrieveResource(common.resourcePromise('http://hubpop.kepco.co.kr/aes/core/api/common_svce/get_app_status_list', 'POST', Params, "application/json"));
             return common.retrieveResource(common.resourcePromise('/aes/core/api/common_svce/get_app_status_list', 'POST', Params, "application/json"));
         };
 
