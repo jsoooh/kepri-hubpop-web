@@ -11,7 +11,7 @@
 	<!-- 프로젝트 대시보드 panel -->
 	<div ng-show="contents.sltInfoTab == 'dashboard'" class="tab-pane st_none" ng-class="{'active':contents.sltInfoTab == 'dashboard'}">
 		<!-- 미터링 대시보드(신규) -->
-		<div ng-if="false" class="dashboard-body padding-0">
+		<div class="dashboard-body padding-0">
 			<div class="row">
 				<!-- 프로젝트 정보 -->
 				<div class="col-md-4 app-info-area">
@@ -21,7 +21,6 @@
 							<div class="project-info-area">
 								<div class="clearfix margin-bottom-30">
 									<div class="round-img pull-left margin-top-0" ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image">
-										<!--<img src="../assets/img/guide/guide_user_dashboard.jpg" alt="">-->
 										<img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" alt="">
 									</div>
 									<div class="round-img pull-left margin-top-0" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image">
@@ -54,7 +53,7 @@
 				<!-- //프로젝트 정보 -->
 				
 				<!-- 가상서버 -->
-				<div class="col-md-4">
+				<div class="col-md-4" ng-if="contents.selOrgProject.isUseIaas">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
 						<div class="panel-heading padding-25">
 							<h3 class="heading">가상서버</h3>
@@ -62,21 +61,9 @@
 						<div class="panel-body padding-0">
 							<div class="scroll-content" style="height: 202px">
 								<ul class="list-striped">
-									<li>
-										<div class="pull-left">서버 vCore</div>
-										<div class="pull-right">10개</div>
-									</li>
-									<li>
-										<div class="pull-left">서버 RAM</div>
-										<div class="pull-right">8192 MB</div>
-									</li>
-									<li>
-										<div class="pull-left">OS 디스크</div>
-										<div class="pull-right">100 GB</div>
-									</li>
-									<li>
-										<div class="pull-left"> 데이터 디스크</div>
-										<div class="pull-right">50 GB</div>
+									<li ng-repeat="meteringItem in contents.orgMeterings | filter : { itemGroupCode: 'M01' }">
+										<div class="pull-left">{{ meteringItem.itemName }}</div>
+										<div class="pull-right">{{ meteringItem.itemUnit == 'MB' ? (meteringItem.meteringValue | displayVolume:'MB') : meteringItem.meteringValue }} {{ meteringItem.itemUnit == 'CNT' ? '개' : (meteringItem.itemUnit == 'MB' ? '' : meteringItem.itemUnit) }}</div>
 									</li>
 								</ul>
 							</div>
@@ -86,7 +73,7 @@
 				<!-- //가상서버 -->
 				
 				<!-- GPU -->
-				<div class="col-md-4">
+				<div class="col-md-4" ng-if="contents.selOrgProject.isUseGpu">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
 						<div class="panel-heading padding-25">
 							<h3 class="heading">GPU</h3>
@@ -94,21 +81,9 @@
 						<div class="panel-body padding-0">
 							<div class="scroll-content" style="height: 202px">
 								<ul class="list-striped">
-									<li>
-										<div class="pull-left">GPU 서버 vCore</div>
-										<div class="pull-right">10개</div>
-									</li>
-									<li>
-										<div class="pull-left">GPU 서버 RAM</div>
-										<div class="pull-right">8192 MB</div>
-									</li>
-									<li>
-										<div class="pull-left">GPU 서버 HDD</div>
-										<div class="pull-right">100 GB</div>
-									</li>
-									<li>
-										<div class="pull-left"> GPU 서버 SSD</div>
-										<div class="pull-right">50 GB</div>
+									<li ng-repeat="meteringItem in contents.orgMeterings | filter : { itemGroupCode: 'M02' }">
+										<div class="pull-left">{{ meteringItem.itemName }}</div>
+										<div class="pull-right">{{ meteringItem.itemUnit == 'MB' ? (meteringItem.meteringValue | displayVolume:'MB') : meteringItem.meteringValue }} {{ meteringItem.itemUnit == 'CNT' ? '개' : (meteringItem.itemUnit == 'MB' ? '' : meteringItem.itemUnit) }}</div>
 									</li>
 								</ul>
 							</div>
@@ -118,7 +93,7 @@
 				<!-- //GPU -->
 			
 				<!-- PaaS -->
-				<div class="col-md-4">
+				<div class="col-md-4" ng-if="contents.selOrgProject.isUsePaas">
 					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
 						<div class="panel-heading padding-25">
 							<h3 class="heading">PaaS</h3>
@@ -128,7 +103,7 @@
 								<div class="col-sm-4 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											13 <small> 개 </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M03001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M03001" })[0].quota_value : 0 }} <small> 개 </small>
 										</div>
 										<div class="caption">인스턴스</div>
 									</div>
@@ -136,7 +111,7 @@
 								<div class="col-sm-4 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											8192 <small> MB </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M03002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M03002" })[0].quota_value/1024 : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">메모리</div>
 									</div>
@@ -144,7 +119,7 @@
 								<div class="col-sm-4">
 									<div class="dashboard-number-box">
 										<div class="number">
-											50 <small> GB </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M03003" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M03003" })[0].quota_value : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">볼륨</div>
 									</div>
@@ -166,7 +141,7 @@
 								<div class="col-sm-6 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											1 <small> 개 </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M04001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M04001" })[0].quota_value : 0 }} <small> 개 </small>
 										</div>
 										<div class="caption">CaaS POD</div>
 									</div>
@@ -174,7 +149,7 @@
 								<div class="col-sm-6">
 									<div class="dashboard-number-box">
 										<div class="number">
-											50 <small> GB </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M04002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M04002" })[0].quota_value : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">CaaS 볼륨</div>
 									</div>
@@ -196,7 +171,7 @@
 								<div class="col-sm-6 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											3 <small> 개 </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M05001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M05001" })[0].quota_value : 0 }} <small> 개 </small>
 										</div>
 										<div class="caption">Function</div>
 									</div>
@@ -204,7 +179,7 @@
 								<div class="col-sm-6">
 									<div class="dashboard-number-box">
 										<div class="number">
-											10 <small> 건 </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M05002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M05002" })[0].quota_value : 0 }} <small> 건 </small>
 										</div>
 										<div class="caption">Function 실행</div>
 									</div>
@@ -226,7 +201,7 @@
 								<div class="col-sm-4 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											50 <small> GB </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M06001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M06001" })[0].quota_value : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">오라클 Exa 용량</div>
 									</div>
@@ -234,7 +209,7 @@
 								<div class="col-sm-4 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											50 <small> GB </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M06002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M06002" })[0].quota_value : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">오라클 SE 용량</div>
 									</div>
@@ -242,7 +217,7 @@
 								<div class="col-sm-4">
 									<div class="dashboard-number-box">
 										<div class="number">
-											50 <small> GB </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M06003" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M06003" })[0].quota_value : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">MS-SQL 용량</div>
 									</div>
@@ -264,19 +239,19 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">컨텍스트 엔티티</div>
-										<div class="pull-right">2개</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M07001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M07001" })[0].quota_value : 0 }} 개</div>
 									</li>
 									<li>
 										<div class="pull-left">컨텍스트 API 호출</div>
-										<div class="pull-right">8건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M07002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M07002" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">컨텍스트 MongoDB 사용량</div>
-										<div class="pull-right">20 GB</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M07003" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M07003" })[0].quota_value : 0 }} GB</div>
 									</li>
 									<li>
 										<div class="pull-left"> 메시지 토픽</div>
-										<div class="pull-right">4개</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M07004" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M07004" })[0].quota_value : 0 }} 개</div>
 									</li>
 								</ul>
 							</div>
@@ -296,7 +271,7 @@
 								<div class="col-sm-6 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											2 <small> 개 </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M08001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M08001" })[0].quota_value : 0 }} <small> 개 </small>
 										</div>
 										<div class="caption">API 배포</div>
 									</div>
@@ -304,7 +279,7 @@
 								<div class="col-sm-6">
 									<div class="dashboard-number-box">
 										<div class="number">
-											4 <small> 건 </small>
+											{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M08002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M08002" })[0].quota_value : 0 }} <small> 건 </small>
 										</div>
 										<div class="caption">API 호출</div>
 									</div>
@@ -326,19 +301,19 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">Gitlab 저장소</div>
-										<div class="pull-right">3개</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M08001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M08001" })[0].quota_value : 0 }} 개</div>
 									</li>
 									<li>
 										<div class="pull-left">SVN 저장소</div>
-										<div class="pull-right">2개</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M08002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M08002" })[0].quota_value : 0 }} 개</div>
 									</li>
 									<li>
 										<div class="pull-left">파이프라인</div>
-										<div class="pull-right">4개</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M08003" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M08003" })[0].quota_value : 0 }} 개</div>
 									</li>
 									<li>
 										<div class="pull-left">파이프라인 실행</div>
-										<div class="pull-right">7건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M08004" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M08004" })[0].quota_value : 0 }} 건</div>
 									</li>
 								</ul>
 							</div>
@@ -358,11 +333,11 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">공유컨텐츠 업로드 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M10001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M10001" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">공유컨텐츠 다운로드 건수</div>
-										<div class="pull-right">50건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M10002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M10002" })[0].quota_value : 0 }} 건</div>
 									</li>
 								</ul>
 							</div>
@@ -382,27 +357,27 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">일괄(JSON) API 호출 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M11001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M11001" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">일괄(JSON) API 데이터 사용량</div>
-										<div class="pull-right">8192 MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M11002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M11002" })[0].quota_value : 0 }} MB</div>
 									</li>
 									<li>
 										<div class="pull-left">일괄(TEXT) API 호출 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M11003" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M11003" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">일괄(TEXT) API 데이터 사용량</div>
-										<div class="pull-right">8192 MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M11004" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M11004" })[0].quota_value : 0 }} MB</div>
 									</li>
 									<li>
 										<div class="pull-left">분할(JSON) API 호출 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M11005" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M11005" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">분할(JSON) API 데이터 사용량</div>
-										<div class="pull-right">8192 MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M11006" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M11006" })[0].quota_value : 0 }} MB</div>
 									</li>
 								</ul>
 							</div>
@@ -422,27 +397,27 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">TTS API 호출 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M12001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M12001" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">TTS API 데이터 사용량</div>
-										<div class="pull-right">8192 MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M12002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M12002" })[0].quota_value : 0 }} MB</div>
 									</li>
 									<li>
 										<div class="pull-left">OCR API 호출 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M12003" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M12003" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">OCR API 데이터 사용량</div>
-										<div class="pull-right">8192 MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M12004" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M12004" })[0].quota_value : 0 }} MB</div>
 									</li>
 									<li>
 										<div class="pull-left">CustomVision API 호출 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M12005" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M12005" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">CustomVision API 데이터 사용량</div>
-										<div class="pull-right">8192 MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M12006" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M12006" })[0].quota_value : 0 }} MB</div>
 									</li>
 								</ul>
 							</div>
@@ -462,15 +437,15 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">분석도구(주피터 노트북)  실행 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M13001" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M13001" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">분석도구(주피터 랩)  실행 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M13002" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M13002" })[0].quota_value : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">분석도구(R Studio)  실행 건수</div>
-										<div class="pull-right">1건</div>
+										<div class="pull-right">{{ (contents.orgMeterings.orgMeterings | filter : { item_code: "M13003" }).length > 0 ? (contents.orgMeterings.orgMeterings | filter : { item_code: "M13003" })[0].quota_value : 0 }} 건</div>
 									</li>
 								</ul>
 							</div>
@@ -481,1279 +456,6 @@
 			</div>
 		</div>
 		<!-- //미터링 대시보드(신규) -->
-
-		<!-- 대시보드 컨텐츠 -->
-		<div ng-if="true" class="dashboard-body padding-0">
-			<div class="row">
-				<!-- 프로젝트 정보 -->
-				<div class="col-md-3 app-info-area">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type4">
-						<div class="panel-body" style="height:268px;">
-							<h3 class="heading h3 margin-bottom-25">프로젝트 정보</h3>
-							<div class="project-info-area">
-								<div class="clearfix margin-bottom-30">
-									<div class="round-img pull-left margin-top-0" ng-if="contents.selOrgProject.iconImage && contents.selOrgProject.iconImage.image">
-										<!--<img src="../assets/img/guide/guide_user_dashboard.jpg" alt="">-->
-										<img ng-src="data:{{ contents.selOrgProject.iconImage.contentType }}; base64, {{ contents.selOrgProject.iconImage.image }}" alt="">
-									</div>
-									<div class="round-img pull-left margin-top-0" ng-if="!contents.selOrgProject.iconImage || !contents.selOrgProject.iconImage.image">
-										<span class="txt">{{contents.selOrgProject.orgName.substr(0, 1)}}</span>
-									</div>
-									
-									<div class="text-area pull-left">
-										<span class="tit">{{contents.selOrgProject.orgName}}</span>
-										<p class="txt">{{ contents.selOrgProject.description }}</p>
-									</div>
-								</div>
-								<ul class="list-dot font-size-13">
-									<li>
-										<b>프로젝트ID : </b> <span> {{contents.selOrgProject.orgId}} </span>
-									</li>
-									<li>
-										<b>프로젝트 생성자 : </b> <span> {{contents.selOrgProject.managerName}} </span>
-									</li>
-									<li>
-										<b>프로젝트 구성원 수 : </b> <span> {{contents.selOrgProject.orgUserCount}}명 </span>
-									</li>
-									<li>
-										<b>프로젝트 생성일자 : </b> <span> {{contents.selOrgProject.createdDate.time | date : 'yyyy-MM-dd HH:mm:ss'}} </span>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //프로젝트 정보 -->
-				
-				<!-- 데이터 구독 현황 -->
-				<div class="col-md-4" style="width:37.5%;">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">데이터 구독 현황</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="/dcp/cl/doDataCatlView.do" class="btn_more"><span class="font-size-12">데이터 구독현황 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-3 text-center">
-									<div class="margin-top-50">
-										<ul class="chart-index-list">
-											<li>
-												<span class="color-bul bg-grey-200"></span> <span class="category"> 요청 </span> <span class="count"> <b>{{contents.dcpDashboardInfo.dataReqAllNoca}}</b></span> <span class="desc"> 건 </span>
-											</li>
-											<li>
-												<span class="color-bul bg-cyan-600"></span> <span class="category"> 승인 </span> <span class="count cyan-600"> <b>{{contents.dcpDashboardInfo.dataReqAprvNoca}}</b>	</span> <span class="desc"> 건 </span>
-											</li>
-											<li>
-												<span class="color-bul bg-pink-600"></span> <span class="category"> 반려 </span> <span class="count pink-600"> <b>{{contents.dcpDashboardInfo.dataReqRejNoca}}</b>	</span> <span class="desc"> 건 </span>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-xs-6">
-									<div class="margin-bottom-20 text-center">
-										<b>데이터 요청</b>
-									</div>
-									<div class="chart_data">
-										<div id="chart-area"></div>
-										<div class="cht_val">
-											<span>0</span> <span>{{contents.dcpDashboardInfo.totTmpCnt}}</span>
-										</div>
-									</div>
-								</div>
-								<div class="col-xs-3 text-center ">
-									<div class="margin-bottom-20">
-										<b>데이터 구독</b>
-									</div>
-									<div class="round-box bg-grey-200 margin-bottom-10">
-										<div class="font-size-40">
-											<b>{{contents.dcpDashboardInfo.dataSubsNoca}}</b>
-										</div>
-									</div>
-									<div class="grey-500">Total</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //데이터 구독 현황 -->
-				
-				<!-- API 서비스 사용현황 -->
-				<div class="col-md-5" style="width:37.5%;">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">API 서비스 사용 현황</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="/apip/com/main.do" class="btn_more"><span class="font-size-12">API 서비스 사용 현황 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-3 text-center">
-									<div class="margin-top-50">
-										<ul class="chart-index-list">
-											<li>
-												<span class="color-bul bg-grey-200"></span> <span class="category"> 등록 </span> <span class="count"> <b>{{contents.apipeDashboardInfo.appTotalCnt}}</b></span> <span class="desc"> 건 </span>
-											</li>
-											<li>
-												<span class="color-bul bg-cyan-600"></span> <span class="category"> 활성 </span> <span class="count cyan-600"> <b>{{contents.apipeDashboardInfo.apiVtlzYCnt}}</b></span> <span class="desc"> 건 </span>
-											</li>
-											<li>
-												<span class="color-bul bg-pink-600"></span> <span class="category"> 비활성 </span> <span class="count pink-600"> <b>{{contents.apipeDashboardInfo.apiVtlzNCnt}}</b></span> <span class="desc"> 건 </span>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-xs-6">
-									<div class="margin-bottom-20 text-center">
-										<b>API 등록</b>
-									</div>
-									<div class="chart_data">
-										<div id="chart-area1"></div>
-										<div class="cht_val">
-											<span>0</span> <span>{{contents.apipeDashboardInfo.totTmpCnt}}</span>
-										</div>
-									</div>
-								</div>
-								<div class="col-xs-3 text-center ">
-									<div class="margin-bottom-20">
-										<b>API 구독</b>
-									</div>
-									<div class="round-box bg-grey-200 margin-bottom-10">
-										<div class="font-size-40">
-											<b>{{contents.apipeDashboardInfo.apiTotalCnt}}</b>
-										</div>
-									</div>
-									<div class="grey-500">Total</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //API 서비스 사용현황 -->
-			</div>
-			
-			<!-- 클라우드 자원사용 현황 신규 -->
-			<div class="panel panel-bordered dashboard-panel dashboard-panel-type3 margin-top-0">
-				<div class="panel-heading padding-25">
-					<h3 class="heading h3 margin-0">클라우드 자원사용 현황</h3>
-				</div>
-				<div class="panel-body padding-0">
-					<div class="row">
-						<!-- //클라우드 자원사용 현황(가상서버) -->
-						<div class="col-md-6 border-right">
-							<div class="padding-20">
-								<div class="box">
-									<div class="box-heading">
-										<h3 class="heading h3 margin-bottom-30 text-center">인스턴스</h3>
-										<a ng-click="main.setMenuByUrlPath('/#/iaas/compute');" class="btn_more"><span class="font-size-12">인스턴스 바로가기</span><i class="xi-angle-right"></i>	</a>
-									</div>
-									<div class="row text-center">
-										<!-- 가상서버 현황 -->
-										<div class="col-xs-2">
-											<div class="font-size-13">
-												<b>TOTAL</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.iaasInstanceStateCount.TOTAL}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 light-green-700">
-											<div class="font-size-13">
-												<b>STARTED</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.iaasInstanceStateCount.STARTED}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 yellow-800">
-											<div class="font-size-13">
-												<b>STOPPED</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.iaasInstanceStateCount.STOPPED}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 pink-700">
-											<div class="font-size-13">
-												<b>ERROR</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.iaasInstanceStateCount.ERROR}}</b>
-											</div>
-										</div>
-										<!-- //가상서버 현황 -->
-										
-										<!-- CPU상태(임시콘텐츠) -->
-										<div class="col-xs-4">
-											<div class="chart-area" style="width: 100%; height: 100px;">
-												<canvas id="lineChart"></canvas>
-											</div>
-											<script>	
-												var ctx = document.getElementById('lineChart').getContext('2d');
-												var chart3 = new Chart(ctx, {
-													// The type of chart we want to create
-													type: 'line',
-	
-													// The data for our dataset
-													data: {
-														labels: ['2010.01', '2018.03', '2018.05', '2018.07', '2018.9', '2018.12'],
-														datasets: [{
-															label: 'My First',
-															borderWidth: 1,
-															backgroundColor: '#fbe8ef',
-															borderColor: '#fdaec9',
-															data: [30, 75, 40, 70, 55, 60],
-														}]
-													},
-	
-													// Configuration options go here
-													options: {
-														maintainAspectRatio: false,
-														title: {
-															display: true,
-															text: 'CPU 상태'
-														},
-														elements: {
-															point:{
-																radius: 0
-															}
-														},
-														legend: {
-															display: false,
-															labels: {
-																fontColor: "#656565",
-																fontSize: 12,
-																boxWidth: 15
-															},
-															position: "bottom"
-														},
-														scales: {
-															xAxes: [{
-																display: false,
-																ticks:{
-																	fontColor : '#666',
-																	fontSize : 12
-																},
-																gridLines:{
-																	display: false
-																}
-															}],
-															yAxes: [{
-																ticks: {
-																	beginAtZero: true,
-																	stepSize : 100,
-																	fontColor : "#838383",
-																	fontSize : 11,
-																	min: 0,
-																	max: 100
-																},
-																gridLines:{
-																	display: false
-																}
-															}]
-														}
-													}
-												});
-											</script>
-										</div>
-										<!-- //CPU상태(임시콘텐츠) -->
-									</div>
-								</div>
-								<!-- 가상서버 차트 -->
-								<div class="box border-top">
-									<div class="row">
-										<div class="chartWrap">
-											<!-- CPU 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area3"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area" ng-if="contents.dataReq4.series[0].cpuUsed == null || contents.dataReq4.series[0].cpuMax == null" class="data_txt">
-																	<div class="top">
-																		<b>0</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>0</b>
-																	</div>
-																</div>
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.dataReq4.series[0].cpuUsed}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>{{contents.dataReq4.series[0].cpuMax}}</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>CPU</b>
-														</div>
-														<div class="font-size-20">
-															<b>{{contents.dataReq4.series[0].data}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- //CPU 차트 -->
-											
-											<!-- MEMORY 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area4"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.dataReq5.series[0].ramSizeUsed | displayVolume:'MB'}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>{{contents.dataReq5.series[0].ramSizeMax | displayVolume:'MB'}}</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>MEMORY</b>
-														</div>
-														<div class="font-size-20">
-															<b>{{contents.dataReq5.series[0].data}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- //MEMORY 차트 -->
-											
-											<!-- STORAGE 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area5"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.dataReq6.series[0].objectStorageGigaByteUsed | displayVolume:'GB'}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>{{contents.dataReq6.series[0].objectStorageGigaByteMax | displayVolume:'GB'}}</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>STORAGE</b>
-														</div>
-														<div class="font-size-20">
-															<b>{{contents.dataReq6.series[0].data}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- //STORAGE 차트 -->
-											
-										</div>
-									</div>
-								</div>
-								<!-- //가상서버 차트 -->
-							</div>
-						</div>
-						<!-- //클라우드 자원사용 현황(가상서버) -->
-						
-						<!-- 클라우드 자원사용 현황(표준App.) -->
-						<div class="col-md-6">
-							<div class="padding-20">
-								<div class="box">
-									<div class="box-heading">
-										<h3 class="heading h3 margin-bottom-30 text-center">표준 App.</h3>
-										<a ng-click=main.setMenuByUrlPath('/#/paas/apps'); class="btn_more"><span class="font-size-12">표준 App. 바로가기</span><i class="xi-angle-right"></i>	</a>
-									</div>
-									<div class="row text-center">
-										<!-- 표준App. 현황 -->
-										<div class="col-xs-2">
-											<div class="font-size-13">
-												<b>TOTAL</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.paasAppsStateCount.TOTAL}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 light-green-700">
-											<div class="font-size-13">
-												<b>STARTED</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.paasAppsStateCount.STARTED}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 yellow-800">
-											<div class="font-size-13">
-												<b>STOPPED</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.paasAppsStateCount.STOPPED}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 pink-700">
-											<div class="font-size-13">
-												<b>ERROR</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.paasAppsStateCount.ERROR}}</b>
-											</div>
-										</div>
-										<!-- //표준App. 현황 -->
-										
-										<!-- CPU상태(임시콘텐츠) -->
-										<div class="col-xs-4">
-											<div class="chart-area" style="width: 100%; height: 100px;">
-												<canvas id="lineChart2"></canvas>
-											</div>
-											<script>	
-												var ctx = document.getElementById('lineChart2').getContext('2d');
-												var chart3 = new Chart(ctx, {
-													// The type of chart we want to create
-													type: 'line',
-	
-													// The data for our dataset
-													data: {
-														labels: ['2010.01', '2018.03', '2018.05', '2018.07', '2018.9', '2018.12'],
-														datasets: [{
-															label: 'My First',
-															borderWidth: 1,
-															backgroundColor: '#fbe8ef',
-															borderColor: '#fdaec9',
-															data: [30, 75, 40, 70, 55, 60],
-														}]
-													},
-	
-													// Configuration options go here
-													options: {
-														maintainAspectRatio: false,
-														title: {
-															display: true,
-															text: 'CPU 상태'
-														},
-														elements: {
-															point:{
-																radius: 0
-															}
-														},
-														legend: {
-															display: false,
-															labels: {
-																fontColor: "#656565",
-																fontSize: 12,
-																boxWidth: 15
-															},
-															position: "bottom"
-														},
-														scales: {
-															xAxes: [{
-																display: false,
-																ticks:{
-																	fontColor : '#666',
-																	fontSize : 12
-																},
-																gridLines:{
-																	display: false
-																}
-															}],
-															yAxes: [{
-																ticks: {
-																	beginAtZero: true,
-																	stepSize : 100,
-																	fontColor : "#838383",
-																	fontSize : 11,
-																	min: 0,
-																	max: 100
-																},
-																gridLines:{
-																	display: false
-																}
-															}]
-														}
-													}
-												});
-											</script>
-										</div>
-										<!-- //CPU상태(임시콘텐츠) -->
-										
-									</div>
-								</div>
-								<!-- 표준App. 차트 -->
-								<div class="box border-top">
-									<div class="row">
-										<div class="chartWrap">
-										
-											<!-- CPU 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area7"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.dataReq7}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>100</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>CPU</b>
-														</div>
-														<div class="font-size-20" ng-init="contents.dataReq7 ='0.0'">
-															<b>{{contents.dataReq7}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- //CPU 차트 -->
-											
-											<!-- MEMORY 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area8"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.dataReq8}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>100</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>MEMORY</b>
-														</div>
-														<div class="font-size-20" ng-init="contents.dataReq8 ='0.0'">
-															<b>{{contents.dataReq8}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!--// MEMORY 차트 -->
-											
-											<!-- STORAGE 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area9"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.dataReq9}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>100</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>STORAGE</b>
-														</div>
-														<div class="font-size-20" ng-init="contents.dataReq9 ='0.0'">
-															<b>{{contents.dataReq9}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- //STORAGE 차트 -->
-											
-										</div>		
-									</div>
-								</div>
-								<!-- //표준App. 차트 -->
-							</div>
-						</div>
-						<!-- //클라우드 자원사용 현황(표준App.) -->
-						
-					</div>
-				</div>
-			</div>
-			<!-- //클라우드 자원사용 현황 신규 -->
-			<!-- GPU 자원사용 현황 신규 -->
-			<div class="panel panel-bordered dashboard-panel dashboard-panel-type3 margin-top-0" ng-if="false">
-				<div class="panel-heading padding-25">
-					<h3 class="heading h3 margin-0">GPU 자원사용 현황</h3>
-				</div>
-				<div class="panel-body padding-0">
-					<div class="row">
-						<!-- //GPU 자원사용 현황(가상서버) -->
-						<div class="col-md-6 border-right">
-							<div class="padding-20">
-								<div class="box">
-									<div class="box-heading">
-										<h3 class="heading h3 margin-bottom-30 text-center">인스턴스</h3>
-										<a href="#/gpu/compute" class="btn_more"><span class="font-size-12">인스턴스 바로가기</span><i class="xi-angle-right"></i>	</a>
-									</div>
-									<div class="row text-center">
-										<!-- 인스턴스 현황 -->
-										<div class="col-xs-2">
-											<div class="font-size-13">
-												<b>TOTAL</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.gpuInstanceStateCount.TOTAL}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 light-green-700">
-											<div class="font-size-13">
-												<b>STARTED</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.gpuInstanceStateCount.STARTED}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 yellow-800">
-											<div class="font-size-13">
-												<b>STOPPED</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.gpuInstanceStateCount.STOPPED}}</b>
-											</div>
-										</div>
-										<div class="col-xs-2 pink-700">
-											<div class="font-size-13">
-												<b>ERROR</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{contents.gpuInstanceStateCount.ERROR}}</b>
-											</div>
-										</div>
-										<!-- //인스턴스 현황 -->
-										
-										<!-- CPU상태(임시콘텐츠) -->
-										<div class="col-xs-4">
-											<div class="chart-area" style="width: 100%; height: 100px;">
-												<canvas id="gpuLineChart"></canvas>
-											</div>
-											<script>	
-												var ctx = document.getElementById('gpuLineChart').getContext('2d');
-												var chart3 = new Chart(ctx, {
-													// The type of chart we want to create
-													type: 'line',
-	
-													// The data for our dataset
-													data: {
-														labels: ['2010.01', '2018.03', '2018.05', '2018.07', '2018.9', '2018.12'],
-														datasets: [{
-															label: 'My First',
-															borderWidth: 1,
-															backgroundColor: '#fbe8ef',
-															borderColor: '#fdaec9',
-															data: [30, 75, 40, 70, 55, 60],
-														}]
-													},
-	
-													// Configuration options go here
-													options: {
-														maintainAspectRatio: false,
-														title: {
-															display: true,
-															text: 'CPU 상태'
-														},
-														elements: {
-															point:{
-																radius: 0
-															}
-														},
-														legend: {
-															display: false,
-															labels: {
-																fontColor: "#656565",
-																fontSize: 12,
-																boxWidth: 15
-															},
-															position: "bottom"
-														},
-														scales: {
-															xAxes: [{
-																display: false,
-																ticks:{
-																	fontColor : '#666',
-																	fontSize : 12
-																},
-																gridLines:{
-																	display: false
-																}
-															}],
-															yAxes: [{
-																ticks: {
-																	beginAtZero: true,
-																	stepSize : 100,
-																	fontColor : "#838383",
-																	fontSize : 11,
-																	min: 0,
-																	max: 100
-																},
-																gridLines:{
-																	display: false
-																}
-															}]
-														}
-													}
-												});
-											</script>
-										</div>
-										<!-- //CPU상태(임시콘텐츠) -->
-									</div>
-								</div>
-								<!-- 인스턴스 차트 -->
-								<div class="box border-top">
-									<div class="row">
-										<div class="chartWrap">
-											<!-- CPU 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area-gpu3" style="position:absolute; left:-12px; top:-20px;"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area" ng-if="contents.gpuDataReq4.series[0].cpuUsed == null || contents.gpuDataReq4.series[0].cpuMax == null" class="data_txt">
-																	<div class="top">
-																		<b>0</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>0</b>
-																	</div>
-																</div>
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.gpuDataReq4.series[0].cpuUsed}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>{{contents.gpuDataReq4.series[0].cpuMax}}</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>CPU</b>
-														</div>
-														<div class="font-size-20">
-															<b>{{contents.gpuDataReq4.series[0].data}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- //CPU 차트 -->
-											
-											<!-- MEMORY 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area-gpu4" style="position:absolute; left:-12px; top:-20px;"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.gpuDataReq5.series[0].ramSizeUsed | displayVolume:'MB'}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>{{contents.gpuDataReq5.series[0].ramSizeMax | displayVolume:'MB'}}</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>MEMORY</b>
-														</div>
-														<div class="font-size-20">
-															<b>{{contents.gpuDataReq5.series[0].data}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- //MEMORY 차트 -->
-											
-											<!-- STORAGE 차트 -->
-											<div class="col-xs-4 chart-center">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="chart-area">
-															<div class="donut_chart_data">
-																<div id="chart-area-gpu5" style="position:absolute; left:-12px; top:-20px;"></div>
-															</div>
-															<div class="chart-inner-text text-center" style="top: 30px;">
-																<div class="half-text-area">
-																	<div class="top">
-																		<b>{{contents.gpuDataReq6.series[0].objectStorageGigaByteUsed | displayVolume:'GB'}}</b>
-																	</div>
-																	<div class="line"></div>
-																	<div class="bottom">
-																		<b>{{contents.gpuDataReq6.series[0].objectStorageGigaByteMax | displayVolume:'GB'}}</b>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="chart-caption pull-left margin-left-15 padding-top-30">
-														<div class="font-size-13">
-															<b>STORAGE</b>
-														</div>
-														<div class="font-size-20">
-															<b>{{contents.gpuDataReq6.series[0].data}}</b> <sub>%</sub>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- //STORAGE 차트 -->
-											
-										</div>
-									</div>
-								</div>
-								<!-- //인스턴스 차트 -->
-							</div>
-						</div>
-						<!-- //GPU 자원사용 현황(인스턴스) -->
-						<!-- GPU 카드 사용현황 -->
-						<div class="col-md-6">
-							<div class="padding-20">
-								<div class="box">
-									<div class="box-heading">
-										<h3 class="heading h3 margin-bottom-30 text-center">GPU 카드 사용현황</h3>
-									</div>
-									<div class="row text-center">
-										<!-- 카드 현황 -->
-										<div class="col-xs-2" ng-repeat="gpuCard in contents.gpuCardList">
-											<div class="font-size-13">
-												<b>{{ gpuCard.name }}</b>
-											</div>
-											<div class="font-size-45">
-												<b>{{ gpuCard.used }}/{{ gpuCard.total }}</b>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- //GPU 카드 사용현황 -->
-					</div>
-				</div>
-			</div>
-			<!-- //GPU 자원사용 현황 신규 -->
-
-			<div class="row">
-				<!-- 데이터 카탈로그 이용 현황 -->
-				<div class="col-md-5">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">데이터 카탈로그 이용 현황</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="/dbp/dataSubscription/subscriptionStatus/list.do" class="btn_more"><span class="font-size-12">데이터 카탈로그 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-3 text-center">
-									<div class="margin-top-50">
-										<ul class="chart-index-list">
-											<li>
-												<span class="color-bul bg-yellow-700"></span> <span class="category"> 대기 </span> <span class="count"> <b>{{contents.ctlgDashboardInfo.ctlgWaitCnt}}</b></span> <span class="desc"> 건 </span>
-											</li>
-											<li>
-												<span class="color-bul bg-cyan-600"></span> <span class="category"> 승인 </span> <span class="count cyan-600"> <b>{{contents.ctlgDashboardInfo.ctlgApproveCnt}}</b></span> <span class="desc"> 건 </span>
-											</li>
-											<li>
-												<span class="color-bul bg-pink-600"></span> <span class="category"> 반려 </span> <span class="count pink-600"> <b>{{contents.ctlgDashboardInfo.ctlgRejectCnt}}</b></span> <span class="desc"> 건 </span>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-xs-6">
-									<div class="margin-bottom-20 text-center">
-										<b>데이터 카탈로그 이용 개수</b>
-									</div>
-									<div class="chart_data">
-										<div id="chart-area"></div>
-										<div class="cht_val">
-											<span>0</span> <span>{{contents.ctlgDashboardInfo.ctlgTotalCnt}}</span>
-										</div>
-									</div>
-								</div>
-								<div class="col-xs-3 text-center ">
-									<div class="margin-bottom-20">
-										<b>MY 데이터</b>
-									</div>
-									<div class="round-box bg-grey-200 margin-bottom-10">
-										<div class="font-size-40">
-											<b>{{contents.dcpDashboardInfo.dataSubsNoca}}</b>
-										</div>
-									</div>
-									<div class="grey-500">Total</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //데이터 카탈로그 이용 현황 -->
-				
-				<!-- 개발 파이프라인 사용 현황 -->
-				<div class="col-md-7">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type1">
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">개발 파이프라인 사용 현황</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="/dpl/coderepo" class="btn_more"><span class="font-size-12">개발 파이프라인 사용 현황 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-5">
-									<div class="row">
-										<div class="col-xs-7">
-											<div class="margin-bottom-20 text-center">
-												<b>코드 저장소</b>
-											</div>
-											<div class="chartWrap">
-												<div class="chart-area" style="width: 120px; height: 120px;">
-													<div class="donut_chart_data">
-														<div id="chart-area10"></div>
-														<div class="chart-inner-text text-center" style="top: 33px;">
-															<strong class="chart-count font-size-25">{{contents.dataReq10.totCnt}}</strong> <span class="chart-category">TOTAL</span>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-xs-5">
-											<ul class="chart-index-list2 padding-top-70">
-												<li>
-													<span class="color-bul bg-cyan-600"></span> <span class="category"> SVN </span> <span class="count"> {{contents.dataReq10.svnCnt}}개 </span>
-												</li>
-												<li>
-													<span class="color-bul bg-yellow-700"></span> <span class="category"> GIT </span> <span class="count"> {{contents.dataReq10.gitCnt}}개 </span>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<div class="col-xs-7">
-									<div class="margin-bottom-20 text-center">
-										<b>빌드/배포</b>
-									</div>
-									<ul class="chart-index-list2 inline-type margin-top-30">
-										<li>
-											<span class="color-bul bg-cyan-600"></span> <span class="category"> 성공 </span> <span class="count"> {{contents.pipelineDashboardInfo.sucCnt}}건 </span>
-										</li>
-										<li>
-											<span class="color-bul bg-pink-600"></span> <span class="category"> 실패 </span> <span class="count"> {{contents.pipelineDashboardInfo.failCnt}}건 </span>
-										</li>
-									</ul>
-									<div class="chartWrap">
-										<div class="bar_chart_data margin-top-30">
-											<div id="chart-area11"></div>
-											<div class="cht_val">
-												<span>0</span> <span>{{contents.pipelineDashboardInfo.totCnt}}</span>
-											</div>
-										</div>
-									</div>
-	
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //개발 파이프라인 사용 현황 -->
-			</div>
-			
-			<div class="row">
-				<!-- GIS 서비스 요약 -->
-				<div class="col-sm-4">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
-						<div class="panel-heading padding-25">
-							<h3 class="heading h3 margin-0">GIS 서비스 요약</h3>
-						</div>
-						<div class="panel-body padding-0">
-							<div class="row no-margin">
-								<div class="col-sm-4 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.gisDashBoardInfo.prjcLayGroupCnt}}</div>
-										<div class="caption">레이어 그룹</div>
-									</div>
-								</div>
-								<div class="col-sm-4 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.gisDashBoardInfo.prjcLayCnt}}</div>
-										<div class="caption">레이어</div>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.gisDashBoardInfo.prjcStyCnt}}</div>
-										<div class="caption">스타일</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //GIS 서비스 요약 -->
-				<!-- 프로젝트 데이터 분석현황 -->
-				<div class="col-sm-4">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
-						<div class="panel-heading padding-25">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">프로젝트 데이터 분석현황</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="/DeePoP/anlEvmt/dataAlgorithm/dataAlgorithm_getDataAlgorithmList.do?menu_id=1360102" class="btn_more"><span class="font-size-12">데이터 분석 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-						</div>
-						<div class="panel-body padding-0">
-							<div class="row no-margin">
-								<div class="col-sm-4 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.pdaDashBoardInfo.algorithmCnt}}</div>
-										<div class="caption">알고리즘</div>
-									</div>
-								</div>
-								<div class="col-sm-4 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.pdaDashBoardInfo.dataCnt}}</div>
-										<div class="caption">데이터</div>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="dashboard-number-box">
-										<div class="number">
-											{{contents.pdaDashBoardInfo.dataUsage}} <small> MB </small>
-										</div>
-										<div class="caption">데이터 사용량</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //프로젝트 데이터 분석현황 -->
-				
-				<!-- 마이크로서비스 사용현황 -->
-				<div class="col-sm-4">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
-						<div class="panel-heading padding-25">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">마이크로서비스 사용현황</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="/apim/msApp/list.do" class="btn_more"><span class="font-size-12">마이크로서비스 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-						</div>
-						<div class="panel-body padding-0">
-							<div class="row no-margin">
-								<div class="col-sm-6 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.msDashBoardInfo.msAppFileTotalCnt}}</div>
-										<div class="caption">워크로드 등록</div>
-									</div>
-								</div>
-								<div class="col-sm-6 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.msDashBoardInfo.msAppAddrTotalCnt}}</div>
-										<div class="caption">서비스 발견</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //마이크로서비스 사용현황 -->
-			</div>
-			
-			<div class="row">
-				<!-- 분석 App.실행 -->
-				<div class="col-sm-4">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
-						<div class="panel-heading padding-25">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">분석 App.실행</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="/aes/svce_list_grid.html" class="btn_more"><span class="font-size-12">분석 App. 실행 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-						</div>
-						<div class="panel-body padding-0">
-							<div class="row no-margin">
-								<div class="col-sm-4 border-right">
-									<div class="dashboard-number-box">
-										<div class="number cyan-600">{{contents.appDashBoardInfo.START_CNT}}</div>
-										<div class="caption">시작</div>
-									</div>
-								</div>
-								<div class="col-sm-4 border-right">
-									<div class="dashboard-number-box">
-										<div class="number yellow-700">{{contents.appDashBoardInfo.STOP_CNT}}</div>
-										<div class="caption">중지</div>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="dashboard-number-box">
-										<div class="number pink-600">{{contents.appDashBoardInfo.FAIL_CNT}}</div>
-										<div class="caption">오류</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- 분석 App.실행 -->
-				
-				<!-- 쿠버네티스 사용 현황 -->
-				<div class="col-sm-5">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
-						<div class="panel-heading padding-25">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">쿠버네티스 사용 현황</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="https://caas.kepco.co.kr:48000/dashBoard.do" class="btn_more"><span class="font-size-12">쿠버네티스 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-						</div>
-						<div class="panel-body padding-0">
-							<div class="row no-margin">
-								<div class="col-sm-3 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.kuberDashBoardInfo.nsUseCnt}}</div>
-										<div class="caption">네임스페이스</div>
-									</div>
-								</div>
-								<div class="col-sm-3 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.kuberDashBoardInfo.wlUseCnt}}</div>
-										<div class="caption">워크로드</div>
-									</div>
-								</div>
-								<div class="col-sm-3 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.kuberDashBoardInfo.podUseCnt}}</div>
-										<div class="caption">포드</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="dashboard-number-box">
-										<div class="number">
-											{{contents.kuberDashBoardInfo.volUseSize}} <small> GB </small>
-										</div>
-										<div class="caption">볼륨용량</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //쿠버네티스 사용 현황 -->
-				
-				<!-- DBaas 신청 현황 -->
-				<div class="col-sm-3">
-					<div class="panel panel-bordered dashboard-panel dashboard-panel-type3">
-						<div class="panel-heading padding-25">
-							<div class="row">
-								<div class="col-xs-6">
-									<h3 class="heading">DBaas 신청 현황</h3>
-								</div>
-								<div class="col-xs-6 text-right">
-									<a href="/dss/dbshared/dbSharedList.do" class="btn_more"><span class="font-size-12">DBaas 신청 바로가기</span><i class="xi-angle-right"></i>	</a>
-								</div>
-							</div>
-						</div>
-						<div class="panel-body padding-0">
-							<div class="row no-margin">
-								<div class="col-sm-6 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">{{contents.dbaasDashBoardInfo.totalCnt}}</div>
-										<div class="caption">신청개수</div>
-									</div>
-								</div>
-								<div class="col-sm-6 border-right">
-									<div class="dashboard-number-box">
-										<div class="number">
-											{{contents.dbaasDashBoardInfo.totalSize}} <small> GB </small>
-										</div>
-										<div class="caption">신청용량</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- //DBaas 신청 현황 -->
-			</div>
-		</div>
-		<!-- //대시보드 컨텐츠 -->
 	</div>
 	<!-- //프로젝트 대시보드 panel -->
 
