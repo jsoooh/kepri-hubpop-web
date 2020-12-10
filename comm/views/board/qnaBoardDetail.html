@@ -1,135 +1,120 @@
-				<style>
-					.btn-file {
-						font-size: 16px;
-						font-weight: 500;
-						min-width: 90px;
-						height: 36px;
-						padding: 0 10px;
-					}
-					.cke_contents {
-						height: 400px !important;
-					}
-				</style>
+<div class="board-warp board-view-wrap">
+	<form name="{{ contents.formName }}" novalidate>
+	<table class="table">
+		<colgroup>
+			<col style="width: 170px;">
+			<col style="width: ;">
+			<col style="width: 170px;">
+			<col style="width: ;">
+			<col style="width: 170px;">
+			<col style="width: ;">
+		</colgroup>
+		<thead>
+			<tr>
+				<th colspan="6">
+					<p ng-show="contents.mode=='V'">{{contents.boardData.title}}</p>
+					<input type="text" id="title" class="form-control" name="title" maxlength="50" ng-model="contents.boardData.title0" placeholder="{{'label.bulletin_title' | translate}}" style="width:95%;ime-mode:active;" validation="required" ng-show="contents.mode=='U'"/>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row">{{ 'label.registrant' | translate }}</th>
+				<td>{{contents.boardData.ownerName}}</td>
+				<th scope="row">{{ 'label.register_dd' | translate }}</th>
+				<td>{{ contents.boardData.createdDate.time | date : "yyyy-MM-dd" }}</td>
+				<th scope="row">{{ 'label.hits' | translate }}</th>
+				<td>{{contents.boardData.hits}}</td>
+			</tr>
+			<tr>
+				<td colspan="6" class="text-box">
+					<div class="text-area">
+						<span ng-show="contents.mode=='V'" ng-bind-html="contents.boardData.content0"></span>
+						<!-- <div class="ta-container detail-container lighter" ng-show="contents.mode=='U'" style="width:100%;ime-mode:active;">
+							<div text-angular ng-model="contents.boardData.content0" name="detail-editor" ta-text-editor-class="clearfix border-around detail-container" ta-html-editor-class="border-around"></div>
+						</div> -->
+						<div ng-show="contents.mode=='U'">
+							<textarea name="detail_editor" id="detail_editor" class="form-control" cols="80">{{contents.boardData.content0}}</textarea>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">{{ 'label.bulletin_attach' | translate }}</th>
+				<td colspan="5">
+					<!-- <a href="#" class="td-attach">file.jpg</a> -->
+					<ul>
+						<li ng-repeat="f in contents.boardData.attachFile" ng-hide="f.isDel">
+							<!--<a href="{{f.storagePath}}" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>-->
+							<a href="/comm-api/api/portal/v1/files/{{f.id}}/download" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>
+							<button type="button" class="btn button_img" ng-click="contents.delFile(f);" ng-show="contents.mode=='U'" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.del' | translate }}"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}"></button>
+						</li>
+					</ul>
+					<div ng-show="contents.mode=='U'">
+						<input type="file" id="uploadedNoticeFile0" file-input="contents.file.uploadedNoticeFile" multiple placeholder="Upload File" style="display: none;"/>
+						<button type="button" class="btn btn-default btn-sm" ng-click="main.fileSelectBtnClick($event);">
+							{{ 'label.file_search' | translate }}
+						</button>
+						<ul>
+							<li class="margin-top-10" ng-repeat="aFile in contents.file.uploadedNoticeFile">{{ aFile.name }}</li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	</form>
+</div>
 
-				<!-- table -->
-				<div class="tbw type1 thCtr">
-					<form name="{{ contents.formName }}" novalidate>
-						<table class="table">
-							<colgroup>
-							<col style="width:13%;">
-							<col style="width:20%;">
-							<col style="width:13%;">
-							<col style="width:20%;">
-							<col style="width:13%;">
-							<col >
-							</colgroup>
-							<tbody>
-								<tr>
-									<th scope="row">{{ 'label.title' | translate }}</th>
-									<td colspan="5">
-										<span ng-show="contents.mode=='V'">{{contents.boardData.title}}</span>
-										<input type="text" id="title" name="title" maxlength="50" 
-											ng-model="contents.boardData.title0" placeholder="{{'label.bulletin_title' | translate}}" 
-											style="width:95%;ime-mode:active;" validation="required"
-											ng-show="contents.mode=='U'"/>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">{{ 'label.registrant' | translate }}</th>
-									<td>{{contents.boardData.ownerName}}</td>
-									<th scope="row">{{ 'label.register_dd' | translate }}</th>
-									<td>{{ contents.boardData.createdDate.time | date : "yyyy-MM-dd" }}</td>
-									<th scope="row">{{ 'label.hits' | translate }}</th>
-									<td>{{contents.boardData.hits}}</td>
-								</tr>
-								<tr>
-									<td colspan="6" class="td-cont" style="height:400px;">
-										<span ng-show="contents.mode=='V'" ng-bind-html="contents.boardData.content0"></span>
-										<!-- <div class="ta-container detail-container lighter" ng-show="contents.mode=='U'" style="width:100%;ime-mode:active;">
-											<div text-angular ng-model="contents.boardData.content0" name="detail-editor" ta-text-editor-class="clearfix border-around detail-container" ta-html-editor-class="border-around"></div>
-										</div> -->
-										<div ng-show="contents.mode=='U'">
-											<textarea name="detail_editor" id="detail_editor" cols="80">{{contents.boardData.content0}}</textarea>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">{{ 'label.bulletin_attach' | translate }}</th>
-									<td colspan="5">
-										<!-- <a href="#" class="td-attach">file.jpg</a> -->
-										<ul>
-											<li ng-repeat="f in contents.boardData.attachFile" ng-hide="f.isDel">
-												<!--<a href="{{f.storagePath}}" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>-->
-												<a href="/comm-api/api/portal/v1/files/{{f.id}}/download" target="_blank">{{f.name}}   -   size: {{f.size}}B</a>
-												<button type="button" class="btn button_img" ng-click="contents.delFile(f);" ng-show="contents.mode=='U'" data-toggle="tooltip" data-placement="bottom" data-original-title="{{ 'label.del' | translate }}"><img src="img/ico_delete.png" width="13" height="16" alt="{{ 'label.del' | translate }}"></button>
-											</li>
-										</ul>
-										<ul style="padding-top:10px;" ng-show="contents.mode=='U'">
-											<li>
-												<input type="file" id="uploadedNoticeFile0" file-input="contents.file.uploadedNoticeFile" multiple placeholder="Upload File" style="display: none;"/>
-												<button type="button" class="btn-file btn-color1" ng-click="main.fileSelectBtnClick($event);">
-													{{ 'label.file_search' | translate }}
-												</button>
-												<ul>
-													<li ng-repeat="aFile in contents.file.uploadedNoticeFile">{{ aFile.name }}</li>
-												</ul>
-											</li>
-										</ul>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</form>
-				</div>
-				<!-- //table -->
+<!-- btm buttom -->
+<div class="text-right">
+	<button type="button" class="btn btn-lg btn-default" ng-click="contents.clickCancel();">{{ 'label.list' | translate }}</button>
+	<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnReply" ng-click="contents.boardAdd($event);">{{ 'label.reply' | translate }}</button>
+	<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnSave" ng-click="contents.updateBoard();">{{ 'label.save' | translate }}</button>
+	<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnEdit" ng-click="contents.mode='U';contents.chkBtnAuth();">{{ 'label.edit' | translate }}</button>
+	<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnCancel" ng-click="contents.mode='V';contents.chkBtnAuth();">{{ 'label.cancel' | translate }}</button>
+	<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnDelete" ng-click="contents.deleteBoard();">{{ 'label.del' | translate }}</button>
+	<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnBack" ng-click="contents.clickBack();">{{ 'label.back' | translate }}</button>
+</div>
+<!-- //btm buttom -->
 
-                <!-- btm buttom -->
-				<div class="text-right">
-					<button type="button" class="btn btn-lg btn-default" ng-click="contents.clickCancel();">{{ 'label.list' | translate }}</button>
-					<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnReply" ng-click="contents.boardAdd($event);">{{ 'label.reply' | translate }}</button>
-					<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnSave" ng-click="contents.updateBoard();">{{ 'label.save' | translate }}</button>
-					<button type="button" class="btn btn-lg btn-primary" ng-show="contents.showBtnEdit" ng-click="contents.mode='U';contents.chkBtnAuth();">{{ 'label.edit' | translate }}</button>
-					<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnCancel" ng-click="contents.mode='V';contents.chkBtnAuth();">{{ 'label.cancel' | translate }}</button>
-					<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnDelete" ng-click="contents.deleteBoard();">{{ 'label.del' | translate }}</button>
-					<button type="button" class="btn btn-lg btn-danger" ng-show="contents.showBtnBack" ng-click="contents.clickBack();">{{ 'label.back' | translate }}</button>
-				</div>
-                <!-- //btm buttom -->
 
-				<!-- table -->
-				<div class="tbl type1" style="margin-top: 30px;" ng-if="contents.replyData.length > 0">
-					<table class="table">
-						<colgroup>
-						<col style="width:15%;">
-						<col style="width:auto;">
-						<col style="width:10%;">
-						<col style="width:20%;">
-						<col style="width:15%;">
-						<col style="width:10%;">
-						</colgroup>
-						<thead>
-							<tr>
-								<th scope="col">No</th>
-								<th scope="col">{{ 'label.title' | translate }}</th>
-								<th scope="col">{{ 'label.bulletin_attach' | translate }}</th>
-								<th scope="col">{{ 'label.registrant' | translate }}</th>
-								<th scope="col">{{ 'label.register_dd' | translate }}</th>
-								<th scope="col">{{ 'label.hits' | translate }}</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="boardItem in contents.replyData">
-								<td>{{$index + 1}}</td>
-								<td class="text-left">
-									<span class="reply" ng-show="boardItem.level!=1"></span>
-									<a href="#/comm/boards/qna/{{boardItem.id}}?parentId={{boardItem.parentId}}">{{boardItem.title}}</a>
-								</td>
-								<td>-</td>
-								<td>{{ boardItem.ownerName }}</td>
-								<td>{{ boardItem.createdDate.time | date : "yyyy-MM-dd HH:mm" }}</td>
-								<td>{{ boardItem.hits }}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<!-- //table -->
-
+<section class="panel panel-bordered" ng-if="contents.replyData.length > 0">
+	<div class="panel-body padding-0">
+		<div class="table-wrap">
+			<table class="table table-hover border-bottom-0" cellspacing="0" width="100%">
+				<colgroup>
+					<col style="width:15%;">
+					<col style="width:auto;">
+					<col style="width:10%;">
+					<col style="width:20%;">
+					<col style="width:15%;">
+					<col style="width:10%;">
+				</colgroup>
+				<thead class="text-center">
+					<tr>
+						<th scope="col" class="border-top-0">No</th>
+						<th scope="col" class="border-top-0">{{ 'label.title' | translate }}</th>
+						<th scope="col" class="border-top-0">{{ 'label.bulletin_attach' | translate }}</th>
+						<th scope="col" class="border-top-0">{{ 'label.registrant' | translate }}</th>
+						<th scope="col" class="border-top-0">{{ 'label.register_dd' | translate }}</th>
+						<th scope="col" class="border-top-0">{{ 'label.hits' | translate }}</th>
+					</tr>
+				</thead>
+				<tbody class="text-center">
+					<tr ng-repeat="boardItem in contents.replyData">
+						<td>{{$index + 1}}</td>
+						<td class="text-left">
+							<span class="reply" ng-show="boardItem.level!=1"></span>
+							<a href="#/comm/boards/qna/{{boardItem.id}}?parentId={{boardItem.parentId}}">{{boardItem.title}}</a>
+						</td>
+						<td>-</td>
+						<td>{{ boardItem.ownerName }}</td>
+						<td>{{ boardItem.createdDate.time | date : "yyyy-MM-dd HH:mm" }}</td>
+						<td>{{ boardItem.hits }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
