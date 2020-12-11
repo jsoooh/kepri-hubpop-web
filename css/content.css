@@ -2820,7 +2820,7 @@ a.ext_link:hover {text-decoration:underline;}
 .guide_t_menu ul li a {display: block; position: relative; color:#888; font-weight:500; line-height:22px; border:1px solid #ddd; border-radius:5px; padding:12px 22px; margin-right:10px;}
 .guide_t_menu ul li a:hover, .guide_t_menu ul li a.on{color:#fff; border:1px solid #2858ad; background: #2858ad;}
 
-.backdrop_type {position:fixed; top: 0px; height: 100%; background-color: #aaaaaa; display: none; opacity: 0.6;}
+.backdrop_type {position:fixed; top: 0px; height: 100%; background-color: #aaaaaa; display: none; opacity: 0.6; z-index:80; width:100%;}
 
 /*프로젝트 자원계획(만들기화면)*/
 .s_cont_box .s_progress_box ul li {display:table;}
