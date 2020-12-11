@@ -60,10 +60,28 @@
 						</div>
 						<div class="panel-body padding-0">
 							<div class="scroll-content" style="height: 202px">
-								<ul class="list-striped">
+								<ul class="list-striped" ng-if="(contents.orgMeterings | filter : { itemGroupCode: 'M01' }).length > 0">
 									<li ng-repeat="meteringItem in contents.orgMeterings | filter : { itemGroupCode: 'M01' }">
 										<div class="pull-left">{{ meteringItem.itemName }}</div>
 										<div class="pull-right">{{ meteringItem.itemUnit == 'MB' ? (meteringItem.meteringValue | displayVolume:'MB') : meteringItem.meteringValue }} {{ meteringItem.itemUnit == 'CNT' ? '개' : (meteringItem.itemUnit == 'MB' ? '' : meteringItem.itemUnit) }}</div>
+									</li>
+								</ul>
+								<ul class="list-striped" ng-if="(contents.orgMeterings | filter : { itemGroupCode: 'M01' }).length == 0">
+									<li>
+										<div class="pull-left">서버 vCore</div>
+										<div class="pull-right">0 개</div>
+									</li>
+									<li>
+										<div class="pull-left">서버 RAM</div>
+										<div class="pull-right">0 MB</div>
+									</li>
+									<li>
+										<div class="pull-left">OS 디스크</div>
+										<div class="pull-right">0 GB</div>
+									</li>
+									<li>
+										<div class="pull-left"> 데이터 디스크</div>
+										<div class="pull-right">0 GB</div>
 									</li>
 								</ul>
 							</div>
@@ -80,10 +98,28 @@
 						</div>
 						<div class="panel-body padding-0">
 							<div class="scroll-content" style="height: 202px">
-								<ul class="list-striped">
+								<ul class="list-striped" ng-if="(contents.orgMeterings | filter : { itemGroupCode: 'M02' }).length > 0">
 									<li ng-repeat="meteringItem in contents.orgMeterings | filter : { itemGroupCode: 'M02' }">
 										<div class="pull-left">{{ meteringItem.itemName }}</div>
 										<div class="pull-right">{{ meteringItem.itemUnit == 'MB' ? (meteringItem.meteringValue | displayVolume:'MB') : meteringItem.meteringValue }} {{ meteringItem.itemUnit == 'CNT' ? '개' : (meteringItem.itemUnit == 'MB' ? '' : meteringItem.itemUnit) }}</div>
+									</li>
+								</ul>
+								<ul class="list-striped" ng-if="(contents.orgMeterings | filter : { itemGroupCode: 'M02' }).length == 0">
+									<li>
+										<div class="pull-left">GPU 서버 vCore</div>
+										<div class="pull-right">0 개</div>
+									</li>
+									<li>
+										<div class="pull-left">GPU 서버 RAM</div>
+										<div class="pull-right">0 MB</div>
+									</li>
+									<li>
+										<div class="pull-left">GPU 서버 HDD</div>
+										<div class="pull-right">0 GB</div>
+									</li>
+									<li>
+										<div class="pull-left"> GPU 서버 SSD</div>
+										<div class="pull-right">0 GB</div>
 									</li>
 								</ul>
 							</div>
