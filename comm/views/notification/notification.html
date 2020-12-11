@@ -1,97 +1,132 @@
-<!-- search -->
-<div class="searchWrap">
-    <div class="searchBox">
-        <div class="form-group">
-            <select id="receiver" name="receiver" 
-                ng-options="condition.id as ( condition.name | translate ) for condition in contents.conditions.receivers" 
-                ng-model="contents.conditionParams.receiver" style="width:130px;" ng-change="contents.selectNotifications();">
-                <option value="">-- 수신그룹 --</option>
-            </select>
-            <select id="schType" name="schType" 
-                ng-options="condition.id as ( condition.name | translate ) for condition in contents.conditions.types" 
-                ng-model="contents.conditionParams.schType" style="width:100px;">
-            </select>
-            <input type="text" style="width:400px;ime-mode:active;" maxlength="30" placeholder="{{ 'message.mi_type_search_word' | translate }}" 
-                ng-model="contents.conditionParams.schText" id="searchText" ng-keypress="contents.schEnter($event);">
-        </div>
-        <button type="button" name="button" class="btn btn-sch" title="검색" ng-click="contents.selectNotifications();"><span class="ico">{{ 'label.search' | translate }}</span></button>
-    </div>
+<!-- 검색 -->
+<div class="card-input-wrap" ng-if="!!main.userTenantId">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="font-size-18 padding-top-5">
+				<b>알림 <span class="color-primary">({{ contents.pageOptions.total }})</span></b>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="text-right">
+				<!-- 검색 -->
+				<div class="form-inline">
+					<div class="margin-right-5">
+						<select id="receiver" class="form-control" name="receiver" ng-options="condition.id as ( condition.name | translate ) for condition in contents.conditions.receivers" ng-model="contents.conditionParams.receiver" style="width: 130px;" ng-change="contents.selectNotifications();">
+							<option value="">-- 수신그룹 --</option>
+						</select>
+					</div>
+					<div class="margin-right-5">
+						<select id="schType" class="form-control" name="schType" ng-options="condition.id as ( condition.name | translate ) for condition in contents.conditions.types" ng-model="contents.conditionParams.schType" style="width: 100px;"></select>
+					</div>
+					<div class="margin-right-5">
+						<input type="text" class="form-control" style="width:400px; ime-mode:active;" maxlength="30" placeholder="{{ 'message.mi_type_search_word' | translate }}" ng-model="contents.conditionParams.schText" id="searchText" ng-keypress="contents.schEnter($event);">
+					</div>
+					<button type="button" class="btn btn-primary" ng-click="contents.selectNotifications();" tooltip-placement="bottom" uib-tooltip="{{ 'label.search' | translate }}">
+						<div class="feather-icon">
+							<i data-feather="search" class="feather-directive"></i>
+						</div>
+						<span class="sr-only">{{ 'label.search' | translate }}</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<!-- search -->
+<!-- //검색 -->
 
-<!-- table top -->
-<div class="tb-top">
-    <div class="pull-left">{{ 'label.all' | translate }} : {{ contents.pageOptions.total }} 건</div>
+<section class="panel panel-bordered" ng-show="contents.pageOptions.total">
+	<div class="panel-body padding-0">
+		<div class="table-input-wrap">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="datatable-length">
+						<span>페이지당 행 수 : </span>
+						<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageSize" ng-init="contents.pageSize = '10'" ng-change="contents.fn.getNetworkList(contents.pageOptions.currentPage)">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="table-wrap">
+			<table class="table table-hover" cellspacing="0" width="100%">
+				<colgroup>
+					<col style="width: 7%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: auto;">
+					<col style="width: 20%;">
+					<col style="width: 15%;">
+				</colgroup>
+				<thead class="text-center">
+					<tr>
+						<th scope="col">No</th>
+						<th scope="col">{{ 'label.receiver' | translate }}</th>
+						<th scope="col">{{ 'label.target' | translate }}</th>
+						<th scope="col">{{ 'label.message' | translate }}</th>
+						<th scope="col">{{ 'label.url' | translate }}</th>
+						<th scope="col">{{ 'label.register_dt' | translate }}</th>
+					</tr>
+				</thead>
+				<tbody class="text-center">
+					<tr ng-repeat="item in contents.notifications">
+						<td>{{contents.pageOptions.pageSize * (contents.pageOptions.currentPage - 1) + $index + 1}}</td>
+						<td><span ng-if="item.receiver == 'p'">{{ 'label.project' | translate }}</span> <span ng-if="item.receiver == 'a'">{{ 'label.admin' | translate }}</span> <span ng-if="item.receiver == 'u'">{{ 'label.user' | translate }}</span></td>
+						<td>{{ item.target | translate }}</td>
+						<td class="text-left">{{ item.message | translate }}</td>
+						<td class="text-center"><a href="{{ item.url }}" target="_blank">{{ item.url }}</a></td>
+						<td>{{ item.time }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="table-bottom-wrap">
+			<div class="row">
+				<div class="col-sm-2">
+					<span class="dataTables_info">
+						{{ 'label.all' | translate }} : {{ contents.pageOptions.total }} 건
+					</span>
+				</div>
+				<div class="col-sm-8">										
+					<nav class="text-center" ng-show="contents.pageOptions.total">
+						<div class="paginationWrap" ng-show="contents.pageOptions.total">
+							<paging 
+								page="contents.pageOptions.currentPage"
+								page-size="contents.pageOptions.pageSize"
+								total="contents.pageOptions.total"
+								pg-href=""
+								show-prev-next="true"
+								show-first-last="true"
+								paging-action="contents.selectNotifications(page)"
+								text-first-class="firstPage"
+								text-last-class="lastPage"
+								text-next-class="nextPage"
+								text-prev-class="prevPage">
+							</paging>
+						</div>
+					</nav>
+				</div>
+				<div class="col-sm-2">
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="text-center blank-page" ng-show="!contents.pageOptions.total">
+	<div class="img">
+		<img src="../assets/img/icon/approval-gray.png" alt="data-center">
+	</div>
+	<div class="cont">
+		<p ng-if="!contents.conditions.schText">게시물이 존재하지 않습니다.</p>
+		<div ng-if="contents.conditions.schText">
+			<p>
+				'<span class="point">{{contents.conditions.schText}}</span>' 에 대한 검색 결과가 없습니다.
+			</p>
+			<p>다른 검색어를 넣어 다시 검색해주세요.</p>
+		</div>
+	</div>
 </div>
-<!-- //table top -->
-
-<!-- table -->
-<div class="tbl type1" ng-show="contents.pageOptions.total">
-    <table class="table">
-        <colgroup>
-            <col style="width:7%;">
-            <col style="width:10%;">
-            <col style="width:10%;">
-            <col style="width:auto;">
-            <col style="width:20%;">
-            <col style="width:15%;">
-        </colgroup>
-        <thead>
-            <tr>
-                <th scope="col">No</th>
-                <th scope="col">{{ 'label.receiver' | translate }}</th>
-                <th scope="col">{{ 'label.target' | translate }}</th>
-                <th scope="col">{{ 'label.message' | translate }}</th>
-                <th scope="col">{{ 'label.url' | translate }}</th>
-                <th scope="col">{{ 'label.register_dt' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="item in contents.notifications">
-                <td>{{contents.pageOptions.pageSize * (contents.pageOptions.currentPage - 1) + $index + 1}}</td>
-                <td>
-                    <span ng-if="item.receiver == 'p'">{{ 'label.project' | translate }}</span>
-                    <span ng-if="item.receiver == 'a'">{{ 'label.admin' | translate }}</span>
-                    <span ng-if="item.receiver == 'u'">{{ 'label.user' | translate }}</span>
-                </td>
-                <td>{{ item.target | translate }}</td>
-                <td class="text-left">{{ item.message | translate }}</td>
-                <td class="text-left"><a href="{{ item.url }}" target="_blank">{{ item.url }}</a></td>
-                <td>{{ item.time }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<!-- //table -->
-
-<!-- page -->
-<nav class="pagiWrap" ng-show="contents.pageOptions.total">
-    <paging
-        page="contents.pageOptions.currentPage"
-        page-size="contents.pageOptions.pageSize"
-        total="contents.pageOptions.total"
-        pg-href=""
-        show-prev-next="true"
-        show-first-last="true"
-        paging-action="contents.selectNotifications(page)"
-        text-first-class="firstPage"
-        text-last-class="lastPage"
-        text-next-class="nextPage"
-        text-prev-class="prevPage">
-    </paging>
-</nav>
-<!-- //page -->
-
-<!-- compMsgBox -->
-<div class="compMsgBox type1" ng-show="!contents.pageOptions.total">
-    <div class="inMsgTxt">
-    <span class="ico"></span>
-        <strong ng-if="!contents.conditions.schText" class="msg-tit">게시물이 존재하지 않습니다.</strong>
-        <strong ng-if="contents.conditions.schText" class="msg-tit">'<span class="point1">{{contents.conditions.schText}}</span>'에 대한 검색 결과가 없습니다.</strong>
-    <div ng-if="contents.conditions.schText" class="msg-txt">
-        다른 검색어를 넣어 다시 검색해주세요.
-    </div>
-    </div>
-</div>
-<!-- //compMsgBox -->
-
