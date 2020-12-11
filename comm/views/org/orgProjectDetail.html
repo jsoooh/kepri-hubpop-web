@@ -155,7 +155,7 @@
 								<div class="col-sm-4">
 									<div class="dashboard-number-box">
 										<div class="number">
-											{{ (contents.orgMeterings | filter : { itemCode: "M03003" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M03003" })[0].meteringValue : 0 }} <small> GB </small>
+											{{ (contents.orgMeterings | filter : { itemCode: "M03003" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M03003" })[0].meteringValue | number) : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">볼륨</div>
 									</div>
@@ -185,7 +185,7 @@
 								<div class="col-sm-6">
 									<div class="dashboard-number-box">
 										<div class="number">
-											{{ (contents.orgMeterings | filter : { itemCode: "M04002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M04002" })[0].meteringValue : 0 }} <small> GB </small>
+											{{ (contents.orgMeterings | filter : { itemCode: "M04002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M04002" })[0].meteringValue | number) : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">CaaS 볼륨</div>
 									</div>
@@ -215,7 +215,7 @@
 								<div class="col-sm-6">
 									<div class="dashboard-number-box">
 										<div class="number">
-											{{ (contents.orgMeterings | filter : { itemCode: "M05002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M05002" })[0].meteringValue : 0 }} <small> 건 </small>
+											{{ (contents.orgMeterings | filter : { itemCode: "M05002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M05002" })[0].meteringValue | number) : 0 }} <small> 건 </small>
 										</div>
 										<div class="caption">Function 실행</div>
 									</div>
@@ -237,7 +237,7 @@
 								<div class="col-sm-4 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											{{ (contents.orgMeterings | filter : { itemCode: "M06001" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M06001" })[0].meteringValue : 0 }} <small> GB </small>
+											{{ (contents.orgMeterings | filter : { itemCode: "M06001" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M06001" })[0].meteringValue | number) : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">오라클 Exa 용량</div>
 									</div>
@@ -245,7 +245,7 @@
 								<div class="col-sm-4 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											{{ (contents.orgMeterings | filter : { itemCode: "M06002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M06002" })[0].meteringValue : 0 }} <small> GB </small>
+											{{ (contents.orgMeterings | filter : { itemCode: "M06002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M06002" })[0].meteringValue | number) : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">오라클 SE 용량</div>
 									</div>
@@ -253,7 +253,7 @@
 								<div class="col-sm-4">
 									<div class="dashboard-number-box">
 										<div class="number">
-											{{ (contents.orgMeterings | filter : { itemCode: "M06003" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M06003" })[0].meteringValue : 0 }} <small> GB </small>
+											{{ (contents.orgMeterings | filter : { itemCode: "M06003" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M06003" })[0].meteringValue | number) : 0 }} <small> GB </small>
 										</div>
 										<div class="caption">MS-SQL 용량</div>
 									</div>
@@ -275,19 +275,19 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">컨텍스트 엔티티</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M07001" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M07001" })[0].meteringValue : 0 }} 개</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M07001" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M07001" })[0].meteringValue | number) : 0 }} 개</div>
 									</li>
 									<li>
 										<div class="pull-left">컨텍스트 API 호출</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M07002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M07002" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M07002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M07002" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">컨텍스트 MongoDB 사용량</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M07003" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M07003" })[0].meteringValue : 0 }} GB</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M07003" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M07003" })[0].meteringValue | number) : 0 }} GB</div>
 									</li>
 									<li>
 										<div class="pull-left"> 메시지 토픽</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M07004" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M07004" })[0].meteringValue : 0 }} 개</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M07004" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M07004" })[0].meteringValue | number) : 0 }} 개</div>
 									</li>
 								</ul>
 							</div>
@@ -307,7 +307,7 @@
 								<div class="col-sm-6 border-right">
 									<div class="dashboard-number-box">
 										<div class="number">
-											{{ (contents.orgMeterings | filter : { itemCode: "M08001" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M08001" })[0].meteringValue : 0 }} <small> 개 </small>
+											{{ (contents.orgMeterings | filter : { itemCode: "M08001" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M08001" })[0].meteringValue | number) : 0 }} <small> 개 </small>
 										</div>
 										<div class="caption">API 배포</div>
 									</div>
@@ -315,7 +315,7 @@
 								<div class="col-sm-6">
 									<div class="dashboard-number-box">
 										<div class="number">
-											{{ (contents.orgMeterings | filter : { itemCode: "M08002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M08002" })[0].meteringValue : 0 }} <small> 건 </small>
+											{{ (contents.orgMeterings | filter : { itemCode: "M08002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M08002" })[0].meteringValue | number) : 0 }} <small> 건 </small>
 										</div>
 										<div class="caption">API 호출</div>
 									</div>
@@ -337,19 +337,19 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">Gitlab 저장소</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M08001" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M08001" })[0].meteringValue : 0 }} 개</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M08001" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M08001" })[0].meteringValue | number) : 0 }} 개</div>
 									</li>
 									<li>
 										<div class="pull-left">SVN 저장소</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M08002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M08002" })[0].meteringValue : 0 }} 개</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M08002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M08002" })[0].meteringValue | number) : 0 }} 개</div>
 									</li>
 									<li>
 										<div class="pull-left">파이프라인</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M08003" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M08003" })[0].meteringValue : 0 }} 개</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M08003" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M08003" })[0].meteringValue | number) : 0 }} 개</div>
 									</li>
 									<li>
 										<div class="pull-left">파이프라인 실행</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M08004" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M08004" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M08004" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M08004" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 								</ul>
 							</div>
@@ -369,11 +369,11 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">공유컨텐츠 업로드 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M10001" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M10001" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M10001" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M10001" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">공유컨텐츠 다운로드 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M10002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M10002" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M10002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M10002" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 								</ul>
 							</div>
@@ -393,27 +393,27 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">일괄(JSON) API 호출 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11001" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M11001" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11001" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M11001" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">일괄(JSON) API 데이터 사용량</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M11002" })[0].meteringValue : 0 }} MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M11002" })[0].meteringValue | number) : 0 }} MB</div>
 									</li>
 									<li>
 										<div class="pull-left">일괄(TEXT) API 호출 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11003" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M11003" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11003" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M11003" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">일괄(TEXT) API 데이터 사용량</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11004" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M11004" })[0].meteringValue : 0 }} MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11004" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M11004" })[0].meteringValue | number) : 0 }} MB</div>
 									</li>
 									<li>
 										<div class="pull-left">분할(JSON) API 호출 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11005" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M11005" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11005" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M11005" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">분할(JSON) API 데이터 사용량</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11006" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M11006" })[0].meteringValue : 0 }} MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M11006" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M11006" })[0].meteringValue | number) : 0 }} MB</div>
 									</li>
 								</ul>
 							</div>
@@ -433,27 +433,27 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">TTS API 호출 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12001" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M12001" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12001" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M12001" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">TTS API 데이터 사용량</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M12002" })[0].meteringValue : 0 }} MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M12002" })[0].meteringValue | number) : 0 }} MB</div>
 									</li>
 									<li>
 										<div class="pull-left">OCR API 호출 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12003" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M12003" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12003" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M12003" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">OCR API 데이터 사용량</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12004" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M12004" })[0].meteringValue : 0 }} MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12004" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M12004" })[0].meteringValue | number) : 0 }} MB</div>
 									</li>
 									<li>
 										<div class="pull-left">CustomVision API 호출 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12005" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M12005" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12005" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M12005" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">CustomVision API 데이터 사용량</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12006" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M12006" })[0].meteringValue : 0 }} MB</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M12006" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M12006" })[0].meteringValue | number) : 0 }} MB</div>
 									</li>
 								</ul>
 							</div>
@@ -473,15 +473,15 @@
 								<ul class="list-striped">
 									<li>
 										<div class="pull-left">분석도구(주피터 노트북)  실행 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M13001" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M13001" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M13001" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M13001" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">분석도구(주피터 랩)  실행 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M13002" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M13002" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M13002" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M13002" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 									<li>
 										<div class="pull-left">분석도구(R Studio)  실행 건수</div>
-										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M13003" }).length > 0 ? (contents.orgMeterings | filter : { itemCode: "M13003" })[0].meteringValue : 0 }} 건</div>
+										<div class="pull-right">{{ (contents.orgMeterings | filter : { itemCode: "M13003" }).length > 0 ? ((contents.orgMeterings | filter : { itemCode: "M13003" })[0].meteringValue | number) : 0 }} 건</div>
 									</li>
 								</ul>
 							</div>
