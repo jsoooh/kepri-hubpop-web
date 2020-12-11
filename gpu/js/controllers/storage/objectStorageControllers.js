@@ -444,12 +444,12 @@ angular.module('gpu.controllers')
                             } else {
                                 param.files.push(file);
                                 console.log("업로드 되는 파일명: " + file.name);
-                                $scope.main.loadingMainBody = true;
-                                $scope.main.loadingMain = true;
                             }
                         }
                     });
                 }
+                $scope.main.loadingMainBody = true;
+                $scope.main.loadingMain = true;
                 // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
                 var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/storage/objectStorage/bucket/object', 'POST', param, "multipart/form-data"));
                 returnPromise.success(function (data, status, headers) {
