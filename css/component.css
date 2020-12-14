@@ -158,3 +158,4 @@ select.ng-touched.ng-valid-validation, input.ng-touched.ng-valid-validation{bord
 /*input validation check icon추가*/
 input.ng-touched.ng-invalid-validation{background: url("../images/ico_invalid.png") no-repeat 99% center;}
 input.ng-touched.ng-valid-validation{background: url("../images/ico_valid.png") no-repeat 99% center;}
+.aside md-dialog .sideCntWrap{margin:0;}
