@@ -41,6 +41,7 @@
 		<!--<h3 class="heading h3">추이<em>(단위: vCore)</em></h3-->
 		<div class="chart_wrap margin-top-30">
 			<div id="monthly-metering-chart"></div>
+			<div class="chartWarningImg" ng-if="contents.perfMeteringMonthlyByOrgAndItemSum < 1">사용량 없음</div>
 			<!--img alt="차트 테스트 이미지" src="images/chart_test_img03.png"-->
 		</div>
 		<h3 class="heading h3 margin-top-30">현황<em class="font-size-13 grey-500 padding-left-10">(단위: {{contents.sltItem.itemUnit}})</em></h3>
@@ -104,6 +105,7 @@
 		</div>
 		<div class="chart_wrap margin-top-30">
 			<div id="daily-metering-chart"></div>
+			<div class="chartWarningImg" ng-if="contents.perfMeteringDailyByOrgAndItemSum < 1">사용량 없음</div>
 			<!--img alt="차트 테스트 이미지" src="images/chart_test_img04.png"-->
 		</div>
 		<h3 class="heading h3 margin-top-30">현황<em class="font-size-13 grey-500 padding-left-10">(단위: {{contents.sltItem.itemUnit}})</em></h3>
