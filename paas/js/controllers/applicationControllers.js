@@ -30,6 +30,11 @@ angular.module('paas.controllers')
         } else {
             ct.listType = "list";          //리스트 타입
         }
+        ct.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
 
         /* 20.06.03 - 대표 도메인 설정 후 리스트 화면 변경시 라우트 탭 선택되어 있는 상태를 초기화 by ksw */
         applicationService.sltInfoTab = '';

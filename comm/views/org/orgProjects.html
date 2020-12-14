@@ -213,18 +213,17 @@
 	<!-- 프로젝트 리스트(테이블형) -->
 	<section class="panel panel-bordered" ng-if="contents.listType == 'list' && (contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length > 0">
 		<div class="panel-body padding-0">
-			<div class="table-input-wrap" ng-if="false">
+			<div class="table-input-wrap">
 				<div class="row">
 					<div class="col-sm-3">
 						<div class="datatable-length">
-							<span>Show</span>
-							<select name="" id="" class="form-control form-control-sm">
-								<option value="">10</option>
-								<option value="">25</option>
-								<option value="">50</option>
-								<option value="">100</option>
+							<span>페이지당 행 수 : </span>
+							<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'" ng-change="contents.pageOptions.currentPage = 1">
+								<option value="10">10</option>
+								<option value="25">25</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
 							</select>
-							<span>entries</span>
 						</div>
 					</div>
 				</div>
@@ -260,7 +259,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="org in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }">
+						<tr ng-repeat="(key, org) in contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 							<td class="text-center">{{ $index+1 }}</td>
 							<td class="text-left"><a href="" ng-click="main.goToPortalOrgPage(org);">{{ org.orgId }}</a></td>
 							<td class="text-left">
@@ -298,8 +297,36 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="table-bottom-wrap" ng-if="false">
+			<div class="table-bottom-wrap">
 				<div class="row">
+					<div class="col-sm-2">
+								<span class="dataTables_info">
+									{{ 'label.total' | translate }} {{ (contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length }}{{ 'label.count' | translate }}
+								</span>
+					</div>
+					<div class="col-sm-8">
+						<nav class="text-center">
+							<div class="paginationWrap">
+								<paging
+										page="contents.pageOptions.currentPage"
+										page-size="contents.pageOptions.pageSize"
+										total="(contents.orgProjects | filter:{ orgName: contents.schFilterText, statusCode: '!deleting' }).length"
+										pg-href=""
+										show-prev-next="true"
+										show-first-last="true"
+										paging-action=""
+										text-first-class="firstPage"
+										text-last-class="lastPage"
+										text-next-class="nextPage"
+										text-prev-class="prevPage">
+								</paging>
+							</div>
+						</nav>
+					</div>
+					<div class="col-sm-2">
+					</div>
+				</div>
+				<div ng-if="false" class="row">
 					<div class="col-sm-5">
 						<span class="dataTables_info">
 							1 - 10 of 23

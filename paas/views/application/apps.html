@@ -159,9 +159,24 @@
 <!-- //앱관리 리스트(카드형) -->
 
 <!-- 앱관리 리스트(테이블형) -->
-<section class="panel panel-bordered" ng-if="(contents.apps | filter:{ name: contents.schFilterText }).length > 0 && contents.listType == 'list'">
+<section class="panel panel-bordered" ng-if="contents.listType == 'list'">
 	<div class="panel-body padding-0">
-		<div class="table-wrap border-0">
+		<div class="table-input-wrap">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="datatable-length">
+						<span>페이지당 행 수 : </span>
+						<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'" ng-change="contents.pageOptions.currentPage = 1">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="table-wrap">
 			<table class="table table-hover" cellspacing="0" width="100%">
 				<colgroup>
 					<col style="width: ">
@@ -172,7 +187,7 @@
 					<col style="width: 15%;">
 					<col style="width: 8%;">
 				</colgroup>
-				<thead class="black white-text text-center">
+				<thead class="text-center">
 					<tr>
 						<th scope="col">APP 이름</th>
 						<th scope="col">개발언어</th>
@@ -184,7 +199,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="appItem in contents.apps | filter : {name: contents.schFilterText}">
+					<tr ng-repeat="(key, appItem) in contents.apps | filter : {name: contents.schFilterText}" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 						<td>
 							<a id="txt-renameApp-{{appItem.name}}" ng-click="contents.moveToApplicationPage(appItem);">{{ appItem.name }}</a>
 							<div id="renameAppButton-{{appItem.name}}" class="renameWrap" style="display:none;">
@@ -235,23 +250,46 @@
 							</div>
 						</td>
 					</tr>
+					<!-- 등록된 멤버가 없을 때 -->
+					<tr ng-if="!contents.isAppsLoad && contents.schFilterText.length > 0 && (contents.apps | filter:{ name:contents.schFilterText }).length == 0" class="no-data text-center">
+						<td colspan="7">검색 결과가 없습니다.</td>
+					</tr>
 				</tbody>
 			</table>
+		</div>
+		<div class="table-bottom-wrap">
+			<div class="row">
+				<div class="col-sm-2">
+			<span class="dataTables_info">
+				{{ 'label.total' | translate }} {{ (contents.apps | filter:{ name:contents.schFilterText }).length }}{{ 'label.count' | translate }}
+			</span>
+				</div>
+				<div class="col-sm-8">
+					<nav class="text-center">
+						<div class="paginationWrap">
+							<paging
+									page="contents.pageOptions.currentPage"
+									page-size="contents.pageOptions.pageSize"
+									total="(contents.apps | filter:{ name:contents.schFilterText }).length"
+									pg-href=""
+									show-prev-next="true"
+									show-first-last="true"
+									paging-action=""
+									text-first-class="firstPage"
+									text-last-class="lastPage"
+									text-next-class="nextPage"
+									text-prev-class="prevPage">
+							</paging>
+						</div>
+					</nav>
+				</div>
+				<div class="col-sm-2">
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
 <!-- 앱관리 리스트(테이블형) -->
-
-<!-- 검색결과 없음 -->
-<div class="text-center blank-page" ng-if="!contents.isAppsLoad && contents.schFilterText.length > 0 && (contents.apps | filter:{ name:contents.schFilterText }).length == 0">
-	<div class="img">
-		<img src="../assets/img/icon/approval.png">
-	</div>
-	<div class="cont">
-		<p>검색 결과가 없습니다.</p>
-	</div>
-</div>
-<!-- //검색결과 없음 -->
 
 <!-- 생성된 서버 없을 경우 -->
 <div class="welcome_layer" ng-if="!contents.pageFirstLoad && contents.isAppsLoad && contents.apps.length == 0 && !!main.sltOrganizationGuid">

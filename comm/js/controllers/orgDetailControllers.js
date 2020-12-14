@@ -19,9 +19,19 @@ angular.module('portal.controllers')
             ct.sltInfoTab = 'dashboard';
         }
 
-        ct.isQuotaChange = true;    //쿼터변경요청 가능 여부, 첫건이 '요청'상태일 때 요청불가
+        ct.isQuotaChange = true;        //쿼터변경요청 가능 여부, 첫건이 '요청'상태일 때 요청불가
         ct.loadQuotaHistory = false;    //쿼터변경요청 조회여부
         ct.loadOrgQuotas = false;       //쿼터값(미터링포함) 조회여부
+        ct.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
+        ct.pageOptions2 = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
 
         // 탭 변경
         ct.changeSltInfoTab = function (sltInfoTab) {

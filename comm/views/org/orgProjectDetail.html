@@ -611,7 +611,7 @@
 						<div class="col-sm-3">
 							<div class="datatable-length">
 								<span>페이지당 행 수 : </span>
-								<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageSize" ng-init="contents.pageSize = '10'" ng-change="contents.fn.getNetworkList(contents.pageOptions.currentPage)">
+								<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'" ng-change="contents.pageOptions.currentPage = 1">
 									<option value="10">10</option>
 									<option value="25">25</option>
 									<option value="50">50</option>
@@ -642,7 +642,7 @@
 							</tr>
 						</thead>
 						<tbody class="text-center">
-							<tr ng-repeat="orgUser in contents.orgUsers | orderBy: '-createDate.time'">
+							<tr ng-repeat="(key, orgUser) in contents.orgUsers | orderBy: '-createDate.time'" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 								<td class="text-center">{{ $index + 1 }}</td>
 								<td class="text-center">{{ orgUser.usersInfo.name }}</td>
 								<td class="text-center">{{ orgUser.usersInfo.email }}</td>
@@ -680,7 +680,7 @@
 					<div class="row">
 						<div class="col-sm-2">
 							<span class="dataTables_info">
-								{{ 'label.total' | translate }} {{ contents.pageOptions.total }}{{ 'label.count' | translate }}
+								{{ 'label.total' | translate }} {{ contents.orgUsers.length }}{{ 'label.count' | translate }}
 							</span>
 						</div>
 						<div class="col-sm-8">										
@@ -689,11 +689,11 @@
 									<paging 
 										page="contents.pageOptions.currentPage" 
 										page-size="contents.pageOptions.pageSize" 
-										total="contents.pageOptions.total" 
+										total="contents.orgUsers.length"
 										pg-href="" 
 										show-prev-next="true" 
 										show-first-last="true" 
-										paging-action="contents.listAdminUsers(page)" 
+										paging-action=""
 										text-first-class="firstPage" 
 										text-last-class="lastPage"
 										text-next-class="nextPage" 
@@ -758,10 +758,6 @@
 		</div>
 		
 		<button type="button" name="button" class="btn btn-lg btn-primary" data-user="aside" data-username="#aside-quota-req" ng-disabled="!main.checkOrgUserRole() || !contents.isQuotaChange" ng-click="contents.requestQuotaForm($event);">쿼터변경요청</button>
-		<!--<button type="button" name="button" class="btn btn-ico-add only-ico" data-user="aside" data-username="#aside-quota-req"  ng-disabled="!contents.isOrgManager || !contents.orgRequest" ng-click="contents.updateQuota($event);">
-                <span class="ico">추가(기존)</span>
-            </button>-->
-		
 		<section class="panel panel-bordered">
 			<div class="panel-body padding-0">
 				<div class="table-input-wrap">
@@ -769,7 +765,7 @@
 						<div class="col-sm-3">
 							<div class="datatable-length">
 								<span>페이지당 행 수 : </span>
-								<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageSize" ng-init="contents.pageSize = '10'" ng-change="contents.fn.getNetworkList(contents.pageOptions.currentPage)">
+								<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions2.pageSize" ng-init="contents.pageOptions2.pageSize = '10'" ng-change="contents.pageOptions2.currentPage = 1">
 									<option value="10">10</option>
 									<option value="25">25</option>
 									<option value="50">50</option>
@@ -806,7 +802,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="item in contents.quotaHistories">
+							<tr ng-repeat="(key, item) in contents.quotaHistories" ng-show="key >= (contents.pageOptions2.currentPage - 1) * contents.pageOptions2.pageSize && key < contents.pageOptions2.currentPage * contents.pageOptions2.pageSize">
 								<td class="text-center">{{ contents.quotaHistories.length - $index }}</td>
 								<td class="text-center">{{ item.requestReason }}</td>
 								<td class="text-left">
@@ -843,20 +839,20 @@
 					<div class="row">
 						<div class="col-sm-2">
 							<span class="dataTables_info">
-								{{ 'label.total' | translate }} {{ contents.pageOptions.total }}{{ 'label.count' | translate }}
+								{{ 'label.total' | translate }} {{ contents.quotaHistories.length }}{{ 'label.count' | translate }}
 							</span>
 						</div>
 						<div class="col-sm-8">										
 							<nav class="text-center">
 								<div class="paginationWrap">
 									<paging 
-										page="contents.pageOptions.currentPage" 
-										page-size="contents.pageOptions.pageSize" 
-										total="contents.pageOptions.total" 
+										page="contents.pageOptions2.currentPage"
+										page-size="contents.pageOptions2.pageSize"
+										total="contents.quotaHistories.length"
 										pg-href="" 
 										show-prev-next="true" 
 										show-first-last="true" 
-										paging-action="contents.listAdminUsers(page)" 
+										paging-action=""
 										text-first-class="firstPage" 
 										text-last-class="lastPage"
 										text-next-class="nextPage" 

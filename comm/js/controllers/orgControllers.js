@@ -11,6 +11,11 @@ angular.module('portal.controllers')
         ct.popup = $stateParams.popup;      //프로젝트생성팝업여부/로그아웃
         ct.schFilterText = "";
         ct.listType = "image";          //프로젝트 리스트 타입
+        ct.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
 
         if (ct.popup == "logout") {
             $scope.main.loadingMainBody = true;
