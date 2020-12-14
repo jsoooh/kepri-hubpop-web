@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="font-size-18 padding-top-5">
-				<b>전체 App <span class="color-primary" ng-if="!!main.userTenantId">({{contents.apps.length}})</span></b>
+				<b>전체 App <span class="color-primary" ng-if="!!main.userTenantId">({{ (contents.apps | filter:{ name:contents.schFilterText }).length }})</span></b>
 			</div>
 		</div>
 		<div class="col-md-6">
