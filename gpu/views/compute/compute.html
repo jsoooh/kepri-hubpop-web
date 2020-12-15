@@ -313,21 +313,36 @@
 		<!-- 서버관리 리스트(테이블형) -->
 		<section class="panel panel-bordered" ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length > 0 && contents.listType == 'list'">
 			<div class="panel-body padding-0">
+				<div class="table-input-wrap">
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="datatable-length">
+								<span>페이지당 행 수 : </span>
+								<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'">
+									<option value="10">10</option>
+									<option value="25">25</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="table-wrap border-0">
 					<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
-							<col style="width: ">
-							<col style="width: ">
-							<col style="width: ">
-							<col style="width: ">
-							<col style="width: 10%;">
-							<col style="width: 10%;">
-							<col style="width: 10%;">
-							<col style="width: 10%;">
-							<col style="width: 10%;">
-							<col style="width: 8%;">
-							<col style="width: 15%;">
-							<col style="width: 5%;">
+							<col>						<!--서버명-->
+							<col style="width: 8%;">	<!--os유형-->
+							<col style="width: 8%;">	<!--서버유형-->
+							<col style="width: 12%;">	<!--접속주소-->
+							<col style="width: 8%;">	<!--모니터링-->
+							<col style="width: 8%;">	<!--cpu-->
+							<col style="width: 8%;">	<!--메모리-->
+							<col style="width: 8%;">	<!--디스크-->
+							<col style="width: 8%;">	<!--키페어-->
+							<col style="width: 5%;">	<!--상태-->
+							<col style="width: 170px;">	<!--생성일-->
+							<col style="width: 5%;">	<!--관리-->
 						</colgroup>
 						<thead class="black white-text text-center">
 							<tr>
@@ -346,19 +361,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
+							<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 								<td style="text-align: left">
 									<span class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span> 
-									<!--<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>--> 
 									<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
 								</td>
 								<td>{{ instance.image.osType }}</td>
-								<!-- <td ng-if="instance.spec.type == 'GPU'">GPU</td>
-								<td ng-if="instance.spec.type != 'GPU'">CPU</td> -->
 								<td>{{ instance.spec.type }}</td>
-								<!--
-									<td ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><span class="tb_txt"><a href="" class="ext_link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="ico_sm ico_copy"></span></button></td>
-								-->
 								<td class="text-center" ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'">
 									<a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a>
 									<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><i data-feather="copy" class="feather-directive blue-600 margin-left-5"></i></button>
@@ -367,7 +376,6 @@
 									<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><i data-feather="copy" class="feather-directive blue-600 margin-left-5"></i></button>
 								</td>
 								<td ng-if="!instance.image.osType">-</td>
-
 								<td class="text-center" ng-if="instance.vmMonitoringYn == 'Y'">
 									<a href="{{ instance.monitoringLink }}" class="link">바로가기</a>
 									<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><i data-feather="copy" class="feather-directive blue-600 margin-left-5"></i></button>
@@ -391,21 +399,6 @@
 										<span class="state-round rgba-black-strong" ng-if="instance.vmState == 'stopped'"></span><!-- 중지 -->
 										<span class="state-txt">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
 									</span> 
-									<!--
-									<div ng-if="instance.alarmStatus">
-										<span class="state">
-											<span class="state-round rgba-green-strong" ng-if="!instance.alarmOccur && instance.vmState == 'active'"></span>
-											<span class="state-round rgba-brown-strong" ng-if="instance.vmState == 'error'"></span>
-											<span class="state-round rgba-blue-grey-strong" ng-if="instance.vmState == 'paused' || instance.vmState == 'resized' || instance.vmState == 'building' || instance.vmState == 'shelved_offloaded'"></span>
-											<span class="state-round rgba-black-strong" ng-if="instance.vmState == 'stopped'"></span>
-											<span class="state-round rgba-orange-strong" ng-if="instance.alarmStatus == 'minor'"></span>
-											<span class="state-round rgba-pink-strong" ng-if="instance.alarmStatus == 'warning'"></span>
-											<span class="state-round rgba-red-strong" ng-if="instance.alarmStatus == 'critical'"></span>
-											<span class="state-txt" ng-if="!instance.alarmOccur">{{ 'iaas.label.instance_' + instance.vmState | translate }}</span>
-											<span class="state-txt" ng-if="instance.alarmOccur">{{ 'iaas.label.instance_' + instance.alarmStatus | translate }}</span>
-										</span>
-									</div>
-									-->
 								</td>
 								<td class="text-center">{{instance.created | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
 								<td class="text-center">
@@ -424,11 +417,6 @@
 												<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘활성’상태인 경우에만 '재시작'이 가능합니다.">재시작</a></li>
 												<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('STOP',instance,$index);" title="정지">정지</a></li>
 												<li ng-if="instance.vmState != 'active'"><a href="javascript:void(0);" class="disabled" class="disabled" title="인스턴스가 ‘활성’상태인 경우에만 '정지'가 가능합니다.">정지</a></li>
-												<!--<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SHELVE',instance,$index);" title="비활성화">비활성화</a></li>
-													<li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘비활성화 해제’상태인 경우에만 '비활성화'가 가능합니다.">비활성화</a></li>
-													<li ng-if="instance.vmState == 'shelved_offloaded'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNSHELVE',instance,$index);" title="비활성화 해제">비활성화 해제</a></li>
-													<li ng-if="instance.vmState != 'shelved_offloaded'"><a href="javascript:void(0);" class="disabled" title="서버가 ‘shelved’상태인 경우에만 '비활성화 해제'가 가능합니다.">비활성화 해제</a></li>
-												-->
 												<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.computePopEditServerForm(instance,$event);" title="인스턴스 사양 변경">인스턴스 사양 변경</a></li>
 												<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '인스턴스 사양 변경'이 가능합니다.">인스턴스 사양 변경</a></li>
 												<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="스냅샷 이미지 생성">스냅샷 이미지 생성</a>	</li>
@@ -443,11 +431,6 @@
 												</li>
 												<li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="contents.deleteInstanceJob(instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
 												<li ng-if="instance.instanceSnapshotList.length > 0">	<a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
-												<!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
-												<!--<li ng-if="instance.vmState == 'paused'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('UNPAUSE',instance,$index)">정지해제</a></li>-->
-												<!-- <li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index);">이미지 백업 이미지</a></li> -->
-												<!--<li ng-if="instance.floatingIp == ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPCONNECT',instance,$index);">접속IP설정</a></li>-->
-												<!--<li ng-if="instance.floatingIp != ''"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('IPDISCONNECT',instance,$index);">접속IP해제</a></li>-->
 											</ul>
 										</div>
 									</div>
@@ -455,6 +438,35 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+				<div class="table-bottom-wrap">
+					<div class="row">
+						<div class="col-sm-2">
+								<span class="dataTables_info">
+									{{ 'label.total' | translate }} {{ (contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting'}).length }}{{ 'label.count' | translate }}
+								</span>
+						</div>
+						<div class="col-sm-8">
+							<nav class="text-center">
+								<div class="paginationWrap">
+									<paging
+											page="contents.pageOptions.currentPage"
+											page-size="contents.pageOptions.pageSize"
+											total="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting'}).length"
+											pg-href=""
+											show-prev-next="true"
+											show-first-last="true"
+											paging-action=""
+											text-first-class="firstPage"
+											text-last-class="lastPage"
+											text-next-class="nextPage"
+											text-prev-class="prevPage">
+									</paging>
+								</div>
+							</nav>
+						</div>
+						<div class="col-sm-2"></div>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -636,6 +648,21 @@
 		<!-- 부하분산 리스트(테이블형) -->
 		<section class="panel panel-bordered" ng-if="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length > 0 && contents.listType == 'list'">
 			<div class="panel-body padding-0">
+				<div class="table-input-wrap">
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="datatable-length">
+								<span>페이지당 행 수 : </span>
+								<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions2.pageSize" ng-init="contents.pageOptions2.pageSize = '10'">
+									<option value="10">10</option>
+									<option value="25">25</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="table-wrap border-0">
 					<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
@@ -657,7 +684,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }">
+							<tr ng-repeat="(key, lbServiceList) in contents.lbServiceLists | filter:{ name: contents.schLbFilterText }" ng-show="key >= (contents.pageOptions2.currentPage - 1) * contents.pageOptions2.pageSize && key < contents.pageOptions2.currentPage * contents.pageOptions2.pageSize">
 								<td class="text-left">
 									<a class="link" ng-click="main.goToPage('/gpu/loadbalancer/detail/' + lbServiceList.iaasLbInfo.id)">{{ lbServiceList.name }}</a>
 								</td>
@@ -672,7 +699,7 @@
 								<td class="text-center">{{ lbServiceList.iaasLbInfo.created | date: 'yyyy.MM.dd HH:mm:ss'}}</td>
 								<td class="text-center">
 									<div class="dropdown btn-option">
-										<button id="btn-option" type="button" class="btn btn-nostyle dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
+										<button id="btn-option2" type="button" class="btn btn-nostyle dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정">
 											<div class="feather-icon">
 												<i data-feather="more-horizontal" class="feather-directive"></i>
 											</div>
@@ -687,6 +714,35 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+				<div class="table-bottom-wrap">
+					<div class="row">
+						<div class="col-sm-2">
+								<span class="dataTables_info">
+									{{ 'label.total' | translate }} {{ (contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length }}{{ 'label.count' | translate }}
+								</span>
+						</div>
+						<div class="col-sm-8">
+							<nav class="text-center">
+								<div class="paginationWrap">
+									<paging
+											page="contents.pageOptions2.currentPage"
+											page-size="contents.pageOptions2.pageSize"
+											total="(contents.lbServiceLists | filter:{ name: contents.schLbFilterText }).length"
+											pg-href=""
+											show-prev-next="true"
+											show-first-last="true"
+											paging-action=""
+											text-first-class="firstPage"
+											text-last-class="lastPage"
+											text-next-class="nextPage"
+											text-prev-class="prevPage">
+									</paging>
+								</div>
+							</nav>
+						</div>
+						<div class="col-sm-2"></div>
+					</div>
 				</div>
 			</div>
 		</section>

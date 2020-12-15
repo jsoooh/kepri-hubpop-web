@@ -200,9 +200,7 @@ angular.module('gpu.controllers')
                 common.showAlertWarning('테넌트 정보가 없습니다.');
                 return;
             }
-            
             $scope.main.loadingMainBody = true;
-            
             var param = {
                 tenantId : ct.data.tenantId,
                 queryType : 'list'

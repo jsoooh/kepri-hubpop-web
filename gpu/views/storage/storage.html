@@ -167,6 +167,21 @@
 <!-- 볼륨 리스트(테이블형) -->
 <section class="panel panel-bordered" ng-if="!!main.userTenantGpuId && (contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length > 0 && contents.listType == 'list'">
 	<div class="panel-body padding-0">
+		<div class="table-input-wrap">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="datatable-length">
+						<span>페이지당 행 수 : </span>
+						<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'" ng-change="contents.pageOptions.currentPage = 1">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="table-wrap border-0">
 			<table class="table table-hover" cellspacing="0" width="100%">
 				<colgroup>
@@ -177,7 +192,6 @@
 					<col style="width: 10%;">
 					<col style="width: 8%;">
 					<col style="width: 10%;">
-					<!--<col style="width: 15%;">-->
 					<col style="width: 8%;">
 				</colgroup>
 				<thead class="text-center">
@@ -189,13 +203,11 @@
 						<th scope="col">연결서버</th>
 						<th scope="col">스냅샷개수</th>
 						<th scope="col">상태</th>
-						<!-- 20.04.29 - 추후 요청 들어올시 진행 by ksw -->
-						<!--<th scope="col">생성일</th>-->
 						<th scope="col">관리</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="volume in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }">
+					<tr ng-repeat="(key, volume) in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 						<td>{{volume.name}}</td>
 						<td class="text-center">{{volume.size}}</td>
 						<td class="text-center">{{volume.type}}</td>
@@ -214,8 +226,6 @@
 								<span>{{ 'iaas.label.volume_' + volume.status | translate }}</span>
 							</span>
 						</td>
-						<!-- 20.04.29 - 추후 요청 들어올시 진행 by ksw -->
-						<!--<td>2019-11-13 09:24:07</td>-->
 						<td class="text-center">
 							<div class="dropdown btn-option">
 								<button id="btn-option" type="button" class="btn btn-xs btn-nostyle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="실행 설정" ng-disabled="!main.checkResourceUserRole()">
@@ -242,6 +252,35 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
+		<div class="table-bottom-wrap">
+			<div class="row">
+				<div class="col-sm-2">
+					<span class="dataTables_info">
+						{{ 'label.total' | translate }} {{ (contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length }}{{ 'label.count' | translate }}
+					</span>
+				</div>
+				<div class="col-sm-8">
+					<nav class="text-center">
+						<div class="paginationWrap">
+							<paging
+									page="contents.pageOptions.currentPage"
+									page-size="contents.pageOptions.pageSize"
+									total="(contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }).length"
+									pg-href=""
+									show-prev-next="true"
+									show-first-last="true"
+									paging-action=""
+									text-first-class="firstPage"
+									text-last-class="lastPage"
+									text-next-class="nextPage"
+									text-prev-class="prevPage">
+							</paging>
+						</div>
+					</nav>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
 		</div>
 	</div>
 </section>

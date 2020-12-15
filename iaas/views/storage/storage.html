@@ -145,7 +145,7 @@
 				<div class="col-sm-3">
 					<div class="datatable-length">
 						<span>페이지당 행 수 : </span>
-						<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'">
+						<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'" ng-change="contents.pageOptions.currentPage = 1">
 							<option value="10">10</option>
 							<option value="25">25</option>
 							<option value="50">50</option>

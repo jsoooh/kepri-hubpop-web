@@ -142,6 +142,21 @@
 			<!-- 서버스냅샷 리스트(테이블형) -->
 			<section class="panel panel-bordered" ng-if="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length > 0 && contents.listType == 'list'">
 				<div class="panel-body padding-0">
+					<div class="table-input-wrap">
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="datatable-length">
+									<span>페이지당 행 수 : </span>
+									<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions.pageSize" ng-init="contents.pageOptions.pageSize = '10'" ng-change="contents.pageOptions.currentPage = 1">
+										<option value="10">10</option>
+										<option value="25">25</option>
+										<option value="50">50</option>
+										<option value="100">100</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="table-wrap border-0">
 						<table class="table table-hover" cellspacing="0" width="100%">
 							<colgroup>
@@ -165,7 +180,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }">
+								<tr ng-repeat="instanceSnapshot in contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 									<td class="text-left">{{instanceSnapshot.name}}</td>
 									<td class="text-left">
 										<!--<a class="txt_long" href="" title="{{instanceSnapshot.instanceName}}" ng-if="instanceSnapshot.beInstance" ng-click="main.goToPage('/iaas/compute/detail/'+instanceSnapshot.instanceId)">{{instanceSnapshot.instanceName}}</a>-->
@@ -200,6 +215,35 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+					<div class="table-bottom-wrap">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="dataTables_info">
+									{{ 'label.total' | translate }} {{ (contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length }}{{ 'label.count' | translate }}
+								</span>
+							</div>
+							<div class="col-sm-8">
+								<nav class="text-center">
+									<div class="paginationWrap">
+										<paging
+												page="contents.pageOptions.currentPage"
+												page-size="contents.pageOptions.pageSize"
+												total="(contents.instanceSnapshotList |  filter:{ name: contents.schInstanceFilterText, status : '!deleting' }).length"
+												pg-href=""
+												show-prev-next="true"
+												show-first-last="true"
+												paging-action=""
+												text-first-class="firstPage"
+												text-last-class="lastPage"
+												text-next-class="nextPage"
+												text-prev-class="prevPage">
+										</paging>
+									</div>
+								</nav>
+							</div>
+							<div class="col-sm-2"></div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -323,6 +367,21 @@
 			<!-- 볼륨스냅샷 리스트(테이블형) -->
 			<section class="panel panel-bordered" ng-if="(contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }).length > 0 && contents.listType == 'list'">
 				<div class="panel-body padding-0">
+					<div class="table-input-wrap">
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="datatable-length">
+									<span>페이지당 행 수 : </span>
+									<select class="form-control form-control-sm margin-left-5" ng-model="contents.pageOptions2.pageSize" ng-init="contents.pageOptions2.pageSize = '10'" ng-change="contents.pageOptions2.currentPage = 1">
+										<option value="10">10</option>
+										<option value="25">25</option>
+										<option value="50">50</option>
+										<option value="100">100</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="table-wrap border-0">
 						<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
@@ -346,7 +405,7 @@
 							</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="storageSnapshot in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }">
+								<tr ng-repeat="(key, storageSnapshot) in contents.storageSnapshotList |  filter:{ volumeName: contents.schStorageFilterText, status : '!deleting' }" ng-show="key >= (contents.pageOptions2.currentPage - 1) * contents.pageOptions2.pageSize && key < contents.pageOptions2.currentPage * contents.pageOptions2.pageSize">
 									<td class="text-left">{{storageSnapshot.snapshotName}}</td>
 									<td class="text-center">{{storageSnapshot.volumeName}}</td>
 									<td class="text-center">{{storageSnapshot.size | displayVolume:'GB'}}</td>
@@ -377,6 +436,35 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+					<div class="table-bottom-wrap">
+						<div class="row">
+							<div class="col-sm-2">
+								<span class="dataTables_info">
+									{{ 'label.total' | translate }} {{ (contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }).length }}{{ 'label.count' | translate }}
+								</span>
+							</div>
+							<div class="col-sm-8">
+								<nav class="text-center">
+									<div class="paginationWrap">
+										<paging
+												page="contents.pageOptions2.currentPage"
+												page-size="contents.pageOptions2.pageSize"
+												total="(contents.storageSnapshotList |  filter:{ snapshotName: contents.schStorageFilterText, status : '!deleting' }).length"
+												pg-href=""
+												show-prev-next="true"
+												show-first-last="true"
+												paging-action=""
+												text-first-class="firstPage"
+												text-last-class="lastPage"
+												text-next-class="nextPage"
+												text-prev-class="prevPage">
+										</paging>
+									</div>
+								</nav>
+							</div>
+							<div class="col-sm-2"></div>
+						</div>
 					</div>
 				</div>
 			</section>
