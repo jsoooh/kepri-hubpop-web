@@ -99,10 +99,10 @@
 <div class="panel panel-bordered" ng-if="!!main.userTenantGpuId">
 	<div class="panel-heading">
 		<div class="row no-margin bordered">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<h3 class="panel-title">버킷목록</h3>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-9">
 				<h3 class="panel-title">파일 및 폴더</h3>
 			</div>
 		</div>
@@ -111,7 +111,7 @@
 	<div class="panel-body padding-0">
 		<div class="row no-margin bordered">
 			<!-- 버킷목록 -->
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="scroll-content" style="height: 530px">
 					<ul class="list-group list-group-dividered list-group-link">
 						<li class="list-group-item" ng-repeat="item in contents.objectStorageList" ng-class="item.containerName==contents.data.bucketName ? 'animated fast fadeInDown active' : 'animated fast fadeInDown'">
@@ -129,10 +129,10 @@
 			<!-- //버킷목록 -->
 
 			<!-- 파일 및 폴더 -->
-			<div class="col-md-8">
+			<div class="col-md-9">
 				<div class="row">
 					<div class="col-md-6">
-						<div class="table-path"><span class="tit">Path:</span><span class="link" ng-repeat="item in contents.objectStorageObjectList.currentPathList" ng-click="contents.fn.onClickObjectStoragePathList($index)">{{item}}</span></div>
+						<div class="table-path"><span class="tit margin-right-5">Path:</span><a class="link" ng-repeat="item in contents.objectStorageObjectList.currentPathList" ng-click="contents.fn.onClickObjectStoragePathList($index)">{{item}}</a></div>
 					</div>
 					<div class="col-md-6 text-right padding-top-10 padding-right-25">
 						<div class="inline-block">
@@ -167,10 +167,10 @@
 									<colgroup>
 										<col style="width: 5%;">
 										<col style="width: 10%;">
-										<col style="width: 20%;">
-										<col>
 										<col style="width: 15%;">
 										<col style="width: 15%;">
+										<col style="width: 15%;">
+										<col style="width: 10%;">
 									</colgroup>
 									<thead class="bg-blue-grey-100">
 									<tr>
