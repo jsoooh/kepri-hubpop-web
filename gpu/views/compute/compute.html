@@ -363,8 +363,8 @@
 						<tbody>
 							<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 								<td style="text-align: left">
-									<span class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span> 
-									<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
+									<a class="link" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</a> 
+									<a class="link" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</a>
 								</td>
 								<td>{{ instance.image.osType }}</td>
 								<td>{{ instance.spec.type }}</td>

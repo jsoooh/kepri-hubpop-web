@@ -377,8 +377,8 @@
 								<tbody>
 									<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }" ng-show="key >= (contents.pageOptions1.currentPage - 1) * contents.pageOptions1.pageSize && key < contents.pageOptions1.currentPage * contents.pageOptions1.pageSize">
 										<td class="text-left">
-											<span class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span>
-											<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
+											<a class="link" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</a>
+											<a class="link" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</a>
 										</td>
 										<td class="text-center">{{ instance.image.osType }}</td>
 										<td class="text-center">
