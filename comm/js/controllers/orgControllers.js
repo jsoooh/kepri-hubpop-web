@@ -256,7 +256,7 @@ angular.module('portal.controllers')
                     dialogAlertHtml += '아래와 같이 사용 중인 서비스가 있습니다.';
                     dialogAlertHtml += '<br>사용중인 서비스 항목 삭제 후 프로젝트 삭제를 진행해 주세요.<br><br>';
                 } else {
-                    dialogAlertHtml = '아래 서비스 확인 중 에러가 있습니다.';
+                    dialogAlertHtml = '아래 서비스 사용여부 확인 중 에러가 있습니다.';
                     dialogAlertHtml += '<br>확인 후 진행해 주세요.<br><br>';
                 }
                 var serviceNameArr = [];
