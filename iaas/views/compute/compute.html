@@ -346,7 +346,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="table-wrap border-0">
+						<div class="table-wrap">
 							<table class="table table-hover" cellspacing="0" width="100%">
 								<colgroup>
 									<col style="width:15%;">
@@ -360,7 +360,7 @@
 									<col style="width: 15%;">
 									<col style="width: 8%;">
 								</colgroup>
-								<thead class="black white-text text-center">
+								<thead class="text-center">
 									<tr>
 										<th scope="col">인스턴스명</th>
 										<th scope="col">OS 유형</th>
@@ -377,8 +377,8 @@
 								<tbody>
 									<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }" ng-show="key >= (contents.pageOptions1.currentPage - 1) * contents.pageOptions1.pageSize && key < contents.pageOptions1.currentPage * contents.pageOptions1.pageSize">
 										<td class="text-left">
-											<span class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span>
-											<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
+											<a class="link" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</a>
+											<a class="link" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</a>
 										</td>
 										<td class="text-center">{{ instance.image.osType }}</td>
 										<td class="text-center">
@@ -689,7 +689,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="table-wrap border-0">
+						<div class="table-wrap">
 							<table class="table table-hover" cellspacing="0" width="100%">
 								<colgroup>
 									<col style="width:15%;">
@@ -699,7 +699,7 @@
 									<col style="width: 15%;">
 									<col style="width: 8%;">
 								</colgroup>
-								<thead class="black white-text text-center">
+								<thead class="text-center">
 									<tr>
 										<th scope="col">명칭</th>
 										<th scope="col">포트수</th>

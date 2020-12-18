@@ -328,7 +328,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="table-wrap border-0">
+				<div class="table-wrap">
 					<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
 							<col>						<!--서버명-->
@@ -344,7 +344,7 @@
 							<col style="width: 170px;">	<!--생성일-->
 							<col style="width: 5%;">	<!--관리-->
 						</colgroup>
-						<thead class="black white-text text-center">
+						<thead class="text-center">
 							<tr>
 								<th scope="col">서버명</th>
 								<th scope="col">OS유형</th>
@@ -363,8 +363,8 @@
 						<tbody>
 							<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 								<td style="text-align: left">
-									<span class="tit" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span> 
-									<span class="tit" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
+									<a class="link" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</a> 
+									<a class="link" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</a>
 								</td>
 								<td>{{ instance.image.osType }}</td>
 								<td>{{ instance.spec.type }}</td>
@@ -663,7 +663,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="table-wrap border-0">
+				<div class="table-wrap">
 					<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
 							<col style="width:15%;">
@@ -673,7 +673,7 @@
 							<col style="width: 15%;">
 							<col style="width: 8%;">
 						</colgroup>
-						<thead class="black white-text text-center">
+						<thead class="text-center">
 							<tr>
 								<th scope="col">명칭</th>
 								<th scope="col">포트수</th>
