@@ -190,9 +190,7 @@ angular.module('portal.controllers')
             }
             // 프로젝트 서비스 조회
             var serviceList = ct.checkOrgProjectService(id, orgId);
-            if (!serviceList) {
-                return;
-            }
+            if (!serviceList) return;
 
             // 프로젝트 서비스 api promise 세팅
             var promiseArr = [];
