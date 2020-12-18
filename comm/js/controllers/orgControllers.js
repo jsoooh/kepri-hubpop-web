@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portal.controllers')
-    .controller('commOrgProjectsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, $q, orgService, userSettingService, common, CONSTANTS) {
+    .controller('commOrgProjectsCtrl', function ($scope, $location, $state, $stateParams, $translate, $timeout, $cookies, $mdDialog, $q, $interval, orgService, userSettingService, common, CONSTANTS) {
         _DebugConsoleLog("orgControllers.js : commOrgProjectsCtrl", 1);
 
         var ct = this;
@@ -200,27 +200,27 @@ angular.module('portal.controllers')
             }
             // 프로젝트 서비스 조회
             var serviceList = ct.checkOrgProjectService(orgItem.id, orgItem.orgId);
-            if (!serviceList) {
-                return;
-            }
+            if (!serviceList) return;
 
             // 프로젝트 서비스 api promise 세팅
-            var promiseArr = new Array();
+            var promiseArr = [];
             angular.forEach(serviceList, function (service) {
-                if (service.promise)
+                if (service.promise) {
                     promiseArr.push(service.promise);
+                }
             });
 
             $scope.main.loadingMainBody = true;
+            var bUse = false;     //서비스 사용 여부
+            var bError = false;   //서비스 api 에러 여부
             $q.all(promiseArr).then(function() {
-                var showAlertBoolean = false;
                 for (var i = 0; i < serviceList.length; i++) {
                     if (serviceList[i].useYn != 'N') {
-                        showAlertBoolean = true;
+                        bUse = true;
                         break;
                     }
                 }
-                if (showAlertBoolean) {
+                if (bUse) {
                     // 프로젝트 서비스 사용중 알람창
                     common.showDialogAlertHtml('알림', setDialogAlertHtml('success', serviceList), 'warning');
                 } else {
@@ -228,11 +228,26 @@ angular.module('portal.controllers')
                     $scope.main.popDeleteCheckName($event, '프로젝트', orgItem.orgName, ct.deleteOrgProjectAction, orgItem);
                 }
             }).catch(function() {
-                // 프로젝트 서비스 호출 오류 알림창
-                common.showDialogAlertHtml('알림', setDialogAlertHtml('error', serviceList), 'warning');
+                bError = true;
             }).finally(function () {
                 $scope.main.loadingMainBody = false;
             });
+
+            //오류 시 전체 서비스 보여주기 위해 $interval 이용
+            var checkServiceCall = $interval(function () {
+                var bCallDone = true;
+                angular.forEach(serviceList, function (service) {
+                    if (service.callYn == 'N') bCallDone = false;
+                });
+                if (bCallDone) {
+                    $interval.cancel(checkServiceCall);
+                    // 프로젝트 서비스 호출 오류 알림창
+                    if (bError) {
+                        common.showDialogAlertHtml('알림', setDialogAlertHtml('error', serviceList), 'warning');
+                    }
+                    $scope.main.loadingMainBody = false;
+                }
+            }, 100);
 
             // 알람 팝업창 html 세팅
             var setDialogAlertHtml = function (functionSuccess, serviceList) {
@@ -244,7 +259,7 @@ angular.module('portal.controllers')
                     dialogAlertHtml = '아래 서비스 확인 중 에러가 있습니다.';
                     dialogAlertHtml += '<br>확인 후 진행해 주세요.<br><br>';
                 }
-                var serviceNameArr = new Array();
+                var serviceNameArr = [];
                 angular.forEach(serviceList, function (service) {
                    if (functionSuccess == 'success' && service.useYn == 'Y') {
                        serviceNameArr.push(service.serviceName);
@@ -267,13 +282,22 @@ angular.module('portal.controllers')
         // 프로젝트 서비스 조회
         ct.checkOrgProjectService = function (id, orgId) {
             var serviceList = [
-                {serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N'},
-                {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N'},
-                {serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N'},
-                {serviceCode : 'gis', serviceName : 'HUB-PoP GIS', useYn : 'N'},
-                {serviceCode : 'vru', serviceName : 'AR/VR 공유서비스', useYn : 'N'},
-                {serviceCode : 'hwu', serviceName : 'HiveBroker 서비스', useYn : 'N'},
-                {serviceCode : 'aau', serviceName : 'AI-API 서비스', useYn : 'N'}
+                {serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N', callYn : 'N'},
+                //엘이테크
+                {serviceCode : 'gis', serviceName : 'HUB-PoP GIS', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'vru', serviceName : 'AR/VR 공유서비스', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'hwu', serviceName : 'HiveBroker 서비스', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'aau', serviceName : 'AI-API 서비스', useYn : 'N', callYn : 'N'},
+                //와이즈테크놀로지
+                {serviceCode : 'DeePoP', serviceName : '분석서비스', useYn : 'N', callYn : 'N'},
+                //엔텔스
+                {serviceCode : 'apip', serviceName : 'API 게이트웨이', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'dbp', serviceName : '실시간데이터브로커', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'dss', serviceName : 'DB 서비스', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'dpl', serviceName : '개발 파이프라인', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'faas', serviceName : 'FaaS', useYn : 'N', callYn : 'N'}
             ];
 
             // 서비스 항목에 usedYn, promise 세팅
@@ -285,22 +309,23 @@ angular.module('portal.controllers')
                 service.promise = promise;
                 promise.success(function (data) {
                     if (serviceCode == 'iaas' || serviceCode == 'gpu') {    // 서버가상화, GPU 서버가상화
-                        if (data && data.content && data.content.pk && data.content.pk.teamCode) {
-                            service.useYn = 'Y';
-                        }
+                        if (data && data.content && data.content.pk && data.content.pk.teamCode) service.useYn = 'Y';
                     } else if (serviceCode == 'paas') { // App 실행 서비스
-                        if (data && data.guid) {
-                            service.useYn = 'Y';
-                        }
-                    } else {    // 타사업자 서비스
-                        if (data == 'Y') {
-                            service.useYn = 'Y';
-                        }
+                        if (data && data.guid) service.useYn = 'Y';
+                    } else if (serviceCode == 'gis' || serviceCode == 'vru' || serviceCode == 'hwu' || serviceCode == 'aau') { //엘이테크 서비스
+                        if (data && data.content) service.useYn = data.content;
+                    } else if (serviceCode == 'DeePoP') { //와이즈테크놀로지 : 분석서비스
+                        if (data && data.use_stat_yn) service.useYn = data.use_stat_yn;
+                    } else if (serviceCode == 'apip' || serviceCode == 'dbp' || serviceCode == 'dss' || serviceCode == 'dpl' || serviceCode == 'faas') { //엔텔스 서비스
+                        if (data && data.content) service.useYn = data.content;
                     }
                 });
                 promise.error(function () {
                     service.useYn = 'E';
                 });
+                promise.finally(function () {
+                    service.callYn = 'Y';
+                })
             };
 
             // 서버 가상화
@@ -309,10 +334,8 @@ angular.module('portal.controllers')
                 "teamCode" : orgId
             };
             setServiceUseYn('iaas', common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', iaasAndGpuParams, 'application/x-www-form-urlencoded')));
-
             // Gpu 서버 가상화
             setServiceUseYn('gpu', common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/org/one', 'GET', iaasAndGpuParams, 'application/x-www-form-urlencoded')));
-
             // App 실행 서비스
             var paasParams = {
                 urlPaths : {"name" : orgId},
@@ -320,22 +343,31 @@ angular.module('portal.controllers')
             };
             setServiceUseYn('paas', common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', paasParams)));
 
-            // 타사업자 파라미터
-            var otherParam = {
-                "PROJECT-ID" : id
-            };
+            // 타사업자 파라미터 : 엘이테크
+            var otherParam = { "PROJECT-ID" : orgId };
             // HUB-PoP GIS
-            // setServiceUseYn('gis', common.retrieveResource(common.resourcePromise('/gis/confirmDeleteOrNot.do', 'GET', otherParam)));
-
+            setServiceUseYn('gis', common.retrieveResource(common.resourcePromise('/gis/confirmDeleteOrNot.do', 'GET', otherParam)));
             // AR/VR 공유서비스
-            // setServiceUseYn('vru', common.retrieveResource(common.resourcePromise('/vru/confirmDeleteOrNot.do', 'GET', otherParam)));
-
+            setServiceUseYn('vru', common.retrieveResource(common.resourcePromise('/vru/confirmDeleteOrNot.do', 'GET', otherParam)));
             // HiveBroker 서비스
-            // setServiceUseYn('hwu', common.retrieveResource(common.resourcePromise('/hwu/confirmDeleteOrNot.do', 'GET', otherParam)));
-
+            setServiceUseYn('hwu', common.retrieveResource(common.resourcePromise('/hwu/confirmDeleteOrNot.do', 'GET', otherParam)));
             // AI-API 서비스
-            // setServiceUseYn('aau', common.retrieveResource(common.resourcePromise('/aau/confirmDeleteOrNot.do', 'GET', otherParam)));
-
+            setServiceUseYn('aau', common.retrieveResource(common.resourcePromise('/aau/confirmDeleteOrNot.do', 'GET', otherParam)));
+            //와이즈테크놀로지 : 분석서비스
+            var other2Param = { "prjc_id" : orgId };
+            setServiceUseYn('DeePoP', common.retrieveResource(common.resourcePromise('/DeePoP/rest/projectUserCheck.do', 'GET', other2Param)));
+            //엔텔스
+            var other3Param = { "teamCode" : orgId };
+            //API 게이트웨이
+            setServiceUseYn('apip', common.retrieveResource(common.resourcePromise('/apip/api/common/service/useYn', 'GET', other3Param)));
+            //실시간데이터브로커
+            setServiceUseYn('dbp', common.retrieveResource(common.resourcePromise('/dbp/api/common/service/useYn', 'GET', other3Param)));
+            //DB 서비스
+            setServiceUseYn('dss', common.retrieveResource(common.resourcePromise('/dss/api/common/service/useYn', 'GET', other3Param)));
+            //개발 파이프라인
+            setServiceUseYn('dpl', common.retrieveResource(common.resourcePromise('/dpl/api/common/service/useYn', 'GET', other3Param)));
+            //FaaS
+            setServiceUseYn('faas', common.retrieveResource(common.resourcePromise('/faas/api/common/service/useYn', 'GET', other3Param)));
             return serviceList;
         };
 
