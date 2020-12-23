@@ -296,6 +296,13 @@ resources:
               echo "export CGIS_S05_IP=$CGIS_S05_IP"               >> /data/cgis/cgis-postgresql/cgis-postgresql.env
               echo "export MY_IP=${MY_IP}"                           >> /data/cgis/cgis-postgresql/cgis-postgresql.env
               #exit 0
+
+              if [ "${CGIS_PORT_WEB}" = "80" ]; then
+                echo "export GISB_PATH=http://${MY_IP}/gisb"                  > /data/cgis/cgis-kepler.gl/cgis-kepler.env
+              else
+                echo "export GISB_PATH=http://${MY_IP}:${CGIS_PORT_WEB}/gisb" > /data/cgis/cgis-kepler.gl/cgis-kepler.env
+              fi
+
             fi
 
             #END
