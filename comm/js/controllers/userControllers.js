@@ -100,6 +100,7 @@ angular.module('common.controllers')
             ct.checkSsoPgsecuid(common.getPgsecuid());
         }
 
+        //쿠키 설정 테스트를 위한 임시 추가. 2021.01.19
         ct.setCookiePgsecuid = function (key) {
             console.log("setCookiePgsecuid > key : ", key);
             common.setPgsecuid(key);
