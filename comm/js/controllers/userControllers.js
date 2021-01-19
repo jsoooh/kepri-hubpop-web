@@ -100,6 +100,11 @@ angular.module('common.controllers')
             ct.checkSsoPgsecuid(common.getPgsecuid());
         }
 
+        ct.setCookiePgsecuid = function (key) {
+            console.log("setCookiePgsecuid > key : ", key);
+            common.setPgsecuid(key);
+        };
+
         ct.loginCommonOrgUser = function (token) {
             // 최초 로그인 후 쿠키 값 제거
             common.clearOrgAuthToken();
