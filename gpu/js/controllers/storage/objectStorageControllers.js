@@ -53,7 +53,6 @@ angular.module('gpu.controllers')
             }
         };
     }])
-    // .controller('iaasObjectStorageCtrl', function ($scope, $location, $state,$translate,$filter, $stateParams, user, $q,paging, common, CONSTANTS) {
     .controller('gpuObjectStorageCtrl', function ($scope, $location, $timeout, $state, $translate, $filter, $stateParams, user, $q, paging, common, CONSTANTS) {
         // _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageCtrl", 1);
         _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageCtrl", 1);
@@ -107,28 +106,29 @@ angular.module('gpu.controllers')
                     if (ct.objectStorageList.length > 0) {
                         ct.data.bucketName = ct.objectStorageList[0].containerName;
                         ct.fn.getObjectStorageObject(ct.objectStorageList[0].containerName, "");
+                    } else {
+                        ct.data.bucketName = null;
                     }
                 }
-                /*
-                                if (ct.objectStorageList && ct.objectStorageList.length > 0) {
-                                    angular.forEach(ct.objectStorageList, function (objectStorage) {
-                                        if (objectStorage.usedKiloByte == 0) {
-                                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
-                                            objectStorage["usedVolumeUnit"] = "GB";
-                                        }
-                                          else if (objectStorage.usedKiloByte < 1024) {
-                                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
-                                            objectStorage["usedVolumeUnit"] = "KB";
-                                        } else if (objectStorage.usedKiloByte >= 1024 && objectStorage.usedKiloByte < 1024*1024 ) {
-                                            objectStorage["usedVolume"] = Math.round(objectStorage.usedKiloByte/1024);
-                                            objectStorage["usedVolumeUnit"] = "MB";
-                                        } else {
-                                            objectStorage["usedVolume"] = objectStorage.usedGiGaByte;
-                                            objectStorage["usedVolumeUnit"] = "GB";
-                                        }
-                                    });
-                                }
-                                */
+
+                /*if (ct.objectStorageList && ct.objectStorageList.length > 0) {
+                    angular.forEach(ct.objectStorageList, function (objectStorage) {
+                        if (objectStorage.usedKiloByte == 0) {
+                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
+                            objectStorage["usedVolumeUnit"] = "GB";
+                        }
+                          else if (objectStorage.usedKiloByte < 1024) {
+                            objectStorage["usedVolume"] = objectStorage.usedKiloByte;
+                            objectStorage["usedVolumeUnit"] = "KB";
+                        } else if (objectStorage.usedKiloByte >= 1024 && objectStorage.usedKiloByte < 1024*1024 ) {
+                            objectStorage["usedVolume"] = Math.round(objectStorage.usedKiloByte/1024);
+                            objectStorage["usedVolumeUnit"] = "MB";
+                        } else {
+                            objectStorage["usedVolume"] = objectStorage.usedGiGaByte;
+                            objectStorage["usedVolumeUnit"] = "GB";
+                        }
+                    });
+                }*/
                 if (ct.objectStorageList && ct.objectStorageList.length > 0) {
                     angular.forEach(ct.objectStorageList, function (objectStorage) {
                         if (objectStorage.usedKiloByte == 0) {
@@ -241,12 +241,12 @@ angular.module('gpu.controllers')
             this.history = [];
             this.currentPath = "";
             // this.onRefresh = function() {};
-        }
+        };
 
         ct.fileNavigator.prototype.getBasePath = function() {
             var path = (ct.fileManager.basePath || '').replace(/^\//, '');
             return path.trim() ? path.split('/') : [];
-        }
+        };
 
         ct.fileNavigator.prototype.list = function(data, path) {
             var self = this;
@@ -275,7 +275,7 @@ angular.module('gpu.controllers')
             }).finally(function() {
                 self.requesting = false;
             });
-        }
+        };
 
         ct.fileNavigator.prototype.buildTree = function(path) {
             var flatNodes = [], selectedNode = {};
@@ -362,7 +362,7 @@ angular.module('gpu.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         if (ct.data.tenantId) {
             ct.fn.getObjectStorageList();
@@ -385,7 +385,7 @@ angular.module('gpu.controllers')
                 ct.fn.updatePathList(ct.objectStorageObjectList.currentPath); // Path 업데이트
                 ct.fn.changeCheckedState(false); // 폴더 이동 후
             }
-        }
+        };
 
         ct.fn.onClickObjectStoragePathList = function(index) {
             if (ct.objectStorageObjectList.currentPathList.length - 1 != index) { // 같은 경우는 현재 path
@@ -396,13 +396,13 @@ angular.module('gpu.controllers')
                 ct.objectStorageObjectList.currentPath = currentPath;
                 ct.fn.updatePathList(ct.objectStorageObjectList.currentPath); // Path 업데이트
             }
-        }
+        };
 
         ct.fn.changeCheckedState = function(checked) {
             for (var i = 0; i < ct.objectStorageObjectList.fileList.length; i++) {
                 ct.objectStorageObjectList.fileList[i].checked = checked;
             }
-        }
+        };
 
         ct.fn.onClickAllChecked = function() {
             ct.fn.changeCheckedState(ct.data.allChecked);
@@ -492,10 +492,7 @@ angular.module('gpu.controllers')
             }
             $timeout(timer, 2000);
             */
-
-
-        }
-
+        };
 
         ct.fn.createFolder = function($event) {
             var dialogOptions =  {
@@ -541,8 +538,7 @@ angular.module('gpu.controllers')
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, dialogOptions);
             $scope.actionLoading = true; // action loading
-        }
-
+        };
 
         ct.fn.cutObject = function () {
             var items = ct.fn.getCheckedFileItems();
@@ -574,7 +570,7 @@ angular.module('gpu.controllers')
                     });
                 }
             }
-        }
+        };
 
         ct.fn.deleteObject = function () {
             var items = ct.fn.getCheckedFileItems();
@@ -599,7 +595,7 @@ angular.module('gpu.controllers')
                     });
                 })
             }
-        }
+        };
 
         ct.fn.downloadFiles = function () {
             var items = ct.fn.getCheckedFileItems();
@@ -634,7 +630,7 @@ angular.module('gpu.controllers')
                 returnPromise.finally(function (data, status, headers) {
                 });
             }
-        }
+        };
 
          ct.fn.copyDownloadUrl = function () {
              var items = ct.fn.getCheckedFileItems();
@@ -662,7 +658,7 @@ angular.module('gpu.controllers')
                  returnPromise.finally(function (data, status, headers) {
                  });
              }
-         }
+         };
 
          ct.fn.getCheckedFileItems = function() {
             var items = [];
@@ -675,7 +671,7 @@ angular.module('gpu.controllers')
                 }
             }
             return items;
-         }
+         };
 
          ct.fn.getCheckedDownloadItems = function() {
              var checked = false;
@@ -692,7 +688,7 @@ angular.module('gpu.controllers')
                  }
              }
              return checked;
-         }
+         };
 
          ct.fn.updatePathList = function (currentPath) {
              ct.objectStorageObjectList.currentPathList = [];
@@ -704,18 +700,14 @@ angular.module('gpu.controllers')
                         ct.objectStorageObjectList.currentPathList.push(pathList[i] + "/");
                 }
              }
-         }
+         };
 
         ct.fn.refreshObjectStorage = function() {
             ct.data.cutObjectName = "";
             ct.fn.getObjectStorageObject(ct.data.bucketName, ct.objectStorageObjectList.currentPath);
         }
-
-
     })
-
     //오브젝트스토리지 생성 컨트롤
-    // .controller('iaasObjectStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuObjectStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         // _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageFormCtrl", 1);
         _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageFormCtrl", 1);
@@ -767,7 +759,7 @@ angular.module('gpu.controllers')
         pop.fn.createObjectStorageAction = function() {
             $scope.main.loadingMainBody = true;
             pop.data.tenantId = pop.userTenant.tenantId;
-            var hyphen = "-"
+            var hyphen = "-";
             var params = {
                 tenantId : pop.data.tenantId,
                 bucket : ct.data.sltPortalOrgId+hyphen+ pop.data.containerName
@@ -788,9 +780,7 @@ angular.module('gpu.controllers')
             });
         };
     })
-
     //오브젝트스토리지 생성 컨트롤
-    // .controller('iaasObjectStorageCreateFolderCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuObjectStorageCreateFolderCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         // _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageCreateFolderCtrl", 1);
         _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageCreateFolderCtrl", 1);
@@ -868,9 +858,7 @@ angular.module('gpu.controllers')
             });
         };
     })
-
     //오브젝트스토리지 생성 컨트롤
-    // .controller('iaasObjectStorageRenameCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuObjectStorageRenameCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         // _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageRenameCtrl", 1);
         _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageRenameCtrl", 1);
@@ -950,7 +938,6 @@ angular.module('gpu.controllers')
             });
         };
     })
-
     .controller('gpuObjectStorageUploadCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageUploadCtrl", 1);
         $scope.contents = common.getMainContentsCtrlScope().contents;
@@ -1026,8 +1013,6 @@ angular.module('gpu.controllers')
             });
         };
     })
-
-    // .controller('iaasObjectStorageInformationCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
     .controller('gpuObjectStorageInformationCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("objectStorageControllers.js : gpuObjectStorageInformationCtrl", 1);
         $scope.contents = common.getMainContentsCtrlScope().contents;

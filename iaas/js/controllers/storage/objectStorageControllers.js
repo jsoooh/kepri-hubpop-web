@@ -79,7 +79,6 @@ angular.module('iaas.controllers')
         ct.objectStorageUsedVolume = "";
         ct.objectStorageUsedVolumeUnit = "";
 
-
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
             ct.data.tenantId = status.tenantId;
@@ -104,10 +103,12 @@ angular.module('iaas.controllers')
                     if (ct.objectStorageList.length > 0) {
                         ct.data.bucketName = ct.objectStorageList[0].containerName;
                         ct.fn.getObjectStorageObject(ct.objectStorageList[0].containerName, "");
+                    } else {
+                        ct.data.bucketName = null;
                     }
                 }
-                /*
-                if (ct.objectStorageList && ct.objectStorageList.length > 0) {
+
+                /*if (ct.objectStorageList && ct.objectStorageList.length > 0) {
                     angular.forEach(ct.objectStorageList, function (objectStorage) {
                         if (objectStorage.usedKiloByte == 0) {
                             objectStorage["usedVolume"] = objectStorage.usedKiloByte;
@@ -124,8 +125,8 @@ angular.module('iaas.controllers')
                             objectStorage["usedVolumeUnit"] = "GB";
                         }
                     });
-                }
-                */
+                }*/
+
                 if (ct.objectStorageList && ct.objectStorageList.length > 0) {
                     angular.forEach(ct.objectStorageList, function (objectStorage) {
                         if (objectStorage.usedKiloByte == 0) {
@@ -233,12 +234,12 @@ angular.module('iaas.controllers')
             this.history = [];
             this.currentPath = "";
             // this.onRefresh = function() {};
-        }
+        };
 
         ct.fileNavigator.prototype.getBasePath = function() {
             var path = (ct.fileManager.basePath || '').replace(/^\//, '');
             return path.trim() ? path.split('/') : [];
-        }
+        };
 
         ct.fileNavigator.prototype.list = function(data, path) {
             var self = this;
@@ -267,7 +268,7 @@ angular.module('iaas.controllers')
             }).finally(function() {
                 self.requesting = false;
             });
-        }
+        };
 
         ct.fileNavigator.prototype.buildTree = function(path) {
             var flatNodes = [], selectedNode = {};
@@ -353,7 +354,7 @@ angular.module('iaas.controllers')
             returnPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         if (ct.data.tenantId) {
             ct.fn.getObjectStorageList();
@@ -376,7 +377,7 @@ angular.module('iaas.controllers')
                 ct.fn.updatePathList(ct.objectStorageObjectList.currentPath); // Path 업데이트
                 ct.fn.changeCheckedState(false); // 폴더 이동 후
             }
-        }
+        };
 
         ct.fn.onClickObjectStoragePathList = function(index) {
             if (ct.objectStorageObjectList.currentPathList.length - 1 != index) { // 같은 경우는 현재 path
@@ -387,20 +388,19 @@ angular.module('iaas.controllers')
                 ct.objectStorageObjectList.currentPath = currentPath;
                 ct.fn.updatePathList(ct.objectStorageObjectList.currentPath); // Path 업데이트
             }
-        }
+        };
 
         ct.fn.changeCheckedState = function(checked) {
             for (var i = 0; i < ct.objectStorageObjectList.fileList.length; i++) {
                 ct.objectStorageObjectList.fileList[i].checked = checked;
             }
-        }
+        };
 
         ct.fn.onClickAllChecked = function() {
             ct.fn.changeCheckedState(ct.data.allChecked);
         };
 
         ct.fn.uploadFiles = function (uploadFiles) {
-
             if (uploadFiles && uploadFiles.files.length > 0) {
                 $scope.main.loadingMainBody = true;
 
@@ -428,8 +428,8 @@ angular.module('iaas.controllers')
                 });
             }
             $scope.main.loadingMainBody = false;
-            /*
-            $timeout(function () {
+
+            /*$timeout(function () {
                 var param = {};
                 param.tenantId = ct.data.tenantId;
                 param.bucket = ct.data.bucketName;
@@ -447,12 +447,10 @@ angular.module('iaas.controllers')
                 returnPromise.finally(function (data, status, headers) {
                     // $scope.main.loadingMainBody = false;
                 });
-            }, 100000);
-            */
-        }
+            }, 100000);*/
+        };
 
-        /*
-        ct.fn.uploadFiles = function (uploadFiles) {
+        /*ct.fn.uploadFiles = function (uploadFiles) {
 
             if (uploadFiles && uploadFiles.files.length > 0) {
 
@@ -467,10 +465,7 @@ angular.module('iaas.controllers')
                 common.showDialog($scope, $event, dialogOptions);
                 $scope.actionLoading = true; // action loading
             }
-        }
-        */
-
-
+        }*/
 
         ct.fn.createFolder = function($event) {
             var dialogOptions =  {
@@ -513,8 +508,7 @@ angular.module('iaas.controllers')
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, dialogOptions);
             $scope.actionLoading = true; // action loading
-        }
-
+        };
 
         ct.fn.cutObject = function () {
             var items = ct.fn.getCheckedFileItems();
@@ -545,7 +539,7 @@ angular.module('iaas.controllers')
                     });
                 }
             }
-        }
+        };
 
         ct.fn.deleteObject = function () {
             var items = ct.fn.getCheckedFileItems();
@@ -569,7 +563,7 @@ angular.module('iaas.controllers')
                     });
                 })
             }
-        }
+        };
 
         ct.fn.downloadFiles = function () {
             var items = ct.fn.getCheckedFileItems();
@@ -603,7 +597,7 @@ angular.module('iaas.controllers')
                 returnPromise.finally(function (data, status, headers) {
                 });
             }
-        }
+        };
 
          ct.fn.copyDownloadUrl = function () {
              var items = ct.fn.getCheckedFileItems();
@@ -630,7 +624,7 @@ angular.module('iaas.controllers')
                  returnPromise.finally(function (data, status, headers) {
                  });
              }
-         }
+         };
 
          ct.fn.getCheckedFileItems = function() {
             var items = [];
@@ -643,11 +637,10 @@ angular.module('iaas.controllers')
                 }
             }
             return items;
-         }
+         };
 
          ct.fn.getCheckedDownloadItems = function() {
              var checked = false;
-
              if (ct.objectStorageObjectList.fileList.length > 0) {
                  for (var i=0; i< ct.objectStorageObjectList.fileList.length; i++) {
                      var item = ct.objectStorageObjectList.fileList[i];
@@ -660,7 +653,7 @@ angular.module('iaas.controllers')
                  }
              }
              return checked;
-         }
+         };
 
          ct.fn.updatePathList = function (currentPath) {
              ct.objectStorageObjectList.currentPathList = [];
@@ -672,16 +665,14 @@ angular.module('iaas.controllers')
                         ct.objectStorageObjectList.currentPathList.push(pathList[i] + "/");
                 }
              }
-         }
+         };
 
         ct.fn.refreshObjectStorage = function() {
             ct.data.cutObjectName = "";
             ct.fn.getObjectStorageObject(ct.data.bucketName, ct.objectStorageObjectList.currentPath);
         }
 
-
     })
-
     //오브젝트스토리지 생성 컨트롤
     .controller('iaasObjectStorageFormCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageFormCtrl", 1);
@@ -751,7 +742,6 @@ angular.module('iaas.controllers')
             });
         };
     })
-
     //오브젝트스토리지 생성 컨트롤
     .controller('iaasObjectStorageCreateFolderCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageCreateFolderCtrl", 1);
@@ -826,7 +816,6 @@ angular.module('iaas.controllers')
         });
     };
     })
-
     //오브젝트스토리지 생성 컨트롤
     .controller('iaasObjectStorageRenameCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageRenameCtrl", 1);
@@ -978,7 +967,6 @@ angular.module('iaas.controllers')
             });
         };
     })
-
     .controller('iaasObjectStorageInformationCtrl', function ($scope, $location, $state,$translate,$timeout, $stateParams, $mdDialog, user, common, ValidationService, CONSTANTS ) {
         _DebugConsoleLog("objectStorageControllers.js : iaasObjectStorageInformationCtrl", 1);
         $scope.contents = common.getMainContentsCtrlScope().contents;

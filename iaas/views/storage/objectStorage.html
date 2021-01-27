@@ -139,13 +139,13 @@
 					<div class="col-md-6 text-right padding-top-10 padding-right-25">
 						<div class="inline-block">
 							<input type="file" id="uploaded" class="form-control" onchange="angular.element(this).scope().contents.fn.uploadFiles(this)" multiple placeholder="Upload File" style="display: none;">
-							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="main.fileSelectBtnClick($event);" ng-disabled="!main.checkResourceUserRole()"><i data-feather="upload" class="feather-directive"></i> 올리기</button>
+							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="main.fileSelectBtnClick($event);" ng-disabled="!main.checkResourceUserRole() || !contents.data.bucketName"><i data-feather="upload" class="feather-directive"></i> 올리기</button>
 						</div>
 						<div class="inline-block">
-							<button type="button" name="button" class="btn btn-sm btn-default" ng-disabled="contents.fn.getCheckedDownloadItems()==false" ng-class="{'disabled' : contents.fn.getCheckedDownloadItems()==false}" ng-click="contents.fn.downloadFiles()"><i data-feather="download" class="feather-directive"></i> 내려받기</button>
+							<button type="button" name="button" class="btn btn-sm btn-default" ng-disabled="!contents.fn.getCheckedDownloadItems()" ng-class="{'disabled' : !contents.fn.getCheckedDownloadItems()}" ng-click="contents.fn.downloadFiles()"><i data-feather="download" class="feather-directive"></i> 내려받기</button>
 						</div>
 						<div class="inline-block">
-							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="contents.fn.createFolder()" ng-disabled="!main.checkResourceUserRole()"><i data-feather="folder-plus" class="feather-directive"></i> 폴더만들기</button>
+							<button type="button" name="button" class="btn btn-sm btn-default" ng-click="contents.fn.createFolder()" ng-disabled="!main.checkResourceUserRole() || !contents.data.bucketName"><i data-feather="folder-plus" class="feather-directive"></i> 폴더만들기</button>
 						</div>
 						<div class="inline-block">
 							<div class="dropdown btn-option">
