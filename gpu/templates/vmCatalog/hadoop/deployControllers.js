@@ -53,7 +53,7 @@ angular.module('gpu.controllers')
                     var masterSpecList = [];
                     var workerSpecList = [];
                     angular.forEach(data.content.specs, function(val, key) {
-                        if (val.name[0] == 'm' &&  val.type == "general") {
+                        if (val.type == "general") {
                             masterSpecList.push(val);
                             workerSpecList.push(val);
                         }
