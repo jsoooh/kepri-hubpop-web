@@ -363,7 +363,7 @@ angular.module('gpu.controllers')
             if (data && data.content && data.content.specs && data.content.specs.length > 0) {
                 var specList = [];
                 angular.forEach(data.content.specs, function(val, key) {
-                    if (val.name[0] == 'm' &&  val.type == "general") {
+                    if (val.type == "general") {
                         specList.push(val);
                     }
                 });
