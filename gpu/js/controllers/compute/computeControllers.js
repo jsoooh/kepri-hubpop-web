@@ -11,8 +11,7 @@ angular.module('gpu.controllers')
                             if (item.gpuCardInfo && item.gpuCardInfo.model == gpuCard.model) {
                                 out.push(item);
                             }
-                        }
-                        else
+                        } else
                             out.push(item);
                     }
                 }); 
@@ -229,6 +228,9 @@ angular.module('gpu.controllers')
                     if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
                         isServerStatusCheck = true;
                     }
+                    if (serverMain.image && serverMain.image.osType) {
+                        serverMain.imageOsType = serverMain.image.osType;
+                    }
                     ct.fn.setProcState(serverMain);
                     ct.fn.setRdpConnectDomain(serverMain);
                     if (angular.isObject(serverMain.elapsed)) {
@@ -261,6 +263,7 @@ angular.module('gpu.controllers')
                     $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                 }
                 ct.pageFirstLoad = false;
+                console.log("ct.serverMainList : ", ct.serverMainList);
             });
             returnPromise.error(function (data, status, headers) {
                 ct.pageFirstLoad = false;
@@ -577,7 +580,7 @@ angular.module('gpu.controllers')
                     if (status == 200 && data) {
                         for (var idx in ct.serverMainList) {
                             if (id == ct.serverMainList[idx]) {
-                                computeDetailService.setMonitoringYn(ct.serverMainList[idx])
+                                computeDetailService.setMonitoringYn(ct.serverMainList[idx]);
                                 break;
                             }
                         }
@@ -701,7 +704,6 @@ angular.module('gpu.controllers')
                 $scope.actionBtnHied = false;
                 common.showDialog($scope, $event, dialogOptions);
                 $scope.actionLoading = true; // action loading
-
             }
         };
 
@@ -909,8 +911,7 @@ angular.module('gpu.controllers')
             if (loadbalancer.ipAddress) {
                 common.copyToClipboard(loadbalancer.ipAddress);
                 $scope.main.copyToClipboard(loadbalancer.ipAddress, '"' + loadbalancer.ipAddress + '"가 클립보드에 복사 되었습니다.');
-            }
-            else {
+            } else {
                 common.showAlertWarning("접속 IP가 존재하지 않습니다.");
             }
         };
@@ -1174,7 +1175,6 @@ angular.module('gpu.controllers')
 
         // Dialog ok 버튼 클릭 시 액션 정의
         $scope.popDialogOk = function () {
-
             if ($scope.actionBtnHied) return;
 
             $scope.actionBtnHied = true;
@@ -1499,8 +1499,7 @@ angular.module('gpu.controllers')
             if (selectedImageType) {
                 ct.selectedOsImageType = selectedImageType.osType;
                 ct.selectedOsImageVersion = selectedImageType.imageVersion;
-            }
-            else {
+            } else {
                 ct.selectedOsImageType = "";
                 ct.selectedOsImageVersion = "";
             }
@@ -1619,8 +1618,8 @@ angular.module('gpu.controllers')
             });
         };
 
+        //GPU 모델 선택 변경
         ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
-
             ct.selectedGpuCard = {};
             if (selectedGpuCardId) {
                 var index;
@@ -1633,15 +1632,14 @@ angular.module('gpu.controllers')
                 }
                 ct.fn.getAvailabilityZoneList(selectedGpuCardId);
                 ct.fn.setSpecMaxDisabled(); // GpuCard 변경시 스펙 Disabled 여부 변경 by hrit, 201015
-            }
-            else
+            } else {
                 ct.fn.getAvailabilityZoneList();
+            }
 
             ct.fn.setSelectedGpuCount();
         };
 
         ct.fn.setSelectedGpuCount = function () {
-
             // GPU 인스턴스는 프로젝트 자원 계획에 카드의 사용쿼터를 표시하므로 스펙 선택 시 GPU 사용량 표시 by hrit, 201015
             ct.gpuCardList.forEach(function (gpuCard) {
                 gpuCard.selected = 0;
@@ -1779,7 +1777,7 @@ angular.module('gpu.controllers')
                     ct.data.portId = data.content.ipinfos[0].id;
                     common.showAlertSuccess("사용가능한 Ip입니다.");
                     ct.ipFlag = true;
-                }else {
+                } else {
                     common.showAlertWarning("사용중인 ip입니다.");
                     ct.subnet.cidr_D = "";
                     ct.ipFlag = false;
@@ -2006,7 +2004,7 @@ angular.module('gpu.controllers')
             } else {
                 return true;
             }
-        }
+        };
 
         if (ct.data.tenantId) {
             ct.fn.getTenantResource();
@@ -2254,7 +2252,7 @@ angular.module('gpu.controllers')
 
             // 테넌트 알람, 인스턴스 알람을 구분
             if (ct.serverId) ct.sch_condition.instanceId = ct.serverId;
-            else ct.sch_condition.instanceId = undefined
+            else ct.sch_condition.instanceId = undefined;
 
             $scope.main.loadingMainBody = true;
             var serverStatsPromise = common.resourcePromise(CONSTANTS.monitNewApiContextUrl + '/admin/alarm/list', 'GET', ct.sch_condition);
@@ -2273,7 +2271,7 @@ angular.module('gpu.controllers')
             serverStatsPromise.finally(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
             });
-        }
+        };
 
         ct.setIndent = function (ip) {
             return ip.replace(',', '<br>');
@@ -2466,7 +2464,7 @@ angular.module('gpu.controllers')
             if (ct.measuretimeSlider.value < 180) {
                 ct.measuretimeSlider.value = 180;
                 ct.fn.parseTimer();
-            };
+            }
         };
 
         ct.fn.parseTimer = function () {
