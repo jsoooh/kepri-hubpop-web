@@ -217,7 +217,7 @@
 			<ul class="list-dot margin-bottom-20">
 				<li>
 					<b>OS 유형</b>
-					<span ng-if="contents.instance.image.osType">{{contents.instance.image.osType | firstUpperCase}}</span>
+					<span ng-if="contents.instance.image.osType">{{ contents.instance.image.osType }} {{ contents.instance.image.version }}</span>
 				</li>
 				<li ng-if="contents.instance.image.osType == 'windows' && !contents.instance.rdpDomain">
 					<b>접속 도메인</b>
