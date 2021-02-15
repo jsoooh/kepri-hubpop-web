@@ -334,7 +334,7 @@
 					<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
 							<col>						<!--서버명-->
-							<col style="width: 75px;">	<!--os유형-->
+							<col style="width: 95px;">	<!--os유형-->
 							<col style="width: 12%;">	<!--인스턴스유형-->
 							<col style="width: 12%;">	<!--이미지-->
 							<col style="width: 160px;">	<!--접속주소-->
@@ -370,7 +370,7 @@
 									<a class="link" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</a> 
 									<a class="link" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/gpu/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</a>
 								</td>
-								<td>{{ instance.image.osType }}</td>
+								<td>{{ instance.image.osType }} {{ instance.image.version }}</td>
 								<td>{{ instance.spec.type }} <span ng-if="instance.spec && instance.spec.gpuCardInfo">({{ instance.spec.gpuCardInfo.model }} {{ instance.spec.gpuCardInfo.vgpu }}EA)</span></td>
 								<td>{{ instance.image.serviceName }}</td>
 								<td class="text-center" ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'">
