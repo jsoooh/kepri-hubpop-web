@@ -219,7 +219,7 @@
 					<b>OS 유형</b>
 					<span ng-if="contents.instance.image.osType">{{ contents.instance.image.osType }} {{ contents.instance.image.version }}</span>
 				</li>
-				<li ng-if="contents.instance.image.osType == 'windows' && !contents.instance.rdpDomain">
+				<li ng-if="contents.instance.image.osType == 'windows' && !!contents.instance.rdpDomain">
 					<b>접속 도메인</b>
 					<span>{{ (contents.instance.rdpConnectDomain) ? contents.instance.rdpConnectDomain + ':' + contents.rdpConnectPort : '' }}</span>
 					<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
@@ -229,7 +229,7 @@
 					<span>{{ contents.instance.rdpDomain ? contents.instance.rdpDomain : '' }}</span>
 					<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
 				</li>
-			<!-- 	<li>
+			 	<!--<li>
 					<b>가상 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'다른 프로젝트에서 생성된 가상서버와 통신할 때 사용하는 IP'">i</a></div></b>
 					<span>{{contents.instance.floatingIp}}</span>
 					<button ng-if="contents.instance.image.osType != 'windows'" type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(contents.instance)"><span class="feather-icon blue-600 margin-left-5"><i data-feather="copy" class="feather-directive"></i></span></button>
@@ -237,7 +237,7 @@
 				<li>
 					<b>내부 IP<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'서버 간 통신 시 내부 IP를 사용할 수 있습니다.'">i</a></div></b>
 					<span>{{contents.instance.fixedIp}}</span>
-				</li> -->
+				</li>-->
 				<li>
 					<b>설명</b>
 					<span>{{contents.instance.description}}</span>
