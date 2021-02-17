@@ -241,8 +241,8 @@ angular.module('gpu.controllers')
                     }
                     ct.fn.setMonitoringLink(serverMain);
 
-                    if (serverMain.uiTask != 'creating' && serverMain.taskState != "deleting" && serverMain.vmMonitoringYn == 'N') {
-                        $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {ct.fn.monitYnState(serverMain);}, 1000);
+                    if (serverMain.uiTask != 'creating' && serverMain.taskState != "deleting" && serverMain.vmMonitoringYn == 'N' && (serverMain.image && serverMain.image.osType != 'windows')) {
+                        $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {ct.fn.monitYnState(serverMain);}, 3000);
                     }
                     if (serverMain.uiTask == 'creating') {
                         ct.fnGetServerMainList();
@@ -263,7 +263,7 @@ angular.module('gpu.controllers')
                     $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
                 }
                 ct.pageFirstLoad = false;
-                console.log("ct.serverMainList : ", ct.serverMainList);
+                //console.log("ct.serverMainList : ", ct.serverMainList);
             });
             returnPromise.error(function (data, status, headers) {
                 ct.pageFirstLoad = false;
@@ -569,7 +569,7 @@ angular.module('gpu.controllers')
         //추가 E
         // 서버삭제
         ct.deleteInstanceJob = function(id) {
-            common.showConfirm('인스턴스 삭제','선택한 인스턴스를 삭제하시겠습니까?').then(function(){
+            common.showConfirm('인스턴스 삭제','선택한 인스턴스를 삭제하시겠습니까?').then(function() {
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : ct.data.tenantId,
@@ -602,23 +602,23 @@ angular.module('gpu.controllers')
         ct.selectedValues = {};
         ct.fnServerConfirm = function(action,instance,index,$event) {
             if (action == "START") {
-                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function(){
+                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "STOP") {
-                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function(){
+                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "PAUSE") {
-                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function(){
+                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "UNPAUSE") {
-                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function(){
+                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "REBOOT") {
-                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function(){
+                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "SHELVE") {
@@ -626,7 +626,7 @@ angular.module('gpu.controllers')
                     ct.fnSingleInstanceAction(action, instance, index);
                 });
             } else if (action == "UNSHELVE") {
-                common.showConfirm('비활성화 해제',instance.name +' 인스턴스를 활성화 하시겠습니까?').then(function(){
+                common.showConfirm('비활성화 해제',instance.name +' 인스턴스를 활성화 하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance,index);
                 });
             } else if (action == "DELETE") {
@@ -634,11 +634,11 @@ angular.module('gpu.controllers')
             } else if (action == "SNAPSHOT") {
                 //ct.fn.createSnapshot(instance);
                 ct.fn.createPopSnapshot ($event,instance) ;
-            } else if (action == "VOLUME"){
+            } else if (action == "VOLUME") {
                 ct.fn.createInstanceVolumePop($event,instance);
-            } else if (action == "IPCONNECT"){
+            } else if (action == "IPCONNECT") {
                 ct.fn.IpConnectPop(instance,index);
-            } else if (action == "IPDISCONNECT"){
+            } else if (action == "IPDISCONNECT") {
                 ct.fn.ipConnectionSet(instance, "detach",index);
             } else if (action == "RENAME") {
                 ct.deleteInstanceJob(instance.id);
@@ -774,7 +774,7 @@ angular.module('gpu.controllers')
 
         // 공인 IP 연결 해제 펑션
         ct.fn.ipConnectionSet = function(instance,type,index) {
-            common.showConfirm('메세지',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function(){
+            common.showConfirm('메세지',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function() {
                 var param = {
                     tenantId : ct.data.tenantId,
                     instanceId : instance.id
@@ -918,7 +918,7 @@ angular.module('gpu.controllers')
 
         // lb 삭제
         ct.deleteLb = function(id) {
-            common.showConfirm('LB 삭제','선택한 LB를 삭제하시겠습니까?').then(function(){
+            common.showConfirm('LB 삭제','선택한 LB를 삭제하시겠습니까?').then(function() {
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : ct.data.tenantId,
@@ -1217,10 +1217,10 @@ angular.module('gpu.controllers')
                 common.showAlertSuccess("인스턴스 설명이 변경 되었습니다.");
                 pop.callBackFunction();
             });
-            returnPromise.error(function (data, status, headers){
+            returnPromise.error(function (data, status, headers) {
                 common.showAlertError(data.message);
             });
-            returnPromise.finally(function (data, status, headers){
+            returnPromise.finally(function (data, status, headers) {
                 $scope.actionBtnHied = false;
                 $scope.main.loadingMainBody = false;
             });

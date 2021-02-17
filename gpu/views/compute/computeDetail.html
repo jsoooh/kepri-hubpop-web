@@ -257,7 +257,7 @@
 					<b>보안그룹</b>
 					<span>{{contents.instance.securityPolicies | join:' ,':'name'}}</span>
 				</li>-->
-				<li>
+				<li ng-if="contents.instance.image && contents.instance.image.osType != 'windows'">
 					<b>모니터링</b>
 					<span ng-show="contents.instance.vmMonitoringYn == 'N'"><img src="images/loading_sm.gif"></span>
 					<span ng-show="contents.instance.vmMonitoringYn == 'D'">비활성화</span>

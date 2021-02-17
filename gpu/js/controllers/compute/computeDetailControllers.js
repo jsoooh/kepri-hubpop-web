@@ -40,7 +40,7 @@ angular.module('gpu.controllers')
         ct.noIngStates = ['active', 'stopped', 'error', 'paused', 'shelved_offloaded', 'error_ip', 'error_volume'];
         ct.creatingStates = ['creating', 'networking', 'block_device_mapping'];
 
-        ct.computeEditFormOpen = function ($event, instance){
+        ct.computeEditFormOpen = function ($event, instance) {
             var dialogOptions =  {
                 controller       : "gpuComputeEditFormCtrl" ,
                 formName         : 'computeEditForm',
@@ -81,8 +81,8 @@ angular.module('gpu.controllers')
                 if (status == 200 && data && data.content && data.content.instances && angular.isArray(data.content.instances)) {
                     instances = data.content.instances;
                     var rtFilter = $filter('filter')(instances, {taskState: '!deleting'});
-                    //if (data.totalElements != 0){
-                    if (rtFilter.length != 0){
+                    //if (data.totalElements != 0) {
+                    if (rtFilter.length != 0) {
                         ct.loadingServerList = true;
                     }
                 }
@@ -274,7 +274,7 @@ angular.module('gpu.controllers')
         //20181120 sg0730  백업 이미지 생성 PopUp 추가
         ct.fn.createPopSnapshot = function($event,instance) {
         	var dialogOptions = {};
-        	if(instance.vmState != 'stopped') {
+        	if (instance.vmState != 'stopped') {
                 common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
             	dialogOptions = {
@@ -321,10 +321,10 @@ angular.module('gpu.controllers')
         ct.doughnut.data.ram = [1, 0];
         ct.doughnut.data.disk = [1, 0];
 
-        ct.zoomPanel = function(evt, type){
+        ct.zoomPanel = function(evt, type) {
             var panel = $(evt.currentTarget).closest(".panel");
             var isZoom = false;
-            if(panel.hasClass("zoom")) {
+            if (panel.hasClass("zoom")) {
                 panel.removeClass("zoom").resize();
                 if (type != 'virtualMonit' && type != 'systemLog') panel.find('.panel_body').css("height", "400px");
                 $timeout(function () {
@@ -338,7 +338,7 @@ angular.module('gpu.controllers')
                     $(window).scrollTop(0);
                 }, 100);
             }
-            if(type == 'insMonit') {
+            if (type == 'insMonit') {
                 if (isZoom) {
                     panel.find('.visualizeItem').css("width", "750px");
                 } else {
@@ -375,7 +375,7 @@ angular.module('gpu.controllers')
                 }
             } else {
                 panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
-                if(type == 'bootLog') {
+                if (type == 'bootLog') {
                     if (isZoom) {
                         ct.fn.systemTerminalResize(180, 40);
                     } else {
@@ -445,8 +445,8 @@ angular.module('gpu.controllers')
             // var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded'));
             var returnPromise = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded'));
             returnPromise.success(function (data, status, headers) {
-                if(data.content.instances.length == 1) {
-                    if(data.content.instances[0].powerState == "deleted"){
+                if (data.content.instances.length == 1) {
+                    if (data.content.instances[0].powerState == "deleted") {
                         common.showAlertWarning('삭제된 인스턴스입니다.');
                         $window.history.back();
                     }
@@ -507,8 +507,8 @@ angular.module('gpu.controllers')
                     // 20.9.1 by hrit, 모니터링 링크 세팅
                     ct.instance.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + ct.instance.name;
 
-                    if (ct.instance.uiTask != 'creating' && ct.instance.taskState != "deleting" && ct.instance.vmMonitoringYn == 'N') {
-                        $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {ct.fn.monitYnState(ct.instance);}, 1000);
+                    if (ct.instance.uiTask != 'creating' && ct.instance.taskState != "deleting" && ct.instance.vmMonitoringYn == 'N' && (ct.instance.image && ct.instance.image.osType != 'windows')) {
+                        $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {ct.fn.monitYnState(ct.instance);}, 3000);
                     }
 
                     $timeout(function () {
@@ -539,8 +539,7 @@ angular.module('gpu.controllers')
                 if (ct.vmMonitoringYn == 'Y') {
                     $timeout(function () {
                         ct.instance.vmMonitoringYn = ct.vmMonitoringYn;
-
-                    },30000);
+                    }, 30000);
                     $interval.cancel($scope.main.refreshInterval['instanceMonitoringYn']);
                 }
             });
@@ -701,7 +700,7 @@ angular.module('gpu.controllers')
 
         // 도메인 반환 버튼
         ct.fn.deleteDomain = function(domainLink) {
-            common.showConfirm('도메인 삭제','※'+domainLink.domainInfo.domain+' 도메인을 삭제 합니다.').then(function(){
+            common.showConfirm('도메인 삭제','※'+domainLink.domainInfo.domain+' 도메인을 삭제 합니다.').then(function() {
                 ct.fn.deleteDomainAction(domainLink);
             });
         };
@@ -743,30 +742,30 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.serverActionConfirm = function(action,instance) {
-            if(action == "START") {
-                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function(){
+            if (action == "START") {
+                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "STOP") {
-                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function(){
+            } else if (action == "STOP") {
+                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "PAUSE") {
-                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function(){
+            } else if (action == "PAUSE") {
+                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "UNPAUSE") {
-                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function(){
+            } else if (action == "UNPAUSE") {
+                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "REBOOT") {
-                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function(){
+            } else if (action == "REBOOT") {
+                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "IPCONNECT"){
+            } else if (action == "IPCONNECT") {
                 ct.fn.IpConnectPop();
-            } else if(action == "IPDISCONNECT"){
-                common.showConfirm('접속 IP를 해제',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function(){
+            } else if (action == "IPDISCONNECT") {
+                common.showConfirm('접속 IP를 해제',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function() {
                     ct.fn.ipConnectionSet("detach");
                 });
             }
@@ -779,7 +778,7 @@ angular.module('gpu.controllers')
 
         // 서버삭제
         ct.deleteInstanceJob = function(id) {
-            common.showConfirm('인스턴스 삭제','선택한 인스턴스를 삭제하시겠습니까?').then(function(){
+            common.showConfirm('인스턴스 삭제','선택한 인스턴스를 삭제하시겠습니까?').then(function() {
                 $scope.main.loadingMainBody = true;
                 var param = {
                     tenantId : ct.data.tenantId,
@@ -805,7 +804,7 @@ angular.module('gpu.controllers')
         };
 
         ct.fnSingleInstanceAction = function(action,instance) {
-            if(typeof id !== 'string' && typeof action !== 'string'){
+            if (typeof id !== 'string' && typeof action !== 'string') {
                 console.log('type missmatch error');
                 return;
             }
@@ -819,15 +818,15 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance/power', 'POST', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
                 var vmStateChange = "";
-                if(action == "START"){
+                if (action == "START") {
                     vmStateChange = "starting";
-                }else if(action == "STOP"){
+                } else if (action == "STOP") {
                     vmStateChange = "stopping";
-                }else if(action == "PAUSE"){
+                } else if (action == "PAUSE") {
                     vmStateChange = "pausing";
-                }else if(action == "UNPAUSE"){
+                } else if (action == "UNPAUSE") {
                     vmStateChange = "unpausing";
-                }else if(action == "REBOOT"){
+                } else if (action == "REBOOT") {
                     vmStateChange = "rebooting";
                 }
                 ct.instance.vmState = vmStateChange;
@@ -849,7 +848,7 @@ angular.module('gpu.controllers')
 
         // SnapShot 생성
         ct.fn.createSnapshot = function($event,instance) {
-            if(instance.vmState != 'stopped') {
+            if (instance.vmState != 'stopped') {
                 common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
                 ct.selectInstance = instance;
@@ -883,7 +882,7 @@ angular.module('gpu.controllers')
 
         // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
-            common.showConfirm('볼륨 연결해제','인스턴스와의 연결을 해제 하시겠습니까?').then(function(){
+            common.showConfirm('볼륨 연결해제','인스턴스와의 연결을 해제 하시겠습니까?').then(function() {
                 ct.fn.restorationVolume(volume);
             });
         };
@@ -953,7 +952,7 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId,
                 instanceId : ct.data.instanceId
             };
-            if(ct.instance.floatingIp) {
+            if (ct.instance.floatingIp) {
                 param.floatingIp = ct.instance.floatingIp;
                 param.action = type;
             } else {
@@ -1056,7 +1055,7 @@ angular.module('gpu.controllers')
                     }
 
                     if (sltInfoTab == 'bootLog') {
-                        if(!ct.panelFlag) {
+                        if (!ct.panelFlag) {
                             $timeout(function () {
                                 ct.fn.systemTerminalResize(170, 15);
                             }, 100);
@@ -1145,15 +1144,14 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.copyConnectInfoToClipboard = function (instance) {
-            if(instance.image.osType == 'ubuntu'){
+            if (instance.image.osType == 'ubuntu') {
                 if (instance.floatingIp) {
                     common.copyToClipboard(instance.floatingIp);
                     $scope.main.copyToClipboard(instance.floatingIp, '"' + instance.floatingIp + '"가 클립보드에 복사 되었습니다.');
                 } else {
                     common.showAlertWarning("접속 IP가 존재하지 않습니다.");
                 }
-            }
-            else if(instance.image.osType == 'windows'){
+            } else if (instance.image.osType == 'windows') {
                 var rdpConnectUrl = (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + ct.rdpConnectPort : '';
                 var rdpDomain = instance.rdpDomain ? instance.rdpDomain : '';
                 var copyUrl = rdpConnectUrl ? rdpConnectUrl : rdpDomain;
@@ -1166,7 +1164,7 @@ angular.module('gpu.controllers')
             }
         };
 
-        if(ct.data.tenantId) {
+        if (ct.data.tenantId) {
             ct.fn.getInstanceInfo();
             ct.fn.changeSltInfoTab();
         }
@@ -1234,8 +1232,8 @@ angular.module('gpu.controllers')
             else ct.fn.specificLogs(page);
         };
 
-        ct.schEnter = function (keyEvent){
-            if(keyEvent.which == 13){
+        ct.schEnter = function (keyEvent) {
+            if (keyEvent.which == 13) {
                 ct.fn.specificLogs();
             }
         };
@@ -1319,7 +1317,7 @@ angular.module('gpu.controllers')
 
         ct.fn.getTimeRangeString = function() {
             $timeout(function() {
-            if(ct.selCTimeRange == 'custom') {
+            if (ct.selCTimeRange == 'custom') {
                 var to = ct.timeRangeTo;
                 var from = ct.timeRangeFrom;
                 ct.timeRangeString = (from._i)+' ~ '+(to._i);
@@ -1365,7 +1363,7 @@ angular.module('gpu.controllers')
 
         // 조회주기 및 GroupBy 설정
         ct.fn.saveTimeRange = function () {
-            if(ct.selCTimeRange == 'custom') {
+            if (ct.selCTimeRange == 'custom') {
                 if (ct.timeRangeTo.diff(ct.timeRangeFrom, 'minutes') < 30) {
                     ct.timeRangeFrom.subtract(30, 'minutes');
                     ct.timeRangePicker.setStartDate(new Date(ct.timeRangeFrom.format('YYYY-MM-DD HH:mm')));
@@ -1554,7 +1552,7 @@ angular.module('gpu.controllers')
 
         //포트포워딩 삭제
         ct.fn.deletePortForwarding = function(forwardingItem) {
-            common.showConfirm('포트포워딩 삭제','※'+forwardingItem.targetPort+' 포트포워딩을 삭제 하시겠습니까?').then(function(){
+            common.showConfirm('포트포워딩 삭제','※'+forwardingItem.targetPort+' 포트포워딩을 삭제 하시겠습니까?').then(function() {
                 ct.fn.deletePortForwardingAction(forwardingItem);
             });
         };
@@ -1623,7 +1621,7 @@ angular.module('gpu.controllers')
         ct.sltInfoTab = 'actEvent';
         ct.deployTypes = angular.copy(CONSTANTS.deployTypes);
 
-        ct.computeEditFormOpen = function (){
+        ct.computeEditFormOpen = function () {
         	// $scope.main.layerTemplateUrl = _IAAS_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
             $scope.main.layerTemplateUrl = _GPU_VIEWS_ + "/compute/computeEditForm.html" + _VersionTail();
 			$(".aside").stop().animate({"right":"-360px"}, 400);
@@ -1660,10 +1658,10 @@ angular.module('gpu.controllers')
         ct.doughnut.ramDataLoad = false;
         ct.doughnut.diskDataLoad = false;
 
-        ct.zoomPanel = function(evt, type){
+        ct.zoomPanel = function(evt, type) {
             var panel = $(evt.currentTarget).closest(".panel");
             var isZoom = false;
-            if(panel.hasClass("zoom")) {
+            if (panel.hasClass("zoom")) {
                 panel.removeClass("zoom").resize();
                 panel.find('.panel_body').css("height", "400px");
                 $timeout(function () {
@@ -1677,7 +1675,7 @@ angular.module('gpu.controllers')
                     $(window).scrollTop(0);
                 }, 100);
             }
-            if(type == 'insMonit') {
+            if (type == 'insMonit') {
                 if (isZoom) {
                     panel.find('.visualizeItem').css("width", "750px");
                 } else {
@@ -1688,7 +1686,7 @@ angular.module('gpu.controllers')
                 }, 100);
             } else {
                 panel.find('.scroll-pane').jScrollPane({contentWidth: '0px'});
-                if(type == 'bootLog') {
+                if (type == 'bootLog') {
                     if (isZoom) {
                         ct.fn.systemTerminalResize(180, 40);
                     } else {
@@ -1714,8 +1712,8 @@ angular.module('gpu.controllers')
             // var returnPromise = common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/instance', 'GET', param, 'application/x-www-form-urlencoded');
             returnPromise.success(function (data, status, headers) {
-                if(data.content.instances.length == 1) {
-                	if(data.content.instances[0].powerState == "deleted"){
+                if (data.content.instances.length == 1) {
+                	if (data.content.instances[0].powerState == "deleted") {
                 		common.showAlertWarning('삭제된 인스턴스입니다.');
                 		$window.history.back();
                 	}
@@ -1734,11 +1732,11 @@ angular.module('gpu.controllers')
                     }
 
                     ct.specValue = '';
-                    if(ct.instance.spec !== undefined && ct.instance.spec != null) {
-                        if(ct.instance.spec.name) ct.specValue +='['+ct.instance.spec.name+']';
-                        if(ct.instance.spec.vcpus) ct.specValue += ' cpu'+ct.instance.spec.vcpus+'개';
-                        if(ct.instance.spec.ram) ct.specValue += ', ram'+ct.instance.spec.ram + 'MB';
-                        if(ct.instance.spec.disk) ct.specValue += ', disk'+ct.instance.spec.disk + 'GB';
+                    if (ct.instance.spec !== undefined && ct.instance.spec != null) {
+                        if (ct.instance.spec.name) ct.specValue +='['+ct.instance.spec.name+']';
+                        if (ct.instance.spec.vcpus) ct.specValue += ' cpu'+ct.instance.spec.vcpus+'개';
+                        if (ct.instance.spec.ram) ct.specValue += ', ram'+ct.instance.spec.ram + 'MB';
+                        if (ct.instance.spec.disk) ct.specValue += ', disk'+ct.instance.spec.disk + 'GB';
                     }
 
                     ct.fn.searchInstanceVolumeList();
@@ -1944,7 +1942,7 @@ angular.module('gpu.controllers')
 
         // 도메인 반환 버튼
         ct.fn.publicIpReturn = function(domain) {
-            common.showConfirm('도메인 반환','※'+domain.domainInfo.domain+' 도메인을 반환 합니다. 반환된 도메인에 대한 관리는 도메인 관리에서 가능합니다').then(function(){
+            common.showConfirm('도메인 반환','※'+domain.domainInfo.domain+' 도메인을 반환 합니다. 반환된 도메인에 대한 관리는 도메인 관리에서 가능합니다').then(function() {
                 ct.fn.restorationDomain(domain);
             });
         };
@@ -1965,37 +1963,37 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.serverActionConfirm = function(action,instance) {
-            if(action == "START") {
-                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function(){
+            if (action == "START") {
+                common.showConfirm('시작',instance.name +' 인스턴스를 시작하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "STOP") {
-                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function(){
+            } else if (action == "STOP") {
+                common.showConfirm('정지',instance.name +' 인스턴스를 정지하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "PAUSE") {
-                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function(){
+            } else if (action == "PAUSE") {
+                common.showConfirm('일시정지', instance.name +' 인스턴스를 일시정지 하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "UNPAUSE") {
-                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function(){
+            } else if (action == "UNPAUSE") {
+                common.showConfirm('정지해제', instance.name +' 인스턴스를 정지해제 하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "REBOOT") {
-                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function(){
+            } else if (action == "REBOOT") {
+                common.showConfirm('재시작',instance.name +' 인스턴스를 재시작하시겠습니까?').then(function() {
                     ct.fnSingleInstanceAction(action,instance);
                 });
-            } else if(action == "IPCONNECT"){
+            } else if (action == "IPCONNECT") {
                 ct.fn.IpConnectPop();
-            } else if(action == "IPDISCONNECT"){
-            	common.showConfirm('접속 IP를 해제',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function(){
+            } else if (action == "IPDISCONNECT") {
+            	common.showConfirm('접속 IP를 해제',instance.name +' 인스턴스의 접속 IP를 해제하시겠습니까?').then(function() {
             		ct.fn.ipConnectionSet("detach");
             	});
             }
         };
 
         ct.fnSingleInstanceAction = function(action,instance) {
-            if(typeof id !== 'string' && typeof action !== 'string'){
+            if (typeof id !== 'string' && typeof action !== 'string') {
                 console.log('type missmatch error');
                 return;
             }
@@ -2022,7 +2020,7 @@ angular.module('gpu.controllers')
 
         // SnapShot 생성
         ct.fn.createSnapshot = function($event,instance) {
-            if(instance.vmState != 'stopped') {
+            if (instance.vmState != 'stopped') {
             	common.showAlertWarning('인스턴스를 정지 후 생성가능합니다.');
             } else {
             	ct.selectInstance = instance;
@@ -2055,7 +2053,7 @@ angular.module('gpu.controllers')
 
         // 디스크 반환 버튼
         ct.fn.restorationConfirm = function(volume) {
-            common.showConfirm('볼륨 연결해제','인스턴스와의 연결을 해제 하시겠습니까?').then(function(){
+            common.showConfirm('볼륨 연결해제','인스턴스와의 연결을 해제 하시겠습니까?').then(function() {
                 ct.fn.restorationVolume(volume);
             });
         };
@@ -2131,7 +2129,7 @@ angular.module('gpu.controllers')
                 tenantId : ct.data.tenantId,
                 instanceId : ct.data.instanceId
             };
-            if(ct.instance.floatingIp) {
+            if (ct.instance.floatingIp) {
                 param.floatingIp = ct.instance.floatingIp;
                 param.action = type;
             } else {
@@ -2813,7 +2811,7 @@ angular.module('gpu.controllers')
             ct.fn.getServerNetData();
         };
 
-        if(ct.data.tenantId) {
+        if (ct.data.tenantId) {
             ct.fn.getInstanceInfo();
             ct.fn.getNowServerCpuUsedData("10m");
             ct.fn.getNowServerMemoryUsedData("10m");
@@ -2939,7 +2937,7 @@ angular.module('gpu.controllers')
             $scope.main.asideClose();
         };
 
-        pop.formClose = function(){
+        pop.formClose = function() {
             $(".aside").stop().animate({"right":"-360px"}, 400);
         };
 
@@ -3032,7 +3030,7 @@ angular.module('gpu.controllers')
             }
 
             pop.checkByte = $bytes.lengthInUtf8Bytes(pop.data.description);
-        	if(pop.checkByte > 255){
+        	if (pop.checkByte > 255) {
                 $scope.actionBtnHied = false;
         		return;
         	}
@@ -3063,7 +3061,7 @@ angular.module('gpu.controllers')
             });
         };
 
-        pop.fn.checkByte = function (text, maxValue){
+        pop.fn.checkByte = function (text, maxValue) {
         	pop.checkByte = $bytes.lengthInUtf8Bytes(text);
         }
     })
@@ -3180,7 +3178,7 @@ angular.module('gpu.controllers')
             $scope.main.asideClose();
         };
 
-        pop.fn.formClose = function(){
+        pop.fn.formClose = function() {
             $(".aside").stop().animate({"right":"-360px"}, 400);
         };
 
@@ -3231,9 +3229,9 @@ angular.module('gpu.controllers')
 
             var instanceId;
 
-            if(pop.instance){
+            if (pop.instance) {
                 instanceId = pop.instance.id;
-            }else{
+            } else {
                 instanceId = ct.data.instanceId;
             }
 
@@ -3251,7 +3249,7 @@ angular.module('gpu.controllers')
             returnPromise.success(function (data, status, headers) {
                 $scope.main.loadingMainBody = false;
                 $scope.actionBtnHied = false;
-                if(ct && ct.fn && ct.fn.getInstanceInfo){
+                if (ct && ct.fn && ct.fn.getInstanceInfo) {
                     ct.instance.floatingIp = pop.selectFloatingIp;
                     ct.fn.getInstanceInfo();
                 } else {
@@ -3338,11 +3336,11 @@ angular.module('gpu.controllers')
 
         pop.setInstanceSpec = function(sltSpec) {
             if (!pop.specDisabledAllSetting || sltSpec.disabled) return;
-        	if(pop.spec && sltSpec.uuid){
+        	if (pop.spec && sltSpec.uuid) {
         		pop.sltSpec = angular.copy(sltSpec);
                 pop.sltSpecUuid = sltSpec.uuid;
                 $scope.dialogOptions.authenticate = false;
-        	}else{
+            } else {
         		pop.sltSpec = {};
                 pop.sltSpecUuid = "";
                 $scope.dialogOptions.authenticate = true;
@@ -3395,7 +3393,7 @@ angular.module('gpu.controllers')
                     }
                 });
                 pop.specMinDisabledSetting = true;
-                if(pop.specMaxDisabledSetting){
+                if (pop.specMaxDisabledSetting) {
                     pop.specDisabledAllSetting = true;
                 }
             }
@@ -3415,7 +3413,7 @@ angular.module('gpu.controllers')
                     }
                 });
                 pop.specMaxDisabledSetting = true;
-                if(pop.specMinDisabledSetting){
+                if (pop.specMinDisabledSetting) {
                     pop.specDisabledAllSetting = true;
                 }
             }
