@@ -165,7 +165,7 @@ angular.module('gpu.controllers')
             return false;
         }
         return true;
-    }
+    };
 
     ct.fn.loadTemplateAndCallAction = function (deployType, callBackFuncion) {
         // 페이지 로드
@@ -259,7 +259,7 @@ angular.module('gpu.controllers')
         } else {
             ct.volumeSliderOptions.ceil = volumeMaxCeil;
         }
-    }
+    };
 
     ct.fn.getTenantResource = function(tenantId, resourceDefer)  {
         var returnPromise = vmCatalogService.getTenantResource(tenantId);
@@ -628,7 +628,6 @@ angular.module('gpu.controllers')
         }
         return {isValid : true};
     };
-
 
     ct.checkClickBtn = false;
 

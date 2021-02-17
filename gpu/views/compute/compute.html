@@ -205,6 +205,8 @@
 													</span>
 													<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 												</li> -->
+												<li><b>인스턴스 유형 :</b><span>{{ instance.spec.type }}</span> <span ng-if="instance.spec && instance.spec.gpuCardInfo">({{ instance.spec.gpuCardInfo.model }} {{ instance.spec.gpuCardInfo.vgpu }}EA)</span></li>
+												<li ng-if="instance.image && instance.image.serviceName"><b>이미지 :</b><span>{{ instance.image.serviceName }}</span></li>
 												<li>
 													<b>접속 IP :</b><span>{{ instance.fixedIp }}</span>
 													<span class="margin-right-5">
@@ -212,18 +214,22 @@
 													</span>
 													<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 												</li>
-												<!-- <li>
+												 <li>
 													<b>접속 계정 :</b><span>Administrator</span>
 												</li>
 												<li>
-													<b>접속 비밀번호 :</b><span>(사용자 정의)</span>
-												</li> -->
+													<b>접속 비밀번호 :</b><span>(가이드 참조)</span>
+												</li>
+												<li>
+													<b>설명</b>
+													<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instance, 'server');">i</a></div>
+												</li>
 											</ul>
-											<!-- <div class="row margin-top-30">
+											 <div class="row margin-top-30">
 												<div class="col-sm-6">
-													<button type="button" class="btn btn-primary btn-sm btn-block" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {rdpConnectUrl : (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + contents.rdpConnectPort : instance.rdpDomain, osType: instance.image.osType, rdpConnectDomain: instance.rdpConnectDomain, rdpDomain: instance.rdpDomain});"><i class="xi-paper margin-right-5"></i>접속방법가이드</button>
+													<button type="button" class="btn btn-primary btn-sm btn-block" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {osType: instance.image.osType, fixedIp: instance.fixedIp});"><i class="xi-paper margin-right-5"></i>접속방법가이드</button>
 												</div>
-											</div> -->
+											</div>
 										</div>
 										<!-- //windows  -->
 									</div>
@@ -334,10 +340,10 @@
 					<table class="table table-hover" cellspacing="0" width="100%">
 						<colgroup>
 							<col>						<!--서버명-->
-							<col style="width: 95px;">	<!--os유형-->
+							<col style="width: 105px;">	<!--os유형-->
 							<col style="width: 12%;">	<!--인스턴스유형-->
 							<col style="width: 12%;">	<!--이미지-->
-							<col style="width: 160px;">	<!--접속주소-->
+							<col style="width: 165px;">	<!--접속주소-->
 							<col style="width: 110px;">	<!--모니터링-->
 							<col style="width: 70px;">	<!--cpu-->
 							<col style="width: 105px;">	<!--메모리-->
@@ -377,7 +383,7 @@
 									<a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a>
 									<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><i data-feather="copy" class="feather-directive blue-600 margin-left-5"></i></button>
 								</td>
-								<td ng-if="instance.image.osType == 'windows'">{{ instance.rdpDomain }}
+								<td ng-if="instance.image.osType == 'windows'">{{ instance.fixedIp }}
 									<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><i data-feather="copy" class="feather-directive blue-600 margin-left-5"></i></button>
 								</td>
 								<td ng-if="!instance.image.osType">-</td>

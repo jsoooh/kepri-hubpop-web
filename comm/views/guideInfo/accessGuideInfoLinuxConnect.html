@@ -48,7 +48,7 @@
 	
 	<h4>2) 접속정보 설정</h4>
 	<div class="imgWrap">
-		<img alt="" src="images/access_guide/access_guide_linux_img02.png" alt="">
+		<img alt="" ng-src="images/access_guide/access_guide_linux_img02{{spop.data.gpuYn ? '-2' : ''}}.png" alt="">
 	</div>
 	<p class="txt_level1 pdb0">①  아래의 접속정보를 참조하여 ‘접속 IP’와 ‘접속 계정’ 정보를 입력합니다.</p>
 	<div class="txt_level_list" ng-if="!spop.data.gpuYn">
@@ -67,7 +67,7 @@
 	</div>
 	
 	<div class="imgWrap">
-		<img alt="" src="images/access_guide/access_guide_linux_img03.png" alt="">
+		<img alt="" ng-src="images/access_guide/access_guide_linux_img03{{spop.data.gpuYn ? '-2' : ''}}.png" alt="">
 	</div>
 	<p class="txt_level1 blt_none">②  ‘인스턴스 접속정보 설정 화면’에서 ‘Client key manager’ 버튼을 클릭합니다.</p>
 	
