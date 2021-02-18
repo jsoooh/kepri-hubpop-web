@@ -208,14 +208,14 @@
 												<li><b>인스턴스 유형 :</b><span>{{ instance.spec.type }}</span> <span ng-if="instance.spec && instance.spec.gpuCardInfo">({{ instance.spec.gpuCardInfo.model }} {{ instance.spec.gpuCardInfo.vgpu }}EA)</span></li>
 												<li ng-if="instance.image && instance.image.serviceName"><b>이미지 :</b><span>{{ instance.image.serviceName }}</span></li>
 												<li>
-													<b>접속 IP :</b><span>{{ instance.fixedIp }}</span>
+													<b>접속 주소 :</b><span>{{ instance.fixedIp }}:20022</span>
 													<span class="margin-right-5">
 														<a tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{ instance.rdpDomain ? instance.rdpDomain : '' }}'">{{ instance.rdpDomain ? instance.rdpDomain : '' }}</a>
 													</span>
 													<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 												</li>
 												 <li>
-													<b>접속 계정 :</b><span>Administrator</span>
+													<b>접속 계정 :</b><span>windows</span>
 												</li>
 												<li>
 													<b>접속 비밀번호 :</b><span>(가이드 참조)</span>
@@ -227,7 +227,7 @@
 											</ul>
 											 <div class="row margin-top-30">
 												<div class="col-sm-6">
-													<button type="button" class="btn btn-primary btn-sm btn-block" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {osType: instance.image.osType, fixedIp: instance.fixedIp});"><i class="xi-paper margin-right-5"></i>접속방법가이드</button>
+													<button type="button" class="btn btn-primary btn-sm btn-block" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {osType: instance.image.osType, fixedIp: instance.fixedIp, isGpu: true});"><i class="xi-paper margin-right-5"></i>접속방법가이드</button>
 												</div>
 											</div>
 										</div>

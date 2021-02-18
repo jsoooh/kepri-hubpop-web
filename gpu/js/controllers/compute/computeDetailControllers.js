@@ -1152,9 +1152,7 @@ angular.module('gpu.controllers')
                     common.showAlertWarning("접속 IP가 존재하지 않습니다.");
                 }
             } else if (instance.image.osType == 'windows') {
-                var rdpConnectUrl = (instance.rdpConnectDomain) ? instance.rdpConnectDomain + ':' + ct.rdpConnectPort : '';
-                var rdpDomain = instance.rdpDomain ? instance.rdpDomain : '';
-                var copyUrl = rdpConnectUrl ? rdpConnectUrl : rdpDomain;
+                var copyUrl = instance.fixedIp + ":20022";
                 if (copyUrl) {
                     common.copyToClipboard(copyUrl);
                     $scope.main.copyToClipboard(copyUrl, '"' + copyUrl + '"가 클립보드에 복사 되었습니다.');
