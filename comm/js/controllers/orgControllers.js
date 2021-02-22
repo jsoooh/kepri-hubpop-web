@@ -36,8 +36,8 @@ angular.module('portal.controllers')
             ct.selectItemKey = itemKey;
         };
 
-        // portalOrg 선택 제거
-        $scope.main.setPortalOrg(null);
+        // portalOrg 선택 제거 : 프로젝트 목록으로 화면이동 시에도 기존 선택된 프로젝트는 해제하지 않음. 2021.02.22
+        //$scope.main.setPortalOrg(null);
         $scope.main.loadingMainBody = true;
         ct.schType = 'orgName';
 
