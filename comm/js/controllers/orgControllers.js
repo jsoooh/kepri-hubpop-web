@@ -37,7 +37,7 @@ angular.module('portal.controllers')
         };
 
         // portalOrg 선택 제거
-        $scope.main.setPortalOrg(null);
+        //$scope.main.setPortalOrg(null);
         $scope.main.loadingMainBody = true;
         ct.schType = 'orgName';
 
