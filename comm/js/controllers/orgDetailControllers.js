@@ -726,7 +726,7 @@ angular.module('portal.controllers')
                 }
             }
             if (ct.sltOrgId != null) {
-                ct.getMeteringHourlys(ct.selOrgProject.orgId);
+                ct.getMeteringHourlys(ct.sltOrgId);
             }
             ct.getOrgProject();
             ct.listOrgUsers();
