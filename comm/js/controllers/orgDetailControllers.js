@@ -44,6 +44,123 @@ angular.module('portal.controllers')
             }
         };
 
+        ct.getDetailTenantByName = function(projectId, orgId, qDefer) {
+            var tenantPromise = portal.portalOrgs.getTenantByName(projectId, orgId);
+            tenantPromise.success(function (data) {
+                if (data.content && data.content.pk && data.content.pk.orgCode) {
+                    data.content.orgCode = data.content.pk.orgCode;
+                    data.content.teamCode = data.content.pk.teamCode;
+                }
+                $scope.main.userTenant = {};
+                $scope.main.userTenantId = "";
+                $scope.main.uaerTenantDisplayName = "";
+                if (angular.isObject(data.content) && data.content.tenantId) {
+                    $scope.main.userTenant = data.content;
+                    $scope.main.userTenantId = data.content.tenantId;
+                    $scope.main.userTenant.id = data.content.tenantId;
+                    $scope.main.userTenant.korName = $scope.main.sltPortalOrg.orgName;
+                    $scope.main.uaerTenantDisplayName = $scope.main.userTenant.korName;
+                    common.setUserTenantId($scope.main.userTenantId);
+                } else {
+                    common.clearUserTenantId();
+                }
+                qDefer.resolve(data.content);
+            });
+            tenantPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+                qDefer.reject(data);
+            });
+        };
+
+        ct.getGpuDetailTenantByName = function(projectId, orgId, qDefer) {
+            var tenantPromise = portal.portalOrgs.getGpuTenantByName(projectId, orgId);
+            tenantPromise.success(function (data) {
+                $scope.main.userTenantGpu = {};
+                $scope.main.userTenantGpuId = "";
+                $scope.main.userTenantGpu.id = "";
+                if (angular.isObject(data.content) && data.content.tenantId) {
+                    $scope.main.userTenantGpu = data.content;
+                    $scope.main.userTenantGpuId = data.content.tenantId;
+                    $scope.main.userTenantGpu.id = data.content.tenantId;
+                    common.setGpuUserTenantId($scope.main.userTenantGpuId);
+                } else {
+                    common.clearGpuUserTenantId();
+                }
+                qDefer.resolve(data.content);
+            });
+            tenantPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+                qDefer.reject(data);
+            });
+        };
+
+        ct.getDetailOrganizationByName = function(orgId, qDefer) {
+            var organizationPromise = portal.portalOrgs.getOrganizationByName(orgId)
+            organizationPromise.success(function (data) {
+                if ($scope.main.sltPortalOrg && $scope.main.sltPortalOrg.orgId) {
+                    $scope.main.setOrganization(data);
+                } else {
+                    $scope.main.setOrganization(null);
+                }
+                qDefer.resolve(data);
+            });
+            organizationPromise.error(function (data) {
+                $scope.main.loadingMainBody = false;
+                qDefer.reject(data);
+            });
+        };
+
+        // Organization 값 셋팅
+        ct.setDetailPortalOrg = function(portalOrg) {
+            if (angular.isObject(portalOrg) && portalOrg.id) {
+                common.setPortalOrgKey(portalOrg.id);
+                common.setTeamCode(portalOrg.orgId);
+                $scope.main.sltPortalOrg = portalOrg;
+                $scope.main.sltPortalOrgId = portalOrg.id;
+                $scope.main.sltPortalOrgIsActive = portalOrg.isActive;
+                $scope.main.sltPortalOrgDisplayName = portalOrg.orgName;
+                $scope.main.sltPortalOrgMyRoleName = portalOrg.myRoleName;
+
+                var qDefers = [];
+
+                if ($scope.main.sltPortalOrg.isUseIaas) {
+                    qDefers.push($q.defer());
+                    ct.getDetailTenantByName($scope.main.sltProjectId, $scope.main.sltPortalOrg.orgId, qDefers[qDefers.length-1]);
+                }
+                if ($scope.main.sltPortalOrg.isUseGpu) {
+                    qDefers.push($q.defer());
+                    ct.getGpuDetailTenantByName($scope.main.sltProjectId, $scope.main.sltPortalOrg.orgId, qDefers[qDefers.length-1]);
+                }
+                if ($scope.main.sltPortalOrg.isUsePaas) {
+                    qDefers.push($q.defer());
+                    ct.getDetailOrganizationByName($scope.main.sltPortalOrg.orgId, qDefers[qDefers.length-1])
+                }
+                var allQDefer = $q.all(qDefers);
+                allQDefer.then(function (datas) {
+                    $scope.main.loadingMainBody = false;
+                });
+            } else {
+                if ($scope.main.sltPortalOrgId) {
+                    common.clearPortalOrgKey();
+                    $scope.main.sltPortalOrg = {};
+                    $scope.main.sltPortalOrgId = "";
+                    $scope.main.sltPortalOrgIsActive = false;
+                    $scope.main.sltPortalOrgDisplayName = "";
+                    $scope.main.sltPortalOrgMyRoleName = "";
+                    $scope.main.setUserTenant(null, null);
+                    $scope.main.setOrganization(null);
+                }
+            }
+        };
+
+        ct.changeDetailPortalOrg = function (portalOrg) {
+            ct.setDetailPortalOrg(portalOrg);
+            if (angular.isObject(portalOrg) && portalOrg.id) {
+            } else {
+                common.goHomePath();
+            }
+        };
+
         // 조직 정보 조회
         ct.getOrgProject = function () {
             ct.searchFirst = false;
@@ -63,7 +180,7 @@ angular.module('portal.controllers')
                         ct.getOrgProject();
                     }, 2000);
                 } else {
-                    $scope.main.loadingMainBody = false;
+                    //$scope.main.loadingMainBody = false;
                     if ($scope.main.reloadTimmer['getOrgProject_' + ct.paramId]) {
                         $timeout.cancel($scope.main.reloadTimmer['getOrgProject_' + ct.paramId]);
                         $scope.main.reloadTimmer['getOrgProject_' + ct.paramId] = null;
@@ -73,13 +190,11 @@ angular.module('portal.controllers')
                     /*if (ct.selOrgProject.myRoleName == 'OWNER' || ct.selOrgProject.myRoleName == 'ADMIN') {
                         ct.isOrgManager = true;
                     }*/
-                    $timeout(function () {
-                        $scope.main.changePortalOrg(data);
-                        if (ct.sltOrgId == null) {
-                            ct.sltOrgId = ct.selOrgProject.orgId;
-                            ct.getMeteringHourlys(ct.sltOrgId);
-                        }
-                    }, 0);
+                    ct.changeDetailPortalOrg(data);
+                    if (ct.sltOrgId == null) {
+                        ct.sltOrgId = ct.selOrgProject.orgId;
+                        ct.getMeteringHourlys(ct.sltOrgId);
+                    }
                 }
             });
             orgPromise.error(function (data) {
@@ -710,9 +825,6 @@ angular.module('portal.controllers')
             orgPromise.error(function (data) {
             });
             orgPromise.finally(function (data, status, headers) {
-                $timeout(function () {
-                    $scope.main.loadingMainBody = false;
-                }, 3000);
             });
         };
         ct.sltOrgId = null;

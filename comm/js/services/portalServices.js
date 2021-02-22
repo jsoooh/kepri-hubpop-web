@@ -283,6 +283,16 @@ angular.module('portal.services', [])
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams));
         };*/
 
+        portal.portalOrgs.getOrganizationByName = function (name, depth) {
+            var getParams = {
+                urlPaths : {
+                    "name" : name
+                },
+                "depth" : depth ? depth : 0
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', getParams));
+        };
+
         portal.portalOrgs.syncGetOrganizationByName = function (name, depth) {
             var getParams = {
                 urlPaths : {
@@ -300,6 +310,14 @@ angular.module('portal.services', [])
             return common.syncHttpResponse(CONSTANTS.iaasApiContextUrl + '/tenant/org/all', 'GET', getParams, 'application/x-www-form-urlencoded');
         };
 
+        portal.portalOrgs.getTenantByName = function (orgCode, teamCode) {
+            var getParams = {
+                "orgCode" : orgCode,
+                "teamCode" : teamCode
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/tenant/org/one', 'GET', getParams));
+        };
+
         portal.portalOrgs.syncGetTenantByName = function (orgCode, teamCode) {
             var getParams = {
 				"orgCode" : orgCode,
@@ -309,6 +327,14 @@ angular.module('portal.services', [])
         };
 
         /* gpu 객체 정보 불러오기 by ksw. 2020.05.18 */
+        portal.portalOrgs.getGpuTenantByName = function (orgCode, teamCode) {
+            var getParams = {
+                "orgCode" : orgCode,
+                "teamCode" : teamCode
+            };
+            return common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/org/one', 'GET', getParams));
+        };
+
         portal.portalOrgs.syncGetGpuTenantByName = function (orgCode, teamCode) {
             var getParams = {
                 "orgCode" : orgCode,
