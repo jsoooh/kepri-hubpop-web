@@ -75,7 +75,10 @@ angular.module('portal.controllers')
                     }*/
                     $timeout(function () {
                         $scope.main.changePortalOrg(data);
-                        ct.getMeteringHourlys(ct.selOrgProject.orgId);
+                        if (ct.sltOrgId == null) {
+                            ct.sltOrgId = ct.selOrgProject.orgId;
+                            ct.getMeteringHourlys(ct.sltOrgId);
+                        }
                     }, 0);
                 }
             });
@@ -712,8 +715,19 @@ angular.module('portal.controllers')
                 }, 3000);
             });
         };
-
+        ct.sltOrgId = null;
         ct.pageLoadData = function () {
+            if (ct.sltOrgId == null && $scope.main.portalOrgs && $scope.main.portalOrgs.length > 0) {
+                for(var i=0; i<$scope.main.portalOrgs.length; i++) {
+                    if (ct.paramId == $scope.main.portalOrgs[i].id) {
+                        ct.sltOrgId = $scope.main.portalOrgs[i].orgId;
+                        break;
+                    }
+                }
+            }
+            if (ct.sltOrgId != null) {
+                ct.getMeteringHourlys(ct.selOrgProject.orgId);
+            }
             ct.getOrgProject();
             ct.listOrgUsers();
         };
