@@ -3254,7 +3254,7 @@ angular.module('common.services', ['LocalStorageModule'])
         if (_DOMAIN_) {
             if (_DOMAIN_.indexOf("kepco.co.kr") > -1) {
                 cookiesOption.domain = ".kepco.co.kr";
-            } else if (_DOMAIN_ == "www.kepri-demo.crossent.com" || _DOMAIN_ == "www.kepri2-demo.crossent.com") {
+            } else if (_DOMAIN_ == "www.kepri-demo.crossent.com" || _DOMAIN_ == "www.kepri2-demo.crossent.com" || _DOMAIN_ == "www.smp-icon-demo.crossent.com") {
                 cookiesOption.domain = _DOMAIN_.substring(3);
             } else if (_DOMAIN_.indexOf('kr') > 0) {
                 cookiesOption.domain = "." + _DOMAIN_;
