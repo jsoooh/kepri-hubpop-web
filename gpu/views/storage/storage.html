@@ -77,7 +77,7 @@
 												<li ng-if="volume.type && volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="볼륨 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">볼륨 크기 변경</a></li>
 												<li ng-if="!volume.type"><a href="javascript:void(0);" class="disabled" title="‘부트볼륨’은 크기를 변경할 수 없습니다..">볼륨 크기 변경</a></li>
 												<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
-												<li ng-if="volume.type && volume.status =='available' && !volume.backupImageCount" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="볼륨 삭제">볼륨 삭제</a></li>
+												<li ng-if="volume.type && volume.status =='available' && !volume.backupImageCount" ng-click="main.popDeleteCheckName($event, '볼륨', volume.name, contents.deleteVolumes, 'thum', volume.volumeId);"><a class="delete" href="javascript:void(0);" title="볼륨 삭제">볼륨 삭제</a></li>
 												<li ng-if="volume.type && volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="볼륨에 스냅샷이 존재하여 삭제할수 없습니다.">볼륨 삭제</a></li>
 												<li ng-if="volume.type && volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="볼륨 상태가 ‘사용가능’인 경우 삭제 가능합니다.">볼륨 삭제</a></li>
 												<li ng-if="!volume.type"><a class="disabled" href="javascript:void(0);" title="‘부트볼륨’은 삭제할 수 없습니다.">볼륨 삭제</a></li>
@@ -242,7 +242,7 @@
 									<li ng-if="volume.type && volume.status !='available'"><a href="javascript:void(0);" class="disabled" title="볼륨 상태가 ‘사용가능’인 경우 크기 변경이 가능합니다.">볼륨 크기 변경</a></li>
 									<li ng-if="!volume.type"><a href="javascript:void(0);" class="disabled" title="‘부트볼륨’은 크기를 변경할 수 없습니다..">볼륨 크기 변경</a></li>
 									<!--<li ng-if="volume.status == 'in-use'" ng-click="contents.fn.dettachVolume()"><a href="javascript:void(0);" title="서버 연결 해제" >서버 연결 해제</a></li>-->
-									<li ng-if="volume.type && volume.status =='available' && !volume.backupImageCount" ng-click="contents.deleteVolumes('thum', volume.volumeId)"><a class="delete" href="javascript:void(0);" title="볼륨 삭제">볼륨 삭제</a></li>
+									<li ng-if="volume.type && volume.status =='available' && !volume.backupImageCount" ng-click="main.popDeleteCheckName($event, '볼륨', volume.name, contents.deleteVolumes, 'thum', volume.volumeId);"><a class="delete" href="javascript:void(0);" title="볼륨 삭제">볼륨 삭제</a></li>
 									<li ng-if="volume.type && volume.status =='available' && volume.backupImageCount"><a href="javascript:void(0);" class="disabled" title="볼륨에 스냅샷이 존재하여 삭제할수 없습니다.">볼륨 삭제</a></li>
 									<li ng-if="volume.type && volume.status !='available'"><a class="disabled" href="javascript:void(0);" title="볼륨 상태가 ‘사용가능’인 경우 삭제 가능합니다.">볼륨 삭제</a></li>
 									<li ng-if="!volume.type"><a class="disabled" href="javascript:void(0);" title="‘부트볼륨’은 삭제할 수 없습니다.">볼륨 삭제</a></li>
