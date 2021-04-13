@@ -54,6 +54,7 @@ angular.module('common.controllers')
                 ct.ssoMessage = '* HUB-POP 포털 접속 중 비밀번호 에러가 발생하였습니다. 다른 비밀번호를 입력하여 주시기바랍니다.';
             }
         };
+
         // 20.1.22 by hrit, sso 로그인 중 8초 후 계정생성로 전환되는 현상 수정
         // 로그인 시도 후 계정이 없는 경우 클라이언트에 상태 반환하여 클라이언트에서 계정생성 재호출하도록 변경
         ct.checkSsoPgsecuid = function (pgsecuid, update) {

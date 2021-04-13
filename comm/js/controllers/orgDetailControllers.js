@@ -120,6 +120,7 @@ angular.module('portal.controllers')
                 $scope.main.sltPortalOrgIsActive = portalOrg.isActive;
                 $scope.main.sltPortalOrgDisplayName = portalOrg.orgName;
                 $scope.main.sltPortalOrgMyRoleName = portalOrg.myRoleName;
+                $scope.main.setUserSltProjectOrg(portalOrg.id);
 
                 var qDefers = [];
 

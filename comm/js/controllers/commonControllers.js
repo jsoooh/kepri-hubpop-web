@@ -727,6 +727,7 @@ angular.module('common.controllers', [])
         mc.changePortalOrg = function(portalOrg) {
             mc.setPortalOrg(portalOrg);
             if (angular.isObject(portalOrg) && portalOrg.id) {
+                mc.setUserSltProjectOrg();
                 mc.asideClose();
                 $scope.$broadcast('portalOrgChanged', mc.sltPortalOrg);
                 $scope.$broadcast('userTenantChanged', mc.userTenant);
@@ -759,14 +760,7 @@ angular.module('common.controllers', [])
                 mc.sltPortalOrgMyRoleName = portalOrg.myRoleName;
                 mc.loadUserTenant();
                 mc.loadSltOrganization();
-                /*if (!mc.sltGroupMenuIconId) {
-                    mc.setGroupMenu(mc.dbMenuList[0]);      //좌측 대메뉴 선택
-                }*/
             } else {
-                /*$timeout(function () {
-                    mc.desplayDbMenuList("none");
-                    $scope.main.urlCheck();
-                }, 100);*/
                 if (mc.sltPortalOrgId) {
                     common.clearPortalOrgKey();
                     mc.sltPortalOrg = {};
@@ -801,7 +795,6 @@ angular.module('common.controllers', [])
             }
         };
 
-        /* 20.05.18 - gpu 객체 정보 불러오기 by ksw */
         mc.syncGetGpuTenantByName = function (orgCode, teamCode) {
             var response = portal.portalOrgs.syncGetGpuTenantByName(orgCode, teamCode);
             if (response && response.status == 200 && angular.isObject(response.data.content)) {
@@ -811,21 +804,40 @@ angular.module('common.controllers', [])
             }
         };
 
+        mc.getTenantByName = function (orgCode, teamCode) {
+            var userTenant = null;
+            var promise = portal.portalOrgs.getTenantByName(orgCode, teamCode);
+            promise.success(function (data, status, headers) {
+                if (status == 200 && angular.isObject(data.content)) {
+                    userTenant = data.content;
+                    userTenant.orgCode = userTenant.pk.orgCode;
+                    userTenant.teamCode = userTenant.pk.teamCode;
+                    mc.setUserTenant(userTenant);
+                }
+            });
+        };
+
+        mc.getGpuTenantByName = function (orgCode, teamCode) {
+            var userTenant2 = null;
+            var promise = portal.portalOrgs.getGpuTenantByName(orgCode, teamCode);
+            promise.success(function (data, status, headers) {
+                if (status == 200 && angular.isObject(data.content)) {
+                    userTenant2 = data.content;
+                    mc.setGpuUserTenant(userTenant2);
+                }
+            });
+        };
+
         mc.loadUserTenant = function () {
             if (angular.isObject(mc.sltProject) && mc.sltProjectId && angular.isObject(mc.sltPortalOrg) && mc.sltPortalOrg.orgId) {
                 var userTenant = null;
                 var userTenant2 = null;
                 if (mc.sltPortalOrg.isUseIaas) {
-                    userTenant = mc.syncGetTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                    mc.getTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
                 }
                 if (mc.sltPortalOrg.isUseGpu) {
-                    userTenant2 = mc.syncGetGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                    mc.getGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
                 }
-                if (userTenant) {
-                    userTenant.orgCode = userTenant.pk.orgCode;
-                    userTenant.teamCode = userTenant.pk.teamCode;
-                }
-                mc.setUserTenant(userTenant, userTenant2);
             } else {
                 mc.setUserTenant(null, null);
             }
@@ -859,6 +871,38 @@ angular.module('common.controllers', [])
             }
         };
 
+        // UserTenant 값 셋팅
+        mc.setUserTenant = function(userTenant) {
+            mc.userTenant = {};
+            mc.userTenantId = "";
+            mc.uaerTenantDisplayName = "";
+            if (angular.isObject(userTenant) && userTenant.tenantId) {
+                mc.userTenant = userTenant;
+                mc.userTenantId = userTenant.tenantId;
+                mc.userTenant.id = userTenant.tenantId;
+                mc.userTenant.korName = mc.sltPortalOrg.orgName;
+                mc.uaerTenantDisplayName = mc.userTenant.korName;
+                common.setUserTenantId(mc.userTenantId);
+            } else {
+                common.clearUserTenantId();
+            }
+        };
+
+        // UserTenant 값 셋팅
+        mc.setGpuUserTenant = function(userTenant2) {
+            mc.userTenantGpu = {};
+            mc.userTenantGpuId = "";
+            mc.userTenantGpu.id = "";
+            if (angular.isObject(userTenant2) && userTenant2.tenantId) {
+                mc.userTenantGpu = userTenant2;
+                mc.userTenantGpuId = userTenant2.tenantId;
+                mc.userTenantGpu.id = userTenant2.tenantId;
+                common.setGpuUserTenantId(mc.userTenantGpuId);
+            } else {
+                common.clearGpuUserTenantId();
+            }
+        };
+
         mc.syncGetOrganizationByName = function (name) {
             var response = portal.portalOrgs.syncGetOrganizationByName(name, 2);
             if (response && response.status == 200) {
@@ -868,9 +912,21 @@ angular.module('common.controllers', [])
             }
         };
 
+        mc.getOrganizationByName = function (name) {
+            var promise = portal.portalOrgs.getOrganizationByName(name, 2);
+            promise.success(function (data, status, headers) {
+                if (status == 200) {
+                    mc.setOrganization(data);
+                } else {
+                    mc.setOrganization(null);
+                }
+            });
+        };
+
         mc.loadSltOrganization = function () {
             if ($scope.main.sltPortalOrg && $scope.main.sltPortalOrg.orgId) {
-                mc.setOrganization(mc.syncGetOrganizationByName($scope.main.sltPortalOrg.orgId));
+                //mc.setOrganization(mc.syncGetOrganizationByName($scope.main.sltPortalOrg.orgId));
+                mc.getOrganizationByName($scope.main.sltPortalOrg.orgId);
             } else {
                 mc.setOrganization(null);
             }
@@ -948,6 +1004,17 @@ angular.module('common.controllers', [])
             } else {
                 mc.setListAllPortalOrgs();
             }
+        };
+
+        mc.listAllPortalOrgs = function () {
+            var promise = portal.portalOrgs.listAllPortalOrgs(mc.sltProjectId);
+            promise.success(function (data, status, headers) {
+                if (status == 200 && angular.isObject(data) && angular.isArray(data.items)) {
+                    mc.setListAllPortalOrgs(data.items);
+                } else {
+                    mc.setListAllPortalOrgs();
+                }
+            });
         };
 
         // Organization 리스트 한글명 매핑
@@ -1081,7 +1148,8 @@ angular.module('common.controllers', [])
                 mc.sltProjectId = "";
                 mc.sltProjectDisplayName = $translate.instant("label.all");
             }
-            mc.syncListAllPortalOrgs();
+            //mc.syncListAllPortalOrgs();
+            //mc.listAllPortalOrgs();
         };
 
         // Project 변경 처리
@@ -1933,6 +2001,31 @@ angular.module('common.controllers', [])
             var menuItem = common.objectsFindCopyByField(mc.dbMenuList, "urlPath", urlPath);
             if (menuItem == null) return;
             mc.setMenu(menuItem);
+        };
+
+        //선택한 프로젝트 저장
+        mc.setUserSltProjectOrg = function (sltPortalOrgId) {
+            var obj = {};
+            obj.orgId = sltPortalOrgId;
+            var userSettingPromise = userSettingService.saveUserSetting(CONSTANTS.userSettingKeys.userSltProjectOrg, obj);
+            userSettingPromise.success(function (data, status, headers) {
+            });
+            userSettingPromise.error(function (data, status, headers) {
+            });
+        };
+
+        //선택한 프로젝트 조회
+        mc.getUserSltProjectOrg = function () {
+            var userSettingPromise = userSettingService.getUserSetting(CONSTANTS.userSettingKeys.userSltProjectOrg);
+            userSettingPromise.success(function (data, status, headers) {
+                data = userSettingService.userSettingParse(data);
+                if (data && angular.isObject(data.contents) && !!data.contents.orgId && mc.portalOrgs.length > 0) {
+                    var sltPortOrg = common.objectsFindCopyByField(mc.portalOrgs, "id", data.contents.orgId);
+                    mc.setPortalOrg(sltPortOrg);
+                }
+            });
+            userSettingPromise.error(function (data, status, headers) {
+            });
         };
 
         _DebugConsoleLog('commonControllers.js : mainCtrl End, path : ' + $location.path(), 1);

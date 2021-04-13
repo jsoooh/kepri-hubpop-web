@@ -63,6 +63,10 @@ angular.module('portal.controllers')
                     common.objectOrArrayMergeData(ct.orgProjects, angular.copy(data.items));
                     //console.log("ct.orgProjects : ", ct.orgProjects);
                     $scope.main.setListAllPortalOrgs(data.items);
+                    //선택한 프로젝트 조회
+                    if (!$scope.main.sltPortalOrgId) {
+                        $scope.main.getUserSltProjectOrg();
+                    }
                 } else {
                     $scope.main.setListAllPortalOrgs();
                 }

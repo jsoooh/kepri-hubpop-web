@@ -275,13 +275,12 @@ angular.module('portal.services', [])
             return common.syncHttpResponseJson(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams);
         };
 
-        /*portal.portalOrgs.listPortalOrgsByProjectId = function (projectId) {
+        portal.portalOrgs.listAllPortalOrgs = function (projectId) {
             var getParams = {
-                "schType": "projectId",
-                "schText": projectId
+                "projectId": projectId
             };
             return common.retrieveResource(common.resourcePromiseJson(CONSTANTS.uaaContextUrl + '/orgs/my', 'GET', getParams));
-        };*/
+        };
 
         portal.portalOrgs.getOrganizationByName = function (name, depth) {
             var getParams = {
