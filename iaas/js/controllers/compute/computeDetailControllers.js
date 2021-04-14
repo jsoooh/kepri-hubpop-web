@@ -1112,11 +1112,6 @@ angular.module('iaas.controllers')
                 }
             }
         };
-
-        if(ct.data.tenantId) {
-            ct.fn.getInstanceInfo();
-            ct.fn.changeSltInfoTab();
-        }
         
         // 시스템 로그 관련
         ct.fn.setPosition = function () {
@@ -1520,6 +1515,11 @@ angular.module('iaas.controllers')
                 $scope.main.loadingMainBody = false;
             });
         };
+
+        if (ct.data.tenantId) {
+            ct.fn.getInstanceInfo();
+            ct.fn.changeSltInfoTab();
+        }
     })
     .controller('iaasComputeSystemDetailCtrl', function ($scope, $location, $state, $sce,$q, $stateParams, $timeout, $window, $mdDialog, $filter, $bytes, $translate, user, common, ValidationService, CONSTANTS) {
         _DebugConsoleLog("computeDetailControllers.js : iaasComputeSystemDetailCtrl", 1);
