@@ -24,6 +24,12 @@ angular.module('gpu.controllers')
         ct.loadingInstanceSnapshotList = false;
         ct.loadingStorageSnapshotList = false;
 
+        ct.pageOptions = {
+            currentPage : 1,
+            pageSize : 10,
+            total : 0
+        };
+
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
