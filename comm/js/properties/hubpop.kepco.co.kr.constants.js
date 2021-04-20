@@ -359,7 +359,7 @@ angular.module('app')
         },
         startYear: 2019,
         startMonth: 12,
-        monitoringUrl: 'http://train-grafana.hubpop.kepco.co.kr/d/hb7fSE0taa/rinugseu-gasangseobeo-sansehyeonhwang',
+        monitoringUrl: 'http://hubpop.kepco.co.kr/grafana/d/hb7fSE0taa/rinugseu-gasangseobeo-sansehyeonhwang',
         vmCatalog: {
             monCollectHostBeat: '100.216.222.84',
             monCollectPortBeat: '9201',
