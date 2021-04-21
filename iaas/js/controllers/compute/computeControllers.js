@@ -106,7 +106,12 @@ angular.module('iaas.controllers')
         });
         
         ct.fn.getKeyFile = function(keypair,type) {
-            document.location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
+            var returnData = common.retrieveResource(common.resourcePromise(CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name, 'GET'));
+            returnData.success(()=>{
+                document.location.href = CONSTANTS.iaasApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
+            })
+            returnData.error(()=>{
+            })
         };
 
         ct.fn.getWindowAgentConfFile = function (instance) {
