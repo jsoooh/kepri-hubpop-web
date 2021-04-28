@@ -95,7 +95,7 @@ angular.module('portal.controllers')
         };
 
         ct.getDetailOrganizationByName = function(orgId, qDefer) {
-            var organizationPromise = portal.portalOrgs.getOrganizationByName(orgId)
+            var organizationPromise = portal.portalOrgs.getOrganizationByName(orgId);
             organizationPromise.success(function (data) {
                 if ($scope.main.sltPortalOrg && $scope.main.sltPortalOrg.orgId) {
                     $scope.main.setOrganization(data);
@@ -148,7 +148,7 @@ angular.module('portal.controllers')
                     $scope.main.sltPortalOrgIsActive = false;
                     $scope.main.sltPortalOrgDisplayName = "";
                     $scope.main.sltPortalOrgMyRoleName = "";
-                    $scope.main.setUserTenant(null, null);
+                    $scope.main.setUserTenants(null, null);
                     $scope.main.setOrganization(null);
                 }
             }

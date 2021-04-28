@@ -724,8 +724,8 @@ angular.module('common.controllers', [])
         };
 
         // PortalOrg 변경 처리
-        mc.changePortalOrg = function(portalOrg) {
-            mc.setPortalOrg(portalOrg);
+        mc.changePortalOrg = function(portalOrg, bSync) {
+            mc.setPortalOrg(portalOrg, bSync);
             if (angular.isObject(portalOrg) && portalOrg.id) {
                 mc.setUserSltProjectOrg();
                 mc.asideClose();
@@ -739,7 +739,7 @@ angular.module('common.controllers', [])
         };
 
         // Organization 값 셋팅
-        mc.setPortalOrg = function(portalOrg) {
+        mc.setPortalOrg = function(portalOrg, bSync) {
             if (!mc.dbMenuList || mc.dbMenuList.length == 0) {
                 mc.setDbMenuList();
             }
@@ -758,8 +758,8 @@ angular.module('common.controllers', [])
                 mc.sltPortalOrgIsActive = portalOrg.isActive;
                 mc.sltPortalOrgDisplayName = portalOrg.orgName;
                 mc.sltPortalOrgMyRoleName = portalOrg.myRoleName;
-                mc.loadUserTenant();
-                mc.loadSltOrganization();
+                mc.loadUserTenant(bSync);
+                mc.loadSltOrganization(bSync);
             } else {
                 if (mc.sltPortalOrgId) {
                     common.clearPortalOrgKey();
@@ -768,7 +768,7 @@ angular.module('common.controllers', [])
                     mc.sltPortalOrgIsActive = false;
                     mc.sltPortalOrgDisplayName = "";
                     mc.sltPortalOrgMyRoleName = "";
-                    mc.setUserTenant(null, null);
+                    mc.setUserTenants(null, null);
                     mc.setOrganization(null);
                 }
             }
@@ -810,8 +810,6 @@ angular.module('common.controllers', [])
             promise.success(function (data, status, headers) {
                 if (status == 200 && angular.isObject(data.content)) {
                     userTenant = data.content;
-                    userTenant.orgCode = userTenant.pk.orgCode;
-                    userTenant.teamCode = userTenant.pk.teamCode;
                     mc.setUserTenant(userTenant);
                 }
             });
@@ -828,23 +826,31 @@ angular.module('common.controllers', [])
             });
         };
 
-        mc.loadUserTenant = function () {
+        mc.loadUserTenant = function (bSync) {
             if (angular.isObject(mc.sltProject) && mc.sltProjectId && angular.isObject(mc.sltPortalOrg) && mc.sltPortalOrg.orgId) {
                 var userTenant = null;
                 var userTenant2 = null;
                 if (mc.sltPortalOrg.isUseIaas) {
-                    mc.getTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                    if (bSync) {
+                        mc.setUserTenant(mc.syncGetTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId));
+                    } else {
+                        mc.getTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                    }
                 }
                 if (mc.sltPortalOrg.isUseGpu) {
-                    mc.getGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                    if (bSync) {
+                        mc.setGpuUserTenant(mc.syncGetGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId));
+                    } else {
+                        mc.getGpuTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId);
+                    }
                 }
             } else {
-                mc.setUserTenant(null, null);
+                mc.setUserTenants(null, null);
             }
         };
 
         // UserTenant 값 셋팅
-        mc.setUserTenant = function(userTenant, userTenant2) {
+        mc.setUserTenants = function(userTenant, userTenant2) {
             mc.userTenant = {};
             mc.userTenantId = "";
             mc.uaerTenantDisplayName = "";
@@ -882,6 +888,8 @@ angular.module('common.controllers', [])
                 mc.userTenant.id = userTenant.tenantId;
                 mc.userTenant.korName = mc.sltPortalOrg.orgName;
                 mc.uaerTenantDisplayName = mc.userTenant.korName;
+                mc.userTenant.orgCode = userTenant.pk.orgCode;
+                mc.userTenant.teamCode = userTenant.pk.teamCode;
                 common.setUserTenantId(mc.userTenantId);
             } else {
                 common.clearUserTenantId();
@@ -923,10 +931,13 @@ angular.module('common.controllers', [])
             });
         };
 
-        mc.loadSltOrganization = function () {
+        mc.loadSltOrganization = function (bSync) {
             if ($scope.main.sltPortalOrg && $scope.main.sltPortalOrg.orgId) {
-                //mc.setOrganization(mc.syncGetOrganizationByName($scope.main.sltPortalOrg.orgId));
-                mc.getOrganizationByName($scope.main.sltPortalOrg.orgId);
+                if (bSync) {
+                    mc.setOrganization(mc.syncGetOrganizationByName($scope.main.sltPortalOrg.orgId));
+                } else {
+                    mc.getOrganizationByName($scope.main.sltPortalOrg.orgId);
+                }
             } else {
                 mc.setOrganization(null);
             }
@@ -1910,7 +1921,7 @@ angular.module('common.controllers', [])
                         $scope.main.reloadTimmer['getOrgProject_' + mc.sltPortalOrgId] = null;
                     }
                     //console.log(data);
-                    mc.changePortalOrg(data);
+                    mc.changePortalOrg(data, true);
                     mc.loadingMainBody = false;
                 }
             });
