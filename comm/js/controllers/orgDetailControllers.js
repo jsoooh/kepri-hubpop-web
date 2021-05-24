@@ -38,9 +38,11 @@ angular.module('portal.controllers')
             ct.sltInfoTab = sltInfoTab;
 
             if (sltInfoTab == 'resource') {
-                ct.listPaasQuotas();
+                // ct.listPaasQuotas(); // PaaS 사용않함 2021.05.24
                 //ct.listQuotaHistories();
                 //ct.listOrgQuotaValues();
+                ct.listQuotaHistories();
+                ct.listOrgQuotas(); //org_quotas 조회 : 쿼터/미터링값 함께 조회
             }
         };
 
@@ -132,10 +134,11 @@ angular.module('portal.controllers')
                     qDefers.push($q.defer());
                     ct.getGpuDetailTenantByName($scope.main.sltProjectId, $scope.main.sltPortalOrg.orgId, qDefers[qDefers.length-1]);
                 }
-                if ($scope.main.sltPortalOrg.isUsePaas) {
+                <!-- PaaS 사용않함 2021.05.24 -->
+                /*if ($scope.main.sltPortalOrg.isUsePaas) {
                     qDefers.push($q.defer());
                     ct.getDetailOrganizationByName($scope.main.sltPortalOrg.orgId, qDefers[qDefers.length-1])
-                }
+                }*/
                 var allQDefer = $q.all(qDefers);
                 allQDefer.then(function (datas) {
                     $scope.main.loadingMainBody = false;
@@ -723,8 +726,8 @@ angular.module('portal.controllers')
             $scope.dialogOptions = {
                 controller: "commRequestQuotaFormCtrl",
                 callBackFunction: ct.listQuotaHistories,
-                selOrgProject : ct.selOrgProject,
-                paasQuotas : ct.paasQuotas
+                selOrgProject : ct.selOrgProject
+                /*paasQuotas : ct.paasQuotas*/  // PaaS 사용않함 2021.05.24
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, $scope.dialogOptions);
@@ -1361,7 +1364,7 @@ angular.module('portal.controllers')
         pop.data = {};
         pop.formName = "requestQuotaForm";
         pop.selOrgProject = angular.copy($scope.dialogOptions.selOrgProject);
-        pop.paasQuotas = angular.copy($scope.dialogOptions.paasQuotas);
+        // pop.paasQuotas = angular.copy($scope.dialogOptions.paasQuotas); // PaaS 사용않함 2021.05.24
         $scope.dialogOptions.formName = pop.formName;
         $scope.dialogOptions.validDisabled = true;
         $scope.dialogOptions.dialogClassName = "modal-lg";

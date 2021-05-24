@@ -345,7 +345,9 @@ angular.module('portal.controllers')
                 urlPaths : {"name" : orgId},
                 "depth" : 0
             };
-            setServiceUseYn('paas', common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', paasParams)));
+
+            // PaaS 사용않함 2021.05.24
+            // setServiceUseYn('paas', common.retrieveResource(common.resourcePromise(CONSTANTS.paasApiCfContextUrl + '/organizations/name/{name}', 'GET', paasParams)));
 
             // 타사업자 파라미터 : 엘이테크
             var otherParam = { "PROJECT-ID" : orgId };
@@ -796,8 +798,9 @@ angular.module('portal.controllers')
             });
         };
 
+        // PaaS 사용않함 2021.05.24
         // paas 프로젝트 쿼터 조회
-        ct.fn.getPaasQuotas = function (currentPage) {
+        /*ct.fn.getPaasQuotas = function (currentPage) {
             $scope.main.loadingMainBody = true;
             ct.paasQuotas = [];
             if (!currentPage) {
@@ -818,7 +821,7 @@ angular.module('portal.controllers')
             returnPromise.finally(function () {
                 $scope.main.loadingMainBody = false;
             });
-        };
+        };*/
 
         // 프로젝트 신청 유효성 검사
         ct.fn.createOrgValidationCheck = function() {
@@ -885,7 +888,7 @@ angular.module('portal.controllers')
         ct.fn.getQuotaPlans();              // 쿼터 세부 유형 조회
         ct.fn.getQuotaItems();              // 쿼터 상세 항목 조회
         ct.fn.changeOrgCase();              // 프로젝트 유형 변경 기본설정
-        ct.fn.getPaasQuotas();              // paas 프로젝트 쿼터 조회
+        // ct.fn.getPaasQuotas();              // paas 프로젝트 쿼터 조회 // PaaS 사용않함 2021.05.24
         ct.fn.getPersonalProjectCount();    // 개인 프로젝트 설정 건수 조회
         ct.fn.getMyPersonalCnt();           // 사용자가 생성한 개인프로젝트 건수 조회
     })

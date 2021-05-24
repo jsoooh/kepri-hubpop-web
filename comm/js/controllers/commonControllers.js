@@ -621,7 +621,8 @@ angular.module('common.controllers', [])
             }
         };
 
-        mc.syncSetPassRegionSet = function () {
+        // PaaS 사용않함 2021.05.24
+        /*mc.syncSetPassRegionSet = function () {
             var response = portal.regions.syncListAllRegions();
             if (response && response.status == 200 && angular.isArray(response.data)) {
                 mc.regions = response.data;
@@ -636,7 +637,7 @@ angular.module('common.controllers', [])
             } else {
                 mc.regions = [];
             }
-        };
+        };*/
 
         //Left Menu 구조 생성
         mc.setDbMenuList = function() {
@@ -921,14 +922,16 @@ angular.module('common.controllers', [])
         };
 
         mc.getOrganizationByName = function (name) {
-            var promise = portal.portalOrgs.getOrganizationByName(name, 2);
+            // PaaS 사용않함 2021.05.24
+            /*var promise = portal.portalOrgs.getOrganizationByName(name, 2);
             promise.success(function (data, status, headers) {
                 if (status == 200) {
                     mc.setOrganization(data);
                 } else {
                     mc.setOrganization(null);
                 }
-            });
+            });*/
+            mc.setOrganization(null);
         };
 
         mc.loadSltOrganization = function (bSync) {
@@ -1504,7 +1507,8 @@ angular.module('common.controllers', [])
             $scope.actionLoading = true;
             var body = {'password': userKeyData.password};
 
-            var userPromise = user.refreshAccessToken(body);
+            // PaaS 사용않함 2021.05.24
+            /*var userPromise = user.refreshAccessToken(body);
             userPromise.success(function (data) {
                 common.isPopCreateUserKey = false;
                 common.mdDialogHide();
@@ -1516,7 +1520,7 @@ angular.module('common.controllers', [])
             userPromise.error(function (data) {
                 $scope.actionLoading = false;
                 $scope.actionBtnHied = false;
-            });
+            });*/
         };
 
         mc.isPopCreateUserKey = false;
@@ -1743,8 +1747,10 @@ angular.module('common.controllers', [])
 
         mc.displayHistoryBtn = false;
 
+
+        // PaaS 사용않함 2021.05.24
         // PassRegion
-        mc.syncSetPassRegionSet();
+        // mc.syncSetPassRegionSet();
 
         if (common.isAuthenticated()) {
             if (!user.checkAccessToken(common.getAccessToken())) {
