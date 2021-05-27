@@ -195,6 +195,7 @@ angular.module('gpu.controllers')
                 common.showAlert("message",data.message);
             });
             returnPromise.finally(function (data, status, headers) {
+                ct.fn.getTenantResource();
             });
         };
 
@@ -358,7 +359,7 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.serverList();
-        ct.fn.getTenantResource();
+        // ct.fn.getTenantResource();
         ct.fn.getStorageSnapshotInfo();
         ct.fn.getVolumeTypeList();
         ct.fn.getStorageList();
