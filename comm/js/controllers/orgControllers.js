@@ -288,7 +288,7 @@ angular.module('portal.controllers')
             var serviceList = [
                 {serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N', callYn : 'N'},
-                {serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N', callYn : 'N'},
+                //{serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N', callYn : 'N'},
                 //엘이테크
                 {serviceCode : 'gis', serviceName : 'HUB-PoP GIS', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'vru', serviceName : 'AR/VR 공유서비스', useYn : 'N', callYn : 'N'},
@@ -352,7 +352,7 @@ angular.module('portal.controllers')
             // 타사업자 파라미터 : 엘이테크
             var otherParam = { "PROJECT-ID" : orgId };
             // HUB-PoP GIS
-            setServiceUseYn('gis', common.retrieveResource(common.resourcePromise('/gis/confirmDeleteOrNot.do', 'GET', otherParam)));
+            // setServiceUseYn('gis', common.retrieveResource(common.resourcePromise('/gis/confirmDeleteOrNot.do', 'GET', otherParam)));
             // AR/VR 공유서비스
             setServiceUseYn('vru', common.retrieveResource(common.resourcePromise('/vru/confirmDeleteOrNot.do', 'GET', otherParam)));
             // HiveBroker 서비스
