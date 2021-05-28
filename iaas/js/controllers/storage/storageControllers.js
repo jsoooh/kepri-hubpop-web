@@ -246,7 +246,6 @@ angular.module('iaas.controllers')
         //////////       2018.11.29 볼륨 사이즈 변경 팝업      sg0730       ////////////////
         //////////////////////////////////////////////////////////////////////////
         ct.fn.reSizePopStorage = function($event,volume) {
-
         	var dialogOptions =  {
                 controller       : "iaasReSizePopStorageCtrl" ,
                 formName         : 'iaasReSizePopStorageForm',
@@ -255,7 +254,6 @@ angular.module('iaas.controllers')
             };
             $scope.actionBtnHied = false;
             common.showDialog($scope, $event, dialogOptions);
-            $scope.actionLoading = true; // action loading
         };
         
         ct.reSizePopStorCallBackFunc = function () {
@@ -1056,7 +1054,6 @@ angular.module('iaas.controllers')
     	$scope.dialogOptions.closeName 	= "닫기";
     	$scope.dialogOptions.templateUrl = _IAAS_VIEWS_ + "/storage/reSizeStoragePopForm.html" + _VersionTail();
 
-    	$scope.actionLoading 			= false;
     	pop.volumeSize 					= 0;
     	pop.inputVolumeSize             = 0;
 
@@ -1136,10 +1133,8 @@ angular.module('iaas.controllers')
                 common.showAlertError("message",data.message);
             });
             returnPromise.finally(function () {
-                $timeout(function () {
-                    pop.fn.refreshSlider();
-                    $scope.actionLoading = false;
-                }, 500);
+                pop.fn.refreshSlider();
+                $scope.actionLoading = false;
             });
         };
 
@@ -1193,7 +1188,7 @@ angular.module('iaas.controllers')
         pop.fn.refreshSlider = function() {
             $timeout(function() {
                 $scope.$broadcast('rzSliderForceRender');
-            })
+            }, 500);
         };
 
         pop.fn.getStorageList();
