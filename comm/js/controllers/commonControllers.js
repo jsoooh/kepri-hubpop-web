@@ -936,11 +936,13 @@ angular.module('common.controllers', [])
 
         mc.loadSltOrganization = function (bSync) {
             if ($scope.main.sltPortalOrg && $scope.main.sltPortalOrg.orgId) {
-                if (bSync) {
+                mc.getOrganizationByName($scope.main.sltPortalOrg.orgId);
+                // PaaS 사용않함 2021.05.24
+                /*if (bSync) {
                     mc.setOrganization(mc.syncGetOrganizationByName($scope.main.sltPortalOrg.orgId));
                 } else {
                     mc.getOrganizationByName($scope.main.sltPortalOrg.orgId);
-                }
+                }*/
             } else {
                 mc.setOrganization(null);
             }
