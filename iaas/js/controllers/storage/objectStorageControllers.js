@@ -626,6 +626,14 @@ angular.module('iaas.controllers')
              }
          };
 
+         // URL 클립보드로 복사하기
+         ct.fn.copyUrlToClipboard = function (url) {
+             if (url) {
+                 common.copyToClipboard(url);
+                 $scope.main.copyToClipboard(url, '"' + url + '"가 클립보드에 복사 되었습니다.');
+             }
+         };
+
          ct.fn.getCheckedFileItems = function() {
             var items = [];
             if (ct.objectStorageObjectList.fileList.length > 0) {

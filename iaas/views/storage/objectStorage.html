@@ -221,7 +221,7 @@
 											</td>
 											<td>
 												<a class="link txt_long" title="{{item.url}}" style="width:300px;"> {{item.url}} </a>
-												<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
+												<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyUrlToClipboard(item.url)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 												<div class="t_tip_bx margin-left-5"><a class="info-icon-tooltip" tooltip-placement="top" uib-tooltip-html="'{{item.name}} ({{item.size}})'">	i</a></div>
 											</td>
 											<td class="hidden-sm hidden-xs"> {{item.modifiedDate}} </td>
