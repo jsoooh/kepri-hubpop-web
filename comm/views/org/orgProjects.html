@@ -1,17 +1,20 @@
 <div ng-if="(contents.orgProjects | filter:{ statusCode: '!deleting' }).length == 0" class="proj_main_cont" ng-click="contents.extendItem($event);">
 	<div class="p_main_top">
-		<div class="top_txt">
-			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
-			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+		<div class="top_txt text-center">
+			<p class="display-2">현재 생성한 프로젝트가 없습니다.</p>
+			<p class="display-1"><span class="blue-600">프로젝트를 신청</span>하고 HUB-PoP 서비스를 사용하세요.</p>
 		</div>
 		<div class="top_btn">
 			<!--<a href="" ng-click="main.addOrgProjectFormOpen($event);">-->
-			<a href="" ng-click="main.requestOrgProjectFormOpen($event);">
-				<span>프로젝트 신청</span>
-			</a>
+			<button type="button" name="button" class="btn btn-block btn-lg btn-primary" ng-click="main.requestOrgProjectFormOpen($event);">
+				<div class="feather-icon font-size-20">
+					<i data-feather="folder-plus" class="feather-directive"></i>
+				</div>
+				 프로젝트 생성
+			</button>
 		</div>
 	</div>
-	<div class="p_main_cont">
+	<div class="p_main_cont margin-top-80">
 		<div class="p_cont_txt">
 			<span class="p_tit">HUB-PoP 서비스</span>
 			<div class="p_txt">HUB-PoP은 전력 SW개발 및 데이터 분석을<br> 빠르게 수행하기 위한 <span class="c_blue">다양한 서비스를 제공</span>합니다.</div>
@@ -88,7 +91,7 @@
 	</div>
 </div>
 
-<div ng-if="(contents.orgProjects | filter:{ statusCode: '!deleting' }).length > 0" class="pdContent">
+<div ng-if="(contents.orgProjects | filter:{ statusCode: '!deleting' }).length > 0" class="pdContent" ng-if="0">
 	
 	<!-- 표준UI소스 -->
 	<!-- 전체 프로젝트 수 -->
