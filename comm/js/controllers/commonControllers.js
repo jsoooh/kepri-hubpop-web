@@ -1164,7 +1164,7 @@ angular.module('common.controllers', [])
                 mc.sltProjectId = "";
                 mc.sltProjectDisplayName = $translate.instant("label.all");
             }
-            //mc.syncListAllPortalOrgs();
+            mc.syncListAllPortalOrgs();
             //mc.listAllPortalOrgs();
         };
 
