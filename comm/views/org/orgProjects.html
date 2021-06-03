@@ -5,8 +5,7 @@
 			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
 		</div>
 		<div class="top_btn">
-			<!--<a href="" ng-click="main.addOrgProjectFormOpen($event);">-->
-			<a href="" ng-click="main.requestOrgProjectFormOpen($event);">
+			<a href="" ng-click="(main.userAuth=='A' || main.userAuth=='M') && main.requestOrgProjectFormOpen($event);" ng-disabled="main.userAuth=='U'">
 				<span>프로젝트 신청</span>
 			</a>
 		</div>
