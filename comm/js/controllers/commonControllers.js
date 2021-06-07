@@ -829,8 +829,6 @@ angular.module('common.controllers', [])
 
         mc.loadUserTenant = function (bSync) {
             if (angular.isObject(mc.sltProject) && mc.sltProjectId && angular.isObject(mc.sltPortalOrg) && mc.sltPortalOrg.orgId) {
-                var userTenant = null;
-                var userTenant2 = null;
                 if (mc.sltPortalOrg.isUseIaas) {
                     if (bSync) {
                         mc.setUserTenant(mc.syncGetTenantByName(mc.sltProjectId, mc.sltPortalOrg.orgId));
@@ -1007,7 +1005,8 @@ angular.module('common.controllers', [])
                 mc.portalOrgs = [];
             }
             if (mc.sltPortalOrgId == sltPortOrgId) {
-                mc.setPortalOrg(sltPortOrg);
+                // 동기 옵션이 true 이여야 새로고침시 서비스 항목을 제대로 불러옮 2021.06.07
+                mc.setPortalOrg(sltPortOrg, true);
             } else {
                 mc.changePortalOrg(sltPortOrg);
             }
