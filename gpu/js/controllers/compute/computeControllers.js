@@ -247,7 +247,13 @@ angular.module('gpu.controllers')
                     ct.fn.setMonitoringLink(serverMain);
 
                     if (serverMain.uiTask != 'creating' && serverMain.taskState != "deleting" && serverMain.vmMonitoringYn == 'N' && (serverMain.image && serverMain.image.osType != 'windows')) {
-                        $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {ct.fn.monitYnState(serverMain);}, 3000);
+                        $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {
+                            if ($location.url() != "/gpu/compute") {
+                                $interval.cancel($scope.main.refreshInterval['instanceMonitoringYn']);
+                            } else {
+                                ct.fn.monitYnState(serverMain);
+                            }
+                            }, 3000);
                     }
                     if (serverMain.uiTask == 'creating') {
                         ct.fnGetServerMainList();
