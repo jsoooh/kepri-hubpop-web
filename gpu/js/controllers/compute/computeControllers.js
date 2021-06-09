@@ -126,11 +126,9 @@ angular.module('gpu.controllers')
 
         ct.fn.getKeyFile = function(keypair,type) {
             var returnData = common.retrieveResource(common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name, 'GET'));
-            returnData.success(()=>{
+            returnData.success(function (data, status, headers) {
                 document.location.href = CONSTANTS.gpuApiContextUrl + '/server/keypair/'+type+"?tenantId="+ct.data.tenantId+"&name="+keypair.name;
-            })
-            returnData.error(()=>{
-            })
+            });
         };
 
         ct.fn.getWindowAgentConfFile = function (instance) {
