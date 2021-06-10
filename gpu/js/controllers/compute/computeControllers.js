@@ -1594,8 +1594,8 @@ angular.module('gpu.controllers')
             ct.sltImageId = '';
             ct.fn.getAvailabilityZoneList();
 
-            // OS 타입 필터링 (유형이 GPU 인건은 ubuntu 18.04 건만 보이게(이정일 차장 요구) 2021.06.09)
-            if (ct.selectedSpecType == 'GPU') {
+            // OS 타입 필터링 (유형이 general 인건은 ubuntu 18.04 건만 보이게(이정일 차장 요구) 2021.06.09)
+            if (ct.selectedSpecType == 'general') {
                 ct.imageTypeFilterList = [];
                 angular.forEach(ct.imageTypeList, function (imageType) {
                    if (imageType.osType == 'ubuntu' && imageType.imageVersion == '18.04') {
