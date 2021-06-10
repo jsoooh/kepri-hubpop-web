@@ -291,7 +291,7 @@ angular.module('portal.controllers')
                 //{serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N', callYn : 'N'},
                 //엘이테크
                 {serviceCode : 'gis', serviceName : 'HUB-PoP GIS', useYn : 'N', callYn : 'N'},
-                {serviceCode : 'vru', serviceName : 'AR/VR 공유서비스', useYn : 'N', callYn : 'N'},
+                // {serviceCode : 'vru', serviceName : 'AR/VR 공유서비스', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'hwu', serviceName : 'HiveBroker 서비스', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'aau', serviceName : 'AI-API 서비스', useYn : 'N', callYn : 'N'},
                 //와이즈테크놀로지
@@ -354,7 +354,7 @@ angular.module('portal.controllers')
             // HUB-PoP GIS
             // setServiceUseYn('gis', common.retrieveResource(common.resourcePromise('/gis/confirmDeleteOrNot.do', 'GET', otherParam)));
             // AR/VR 공유서비스
-            setServiceUseYn('vru', common.retrieveResource(common.resourcePromise('/vru/confirmDeleteOrNot.do', 'GET', otherParam)));
+            // setServiceUseYn('vru', common.retrieveResource(common.resourcePromise('/vru/confirmDeleteOrNot.do', 'GET', otherParam)));
             // HiveBroker 서비스
             setServiceUseYn('hwu', common.retrieveResource(common.resourcePromise('/hwu/confirmDeleteOrNot.do', 'GET', otherParam)));
             // AI-API 서비스
