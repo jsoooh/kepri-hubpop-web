@@ -1,24 +1,10 @@
-<div ng-if="(contents.orgProjects | filter:{ statusCode: '!deleting' }).length == 0" class="proj_main_cont" ng-click="contents.extendItem($event);">
-	<div class="p_main_top">
-		<div class="top_txt">
-			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
-			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
-		</div>
-		<div class="top_btn">
-			<button type="button" name="button" class="btn btn-block btn-lg btn-primary" ng-click="(main.userAuth=='A' || main.userAuth=='M') && main.requestOrgProjectFormOpen($event);" ng-disabled="main.userAuth=='U'">
-				<div class="feather-icon font-size-20">
-					<i data-feather="folder-plus" class="feather-directive"></i>
-				</div>
-				프로젝트 생성
-			</button>
-		</div>
-	</div>
+<div ng-if="(contents.orgProjects | filter:{ statusCode: '!deleting' }).length == 0" class="proj_main_cont" ng-click="contents.extendItem($event);" style="position: absolute; top: 40%;">
 	<div class="p_main_cont">
 		<div class="p_cont_txt">
 			<span class="p_tit">HUB-PoP 서비스</span>
 			<div class="p_txt">HUB-PoP은 전력 SW개발 및 데이터 분석을<br> 빠르게 수행하기 위한 <span class="c_blue">다양한 서비스를 제공</span>합니다.</div>
 		</div>
-		<div class="p_cont_list">
+		<!--<div class="p_cont_list">
 			<ul>
 				<li class="pdl0">
 					<a href="" class="NotCloseFirstOrgProjecItem" ng-class="{'on' : contents.selectItemKey == 1}" ng-click="contents.changeItem($event, 1);">
@@ -26,14 +12,14 @@
 						<span class="btn_txt">서버가상화</span>
 					</a>
 				</li>
-				<!-- PaaS 사용않함 2021.05.24 -->
-				<!--<li>
+				&lt;!&ndash; PaaS 사용않함 2021.05.24 &ndash;&gt;
+				&lt;!&ndash;<li>
 					<a href="" class="NotCloseFirstOrgProjecItem" ng-class="{'on' : contents.selectItemKey == 2}" ng-click="contents.changeItem($event, 2);">
 						<span class="btn_ico ico2"></span>
 						<span class="btn_txt">표준 APP개발</span>
 					</a>
-				</li>-->
-				<!-- PaaS 사용않함 2021.05.24 -->
+				</li>&ndash;&gt;
+				&lt;!&ndash; PaaS 사용않함 2021.05.24 &ndash;&gt;
 				<li>
 					<a href="" class="NotCloseFirstOrgProjecItem" ng-class="{'on' : contents.selectItemKey == 3}" ng-click="contents.changeItem($event, 3);">
 						<span class="btn_ico ico3"></span>
@@ -47,11 +33,11 @@
 					</a>
 				</li>
 			</ul>
-			<!-- 가이드박스 -->
+			&lt;!&ndash; 가이드박스 &ndash;&gt;
 			<div class="guide_box NotCloseFirstOrgProjecItem" ng-style="{ 'display': ((contents.selectItemKey == 0) ? 'none' : 'block') }">
 				<span class="gbox_ico" ng-class="{'no_01': (contents.selectItemKey == 1), 'no_02': (contents.selectItemKey == 2), 'no_03': (contents.selectItemKey == 3), 'no_04': (contents.selectItemKey == 4), 'no_05': (contents.selectItemKey == 5), 'no_06': (contents.selectItemKey == 6), 'no_07': (contents.selectItemKey == 7), 'no_08': (contents.selectItemKey == 8) }"></span>
 				<span ng-if="contents.selectItemKey == 1" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">가상서버를 생성</span>합니다. <br/>가상서버 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
-				<!--<span ng-if="contents.selectItemKey == 2" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">표준 APP를 생성</span>합니다. <br/>표준 APP 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>--><!-- PaaS 사용않함 2021.05.24 -->
+				&lt;!&ndash;<span ng-if="contents.selectItemKey == 2" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">표준 APP를 생성</span>합니다. <br/>표준 APP 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>&ndash;&gt;&lt;!&ndash; PaaS 사용않함 2021.05.24 &ndash;&gt;
 				<span ng-if="contents.selectItemKey == 3" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">분석허브를 생성</span>합니다. <br/>분석허브 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
 				<span ng-if="contents.selectItemKey == 4" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">GIS 플랫폼을 생성</span>합니다. <br/>GIS 플랫폼 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
 				<span ng-if="contents.selectItemKey == 5" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">개발 파이프라인을 생성</span>합니다. <br/>개발 파이프라인 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
@@ -59,7 +45,7 @@
 				<span ng-if="contents.selectItemKey == 7" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">API Gateway를 생성</span>합니다. <br/>API Gateway 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
 				<span ng-if="contents.selectItemKey == 8" class="gbox_txt">프로젝트에 사용 될 <span class="c_blue">데이터연계를 생성</span>합니다. <br/>데이터연계 생성은 작업자가 개발할 수 있는 개발환경을 만드는 곳입니다.</span>
 			</div>
-			<!-- //가이드박스 -->
+			&lt;!&ndash; //가이드박스 &ndash;&gt;
 			<ul>
 				<li class="pdl0">
 					<a href="" class="NotCloseFirstOrgProjecItem" ng-class="{'on' : contents.selectItemKey == 5}" ng-click="contents.changeItem($event, 5);">
@@ -86,6 +72,20 @@
 					</a>
 				</li>
 			</ul>
+		</div>-->
+	</div>
+	<div class="p_main_top">
+		<div class="top_txt">
+			<span class="s_txt">현재 생성한 프로젝트가 없습니다.</span>
+			<span class="l_txt"><span class="c_blue">프로젝트를 생성</span>하고 HUB-PoP 서비스를 사용하세요.</span>
+		</div>
+		<div class="top_btn">
+			<button type="button" name="button" class="btn btn-block btn-lg btn-primary" ng-click="(main.userAuth=='A' || main.userAuth=='M') && main.requestOrgProjectFormOpen($event);" ng-disabled="main.userAuth=='U'">
+				<div class="feather-icon font-size-20">
+					<i data-feather="folder-plus" class="feather-directive"></i>
+				</div>
+				프로젝트 생성
+			</button>
 		</div>
 	</div>
 </div>
