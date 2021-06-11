@@ -49,7 +49,7 @@
 						</div>
 						<div class="form-group">
 							<select id="ImageTypeList" name="ImageTypeList" class="form-control"
-									ng-options="imageType as imageType.osType + ' ' + imageType.imageVersion for imageType in contents.imageTypeFilterList"
+									ng-options="imageType as imageType.osType + ' ' + imageType.imageVersion for imageType in contents.imageTypeList"
 									ng-model="ct.selectedImageType" ng-change="contents.fn.onchangeImageType(ct.selectedImageType);" validation="required">
 								<option value="">{{ 'label.select' | translate }}</option>
 							</select>

@@ -1489,13 +1489,16 @@ angular.module('gpu.controllers')
         ct.fn.imageTypeListSearch = function() {
             $scope.main.loadingMainBody = true;
 
-            ct.imageTypeFilterList = [];
             ct.imageTypeList  = [];
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/image/osType', 'GET');
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content) {
-                    ct.imageTypeList = data.content;
-                    ct.imageTypeFilterList = angular.copy(data.content);
+                    // ubuntu 18.04 건만 보이게(이정일 차장 요구) 2021.06.09
+                    angular.forEach(data.content, function (imageType) {
+                        if (imageType.osType == 'ubuntu' && imageType.imageVersion == '18.04') {
+                            ct.imageTypeList.push(imageType);
+                        }
+                    });
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -1593,18 +1596,6 @@ angular.module('gpu.controllers')
         ct.fn.specTypeChange = function () {
             ct.sltImageId = '';
             ct.fn.getAvailabilityZoneList();
-
-            // OS 타입 필터링 (유형이 general 인건은 ubuntu 18.04 건만 보이게(이정일 차장 요구) 2021.06.09)
-            if (ct.selectedSpecType == 'general') {
-                ct.imageTypeFilterList = [];
-                angular.forEach(ct.imageTypeList, function (imageType) {
-                   if (imageType.osType == 'ubuntu' && imageType.imageVersion == '18.04') {
-                       ct.imageTypeFilterList.push(imageType);
-                   }
-                });
-            } else {
-                ct.imageTypeFilterList = angular.copy(ct.imageTypeList);
-            }
         };
 
         ct.fn.getGpuCardList = function() {
