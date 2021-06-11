@@ -34,13 +34,13 @@ angular.module('app')
                                 controller: 'gpuComputeCreateCtrl',
                                 templateUrl: _GPU_VIEWS_+'/compute/computeCreateForm.html'
                             },
-                            serverCopy: {
+                            /*serverCopy: {
                                 name: 'server_main',
                                 stateKey: 'gpuComputeCopy',
                                 url: '/gpu/compute/copy',
                                 controller: 'gpuComputeCopyCtrl',
                                 templateUrl: _GPU_VIEWS_+'/compute/computeCopyList.html'
-                            },
+                            },*/
                             serverAlarm: {
                                 name: 'server_main',
                                 stateKey: 'gpuComputeAlarm',

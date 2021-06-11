@@ -69,9 +69,9 @@
 			<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="main.goToPage('/gpu/compute/create')">
 				<div class="feather-icon color-primary"><i data-feather="server" class="feather-directive"></i></div> <b>인스턴스 만들기</b>
 			</button>
-			<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="main.goToPage('/gpu/compute/copy')">
+			<!--<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="main.goToPage('/gpu/compute/copy')">
 				<div class="feather-icon color-primary"><i data-feather="copy" class="feather-directive"></i></div> <b>다른 인스턴스 복사하기</b>
-			</button>
+			</button>-->
 			<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/gpu/loadbalancer/create')" ng-if="false">
 				<div class="feather-icon color-primary"><i data-feather="server" class="feather-directive"></i></div> <b>부하 분산 설정</b>
 			</button>
@@ -497,7 +497,7 @@
 		<!-- 생성된 서버 없을 경우 -->
 		<div class="welcome_layer type-gpu" ng-if="!!main.userTenantGpuId && !contents.loadingServerList && contents.serverMainList.length == 0">
 			<div class="guide_fnt arrw_btm">신규 인스턴스를 만듭니다.</div>
-			<div class="guide_fnt arrw_top">다른 프로젝트의 스냅샷 이미지로부터 신규 가상서버를 만듭니다.</div>
+			<!--<div class="guide_fnt arrw_top">다른 프로젝트의 스냅샷 이미지로부터 신규 가상서버를 만듭니다.</div>-->
 			<div class="text-center blank-page">
 				<div class="img">
 					<img src="../assets/img/icon/data-center.png">
@@ -811,4 +811,3 @@
 		</div>
 	</div>
 	<!-- //테넌트 생성 전인 경우(new) -->
-	
