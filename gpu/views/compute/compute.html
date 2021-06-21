@@ -147,7 +147,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="card-body">
+						<div class="card-body" style="height:340px;">
 							<div ng-if="instance.procState == 'end'">
 								<div class="row">
 									<div class="col-md-12">
@@ -156,7 +156,7 @@
 											<ul class="list-dot font-size-13 margin-top-10">
 												<li><b>접속 프로토콜 :</b><span>SSH</span></li>
 												<li><b>인스턴스 유형 :</b><span>{{ instance.spec.type }}</span> <span ng-if="instance.spec && instance.spec.gpuCardInfo">({{ instance.spec.gpuCardInfo.model }} {{ instance.spec.gpuCardInfo.vgpu }}EA)</span></li>
-												<li ng-if="instance.image && instance.image.serviceName"><b>이미지 :</b><span>{{ instance.image.serviceName }}</span></li>
+												<li ng-if="instance.image && instance.image.serviceName"><b>이미지 서비스명:</b><span>{{ instance.image.serviceName }}</span></li>
 												<!-- <li><b>접속 IP :</b><span class="margin-right-5">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li>
 												<li><b>접속 IP :</b><span class="margin-right-5"><a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li> -->
 												<li><b>접속 IP :</b><span class="margin-right-5"><a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li>
@@ -358,7 +358,7 @@
 								<th scope="col">서버명</th>
 								<th scope="col">OS유형</th>
 								<th scope="col">인스턴스 유형</th>
-								<th scope="col">이미지</th>
+								<th scope="col">이미지 서비스명</th>
 								<th scope="col">접속주소(IP)</th>
 								<th scope="col">모니터링</th>
 								<th scope="col">vCore</th>
