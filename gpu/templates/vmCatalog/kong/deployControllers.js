@@ -10,8 +10,8 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.pgPort = ct.prodPortBand + 5432;
-        ct.data.kongaPort = ct.prodPortBand + 51337; // 1337 포트 운영 서버에서 막혀 있음. 정책 결정 전까지 51337 사용
+        ct.data.pgPort = ct.prodPortBand + 305;
+        ct.data.kongaPort = ct.prodPortBand + 105; // 1337 포트 운영 서버에서 막혀 있음.
         ct.data.kongUserId = "kong";
         ct.data.kongDbName = "kong";
         ct.data.kongaUserId = "konga";

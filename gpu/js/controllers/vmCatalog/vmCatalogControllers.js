@@ -71,7 +71,7 @@ angular.module('gpu.controllers')
     ct.bucketNames              = [];
     ct.usingPorts               = {};
     // 기본 port가 10000이하인 경우에 prodPortBand를 더함.
-    ct.prodPortBand         = 0;
+    ct.prodPortBand         = 30000;
     // vm 생성시 기본적으로 사용하는 port
     ct.usingPorts.single        = [9100];
     ct.usingPorts.replica       = [9100];
@@ -559,24 +559,24 @@ angular.module('gpu.controllers')
     ct.fn.systemPortCustomValidationCheck = function(deployType, port) {
         if (port == undefined || port == null || port == "") return;
         if (!angular.isNumber(port)) port = parseInt(port, 10);
-        if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
+        if (port >= 30000 && port <= 32000) {
             if (ct.usingPorts[deployType].indexOf(port) >= 0) {
                 return {isValid : false, message: "사용이 예약된 포트 입니다."};
             } else {
                 return {isValid: true};
             }
         } else {
-            return {isValid : false, message: "사용이 가능한 포트 범위는 [80, 443, 1024~65535] 입니다."};
+            return {isValid : false, message: "사용이 가능한 포트 범위는 [30000~32000] 입니다."};
         }
     };
 
     ct.fn.systemLbPortCustomValidationCheck = function(port) {
         if (port == undefined || port == null || port == "") return;
         if (!angular.isNumber(port)) port = parseInt(port, 10);
-        if (port == 80 || port == 443 || (port >= 1024 && port <= 65535)) {
+        if (port >= 30000 && port <= 32000) {
             return {isValid: true};
         } else {
-            return {isValid : false, message: "사용이 가능한 포트 범위는 [80, 443, 1024~65535] 입니다."};
+            return {isValid : false, message: "사용이 가능한 포트 범위는 [30000~32000] 입니다."};
         }
     };
 

@@ -10,9 +10,9 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.servicePort = ct.prodPortBand + 6379;
-        ct.data.redis1Port = ct.prodPortBand + 6379;
-        ct.data.redis2Port = ct.prodPortBand + 6380;
+        ct.data.servicePort = ct.prodPortBand + 112;
+        ct.data.redis1Port = ct.prodPortBand + 112;
+        ct.data.redis2Port = ct.prodPortBand + 192;
 
         ct.usingPorts.cluster = [ct.data.servicePort];
 

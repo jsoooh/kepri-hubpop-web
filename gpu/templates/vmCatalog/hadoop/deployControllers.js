@@ -26,8 +26,9 @@ angular.module('gpu.controllers')
         ct.data.workerCnt = 2; // default
         ct.data.type = "core";
 
-        ct.data.lbSvcPort = ct.prodPortBand+ 9000;
-        ct.data.servicePort = ct.prodPortBand+ 50070;
+        ct.data.lbSvcPort = ct.prodPortBand+ 402;
+        ct.data.servicePort = ct.prodPortBand + 901;
+
         // 테스트
         if (ct.testInput) {
             ct.data.deployName = "하둡";

@@ -10,8 +10,8 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.lbSvcPort = ct.prodPortBand + 80;
-        ct.data.servicePort = ct.prodPortBand + 80;
+        ct.data.lbSvcPort = ct.prodPortBand + 109;
+        ct.data.servicePort = ct.prodPortBand + 109;
 
         // 테스트
         if (ct.testInput) {

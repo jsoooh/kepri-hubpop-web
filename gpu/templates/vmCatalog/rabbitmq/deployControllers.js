@@ -10,11 +10,11 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.servicePort = ct.prodPortBand + 5672;
+        ct.data.servicePort = ct.prodPortBand + 111;
         ct.data.managementPort = 15672;
-        ct.data.epmdPort = ct.prodPortBand + 4369;
+        ct.data.epmdPort = ct.prodPortBand + 901;
         ct.data.erlangPort = 25672;
-        ct.data.ncCheckPort = ct.prodPortBand + 4444;
+        ct.data.ncCheckPort = ct.prodPortBand + 902;
 
         ct.usingPorts.cluster.push(ct.data.epmdPort);
         ct.usingPorts.cluster.push(ct.data.managementPort);

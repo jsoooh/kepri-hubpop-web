@@ -10,8 +10,8 @@ angular.module('gpu.controllers')
 
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
-        ct.data.lbSvcPort = ct.prodPortBand+ 8080;
-        ct.data.servicePort = ct.prodPortBand+ 8080;
+        ct.data.lbSvcPort = ct.prodPortBand + 113;
+        ct.data.servicePort = ct.prodPortBand + 113;
 
         // 선택 불가 포트
         ct.usingPorts.single.push(8005);

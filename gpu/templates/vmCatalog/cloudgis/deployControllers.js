@@ -11,10 +11,11 @@ angular.module('gpu.controllers')
         ct.vs = new ValidationService({controllerAs : $scope.subPage});
 
         ct.data.replicaCnt = 2;
-        ct.data.servicePort = ct.prodPortBand + 80;
+        ct.data.servicePort = ct.prodPortBand + 281;
+        ct.data.pgPort = ct.prodPortBand + 301;
         ct.data.checkPort = 28080;
-        ct.data.GIS1Port = ct.prodPortBand + 8081;
-        ct.data.GIS2Port = ct.prodPortBand + 8081;
+        ct.data.GIS1Port = ct.prodPortBand + 901;
+        ct.data.GIS2Port = ct.prodPortBand + 901;
         ct.data.applicationName = "master01";
 
         ct.usingPorts.replica.push(ct.data.checkPort);
@@ -22,7 +23,6 @@ angular.module('gpu.controllers')
         ct.data.deployType = "single";
         ct.data.volumeUse = false;
 
-        ct.testInput = true;
         // 테스트
         if (ct.testInput) {
             //ct.data.deployName = "CloudGIS";

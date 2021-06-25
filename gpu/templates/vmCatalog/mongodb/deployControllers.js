@@ -11,8 +11,8 @@ angular.module('gpu.controllers')
         ct.vs = new ValidationService({controllerAs: $scope.subPage});
 
         ct.data.clusterCnt = 3;
-        ct.data.servicePort = 27017;
-        ct.data.checkPort = ct.prodPortBand + 9994;
+        ct.data.servicePort = ct.prodPortBand + 107;
+        ct.data.checkPort = ct.prodPortBand +  901;
         ct.data.mongoPort1 = 27020;
         ct.data.mongoPort2 = 27030;
         ct.data.mongoPort3 = 27040;
