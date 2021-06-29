@@ -45,9 +45,6 @@
 			<div class="card card-type1">
 				<div class="card-header">
 					<div class="card-info-area">
-						<div class="square-mark">
-							<img ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalogDeploy.vmCatalogInfo.templatePath + '/logo.png' }}" >
-						</div>
 						<div class="text-box">
 							<div class="top">
 								<div class="row">
@@ -126,7 +123,8 @@
 					<ul ng-if="vmCatalogDeploy.deployStatus == 'DEPLOY_COMPLETE' && vmCatalogDeploy.stackStatus == 'CREATE_COMPLETE'" class="img_count" ng-class="{ 'imgType1': vmCatalogDeploy.deployServerCount == 1,  'imgType2': vmCatalogDeploy.deployServerCount == 2,  'imgType3': vmCatalogDeploy.deployServerCount == 3 }">
 							<!-- <li ng-repeat="(key, server) in ( vmCatalogDeploy.servers | filter: { instance : '!null' } )"> -->
 							<li>
-								<img ng-src="images/thum/im_thum_centos_300.png">
+								<img ng-if="!vmCatalogDeploy.vmCatalogInfo.templatePath" ng-src="images/thum/im_thum_centos_300.png"> <!-- 이미지가 없을시 기본이미지 -->
+								<img ng-if="vmCatalogDeploy.vmCatalogInfo.templatePath" ng-src="{{ main.gpuVmCatalogTemplatePath + vmCatalogDeploy.vmCatalogInfo.templatePath + '/logo.png' }}" > <!-- 카탈로그 이미지 -->
 							</li>
 						</ul>
 					</div>
@@ -160,15 +158,15 @@
 						<th scope="col">카탈로그 이름</th>
 						<th scope="col">배포 버전</th>
 						<th scope="col">배포 유형</th>
-						<th scope="col">로드 밸런스</th>
-						<th scope="col">서버 수</th>
+						<th scope="col">로드 밸런서</th>
+						<th scope="col">서버 개수</th>
 						<th scope="col">상태</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="(key, vmCatalogDeploy) in (contents.vmCatalogDeployList | filter: { deployName : contents.searchText })">
-						<td class="text-center"><a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</a></td>
-						<td class="text-center"><a href="" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</a></td>
+						<td class="text-center" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.deployName }}</td>
+						<td class="text-center" ng-click="main.goToPage('/gpu/vmCatalogDeploy/view/' + vmCatalogDeploy.id)">{{ vmCatalogDeploy.stackName }}</td>
 						<td class="text-center">{{ vmCatalogDeploy.vmCatalogInfo.catalogName }}</td>
 						<td class="text-center">{{ vmCatalogDeploy.version }}</td>
 						<td class="text-center">

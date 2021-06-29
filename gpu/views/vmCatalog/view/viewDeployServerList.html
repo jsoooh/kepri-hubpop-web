@@ -54,15 +54,18 @@
 								<div class="margin-top-20 font-size-13">삭제 중</div>
 							</div>
 							<!-- //서버 삭제 중 -->
-							<div class="img-size64" style="margin:0 auto;">
-								<img ng-if="contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE'" ng-src="images/thum/im_thum_centos_300.png" >
+
+							<!-- 서비스 배포 완료-->
+							<div class="img-size64" style="margin:0 auto;" ng-if="contents.vmCatalogDeployInfo.deployStatus == 'DEPLOY_COMPLETE' && contents.vmCatalogDeployInfo.stackStatus == 'CREATE_COMPLETE'">
+								<img ng-if="!contents.vmCatalogInfo.templatePath" ng-src="images/thum/im_thum_centos_300.png" > <!-- 이미지가 없을시 기본이미지 -->
+								<img ng-if="contents.vmCatalogInfo.templatePath" ng-src="{{ main.gpuVmCatalogTemplatePath + contents.vmCatalogInfo.templatePath + '/logo.png' }}"> <!-- 카탈로그 이미지 -->
 							</div>
 						</div>
 						<div class="col-md-9">
 							<div class="text-box">
 								<ul class="list-dot font-size-13">
 									<li>
-										<b>접속 계정</b> 
+										<b>접속 계정</b>
 										<span>centos</span>
 									</li>
 									<li>
