@@ -19,11 +19,14 @@
 		<img alt="" src="images/access_guide/access_guide_disk_img01.png" alt="">
 	</div>
 	<p class="txt_level1 blt_none">①  <strong>‘서버 SSH 접속’</strong> 을 합니다.</p>
-	<p class="txt_level1 blt_none">②  <strong>[lsblk] 명령을 입력</strong>하여 <strong>마운트정보를 확인</strong>합니다.</p>
+	<p class="txt_level1 blt_none">②  <strong>[lsblk]</strong>명령을 입력하여 <strong>마운트정보를 확인</strong>합니다.</p>
 	<p class="txt_level1 blt_none">③  <strong>[sudo mkfs -t ext4 /dev/vdb]</strong> 명령을 입력하여 해당 <strong>disk(vdb)를 포맷</strong>합니다.</p>
 	<p class="txt_level1 blt_none">④  <strong>[sudo mkdir /mnt/data]</strong> 명령을 입력하여 <strong>마운트포인트(/mnt/data)를 생성</strong>합니다.</p>
-	<p class="txt_level1 blt_none">⑤  <strong>[sudo mount /dev/vdb /mnt/data]</strong> 명령을 입력하여 마운트포인트(/mnt/data)에 <strong>disk(vdb)를 마운트</strong>합니다.</p>
-	<p class="txt_level1 blt_none">⑥  <strong>[lsblk]</strong> 명령을 입력하여 <strong>마운트정보를 확인</strong>합니다</p>
+	<p class="txt_level1 blt_none">⑤  <strong>[blkid]</strong>명령을 입력하여 <strong>연결된 볼륨의 UUID를 확인</strong>합니다.</p>
+	<p class="txt_level1 blt_none">⑥  <strong>[vi /etc/fstab]</strong>명령을 입력하여 <strong>볼륨의 UUID와 설정을 아래와 같이 입력</strong>합니다.</p>
+	<p class="txt_level1 blt_none">&nbsp;&nbsp;&nbsp; <strong>[UUID=볼륨의UUID /mnt/data ext4 defaults 0 0]</strong></p>
+	<p class="txt_level1 blt_none">⑦  <strong>[sudo mount –a]</strong>명령을 입력하여 <strong>disk를 마운트</strong>합니다.</p>
+	<p class="txt_level1 blt_none">⑧  <strong>[lsblk]</strong>명령을 입력하여 <strong>마운트 정보를 확인</strong>합니다.</p>
 
 	<h3 id="/iaas/storage?content=2" class="mt80">2. Windows 서버 디스크 마운트(mount)</h3>
 	<p class="txt_level1 pdb0">Windows 서버에 연결된 디스크(Disk)를 사용하기 위한 마운트(mount) 방법을 안내합니다.</p>
