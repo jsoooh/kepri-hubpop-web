@@ -1644,7 +1644,7 @@ angular.module('gpu.controllers')
                         break;
                     }
                 }
-                ct.fn.getAvailabilityZoneList(selectedGpuCardId);
+                ct.fn.getAvailabilityZoneList(selectedGpuCardId, ct.data.spec.gpu);
                 ct.fn.setSpecMaxDisabled(); // GpuCard 변경시 스펙 Disabled 여부 변경 by hrit, 201015
             } else {
                 ct.fn.getAvailabilityZoneList();
@@ -1662,9 +1662,10 @@ angular.module('gpu.controllers')
             });
         };
 
-        ct.fn.getAvailabilityZoneList = function(id) {
+        ct.fn.getAvailabilityZoneList = function(gpuCardId, gpuCardCount) {
             var param = {
-                gpuCardId : id
+                gpuCardId : gpuCardId,
+                gpuCardCount : gpuCardCount
             };
             ct.availabilityZoneList  = [];
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET', param);

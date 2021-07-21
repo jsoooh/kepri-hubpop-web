@@ -707,8 +707,6 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
-            console.log(222)
-
             ct.selectedGpuCard = {};
             if (selectedGpuCardId) {
                 var index;
@@ -719,31 +717,29 @@ angular.module('gpu.controllers')
                         break;
                     }
                 }
-                ct.fn.getAvailabilityZoneList(selectedGpuCardId);
+                ct.fn.getAvailabilityZoneList(selectedGpuCardId, ct.data.spec.gpu);
                 ct.fn.setSpecMaxDisabled(); // GpuCard 변경시 스펙 Disabled 여부 변경 by hrit, 201015
             }
-            else
+            else {
                 ct.fn.getAvailabilityZoneList();
-                
-            console.log(111)
+            }
             ct.fn.setSelectedGpuCount();
         };
 
         ct.fn.setSelectedGpuCount = function () {
-
-            console.log(ct.gpuCardList)
             // GPU 인스턴스는 프로젝트 자원 계획에 카드의 사용쿼터를 표시하므로 스펙 선택 시 GPU 사용량 표시 by hrit, 201015
             ct.gpuCardList.forEach(function (gpuCard) {
                 gpuCard.selected = 0;
                 if (gpuCard.id == ct.selectedGpuCardId) 
                     gpuCard.selected = ct.data.spec.gpu ? ct.data.spec.gpu: 0;
             });
-        }
+        };
 
 
-        ct.fn.getAvailabilityZoneList = function(id) {
+        ct.fn.getAvailabilityZoneList = function(gpuCardId, gpuCardCount) {
             var param = {
-                gpuCardId : id
+                gpuCardId : gpuCardId,
+                gpuCardCount : gpuCardCount
             };
             ct.availabilityZoneList  = [];
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET', param);
