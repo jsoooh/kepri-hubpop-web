@@ -39,6 +39,7 @@
             "instance_unpausing" : "정지해제 중",
             "instance_rebooting" : "재시작 중",
             "instance_building" : "생성중",
+            "instance_deleted" : "삭제중",
             "instance_snapshot_active" : "사용가능",
             "instance_snapshot_queued" : "생성 중",
             "instance_snapshot_saving" : "생성 중",
