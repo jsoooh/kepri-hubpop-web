@@ -274,7 +274,8 @@ angular.module('gpu.controllers')
                     ct.snapshotInfo = data.content;
                     ct.fn.setSpecMinDisabled();
 
-                    var params = {
+                    // Train은 fixed_ip 대신 floating_ip만 사용하기때문에 불필요
+                    /*var params = {
                         tenantId: ct.snapshotInfo.tenantId,
                         instanceId: ct.snapshotInfo.instanceId
                     };
@@ -289,7 +290,7 @@ angular.module('gpu.controllers')
                     });
                     rp.error(function (result) {
                         common.showAlertWarning('네트워크ID 가 설정되지 않았습니다. >>> ' + result.exception);
-                    });
+                    });*/
                 }
                 $scope.main.loadingMainBody = false;
             });
