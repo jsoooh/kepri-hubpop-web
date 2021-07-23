@@ -72,22 +72,22 @@
 			<!--<button type="button" class="btn btn-default btn-lg font-size-14" ng-click="main.goToPage('/gpu/compute/copy')">
 				<div class="feather-icon color-primary"><i data-feather="copy" class="feather-directive"></i></div> <b>다른 인스턴스 복사하기</b>
 			</button>-->
-			<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/gpu/loadbalancer/create')" ng-if="false">
+			<button ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState: '!deleting', imageOsType: '!windows' }).length > 0" type="button" class="btn btn-default btn-lg font-size-14" ng-click="contents.fn.getKeyFile((contents.serverMainList | filter:{ name: contents.schFilterText, taskState: '!deleting', imageOsType: '!windows' })[0].keypair,'privateKey')">
+				<div class="feather-icon color-primary"><i data-feather="download" class="feather-directive"></i></div> <b>접속 인증 키(KEY) : {{(contents.serverMainList | filter:{ name: contents.schFilterText, taskState: '!deleting', imageOsType: '!windows' })[0].keypair.name}}</b>
+			</button>
+			<!--<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/gpu/loadbalancer/create')" ng-if="false">
 				<div class="feather-icon color-primary"><i data-feather="server" class="feather-directive"></i></div> <b>부하 분산 설정</b>
 			</button>
 			<button type="button" class="btn btn-default btn-lg" ng-click="main.goToPage('/gpu/loadbalancer/detail/:lbInfoId')" ng-if="false">
 				<div class="feather-icon color-primary"><i data-feather="server" class="feather-directive"></i></div> <b>부하 분산 상세</b>
-			</button>
-			<span ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState: '!deleting', imageOsType: '!windows' }).length > 0" style="border-bottom: 1px solid #eeeeee;padding: 10px 15px;">
-				<b>접속 인증 키(KEY) : </b><span class="margin-right-5">{{(contents.serverMainList | filter:{ name: contents.schFilterText, taskState: '!deleting', imageOsType: '!windows' })[0].keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile((contents.serverMainList | filter:{ name: contents.schFilterText, taskState: '!deleting', imageOsType: '!windows' })[0].keypair,'privateKey')"><span class="feather-icon blue-600"><i data-feather="download" class="feather-directive"></i></span></button>
-			</span>
+			</button>-->
 		</div>
 		<!-- //버튼영역 -->
 		
 		<!-- 서버관리 리스트(카드형) -->
 		<div class="card-list-wrap" ng-if="(contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }).length > 0 && contents.listType == 'image'">
 			<div class="row">
-				<div class="col-md-4" ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
+				<div class="col-md-3" ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }">
 					<div class="card card-type1" ng-class="{'new-create' : instance.newCreated}">
 						<div class="card-header">
 							<div class="card-info-area">
@@ -131,7 +131,9 @@
 														<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '스냅샷 이미지 생성'이 가능합니다.">스냅샷 이미지 생성</a></li>
 														<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="볼륨 연결">볼륨 연결</a></li>
 														<li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">키페어 다운로드</a></li>
-														<li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링 <span ng-if="instance.vmMonitoringYn == 'D' || instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="instance.vmMonitoringYn == 'Y'">비활성화</span></a></li>
+														<li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링<span ng-if="instance.vmMonitoringYn == 'D' || instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="instance.vmMonitoringYn == 'Y'">비활성화</span></a></li>
+														<li ng-if="instance.vmMonitoringYn == 'Y'"><a href="{{instance.monitoringLink}}">모니터링 바로가기</a></li>
+														<li ng-if="instance.vmMonitoringYn != 'Y'"><a href="javascript:void(0);" class="disabled" title="모니터링이‘활성화’상태인 경우에만 모니터링 바로가기가 가능합니다.">모니터링 바로가기 <img ng-show="instance.vmMonitoringYn == 'N'" src="images/loading_sm.gif"></a></li>
 														<li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '인스턴스', instance.name, contents.deleteInstanceJob, instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
 														<li ng-if="instance.instanceSnapshotList.length > 0"><a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
 														<!--<li ng-if="instance.vmState == 'active'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('PAUSE',instance,$index)">일시정지</a></li>-->
@@ -147,7 +149,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="card-body" style="height:340px;">
+						<div class="card-body" style="height:300px;">
 							<div ng-if="instance.procState == 'end'">
 								<div class="row">
 									<div class="col-md-12">
@@ -156,32 +158,19 @@
 											<ul class="list-dot font-size-13 margin-top-10">
 												<li><b>접속 프로토콜 :</b><span>SSH</span></li>
 												<li><b>인스턴스 유형 :</b><span>{{ instance.spec.type }}</span> <span ng-if="instance.spec && instance.spec.gpuCardInfo">({{ instance.spec.gpuCardInfo.model }} {{ instance.spec.gpuCardInfo.vgpu }}EA)</span></li>
-												<li ng-if="instance.image && instance.image.serviceName"><b>이미지 서비스명:</b><span>{{ instance.image.serviceName }}</span></li>
+												<li ng-if="instance.image && instance.image.serviceName" class="text-truncate"><b>이미지 서비스명:</b><span>{{ instance.image.serviceName }}</span></li>
 												<!-- <li><b>접속 IP :</b><span class="margin-right-5">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li>
 												<li><b>접속 IP :</b><span class="margin-right-5"><a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li> -->
 												<li><b>접속 IP :</b><span class="margin-right-5"><a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li>
 												<li><b>접속 계정 :</b><span>{{instance.image.osType}}</span></li>
 												<!--<li ng-show="instance.keypair.privateKeyYn == 'Y'"><b>접속 인증 키(KEY) :</b><span class="margin-right-5">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="feather-icon blue-600"><i data-feather="download" class="feather-directive"></i></span></button></li>-->
 												<li>
-													<b>모니터링 :</b>
-													<span ng-show="instance.vmMonitoringYn == 'N'"><img src="images/loading_sm.gif"></span>
-													<span ng-show="instance.vmMonitoringYn == 'D'">비활성화</span>
-													<span ng-show="instance.vmMonitoringYn == 'Y'">
-														<a href="{{ instance.monitoringLink }}" target="_blank" class="link">모니터링 바로가기</a>
-													</span>
-													<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" 
-														ng-show="instance.vmMonitoringYn == 'Y'"
-														ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)">
-														<span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span>
-													</button>
-												</li>
-												<li>
 													<b>설명</b>
 													<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instance, 'server');">i</a></div>
 												</li>
 											</ul>
 											<div class="row margin-top-30">
-												<div class="col-sm-6">
+												<div class="col-sm-12">
 													<button type="button" class="btn btn-primary btn-sm btn-block" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {fixedIp : instance.fixedIp, osType:instance.image.osType, gpuYn : true});"><i class="xi-paper margin-right-5"></i>접속방법가이드</button>
 												</div>
 											</div>
@@ -206,7 +195,7 @@
 													<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 												</li> -->
 												<li><b>인스턴스 유형 :</b><span>{{ instance.spec.type }}</span> <span ng-if="instance.spec && instance.spec.gpuCardInfo">({{ instance.spec.gpuCardInfo.model }} {{ instance.spec.gpuCardInfo.vgpu }}EA)</span></li>
-												<li ng-if="instance.image && instance.image.serviceName"><b>이미지 :</b><span>{{ instance.image.serviceName }}</span></li>
+												<li ng-if="instance.image && instance.image.serviceName" class="text-truncate"><b>이미지 :</b><span>{{ instance.image.serviceName }}</span></li>
 												<li>
 													<b>접속 주소 :</b><span>{{ instance.fixedIp }}:20022</span>
 													<span class="margin-right-5">
@@ -226,7 +215,7 @@
 												</li>
 											</ul>
 											 <div class="row margin-top-30">
-												<div class="col-sm-6">
+												<div class="col-sm-12">
 													<button type="button" class="btn btn-primary btn-sm btn-block" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {osType: instance.image.osType, fixedIp: instance.fixedIp, isGpu: true});"><i class="xi-paper margin-right-5"></i>접속방법가이드</button>
 												</div>
 											</div>
@@ -342,9 +331,9 @@
 							<col>						<!--서버명-->
 							<col style="width: 105px;">	<!--os유형-->
 							<col style="width: 12%;">	<!--인스턴스유형-->
-							<col style="width: 12%;">	<!--이미지-->
+							<col style="width: 16%;">	<!--이미지-->
 							<col style="width: 165px;">	<!--접속주소-->
-							<col style="width: 110px;">	<!--모니터링-->
+							<!--<col style="width: 110px;">-->	<!--모니터링-->
 							<col style="width: 70px;">	<!--cpu-->
 							<col style="width: 105px;">	<!--메모리-->
 							<col style="width: 105px;">	<!--디스크-->
@@ -360,7 +349,7 @@
 								<th scope="col">인스턴스 유형</th>
 								<th scope="col">이미지 서비스명</th>
 								<th scope="col">접속주소(IP)</th>
-								<th scope="col">모니터링</th>
+								<!--<th scope="col">모니터링</th>-->
 								<th scope="col">vCore</th>
 								<th scope="col">메모리(GB)</th>
 								<th scope="col">디스크(GB)</th>
@@ -386,12 +375,6 @@
 								<td ng-if="instance.image.osType == 'windows'">{{ instance.fixedIp }}
 									<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><i data-feather="copy" class="feather-directive blue-600 margin-left-5"></i></button>
 								</td>
-								<td ng-if="!instance.image.osType">-</td>
-								<td class="text-center" ng-if="instance.vmMonitoringYn == 'Y'">
-									<a href="{{ instance.monitoringLink }}" class="link">바로가기</a>
-									<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyMonitoringInfoToClipboard(instance.monitoringLink)"><i data-feather="copy" class="feather-directive blue-600 margin-left-5"></i></button>
-								</td>
-								<td class="text-center" ng-if="instance.vmMonitoringYn == 'N' || instance.vmMonitoringYn == 'D'">-</td>
 								<td class="text-center">{{ instance.spec.vcpus }}</td>
 								<td class="text-center">{{ (instance.spec.ram / 1024 | number:1).replace('.0', '') }}</td>
 								<td class="text-center">{{ instance.spec.disk }}</td>
@@ -440,6 +423,8 @@
 														<span ng-if="!(instance.vmMonitoringYn == 'D' && instance.vmMonitoringYn == 'N') && instance.vmMonitoringYn == 'Y'">비활성화</span>
 													</a>
 												</li>
+												<li ng-if="instance.vmMonitoringYn == 'Y'"><a href="{{instance.monitoringLink}}">모니터링 바로가기</a></li>
+												<li ng-if="instance.vmMonitoringYn != 'Y'"><a href="javascript:void(0);" class="disabled" title="모니터링이‘활성화’상태인 경우에만 모니터링 바로가기가 가능합니다.">모니터링 바로가기 <img ng-show="instance.vmMonitoringYn == 'N'" src="images/loading_sm.gif"></a></li>
 												<li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '인스턴스', instance.name, contents.deleteInstanceJob, instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
 												<li ng-if="instance.instanceSnapshotList.length > 0">	<a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
 											</ul>
