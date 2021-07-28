@@ -2040,6 +2040,10 @@ angular.module('common.controllers', [])
                 if (data && angular.isObject(data.contents) && !!data.contents.orgId && mc.portalOrgs.length > 0) {
                     var sltPortOrg = common.objectsFindCopyByField(mc.portalOrgs, "id", data.contents.orgId);
                     mc.setPortalOrg(sltPortOrg);
+
+                    // 한전 긴급 요청사항 첫페이지 들어올때 강제로 전체메뉴 보여주기 [나중에 삭제] 2021.07.28
+                    $scope.main.sltPortalOrgId = sltPortOrg.id;
+                    $scope.main.allMenuOpenClick();
                 }
             });
             userSettingPromise.error(function (data, status, headers) {
