@@ -1429,8 +1429,8 @@ angular.module('gpu.controllers')
                     if (spec.vcpus > ct.tenantResource.available.cores 
                         || spec.ram > ct.tenantResource.available.ramSize 
                         || spec.disk > ct.tenantResource.available.hddVolumeGigabytes
-                        || (ct.selectedSpecType == 'GPU' && spec.gpu > ct.selectedGpuCard.availableCount)   // 해당 프로젝트에서 사용가능한 개수
-                        || (ct.selectedSpecType == 'GPU' && spec.gpu > ct.selectedAvailabilityZone.availableMaxGpuCard)) {  // 해당 가용성 존에서 사용가능한 최대 개수
+                        || (ct.selectedSpecType == 'GPU' && ct.selectedGpuCard && spec.gpu > ct.selectedGpuCard.availableCount)   // 해당 프로젝트에서 사용가능한 개수
+                        || (ct.selectedSpecType == 'GPU' && ct.selectedAvailabilityZone && spec.gpu > ct.selectedAvailabilityZone.availableMaxGpuCard)) {  // 해당 가용성 존에서 사용가능한 최대 개수
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
