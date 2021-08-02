@@ -1429,7 +1429,8 @@ angular.module('gpu.controllers')
                     if (spec.vcpus > ct.tenantResource.available.cores 
                         || spec.ram > ct.tenantResource.available.ramSize 
                         || spec.disk > ct.tenantResource.available.hddVolumeGigabytes
-                        || (ct.selectedSpecType == 'GPU' && spec.gpu > ct.selectedGpuCard.availableCount)) { 
+                        || (ct.selectedSpecType == 'GPU' && spec.gpu > ct.selectedGpuCard.availableCount)   // 해당 프로젝트에서 사용가능한 개수
+                        || (ct.selectedSpecType == 'GPU' && spec.gpu > ct.selectedAvailabilityZone.availableMaxGpuCard)) {  // 해당 가용성 존에서 사용가능한 최대 개수
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
@@ -1635,16 +1636,17 @@ angular.module('gpu.controllers')
         //GPU 모델 선택 변경
         ct.fn.onchangeGpuCard = function (selectedGpuCardId) {
             ct.selectedGpuCard = {};
+            ct.selectedAvailabilityZoneId = null;
+            
+            // 선택된 GPU 카드가 있다면
             if (selectedGpuCardId) {
-                var index;
-                for (index = 0; index < ct.gpuCardList.length; index++) {
-                    if (selectedGpuCardId == ct.gpuCardList[index].id) {
-                        ct.selectedGpuCard = ct.gpuCardList[index];
-                        ct.fn.defaultSelectSpec();
-                        break;
-                    }
+                var selectedGpuCard = common.objectsFindByField(ct.gpuCardList, 'id', selectedGpuCardId);
+                if (selectedGpuCard) {
+                    ct.selectedGpuCard = selectedGpuCard;
+                    ct.fn.defaultSelectSpec();
                 }
-                ct.fn.getAvailabilityZoneList(selectedGpuCardId, ct.data.spec.gpu);
+                ct.fn.getAvailabilityZoneList(selectedGpuCardId);
+                ct.fn.setSpecAllEnabled();
                 ct.fn.setSpecMaxDisabled(); // GpuCard 변경시 스펙 Disabled 여부 변경 by hrit, 201015
             } else {
                 ct.fn.getAvailabilityZoneList();
@@ -1662,10 +1664,9 @@ angular.module('gpu.controllers')
             });
         };
 
-        ct.fn.getAvailabilityZoneList = function(gpuCardId, gpuCardCount) {
+        ct.fn.getAvailabilityZoneList = function(gpuCardId) {
             var param = {
-                gpuCardId : gpuCardId,
-                gpuCardCount : gpuCardCount
+                gpuCardId : gpuCardId
             };
             ct.availabilityZoneList  = [];
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET', param);
@@ -1685,14 +1686,37 @@ angular.module('gpu.controllers')
         ct.fn.onchangeAvailabilityZone = function(availabilityZoneId) {
             ct.selectedAvailabilityZone = {};
             if (availabilityZoneId) {
-                var index;
-                for (index = 0; index < ct.availabilityZoneList.length; index++) {
-                    if (availabilityZoneId == ct.availabilityZoneList[index].id) {
-                        ct.selectedAvailabilityZone = ct.availabilityZoneList[index];
-                        break;
-                    }
+                var availabilityZone = common.objectsFindByField(ct.availabilityZoneList, 'id', availabilityZoneId);
+                if (availabilityZone) {
+                    ct.selectedAvailabilityZone = availabilityZone;
                 }
+                // 해당 가용성 존에서 사용가능한 GPU 카드 최대 개수
+                ct.fn.getAvailableMaxGpuCardByAvailabilityZone(ct.selectedGpuCardId, availabilityZoneId);
             }
+        };
+
+        // 해당 가용성 존에서 사용가능한 GPU 카드 최대 개수
+        ct.fn.getAvailableMaxGpuCardByAvailabilityZone = function (gpuCardId, availabilityZoneId) {
+            if (!gpuCardId || !availabilityZoneId) {
+                return;
+            }
+
+            var params = {
+                gpuCardId : gpuCardId,
+                availabilityZoneId : availabilityZoneId
+            };
+
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZone/gpu/availablemax', 'GET', params);
+            returnPromise.success(function (data, status, headers) {
+                if (ct.selectedAvailabilityZone) {
+                    ct.selectedAvailabilityZone.availableMaxGpuCard = data.content;
+                    ct.fn.setSpecAllEnabled();
+                    ct.fn.setSpecMaxDisabled();
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
         };
 
         // 네트워크 리스트 조회
