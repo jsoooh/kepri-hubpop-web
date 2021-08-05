@@ -1008,3 +1008,29 @@ html {
   padding: 20px 30px 50px;
   position: relative;
 }
+
+/*========== 210805 고객 요청으로 메뉴 수정(css 재정의) ==========*/
+/*우측 상단 닫기 버튼*/
+#allMenu .all-menu-top .btn-close span.bar1{
+  height:22px;
+  left:calc(50% - 2px);
+}
+
+#allMenu .all-menu-top .btn-close span.bar2{
+  width:22px;
+  top:-15px;
+}
+/*상단 타이틀,버튼 영역*/
+#allMenu .all-menu-top{
+  height:50px;
+}
+
+/*1차 대메뉴 타이틀*/
+#allMenu .category-list .inner .title{
+  color:#fff;
+  font-size:20px;
+  text-align:center;
+  background:#2a5298;
+  border-radius:3px;
+  padding:7px;
+}
