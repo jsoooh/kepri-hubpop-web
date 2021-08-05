@@ -2649,6 +2649,7 @@ angular.module('gpu.controllers')
         ct.fn.requestData();
         //-- 알람설정 탭 종료
 
+
         if (ct.alarmId) ct.changeSltInfoTab('alarmDetail', ct.alarmId);
     })
     .directive('krInput', ['$parse', function($parse) { // 알람 메세지 입력 시 한글 실시간 바인드 안되는 현상에 대한 조치
