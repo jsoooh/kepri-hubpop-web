@@ -3285,8 +3285,8 @@ angular.module('gpu.controllers')
         pop.instance 					= $scope.dialogOptions.instance;
         pop.instanceNm                  = pop.instance.name;
         pop.uuid                		= pop.instance.spec.uuid;
-
         pop.tenantId 					= pop.instance.tenantId;
+        pop.availableMaxGpuCard         = 0;
 
         if (!pop.tenantId) {
             pop.tenantId = $scope.main.userTenantGpuId;
@@ -3376,6 +3376,46 @@ angular.module('gpu.controllers')
             });
         };
 
+        // 인스턴스에서 사용중인 GPU 카드를 사용가능한 가용성 존 목록 조회
+        pop.getAvailabilityZoneList = function(gpuCardId) {
+            var param = {
+                gpuCardId : gpuCardId
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZones', 'GET', param);
+            returnPromise.success(function (data, status, headers) {
+
+                // 인스턴스가 속한 가용성존 조회
+                var availabilityZone = common.objectsFindByField(data.content, 'availabilityZone', pop.instance.zone);
+                if (availabilityZone) {
+                    pop.getAvailableMaxGpuCardByAvailabilityZone(gpuCardId, availabilityZone.id);
+                }
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+        };
+
+        // 해당 가용성 존에서 사용가능한 GPU 카드 최대 개수
+        pop.getAvailableMaxGpuCardByAvailabilityZone = function (gpuCardId, availabilityZoneId) {
+            if (!gpuCardId || !availabilityZoneId) {
+                return;
+            }
+
+            var params = {
+                gpuCardId : gpuCardId,
+                availabilityZoneId : availabilityZoneId
+            };
+
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/availabilityZone/gpu/availablemax', 'GET', params);
+            returnPromise.success(function (data, status, headers) {
+                pop.availableMaxGpuCard = data.content;
+                pop.setSpecMaxDisabled();
+            });
+            returnPromise.error(function (data, status, headers) {
+                common.showAlertError(data.message);
+            });
+        };
+
         // min spac disabled 존재 여부 (안내 문구 출력 여부로 사용 예정)
         pop.isMinSpecDisabled = false;
 
@@ -3405,7 +3445,10 @@ angular.module('gpu.controllers')
         pop.setSpecMaxDisabled = function () {
             if (pop.isSpecLoad && pop.tenantResource && pop.tenantResource.maxResource &&  pop.tenantResource.usedResource) {
                 angular.forEach(pop.specList, function (spec) {
-                    if (spec.vcpus > pop.tenantResource.available.cores || spec.ram > pop.tenantResource.available.ramSize || spec.disk > pop.tenantResource.available.hddVolumeGigabytes) {
+                    if (spec.vcpus > pop.tenantResource.available.cores
+                        || spec.ram > pop.tenantResource.available.ramSize
+                        || spec.disk > pop.tenantResource.available.hddVolumeGigabytes
+                        || (pop.instance.spec.type == 'GPU' && spec.gpu > pop.availableMaxGpuCard)) {   // 해당 인스턴스 가용성 존에서 사용가능한 최대 개수
                         spec.disabled = true;
                         pop.isMaxSpecDisabled = true;
                     }
@@ -3477,6 +3520,10 @@ angular.module('gpu.controllers')
         pop.getTenantResource();
         pop.getSpecList();
 
+        // 해당 인스턴스가 GPU를 사용한다면
+        if (pop.instance && pop.instance.spec && pop.instance.spec.type == 'GPU') {
+            pop.getAvailabilityZoneList(pop.instance.spec.gpuCardInfo.id);
+        }
     })
     //////////////////////////////////////////////////////////////
     .controller('gpuCreatePopSnapshotCtrl', function ($scope, $location, $state, $sce, $stateParams,$filter,$q,$translate, $timeout, $bytes,ValidationService, user, common, CONSTANTS) {
