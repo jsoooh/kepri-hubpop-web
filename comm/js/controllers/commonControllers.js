@@ -2047,7 +2047,6 @@ angular.module('common.controllers', [])
                 }
             });
             userSettingPromise.error(function (data, status, headers) {
-
             });
         };
 
