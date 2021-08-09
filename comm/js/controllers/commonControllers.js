@@ -1232,6 +1232,9 @@ angular.module('common.controllers', [])
             mc.userTenantName = "";
             mc.userTenantDisplayName = "";
 
+            mc.userTenantGpu = {};
+            mc.userTenantGpuId = "";
+
             mc.projects = [];
             mc.portalOrgs = [];
             mc.organizations = [];
