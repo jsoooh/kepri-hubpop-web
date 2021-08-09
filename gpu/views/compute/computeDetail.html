@@ -247,7 +247,7 @@
 					<span>{{contents.instance.fixedIp}}</span>
 				</li>
 				<li ng-if="contents.instance.image.osType != 'windows' && contents.instance.keypair.privateKeyYn == 'Y'">
-					<b>키페어</b>
+					<b>접속 인증키</b>
 					<span>{{contents.instance.keypair.name}}</span>
 					<button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(contents.instance.keypair,'privateKey')"><span class="feather-icon blue-600 margin-left-5"><i data-feather="download" class="feather-directive"></i></span></button>
 				</li>
