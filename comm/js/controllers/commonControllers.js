@@ -2323,6 +2323,9 @@ angular.module('common.controllers', [])
             $scope.main.contentsLayoutResizeEvent	= true;
         }*/
 
+        // jQuery로 만든
+        cmm.tooltip();
+
         $scope.main.asideClose();
         $scope.main.isLoadPageBody = true;
         $('body').removeClass('fixed');

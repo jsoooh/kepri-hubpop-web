@@ -1204,8 +1204,8 @@ button.btn.btn-lg.btn-color4.btn-only-more:hover{background:#335cc4;border-color
 #chkUse + label{margin-top:4px;}
 
 /* 180419 tooltip*/
-.tooltip-arrow{border-top:10px solid #fccd50 !important;border-right:6px solid transparent !important;border-left:6px solid transparent !important;}
-.tooltip-inner{background-color:#fccd50 !important;border:1px solid #fccd50 !important;color:#424242;font-size:14px; font-weight:700;}
+/*.tooltip-arrow{border-top:10px solid #fccd50 !important;border-right:6px solid transparent !important;border-left:6px solid transparent !important;}
+.tooltip-inner{background-color:#fccd50 !important;border:1px solid #fccd50 !important;color:#424242;font-size:14px; font-weight:700;}*/
 
 /* 180418 scroll bbs */
 .tbl.type1.bbs{height:580px;}
