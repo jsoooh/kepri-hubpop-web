@@ -2004,16 +2004,18 @@ angular.module('common.controllers', [])
             promise.success(function (data) {
                 if (system == "iaas" || system == "gpu") {
                     mc.loadUserTenant();
-                    mc.loadingMainBody = false;
                 }
                 if (system == "paas") {
                     mc.loadSltOrganization();
                 }
+                // 페이지 리로드 (페이지를 갱신하지 않으면 서비스 새로시작 화면이 안보임)
+                window.location.reload();
             });
             promise.error(function (data, status, headers) {
-                mc.loadingMainBody = false;
+                common.showAlertError(data.message);
             });
             promise.finally(function (data, status, headers) {
+                mc.loadingMainBody = false;
             });
         };
 
