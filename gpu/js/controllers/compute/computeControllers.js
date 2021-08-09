@@ -244,14 +244,14 @@ angular.module('gpu.controllers')
                     }
                     ct.fn.setMonitoringLink(serverMain);
 
-                    if (serverMain.uiTask != 'creating' && serverMain.taskState != "deleting" && serverMain.vmMonitoringYn == 'N' && (serverMain.image && serverMain.image.osType != 'windows')) {
+                    if (serverMain.uiTask != 'creating' && serverMain.taskState != "deleting" && serverMain.vmMonitoringYn == 'N' && serverMain.imageOsType != 'windows') {
+                        if ($scope.main.refreshInterval['instanceMonitoringYn']) {
+                            $interval.cancel($scope.main.refreshInterval['instanceMonitoringYn']);
+                            $scope.main.refreshInterval['instanceMonitoringYn'] = null;
+                        }
                         $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {
-                            if ($location.url() != "/gpu/compute") {
-                                $interval.cancel($scope.main.refreshInterval['instanceMonitoringYn']);
-                            } else {
-                                ct.fn.monitYnState(serverMain);
-                            }
-                            }, 3000);
+                            ct.fn.monitYnState(serverMain);
+                        }, 3000);
                     }
                     if (serverMain.uiTask == 'creating') {
                         ct.fnGetServerMainList();
@@ -265,11 +265,14 @@ angular.module('gpu.controllers')
                     $scope.main.reloadTimmer['instanceServerStateList'] = $timeout(function () {
                         ct.fn.checkServerState();
                     }, 1000);
+
                     if ($scope.main.refreshInterval['instanceCreatingTimmer']) {
                         $interval.cancel($scope.main.refreshInterval['instanceCreatingTimmer']);
                         $scope.main.refreshInterval['instanceCreatingTimmer'] = null;
                     }
-                    $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(ct.creatingTimmerSetting, 1000);
+                    $scope.main.refreshInterval['instanceCreatingTimmer'] = $interval(function () {
+                        ct.creatingTimmerSetting();
+                    }, 1000);
                 }
                 ct.pageFirstLoad = false;
                 //console.log("ct.serverMainList : ", ct.serverMainList);
