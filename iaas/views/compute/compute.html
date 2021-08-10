@@ -352,12 +352,12 @@
 									<col style="width:15%;">
 									<col style="width:10%;">
 									<col style="width:">
+									<col style="width: 7%;">
+									<col style="width: 7%;">
 									<col style="width: 8%;">
 									<col style="width: 8%;">
 									<col style="width: 8%;">
-									<col style="width: 8%;">
-									<col style="width: 8%;">
-									<col style="width: 15%;">
+									<col style="width: 12%;">
 									<col style="width: 8%;">
 								</colgroup>
 								<thead class="text-center">
@@ -376,9 +376,9 @@
 								</thead>
 								<tbody>
 									<tr ng-repeat="(key, instance) in contents.serverMainList | filter:{ name: contents.schFilterText, taskState : '!deleting' }" ng-show="key >= (contents.pageOptions1.currentPage - 1) * contents.pageOptions1.pageSize && key < contents.pageOptions1.currentPage * contents.pageOptions1.pageSize">
-										<td class="text-left">
-											<a class="link" ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</a>
-											<a class="link" ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</a>
+										<td class="text-center">
+											<span ng-if="instance.procState != 'end'" title="{instance.name}}">{{instance.name}}</span>
+											<span ng-if="instance.procState == 'end'" ng-click="main.goToPage('/iaas/compute/detail/'+instance.id)" title="{{instance.name}}">{{instance.name}}</span>
 										</td>
 										<td class="text-center">{{ instance.image.osType }}</td>
 										<td class="text-center">
