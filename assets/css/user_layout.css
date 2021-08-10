@@ -1034,3 +1034,8 @@ html {
   border-radius:3px;
   padding:7px;
 }
+
+/* 대메뉴 툴팁 width값지정 */
+#header .left-wrap > .header-mid #gnb > .lnb-depth1-item .tooltip {
+  width: 170px;
+}
