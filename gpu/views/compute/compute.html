@@ -130,11 +130,11 @@
 														<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="스냅샷 이미지 생성">스냅샷 이미지 생성</a></li>
 														<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '스냅샷 이미지 생성'이 가능합니다.">스냅샷 이미지 생성</a></li>
 														<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="볼륨 연결">볼륨 연결</a></li>
-														<li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">접속 인증키 다운로드</a></li>
 														<li><a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링<span ng-if="instance.vmMonitoringYn == 'D' || instance.vmMonitoringYn == 'N'">활성화</span><span ng-if="instance.vmMonitoringYn == 'Y'">비활성화</span></a></li>
 														<li ng-if="instance.vmMonitoringYn == 'Y'"><a href="{{instance.monitoringLink}}">모니터링 바로가기</a></li>
 														<li ng-if="instance.vmMonitoringYn != 'Y'"><a href="javascript:void(0);" class="disabled" title="모니터링이‘활성화’상태인 경우에만 모니터링 바로가기가 가능합니다.">모니터링 바로가기 <img ng-show="instance.vmMonitoringYn == 'N'" src="images/loading_sm.gif"></a></li>
-														<li><a href="javascript:void(0);" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {fixedIp : instance.fixedIp, osType:instance.image.osType, gpuYn : true});" title="접속방법 가이드">접속방법 가이드</a></li>
+														<li ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><a href="javascript:void(0);" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {fixedIp : instance.fixedIp, osType:instance.image.osType, gpuYn : true});" title="리눅스 접속방법 가이드">접속방법 가이드</a></li>
+                                                        <li ng-if="instance.image.osType == 'windows'"><a href="javascript:void(0);" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {osType: instance.image.osType, fixedIp: instance.fixedIp, isGpu: true});" title="윈도우 접속방법 가이드">접속방법 가이드</a></li>
 														<li><a href="javascript:void(0);" ng-click="contents.fn.descriptionFormOpen($event, instance, 'server');" title="설명 변경">설명 변경</a></li>
 														<li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '인스턴스', instance.name, contents.deleteInstanceJob, instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
 														<li ng-if="instance.instanceSnapshotList.length > 0"><a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
@@ -151,20 +151,23 @@
 								</div>
 							</div>
 						</div>
-						<div class="card-body" style="height:220px;">
+						<div class="card-body" style="height:300px;">
 							<div ng-if="instance.procState == 'end'">
 								<div class="row">
 									<div class="col-md-12">
 										<!-- ubuntu  -->
 										<div ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'">
 											<ul class="list-dot font-size-13 margin-top-10">
-												<li><b>접속 프로토콜 :</b><span>SSH</span></li>
+												<li><b>OS 유형 :</b><span>{{instance.image.osType}}</span></li>
 												<li><b>인스턴스 유형 :</b><span>{{ instance.spec.type }}</span> <span ng-if="instance.spec && instance.spec.gpuCardInfo">({{ instance.spec.gpuCardInfo.model }} {{ instance.spec.gpu}}EA)</span></li>
 												<li ng-if="instance.image && instance.image.serviceName" class="text-truncate"><b>이미지명:</b><span>{{ instance.image.serviceName }}</span></li>
 												<!-- <li><b>접속 IP :</b><span class="margin-right-5">{{instance.floatingIp}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li>
 												<li><b>접속 IP :</b><span class="margin-right-5"><a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.floatingIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li> -->
 												<li><b>접속 IP :</b><span class="margin-right-5"><a href="" class="link" ng-click="contents.fn.openWebConsole(instance)">{{instance.fixedIp}}</a></span><button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button></li>
 												<li><b>접속 계정 :</b><span>{{instance.image.osType}}</span></li>
+                                                <li><b>CPU :</b><span>{{instance.spec.vcpus}} vCore</span></li>
+                                                <li><b>메모리 :</b><span>{{(instance.spec.ram/1024|number:1).replace('.0', '')}}GB</span></li>
+                                                <li><b>디스크 :</b><span>{{instance.spec.disk}}GB</span></li>
 												<!--<li ng-show="instance.keypair.privateKeyYn == 'Y'"><b>접속 인증 키(KEY) :</b><span class="margin-right-5">{{instance.keypair.name}}</span><button type="button" tooltip-placement="top" uib-tooltip-html="'파일 다운로드'" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')"><span class="feather-icon blue-600"><i data-feather="download" class="feather-directive"></i></span></button></li>-->
 												<!--<li>
 													<b>설명</b>
@@ -187,7 +190,7 @@
 										<!-- windows  -->
 										<div ng-if="instance.image.osType == 'windows'">
 											<ul class="list-dot font-size-13 margin-top-10">
-												<li><b>접속 프로토콜 :</b><span>RDP</span></li>
+												<li><b>OS 유형 :</b><span>{{instance.image.osType}}</span></li>
 												<!-- <li ng-if="!instance.rdpDomain">
 													<b>접속 도메인 :</b>
 													<span class="margin-right-5">
@@ -205,22 +208,23 @@
 													</span>
 													<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 												</li>
-												 <li>
-													<b>접속 계정 :</b><span>windows</span>
-												</li>
-												<li>
+                                                <li><b>접속 계정 :</b><span>windows</span></li>
+                                                <li><b>CPU :</b><span>{{instance.spec.vcpus}}vCore</span></li>
+                                                <li><b>메모리 :</b><span>{{(instance.spec.ram/1024|number:1).replace('.0', '')}}GB</span></li>
+                                                <li><b>디스크 :</b><span>{{instance.spec.disk}}GB</span></li>
+												<!--<li>
 													<b>접속 비밀번호 :</b><span>(가이드 참조)</span>
-												</li>
-												<li>
+												</li>-->
+												<!--<li>
 													<b>설명</b>
 													<div class="t_tip_bx"><a class="info-icon-tooltip" tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{instanceSnapshot.description | enterByNbr}}'" ng-click="contents.fn.descriptionFormOpen($event, instance, 'server');">i</a></div>
-												</li>
+												</li>-->
 											</ul>
-											 <div class="row margin-top-30">
+											 <!--<div class="row margin-top-30">
 												<div class="col-sm-12">
 													<button type="button" class="btn btn-primary btn-sm btn-block" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {osType: instance.image.osType, fixedIp: instance.fixedIp, isGpu: true});"><i class="xi-paper margin-right-5"></i>접속방법가이드</button>
 												</div>
-											</div>
+											</div>-->
 										</div>
 										<!-- //windows  -->
 									</div>
@@ -417,7 +421,6 @@
 												<li ng-if="instance.vmState == 'stopped'"><a href="javascript:void(0);" ng-click="contents.fnServerConfirm('SNAPSHOT',instance,$index, $event);" title="스냅샷 이미지 생성">스냅샷 이미지 생성</a>	</li>
 												<li ng-if="instance.vmState != 'stopped'"><a href="javascript:void(0);" class="disabled" title="인스턴스가 ‘정지’상태인 경우에만 '스냅샷 이미지 생성'이 가능합니다.">스냅샷 이미지 생성</a></li>
 												<li><a href="javascript:void(0);" ng-click="contents.fn.createInstanceVolumePop($event,instance);" title="볼륨 연결">볼륨 연결</a></li>
-												<li ng-if="instance.image.osType != 'windows'"><a href="javascript:void(0);" ng-click="contents.fn.getKeyFile(instance.keypair,'privateKey')" title="키페어 다운로드">접속 인증키 다운로드</a></li>
 												<li>
 													<a href="javascript:void(0);" ng-click="contents.fn.setMonitoringYn(instance);">모니터링 
 														<span ng-if="instance.vmMonitoringYn == 'D' || instance.vmMonitoringYn == 'N'">활성화</span>
@@ -426,7 +429,8 @@
 												</li>
 												<li ng-if="instance.vmMonitoringYn == 'Y'"><a href="{{instance.monitoringLink}}">모니터링 바로가기</a></li>
 												<li ng-if="instance.vmMonitoringYn != 'Y'"><a href="javascript:void(0);" class="disabled" title="모니터링이‘활성화’상태인 경우에만 모니터링 바로가기가 가능합니다.">모니터링 바로가기 <img ng-show="instance.vmMonitoringYn == 'N'" src="images/loading_sm.gif"></a></li>
-												<li><a href="javascript:void(0);" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {fixedIp : instance.fixedIp, osType:instance.image.osType, gpuYn : true});" title="접속방법 가이드">접속방법 가이드</a></li>
+                                                <li ng-if="instance.image.osType == 'ubuntu' || instance.image.osType == 'centos'"><a href="javascript:void(0);" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoLinuxConnect.html', {fixedIp : instance.fixedIp, osType:instance.image.osType, gpuYn : true});" title="리눅스 접속방법 가이드">접속방법 가이드</a></li>
+                                                <li ng-if="instance.image.osType == 'windows'"><a href="javascript:void(0);" ng-click="main.showRightSliderContents($event, '접속방법 가이드', '/guideInfo/accessGuideInfoWinConnect.html', {osType: instance.image.osType, fixedIp: instance.fixedIp, isGpu: true});" title="윈도우 접속방법 가이드">접속방법 가이드</a></li>
 												<li><a href="javascript:void(0);" ng-click="contents.fn.descriptionFormOpen($event, instance, 'server');" title="설명 변경">설명 변경</a></li>
 												<li ng-if="instance.instanceSnapshotList.length == 0"><a href="javascript:void(0);" class="delete" ng-click="main.popDeleteCheckName($event, '인스턴스', instance.name, contents.deleteInstanceJob, instance.id);" title="인스턴스 삭제">인스턴스 삭제</a></li>
 												<li ng-if="instance.instanceSnapshotList.length > 0">	<a href="javascript:void(0);" class="disabled" title="인스턴스 스냅샷 삭제 후 삭제할 수 있습니다.">인스턴스 삭제</a></li>
