@@ -566,10 +566,10 @@ angular.module('portal.controllers')
 
         // 프로젝트 개인 유형 상세 쿼터값
         ct.personQuotaItems = [
-            {id : 3, value : 4},        // 서버 가상화 vCore 개수
-            {id : 4, value : 8},        // 서버 가상화 메모리
-            {id : 5, value : 100},      // 서버 가상화 OS 디스크(HDD)
-            {id : 6, value : 100},      // 서버 가상화 데이터 디스크(HDD)
+            {id : 3, value : 0},        // 서버 가상화 vCore 개수
+            {id : 4, value : 0},        // 서버 가상화 메모리
+            {id : 5, value : 0},        // 서버 가상화 OS 디스크(HDD)
+            {id : 6, value : 0},        // 서버 가상화 데이터 디스크(HDD)
             {id : 12, value : 30},      // 쿠버네티스 공통 클러스터 POD 개수
             {id : 13, value : 100},     // 쿠버네티스 외부 볼륨 디스크(HDD)
             {id : 18, value : 20}       // 서버리스 컴퓨팅 Function 개수
