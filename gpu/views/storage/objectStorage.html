@@ -1,15 +1,16 @@
 <div ng-if="!!main.userTenantGpuId" class="storage_infoWrap">
 	<!-- 사용량 및 접속 정보 -->
-	<div class="panel-group">
-		<section class="panel panel-bordered">
-			<div class="panel-heading border-bottom-0">
-				<a class="panel-title collapsed" data-toggle="collapse" data-target="#basicCollapse1" href="" aria-expanded="false" ng-click="main.panelToggleChange($event);"><b>사용량 및 접속 정보</b></a>
-			</div>
-			<!-- // panel-heading -->
-			<div class="panel-collapse collapse" id="basicCollapse1" aria-expanded="false">
-				<div class="panel-body">
+	<section class="panel panel-bordered">
+		<div class="panel-heading">
+			<h3 class="panel-title">사용량 및 접속 정보</h3>
+		</div>
+		<!-- // panel-heading -->
+		<div class="panel-body padding-0">
+			<div class="row no-margin bordered">
+				<div class="col-md-4 padding-20">
+					<h4 class="heading h4">사용량</h4>
 					<div class="graph-wrap-type1">
-						<div class="row">
+						<div class="row padding-top-10">
 							<div class="col-md-6">
 								<div class="text">
 									<!--<strong ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</strong>-->
@@ -32,49 +33,49 @@
 						</div>
 						<span class="pull-right font-size-12 margin-top-20">{{contents.toDay}} 기준</span>
 					</div>
-					
-					<h4 class="heading h4 margin-top-30">접속정보</h4>
-					<table class="table border-0 margin-top-20">
+				</div>
+				<div class="col-md-8 padding-20">
+					<h4 class="heading h4">접속정보</h4>
+					<table class="table border-0 margin-top-20 margin-bottom-0">
 						<colgroup>
-							<col style="width: 30%">
+							<col style="width: 40%">
 							<col>
 						</colgroup>
 						<tbody>
-							<tr>
-								<td class="border-top-0">
-									<span class="label label-pill label-round label-success label-ico"><i class="xi-folder-o"></i></span>
-									<span class="margin-left-10">오브젝트 스토리지 접속 주소</span>
-								</td>
-								<td class="border-top-0">{{contents.sendSecretInfoList.s3RadosEndPoint}}</td>
-							</tr>
-							<tr>
-								<td>
-									<span class="label label-pill label-round label-primary label-ico"><i class="xi-log"></i></span>
-									<span class="margin-left-10">Access Key ID</span>
-								</td>
-								<td>{{contents.sendSecretInfoList.s3AccessKey}}</td>
-							</tr>
-							<tr>
-								<td>
-									<span class="label label-pill label-round label-warning label-ico"><i class="xi-lock-o"></i></span>
-									<span class="margin-left-10">Secret Access Key</span>
-								</td>
-								<td>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
-							</tr>
-							<!-- <tr>
-								<td>
-									<span class="label label-pill label-round label-warning label-ico"> <i class="xi-lock-o"></i></span> 
-									<span class="margin-left-10">API Key</span>
-								</td>
-								<td>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
-							</tr> -->
+						<tr>
+							<td class="border-top-0">
+								<span class="label label-pill label-round label-success label-ico"><i class="xi-folder-o"></i></span>
+								<span class="margin-left-10">오브젝트 스토리지 접속 주소</span>
+							</td>
+							<td class="border-top-0">{{contents.sendSecretInfoList.s3RadosEndPoint}}</td>
+						</tr>
+						<tr>
+							<td>
+								<span class="label label-pill label-round label-primary label-ico"><i class="xi-log"></i></span>
+								<span class="margin-left-10">Access Key ID</span>
+							</td>
+							<td>{{contents.sendSecretInfoList.s3AccessKey}}</td>
+						</tr>
+						<tr>
+							<td>
+								<span class="label label-pill label-round label-warning label-ico"><i class="xi-lock-o"></i></span>
+								<span class="margin-left-10">Secret Access Key</span>
+							</td>
+							<td>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
+						</tr>
+						<!-- <tr>
+                            <td>
+                                <span class="label label-pill label-round label-warning label-ico"> <i class="xi-lock-o"></i></span>
+                                <span class="margin-left-10">API Key</span>
+                            </td>
+                            <td>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
+                        </tr> -->
 						</tbody>
 					</table>
-					
 				</div>
 			</div>
-		</section>
-	</div>
+		</div>
+	</section>
 	<!-- //사용량 및 접속 정보 -->
 </div>
 
