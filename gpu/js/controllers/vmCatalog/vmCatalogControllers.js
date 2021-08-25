@@ -14,6 +14,9 @@ angular.module('gpu.controllers')
     ct.vmCatalogs = [];
     ct.schFilterText = "";
 
+    /* gpu 사용 확인 */
+    ct.isUseGpu = $scope.main.sltPortalOrg.isUseGpu;
+
     ct.fn.listAllVmCatalogs = function () {
         $scope.main.loadingMainBody = true;
         var promise = vmCatalogService.listAllVmCatalogs();
@@ -32,7 +35,13 @@ angular.module('gpu.controllers')
     };
 
     ct.fn.loadPage = function () {
-        ct.fn.listAllVmCatalogs();
+        $scope.main.loadingMainBody = true;
+        if(!ct.isUseGpu) {
+            common.showDialogAlert('알림', '현재 프로젝트는 "GPU 서버 가상화"를 이용하지 않는 프로젝트입니다.');
+            $scope.main.goToPage("/");
+        }else {
+            ct.fn.listAllVmCatalogs();
+        }
     }
 
     ct.fn.loadPage();

@@ -30,6 +30,9 @@ angular.module('gpu.controllers')
             total : 0
         };
 
+        /* gpu 사용 확인 */
+        ct.isUseGpu = $scope.main.sltPortalOrg.isUseGpu;
+
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
@@ -43,7 +46,7 @@ angular.module('gpu.controllers')
             ct.fn.getInstanceSnapshotList();
             ct.fn.getStorageSnapshotList();
         });
-        
+
         // Snapshot List
         ct.fn.getInstanceSnapshotList = function() {
             $scope.main.loadingMainBody = true;
@@ -215,9 +218,18 @@ angular.module('gpu.controllers')
             common.showAlertError('이미 삭제된 인스턴스입니다.');
         };
 
+        ct.fn.loadPage = function() {
+            if(!ct.isUseGpu) {
+                common.showDialogAlert('알림', '현재 프로젝트는 "GPU 서버 가상화"를 이용하지 않는 프로젝트입니다.');
+                $scope.main.goToPage("/");
+            }else {
+                ct.fn.getInstanceSnapshotList();
+                ct.fn.getStorageSnapshotList(1);
+            }
+        }
+
         if (ct.data.tenantId) {
-            ct.fn.getInstanceSnapshotList();
-            ct.fn.getStorageSnapshotList(1);
+            ct.fn.loadPage();
         }
     })
     .controller('gpuServerSnapshotCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {

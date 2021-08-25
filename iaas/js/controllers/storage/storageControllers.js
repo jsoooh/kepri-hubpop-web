@@ -12,6 +12,9 @@ angular.module('iaas.controllers')
         ct.typeState = true;
         ct.listType = "image";
 
+        /* iaas 사용 확인 */
+        ct.isUseIaas = $scope.main.sltPortalOrg.isUseIaas;
+
         ct.fn.formOpen = function($event, state, data){
         	ct.formType = state;
     		if (state == 'storage') {
@@ -259,9 +262,18 @@ angular.module('iaas.controllers')
         ct.reSizePopStorCallBackFunc = function () {
             ct.fn.getStorageList();
         };
-        
+
+        ct.fn.loadPage = function() {
+            if (!ct.isUseIaas) {
+                common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
+                $scope.main.goToPage("/");
+            } else {
+                ct.fn.getStorageList();
+            }
+        }
+
         if (ct.data.tenantId) {
-            ct.fn.getStorageList();
+            ct.fn.loadPage();
         }
 
     })

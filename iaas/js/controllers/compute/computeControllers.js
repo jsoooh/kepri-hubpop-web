@@ -32,6 +32,9 @@ angular.module('iaas.controllers')
         ct.tabIndex = 0;
         ct.lbPortCnt = 0;   //테넌트의 전체 lbPort 갯수
 
+        /* iaas 사용 확인 */
+        ct.isUseIaas = $scope.main.sltPortalOrg.isUseIaas;
+
         // 부하분산 인스턴스 관리 디테일 페이지에서 리스트 페이지로 넘어올때 필요하여 추가
         if ($location.$$search.tabIndex) {
             ct.tabIndex = $location.$$search.tabIndex;
@@ -1014,18 +1017,27 @@ angular.module('iaas.controllers')
             */
         }, 1000 * 60);
 
+        ct.fn.loadPage = function() {
+            if(!ct.isUseIaas) {
+                common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
+                $scope.main.goToPage("/");
+            }else {
+                ct.fnGetServerMainList();
+                ct.fngetLbList();
+
+                // 페이지 로딩바
+                if (ct.promiseList && ct.promiseList.length > 0) {
+                    $scope.main.loadingMainBody = true;
+                    $q.all(ct.promiseList).finally(function() {
+                        $scope.main.loadingMainBody = false;
+                    });
+                }
+            }
+        }
+
         // 페이지 데이터 로드
         if (ct.data.tenantId) {
-            ct.fnGetServerMainList();
-            ct.fngetLbList();
-
-            // 페이지 로딩바
-            if (ct.promiseList && ct.promiseList.length > 0) {
-                $scope.main.loadingMainBody = true;
-                $q.all(ct.promiseList).finally(function() {
-                    $scope.main.loadingMainBody = false;
-                });
-            }
+          ct.fn.loadPage();
         } else {
             /*
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');
