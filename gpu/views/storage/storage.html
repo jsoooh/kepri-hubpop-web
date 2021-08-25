@@ -108,25 +108,25 @@
 								<div class="text-box margin-top-20">
 									<ul class="list-dot font-size-13">
 										<li>
-											<b>볼륨타입 </b>
+											<b>볼륨타입: </b>
 											<span ng-show="volume.type">{{volume.type}}</span>
 											<span ng-show="!volume.type">부팅볼륨</span>
 										</li>
 										<li>
-											<b>연결서버  </b>
+											<b>연결서버:  </b>
 											<span class="txt_long" ng-if="volume.status == 'in-use'" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/gpu/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</span>
 											<span ng-if="volume.status != 'in-use'">연결 정보 없음</span>
 										</li>
 										<li>
-											<b>스냅샷 개수 </b>
+											<b>스냅샷 개수: </b>
 											<span>{{volume.backupImageCount? volume.backupImageCount : 0 }} 개</span>
 										</li>
 										<li>
-											<b>설명  </b>
+											<b>설명: </b>
 											<div class="t_tip_bx"><a class="info-icon-tooltip"  tooltip-class="tooltip_long" tooltip-placement="top" uib-tooltip-html="'{{volume.description | enterByNbr}}'" ng-click="contents.fn.formOpen($event, 'description', volume);">i</a></div>
 										</li>
 										<li>
-											<b><a class="link" ng-click="main.showRightSliderContents($event, '볼륨 연결 가이드', '/guideInfo/accessGuideInfoDiskConnect.html', {volume : volume});">볼륨 연결 가이드<span class="feather-icon blue-600 margin-left-5"><i data-feather="file-text" class="feather-directive"></i></span></a></b>
+											<b><a class="link" ng-click="main.showRightSliderContents($event, '볼륨 연결 가이드', '/guideInfo/accessGuideInfoDiskConnect.html', {volume : volume});">볼륨 연결 가이드: <span class="feather-icon blue-600 margin-left-5"><i data-feather="file-text" class="feather-directive"></i></span></a></b>
 										</li>
 									</ul>
 								</div>
