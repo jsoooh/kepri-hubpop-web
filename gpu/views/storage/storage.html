@@ -210,7 +210,10 @@
 					<tr ng-repeat="(key, volume) in contents.storageMainList | filter:{ name: contents.schFilterText, status: '!deleting' }" ng-show="key >= (contents.pageOptions.currentPage - 1) * contents.pageOptions.pageSize && key < contents.pageOptions.currentPage * contents.pageOptions.pageSize">
 						<td>{{volume.name}}</td>
 						<td class="text-center">{{volume.size}}</td>
-						<td class="text-center">{{volume.type}}</td>
+						<td class="text-center">
+							<span ng-show="volume.type">{{volume.type}}</span>
+							<span ng-show="!volume.type">부팅볼륨</span>
+						</td>
 						<td>{{volume.description | enterByNbr}}</td>
 						<td class="text-center">
 							<span ng-if="volume.status == 'in-use'"><a class="txt_long" href="" title="{{volume.volumeAttachment.instanceName}}" ng-click="main.goToPage('/gpu/compute/detail/' + volume.volumeAttachment.instanceId);">{{volume.volumeAttachment.instanceName}}</a></span>
