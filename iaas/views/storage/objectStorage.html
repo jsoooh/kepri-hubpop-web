@@ -6,47 +6,49 @@
 				<a class="panel-title collapsed" data-toggle="collapse" data-target="#basicCollapse1" href="" aria-expanded="false" ng-click="main.panelToggleChange($event);"><b>사용량 및 접속 정보</b></a>
 			</div>
 			<!-- // panel-heading -->
-			<div class="panel-collapse collapse" id="basicCollapse1" aria-expanded="false">
-				<div class="panel-body">
-					<div class="graph-wrap-type1">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="text">
-									<!--<strong ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</strong>-->
-									<strong>{{contents.objectStorageUsedVolume}}</strong>
-									<b>{{contents.objectStorageUsedVolumeUnit}}</b>
-									<span ng-init="contents.objecteStorageQuator.teamQuator ='0'">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
-									
+			<div class="panel-body padding-0">
+				<div class="row no-margin bordered">
+					<div class="col-md-4 padding-20">
+						<h4 class="heading h4">사용량</h4>
+						<div class="graph-wrap-type1">
+							<div class="row padding-top-10">
+								<div class="col-md-6">
+									<div class="text">
+										<!--<strong ng-init="contents.objecteStorageQuator.quatorUsed ='0'">{{contents.objecteStorageQuator.quatorUsed}}</strong>-->
+										<strong>{{contents.objectStorageUsedVolume}}</strong>
+										<b>{{contents.objectStorageUsedVolumeUnit}}</b>
+										<span ng-init="contents.objecteStorageQuator.teamQuator ='0'">(할당량 {{contents.objecteStorageQuator.teamQuator}} GB)</span>
+									</div>
+								</div>
+								<div class="col-md-6 text-right">
+									<div class="text grey" ng-init="contents.objecteStorageQuator.teamQuator ='0'" ng-if="contents.objecteStorageQuator.teamQuator == '0'">
+										<strong>0</strong><b>%</b>
+									</div>
+									<div class="text grey" ng-if="contents.objecteStorageQuator.teamQuator != '0'">
+										<strong>{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}</strong><b>%</b>
+									</div>
 								</div>
 							</div>
-							<div class="col-md-6 text-right">
-								<div class="text grey" ng-init="contents.objecteStorageQuator.teamQuator ='0'" ng-if="contents.objecteStorageQuator.teamQuator == '0'">
-									<strong>0</strong><b>%</b>
-								</div>
-								<div class="text grey" ng-if="contents.objecteStorageQuator.teamQuator != '0'">
-									<strong>{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}</strong><b>%</b>
-								</div>
+							<div class="progress progress-sm" percent-progress-bar-animate bar-type="width" percent= "{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}" >
+								<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="15%"></div>
 							</div>
+							<span class="pull-right font-size-12 margin-top-20">{{contents.toDay}} 기준</span>
 						</div>
-						<div class="progress progress-sm" percent-progress-bar-animate bar-type="width" percent= "{{contents.objecteStorageQuator.quatorUsed / contents.objecteStorageQuator.teamQuator * 100}}" >
-							<div class="progress-bar" role='progressbar' tooltip-placement="top" uib-tooltip="15%"></div>
-						</div>
-						<span class="pull-right font-size-12 margin-top-20">{{contents.toDay}} 기준</span>
 					</div>
-					
-					<h4 class="heading h4 margin-top-30">접속정보</h4>
-					<table class="table border-0 margin-top-20">
-						<colgroup>
-							<col style="width: 30%">
-							<col>
-						</colgroup>
-						<tbody>
+					<div class="col-md-8 padding-20">
+						<h4 class="heading h4">접속정보</h4>
+						<table class="table border-0 margin-top-20 margin-bottom-0">
+							<colgroup>
+								<col style="width: 40%">
+								<col>
+							</colgroup>
+							<tbody>
 							<tr>
-								<td>
+								<td class="border-top-0">
 									<span class="label label-pill label-round label-success label-ico"><i class="xi-folder-o"></i></span>
 									<span class="margin-left-10">오브젝트 스토리지 접속 주소</span>
 								</td>
-								<td>{{contents.sendSecretInfoList.s3RadosEndPoint}}</td>
+								<td class="border-top-0">{{contents.sendSecretInfoList.s3RadosEndPoint}}</td>
 							</tr>
 							<tr>
 								<td>
@@ -63,16 +65,15 @@
 								<td>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
 							</tr>
 							<!-- <tr>
-								<td>
-									<span class="label label-pill label-round label-warning label-ico">
-										<i class="xi-lock-o"></i>
-									</span>
-									<span class="margin-left-10">API Key</span>
-								</td>
-								<td>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
-							</tr> -->
-						</tbody>
-					</table>
+                                <td>
+                                    <span class="label label-pill label-round label-warning label-ico"> <i class="xi-lock-o"></i></span>
+                                    <span class="margin-left-10">API Key</span>
+                                </td>
+                                <td>{{contents.sendSecretInfoList.s3SecreteAccessKey}}</td>
+                            </tr> -->
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</section>
