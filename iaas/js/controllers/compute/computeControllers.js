@@ -32,9 +32,6 @@ angular.module('iaas.controllers')
         ct.tabIndex = 0;
         ct.lbPortCnt = 0;   //테넌트의 전체 lbPort 갯수
 
-        /* iaas 사용 확인 */
-        ct.isUseIaas = $scope.main.sltPortalOrg.isUseIaas;
-
         // 부하분산 인스턴스 관리 디테일 페이지에서 리스트 페이지로 넘어올때 필요하여 추가
         if ($location.$$search.tabIndex) {
             ct.tabIndex = $location.$$search.tabIndex;
@@ -1018,9 +1015,10 @@ angular.module('iaas.controllers')
         }, 1000 * 60);
 
         ct.fn.loadPage = function() {
-            if(!ct.isUseIaas) {
+            // iaas 사용 확인
+            if (!$scope.main.sltPortalOrg.isUseIaas) {
                 common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
-                $scope.main.goToPage("/");
+                $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
             }else {
                 ct.fnGetServerMainList();
                 ct.fngetLbList();

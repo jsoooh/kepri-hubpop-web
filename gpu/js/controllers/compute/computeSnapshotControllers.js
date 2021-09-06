@@ -30,9 +30,6 @@ angular.module('gpu.controllers')
             total : 0
         };
 
-        /* gpu 사용 확인 */
-        ct.isUseGpu = $scope.main.sltPortalOrg.isUseGpu;
-
         // 공통 레프트 메뉴의 userTenantId
         // ct.data.tenantId = $scope.main.userTenantId;
         // ct.data.tenantName = $scope.main.userTenant.korName;
@@ -219,9 +216,10 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.loadPage = function() {
-            if(!ct.isUseGpu) {
+            // gpu 사용 확인
+            if (!$scope.main.sltPortalOrg.isUseGpu) {
                 common.showDialogAlert('알림', '현재 프로젝트는 "GPU 서버 가상화"를 이용하지 않는 프로젝트입니다.');
-                $scope.main.goToPage("/");
+                $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
             }else {
                 ct.fn.getInstanceSnapshotList();
                 ct.fn.getStorageSnapshotList(1);

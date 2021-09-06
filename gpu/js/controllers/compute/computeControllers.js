@@ -51,9 +51,6 @@ angular.module('gpu.controllers')
         ct.tabIndex = 0;
         ct.lbPortCnt = 0;   //테넌트의 전체 lbPort 갯수
 
-        /* gpu 사용 확인 */
-        ct.isUseGpu = $scope.main.sltPortalOrg.isUseGpu;
-
         // 부하분산 서버관리 디테일 페이지에서 리스트 페이지로 넘어올때 필요하여 추가
         if ($location.$$search.tabIndex) {
             ct.tabIndex = $location.$$search.tabIndex;
@@ -1117,9 +1114,10 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.loadPage = function() {
-            if(!ct.isUseGpu) {
+            // gpu 사용 확인
+            if (!$scope.main.sltPortalOrg.isUseGpu) {
                 common.showDialogAlert('알림', '현재 프로젝트는 "GPU 서버 가상화"를 이용하지 않는 프로젝트입니다.');
-                $scope.main.goToPage("/");
+                $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
             }else {
                 ct.fnGetServerMainList();
                 ct.fngetLbList();

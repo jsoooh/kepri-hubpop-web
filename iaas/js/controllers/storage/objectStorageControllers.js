@@ -79,9 +79,6 @@ angular.module('iaas.controllers')
         ct.objectStorageUsedVolume = "";
         ct.objectStorageUsedVolumeUnit = "";
 
-        /* iaas 사용 확인 */
-        ct.isUseIaas = $scope.main.sltPortalOrg.isUseIaas;
-
         // 공통 레프트 메뉴에서 선택된 userTenantId 브로드캐스팅 받는 함수
         $scope.$on('userTenantChanged',function(event,status) {
             ct.data.tenantId = status.tenantId;
@@ -360,9 +357,10 @@ angular.module('iaas.controllers')
         };
 
         ct.fn.loadPage = function() {
-            if (!ct.isUseIaas) {
+            // iaas 사용 확인
+            if (!$scope.main.sltPortalOrg.isUseIaas) {
                 common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
-                $scope.main.goToPage("/");
+                $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
             } else {
                 ct.fn.getObjectStorageList();
                 ct.fn.getSendSecretInfoList();
