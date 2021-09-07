@@ -186,27 +186,22 @@ angular.module('iaas.controllers')
             common.showAlertError('이미 삭제된 인스턴스입니다.');
         };
 
-        ct.fn.loadPage = function() {
-            // iaas 사용 확인
-            if (!$scope.main.sltPortalOrg.isUseIaas) {
-                common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
-                $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
-            } else {
-                ct.fn.getInstanceSnapshotList();
-                ct.fn.getStorageSnapshotList(1);
-
-                // 인스턴스 스냅샷, 볼륨 스냅샷 데이터 로딩창
-                if (ct.promiseList && ct.promiseList.length > 0) {
-                    $scope.main.loadingMainBody = true;
-                    $q.all(ct.promiseList).finally(function () {
-                        $scope.main.loadingMainBody = false;
-                    });
-                }
-            }
+        if (!$scope.main.sltPortalOrg.isUseIaas) {
+            common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
+            $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
         }
 
         if (ct.data.tenantId) {
-           ct.fn.loadPage();
+            ct.fn.getInstanceSnapshotList();
+            ct.fn.getStorageSnapshotList(1);
+
+            // 인스턴스 스냅샷, 볼륨 스냅샷 데이터 로딩창
+            if (ct.promiseList && ct.promiseList.length > 0) {
+                $scope.main.loadingMainBody = true;
+                $q.all(ct.promiseList).finally(function () {
+                    $scope.main.loadingMainBody = false;
+                });
+            }
         }
     })
     .controller('iaasServerSnapshotCreateCtrl', function ($scope, $location, $state, $sce,$translate, $stateParams,$timeout,$filter, $mdDialog, ValidationService, user, common, CONSTANTS) {

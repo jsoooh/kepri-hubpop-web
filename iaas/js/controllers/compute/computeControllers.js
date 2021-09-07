@@ -1014,28 +1014,23 @@ angular.module('iaas.controllers')
             */
         }, 1000 * 60);
 
-        ct.fn.loadPage = function() {
-            // iaas 사용 확인
-            if (!$scope.main.sltPortalOrg.isUseIaas) {
-                common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
-                $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
-            }else {
-                ct.fnGetServerMainList();
-                ct.fngetLbList();
-
-                // 페이지 로딩바
-                if (ct.promiseList && ct.promiseList.length > 0) {
-                    $scope.main.loadingMainBody = true;
-                    $q.all(ct.promiseList).finally(function() {
-                        $scope.main.loadingMainBody = false;
-                    });
-                }
-            }
+        if (!$scope.main.sltPortalOrg.isUseIaas) {
+            common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
+            $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
         }
 
         // 페이지 데이터 로드
         if (ct.data.tenantId) {
-          ct.fn.loadPage();
+            ct.fnGetServerMainList();
+            ct.fngetLbList();
+
+            // 페이지 로딩바
+            if (ct.promiseList && ct.promiseList.length > 0) {
+                $scope.main.loadingMainBody = true;
+                $q.all(ct.promiseList).finally(function() {
+                    $scope.main.loadingMainBody = false;
+                });
+            }
         } else {
             /*
             var showAlert = common.showDialogAlert('알림','프로젝트를 선택해 주세요.');

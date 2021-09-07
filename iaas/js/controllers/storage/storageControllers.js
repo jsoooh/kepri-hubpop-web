@@ -260,18 +260,13 @@ angular.module('iaas.controllers')
             ct.fn.getStorageList();
         };
 
-        ct.fn.loadPage = function() {
-            // iaas 사용 확인
-            if (!$scope.main.sltPortalOrg.isUseIaas) {
-                common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
-                $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
-            } else {
-                ct.fn.getStorageList();
-            }
+        if (!$scope.main.sltPortalOrg.isUseIaas) {
+            common.showDialogAlert('알림', '현재 프로젝트는 "서버 가상화"를 이용하지 않는 프로젝트입니다.');
+            $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
         }
 
         if (ct.data.tenantId) {
-            ct.fn.loadPage();
+            ct.fn.getStorageList();
         }
 
     })

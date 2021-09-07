@@ -31,14 +31,13 @@ angular.module('gpu.controllers')
         });
     };
 
+    if (!$scope.main.sltPortalOrg.isUseGpu) {
+        common.showDialogAlert('알림', '현재 프로젝트는 "GPU 서버 가상화"를 이용하지 않는 프로젝트입니다.');
+        $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
+    }
+
     ct.fn.loadPage = function () {
-        // gpu 사용 확인
-        if (!$scope.main.sltPortalOrg.isUseGpu) {
-            common.showDialogAlert('알림', '현재 프로젝트는 "GPU 서버 가상화"를 이용하지 않는 프로젝트입니다.');
-            $scope.main.goToPage("/comm/projects/projectDetail/" + $scope.main.sltPortalOrg.id);
-        }else {
-            ct.fn.listAllVmCatalogs();
-        }
+        ct.fn.listAllVmCatalogs();
     }
 
     ct.fn.loadPage();
