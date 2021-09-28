@@ -194,8 +194,8 @@
 														</span>
 														<button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="contents.fn.copyConnectInfoToClipboard(instance)"><span class="feather-icon blue-600"><i data-feather="copy" class="feather-directive"></i></span></button>
 													</li>
-													<li>
-														<b>접속 계정 :</b><span>Administrator</span>
+													<li><!-- 분석 인스턴스인 경우 접속 계정이 windows 로 나오게 표기 -->
+														<b>접속 계정 :</b><span ng-show="instance.image.name != 'Win_Server_2016_DS_Raw_v2'">Administrator</span><span ng-show="instance.image.name == 'Win_Server_2016_DS_Raw_v2'">windows</span>
 													</li>
 													<li>
 														<b>접속 비밀번호 :</b><span>(사용자 정의)</span>
