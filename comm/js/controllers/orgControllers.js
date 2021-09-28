@@ -398,7 +398,23 @@ angular.module('portal.controllers')
             });
         };
 
-        ct.listOrgProjects();   //조직 목록 조회
+        ct.syncGpuTenant = function() {
+            var params = {
+                orgCode : $scope.main.sltProjectId,
+            };
+            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/openstack/gpuSync','POST',  params, 'application/x-www-form-urlencoded');
+            returnPromise.success(function (data, status, headers) {
+                console.log(data);
+            });
+            returnPromise.error(function (data, status, headers) {
+                console.log(data);
+            });
+            returnPromise.finally(function (data, status, headers) {
+                ct.listOrgProjects()   //조직 목록 조회
+            });
+        }
+
+        ct.syncGpuTenant();  // 오픈스택 GPU 프로젝트 동기화한 다음 조직 목록 조회
     })
     .controller('commFirstOrgProjectMainCtrl', function ($scope) {
         _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);
