@@ -398,23 +398,7 @@ angular.module('portal.controllers')
             });
         };
 
-        ct.syncGpuTenant = function() {
-            var params = {
-                orgCode : $scope.main.sltProjectId,
-            };
-            var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/tenant/openstack/gpuSync','POST',  params, 'application/x-www-form-urlencoded');
-            returnPromise.success(function (data, status, headers) {
-                console.log(data);
-            });
-            returnPromise.error(function (data, status, headers) {
-                console.log(data);
-            });
-            returnPromise.finally(function (data, status, headers) {
-                ct.listOrgProjects()   //조직 목록 조회
-            });
-        }
-
-        ct.syncGpuTenant();  // 오픈스택 GPU 프로젝트 동기화한 다음 조직 목록 조회
+        ct.listOrgProjects()   //조직 목록 조회
     })
     .controller('commFirstOrgProjectMainCtrl', function ($scope) {
         _DebugConsoleLog("orgControllers.js : commFirstOrgProjectMainCtrl", 1);
@@ -650,10 +634,10 @@ angular.module('portal.controllers')
         };
 
         // 프로젝트 쿼터 유형 조회
-        ct.fn.getQuotaPlanGroups = function() {
+        ct.fn.getQuotaPlanGroups = function () {
             var params = {
-                schType : "name",
-                schText : ""
+                schType: "name",
+                schText: ""
             };
             var returnPromise = quotaService.listQuotaPlanGroups(params);
             returnPromise.success(function (data) {
@@ -665,11 +649,11 @@ angular.module('portal.controllers')
         };
 
         // 프로젝트 쿼터 세부 유형 조회
-        ct.fn.getQuotaPlans = function() {
+        ct.fn.getQuotaPlans = function () {
             ct.quotaPlansData = [];
             var params = {
-                schGroupId : 0,
-                schType : "name"
+                schGroupId: 0,
+                schType: "name"
             };
             var returnPromise = quotaService.listQuotaPlan(params);
             returnPromise.success(function (data) {
