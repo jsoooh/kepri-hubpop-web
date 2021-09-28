@@ -119,7 +119,7 @@
 											<col style="width:20%;">
 										</colgroup>
 										<tbody>
-											<tr ng-repeat="(key, spec) in contents.specList | filter:{name:'m'}" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': (spec.uuid == contents.specUuid)}" ng-click="contents.fn.selectSpec(spec);">
+											<tr ng-repeat="(key, spec) in contents.specList" ng-class="{'tbl_disabled': (!contents.specDisabledAllSetting || spec.disabled), 'tbl_selected': (spec.uuid == contents.specUuid)}" ng-click="contents.fn.selectSpec(spec);">
 												<td class="text-center">
 													<div class="radio-group">
 														<input type="radio" name="spec_radio" id="spec_radio_{{key}}" class="radio-input" ng-model="contents.specUuid" value="{{spec.uuid}}" ng-disabled="(!contents.specDisabledAllSetting || spec.disabled)">
