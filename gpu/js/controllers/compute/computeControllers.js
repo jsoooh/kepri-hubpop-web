@@ -1502,12 +1502,7 @@ angular.module('gpu.controllers')
             var returnPromise = common.resourcePromise(CONSTANTS.gpuApiContextUrl + '/server/image/osType', 'GET');
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content) {
-                    // ubuntu 18.04 건만 보이게(이정일 차장 요구) 2021.06.09
-                    angular.forEach(data.content, function (imageType) {
-                        if (imageType.osType == 'ubuntu' && imageType.imageVersion == '18.04') {
-                            ct.imageTypeList.push(imageType);
-                        }
-                    });
+                    ct.imageTypeList = data.content;
                 }
             });
             returnPromise.error(function (data, status, headers) {
@@ -1519,6 +1514,7 @@ angular.module('gpu.controllers')
         };
 
         ct.fn.onchangeImageType = function(selectedImageType) {
+            ct.sltImageId = "";
             if (selectedImageType) {
                 ct.selectedOsImageType = selectedImageType.osType;
                 ct.selectedOsImageVersion = selectedImageType.imageVersion;
