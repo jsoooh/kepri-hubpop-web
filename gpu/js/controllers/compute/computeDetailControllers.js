@@ -3319,6 +3319,13 @@ angular.module('gpu.controllers')
             returnPromise.success(function (data, status, headers) {
                 if (data && data.content && data.content.specs && data.content.specs.length > 0) {
                     pop.specList = data.content.specs;
+
+                    // 현재 인스턴스 사양은 비활성화
+                    angular.forEach(pop.specList, function (spec) {
+                       if (spec.uuid == pop.instance.spec.uuid) {
+                           spec.disabled = true;
+                       }
+                    });
                 }
                 pop.isSpecLoad = true;
                 pop.setSpecMinDisabled();
@@ -3425,7 +3432,7 @@ angular.module('gpu.controllers')
         pop.setSpecMinDisabled = function () {
             if (pop.isSpecLoad) {
                 angular.forEach(pop.specList, function (spec) {
-                    if (spec.disk <= pop.instance.spec.disk || spec.ram <= pop.instance.spec.ram) {
+                    if (spec.disk < pop.instance.spec.disk || spec.ram < pop.instance.spec.ram || spec.vcpus < pop.instance.spec.vcpus) {
                         spec.disabled = true;
                         pop.isMinSpecDisabled = true;
                     }
