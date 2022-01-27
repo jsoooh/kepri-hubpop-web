@@ -3432,7 +3432,7 @@ angular.module('gpu.controllers')
         pop.setSpecMinDisabled = function () {
             if (pop.isSpecLoad) {
                 angular.forEach(pop.specList, function (spec) {
-                    if (spec.disk < pop.instance.spec.disk || spec.ram < pop.instance.spec.ram || spec.vcpus < pop.instance.spec.vcpus) {
+                    if (spec.disk < pop.instance.spec.disk || spec.ram < pop.instance.spec.ram || spec.vcpus < pop.instance.spec.vcpus || spec.uuid == pop.instance.spec.uuid) {
                         spec.disabled = true;
                         pop.isMinSpecDisabled = true;
                     }
