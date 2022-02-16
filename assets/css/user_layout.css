@@ -437,9 +437,10 @@ html {
   z-index: 10;
   width: calc(100% - 70px);
   overflow-y: auto;
+  overflow-x: auto; /**/
 }
 #allMenu .all-menu-wrap {
-  width: 1202px;
+  width: 3202px; /*1202px;*/
   padding: 0 30px;
 }
 #allMenu .all-menu-top {
@@ -495,7 +496,7 @@ html {
 #allMenu .category-list > li {
   display: inline-block;
   vertical-align: top;
-  width: 33%;
+  width: 16%; /*33%;*/
   padding-right: 40px;
   margin-bottom: 40px;
 }
