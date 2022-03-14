@@ -243,6 +243,7 @@ angular.module('gpu.controllers')
                         var createdDate = new Date(serverMain.created);
                         serverMain.creatingTimmer = parseInt((nowDate.getTime() - createdDate.getTime())/1000, 10);
                     }
+                    /*모니터링 관련 체크 제외. 22.03.14
                     ct.fn.setMonitoringLink(serverMain);
 
                     if (serverMain.uiTask != 'creating' && serverMain.taskState != "deleting" && serverMain.vmMonitoringYn == 'N' && serverMain.imageOsType != 'windows') {
@@ -253,7 +254,7 @@ angular.module('gpu.controllers')
                         $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {
                             ct.fn.monitYnState(serverMain);
                         }, 3000);
-                    }
+                    }*/
                     if (serverMain.uiTask == 'creating') {
                         ct.fnGetServerMainList();
                     }

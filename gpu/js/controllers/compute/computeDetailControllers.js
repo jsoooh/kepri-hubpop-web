@@ -507,9 +507,10 @@ angular.module('gpu.controllers')
                     // 20.9.1 by hrit, 모니터링 링크 세팅
                     ct.instance.monitoringLink = CONSTANTS.monitoringUrl + '?var-project_name=' + ct.data.tenantName + '&var-node_name=' + ct.instance.name;
 
+                    /*모니터링 관련 체크 제외. 22.03.14
                     if (ct.instance.uiTask != 'creating' && ct.instance.taskState != "deleting" && ct.instance.vmMonitoringYn == 'N' && (ct.instance.image && ct.instance.image.osType != 'windows')) {
                         $scope.main.refreshInterval['instanceMonitoringYn'] = $interval(function () {ct.fn.monitYnState(ct.instance);}, 3000);
-                    }
+                    }*/
 
                     $timeout(function () {
                         $('#action_event_panel.scroll-pane').jScrollPane({});
