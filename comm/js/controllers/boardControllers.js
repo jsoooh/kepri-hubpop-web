@@ -924,7 +924,7 @@ angular.module('portal.controllers')
             .on('change', function (evt) {
                 pop.boardData.content0 = $sce.trustAsHtml(common.trustAsHtml(evt.editor.getData()));
             });
-        }, 500)
+        }, 500);
 
         $scope.popDialogOk = function () {
             pop.boardAddAction();

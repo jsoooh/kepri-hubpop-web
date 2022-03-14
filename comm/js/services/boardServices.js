@@ -70,11 +70,11 @@ angular.module('portal.services')
 				"schText" : schText ? schText : ""
             };
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/boards/' + email + '/qna', 'GET', getParams));
-        }
+        };
 
         boardService.listReply = function(parentId) {
             return common.retrieveResource(common.resourcePromise(CONSTANTS.uaaContextUrl + '/reply/' + parentId));
-        }
+        };
 
 		return boardService;
 	})
