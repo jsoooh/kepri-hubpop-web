@@ -286,10 +286,11 @@ angular.module('portal.controllers')
         // 프로젝트 서비스 조회
         ct.checkOrgProjectService = function (id, orgId) {
             var serviceList = [
-                {serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N', callYn : 'N'},
-                {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N', callYn : 'N'},
+                //{serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N', callYn : 'N'}//,
                 //{serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N', callYn : 'N'},
                 //엘이테크
+                /*삭제 전 체크에 타사업자 제외. 22.03.14
                 {serviceCode : 'gis', serviceName : 'HUB-PoP GIS', useYn : 'N', callYn : 'N'},
                 // {serviceCode : 'vru', serviceName : 'AR/VR 공유서비스', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'hwu', serviceName : 'HiveBroker 서비스', useYn : 'N', callYn : 'N'},
@@ -301,7 +302,7 @@ angular.module('portal.controllers')
                 {serviceCode : 'dbp', serviceName : '실시간데이터브로커', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'dss', serviceName : 'DB 서비스', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'dpl', serviceName : '개발 파이프라인', useYn : 'N', callYn : 'N'},
-                {serviceCode : 'faas', serviceName : 'FaaS', useYn : 'N', callYn : 'N'}
+                {serviceCode : 'faas', serviceName : 'FaaS', useYn : 'N', callYn : 'N'}*/
             ];
 
             // 서비스 항목에 usedYn, promise 세팅
@@ -566,10 +567,14 @@ angular.module('portal.controllers')
 
         // 프로젝트 개인 유형 상세 쿼터값
         ct.personQuotaItems = [
-            {id : 3, value : 0},        // 서버 가상화 vCore 개수
+            /*{id : 3, value : 0},        // 서버 가상화 vCore 개수
             {id : 4, value : 0},        // 서버 가상화 메모리
             {id : 5, value : 0},        // 서버 가상화 OS 디스크(HDD)
-            {id : 6, value : 0},        // 서버 가상화 데이터 디스크(HDD)
+            {id : 6, value : 0},        // 서버 가상화 데이터 디스크(HDD)*/
+            {id : 7, value : 4},        // 서버 가상화 vCore 개수
+            {id : 8, value : 8},        // 서버 가상화 메모리
+            {id : 9, value : 100},        // 서버 가상화 OS 디스크(HDD)
+            {id : 10, value : 100},        // 서버 가상화 데이터 디스크(HDD)
             {id : 12, value : 30},      // 쿠버네티스 공통 클러스터 POD 개수
             {id : 13, value : 100},     // 쿠버네티스 외부 볼륨 디스크(HDD)
             {id : 18, value : 20}       // 서버리스 컴퓨팅 Function 개수

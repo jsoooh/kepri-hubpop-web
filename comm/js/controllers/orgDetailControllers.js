@@ -394,10 +394,11 @@ angular.module('portal.controllers')
         // 프로젝트 서비스 조회
         ct.checkOrgProjectService = function (id, orgId) {
             var serviceList = [
-                {serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N', callYn : 'N'},
-                {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N', callYn : 'N'},
+                //{serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N', callYn : 'N'},
+                {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N', callYn : 'N'}//,
                 // {serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N', callYn : 'N'},
                 //엘이테크
+                /*삭제 전 체크에 타사업자 제외. 22.03.14
                 {serviceCode : 'gis', serviceName : 'HUB-PoP GIS', useYn : 'N', callYn : 'N'},
                 // {serviceCode : 'vru', serviceName : 'AR/VR 공유서비스', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'hwu', serviceName : 'HiveBroker 서비스', useYn : 'N', callYn : 'N'},
@@ -409,7 +410,7 @@ angular.module('portal.controllers')
                 {serviceCode : 'dbp', serviceName : '실시간데이터브로커', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'dss', serviceName : 'DB 서비스', useYn : 'N', callYn : 'N'},
                 {serviceCode : 'dpl', serviceName : '개발 파이프라인', useYn : 'N', callYn : 'N'},
-                {serviceCode : 'faas', serviceName : 'FaaS', useYn : 'N', callYn : 'N'}
+                {serviceCode : 'faas', serviceName : 'FaaS', useYn : 'N', callYn : 'N'}*/
             ];
 
             // 서비스 항목에 usedYn, promise 세팅
