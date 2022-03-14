@@ -225,7 +225,8 @@ angular.module('gpu.controllers')
                 }
                 var isServerStatusCheck = false;
                 common.objectOrArrayMergeData(ct.serverMainList, instances);
-                ct.fnGetInstancesData();
+                //서버 알람 상태 조회. disable : mhwalee. 22.03.14
+                //ct.fnGetInstancesData();
                 var nowDate = new Date();
                 angular.forEach(ct.serverMainList, function (serverMain) {
                     if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
@@ -378,7 +379,8 @@ angular.module('gpu.controllers')
                     if (instanceId) {
                         var instance = data.content.instances[0];
                         var serverItem = common.objectsFindByField(ct.serverMainList, "id", data.content.instances[0].id);
-                        ct.fnGetInstancesData(serverItem);
+                        //서버 알람 상태 조회. disable : mhwalee. 22.03.14
+                        //ct.fnGetInstancesData(serverItem);
                         if (serverItem && serverItem.id) {
                             var beforUiTask = serverItem.uiTask;
                             var newItem = false;
@@ -431,13 +433,15 @@ angular.module('gpu.controllers')
                                 ct.fn.mergeServerInfo(ct.serverMainList[inKey], instance);
                                 ct.fn.setProcState(ct.serverMainList[inKey]);
                                 ct.fn.setRdpConnectDomain(ct.serverMainList[inKey]);
-                                ct.fnGetInstancesData(instance);
+                                //서버 알람 상태 조회. disable : mhwalee. 22.03.14
+                                //ct.fnGetInstancesData(instance);
                                 ct.fn.setMonitoringLink(ct.serverMainList[inKey]);
                             } else {
                                 ct.fn.setProcState(instance);
                                 ct.fn.setRdpConnectDomain(instance);
                                 ct.serverMainList.push(instance);
-                                ct.fnGetInstancesData(instance);
+                                //서버 알람 상태 조회. disable : mhwalee. 22.03.14
+                                //ct.fnGetInstancesData(instance);
                                 ct.fn.setMonitoringLink(instance);
                             }
                         });
@@ -485,7 +489,8 @@ angular.module('gpu.controllers')
                                 ct.fn.checkServerState(instanceStateInfo.id);
                             }, 1000);
                             var serverItem = common.objectsFindByField(ct.serverMainList, "id", instanceStateInfo.id);
-                            ct.fnGetInstancesData(serverItem);
+                            //서버 알람 상태 조회. disable : mhwalee. 22.03.14
+                            //ct.fnGetInstancesData(serverItem);
                             if (instanceStateInfo.taskState == "shelving_image_uploading" || instanceStateInfo.taskState == "shelving_offloading" || instanceStateInfo.taskState == "shelving" || instanceStateInfo.taskState == "shelving_image_pending_upload") {
                                 instanceStateInfo.vmState = "shelved";
                             } else if (instanceStateInfo.taskState == "powering-off") {
@@ -511,7 +516,8 @@ angular.module('gpu.controllers')
                         var serverMainList = angular.copy(ct.serverMainList);
                         angular.forEach(serverStates, function (instanceStateInfo, inKey) {
                             ct.fn.setProcState(instanceStateInfo);
-                            ct.fnGetInstancesData(instanceStateInfo);
+                            //서버 알람 상태 조회. disable : mhwalee. 22.03.14
+                            //ct.fnGetInstancesData(instanceStateInfo);
                             var serverItem = common.objectsFindByField(serverMainList, "id", instanceStateInfo.id);
                             if (serverItem && serverItem.id) {
                                 delete serverItem.taskState;
