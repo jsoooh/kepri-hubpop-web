@@ -12,7 +12,7 @@
 		<thead>
 			<tr>
 				<th colspan="6">
-					<p ng-show="contents.mode=='V'">{{contents.boardData.title}}</p>
+					<p ng-show="contents.mode=='V'" ng-bind-html="contents.boardData.title"></p>
 					<input type="text" id="title" class="form-control" name="title" maxlength="50" ng-model="contents.boardData.title0" placeholder="{{'label.bulletin_title' | translate}}" style="ime-mode:active;" validation="required" ng-show="contents.mode=='U'"/>
 				</th>
 			</tr>

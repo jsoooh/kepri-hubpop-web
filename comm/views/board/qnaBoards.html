@@ -85,7 +85,7 @@
 						<td>{{contents.pageOptions.pageSize * (contents.pageOptions.currentPage - 1) + $index + 1}}</td>
 						<td class="text-left">
 							<span class="reply" ng-show="boardItem.level!=1"></span>
-							<a href="#/comm/boards/qna/{{boardItem.id}}">{{boardItem.title}}</a>
+							<a href="#/comm/boards/qna/{{boardItem.id}}" ng-bind-html="boardItem.title"></a>
 						</td>
 						<td>{{ boardItem.ownerName }}</td>
 						<td>{{ boardItem.createdDate.time | date : "yyyy-MM-dd HH:mm" }}</td>
