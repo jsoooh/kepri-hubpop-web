@@ -1,112 +1,112 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-	<title>HUB-POP</title>
-	<link rel="shortsut icon" href="assets/img/common/user_ico.ico" />
-	<script type="text/javascript">
-		var _DOMAIN_ = document.domain;
-		var _PROTOCOL_ = location.protocol ? location.protocol : "http:";
-		var _PORT_ = location.port ? location.port : "80";
-		var _VERSION_ = "0.2.M.0.5";
-		var _MODE_ = "DEBUG"; // RUN, DEV, DEBUG
-		var _DEBUG_LEVEL_ = 3; // 1, 2, 3
-		var _TOME_ = new Date().getTime();
-		var _VERSION_TAIL_HEAD_ = "?version=" + _VERSION_;
-		var _VERSION_TAIL_ = _VERSION_TAIL_HEAD_ + ((_MODE_ == "DEBUG" && _DEBUG_LEVEL_ > 1) ? "." + _TOME_ : "");
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>HUB-POP</title>
+    <link rel="shortsut icon" href="assets/img/common/user_ico.ico"/>
+    <script type="text/javascript">
+        var _DOMAIN_ = document.domain;
+        var _PROTOCOL_ = location.protocol ? location.protocol : "http:";
+        var _PORT_ = location.port ? location.port : "80";
+        var _VERSION_ = "0.2.M.0.5";
+        var _MODE_ = "DEBUG"; // RUN, DEV, DEBUG
+        var _DEBUG_LEVEL_ = 3; // 1, 2, 3
+        var _TOME_ = new Date().getTime();
+        var _VERSION_TAIL_HEAD_ = "?version=" + _VERSION_;
+        var _VERSION_TAIL_ = _VERSION_TAIL_HEAD_ + ((_MODE_ == "DEBUG" && _DEBUG_LEVEL_ > 1) ? "." + _TOME_ : "");
 
-		// upload 진행 바 표현 최소 파일 사이즈 - 작은 사이즈의 경우 표현이 의미 없음
-		var _UPLOADING_VIEW_MIN_SIZE_ = 10240; // 10MB
+        // upload 진행 바 표현 최소 파일 사이즈 - 작은 사이즈의 경우 표현이 의미 없음
+        var _UPLOADING_VIEW_MIN_SIZE_ = 10240; // 10MB
 
-		function _VersionTail() {
-			if (_MODE_ == "DEBUG" && _DEBUG_LEVEL_ >= 3) {
-				return 	_VersionTimeTail();
-			} else {
-				return _VERSION_TAIL_;
-			}
-		}
+        function _VersionTail() {
+            if (_MODE_ == "DEBUG" && _DEBUG_LEVEL_ >= 3) {
+                return _VersionTimeTail();
+            } else {
+                return _VERSION_TAIL_;
+            }
+        }
 
-		function _VersionTimeTail() {
-			return 	_VERSION_TAIL_HEAD_ + "." + new Date().getTime();
-		}
+        function _VersionTimeTail() {
+            return _VERSION_TAIL_HEAD_ + "." + new Date().getTime();
+        }
 
-		function _DebugConsoleLog(message, level) {
-			if (_MODE_ == "DEBUG" && (level == undefined || level == null || level <= _DEBUG_LEVEL_)) {
-				console.log(message);
-			}
-		}
+        function _DebugConsoleLog(message, level) {
+            if (_MODE_ == "DEBUG" && (level == undefined || level == null || level <= _DEBUG_LEVEL_)) {
+                console.log(message);
+            }
+        }
 
-		var _MENU_TYPE_			 	= "db"; // part, all, db
-		var _PROJECT_TYPE_			= "org"; // pjt, org
+        var _MENU_TYPE_ = "db"; // part, all, db
+        var _PROJECT_TYPE_ = "org"; // pjt, org
 
-		var _COMM_STAGE_			 = "comm";
-		var _IAAS_STAGE_			 = "iaas";
-		var _GPU_STAGE_			 	 = "gpu";
-		var _PAAS_STAGE_			 = "paas";
-		var _MARKET_STAGE_			 = "market";
-		var _MONIT_STAGE_			 = "monit";
-		var _PERF_STAGE_		     = "perf";
+        var _COMM_STAGE_ = "comm";
+        var _IAAS_STAGE_ = "iaas";
+        var _GPU_STAGE_ = "gpu";
+        var _PAAS_STAGE_ = "paas";
+        var _MARKET_STAGE_ = "market";
+        var _MONIT_STAGE_ = "monit";
+        var _PERF_STAGE_ = "perf";
 
-		var _VIEWS_                  = "views";
+        var _VIEWS_ = "views";
 
-		var _COMM_VIEWS_			 = _COMM_STAGE_ +"/views";
-		var _IAAS_VIEWS_			 = _IAAS_STAGE_ +"/views";
-		var _GPU_VIEWS_			     = _GPU_STAGE_ +"/views";
-		var _PAAS_VIEWS_			 = _PAAS_STAGE_ +"/views";
-		var _MARKET_VIEWS_			 = _MARKET_STAGE_ +"/views";
-		var _MONIT_VIEWS_			 = _MONIT_STAGE_ +"/views";
-		var _PERF_VIEWS_			 = _PERF_STAGE_ +"/views";
+        var _COMM_VIEWS_ = _COMM_STAGE_ + "/views";
+        var _IAAS_VIEWS_ = _IAAS_STAGE_ + "/views";
+        var _GPU_VIEWS_ = _GPU_STAGE_ + "/views";
+        var _PAAS_VIEWS_ = _PAAS_STAGE_ + "/views";
+        var _MARKET_VIEWS_ = _MARKET_STAGE_ + "/views";
+        var _MONIT_VIEWS_ = _MONIT_STAGE_ + "/views";
+        var _PERF_VIEWS_ = _PERF_STAGE_ + "/views";
 
-		var _COMM_JS_				= _COMM_STAGE_ + "/js";
-		var _IAAS_JS_				= _IAAS_STAGE_ + "/js";
-		var _GPU_JS_				= _GPU_STAGE_ + "/js";
-		var _PAAS_JS_				= _PAAS_STAGE_ + "/js";
-		var _MONIT_JS_				= _MONIT_STAGE_ + "/js";
-		var _PERF_JS_				= _PERF_STAGE_ + "/js";
+        var _COMM_JS_ = _COMM_STAGE_ + "/js";
+        var _IAAS_JS_ = _IAAS_STAGE_ + "/js";
+        var _GPU_JS_ = _GPU_STAGE_ + "/js";
+        var _PAAS_JS_ = _PAAS_STAGE_ + "/js";
+        var _MONIT_JS_ = _MONIT_STAGE_ + "/js";
+        var _PERF_JS_ = _PERF_STAGE_ + "/js";
 
-		var _GPU_VM_CATALOG_TEMPLATE_= _GPU_STAGE_ +"/templates/vmCatalog";
+        var _GPU_VM_CATALOG_TEMPLATE_ = _GPU_STAGE_ + "/templates/vmCatalog";
 
-		var _CONNECT_SITE_				= "USER";
-		var _LAYOUT_VIEWS_				= _COMM_VIEWS_;
+        var _CONNECT_SITE_ = "USER";
+        var _LAYOUT_VIEWS_ = _COMM_VIEWS_;
 
-		var _CSRF_TOKEN_HEADER_NAME_	= "X-CSRF-TOKEN";
-		var _TOKEN_HEADER_NAME_			= "X-HEADER-TOKEN";
-		var _REGION_HEADER_NAME_		= "X-HEADER-REGION";
+        var _CSRF_TOKEN_HEADER_NAME_ = "X-CSRF-TOKEN";
+        var _TOKEN_HEADER_NAME_ = "X-HEADER-TOKEN";
+        var _REGION_HEADER_NAME_ = "X-HEADER-REGION";
 
-		var _COOKIES_PATH_	             = "/";
-		var _CSRF_TOKEN_COOKIE_NAME_     = "XSRF-TOKEN";
-		var _ACCESS_TOKEN_COOKIE_NAME_   = "U-TOKEN";
-		var _LANGUAGE_KEY_COOKIE_NAME_   = "LANGUAGE-KEY";
-		var _REGION_KEY_COOKIE_NAME_     = "REGION-KEY";
-		var _USER_INFO_COOKIE_NAME_      = "USER-INFO";
-		var _LEFT_MENU_SHOW_COOKIE_NAME_ = "LEFT-MENU-SHOW";
-		var _PROJECT_ID_COOKIE_NAME_     = "PROJECT-ID";
-		var _PROJECT_CODE_COOKIE_NAME_   = "PROJECT-CODE";
-		var _USER_TENANT_ID_COOKIE_NAME_ = "USER-TENANT-ID";
-		var _GPU_TENANT_ID_COOKIE_NAME_  = "GPU-TENANT-ID";
+        var _COOKIES_PATH_ = "/";
+        var _CSRF_TOKEN_COOKIE_NAME_ = "XSRF-TOKEN";
+        var _ACCESS_TOKEN_COOKIE_NAME_ = "U-TOKEN";
+        var _LANGUAGE_KEY_COOKIE_NAME_ = "LANGUAGE-KEY";
+        var _REGION_KEY_COOKIE_NAME_ = "REGION-KEY";
+        var _USER_INFO_COOKIE_NAME_ = "USER-INFO";
+        var _LEFT_MENU_SHOW_COOKIE_NAME_ = "LEFT-MENU-SHOW";
+        var _PROJECT_ID_COOKIE_NAME_ = "PROJECT-ID";
+        var _PROJECT_CODE_COOKIE_NAME_ = "PROJECT-CODE";
+        var _USER_TENANT_ID_COOKIE_NAME_ = "USER-TENANT-ID";
+        var _GPU_TENANT_ID_COOKIE_NAME_ = "GPU-TENANT-ID";
 
-		var _ACCESS_TOKEN_CASHE_NAME_    = "cmm.accessToken";
-		var _LANGUAGE_KEY_CASHE_NAME_    = "cmm.languageKey";
-		var _REGION_KEY_CASHE_NAME_      = "cmm.regionKey";
-		var _USER_INFO_CASHE_NAME_       = "cmm.user";
-		var _LEFT_MENU_SHOW_CASHE_NAME_  = "cmm.leftMenuShow";
-		var _COMPANY_LOGO_CASHE_NAME_    = "cmm.companyLogo";
+        var _ACCESS_TOKEN_CASHE_NAME_ = "cmm.accessToken";
+        var _LANGUAGE_KEY_CASHE_NAME_ = "cmm.languageKey";
+        var _REGION_KEY_CASHE_NAME_ = "cmm.regionKey";
+        var _USER_INFO_CASHE_NAME_ = "cmm.user";
+        var _LEFT_MENU_SHOW_CASHE_NAME_ = "cmm.leftMenuShow";
+        var _COMPANY_LOGO_CASHE_NAME_ = "cmm.companyLogo";
 
-		var _DEFAULT_TIMERANGE_          = "defaultTimeRange";
-		var _TIMERANGE_FROM_             = "timeRangeFrom";
-		var _TIMERANGE_TO_               = "timeRangeTo";
-		var _GROUPBY_                    = "groupBy";
-		var _REFRESH_TIME_               = "refreshTime";
-		var _DEFAULT_TIMERANGE_FROM_     = "defaultTimeRangeFrom";
-		var _DEFAULT_TIMERANGE_TO_       = "defaultTimeRangeTo";
+        var _DEFAULT_TIMERANGE_ = "defaultTimeRange";
+        var _TIMERANGE_FROM_ = "timeRangeFrom";
+        var _TIMERANGE_TO_ = "timeRangeTo";
+        var _GROUPBY_ = "groupBy";
+        var _REFRESH_TIME_ = "refreshTime";
+        var _DEFAULT_TIMERANGE_FROM_ = "defaultTimeRangeFrom";
+        var _DEFAULT_TIMERANGE_TO_ = "defaultTimeRangeTo";
 
         function loadCssLink(file) {
-            document.writeln('<link rel="stylesheet" href="'+file+'" type="text/css"/>');
+            document.writeln('<link rel="stylesheet" href="' + file + '" type="text/css"/>');
         }
 
         function loadJavascript(file) {
-            document.writeln('<script src="'+file+'" type="text/javascript"></\script>');
+            document.writeln('<script src="' + file + '" type="text/javascript"></\script>');
         }
 
         var _MIN_ = (_MODE_ == "RUN") ? ".min" : "";
@@ -114,7 +114,7 @@
         loadCssLink('css/components/jquery.jscrollpane.css');
         loadCssLink('css/components/jquery.scrolling-tabs' + _MIN_ + '.css');
         loadCssLink('css/components/jquery-ui' + _MIN_ + '.css');
-		loadCssLink('assets/lib/bootstrap/hubpop/bootstrap_hubpop.css'+_VERSION_TAIL_);
+        loadCssLink('assets/lib/bootstrap/hubpop/bootstrap_hubpop.css' + _VERSION_TAIL_);
         //loadCssLink('css/components/bootstrap' + _MIN_ + '.css');
         loadCssLink('css/components/bootstrap-slider.css');
         loadCssLink('css/components/bootstrap-select' + _MIN_ + '.css');
@@ -135,18 +135,18 @@
         loadCssLink('css/components/tui-time-picker.css');
         loadCssLink('css/components/tui-date-picker.css');
 
-        loadCssLink('css/css.css'+_VERSION_TAIL_);
-        loadCssLink('css/layout_join.css'+_VERSION_TAIL_);
-        loadCssLink('css/content_join.css'+_VERSION_TAIL_);
-        loadCssLink('css/common_join.css'+_VERSION_TAIL_);
-        loadCssLink('css/component.css'+_VERSION_TAIL_);
+        loadCssLink('css/css.css' + _VERSION_TAIL_);
+        loadCssLink('css/layout_join.css' + _VERSION_TAIL_);
+        loadCssLink('css/content_join.css' + _VERSION_TAIL_);
+        loadCssLink('css/common_join.css' + _VERSION_TAIL_);
+        loadCssLink('css/component.css' + _VERSION_TAIL_);
 
         loadCssLink('css/components/dygraph.css');
 
         loadJavascript('js/components/modernizr-custom.js');
         loadJavascript('js/components/es5-shim.min.js');
         loadJavascript('js/components/es5-sham.min.js');
-		loadJavascript('assets/lib/jquery-1.12.4.min.js');
+        loadJavascript('assets/lib/jquery-1.12.4.min.js');
         //loadJavascript('js/components/jquery' + _MIN_ + '.js');
         loadJavascript('js/components/jquery-ui' + _MIN_ + '.js');
         loadJavascript('js/components/jquery.mousewheel.js');
@@ -155,15 +155,15 @@
         loadJavascript('js/components/ResizeSensor.js');
         loadJavascript('js/components/ElementQueries.js');
         loadJavascript('js/components/console-sham' + _MIN_ + '.js');
-		loadJavascript('assets/lib/bootstrap/js/bootstrap.min.js');
+        loadJavascript('assets/lib/bootstrap/js/bootstrap.min.js');
         //loadJavascript('js/components/bootstrap' + _MIN_ + '.js');
         loadJavascript('js/components/angular' + _MIN_ + '.js');
         loadJavascript('js/components/angular-sanitize' + _MIN_ + '.js');
         loadJavascript('js/components/ui-bootstrap-tpls' + _MIN_ + '.js');
         loadJavascript('js/components/moment' + _MIN_ + '.js');
         loadJavascript('js/components/moment-range' + _MIN_ + '.js');
-		loadJavascript('js/components/ocLazyLoad' + _MIN_ + '.js');
-		loadJavascript('js/components/Chart' + _MIN_ + '.js');
+        loadJavascript('js/components/ocLazyLoad' + _MIN_ + '.js');
+        loadJavascript('js/components/Chart' + _MIN_ + '.js');
         loadJavascript('js/components/bootstrap-datetimepicker' + _MIN_ + '.js');
         loadJavascript('js/components/bootstrap-slider.js');
         loadJavascript('js/components/d3.js');
@@ -211,125 +211,126 @@
         loadJavascript('js/components/dygraph.min.js');
         loadJavascript('js/components/ckeditor/ckeditor.js');
 
-		//assets.css
-		loadCssLink('assets/lib/font-awesome/css/all.min.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/XEIcon/xeicon.min.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/NotoSansKr/NotoSansKr.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/NanumGothic/webfonts_NanumGothic.css'+_VERSION_TAIL_);
-		loadCssLink('assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.css'+_VERSION_TAIL_);
-		//loadCssLink('assets/lib/bootstrap/hubpop/bootstrap_hubpop.css'+_VERSION_TAIL_);		//중복으로 상단으로 이동
-		loadCssLink('assets/css/component.css'+_VERSION_TAIL_);
-		loadCssLink('assets/css/user_layout.css'+_VERSION_TAIL_);	//로그인/계정생성 화면에서는 skip
-		loadCssLink('assets/css/contents.css'+_VERSION_TAIL_);
-		//assets.css
+        //assets.css
+        loadCssLink('assets/lib/font-awesome/css/all.min.css' + _VERSION_TAIL_);
+        loadCssLink('assets/lib/XEIcon/xeicon.min.css' + _VERSION_TAIL_);
+        loadCssLink('assets/lib/NotoSansKr/NotoSansKr.css' + _VERSION_TAIL_);
+        loadCssLink('assets/lib/NanumGothic/webfonts_NanumGothic.css' + _VERSION_TAIL_);
+        loadCssLink('assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.css' + _VERSION_TAIL_);
+        //loadCssLink('assets/lib/bootstrap/hubpop/bootstrap_hubpop.css'+_VERSION_TAIL_);		//중복으로 상단으로 이동
+        loadCssLink('assets/css/component.css' + _VERSION_TAIL_);
+        loadCssLink('assets/css/user_layout.css' + _VERSION_TAIL_);	//로그인/계정생성 화면에서는 skip
+        loadCssLink('assets/css/contents.css' + _VERSION_TAIL_);
+        //assets.css
 
-		//assets.js
-		loadJavascript('assets/lib/feather/feather.min.js');
-		//loadJavascript('assets/js/common/html5shiv.min.js');		//IE 9. 하단에 기재
-		//loadJavascript('assets/js/common/respond.min'.js');		//IE 9. 하단에 기재
-		//loadJavascript('assets/lib/jquery-1.12.4.min.js');			//중복으로 상단으로 이동
-		loadJavascript('assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.js');
-		//loadJavascript('assets/lib/bootstrap/js/bootstrap.min.js');	//중복으로 상단으로 이동
-		loadJavascript('assets/js/common.js');
-		loadJavascript('assets/js/user.js');
-		//assets.js
+        //assets.js
+        loadJavascript('assets/lib/feather/feather.min.js');
+        //loadJavascript('assets/js/common/html5shiv.min.js');		//IE 9. 하단에 기재
+        //loadJavascript('assets/js/common/respond.min'.js');		//IE 9. 하단에 기재
+        //loadJavascript('assets/lib/jquery-1.12.4.min.js');			//중복으로 상단으로 이동
+        loadJavascript('assets/lib/mCustomScrollbar/jquery.mCustomScrollbar.js');
+        //loadJavascript('assets/lib/bootstrap/js/bootstrap.min.js');	//중복으로 상단으로 이동
+        loadJavascript('assets/js/common.js');
+        loadJavascript('assets/js/user.js');
+        //assets.js
 
-		loadJavascript(_COMM_STAGE_+'/js/cmmFunction.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/app.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/properties/loadFiles.js'+_VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/cmmFunction.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/app.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/properties/loadFiles.js' + _VERSION_TAIL_HEAD_);
 
-        loadJavascript(_COMM_STAGE_+'/js/filters/commonFilters.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/directives/commonDirectives.js'+_VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/filters/commonFilters.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/directives/commonDirectives.js' + _VERSION_TAIL_HEAD_);
 
-        loadJavascript(_COMM_STAGE_+'/js/directives/iaasDirectives.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/directives/checklistModel.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/filters/iaasFilters.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/filters/commQuotaFilters.js'+_VERSION_TAIL_HEAD_);
-        loadJavascript(_COMM_STAGE_+'/js/filters/commProjectFilters.js'+_VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/directives/iaasDirectives.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/directives/checklistModel.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/filters/iaasFilters.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/filters/commQuotaFilters.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/filters/commProjectFilters.js' + _VERSION_TAIL_HEAD_);
 
         if (_DOMAIN_.indexOf("kr") > 0 || _DOMAIN_.indexOf("com") > 0) {
-            loadJavascript(_COMM_STAGE_+'/js/properties/' + _DOMAIN_ + '.constants.js'+_VERSION_TAIL_HEAD_);
+            loadJavascript(_COMM_STAGE_ + '/js/properties/' + _DOMAIN_ + '.constants.js' + _VERSION_TAIL_HEAD_);
         } else {
-            loadJavascript(_COMM_STAGE_+'/js/properties/localhost.constants.js'+_VERSION_TAIL_HEAD_);
+            loadJavascript(_COMM_STAGE_ + '/js/properties/localhost.constants.js' + _VERSION_TAIL_HEAD_);
         }
 
-		loadJavascript(_COMM_STAGE_+'/js/services/commonServices.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/services/userServices.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/services/userSettingServices.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/services/portalServices.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/services/memberServices.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/services/orgServices.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/services/quotaServices.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/services/signupServices.js'+_VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/services/commonServices.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/services/userServices.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/services/userSettingServices.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/services/portalServices.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/services/memberServices.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/services/orgServices.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/services/quotaServices.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/services/signupServices.js' + _VERSION_TAIL_HEAD_);
 
-		loadJavascript(_COMM_STAGE_+'/js/controllers/commonControllers.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/controllers/userControllers.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/controllers/portalControllers.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/controllers/orgControllers.js'+_VERSION_TAIL_HEAD_);
-		loadJavascript(_COMM_STAGE_+'/js/controllers/signupControllers.js'+_VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/controllers/commonControllers.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/controllers/userControllers.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/controllers/portalControllers.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/controllers/orgControllers.js' + _VERSION_TAIL_HEAD_);
+        loadJavascript(_COMM_STAGE_ + '/js/controllers/signupControllers.js' + _VERSION_TAIL_HEAD_);
 
-		// COMM
-		loadJavascript(_COMM_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
+        // COMM
+        loadJavascript(_COMM_STAGE_ + '/js/properties/sitemap.js' + _VERSION_TAIL_HEAD_);
 
         // Sample
-        if (_MODE_ == "DEBUG") loadJavascript(_COMM_STAGE_+'/js/controllers/sampleControllers.js'+_VERSION_TAIL_HEAD_);
+        if (_MODE_ == "DEBUG") loadJavascript(_COMM_STAGE_ + '/js/controllers/sampleControllers.js' + _VERSION_TAIL_HEAD_);
 
         // IAAS
-		loadJavascript(_IAAS_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
+        loadJavascript(_IAAS_STAGE_ + '/js/properties/sitemap.js' + _VERSION_TAIL_HEAD_);
 
-		// GPU
-		loadJavascript(_GPU_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
+        // GPU
+        loadJavascript(_GPU_STAGE_ + '/js/stageLoad.js' + _VERSION_TAIL_);
 
         // PAAS
-        loadJavascript(_PAAS_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
+        loadJavascript(_PAAS_STAGE_ + '/js/properties/sitemap.js' + _VERSION_TAIL_HEAD_);
 
-		// PERF
-		loadJavascript(_PERF_STAGE_+'/js/properties/sitemap.js'+_VERSION_TAIL_HEAD_);
+        // PERF
+        loadJavascript(_PERF_STAGE_ + '/js/properties/sitemap.js' + _VERSION_TAIL_HEAD_);
 
         // MONIT
         //loadJavascript(_MONIT_STAGE_+'/js/stageLoad.js'+_VERSION_TAIL_);
 
-	</script>
-	<!--[if lt IE 9]>
-	<script type="text/javascript" src="assets/js/common/html5shiv.min.js"></script>
-	<script type="text/javascript" src="assets/js/common/respond.min.js"></script>
-	<![endif]-->
+    </script>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="assets/js/common/html5shiv.min.js"></script>
+    <script type="text/javascript" src="assets/js/common/respond.min.js"></script>
+    <![endif]-->
 
 </head>
-<body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader" ng-class="{'full-layout' : (main.stateKey == 'login' || main.stateKey == 'signup')}">
+<body class="user-site" id="mainCtrl" ng-controller="mainCtrl as main" nv-file-drop="" uploader="main.uploader"
+      ng-class="{'full-layout' : (main.stateKey == 'login' || main.stateKey == 'signup')}">
 <script type="text/javascript">
-	document.writeln('<div id="pageWrap" ng-class="{\'all-menu-open\' : main.allMenuOpen, \'dashboard-full\' : (main.isLoginPage && main.dashboardFull), \'page-blank\' : (main.isLoginPage && !main.sltPortalOrgId) }">                                         ');
-	document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuFirst.html'+_VERSION_TAIL_+'\'"></header>     ');
-	document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" ng-class="{\'active\' : main.allMenuOpen }" ng-include="\''+_COMM_VIEWS_+ '/menu/allMenuMap.html'+_VERSION_TAIL_+'\'"></div>   ');
-	document.writeln('	<aside ng-if="main.isLoginPage && !!main.sltPortalOrgId" id="lnbWrap" ng-include="\''+_COMM_VIEWS_+ '/menu/leftMenuMiddle.html'+_VERSION_TAIL_+'\'"></aside>     ');	//GNB WRAP
-	document.writeln('	<div id="container">                                      ');	//container
-	document.writeln('		<main id="contentWrap" ng-class="{ \'dashboard-wrap\' : main.stateKey == \'commProjectDetail\' }">                                   ');
-	document.writeln('			<div ng-if="main.isLoginPage" class="page-title" ng-class="{ \'dashboard-top\' : main.stateKey == \'commProjectDetail\' }" ng-include="main.topTemplateUrl"></div> ');
-	document.writeln('			<div class="page-content" ui-view="mainBody"></div> ');		//콘텐츠 영역
-	document.writeln('		</main>                                               ');
-	document.writeln('	</div>                                                    ');	// #container
-	document.writeln('</div>                                                      ');	// #pageWrap
+    document.writeln('<div id="pageWrap" ng-class="{\'all-menu-open\' : main.allMenuOpen, \'dashboard-full\' : (main.isLoginPage && main.dashboardFull), \'page-blank\' : (main.isLoginPage && !main.sltPortalOrgId) }">                                         ');
+    document.writeln('	<header ng-if="main.isLoginPage" id="header" ng-include="\'' + _COMM_VIEWS_ + '/menu/leftMenuFirst.html' + _VERSION_TAIL_ + '\'"></header>     ');
+    document.writeln('	<div ng-if="main.isLoginPage" id="allMenu" ng-class="{\'active\' : main.allMenuOpen }" ng-include="\'' + _COMM_VIEWS_ + '/menu/allMenuMap.html' + _VERSION_TAIL_ + '\'"></div>   ');
+    document.writeln('	<aside ng-if="main.isLoginPage && !!main.sltPortalOrgId" id="lnbWrap" ng-include="\'' + _COMM_VIEWS_ + '/menu/leftMenuMiddle.html' + _VERSION_TAIL_ + '\'"></aside>     ');	//GNB WRAP
+    document.writeln('	<div id="container">                                      ');	//container
+    document.writeln('		<main id="contentWrap" ng-class="{ \'dashboard-wrap\' : main.stateKey == \'commProjectDetail\' }">                                   ');
+    document.writeln('			<div ng-if="main.isLoginPage" class="page-title" ng-class="{ \'dashboard-top\' : main.stateKey == \'commProjectDetail\' }" ng-include="main.topTemplateUrl"></div> ');
+    document.writeln('			<div class="page-content" ui-view="mainBody"></div> ');		//콘텐츠 영역
+    document.writeln('		</main>                                               ');
+    document.writeln('	</div>                                                    ');	// #container
+    document.writeln('</div>                                                      ');	// #pageWrap
 
-	document.writeln('<div style="display: none;" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'block\' : \'none\' }" id="wrap" ng-class="main.mainLayoutClass">');
-	document.writeln('	<div id="slider-contents-container" class="md-dialog-container backdrop_type" tabindex="-1"></div>'); // 가이드
-	document.writeln('	<div class="aside" id="slider-contents"></div>');
-	document.writeln('</div>');
-	document.writeln('<div growl></div>');
-	
-	//신규 로딩
-	document.writeln('<div class="loading-wrap" id="newLoading" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\''+_COMM_VIEWS_+ '/common/mainLoading.html'+_VERSION_TAIL_+'\'">'); //로딩바 영역
-	document.writeln('	<div class="loading-box" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
-	document.writeln('		<div class="img"><img src="assets/img/common/loading.png" alt="" /></div>'); 
-	document.writeln('		<ul class="dot-pulse">'); 
-	document.writeln('			<li><div class="dot"></div></li>'); 
-	document.writeln('			<li><div class="dot"></div></li>'); 
-	document.writeln('			<li><div class="dot"></div></li>'); 
-	document.writeln('			<li><div class="dot"></div></li>'); 
-	document.writeln('			<li><div class="dot"></div></li>'); 
-	document.writeln('		</ul>'); 
-	document.writeln('	</div>'); 
-	document.writeln('</div>'); 
-	document.writeln('<div id="noticeDiv"><div>');
+    document.writeln('<div style="display: none;" ng-style="{ \'display\' : (main.isLoadPageBody) ? \'block\' : \'none\' }" id="wrap" ng-class="main.mainLayoutClass">');
+    document.writeln('	<div id="slider-contents-container" class="md-dialog-container backdrop_type" tabindex="-1"></div>'); // 가이드
+    document.writeln('	<div class="aside" id="slider-contents"></div>');
+    document.writeln('</div>');
+    document.writeln('<div growl></div>');
+
+    //신규 로딩
+    document.writeln('<div class="loading-wrap" id="newLoading" ng-show="main.loadingMain || main.loadingMainBody" ng-include="\'' + _COMM_VIEWS_ + '/common/mainLoading.html' + _VERSION_TAIL_ + '\'">'); //로딩바 영역
+    document.writeln('	<div class="loading-box" ng-class="{ \'pd0\' : (main.stateKey == \'login\' || main.stateKey == \'signup\' ) }">');
+    document.writeln('		<div class="img"><img src="assets/img/common/loading.png" alt="" /></div>');
+    document.writeln('		<ul class="dot-pulse">');
+    document.writeln('			<li><div class="dot"></div></li>');
+    document.writeln('			<li><div class="dot"></div></li>');
+    document.writeln('			<li><div class="dot"></div></li>');
+    document.writeln('			<li><div class="dot"></div></li>');
+    document.writeln('			<li><div class="dot"></div></li>');
+    document.writeln('		</ul>');
+    document.writeln('	</div>');
+    document.writeln('</div>');
+    document.writeln('<div id="noticeDiv"><div>');
 </script>
 </body>
 </html>
