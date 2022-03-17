@@ -842,7 +842,7 @@ angular.module('gpu.controllers')
                 var rdpDomain = instance.rdpDomain ? instance.rdpDomain : '';
                 var fixedIp = instance.fixedIp;
                 //console.log(rdpConnectUrl, rdpDomain, fixedIp);
-                var copyUrl = rdpConnectUrl ? rdpConnectUrl : (rdpDomain ? rdpDomain : fixedIp + ":20022");
+                var copyUrl = rdpConnectUrl ? rdpConnectUrl : (rdpDomain ? rdpDomain : fixedIp + ":22002");
                 if (copyUrl) {
                     common.copyToClipboard(copyUrl);
                     $scope.main.copyToClipboard(copyUrl, '"' + copyUrl + '"가 클립보드에 복사 되었습니다.');

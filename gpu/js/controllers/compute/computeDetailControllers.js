@@ -1153,7 +1153,7 @@ angular.module('gpu.controllers')
                     common.showAlertWarning("접속 IP가 존재하지 않습니다.");
                 }
             } else if (instance.image.osType == 'windows') {
-                var copyUrl = instance.fixedIp + ":20022";
+                var copyUrl = instance.fixedIp + ":22002";
                 if (copyUrl) {
                     common.copyToClipboard(copyUrl);
                     $scope.main.copyToClipboard(copyUrl, '"' + copyUrl + '"가 클립보드에 복사 되었습니다.');
