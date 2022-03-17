@@ -343,7 +343,7 @@ angular.module('portal.services', [])
         };
 
         portal.portalOrgs.getNotices = function () {
-            return common.retrieveResource(common.resourcePromise('/hsvc/api/noti/info/v1.0', 'GET'));
+            return common.retrieveResource(common.resourcePromise('/nhsvc/api/noti/info/v1.0', 'GET'));
         };
 
         // iaas/gpu/paas 프로젝트 생성은 별도 시점에 실행
