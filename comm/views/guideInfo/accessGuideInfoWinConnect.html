@@ -87,7 +87,7 @@
 		<p class="txt_level3 type2">인스턴스 접속 정보</p>
 		<dl>
 			<dt ng-if="!!spop.data.rdpDomain">- 접속 도메인 :</dt><dd ng-if="!!spop.data.rdpDomain">{{spop.data.rdpConnectUrl}} <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="main.copyToClipboard(spop.data.rdpConnectUrl, '클립보드에 복사 되었습니다.')"><span class="ico_sm ico_copy"></span></button></dd>
-			<dt ng-if="!!spop.data.fixedIp">- 접속 주소 :</dt><dd ng-if="!!spop.data.fixedIp">{{spop.data.fixedIp}}:20022 <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="main.copyToClipboard(spop.data.fixedIp+':20022', '클립보드에 복사 되었습니다.')"><span class="ico_sm ico_copy"></span></button></dd>
+			<dt ng-if="!!spop.data.fixedIp">- 접속 주소 :</dt><dd ng-if="!!spop.data.fixedIp">{{spop.data.fixedIp}}:22002 <button type="button" tooltip-placement="top" uib-tooltip-html="'복사하기'" ng-click="main.copyToClipboard(spop.data.fixedIp+':22002', '클립보드에 복사 되었습니다.')"><span class="ico_sm ico_copy"></span></button></dd>
 			<dt>- 접속 계정 :</dt><dd>{{ !spop.data.isGpu ? 'administrator' : 'windows' }}</dd>
 			<dt>- 접속 비밀번호 :</dt><dd>{{ !spop.data.isGpu ? 'kepri!234' : 'kepco123456/' }}</dd>
 		</dl>
