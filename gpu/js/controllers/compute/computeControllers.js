@@ -1437,8 +1437,13 @@ angular.module('gpu.controllers')
         ct.isMaxSpecDisabled = false;
         // spec loading 체크
         ct.specMaxDisabledSetting = false;
+        // flavor 최대 os disk 크기
+        ct.data.maxOsDisk = 40;
+        // flavor os disk disabled 존재 여부
+        ct.isMaxOsDiskDisabled = false;
         ct.fn.setSpecMaxDisabled = function () {
             ct.isMaxSpecDisabled = false;
+            ct.isMaxOsDiskDisabled = false;
             if (ct.isSpecLoad && ct.tenantResource && ct.tenantResource.maxResource &&  ct.tenantResource.usedResource) {
                 angular.forEach(ct.specList, function (spec) {
                     if (spec.vcpus > ct.tenantResource.available.cores 
@@ -1449,11 +1454,26 @@ angular.module('gpu.controllers')
                         spec.disabled = true;
                         ct.isMaxSpecDisabled = true;
                     }
+
+                    if (spec.disk > ct.data.maxOsDisk) {
+                        ct.isMaxOsDiskDisabled = true;
+                        spec.disabled = true;
+                    }
                 });
                 ct.specMaxDisabledSetting = true;
                 ct.fn.defaultSelectSpec();
             }
         };
+
+        ct.fn.checkSpecDisabled = function() {
+            // 자원이 부족하다면 return false (alert 에 자원부족만 뜨도록)
+            if((!ct.isMinSpecDisabled && ct.isMaxSpecDisabled)){
+                return false;
+            }
+            if (ct.specList && ct.specList.length && ct.specList.length > 0) {
+                return true;
+            }
+        }
 
         ct.fn.setSpecAllEnabled = function () {
             if (ct.specList && ct.specList.length && ct.specList.length > 0) {
@@ -1987,7 +2007,7 @@ angular.module('gpu.controllers')
             returnPromise.finally(function() {
             });
         };
-        
+
         // 서버 디스크용 HDD 생성
         ct.fn.createStorageVolumeAction = function (instance) {
             var params = {};
