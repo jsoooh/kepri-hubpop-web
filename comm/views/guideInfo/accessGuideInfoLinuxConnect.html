@@ -62,7 +62,9 @@
 		<p class="txt_level3 type2">인스턴스 접속 정보</p>
 		<dl>
 			<dt>- 접속 IP :</dt><dd>{{spop.data.fixedIp}}</dd>
-			<dt>- 접속 계정 :</dt><dd>{{spop.data.osType}}</dd>
+			<dt>- 접속 계정 :</dt>
+			<dd ng-if="spop.data.osType!='rhel'">{{spop.data.osType}}</dd>
+			<dd ng-if="spop.data.osType=='rhel'">cloud-user</dd>
 		</dl>
 	</div>
 	

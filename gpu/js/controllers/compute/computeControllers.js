@@ -849,7 +849,7 @@ angular.module('gpu.controllers')
                 } else {
                     common.showAlertWarning("접속 URL이 존재하지 않습니다.");
                 }
-            } else if (instance.image.osType == 'centos') {
+            } else if (instance.image.osType == 'centos'|| instance.image.osType == 'rhel') {
                 if (instance.fixedIp) {
                     common.copyToClipboard(instance.fixedIp);
                     $scope.main.copyToClipboard(instance.fixedIp, '"' + instance.fixedIp + '"가 클립보드에 복사 되었습니다.');
