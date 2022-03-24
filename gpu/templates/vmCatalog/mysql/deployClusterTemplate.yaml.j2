@@ -351,6 +351,10 @@ resources:
             pid-file=/var/run/mysqld/mysqld.pid
 
             EOF
+
+            touch /var/log/lastlog
+            chgrp utmp /var/log/lastlog
+            chmod 664 /var/log/lastlog
             sleep 10
 
             masterRun=1
@@ -456,6 +460,10 @@ resources:
             pid-file=/var/run/mysqld/mysqld.pid
 
             EOF
+
+            touch /var/log/lastlog
+            chgrp utmp /var/log/lastlog
+            chmod 664 /var/log/lastlog
             sleep 10
 
             masterRun=1

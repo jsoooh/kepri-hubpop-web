@@ -13,7 +13,7 @@ angular.module('gpu.controllers')
         ct.data.replicaCnt = 2;
         ct.data.servicePort = ct.prodPortBand + 108;
         ct.data.lbSvcPort = ct.prodPortBand + 108;
-        ct.data.galeraPort = ct.prodPortBand + 901;
+        ct.data.galeraPort = 4567;
         ct.data.checkPort = ct.prodPortBand + 902;
 
         ct.data.deployType = "single";
