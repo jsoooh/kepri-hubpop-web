@@ -232,6 +232,11 @@ angular.module('gpu.controllers')
                     if (ct.noIngStates.indexOf(serverMain.uiTask) == -1) {
                         isServerStatusCheck = true;
                     }
+                    if (serverMain.image == undefined) {
+                        serverMain.image = {
+                            osType : 'centos'
+                        };
+                    }
                     if (serverMain.image && serverMain.image.osType) {
                         serverMain.imageOsType = serverMain.image.osType;
                     }
