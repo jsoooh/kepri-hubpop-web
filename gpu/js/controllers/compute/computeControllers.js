@@ -1443,7 +1443,7 @@ angular.module('gpu.controllers')
         // spec loading 체크
         ct.specMaxDisabledSetting = false;
         // flavor 최대 os disk 크기
-        ct.data.maxOsDisk = 40;
+        ct.data.maxOsDisk = 60;
         // flavor os disk disabled 존재 여부
         ct.isMaxOsDiskDisabled = false;
         ct.fn.setSpecMaxDisabled = function () {
@@ -1462,7 +1462,6 @@ angular.module('gpu.controllers')
 
                     if (spec.disk > ct.data.maxOsDisk) {
                         ct.isMaxOsDiskDisabled = true;
-                        spec.disabled = true;
                     }
                 });
                 ct.specMaxDisabledSetting = true;
