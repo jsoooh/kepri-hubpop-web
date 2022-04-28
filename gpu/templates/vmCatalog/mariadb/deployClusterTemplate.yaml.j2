@@ -289,7 +289,7 @@ resources:
           template: |
             #!/bin/sh
             echo "mariadb setting start"
-            echo "Installint entcat with sudo yum install -y nc"
+            echo "sudo yum install -y nc"
             sudo yum install -y nc
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
