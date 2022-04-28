@@ -13,7 +13,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Mysql.raw
+    default: RHEL84-Mysql
   flavor_volume_size:
     type: string
   flavor:
@@ -137,6 +137,8 @@ resources:
           template: |
             #!/bin/sh
             echo "Master mysql setting start"
+            echo "sudo yum install -y nc"
+            sudo yum install -y nc
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
@@ -275,6 +277,8 @@ resources:
           template: |
             #!/bin/sh
             echo "mysql setting start"
+            echo "sudo yum install -y nc"
+            sudo yum install -y nc
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 {% if volumeUse %}
             mkfs.$volume_format_type $volume_mount_point
