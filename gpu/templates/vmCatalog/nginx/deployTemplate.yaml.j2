@@ -13,7 +13,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Nginx.raw
+    default: RHEL84-Nginx.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -57,7 +57,7 @@ resources:
             #!/bin/sh
             echo "nginx setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
-            sed -i 's/listen       80;/listen       $service_port;/' /etc/nginx/conf.d/default.conf
+            sed -i 's/listen       20022;/listen       $service_port;/' /etc/nginx/conf.d/default.conf
             systemctl start nginx
             systemctl enable nginx
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status

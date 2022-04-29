@@ -11,7 +11,7 @@
     "cluster": "deployClusterTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS76-Mongodb.raw",
-    "cluster": "CentOS76-Mongodb.raw"
+    "single": "RHEL84-Mongodb.qcow2",
+    "cluster": "RHEL84-Mongodb.qcow2"
   }
 }

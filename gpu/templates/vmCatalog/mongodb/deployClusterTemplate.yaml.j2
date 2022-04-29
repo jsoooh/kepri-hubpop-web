@@ -13,7 +13,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Mongodb.raw
+    default: RHEL84-Mongodb.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -161,6 +161,11 @@ resources:
             sleep 1
 {% endif %}
 
+            cat <<EOF>> /etc/hosts
+            $server2_ip_address  server02
+            $server3_ip_address  server03
+            EOF
+
             mkdir -p /var/lib/mongo/rs/data1
             mkdir -p /var/lib/mongo/rs/data2
             mkdir -p /var/lib/mongo/rs/data3
@@ -212,20 +217,20 @@ resources:
             cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod2.conf
             cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/port: $mongo_port1/port: $mongo_port2/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/port: $mongo_port1/port: $mongo_port3/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/replSetName: rs01/replSetName: rs03/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/replSetName: rs01/replSetName: rs02/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/replSetName: rs01/replSetName: rs03/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/replSetName: rs01/replSetName: rs02/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/" /var/lib/mongo/conf/mongod3.conf
 
             chown -R mongod:mongod /var/lib/mongo/conf
 
@@ -235,6 +240,8 @@ resources:
             mongod -f /var/lib/mongo/conf/mongod1.conf
             mongod -f /var/lib/mongo/conf/mongod2.conf
             mongod -f /var/lib/mongo/conf/mongod3.conf
+
+            yum install -y nc
 
             server2Run=1
             while [ $server2Run -ne 0 ]
@@ -437,6 +444,10 @@ resources:
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
 {% endif %}
+            cat <<EOF>> /etc/hosts
+            $server1_ip_address  server01
+            $server3_ip_address  server03
+            EOF
 
             mkdir -p /var/lib/mongo/rs/data1
             mkdir -p /var/lib/mongo/rs/data2
@@ -490,20 +501,20 @@ resources:
             cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod2.conf
             cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/port: $mongo_port1/port: $mongo_port2/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/port: $mongo_port1/port: $mongo_port3/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/replSetName: rs02/replSetName: rs01/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/replSetName: rs02/replSetName: rs03/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/replSetName: rs02/replSetName: rs01/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/replSetName: rs02/replSetName: rs03/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/" /var/lib/mongo/conf/mongod3.conf
 
             chown -R mongod:mongod /var/lib/mongo/conf
 
@@ -513,6 +524,8 @@ resources:
             mongod -f /var/lib/mongo/conf/mongod1.conf
             mongod -f /var/lib/mongo/conf/mongod2.conf
             mongod -f /var/lib/mongo/conf/mongod3.conf
+
+            yum install -y nc
 
             server3Run=1
             while [ $server3Run -ne 0 ]
@@ -678,6 +691,10 @@ resources:
             ln -s $volume_mount_path/mongo /var/lib/mongo
             sleep 1
 {% endif %}
+            cat <<EOF>> /etc/hosts
+            $server1_ip_address  server01
+            $server2_ip_address  server02
+            EOF
 
             mkdir -p /var/lib/mongo/rs/data1
             mkdir -p /var/lib/mongo/rs/data2
@@ -731,20 +748,20 @@ resources:
             cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod2.conf
             cp /var/lib/mongo/conf/mongod1.conf /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/port: $mongo_port1/port: $mongo_port2/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/port: $mongo_port1/port: $mongo_port3/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/port: $mongo_port1/port: $mongo_port2/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/port: $mongo_port1/port: $mongo_port3/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/replSetName: rs03/replSetName: rs02/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/replSetName: rs03/replSetName: rs01/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/replSetName: rs03/replSetName: rs02/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/replSetName: rs03/replSetName: rs01/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod2.log/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/path: \/var\/log\/mongodb\/mongod1.log/path: \/var\/log\/mongodb\/mongod3.log/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data2/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/dbPath: \/var\/lib\/mongo\/rs\/data1/dbPath: \/var\/lib\/mongo\/rs\/data3/" /var/lib/mongo/conf/mongod3.conf
 
-            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/' /var/lib/mongo/conf/mongod2.conf
-            sed -i 's/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/' /var/lib/mongo/conf/mongod3.conf
+            sed -i "s/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod2.pid/" /var/lib/mongo/conf/mongod2.conf
+            sed -i "s/pidFilePath: \/var\/run\/mongodb\/mongod1.pid/pidFilePath: \/var\/run\/mongodb\/mongod3.pid/" /var/lib/mongo/conf/mongod3.conf
 
             chown -R mongod:mongod /var/lib/mongo/conf
 
@@ -754,6 +771,8 @@ resources:
             mongod -f /var/lib/mongo/conf/mongod1.conf
             mongod -f /var/lib/mongo/conf/mongod2.conf
             mongod -f /var/lib/mongo/conf/mongod3.conf
+
+            yum install -y nc
 
             server1Run=1
             while [ $server1Run -ne 0 ]

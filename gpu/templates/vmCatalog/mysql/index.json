@@ -12,8 +12,8 @@
     "cluster": "deployClusterTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS76-Mysql.raw",
-    "replica": "CentOS76-Mysql.raw",
-    "cluster": "CentOS76-Galera-Mysql.raw"
+    "single": "RHEL84-Mysql.qcow2",
+    "replica": "RHEL84-Mysql.qcow2",
+    "cluster": "RHEL84-Galera-Mysql.qcow2"
   }
 }

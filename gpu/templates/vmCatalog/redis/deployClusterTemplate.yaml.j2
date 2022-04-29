@@ -13,7 +13,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Redis.raw
+    default: RHEL84-Redis.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -86,33 +86,37 @@ resources:
             echo "redis setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
+            systemctl stop redis
+
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
-            sed -i 's/^# requirepass foobared/requirepass $redis_password/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-enabled yes/cluster-enabled yes/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-node-timeout 15000/cluster-node-timeout 15000/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-migration-barrier 1/cluster-migration-barrier 1/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# masterauth <master-password>/masterauth $redis_password/' /etc/redis_$redis1_port.conf
+            sed -i "s/^# requirepass foobared/requirepass $redis_password/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-enabled yes/cluster-enabled yes/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-node-timeout 15000/cluster-node-timeout 15000/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-migration-barrier 1/cluster-migration-barrier 1/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# masterauth <master-password>/masterauth $redis_password/" /etc/redis_$redis1_port.conf
 
             cp /etc/redis_$redis1_port.conf /etc/redis_$redis2_port.conf
 
             sed -i "s/^port 6379/port $redis1_port/" /etc/redis_$redis1_port.conf
-            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/' /etc/redis_$redis1_port.conf
-            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/' /etc/redis_$redis1_port.conf
-            sed -i 's/^logfile \/var\/log\/redis\/redis.log"/logfile \/var\/log\/redis\/redis_$redis1_port.log/' /etc/redis_$redis1_port.conf
+            sed -i "s/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/" /etc/redis_$redis1_port.conf
+            sed -i "s/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/" /etc/redis_$redis1_port.conf
+            sed -i "s/^logfile \/var\/log\/redis\/redis.log/logfile \/var\/log\/redis\/redis_$redis1_port.log/" /etc/redis_$redis1_port.conf
 
             sed -i "s/^port 6379/port $redis2_port/" /etc/redis_$redis2_port.conf
-            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/' /etc/redis_$redis2_port.conf
-            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/' /etc/redis_$redis2_port.conf
-            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/' /etc/redis_$redis2_port.conf
-            sed -i 's/^logfile \/var\/log\/redis\/redis.log"/logfile \/var\/log\/redis\/redis_$redis2_port.log/' /etc/redis_$redis2_port.conf
+            sed -i "s/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/" /etc/redis_$redis2_port.conf
+            sed -i "s/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/" /etc/redis_$redis2_port.conf
+            sed -i "s/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/" /etc/redis_$redis2_port.conf
+            sed -i "s/^logfile \/var\/log\/redis\/redis.log/logfile \/var\/log\/redis\/redis_$redis2_port.log/" /etc/redis_$redis2_port.conf
 
             sleep 1
-            redis-server /etc/redis_$redis1_port.conf &
-            redis-server /etc/redis_$redis2_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis1_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis2_port.conf &
+
+            yum install -y nc
 
             redis2Run=1
             while [ $redis2Run -ne 0 ]
@@ -136,26 +140,26 @@ resources:
 
             sleep 5
 
-            echo "redis-cli -a $redis_password --cluster create $server1_ip_address:$redis1_port $server2_ip_address:$redis1_port $server3_ip_address:$redis1_port"
-            redis-cli -a $redis_password --cluster create $server1_ip_address:$redis1_port $server2_ip_address:$redis1_port $server3_ip_address:$redis1_port <<EOF
+            echo "/usr/local/bin/redis-cli -a $redis_password --cluster create $server1_ip_address:$redis1_port $server2_ip_address:$redis1_port $server3_ip_address:$redis1_port"
+            /usr/local/bin/redis-cli -a $redis_password --cluster create $server1_ip_address:$redis1_port $server2_ip_address:$redis1_port $server3_ip_address:$redis1_port <<EOF
             yes
             EOF
 
             sleep 5
 
-            echo "redis-cli -a $redis_password --cluster add-node $server2_ip_address:$redis2_port $server1_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server1_ip_address:$redis1_port | grep master | awk '{print \$1}')"
-            redis-cli -a $redis_password --cluster add-node $server2_ip_address:$redis2_port $server1_ip_address:$redis1_port --cluster-slave --cluster-master-id $(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server1_ip_address:$redis1_port | grep master | awk '{print $1}')
+            echo "/usr/local/bin/redis-cli -a $redis_password --cluster add-node $server2_ip_address:$redis2_port $server1_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(/usr/local/bin/redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server1_ip_address:$redis1_port | grep master | awk '{print \$1}')"
+            /usr/local/bin/redis-cli -a $redis_password --cluster add-node $server2_ip_address:$redis2_port $server1_ip_address:$redis1_port --cluster-slave --cluster-master-id $(/usr/local/bin/redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server1_ip_address:$redis1_port | grep master | awk '{print $1}')
             sleep 2
-            echo "redis-cli -a $redis_password --cluster add-node $server3_ip_address:$redis2_port $server2_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server2_ip_address:$redis1_port | grep master | awk '{print \$1}')"
-            redis-cli -a $redis_password --cluster add-node $server3_ip_address:$redis2_port $server2_ip_address:$redis1_port --cluster-slave --cluster-master-id $(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server2_ip_address:$redis1_port | grep master | awk '{print $1}')
+            echo "/usr/local/bin/redis-cli -a $redis_password --cluster add-node $server3_ip_address:$redis2_port $server2_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(/usr/local/bin/redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server2_ip_address:$redis1_port | grep master | awk '{print \$1}')"
+            /usr/local/bin/redis-cli -a $redis_password --cluster add-node $server3_ip_address:$redis2_port $server2_ip_address:$redis1_port --cluster-slave --cluster-master-id $(/usr/local/bin/redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server2_ip_address:$redis1_port | grep master | awk '{print $1}')
             sleep 2
-            echo "redis-cli -a $redis_password --cluster add-node $server1_ip_address:$redis2_port $server3_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server3_ip_address:$redis1_port | grep master | awk '{print \$1}')"
-            redis-cli -a $redis_password --cluster add-node $server1_ip_address:$redis2_port $server3_ip_address:$redis1_port --cluster-slave --cluster-master-id $(redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server3_ip_address:$redis1_port | grep master | awk '{print $1}')
+            echo "/usr/local/bin/redis-cli -a $redis_password --cluster add-node $server1_ip_address:$redis2_port $server3_ip_address:$redis1_port --cluster-slave --cluster-master-id \$(/usr/local/bin/redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server3_ip_address:$redis1_port | grep master | awk '{print \$1}')"
+            /usr/local/bin/redis-cli -a $redis_password --cluster add-node $server1_ip_address:$redis2_port $server3_ip_address:$redis1_port --cluster-slave --cluster-master-id $(/usr/local/bin/redis-cli -p $redis1_port -a $redis_password cluster nodes | grep $server3_ip_address:$redis1_port | grep master | awk '{print $1}')
             sleep 2
 
             cat <<EOF>> /etc/rc.local
-            redis-server /etc/redis_$redis1_port.conf &
-            redis-server /etc/redis_$redis2_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis1_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis2_port.conf &
             EOF
 
             systemctl enable rc-local
@@ -185,36 +189,38 @@ resources:
             echo "redis setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
+            systemctl stop redis
+
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
-            sed -i 's/^# requirepass foobared/requirepass $redis_password/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-enabled yes/cluster-enabled yes/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-node-timeout 15000/cluster-node-timeout 15000/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-migration-barrier 1/cluster-migration-barrier 1/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# masterauth <master-password>/masterauth $redis_password/' /etc/redis_$redis1_port.conf
+            sed -i "s/^# requirepass foobared/requirepass $redis_password/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-enabled yes/cluster-enabled yes/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-node-timeout 15000/cluster-node-timeout 15000/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-migration-barrier 1/cluster-migration-barrier 1/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# masterauth <master-password>/masterauth $redis_password/" /etc/redis_$redis1_port.conf
 
             cp /etc/redis_$redis1_port.conf /etc/redis_$redis2_port.conf
 
             sed -i "s/^port 6379/port $redis1_port/" /etc/redis_$redis1_port.conf
-            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/' /etc/redis_$redis1_port.conf
-            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/' /etc/redis_$redis1_port.conf
+            sed -i "s/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/" /etc/redis_$redis1_port.conf
+            sed -i "s/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/" /etc/redis_$redis1_port.conf
 
             sed -i "s/^port 6379/port $redis2_port/" /etc/redis_$redis2_port.conf
-            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/' /etc/redis_$redis2_port.conf
-            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/' /etc/redis_$redis2_port.conf
-            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/' /etc/redis_$redis2_port.conf
+            sed -i "s/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/" /etc/redis_$redis2_port.conf
+            sed -i "s/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/" /etc/redis_$redis2_port.conf
+            sed -i "s/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/" /etc/redis_$redis2_port.conf
 
             sleep 1
-            redis-server /etc/redis_$redis1_port.conf &
-            redis-server /etc/redis_$redis2_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis1_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis2_port.conf &
 
             sleep 1
             cat <<EOF>> /etc/rc.local
-            redis-server /etc/redis_$redis1_port.conf &
-            redis-server /etc/redis_$redis2_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis1_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis2_port.conf &
             EOF
 
             systemctl enable rc-local
@@ -243,36 +249,38 @@ resources:
             echo "redis setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
+            systemctl stop redis
+
             cp /etc/redis.conf /etc/redis_$redis1_port.conf
             sed -i "s/^bind 127.0.0.1/bind 0.0.0.0/" /etc/redis_$redis1_port.conf
-            sed -i 's/^# requirepass foobared/requirepass $redis_password/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-enabled yes/cluster-enabled yes/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-node-timeout 15000/cluster-node-timeout 15000/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-migration-barrier 1/cluster-migration-barrier 1/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# masterauth <master-password>/masterauth $redis_password/' /etc/redis_$redis1_port.conf
+            sed -i "s/^# requirepass foobared/requirepass $redis_password/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-enabled yes/cluster-enabled yes/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-node-timeout 15000/cluster-node-timeout 15000/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-replica-validity-factor 10/cluster-replica-validity-factor 10/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-migration-barrier 1/cluster-migration-barrier 1/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-require-full-coverage yes/cluster-require-full-coverage yes/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# masterauth <master-password>/masterauth $redis_password/" /etc/redis_$redis1_port.conf
 
             cp /etc/redis_$redis1_port.conf /etc/redis_$redis2_port.conf
 
             sed -i "s/^port 6379/port $redis1_port/" /etc/redis_$redis1_port.conf
-            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/' /etc/redis_$redis1_port.conf
-            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/' /etc/redis_$redis1_port.conf
-            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/' /etc/redis_$redis1_port.conf
+            sed -i "s/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis1_port.pid/" /etc/redis_$redis1_port.conf
+            sed -i "s/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis1_port.conf/" /etc/redis_$redis1_port.conf
+            sed -i "s/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis1_port.aof"/" /etc/redis_$redis1_port.conf
 
             sed -i "s/^port 6379/port $redis2_port/" /etc/redis_$redis2_port.conf
-            sed -i 's/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/' /etc/redis_$redis2_port.conf
-            sed -i 's/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/' /etc/redis_$redis2_port.conf
-            sed -i 's/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/' /etc/redis_$redis2_port.conf
+            sed -i "s/^pidfile \/var\/run\/redis_6379.pid/pidfile \/var\/run\/redis_$redis2_port.pid/" /etc/redis_$redis2_port.conf
+            sed -i "s/^# cluster-config-file nodes-6379.conf/cluster-config-file nodes-$redis2_port.conf/" /etc/redis_$redis2_port.conf
+            sed -i "s/^appendfilename "appendonly.aof"/appendfilename "appendonly_$redis2_port.aof"/" /etc/redis_$redis2_port.conf
 
             sleep 1
-            redis-server /etc/redis_$redis1_port.conf &
-            redis-server /etc/redis_$redis2_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis1_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis2_port.conf &
 
             sleep 1
             cat <<EOF>> /etc/rc.local
-            redis-server /etc/redis_$redis1_port.conf &
-            redis-server /etc/redis_$redis2_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis1_port.conf &
+            /usr/local/bin/redis-server /etc/redis_$redis2_port.conf &
             EOF
 
             systemctl enable rc-local

@@ -11,7 +11,7 @@
     "replica": "deployReplicaTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS76-Postgresql.raw",
-    "replica": "CentOS76-Postgresql.raw"
+    "single": "RHEL84-Postgresql.qcow2",
+    "replica": "RHEL84-Postgresql.qcow2"
   }
 }

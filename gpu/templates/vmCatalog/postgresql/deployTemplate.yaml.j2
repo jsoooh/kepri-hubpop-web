@@ -13,7 +13,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Postgresql.raw
+    default: RHEL84-Postgresql.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -120,8 +120,8 @@ resources:
             sleep 1
 {% endif %}
             /usr/pgsql-11/bin/postgresql-11-setup initdb
-            sed -i 's/#port = 5432/port = $service_port/' /var/lib/pgsql/11/data/postgresql.conf
-            sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
+            sed -i 's|^#port = 5432|port = $service_port|' /var/lib/pgsql/11/data/postgresql.conf
+            sed -i 's|^#listen_addresses = 'localhost'|listen_addresses = '*'|' /var/lib/pgsql/11/data/postgresql.conf
 
             systemctl start postgresql-11
             sleep 1

@@ -10,6 +10,6 @@
     "single": "deployTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS76-Haproxy.raw"
+    "single": "RHEL84-Haproxy.qcow2"
   }
 }

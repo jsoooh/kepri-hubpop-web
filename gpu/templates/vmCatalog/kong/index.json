@@ -10,6 +10,6 @@
     "single": "deployTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS76-Kong_Konga.raw"
+    "single": "RHEL84-Kong_Konga.qcow2"
   }
 }

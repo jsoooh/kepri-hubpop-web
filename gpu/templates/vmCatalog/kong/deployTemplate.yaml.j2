@@ -7,7 +7,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Kong_Konga.raw
+    default: RHEL84-Kong_Konga.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -103,16 +103,33 @@ resources:
             EOF
 
             /usr/pgsql-11/bin/postgresql-11-setup initdb
-            sed -i 's/#port = 5432/port = $pg_port/' /var/lib/pgsql/11/data/postgresql.conf
+            sed -i "s/#port = 5432/port = $pg_port/" /var/lib/pgsql/11/data/postgresql.conf
             sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/11/data/postgresql.conf
 
-            systemctl start postgresql-11
+            cat <<EOF> /var/lib/pgsql/11/data/pg_hba.conf
+            # TYPE  DATABASE        USER            ADDRESS                 METHOD
+            # "local" is for Unix domain socket connections only
+            local   all             all                                     trust
+            # IPv4 local connections:
+            host    all             all             0.0.0.0/0               md5
+            host    all             all             127.0.0.1/32            trust
+            # IPv6 local connections:
+            host    all             all             ::1/128                 md5
+            # replication privilege.
+            local   replication     all                                     md5
+            host    replication     all             127.0.0.1/32            md5
+            host    replication     all             ::1/128                 md5
+            EOF
+
+            systemctl restart postgresql-11
             sleep 1
-            sudo -u postgres psql <<EOF
+            sudo -u postgres psql -p $pg_port <<EOF
             ALTER USER postgres WITH PASSWORD '$pg_password';
-            CREATE USER $kong_user_id PASSWORD '$kong_user_password';
+            CREATE USER $kong_user_id;
+            ALTER USER $kong_user_id WITH PASSWORD '$kong_user_password';
             CREATE DATABASE $kong_db_name OWNER $kong_user_id;
-            CREATE USER $konga_user_id PASSWORD '$konga_user_password';
+            CREATE USER $konga_user_id;
+            ALTER USER $konga_user_id WITH  PASSWORD '$konga_user_password';
             CREATE DATABASE $konga_db_name OWNER $konga_user_id;
             EOF
 
@@ -156,25 +173,25 @@ resources:
 
             sleep 2
 
-            cat <<EOF> /home/centos/konga-0.14.7/.env
+            cat <<EOF> /home/cloud-user/konga/.env
             PORT=$konga_port
             NODE_ENV=production
             KONGA_HOOK_TIMEOUT=120000
             DB_ADAPTER=postgres
-            DB_URI="postgresql://$konga_user_id:$konga_user_password@127.0.0.1:$pg_port/$konga_db_name"
+            DB_URI="postgresql://$konga_user_id:$konga_user_password@$pg_host:$pg_port/$konga_db_name"
             KONGA_LOG_LEVEL=warn
             TOKEN_SECRET=some_secret_token
 
             EOF
 
-            chown centos.centos /home/centos/konga-0.14.7/.env
+            chown cloud-user.cloud-user /home/cloud-user/konga/.env
 
-            su - centos -c "mkdir /home/centos/konga-0.14.7/logs"
-            su - centos -c "cd /home/centos/konga-0.14.7; ./start.sh -c prepare"
+            su - cloud-user -c "mkdir /home/cloud-user/konga/logs"
+            su - cloud-user -c "cd /home/cloud-user/konga; ./start.sh -c prepare"
 
             sleep 1
 
-            su - centos -c "cd /home/centos/konga-0.14.7; npm start >> /home/centos/konga-0.14.7/logs/konga.log 2>&1 &"
+            su - cloud-user -c "cd /home/cloud-user/konga; npm start >> /home/cloud-user/konga/logs/konga.log 2>&1 &"
 
             sleep 1
 
@@ -185,7 +202,7 @@ resources:
             EOF
 
             expect <<EOF
-            spawn bash -c "psql -p $pg_port -U $konga_user_id -W $konga_db_name < /root/konga_public_konga_kong_nodes.sql";
+            spawn bash -c "psql -p $pg_port -U $konga_user_id -W $konga_db_name -h$pg_host < /root/konga_public_konga_kong_nodes.sql";
             expect "Password:"
               send "$konga_user_password\r"
             expect eof

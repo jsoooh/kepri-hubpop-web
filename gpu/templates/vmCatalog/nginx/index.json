@@ -11,7 +11,7 @@
     "cluster": "deployClusterTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS76-Nginx.raw",
-    "cluster": "CentOS76-Nginx.raw"
+    "single": "RHEL84-Nginx.qcow2",
+    "cluster": "RHEL84-Nginx.qcow2"
   }
 }

@@ -13,7 +13,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Mongodb.raw
+    default: RHEL84-Mongodb.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -115,7 +115,7 @@ resources:
 {% endif %}
 
             cp /etc/mongod.conf /etc/mongod.conf.backup
-            sed -i 's/^  port: 20717/  port: $service_port/' /etc/mongod.conf
+            sed -i 's/^  port: 27017/  port: $service_port/' /etc/mongod.conf
             sleep 1
             systemctl start mongod
             mongo << EOF

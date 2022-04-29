@@ -13,7 +13,7 @@ parameters:
     type: string
   image:
     type: string
-    default: RHEL84-Mysql
+    default: RHEL84-Mysql.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -145,7 +145,7 @@ resources:
 
             # Create DB, User Using Changed Password, TIP: [-p'$root_password'] causes [ERROR 1045 (28000): Access denied]
             mysql -u root -pP@ssw0rd <<EOF
-              UNINSTALL PLUGIN validate_password;
+              #UNINSTALL PLUGIN validate_password;
               ALTER USER 'root'@'localhost' IDENTIFIED BY '$root_password';
 {% if createUser %}
               CREATE DATABASE $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
