@@ -63,19 +63,19 @@ resources:
             echo "kafka setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
-            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
+            cp /home/kafka/config/zookeeper.properties /home/kafka/config/zookeeper.properties.backup
+            cp /home/kafka/config/server.properties /home/kafka/config/server.properties.backup
 
-            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
+            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/config/zookeeper.properties
 
-            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_ip_address:$zookeeper_port/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/config/server.properties
+            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server_ip_address:$service_port/" /home/kafka/config/server.properties
+            sed -i "s/^zookeeper.connect=127.0.0.1:2181/zookeeper.connect=$server_ip_address:$zookeeper_port/" /home/kafka/config/server.properties
 
             mkdir /tmp/zookeeper
             echo 0 > /tmp/zookeeper/myid
 
-            chown -R kafka.kafka /tmp/zookeeper
+            chown -R kafka:kafka /tmp/zookeeper
 
             systemctl start kafka
             systemctl enable kafka

@@ -13,7 +13,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Rabbitmq.raw
+    default: RHEL84-Rabbitmq.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -94,7 +94,7 @@ resources:
             #!/bin/sh
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
-            sed -i 's/# listeners.tcp.default = 5672/listeners.tcp.default = $amqp_port/' /etc/rabbitmq/rabbitmq.conf
+            sed -i "s/DEFAULT_NODE_PORT=5672/NODE_PORT=$amqp_port/"  /usr/lib/rabbitmq/bin/rabbitmq-env
             sleep 1
 
             hostnamectl set-hostname rabbitmq-server1
@@ -105,7 +105,7 @@ resources:
             $server3_ip_address rabbitmq-server3
             EOF
 
-            systemctl start rabbitmq-server
+            systemctl restart rabbitmq-server
             sleep 1
             rabbitmq-plugins enable rabbitmq_management
             sleep 1
@@ -120,6 +120,8 @@ resources:
             sleep 1
             rabbitmqctl start_app
             sleep 1
+
+            yum install -y nc
 
             nohup nc -kl $nc_check_port 2>&1 &
             nc_pid=$!
@@ -180,7 +182,7 @@ resources:
             #!/bin/sh
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
-            sed -i 's/# listeners.tcp.default = 5672/listeners.tcp.default = $amqp_port/' /etc/rabbitmq/rabbitmq.conf
+            sed -i "s/DEFAULT_NODE_PORT=5672/NODE_PORT=$amqp_port/"  /usr/lib/rabbitmq/bin/rabbitmq-env
             sleep 1
 
             hostnamectl set-hostname rabbitmq-server2
@@ -190,6 +192,8 @@ resources:
             $server2_ip_address rabbitmq-server2
             $server3_ip_address rabbitmq-server3
             EOF
+
+            yum install -y nc
 
             server1Run=1
             while [ $server1Run -ne 0 ]
@@ -201,7 +205,7 @@ resources:
               sleep 10
             done
 
-            systemctl start rabbitmq-server
+            systemctl restart rabbitmq-server
             sleep 1
             rabbitmq-plugins enable rabbitmq_management
             sleep 1
@@ -242,7 +246,7 @@ resources:
             #!/bin/sh
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
-            sed -i 's/# listeners.tcp.default = 5672/listeners.tcp.default = $amqp_port/' /etc/rabbitmq/rabbitmq.conf
+            sed -i "s/DEFAULT_NODE_PORT=5672/NODE_PORT=$amqp_port/"  /usr/lib/rabbitmq/bin/rabbitmq-env
             sleep 1
 
             hostnamectl set-hostname rabbitmq-server3
@@ -252,6 +256,8 @@ resources:
             $server2_ip_address rabbitmq-server2
             $server3_ip_address rabbitmq-server3
             EOF
+
+            yum install -y nc
 
             server1Run=1
             while [ $server1Run -ne 0 ]
@@ -263,7 +269,7 @@ resources:
               sleep 10
             done
 
-            systemctl start rabbitmq-server
+            systemctl restart rabbitmq-server
             sleep 1
             rabbitmq-plugins enable rabbitmq_management
             sleep 1

@@ -11,7 +11,7 @@
     "cluster": "deployClusterTemplate.yaml.j2"
   },
   "images": {
-    "single": "CentOS76-Rabbitmq.raw",
-    "cluster": "CentOS76-Rabbitmq.raw"
+    "single": "RHEL84-Rabbitmq.qcow2",
+    "cluster": "RHEL84-Rabbitmq.qcow2"
   }
 }

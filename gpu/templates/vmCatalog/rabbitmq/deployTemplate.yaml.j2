@@ -11,9 +11,10 @@ parameters:
     type: string
   api_end_point:
     type: string
+    default: http://115.68.66.188:31080/gpu-api/api/iaas/v1.0
   image:
     type: string
-    default: CentOS76-Rabbitmq.raw
+    default: RHEL84-Rabbitmq.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -72,11 +73,11 @@ resources:
             #!/bin/sh
             echo "rabbitmq setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
-            sed -i 's/# listeners.tcp.default = 5672/listeners.tcp.default = $amqp_port/' /etc/rabbitmq/rabbitmq.conf
-            # sed -i 's/DEFAULT_NODE_PORT=5672/DEFAULT_NODE_PORT=$amqp_port/'  /usr/lib/rabbitmq/bin/rabbitmq-env
+            #sed -i 's/# listeners.tcp.default = 5672/listeners.tcp.default = $amqp_port/' /etc/rabbitmq/rabbitmq.conf
+            sed -i 's/DEFAULT_NODE_PORT=5672/NODE_PORT=$amqp_port/'  /usr/lib/rabbitmq/bin/rabbitmq-env
             sleep 1
 
-            systemctl start rabbitmq-server
+            systemctl restart rabbitmq-server
             rabbitmq-plugins enable rabbitmq_management
             systemctl restart rabbitmq-server
             rabbitmqctl add_user admin $admin_password

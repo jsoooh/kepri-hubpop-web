@@ -7,7 +7,7 @@ parameters:
     type: string
   image:
     type: string
-    default: CentOS76-Kafka.raw
+    default: RHEL84-Kafka.qcow2
   flavor_volume_size:
     type: string
   flavor:
@@ -94,11 +94,11 @@ resources:
             echo "kafka setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
-            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
+            cp /home/kafka/config/zookeeper.properties /home/kafka/config/zookeeper.properties.backup
+            cp /home/kafka/config/server.properties /home/kafka/config/server.properties.backup
 
-            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
-            cat <<EOF>> /home/kafka/kafka/config/zookeeper.properties
+            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/config/zookeeper.properties
+            cat <<EOF>> /home/kafka/config/zookeeper.properties
 
             initLimit=5
             syncLimit=3
@@ -112,15 +112,19 @@ resources:
             mkdir /tmp/zookeeper
             echo 1 > /tmp/zookeeper/myid
 
-            chown -R kafka.kafka /tmp/zookeeper
+            chown -R kafka:kafka /tmp/zookeeper
 
-            sed -i "s/^broker.id=0/broker.id=1/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server1_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^broker.id=0/broker.id=1/" /home/kafka/config/server.properties
+            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/config/server.properties
+            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server1_ip_address:$service_port/" /home/kafka/config/server.properties
+            sed -i "s/^zookeeper.connect=127.0.0.1:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/config/server.properties
+
+            rm -rf /tmp/kafka-logs/meta.properties
 
             systemctl start kafka
             systemctl enable kafka
+
+            yum install -y nc
 
             kafka2Run=1
             while [ $kafka2Run -ne 0 ]
@@ -181,11 +185,11 @@ resources:
             echo "kafka setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
-            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
+            cp /home/kafka/config/zookeeper.properties /home/kafka/config/zookeeper.properties.backup
+            cp /home/kafka/config/server.properties /home/kafka/config/server.properties.backup
 
-            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
-            cat <<EOF>> /home/kafka/kafka/config/zookeeper.properties
+            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/config/zookeeper.properties
+            cat <<EOF>> /home/kafka/config/zookeeper.properties
 
             initLimit=5
             syncLimit=3
@@ -199,12 +203,14 @@ resources:
             mkdir /tmp/zookeeper
             echo 2 > /tmp/zookeeper/myid
 
-            chown -R kafka.kafka /tmp/zookeeper
+            chown -R kafka:kafka /tmp/zookeeper
 
-            sed -i "s/^broker.id=0/broker.id=2/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server2_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^broker.id=0/broker.id=2/" /home/kafka/config/server.properties
+            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/config/server.properties
+            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server2_ip_address:$service_port/" /home/kafka/config/server.properties
+            sed -i "s/^zookeeper.connect=127.0.0.1:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/config/server.properties
+
+            rm -rf /tmp/kafka-logs/meta.properties
 
             systemctl start kafka
             systemctl enable kafka
@@ -246,11 +252,11 @@ resources:
             echo "kafka setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-            cp /home/kafka/kafka/config/zookeeper.properties /home/kafka/kafka/config/zookeeper.properties.backup
-            cp /home/kafka/kafka/config/server.properties /home/kafka/kafka/config/server.properties.backup
+            cp /home/kafka/config/zookeeper.properties /home/kafka/config/zookeeper.properties.backup
+            cp /home/kafka/config/server.properties /home/kafka/config/server.properties.backup
 
-            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/kafka/config/zookeeper.properties
-            cat <<EOF>> /home/kafka/kafka/config/zookeeper.properties
+            sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/config/zookeeper.properties
+            cat <<EOF>> /home/kafka/config/zookeeper.properties
 
             initLimit=5
             syncLimit=3
@@ -264,12 +270,14 @@ resources:
             mkdir /tmp/zookeeper
             echo 3 > /tmp/zookeeper/myid
 
-            chown -R kafka.kafka /tmp/zookeeper
+            chown -R kafka:kafka /tmp/zookeeper
 
-            sed -i "s/^broker.id=0/broker.id=3/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server3_ip_address:$service_port/" /home/kafka/kafka/config/server.properties
-            sed -i "s/^zookeeper.connect=localhost:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/kafka/config/server.properties
+            sed -i "s/^broker.id=0/broker.id=3/" /home/kafka/config/server.properties
+            sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/config/server.properties
+            sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server3_ip_address:$service_port/" /home/kafka/config/server.properties
+            sed -i "s/^zookeeper.connect=127.0.0.1:2181/zookeeper.connect=$server_addresses_and_ports/" /home/kafka/config/server.properties
+
+            rm -rf /tmp/kafka-logs/meta.properties
 
             systemctl start kafka
             systemctl enable kafka
