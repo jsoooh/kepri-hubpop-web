@@ -218,7 +218,7 @@ resources:
             innodb_autoinc_lock_mode=2
             innodb_flush_log_at_trx_commit=0
             innodb_buffer_pool_size=122M
-            wsrep_provider=/usr/lib64/galera-3/libgalera_smm.so
+            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
             wsrep_provider_options="gcache.size=300M; gcache.page_size=300M"
             wsrep_cluster_name="galeracluster"
             wsrep_cluster_address="gcomm://$server_addresses_and_ports"
@@ -234,14 +234,14 @@ resources:
             EOF
             sleep 1
 
-            /usr/bin/mysqld_bootstrap
+            /usr/bin/mysqld_bootstrap --wsrep-new-cluster
             sleep 1
 
             # Change Mysql Root Password
-            /usr/bin/mysqld_bootstrap
+            systemctl start mysqld
             sleep 1
 
-            TEMP_PASSWORD=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f11)
+            TEMP_PASSWORD=$(grep 'A temporary password is generated for root' /var/log/mysqld.log | cut -d' ' -f13)
             if [ "${TEMP_PASSWORD}" == "" ]; then
               /usr/bin/mysqladmin -u root password 'P@ssw0rd'
             else
@@ -250,7 +250,7 @@ resources:
 
             # Create DB, User Using Changed Password, TIP: [-p'$root_password'] causes [ERROR 1045 (28000): Access denied]
             mysql -u root -pP@ssw0rd <<EOF
-              UNINSTALL PLUGIN validate_password;
+              #UNINSTALL PLUGIN validate_password;
               ALTER USER 'root'@'localhost' IDENTIFIED BY '$root_password';
 {% if createUser %}
               CREATE DATABASE $create_db_name CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
@@ -341,7 +341,7 @@ resources:
             innodb_autoinc_lock_mode=2
             innodb_flush_log_at_trx_commit=0
             innodb_buffer_pool_size=122M
-            wsrep_provider=/usr/lib64/galera-3/libgalera_smm.so
+            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
             wsrep_provider_options="gcache.size=300M; gcache.page_size=300M"
             wsrep_cluster_name="galeracluster"
             wsrep_cluster_address="gcomm://$server_addresses_and_ports"
@@ -452,7 +452,7 @@ resources:
             innodb_autoinc_lock_mode=2
             innodb_flush_log_at_trx_commit=0
             innodb_buffer_pool_size=122M
-            wsrep_provider=/usr/lib64/galera-3/libgalera_smm.so
+            wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
             wsrep_provider_options="gcache.size=300M; gcache.page_size=300M"
             wsrep_cluster_name="galeracluster"
             wsrep_cluster_address="gcomm://$server_addresses_and_ports"
