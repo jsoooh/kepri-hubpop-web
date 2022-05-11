@@ -112,6 +112,8 @@ resources:
             mkdir /tmp/zookeeper
             echo 1 > /tmp/zookeeper/myid
 
+            systemctl restart zookeeper
+
             chown -R kafka:kafka /tmp/zookeeper
 
             sed -i "s/^broker.id=0/broker.id=1/" /home/kafka/config/server.properties
@@ -121,7 +123,7 @@ resources:
 
             rm -rf /tmp/kafka-logs/meta.properties
 
-            systemctl start kafka
+            systemctl restart kafka
             systemctl enable kafka
 
             yum install -y nc
@@ -203,6 +205,8 @@ resources:
             mkdir /tmp/zookeeper
             echo 2 > /tmp/zookeeper/myid
 
+            systemctl restart zookeeper
+
             chown -R kafka:kafka /tmp/zookeeper
 
             sed -i "s/^broker.id=0/broker.id=2/" /home/kafka/config/server.properties
@@ -212,7 +216,7 @@ resources:
 
             rm -rf /tmp/kafka-logs/meta.properties
 
-            systemctl start kafka
+            systemctl restart kafka
             systemctl enable kafka
             echo "kafka setting end"
 
@@ -270,6 +274,8 @@ resources:
             mkdir /tmp/zookeeper
             echo 3 > /tmp/zookeeper/myid
 
+            systemctl restart zookeeper
+
             chown -R kafka:kafka /tmp/zookeeper
 
             sed -i "s/^broker.id=0/broker.id=3/" /home/kafka/config/server.properties
@@ -279,7 +285,7 @@ resources:
 
             rm -rf /tmp/kafka-logs/meta.properties
 
-            systemctl start kafka
+            systemctl restart kafka
             systemctl enable kafka
             echo "kafka setting end"
 
