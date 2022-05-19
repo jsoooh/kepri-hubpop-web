@@ -68,16 +68,18 @@ resources:
 
             sed -i "s/^clientPort=2181/clientPort=$zookeeper_port/" /home/kafka/config/zookeeper.properties
 
+            mkdir /tmp/zookeeper
+            echo 0 > /tmp/zookeeper/myid
+
+            systemctl restart zookeeper
+
+            chown -R kafka:kafka /tmp/zookeeper
+
             sed -i "s/^#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/:$service_port/" /home/kafka/config/server.properties
             sed -i "s/^#advertised.listeners=PLAINTEXT:\/\/your.host.name:9092/advertised.listeners=PLAINTEXT:\/\/$server_ip_address:$service_port/" /home/kafka/config/server.properties
             sed -i "s/^zookeeper.connect=127.0.0.1:2181/zookeeper.connect=$server_ip_address:$zookeeper_port/" /home/kafka/config/server.properties
 
-            mkdir /tmp/zookeeper
-            echo 0 > /tmp/zookeeper/myid
-
-            chown -R kafka:kafka /tmp/zookeeper
-
-            systemctl start kafka
+            systemctl restart kafka
             systemctl enable kafka
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_COMPLETE\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
             echo "kafka setting end"

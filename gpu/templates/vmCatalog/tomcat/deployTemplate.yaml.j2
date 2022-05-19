@@ -58,7 +58,10 @@ resources:
             echo "tomcat setting start"
             curl -X PUT -H "Content-Type: application/json" --connect-timeout 10 --data "{\"deployStatus\": \"DEPLOY_IN_PROGRESS\"}" $api_end_point/vm_catalog/external/$project_id/deploy/$stack_name/$stack_id/status
 
-            sed -i 's/<Connector port="8080"/<Connector port="$service_port"/' /usr/local/tomcat/conf/server.xml
+            sed -i 's/^Environment="JAVA_HOME=\/usr\/lib\/jvm\/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64\/"/Environment="JAVA_HOME=\/usr\/lib\/jvm\/java-11-openjdk-11.0.10.0.9-8.el8.x86_64\/"/' /etc/systemd/system/tomcat.service
+            systemctl daemon-reload
+
+            sed -i 's/<Connector port="8080"/<Connector port="$service_port"/' /usr/local/tomcat8/conf/server.xml
 
             systemctl start tomcat
             systemctl enable tomcat
