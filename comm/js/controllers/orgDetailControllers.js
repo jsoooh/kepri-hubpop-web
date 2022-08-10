@@ -395,7 +395,7 @@ angular.module('portal.controllers')
         ct.checkOrgProjectService = function (id, orgId) {
             var serviceList = [
                 //{serviceCode : 'iaas', serviceName : '서버 가상화', useYn : 'N', callYn : 'N'},
-                {serviceCode : 'gpu', serviceName : 'GPU 서버 가상화', useYn : 'N', callYn : 'N'}//,
+                {serviceCode : 'gpu', serviceName : '서버 가상화', useYn : 'N', callYn : 'N'}//,
                 // {serviceCode : 'paas', serviceName : 'App 실행 서비스', useYn : 'N', callYn : 'N'},
                 //엘이테크
                 /*삭제 전 체크에 타사업자 제외. 22.03.14
