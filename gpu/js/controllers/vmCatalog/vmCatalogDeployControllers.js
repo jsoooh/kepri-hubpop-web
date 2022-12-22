@@ -220,6 +220,7 @@ angular.module('gpu.controllers')
                         $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
                     }
                 }
+                $scope.main.loadingMainBody = false;
             } else {
                 $scope.main.goToPage("/gpu/vmCatalogDeploy/list");
                 $scope.main.loadingMainBody = false;
@@ -242,6 +243,9 @@ angular.module('gpu.controllers')
                 ct.fn.mappingOuputsData(data.content.outputs);
                 if (ct.vmCatalogDeployInfo.stackStatus.indexOf("FAILED") == -1 && ct.vmCatalogDeployInfo.deployStatus.indexOf("PROGRESS") > 0) {
                     vmCatalogService.checkDeployTimeOutStatus(ct.vmCatalogDeployInfo);
+                    if (ct.vmCatalogDeployInfo.stackStatus == "CREATE_COMPLETE") {
+                        ct.vmCatalogDeployInfo.deployStatus = "DEPLOY_COMPLETE";
+                    }
                     if(ct.vmCatalogDeployInfo.deployStatus != "DEPLOY_TIME_OUT") {
                         $scope.main.reloadTimmerStart("VmCatalogDeployStatus", function () { ct.fn.getVmCatalogDeployStatus(tenantId, deployId); }, 10000);
                     }
